@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import {
+  AuthUser,
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
@@ -56,20 +57,41 @@ export const getCaseDocketEntriesInteractor = async (
   }
 
   const formattedDocketNumber = Case.formatDocketNumber(docketNumber);
+  // Preserve the AuthUser reference before isAuthorized (a type guard) narrows it
+  const user: AuthUser = authorizedUser;
   const hasFullAccess = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.GET_ALL_CASE_DATA,
   );
   const filterOnDocketRecord = !hasFullAccess;
 
+  // For non-privileged users, determine their association level with the case.
+  // On staging, CaseFactory distinguished between:
+  //   - Associated users → CaseDTO (all on-record entries, internal fields stripped)
+  //   - IRS superuser with served petition → CaseDTO (same as associated)
+  //   - Unassociated users on sealed cases → RestrictedCaseDTO (empty docket entries)
+  //   - Unassociated users on unsealed cases → PublicCaseDTO (restricted field allowlist)
+  let isAssociatedOrPrivileged = false;
   if (!hasFullAccess) {
     const isCaseSealed = await checkIfCaseIsSealed(formattedDocketNumber);
-    if (isCaseSealed) {
+
+    if (user.role === ROLES.irsSuperuser) {
+      // IRS superuser with served petition gets associated-level access
+      const petitionServed =
+        await computePetitionServedStatus(formattedDocketNumber);
+      isAssociatedOrPrivileged = petitionServed;
+      // If case is sealed and IRS superuser doesn't have served petition, deny
+      if (isCaseSealed && !isAssociatedOrPrivileged) {
+        return EMPTY_RESULT;
+      }
+    } else {
       const isAssociated = await verifyCaseForUser({
         docketNumber: formattedDocketNumber,
-        userId: authorizedUser.userId,
+        userId: user.userId,
       });
-      if (!isAssociated) {
+      isAssociatedOrPrivileged = isAssociated;
+
+      if (isCaseSealed && !isAssociated) {
         return EMPTY_RESULT;
       }
     }
@@ -97,7 +119,7 @@ export const getCaseDocketEntriesInteractor = async (
   // even though it's not on the docket record. Since filterOnDocketRecord
   // excludes it from the paginated query, fetch it separately.
   if (
-    authorizedUser.role === ROLES.irsSuperuser &&
+    user.role === ROLES.irsSuperuser &&
     filterOnDocketRecord &&
     page === 0
   ) {
@@ -126,12 +148,23 @@ export const getCaseDocketEntriesInteractor = async (
 
   const filteredDocketEntries = filterStinFromDocketEntries(
     enrichedDocketEntries,
-    authorizedUser,
+    user,
   );
 
-  const processedDocketEntries = hasFullAccess
-    ? filteredDocketEntries
-    : filteredDocketEntries.map(stripInternalDocketEntryFields);
+  let processedDocketEntries: RawDocketEntry[];
+  if (hasFullAccess) {
+    processedDocketEntries = filteredDocketEntries;
+  } else if (isAssociatedOrPrivileged) {
+    // Associated users get all on-record entries with internal fields stripped
+    processedDocketEntries = filteredDocketEntries.map(
+      stripInternalDocketEntryFields,
+    );
+  } else {
+    // Unassociated users get PublicDocketEntry-style restricted field set
+    processedDocketEntries = filteredDocketEntries.map(
+      toPublicDocketEntryFields,
+    );
+  }
 
   const result: {
     docketEntries: RawDocketEntry[];
@@ -227,15 +260,78 @@ async function fetchStinEntry(
   return result ? fromKyselyDocketEntry(result) : undefined;
 }
 
+// Allowlist of fields that unassociated (public) users may see on docket entries.
+// This mirrors the fields exposed by the PublicDocketEntry entity on staging.
+const PUBLIC_DOCKET_ENTRY_ALLOWED_FIELDS: ReadonlySet<string> = new Set([
+  'action',
+  'additionalInfo',
+  'additionalInfo2',
+  'affectedByDocketEntries',
+  'affectedDocketEntries',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'docketEntryId',
+  'docketNumber',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filedByRole',
+  'filingDate',
+  'freeText',
+  'index',
+  'isFileAttached',
+  'isLegacyServed',
+  'isOnDocketRecord',
+  'isPaper',
+  'isSealed',
+  'isStricken',
+  'lodged',
+  'numberOfPages',
+  'objections',
+  'processingStatus',
+  'receivedAt',
+  'sealedTo',
+  'servedAt',
+  'servedPartiesCode',
+]);
+
+/**
+ * Restricts a docket entry to only the fields visible to unassociated / public
+ * users.  Mirrors the PublicDocketEntry entity from staging.
+ */
+export function toPublicDocketEntryFields(
+  docketEntry: RawDocketEntry,
+): RawDocketEntry {
+  const publicEntry: Record<string, any> = {};
+  for (const key of Object.keys(docketEntry)) {
+    if (PUBLIC_DOCKET_ENTRY_ALLOWED_FIELDS.has(key)) {
+      publicEntry[key] = docketEntry[key];
+    }
+  }
+  // previousDocument gets a restricted subset of fields
+  if (docketEntry.previousDocument) {
+    publicEntry.previousDocument = {
+      docketEntryId: docketEntry.previousDocument.docketEntryId,
+      documentTitle: docketEntry.previousDocument.documentTitle,
+      documentType: docketEntry.previousDocument.documentType,
+    };
+  }
+  return publicEntry as RawDocketEntry;
+}
+
 // These fields are only assigned in DocketEntry.initForUnfilteredForInternalUsers
 // and must be stripped for non-internal users to match the filtered DocketEntry behavior.
-const INTERNAL_ONLY_DOCKET_ENTRY_FIELDS = [
+export const INTERNAL_ONLY_DOCKET_ENTRY_FIELDS = [
   'draftOrderState',
   'editState',
   'isDraft',
   'judge',
   'pending',
   'previousDocument',
+  'qcComplete',
+  'qcViewed',
   'signedAt',
   'signedByUserId',
   'signedJudgeName',
@@ -244,9 +340,10 @@ const INTERNAL_ONLY_DOCKET_ENTRY_FIELDS = [
   'strickenByUserId',
   'userId',
   'workItem',
+  'workItemId',
 ] as const;
 
-function stripInternalDocketEntryFields(
+export function stripInternalDocketEntryFields(
   docketEntry: RawDocketEntry,
 ): RawDocketEntry {
   const stripped = { ...docketEntry };
