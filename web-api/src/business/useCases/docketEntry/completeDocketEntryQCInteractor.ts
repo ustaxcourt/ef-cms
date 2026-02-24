@@ -160,7 +160,6 @@ const completeDocketEntryQC = async (
     serviceDate: entryMetadata.serviceDate,
   };
 
-  // potentially create helper method/abstract ff below
   const { CLERK_OF_THE_COURT_CONFIGURATION } =
     applicationContext.getConstants();
 
@@ -211,7 +210,6 @@ const completeDocketEntryQC = async (
       petitioners: currentCase.petitioners,
     });
 
-    // 8477 TODO: extract to helper function?
     if (
       currentDocketEntry.originallyFiledDocketNumber ===
         currentDocketEntry.docketNumber ||
@@ -236,7 +234,7 @@ const completeDocketEntryQC = async (
       currentDocketEntry.filedBy !== updatedDocketEntry.filedBy ||
       updatedDocumentTitle !== currentDocumentTitle;
 
-    const { index: docketEntryIndex } = currentDocketEntry;
+    const docketEntryIndex: number = currentDocketEntry.index!;
 
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(currentCase);
 
@@ -350,7 +348,6 @@ const completeDocketEntryQC = async (
       const noticeDocumentStorageId = await generateNoticeOfDocketChangePdf({
         applicationContext,
         authorizedUser,
-        // @ts-ignore
         docketChangeInfo,
       });
 
@@ -361,8 +358,7 @@ const completeDocketEntryQC = async (
           documentStorageId: noticeDocumentStorageId,
           documentTitle: replaceBracketed(
             SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
-            // @ts-ignore
-            docketChangeInfo.docketEntryIndex,
+            docketChangeInfo.docketEntryIndex.toString(),
           ),
           isFileAttached: true,
           isOnDocketRecord: true,
@@ -412,7 +408,6 @@ const completeDocketEntryQC = async (
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-      // 8477 TODO: this is bad, I do not like it Sam I Am
       if (
         currentDocketEntry.originallyFiledDocketNumber ===
           currentDocketEntry.docketNumber ||
