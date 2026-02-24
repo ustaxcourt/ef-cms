@@ -9,6 +9,7 @@ import {
 import { getDbReader } from '@web-api/database';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import { RawUser } from '@shared/business/entities/User';
+import { runInBatches } from '../helpers/batch';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -333,24 +334,9 @@ const processUser = async (userName: string, users: Users): Promise<void> => {
   const users = await getUsers();
 
   // Create task functions so work is started only when invoked
-  const taskFns: (() => Promise<void>)[] = Object.keys(users).map(
+  const tasks: (() => Promise<void>)[] = Object.keys(users).map(
     user => () => processUser(user, users),
   );
 
-  // Run tasks in chunks of 15, awaiting each batch before continuing
-  const concurrency = 15;
-  for (let i = 0; i < taskFns.length; i += concurrency) {
-    const batch = taskFns.slice(i, i + concurrency);
-    console.log(
-      'running batch:',
-      batch.map((_, idx) => i + idx),
-    );
-    try {
-      await Promise.all(batch.map(fn => fn()));
-    } catch (err) {
-      console.error('Error in batch:', err);
-    }
-    // small delay between batches to avoid bursting
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+  await runInBatches(tasks);
 })();
