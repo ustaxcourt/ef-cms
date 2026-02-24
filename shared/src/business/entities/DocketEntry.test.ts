@@ -138,7 +138,7 @@ describe('DocketEntry entity', () => {
     });
 
     it('Sets documentStorageId to the passed in value if it was passed in', () => {
-      const mockDocumentStorageId = 'abcd';
+      const mockDocumentStorageId = '65b42116-0125-4223-b1c0-4f8658684f2c';
       const myDoc = new DocketEntry(
         { ...A_VALID_DOCKET_ENTRY, documentStorageId: mockDocumentStorageId },
         {
