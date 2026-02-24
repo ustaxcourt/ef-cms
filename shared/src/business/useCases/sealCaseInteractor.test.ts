@@ -40,14 +40,17 @@ describe('sealCaseInteractor', () => {
   });
 
   it('should call updateCase with the sealedDate set on the case and return the updated case', async () => {
-    const result = await sealCaseInteractor(
+    await sealCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
       },
       mockDocketClerkUser,
     );
-    expect(result.sealedDate).toBeTruthy();
+
+    const updatedCase = jest.mocked(updateCaseAndAssociationsMock).mock
+      .calls[0][0].caseToUpdate;
+    expect(updatedCase.sealedDate).toBeTruthy();
   });
 
   it('should send a notification that a case has been sealed', async () => {
