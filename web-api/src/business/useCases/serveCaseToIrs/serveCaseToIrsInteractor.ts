@@ -39,7 +39,6 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -541,28 +540,11 @@ export const serveCaseToIrs = async (
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
-    caseEntity.markAsSentToIRS();
-
     if (caseEntity.isPaper) {
       addDocketEntries({ caseEntity });
     }
 
-    const user = await getUserById({ userId: authorizedUser.userId });
-
-    if (!user) {
-      throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
-    }
-    const throwError = async error => {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'serve_to_irs_duplicate_error',
-          error: error.message,
-        },
-        userId: user.userId,
-      });
-
+    const throwError = error => {
       throw error;
     };
 
@@ -576,6 +558,8 @@ export const serveCaseToIrs = async (
     if (petitionDocument.servedAt) {
       await throwError(PETITION_DUPLICATE_ERROR);
     }
+
+    caseEntity.markAsSentToIRS();
 
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
       await applicationContext.getUtilities().serveCaseDocument({
