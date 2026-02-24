@@ -228,7 +228,9 @@ export const fileExternalDocument = async (
     return rawCaseEntity;
   });
 
-  const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
+  const resolvedCaseEntities: RawCase[] = await settlePromises(
+    consolidatedCaseEntities,
+  );
 
   await upsertWorkItems({
     workItems,

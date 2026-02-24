@@ -217,10 +217,18 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           logout();
 
           loginAsPrivatePractitioner(practitionerEmail);
+          logout();
+
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
-            cy.visit(`/verify-email?token=${verificationToken}`);
+            cy.clearAllCookies();
+            cy.clearAllLocalStorage();
+            cy.clearAllSessionStorage();
+
+            cy.visit(
+              `${getCypressEnv().publicSiteUrl}/verify-email?token=${verificationToken}`,
+            );
           });
           cy.get('[data-testid="success-alert"]')
             .should('be.visible')

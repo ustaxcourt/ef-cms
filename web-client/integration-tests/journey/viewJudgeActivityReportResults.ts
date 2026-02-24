@@ -1,6 +1,6 @@
 import {
+  createISODateString,
   formatDateString,
-  prepareDateFromString,
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -21,7 +21,7 @@ export const viewJudgeActivityReportResults = (
 
   return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
-      prepareDateFromString(),
+      createISODateString(),
       getConstants().DATE_FORMATS.MMDDYYYY,
     );
 

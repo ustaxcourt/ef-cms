@@ -202,7 +202,6 @@ import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from '
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
 import qs from 'qs';
@@ -213,6 +212,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
@@ -695,6 +695,10 @@ app.use(expressLogger);
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
+  );
+  app.post(
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
   );
@@ -1089,7 +1093,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),

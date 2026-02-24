@@ -72,5 +72,15 @@ describe('ExternalDocumentNonStandardG', () => {
         'Fiftieth Amendment to Answer',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentG = ExternalDocumentFactory({
+        category: 'Answer',
+        documentType: 'Amendment to Answer',
+        scenario: 'Nonstandard G',
+      });
+
+      expect(externalDocumentG.getDocumentTitle()).toEqual('');
+    });
   });
 });

@@ -10,16 +10,21 @@ export const PetitionQc = connect({}, function PetitionQc() {
   return (
     <>
       <CaseDetailHeader />
-      <section className="usa-section grid-container DocumentDetail">
-        <h2 className="heading-1">Petition</h2>
+      <section className="DocumentDetail tw:py-12 tw:max-w-[1440px] tw:mx-auto tw:px-4">
+        <h2
+          className="tw:mt-0 tw:mb-4 tw:font-serif tw:text-3xl tw:font-bold"
+          data-testid="petition-qc-page-heading"
+        >
+          Petition
+        </h2>
         <SuccessNotification />
         <ErrorNotification />
-        <div className="grid-container padding-x-0">
-          <div className="grid-row grid-gap">
-            <div className="grid-col-5">
+        <div className="tw:max-w-[1440px] tw:mx-auto tw:px-0">
+          <div className="tw:flex tw:flex-row tw:gap-4">
+            <div className="tw:flex-5 tw:min-w-0">
               <CaseDetailEdit />
             </div>
-            <div className="grid-col-7">
+            <div className="tw:flex-7 tw:min-w-0">
               <PetitionQcDocumentPreview title="Add Document(s)" />
             </div>
           </div>
