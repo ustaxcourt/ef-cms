@@ -67,11 +67,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .execute();
 
-  console.log('recordsToUpdate: ', recordsToUpdate.length);
+  console.log(`Records to Update: ${recordsToUpdate.length}`);
 
   recordsToUpdate = chunk(recordsToUpdate, BATCH_SIZE);
 
-  console.log('# of chunks of batches: ', recordsToUpdate.length);
+  console.log(`# of chunks of batches: ${recordsToUpdate.length}`);
 
   const storageClient = getStorageClient();
 

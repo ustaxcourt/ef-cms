@@ -2,17 +2,17 @@ import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../shared/src/test/mockCase';
+} from '@shared/test/mockCase';
 import {
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@web-client/applicationContext';
 import { cloneDeep } from 'lodash';
-import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
+import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
   const mockEventCode = 'OSC';

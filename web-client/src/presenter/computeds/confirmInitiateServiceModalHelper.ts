@@ -142,11 +142,9 @@ export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
     docketEntry.eventCode,
   );
 
-  let shouldAllowMultiDocketing = isLead && isMultiDocketable;
-
-  if (!isSavedForLater && !isMultiDocketed && !isFiled) {
-    shouldAllowMultiDocketing = false;
-  }
-
-  return shouldAllowMultiDocketing;
+  return (
+    isLead &&
+    isMultiDocketable &&
+    (isSavedForLater || isMultiDocketed || isFiled)
+  );
 };
