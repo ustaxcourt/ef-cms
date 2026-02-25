@@ -1,6 +1,6 @@
 import {
   AdminDeleteUserCommand,
-  AdminResetUserPasswordCommand,
+  AdminSetUserPasswordCommand,
   ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
@@ -220,7 +220,7 @@ describe('Cognito Helpers', () => {
       });
 
       expect(result).toBe(true);
-      expect(AdminResetUserPasswordCommand).toHaveBeenCalledWith({
+      expect(AdminSetUserPasswordCommand).toHaveBeenCalledWith({
         Password: 'newPassword123!',
         Permanent: true,
         UserPoolId: mockUserPoolId,
