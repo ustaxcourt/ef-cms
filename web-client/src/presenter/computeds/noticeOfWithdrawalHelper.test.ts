@@ -31,7 +31,7 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.filingParties).toEqual([mockPetitioners[0]]);
+    expect(result.partiesToWithdrawFrom).toEqual([mockPetitioners[0]]);
   });
 
   it('should set showRespondant to true for IRS practitioners', () => {
@@ -43,7 +43,7 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.showRespondant).toBe(true);
+    expect(result.showRespondent).toBe(true);
   });
 
   it('should set showEditContactInformation to true if any filing party does not have a sealed address', () => {
@@ -118,6 +118,6 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.filingParties).toEqual([expected]);
+    expect(result.partiesToWithdrawFrom).toEqual([expected]);
   });
 });

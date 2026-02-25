@@ -33,7 +33,7 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
     caseTitle: 'Test Case Title',
     docketNumber: '123-45',
     docketNumberWithSuffix: '123-45S',
-    filers: ['filer1'],
+    partiesToWithdrawFrom: ['filer1'],
     petitioners: [{ contactId: 'filer1', name: 'John Doe' }],
   };
   beforeEach(() => {
@@ -78,7 +78,16 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
-
+  it('should throw an error if the user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+    await expect(
+      generateNoticeOfWithdrawalPdfInteractor(
+        applicationContext,
+        mockInput,
+        mockPrivatePractitionerUser,
+      ),
+    ).rejects.toThrow('Practitioner information not found');
+  });
   it('should generate a notice of withdrawal PDF for private practitioners', async () => {
     const result = await generateNoticeOfWithdrawalPdfInteractor(
       applicationContext,
@@ -93,7 +102,7 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
           caseCaptionExtension: mockInput.caseCaptionExtension,
           caseTitle: mockInput.caseTitle,
           docketNumberWithSuffix: mockInput.docketNumberWithSuffix,
-          filers: ['John Doe'],
+          partiesToWithdrawFrom: ['John Doe'],
           practitionerInformation: MOCK_PRACTITIONER,
         }),
       }),
@@ -150,9 +159,11 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
   it('should throw an error if PDF generation fails', async () => {
+    const expectedError = new Error('PDF generation failed');
     applicationContext
       .getDocumentGenerators()
-      .noticeOfWithdrawal.mockRejectedValue(new Error('PDF generation failed'));
+      .noticeOfWithdrawal.mockRejectedValue(expectedError);
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
     await expect(
       generateNoticeOfWithdrawalPdfInteractor(
         applicationContext,
@@ -160,5 +171,9 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
         mockPrivatePractitionerUser,
       ),
     ).rejects.toThrow('PDF generation failed');
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Error generating PDFs:',
+      expectedError,
+    );
   });
 });
