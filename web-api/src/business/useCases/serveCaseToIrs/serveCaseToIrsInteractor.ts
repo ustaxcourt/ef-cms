@@ -548,7 +548,7 @@ export const serveCaseToIrs = async (
 
     if (!petitionDocument) {
       throw new Error(
-        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
+        `Could not find petition document on case ${caseEntity.docketNumber}`,
       );
     }
     if (petitionDocument.servedAt) {
