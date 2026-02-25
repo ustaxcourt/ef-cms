@@ -19,6 +19,7 @@ const scriptConfig: ScriptConfig = {
     UserPoolId: 'USER_POOL_ID',
     region: 'REGION',
   },
+  preventExecutionAgainst: ['local', 'prod'],
   requireActiveAwsSession: true,
 };
 const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {

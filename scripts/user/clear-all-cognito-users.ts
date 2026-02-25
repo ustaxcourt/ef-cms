@@ -13,22 +13,18 @@ import { runInBatches } from '../helpers/batch';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'clear-all-cognito-users - Deletes all cognito accounts in the test environment.',
+    'clear-all-cognito-users - Deletes all cognito accounts in the provided user pool.',
   environment: {
-    env: 'ENV',
     UserPoolId: 'USER_POOL_ID',
     region: 'REGION',
   },
+  preventExecutionAgainst: ['prod'],
   requireActiveAwsSession: true,
 };
 
-const { env, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
+const { UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
-if (env === 'prod') {
-  console.error('This script should not be run against prod.');
-  process.exit(1);
-}
 
 const cognito = new CognitoIdentityProvider({ region });
 

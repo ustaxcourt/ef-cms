@@ -15,22 +15,16 @@ const scriptConfig: ScriptConfig = {
   description:
     'reset-passwords - Resets the cognito password for all test users.',
   environment: {
-    env: 'ENV',
     Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
     region: 'REGION',
   },
+  preventExecutionAgainst: ['prod'],
   requireActiveAwsSession: true,
 };
-const { env, Password, UserPoolId, region } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
+const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
-if (env === 'prod') {
-  console.error('This script should not be run against prod.');
-  process.exit(1);
-}
 
 const cognito = new CognitoIdentityProvider({ region });
 

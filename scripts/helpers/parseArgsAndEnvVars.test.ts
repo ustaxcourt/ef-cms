@@ -1,5 +1,6 @@
 /* eslint-disable jest/no-conditional-expect */
-/* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable custom-rules-plugin/no-dates */
+/* eslint-disable max-lines */
 import {
   FORMATS,
   formatNow,
@@ -40,6 +41,7 @@ const ogScriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
+  preventExecutionAgainst: ['prod'],
   requireActiveAwsSession: true,
 };
 const mockScriptConfig = cloneDeep(ogScriptConfig);
@@ -136,7 +138,7 @@ describe('parseArgsAndEnvVars', () => {
       } catch (err: any) {
         expect(err.toString()).toEqual('Error: caught process.exit');
       }
-      expect(mockConsoleLog).toHaveBeenCalledTimes(5);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(6);
       expect(mockExit).toHaveBeenCalledWith(0);
     });
     it('generates a usage example from provided configuration', () => {
@@ -230,7 +232,7 @@ describe('parseArgsAndEnvVars', () => {
       expect(result.hostname).toEqual('jest');
       expect(mockConsoleLog).not.toHaveBeenCalled();
     });
-    it('tells the user when an active AWS session is required', () => {
+    it('tells the user the environments against which execution will be prevented', () => {
       process.argv = ['ts-node', 'some-script.ts', '-h'];
       try {
         parseArgsAndEnvVars(mockScriptConfig);
@@ -239,6 +241,32 @@ describe('parseArgsAndEnvVars', () => {
       }
       expect(mockConsoleLog).toHaveBeenNthCalledWith(
         5,
+        '\nPrevent Execution Against:',
+        ['prod'],
+      );
+    });
+    it('does not tell the user execution will be prevented if execution will not be prevented', () => {
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      delete itsScriptConfig.preventExecutionAgainst;
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).not.toHaveBeenCalledWith(
+        '\nPrevent Execution Against:',
+      );
+    });
+    it('tells the user when an active AWS session is required', () => {
+      process.argv = ['ts-node', 'some-script.ts', '-h'];
+      try {
+        parseArgsAndEnvVars(mockScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        6,
         '\nActive AWS session required.',
       );
     });
@@ -267,7 +295,7 @@ describe('parseArgsAndEnvVars', () => {
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(11);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(12);
       expect(mockExit).not.toHaveBeenCalled();
     });
     it('only calls usage once if the verbose flag was provided and there was an error', () => {
@@ -309,7 +337,7 @@ describe('parseArgsAndEnvVars', () => {
         1,
         'Verbose output enabled\n',
       );
-      expect(mockConsoleLog).toHaveBeenCalledTimes(8);
+      expect(mockConsoleLog).toHaveBeenCalledTimes(9);
       expect(mockExit).toHaveBeenCalledWith(0);
     });
   });
@@ -609,6 +637,52 @@ describe('parseArgsAndEnvVars', () => {
       parseArgsAndEnvVars(itsScriptConfig);
       expect(mockExit).not.toHaveBeenCalled();
     });
+  });
+  describe('Execution Prevention', () => {
+    it(
+      'exits if the ENV environment variable is not set and ' +
+        "preventExecutionAgainst includes 'local'",
+      () => {
+        process.env = {};
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        delete itsScriptConfig.environment;
+        itsScriptConfig.preventExecutionAgainst = ['local'];
+        try {
+          parseArgsAndEnvVars(itsScriptConfig);
+        } catch (err: any) {
+          expect(err.toString()).toEqual('Error: caught process.exit');
+        }
+        expect(mockConsoleLog).toHaveBeenNthCalledWith(
+          1,
+          'Execution against local is not permitted.\n',
+        );
+      },
+    );
+    it('exits if the value of the ENV environment variable is included in preventExecutionAgainst', () => {
+      process.env = { ENV: 'prod' };
+      const itsScriptConfig = cloneDeep(mockScriptConfig);
+      try {
+        parseArgsAndEnvVars(itsScriptConfig);
+      } catch (err: any) {
+        expect(err.toString()).toEqual('Error: caught process.exit');
+      }
+      expect(mockConsoleLog).toHaveBeenNthCalledWith(
+        1,
+        'Execution against prod is not permitted.\n',
+      );
+    });
+    it(
+      'does not exit if the ENV environment variable is not set and ' +
+        'preventExecutionAgainst is empty',
+      () => {
+        process.env = { AWS_SESSION_EXPIRATION: mockAwsSessionExpiration };
+        const itsScriptConfig = cloneDeep(mockScriptConfig);
+        delete itsScriptConfig.environment;
+        delete itsScriptConfig.preventExecutionAgainst;
+        parseArgsAndEnvVars(itsScriptConfig);
+        expect(mockExit).not.toHaveBeenCalled();
+      },
+    );
   });
   describe('AWS Session Expiration', () => {
     it('exits if the AWS_SESSION_EXPIRATION environment variable is not set', () => {
