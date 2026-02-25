@@ -5,7 +5,7 @@ import {
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { verifyDirectCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
@@ -33,7 +33,7 @@ export const submitPendingCaseAssociationRequestInteractor = async (
     throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
   }
 
-  const isAssociated = await verifyCaseForUser({
+  const isAssociated = await verifyDirectCaseAssociation({
     docketNumber,
     userId: user.userId,
   });

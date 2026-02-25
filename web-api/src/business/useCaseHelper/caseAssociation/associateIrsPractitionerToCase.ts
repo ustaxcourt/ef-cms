@@ -4,7 +4,7 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { verifyDirectCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 export const associateIrsPractitionerToCase = async ({
   authorizedUser,
@@ -18,7 +18,7 @@ export const associateIrsPractitionerToCase = async ({
   user: RawUser;
 }): Promise<RawCase> => {
   const [isAssociated, caseToUpdate] = await Promise.all([
-    verifyCaseForUser({
+    verifyDirectCaseAssociation({
       docketNumber,
       userId: user.userId,
     }),

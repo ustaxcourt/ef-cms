@@ -6,7 +6,7 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { verifyDirectCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 export const associatePrivatePractitionerToCase = async ({
   authorizedUser,
@@ -21,7 +21,7 @@ export const associatePrivatePractitionerToCase = async ({
   user: RawPractitioner;
   representing: string[];
 }): Promise<RawCase> => {
-  const isAssociated = await verifyCaseForUser({
+  const isAssociated = await verifyDirectCaseAssociation({
     docketNumber,
     userId: user.userId,
   });

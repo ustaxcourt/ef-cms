@@ -25,7 +25,7 @@ import {
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { verifyDirectCaseAssociation as verifyDirectCaseAssociationMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 describe('associatePrivatePractitionerToCase', () => {
   const logger = getDawsonLogger();
@@ -33,7 +33,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
+  const verifyDirectCaseAssociation = jest.mocked(verifyDirectCaseAssociationMock);
 
   let caseRecord;
 
@@ -106,7 +106,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    verifyCaseForUser.mockResolvedValue(true);
+    verifyDirectCaseAssociation.mockResolvedValue(true);
 
     await associatePrivatePractitionerToCase({
       authorizedUser: mockDocketClerkUser,
@@ -119,7 +119,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    verifyCaseForUser.mockResolvedValue(false);
+    verifyDirectCaseAssociation.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
       authorizedUser: mockDocketClerkUser,
@@ -132,7 +132,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
-    verifyCaseForUser.mockResolvedValue(false);
+    verifyDirectCaseAssociation.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
       authorizedUser: mockDocketClerkUser,
@@ -155,7 +155,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should only set a petitioner to receive no service if the practitioner is only representing that petitioner', async () => {
-    verifyCaseForUser.mockResolvedValue(false);
+    verifyDirectCaseAssociation.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
       authorizedUser: mockDocketClerkUser,
@@ -175,7 +175,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
-    verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyDirectCaseAssociation.mockResolvedValueOnce(true);
 
     getCaseByDocketNumber.mockResolvedValueOnce({
       ...caseRecord,
@@ -195,7 +195,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
-    verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyDirectCaseAssociation.mockResolvedValueOnce(true);
 
     getCaseByDocketNumber.mockResolvedValueOnce({
       ...caseRecord,

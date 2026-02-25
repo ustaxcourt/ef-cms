@@ -113,7 +113,10 @@ jest.mock(
 
 jest.mock(
   '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser',
-  () => mockFactory('verifyCaseForUser'),
+  () => ({
+    ...mockFactory('verifyCaseForUser'),
+    ...mockFactory('verifyDirectCaseAssociation'),
+  }),
 );
 
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>

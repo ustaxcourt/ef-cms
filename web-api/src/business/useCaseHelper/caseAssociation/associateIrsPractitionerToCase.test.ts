@@ -18,12 +18,12 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { verifyDirectCaseAssociation as verifyDirectCaseAssociationMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 describe('associateIrsPractitionerToCase', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
+  const verifyDirectCaseAssociation = jest.mocked(verifyDirectCaseAssociationMock);
   const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -55,7 +55,7 @@ describe('associateIrsPractitionerToCase', () => {
   });
 
   it('should not add mapping when the user is already associated with the case', async () => {
-    verifyCaseForUser.mockResolvedValue(true);
+    verifyDirectCaseAssociation.mockResolvedValue(true);
 
     await associateIrsPractitionerToCase({
       authorizedUser: mockDocketClerkUser,
@@ -68,7 +68,7 @@ describe('associateIrsPractitionerToCase', () => {
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    verifyCaseForUser.mockResolvedValue(false);
+    verifyDirectCaseAssociation.mockResolvedValue(false);
 
     await associateIrsPractitionerToCase({
       authorizedUser: mockDocketClerkUser,
