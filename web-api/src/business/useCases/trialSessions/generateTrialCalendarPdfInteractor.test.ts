@@ -323,9 +323,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
-    const sessionDetail =
+    const { sessionDetail } =
       applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
-        .data.sessionDetail;
+        .data;
     expect(sessionDetail.courtReporter).toBe('Not assigned');
     expect(sessionDetail.irsCalendarAdministrator).toBe('Not assigned');
     expect(sessionDetail.judge).toBe('Not assigned');
@@ -343,9 +343,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
-    const sessionDetail =
+    const { sessionDetail } =
       applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
-        .data.sessionDetail;
+        .data;
     expect(sessionDetail.trialClerk).toBe('Alternate Clerk');
   });
 
@@ -359,9 +359,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
-    const sessionDetail =
+    const { sessionDetail } =
       applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
-        .data.sessionDetail;
+        .data;
     expect(sessionDetail.formattedCityStateZip).not.toContain(',');
   });
 
