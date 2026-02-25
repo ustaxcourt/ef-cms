@@ -20,7 +20,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
       user.role === ROLES.irsPractitioner)
   ) {
     if (user.role === ROLES.privatePractitioner) {
-      const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
+      const partiesToWithdrawFrom = getPartiesToWithdrawFrom(caseDetail, user);
       if (partiesToWithdrawFrom.length === 0) {
         errors.push(
           'You are the only counsel representing your party in this case.',
@@ -57,7 +57,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   }
 };
 
-export const getPartiesToWithrawFrom = (
+export const getPartiesToWithdrawFrom = (
   caseDetail: RawCase,
   user,
 ): string[] => {

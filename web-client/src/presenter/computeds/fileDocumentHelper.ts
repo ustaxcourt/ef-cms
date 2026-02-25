@@ -125,7 +125,11 @@ export const fileDocumentHelper = (
 
   let partiesHeaderText = 'Parties Filing The Document(s)';
   let partiesLabelText = 'Filing Parties';
-  if (form.eventCode === 'NOTW') {
+  if (
+    form.eventCode === 'NOTW' &&
+    (user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner)
+  ) {
     partiesHeaderText = "Parties You're Withdrawing From as Counsel";
     partiesLabelText = 'Parties';
   }

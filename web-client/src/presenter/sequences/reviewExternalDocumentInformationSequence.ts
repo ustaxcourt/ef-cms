@@ -14,12 +14,16 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
 import { setCustomValidationAlertErrorsFileDocumentAction } from '../actions/setCustomValidationAlertErrorsFileDocumentAction';
+import { isNoticeOfWithdrawalAction } from '@web-client/presenter/actions/isNoticeOfWithdrawalAction';
+import { setPartiesToWithdrawFromAction } from '@web-client/presenter/actions/setPartiesToWithdrawFromAction';
 
 export const reviewExternalDocumentInformationSequence =
   showProgressSequenceDecorator([
     clearAlertsAction,
     startShowValidationAction,
     setFilersFromFilersMapAction,
+    isNoticeOfWithdrawalAction,
+    { yes: [setPartiesToWithdrawFromAction], no: [] },
     validateExternalDocumentInformationAction,
     {
       error: [

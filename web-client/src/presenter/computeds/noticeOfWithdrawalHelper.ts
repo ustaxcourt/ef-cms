@@ -1,7 +1,7 @@
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { getPartiesToWithrawFrom } from '../actions/validateNoticeOfWithdrawalAction';
+import { getPartiesToWithdrawFrom } from '../actions/validateNoticeOfWithdrawalAction';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -10,25 +10,25 @@ import {
 export const noticeOfWithdrawalHelper = (
   get: Get,
 ): {
-  filingParties: TPetitioner[];
+  partiesToWithdrawFrom: TPetitioner[];
   partiesWithPaperService: TPetitioner[];
   showConsolidatedCaseAlertWarning: boolean;
   showEditContactInformation: boolean;
-  showRespondant: boolean;
+  showRespondent: boolean;
 } => {
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
-  const filingParties: TPetitioner[] = getPartiesToWithrawFrom(
+  const partiesToWithdrawFrom: TPetitioner[] = getPartiesToWithdrawFrom(
     caseDetail,
     user,
   ).map(partyId =>
     caseDetail.petitioners.find(p => p.contactId === partyId),
   ) as TPetitioner[];
 
-  const showRespondant = user.role === ROLES.irsPractitioner;
+  const showRespondent = user.role === ROLES.irsPractitioner;
 
-  const showEditContactInformation = filingParties.some(
+  const showEditContactInformation = partiesToWithdrawFrom.some(
     p => !p.isAddressSealed,
   );
 
@@ -40,10 +40,10 @@ export const noticeOfWithdrawalHelper = (
     caseDetail.consolidatedCases?.length > 0;
 
   return {
-    filingParties,
+    partiesToWithdrawFrom,
     partiesWithPaperService,
     showConsolidatedCaseAlertWarning,
     showEditContactInformation,
-    showRespondant,
+    showRespondent,
   };
 };

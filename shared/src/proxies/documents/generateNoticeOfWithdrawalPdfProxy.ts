@@ -8,7 +8,7 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     caseTitle,
     docketNumber,
     docketNumberWithSuffix,
-    filers,
+    partiesToWithdrawFrom,
     petitioners,
   },
 ): Promise<{ fileId: string; url: string }> => {
@@ -19,7 +19,7 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
       caseTitle,
       docketNumber,
       docketNumberWithSuffix,
-      filers,
+      partiesToWithdrawFrom,
       petitioners,
     },
     endpoint: `/cases/${docketNumberWithSuffix}/generate-notice-of-withdrawal`,
