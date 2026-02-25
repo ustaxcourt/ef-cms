@@ -43,6 +43,22 @@ describe('saveCaseNoteInteractor', () => {
     expect(result.caseNote).toEqual('This is my case note');
   });
 
+  it('should return both the caseNote and docketNumber', async () => {
+    const result = await saveCaseNoteInteractor(
+      applicationContext,
+      {
+        caseNote: 'A brand new note',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockJudgeUser,
+    );
+
+    expect(result).toEqual({
+      caseNote: 'A brand new note',
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+  });
+
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },

@@ -33,4 +33,24 @@ describe('casePublicSearchInteractor', () => {
       },
     });
   });
+
+  it('should search without dates when startDate and endDate are not provided', async () => {
+    const requestParams = {
+      countryType: 'domestic',
+      petitionerName: 'test person',
+      petitionerState: 'NY',
+      caseTypes: [CASE_TYPES_MAP.cdp],
+    };
+
+    await casePublicSearchInteractor(applicationContext, requestParams as any);
+
+    expect(casePublicSearch).toHaveBeenCalledWith({
+      applicationContext,
+      searchTerms: {
+        ...requestParams,
+        endDate: undefined,
+        startDate: undefined,
+      },
+    });
+  });
 });

@@ -40,4 +40,23 @@ describe('getSesStatus', () => {
 
     expect(status).toEqual(false);
   });
+
+  it('should return true and log a warning when SendDataPoints is undefined', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    send.mockResolvedValueOnce({
+      SendDataPoints: undefined,
+    });
+
+    const status = await getSesStatus({
+      applicationContext,
+    });
+
+    expect(status).toEqual(true);
+    expect(warnSpy).toHaveBeenCalledWith(
+      'SES::GetSendStatisticsCommand returned no data',
+    );
+
+    warnSpy.mockRestore();
+  });
 });

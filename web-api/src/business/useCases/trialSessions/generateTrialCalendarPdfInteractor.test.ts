@@ -282,4 +282,102 @@ describe('generateTrialCalendarPdfInteractor', () => {
         .data.sessionDetail;
     expect(formattedTrialSession.startTime).toBe('3:00 pm');
   });
+
+  it('should throw a NotFoundError when the trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValue(undefined as any);
+
+    await expect(
+      generateTrialCalendarPdfInteractor(applicationContext, {
+        trialSessionId: 'nonexistent-id',
+      }),
+    ).rejects.toThrow('was not found');
+  });
+
+  it('should format AM start time correctly', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      startTime: '10:00',
+    });
+
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    const formattedTrialSession =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(formattedTrialSession.startTime).toBe('10:00 am');
+  });
+
+  it('should use fallback values for courtReporter, irsCalendarAdministrator, judge, and trialClerk when not assigned', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      courtReporter: undefined,
+      irsCalendarAdministrator: undefined,
+      judge: undefined,
+      trialClerk: undefined,
+      alternateTrialClerkName: undefined,
+    });
+
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    const sessionDetail =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(sessionDetail.courtReporter).toBe('Not assigned');
+    expect(sessionDetail.irsCalendarAdministrator).toBe('Not assigned');
+    expect(sessionDetail.judge).toBe('Not assigned');
+    expect(sessionDetail.trialClerk).toBe('Not assigned');
+  });
+
+  it('should use alternateTrialClerkName when trialClerk is not assigned but alternateTrialClerkName is set', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      trialClerk: undefined,
+      alternateTrialClerkName: 'Alternate Clerk',
+    });
+
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    const sessionDetail =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(sessionDetail.trialClerk).toBe('Alternate Clerk');
+  });
+
+  it('should handle trial session without city', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      city: undefined,
+    });
+
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    const sessionDetail =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(sessionDetail.formattedCityStateZip).not.toContain(',');
+  });
+
+  it('should format 12:00 start time as pm', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      startTime: '12:00',
+    });
+
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+    });
+
+    const formattedTrialSession =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(formattedTrialSession.startTime).toBe('12:00 pm');
+  });
 });

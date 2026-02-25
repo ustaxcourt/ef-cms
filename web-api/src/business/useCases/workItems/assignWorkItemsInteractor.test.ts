@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   CLERK_OF_COURT_SECTION,
@@ -286,5 +287,77 @@ describe('assignWorkItemsInteractor', () => {
         sentByUserId: caseServicesSupervisorUser.userId,
       },
     ]);
+  });
+
+  it('should throw NotFoundError when the authorized user is not found', async () => {
+    getUserById.mockResolvedValue(undefined as unknown as DbUser);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItem: mockWorkItem,
+          workItemId: undefined,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when the user being assigned is not found', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce(undefined as unknown as DbUser);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: 'non-existent-user-id',
+          assigneeName: 'Nobody',
+          workItem: mockWorkItem,
+          workItemId: undefined,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when workItemId is provided but work item is not found', async () => {
+    getWorkItemById.mockResolvedValue(undefined);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItemId: 'non-existent-work-item-id',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when the docket entry associated with the work item is not found', async () => {
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItem: mockWorkItem,
+          workItemId: undefined,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 });

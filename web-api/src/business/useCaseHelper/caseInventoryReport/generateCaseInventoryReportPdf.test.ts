@@ -169,6 +169,26 @@ describe('generateCaseInventoryReportPdf', () => {
     expect(showJudgeColumn).toBeFalsy();
   });
 
+  it('should handle cases with no caseCaption by defaulting to empty string', async () => {
+    const casesWithoutCaption = [
+      {
+        ...mockCases[0],
+        caseCaption: undefined,
+      },
+    ];
+
+    await generateCaseInventoryReportPdf({
+      applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
+      cases: casesWithoutCaption as any,
+      filters: { associatedJudge: CHIEF_JUDGE },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().caseInventoryReport,
+    ).toHaveBeenCalled();
+  });
+
   it('should hide the judge and status columns if the associatedJudge and status filters are set', async () => {
     applicationContext
       .getDocumentGenerators()

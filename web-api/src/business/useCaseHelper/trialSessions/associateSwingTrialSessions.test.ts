@@ -56,6 +56,20 @@ describe('associateSwingTrialSessions', () => {
     ).rejects.toThrow();
   });
 
+  it('throws a NotFoundError when the swing session is not found', async () => {
+    getTrialSessionById.mockResolvedValue(undefined as any);
+
+    await expect(
+      associateSwingTrialSessions(
+        {
+          swingSessionId: 'nonexistent-id',
+          trialSessionEntity: mockCurrentTrialSessionEntity,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('was not found');
+  });
+
   it('retrieves the swing session to be associated with the current session from persistence', async () => {
     await associateSwingTrialSessions(
       {

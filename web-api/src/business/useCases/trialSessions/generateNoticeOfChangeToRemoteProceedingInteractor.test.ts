@@ -150,4 +150,26 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       titleOfClerk: 'clerk of court',
     });
   });
+
+  it('should use the docketNumber when docketNumberWithSuffix is not set', async () => {
+    getCaseByDocketNumber.mockReturnValue({
+      caseCaption: 'Test Case Caption',
+      docketNumber: '999-99',
+      docketNumberWithSuffix: undefined,
+    });
+
+    await generateNoticeOfChangeToRemoteProceedingInteractor(
+      applicationContext,
+      {
+        docketNumber: '999-99',
+        trialSessionInformation: mockTrialSessionInformation,
+      },
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators()
+        .noticeOfChangeToRemoteProceeding.mock.calls[0][0].data
+        .docketNumberWithSuffix,
+    ).toBe('999-99');
+  });
 });

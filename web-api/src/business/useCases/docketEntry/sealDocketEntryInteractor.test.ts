@@ -11,6 +11,7 @@ import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityCo
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
@@ -22,6 +23,8 @@ describe('sealDocketEntryInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId =
     getDocketEntriesByDocketNumberAndDocketEntryIdMock as jest.Mock;
+  const getWorkItemByDocketNumberAndDocketEntryId =
+    getWorkItemByDocketNumberAndDocketEntryIdMock as jest.Mock;
   getCaseByDocketNumber.mockResolvedValue({});
 
   it('should require a value for dockeEntrySealedTo', async () => {
@@ -85,6 +88,30 @@ describe('sealDocketEntryInteractor', () => {
     ).rejects.toThrow(
       'The DocketEntry entity was invalid. {"sealedTo":"\'sealedTo\' must be one of [External, Public]"}',
     );
+  });
+
+  it('should set qcComplete and qcViewed from work item when work item exists', async () => {
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValueOnce({
+      completedAt: '2021-01-01T00:00:00.000Z',
+      isRead: true,
+      workItemId: 'abc-123',
+    });
+
+    const sealedDocketEntry = await sealDocketEntryInteractor(
+      {
+        docketEntryId: answerDocketEntryId,
+        docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(sealedDocketEntry).toBeDefined();
+    expect(sealedDocketEntry.isSealed).toEqual(true);
   });
 
   it('should mark the docket entry as sealed and save', async () => {

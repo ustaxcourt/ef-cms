@@ -99,4 +99,41 @@ describe('formatConsolidatedCaseCoversheetData', () => {
       documentNumber: 3,
     });
   });
+
+  it('should set caseTitle and caseCaptionExtension when the lead case is in the consolidated group', async () => {
+    getConsolidatedCases.mockResolvedValue([
+      {
+        caseCaption: 'Test Lead Caption, Petitioner',
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntry.docketEntryId,
+            index: 1,
+          },
+        ],
+        docketNumber: MOCK_CASE.leadDocketNumber,
+      },
+      {
+        caseCaption: 'Test Caption 2, Petitioner',
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntry.docketEntryId,
+            index: 2,
+          },
+        ],
+        docketNumber: '102-19',
+      },
+    ]);
+
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: mockDocketEntry,
+      useInitialData: false,
+    });
+
+    expect(result.consolidatedCases.length).toEqual(2);
+    expect(result.caseTitle).toBeDefined();
+    expect(result.caseCaptionExtension).toBeDefined();
+  });
 });

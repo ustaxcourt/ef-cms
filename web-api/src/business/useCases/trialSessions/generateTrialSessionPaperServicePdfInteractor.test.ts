@@ -101,4 +101,20 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       },
     });
   });
+
+  it('should throw a NotFoundError when the trial session is not found after generating the PDF', async () => {
+    getTrialSessionById.mockResolvedValue(undefined as any);
+
+    await expect(
+      generateTrialSessionPaperServicePdfInteractor(
+        applicationContext,
+        {
+          trialNoticePdfsKeys: ['123-56'],
+          trialSessionId: 'nonexistent-id',
+          clientConnectionId: 'id"',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('was not found');
+  });
 });

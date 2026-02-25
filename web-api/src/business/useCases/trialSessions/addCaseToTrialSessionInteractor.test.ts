@@ -9,7 +9,6 @@ jest.mock(
 );
 import {
   CASE_STATUS_TYPES,
-  CHIEF_JUDGE,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';

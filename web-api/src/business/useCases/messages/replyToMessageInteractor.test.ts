@@ -6,7 +6,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { createMessageAsReply as createMessageAsReplyMock } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
@@ -103,5 +103,86 @@ describe('replyToMessageInteractor', () => {
     expect(createMessageAsReply.mock.calls[0][0].parentMessageId).toEqual(
       messageData.parentMessageId,
     );
+  });
+
+  it('should throw NotFoundError when the case is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue(undefined);
+
+    await expect(
+      replyToMessageInteractor(
+        {
+          attachments: mockAttachments,
+          docketNumber: '999-99',
+          message: "How's it going?",
+          parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
+          subject: 'Hey!',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when the fromUser is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      caseCaption: 'Roslindis Angelino, Petitioner',
+      docketNumberWithSuffix: '123-45S',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
+    getUserById
+      .mockResolvedValueOnce(undefined as unknown as DbUser)
+      .mockResolvedValueOnce({
+        name: 'Test Petitionsclerk2',
+        role: ROLES.petitionsClerk,
+        section: PETITIONS_SECTION,
+        userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
+      } as DbUser);
+
+    await expect(
+      replyToMessageInteractor(
+        {
+          attachments: mockAttachments,
+          docketNumber: '101-20',
+          message: "How's it going?",
+          parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
+          subject: 'Hey!',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when the toUser is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      caseCaption: 'Roslindis Angelino, Petitioner',
+      docketNumberWithSuffix: '123-45S',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
+    getUserById
+      .mockResolvedValueOnce({
+        name: 'Test Petitionsclerk',
+        role: ROLES.petitionsClerk,
+        section: PETITIONS_SECTION,
+        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      } as DbUser)
+      .mockResolvedValueOnce(undefined as unknown as DbUser);
+
+    await expect(
+      replyToMessageInteractor(
+        {
+          attachments: mockAttachments,
+          docketNumber: '101-20',
+          message: "How's it going?",
+          parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
+          subject: 'Hey!',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'non-existent-user-id',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 });

@@ -246,4 +246,41 @@ describe('addConsolidatedCaseInteractor', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.leadDocketNumber,
     ).toEqual('119-19');
   });
+
+  it('Should use the caseToUpdate itself (not consolidated group) when caseToUpdate has the same leadDocketNumber as caseToConsolidateWith', async () => {
+    mockCases['619-19'].leadDocketNumber = '119-19';
+    mockCases['119-19'].leadDocketNumber = '119-19';
+
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '619-19',
+        docketNumberToConsolidateWith: '119-19',
+      },
+      mockDocketClerkUser,
+    );
+
+    // Since caseToUpdate.leadDocketNumber === caseToConsolidateWith.leadDocketNumber,
+    // allCasesToConsolidate should just be [caseToUpdate] (not fetching consolidated group)
+    // plus the consolidated cases from the lead case
+    expect(getConsolidatedCases).toHaveBeenCalledWith({
+      leadDocketNumber: '119-19',
+    });
+  });
+
+  it('Should use single caseToUpdate when it has no leadDocketNumber', async () => {
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '320-19',
+      },
+      mockDocketClerkUser,
+    );
+
+    // Both cases have no leadDocketNumber, so allCasesToConsolidate = [caseToUpdate, caseToConsolidateWith]
+    // No call to getConsolidatedCases needed
+    expect(getConsolidatedCases).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+  });
 });

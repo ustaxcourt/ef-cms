@@ -10,6 +10,7 @@ import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entitie
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
+import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
@@ -196,6 +197,44 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should use stampedPdf instead of calling getDocument when stampedPdf is provided', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementationOnce(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+      stampedPdf: testPdfDoc,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalled();
+    expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 
   it('should use the electronicParties array that is passed in', async () => {

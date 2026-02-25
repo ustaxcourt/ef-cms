@@ -11,6 +11,12 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
+);
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -25,6 +31,8 @@ import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persi
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('removeConsolidatedCasesInteractor', () => {
@@ -37,6 +45,10 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   // In this file, getCasesByDocketNumbers should be the cases that are to be removed
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
+  );
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
@@ -344,5 +356,181 @@ describe('removeConsolidatedCasesInteractor', () => {
         identifiers: ['case|105-19', 'case|104-19'],
       }),
     );
+  });
+
+  it('should update consolidated case deadline reference IDs when removing the lead case with deadlines', async () => {
+    const mockLeadDeadline = {
+      caseDeadlineId: 'deadline-lead-1',
+      deadlineDate: '2023-01-01T00:00:00.000Z',
+      description: 'Test deadline',
+      docketNumber: '101-19',
+    };
+
+    const mockChildDeadlines = [
+      {
+        caseDeadlineId: 'deadline-child-102',
+        consolidatedCaseDeadlineId: 'deadline-lead-1',
+        deadlineDate: '2023-01-01T00:00:00.000Z',
+        description: 'Test deadline',
+        docketNumber: '102-19',
+      },
+      {
+        caseDeadlineId: 'deadline-child-103',
+        consolidatedCaseDeadlineId: 'deadline-lead-1',
+        deadlineDate: '2023-01-01T00:00:00.000Z',
+        description: 'Test deadline',
+        docketNumber: '103-19',
+      },
+    ];
+
+    getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '101-19') {
+        return Promise.resolve([mockLeadDeadline]);
+      }
+      return Promise.resolve([]);
+    });
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
+      mockChildDeadlines,
+    );
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
+
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      getCaseDeadlinesByConsolidatedCaseDeadlineIds,
+    ).toHaveBeenCalledWith(['deadline-lead-1']);
+    expect(upsertCaseDeadlines).toHaveBeenCalled();
+    const allUpsertedDeadlines = upsertCaseDeadlines.mock.calls.flatMap(
+      call => call[0],
+    );
+    const deadline102 = allUpsertedDeadlines.find(
+      d => d.docketNumber === '102-19',
+    );
+    const deadline103 = allUpsertedDeadlines.find(
+      d => d.docketNumber === '103-19',
+    );
+    expect(deadline102.consolidatedCaseDeadlineId).toBeUndefined();
+    expect(deadline103.consolidatedCaseDeadlineId).toEqual(
+      'deadline-child-102',
+    );
+  });
+
+  it('should handle when child deadlines have no matching new lead case deadline', async () => {
+    const mockLeadDeadline = {
+      caseDeadlineId: 'deadline-lead-1',
+      deadlineDate: '2023-01-01T00:00:00.000Z',
+      description: 'Test deadline',
+      docketNumber: '101-19',
+    };
+
+    const mockChildDeadlines = [
+      {
+        caseDeadlineId: 'deadline-child-103',
+        consolidatedCaseDeadlineId: 'deadline-lead-1',
+        deadlineDate: '2023-01-01T00:00:00.000Z',
+        description: 'Test deadline',
+        docketNumber: '103-19',
+      },
+    ];
+
+    getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '101-19') {
+        return Promise.resolve([mockLeadDeadline]);
+      }
+      return Promise.resolve([]);
+    });
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
+      mockChildDeadlines,
+    );
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
+
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertCaseDeadlines).toHaveBeenCalled();
+    const upsertedDeadlines = upsertCaseDeadlines.mock.calls[0][0];
+    expect(upsertedDeadlines[0].consolidatedCaseDeadlineId).toBeUndefined();
+  });
+
+  it('should log a warning when some deadline updates fail during lead case removal', async () => {
+    const consoleWarnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => {});
+
+    const mockLeadDeadline = {
+      caseDeadlineId: 'deadline-lead-1',
+      deadlineDate: '2023-01-01T00:00:00.000Z',
+      description: 'Test deadline',
+      docketNumber: '101-19',
+    };
+
+    getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '101-19') {
+        return Promise.resolve([mockLeadDeadline]);
+      }
+      return Promise.resolve([]);
+    });
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockRejectedValue(
+      new Error('Database error'),
+    );
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
+
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Some deadline updates failed:',
+      expect.any(Array),
+    );
+
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('should skip updating deadlines when there are no child deadlines', async () => {
+    const mockLeadDeadline = {
+      caseDeadlineId: 'deadline-lead-1',
+      deadlineDate: '2023-01-01T00:00:00.000Z',
+      description: 'Test deadline',
+      docketNumber: '101-19',
+    };
+
+    getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '101-19') {
+        return Promise.resolve([mockLeadDeadline]);
+      }
+      return Promise.resolve([]);
+    });
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
+
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
   });
 });

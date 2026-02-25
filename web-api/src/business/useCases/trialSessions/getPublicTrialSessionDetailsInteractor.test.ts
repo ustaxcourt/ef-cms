@@ -64,4 +64,34 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     });
     expect(result).toMatchObject(expectedPublicDetails);
   });
+
+  it('should throw a NotFoundError when the trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValue(undefined as any);
+
+    await expect(
+      getPublicTrialSessionDetailsInteractor({
+        trialSessionId: 'nonexistent-id',
+      }),
+    ).rejects.toThrow('was not found');
+  });
+
+  it('should look up swing session location when the session has a swingSessionId', async () => {
+    const swingSessionId = '1234abcd-18d0-43ec-bafb-654e83405416';
+    getTrialSessionById
+      .mockResolvedValueOnce({
+        ...MOCK_TRIAL,
+        swingSessionId,
+      })
+      .mockResolvedValueOnce({
+        ...MOCK_TRIAL,
+        trialLocation: 'Houston, Texas',
+      });
+
+    const result = await getPublicTrialSessionDetailsInteractor({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(result.swingSessionId).toEqual(swingSessionId);
+    expect(result.swingSessionLocation).toEqual('Houston, Texas');
+  });
 });

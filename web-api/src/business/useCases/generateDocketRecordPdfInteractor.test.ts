@@ -284,6 +284,94 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(result).toEqual(mockPdfUrlAndID);
   });
 
+  it('should process affectedByDocketEntries on docket entries', async () => {
+    caseDetail.docketEntries = [
+      {
+        docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+        index: 1,
+        isOnDocketRecord: true,
+        affectedByDocketEntries: [
+          {
+            docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+            disposition: 'GRANTED',
+          },
+        ],
+      },
+      {
+        docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        index: 2,
+        isOnDocketRecord: true,
+      },
+    ];
+
+    await generateDocketRecordPdfInteractor(
+      applicationContext,
+      {
+        docketNumber: caseDetail.docketNumber,
+        includePartyDetail: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    const docketRecordCalls =
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+    expect(docketRecordCalls.length).toEqual(1);
+
+    const formattedEntries = docketRecordCalls[0][0].data.caseDetail.formattedDocketEntries;
+    const entryWithRelated = formattedEntries.find(
+      e => e.docketEntryId === 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    );
+    expect(entryWithRelated.relatedDocketEntries.length).toBeGreaterThan(0);
+    expect(entryWithRelated.relatedDocketEntries[0]).toMatchObject({
+      docketEntryIndex: 2,
+      disposition: 'GRANTED BY',
+    });
+  });
+
+  it('should process affectedDocketEntries on docket entries', async () => {
+    caseDetail.docketEntries = [
+      {
+        docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+        index: 1,
+        isOnDocketRecord: true,
+        affectedDocketEntries: [
+          {
+            docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+            disposition: 'DENIED',
+          },
+        ],
+      },
+      {
+        docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        index: 2,
+        isOnDocketRecord: true,
+      },
+    ];
+
+    await generateDocketRecordPdfInteractor(
+      applicationContext,
+      {
+        docketNumber: caseDetail.docketNumber,
+        includePartyDetail: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    const docketRecordCalls =
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+    expect(docketRecordCalls.length).toEqual(1);
+
+    const formattedEntries = docketRecordCalls[0][0].data.caseDetail.formattedDocketEntries;
+    const entryWithRelated = formattedEntries.find(
+      e => e.docketEntryId === 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    );
+    expect(entryWithRelated.relatedDocketEntries.length).toBeGreaterThan(0);
+    expect(entryWithRelated.relatedDocketEntries[0]).toMatchObject({
+      docketEntryIndex: 2,
+      disposition: 'DENYING',
+    });
+  });
+
   describe('sorting', () => {
     it('should pass in entries sorted by the provided property and orderType "asc"', async () => {
       caseDetail.docketEntries = [

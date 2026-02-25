@@ -75,4 +75,19 @@ describe('sendSlackNotification', () => {
 
     expect(applicationContext.getHttpClient().post).not.toHaveBeenCalled();
   });
+
+  it('should not send a message and should log a warning when no slack webhook URL is configured', async () => {
+    applicationContext.getSlackWebhookUrl.mockReset().mockReturnValueOnce('');
+
+    await sendSlackNotification({
+      applicationContext,
+      text: 'Hello',
+      topic: 'test-topic',
+    });
+
+    expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+      'No environment variable specified for Slack Webhook URL',
+    );
+    expect(applicationContext.getHttpClient().post).not.toHaveBeenCalled();
+  });
 });

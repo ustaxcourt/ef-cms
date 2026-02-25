@@ -57,6 +57,47 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       });
   });
 
+  it('should throw a NotFoundError when the primary document is not found on the case', async () => {
+    await expect(
+      generatePrintableFilingReceiptInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          documentsFiled: {
+            primaryDocumentId: 'non-existent-id',
+          },
+          fileAcrossConsolidatedGroup: false,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find docket entry with id non-existent-id on case ${mockCase.docketNumber}`,
+    );
+  });
+
+  it('should throw an error when filing across consolidated group but the case has no lead docket number', async () => {
+    getCaseByDocketNumber.mockReturnValueOnce({
+      ...mockCase,
+      leadDocketNumber: undefined,
+    });
+
+    await expect(
+      generatePrintableFilingReceiptInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          documentsFiled: {
+            primaryDocumentId: mockPrimaryDocketEntryId,
+          },
+          fileAcrossConsolidatedGroup: true,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      'you can not file across a consolidated group because this case is not part of one',
+    );
+  });
+
   it('should call the Receipt of Filing document generator', async () => {
     await generatePrintableFilingReceiptInteractor(
       applicationContext,

@@ -27,4 +27,12 @@ describe('countPagesInDocument', () => {
 
     expect(pageCount).toEqual(1);
   });
+
+  it('throws an error when neither documentBytes nor docketEntryId is provided', async () => {
+    await expect(
+      countPagesInDocument({
+        applicationContext,
+      }),
+    ).rejects.toThrow();
+  });
 });

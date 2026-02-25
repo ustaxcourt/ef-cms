@@ -109,6 +109,28 @@ describe('setTrialSessionCalendarInteractor', () => {
     ).toEqual('set_trial_session_calendar_error');
   });
 
+  it('should send an error notification when the trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValueOnce(null);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hellomom',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('set_trial_session_calendar_error');
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.message,
+    ).toContain('Trial session 6805d1ab-18d0-43ec-bafb-654e83405416 was not found.');
+  });
+
   it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
     getCalendaredCasesForTrialSession.mockResolvedValue([
       {

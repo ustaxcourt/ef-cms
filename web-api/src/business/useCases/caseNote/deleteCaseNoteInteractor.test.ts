@@ -56,6 +56,18 @@ describe('deleteCaseNoteInteractor', () => {
     expect(result.docketNumber).toBeDefined();
   });
 
+  it('should return the docket number after successful deletion', async () => {
+    const result = await deleteCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockUser,
+    );
+
+    expect(result).toEqual({ docketNumber: MOCK_CASE.docketNumber });
+  });
+
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },

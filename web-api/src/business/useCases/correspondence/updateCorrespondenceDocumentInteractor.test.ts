@@ -108,6 +108,21 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     ]);
   });
 
+  it('should handle updating correspondence when currentCorrespondenceDocument is not found', async () => {
+    await expect(
+      updateCorrespondenceDocumentInteractor(
+        {
+          documentMetadata: {
+            correspondenceId: 'non-existent-id',
+            docketNumber: mockCase.docketNumber,
+            documentTitle: 'A title that has been updated',
+          } as any,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow();
+  });
+
   it('should return the docket number', async () => {
     const result = await updateCorrespondenceDocumentInteractor(
       {

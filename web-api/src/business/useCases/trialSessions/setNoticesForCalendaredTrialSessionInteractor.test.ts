@@ -7,7 +7,10 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
+import {
+  setNoticesForCalendaredTrialSessionInteractor,
+  determineEntitiesToLock,
+} from './setNoticesForCalendaredTrialSessionInteractor';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import {
   getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
@@ -256,6 +259,106 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         trialNoticePdfsKeys: [],
       },
       userId: mockPetitionsClerkUser.userId,
+    });
+  });
+
+  it('should throw a NotFoundError when the trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValue(undefined);
+
+    await expect(
+      setNoticesForCalendaredTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(`Trial session ${trialSessionId} was not found.`);
+  });
+
+  it('should throw a NotFoundError when the notification processing job is not found during waitForJobToFinish', async () => {
+    getTrialSessionNotificationProcessing
+      .mockResolvedValueOnce(undefined) // first call in setNoticesForCalendaredTrialSession (no processing status)
+      .mockResolvedValueOnce(undefined); // second call in waitForJobToFinish returns undefined
+
+    await expect(
+      setNoticesForCalendaredTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not get notification processing job with id ${trialSessionId}`,
+    );
+  });
+
+  it('should call generateTrialSessionPaperServicePdfInteractor when there are paper service PDFs', async () => {
+    getTrialSessionNotificationProcessing
+      .mockResolvedValueOnce(undefined)
+      .mockResolvedValueOnce({
+        unfinishedCases: 0,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
+
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCases()
+        .generateTrialSessionPaperServicePdfInteractor,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        clientConnectionId,
+        trialSessionId,
+      }),
+      mockPetitionsClerkUser,
+    );
+  });
+
+  describe('determineEntitiesToLock', () => {
+    it('should return identifiers based on calendared cases', async () => {
+      const result = await determineEntitiesToLock(applicationContext, {
+        trialSessionId,
+      });
+
+      expect(result).toEqual({
+        identifiers: [
+          'case|101-20',
+          'case|102-20',
+          'case|103-20',
+        ],
+        ttl: 900,
+      });
+    });
+
+    it('should return empty identifiers when there are no calendared cases', async () => {
+      getCalendaredCasesForTrialSession.mockResolvedValue([]);
+
+      const result = await determineEntitiesToLock(applicationContext, {
+        trialSessionId,
+      });
+
+      expect(result).toEqual({
+        identifiers: [],
+        ttl: 900,
+      });
     });
   });
 });

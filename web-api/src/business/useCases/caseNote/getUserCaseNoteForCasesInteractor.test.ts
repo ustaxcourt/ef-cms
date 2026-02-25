@@ -86,6 +86,20 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     expect(result).toMatchObject([MOCK_NOTE]);
   });
 
+  it('returns an empty array when no case notes exist', async () => {
+    getUserCaseNoteForCases.mockResolvedValueOnce([]);
+
+    const result = await getUserCaseNoteForCasesInteractor(
+      applicationContext,
+      {
+        docketNumbers: ['999-99'],
+      },
+      mockCurrentUser,
+    );
+
+    expect(result).toEqual([]);
+  });
+
   it('uses the current user userId when there is no associated judge', async () => {
     const userIdToExpect = 'f922e1fc-567f-4f7d-b1f5-c9eec1567643';
     const mockUser = {

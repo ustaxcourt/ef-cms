@@ -176,6 +176,23 @@ describe('Verify User Pending Email', () => {
       ).rejects.toThrow('Tokens do not match');
     });
 
+    it('should throw an unauthorized error when the pendingEmailVerificationToken is an empty string', async () => {
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue({
+        ...mockPractitioner,
+        pendingEmailVerificationToken: '',
+      });
+
+      await expect(
+        verifyUserPendingEmailInteractor(
+          applicationContext,
+          {
+            token: TOKEN,
+          },
+          mockPrivatePractitionerUser,
+        ),
+      ).rejects.toThrow('Tokens do not match');
+    });
+
     it('should throw an unauthorized error when there is no token timestamp', async () => {
       getUserByIdOnceAllUpdatesComplete.mockResolvedValue({
         ...mockPractitioner,

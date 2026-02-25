@@ -78,6 +78,19 @@ describe('updatePractitionerUser', () => {
     );
   });
 
+  it('should throw an error when neither email nor pendingEmail is set', async () => {
+    await expect(
+      updatePractitionerUser({
+        applicationContext,
+        user: {
+          ...updatedUser,
+          email: undefined,
+          pendingEmail: undefined,
+        } as any,
+      }),
+    ).rejects.toThrow('expected an email when updating a user record');
+  });
+
   it("should update an existing practitioner user's Cognito attributes using the users pending email", async () => {
     updatedUser.email = undefined as any;
     updatedUser.pendingEmail = pendingEmail;

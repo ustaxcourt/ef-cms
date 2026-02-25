@@ -32,4 +32,17 @@ describe('getDocument', () => {
       applicationContext.getStorageClient().getObject,
     ).toHaveBeenCalledWith({ Bucket: documentsBucketName, Key: key });
   });
+
+  it('should throw an error when the response Body is falsy', async () => {
+    applicationContext.getStorageClient().getObject.mockResolvedValueOnce({
+      Body: undefined,
+    });
+
+    await expect(
+      getDocument({
+        applicationContext,
+        key,
+      }),
+    ).rejects.toThrow(`Unable to get document (${key}) from persistence.`);
+  });
 });

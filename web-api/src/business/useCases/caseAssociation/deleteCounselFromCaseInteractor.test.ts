@@ -362,6 +362,21 @@ describe('deleteCounselFromCaseInteractor', () => {
     );
   });
 
+  it('should throw a NotFoundError when the user to delete is not found', async () => {
+    getUserById.mockResolvedValue(undefined as any);
+
+    await expect(
+      deleteCounselFromCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userId: 'nonexistent-user-id',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Could not find user');
+  });
+
   describe('setupServiceIndicatorForUnrepresentedPetitioners', () => {
     it("should set the petitioner's serviceIndicator to null when the petitioner is not represented", () => {
       const mockCase = {

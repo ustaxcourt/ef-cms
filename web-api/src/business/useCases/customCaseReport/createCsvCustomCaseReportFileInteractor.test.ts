@@ -116,6 +116,43 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     expect(saveFileAndGenerateUrlCalls[0][0].file).toEqual(csvBuffer);
   });
 
+  it('should throttle requests every 10th iteration', async () => {
+    jest.useFakeTimers();
+
+    getCustomCaseReportInteractor.mockResolvedValue({
+      foundCases: [
+        {
+          associatedJudge: 'associatedJudge',
+          caseCaption: 'caseCaption',
+          caseType: CASE_TYPES_MAP.cdp,
+          docketNumber: 'docketNumber',
+          docketNumberWithSuffix: 'docketNumberWithSuffix',
+          preferredTrialCity: 'preferredTrialCity',
+          procedureType: '',
+          receivedAt: 'receivedAt',
+          status: CASE_STATUS_TYPES.assignedCase,
+        },
+      ],
+      totalCount: 1,
+    });
+
+    const promise = createCsvCustomCaseReportFileInteractor(
+      {
+        ...DEFAULT_PARAMS,
+        totalCount: 90001,
+      },
+      mockDocketClerkUser,
+    );
+
+    // Advance all timers to resolve the throttle setTimeout
+    await jest.runAllTimersAsync();
+    await promise;
+
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledTimes(11);
+
+    jest.useRealTimers();
+  });
+
   it('should throw an error if a user is not authorized', async () => {
     await expect(
       createCsvCustomCaseReportFileInteractor(

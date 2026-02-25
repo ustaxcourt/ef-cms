@@ -232,6 +232,23 @@ describe('addExistingUserToCase', () => {
     ]);
   });
 
+  it('should throw a NotFoundError when getUserById returns null', async () => {
+    getUserById.mockResolvedValueOnce(null as any);
+
+    await expect(
+      addExistingUserToCase({
+        applicationContext,
+        authorizedUser: mockAdmissionsClerkUser,
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
+        contactId: mockContactId,
+        email: 'testing@example.com',
+        name: 'Bob Ross',
+      }),
+    ).rejects.toThrow('Could not find user');
+  });
+
   it('should not change the service indicator to electronic when the user has a pendingEmail', async () => {
     getUserById.mockResolvedValue({
       pendingEmail: 'testing@example.com',

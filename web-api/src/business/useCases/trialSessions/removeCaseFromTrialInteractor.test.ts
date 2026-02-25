@@ -281,4 +281,23 @@ describe('removeCaseFromTrialInteractor', () => {
       }),
     );
   });
+
+  it('should throw a NotFoundError when the trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValue(undefined as any);
+
+    await expect(
+      removeCaseFromTrialInteractor(
+        applicationContext,
+        {
+          associatedJudge: 'Judge Dredd',
+          associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+          caseStatus: CASE_STATUS_TYPES.cav,
+          disposition: 'because',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: 'nonexistent-id',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('was not found');
+  });
 });

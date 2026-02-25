@@ -187,6 +187,20 @@ describe('getPractitionerByBarNumberInteractor', () => {
       expect(results).toBeDefined();
     });
 
+    it('should return an empty array when no practitioner is found for a public user', async () => {
+      getPractitionerByBarNumber.mockResolvedValue(undefined);
+
+      const results = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'NONEXISTENT',
+        },
+        undefined,
+      );
+
+      expect(results).toEqual([]);
+    });
+
     it('should return an array with Practitioner result', async () => {
       const results = await getPractitionerByBarNumberInteractor(
         applicationContext,

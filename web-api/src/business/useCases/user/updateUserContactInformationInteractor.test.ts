@@ -1,6 +1,8 @@
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
 jest.mock('./generateChangeOfAddress');
+jest.mock('@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
@@ -11,13 +13,18 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
-import { updateUserContactInformation } from './updateUserContactInformationInteractor';
+import {
+  updateUserContactInformation,
+  determineEntitiesToLock,
+} from './updateUserContactInformationInteractor';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress as generateChangeOfAddressMock } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('updateUserContactInformation', () => {
   const getUserById = jest.mocked(getUserByIdMock);
@@ -342,5 +349,57 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(upsertUsers).not.toHaveBeenCalled();
+  });
+
+  it('should throw a NotFoundError when the user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+
+    await expect(
+      updateUserContactInformation(
+        applicationContext,
+        {
+          contactInfo,
+          firmName: 'test',
+          userId: mockUser.userId,
+          clientConnectionId,
+        },
+        mockUser,
+      ),
+    ).rejects.toThrow(`User not found with user id ${mockUser.userId}`);
+  });
+
+  describe('determineEntitiesToLock', () => {
+    const getUserByIdOnceAllUpdatesComplete = jest.mocked(
+      getUserByIdOnceAllUpdatesCompleteMock,
+    );
+    const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+
+    it('should return identifiers based on user docket numbers', async () => {
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue({} as any);
+      getDocketNumbersByUser.mockResolvedValue(['101-20', '102-20']);
+
+      const result = await determineEntitiesToLock(applicationContext, {
+        userId: 'test-user-id',
+      } as any);
+
+      expect(result).toEqual({
+        identifiers: ['case|101-20', 'case|102-20'],
+        ttl: 900,
+      });
+    });
+
+    it('should return empty identifiers when user has no cases', async () => {
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue({} as any);
+      getDocketNumbersByUser.mockResolvedValue([]);
+
+      const result = await determineEntitiesToLock(applicationContext, {
+        userId: 'test-user-id',
+      } as any);
+
+      expect(result).toEqual({
+        identifiers: [],
+        ttl: 900,
+      });
+    });
   });
 });

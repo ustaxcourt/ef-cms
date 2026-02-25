@@ -77,6 +77,24 @@ describe('generateStampedCoversheetInteractor', () => {
     );
   });
 
+  it('should pass filingDateUpdated to createStampedCoversheetPdf when provided', async () => {
+    await generateStampedCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        filingDateUpdated: true,
+        stampData: mockStampData,
+        stampedDocketEntryId: mockStampedDocketEntryId,
+      },
+      mockPetitionerUser,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalled();
+  });
+
   it('should save the stamped coversheet', async () => {
     await generateStampedCoversheetInteractor(
       applicationContext,

@@ -157,4 +157,61 @@ describe('generatePdfFromHtmlHelper', () => {
     expect(firstPageFooter.indexOf(defaultFooterContent)).toEqual(-1);
     expect(firstPageFooter.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
+
+  it('should return the first page directly when the document is only 1 page and remainingPages throws "Page range exceeds page count"', async () => {
+    const singlePagePdfMock = jest
+      .fn()
+      .mockImplementationOnce(() => Buffer.from('first-page'))
+      .mockImplementationOnce(() => {
+        throw new Error('Page range exceeds page count');
+      });
+
+    const singlePageBrowser = {
+      newPage: () => ({
+        pdf: singlePagePdfMock,
+        setContent: jest.fn(),
+        close: jest.fn(),
+      }),
+    } as any;
+
+    const result = await generatePdfFromHtmlHelper(
+      {
+        contentHtml:
+          '<!doctype html><html><head></head><body>Hello World</body></html>',
+        docketNumber: '123-45',
+      },
+      singlePageBrowser,
+    );
+
+    expect(combineTwoPdfs).not.toHaveBeenCalled();
+    expect(result).toEqual(Buffer.from('first-page'));
+  });
+
+  it('should re-throw errors from remaining pages that are not "Page range exceeds page count"', async () => {
+    const errorPdfMock = jest
+      .fn()
+      .mockImplementationOnce(() => Buffer.from('first-page'))
+      .mockImplementationOnce(() => {
+        throw new Error('Some other error');
+      });
+
+    const errorBrowser = {
+      newPage: () => ({
+        pdf: errorPdfMock,
+        setContent: jest.fn(),
+        close: jest.fn(),
+      }),
+    } as any;
+
+    await expect(
+      generatePdfFromHtmlHelper(
+        {
+          contentHtml:
+            '<!doctype html><html><head></head><body>Hello World</body></html>',
+          docketNumber: '123-45',
+        },
+        errorBrowser,
+      ),
+    ).rejects.toThrow('Some other error');
+  });
 });

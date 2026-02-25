@@ -1895,6 +1895,25 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
+  it('should send serve_to_irs_error with empty string userId when authorizedUser is undefined', async () => {
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      undefined,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_to_irs_error',
+      },
+      userId: '',
+    });
+  });
+
   it('should generate a second notice of receipt of petition with the name and title of the clerk of the court', async () => {
     mockCase = {
       ...MOCK_CASE,

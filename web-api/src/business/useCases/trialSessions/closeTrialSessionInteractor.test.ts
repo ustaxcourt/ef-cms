@@ -167,6 +167,28 @@ describe('closeTrialSessionInteractor', () => {
     ).rejects.toThrow('Trial session cannot be closed with open cases');
   });
 
+  it('closes the trial session when caseOrder is undefined (empty case list)', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: undefined,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      startDate: PAST_DATE,
+    };
+
+    await closeTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: mockTrialSession.trialSessionId,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      updateTrialSession.mock.calls[0][0].trialSessionToUpdate.sessionStatus,
+    ).toBe('Closed');
+  });
+
   it('closes the trial session and invokes expected persistence methods', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,

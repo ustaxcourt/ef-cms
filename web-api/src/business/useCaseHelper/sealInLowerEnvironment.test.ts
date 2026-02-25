@@ -72,4 +72,26 @@ describe('sealInLowerEnvironment', () => {
       applicationContext.getUseCases().sealCaseInteractor,
     ).not.toHaveBeenCalled();
   });
+
+  it('should handle a record with both docketEntryId and docketNumber', async () => {
+    applicationContext.getConfigurationGateway().isCurrentColorActive = jest
+      .fn()
+      .mockReturnValue(true);
+
+    const result = await sealInLowerEnvironment(
+      applicationContext,
+      [
+        {
+          docketEntryId: 'abc-123',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+      ],
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().sealCaseInteractor,
+    ).not.toHaveBeenCalled();
+    expect(result[0]).toBeUndefined();
+  });
 });

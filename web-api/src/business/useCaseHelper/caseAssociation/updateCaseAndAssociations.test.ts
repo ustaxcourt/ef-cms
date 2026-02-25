@@ -532,6 +532,22 @@ describe('updateCaseAndAssociations', () => {
       expect(getMessagesByDocketNumberMock).toHaveBeenCalled();
       expect(upsertMessages).toHaveBeenCalled();
     });
+
+    it('returns early with empty array when getMessagesByDocketNumber returns null', async () => {
+      getCaseByDocketNumber.mockResolvedValue({ ...MOCK_CASE });
+      getMessagesByDocketNumber.mockResolvedValue(null);
+
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: {
+          ...MOCK_CASE,
+          caseType: CASE_TYPES_MAP.whistleblower,
+        },
+      });
+
+      expect(getMessagesByDocketNumber).toHaveBeenCalled();
+      expect(upsertMessages).toHaveBeenCalledWith([]);
+    });
   });
 
   describe('case deadlines', () => {
@@ -568,6 +584,40 @@ describe('updateCaseAndAssociations', () => {
       expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
       expect(upsertCaseDeadlines).toHaveBeenCalledWith([{ some: 'deadline' }]);
+    });
+  });
+
+  describe('petitioners', () => {
+    it('should detect updated petitioners and call associateUsersWithCases', async () => {
+      const caseWithUpdatedPetitioner = {
+        ...validMockCase,
+        petitioners: validMockCase.petitioners.map(p => ({
+          ...p,
+          name: 'Updated Name',
+        })),
+      };
+      getCaseByDocketNumber.mockResolvedValueOnce(validMockCase);
+
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: caseWithUpdatedPetitioner,
+      });
+
+      expect(associateUsersWithCases).toHaveBeenCalled();
+      const updatedUsers = associateUsersWithCases.mock.calls[0][0];
+      expect(updatedUsers.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('includeCorrespondence option', () => {
+    it('should skip correspondence processing when includeCorrespondence is false', async () => {
+      getCaseByDocketNumber.mockResolvedValueOnce(validMockCase);
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: validMockCase,
+        includeCorrespondence: false,
+      });
+      expect(upsertCaseCorrespondences).toHaveBeenCalledWith([]);
     });
   });
 });

@@ -70,4 +70,24 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
       trialInfo: mockTrialSessionInformation,
     });
   });
+
+  it('should use the docketNumber when docketNumberWithSuffix is not set', async () => {
+    getUsersInSections.mockResolvedValue([mockJudge as DbUser]);
+
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketNumberWithSuffix: undefined,
+    });
+
+    await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionInformation: mockTrialSessionInformation,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators()
+        .noticeOfChangeToInPersonProceeding.mock.calls[0][0].data
+        .docketNumberWithSuffix,
+    ).toBe(MOCK_CASE.docketNumber);
+  });
 });

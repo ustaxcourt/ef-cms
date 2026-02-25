@@ -92,6 +92,33 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     expect(result).toEqual(mockPdfUrl);
   });
 
+  it('should fall back to docketNumber when docketNumberWithSuffix is not present', async () => {
+    getCaseByDocketNumber.mockReturnValueOnce({
+      caseCaption: 'Dr. Leo Marvin, Petitioner',
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '',
+    });
+
+    await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        addedDocketNumbers: [],
+        docketNumber: '123-45',
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          docketNumberWithSuffix: '123-45',
+        }),
+      }),
+    );
+  });
+
   it('should call the generate the order pdf with the defined addedDocketNumbers', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,

@@ -267,6 +267,82 @@ describe('updateTrialSessionInteractor', () => {
       });
     });
 
+    it('should not generate paper service pdfs when there are no cases on the session (no caseOrder)', async () => {
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        getPageCount: () => 0,
+        save: () => MOCK_SAVE_RESULTS,
+      });
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: undefined,
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      expect(saveFileAndGenerateUrl as jest.Mock).not.toHaveBeenCalled();
+
+      const sendNotificationToUserCalls = (sendNotificationToUser as jest.Mock)
+        .mock.calls;
+      expect(sendNotificationToUserCalls[0][0]).toMatchObject({
+        message: {
+          action: 'update_trial_session_complete',
+          fileId: undefined,
+          hasPaper: undefined,
+          pdfUrl: undefined,
+        },
+      });
+    });
+
+    it('should not save file when there are no paper service pages (hasPaper=false)', async () => {
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        getPageCount: () => 0,
+        save: () => MOCK_SAVE_RESULTS,
+      });
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: [{ docketNumber: '111-25' }],
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      expect(saveFileAndGenerateUrl as jest.Mock).not.toHaveBeenCalled();
+
+      const sendNotificationToUserCalls = (sendNotificationToUser as jest.Mock)
+        .mock.calls;
+      expect(sendNotificationToUserCalls[0][0]).toMatchObject({
+        message: {
+          action: 'update_trial_session_complete',
+          hasPaper: false,
+        },
+      });
+    });
+
     it('should update associated swing trial session', async () => {
       const SWING_ID = getUniqueId();
 
@@ -350,6 +426,25 @@ describe('updateTrialSessionInteractor', () => {
       ).rejects.toThrow(
         `Trial session ${TEST_TRIAL_SESSION_ID} was not found.`,
       );
+    });
+
+    it('should return only the trial session identifier when caseOrder is undefined', async () => {
+      const TEST_TRIAL_SESSION_ID = getUniqueId();
+
+      getTrialSessionById.mockResolvedValue({
+        caseOrder: undefined,
+      } as RawTrialSession);
+
+      const results = await determineEntitiesToLock(applicationContext, {
+        trialSession: {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+        } as TrialSession,
+      });
+
+      expect(results).toEqual({
+        identifiers: [`trial-session|${TEST_TRIAL_SESSION_ID}`],
+        ttl: 900,
+      });
     });
   });
 });

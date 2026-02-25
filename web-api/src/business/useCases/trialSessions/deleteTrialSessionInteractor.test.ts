@@ -105,6 +105,27 @@ describe('deleteTrialSessionInteractor', () => {
     ).rejects.toThrow('Trial session cannot be deleted after it is calendared');
   });
 
+  it('deletes the trial session and processes empty caseOrder without updating cases', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [],
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([]);
+
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+    expect(deleteTrialSession).toHaveBeenCalled();
+  });
+
   it('deletes the trial session and invokes expected persistence methods', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,

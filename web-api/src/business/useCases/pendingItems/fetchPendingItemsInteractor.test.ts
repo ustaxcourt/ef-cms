@@ -33,6 +33,18 @@ describe('fetchPendingItemsInteractor', () => {
     ).rejects.toThrow('judge is required');
   });
 
+  it('should throw an error when the judge is an empty string', async () => {
+    await expect(
+      fetchPendingItemsInteractor(
+        applicationContext,
+        {
+          judge: '',
+        } as any,
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('judge is required');
+  });
+
   it('should call fetchPendingItems from persistence and return the results', async () => {
     fetchPendingItems.mockReturnValue([
       { docketEntryId: 'def', docketNumber: '101-20', pending: true },

@@ -428,4 +428,74 @@ describe('batchDownloadTrialSessionInteractor', () => {
       ),
     ).rejects.toThrow(`Error starting AWS batch job: Error: ${err}`);
   });
+
+  it('should not send error notification when authorizedUser has no userId', async () => {
+    const userWithNoId = { ...mockJudgeUser, userId: undefined };
+
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+        clientConnectionId: 'abc-123',
+      },
+      userWithNoId as any,
+    );
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.objectContaining({
+          action: 'batch_download_error',
+        }),
+      }),
+    );
+  });
+
+  it('should skip docket entries that have no docketEntryId', async () => {
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...mockCase,
+        docketEntries: [
+          {
+            documentTitle: 'entry without id',
+            documentType: 'Stipulated Decision',
+            entityName: 'DocketEntry',
+            eventCode: 'SDEC',
+            filingDate: '2018-03-01T00:03:00.000Z',
+            index: 1,
+            isDraft: false,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            userId: 'abc-123',
+            // docketEntryId is undefined
+          },
+        ],
+      },
+    ]);
+
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+        clientConnectionId: 'abc-123',
+      },
+      mockJudgeUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().zipDocuments,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [
+        {
+          filePathInZip: '101-18, Test Petitioner/0_Docket Record.pdf',
+          key: '69db2094-b50f-4fe5-9891-1c0b463792f3',
+          useTempBucket: true,
+        },
+      ],
+      onProgress: expect.anything(),
+      outputZipName: 'September_26_2019-Birmingham.zip',
+    });
+  });
 });

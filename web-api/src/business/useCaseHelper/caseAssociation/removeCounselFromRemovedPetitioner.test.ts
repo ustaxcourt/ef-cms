@@ -104,6 +104,33 @@ describe('removeCounselFromRemovedPetitioner', () => {
     ]);
   });
 
+  it('should handle when getPractitionersRepresenting returns an empty array', () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: [
+          MOCK_CASE.petitioners[0],
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: mockContactSecondaryId,
+            contactType: CONTACT_TYPES.secondary,
+          },
+        ],
+        privatePractitioners: [],
+      },
+      { authorizedUser: mockPetitionsClerkUser },
+    );
+
+    const updatedCase = removeCounselFromRemovedPetitioner({
+      authorizedUser: mockPetitionsClerkUser,
+      caseEntity,
+      petitionerContactId: mockContactSecondaryId,
+    });
+
+    expect(updatedCase.privatePractitioners?.length).toEqual(0);
+  });
+
   it('should not remove the privatePracitioner if they represent both the petitioner being removed and a remaining petitioner', () => {
     const caseEntity = new Case(
       {

@@ -7,7 +7,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { createMessageInteractor } from './createMessageInteractor';
 import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -97,5 +97,74 @@ describe('createMessageInteractor', () => {
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       to: 'Test Petitionsclerk2',
     });
+  });
+
+  it('throws NotFoundError when the case is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue(undefined);
+
+    await expect(
+      createMessageInteractor(
+        {
+          attachments: [],
+          docketNumber: '999-99',
+          message: 'hello',
+          subject: 'test',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'abc',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('throws NotFoundError when the fromUser is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      caseCaption: 'Test Caption, Petitioner',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
+    getUserById.mockResolvedValueOnce(undefined as unknown as DbUser);
+
+    await expect(
+      createMessageInteractor(
+        {
+          attachments: [],
+          docketNumber: '101-20',
+          message: 'hello',
+          subject: 'test',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'abc',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('throws NotFoundError when the toUser is not found', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      caseCaption: 'Test Caption, Petitioner',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
+    getUserById
+      .mockResolvedValueOnce({
+        name: 'Test Petitionsclerk',
+        role: ROLES.petitionsClerk,
+        section: PETITIONS_SECTION,
+        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      } as DbUser)
+      .mockResolvedValueOnce(undefined as unknown as DbUser);
+
+    await expect(
+      createMessageInteractor(
+        {
+          attachments: [],
+          docketNumber: '101-20',
+          message: 'hello',
+          subject: 'test',
+          toSection: PETITIONS_SECTION,
+          toUserId: 'non-existent-user-id',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 });

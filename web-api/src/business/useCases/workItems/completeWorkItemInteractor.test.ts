@@ -7,8 +7,13 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { NotFoundError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { completeWorkItemInteractor } from './completeWorkItemInteractor';
+import {
+  completeWorkItem,
+  completeWorkItemInteractor,
+  determineEntitiesToLock,
+} from './completeWorkItemInteractor';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
   mockDocketClerkUser,
@@ -65,5 +70,30 @@ describe('completeWorkItemInteractor', () => {
     expect(getWorkItemById.mock.calls[1][0]).toMatchObject({
       workItemId: mockWorkItemId,
     });
+  });
+
+  it('should throw NotFoundError when the work item is not found in completeWorkItem', async () => {
+    getWorkItemById.mockResolvedValue(undefined);
+
+    await expect(
+      completeWorkItem(
+        applicationContext,
+        {
+          completedMessage: 'Completed',
+          workItemId: 'non-existent-work-item-id',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError when the work item is not found in determineEntitiesToLock', async () => {
+    getWorkItemById.mockResolvedValue(undefined);
+
+    await expect(
+      determineEntitiesToLock({
+        workItemId: 'non-existent-work-item-id',
+      }),
+    ).rejects.toThrow(NotFoundError);
   });
 });

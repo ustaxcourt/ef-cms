@@ -10,6 +10,9 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -35,6 +38,8 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { getAllFeatureFlagsInteractor as getAllFeatureFlagsInteractorMock } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -53,6 +58,10 @@ describe('editPaperFilingInteractor', () => {
     fileAndServeDocumentOnOneCaseMock,
   );
   const getUserById = jest.mocked(getUserByIdMock);
+
+  const getAllFeatureFlagsInteractor = jest.mocked(
+    getAllFeatureFlagsInteractorMock,
+  );
 
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
@@ -104,6 +113,7 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
+    getAllFeatureFlagsInteractor.mockResolvedValue({});
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(workItem),
@@ -171,6 +181,32 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           ),
         ).rejects.toThrow('Docket entry has already been served');
+      });
+
+      it('should throw an error when the docket entry event code is in the restricted event codes list', async () => {
+        getAllFeatureFlagsInteractor.mockResolvedValue({
+          [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: 'A,MISP',
+        });
+
+        await expect(
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'Answer',
+                documentType: 'Answer',
+                eventCode: 'A',
+                filers: [mockPrimaryId],
+                isFileAttached: false,
+              },
+              isSavingForLater: true,
+            },
+            mockDocketClerkUser,
+          ),
+        ).rejects.toThrow('Unauthorized to edit this document type');
       });
 
       it('should throw an error when the docket entry is ready for service but is already pending service', async () => {
@@ -321,6 +357,58 @@ describe('editPaperFilingInteractor', () => {
         });
       });
     });
+
+    describe('Sad Path', () => {
+      it('should throw an error when the user is not found while saving for later', async () => {
+        getUserById.mockResolvedValue(undefined as unknown as DbUser);
+
+        await expect(
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                filers: [mockPrimaryId],
+                isFileAttached: false,
+              },
+              isSavingForLater: true,
+            },
+            mockDocketClerkUser,
+          ),
+        ).rejects.toThrow('User not found');
+      });
+
+      it('should throw an error when the work item is not found while saving for later', async () => {
+        getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+          undefined as unknown as WorkItem,
+        );
+
+        await expect(
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                filers: [mockPrimaryId],
+                isFileAttached: false,
+              },
+              isSavingForLater: true,
+            },
+            mockDocketClerkUser,
+          ),
+        ).rejects.toThrow('Could not find work item');
+      });
+    });
   });
 
   describe('Serve', () => {
@@ -432,6 +520,54 @@ describe('editPaperFilingInteractor', () => {
       });
 
       describe('Sad Path', () => {
+        it('should throw an error when attempting to serve a docket entry without a file attached', async () => {
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: mockDocketEntryId,
+                documentMetadata: {
+                  docketNumber: caseRecord.docketNumber,
+                  documentTitle: 'My Document',
+                  documentType: 'Memorandum in Support',
+                  eventCode: 'MISP',
+                  filers: [mockPrimaryId],
+                  isFileAttached: false,
+                },
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow(
+            'Docket entry cannot be served without a file attached',
+          );
+        });
+
+        it('should throw an error when the user is not found during serve', async () => {
+          getUserById.mockResolvedValue(undefined as unknown as DbUser);
+
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: mockDocketEntryId,
+                documentMetadata: {
+                  docketNumber: caseRecord.docketNumber,
+                  documentTitle: 'My Document',
+                  documentType: 'Memorandum in Support',
+                  eventCode: 'MISP',
+                  filers: [mockPrimaryId],
+                  isFileAttached: true,
+                },
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow('User not found');
+        });
+
         it('should call the persistence method to unset the pending service status on the docket entry when an error occurs while serving', async () => {
           applicationContext
             .getUseCaseHelpers()
