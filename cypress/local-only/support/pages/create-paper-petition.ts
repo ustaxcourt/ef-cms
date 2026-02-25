@@ -20,13 +20,13 @@ export const postPaperPetition = () => {
   cy.get('#submit-case').click();
 
   return cy.wait('@postPaperCase').then(({ response }) => {
-    if (!response || !response.body?.caseDetail.docketNumber) {
+    if (!response || !response.body?.docketNumber) {
       throw new Error(
         'Unable to get docket number from postPaperCase HTTP request',
       );
     }
-    expect(response.body.caseDetail).to.have.property('docketNumber');
-    return cy.wrap({ docketNumber: response.body.caseDetail.docketNumber! });
+    expect(response.body).to.have.property('docketNumber');
+    return cy.wrap({ docketNumber: response.body.docketNumber! });
   });
 };
 

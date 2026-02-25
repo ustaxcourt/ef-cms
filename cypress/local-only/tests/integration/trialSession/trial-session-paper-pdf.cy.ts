@@ -55,10 +55,8 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         cy.get('#submit-case').click();
         cy.wait('@postPaperCase').then(({ response: paperCaseResponse }) => {
           const petitionId =
-            paperCaseResponse?.body.caseDetail.docketEntries.find(
-              (d: any) => d.documentTitle === 'Petition',
-            ).docketEntryId;
-          const docketNumber = paperCaseResponse?.body.caseDetail.docketNumber;
+            paperCaseResponse?.body.petitionDocketEntryId;
+          const docketNumber = paperCaseResponse?.body.docketNumber;
           cy.visit(
             `/case-detail/${docketNumber}/petition-qc/document-view/${petitionId}`,
           );

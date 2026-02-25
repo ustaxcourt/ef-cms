@@ -338,7 +338,6 @@ export const INTERNAL_ONLY_DOCKET_ENTRY_FIELDS = [
   'stampData',
   'strickenBy',
   'strickenByUserId',
-  'userId',
   'workItem',
   'workItemId',
 ] as const;
