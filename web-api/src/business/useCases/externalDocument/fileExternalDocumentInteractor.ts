@@ -1,7 +1,6 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-  ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
@@ -163,7 +162,6 @@ export const fileExternalDocument = async (
     for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
       if (docketEntryId && metadata) {
         const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-        const preFiledBy = metadata.filedBy;
         const docketEntryEntity = new DocketEntry(
           {
             ...baseMetadata,
@@ -181,16 +179,6 @@ export const fileExternalDocument = async (
         );
 
         docketEntryEntity.setFiledBy(user);
-        const isNOTWRelated =
-          docketEntryEntity.eventCode === 'NOTW' ||
-          docketEntryEntity.previousDocument?.documentType ===
-            'Notice of Withdrawal as Counsel';
-        const isPractitioner =
-          docketEntryEntity.filedByRole === ROLES.irsPractitioner ||
-          docketEntryEntity.filedByRole === ROLES.privatePractitioner;
-        if (isNOTWRelated && isPractitioner) {
-          docketEntryEntity.filedBy = preFiledBy;
-        }
         docketEntryEntity.validate();
 
         const workItem = new WorkItem({
