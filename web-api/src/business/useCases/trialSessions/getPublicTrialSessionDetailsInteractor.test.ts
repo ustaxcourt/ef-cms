@@ -81,11 +81,11 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       .mockResolvedValueOnce({
         ...MOCK_TRIAL,
         swingSessionId,
-      })
+      } as any)
       .mockResolvedValueOnce({
         ...MOCK_TRIAL,
         trialLocation: 'Houston, Texas',
-      });
+      } as any);
 
     const result = await getPublicTrialSessionDetailsInteractor({
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',

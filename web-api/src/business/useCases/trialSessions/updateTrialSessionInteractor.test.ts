@@ -433,7 +433,7 @@ describe('updateTrialSessionInteractor', () => {
 
       getTrialSessionById.mockResolvedValue({
         caseOrder: undefined,
-      } as RawTrialSession);
+      } as unknown as RawTrialSession);
 
       const results = await determineEntitiesToLock(applicationContext, {
         trialSession: {

@@ -385,12 +385,12 @@ describe('removeConsolidatedCasesInteractor', () => {
 
     getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '101-19') {
-        return Promise.resolve([mockLeadDeadline]);
+        return Promise.resolve([mockLeadDeadline] as any);
       }
       return Promise.resolve([]);
     });
     getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
-      mockChildDeadlines,
+      mockChildDeadlines as any,
     );
     getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
 
@@ -416,8 +416,8 @@ describe('removeConsolidatedCasesInteractor', () => {
     const deadline103 = allUpsertedDeadlines.find(
       d => d.docketNumber === '103-19',
     );
-    expect(deadline102.consolidatedCaseDeadlineId).toBeUndefined();
-    expect(deadline103.consolidatedCaseDeadlineId).toEqual(
+    expect(deadline102!.consolidatedCaseDeadlineId).toBeUndefined();
+    expect(deadline103!.consolidatedCaseDeadlineId).toEqual(
       'deadline-child-102',
     );
   });
@@ -442,12 +442,12 @@ describe('removeConsolidatedCasesInteractor', () => {
 
     getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '101-19') {
-        return Promise.resolve([mockLeadDeadline]);
+        return Promise.resolve([mockLeadDeadline] as any);
       }
       return Promise.resolve([]);
     });
     getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
-      mockChildDeadlines,
+      mockChildDeadlines as any,
     );
     getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
 
@@ -479,7 +479,7 @@ describe('removeConsolidatedCasesInteractor', () => {
 
     getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '101-19') {
-        return Promise.resolve([mockLeadDeadline]);
+        return Promise.resolve([mockLeadDeadline] as any);
       }
       return Promise.resolve([]);
     });
@@ -515,7 +515,7 @@ describe('removeConsolidatedCasesInteractor', () => {
 
     getCaseDeadlinesByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '101-19') {
-        return Promise.resolve([mockLeadDeadline]);
+        return Promise.resolve([mockLeadDeadline] as any);
       }
       return Promise.resolve([]);
     });

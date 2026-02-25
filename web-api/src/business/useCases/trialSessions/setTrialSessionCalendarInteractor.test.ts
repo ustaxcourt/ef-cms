@@ -110,7 +110,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should send an error notification when the trial session is not found', async () => {
-    getTrialSessionById.mockResolvedValueOnce(null);
+    getTrialSessionById.mockResolvedValueOnce(undefined);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
