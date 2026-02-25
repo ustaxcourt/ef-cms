@@ -12,11 +12,9 @@ const formatPartyNames = (names: string[], prefix: string): string => {
 export const generateFiledBy = ({
   docketEntry,
   petitioners,
-  filedBy,
 }: {
   docketEntry: RawDocketEntry;
   petitioners: any[];
-  filedBy?: string;
 }): string | undefined => {
   const isNoticeOfContactChange =
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
@@ -44,10 +42,6 @@ export const generateFiledBy = ({
     return docketEntry.otherFilingParty
       ? `${partiesArray.join(' & ')}, ${docketEntry.otherFilingParty}`
       : partiesArray.join(' & ');
-  }
-
-  if (docketEntry.eventCode === 'NOTW') {
-    return filedBy;
   }
 
   if (docketEntry.partyIrsPractitioner) {
