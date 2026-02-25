@@ -20,6 +20,7 @@ export const ServeCaseToIrsDuplicateErrorModal: React.FC<ServeCaseToIrsDuplicate
           closeLink={false}
           confirmSequence={confirmSequence}
           title={'Petition has already been served.'}
+          dataTestId='serve-case-to-irs-duplicate-error-modal'
         >
           <div className="file-upload-error">
             Click the button to refresh the data and navigate to your previous
