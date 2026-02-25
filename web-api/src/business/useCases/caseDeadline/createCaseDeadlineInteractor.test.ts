@@ -24,10 +24,12 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 describe('createCaseDeadlineInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
 
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -70,15 +72,16 @@ describe('createCaseDeadlineInteractor', () => {
   it('creates a case deadline and marks the case as automatically blocked when there are no pending items', async () => {
     mockCase = MOCK_CASE_WITHOUT_PENDING;
 
-    const caseDeadline = await createCaseDeadlineInteractor(
+    const result = await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
       mockPetitionsClerkUser,
     );
 
-    expect(caseDeadline).toBeDefined();
-    expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
-    expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
+    expect(result).toBeDefined();
+    const createdDeadline = upsertCaseDeadlines.mock.calls[0][0][0];
+    expect(createdDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
+    expect(createdDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
@@ -94,15 +97,16 @@ describe('createCaseDeadlineInteractor', () => {
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
 
-    const caseDeadline = await createCaseDeadlineInteractor(
+    const result = await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
       mockPetitionsClerkUser,
     );
 
-    expect(caseDeadline).toBeDefined();
-    expect(caseDeadline.associatedJudge).toEqual('Judge Buch');
-    expect(caseDeadline.associatedJudgeId).toEqual(
+    expect(result).toBeDefined();
+    const createdDeadline = upsertCaseDeadlines.mock.calls[0][0][0];
+    expect(createdDeadline.associatedJudge).toEqual('Judge Buch');
+    expect(createdDeadline.associatedJudgeId).toEqual(
       'dabbad02-18d0-43ec-bafb-654e83405416',
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();

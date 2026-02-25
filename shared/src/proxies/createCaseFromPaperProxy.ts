@@ -21,7 +21,7 @@ export const createCaseFromPaperInteractor = (
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },
-): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
+): Promise<{ docketNumber: string; petitionDocketEntryId: string; workItem: RawWorkItem }> => {
   return post({
     applicationContext,
     body: {

@@ -267,7 +267,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates the service indicator on the contacts when they are being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -282,16 +282,18 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(results.petitioners[0].serviceIndicator).toBe(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
-    expect(results.petitioners[1].serviceIndicator).toBe(
+    expect(updatedCase.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 
   it('reverts the service indicator on the contacts when they are no longer being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -306,10 +308,12 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(results.petitioners[0].serviceIndicator).toBe(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
-    expect(results.petitioners[1].serviceIndicator).toBe(
+    expect(updatedCase.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -320,7 +324,7 @@ describe('updateCounselOnCaseInteractor', () => {
       privatePractitioners: [mockPrivatePractitioners[1]],
     });
 
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -332,7 +336,9 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(results.petitioners[0].serviceIndicator).toBe(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[0].serviceIndicator).toBe(
       MOCK_CASE.petitioners[0].serviceIndicator,
     );
   });
