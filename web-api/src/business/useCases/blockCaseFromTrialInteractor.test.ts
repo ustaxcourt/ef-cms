@@ -38,9 +38,16 @@ describe('blockCaseFromTrialInteractor', () => {
     );
 
     expect(result).toMatchObject({
-      blocked: true,
-      blockedReason: 'just because',
+      docketNumber: MOCK_CASE.docketNumber,
     });
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          blocked: true,
+          blockedReason: 'just because',
+        }),
+      }),
+    );
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

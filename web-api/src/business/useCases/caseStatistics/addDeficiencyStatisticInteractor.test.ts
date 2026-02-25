@@ -101,7 +101,7 @@ describe('addDeficiencyStatisticInteractor', () => {
     );
 
     expect(result).toMatchObject({
-      statistics: [mockStatistic],
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 });

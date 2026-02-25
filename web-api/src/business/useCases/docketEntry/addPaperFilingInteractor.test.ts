@@ -11,7 +11,9 @@ jest.mock(
 import {
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
-jest.mock('@shared/sharedAppContext');
+jest.mock('@shared/sharedAppContext', () => ({
+  ...jest.requireActual('@shared/sharedAppContext'),
+}));
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,

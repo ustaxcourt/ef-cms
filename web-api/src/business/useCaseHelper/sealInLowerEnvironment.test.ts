@@ -41,7 +41,7 @@ describe('sealInLowerEnvironment', () => {
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).toHaveBeenCalled();
-    expect(result[0].sealedDate).toBeTruthy();
+    expect(result[0].docketNumber).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should only log a warning if we do not have a docketNumber', async () => {

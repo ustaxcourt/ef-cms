@@ -286,9 +286,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
+    expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
   it('should not serve a document or return a paperServicePdfUrl when only the serviceIndicator for the petitioner changes but not the address', async () => {
