@@ -1,6 +1,6 @@
 import {
   AdminDeleteUserCommand,
-  AdminResetUserPasswordCommand,
+  AdminSetUserPasswordCommand,
   CognitoIdentityProvider,
   ListUsersCommand,
   ListUsersCommandOutput,
@@ -117,7 +117,7 @@ export const resetUserPassword = async ({
   user: UserType;
   UserPoolId: string;
 }): Promise<boolean> => {
-  const adminResetUserPasswordCommandInput = {
+  const adminSetUserPasswordCommandInput = {
     Password,
     Permanent: true,
     Username: user.Username,
@@ -126,11 +126,11 @@ export const resetUserPassword = async ({
 
   let updated = false;
   try {
-    const adminResetUserPasswordCommand = new AdminResetUserPasswordCommand(
-      adminResetUserPasswordCommandInput,
+    const adminSetUserPasswordCommand = new AdminSetUserPasswordCommand(
+      adminSetUserPasswordCommandInput,
     );
 
-    await cognito.send(adminResetUserPasswordCommand);
+    await cognito.send(adminSetUserPasswordCommand);
     console.log('Reset password for user: ', user.Username);
     updated = true;
   } catch (error) {
