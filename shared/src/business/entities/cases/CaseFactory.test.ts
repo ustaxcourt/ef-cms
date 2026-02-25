@@ -212,6 +212,51 @@ describe('CaseFactory', () => {
     });
   });
 
+  describe('getFullCase', () => {
+    it('should return a full Case when user has access', () => {
+      const caseData = CaseFactory.getFullCase({
+        rawCase: MOCK_UNSERVED_CASE,
+        user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+    });
+
+    it('should throw an error when user does not have access to the full case', () => {
+      expect(() =>
+        CaseFactory.getFullCase({
+          rawCase: MOCK_UNSERVED_CASE,
+          user: undefined,
+        }),
+      ).toThrow('does not have access');
+    });
+  });
+
+  describe('casePetitionIsServed via IRS superuser path', () => {
+    it('should use petitionIsServed flag from rawCase when it is defined', () => {
+      const rawCaseWithPetitionIsServed = {
+        ...MOCK_UNSERVED_CASE,
+        petitionIsServed: true,
+      };
+      const caseData = CaseFactory.getCase({
+        rawCase: rawCaseWithPetitionIsServed,
+        user: mockIrsSuperuser,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+    });
+
+    it('should return restricted case when petitionIsServed is explicitly false for IRS superuser', () => {
+      const rawCaseWithPetitionNotServed = {
+        ...MOCK_UNSERVED_CASE,
+        petitionIsServed: false,
+      };
+      const caseData = CaseFactory.getCase({
+        rawCase: rawCaseWithPetitionNotServed,
+        user: mockIrsSuperuser,
+      });
+      expect(caseData).toBeInstanceOf(PublicCase);
+    });
+  });
+
   describe('when using getCaseDTO method', () => {
     const MOCK_UNSERVED_CASE_DTO = {
       ...MOCK_UNSERVED_CASE,

@@ -41,5 +41,37 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
       }])).toEqual('Testing Petr. Bob')
   });
 
+  it('should return "Respondent" in document title when partyIrsPractitioner is true', () => {
+    const entity = new CaseAssociationRequestDocumentTypeD({
+      documentType: 'Notice of Intervention',
+      documentTitleTemplate: 'Testing []',
+      partyIrsPractitioner: true,
+    });
 
+    expect(entity.getDocumentTitle([])).toEqual('Testing Respondent');
+  });
+
+  it('should return "Petrs." in document title when there are multiple filers', () => {
+    const entity = new CaseAssociationRequestDocumentTypeD({
+      documentType: 'Notice of Intervention',
+      documentTitleTemplate: 'Testing []',
+      filers: ['abc', 'def'],
+    });
+
+    expect(
+      entity.getDocumentTitle([
+        { contactId: 'abc', name: 'Alice' },
+        { contactId: 'def', name: 'Bob' },
+      ]),
+    ).toEqual('Testing Petrs. Alice & Bob');
+  });
+
+  it('should not map supportingDocuments when they are not provided', () => {
+    const entity = new CaseAssociationRequestDocumentTypeD({
+      documentType: 'Notice of Intervention',
+      documentTitleTemplate: 'Testing []',
+    });
+
+    expect(entity.supportingDocuments).toBeUndefined();
+  });
 });

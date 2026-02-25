@@ -48,7 +48,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should delete the statistic and return the updated case', async () => {
+  it('should delete the statistic and return the docket number', async () => {
     const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
@@ -58,7 +58,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       mockDocketClerkUser,
     );
     expect(result).toMatchObject({
-      statistics: [],
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
@@ -72,7 +72,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       mockDocketClerkUser,
     );
     expect(result).toMatchObject({
-      statistics: [statistic],
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 

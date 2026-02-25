@@ -63,7 +63,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should update the case statistic and return the updated statistic when statisticId is present on the case', async () => {
+  it('should update the case statistic and return the docket number when statisticId is present on the case', async () => {
     const statisticToUpdate = {
       ...statistic,
       determinationDeficiencyAmount: 1,
@@ -78,11 +78,11 @@ describe('updateDeficiencyStatisticInteractor', () => {
       authorizedUser,
     );
     expect(result).toMatchObject({
-      statistics: [statisticToUpdate],
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
-  it('should return the original statistic when statisticId is not present on the case', async () => {
+  it('should return the docket number when statisticId is not present on the case', async () => {
     const statisticToUpdate = {
       ...statistic,
       determinationDeficiencyAmount: 1,
@@ -98,7 +98,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
       authorizedUser,
     );
     expect(result).toMatchObject({
-      statistics: [statistic],
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 

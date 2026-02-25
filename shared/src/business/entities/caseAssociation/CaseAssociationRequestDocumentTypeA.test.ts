@@ -22,4 +22,27 @@ describe('CaseAssociationRequestFactory', () => {
 
     expect(entity.getDocumentTitle()).toEqual(mockDocumentTitleTemplate);
   });
+
+  it('should map supportingDocuments through SupportingDocumentInformationFactory when provided', () => {
+    const entity = new CaseAssociationRequestDocumentTypeA({
+      documentType: 'Notice of Intervention',
+      supportingDocuments: [
+        {
+          documentTitle: 'Supporting Document 1',
+          documentType: 'Supporting Document',
+        },
+      ],
+    });
+
+    expect(entity.supportingDocuments).toBeDefined();
+    expect(entity.supportingDocuments).toHaveLength(1);
+  });
+
+  it('should not map supportingDocuments when they are not provided', () => {
+    const entity = new CaseAssociationRequestDocumentTypeA({
+      documentType: 'Notice of Intervention',
+    });
+
+    expect(entity.supportingDocuments).toBeUndefined();
+  });
 });

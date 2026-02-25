@@ -108,7 +108,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     ]);
   });
 
-  it('should return an updated raw case object', async () => {
+  it('should return the docket number', async () => {
     const result = await updateCorrespondenceDocumentInteractor(
       {
         documentMetadata: {
@@ -121,13 +121,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     );
 
     expect(result).toMatchObject({
-      ...mockCase,
-      correspondence: [
-        {
-          ...mockCorrespondence,
-          documentTitle: 'A title that has been updated',
-        },
-      ],
+      docketNumber: mockCase.docketNumber,
     });
   });
 });

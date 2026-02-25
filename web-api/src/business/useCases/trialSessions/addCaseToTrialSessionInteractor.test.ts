@@ -103,7 +103,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     ).rejects.toThrow('The case is already part of this trial session.');
   });
 
-  it('should return the expected case with new trial session information', async () => {
+  it('should return the docket number after adding the case to the trial session', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
@@ -121,12 +121,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     );
 
     expect(latestCase).toMatchObject({
-      associatedJudge: CHIEF_JUDGE,
-      status: CASE_STATUS_TYPES.calendared,
-      trialDate: '2025-12-01T00:00:00.000Z',
-      trialLocation: 'Birmingham, Alabama',
-      trialSessionId: mockTrialSession.trialSessionId,
-      trialTime: '10:00',
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 

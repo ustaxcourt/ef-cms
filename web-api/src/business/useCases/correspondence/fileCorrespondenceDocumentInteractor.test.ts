@@ -134,7 +134,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     ]);
   });
 
-  it('should return an updated raw case object', async () => {
+  it('should return the correspondenceId and docketNumber', async () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await fileCorrespondenceDocumentInteractor(
@@ -149,17 +149,8 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
     expect(result).toMatchObject({
-      ...mockCase,
-      correspondence: [
-        {
-          correspondenceId: mockCorrespondenceId,
-          docketNumber: mockCase.docketNumber,
-          documentTitle: mockDocumentTitle,
-          filedBy: docketClerkUser.name,
-          filingDate: mockFilingDate,
-          userId: docketClerkUser.userId,
-        },
-      ],
+      correspondenceId: mockCorrespondenceId,
+      docketNumber: mockCase.docketNumber,
     });
   });
 });
