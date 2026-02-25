@@ -3,7 +3,7 @@ import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/component
 import React from 'react';
 import classNames from 'classnames';
 
-const RenderAddress = ({ contact, countryTypes }) => {
+const RenderAddress = ({ contact, countryTypes }: { className?: string; contact: any; countryTypes: any }) => {
   const isInternational = contact.countryType === countryTypes.INTERNATIONAL;
 
   return (
@@ -22,7 +22,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
+const RenderContact = ({ contact, countryTypes, showContactDetails }: { caseTitle?: string; contact: any; countryTypes: any; showContactDetails: any }) => {
   return (
     <>
       <tbody>

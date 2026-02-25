@@ -17,9 +17,7 @@ export const saveAndSubmitCaseAction = async ({
 }>) => {
   const { fileUploadProgressMap } = props;
 
-  const petitionMetadata: ElectronicCreatedCaseType = get(
-    state.petitionFormatted,
-  );
+  const petitionMetadata = get(state.petitionFormatted) as unknown as ElectronicCreatedCaseType;
 
   const user = get(state.user);
 

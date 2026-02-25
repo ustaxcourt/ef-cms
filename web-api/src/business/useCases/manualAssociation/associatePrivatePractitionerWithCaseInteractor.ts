@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
@@ -47,7 +48,7 @@ export const associatePrivatePractitionerWithCase = async (
     docketNumber,
     representing,
     serviceIndicator,
-    user,
+    user: user as unknown as RawPractitioner,
   });
 
   return { docketNumber };

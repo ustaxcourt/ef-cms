@@ -116,4 +116,23 @@ describe('formatPendingItem', () => {
 
     expect(result.formattedName).toBe(pendingItem.documentType);
   });
+
+  it('should use empty string when both documentTitle and documentType are not available', () => {
+    const result = formatPendingItem({
+      ...pendingItem,
+      documentTitle: '',
+      documentType: '',
+    });
+
+    expect(result.formattedName).toBe('');
+  });
+
+  it('should use empty string for caseCaption when caseCaption is not provided', () => {
+    const result = formatPendingItem({
+      ...pendingItem,
+      caseCaption: undefined as any,
+    });
+
+    expect(result.caseTitle).toBeDefined();
+  });
 });

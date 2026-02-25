@@ -52,8 +52,6 @@ const completeDocketEntryQC = async (
     documentType?: string;
     eventCode: string;
     freeText?: string;
-    description?: string;
-    filingsAndProceedings?: string;
   };
   paperServiceParties: any[];
   paperServicePdfUrl: string;
@@ -393,12 +391,10 @@ const completeDocketEntryQC = async (
     updatedDocketEntry: {
       additionalInfo: rawUpdatedDocketEntry.additionalInfo,
       additionalInfo2: rawUpdatedDocketEntry.additionalInfo2,
-      description: rawUpdatedDocketEntry.description,
       docketEntryId: rawUpdatedDocketEntry.docketEntryId,
       documentTitle: rawUpdatedDocketEntry.documentTitle,
       documentType: rawUpdatedDocketEntry.documentType,
       eventCode: rawUpdatedDocketEntry.eventCode,
-      filingsAndProceedings: rawUpdatedDocketEntry.filingsAndProceedings,
       freeText: rawUpdatedDocketEntry.freeText,
     },
   };
