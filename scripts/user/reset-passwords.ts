@@ -8,21 +8,21 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { deleteUserFromCognito, getAllCognitoUsers } from '../helpers/cognito';
 import { runInBatches } from '../helpers/batch';
+import { getEnabledCognitoUsers, resetUserPassword } from '../helpers/cognito';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'clear-all-cognito-users - Deletes all cognito accounts in the provided user pool.',
+    'reset-passwords - Resets the cognito password for all test users.',
   environment: {
+    Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
     region: 'REGION',
   },
   preventExecutionAgainst: ['prod'],
   requireActiveAwsSession: true,
 };
-
-const { UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
+const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
 
@@ -30,16 +30,16 @@ const cognito = new CognitoIdentityProvider({ region });
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const allUsers: UserType[] = await getAllCognitoUsers({
+  const enabledUsers: UserType[] = await getEnabledCognitoUsers({
     cognito,
     UserPoolId,
   });
 
-  const tasks: (() => Promise<boolean>)[] = allUsers.map(
-    user => () => deleteUserFromCognito({ cognito, user, UserPoolId }),
+  const tasks: (() => Promise<boolean>)[] = enabledUsers.map(
+    user => () => resetUserPassword({ cognito, Password, user, UserPoolId }),
   );
 
   await runInBatches(tasks);
 
-  console.log('All users deleted.');
+  console.log("All enabled users' passwords have been reset.");
 })();
