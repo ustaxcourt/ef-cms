@@ -10,7 +10,7 @@ export const createCaseInteractor = (
     petitionMetadata: ElectronicCreatedCaseType;
     stinFileId: string;
   },
-): Promise<RawCase> => {
+): Promise<{ docketNumber: string; docketNumberWithSuffix: string; docketEntryIds: string[] }> => {
   return post({
     applicationContext,
     body: requestBody,

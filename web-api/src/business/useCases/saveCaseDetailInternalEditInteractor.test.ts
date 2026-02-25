@@ -41,7 +41,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
-  jest
+  const mockedUpdateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociations)
     .mockImplementation(({ caseToUpdate }) => caseToUpdate);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
@@ -117,7 +117,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   it('should update contactSecondary', async () => {
     const mockAddress = '1234 Something Lane';
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -134,7 +134,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.petitioners[1].address1).toEqual(mockAddress);
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[1].address1).toEqual(mockAddress);
   });
 
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
@@ -231,7 +233,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     caseToUpdate.orderForRatification = true;
     caseToUpdate.orderToShowCause = true;
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -243,17 +245,19 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
-    expect(result.orderForAmendedPetition).toBeTruthy();
-    expect(result.orderForAmendedPetitionAndFilingFee).toBeTruthy();
-    expect(result.orderForFilingFee).toBeTruthy();
-    expect(result.orderForCds).toBeTruthy();
-    expect(result.orderForRatification).toBeTruthy();
-    expect(result.orderToShowCause).toBeTruthy();
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.orderDesignatingPlaceOfTrial).toBeTruthy();
+    expect(updatedCase.orderForAmendedPetition).toBeTruthy();
+    expect(updatedCase.orderForAmendedPetitionAndFilingFee).toBeTruthy();
+    expect(updatedCase.orderForFilingFee).toBeTruthy();
+    expect(updatedCase.orderForCds).toBeTruthy();
+    expect(updatedCase.orderForRatification).toBeTruthy();
+    expect(updatedCase.orderToShowCause).toBeTruthy();
   });
 
   it('should not change contact primary contactId when saving case', async () => {
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -268,7 +272,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.petitioners[0].contactId).toEqual(
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[0].contactId).toEqual(
       mockCase.petitioners[0].contactId,
     );
   });
@@ -276,7 +282,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   it('should remove contactSecondary if changing from a party type with primary and secondary to a party type with only primary', async () => {
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithContactSecondary);
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -289,7 +295,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.petitioners.length).toEqual(1);
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners.length).toEqual(1);
   });
 
   it('should remove contactSecondary from privatePractitioner representing array if changing from a party type with primary and secondary to a party type with only primary', async () => {
@@ -315,7 +323,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockCaseWithContactSecondaryRepresented,
     );
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -328,11 +336,13 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.privatePractitioners).toBeDefined();
-    expect(result.privatePractitioners![0].representing).toEqual([
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.privatePractitioners).toBeDefined();
+    expect(updatedCase.privatePractitioners![0].representing).toEqual([
       mockCase.petitioners[0].contactId,
     ]);
-    expect(result.privatePractitioners![1].representing).toEqual([
+    expect(updatedCase.privatePractitioners![1].representing).toEqual([
       mockCase.petitioners[0].contactId,
     ]);
   });
@@ -345,7 +355,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     };
     getCaseByDocketNumber.mockResolvedValue({ ...currentCaseDetail });
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -358,7 +368,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
+    const updatedCase =
+      mockedUpdateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

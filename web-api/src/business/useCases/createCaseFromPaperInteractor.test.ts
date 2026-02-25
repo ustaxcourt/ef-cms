@@ -83,7 +83,7 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('creates a new case from paper and returns a case with a history of case statuses', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -136,13 +136,16 @@ describe('createCaseFromPaperInteractor', () => {
       updatedCaseStatus: CASE_STATUS_TYPES.new,
     };
 
-    expect(caseFromPaper.caseDetail).toMatchObject({
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    expect(createdCase).toMatchObject({
       caseStatusHistory: [expectedCaseStatus],
     });
   });
 
   it('adds an applicationForWaiverOfFilingFee docket entry to the case', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         applicationForWaiverOfFilingFeeFileId:
@@ -183,8 +186,11 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
     const applicationForWaiverOfFilingFeeDocketEntry =
-      caseFromPaper.caseDetail.docketEntries.find(
+      createdCase.docketEntries.find(
         d =>
           d.eventCode ===
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
@@ -201,7 +207,7 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('adds a Corporate Disclosure Statement docket entry to the case', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -246,8 +252,11 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
     const corporateDisclosureDocketEntry =
-      caseFromPaper.caseDetail.docketEntries.find(
+      createdCase.docketEntries.find(
         d =>
           d.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
       );
@@ -263,7 +272,7 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('adds a STIN docket entry to the case with index 0', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -305,7 +314,10 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const stinDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const stinDocketEntry = createdCase.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
     );
     expect(stinDocketEntry).toMatchObject({
@@ -320,7 +332,7 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('adds an RQT docket entry to the case when an RQT file is attached', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -365,7 +377,10 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const rqtDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const rqtDocketEntry = createdCase.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
     );
@@ -381,7 +396,7 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('adds an ATP docket entry to the case when an ATP file is attached', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
+    await createCaseFromPaperInteractor(
       applicationContext,
       {
         attachmentToPetitionFileId: '513f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -421,7 +436,10 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const atpDocketEntry = caseFromPaper.caseDetail.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const atpDocketEntry = createdCase.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
@@ -549,8 +567,11 @@ describe('createCaseFromPaperInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
     const reqForPlaceOfTrialDocketEntry =
-      caseFromPaper.caseDetail.docketEntries.find(
+      createdCase.docketEntries.find(
         d =>
           d.eventCode ===
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,

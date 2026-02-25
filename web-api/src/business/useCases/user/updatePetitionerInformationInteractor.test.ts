@@ -272,7 +272,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should update petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -286,11 +286,13 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toEqual(mockUrl);
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toHaveBeenCalled();
   });
 
   it('should not serve a document or return a paperServicePdfUrl when only the serviceIndicator for the petitioner changes but not the address', async () => {
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -309,7 +311,6 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toBeUndefined();
   });
 
   it('should not update petitioner email even when it is provided', async () => {

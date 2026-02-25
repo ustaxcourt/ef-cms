@@ -113,7 +113,7 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should add the petitioner to the case and return the updated case', async () => {
-    const updatedCase = await addPetitionerToCaseInteractor(
+    await addPetitionerToCaseInteractor(
       applicationContext,
       {
         caseCaption: MOCK_CASE.caseCaption,
@@ -123,6 +123,8 @@ describe('addPetitionerToCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners.length).toEqual(2);
     expect(updatedCase.petitioners[1]).toMatchObject(mockContact);
   });

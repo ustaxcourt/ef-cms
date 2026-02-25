@@ -133,15 +133,15 @@ describe('createCaseInteractor', () => {
     );
 
     expect(result).toBeDefined();
-    const petitionDocketEntry = result.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const petitionDocketEntry = createdCase.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
     );
     expect(petitionDocketEntry).toBeDefined();
     expect(petitionDocketEntry!.redactionAcknowledgement).toEqual(true);
-    expect(
-      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
-        .calls[0][0].caseToCreate,
-    ).toMatchObject({
+    expect(createdCase).toMatchObject({
       caseStatusHistory: [
         {
           changedBy: 'Petitioner',
@@ -191,7 +191,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should match the current user id to the contactId when the user is petitioner', async () => {
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -201,12 +201,15 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    expect(result.petitioners[0].contactId).toEqual(user.userId);
-    expect(result.petitioners[0].address1).toEqual('99 South Oak Lane');
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    expect(createdCase.petitioners[0].contactId).toEqual(user.userId);
+    expect(createdCase.petitioners[0].address1).toEqual('99 South Oak Lane');
   });
 
   it('should create a STIN docket entry on the case with index 0', async () => {
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -241,7 +244,10 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    const stinDocketEntry = result.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const stinDocketEntry = createdCase.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
     )!;
     expect(stinDocketEntry.index).toEqual(0);
@@ -295,11 +301,14 @@ describe('createCaseInteractor', () => {
     );
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners).toBeDefined();
-    expect(result.privatePractitioners![0].representing).toEqual([
-      getContactPrimary(result).contactId,
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    expect(createdCase.privatePractitioners).toBeDefined();
+    expect(createdCase.privatePractitioners![0].representing).toEqual([
+      getContactPrimary(createdCase).contactId,
     ]);
-    const petitionDocketEntry = result.docketEntries.find(
+    const petitionDocketEntry = createdCase.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
     );
 
@@ -312,7 +321,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should create a case successfully with an "Attachment to Petition" document', async () => {
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         attachmentToPetitionFileIds: ['f09116b1-6a8c-4198-b661-0f06e9c6cbdc'],
@@ -350,7 +359,10 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    const atpDocketEntry = result.docketEntries.find(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const atpDocketEntry = createdCase.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
@@ -360,7 +372,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         attachmentToPetitionFileIds: [
@@ -401,7 +413,10 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    const atpDocketEntries = result.docketEntries.filter(
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    const atpDocketEntries = createdCase.docketEntries.filter(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
@@ -467,10 +482,13 @@ describe('createCaseInteractor', () => {
     );
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners).toBeDefined();
-    expect(result.privatePractitioners![0].representing).toEqual([
-      getContactPrimary(result).contactId,
-      getContactSecondary(result).contactId,
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    expect(createdCase.privatePractitioners).toBeDefined();
+    expect(createdCase.privatePractitioners![0].representing).toEqual([
+      getContactPrimary(createdCase).contactId,
+      getContactSecondary(createdCase).contactId,
     ]);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
@@ -487,7 +505,7 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -539,7 +557,10 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    result.petitioners.forEach(p => {
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    createdCase.petitioners.forEach(p => {
       expect(p.serviceIndicator).not.toBeUndefined();
     });
   });
@@ -553,7 +574,7 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    const result = await createCaseInteractor(
+    await createCaseInteractor(
       applicationContext,
       {
         petitionFileId: '6722d660-d241-45ad-b7b2-0326cbfee40d',
@@ -588,7 +609,10 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    result.petitioners.forEach(p => {
+    const createdCase =
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
+        .calls[0][0].caseToCreate;
+    createdCase.petitioners.forEach(p => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
       expect(p.email).toBeUndefined();
     });

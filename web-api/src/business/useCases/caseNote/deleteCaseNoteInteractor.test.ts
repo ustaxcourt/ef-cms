@@ -53,7 +53,7 @@ describe('deleteCaseNoteInteractor', () => {
     expect(deleteCaseNotePersistence).toHaveBeenCalledWith({
       docketNumber: MOCK_CASE.docketNumber,
     });
-    expect(result.caseNote).not.toBeDefined();
+    expect(result.docketNumber).toBeDefined();
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

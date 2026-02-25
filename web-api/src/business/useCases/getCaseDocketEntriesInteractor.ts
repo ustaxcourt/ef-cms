@@ -46,7 +46,7 @@ export const getCaseDocketEntriesInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   docketEntries: RawDocketEntry[];
-  archivedDocketEntries: RawDocketEntry[];
+  archivedDocketEntries?: RawDocketEntry[];
   totalCount: number;
   hasPendingItems: boolean;
 }> => {
