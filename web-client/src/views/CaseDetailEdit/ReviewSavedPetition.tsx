@@ -288,7 +288,7 @@ export const ReviewSavedPetition = connect(
           />
         )}
         {showModal === 'ServeCaseToIrsDuplicateErrorModal' && (
-          <ServeCaseToIrsDuplicateErrorModal onCancelSequence="closeModalAndNavigateSequence" />
+          <ServeCaseToIrsDuplicateErrorModal/>
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />
