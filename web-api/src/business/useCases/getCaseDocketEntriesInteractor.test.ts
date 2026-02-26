@@ -111,9 +111,7 @@ function setupDbReaderMock({
 } = {}) {
   // getDbReader is called multiple times with different callbacks.
   // We track call order to return appropriate results.
-  let callCount = 0;
-  getDbReader.mockImplementation(async () => {
-    callCount++;
+  getDbReader.mockImplementation(() => {
 
     // The interactor makes these calls in order:
     // 1. checkIfCaseIsSealed (for external users only — queries dwCase)
@@ -162,7 +160,7 @@ function setupDbReaderMock({
   // 2. computePetitionServedStatus -> { servedAt }
 
   // Return mock values based on call count
-  getDbReader.mockImplementation(async (_cb: any) => {
+  getDbReader.mockImplementation((_cb: any) => {
     const idx = responses.length;
     // Just always push and return undefined - we'll set up specific values
     responses.push(idx);
@@ -174,9 +172,6 @@ function setupDbReaderMock({
   // and each expects different return shapes, and they're called at different
   // times, let's just override based on call sequence.
   getDbReader.mockReset();
-
-  // Create a sequence of return values based on expected call order
-  const mockReturnSequence: any[] = [];
 
   return {
     setupForInternalUser() {
