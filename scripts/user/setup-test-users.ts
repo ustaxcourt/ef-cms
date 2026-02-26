@@ -23,20 +23,14 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 const scriptConfig: ScriptConfig = {
   description: 'setup-test-users - Creates test users.',
   environment: {
-    env: 'ENV',
     password: 'DEFAULT_ACCOUNT_PASS',
-    userPoolId: 'USER_POOL_ID',
   },
+  preventExecutionAgainst: ['prod'],
   requireActiveAwsSession: true,
 };
-const { env, password } = parseArgsAndEnvVars(scriptConfig) as {
+const { password } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
-
-if (env === 'prod') {
-  console.error('ERROR: attempted to create test users in production');
-  process.exit(1);
-}
 
 const CONCURRENCY_LIMIT = 25;
 const limit = pLimit(CONCURRENCY_LIMIT);
