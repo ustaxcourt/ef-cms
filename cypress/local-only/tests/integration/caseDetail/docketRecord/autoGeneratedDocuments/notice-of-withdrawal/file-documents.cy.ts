@@ -139,8 +139,14 @@ describe('Notice of Withdrawal - File Documents', () => {
   it('should successfully file manually uploaded notw as irs practitioner', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitioner2BarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
@@ -232,15 +238,9 @@ describe('Notice of Withdrawal - File Documents', () => {
         });
       });
 
-      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
-        'Participant',
-      );
-      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
-        'Intervenor',
-      );
-      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
-        'Petitioner',
-      );
+      cy.get('[data-testid="auto-generated-parties"]').contains('Participant');
+      cy.get('[data-testid="auto-generated-parties"]').contains('Intervenor');
+      cy.get('[data-testid="auto-generated-parties"]').contains('Petitioner');
       cy.get('[data-testid="submit-auto-generated-document-button"]').click();
       cy.get('[data-testid="success-alert"]').should('be.visible');
     });
@@ -249,8 +249,14 @@ describe('Notice of Withdrawal - File Documents', () => {
   it('should successfully file the auto generated notw as irs practitioner', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitioner2BarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
