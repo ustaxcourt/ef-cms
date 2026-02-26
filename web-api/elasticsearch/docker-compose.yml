@@ -1,6 +1,7 @@
 services:
   opensearch-node:
     image: opensearchproject/opensearch:3.3.0
+    platform: linux/amd64
     container_name: opensearch-node
     environment:
       - cluster.name=opensearch-cluster # Name the cluster
@@ -8,9 +9,15 @@ services:
       - discovery.seed_hosts=opensearch-node # Nodes to look for when discovering the cluster
       - cluster.initial_cluster_manager_nodes=opensearch-node # Nodes eligibile to serve as cluster manager
       - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - bootstrap.system_call_filter=false
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m' # Set min and max JVM heap sizes to at least 50% of system RAM
       - 'DISABLE_INSTALL_DEMO_CONFIG=true' # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
       - 'DISABLE_SECURITY_PLUGIN=true' # Disables Security plugin
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     ulimits:
       memlock:
         soft: -1 # Set memlock to unlimited (no soft or hard limit)
