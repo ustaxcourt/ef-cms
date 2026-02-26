@@ -1,29 +1,30 @@
 /* eslint-disable complexity */
-
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
+import {
+  canAllowDocumentServiceForCase,
+  isLeadCase,
+  isMemberCase,
+} from '@shared/business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  COURT_ISSUED_EVENT_CODES,
+  INITIAL_DOCUMENT_TYPES,
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+  STAMPED_DOCUMENTS_ALLOWLIST,
+  STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
+  STIPULATED_DECISION_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
 
 export const documentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-    STAMPED_DOCUMENTS_ALLOWLIST,
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
-    STIPULATED_DECISION_EVENT_CODE,
-  } = applicationContext.getConstants();
-
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
@@ -36,9 +37,6 @@ export const documentViewerHelper = (
       caseDetail,
     });
 
-  const canAllowDocumentServiceForCase = !!applicationContext
-    .getUtilities()
-    .canAllowDocumentServiceForCase(caseDetail);
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
@@ -61,36 +59,6 @@ export const documentViewerHelper = (
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
-  const isSimultaneousDocType = Boolean(
-    viewerDocumentToDisplay &&
-    ((viewerDocumentToDisplay.eventCode &&
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-        viewerDocumentToDisplay.eventCode,
-      )) ||
-      viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
-  );
-
-  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode }) => eventCode,
-  ).includes(formattedDocumentToDisplay.eventCode);
-
-  const showServeCourtIssuedDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    isCourtIssuedDocument &&
-    permissions.SERVE_DOCUMENT;
-
-  const showUnservedPetitionWarning =
-    !canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServePetitionButton =
-    showNotServed &&
-    formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_PETITION;
-
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
@@ -107,18 +75,10 @@ export const documentViewerHelper = (
     restrictedEventCodes &&
     restrictedEventCodes?.includes(formattedDocumentToDisplay.eventCode);
 
-  const isDocumentUnserved = () => {
-    return showNotServed || !servedLabel;
-  };
-
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY &&
     formattedDocumentToDisplay.qcNeeded &&
     !isRestricted;
-
-  const showApplyStampButton =
-    permissions.STAMP_MOTION &&
-    STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
   const showOrderResponseButton =
     permissions.MOTION_ORDER_RESPONSE &&
@@ -126,35 +86,25 @@ export const documentViewerHelper = (
       formattedDocumentToDisplay.eventCode,
     );
 
-  const showServePaperFiledDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !isCourtIssuedDocument &&
-    !formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_DOCUMENT &&
-    // If not a simultaneous doc, use normal logic
-    (!isSimultaneousDocType ||
-      // unconsolidated case
-      (isSimultaneousDocType && !caseDetail.leadDocketNumber) ||
-      // in lead case of group
-      (isSimultaneousDocType && isLeadCase(caseDetail)) ||
-      // in member case and not filed across group
-      (isSimultaneousDocType &&
-        isMemberCase(caseDetail) &&
-        !DocketEntry.isMultiDocketed(formattedDocumentToDisplay)));
-
-  const showLeadCaseBanner =
-    isMemberCase(caseDetail) &&
-    isSimultaneousDocType &&
-    DocketEntry.isMultiDocketed(formattedDocumentToDisplay) &&
-    isDocumentUnserved() &&
-    permissions.SERVE_DOCUMENT;
-
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
       formattedDocumentToDisplay.eventCode,
     );
+
+  const {
+    showServePaperFiledDocumentButton,
+    showServeCourtIssuedDocumentButton,
+    showServePetitionButton,
+    showApplyStampButton,
+    showServiceWarning: showUnservedPetitionWarning,
+    showLeadCaseNotification: showLeadCaseBanner,
+  } = showThings({
+    showNotServed,
+    document: formattedDocumentToDisplay,
+    permissions,
+    caseDetail,
+  });
 
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
@@ -175,5 +125,82 @@ export const documentViewerHelper = (
     showStatusReportOrderButton,
     showStricken: !!formattedDocumentToDisplay.isStricken,
     showUnservedPetitionWarning,
+  };
+};
+
+export const showThings = ({
+  document,
+  showNotServed,
+  permissions,
+  caseDetail,
+}) => {
+  const isDocumentUnserved = showNotServed || !document.servedAt;
+
+  const isSimultaneousDocType = Boolean(
+    document &&
+    ((document.eventCode &&
+      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(document.eventCode)) ||
+      document.documentTitle?.includes('Simultaneous')),
+  );
+
+  const isPetitionDocument =
+    document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
+
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(document.eventCode);
+
+  const canAllowDocumentService = canAllowDocumentServiceForCase(caseDetail);
+
+  const showServePaperFiledDocumentButton =
+    canAllowDocumentService &&
+    showNotServed &&
+    !isCourtIssuedDocument &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT &&
+    // If not a simultaneous doc, use normal logic
+    (!isSimultaneousDocType ||
+      // unconsolidated case
+      (isSimultaneousDocType && !caseDetail.leadDocketNumber) ||
+      // in lead case of group
+      (isSimultaneousDocType && isLeadCase(caseDetail)) ||
+      // in member case and not filed across group
+      (isSimultaneousDocType &&
+        isMemberCase(caseDetail) &&
+        !DocketEntry.isMultiDocketed(document)));
+
+  const showServeCourtIssuedDocumentButton =
+    canAllowDocumentService &&
+    showNotServed &&
+    isCourtIssuedDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showServePetitionButton =
+    showNotServed && document.isPetition && permissions.SERVE_PETITION;
+
+  const showServiceWarning =
+    !canAllowDocumentService &&
+    showNotServed &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
+
+  const showLeadCaseNotification =
+    isMemberCase(caseDetail) &&
+    isSimultaneousDocType &&
+    DocketEntry.isMultiDocketed(document) &&
+    isDocumentUnserved &&
+    permissions.SERVE_DOCUMENT;
+
+  return {
+    showServePaperFiledDocumentButton,
+    showServeCourtIssuedDocumentButton,
+    showServePetitionButton,
+    showApplyStampButton,
+    showServiceWarning,
+    showLeadCaseNotification,
   };
 };

@@ -7,22 +7,19 @@ import {
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
+import { showThings } from './documentViewerHelper';
 
 export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
   const {
-    COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
-    INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-    STAMPED_DOCUMENTS_ALLOWLIST,
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
@@ -37,10 +34,6 @@ export const messageDocumentHelper = (
   if (!viewerDocumentToDisplayDocumentId) {
     return {};
   }
-
-  const canAllowDocumentServiceForCase = applicationContext
-    .getUtilities()
-    .canAllowDocumentServiceForCase(caseDetail);
 
   // We use getAttachmentDocumentById instead of filtering based on getFormattedCaseDetail
   // (as we do in draftDocumentViewerHelper) to ensure we search over archived documents as well.
@@ -73,12 +66,9 @@ export const messageDocumentHelper = (
   );
 
   const isSigned = !!caseDocument.signedAt;
-
   const isCorrespondence = !!caseDocument.correspondenceId;
   const isNonCorrespondenceDraft = caseDocument.isDraft && !isCorrespondence;
   const isArchived = !!caseDocument.archived;
-  const isPetitionDocument =
-    caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
 
   const showEditButtonForRole = isInternalUser;
   const showEditButtonForDocument =
@@ -128,19 +118,26 @@ export const messageDocumentHelper = (
   const { draftDocuments } = applicationContext
     .getUtilities()
     .formatCase(applicationContext, caseDetail, user);
-  const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
-  );
+
   const showNotServed = getShowNotServedForDocument({
     caseDetail,
     docketEntryId: caseDocument.docketEntryId,
     draftDocuments,
   });
 
-  const showApplyStampButton =
-    permissions.STAMP_MOTION &&
-    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+  const {
+    showServePaperFiledDocumentButton,
+    showServeCourtIssuedDocumentButton,
+    showServePetitionButton,
+    showApplyStampButton,
+    showServiceWarning,
+    showLeadCaseNotification: showLeadCaseWarning,
+  } = showThings({
+    showNotServed,
+    document: caseDocument,
+    permissions,
+    caseDetail,
+  });
 
   const showOrderResponseButton =
     permissions.MOTION_ORDER_RESPONSE &&
@@ -148,36 +145,7 @@ export const messageDocumentHelper = (
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
-    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-        formattedDocument?.eventCode,
-      ));
-
-  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode }) => eventCode,
-  ).includes(caseDocument.eventCode);
-
-  const showServeCourtIssuedDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    isCourtIssuedDocument &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServePaperFiledDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !isCourtIssuedDocument &&
-    !isPetitionDocument &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServiceWarning =
-    !canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !isPetitionDocument &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServePetitionButton =
-    showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
 
   const showSignStipulatedDecisionButton =
     isInternalUser &&
@@ -226,6 +194,7 @@ export const messageDocumentHelper = (
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showServiceWarning,
+    showLeadCaseWarning,
     showSignStipulatedDecisionButton,
     showStatusReportOrderButton,
     statusReportOrderFromMessagesLink,

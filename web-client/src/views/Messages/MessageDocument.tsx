@@ -259,6 +259,13 @@ export const MessageDocument = connect(
               Document cannot be served until the Petition is served.
             </div>
           )}
+        {messageViewerDocumentToDisplay &&
+          messageDocumentHelper.showLeadCaseWarning && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              This document can only be served from the lead case in a
+              consolidated group. This is a member case.
+            </div>
+          )}
 
         {messageViewerDocumentToDisplay && messageDocumentHelper.archived && (
           <div className="archived-document-frame">
