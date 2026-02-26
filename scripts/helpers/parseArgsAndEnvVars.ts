@@ -14,7 +14,7 @@ export type ScriptConfig = {
     /**
      * List of environment variables that are required to be present.
      * The key is the property by which the parsed value will be
-     * returned and the value is the environment variable name
+     * returned, and the value is the environment variable name
      * (e.g. `env: 'ENV'`).
      */
     [key: string]: string;
@@ -33,6 +33,12 @@ export type ScriptConfig = {
      */
     [key: string]: ScriptParameter;
   };
+  /**
+   * The `preventExecutionAgainst` property indicates environments the script
+   * should not execute against. If 'local' is provided, execution will be
+   * prevented if the `ENV` environment variable is not present.
+   */
+  preventExecutionAgainst?: string[];
   /**
    * The `requireActiveAwsSession` property indicates whether the AWS session
    * token should be currently active.
@@ -248,6 +254,9 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
       '\nRequired Environment Variables:',
       Object.values(sc.environment),
     );
+  }
+  if (sc.preventExecutionAgainst) {
+    console.log('\nPrevent Execution Against:', sc.preventExecutionAgainst);
   }
   if (sc.requireActiveAwsSession) {
     console.log('\nActive AWS session required.');
@@ -522,6 +531,21 @@ export const getEnvironmentVariables = (environment?: {
   return ret;
 };
 
+const preventExecutionAgainstEnvironment = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  const { env } = getEnvironmentVariables({ env: 'ENV' });
+  const envToCheck = env || 'local';
+  if (sc.preventExecutionAgainst!.includes(envToCheck)) {
+    showErrorAndExit(
+      `Execution against ${envToCheck} is not permitted.`,
+      sc,
+      verbose,
+    );
+  }
+};
+
 const checkAwsSessionExpiration = (
   sc: ScriptConfig,
   verbose: boolean,
@@ -577,6 +601,10 @@ export const parseArgsAndEnvVars = (
   const environmentVariables = getEnvironmentVariables(sc.environment);
   if (parsedParameters.verbose) {
     console.log('environment variables:', environmentVariables);
+  }
+
+  if (sc.preventExecutionAgainst && sc.preventExecutionAgainst.length > 0) {
+    preventExecutionAgainstEnvironment(sc, !!parsedParameters.verbose);
   }
 
   if (sc.requireActiveAwsSession) {
