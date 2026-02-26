@@ -20,7 +20,7 @@ export const generateFiledBy = ({
 }: {
   docketEntry: RawDocketEntry;
   petitioners: any[];
-  user: UnknownAuthUser;
+  user?: UnknownAuthUser;
 }): string | undefined => {
   const isNoticeOfContactChange =
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
