@@ -67,7 +67,7 @@ export const prepareMotionOrderResponseAction = ({
   );
 
   let createOrderSelectedCases = [] as any;
-  let documentNumberText = `(Document no. ${index}).`;
+  let documentNumberText = `(doc. no. ${index}).`;
 
   if (
     isOnLeadCase &&
@@ -81,7 +81,7 @@ export const prepareMotionOrderResponseAction = ({
       };
     });
     createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
-    documentNumberText = `(Lead case Document no. ${index}).`;
+    documentNumberText = `(lead case doc. no. ${index}).`;
   }
 
   let preamblePrepend = '';
