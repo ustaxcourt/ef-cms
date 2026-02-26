@@ -2280,6 +2280,7 @@ export const getPetitionDocketEntry = function (
 export const filterStinFromDocketEntries = (
   docketEntries: RawDocketEntry[],
   authorizedUser: { role: string } | undefined,
+  petitionIsServedOverride?: boolean,
 ): RawDocketEntry[] => {
   if (authorizedUser?.role === ROLES.irsSuperuser) {
     return docketEntries;
@@ -2290,11 +2291,12 @@ export const filterStinFromDocketEntries = (
     authorizedUser?.role === ROLES.caseServicesSupervisor;
 
   if (isPetitionsClerkOrSupervisor) {
-    const petitionEntry = docketEntries.find(
-      d =>
-        d.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    );
-    const petitionIsServed = !!petitionEntry?.servedAt;
+    const petitionIsServed =
+      petitionIsServedOverride ??
+      !!docketEntries.find(
+        d =>
+          d.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+      )?.servedAt;
     if (!petitionIsServed) {
       return docketEntries;
     }

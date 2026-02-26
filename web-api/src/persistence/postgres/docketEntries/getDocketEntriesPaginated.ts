@@ -30,7 +30,12 @@ export const getDocketEntriesPaginated = async ({
   let activeQuery = baseQuery.where('de.archived', 'is not', true);
 
   if (filterOnDocketRecord) {
-    activeQuery = activeQuery.where('de.isOnDocketRecord', '=', true);
+    activeQuery = activeQuery.where(eb =>
+      eb.or([
+        eb('de.isOnDocketRecord', '=', true),
+        eb('de.eventCode', '=', 'STIN'),
+      ]),
+    );
   }
 
   const paginatedQuery = activeQuery
@@ -46,7 +51,12 @@ export const getDocketEntriesPaginated = async ({
       .where('de.archived', 'is not', true);
 
     if (filterOnDocketRecord) {
-      q = q.where('de.isOnDocketRecord', '=', true);
+      q = q.where(eb =>
+        eb.or([
+          eb('de.isOnDocketRecord', '=', true),
+          eb('de.eventCode', '=', 'STIN'),
+        ]),
+      );
     }
 
     return q

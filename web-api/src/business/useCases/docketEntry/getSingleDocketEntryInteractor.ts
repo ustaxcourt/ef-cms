@@ -93,9 +93,13 @@ export const getSingleDocketEntryInteractor = async (
 
   let docketEntry = results[0];
 
+  const isStin =
+    docketEntry.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType;
+
   // Users without GET_ALL_CASE_DATA (e.g. external users) can only access
-  // docket entries that are on the docket record.
-  if (!hasFullAccess && !docketEntry.isOnDocketRecord) {
+  // docket entries that are on the docket record. STIN is a special case
+  // handled by the STIN filtering block below.
+  if (!hasFullAccess && !docketEntry.isOnDocketRecord && !isStin) {
     throw new NotFoundError(
       `Docket entry ${docketEntryId} not found for case ${formattedDocketNumber}`,
     );
@@ -103,10 +107,7 @@ export const getSingleDocketEntryInteractor = async (
 
   // STIN filtering: only IRS superuser can see the STIN.
   // petitionsClerk/caseServicesSupervisor can see it only before petition is served.
-  if (
-    docketEntry.documentType ===
-    INITIAL_DOCUMENT_TYPES.stin.documentType
-  ) {
+  if (isStin) {
     if (user.role === ROLES.irsSuperuser) {
       // IRS superuser can always see STIN — allow through
     } else if (

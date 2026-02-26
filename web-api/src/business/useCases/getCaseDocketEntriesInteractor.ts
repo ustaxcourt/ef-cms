@@ -1,6 +1,5 @@
 import {
   DOCKET_ENTRIES_PAGE_SIZE,
-  INITIAL_DOCUMENT_TYPES,
   ROLES,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -14,8 +13,6 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
-import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { getDocketEntriesPaginated } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesPaginated';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import {
@@ -97,42 +94,25 @@ export const getCaseDocketEntriesInteractor = async (
     }
   }
 
-  const [paginatedResult, workItems, hasPendingItems] = await Promise.all([
-    getDocketEntriesPaginated({
-      docketNumber: formattedDocketNumber,
-      filterOnDocketRecord,
-      includeArchived: hasFullAccess,
-      page,
-      pageSize,
-    }),
-    getWorkItemsByDocketNumber({
-      docketNumber: formattedDocketNumber,
-    }),
-    computeHasPendingItems(formattedDocketNumber),
-  ]);
+  const [paginatedResult, workItems, hasPendingItems, petitionIsServed] =
+    await Promise.all([
+      getDocketEntriesPaginated({
+        docketNumber: formattedDocketNumber,
+        filterOnDocketRecord,
+        includeArchived: hasFullAccess,
+        page,
+        pageSize,
+      }),
+      getWorkItemsByDocketNumber({
+        docketNumber: formattedDocketNumber,
+      }),
+      computeHasPendingItems(formattedDocketNumber),
+      computePetitionServedStatus(formattedDocketNumber),
+    ]);
 
   const workItemByDocketEntryId = new Map(
     workItems.map(wi => [wi.docketEntryId, wi]),
   );
-
-  // IRS Super Users should see the STIN when the petition has been served,
-  // even though it's not on the docket record. Since filterOnDocketRecord
-  // excludes it from the paginated query, fetch it separately.
-  if (
-    user.role === ROLES.irsSuperuser &&
-    filterOnDocketRecord &&
-    page === 0
-  ) {
-    const petitionIsServed = await computePetitionServedStatus(
-      formattedDocketNumber,
-    );
-    if (petitionIsServed) {
-      const stinEntry = await fetchStinEntry(formattedDocketNumber);
-      if (stinEntry) {
-        paginatedResult.docketEntries.unshift(stinEntry);
-      }
-    }
-  }
 
   const enrichedDocketEntries = paginatedResult.docketEntries.map(
     docketEntry => {
@@ -149,6 +129,7 @@ export const getCaseDocketEntriesInteractor = async (
   const filteredDocketEntries = filterStinFromDocketEntries(
     enrichedDocketEntries,
     user,
+    petitionIsServed,
   );
 
   let processedDocketEntries: RawDocketEntry[];
@@ -241,23 +222,6 @@ async function computePetitionServedStatus(
       .executeTakeFirst(),
   );
   return !!petitionEntry?.servedAt;
-}
-
-async function fetchStinEntry(
-  docketNumber: string,
-): Promise<RawDocketEntry | undefined> {
-  const baseQuery = await docketEntriesBaseQuery({
-    docketNumbers: [docketNumber],
-  });
-  const result = await baseQuery
-    .where(
-      'de.documentType',
-      '=',
-      INITIAL_DOCUMENT_TYPES.stin.documentType,
-    )
-    .where('de.archived', 'is not', true)
-    .executeTakeFirst();
-  return result ? fromKyselyDocketEntry(result) : undefined;
 }
 
 // Allowlist of fields that unassociated (public) users may see on docket entries.
