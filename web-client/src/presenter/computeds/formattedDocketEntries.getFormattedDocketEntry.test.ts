@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
