@@ -19,6 +19,7 @@ import {
   PAYMENT_STATUS,
   PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  PETITION_DUPLICATE_ERROR,
 } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -168,7 +169,10 @@ const generateNoticeOfReceipt = async ({
     CLERK_OF_THE_COURT_CONFIGURATION,
   ]);
 
-  const { name, title }: {
+  const {
+    name,
+    title,
+  }: {
     name: string;
     title: string;
   } = CLERK_OF_THE_COURT_RECORD.value.current;
@@ -538,11 +542,22 @@ export const serveCaseToIrs = async (
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
-    caseEntity.markAsSentToIRS();
-
     if (caseEntity.isPaper) {
       addDocketEntries({ caseEntity });
     }
+
+    const petitionDocument = caseEntity.getPetitionDocketEntry();
+
+    if (!petitionDocument) {
+      throw new Error(
+        `Could not find petition document on case ${caseEntity.docketNumber}`,
+      );
+    }
+    if (petitionDocument.servedAt) {
+      throw new Error(PETITION_DUPLICATE_ERROR);
+    }
+
+    caseEntity.markAsSentToIRS();
 
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
       await applicationContext.getUtilities().serveCaseDocument({
@@ -578,14 +593,6 @@ export const serveCaseToIrs = async (
             caseEntity,
             systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
           }),
-      );
-    }
-
-    const petitionDocument = caseEntity.getPetitionDocketEntry();
-
-    if (!petitionDocument) {
-      throw new Error(
-        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
       );
     }
 
@@ -712,19 +719,30 @@ export const serveCaseToIrs = async (
       },
       userId: authorizedUser.userId,
     });
-  } catch (err) {
+  } catch (err: any) {
     applicationContext.logger.error('Error serving case to IRS', {
       docketNumber,
       error: err,
     });
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_to_irs_error',
-      },
-      userId: authorizedUser?.userId || '',
-    });
+    if (err.message === PETITION_DUPLICATE_ERROR) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_duplicate_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    } else {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    }
   }
 };
 
