@@ -10,11 +10,11 @@ describe('validatePractitionerInteractor', () => {
     });
 
     expect(Object.keys(errors!)).toEqual([
-      'role',
       'userId',
       'accountStatus',
       'admissionsDate',
       'admissionsStatus',
+      'role',
       'barNumber',
       'birthYear',
       'firstName',
