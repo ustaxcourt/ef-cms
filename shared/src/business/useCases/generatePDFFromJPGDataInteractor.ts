@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { generatePDFFromJPGs } from '../utilities/generatePDFFromJPGs';
 
 /**
@@ -7,7 +8,7 @@ import { generatePDFFromJPGs } from '../utilities/generatePDFFromJPGs';
  */
 
 export const generatePDFFromJPGDataInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   { imgData }: { imgData: any },
 ) => {
   return generatePDFFromJPGs(applicationContext, { imgData });

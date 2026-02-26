@@ -1,15 +1,15 @@
-version: '3.7'
-
 services:
   shell:
     build:
       context: .
       dockerfile: ./Dockerfile-local
+    image: efcms-local
     container_name: shell
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "tail -f /dev/null"
     volumes:
       - .:/home/app
-      - node_modules:/home/app/node_modules
+      - node_modules_shell:/home/app/node_modules
     environment:
       AWS_ACCESS_KEY_ID: '${AWS_ACCESS_KEY_ID}'
       AWS_SECRET_ACCESS_KEY: '${AWS_SECRET_ACCESS_KEY}'
@@ -18,11 +18,13 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-local
+    image: efcms-local
     container_name: client
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:client"
     volumes:
       - .:/home/app
-      - node_modules:/home/app/node_modules
+      - node_modules_client:/home/app/node_modules
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
       AWS_SECRET_ACCESS_KEY: S3RVER
@@ -33,7 +35,9 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-local
+    image: efcms-local
     container_name: public
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:public"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
@@ -42,40 +46,100 @@ services:
       - '5678:5678'
     volumes:
       - .:/home/app
-      - node_modules:/home/app/node_modules
+      - node_modules_public:/home/app/node_modules
 
   api:
     build:
       context: .
       dockerfile: ./Dockerfile-local
+    image: efcms-local
     container_name: api
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:api:docker"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
       AWS_SECRET_ACCESS_KEY: S3RVER
       ELASTICSEARCH_ENDPOINT: http://elasticsearch:9200
       ELASTICSEARCH_HOST: elasticsearch
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      DATABASE_NAME: postgres
+      IDE_DEBUGGING: ${IDE_DEBUGGING}
     ports:
       - '3011:3011'
       - '4000:4000'
       - '4001:4001'
       - '9001:9001'
+      - '9229:9229'
+      - '9231:9231'
     volumes:
       - .:/home/app
-      - node_modules:/home/app/node_modules
+      - node_modules_api:/home/app/node_modules
     depends_on:
-      - opensearch-node
+      opensearch-node:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17.5-bookworm
+    platform: linux/amd64
+    container_name: dawson-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /data/postgres
+    volumes:
+      - dawson-db:/data/postgres
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   opensearch-node:
-    image: opensearchproject/opensearch:2.19.0
+    image: opensearchproject/opensearch:3.3.0
+    platform: linux/amd64
+    container_name: opensearch-node
+    networks:
+      default:
+        aliases:
+          - elasticsearch
     volumes:
       - opensearch-data:/usr/share/opensearch/data
     ports:
       - '9200:9200'
+      - '9600:9600'
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
-      discovery.type: single-node
+      - bootstrap.memory_lock=true
+      - bootstrap.system_call_filter=false
+      - cluster.initial_cluster_manager_nodes=opensearch-node
+      - cluster.name=opensearch-cluster
+      - discovery.seed_hosts=opensearch-node
+      - node.name=opensearch-node
+      - 'DISABLE_INSTALL_DEMO_CONFIG=true'
+      - 'DISABLE_SECURITY_PLUGIN=true'
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
 
 volumes:
-  node_modules:
+  node_modules_shell:
+  node_modules_client:
+  node_modules_public:
+  node_modules_api:
   opensearch-data:
+  dawson-db:

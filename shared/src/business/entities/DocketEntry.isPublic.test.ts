@@ -131,7 +131,7 @@ describe('DocketEntry isPublic', () => {
           ![...amendmentEventCodes, 'SDEC', 'AMBR'].includes(eventCode),
       );
 
-      const practitionerRoles = [
+      const practitionerRoles: string[] = [
         ROLES.privatePractitioner,
         ROLES.irsPractitioner,
       ];

@@ -104,5 +104,15 @@ describe('ExternalDocumentNonStandardF', () => {
 
       expect(externalDocumentF.getDocumentTitle()).toEqual('Fiftieth Amended');
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentF = ExternalDocumentFactory({
+        category: 'Miscellaneous',
+        documentType: 'Amended',
+        scenario: 'Nonstandard F',
+      });
+
+      expect(externalDocumentF.getDocumentTitle()).toEqual('');
+    });
   });
 });
