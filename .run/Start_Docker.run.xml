@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Prepare Local Environment" type="ShConfigurationType">
+  <configuration default="false" name="Start Docker" type="ShConfigurationType">
     <option name="SCRIPT_TEXT" value="" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
-    <option name="SCRIPT_PATH" value="$PROJECT_DIR$/debug-local-in-ide.sh" />
+    <option name="SCRIPT_PATH" value="$PROJECT_DIR$/docker-local.sh" />
     <option name="SCRIPT_OPTIONS" value="" />
     <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
     <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -11,7 +11,9 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="EXECUTE_IN_TERMINAL" value="false" />
     <option name="EXECUTE_SCRIPT_FILE" value="true" />
-    <envs />
+    <envs>
+      <env name="IDE_DEBUGGING" value="true" />
+    </envs>
     <method v="2" />
   </configuration>
 </component>
