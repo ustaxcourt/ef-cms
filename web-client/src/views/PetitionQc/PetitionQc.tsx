@@ -10,9 +10,9 @@ export const PetitionQc = connect({}, function PetitionQc() {
   return (
     <>
       <CaseDetailHeader />
-      <section className="DocumentDetail tw:py-12 tw:max-w-[1440px] tw:mx-auto tw:px-4">
+      <section className="DocumentDetail tw:max-w-[1440px] tw:mx-auto tw:px-4">
         <h2
-          className="tw:mt-0 tw:mb-4 tw:text-3xl tw:font-bold"
+          className="tw:mt-0 tw:mb-4 tw:text-xxxl tw:font-bold"
           data-testid="petition-qc-page-heading"
         >
           Petition
