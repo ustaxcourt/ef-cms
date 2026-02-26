@@ -131,6 +131,9 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-green: var(--green);
   --breakpoint-xs: 30rem;
+  --text-xxxl: 32px;
+  /* stylelint-disable-next-line custom-property-pattern -- tailwind v4 requires --text-{size}--line-height */
+  --text-xxxl--line-height: 1.4375;
 
   /* DAWSON UI palette -> semantic color mappings */
   --color-blue-primary: var(--blue-primary);
