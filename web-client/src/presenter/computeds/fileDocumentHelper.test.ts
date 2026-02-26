@@ -705,4 +705,37 @@ describe('fileDocumentHelper', () => {
       expect(showPartiesFiling).toEqual(true);
     });
   });
+  describe('allowExternalConsolidatedGroupFiling', () => {
+    it('should set allowExternalConsolidatedGroupFiling to false if the user is an IRS practitioner and the eventCode is explicitly not allowed', () => {
+      state.form = {
+        eventCode: 'NOTW',
+      };
+      state.caseDetail = {
+        ...state.caseDetail,
+        leadDocketNumber: '123-45',
+      };
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: irsPractitionerUser },
+      });
+      expect(result.allowExternalConsolidatedGroupFiling).toEqual(false);
+    });
+    it('should set allowExternalConsolidatedGroupFiling to false if the user is private practitioner and the eventCode is explicitly not allowed', () => {
+      state.form = {
+        eventCode: 'NOTW',
+      };
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: privatePractitionerUser },
+      });
+      expect(result.allowExternalConsolidatedGroupFiling).toEqual(false);
+    });
+    it('should set allowExternalConsolidatedGroupFiling to true if the user is a petitioner and the eventCode is not explicitly not allowed', () => {
+      state.form = {
+        eventCode: 'A',
+      };
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: privatePractitionerUser },
+      });
+      expect(result.allowExternalConsolidatedGroupFiling).toEqual(true);
+    });
+  });
 });

@@ -70,7 +70,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     });
   });
 
-  it('should set fileAcrossConsolidatedGroup to false when the user is filing a document that is explicity denied filing in consolidated groups', async () => {
+  it('should set fileAcrossConsolidatedGroup to false when the user is filing a document that is explicity denied filing in consolidated groups as private practitioner', async () => {
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
@@ -82,6 +82,24 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
           eventCode: 'NOTW',
         },
         user: privatePractitionerUser,
+      },
+    });
+    expect(result.state.form).toMatchObject({
+      fileAcrossConsolidatedGroup: false,
+    });
+  });
+  it('should set fileAcrossConsolidatedGroup to false when the user is filing a document that is explicity denied filing in consolidated groups as irs practitioner', async () => {
+    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          leadDocketNumber: MOCK_CASE.docketNumber,
+        },
+        form: {
+          eventCode: 'NOTW',
+        },
+        user: irsPractitionerUser,
       },
     });
     expect(result.state.form).toMatchObject({
