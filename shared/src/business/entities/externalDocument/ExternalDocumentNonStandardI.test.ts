@@ -92,5 +92,15 @@ describe('ExternalDocumentNonStandardI', () => {
         'Fiftieth Amendment to Test',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentI = ExternalDocumentFactory({
+        category: 'Miscellaneous',
+        documentType: 'Amendment [anything]',
+        scenario: 'Nonstandard I',
+      });
+
+      expect(externalDocumentI.getDocumentTitle()).toEqual('');
+    });
   });
 });
