@@ -14,7 +14,12 @@ describe('completeDocketEntryQCAction', () => {
         addToCoversheet: false,
         additionalInfo: '',
       },
-    ],
+    ] as Array<{
+      docketEntryId: string;
+      documentTitle: string;
+      addToCoversheet?: boolean;
+      additionalInfo?: string;
+    }>,
     docketNumber: '123-45',
   };
 

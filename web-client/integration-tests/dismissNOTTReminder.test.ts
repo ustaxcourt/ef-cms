@@ -9,7 +9,10 @@ import {
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
-import { prepareDateFromString } from '../../shared/src/business/utilities/DateHandler';
+import {
+  getCurrentDateTimeInMillis,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionDetailsHelper } from '../src/presenter/computeds/trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -17,7 +20,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('Dismiss NOTT reminder on calendared trial session within 30-35 day range', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Seattle, Washington, ${Date.now()}`;
+  const trialLocation = `Seattle, Washington, ${getCurrentDateTimeInMillis()}`;
 
   const currentDate = prepareDateFromString().plus({
     ['days']: 30,
@@ -25,17 +28,17 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
 
   const overrides = {
     maxCases: 2,
-    preferredTrialCity: trialLocation,
     sessionType: SESSION_TYPES.small,
+    preferredTrialCity: trialLocation,
     trialDay:
       currentDate.day.toString().length === 1
-        ? '0' + currentDate.day
-        : currentDate.day,
+        ? '0' + currentDate.day.toString()
+        : currentDate.day.toString(),
     trialLocation,
     trialMonth:
       currentDate.month.toString().length === 1
-        ? '0' + currentDate.month
-        : currentDate.month,
+        ? '0' + currentDate.month.toString()
+        : currentDate.month.toString(),
     trialYear: currentDate.year.toString(),
   };
 
@@ -103,7 +106,7 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
         'Have notices been served?',
       );
 
-      let trialSessionDetailsHelperComputed: any = runCompute(
+      const trialSessionDetailsHelperComputed: any = runCompute(
         withAppContextDecorator(trialSessionDetailsHelper),
         {
           state: cerebralTest.getState(),
@@ -143,7 +146,7 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
         'Have notices been served?',
       );
 
-      let trialSessionDetailsHelperComputed: any = runCompute(
+      const trialSessionDetailsHelperComputed: any = runCompute(
         withAppContextDecorator(trialSessionDetailsHelper),
         {
           state: cerebralTest.getState(),
