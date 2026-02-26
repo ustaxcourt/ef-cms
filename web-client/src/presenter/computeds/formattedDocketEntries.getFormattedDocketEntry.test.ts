@@ -737,11 +737,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = getFormattedDocketEntry({
-          ...baseParams,
-          entry: entryWithAffectedBy,
-          rawCase: mockCase,
-        });
+        const result = runCompute(get =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffectedBy,
+            rawCase: mockCase,
+          }),
+        ) as ReturnType<typeof getFormattedDocketEntry>;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTED BY #5',
@@ -762,11 +765,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = getFormattedDocketEntry({
-          ...baseParams,
-          entry: entryWithAffectedBy,
-          rawCase: mockCase,
-        });
+        const result = runCompute(get =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffectedBy,
+            rawCase: mockCase,
+          }),
+        ) as ReturnType<typeof getFormattedDocketEntry>;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTED IN PART BY #5',
@@ -789,11 +795,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = getFormattedDocketEntry({
-          ...baseParams,
-          entry: entryWithAffected,
-          rawCase: mockCase,
-        });
+        const result = runCompute(get =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffected,
+            rawCase: mockCase,
+          }),
+        ) as ReturnType<typeof getFormattedDocketEntry>;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTING #10',
@@ -814,11 +823,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = getFormattedDocketEntry({
-          ...baseParams,
-          entry: entryWithAffected,
-          rawCase: mockCase,
-        });
+        const result = runCompute(get =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffected,
+            rawCase: mockCase,
+          }),
+        ) as ReturnType<typeof getFormattedDocketEntry>;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTING IN PART #10',
