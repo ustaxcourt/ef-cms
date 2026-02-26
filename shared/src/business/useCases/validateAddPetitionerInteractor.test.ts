@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
 
 describe('validateAddPetitionerInteractor', () => {
@@ -27,7 +26,7 @@ describe('validateAddPetitionerInteractor', () => {
   });
 
   it('should not return validation errors when contact is valid and a case caption is present', () => {
-    const errors = validateAddPetitionerInteractor(applicationContext, {
+    const errors = validateAddPetitionerInteractor({
       contact: mockContact,
     });
 
@@ -41,7 +40,7 @@ describe('validateAddPetitionerInteractor', () => {
       caseCaption: undefined,
     };
 
-    const errors = validateAddPetitionerInteractor(applicationContext, {
+    const errors = validateAddPetitionerInteractor({
       contact: mockContact,
     });
 
@@ -62,7 +61,7 @@ describe('validateAddPetitionerInteractor', () => {
       },
     ];
 
-    const errors = validateAddPetitionerInteractor(applicationContext, {
+    const errors = validateAddPetitionerInteractor({
       contact: mockContact,
       existingPetitioners: mockExistingPetitioners,
     });

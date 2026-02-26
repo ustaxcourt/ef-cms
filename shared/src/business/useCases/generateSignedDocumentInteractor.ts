@@ -104,7 +104,7 @@ export const generateSignedDocumentInteractor = async (
     pdfData: any;
     posX: number;
     posY: number;
-    scale: number;
+    scale?: number;
     sigTextData: any;
   },
 ) => {

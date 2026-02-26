@@ -24,7 +24,7 @@ export const updateDocketEntryMetaAction = async ({
         docketNumber,
       });
     return path.success();
-  } catch (err) {
+  } catch (err: any) {
     return path.error({
       alertError: {
         message: err.message,
