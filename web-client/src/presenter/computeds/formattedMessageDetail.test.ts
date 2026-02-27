@@ -17,7 +17,7 @@ describe('formattedMessageDetail', () => {
 
   const { PETITIONS_SECTION } = applicationContext.getConstants();
 
-   const mockCaseDetail = {
+  const mockCaseDetail = {
     archivedCorrespondences: [],
     archivedDocketEntries: [],
     correspondence: [],

@@ -1,14 +1,8 @@
 /* eslint-disable complexity */
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import {
-  ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
-  STATUS_REPORT_ORDER_OPTIONS,
-} from '@shared/business/entities/EntityConstants';
+import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { showThings } from './documentViewerHelper';
 
 export const messageDocumentHelper = (
@@ -19,8 +13,6 @@ export const messageDocumentHelper = (
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
     NOTICE_EVENT_CODES,
-    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
   const user = get(state.user);
@@ -111,49 +103,22 @@ export const messageDocumentHelper = (
   const showDocumentNotSignedAlert =
     requiresSignature && !isSigned && !isArchived;
 
-  // It seems like we should be able to get formattedDocumentToDisplay like we do in draftDocumentViewerHelper
-  // to avoid the duplication with caseDocument and formattedDocument in this file. However, we are using
-  // slightly different properties to pull up caseDocument and formattedDocument. This may be unnecessary.
-  // The variables affected by formattedDocument are showApplyStampButton and showStatusReportOrderButton.
-  const { draftDocuments } = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail, user);
-
-  const showNotServed = getShowNotServedForDocument({
-    caseDetail,
-    docketEntryId: caseDocument.docketEntryId,
-    draftDocuments,
-  });
-
   const {
     showServePaperFiledDocumentButton,
     showServeCourtIssuedDocumentButton,
     showServePetitionButton,
+    showStatusReportOrderButton,
+    showOrderResponseButton,
+    showSignStipulatedDecisionButton,
     showApplyStampButton,
     showServiceWarning,
     showLeadCaseNotification: showLeadCaseWarning,
   } = showThings({
-    showNotServed,
     document: caseDocument,
     permissions,
     caseDetail,
+    isInternalUser,
   });
-
-  const showOrderResponseButton =
-    permissions.MOTION_ORDER_RESPONSE &&
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
-
-  const showStatusReportOrderButton =
-    permissions.STATUS_REPORT_ORDER &&
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
-
-  const showSignStipulatedDecisionButton =
-    isInternalUser &&
-    caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    DocketEntry.isServed(caseDocument) &&
-    !caseDetail.docketEntries.find(
-      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
-    );
 
   const showEditButtonForCorrespondenceDocument =
     isCorrespondence && permissions.CASE_CORRESPONDENCE;
