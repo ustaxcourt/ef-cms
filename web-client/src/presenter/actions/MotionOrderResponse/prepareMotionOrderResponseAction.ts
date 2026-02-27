@@ -12,11 +12,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
   const pNames = petitioners.map(p => p.name);
+  const petitioner = pNames.length > 1 ? 'petitioners' : 'petitioner';
   const cleanedFiledBy = motion.filedBy.replace(/^(?:Petr\.|Respt\.)?\s*/, '');
   const movant = pNames.some(name => cleanedFiledBy.includes(name))
-    ? 'petitioner'
+    ? petitioner
     : 'respondent';
-  const nonMovant = movant === 'petitioner' ? 'respondent' : 'petitioner';
+  const nonMovant = movant === petitioner ? 'respondent' : petitioner;
   return { movant, nonMovant };
 };
 
