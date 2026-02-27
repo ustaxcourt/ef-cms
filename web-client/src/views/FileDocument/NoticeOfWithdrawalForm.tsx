@@ -215,6 +215,7 @@ export const NoticeOfWithdrawalForm = connect(
                               key: `confirmPetitionersContactInformationMap.${party.contactId}`,
                               value: e.target.checked,
                             });
+                            validateExternalDocumentInformationSequence();
                           }}
                         />
                         <label
@@ -295,6 +296,7 @@ export const NoticeOfWithdrawalForm = connect(
                     key: 'paperServiceAcknowledgement',
                     value: e.target.checked,
                   });
+                  validateExternalDocumentInformationSequence();
                 }}
               />
               <label
