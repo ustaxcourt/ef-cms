@@ -8,6 +8,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
 import {
+  casePetitioner,
   docketClerkUser,
   irsPractitionerUser,
   privatePractitionerUser,
@@ -625,8 +626,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           },
         ],
@@ -647,8 +650,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
@@ -667,6 +672,7 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         irsPractitioners: [
           {
             barNumber: '1234',
@@ -674,6 +680,7 @@ describe('fileDocumentHelper', () => {
         ],
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
@@ -691,8 +698,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],

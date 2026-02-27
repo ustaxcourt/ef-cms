@@ -3,5 +3,6 @@
     <toRun name="API" type="NodeJSConfigurationType" />
     <toRun name="Client" type="js.build_tools.npm" />
     <toRun name="Public" type="js.build_tools.npm" />
+    <method v="2" />
   </configuration>
 </component>

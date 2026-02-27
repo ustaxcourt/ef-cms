@@ -5,11 +5,13 @@
  * @returns {Object} formattedCases
  */
 
+import { TrialSessionWorkingCopyCase } from "@web-client/presenter/computeds/trialSessionWorkingCopyHelper";
+
 export const preparePrintableFormattedCasesAction = ({
   props,
 }: ActionProps) => {
   let { formattedCases } = props;
-  let temporaryFormattedCases = [];
+  let temporaryFormattedCases: TrialSessionWorkingCopyCase[] = [];
 
   formattedCases.forEach(formattedCase => {
     temporaryFormattedCases.push(formattedCase);
