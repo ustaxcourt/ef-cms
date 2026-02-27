@@ -55,6 +55,7 @@ export const updateCaseAndAssociations = async ({
     includeConsolidatedCases: false,
   });
 
+  newCaseEntity.recomputeHasPendingItems();
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, {

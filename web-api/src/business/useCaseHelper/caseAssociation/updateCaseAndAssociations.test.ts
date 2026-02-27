@@ -55,6 +55,7 @@ describe('updateCaseAndAssociations', () => {
     validMockCase = new Case(
       {
         ...MOCK_CASE,
+        hasPendingItems: true,
         archivedCorrespondences: [
           {
             correspondenceId: '95a84f02-23e6-4fff-9770-41f655f972a3',
