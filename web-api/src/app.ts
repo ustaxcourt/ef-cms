@@ -78,6 +78,7 @@ import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDea
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
@@ -699,6 +700,10 @@ app.use(expressLogger);
     lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
+  );
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',

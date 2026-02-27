@@ -7,17 +7,26 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 
-export const getCaseInteractor = async (
+const PAGE_SIZE = 1000;
+const MAX_PAGE = 20;
+
+export const getCaseDocketEntriesInteractor = async (
   {
     docketNumber,
-    excludeDocketEntries,
-  }: { docketNumber: string; excludeDocketEntries?: boolean },
+    page = 0,
+  }: {
+    docketNumber: string;
+    page?: number;
+  },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
+) => {
+  if (page > MAX_PAGE) {
+    throw new Error(
+      `Page ${page} exceeds the maximum allowed page of ${MAX_PAGE}`,
+    );
+  }
+
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
@@ -26,10 +35,15 @@ export const getCaseInteractor = async (
 
   const formattedDocketNumber = Case.formatDocketNumber(docketNumber);
 
-  const caseRecord = await getCaseByDocketNumber({
-    docketNumber: formattedDocketNumber,
-    user: authorizedUser,
-  });
+  const [caseRecord, workItems] = await Promise.all([
+    getCaseByDocketNumber({
+      docketNumber: formattedDocketNumber,
+      user: authorizedUser,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber: formattedDocketNumber,
+    }),
+  ]);
 
   const isValidCase = Boolean(caseRecord?.docketNumber);
 
@@ -44,22 +58,11 @@ export const getCaseInteractor = async (
     user: authorizedUser,
   });
 
-  if (excludeDocketEntries) {
-    return { ...theCase, docketEntries: [] } as
-      | CaseDTO
-      | RestrictedCaseDTO
-      | PublicCaseDTO;
-  }
-
-  const workItems = await getWorkItemsByDocketNumber({
-    docketNumber: formattedDocketNumber,
-  });
-
-  // The UI needs some work item info associated with the docket entry, so we attach that here
+  // Enrich docket entries with work item info needed by the UI
   const workItemByDocketEntryId = new Map<string, (typeof workItems)[0]>(
     workItems.map(wi => [wi.docketEntryId, wi]),
   );
-  const docketEntriesWithUIInfo = theCase.docketEntries.map(docketEntry => {
+  const allDocketEntries = theCase.docketEntries.map(docketEntry => {
     const workItem = workItemByDocketEntryId.get(docketEntry.docketEntryId);
 
     return {
@@ -70,8 +73,14 @@ export const getCaseInteractor = async (
     };
   });
 
-  return { ...theCase, docketEntries: docketEntriesWithUIInfo } as
-    | CaseDTO
-    | RestrictedCaseDTO
-    | PublicCaseDTO;
+  const totalCount = allDocketEntries.length;
+  const start = page * PAGE_SIZE;
+  const docketEntries = allDocketEntries.slice(start, start + PAGE_SIZE);
+
+  return {
+    docketEntries,
+    page,
+    pageSize: PAGE_SIZE,
+    totalCount,
+  };
 };

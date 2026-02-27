@@ -1,20 +1,22 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
+import { getCaseDocketEntriesInteractor } from '@shared/business/useCases/getCaseDocketEntriesInteractor';
 
 /**
- * used for fetching a single case
+ * used for fetching paginated docket entries for a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
+export const getCaseDocketEntriesLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, () =>
-    getCaseInteractor(
+    getCaseDocketEntriesInteractor(
       {
         docketNumber: event.pathParameters.docketNumber,
-        excludeDocketEntries:
-          event.queryStringParameters?.excludeDocketEntries === 'true',
+        page: parseInt(event.queryStringParameters?.page ?? '0', 10),
       },
       authorizedUser,
     ),

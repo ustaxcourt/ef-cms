@@ -161,6 +161,7 @@ import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/case
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
+import { getCaseDocketEntriesInteractor } from '../../shared/src/proxies/getCaseDocketEntriesProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
@@ -440,6 +441,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getConsolidatedCaseDeadlinesInteractor,
+  getCaseDocketEntriesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,

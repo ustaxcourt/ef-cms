@@ -627,4 +627,86 @@ describe('getCaseInteractor', () => {
 
     expect((result.docketEntries[0] as any).servedParties).toBeUndefined();
   });
+
+  describe('excludeDocketEntries', () => {
+    it('should return an empty docketEntries array when excludeDocketEntries is true', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+      });
+
+      const result = await getCaseInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          excludeDocketEntries: true,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.docketEntries).toEqual([]);
+    });
+
+    it('should not fetch work items when excludeDocketEntries is true', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+      });
+      getWorkItemsByDocketNumber.mockClear();
+
+      await getCaseInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          excludeDocketEntries: true,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(getWorkItemsByDocketNumber).not.toHaveBeenCalled();
+    });
+
+    it('should still return case metadata when excludeDocketEntries is true', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+      });
+
+      const result = await getCaseInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          excludeDocketEntries: true,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.docketNumber).toEqual(MOCK_CASE.docketNumber);
+    });
+
+    it('should return docket entries when excludeDocketEntries is false', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+      });
+
+      const result = await getCaseInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          excludeDocketEntries: false,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.docketEntries.length).toBeGreaterThan(0);
+    });
+
+    it('should return docket entries when excludeDocketEntries is undefined', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+      });
+
+      const result = await getCaseInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.docketEntries.length).toBeGreaterThan(0);
+    });
+  });
 });

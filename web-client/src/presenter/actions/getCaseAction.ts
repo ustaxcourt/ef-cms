@@ -24,5 +24,28 @@ export const getCaseAction = async ({
       docketNumber,
     });
 
+  // Fetch all docket entries via the paginated endpoint
+  const MAX_PAGE = 20;
+  const allDocketEntries: any[] = [];
+  let page = 0;
+  let hasMore = true;
+
+  while (hasMore && page <= MAX_PAGE) {
+    const result = await applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor(applicationContext, {
+        docketNumber,
+        page,
+      });
+
+    allDocketEntries.push(...result.docketEntries);
+
+    const fetched = (page + 1) * result.pageSize;
+    hasMore = fetched < result.totalCount;
+    page++;
+  }
+
+  caseDetail.docketEntries = allDocketEntries;
+
   return { caseDetail };
 };
