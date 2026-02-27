@@ -62,5 +62,16 @@ describe('ExternalDocumentNonStandardE', () => {
         'Motion to Change Place of Submission of Declaratory Judgment Case to Little Rock, AR',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentE = ExternalDocumentFactory({
+        category: 'Motion',
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case',
+        scenario: 'Nonstandard E',
+      });
+
+      expect(externalDocumentE.getDocumentTitle()).toEqual('');
+    });
   });
 });

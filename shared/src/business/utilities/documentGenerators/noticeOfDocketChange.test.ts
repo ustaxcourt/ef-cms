@@ -20,6 +20,10 @@ describe('noticeOfDocketChange', () => {
           },
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
+          filingParties: {
+            after: undefined,
+            before: undefined,
+          },
         },
       });
     },

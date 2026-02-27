@@ -1,20 +1,19 @@
 import { ACCOUNT_STATUS, ROLES } from '../../entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validatePractitionerInteractor } from './validatePractitionerInteractor';
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validatePractitionerInteractor(applicationContext, {
+    const errors = validatePractitionerInteractor({
       practitioner: {} as RawPractitioner,
     });
 
     expect(Object.keys(errors!)).toEqual([
-      'role',
       'userId',
       'accountStatus',
       'admissionsDate',
       'admissionsStatus',
+      'role',
       'barNumber',
       'birthYear',
       'firstName',
@@ -26,7 +25,7 @@ describe('validatePractitionerInteractor', () => {
   });
 
   it('returns null on no errors', () => {
-    const errors = validatePractitionerInteractor(applicationContext, {
+    const errors = validatePractitionerInteractor({
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
