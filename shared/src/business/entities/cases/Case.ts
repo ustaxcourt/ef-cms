@@ -2282,24 +2282,26 @@ export const filterStinFromDocketEntries = (
   authorizedUser: { role: string } | undefined,
   petitionIsServedOverride?: boolean,
 ): RawDocketEntry[] => {
+  if (authorizedUser?.role === ROLES.irsSuperuser) {
+    if (petitionIsServedOverride === false) {
+      return docketEntries.filter(
+        d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+    }
+    return docketEntries;
+  }
+
   const isPetitionsClerkOrSupervisor =
     authorizedUser?.role === ROLES.petitionsClerk ||
     authorizedUser?.role === ROLES.caseServicesSupervisor;
 
-  const petitionIsServed =
-    petitionIsServedOverride ??
-    !!docketEntries.find(
-      d =>
-        d.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    )?.servedAt;
-
-  if (authorizedUser?.role === ROLES.irsSuperuser) {
-    if (petitionIsServed) {
-      return docketEntries;
-    }
-  }
-
   if (isPetitionsClerkOrSupervisor) {
+    const petitionIsServed =
+      petitionIsServedOverride ??
+      !!docketEntries.find(
+        d =>
+          d.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+      )?.servedAt;
     if (!petitionIsServed) {
       return docketEntries;
     }
