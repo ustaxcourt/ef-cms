@@ -81,7 +81,7 @@ export const documentViewerHelper = (
     showNotServed,
     showServiceWarning: showUnservedPetitionWarning,
     showLeadCaseNotification: showLeadCaseBanner,
-  } = showThings({
+  } = getDocumentDisplayFlags({
     document: formattedDocumentToDisplay,
     permissions,
     caseDetail,
@@ -110,7 +110,7 @@ export const documentViewerHelper = (
   };
 };
 
-export const showThings = ({
+export const getDocumentDisplayFlags = ({
   document,
   permissions,
   caseDetail,

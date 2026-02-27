@@ -3,7 +3,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-import { showThings } from './documentViewerHelper';
+import { getDocumentDisplayFlags } from './documentViewerHelper';
 
 export const messageDocumentHelper = (
   get: Get,
@@ -113,7 +113,7 @@ export const messageDocumentHelper = (
     showApplyStampButton,
     showServiceWarning,
     showLeadCaseNotification: showLeadCaseWarning,
-  } = showThings({
+  } = getDocumentDisplayFlags({
     document: caseDocument,
     permissions,
     caseDetail,
