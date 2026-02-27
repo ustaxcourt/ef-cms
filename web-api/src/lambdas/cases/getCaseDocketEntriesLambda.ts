@@ -12,12 +12,14 @@ export const getCaseDocketEntriesLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, () =>
-    getCaseDocketEntriesInteractor(
+  genericHandler(event, () => {
+    const parsedPage = parseInt(event.queryStringParameters?.page ?? '0', 10);
+
+    return getCaseDocketEntriesInteractor(
       {
         docketNumber: event.pathParameters.docketNumber,
-        page: parseInt(event.queryStringParameters?.page ?? '0', 10),
+        page: Number.isNaN(parsedPage) ? 0 : parsedPage,
       },
       authorizedUser,
-    ),
-  );
+    );
+  });

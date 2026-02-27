@@ -145,7 +145,31 @@ describe('getCaseDocketEntriesInteractor', () => {
         { docketNumber: MOCK_CASE.docketNumber, page: 21 },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow('Page 21 exceeds the maximum allowed page of 20');
+    ).rejects.toThrow(
+      "Invalid page '21'. Must be a number between 0 and 20",
+    );
+  });
+
+  it('should throw an error when page is negative', async () => {
+    await expect(
+      getCaseDocketEntriesInteractor(
+        { docketNumber: MOCK_CASE.docketNumber, page: -1 },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      "Invalid page '-1'. Must be a number between 0 and 20",
+    );
+  });
+
+  it('should throw an error when page is NaN', async () => {
+    await expect(
+      getCaseDocketEntriesInteractor(
+        { docketNumber: MOCK_CASE.docketNumber, page: NaN },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      "Invalid page 'NaN'. Must be a number between 0 and 20",
+    );
   });
 
   it('should filter docket entries for external users', async () => {

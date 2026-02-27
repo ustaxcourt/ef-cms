@@ -18,31 +18,45 @@ export const getCaseAction = async ({
     throw new Error('Docket number is required to get case details');
   }
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .getCaseInteractor(applicationContext, {
-      docketNumber,
-    });
-
-  // Fetch all docket entries via the paginated endpoint
   const MAX_PAGE = 20;
-  const allDocketEntries: any[] = [];
-  let page = 0;
-  let hasMore = true;
 
-  while (hasMore && page <= MAX_PAGE) {
-    const result = await applicationContext
+  // Fetch the case metadata and the first page of docket entries in parallel
+  const [caseDetail, firstPageResult] = await Promise.all([
+    applicationContext.getUseCases().getCaseInteractor(applicationContext, {
+      docketNumber,
+    }),
+    applicationContext
       .getUseCases()
       .getCaseDocketEntriesInteractor(applicationContext, {
         docketNumber,
-        page,
-      });
+        page: 0,
+      }),
+  ]);
 
-    allDocketEntries.push(...result.docketEntries);
+  const allDocketEntries: any[] = [...firstPageResult.docketEntries];
 
-    const fetched = (page + 1) * result.pageSize;
-    hasMore = fetched < result.totalCount;
-    page++;
+  // If there are more pages, fetch them all in parallel
+  const totalPages = Math.ceil(
+    firstPageResult.totalCount / firstPageResult.pageSize,
+  );
+  const remainingPages = Math.min(totalPages, MAX_PAGE + 1);
+
+  if (remainingPages > 1) {
+    const pagePromises: Promise<any>[] = [];
+    for (let page = 1; page < remainingPages; page++) {
+      pagePromises.push(
+        applicationContext
+          .getUseCases()
+          .getCaseDocketEntriesInteractor(applicationContext, {
+            docketNumber,
+            page,
+          }),
+      );
+    }
+    const results = await Promise.all(pagePromises);
+    for (const result of results) {
+      allDocketEntries.push(...result.docketEntries);
+    }
   }
 
   caseDetail.docketEntries = allDocketEntries;

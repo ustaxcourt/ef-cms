@@ -21,9 +21,9 @@ export const getCaseDocketEntriesInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (page > MAX_PAGE) {
+  if (!Number.isFinite(page) || page < 0 || page > MAX_PAGE) {
     throw new Error(
-      `Page ${page} exceeds the maximum allowed page of ${MAX_PAGE}`,
+      `Invalid page '${page}'. Must be a number between 0 and ${MAX_PAGE}`,
     );
   }
 
