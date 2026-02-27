@@ -741,7 +741,10 @@ export class DocketEntry extends JoiValidationEntity {
     if (user.role === ROLES.irsSuperuser)
       return DocketEntry.isServed(petitionDocketEntry);
 
-    if (isTerminalUser) return !DocketEntry.isSealed(entry);
+    if (isTerminalUser) {
+      if (entry.isStricken) return false;
+      return !DocketEntry.isSealed(entry);
+    }
 
     const userHasAccessToCase = Case.userHasAccessToCase(rawCase, user);
 
