@@ -5,7 +5,6 @@ import { ROLES } from '../entities/EntityConstants';
 import { getCaseDocketEntriesInteractor } from './getCaseDocketEntriesInteractor';
 import {
   mockDocketClerkUser,
-  mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { UnauthorizedError } from '@web-api/errors/errors';
