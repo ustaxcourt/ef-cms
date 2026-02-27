@@ -39,7 +39,7 @@ const REGULAR_ENTRY: RawDocketEntry = {
   eventCode: 'O',
   isOnDocketRecord: true,
   servedAt: '2024-01-01T00:00:00.000Z',
-  draftOrderState: { someState: true },
+  draftOrderState: {},
   pending: false,
 } as RawDocketEntry;
 

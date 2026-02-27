@@ -53,15 +53,27 @@ describe('filterStinFromDocketEntries', () => {
       expect(result.find(d => d.documentType === STIN_DOCUMENT_TYPE)).toBeDefined();
     });
 
-    it('includes STIN when petitionIsServedOverride is false', () => {
+    it('excludes STIN when petitionIsServedOverride is false', () => {
       const result = filterStinFromDocketEntries(entriesWithStin, user, false);
-      expect(result).toHaveLength(2);
-      expect(result.find(d => d.documentType === STIN_DOCUMENT_TYPE)).toBeDefined();
+      expect(result).toHaveLength(1);
+      expect(result.find(d => d.documentType === STIN_DOCUMENT_TYPE)).toBeUndefined();
     });
 
-    it('includes STIN when petitionIsServedOverride is undefined', () => {
-      const result = filterStinFromDocketEntries(entriesWithStin, user);
+    it('excludes STIN when petitionIsServedOverride is undefined and petition is not served', () => {
+      const entries = [makeStin(), makeRegularEntry(), makePetition()];
+      const result = filterStinFromDocketEntries(entries, user);
       expect(result).toHaveLength(2);
+      expect(result.find(d => d.documentType === STIN_DOCUMENT_TYPE)).toBeUndefined();
+    });
+
+    it('includes STIN when petitionIsServedOverride is undefined and petition is served', () => {
+      const entries = [
+        makeStin(),
+        makeRegularEntry(),
+        makePetition({ servedAt: '2024-01-01T00:00:00.000Z' }),
+      ];
+      const result = filterStinFromDocketEntries(entries, user);
+      expect(result).toHaveLength(3);
       expect(result.find(d => d.documentType === STIN_DOCUMENT_TYPE)).toBeDefined();
     });
   });

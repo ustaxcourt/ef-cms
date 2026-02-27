@@ -325,7 +325,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(entryWithRelated.relatedDocketEntries.length).toBeGreaterThan(0);
     expect(entryWithRelated.relatedDocketEntries[0]).toMatchObject({
       docketEntryIndex: 2,
-      disposition: 'GRANTED BY',
+      dispositionText: ['GRANTED BY #2'],
     });
   });
 
@@ -369,7 +369,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(entryWithRelated.relatedDocketEntries.length).toBeGreaterThan(0);
     expect(entryWithRelated.relatedDocketEntries[0]).toMatchObject({
       docketEntryIndex: 2,
-      disposition: 'DENYING',
+      dispositionText: ['DENYING #2'],
     });
   });
 

@@ -359,7 +359,7 @@ describe('getCaseDocketEntriesInteractor', () => {
         user,
       );
 
-      // IRS superuser always sees STIN
+      // IRS superuser sees STIN when petition is served
       expect(
         result.docketEntries.find(
           d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
