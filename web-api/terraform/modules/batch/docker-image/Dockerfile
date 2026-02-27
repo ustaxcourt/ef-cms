@@ -1,3 +1,4 @@
+ARG TARGETARCH=amd64
 FROM node:24
 
 RUN apt-get update && \

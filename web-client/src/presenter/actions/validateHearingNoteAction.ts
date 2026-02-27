@@ -17,7 +17,7 @@ export const validateHearingNoteAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateHearingNoteInteractor(applicationContext, {
+    .validateHearingNoteInteractor({
       note,
     });
 

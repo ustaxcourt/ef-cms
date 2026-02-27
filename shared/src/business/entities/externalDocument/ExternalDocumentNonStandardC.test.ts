@@ -108,5 +108,15 @@ describe('ExternalDocumentNonStandardC', () => {
         'Affidavit Of Lori Loughlin in Support Of',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentC = ExternalDocumentFactory({
+        category: 'Supporting Document',
+        documentType: 'Affidavit in Support',
+        scenario: 'Nonstandard C',
+      });
+
+      expect(externalDocumentC.getDocumentTitle()).toEqual('');
+    });
   });
 });

@@ -19,7 +19,7 @@ export const validateAddPetitionerAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddPetitionerInteractor(applicationContext, {
+    .validateAddPetitionerInteractor({
       contact,
       existingPetitioners,
     });
