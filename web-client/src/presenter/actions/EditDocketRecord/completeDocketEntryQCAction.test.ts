@@ -8,8 +8,16 @@ describe('completeDocketEntryQCAction', () => {
 
   const caseDetail = {
     docketEntries: [
-      { docketEntryId: mockDocketEntryId, documentTitle: "bob's burgers" },
-    ],
+      {
+        docketEntryId: mockDocketEntryId,
+        documentTitle: "bob's burgers",
+      },
+    ] as Array<{
+      docketEntryId: string;
+      documentTitle: string;
+      addToCoversheet?: boolean;
+      additionalInfo?: string;
+    }>,
     docketNumber: '123-45',
   };
 

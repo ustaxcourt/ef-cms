@@ -15,6 +15,7 @@ type FilingsAndProceedingsProps = {
     docketEntryId: string;
     relatedDocketEntries: {
       disposition?: string;
+      dispositionText?: [];
       docketEntryId?: string;
       docketEntryIndex?: number;
       showDocumentViewerLink: boolean;
@@ -229,41 +230,11 @@ export const FilingsAndProceedings = connect<
             <span key={affectedEntry.docketEntryId}>
               <br></br>
               <span className="display-inline-block">
-                <span> --- </span>
-                {(affectedEntry.showDocumentViewerLink ||
-                  affectedEntry.showDownloadLink) && (
-                  <Button
-                    link
-                    className={classNames('text-right', 'view-pdf-link')}
-                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
-                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
-                    onClick={() =>
-                      affectedEntry.showDocumentViewerLink
-                        ? changeTabAndSetViewerDocumentToDisplaySequence({
-                            docketRecordTab: 'documentView',
-                            viewerDocumentToDisplay: {
-                              docketEntryId: affectedEntry.docketEntryId,
-                            },
-                          })
-                        : openCaseDocumentDownloadUrlSequence({
-                            docketEntryId: affectedEntry.docketEntryId,
-                            docketNumber: caseDetail.docketNumber,
-                          })
-                    }
-                  >
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}
-                  </Button>
-                )}
-                {!(
-                  affectedEntry.showDocumentViewerLink ||
-                  affectedEntry.showDownloadLink
-                ) && (
-                  <span>
-                    {' '}
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}{' '}
-                  </span>
+                {renderDispositionLinks(
+                  affectedEntry,
+                  caseDetail.docketNumber,
+                  changeTabAndSetViewerDocumentToDisplaySequence,
+                  openCaseDocumentDownloadUrlSequence,
                 )}
               </span>
             </span>
@@ -273,5 +244,46 @@ export const FilingsAndProceedings = connect<
     );
   },
 );
+
+const renderDispositionLinks = (
+  affectedEntry,
+  docketNumber,
+  changeTabSequence,
+  openDocumentDownloadSequence,
+) => {
+  const showLink =
+    affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink;
+
+  return affectedEntry.dispositionLinkText.map((linkText, index) => (
+    <div className="tw:flex" key={`${affectedEntry.docketEntryIndex}-${index}`}>
+      <span className="tw:shrink-0 tw:mr-1 tw:my-auto"> --- </span>
+      {showLink ? (
+        <Button
+          link
+          className={classNames('text-right', 'view-pdf-link')}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+          onClick={() =>
+            affectedEntry.showDocumentViewerLink
+              ? changeTabSequence({
+                  docketRecordTab: 'documentView',
+                  viewerDocumentToDisplay: {
+                    docketEntryId: affectedEntry.docketEntryId,
+                  },
+                })
+              : openDocumentDownloadSequence({
+                  docketEntryId: affectedEntry.docketEntryId,
+                  docketNumber,
+                })
+          }
+        >
+          {linkText}
+        </Button>
+      ) : (
+        <span>{linkText}</span>
+      )}
+    </div>
+  ));
+};
 
 FilingsAndProceedings.displayName = 'FilingsAndProceedings';
