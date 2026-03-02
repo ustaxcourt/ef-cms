@@ -230,7 +230,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### DWT
 **Current Installed DWT: 19.3.0**
-- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. **DO NOT UPDATE DWT WITHOUT COORDINATING THE UPGRADE OF WINDOWS CLIENTS BEFOREHAND.**
+- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. **DO NOT UPDATE DWT WITHOUT COORDINATING THE UPGRADE OF WINDOWS CLIENTS BEFOREHAND.**
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.37.3**
