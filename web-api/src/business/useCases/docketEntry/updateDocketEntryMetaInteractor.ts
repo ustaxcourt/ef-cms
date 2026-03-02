@@ -61,6 +61,7 @@ export const updateDocketEntryMeta = async (
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
     !DocketEntry.isMinuteEntry(originalDocketEntry);
 
+  // triggers this Error "Ensure that you are using a supported browser: Chrome, Firefox, Safari, MS Edge, or IE11 (or later)" on UI
   if (isUnservedAndNotExempt) {
     throw new Error('Unable to update unserved docket entry.');
   }
