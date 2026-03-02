@@ -77,6 +77,7 @@ const renderTabFactory = (params: {
 export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
+  'data-testid'?: string;
   disabled?: boolean;
   icon?: React.JSX.Element | boolean;
   id?: string;
