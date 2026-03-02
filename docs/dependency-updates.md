@@ -229,8 +229,8 @@ Below is a list of dependencies that are locked down due to known issues with se
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-**Current Installed DWT: 19.3.1**
-- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+**Current Installed DWT: 19.3.0**
+- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. **DO NOT UPDATE DWT WITHOUT COORDINATING THE UPGRADE OF WINDOWS CLIENTS BEFOREHAND.**
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.37.3**
