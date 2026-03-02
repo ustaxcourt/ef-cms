@@ -156,6 +156,21 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         .contains('Administrative Record')
         .click();
 
+      cy.get('[data-testid="alert-info"]').should('exist');
+
+      cy.get('[data-testid="alert-info"]').should(
+        'contain',
+        "This document will also be QC'd for all consolidated cases.",
+      );
+      cy.get('[data-testid="alert-info"]').should(
+        'contain',
+        'If a Notice of Docket Change is generated, it will be filed in all cases in the group.',
+      );
+
+      cy.get('[data-testid="additional-info-primary-document-form"]').type(
+        'Something Absurd',
+      );
+
       cy.get('#save-and-finish').click();
 
       cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
@@ -167,12 +182,15 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         .find('.filing-type-icon')
         .should('be.empty');
 
+      cy.get('[data-testid="document-viewer-link-NODC"]').should('exist');
+
       consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
         goToCase(memberDocketNumber);
         cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
           .find('.filing-type-icon')
           .should('be.empty');
+        cy.get('[data-testid="document-viewer-link-NODC"]').should('exist');
       });
     });
   });
