@@ -34,9 +34,18 @@ describe('gotoDocketEntryQcSequence', () => {
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
-      docketEntries: [mockDocketEntry],
+      docketEntries: [],
       docketNumber: mockDocketNumber,
     });
+
+    applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor.mockReturnValue({
+        docketEntries: [mockDocketEntry],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      });
 
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');
