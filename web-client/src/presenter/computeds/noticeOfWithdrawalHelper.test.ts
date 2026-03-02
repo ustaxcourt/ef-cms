@@ -31,10 +31,10 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.filers).toEqual([mockPetitioners[0]]);
+    expect(result.filingParties).toEqual([mockPetitioners[0]]);
   });
 
-  it('should set showRespondant to true for IRS practitioners', () => {
+  it('should set showRespondent to true for IRS practitioners', () => {
     const result = runCompute(noticeOfWithdrawalHelper, {
       state: {
         user: { role: USER_ROLES.irsPractitioner, userId: 'irs1' },
@@ -118,6 +118,6 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.filers).toEqual([expected]);
+    expect(result.filingParties).toEqual([expected]);
   });
 });
