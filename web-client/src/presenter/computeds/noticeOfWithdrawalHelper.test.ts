@@ -31,7 +31,7 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.partiesToWithdrawFrom).toEqual([mockPetitioners[0]]);
+    expect(result.filers).toEqual([mockPetitioners[0]]);
   });
 
   it('should set showRespondant to true for IRS practitioners', () => {
@@ -118,6 +118,6 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.partiesToWithdrawFrom).toEqual([expected]);
+    expect(result.filers).toEqual([expected]);
   });
 });

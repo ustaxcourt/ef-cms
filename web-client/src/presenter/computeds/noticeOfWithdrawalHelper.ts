@@ -10,7 +10,7 @@ import {
 export const noticeOfWithdrawalHelper = (
   get: Get,
 ): {
-  partiesToWithdrawFrom: TPetitioner[];
+  filingParties: TPetitioner[];
   partiesWithPaperService: TPetitioner[];
   showConsolidatedCaseAlertWarning: boolean;
   showEditContactInformation: boolean;
@@ -19,7 +19,7 @@ export const noticeOfWithdrawalHelper = (
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
-  const partiesToWithdrawFrom: TPetitioner[] = getPartiesToWithdrawFrom(
+  const filingParties: TPetitioner[] = getPartiesToWithdrawFrom(
     caseDetail,
     user,
   ).map(partyId =>
@@ -28,7 +28,7 @@ export const noticeOfWithdrawalHelper = (
 
   const showRespondent = user.role === ROLES.irsPractitioner;
 
-  const showEditContactInformation = partiesToWithdrawFrom.some(
+  const showEditContactInformation = filingParties.some(
     p => !p.isAddressSealed,
   );
 
@@ -40,7 +40,7 @@ export const noticeOfWithdrawalHelper = (
     caseDetail.consolidatedCases?.length > 0;
 
   return {
-    partiesToWithdrawFrom,
+    filingParties,
     partiesWithPaperService,
     showConsolidatedCaseAlertWarning,
     showEditContactInformation,

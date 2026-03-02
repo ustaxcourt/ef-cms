@@ -102,14 +102,7 @@ export const fileDocumentHelper = (
     form,
   });
 
-  const shouldUsePartyToWithdrawFrom =
-    form.eventCode === 'NOTW' &&
-    (user.role === ROLES.privatePractitioner ||
-      user.role === ROLES.irsPractitioner);
-
-  const parties = shouldUsePartyToWithdrawFrom
-    ? form.partiesToWithdrawFromMap
-    : form.filersMap;
+  const parties = form.filersMap;
 
   const formattedFilingParties = getFilerParties({
     caseDetail,
@@ -134,6 +127,10 @@ export const fileDocumentHelper = (
 
   let partiesHeaderText = 'Parties Filing The Document(s)';
   let partiesLabelText = 'Filing Parties';
+  const shouldUsePartyToWithdrawFrom =
+    form.eventCode === 'NOTW' &&
+    (user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner);
   if (shouldUsePartyToWithdrawFrom) {
     partiesHeaderText = "Parties You're Withdrawing From as Counsel";
     partiesLabelText = 'Parties';

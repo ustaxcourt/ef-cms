@@ -17,9 +17,7 @@ export const autoGenerateFilingPdfAction = async ({
 
   const { petitioners, docketNumber, docketNumberWithSuffix } = caseDetail;
 
-  const { generationType, eventCode, filers, partiesToWithdrawFrom } = get(
-    state.form,
-  );
+  const { generationType, eventCode, filers } = get(state.form);
 
   const user = get(state.user);
 
@@ -50,7 +48,7 @@ export const autoGenerateFilingPdfAction = async ({
             caseTitle,
             docketNumber,
             docketNumberWithSuffix,
-            partiesToWithdrawFrom,
+            filers,
             petitioners,
           });
         if (

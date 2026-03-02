@@ -45,19 +45,19 @@ export const NoticeOfWithdrawalForm = connect(
           />
         )}
         <fieldset className="usa-fieldset margin-bottom-0">
-          <FormGroup errorText={validationErrors?.partiesToWithdrawFrom}>
+          <FormGroup errorText={validationErrors?.filers}>
             <legend>
               From whom are you removing yourself as counsel of record?
             </legend>
             <span className="usa-hint">Check all that apply.</span>
-            {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
+            {noticeOfWithdrawalHelper.filingParties.map(party => (
               <div className="usa-checkbox" key={party.contactId}>
                 <input
                   aria-describedby="who-legend"
-                  checked={form.partiesToWithdrawFromMap?.[party.contactId]}
+                  checked={form.filersMap?.[party.contactId]}
                   className="usa-checkbox__input"
                   id={`party-${party.contactId}`}
-                  name={`partiesToWithdrawFromMap.${party.contactId}`}
+                  name={`filersMap.${party.contactId}`}
                   type="checkbox"
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
@@ -169,7 +169,7 @@ export const NoticeOfWithdrawalForm = connect(
                 className="tw:flex tw:flex-wrap tw:justify-between"
                 data-testid="edit-contact-information-section"
               >
-                {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
+                {noticeOfWithdrawalHelper.filingParties.map(party => (
                   <div
                     className="tw:mt-6 tw:w-[300px]"
                     data-testid={`edit-contact-${party.contactId}`}

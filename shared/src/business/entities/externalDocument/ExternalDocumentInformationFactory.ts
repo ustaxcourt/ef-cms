@@ -31,7 +31,6 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public hasSupportingDocuments: boolean;
   public lodged?: boolean;
   public filers: string[];
-  public partiesToWithdrawFrom?: string[];
   public objections: string;
   public ordinalValue?: string;
   public paperServiceAcknowledgement?: boolean;
@@ -64,7 +63,6 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.lodged = rawProps.lodged;
     this.filers = rawProps.filers;
     this.objections = rawProps.objections;
-    this.partiesToWithdrawFrom = rawProps.partiesToWithdrawFrom;
     this.ordinalValue = rawProps.ordinalValue;
     this.paperServiceAcknowledgement = rawProps.paperServiceAcknowledgement;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
@@ -253,11 +251,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         }
       }
     } else {
-      if (
-        this.filers.length === 0 &&
-        this.partyIrsPractitioner !== true &&
-        !isNotwAndPractitioner
-      ) {
+      if (this.filers.length === 0 && this.partyIrsPractitioner !== true) {
         addProperty(
           'filers',
           joi
@@ -295,7 +289,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       );
       if (!this.partyIrsPractitioner) {
         addProperty(
-          'partiesToWithdrawFrom',
+          'filers',
           joi.array().items(joi.string().required()).messages({
             '*': 'Select a party from whom are you removing yourself as counsel of record',
           }),

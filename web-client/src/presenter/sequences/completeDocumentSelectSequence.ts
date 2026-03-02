@@ -16,7 +16,6 @@ import { isNoticeOfWithdrawalAction } from '../actions/isNoticeOfWithdrawalActio
 import { validateNoticeOfWithdrawalAction } from '../actions/validateNoticeOfWithdrawalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setDefaultPaperServiceAcknowledgementAction } from '../actions/setDefaultPaperServiceAcknowledgementAction';
-import { setDefaultPartiesToWithdrawFromMapAction } from '@web-client/presenter/actions/setDefaultPartiesToWithdrawFromMapAction';
 
 const navigationSequence = [
   setDocketNumberPropAction,
@@ -47,7 +46,6 @@ export const completeDocumentSelectSequence = [
           {
             error: [setAlertErrorAction],
             success: [
-              setDefaultPartiesToWithdrawFromMapAction,
               setDefaultPaperServiceAcknowledgementAction,
               navigationSequence,
             ],

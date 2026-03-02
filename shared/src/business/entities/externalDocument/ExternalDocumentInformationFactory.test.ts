@@ -493,12 +493,12 @@ describe('ExternalDocumentInformationFactory', () => {
           ...baseDoc.currentUser,
           role: ROLES.privatePractitioner,
         };
-        baseDoc.partiesToWithdrawFrom = [];
+        baseDoc.filers = [];
         baseDoc.partyIrsPractitioner = false;
         expect(errors().allPartiesConsent).toEqual(
           'All parties have not consented to your withdrawal as counsel',
         );
-        expect(errors().partiesToWithdrawFrom).toEqual(
+        expect(errors().filers).toEqual(
           'Select a party from whom are you removing yourself as counsel of record',
         );
       });

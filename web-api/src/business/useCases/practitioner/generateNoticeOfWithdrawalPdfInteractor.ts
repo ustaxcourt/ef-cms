@@ -20,14 +20,14 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     caseTitle,
     docketNumber,
     docketNumberWithSuffix,
-    partiesToWithdrawFrom,
+    filers,
     petitioners,
   }: {
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumber: string;
     docketNumberWithSuffix: string;
-    partiesToWithdrawFrom: string[];
+    filers: string[];
     petitioners: {
       contactId: string;
       name: string;
@@ -47,10 +47,10 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     throw new Error('Practitioner information not found');
   }
 
-  const partiesToWithdrawFromNames: string[] =
+  const filersNames: string[] =
     authorizedUser.role === ROLES.irsPractitioner
       ? ['Respondent']
-      : (partiesToWithdrawFrom
+      : (filers
           .map(userId => {
             const petitioner = petitioners.find(pe => pe.contactId === userId);
             return petitioner ? petitioner.name : null;
@@ -68,7 +68,7 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
-          partiesToWithdrawFrom: partiesToWithdrawFromNames,
+          filers: filersNames,
           practitionerInformation,
         },
       });

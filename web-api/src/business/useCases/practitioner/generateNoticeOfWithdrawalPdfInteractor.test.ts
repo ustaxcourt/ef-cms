@@ -33,7 +33,7 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
     caseTitle: 'Test Case Title',
     docketNumber: '123-45',
     docketNumberWithSuffix: '123-45S',
-    partiesToWithdrawFrom: ['filer1'],
+    filers: ['filer1'],
     petitioners: [{ contactId: 'filer1', name: 'John Doe' }],
   };
   beforeEach(() => {
@@ -102,7 +102,7 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
           caseCaptionExtension: mockInput.caseCaptionExtension,
           caseTitle: mockInput.caseTitle,
           docketNumberWithSuffix: mockInput.docketNumberWithSuffix,
-          partiesToWithdrawFrom: ['John Doe'],
+          filers: ['John Doe'],
           practitionerInformation: MOCK_PRACTITIONER,
         }),
       }),

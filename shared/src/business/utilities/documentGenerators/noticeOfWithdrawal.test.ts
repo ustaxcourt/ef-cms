@@ -13,7 +13,7 @@ describe('noticeOfWithdrawal', () => {
           caseCaptionExtension: 'Petitioner',
           caseTitle: 'John Doe, et al',
           docketNumberWithSuffix: '123-45S',
-          partiesToWithdrawFrom: ['John Doe', 'Jane Doe'],
+          filers: ['John Doe', 'Jane Doe'],
           practitionerInformation: {
             contact: {
               address1: '23456 Side St',

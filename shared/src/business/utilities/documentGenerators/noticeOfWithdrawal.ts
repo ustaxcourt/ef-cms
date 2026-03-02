@@ -15,7 +15,7 @@ export const noticeOfWithdrawal = async ({
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
-    partiesToWithdrawFrom: string[];
+    filers: string[];
     practitionerInformation: {
       contact?: UserContact;
       barNumber?: string;
@@ -28,7 +28,7 @@ export const noticeOfWithdrawal = async ({
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    partiesToWithdrawFrom,
+    filers,
     practitionerInformation,
   } = data;
 
@@ -40,7 +40,7 @@ export const noticeOfWithdrawal = async ({
       caseTitle,
       date,
       docketNumberWithSuffix,
-      partiesToWithdrawFrom,
+      filers,
       practitionerInformation,
     }),
   );

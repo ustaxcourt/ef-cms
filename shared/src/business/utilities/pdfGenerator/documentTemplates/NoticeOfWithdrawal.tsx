@@ -9,14 +9,14 @@ export const NoticeOfWithdrawal = ({
   caseTitle,
   date,
   docketNumberWithSuffix,
-  partiesToWithdrawFrom,
+  filers,
   practitionerInformation,
 }: {
   caseCaptionExtension: string;
   caseTitle: string;
   date: string;
   docketNumberWithSuffix: string;
-  partiesToWithdrawFrom: string[];
+  filers: string[];
   practitionerInformation: {
     contact?: UserContact;
     barNumber?: string;
@@ -24,9 +24,7 @@ export const NoticeOfWithdrawal = ({
     name: string;
   };
 }) => {
-  const partiesToWithdrawFromString = joinWithAmpersand(
-    partiesToWithdrawFrom,
-  ).toUpperCase();
+  const filersString = joinWithAmpersand(filers).toUpperCase();
 
   return (
     <div id="notice-of-withdrawal-pdf">
@@ -47,12 +45,11 @@ export const NoticeOfWithdrawal = ({
 
         <ol>
           <li>
-            More than one counsel has entered an appearance for{' '}
-            {partiesToWithdrawFromString}.
+            More than one counsel has entered an appearance for {filersString}.
           </li>
           <li>
             At least one counsel of record will continue to represent the{' '}
-            {partiesToWithdrawFrom.length > 1 ? 'parties' : 'party'}.
+            {filers.length > 1 ? 'parties' : 'party'}.
           </li>
           <li>
             This notice of withdrawal is not being filed within 30 days of the
