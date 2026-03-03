@@ -995,10 +995,11 @@ export class Case extends JoiValidationEntity {
       secondaryContact,
     });
   }
-
+  
   //@ts-ignore
   toRawObject(): RawCase {
     const result = this.toRawObjectFromJoi();
+    // @ts-ignore
     return result as RawCase;
   }
 
