@@ -64,7 +64,7 @@ EFCMS_ROOT=$(realpath "$(dirname "$0")/..")
 
 if [ -f "CHANGES.md" ]; then
   CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
-  ADDED_LINES=$(printf "%s\n" "$CHANGES_DIFF" | grep "^+" | grep -v "^+++" | grep -v "No newline")
+  ADDED_LINES=$(printf "%s\n" "$CHANGES_DIFF" | grep "^+" | grep -v "^+++" | grep -v "No newline" || true)
 
   if [ -n "$ADDED_LINES" ]; then
     {

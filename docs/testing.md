@@ -255,7 +255,7 @@ All of the expected output images are found in the `./shared/test-pdf-expected-i
 Add `--no-cache` to the end of the two docker build commands below if you need to double check it's not trying to test an old version code.
 
 ```
-docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
+docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile . && \
 docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
 docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
