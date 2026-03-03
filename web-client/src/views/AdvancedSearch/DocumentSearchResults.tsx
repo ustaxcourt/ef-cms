@@ -141,11 +141,11 @@ export const DocumentSearchResults = connect(
       { label: 'Sort by Judge (descending)', value: 'formattedJudgeName|desc' },
       {
         label: 'Sort by Pages (ascending)',
-        value: 'numberOfPagesFormatted|asc',
+        value: 'numberOfPages|asc',
       },
       {
         label: 'Sort by Pages (descending)',
-        value: 'numberOfPagesFormatted|desc',
+        value: 'numberOfPages|desc',
       },
       { label: 'Sort by Docket No. (ascending)', value: 'docketNumber|asc' },
       { label: 'Sort by Docket No. (descending)', value: 'docketNumber|desc' },
@@ -188,7 +188,8 @@ export const DocumentSearchResults = connect(
                         iconClass="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
                         title={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
-                        iconAriaLabel={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`} />
+                        iconAriaLabel={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
+                      />
                     )}
                     <span
                       className="cursor-default"
@@ -295,11 +296,9 @@ export const DocumentSearchResults = connect(
                           defaultSortOrder={ASCENDING}
                           descText={SORT_DESCENDING_TEXT.date}
                           hasRows={true}
-                          sortField="numberOfPagesFormatted"
+                          sortField="numberOfPages"
                           title="Pages"
-                          onClickSequence={() =>
-                            handleSort('numberOfPagesFormatted')
-                          }
+                          onClickSequence={() => handleSort('numberOfPages')}
                         />
                       </th>
                       <th className="text-no-wrap overflow-hidden">

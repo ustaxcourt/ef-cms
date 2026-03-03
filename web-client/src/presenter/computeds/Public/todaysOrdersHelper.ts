@@ -63,6 +63,10 @@ export const todaysOrdersHelper = (
         compare1.docketNumber,
         compare2.docketNumber,
       );
+    } else if (tableSort.sortField === 'numberOfPages') {
+      const pages1 = Number(compare1.numberOfPages) || 0;
+      const pages2 = Number(compare2.numberOfPages) || 0;
+      sortNumber = pages1 - pages2;
     } else if (
       SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS.includes(tableSort.sortField)
     ) {
