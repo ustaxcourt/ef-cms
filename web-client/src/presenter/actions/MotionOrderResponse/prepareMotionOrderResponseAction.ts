@@ -6,6 +6,8 @@ import {
 import {
   formatDateString,
   FORMATS,
+  isValidDateString,
+  TimeFormats,
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -61,11 +63,17 @@ export const prepareMotionOrderResponseAction = ({
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const dueDateFormatted = formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
-  const responseDateFormatted = formatDateString(
-    responseDate,
-    FORMATS.MONTH_DAY_YEAR,
-  );
+  const dueDateFormatted = isValidDateString(dueDate, [
+    FORMATS.YYYYMMDD,
+  ] as TimeFormats[])
+    ? formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR)
+    : '';
+
+  const responseDateFormatted = isValidDateString(responseDate, [
+    FORMATS.YYYYMMDD,
+  ] as TimeFormats[])
+    ? formatDateString(responseDate, FORMATS.MONTH_DAY_YEAR)
+    : '';
 
   let createOrderSelectedCases = [] as any;
   let documentNumberText = `(doc. no. ${index}).`;
