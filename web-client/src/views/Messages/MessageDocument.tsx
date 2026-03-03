@@ -18,6 +18,8 @@ export const MessageDocument = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToStatusReportOrderSequence:
       sequences.navigateToStatusReportOrderSequence,
+    navigateToPathAndSetRedirectUrlSequence:
+      sequences.navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -41,6 +43,7 @@ export const MessageDocument = connect(
     messageViewerDocumentToDisplay,
     navigateToPathSequence,
     navigateToStatusReportOrderSequence,
+    navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -182,8 +185,9 @@ export const MessageDocument = connect(
             data-testid="order-response-button"
             icon="edit"
             onClick={() => {
-              navigateToPathSequence({
+              navigateToPathAndSetRedirectUrlSequence({
                 path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
+                redirectUrl: messageDocumentHelper.messageDetailLink
               });
             }}
           >
