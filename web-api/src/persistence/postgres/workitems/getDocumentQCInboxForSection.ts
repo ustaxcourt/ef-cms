@@ -11,6 +11,8 @@ import {
   RawWorkItemWithCaseAndDocketEntryInfo,
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
+import { groupBy } from 'lodash';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
@@ -34,41 +36,55 @@ export const getDocumentQCInboxForSection = async ({
     return builder.execute();
   });
 
-  const maybeComplete = await attachDocketEntriesToWorkItemQC({ workItems });
-  // return maybeComplete;
+  let items = await attachDocketEntriesToWorkItemQC({ workItems });
 
-  // temp results to calculate and query what else we need and push maybe complete
-  const temp = {};
+  if (judgeId) {
+    const groupedItems = groupBy(items, 'docketEntryId');
 
-  // loop over maybe complete, key by docket entry id, value is every item in maybe complete array that shares the docket entry ID
-  for (const de of maybeComplete) {
-    if (temp[de.docketEntryId]) {
-      temp[de.docketEntryId].push(de);
-    } else {
-      temp[de.docketEntryId] = [de];
+    const params: {
+      docketNumber: string;
+      docketEntryId: string;
+    }[] = [];
+
+    for (const itemGroup of Object.values(groupedItems)) {
+      const missingDocketNumbers = itemGroup[0].docketEntry.multiDocketedOn;
+
+      itemGroup.forEach(item => {
+        missingDocketNumbers.filter(dn => dn !== item.docketNumber);
+      });
+
+      missingDocketNumbers.forEach(dn => {
+        params.push({
+          docketNumber: dn,
+          docketEntryId: itemGroup[0].docketEntryId,
+        });
+      });
     }
-  }
 
-  const anotherTemp = [];
+    const promises: Promise<any>[] = [];
 
-  for (const deArray of Object.values(temp)) {
-    const multiDocketedForGroup = deArray[0].docketEntry.multiDocketedOn;
-
-    const { docketEntryId } = deArray[0];
-
-    for (const el of deArray) {
-      multiDocketedForGroup.filter(mlEL => mlEL !== el.docketNumber);
+    for (const param of params) {
+      promises.push(getMissingItems(param));
     }
 
-    multiDocketedForGroup.forEach(el =>
-      anotherTemp.push({
-        docketNumber: el.docketNumber,
-        docketEntryId,
-      }),
-    );
-  }
+    const missingWorkItems = await settlePromises(promises);
 
-  // loop over the items in array of key by docket entry ID
-  // pick out MD array, compare length of array that is in there
-  // for each docket number in MD array, is there an item that is key by docket entry ID, if no, no then yes
+    const missingItems = await attachDocketEntriesToWorkItemQC({
+      workItems: missingWorkItems,
+    });
+
+    items = items.concat(missingItems);
+  }
+  return items;
+};
+
+const getMissingItems = async ({ docketNumber, docketEntryId }) => {
+  const result = await getDbReader(reader => {
+    return workItemQCQueryBase(reader)
+      .where('w.docketNumber', '=', docketNumber)
+      .where('w.docketEntryId', '=', docketEntryId)
+      .limit(5000)
+      .executeTakeFirst();
+  });
+  return result;
 };
