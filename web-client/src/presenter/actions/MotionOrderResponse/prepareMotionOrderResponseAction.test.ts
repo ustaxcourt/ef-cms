@@ -196,9 +196,7 @@ describe('prepareMotionOrderResponseAction', () => {
       },
     });
 
-    expect(result.state.form.richText).toContain(
-      'petitioners filed a Motion',
-    );
+    expect(result.state.form.richText).toContain('petitioners filed a Motion');
   });
 
   it('should handle having multiple petitioners as nonmovant', async () => {
@@ -354,6 +352,29 @@ describe('prepareMotionOrderResponseAction', () => {
     );
     expect(richText).toContain(
       'ORDERED that The Court expects full compliance.',
+    );
+  });
+
+  it('should not display Invalid DateTime when given an invalid date string in pdf preview', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          responseDate: 'randomstring',
+          dueDate: 'randomstring',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).not.toContain(
+      'ORDERED that by Invalid DateTime, respondent shall file a Response',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'ORDERED that by Invalid DateTime, petitioner may file a Reply',
     );
   });
 });
