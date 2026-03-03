@@ -51,19 +51,6 @@ npm run ecr:check-version
 npm run ecr:check-version
 ```
 </details>
-<details><summary>Dependency Updates - Week of 2026-02-09</summary>
-
-## Manual Deployment Steps
-
-### Before Deployment
-
-#### Docker container `4.3.67` - choose exp5
-
-```bash
-. scripts/env/set-env.zsh expN
-npm run ecr:check-version
-```
-</details>
 <details><summary>Dependency Updates - Week of 2026-02-02</summary>
 
 ## Local
