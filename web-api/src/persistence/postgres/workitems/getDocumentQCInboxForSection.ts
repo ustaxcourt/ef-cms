@@ -34,5 +34,41 @@ export const getDocumentQCInboxForSection = async ({
     return builder.execute();
   });
 
-  return attachDocketEntriesToWorkItemQC({ workItems });
+  const maybeComplete = await attachDocketEntriesToWorkItemQC({ workItems });
+  // return maybeComplete;
+
+  // temp results to calculate and query what else we need and push maybe complete
+  const temp = {};
+
+  // loop over maybe complete, key by docket entry id, value is every item in maybe complete array that shares the docket entry ID
+  for (const de of maybeComplete) {
+    if (temp[de.docketEntryId]) {
+      temp[de.docketEntryId].push(de);
+    } else {
+      temp[de.docketEntryId] = [de];
+    }
+  }
+
+  const anotherTemp = [];
+
+  for (const deArray of Object.values(temp)) {
+    const multiDocketedForGroup = deArray[0].docketEntry.multiDocketedOn;
+
+    const { docketEntryId } = deArray[0];
+
+    for (const el of deArray) {
+      multiDocketedForGroup.filter(mlEL => mlEL !== el.docketNumber);
+    }
+
+    multiDocketedForGroup.forEach(el =>
+      anotherTemp.push({
+        docketNumber: el.docketNumber,
+        docketEntryId,
+      }),
+    );
+  }
+
+  // loop over the items in array of key by docket entry ID
+  // pick out MD array, compare length of array that is in there
+  // for each docket number in MD array, is there an item that is key by docket entry ID, if no, no then yes
 };
