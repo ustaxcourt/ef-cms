@@ -100,6 +100,7 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
   let caseServed = false;
   let exhibitsCreated = 0;
   let exhibitsFailed = 0;
+  let docketNumber = '';
 
   try {
     const isLocal = env === 'local';
@@ -183,7 +184,8 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
       petitionerAuthorizedUser,
     );
 
-    const { docketNumber, docketNumberWithSuffix } = createCaseResult;
+    docketNumber = createCaseResult.docketNumber;
+    const { docketNumberWithSuffix } = createCaseResult;
     caseCreated = true;
     console.log(`✓ Petition created successfully!`);
     console.log(`  → Case Number: ${docketNumber}`);
