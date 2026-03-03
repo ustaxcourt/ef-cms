@@ -186,9 +186,9 @@ describe('getCaseDocketEntriesInteractor', () => {
     );
 
     // External users should only see docket entries on the docket record
-    const expectedDocketEntries = MOCK_CASE.docketEntries.filter(
-      de => de.isOnDocketRecord,
-    );
+    const expectedDocketEntries = MOCK_CASE.docketEntries
+      .filter(de => de.isOnDocketRecord)
+      .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest);
     expect(result.docketEntries).toMatchObject(expectedDocketEntries);
   });
 });

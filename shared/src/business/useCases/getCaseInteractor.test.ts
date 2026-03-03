@@ -122,9 +122,9 @@ describe('getCaseInteractor', () => {
   });
 
   it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with an unsealed case', async () => {
-    const expectedDocketEntries = testCase.docketEntries.filter(
-      de => de.isOnDocketRecord,
-    );
+    const expectedDocketEntries = testCase.docketEntries
+      .filter(de => de.isOnDocketRecord)
+      .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest);
     getCaseByDocketNumber.mockResolvedValue(testCase);
 
     const result = await getCaseInteractor(
@@ -143,9 +143,9 @@ describe('getCaseInteractor', () => {
   });
 
   it('should filter out docket entries that are not on the docket record when the currentUser is an external user associated with a sealed case', async () => {
-    const expectedDocketEntries = testCase.docketEntries.filter(
-      de => de.isOnDocketRecord,
-    );
+    const expectedDocketEntries = testCase.docketEntries
+      .filter(de => de.isOnDocketRecord)
+      .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest);
     getCaseByDocketNumber.mockResolvedValue({
       ...testCase,
       isSealed: true,
