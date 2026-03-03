@@ -11,6 +11,7 @@ import {
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   ORDER_TYPES,
@@ -46,6 +47,10 @@ export const formattedWorkQueue = (
   const users = get(state.users);
   const authorizedUser = get(state.user);
 
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
     assignmentFilterValue = users.find(
       user => user.userId === assignmentFilterValue.userId,
@@ -66,12 +71,17 @@ export const formattedWorkQueue = (
       }),
     )
     .map(workItem => {
-      const editLink = getWorkItemDocumentLink({
-        authorizedUser,
-        permissions,
-        workItem,
-        workQueueToDisplay,
-      });
+      const { eventCode } = workItem.docketEntry;
+
+      const editLink =
+        restrictedEventCodes && restrictedEventCodes?.includes(eventCode)
+          ? null
+          : getWorkItemDocumentLink({
+              authorizedUser,
+              permissions,
+              workItem,
+              workQueueToDisplay,
+            });
       return {
         ...workItem,
         editLink,
@@ -109,7 +119,7 @@ export const formattedWorkQueue = (
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [] as (string | ((workItemToSort: any) => any))[];
-  let highPriorityDirection = [] as string[];;
+  let highPriorityDirection = [] as string[];
   if (workQueueToDisplay.box == 'inbox') {
     const caseStatusSortRank = {
       [STATUS_TYPES.submitted]: 1,
@@ -490,7 +500,7 @@ export type FormattedWorkItemWithCaseInfo =
     consolidatedIconTooltipText: string;
     createdAtFormatted: string;
     docketEntry: any;
-    editLink: string;
+    editLink: string | null;
     formattedCaseStatus: string;
     highPriority: boolean;
     inConsolidatedGroup: boolean;

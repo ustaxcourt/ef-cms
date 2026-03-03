@@ -1,4 +1,5 @@
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
 /**
@@ -12,7 +13,8 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
  * @returns {Promise<object>} the document data
  */
 export const loadPDFForSigningInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext
+  ,
   {
     docketEntryId,
     docketNumber,
@@ -21,8 +23,8 @@ export const loadPDFForSigningInteractor = async (
   }: {
     docketEntryId: string;
     docketNumber: string;
-    onlyCover: boolean;
-    removeCover: boolean;
+    onlyCover?: boolean;
+    removeCover?: boolean;
   },
 ): Promise<PDFDocumentProxy> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -32,8 +34,8 @@ export const loadPDFForSigningInteractor = async (
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
-        applicationContext: applicationContext as any,
-        ...(docketNumber && { docketNumber }),
+        applicationContext,
+        docketNumber,
         key: docketEntryId,
       });
 
@@ -63,10 +65,6 @@ export const loadPDFForSigningInteractor = async (
       isEvalSupported: false,
     }).promise;
   } catch (err) {
-    applicationContext.logger.error(
-      `error loading PDF for signing with docketEntryId ${docketEntryId}`,
-      err,
-    );
     throw new Error('error loading PDF for signing');
   }
 };

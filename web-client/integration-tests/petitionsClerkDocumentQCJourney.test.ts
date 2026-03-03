@@ -10,11 +10,12 @@ import { petitionsClerkGetsSectionDocumentQCInboxCount } from './journey/petitio
 import { petitionsClerkVerifiesAssignedWorkItem } from './journey/petitionsClerkVerifiesAssignedWorkItem';
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 
 describe('Petitions Clerk Document QC Journey', () => {
   const cerebralTest = setupTest();
 
-  const createdCases = [];
+  const createdCases: TAssociatedCase[] = [];
   const caseCreationCount = 3;
 
   afterAll(() => {

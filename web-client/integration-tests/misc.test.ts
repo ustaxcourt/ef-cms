@@ -1,9 +1,17 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContext } from '../src/applicationContext';
-import { presenter } from '../src/presenter/presenter';
+import { presenter } from '../src/presenter/presenter-mock';
+import { toggleBetaBarSequence } from '@web-client/presenter/sequences/toggleBetaBarSequence';
+import { gotoStyleGuideSequence } from '@web-client/presenter/sequences/gotoStyleGuideSequence';
+import { toggleUsaBannerDetailsSequence } from '@web-client/presenter/sequences/toggleUsaBannerDetailsSequence';
 
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
+presenter.sequences = {
+  toggleBetaBarSequence: toggleBetaBarSequence,
+  gotoStyleGuideSequence: gotoStyleGuideSequence,
+  toggleUsaBannerDetailsSequence: toggleUsaBannerDetailsSequence,
+};
 
 const cerebralTest = CerebralTest(presenter);
 
