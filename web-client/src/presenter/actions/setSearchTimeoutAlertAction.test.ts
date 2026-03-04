@@ -14,10 +14,12 @@ describe('setSearchTimeoutAlertAction', () => {
         'Please wait a few moments, then click the Search button to retry.',
       title: 'Search is taking too long to respond',
     };
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
     const { state } = await runAction(setSearchTimeoutAlertAction, {
       modules: { presenter },
       props: { error },
     });
     expect(state.alertError).toEqual(error);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
   });
 });
