@@ -230,7 +230,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### DWT
 **Current Installed DWT: 19.3.1**
-- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.37.3**
@@ -299,10 +299,16 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 
-### hashicorp/aws in .tf files
-**Installed Version: 6.32.1**
-- Updating hashicorp/aws version to 6.33.0 in .tf files caused failures during deployment to an experimental branch so it was reverted back to version 6.32.1.
-- upon updating please deploy to an experimental branch and confirm functionality.
+### eslint and @eslint/js
+**Installed Versions:**
+**eslint: 9.39.3**
+**@eslint/js: 9.39.3**
+- We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-import, eslint-plugin-jsx-a11y, eslint-plugin-react. Note that we do not use eslint-plugin-import any more so that could be removed if it remains the only one not updated to support version 10 of @eslint/js.
+- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+
+### bn.js
+**Installed Versions <5.2.3**
+- There is a new vulnerability in older versions of bn.js. Currently, this package is only used by cognito-local, one of our dev dependencies. 
 
 ## Troubleshooting
 
