@@ -15,25 +15,7 @@ import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postg
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
 
-const getTrialSessionsAndValidate = async () => {
-  try {
-    const trialSessions = await getTrialSessions();
-    for (const trialSession of trialSessions) {
-      const trialSessionEntity = new TrialSession(trialSession);
-      const errors = trialSessionEntity.getFormattedValidationErrors();
-      if (errors) {
-        console.error(
-          `Validation errors for trial session ${trialSession.trialSessionId}:`,
-          errors,
-        );
-      }
-    }
-    console.log('All trial session entities validated!');
-  } catch (error) {
-    console.error('Error getting trial sessions:', error);
-  }
-};
-
+/* HELPERS */
 const getAllDocketNumbers = async () => {
   return getDbReader(async reader => {
     return (
@@ -70,6 +52,61 @@ const getAllMessages = async (limit?: number, offset?: number) => {
   return messages.map(message => fromKyselyMessage(message));
 };
 
+const getAllWorkItems = async () => {
+  const workItems = await getDbReader(async reader => {
+    return await reader.selectFrom('dwWorkItem').selectAll().execute();
+  });
+
+  return workItems.map(workItem => fromKyselyWorkItem(workItem));
+};
+
+const getAllTrialSessionWorkingCopies = async () => {
+  return getDbReader(async reader => {
+    return (
+      await reader.selectFrom('dwTrialSessionWorkingCopy').selectAll().execute()
+    ).map(record => fromKyselyNewTrialSessionWorkingCopy(record));
+  });
+};
+
+const getAllUsers = async () => {
+  const users = await getDbReader(async reader => {
+    return await reader.selectFrom('dwUser').selectAll().execute();
+  });
+
+  return users.map(user => fromKyselyUser(user));
+};
+
+const getAllPractionerDocuments = async () => {
+  const practitionerDocuments = await getDbReader(async reader => {
+    return await reader
+      .selectFrom('dwPractitionerDocuments')
+      .selectAll()
+      .execute();
+  });
+
+  return practitionerDocuments;
+};
+
+/* VALIDATION FUNCTIONS */
+const getTrialSessionsAndValidate = async () => {
+  try {
+    const trialSessions = await getTrialSessions();
+    for (const trialSession of trialSessions) {
+      const trialSessionEntity = new TrialSession(trialSession);
+      const errors = trialSessionEntity.getFormattedValidationErrors();
+      if (errors) {
+        console.error(
+          `Validation errors for trial session ${trialSession.trialSessionId}:`,
+          errors,
+        );
+      }
+    }
+    console.log('All trial session entities validated!');
+  } catch (error) {
+    console.error('Error getting trial sessions:', error);
+  }
+};
+
 const getMessagesAndValidate = async () => {
   try {
     const messages = await getAllMessages();
@@ -87,14 +124,6 @@ const getMessagesAndValidate = async () => {
   } catch (error) {
     console.error('Error getting messages:', error);
   }
-};
-
-const getAllWorkItems = async () => {
-  const workItems = await getDbReader(async reader => {
-    return await reader.selectFrom('dwWorkItem').selectAll().execute();
-  });
-
-  return workItems.map(workItem => fromKyselyWorkItem(workItem));
 };
 
 const getWorkItemsAndValidate = async () => {
@@ -115,6 +144,7 @@ const getWorkItemsAndValidate = async () => {
     console.error('Error getting work items:', error);
   }
 };
+
 const getCasesAndValidate = async () => {
   try {
     const docketNumbers = await getAllDocketNumbers();
@@ -142,14 +172,6 @@ const getCasesAndValidate = async () => {
   }
 };
 
-const getAllTrialSessionWorkingCopies = async () => {
-  return getDbReader(async reader => {
-    return (
-      await reader.selectFrom('dwTrialSessionWorkingCopy').selectAll().execute()
-    ).map(record => fromKyselyNewTrialSessionWorkingCopy(record));
-  });
-};
-
 const getTrialSessionWorkingCopiesAndValidate = async () => {
   try {
     const workingCopies = await getAllTrialSessionWorkingCopies();
@@ -169,14 +191,6 @@ const getTrialSessionWorkingCopiesAndValidate = async () => {
   }
 };
 
-const getAllUsers = async () => {
-  const users = await getDbReader(async reader => {
-    return await reader.selectFrom('dwUser').selectAll().execute();
-  });
-
-  return users.map(user => fromKyselyUser(user));
-};
-
 const getUsersAndValidate = async () => {
   try {
     const users = await getAllUsers();
@@ -191,17 +205,6 @@ const getUsersAndValidate = async () => {
   } catch (error) {
     console.error('Error getting users:', error);
   }
-};
-
-const getAllPractionerDocuments = async () => {
-  const practitionerDocuments = await getDbReader(async reader => {
-    return await reader
-      .selectFrom('dwPractitionerDocuments')
-      .selectAll()
-      .execute();
-  });
-
-  return practitionerDocuments;
 };
 
 const getPractitionerDocumentsAndValidate = async () => {
