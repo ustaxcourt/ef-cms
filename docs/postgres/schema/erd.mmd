@@ -108,7 +108,7 @@ erDiagram
     }
 
     dwUserContact {
-        string userId PK,FK "Associated user ID"
+        string userId PK "Associated user ID"
         string docketNumber PK,FK "Associated case docket number"
         number lat "Latitude coordinate"
         number lng "Longitude coordinate"
@@ -185,7 +185,6 @@ erDiagram
     dwUser ||--o{ dwResponseString : "has"
     dwUser ||--o{ dwDocketEntry : "filed_by"
     dwUser ||--o{ dwCaseCorrespondence : "creates"
-    dwUser ||--o{ dwUserContact : "has"
     dwUser ||--o{ dwTrialSessionWorkingCopy : "has"
 
     %% Docket entry relationships
