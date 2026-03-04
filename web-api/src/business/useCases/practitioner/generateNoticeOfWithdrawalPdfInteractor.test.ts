@@ -60,7 +60,10 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .saveFileAndGenerateUrl.mockResolvedValue(mockPdfUrl);
+      .saveFileAndGenerateUrl.mockResolvedValue({
+        url: mockPdfUrl,
+        fileId: 'fileId123',
+      });
 
     getUserById.mockResolvedValue(MOCK_PRACTITIONER as DbUser);
     getCaseByDocketNumber.mockResolvedValue(mockCaseData as RawCase);
@@ -107,7 +110,7 @@ describe('generateNoticeOfWithdrawalPdfInteractor', () => {
         }),
       }),
     );
-    expect(result).toEqual(mockPdfUrl);
+    expect(result).toEqual({ url: mockPdfUrl, fileId: 'fileId123' });
   });
   it('should generate a notice of withdrawal PDF for irs practitioners', async () => {
     const mockIrsPractitionerUser = {

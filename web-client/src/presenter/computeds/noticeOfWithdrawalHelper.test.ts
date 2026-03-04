@@ -93,7 +93,7 @@ describe('noticeOfWithdrawalHelper', () => {
   it('should return the parties with paper service', () => {
     const expected = {
       ...mockPetitioners[0],
-      serviceType: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
     const result = runCompute(noticeOfWithdrawalHelper, {
       state: {
@@ -118,6 +118,6 @@ describe('noticeOfWithdrawalHelper', () => {
         },
       },
     });
-    expect(result.filingParties).toEqual([expected]);
+    expect(result.partiesWithPaperService).toEqual([expected]);
   });
 });

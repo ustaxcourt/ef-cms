@@ -128,7 +128,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
       cy.get('#consolidated-case-group-radios').should('be.visible');
     });
   });
-  it.only('should not show consolidated group filing option for practitioners filing notw', () => {
+  it('should not show consolidated group filing option for practitioners filing notw', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       // Setup for private practitioner test
       loginAsDocketClerk1();

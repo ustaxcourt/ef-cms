@@ -3,7 +3,7 @@ import { setFormFiledByAsUserAction } from './setFormFiledByAsUserAction';
 
 describe('setFormFiledByAsUserAction', () => {
   const userName = 'test user';
-  it('sets state.form.isDocumentRequired to true if a file is not attached on the form', async () => {
+  it('sets form.filedBy to name of the user', async () => {
     const result = await runAction(setFormFiledByAsUserAction, {
       state: {
         user: {
