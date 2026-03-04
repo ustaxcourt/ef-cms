@@ -2,6 +2,7 @@
 
 // usage: ./scripts/create-large-case-with-exhibits.ts -e 100
 // or: ./scripts/create-large-case-with-exhibits.ts -e 5000 --env dev
+// or: ./scripts/create-large-case-with-exhibits.ts -e 100 -d 123-24 (add exhibits to existing case)
 
 import {
   type ScriptConfig,
@@ -23,6 +24,11 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
   },
   parameters: {
+    docketNumber: {
+      default: '',
+      short: 'd',
+      type: 'string',
+    },
     exhibits: {
       default: '5000',
       short: 'e',
@@ -38,9 +44,10 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: false,
 };
 
-const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
+const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
+  docketNumber: string;
   env: string;
   exhibits: number;
   userId: string;
@@ -64,6 +71,9 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
   console.log('╚════════════════════════════════════════╝');
   console.log(`  Environment:        ${env}`);
   console.log(`  Exhibits to create: ${exhibits}`);
+  if (existingDocketNumber) {
+    console.log(`  Existing Case:      ${existingDocketNumber}`);
+  }
   console.log(`  Petitioner User:    ${petitionerUserId}`);
   console.log(`  Clerk User:         ${petitionsClerkUserId}`);
   console.log('');
@@ -100,7 +110,7 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
   let caseServed = false;
   let exhibitsCreated = 0;
   let exhibitsFailed = 0;
-  let docketNumber = '';
+  let docketNumber = existingDocketNumber || '';
 
   try {
     const isLocal = env === 'local';
@@ -143,73 +153,79 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
 
     console.log(`✓ PDF files uploaded (${isLocal ? 's3rver' : 'S3'})`);
 
-    // Step 2: Create petition (as petitioner)
-    console.log('\nStep 2: Creating petition...');
-    const petitionMetadata = {
-      caseType: 'Deficiency',
-      filingType: 'Myself',
-      hasIrsNotice: true,
-      irsNotices: [
-        {
-          caseType: 'Deficiency',
-          noticeIssuedDate: '2024-01-01T00:00:00.000Z',
-          taxYear: '2023',
+    if (!existingDocketNumber) {
+      // Step 2: Create petition (as petitioner)
+      console.log('\nStep 2: Creating petition...');
+      const petitionMetadata = {
+        caseType: 'Deficiency',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNotices: [
+          {
+            caseType: 'Deficiency',
+            noticeIssuedDate: '2024-01-01T00:00:00.000Z',
+            taxYear: '2023',
+          },
+        ],
+        partyType: 'Petitioner',
+        contactPrimary: {
+          address1: '123 Main St',
+          city: 'Anytown',
+          countryType: 'domestic',
+          name: 'Test Petitioner',
+          phone: '123-456-7890',
+          postalCode: '12345',
+          state: 'CA',
         },
-      ],
-      partyType: 'Petitioner',
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Anytown',
-        countryType: 'domestic',
-        name: 'Test Petitioner',
-        phone: '123-456-7890',
-        postalCode: '12345',
-        state: 'CA',
-      },
-      preferredTrialCity: 'Los Angeles, California',
-      procedureType: 'Regular',
-      petitionFile: { name: 'petition.pdf' },
-      petitionFileSize: pdfBuffer.length,
-      stinFile: { name: 'stin.pdf' },
-      stinFileSize: pdfBuffer.length,
-    };
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        petitionFile: { name: 'petition.pdf' },
+        petitionFileSize: pdfBuffer.length,
+        stinFile: { name: 'stin.pdf' },
+        stinFileSize: pdfBuffer.length,
+      };
 
-    const createCaseResult = await createCaseInteractor(
-      applicationContextPetitioner,
-      {
-        petitionFileId,
-        petitionMetadata,
-        stinFileId,
-      },
-      petitionerAuthorizedUser,
-    );
-
-    docketNumber = createCaseResult.docketNumber;
-    const { docketNumberWithSuffix } = createCaseResult;
-    caseCreated = true;
-    console.log(`✓ Petition created successfully!`);
-    console.log(`  → Case Number: ${docketNumber}`);
-    console.log(`  → Docket Number with Suffix: ${docketNumberWithSuffix}`);
-
-    // Step 3: Serve petition to IRS (as petitions clerk)
-    console.log('\nStep 3: Serving petition to IRS...');
-    console.log(`  → Serving case ${docketNumber} to IRS...`);
-    try {
-      await serveCaseToIrsInteractor(
-        applicationContextClerk,
+      const createCaseResult = await createCaseInteractor(
+        applicationContextPetitioner,
         {
-          clientConnectionId: 'script-connection',
-          docketNumber,
+          petitionFileId,
+          petitionMetadata,
+          stinFileId,
         },
-        clerkAuthorizedUser,
+        petitionerAuthorizedUser,
       );
+
+      docketNumber = createCaseResult.docketNumber;
+      const { docketNumberWithSuffix } = createCaseResult;
+      caseCreated = true;
+      console.log(`✓ Petition created successfully!`);
+      console.log(`  → Case Number: ${docketNumber}`);
+      console.log(`  → Docket Number with Suffix: ${docketNumberWithSuffix}`);
+
+      // Step 3: Serve petition to IRS (as petitions clerk)
+      console.log('\nStep 3: Serving petition to IRS...');
+      console.log(`  → Serving case ${docketNumber} to IRS...`);
+      try {
+        await serveCaseToIrsInteractor(
+          applicationContextClerk,
+          {
+            clientConnectionId: 'script-connection',
+            docketNumber,
+          },
+          clerkAuthorizedUser,
+        );
+        caseServed = true;
+        console.log(`✓ Case ${docketNumber} successfully served to IRS!`);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`✗ Failed to serve case: ${errorMessage}`);
+        console.log(`  ⚠ Case ${docketNumber} created but NOT served`);
+        console.log(`  → You can manually serve it by logging in as a petitions clerk`);
+      }
+    } else {
+      console.log(`\nSkipping Steps 2 & 3: Using existing case ${existingDocketNumber}`);
+      caseCreated = true;
       caseServed = true;
-      console.log(`✓ Case ${docketNumber} successfully served to IRS!`);
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`✗ Failed to serve case: ${errorMessage}`);
-      console.log(`  ⚠ Case ${docketNumber} created but NOT served`);
-      console.log(`  → You can manually serve it by logging in as a petitions clerk`);
     }
 
     // Step 4: Add exhibits
@@ -310,7 +326,6 @@ const { env, exhibits, userId, verbose } = parseArgsAndEnvVars(
     console.log('║           CASE SUMMARY                 ║');
     console.log('╚════════════════════════════════════════╝');
     console.log(`  Case Number:           ${docketNumber}`);
-    console.log(`  Docket w/ Suffix:      ${docketNumberWithSuffix}`);
     console.log(`  Environment:           ${env}`);
     console.log('');
     console.log(`  Case Created:          ${caseCreated ? '✓ Yes' : '✗ No'}`);
