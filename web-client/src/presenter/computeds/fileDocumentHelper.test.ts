@@ -737,7 +737,16 @@ describe('fileDocumentHelper', () => {
       });
       expect(result.allowExternalConsolidatedGroupFiling).toEqual(false);
     });
-    it('should set allowExternalConsolidatedGroupFiling to true if the user is a petitioner and the eventCode is not explicitly not allowed', () => {
+    it('should set allowExternalConsolidatedGroupFiling to true if the user is a petitioner and the eventCode is explicity not allowed', () => {
+      state.form = {
+        eventCode: 'A',
+      };
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: casePetitioner },
+      });
+      expect(result.allowExternalConsolidatedGroupFiling).toEqual(true);
+    });
+    it('should set allowExternalConsolidatedGroupFiling to true if the user is a practitioner and the eventCode is allowed', () => {
       state.form = {
         eventCode: 'A',
       };

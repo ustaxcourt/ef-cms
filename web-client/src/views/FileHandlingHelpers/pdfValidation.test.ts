@@ -219,5 +219,6 @@ describe('validatePdf', () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       `FileReader result is invalid for file: ${mockFile.name}. Result: null`,
     );
+    consoleErrorSpy.mockRestore();
   });
 });

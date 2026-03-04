@@ -46,7 +46,7 @@ export const NoticeOfWithdrawalForm = connect(
         )}
         <fieldset className="usa-fieldset margin-bottom-0">
           <FormGroup errorText={validationErrors?.filers}>
-            <legend>
+            <legend id="who-legend">
               From whom are you removing yourself as counsel of record?
             </legend>
             <span className="usa-hint">Check all that apply.</span>
@@ -105,7 +105,7 @@ export const NoticeOfWithdrawalForm = connect(
           </FormGroup>
 
           <FormGroup errorText={validationErrors?.allPartiesConsent}>
-            <legend>
+            <legend id="all-parties-consent-radios">
               Have all parties consented to your withdrawing as counsel?
             </legend>
             <div className="usa-radio">
@@ -200,30 +200,32 @@ export const NoticeOfWithdrawalForm = connect(
                           <span className="tw:block">{party.country}</span>
                         )}
                         <span className="tw:block">{party.phone}</span>
-                        <input
-                          checked={
-                            form.confirmPetitionersContactInformationMap?.[
-                              party.contactId
-                            ]
-                          }
-                          className="usa-checkbox__input"
-                          id={`confirmPetitionersContactInformationMap-${party.contactId}`}
-                          name={`confirmPetitionersContactInformationMap.${party.contactId}`}
-                          type="checkbox"
-                          onChange={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: `confirmPetitionersContactInformationMap.${party.contactId}`,
-                              value: e.target.checked,
-                            });
-                            validateExternalDocumentInformationSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor={`confirmPetitionersContactInformationMap-${party.contactId}`}
-                        >
-                          Yes, this information is current
-                        </label>
+                        <div className="usa-checkbox">
+                          <input
+                            checked={
+                              form.confirmPetitionersContactInformationMap?.[
+                                party.contactId
+                              ]
+                            }
+                            className="usa-checkbox__input"
+                            id={`confirmPetitionersContactInformationMap-${party.contactId}`}
+                            name={`confirmPetitionersContactInformationMap.${party.contactId}`}
+                            type="checkbox"
+                            onChange={e => {
+                              updateFileDocumentWizardFormValueSequence({
+                                key: `confirmPetitionersContactInformationMap.${party.contactId}`,
+                                value: e.target.checked,
+                              });
+                              validateExternalDocumentInformationSequence();
+                            }}
+                          />
+                          <label
+                            className="usa-checkbox__label"
+                            htmlFor={`confirmPetitionersContactInformationMap-${party.contactId}`}
+                          >
+                            Yes, this information is current
+                          </label>
+                        </div>
                         <Button
                           className="tw:mt-2"
                           data-testid={`edit-contact-information-button-${party.contactId}`}

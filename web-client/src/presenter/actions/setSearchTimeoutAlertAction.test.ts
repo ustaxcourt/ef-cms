@@ -21,5 +21,6 @@ describe('setSearchTimeoutAlertAction', () => {
     });
     expect(state.alertError).toEqual(error);
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+    consoleErrorSpy.mockRestore();
   });
 });
