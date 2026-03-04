@@ -120,29 +120,11 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         .filter(':contains("Administrative Record")')
         .should('exist');
 
-      // cy.get(
-      //   `[data-testid="work-item-${consolidatedGroupInfo.leadDocketNumber}"]`,
-      // )
-      //   .find('.consolidated-case-column')
-      //   .find('.consolidated-icons-stack span')
-      //   .then(icons => {
-      //     expect(
-      //       consolidatedGroupInfo.memberDocketNumbers.length + 1 ===
-      //         icons.length,
-      //     );
-      //   });
-      let a;
-      cy.get(
-        `[data-testid="work-item-${consolidatedGroupInfo.leadDocketNumber}"]`,
-      )
-        .find('.consolidated-case-column')
-        .find('.consolidated-icons-stack span')
-        .then(icons => {
-          console.log('icons.legnth', icons.length);
-          a = icons.length;
-        });
-
-      expect(a).to.equal(consolidatedGroupInfo.memberDocketNumbers.length + 1);
+      cy.get('tr')
+        .filter(
+          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]}))`,
+        )
+        .should('have.length', 1);
     });
 
     it('should display the QC work item across section and individual QC views', () => {

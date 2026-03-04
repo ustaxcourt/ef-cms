@@ -41,20 +41,22 @@ export const getDocumentQCInboxForSection = async ({
   if (judgeId) {
     const groupedItems = groupBy(items, 'docketEntryId');
 
-    const params: {
+    const params: Set<{
       docketNumber: string;
       docketEntryId: string;
-    }[] = [];
+    }> = new Set();
 
     for (const itemGroup of Object.values(groupedItems)) {
-      const missingDocketNumbers = itemGroup[0].docketEntry.multiDocketedOn;
+      let missingDocketNumbers = itemGroup[0].docketEntry.multiDocketedOn;
 
       itemGroup.forEach(item => {
-        missingDocketNumbers.filter(dn => dn !== item.docketNumber);
+        missingDocketNumbers = missingDocketNumbers.filter(
+          dn => dn !== item.docketNumber,
+        );
       });
 
       missingDocketNumbers.forEach(dn => {
-        params.push({
+        params.add({
           docketNumber: dn,
           docketEntryId: itemGroup[0].docketEntryId,
         });
