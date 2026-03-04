@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { noticeOfTrialIssued } from './noticeOfTrialIssued';
@@ -26,8 +27,19 @@ describe('documentGenerators', () => {
             trialLocation: 'Birmingham, Alabama',
             startDate: '2001-01-01T05:00:00.000Z',
             startTime: '2001-01-01T05:00:00.000Z',
-            judgeName: 'Carluzzo',
+            judge: { name: 'Carluzzo', userId: '123' },
             chambersPhoneNumber: '1-721-740-9885 x4239',
+            caseOrder: [],
+            hasNottBeenServed: false,
+            isCalendared: true,
+            proceedingType: 'In Person' as const,
+            sessionType: 'Regular',
+            sessionStatus: 'Scheduled',
+            sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+            term: 'Fall',
+            termYear: '2020',
+            trialSessionId: '123',
+            paperServicePdfs: [],
           },
         },
       });

@@ -114,7 +114,7 @@ describe('Judge`s chambers stamps an order', () => {
           loginAsClerkOfCourt();
           cy.visit('/messages/my/inbox');
           cy.get(
-            '.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell"]',
+            `.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell-${docketNumber}"]`,
           )
             .first()
             .click();

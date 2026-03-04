@@ -1,6 +1,10 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
-import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from './EntityConstants';
 import { User } from './User';
 import joi from 'joi';
 
@@ -21,7 +25,8 @@ export class IrsPractitioner extends User {
 
   static ENTITY_NAME = 'IrsPractitioner';
 
-  static VALIDATION_RULES = joi.object().keys({
+  static VALIDATION_RULES = {
+    ...super.VALIDATION_RULES,
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
       .description(
@@ -38,10 +43,13 @@ export class IrsPractitioner extends User {
     ).required(),
     token: JoiValidationConstants.STRING.optional(),
     userId: JoiValidationConstants.UUID.required(),
-  });
+    accountStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(ACCOUNT_STATUS),
+    ),
+  };
 
   getValidationRules() {
-    return IrsPractitioner.VALIDATION_RULES as any;
+    return IrsPractitioner.VALIDATION_RULES;
   }
 }
 
