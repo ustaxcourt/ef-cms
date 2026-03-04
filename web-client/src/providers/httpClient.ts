@@ -24,8 +24,14 @@ export const getHttpClient = (
         : JSON.stringify(response.data).length;
 
       if (responseSize > MAX_RESPONSE_SIZE_BYTES) {
+        const responseSizeMB = (responseSize / (1024 * 1024)).toFixed(2);
+        const maxSizeMB = (MAX_RESPONSE_SIZE_BYTES / (1024 * 1024)).toFixed(2);
+        console.error(
+          `Response size ${responseSizeMB} MB exceeds maximum allowed size of ${maxSizeMB} MB. This request will fail in production.`,
+          stackError.stack,
+        );
         const error = new Error(
-          `Response size ${responseSize} bytes exceeds maximum allowed size of ${MAX_RESPONSE_SIZE_BYTES} bytes`,
+          `Response size ${responseSizeMB} MB exceeds maximum allowed size of ${maxSizeMB} MB. This request will fail in production.`,
         );
         error.stack = stackError.stack;
         throw error;
