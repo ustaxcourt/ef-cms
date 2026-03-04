@@ -7,6 +7,11 @@ describe('createChainable', () => {
       expect(chain.crossJoin()).toBe(chain);
     });
 
+    it('returns chain from distinct', () => {
+      const chain = createChainable(null);
+      expect(chain.distinct()).toBe(chain);
+    });
+
     it('returns chain from limit', () => {
       const chain = createChainable(null);
       expect(chain.limit()).toBe(chain);
@@ -119,6 +124,7 @@ describe('createChainable', () => {
         .crossJoin()
         .leftJoin('users', j => j.onRef())
         .where()
+        .distinct()
         .limit()
         .where('col', '=', 'val');
 

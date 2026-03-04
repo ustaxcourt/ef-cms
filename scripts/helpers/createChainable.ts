@@ -7,6 +7,7 @@ export const createChainable = (
   };
   const chain = {
     crossJoin: () => chain,
+    distinct: () => chain,
     leftJoin: (
       _table: string,
       joinCb: (j: typeof joinChain) => typeof joinChain,
