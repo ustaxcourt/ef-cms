@@ -21,5 +21,5 @@ export const handler = (event, context) => {
     typeof event.body === 'string' ? event.body : JSON.stringify(event.body);
   return awsServerlessExpress({
     app,
-  })(event, context);
+  })(event, context, () => {});
 };
