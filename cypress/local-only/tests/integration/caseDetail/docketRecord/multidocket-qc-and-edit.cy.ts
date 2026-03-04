@@ -2,12 +2,15 @@ import {
   loginAsDocketClerk1,
   loginAsCaseServicesSupervisor,
   loginAsPrivatePractitioner,
+  loginAsColvin,
 } from '../../../../../helpers/authentication/login-as-helpers';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import { attachFile } from '../../../../../helpers/file/upload-file';
 import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { createAndServeConsolidatedGroup } from '../../../../../helpers/fileAPetition/create-consolidated-case-group';
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 
 // Each describe block relies on the previous one having been run
 
@@ -20,9 +23,16 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
   before(() => {
     createAndServeConsolidatedGroup({
       numberOfMemberCases: 1,
+      leadCaseJudge: 'Colvin',
+      memberCaseJudge: 'Colvin',
+      caseStatus: CASE_STATUS_TYPES.submitted,
     }).then(groupInfo => {
       consolidatedGroupInfo = groupInfo;
       cy.wrap(consolidatedGroupInfo).as('CONSOLIDATED_GROUP_INFO');
+
+      loginAsDocketClerk1();
+      goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
+      updateCaseStatus(CASE_STATUS_TYPES.submitted, 'Ashford');
 
       loginAsPrivatePractitioner('privatePractitioner1@example.com');
       externalUserSearchesDocketNumber(consolidatedGroupInfo.leadDocketNumber);
@@ -51,6 +61,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         'complete-doc-document-type-search',
         'Administrative Record',
       );
+
       cy.get('[data-testid="submit-document"]').click();
 
       attachFile({
@@ -97,6 +108,41 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
           'not.exist',
         );
       });
+    });
+
+    it('should display correct number of stacked icons for consolidated cases in judge QC inbox', () => {
+      loginAsColvin();
+      cy.visit('/document-qc/section/inbox');
+
+      cy.get(
+        `[data-testid="work-item-${consolidatedGroupInfo.leadDocketNumber}"]`,
+      )
+        .filter(':contains("Administrative Record")')
+        .should('exist');
+
+      // cy.get(
+      //   `[data-testid="work-item-${consolidatedGroupInfo.leadDocketNumber}"]`,
+      // )
+      //   .find('.consolidated-case-column')
+      //   .find('.consolidated-icons-stack span')
+      //   .then(icons => {
+      //     expect(
+      //       consolidatedGroupInfo.memberDocketNumbers.length + 1 ===
+      //         icons.length,
+      //     );
+      //   });
+      let a;
+      cy.get(
+        `[data-testid="work-item-${consolidatedGroupInfo.leadDocketNumber}"]`,
+      )
+        .find('.consolidated-case-column')
+        .find('.consolidated-icons-stack span')
+        .then(icons => {
+          console.log('icons.legnth', icons.length);
+          a = icons.length;
+        });
+
+      expect(a).to.equal(consolidatedGroupInfo.memberDocketNumbers.length + 1);
     });
 
     it('should display the QC work item across section and individual QC views', () => {
