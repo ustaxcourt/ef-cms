@@ -23,10 +23,9 @@ export const validateSetForHearingAction = ({
     errors.trialSessionId = 'Select a Trial Session';
   }
 
-  const appContext = applicationContext as unknown as IApplicationContext;
   const noteEntityErrors = applicationContext
     .getUseCases()
-    .validateHearingNoteInteractor(appContext, {
+    .validateHearingNoteInteractor({
       note: calendarNotes || '',
     });
 

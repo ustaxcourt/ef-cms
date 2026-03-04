@@ -63,7 +63,7 @@ export const environment = {
   },
   region,
   s3Endpoint: isLocal
-    ? 'http://0.0.0.0:9001'
+    ? 'http://localhost:9001'
     : 'https://s3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: isLocal

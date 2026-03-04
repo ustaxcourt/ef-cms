@@ -1,14 +1,20 @@
 #!/bin/bash
-# Extracted from run-local.sh - Prepares the environment for debugging
 
-# Load environment variables
-# shellcheck disable=SC1091
-. ./setup-local-env.sh
+set -e
 
-# Ensure npm is in the path
+if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+  # shellcheck disable=SC1091
+  . ./setup-local-env.sh
+fi
+
 if ! command -v npm &> /dev/null; then
   # shellcheck disable=SC1091
   [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" && nvm use --silent &> /dev/null || true
+fi
+
+IN_DOCKER=false
+if [ -f /.dockerenv ] || [ -f /run/.containerenv ] || [ "$POSTGRES_HOST" = "db" ]; then
+  IN_DOCKER=true
 fi
 
 if command -v docker-compose &> /dev/null; then
@@ -17,73 +23,159 @@ else
   DOCKER_COMPOSE="docker compose"
 fi
 
-echo "Stopping postgres in case it's already running"
-$DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
+SKIP_DOCKER=false
+BACKGROUND=false
+SKIP_ASSETS=false
 
-echo "Starting postgres"
-$DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d || { echo "Failed to start Postgres containers"; exit 1; }
-
-echo "Waiting for Postgres..."
-MAX_RETRIES=30
-RETRY_COUNT=0
-until docker exec dawson-db pg_isready -U postgres &> /dev/null || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
-  echo "Postgres is unavailable - sleeping"
-  sleep 2
-  ((RETRY_COUNT++))
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --skip-docker) SKIP_DOCKER=true ;;
+    --background) BACKGROUND=true ;;
+    --skip-assets) SKIP_ASSETS=true ;;
+    *) echo "Unknown parameter passed: $1"; exit 1 ;;
+  esac
+  shift
 done
 
-if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-  echo "Error: Postgres failed to start in time."
-  exit 1
+if [ -z "$POSTGRES_HOST" ]; then
+  if [ "$IN_DOCKER" = "true" ]; then
+    export POSTGRES_HOST="db"
+  else
+    export POSTGRES_HOST="localhost"
+  fi
 fi
 
-echo "Stopping opensearch in case it's already running"
-$DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
+if [ -z "$ELASTICSEARCH_HOST" ]; then
+  if [ "$IN_DOCKER" = "true" ]; then
+    export ELASTICSEARCH_HOST="elasticsearch"
+    export ELASTICSEARCH_ENDPOINT="${ELASTICSEARCH_ENDPOINT:-http://elasticsearch:9200}"
+  else
+    export ELASTICSEARCH_HOST="localhost"
+    export ELASTICSEARCH_ENDPOINT="${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}"
+  fi
+fi
 
-echo "Starting opensearch"
-$DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" up -d || { echo "Failed to start OpenSearch containers"; exit 1; }
+wait_for_opensearch() {
+  echo "Waiting for OpenSearch..."
+  local os_url=${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}
+  URL="${os_url}/" ./wait-until.sh
+}
 
-echo "Waiting for OpenSearch..."
-URL=http://localhost:9200/ ./wait-until.sh
+wait_for_postgres() {
+  echo "Waiting for Postgres..."
+  local host="${POSTGRES_HOST}"
+  local user="${POSTGRES_USER:-postgres}"
+  local port="${POSTGRES_PORT:-5432}"
 
-echo "Building assets"
-npm run build:assets
+  if [ -n "$CI" ]; then
+    until (echo > "/dev/tcp/${host}/${port}") > /dev/null 2>&1; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 2
+    done
+  elif [ "$host" != "localhost" ] || [ "$IN_DOCKER" = "true" ]; then
+    until pg_isready -h "$host" -p "$port" -U "$user" &> /dev/null; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 1
+    done
+  else
+    until docker exec dawson-db pg_isready -U "$user" &> /dev/null; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 2
+    done
+  fi
+}
 
-echo "Seeding opensearch"
-npm run seed:opensearch
+start_docker_dependencies() {
+  if [ "$SKIP_DOCKER" = "true" ]; then
+    return
+  fi
 
-echo "Cleaning up old service instances"
-pkill -f s3rver || true
-pkill -f cognito-local || true
+  echo "Stopping any existing local docker services..."
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
 
-# Give the OS a moment to release ports
-sleep 2
+  # ensure the container names are not in use
+  docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || true
 
-echo "Preparing S3 storage"
-mkdir -p ./web-api/storage/s3
-rm -rf ./web-api/storage/s3/*
+  echo "Starting postgres"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d || { echo "Failed to start Postgres containers"; exit 1; }
 
-echo "Starting background services (S3 and Cognito)"
-nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null &
-nohup env HOST=0.0.0.0 CODE="385030" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null &
+  echo "Starting opensearch"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" up -d || { echo "Failed to start OpenSearch containers"; exit 1; }
 
-echo "Waiting for background services..."
-# S3rver takes a moment to initialize the buckets
-URL=http://0.0.0.0:9001/ ./wait-until.sh
-URL=http://0.0.0.0:9229/ CHECK_CODE="404" ./wait-until.sh
+  wait_for_opensearch
+  wait_for_postgres
+}
 
-# Extra safety buffer to ensure background processes are fully initialized
-sleep 3
+setup_opensearch() {
+  echo "Seeding opensearch"
+  npm run seed:opensearch
+}
 
-echo "Seeding S3"
-npm run seed:s3
+setup_s3() {
+  echo "Cleaning up old s3rver instance"
+  pkill -f s3rver || true
+  # Give the OS a moment to release ports
+  sleep 2
 
-echo "Running migrations and seeding Postgres"
-npm run migration:postgres
-npm run migration:postgres:contract
-npm run seed:postgres
+  if [ -n "${RESUME}" ]; then
+    echo "Resuming operation with previous s3 data"
+  else
+    rm -rf ./web-api/storage/s3/*
+    mkdir -p ./web-api/storage/s3
+  fi
 
-echo "Seeding cognito-local users"
-npx ts-node --transpile-only .cognito/seedCognitoLocal.ts
+  echo "Starting s3rver"
+  if [ "$BACKGROUND" = "true" ]; then
+    nohup npm run start:s3rver > /dev/null 2>&1 < /dev/null &
+  else
+    npm run start:s3rver &
+  fi
+
+  URL=http://localhost:9001/ ./wait-until.sh
+  sleep 2
+
+  if [ -z "${RESUME}" ]; then
+    npm run seed:s3
+  fi
+}
+
+setup_postgres() {
+  echo "Running migrations and seeding Postgres"
+  npm run migration:postgres
+  npm run migration:postgres:contract
+  npm run seed:postgres
+}
+
+setup_cognito() {
+  echo "Cleaning up old cognito-local instance"
+  pkill -f cognito-local || true
+  # Give the OS a moment to release ports
+  sleep 2
+
+  echo "Seeding cognito-local users"
+  npx ts-node --transpile-only .cognito/seedCognitoLocal.ts
+
+  echo "Starting cognito-local"
+  if [ "$BACKGROUND" = "true" ]; then
+    nohup env HOST=0.0.0.0 CODE="385030" npx cognito-local > /dev/null 2>&1 < /dev/null &
+  else
+    HOST=0.0.0.0 CODE="385030" npx cognito-local &
+  fi
+
+  URL=http://localhost:9229/ CHECK_CODE="404" ./wait-until.sh
+}
+
+if [ "$SKIP_ASSETS" = "false" ]; then
+  npm run build:assets
+fi
+
+start_docker_dependencies
+wait_for_opensearch
+wait_for_postgres
+setup_opensearch
+setup_s3
+setup_postgres
+setup_cognito
 
 echo "Environment prepared!"

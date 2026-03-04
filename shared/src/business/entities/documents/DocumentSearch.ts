@@ -86,7 +86,7 @@ export class DocumentSearch extends JoiValidationEntity {
         .conditional('startDate', {
           is: joi.exist().not(null),
           otherwise: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+            [...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS],
           )
             .less(joi.ref('tomorrow'))
             .optional()
@@ -94,7 +94,7 @@ export class DocumentSearch extends JoiValidationEntity {
               'The end date search filter is not required if there is no start date',
             ),
           then: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+            [...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS],
           )
             .less(joi.ref('tomorrow'))
             .min(joi.ref('startDate'))
@@ -128,7 +128,7 @@ export class DocumentSearch extends JoiValidationEntity {
           is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           otherwise: joi.forbidden(),
           then: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+            [...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS],
           )
             .max('now')
             .required()
