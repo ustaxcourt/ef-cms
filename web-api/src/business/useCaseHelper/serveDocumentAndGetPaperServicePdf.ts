@@ -2,6 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 import { processCaseForService } from './service/processCaseForService';
+import { getDocumentStorageId } from '@shared/business/utilities/getDocumentStorageId';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
@@ -37,9 +38,10 @@ export const serveDocumentAndGetPaperServicePdf = async ({
         docketEntryId: caseSpecificDocketEntryId,
         electronicParties,
         loadPdfDocument: async () => {
-          const { documentStorageId } = caseEntity.docketEntries.find(de => {
-            return de.docketEntryId === caseSpecificDocketEntryId;
-          })!;
+          const documentStorageId = getDocumentStorageId({
+            caseDetail: caseEntity,
+            docketEntryId: caseSpecificDocketEntryId,
+          });
           return await applicationContext.getPersistenceGateway().getDocument({
             applicationContext,
             key: documentStorageId,
@@ -64,9 +66,10 @@ export const serveDocumentAndGetPaperServicePdf = async ({
             return stampedPdf;
           }
 
-          const { documentStorageId } = caseEntity.docketEntries.find(de => {
-            return de.docketEntryId === docketEntryId;
-          })!;
+          const documentStorageId = getDocumentStorageId({
+            caseDetail: caseEntity,
+            docketEntryId,
+          });
 
           if (!cachedDocumentStorageId) {
             cachedDocumentStorageId = documentStorageId;

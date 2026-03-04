@@ -1,13 +1,10 @@
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../shared/src/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../shared/src/test/mockCase';
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
