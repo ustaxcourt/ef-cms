@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -56,10 +55,10 @@ describe('unsealCaseAction', () => {
     ).toMatchObject({ docketNumber: mockDocketNumber });
   });
 
-  it('should call path.success with the updated caseDetail and an alertSuccess.message', async () => {
+  it('should call path.success with an alertSuccess.message', async () => {
     await applicationContext
       .getUseCases()
-      .unsealCaseInteractor.mockReturnValue(MOCK_CASE);
+      .unsealCaseInteractor.mockReturnValue(undefined);
 
     await runAction(unsealCaseAction, {
       modules: {
@@ -77,7 +76,6 @@ describe('unsealCaseAction', () => {
       alertSuccess: {
         message: 'Case unsealed.',
       },
-      caseDetail: MOCK_CASE,
     });
   });
 });

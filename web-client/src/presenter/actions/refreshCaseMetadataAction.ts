@@ -1,7 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
- * Fetches the case metadata (without docket entries) and merges it into the existing case on state.
+ * Fetches the case metadata (without docket entries) and replaces the case on
+ * state, preserving only the existing docketEntries. This avoids stale fields
+ * lingering when the server omits cleared properties (e.g. sealedDate after unsealing).
  */
 export const refreshCaseMetadataAction = async ({
   applicationContext,
@@ -17,7 +19,6 @@ export const refreshCaseMetadataAction = async ({
   const existingCase = get(state.caseDetail);
 
   store.set(state.caseDetail, {
-    ...existingCase,
     ...updatedCase,
     docketEntries: existingCase.docketEntries,
   });
