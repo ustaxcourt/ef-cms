@@ -1,12 +1,10 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
-import {
-  NoticeOfChangeOfTrialStartDate,
-  TrialSessionStartDateChangePDFInfo,
-} from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialStartDate';
+import { NoticeOfChangeOfTrialStartDate } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialStartDate';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 export const noticeOfChangeOfTrialStartDate = async ({
   applicationContext,
@@ -17,8 +15,8 @@ export const noticeOfChangeOfTrialStartDate = async ({
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
-    updatedTrialSession: TrialSessionStartDateChangePDFInfo;
-    previousTrialSession: TrialSessionStartDateChangePDFInfo;
+    updatedTrialSession: RawTrialSession;
+    previousTrialSession: RawTrialSession;
   };
 }): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;

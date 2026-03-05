@@ -2,6 +2,7 @@ import { ChangeOfTrialStartDateDocketHeader } from '@shared/business/utilities/p
 import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+
 import React from 'react';
 
 export type TrialSessionStartDateChangePDFInfo = Pick<
@@ -40,69 +41,37 @@ export const NoticeOfChangeOfTrialStartDate = ({
         docketNumberWithSuffix={docketNumberWithSuffix}
         documentTitle="NOTICE OF CHANGE OF TRIAL START DATE"
       />
-      <div style={{ display: 'flex', paddingBottom: '2rem' }}>
-        <div style={{ marginRight: '1rem', width: '50%' }}>
-          <table>
-            <thead>
-              <th>Trial At</th>
-            </thead>
-            <tr>
-              <td>
-                {updatedTrialSession.courthouseName && (
-                  <div>{updatedTrialSession.courthouseName}</div>
-                )}
-                {updatedTrialSession.address1 && (
-                  <div>{updatedTrialSession.address1}</div>
-                )}
-                {updatedTrialSession.address2 && (
-                  <div>{updatedTrialSession.address2}</div>
-                )}
-                <div>
-                  {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
-                  {updatedTrialSession.postalCode}
-                </div>
-                <div style={{ fontWeight: 'bold' }}>In Person</div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div style={{ width: '50%' }}>
-          <table style={{ height: '100%' }}>
-            <thead>
-              <th>Judge</th>
-            </thead>
-            <tr>
-              <td>{updatedTrialSession.judge?.name}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <div>
-        &emsp;The parties are hereby notified that the Court&apos;s Notice of
-        Trial for this case is amended in that the location of the Court&apos;s{' '}
-        {previousTrialSession.trialLocation} Trial Session scheduled to begin on{' '}
-        {formatDateString(updatedTrialSession.startDate, 'MMDDYYYY')}, will be
-        held in {updatedTrialSession.trialLocation} at:
-        <div style={{ paddingTop: '1rem', textAlign: 'center' }}>
-          {updatedTrialSession.courthouseName && (
-            <div>{updatedTrialSession.courthouseName}</div>
-          )}
-          {updatedTrialSession.address1 && (
-            <div>{updatedTrialSession.address1}</div>
-          )}
-          {updatedTrialSession.address2 && (
-            <div>{updatedTrialSession.address2}</div>
-          )}
-          <div>
-            {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
-            {updatedTrialSession.postalCode}
-          </div>
-        </div>
-        <div style={{ fontStyle: 'italic', paddingTop: '1rem' }}>
-          The Standing Pretrial Order served in this case remains in full force
-          and effect.
-        </div>
-      </div>
+      <NoticeOfChangeRemote />
     </div>
   );
 };
+
+function NoticeOfChangeRemote() {
+  return (
+    <div>
+      <p>
+        The [TRIAL_LOCATION] [SESSION_TYPE] trial session scheduled to begin on
+        [OLD_START_DATE], has been changed to [NEW_START_DATE], beginning at
+        [TIME]. The calendar will be called at that date and time, and the
+        parties are directed to appear before the Court at a remote proceeding
+        to be held using Zoom.gov and to be prepared to try the case. The
+        parties shall follow the instructions below for how to participate in
+        the remote proceeding.
+      </p>
+      <h3>ACCESS REMOTE PROCEEDING</h3>
+      <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
+      <p>Meeting ID: [MEETING_ID]</p>
+      <p>Passcode: [MEETING_PASS]</p>
+      <p>
+        Join online: Go to www.zoomgov.com and click `Join a meeting` (blue box
+        in the middle of the page). Enter the Meeting ID and Passcode above when
+        prompted.
+      </p>
+      <p>
+        The parties are further notified that the previously issued Standing
+        Pretrial Order remains in full force and effect except to the extent
+        modified above.
+      </p>
+    </div>
+  );
+}
