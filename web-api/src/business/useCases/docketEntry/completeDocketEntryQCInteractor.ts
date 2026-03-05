@@ -37,14 +37,12 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  caseDetail: CaseDTO;
   paperServiceParties: any[];
   paperServicePdfUrl: string;
   paperServiceDocumentTitle: string;
@@ -374,7 +372,6 @@ const completeDocketEntryQC = async (
   }
 
   return {
-    caseDetail: new CaseDTO(caseEntity.toRawObject()),
     paperServiceDocumentTitle,
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
