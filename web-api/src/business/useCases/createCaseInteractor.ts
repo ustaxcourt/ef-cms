@@ -28,6 +28,7 @@ import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
+
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
