@@ -19,7 +19,11 @@ const deps = {
 };
 
 function StartDateInformation({ startDateInfo }: { startDateInfo: string }) {
-  return <>{formatDateString(startDateInfo, FORMATS.MMDDYYYY)}</>;
+  return (
+    <div className="tw:font-semibold">
+      {formatDateString(startDateInfo, FORMATS.MMDDYYYY)}
+    </div>
+  );
 }
 
 function StartDateComparison({
@@ -32,12 +36,12 @@ function StartDateComparison({
   const isCurrent = headerLabel.includes('Previous');
   return (
     <div
-      className="grid-col-6 padding-right-1"
+      className=""
       data-testid={
         isCurrent ? 'current-start-date-info' : 'updated-start-date-info'
       }
     >
-      <div className="semi-bold padding-bottom-1">{headerLabel}</div>
+      <div className="tw:font-semibold tw:pb-1">{headerLabel}</div>
       <StartDateInformation startDateInfo={startDateInfo} />
     </div>
   );
@@ -58,6 +62,7 @@ export const ConfirmTrialSessionStartDateChangeModalDialog = connect<
 
     return (
       <ModalDialog
+        className="tw:mt-1"
         cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Yes, Change Trial Date"
@@ -65,12 +70,12 @@ export const ConfirmTrialSessionStartDateChangeModalDialog = connect<
         message=""
         title="Are You Sure You Want to Change the Trial Date?"
       >
-        <div className="font-sans-pro">
-          <div className="grid-row padding-bottom-3">
+        <div className="">
+          <div className="tw:flex tw:pb-3">
             Changing the trial start date will automatically generate a Notice
             of Change of Trial Date.
           </div>
-          <div className="grid-row padding-bottom-3">
+          <div className="tw:flex tw:flex-wrap tw:gap-4 tw:pb-3">
             <StartDateComparison
               headerLabel="Previous start date"
               startDateInfo={currentTrialSessionStartDate!}
