@@ -14,7 +14,6 @@ import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction'
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -31,8 +30,6 @@ import { validateCourtOrderAction } from '../actions/CourtIssuedOrder/validateCo
 const onFileUploadedSuccess = [
   getCreateOrderSelectedCases,
   submitCourtIssuedOrderAction,
-  setDefaultDraftDocumentIdAction,
-  setCaseAction,
   setDefaultDraftDocumentIdAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,

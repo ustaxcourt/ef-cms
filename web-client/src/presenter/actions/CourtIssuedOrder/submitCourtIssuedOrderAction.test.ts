@@ -1,5 +1,4 @@
 import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -11,11 +10,11 @@ describe('submitCourtIssuedOrderAction', () => {
 
     applicationContext
       .getUseCases()
-      .fileCourtIssuedOrderInteractor.mockReturnValue(MOCK_CASE);
+      .fileCourtIssuedOrderInteractor.mockReturnValue(undefined);
 
     applicationContext
       .getUseCases()
-      .updateCourtIssuedOrderInteractor.mockReturnValue(MOCK_CASE);
+      .updateCourtIssuedOrderInteractor.mockReturnValue(undefined);
   });
 
   it('should call fileCourtIssuedOrder', async () => {
