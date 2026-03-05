@@ -41,8 +41,10 @@ describe('updateQcCompleteForTrialInteractor', () => {
     ).rejects.toThrow('Unauthorized for trial session QC complete');
   });
 
-  it('should call updateCase with the updated qcCompleteForTrial value and return the updated case', async () => {
-    const result = await updateQcCompleteForTrialInteractor(
+  it('should call updateCase with the updated qcCompleteForTrial value', async () => {
+    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+
+    await updateQcCompleteForTrialInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -51,7 +53,10 @@ describe('updateQcCompleteForTrialInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
-    expect(result.qcCompleteForTrial).toEqual({
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.qcCompleteForTrial).toEqual({
       '10aa100f-0330-442b-8423-b01690c76e3f': true,
     });
   });

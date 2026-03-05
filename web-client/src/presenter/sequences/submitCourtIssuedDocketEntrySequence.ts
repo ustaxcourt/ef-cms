@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
@@ -85,6 +86,7 @@ export const submitCourtIssuedDocketEntrySequence = [
 
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
+      refreshCaseMetadataAction,
       followRedirectAction,
       {
         default: navigateToCaseDetailAction,
