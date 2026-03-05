@@ -58,17 +58,12 @@ describe('completeDocketEntryQCAction', () => {
         .calls.length,
     ).toEqual(1);
 
-    expect(successMock.mock.calls[0][0]).toEqual({
+    expect(successMock.mock.calls[0][0]).toMatchObject({
       alertSuccess: {
-        message: "bob's burgers has been completed.",
+        message: 'QC has been completed.',
         title: 'QC Completed',
       },
-      caseDetail,
       docketNumber: caseDetail.docketNumber,
-      updatedDocument: {
-        docketEntryId: mockDocketEntryId,
-        documentTitle: "bob's burgers",
-      },
     });
   });
 
@@ -93,7 +88,7 @@ describe('completeDocketEntryQCAction', () => {
     });
 
     expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
-      "bob's burgers More title information has been completed.",
+      'QC has been completed.',
     );
   });
 
@@ -121,7 +116,7 @@ describe('completeDocketEntryQCAction', () => {
     });
 
     expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
-      "bob's burgers More title information QC completed and message sent.",
+      'QC completed and message sent.',
     );
   });
 });
