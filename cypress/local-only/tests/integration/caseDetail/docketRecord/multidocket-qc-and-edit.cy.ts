@@ -108,6 +108,12 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
           'not.exist',
         );
       });
+
+      cy.get('tr')
+        .filter(
+          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]}))`,
+        )
+        .should('have.length', 1);
     });
 
     it('should display correct number of stacked icons for consolidated cases in judge QC inbox', () => {

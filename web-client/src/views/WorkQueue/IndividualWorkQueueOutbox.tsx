@@ -50,7 +50,7 @@ export const IndividualWorkQueueOutbox = connect(
               return (
                 <tr
                   key={workItem.key}
-                  data-testid={`work-item-outbox-row-${workItem.groupLead}-${workItem.docGroup.key}`}
+                  data-testid={`section-work-item-outbox-${workItem.groupLead}`}
                 >
                   <td className="consolidated-case-column">
                     {workItem.memberCasesUnique.length > 1 ? (
