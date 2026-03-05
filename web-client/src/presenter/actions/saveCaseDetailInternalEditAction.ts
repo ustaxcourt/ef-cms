@@ -67,7 +67,7 @@ export const saveCaseDetailInternalEditAction = async ({
     }
   }
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
@@ -75,8 +75,8 @@ export const saveCaseDetailInternalEditAction = async ({
 
   return {
     alertSuccess: {
-      message: `Case ${caseDetail.docketNumber} updated.`,
+      message: `Case ${caseToUpdate.docketNumber} updated.`,
     },
-    caseDetail,
+    docketNumber: caseToUpdate.docketNumber,
   };
 };

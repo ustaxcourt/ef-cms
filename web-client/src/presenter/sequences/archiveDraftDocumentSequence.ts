@@ -5,7 +5,7 @@ import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCa
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -19,7 +19,7 @@ export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
     success: [
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
-      setCaseAction,
+      getCaseAction,
       getMessagesForCaseAction,
       resetArchiveDraftDocumentAction,
       loadDefaultDraftViewerDocumentToDisplaySequence,

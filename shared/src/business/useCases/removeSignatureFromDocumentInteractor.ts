@@ -7,7 +7,6 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { NotFoundError } from '@web-api/errors/errors';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * Removes a signature from a document
@@ -22,7 +21,7 @@ export const removeSignatureFromDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to remove signature from document is not an auth user',
@@ -65,6 +64,4 @@ export const removeSignatureFromDocumentInteractor = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new CaseDTO(caseEntity.toRawObject());
 };
