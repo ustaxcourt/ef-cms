@@ -7,6 +7,7 @@ import { entryOfAppearance } from '@shared/business/utilities/documentGenerators
 import { minuteSheet } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
 import { noticeOfChangeOfTrialLocation } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
+import { noticeOfChangeOfTrialStartDate } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate';
 import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
 import { noticeOfChangeToRemoteProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding';
 import { noticeOfDocketChange } from '../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange';
@@ -35,6 +36,7 @@ export const getDocumentGenerators = () => ({
   minuteSheet,
   noticeOfChangeOfTrialJudge,
   noticeOfChangeOfTrialLocation,
+  noticeOfChangeOfTrialStartDate,
   noticeOfChangeToInPersonProceeding,
   noticeOfChangeToRemoteProceeding,
   noticeOfDocketChange,

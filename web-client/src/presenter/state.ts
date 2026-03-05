@@ -447,10 +447,9 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
-  newMinuteSheetModalHelper:
-    newMinuteSheetModalHelper as unknown as ReturnType<
-      typeof newMinuteSheetModalHelper
-    >,
+  newMinuteSheetModalHelper: newMinuteSheetModalHelper as unknown as ReturnType<
+    typeof newMinuteSheetModalHelper
+  >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -716,6 +715,10 @@ export const baseState = {
     updatedTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
       | undefined,
+  },
+  trialSessionStartDateChangeModalInfo: {
+    currentTrialSessionStartDate: undefined as string | undefined,
+    updatedTrialSessionStartDate: undefined as string | undefined,
   },
   currentViewMetadata: {
     caseDetail: {
