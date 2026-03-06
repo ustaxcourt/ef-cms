@@ -5,6 +5,8 @@ import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMi
 import { formatMinuteSheet } from './formatMinuteSheet';
 import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
+import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
+import { mockFormattedMinuteSheet } from './mockFormattedMinuteSheet';
 
 jest.mock('@web-api/persistence/postgres/minuteSheets/getMinuteSheet');
 jest.mock(
@@ -19,26 +21,31 @@ describe('createAndUploadMinuteSheet', () => {
     trialSessionId: 'trial-123',
     aCase: { caseId: 'case-123' },
     trialSession: { trialSessionId: 'trial-123' },
-    docketEntryId: 'docket-entry-123',
+    documentStorageId: 'docket-entry-123',
   };
   const mockGetMinuteSheetValue = {
-    content: 'mocked minute sheet content',
+    content: mockMinuteSheet,
+    docketNumber: mockParams.docketNumber,
+    trialSessionId: mockParams.trialSessionId,
   };
 
-  const mockGetMinuteSheet = getMinuteSheet as jest.Mock;
-  const mockFormatMinuteSheet = formatMinuteSheet as jest.Mock;
-  const mockMinuteSheetDocumentGenerator =
-    minuteSheetDocumentGenerator as jest.Mock;
-  const mockUploadDocument = uploadDocument as jest.Mock;
+  const mockGetMinuteSheet = jest.mocked(getMinuteSheet);
+  const mockFormatMinuteSheet = jest.mocked(formatMinuteSheet);
+  const mockMinuteSheetDocumentGenerator = jest.mocked(
+    minuteSheetDocumentGenerator,
+  );
+  const mockUploadDocument = jest.mocked(uploadDocument);
 
   beforeEach(() => {
     mockGetMinuteSheet.mockResolvedValue(mockGetMinuteSheetValue);
-    mockFormatMinuteSheet.mockReturnValue('formatted minute sheet');
-    mockMinuteSheetDocumentGenerator.mockResolvedValue('pdf data');
+    mockFormatMinuteSheet.mockReturnValue(mockFormattedMinuteSheet);
+    mockMinuteSheetDocumentGenerator.mockResolvedValue(
+      'pdf data' as unknown as Uint8Array,
+    );
   });
 
   it('throw not found error if minute sheet is not found', async () => {
-    mockGetMinuteSheet.mockResolvedValue(null);
+    mockGetMinuteSheet.mockResolvedValue(undefined);
     await expect(
       createAndUploadMinuteSheet(applicationContext, mockParams),
     ).rejects.toThrow(NotFoundError);
@@ -61,13 +68,13 @@ describe('createAndUploadMinuteSheet', () => {
     expect(mockMinuteSheetDocumentGenerator).toHaveBeenCalledWith({
       applicationContext,
       data: {
-        formattedMinuteSheet: 'formatted minute sheet',
+        formattedMinuteSheet: mockFormattedMinuteSheet,
       },
     });
     expect(mockUploadDocument).toHaveBeenCalledWith({
       applicationContext,
       pdfData: 'pdf data',
-      pdfName: mockParams.docketEntryId,
+      key: mockParams.documentStorageId,
     });
     expect(result).toBe('pdf data');
   });

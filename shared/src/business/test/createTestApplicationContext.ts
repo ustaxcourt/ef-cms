@@ -530,6 +530,7 @@ export const createTestApplicationContext = () => {
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
       sendSlackNotification: jest.fn(),
+      sendZipperBatchJob: jest.fn(),
     }),
     getDocumentGenerators: jest
       .fn()
