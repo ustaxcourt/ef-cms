@@ -253,8 +253,6 @@ export const updatePetitionerInformation = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let serviceUrl;
-
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
@@ -271,7 +269,7 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await generateAndServeDocketEntry({
+    await generateAndServeDocketEntry({
       applicationContext,
       authorizedUser,
       caseEntity,
@@ -283,7 +281,6 @@ export const updatePetitionerInformation = async (
       servedParties,
       user: authorizedUser,
     });
-    serviceUrl = url;
   }
 
   const shouldUpdateEmailAddress =

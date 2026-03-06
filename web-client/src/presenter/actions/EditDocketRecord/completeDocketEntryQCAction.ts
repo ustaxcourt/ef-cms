@@ -43,11 +43,15 @@ export const completeDocketEntryQCAction = async ({
       paperServiceDocumentTitle,
       paperServiceParties,
       paperServicePdfUrl,
-    } = await applicationContext
+    } = (await applicationContext
       .getUseCases()
       .completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata,
-      });
+      })) as {
+      paperServiceDocumentTitle: string;
+      paperServiceParties: any[];
+      paperServicePdfUrl: string;
+    };
 
     const form = get(state.form);
     const descriptionDisplay = applicationContext
