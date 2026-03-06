@@ -4,12 +4,16 @@ export const setTrialSessionStartDateDifferencesAction = ({
   props,
   store,
 }: ActionProps<{
-  currentTrialSessionStartDate: any;
-  updatedTrialSessionStartDate: any;
+  currentTrialSession: any;
+  updatedTrialSession: any;
+  persistModal: boolean
 }>) => {
-  const { currentTrialSessionStartDate, updatedTrialSessionStartDate } = props;
+  const { currentTrialSession, updatedTrialSession, persistModal } = props;
   store.set(state.trialSessionStartDateChangeModalInfo, {
-    currentTrialSessionStartDate: currentTrialSessionStartDate.startDate,
-    updatedTrialSessionStartDate: updatedTrialSessionStartDate.startDate,
+    currentTrialSessionStartDate: currentTrialSession.startDate,
+    updatedTrialSessionStartDate: updatedTrialSession.startDate,
+  });
+  store.set(state.trialSessionChangeModalState, {
+    persist: persistModal,
   });
 };
