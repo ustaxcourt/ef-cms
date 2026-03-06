@@ -191,5 +191,18 @@ describe('todaysOpinionsHelper', () => {
       expect(result.formattedOpinions[0].docketNumber).toEqual('100-20');
       expect(result.formattedOpinions[2].docketNumber).toEqual('300-22');
     });
+
+    it('does not sort if state.tableSort does not exist', () => {
+      // Ensure tableSort is undefined / falsy
+      delete (state as any).tableSort;
+
+      const result = runCompute(todaysOpinionsHelper, { state });
+
+      expect(result.formattedOpinions.map(o => o.docketEntryId)).toEqual([
+        'id-2',
+        'id-1',
+        'id-3',
+      ]);
+    });
   });
 });
