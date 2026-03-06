@@ -59,7 +59,7 @@ export const ConfirmTrialSessionStartDateChangeModalDialog = connect<
   }) {
     const { currentTrialSessionStartDate, updatedTrialSessionStartDate } =
       trialSessionStartDateChangeModalInfo;
-
+    console.log('render start date modal');
     return (
       <ModalDialog
         className="tw:mt-1"

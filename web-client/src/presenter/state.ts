@@ -720,6 +720,9 @@ export const baseState = {
     currentTrialSessionStartDate: undefined as string | undefined,
     updatedTrialSessionStartDate: undefined as string | undefined,
   },
+  trialSessionChangeModalState: {
+    persist: false as boolean | undefined,
+  },
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
