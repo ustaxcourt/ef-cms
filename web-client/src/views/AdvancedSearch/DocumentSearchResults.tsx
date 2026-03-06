@@ -286,7 +286,7 @@ export const DocumentSearchResults = connect(
                       </th>
                       <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
-                          ascText={SORT_ASCENDING_TEXT.date}
+                          ascText={SORT_ASCENDING_TEXT.number}
                           currentlySortedField={
                             advancedDocumentSearchHelper.sortColumn
                           }
@@ -294,7 +294,7 @@ export const DocumentSearchResults = connect(
                             advancedDocumentSearchHelper.sortDirection
                           }
                           defaultSortOrder={ASCENDING}
-                          descText={SORT_DESCENDING_TEXT.date}
+                          descText={SORT_DESCENDING_TEXT.number}
                           hasRows={true}
                           sortField="numberOfPages"
                           title="Pages"
