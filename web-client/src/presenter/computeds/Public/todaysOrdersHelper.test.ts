@@ -239,6 +239,7 @@ describe('todaysOrdersHelper', () => {
         },
       ]);
     });
+
     it('should sort by docketNumber', () => {
       state = {
         tableSort: {
@@ -291,6 +292,7 @@ describe('todaysOrdersHelper', () => {
         },
       ]);
     });
+
     it('should not sort if state.tableSort does not exist', () => {
       state = {
         todaysOrders: {
@@ -324,6 +326,51 @@ describe('todaysOrdersHelper', () => {
           numberOfPagesFormatted: 'n/a',
         },
       ]);
-    })
+    });
+  });
+
+  it('should sort by numberOfPages ascending', () => {
+    state = {
+      tableSort: {
+        sortField: 'numberOfPages',
+        sortOrder: 'asc',
+      },
+      todaysOrders: {
+        results: [
+          { numberOfPages: 10 },
+          { numberOfPages: undefined },
+          { numberOfPages: 5 },
+          { numberOfPages: 20 },
+        ],
+      },
+    };
+
+    const result = runCompute(todaysOrdersHelper, { state });
+
+    expect(result.formattedOrders).toEqual([
+      {
+        formattedFilingDate: '',
+        formattedJudgeName: '',
+        numberOfPagesFormatted: 'n/a',
+      },
+      {
+        numberOfPages: 5,
+        formattedFilingDate: '',
+        formattedJudgeName: '',
+        numberOfPagesFormatted: 5,
+      },
+      {
+        numberOfPages: 10,
+        formattedFilingDate: '',
+        formattedJudgeName: '',
+        numberOfPagesFormatted: 10,
+      },
+      {
+        numberOfPages: 20,
+        formattedFilingDate: '',
+        formattedJudgeName: '',
+        numberOfPagesFormatted: 20,
+      },
+    ]);
   });
 });
