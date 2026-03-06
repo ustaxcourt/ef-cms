@@ -17,6 +17,7 @@ export const noticeOfChangeOfTrialStartDate = async ({
     docketNumberWithSuffix: string;
     updatedTrialSession: RawTrialSession;
     previousTrialSession: RawTrialSession;
+    clerkOfTheCourtRecord: { name: string; title: string };
   };
 }): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;

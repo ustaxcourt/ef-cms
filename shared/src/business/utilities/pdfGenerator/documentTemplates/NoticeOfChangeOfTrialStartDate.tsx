@@ -1,23 +1,16 @@
 import { ChangeOfTrialStartDateDocketHeader } from '@shared/business/utilities/pdfGenerator/components/ChangeOfTrialStartDateDocketHeader';
-import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { formatDateString } from '@shared/business/utilities/DateHandler';
+import {
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 import React from 'react';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
+import { ClerkOfTheCourtSignature } from '@shared/business/utilities/pdfGenerator/components/ClerkOfTheCourtSignature';
 
-export type TrialSessionStartDateChangePDFInfo = Pick<
-  RawTrialSession,
-  | 'trialSessionId'
-  | 'judge'
-  | 'address1'
-  | 'address2'
-  | 'city'
-  | 'state'
-  | 'postalCode'
-  | 'courthouseName'
-  | 'startDate'
-  | 'trialLocation'
->;
+export type TrialSessionStartDateChangePDFInfo = RawTrialSession;
 
 export const NoticeOfChangeOfTrialStartDate = ({
   caseCaptionExtension,
@@ -25,52 +18,113 @@ export const NoticeOfChangeOfTrialStartDate = ({
   docketNumberWithSuffix,
   previousTrialSession,
   updatedTrialSession,
+  clerkOfTheCourtRecord,
 }: {
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
   previousTrialSession: TrialSessionStartDateChangePDFInfo;
   updatedTrialSession: TrialSessionStartDateChangePDFInfo;
+  clerkOfTheCourtRecord: { name: string; title: string };
 }) => {
   return (
     <div>
-      <OrderPrimaryHeader />
+      <PrimaryHeader />
       <ChangeOfTrialStartDateDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="NOTICE OF CHANGE OF TRIAL START DATE"
+        documentTitle="NOTICE OF CHANGE OF TRIAL DATE"
       />
-      <NoticeOfChangeRemote />
+      {updatedTrialSession.proceedingType ===
+      TRIAL_SESSION_PROCEEDING_TYPES.inPerson ? (
+        <NoticeOfChangeInPerson
+          previousTrialSession={previousTrialSession}
+          updatedTrialSession={updatedTrialSession}
+        />
+      ) : (
+        <NoticeOfChangeRemote
+          previousTrialSession={previousTrialSession}
+          updatedTrialSession={updatedTrialSession}
+        />
+      )}
+      <p>
+        &emsp;The parties are further notified that the previously issued
+        Standing Pretrial Order remains in full force and effect except to the
+        extent modified above.
+      </p>
+      <ClerkOfTheCourtSignature
+        nameOfClerk={clerkOfTheCourtRecord.name}
+        titleOfClerk={clerkOfTheCourtRecord.title}
+      />
     </div>
   );
 };
 
-function NoticeOfChangeRemote() {
+function NoticeOfChangeRemote({
+  previousTrialSession,
+  updatedTrialSession,
+}: {
+  previousTrialSession: TrialSessionStartDateChangePDFInfo;
+  updatedTrialSession: TrialSessionStartDateChangePDFInfo;
+}) {
   return (
     <div>
       <p>
-        The [TRIAL_LOCATION] [SESSION_TYPE] trial session scheduled to begin on
-        [OLD_START_DATE], has been changed to [NEW_START_DATE], beginning at
-        [TIME]. The calendar will be called at that date and time, and the
-        parties are directed to appear before the Court at a remote proceeding
-        to be held using Zoom.gov and to be prepared to try the case. The
-        parties shall follow the instructions below for how to participate in
-        the remote proceeding.
+        &emsp;The {updatedTrialSession.trialLocation}{' '}
+        {updatedTrialSession.sessionType} trial session scheduled to begin on{' '}
+        {formatDateString(previousTrialSession.startDate, FORMATS.MMDDYYYY)},
+        has been changed to{' '}
+        {formatDateString(updatedTrialSession.startDate, FORMATS.MMDDYYYY)},
+        beginning at {updatedTrialSession.startTime}. The calendar will be
+        called at that date and time, and the parties are directed to appear
+        before the Court at a remote proceeding to be held using Zoom.gov and to
+        be prepared to try the case. The parties shall follow the instructions
+        below for how to participate in the remote proceeding.
       </p>
-      <h3>ACCESS REMOTE PROCEEDING</h3>
-      <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
-      <p>Meeting ID: [MEETING_ID]</p>
-      <p>Passcode: [MEETING_PASS]</p>
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ fontWeight: 'bold' }}>ACCESS REMOTE PROCEEDING</p>
+        <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
+        <p>
+          <span style={{ fontWeight: 'bold' }}>Meeting ID:</span>{' '}
+          {updatedTrialSession.meetingId}
+        </p>
+        <p>
+          <span style={{ fontWeight: 'bold' }}>Passcode:</span>{' '}
+          {updatedTrialSession.password}
+        </p>
+      </div>
       <p>
-        Join online: Go to www.zoomgov.com and click `Join a meeting` (blue box
+        &emsp;Join online: Go to www.zoomgov.com and click `Join a meeting` (blue box
         in the middle of the page). Enter the Meeting ID and Passcode above when
         prompted.
       </p>
+    </div>
+  );
+}
+
+function NoticeOfChangeInPerson({
+  previousTrialSession,
+  updatedTrialSession,
+}: {
+  previousTrialSession: TrialSessionStartDateChangePDFInfo;
+  updatedTrialSession: TrialSessionStartDateChangePDFInfo;
+}) {
+  return (
+    <div>
       <p>
-        The parties are further notified that the previously issued Standing
-        Pretrial Order remains in full force and effect except to the extent
-        modified above.
+        &emsp;The {updatedTrialSession.trialLocation}{' '}
+        {updatedTrialSession.sessionType} trial session scheduled to begin on{' '}
+        {formatDateString(previousTrialSession.startDate, FORMATS.MMDDYYYY)},
+        has been changed to{' '}
+        {formatDateString(updatedTrialSession.startDate, FORMATS.MMDDYYYY)},
+        beginning at {updatedTrialSession.startTime}. The calendar will be
+        called at that date and time, and the parties are expected to be present
+        and to be prepared to try the case. The trial session will be held at{' '}
+        {updatedTrialSession.courthouseName}, {updatedTrialSession.address1}{' '}
+        {updatedTrialSession.address2 ? `${updatedTrialSession.address2} ` : ''}
+        {updatedTrialSession.city} {updatedTrialSession.state}{' '}
+        {updatedTrialSession.postalCode}.
       </p>
     </div>
   );
