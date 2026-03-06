@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { Message } from '@shared/business/entities/Message';
 import { PractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -14,6 +15,7 @@ import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/ge
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
+import { createSpinner } from 'scripts/helpers/consoleSpinner';
 
 /* HELPERS */
 const getAllDocketNumbers = async () => {
@@ -87,70 +89,99 @@ const getAllPractionerDocuments = async () => {
   return practitionerDocuments;
 };
 
-/* VALIDATION FUNCTIONS */
-const getTrialSessionsAndValidate = async () => {
+const entityHelperFunctions = {
+  // Case: getCasesAndValidate,
+  Message: getAllMessages,
+  PractitionerDocument: getAllPractionerDocuments,
+  TrialSession: getTrialSessions,
+  TrialSessionWorkingCopy: getAllTrialSessionWorkingCopies,
+  User: getAllUsers,
+  WorkItem: getAllWorkItems,
+};
+
+const mapEntityNameToClass = (
+  entityName: string,
+  record,
+): JoiValidationEntity => {
+  switch (entityName) {
+    case 'Case':
+      return new Case(record, { authorizedUser: undefined });
+    case 'Message':
+      return new Message(record);
+    case 'PractitionerDocument':
+      return new PractitionerDocument(record, {
+        applicationContext: undefined,
+      });
+    case 'TrialSession':
+      return new TrialSession(record);
+    case 'TrialSessionWorkingCopy':
+      return new TrialSessionWorkingCopy(record);
+    case 'User':
+      return new User(record);
+    case 'WorkItem':
+      return new WorkItem(record);
+    default:
+      throw new Error(`Unknown entity name: ${entityName}`);
+  }
+};
+
+const performValidation = async (entityName: string) => {
+  const spinner = createSpinner(`Starting ${entityName} Entity Validation...`);
+  const validationErrors: any[] = [];
   try {
-    const trialSessions = await getTrialSessions();
-    for (const trialSession of trialSessions) {
-      const trialSessionEntity = new TrialSession(trialSession);
-      const errors = trialSessionEntity.getFormattedValidationErrors();
+    const entityRecords = await entityHelperFunctions[entityName]();
+    for (const record of entityRecords) {
+      const entity = mapEntityNameToClass(entityName, record);
+      const errors = entity.getFormattedValidationErrors();
       if (errors) {
-        console.error(
-          `Validation errors for trial session ${trialSession.trialSessionId}:`,
-          errors,
+        spinner.update(
+          `Validating ${entityName} entities, ${validationErrors.length} error(s) found out of ${entityRecords.length} records...`,
+        );
+        validationErrors.push(
+          `Validation errors for ${entityName} ${record[`${entityName.toLowerCase()}Id`]}: ${JSON.stringify(errors)}`,
         );
       }
     }
-    console.log('All trial session entities validated!');
+    if (validationErrors.length > 0) {
+      spinner.fail(
+        `Validation completed with ${validationErrors.length} error(s) found out of ${entityRecords.length} records.`,
+      );
+      console.log(validationErrors);
+    } else {
+      spinner.succeed(`All ${entityName} entities validated!`);
+    }
   } catch (error) {
-    console.error('Error getting trial sessions:', error);
+    console.error(`Error getting ${entityName} entities:`, error);
   }
+
+  return validationErrors;
+};
+
+/* VALIDATION FUNCTIONS */
+const getTrialSessionsAndValidate = async () => {
+  await performValidation('TrialSession');
 };
 
 const getMessagesAndValidate = async () => {
-  try {
-    const messages = await getAllMessages();
-    for (const message of messages) {
-      const messageEntity = new Message(message);
-      const errors = messageEntity.getFormattedValidationErrors();
-      if (errors) {
-        console.error(
-          `Validation errors for message ${message.messageId}:`,
-          errors,
-        );
-      }
-    }
-    console.log('All message entities validated!');
-  } catch (error) {
-    console.error('Error getting messages:', error);
-  }
+  await performValidation('Message');
 };
 
 const getWorkItemsAndValidate = async () => {
-  try {
-    const workItems = await getAllWorkItems();
-    for (const workItem of workItems) {
-      const workItemEntity = new WorkItem(workItem);
-      const errors = workItemEntity.getFormattedValidationErrors();
-      if (errors) {
-        console.error(
-          `Validation errors for work item ${workItem.workItemId}:`,
-          errors,
-        );
-      }
-    }
-    console.log('All work item entities validated!');
-  } catch (error) {
-    console.error('Error getting work items:', error);
-  }
+  await performValidation('WorkItem');
 };
 
 const getCasesAndValidate = async () => {
   try {
+    console.log('Starting Case Entity Validation...');
     const docketNumbers = await getAllDocketNumbers();
 
     const chunkSize = 10000;
     for (let i = 0; i < docketNumbers.length; i += chunkSize) {
+      const spinner = createSpinner('Starting validation...');
+
+      spinner.update(
+        `Validating Case entity: Processing cases ${i + 1} - ${Math.min(i + chunkSize, docketNumbers.length)}`,
+      );
       const chunk = docketNumbers.slice(i, i + chunkSize);
       // do whatever
       const caseData = await getCasesByDocketNumbers({ docketNumbers: chunk });
@@ -159,13 +190,13 @@ const getCasesAndValidate = async () => {
         const caseEntity = new Case(caseItem, { authorizedUser: undefined });
         const errors = caseEntity.getFormattedValidationErrors();
         if (errors) {
-          console.error(
-            `Validation errors for case ${caseItem.docketNumber}:`,
-            errors,
+          spinner.update(
+            `Validation errors for case ${caseItem.docketNumber}: ${errors}`,
           );
         }
       });
-      console.log(`Processed cases ${i + 1} - ${i + chunkSize}`);
+      // console.log(`Processed cases ${i + 1} - ${i + chunkSize}`);
+      spinner.succeed(`Processed cases ${i + 1} - ${i + chunkSize}`);
     }
   } catch (error) {
     console.error('Error getting cases:', error);
@@ -173,69 +204,33 @@ const getCasesAndValidate = async () => {
 };
 
 const getTrialSessionWorkingCopiesAndValidate = async () => {
-  try {
-    const workingCopies = await getAllTrialSessionWorkingCopies();
-    for (const workingCopy of workingCopies) {
-      const workingCopyEntity = new TrialSessionWorkingCopy(workingCopy);
-      const errors = workingCopyEntity.getFormattedValidationErrors();
-      if (errors) {
-        console.error(
-          `Validation errors for trial session working copy ${workingCopy.trialSessionId} and user ${workingCopy.userId}:`,
-          errors,
-        );
-      }
-    }
-    console.log('All trial session working copy entities validated!');
-  } catch (error) {
-    console.error('Error getting trial session working copies:', error);
-  }
+  await performValidation('TrialSessionWorkingCopy');
 };
 
 const getUsersAndValidate = async () => {
-  try {
-    const users = await getAllUsers();
-    for (const user of users) {
-      const userEntity = new User(user);
-      const errors = userEntity.getFormattedValidationErrors();
-      if (errors) {
-        console.error(`Validation errors for user ${user.userId}:`, errors);
-      }
-    }
-    console.log('All user entities validated!');
-  } catch (error) {
-    console.error('Error getting users:', error);
-  }
+  await performValidation('User');
 };
 
 const getPractitionerDocumentsAndValidate = async () => {
-  try {
-    const practitionerDocuments = await getAllPractionerDocuments();
-    for (const practitionerDocument of practitionerDocuments) {
-      // Assuming you have a PractitionerDocument entity similar to Case and TrialSession
-      const practitionerDocumentItem = new PractitionerDocument(
-        practitionerDocument,
-        { applicationContext: undefined },
-      );
-      const errors = practitionerDocumentItem.getFormattedValidationErrors();
-      if (errors) {
-        console.error(
-          `Validation errors for practioner document ${practitionerDocumentItem.practitionerDocumentFileId}`,
-          errors,
-        );
-      }
-    }
-    console.log('All practitioner document entities validated!');
-  } catch (error) {
-    console.error('Error getting practitioner documents:', error);
-  }
+  await performValidation('PractitionerDocument');
 };
 
-void (async () => {
-  await getTrialSessionsAndValidate();
-  await getCasesAndValidate();
-  await getMessagesAndValidate();
-  await getWorkItemsAndValidate();
-  await getUsersAndValidate();
-  await getTrialSessionWorkingCopiesAndValidate();
-  await getPractitionerDocumentsAndValidate();
-})();
+export const entityValidationFunctions = {
+  Case: getCasesAndValidate,
+  Message: getMessagesAndValidate,
+  PractitionerDocument: getPractitionerDocumentsAndValidate,
+  TrialSession: getTrialSessionsAndValidate,
+  TrialSessionWorkingCopy: getTrialSessionWorkingCopiesAndValidate,
+  User: getUsersAndValidate,
+  WorkItem: getWorkItemsAndValidate,
+};
+
+// void (async () => {
+//   await getTrialSessionsAndValidate();
+//   await getCasesAndValidate();
+//   await getMessagesAndValidate();
+//   await getWorkItemsAndValidate();
+//   await getUsersAndValidate();
+//   await getTrialSessionWorkingCopiesAndValidate();
+//   await getPractitionerDocumentsAndValidate();
+// })();

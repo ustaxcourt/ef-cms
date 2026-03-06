@@ -3,25 +3,29 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { createValidationIdentifier } from 'scripts/entity-validation/createValidationIdentifier';
+import { entityValidationFunctions } from 'scripts/entity-validation/EntityValidationScript';
+import { getSSMItem, putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
-async function getEntityIdentifiers() {
-  const validationIdentityMap = {};
+const SSM_KEY = 'entity-validation-fingerprints-map';
+const VALIDATION_REGEX = /validation/i;
 
-  // for testing purposes, we are hardcoding the entities to check. In the future, we will want to dynamically get all entities in the shared/src/business/entities directory.
-  const hardCodedEntitiesToCheck = [
-    'cases/Case.ts',
-    'DocketEntry.ts',
-    'IrsPractitioner.ts',
-    'PrivatePractitioner.ts',
-    'Correspondence.ts',
-    'Message.ts',
-    'PractitionerDocument.ts',
-    'trialSessions/TrialSessionWorkingCopy.ts',
-    'trialSessions/TrialSession.ts',
-    'User.ts',
-    'WorkItem.ts',
-  ];
+// TODO: Replace with dynamic entity discovery from shared/src/business/entities
+const ENTITIES_TO_CHECK = [
+  // 'cases/Case.ts',
+  // 'DocketEntry.ts',
+  // 'IrsPractitioner.ts',
+  // 'PrivatePractitioner.ts',
+  // 'Correspondence.ts',
+  'Message.ts',
+  'PractitionerDocument.ts',
+  'trialSessions/TrialSessionWorkingCopy.ts',
+  'trialSessions/TrialSession.ts',
+  'User.ts',
+  'WorkItem.ts',
+];
 
+async function getEntityIdentifiers(): Promise<string> {
+  const validationIdentityMap: Record<string, string> = {};
   const directoryPath = path.join(
     __dirname,
     '../../shared/src/business/entities',
@@ -29,36 +33,96 @@ async function getEntityIdentifiers() {
   const files = await fs.readdir(directoryPath, { recursive: true });
 
   for (const file of files) {
-    // console.log(file);
-    const filePath = path.join(directoryPath, file);
-
-    if (file.endsWith('.test.ts')) {
+    if (
+      !file.endsWith('.ts') ||
+      file.endsWith('.test.ts') ||
+      !ENTITIES_TO_CHECK.includes(file)
+    ) {
       continue;
     }
-    // if (file.endsWith('.ts')) { // This is the original line, but we want to only check the hardcoded entities for now.
-    if (file.endsWith('.ts') && hardCodedEntitiesToCheck.includes(file)) {
-      // console.log('filepath: ', filePath);
-      const moduleExports = await import(filePath);
-      console.log('module exports:', moduleExports);
 
-      Object.keys(moduleExports).forEach(exportName => {
-        const validationRegex = /validation/i;
-        const individualExport = moduleExports[exportName];
-        Object.keys(individualExport).forEach(key => {
-          if (validationRegex.test(key)) {
-            // Check if the export contains a property with 'validation' in it. We are looking for VALIDATION_RULES.
-            const identifier = createValidationIdentifier(
-              individualExport[key],
-            );
-            validationIdentityMap[`${exportName}.${key}`] = identifier;
-          }
-        });
-      });
+    const moduleExports = await import(path.join(directoryPath, file));
+
+    for (const exportName of Object.keys(moduleExports)) {
+      const individualExport = moduleExports[exportName];
+      for (const key of Object.keys(individualExport)) {
+        if (VALIDATION_REGEX.test(key)) {
+          validationIdentityMap[`${exportName}.${key}`] =
+            createValidationIdentifier(individualExport[key]);
+        }
+      }
     }
   }
 
-  // TODO: this should be a return that is passed into the validationRuleChangeDetection script
-  console.log(JSON.stringify(validationIdentityMap, null, 2));
+  return JSON.stringify(validationIdentityMap, null, 2);
 }
 
-void getEntityIdentifiers();
+function detectEntityValidationChange(
+  currFingerprint: Record<string, string>,
+  newFingerprint: Record<string, string>,
+): string[] {
+  return Array.from(
+    new Set<string>(
+      Object.keys(newFingerprint).filter(
+        entity =>
+          !currFingerprint[entity] ||
+          currFingerprint[entity] !== newFingerprint[entity],
+      ),
+    ),
+  );
+}
+
+async function validateEntitiesWithNewRules(
+  changedEntities: string[],
+): Promise<void> {
+  for (const entity of changedEntities) {
+    const entityName = entity.split('.')[0];
+    try {
+      await entityValidationFunctions[entityName]();
+    } catch (error) {
+      throw new Error(`Error validating entity ${entityName}: ${error}`);
+    }
+  }
+  console.log('All changed entities successfully validated!');
+}
+
+async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
+  try {
+    return await getSSMItem(SSM_KEY);
+  } catch {
+    return undefined;
+  }
+}
+
+async function main(): Promise<void> {
+  const currFingerprint = await getCurrentFingerprintFromSSM();
+  const newFingerprint = await getEntityIdentifiers();
+
+  const changedEntities = detectEntityValidationChange(
+    JSON.parse(currFingerprint ?? '{}'),
+    JSON.parse(newFingerprint),
+  );
+
+  if (!currFingerprint) {
+    console.log(
+      'No prior Entity validation fingerprints were found. Attempting to validate all entities...',
+    );
+    await validateEntitiesWithNewRules(changedEntities);
+    console.log('Validation Successful. Writing new fingerprint to SSM.');
+    await putSSMItem(SSM_KEY, newFingerprint);
+    return;
+  }
+
+  if (changedEntities.length === 0) {
+    console.log('Entity validation fingerprints have not changed.');
+    return;
+  }
+
+  await validateEntitiesWithNewRules(changedEntities);
+  console.log(
+    'Entity validation fingerprints have changed. Writing new fingerprint to SSM.',
+  );
+  await putSSMItem(SSM_KEY, newFingerprint);
+}
+
+void main();
