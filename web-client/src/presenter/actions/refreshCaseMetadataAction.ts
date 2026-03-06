@@ -21,5 +21,6 @@ export const refreshCaseMetadataAction = async ({
   store.set(state.caseDetail, {
     ...updatedCase,
     docketEntries: existingCase.docketEntries,
+    messages: existingCase.messages,
   });
 };

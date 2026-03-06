@@ -6,10 +6,14 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('refreshCaseMetadataAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should fetch case metadata and replace state while preserving docket entries', async () => {
+  it('should fetch case metadata and replace state while preserving docket entries and messages', async () => {
     const existingDocketEntries = [
       { docketEntryId: '1', description: 'Petition' },
       { docketEntryId: '2', description: 'Order' },
+    ];
+
+    const existingMessages = [
+      { messageId: 'm1', subject: 'Test message' },
     ];
 
     applicationContext
@@ -28,6 +32,7 @@ describe('refreshCaseMetadataAction', () => {
           caseCaption: 'Old Caption',
           docketEntries: existingDocketEntries,
           docketNumber: '101-20',
+          messages: existingMessages,
           status: 'New',
         },
       },
@@ -43,6 +48,7 @@ describe('refreshCaseMetadataAction', () => {
     expect(result.state.caseDetail.docketEntries).toEqual(
       existingDocketEntries,
     );
+    expect(result.state.caseDetail.messages).toEqual(existingMessages);
   });
 
   it('should clear stale fields that are absent from the refreshed case', async () => {

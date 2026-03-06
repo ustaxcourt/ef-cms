@@ -49,9 +49,14 @@ export const completeDocketEntryQCAction = async ({
         entryMetadata,
       });
 
+    const form = get(state.form);
+    const descriptionDisplay = applicationContext
+      .getUtilities()
+      .getDescriptionDisplay(form);
+
     const message = qcCompletionAndMessageFlag
-      ? 'QC completed and message sent.'
-      : 'QC has been completed.';
+      ? `${descriptionDisplay} QC completed and message sent.`
+      : `${descriptionDisplay} has been completed.`;
 
     return path.success({
       alertSuccess: {
