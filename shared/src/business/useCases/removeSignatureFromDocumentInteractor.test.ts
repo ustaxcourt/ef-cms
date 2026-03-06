@@ -10,8 +10,10 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeSignatureFromDocumentInteractor', () => {
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   let mockCase;
 
@@ -95,7 +97,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
   it('should unsign the document and save the updated document to the case', async () => {
-    const updatedCase = await removeSignatureFromDocumentInteractor(
+    await removeSignatureFromDocumentInteractor(
       applicationContext,
       {
         docketEntryId: mockDocketEntryId,
@@ -104,6 +106,8 @@ describe('removeSignatureFromDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const unsignedDocument = updatedCase.docketEntries.find(
       doc => doc.docketEntryId === mockDocketEntryId,
     );

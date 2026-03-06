@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { deleteCaseDeadlineAction } from './deleteCaseDeadlineAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -22,52 +21,10 @@ describe('deleteCaseDeadlineAction', () => {
     };
   });
 
-  it('should set automatic blocked fields on state', async () => {
-    const mockAutomaticBlocked = true;
-    const mockAutomaticBlockedDate = '2019-11-11';
-    const mockAutomaticBlockedReason = 'Because I said so';
-
+  it('should call deleteCaseDeadlineInteractor and return success path', async () => {
     applicationContext
       .getUseCases()
-      .deleteCaseDeadlineInteractor.mockReturnValue({
-        ...MOCK_CASE,
-        automaticBlocked: mockAutomaticBlocked,
-        automaticBlockedDate: mockAutomaticBlockedDate,
-        automaticBlockedReason: mockAutomaticBlockedReason,
-      });
-
-    const result = await runAction(deleteCaseDeadlineAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          automaticBlocked: undefined,
-          automaticBlockedDate: undefined,
-          automaticBlockedReason: undefined,
-          docketNumber: mockDocketNumber,
-        },
-        form: {
-          caseDeadlineId: mockCaseDeadlineId,
-        },
-      },
-    });
-
-    expect(result.state.caseDetail.automaticBlocked).toEqual(
-      mockAutomaticBlocked,
-    );
-    expect(result.state.caseDetail.automaticBlockedDate).toEqual(
-      mockAutomaticBlockedDate,
-    );
-    expect(result.state.caseDetail.automaticBlockedReason).toEqual(
-      mockAutomaticBlockedReason,
-    );
-  });
-
-  it('should call the success path with alertSuccess.message', async () => {
-    applicationContext
-      .getUseCases()
-      .deleteCaseDeadlineInteractor.mockReturnValue(MOCK_CASE);
+      .deleteCaseDeadlineInteractor.mockReturnValue(undefined);
 
     await runAction(deleteCaseDeadlineAction, {
       modules: {
@@ -83,11 +40,17 @@ describe('deleteCaseDeadlineAction', () => {
       },
     });
 
-    expect(successStub.mock.calls.length).toEqual(1);
-    expect(successStub.mock.calls[0][0]).toEqual({
+    expect(
+      applicationContext.getUseCases().deleteCaseDeadlineInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      caseDeadlineId: mockCaseDeadlineId,
+      docketNumber: mockDocketNumber,
+    });
+    expect(successStub).toHaveBeenCalledWith({
       alertSuccess: {
         message: 'Deadline removed.',
       },
     });
   });
+
 });
