@@ -2,6 +2,36 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
+ * Computed helper for consolidated outbox items
+ */
+export const outboxHelper = (
+  get: Get,
+): {
+  consolidatedWorkItems: ConsolidatedWorkItem[];
+  outboxRenderedRowCount: number;
+  sortMemberCases: typeof sortMemberCases;
+} => {
+  const formattedWorkQueue = get(state.formattedWorkQueue) || [];
+
+  let consolidatedWorkItems: ConsolidatedWorkItem[] = [];
+  let outboxRenderedRowCount = 0;
+
+  try {
+    consolidatedWorkItems = consolidateWorkQueueItems(formattedWorkQueue);
+    outboxRenderedRowCount = consolidatedWorkItems.length;
+  } catch (e) {
+    consolidatedWorkItems = [];
+    outboxRenderedRowCount = 0;
+  }
+
+  return {
+    consolidatedWorkItems,
+    outboxRenderedRowCount,
+    sortMemberCases,
+  };
+};
+
+/**
  * Shape of a consolidated work item
  */
 export interface ConsolidatedWorkItem {
@@ -123,35 +153,5 @@ export function sortMemberCases(cases: any[]): any[] {
     return (ay || '').localeCompare(by || '');
   });
 }
-
-/**
- * Computed helper for consolidated outbox items
- */
-export const outboxHelper = (
-  get: Get,
-): {
-  consolidatedWorkItems: ConsolidatedWorkItem[];
-  outboxRenderedRowCount: number;
-  sortMemberCases: typeof sortMemberCases;
-} => {
-  const formattedWorkQueue = get(state.formattedWorkQueue) || [];
-
-  let consolidatedWorkItems: ConsolidatedWorkItem[] = [];
-  let outboxRenderedRowCount = 0;
-
-  try {
-    consolidatedWorkItems = consolidateWorkQueueItems(formattedWorkQueue);
-    outboxRenderedRowCount = consolidatedWorkItems.length;
-  } catch (e) {
-    consolidatedWorkItems = [];
-    outboxRenderedRowCount = 0;
-  }
-
-  return {
-    consolidatedWorkItems,
-    outboxRenderedRowCount,
-    sortMemberCases,
-  };
-};
 
 export const consolidateWorkQueueItemsOutboxHelper = outboxHelper;

@@ -8,7 +8,7 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { capitalize, cloneDeep, orderBy, uniqBy } from 'lodash';
+import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
@@ -18,7 +18,7 @@ import {
   ROLES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import {
   calculateISODate,
@@ -70,9 +70,11 @@ export const formattedWorkQueue = (
       workQueueToDisplay.queue === 'my') &&
     workQueueToDisplay.box === 'inbox'
   ) {
-    const consolidated: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
     const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-
+    const consolidatedGroups = new Map<
+      string,
+      RawWorkItemWithCaseAndDocketEntryInfo[]
+    >();
     const docketEntryIdGroups = new Map<
       string,
       RawWorkItemWithCaseAndDocketEntryInfo[]
@@ -88,47 +90,39 @@ export const formattedWorkQueue = (
       if (group.length === 1) {
         solo.push(group[0]);
       } else {
-        group.forEach(g => {
-          if (g.docketEntry.multiDocketedOn?.length < 2) {
-            solo.push(g);
-          } else if (g.leadDocketNumber) {
-            consolidated.push(g);
+        group.forEach(item => {
+          if (item.docketEntry.multiDocketedOn?.length < 2) {
+            solo.push(item);
+          } else if (item.leadDocketNumber) {
+            const key = item.docketEntryId;
+            if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
+            consolidatedGroups.get(key)!.push(item);
           } else {
-            solo.push(g);
+            solo.push(item);
           }
         });
       }
-    }
-
-    const byLead = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
-    for (const wi of consolidated) {
-      const key = wi.leadDocketNumber!;
-      if (!byLead.has(key)) byLead.set(key, []);
-      byLead.get(key)!.push(wi);
     }
 
     const consolidatedResult: Array<
       RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
     > = [];
 
-    for (const group of byLead.values()) {
-      const leadItems = group.filter(w => isLeadCase(w));
-
-      const groupedCases = uniqBy(group, g => g.docketNumber).map(g => ({
-        docketNumber: g.docketNumber,
-        docketNumberWithSuffix: (g as any).docketNumberWithSuffix,
-        inLeadCase: isLeadCase(g),
+    for (const group of consolidatedGroups.values()) {
+      const groupedCases = group.map(item => ({
+        docketNumber: item.docketNumber,
+        docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
+        inLeadCase: isLeadCase(item),
       }));
 
-      if (leadItems.length > 0) {
-        for (const li of leadItems) {
-          consolidatedResult.push({ ...li, groupedCases });
-        }
-      } else {
-        for (const member of group) {
-          consolidatedResult.push({ ...member, groupedCases });
-        }
-      }
+      const leadOrLowestNumber =
+        Case.sortByDocketNumber(groupedCases)[0].docketNumber;
+
+      const leadOrLowestNumberedItem = group.find(item => {
+        return item.docketNumber === leadOrLowestNumber;
+      })!;
+
+      consolidatedResult.push({ ...leadOrLowestNumberedItem, groupedCases });
     }
 
     filtered = [...solo, ...consolidatedResult];
@@ -589,5 +583,3 @@ export type FormattedWorkItemWithCaseInfo =
     showUnreadStatusIcon: boolean;
     groupedCases?: any[];
   };
-
-// we hav e anetwork requets, grabbing smtg from state.workitmes, see what came form back end and put lofgs to see how it is manipulated, is lead dock# incorrect or the logic mistanely goruping them for some other reason

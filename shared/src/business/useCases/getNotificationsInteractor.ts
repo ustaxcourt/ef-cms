@@ -149,12 +149,7 @@ const countUniqueWorkItems = workItems => {
     }
   }
 
-  for (const group of consolidatedGroups.values()) {
-    const hasLeadItem = group.some(
-      item => item.docketNumber === item.leadDocketNumber,
-    );
-    count += hasLeadItem ? 1 : group.length;
-  }
+  count += consolidatedGroups.size;
 
   return count;
 };
