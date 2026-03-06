@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
@@ -43,7 +44,7 @@ export const addPaperFiling = async (
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
-    documentStorageId: string;
+    documentStorageId?: string;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
