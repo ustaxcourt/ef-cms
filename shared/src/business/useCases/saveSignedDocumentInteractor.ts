@@ -88,9 +88,13 @@ export const saveSignedDocumentInteractor = async (
     docketEntryId: originalDocketEntryId,
   });
 
+  if (!originalDocketEntryEntity) {
+    throw Error('Docket Entry to be signed was not found');
+  }
+
   let signedDocketEntryEntity: DocketEntry;
   if (
-    originalDocketEntryEntity?.documentType ===
+    originalDocketEntryEntity.documentType ===
     ACTION_DOCUMENT_TYPE_OPTIONS.proposedStipulatedDecision
   ) {
     signedDocketEntryEntity = new DocketEntry(
@@ -137,12 +141,12 @@ export const saveSignedDocumentInteractor = async (
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
       applicationContext,
-      originalDocumentStorageId: originalDocketEntryEntity?.documentStorageId,
+      originalDocumentStorageId: originalDocketEntryEntity.documentStorageId,
     });
 
     await replaceOriginalWithSignedDocument({
       applicationContext,
-      originalDocumentStorageId: originalDocketEntryEntity?.documentStorageId,
+      originalDocumentStorageId: originalDocketEntryEntity.documentStorageId,
       signedDocumentStorageId,
     });
 

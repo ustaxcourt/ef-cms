@@ -18,7 +18,10 @@ export const countPagesInDocument = async ({
       applicationContext,
       key: documentStorageId,
     });
+  } else {
+    throw Error('Cannot find PDF document');
   }
+
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(bytes);

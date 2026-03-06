@@ -26,4 +26,12 @@ describe('countPagesInDocument', () => {
 
     expect(pageCount).toEqual(1);
   });
+
+  it('should throw an Error if documentBytes and documentStorageId are undefined', async () => {
+    await expect(
+      countPagesInDocument({
+        applicationContext,
+      }),
+    ).rejects.toThrow();
+  });
 });
