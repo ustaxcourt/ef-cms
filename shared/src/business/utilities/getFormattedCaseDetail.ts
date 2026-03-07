@@ -94,7 +94,11 @@ export const formatDocketEntry = (
   ).includes(preformattedEntry.eventCode);
   const isUnservable = DocketEntry.isUnservable(preformattedEntry);
   const isInProgress = computeIsInProgress({
-    formattedEntry: { ...preformattedEntry, isUnservable },
+    formattedEntry: {
+      ...preformattedEntry,
+      isCourtIssuedDocument,
+      isUnservable,
+    },
   });
   const qcWorkItemsUntouched = hasWorkItemInfo && !preformattedEntry.qcComplete;
 
