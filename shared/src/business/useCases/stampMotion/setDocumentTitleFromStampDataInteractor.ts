@@ -32,7 +32,7 @@ export const setDocumentTitleFromStampDataInteractor = ({
     strickenFromTrialSession,
   } = stampMotionForm;
 
-  let formattedDraftDocumentTitle = `${disposition.toUpperCase()}`;
+  let formattedDraftDocumentTitle = `${disposition?.toUpperCase()}`;
 
   if (disposition === MOTION_DISPOSITIONS.DENIED) {
     if (deniedAsMoot) {
