@@ -108,19 +108,24 @@ export const formatDocketEntry = (
         ? formatDateString(preformattedEntry.filingDate, FORMATS.ISO)
         : formatDateString(preformattedEntry.createdAt, FORMATS.ISO);
   const createdAtFormatted = formatDateString(createdAtISO, 'MMDDYY');
+  const certificateOfServiceDateFormatted =
+    preformattedEntry.certificateOfServiceDate
+      ? formatDateString(preformattedEntry.certificateOfServiceDate, 'MMDDYY')
+      : '';
+  const filingsAndProceedings = getFilingsAndProceedings({
+    ...preformattedEntry,
+    certificateOfServiceDateFormatted,
+  });
 
   return {
     ...preformattedEntry,
-    certificateOfServiceDateFormatted:
-      preformattedEntry.certificateOfServiceDate
-        ? formatDateString(preformattedEntry.certificateOfServiceDate, 'MMDDYY')
-        : '',
+    certificateOfServiceDateFormatted,
     createdAtFormatted,
     descriptionDisplay: applicationContext
       .getUtilities()
       .getDescriptionDisplay(preformattedEntry),
     eventCode: preformattedEntry.lodged ? 'MISCL' : preformattedEntry.eventCode,
-    filingsAndProceedings: getFilingsAndProceedings(preformattedEntry),
+    filingsAndProceedings,
     hasWorkItemInfo,
     isCourtIssuedDocument,
     isInProgress,
