@@ -17,6 +17,7 @@ import {
 } from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
+  FormattedDocketEntry,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
@@ -981,7 +982,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
           sealedToTooltip: 'anything',
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1003,7 +1004,7 @@ describe('formattedDocketEntries', () => {
           qcNeeded: true,
           className: 'fa-icon-blue',
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1024,7 +1025,7 @@ describe('formattedDocketEntries', () => {
           isInProgress: true,
           isPaper: false,
           qcNeeded: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1044,7 +1045,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           qcNeeded: true,
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1063,7 +1064,7 @@ describe('formattedDocketEntries', () => {
         formattedResult: {
           ...mockDocketEntry,
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 

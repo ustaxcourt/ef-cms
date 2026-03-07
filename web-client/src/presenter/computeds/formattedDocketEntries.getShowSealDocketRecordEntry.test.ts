@@ -1,16 +1,16 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { getShowSealDocketRecordEntry } from './formattedDocketEntries';
+import {
+  type FormattedDocketEntry,
+  getShowSealDocketRecordEntry,
+} from './formattedDocketEntries';
 
 describe('getShowSealDocketRecordEntry', () => {
   it('should return true when the entry is NOT an opinion', () => {
-    const mockNotOpinionEntry = {
+    const mockNotOpinionEntry: FormattedDocketEntry = {
       eventCode: 'NOT OPINION',
-    };
+    } as unknown as FormattedDocketEntry;
 
-    const result = getShowSealDocketRecordEntry({
-      applicationContext,
-      entry: mockNotOpinionEntry,
-    });
+    const result = getShowSealDocketRecordEntry({ entry: mockNotOpinionEntry });
 
     expect(result).toBe(true);
   });
@@ -19,14 +19,11 @@ describe('getShowSealDocketRecordEntry', () => {
     const { OPINION_EVENT_CODES_WITH_BENCH_OPINION } =
       applicationContext.getConstants();
 
-    const mockOpinionEntry = {
+    const mockOpinionEntry: FormattedDocketEntry = {
       eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
-    };
+    } as unknown as FormattedDocketEntry;
 
-    const result = getShowSealDocketRecordEntry({
-      applicationContext,
-      entry: mockOpinionEntry,
-    });
+    const result = getShowSealDocketRecordEntry({ entry: mockOpinionEntry });
 
     expect(result).toBe(false);
   });

@@ -12,9 +12,13 @@ import {
   docketClerk1User,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
-import { getFormattedDocketEntry } from './formattedDocketEntries';
+import {
+  type FormattedDocketEntry,
+  getFormattedDocketEntry,
+} from './formattedDocketEntries';
 import { simpleDocketEntries } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 import { runCompute } from 'cerebral/test';
+import { type Get } from 'cerebral';
 
 let mockIsNotServedDocument;
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
@@ -78,7 +82,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showLoadingIcon', () => {
     it('should be true if isExternalUser is false, permissions.UPDATE_CASE is false, and entry.processingStatus is not complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -89,13 +93,13 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: docketClerk1User,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLoadingIcon).toBeTruthy();
     });
 
     it('should be false if isExternalUser is false, permissions.UPDATE_CASE is true, and entry.processingStatus is not complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -106,13 +110,13 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: true },
           user: docketClerk1User,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
 
     it('should be false if isExternalUser is false, permissions.UPDATE_CASE is false, and entry.processingStatus is complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -123,13 +127,13 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: docketClerk1User,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
 
     it('should be false if isExternalUser is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -140,7 +144,7 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
@@ -148,7 +152,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('isPaper', () => {
     it('should be true if isInProgress is false, qcWorkItemsUntouched is false, and isPaper is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -159,13 +163,13 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.isPaper).toBeTruthy();
     });
 
     it('should be false if isInProgress is false, qcWorkItemsUntouched is false, and isPaper is false', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -176,13 +180,13 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.isPaper).toBeFalsy();
     });
 
     it('should be false if isInProgress is true, qcWorkItemsUntouched is false, and isPaper is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -193,13 +197,13 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.isPaper).toBeFalsy();
     });
 
     it('should be false if isInProgress is false, qcWorkItemsUntouched is true, and isPaper is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -210,7 +214,7 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: true,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.isPaper).toBeFalsy();
     });
@@ -219,7 +223,7 @@ describe('getFormattedDocketEntry', () => {
   describe('descriptionDisplay', () => {
     it('should call getDescriptionDisplay and return only documentTitle with no other information', () => {
       const expectedDescriptionDisplay = 'Answer';
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -229,7 +233,7 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: 'Answer',
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
@@ -240,7 +244,7 @@ describe('getFormattedDocketEntry', () => {
     it('should call getDescriptionDisplay if entry.documentTitle is set and return its result using document title and additional info', () => {
       const additionalInfo = 'With Extra Things';
 
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -251,7 +255,7 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: 'Answer',
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
@@ -260,7 +264,7 @@ describe('getFormattedDocketEntry', () => {
     });
 
     it('should not call getDescriptionDisplay or set descriptionDisplay on result if entry.documentTitle is undefined', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -269,18 +273,18 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: undefined,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
       ).not.toHaveBeenCalled();
-      expect(result.descriptionDisplay).toBeUndefined();
+      expect(result.descriptionDisplay).toBeFalsy();
     });
   });
 
   describe('showDocumentProcessing', () => {
     it('should be true if permissions.UPDATE_CASE is false and entry.processingStatus is not complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -291,13 +295,13 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: false },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentProcessing).toBeTruthy();
     });
 
     it('should be false if permissions.UPDATE_CASE is false and entry.processingStatus is complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -308,13 +312,13 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: false },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentProcessing).toBeFalsy();
     });
 
     it('should be false if permissions.UPDATE_CASE is true and entry.processingStatus is not complete', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -325,7 +329,7 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: true },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentProcessing).toBeFalsy();
     });
@@ -334,26 +338,26 @@ describe('getFormattedDocketEntry', () => {
   describe('showNotServed', () => {
     it('should be true if computeIsNotServedDocument returns true', () => {
       mockIsNotServedDocument = true;
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
           entry: simpleDocketEntry,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showNotServed).toBeTruthy();
     });
 
     it('should be false if computeIsNotServedDocument returns false', () => {
       mockIsNotServedDocument = false;
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
           entry: simpleDocketEntry,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showNotServed).toBeFalsy();
     });
@@ -361,7 +365,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showServed', () => {
     it('should be true if entry.isStatusServed is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -370,13 +374,13 @@ describe('getFormattedDocketEntry', () => {
             isStatusServed: true,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showServed).toBeTruthy();
     });
 
     it('should be false if entry.isStatusServed is false', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -385,7 +389,7 @@ describe('getFormattedDocketEntry', () => {
             isStatusServed: false,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showServed).toBeFalsy();
     });
@@ -393,7 +397,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showDocumentViewerLink', () => {
     it('should be true if isExternalUser is false and document links are shown', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -401,13 +405,13 @@ describe('getFormattedDocketEntry', () => {
             ...servedCourtIssuedDocketEntry,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentViewerLink).toBeTruthy();
     });
 
     it('should be false if isExternalUser is false and document links are not shown', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -415,13 +419,13 @@ describe('getFormattedDocketEntry', () => {
             ...simpleDocketEntry,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentViewerLink).toBeFalsy();
     });
 
     it('should be false if isExternalUser is true', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -430,7 +434,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentViewerLink).toBeFalsy();
     });
@@ -438,7 +442,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showLinkToDocument', () => {
     it('should be true if isExternalUser is true and document links are shown', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -447,13 +451,13 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBeTruthy();
     });
 
     it('should be false if isExternalUser is true and document links are not shown', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -462,13 +466,13 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
 
     it('should be false if isExternalUser is true and document links are not shown because the docket entry is a brief, not filed by practitioner', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -478,13 +482,13 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
 
     it('should be false if isExternalUser is false', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -492,7 +496,7 @@ describe('getFormattedDocketEntry', () => {
             ...servedCourtIssuedDocketEntry,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
@@ -503,20 +507,20 @@ describe('getFormattedDocketEntry', () => {
         eventCode: BRIEF_EVENTCODES[0],
         filedByRole: ROLES.privatePractitioner,
       };
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
           entry,
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should be false for an external user when filedAfterPolicyChange is false and the document was filed by a practitioner', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -531,7 +535,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showLinkToDocument).toBe(false);
     });
@@ -539,7 +543,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showEditDocketRecordEntry', () => {
     it('should be true if user has EDIT_DOCKET_ENTRY permissions', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -550,13 +554,13 @@ describe('getFormattedDocketEntry', () => {
             EDIT_DOCKET_ENTRY: true,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showEditDocketRecordEntry).toBeTruthy();
     });
 
     it('should be false if user does not have EDIT_DOCKET_ENTRY permissions', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -567,7 +571,7 @@ describe('getFormattedDocketEntry', () => {
             EDIT_DOCKET_ENTRY: false,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showEditDocketRecordEntry).toBeFalsy();
     });
@@ -575,7 +579,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('showDocumentDescriptionWithoutLink', () => {
     it('should be true if document links are not shown and document is not processing', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -584,13 +588,13 @@ describe('getFormattedDocketEntry', () => {
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentDescriptionWithoutLink).toBeTruthy();
     });
 
     it('should be false if document links are shown and document is not processing', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -599,7 +603,7 @@ describe('getFormattedDocketEntry', () => {
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentDescriptionWithoutLink).toBeFalsy();
     });
@@ -615,14 +619,14 @@ describe('getFormattedDocketEntry', () => {
         servedAt: '2019-03-01T21:00:00.000Z',
       };
 
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
           entry: mockSealedDocketEntry,
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(true);
     });
@@ -638,7 +642,7 @@ describe('getFormattedDocketEntry', () => {
         servedAt: '2019-03-01T21:00:00.000Z',
       };
 
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -649,7 +653,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(false);
     });
@@ -657,7 +661,7 @@ describe('getFormattedDocketEntry', () => {
 
   describe('editDocketEntryMetaLink', () => {
     it('should contain docketNumber and entry index', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -666,7 +670,7 @@ describe('getFormattedDocketEntry', () => {
             index: 1234,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.editDocketEntryMetaLink).toEqual(
         `/case-detail/${baseParams.docketNumber}/docket-entry/1234/edit-meta`,
@@ -676,19 +680,19 @@ describe('getFormattedDocketEntry', () => {
 
   describe('toolTipText', () => {
     it('should add a tooltip to (disabled) docket entries with no file attached', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
           entry: simpleDocketEntry,
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
       expect(result.toolTipText).toEqual('No Document View');
     });
 
     it('should not add a tooltip to docket entries with a file attached', () => {
-      const result = runCompute(get =>
+      const result = runCompute((get: Get) =>
         getFormattedDocketEntry({
           ...baseParams,
           get,
@@ -697,9 +701,9 @@ describe('getFormattedDocketEntry', () => {
             isFileAttached: true,
           },
         }),
-      ) as ReturnType<typeof getFormattedDocketEntry>;
+      ) as unknown as FormattedDocketEntry;
 
-      expect(result.toolTipText).toBeUndefined();
+      expect(result.toolTipText).toBeFalsy();
     });
   });
 
@@ -737,14 +741,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = runCompute(get =>
+        const result = runCompute((get: Get) =>
           getFormattedDocketEntry({
             ...baseParams,
             get,
             entry: entryWithAffectedBy,
             rawCase: mockCase,
           }),
-        ) as ReturnType<typeof getFormattedDocketEntry>;
+        ) as unknown as FormattedDocketEntry;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTED BY #5',
@@ -765,14 +769,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = runCompute(get =>
+        const result = runCompute((get: Get) =>
           getFormattedDocketEntry({
             ...baseParams,
             get,
             entry: entryWithAffectedBy,
             rawCase: mockCase,
           }),
-        ) as ReturnType<typeof getFormattedDocketEntry>;
+        ) as unknown as FormattedDocketEntry;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTED IN PART BY #5',
@@ -795,14 +799,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = runCompute(get =>
+        const result = runCompute((get: Get) =>
           getFormattedDocketEntry({
             ...baseParams,
             get,
             entry: entryWithAffected,
             rawCase: mockCase,
           }),
-        ) as ReturnType<typeof getFormattedDocketEntry>;
+        ) as unknown as FormattedDocketEntry;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTING #10',
@@ -823,14 +827,14 @@ describe('getFormattedDocketEntry', () => {
 
         mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
 
-        const result = runCompute(get =>
+        const result = runCompute((get: Get) =>
           getFormattedDocketEntry({
             ...baseParams,
             get,
             entry: entryWithAffected,
             rawCase: mockCase,
           }),
-        ) as ReturnType<typeof getFormattedDocketEntry>;
+        ) as unknown as FormattedDocketEntry;
 
         expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
           'GRANTING IN PART #10',

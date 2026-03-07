@@ -18,7 +18,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { type ClientApplicationContext } from '@web-client/applicationContext';
+import { type ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
+import { type ServerApplicationContext } from '@web-api/applicationContext';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -52,112 +54,109 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-export const formatDocketEntry = (applicationContext, docketEntry) => {
-  const formattedEntry = cloneDeep(docketEntry);
+export type FormattedCaseDetailDocketEntry = RawDocketEntry & {
+  certificateOfServiceDateFormatted: string;
+  createdAtFormatted: string;
+  descriptionDisplay: string;
+  filingsAndProceedings: string;
+  hasWorkItemInfo: boolean;
+  isCourtIssuedDocument: boolean;
+  isInProgress: boolean;
+  isNotServedDocument: boolean;
+  isPetition: boolean;
+  isStatusServed: boolean;
+  isStipDecision: boolean;
+  isTranscript: boolean;
+  isUnservable: boolean;
+  qcNeeded: boolean;
+  qcWorkItemsCompleted: boolean;
+  qcWorkItemsUntouched: boolean;
+  sealedToTooltip: string;
+  servedAtFormatted: string;
+  showLegacySealed: boolean;
+  showServedAt: boolean;
+  signedAtFormatted: string;
+  signedAtFormattedTZ: string;
+  sortingFilingDate: string;
+};
 
-  formattedEntry.servedAtFormatted = formatDateString(
-    formattedEntry.servedAt,
-    'MMDDYY',
-  );
-
-  formattedEntry.signedAtFormatted = formatDateString(
-    formattedEntry.signedAt,
-    'MMDDYY',
-  );
-
-  formattedEntry.signedAtFormattedTZ = formatDateString(
-    formattedEntry.signedAt,
-    'DATE_TIME_TZ',
-  );
-
-  if (formattedEntry.certificateOfServiceDate) {
-    formattedEntry.certificateOfServiceDateFormatted = formatDateString(
-      formattedEntry.certificateOfServiceDate,
-      'MMDDYY',
-    );
-  }
-  if (formattedEntry.lodged) {
-    formattedEntry.eventCode = 'MISCL';
-  }
-  formattedEntry.showLegacySealed = !!formattedEntry.isLegacySealed;
-  formattedEntry.showServedAt = !!formattedEntry.servedAt;
-  formattedEntry.isStatusServed = !!formattedEntry.servedAt;
-  formattedEntry.isPetition =
-    formattedEntry.documentType === 'Petition' ||
-    formattedEntry.eventCode === 'P';
-
-  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+export const formatDocketEntry = (
+  applicationContext:
+    | ServerApplicationContext
+    | ClientApplicationContext
+    | ClientPublicApplicationContext,
+  docketEntry: RawDocketEntry,
+): FormattedCaseDetailDocketEntry => {
+  const preformattedEntry = cloneDeep(docketEntry);
+  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(preformattedEntry);
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
-  ).includes(formattedEntry.eventCode);
-
-  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(formattedEntry);
-
-  formattedEntry.qcWorkItemsCompleted =
-    !hasWorkItemInfo || !!formattedEntry.qcComplete;
-
-  formattedEntry.isUnservable = DocketEntry.isUnservable(formattedEntry);
-
-  formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
-
-  formattedEntry.isNotServedDocument = computeIsNotServedDocument({
-    formattedEntry,
+  ).includes(preformattedEntry.eventCode);
+  const isUnservable = DocketEntry.isUnservable(preformattedEntry);
+  const isInProgress = computeIsInProgress({
+    formattedEntry: { ...preformattedEntry, isUnservable },
   });
+  const qcWorkItemsUntouched = hasWorkItemInfo && !preformattedEntry.qcComplete;
 
-  formattedEntry.isTranscript =
-    formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
+  const createdAtISO =
+    isCourtIssuedDocument &&
+    !preformattedEntry.servedAt &&
+    !isUnservable &&
+    preformattedEntry.isOnDocketRecord
+      ? ''
+      : preformattedEntry.isOnDocketRecord
+        ? formatDateString(preformattedEntry.filingDate, FORMATS.ISO)
+        : formatDateString(preformattedEntry.createdAt, FORMATS.ISO);
+  const createdAtFormatted = formatDateString(createdAtISO, 'MMDDYY');
 
-  formattedEntry.isStipDecision =
-    formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
-
-  formattedEntry.qcWorkItemsUntouched =
-    hasWorkItemInfo && !formattedEntry.qcComplete;
-
-  formattedEntry.qcNeeded =
-    formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
-
-  if (
-    formattedEntry.isCourtIssuedDocument &&
-    !formattedEntry.servedAt &&
-    !formattedEntry.isUnservable &&
-    formattedEntry.isOnDocketRecord
-  ) {
-    formattedEntry.createdAtFormatted = '';
-  } else if (formattedEntry.isOnDocketRecord) {
-    formattedEntry.createdAtFormatted = applicationContext
+  return {
+    ...preformattedEntry,
+    certificateOfServiceDateFormatted:
+      preformattedEntry.certificateOfServiceDate
+        ? formatDateString(preformattedEntry.certificateOfServiceDate, 'MMDDYY')
+        : '',
+    createdAtFormatted,
+    descriptionDisplay: applicationContext
       .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
-  } else {
-    formattedEntry.createdAtFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
-  }
-
-  formattedEntry.filingsAndProceedings =
-    getFilingsAndProceedings(formattedEntry);
-
-  formattedEntry.descriptionDisplay = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(formattedEntry);
-
-  if (formattedEntry.lodged) {
-    formattedEntry.eventCode = 'MISCL';
-  }
-
-  if (formattedEntry.isSealed) {
-    formattedEntry.sealedToTooltip = applicationContext
-      .getUtilities()
-      .getSealedDocketEntryTooltip(applicationContext, formattedEntry);
-  } else if (formattedEntry.isLegacySealed) {
-    formattedEntry.sealedToTooltip = 'Sealed in Blackstone';
-  }
-
-  return formattedEntry;
+      .getDescriptionDisplay(preformattedEntry),
+    eventCode: preformattedEntry.lodged ? 'MISCL' : preformattedEntry.eventCode,
+    filingsAndProceedings: getFilingsAndProceedings(preformattedEntry),
+    hasWorkItemInfo,
+    isCourtIssuedDocument,
+    isInProgress,
+    isNotServedDocument: computeIsNotServedDocument({
+      formattedEntry: preformattedEntry,
+    }),
+    isPetition:
+      preformattedEntry.documentType === 'Petition' ||
+      preformattedEntry.eventCode === 'P',
+    isStatusServed: !!preformattedEntry.servedAt,
+    isStipDecision:
+      preformattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE,
+    isTranscript: preformattedEntry.eventCode === TRANSCRIPT_EVENT_CODE,
+    isUnservable,
+    qcNeeded: qcWorkItemsUntouched && !isInProgress,
+    qcWorkItemsCompleted: !hasWorkItemInfo || !!preformattedEntry.qcComplete,
+    qcWorkItemsUntouched,
+    sealedToTooltip: preformattedEntry.isLegacySealed
+      ? 'Sealed in Blackstone'
+      : preformattedEntry.isSealed
+        ? applicationContext
+            .getUtilities()
+            .getSealedDocketEntryTooltip(applicationContext, preformattedEntry)
+        : '',
+    servedAtFormatted: formatDateString(preformattedEntry.servedAt, 'MMDDYY'),
+    showLegacySealed: !!preformattedEntry.isLegacySealed,
+    showServedAt: !!preformattedEntry.servedAt,
+    signedAtFormatted: formatDateString(preformattedEntry.signedAt, 'MMDDYY'),
+    signedAtFormattedTZ: formatDateString(
+      preformattedEntry.signedAt,
+      'DATE_TIME_TZ',
+    ),
+    sortingFilingDate: createdAtISO
+      ? formatDateString(createdAtISO, 'YYYYMMDD_NUMERIC')
+      : '',
+  };
 };
 
 export const getFilingsAndProceedings = formattedDocketEntry => {
