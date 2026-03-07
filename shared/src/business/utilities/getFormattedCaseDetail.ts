@@ -123,7 +123,7 @@ export const formatDocketEntry = (
     createdAtFormatted,
     descriptionDisplay: applicationContext
       .getUtilities()
-      .getDescriptionDisplay(preformattedEntry),
+      .getDescriptionDisplay({ ...preformattedEntry, filingsAndProceedings }),
     eventCode: preformattedEntry.lodged ? 'MISCL' : preformattedEntry.eventCode,
     filingsAndProceedings,
     hasWorkItemInfo,
