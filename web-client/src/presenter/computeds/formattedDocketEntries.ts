@@ -341,9 +341,11 @@ export const getFormattedDocketEntry = ({
 
   return {
     ...preFormattedDocketEntry,
-    descriptionDisplay: applicationContext
-      .getUtilities()
-      .getDescriptionDisplay(preFormattedDocketEntry),
+    descriptionDisplay: preFormattedDocketEntry.documentTitle
+      ? applicationContext
+          .getUtilities()
+          .getDescriptionDisplay(preFormattedDocketEntry)
+      : '',
     iconsToDisplay: setupIconsToDisplay({
       formattedResult: preFormattedDocketEntry,
       isExternalUser,
