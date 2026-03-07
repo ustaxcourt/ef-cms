@@ -5,23 +5,33 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
+type ElectronicServiceConsentCheckboxProps = {
   bind: string;
   contactType: string;
 };
+const electronicServiceConsentCheckboxProps =
+  cerebralProps as unknown as ElectronicServiceConsentCheckboxProps;
+const electronicServiceConsentCheckboxDeps = {
+  bind: electronicServiceConsentCheckboxProps.bind,
+  contactType: electronicServiceConsentCheckboxProps.contactType,
+  data: state[electronicServiceConsentCheckboxProps.bind],
+  updateFormValueSequence: sequences.updateFormValueSequence,
+};
 
-export const ElectronicServiceConsentCheckbox = connect(
-  {
-    bind: props.bind,
-    contactType: props.contactType,
-    data: state[props.bind],
-    updateFormValueSequence: sequences.updateFormValueSequence,
-  },
+export const ElectronicServiceConsentCheckbox = connect<
+  ElectronicServiceConsentCheckboxProps,
+  typeof electronicServiceConsentCheckboxDeps
+>(
+  electronicServiceConsentCheckboxDeps,
   function ElectronicServiceConsentCheckbox({
     contactType,
     data,
     updateFormValueSequence,
-  }) {
+  }: {
+    contactType: string;
+    data: any;
+    updateFormValueSequence: Function;
+  }): React.JSX.Element {
     return (
       <FormGroup
         className="max-width-fit-content margin-bottom-4"

@@ -14,6 +14,7 @@ type NonstandardFormProps = {
   helper: string;
   level: string;
   namespace?: string;
+  showIndex?: boolean;
   updateSequence: string;
   validateSequence: string;
   validationErrors: string;
@@ -45,10 +46,10 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
     helper,
     level,
     namespace,
+    showIndex = false,
     updateSequence,
     validateSequence,
     validationErrors,
-    showIndex = false
   }: {
     caseDetail: { procedureType?: string };
     DATE_FORMATS: { ISO: string };
@@ -58,10 +59,10 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
     helper: Record<string, any>;
     level: string;
     namespace: string;
+    showIndex?: boolean;
     updateSequence: Function | RunnableSequence;
     validateSequence: Function | RunnableSequence;
     validationErrors: Record<string, any>;
-    showIndex?: boolean
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');
