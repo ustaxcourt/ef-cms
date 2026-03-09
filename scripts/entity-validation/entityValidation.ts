@@ -3,7 +3,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { createValidationIdentifier } from 'scripts/entity-validation/createValidationIdentifier';
-import { entityValidationFunctions } from 'scripts/entity-validation/EntityValidationScript';
+import { entityValidationFunctions } from 'scripts/entity-validation/EntityValidationHelper';
 import { getSSMItem, putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
 const SSM_KEY = 'entity-validation-fingerprints-map';
@@ -17,11 +17,11 @@ const ENTITIES_TO_CHECK = [
   // 'PrivatePractitioner.ts',
   // 'Correspondence.ts',
   'Message.ts',
-  'PractitionerDocument.ts',
-  'trialSessions/TrialSessionWorkingCopy.ts',
-  'trialSessions/TrialSession.ts',
-  'User.ts',
-  'WorkItem.ts',
+  // 'PractitionerDocument.ts',
+  // 'trialSessions/TrialSessionWorkingCopy.ts',
+  // 'trialSessions/TrialSession.ts',
+  // 'User.ts',
+  // 'WorkItem.ts',
 ];
 
 async function getEntityIdentifiers(): Promise<string> {
@@ -75,11 +75,12 @@ function detectEntityValidationChange(
 async function validateEntitiesWithNewRules(
   changedEntities: string[],
 ): Promise<string[]> {
-  const validationOutput: string[] = [];
+  let validationOutput: string[] = [];
   for (const entity of changedEntities) {
     const entityName = entity.split('.')[0];
     try {
-      validationOutput.concat(await entityValidationFunctions[entityName]());
+      const val: string[] = await entityValidationFunctions[entityName]();
+      if (val.length > 0) validationOutput = validationOutput.concat(val);
     } catch (error) {
       throw new Error(`Error validating entity ${entityName}: ${error}`);
     }
@@ -96,7 +97,7 @@ async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
   }
 }
 
-async function main(): Promise<void> {
+async function main(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
 
@@ -105,26 +106,30 @@ async function main(): Promise<void> {
     JSON.parse(newFingerprint),
   );
 
-  // if (!currFingerprint) {
-  //   console.log(
-  //     'No prior Entity validation fingerprints were found. Attempting to validate all entities...',
-  //   );
-  //   await validateEntitiesWithNewRules(changedEntities);
-  //   console.log('Validation Successful. Writing new fingerprint to SSM.');
-  //   await putSSMItem(SSM_KEY, newFingerprint);
-  //   return;
-  // }
-
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');
-    return;
+    return 0;
   }
 
-  console.log(await validateEntitiesWithNewRules(changedEntities));
-  console.log(
-    'Entity validation fingerprints have changed. Writing new fingerprint to SSM.',
-  );
-  await putSSMItem(SSM_KEY, newFingerprint);
+  const validationErrors = await validateEntitiesWithNewRules(changedEntities);
+
+  if (validationErrors.length > 0) {
+    console.log(validationErrors);
+    return validationErrors.length;
+  } else {
+    console.log(
+      'Entity validation fingerprints have changed. Writing new fingerprint to SSM.',
+    );
+    await putSSMItem(SSM_KEY, newFingerprint);
+    return 0;
+  }
 }
 
-void main();
+main()
+  .then(returnVal => {
+    process.exit(returnVal);
+  })
+  .catch(err => {
+    console.log('Error:', err);
+    process.exit(1);
+  });

@@ -127,7 +127,7 @@ const mapEntityNameToClass = (
 
 const performValidation = async (entityName: string) => {
   const spinner = createSpinner(`Starting ${entityName} Entity Validation...`);
-  const validationErrors: any[] = [];
+  const validationErrors: string[] = [];
   try {
     const entityRecords = await entityHelperFunctions[entityName]();
     for (const record of entityRecords) {
@@ -171,16 +171,15 @@ const getWorkItemsAndValidate = async () => {
 };
 
 const getCasesAndValidate = async () => {
+  const validationErrors: string[] = [];
   try {
     console.log('Starting Case Entity Validation...');
     const docketNumbers = await getAllDocketNumbers();
 
     const chunkSize = 10000;
     for (let i = 0; i < docketNumbers.length; i += chunkSize) {
-      const spinner = createSpinner('Starting validation...');
-
-      spinner.update(
-        `Validating Case entity: Processing cases ${i + 1} - ${Math.min(i + chunkSize, docketNumbers.length)}`,
+      const spinner = createSpinner(
+        `Starting validation of cases ${i}-${i + chunkSize}...`,
       );
       const chunk = docketNumbers.slice(i, i + chunkSize);
       // do whatever
@@ -190,8 +189,11 @@ const getCasesAndValidate = async () => {
         const caseEntity = new Case(caseItem, { authorizedUser: undefined });
         const errors = caseEntity.getFormattedValidationErrors();
         if (errors) {
-          spinner.update(
+          validationErrors.push(
             `Validation errors for case ${caseItem.docketNumber}: ${errors}`,
+          );
+          spinner.update(
+            `Starting validation of cases ${i * chunkSize}-${(i + 1) * chunkSize}. ${validationErrors.length} errors found...`,
           );
         }
       });
@@ -201,6 +203,7 @@ const getCasesAndValidate = async () => {
   } catch (error) {
     console.error('Error getting cases:', error);
   }
+  return validationErrors;
 };
 
 const getTrialSessionWorkingCopiesAndValidate = async () => {
