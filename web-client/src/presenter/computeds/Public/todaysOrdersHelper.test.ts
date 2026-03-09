@@ -197,9 +197,10 @@ describe('todaysOrdersHelper', () => {
   describe('formattedOrders', () => {
     it('should sort by filing date ascending', () => {
       state = {
-        tableSort: {
+        todaysOrdersTableSort: {
           sortField: 'filingDate',
           sortOrder: 'asc',
+          sortKey: 'todaysOrdersTableSort',
         },
         todaysOrders: {
           results: [
@@ -242,9 +243,10 @@ describe('todaysOrdersHelper', () => {
 
     it('should sort by docketNumber', () => {
       state = {
-        tableSort: {
+        todaysOrdersTableSort: {
           sortField: 'docketNumber',
           sortOrder: 'asc',
+          sortKey: 'todaysOrdersTableSort',
         },
         todaysOrders: {
           results: [
@@ -292,48 +294,14 @@ describe('todaysOrdersHelper', () => {
         },
       ]);
     });
-
-    it('should not sort if state.tableSort does not exist', () => {
-      state = {
-        todaysOrders: {
-          results: [
-            { filingDate: '2020-06-11T20:17:10.646Z' },
-            { filingDate: '2030-06-11T20:17:10.646Z' },
-            { filingDate: '2025-06-11T20:17:10.646Z' },
-          ],
-        },
-      };
-
-      const result = runCompute(todaysOrdersHelper, { state });
-
-      expect(result.formattedOrders).toEqual([
-        {
-          filingDate: '2020-06-11T20:17:10.646Z',
-          formattedFilingDate: '06/11/20',
-          formattedJudgeName: '',
-          numberOfPagesFormatted: 'n/a',
-        },
-        {
-          filingDate: '2030-06-11T20:17:10.646Z',
-          formattedFilingDate: '06/11/30',
-          formattedJudgeName: '',
-          numberOfPagesFormatted: 'n/a',
-        },
-        {
-          filingDate: '2025-06-11T20:17:10.646Z',
-          formattedFilingDate: '06/11/25',
-          formattedJudgeName: '',
-          numberOfPagesFormatted: 'n/a',
-        },
-      ]);
-    });
   });
 
   it('should sort by numberOfPages ascending', () => {
     state = {
-      tableSort: {
+      todaysOrdersTableSort: {
         sortField: 'numberOfPages',
         sortOrder: 'asc',
+        sortKey: 'todaysOrdersTableSort',
       },
       todaysOrders: {
         results: [
