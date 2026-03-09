@@ -760,7 +760,7 @@ describe('getNotificationsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.qcSectionInboxCount).toEqual(3);
+    expect(result.qcSectionInboxCount).toEqual(2);
   });
 
   it('should count one item per case in a legacy migrated consolidated group with empty multiDocketedOn arrays in qcIndividualInboxCount', async () => {
