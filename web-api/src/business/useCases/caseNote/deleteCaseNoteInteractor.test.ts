@@ -59,26 +59,16 @@ describe('deleteCaseNoteInteractor', () => {
       '09c66c94-7480-4915-8f10-2f2e6e0bf4ad',
     );
 
-    let error;
-    let result;
+    await deleteCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockUser,
+    );
 
-    try {
-      result = await deleteCaseNoteInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-        mockUser,
-      );
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
-    expect(result).toBeDefined();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.caseNote).not.toBeDefined();
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

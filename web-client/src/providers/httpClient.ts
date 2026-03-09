@@ -1,6 +1,9 @@
 import { X_FORCE_REFRESH } from '@shared/utils/headers';
 import axios, { AxiosInstance } from 'axios';
 
+const MAX_RESPONSE_SIZE_BYTES =
+  Number(process.env.MAX_RESPONSE_SIZE_BYTES) || 3 * 1024 * 1024; // 3MB default
+
 let axiosClient: AxiosInstance;
 
 export const getHttpClient = (
@@ -12,6 +15,31 @@ export const getHttpClient = (
   */
   const stackError = new Error(); // Look at the stack trace for more information on the error.
   axiosClient = axiosClient || axios.create();
+
+  if (process.env.ENV === 'local') {
+    axiosClient.interceptors.response.use(response => {
+      const contentLength = response.headers['content-length'];
+      const responseSize = contentLength
+        ? Number(contentLength)
+        : JSON.stringify(response.data).length;
+
+      if (responseSize > MAX_RESPONSE_SIZE_BYTES) {
+        const responseSizeMB = (responseSize / (1024 * 1024)).toFixed(2);
+        const maxSizeMB = (MAX_RESPONSE_SIZE_BYTES / (1024 * 1024)).toFixed(2);
+        console.error(
+          `Response size ${responseSizeMB} MB exceeds maximum allowed size of ${maxSizeMB} MB. This request will fail in production.`,
+          stackError.stack,
+        );
+        const error = new Error(
+          `Response size ${responseSizeMB} MB exceeds maximum allowed size of ${maxSizeMB} MB. This request will fail in production.`,
+        );
+        error.stack = stackError.stack;
+        throw error;
+      }
+
+      return response;
+    });
+  }
 
   axiosClient.interceptors.response.use(undefined, async error => {
     const shouldForceRefresh =

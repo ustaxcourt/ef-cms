@@ -2,6 +2,7 @@ import { appendFormAndOverwriteOrderFileAction } from '../actions/CourtIssuedOrd
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getCreateOrderSelectedCases } from '@web-client/presenter/actions/getCreateOrderSelectedCases';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
@@ -31,7 +32,7 @@ import { validateCourtOrderAction } from '../actions/CourtIssuedOrder/validateCo
 const onFileUploadedSuccess = [
   getCreateOrderSelectedCases,
   submitCourtIssuedOrderAction,
-  setDefaultDraftDocumentIdAction,
+  getCaseAction,
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,

@@ -45,8 +45,8 @@ describe('updateOtherStatisticsInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await updateOtherStatisticsInteractor(
+  it('should call updateCase with the updated case statistics', async () => {
+    await updateOtherStatisticsInteractor(
       applicationContext,
       {
         damages: 1234,
@@ -55,10 +55,15 @@ describe('updateOtherStatisticsInteractor', () => {
       },
       authorizedUser,
     );
-    expect(result).toMatchObject({
-      damages: 1234,
-      litigationCosts: 5678,
-    });
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          damages: 1234,
+          litigationCosts: 5678,
+        }),
+      }),
+    );
   });
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
