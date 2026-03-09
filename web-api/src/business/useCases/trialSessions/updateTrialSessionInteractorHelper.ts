@@ -217,7 +217,7 @@ export const getPaperServicePdfName = ({
   } else if (shouldSetNoticeOfTrialSessionLocationChange) {
     return 'Notice of Change of Trial Location';
   } else if (shouldSetNoticeOfTrialSessionStartDateChange) {
-    return 'Notice of Change of Trial Start Date';
+    return 'Notice of Change of Trial Date';
   } else {
     return 'Notice of Change';
   }

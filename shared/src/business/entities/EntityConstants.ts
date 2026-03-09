@@ -962,8 +962,8 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'NCTL',
   },
   noticeOfChangeOfTrialStartDate: {
-    documentTitle: 'Notice of Change of Trial Start Date',
-    documentType: 'Notice of Change of Trial Start Date',
+    documentTitle: 'Notice of Change of Trial Date',
+    documentType: 'Notice of Change of Trial Date',
     eventCode: 'NOT',
   },
   noticeOfTrial: {

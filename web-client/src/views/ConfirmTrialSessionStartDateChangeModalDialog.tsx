@@ -36,7 +36,7 @@ function StartDateComparison({
   const isCurrent = headerLabel.includes('Previous');
   return (
     <div
-      className=""
+      className="tw:w-50"
       data-testid={
         isCurrent ? 'current-start-date-info' : 'updated-start-date-info'
       }
@@ -77,11 +77,11 @@ export const ConfirmTrialSessionStartDateChangeModalDialog = connect<
           </div>
           <div className="tw:flex tw:flex-wrap tw:gap-4 tw:pb-3">
             <StartDateComparison
-              headerLabel="Previous start date"
+              headerLabel="Previous date"
               startDateInfo={currentTrialSessionStartDate!}
             />
             <StartDateComparison
-              headerLabel="New start date"
+              headerLabel="New date"
               startDateInfo={updatedTrialSessionStartDate!}
             />
           </div>
