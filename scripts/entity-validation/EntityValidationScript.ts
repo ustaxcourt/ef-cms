@@ -159,15 +159,15 @@ const performValidation = async (entityName: string) => {
 
 /* VALIDATION FUNCTIONS */
 const getTrialSessionsAndValidate = async () => {
-  await performValidation('TrialSession');
+  return performValidation('TrialSession');
 };
 
 const getMessagesAndValidate = async () => {
-  await performValidation('Message');
+  return performValidation('Message');
 };
 
 const getWorkItemsAndValidate = async () => {
-  await performValidation('WorkItem');
+  return performValidation('WorkItem');
 };
 
 const getCasesAndValidate = async () => {
@@ -204,15 +204,15 @@ const getCasesAndValidate = async () => {
 };
 
 const getTrialSessionWorkingCopiesAndValidate = async () => {
-  await performValidation('TrialSessionWorkingCopy');
+  return performValidation('TrialSessionWorkingCopy');
 };
 
 const getUsersAndValidate = async () => {
-  await performValidation('User');
+  return performValidation('User');
 };
 
 const getPractitionerDocumentsAndValidate = async () => {
-  await performValidation('PractitionerDocument');
+  return performValidation('PractitionerDocument');
 };
 
 export const entityValidationFunctions = {

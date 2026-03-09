@@ -74,16 +74,18 @@ function detectEntityValidationChange(
 
 async function validateEntitiesWithNewRules(
   changedEntities: string[],
-): Promise<void> {
+): Promise<string[]> {
+  const validationOutput: string[] = [];
   for (const entity of changedEntities) {
     const entityName = entity.split('.')[0];
     try {
-      await entityValidationFunctions[entityName]();
+      validationOutput.concat(await entityValidationFunctions[entityName]());
     } catch (error) {
       throw new Error(`Error validating entity ${entityName}: ${error}`);
     }
   }
   console.log('All changed entities successfully validated!');
+  return validationOutput;
 }
 
 async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
@@ -103,22 +105,22 @@ async function main(): Promise<void> {
     JSON.parse(newFingerprint),
   );
 
-  if (!currFingerprint) {
-    console.log(
-      'No prior Entity validation fingerprints were found. Attempting to validate all entities...',
-    );
-    await validateEntitiesWithNewRules(changedEntities);
-    console.log('Validation Successful. Writing new fingerprint to SSM.');
-    await putSSMItem(SSM_KEY, newFingerprint);
-    return;
-  }
+  // if (!currFingerprint) {
+  //   console.log(
+  //     'No prior Entity validation fingerprints were found. Attempting to validate all entities...',
+  //   );
+  //   await validateEntitiesWithNewRules(changedEntities);
+  //   console.log('Validation Successful. Writing new fingerprint to SSM.');
+  //   await putSSMItem(SSM_KEY, newFingerprint);
+  //   return;
+  // }
 
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');
     return;
   }
 
-  await validateEntitiesWithNewRules(changedEntities);
+  console.log(await validateEntitiesWithNewRules(changedEntities));
   console.log(
     'Entity validation fingerprints have changed. Writing new fingerprint to SSM.',
   );
