@@ -1,3 +1,6 @@
+<details><summary>Dependency Updates - Week of 2026-03-09</summary>
+- update printable trial session working copy without case notes 2 pdf
+</details>
 <details><summary>Dependency Updates - Week of 2026-03-02</summary>
 
 ## Local
