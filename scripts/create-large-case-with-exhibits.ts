@@ -142,13 +142,13 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
     await applicationContextPetitioner.getPersistenceGateway().uploadDocument({
       applicationContext: applicationContextPetitioner,
       pdfData: pdfBuffer,
-      pdfName: petitionFileId,
+      key: petitionFileId,
     });
 
     await applicationContextPetitioner.getPersistenceGateway().uploadDocument({
       applicationContext: applicationContextPetitioner,
       pdfData: pdfBuffer,
-      pdfName: stinFileId,
+      key: stinFileId,
     });
 
     console.log(`✓ PDF files uploaded (${isLocal ? 's3rver' : 'S3'})`);
@@ -265,7 +265,7 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
           applicationContextPetitioner.getPersistenceGateway().uploadDocument({
             applicationContext: applicationContextPetitioner,
             pdfData: pdfBuffer,
-            pdfName: exhibitFileId,
+            key: exhibitFileId,
           }),
         );
       }

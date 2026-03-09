@@ -19,6 +19,7 @@ import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postg
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { Message } from '../entities/Message';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
