@@ -48,7 +48,7 @@ export const todaysOrdersHelper = (
     };
   });
 
-  const tableSort = get(state.tableSort);
+  const tableSort = get(state.todaysOrdersTableSort);
 
   const sortedFormattedOrders = formattedOrders.sort((orderA, orderB) => {
     if (!tableSort) return 0;
