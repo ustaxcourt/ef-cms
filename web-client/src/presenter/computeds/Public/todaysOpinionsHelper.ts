@@ -31,38 +31,40 @@ export const todaysOpinionsHelper = (
     numberOfPagesFormatted: opinion.numberOfPages ?? 'n/a',
   }));
 
-  const tableSort = get(state.tableSort);
+  const tableSort = get(state.todaysOpinionsTableSort);
 
-  const sortedFormattedOpinions = formattedOpinions.sort((opinionA, opinionB) => {
-    if (!tableSort) return 0;
+  const sortedFormattedOpinions = formattedOpinions.sort(
+    (opinionA, opinionB) => {
+      if (!tableSort) return 0;
 
-    let sortNumber = 0;
+      let sortNumber = 0;
 
-    const compare1 = tableSort.sortOrder === DESCENDING ? opinionB : opinionA;
-    const compare2 = tableSort.sortOrder === DESCENDING ? opinionA : opinionB;
+      const compare1 = tableSort.sortOrder === DESCENDING ? opinionB : opinionA;
+      const compare2 = tableSort.sortOrder === DESCENDING ? opinionA : opinionB;
 
-    if (tableSort.sortField === 'docketNumber') {
-      sortNumber = Case.docketNumberSort(
-        compare1.docketNumber,
-        compare2.docketNumber,
-      );
-    } else if (tableSort.sortField === 'numberOfPages') {
-      const pages1 = Number(compare1.numberOfPages) || 0;
-      const pages2 = Number(compare2.numberOfPages) || 0;
-      sortNumber = pages1 - pages2;
-    } else if (
-      SUPPORTED_SORT_FIELDS_FOR_TODAYS_OPINIONS.includes(tableSort.sortField)
-    ) {
-      const compare1SortField = compare1[tableSort.sortField] || '';
-      const compare2SortField = compare2[tableSort.sortField] || '';
+      if (tableSort.sortField === 'docketNumber') {
+        sortNumber = Case.docketNumberSort(
+          compare1.docketNumber,
+          compare2.docketNumber,
+        );
+      } else if (tableSort.sortField === 'numberOfPages') {
+        const pages1 = Number(compare1.numberOfPages) || 0;
+        const pages2 = Number(compare2.numberOfPages) || 0;
+        sortNumber = pages1 - pages2;
+      } else if (
+        SUPPORTED_SORT_FIELDS_FOR_TODAYS_OPINIONS.includes(tableSort.sortField)
+      ) {
+        const compare1SortField = compare1[tableSort.sortField] || '';
+        const compare2SortField = compare2[tableSort.sortField] || '';
 
-      sortNumber = compare1SortField
-        .toString()
-        .localeCompare(compare2SortField.toString());
-    }
+        sortNumber = compare1SortField
+          .toString()
+          .localeCompare(compare2SortField.toString());
+      }
 
-    return sortNumber;
-  });
+      return sortNumber;
+    },
+  );
 
   return {
     formattedCurrentDate,
