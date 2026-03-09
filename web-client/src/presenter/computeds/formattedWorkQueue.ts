@@ -68,14 +68,14 @@ export const formattedWorkQueue = (
   if (
     (workQueueToDisplay.queue === 'section' ||
       workQueueToDisplay.queue === 'my') &&
-    workQueueToDisplay.box === 'inbox'
+    (workQueueToDisplay.box === 'inbox' || workQueueToDisplay.box === 'outbox')
   ) {
-    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-    const consolidatedGroups = new Map<
+    const docketEntryIdGroups = new Map<
       string,
       RawWorkItemWithCaseAndDocketEntryInfo[]
     >();
-    const docketEntryIdGroups = new Map<
+    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+    const consolidatedGroups = new Map<
       string,
       RawWorkItemWithCaseAndDocketEntryInfo[]
     >();
@@ -105,15 +105,23 @@ export const formattedWorkQueue = (
     }
 
     const consolidatedResult: Array<
-      RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
+      RawWorkItemWithCaseAndDocketEntryInfo & {
+        groupedCases?: {
+          docketNumber: string;
+          docketNumberWithSuffix: string;
+          inLeadCase: boolean;
+        }[];
+      }
     > = [];
 
     for (const group of consolidatedGroups.values()) {
-      const groupedCases = group.map(item => ({
-        docketNumber: item.docketNumber,
-        docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
-        inLeadCase: isLeadCase(item),
-      }));
+      const groupedCases = Case.sortByDocketNumber(
+        group.map(item => ({
+          docketNumber: item.docketNumber,
+          docketNumberWithSuffix: item.docketNumberWithSuffix,
+          inLeadCase: isLeadCase(item),
+        })),
+      );
 
       const leadOrLowestNumber =
         Case.sortByDocketNumber(groupedCases)[0].docketNumber;
@@ -581,5 +589,9 @@ export type FormattedWorkItemWithCaseInfo =
     showUnassignedIcon: boolean;
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
-    groupedCases?: any[];
+    groupedCases?: {
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      inLeadCase: boolean;
+    }[];
   };

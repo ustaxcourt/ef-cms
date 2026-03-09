@@ -1,14 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Takes the selected work items in the store and invoke the assignWorkItems so that the assignee is attached to each
- * of the work items.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
- * @param {object} providers.store the cerebral store containing the selectedWorkItems, workQueue, assigneeId, assigneeName this method uses
- * @param {Function} providers.get the cerebral get helper function
- * @returns {Promise} async action
- */
 export const assignSelectedWorkItemsAction = async ({
   applicationContext,
   get,
@@ -19,14 +10,35 @@ export const assignSelectedWorkItemsAction = async ({
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
 
+  const workItemIdsToAssign = new Set();
+
+  selectedWorkItems.forEach(workItem => {
+    workItemIdsToAssign.add(workItem.workItemId);
+
+    const { multiDocketedOn } = workItem.docketEntry;
+
+    if (multiDocketedOn.length < 2) {
+      return;
+    }
+
+    sectionWorkQueue.forEach(queueWorkItem => {
+      if (
+        queueWorkItem.docketEntryId === workItem.docketEntryId &&
+        multiDocketedOn.includes(queueWorkItem.docketNumber)
+      ) {
+        workItemIdsToAssign.add(queueWorkItem.workItemId);
+      }
+    });
+  });
+
   await Promise.all(
-    selectedWorkItems.map(workItem =>
+    Array.from(workItemIdsToAssign).map(workItemId =>
       applicationContext
         .getUseCases()
         .assignWorkItemsInteractor(applicationContext, {
           assigneeId,
           assigneeName,
-          workItemId: workItem.workItemId,
+          workItemId,
         }),
     ),
   );
@@ -38,9 +50,7 @@ export const assignSelectedWorkItemsAction = async ({
   store.set(
     state.workQueue,
     sectionWorkQueue.map(workItem => {
-      if (
-        selectedWorkItems.find(item => item.workItemId === workItem.workItemId)
-      ) {
+      if (workItemIdsToAssign.has(workItem.workItemId)) {
         return {
           ...workItem,
           assigneeId,

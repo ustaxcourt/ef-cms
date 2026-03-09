@@ -7,19 +7,18 @@ import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
-    outboxHelper: state.consolidateWorkQueueItemsOutboxHelper,
+    formattedWorkQueue: state.formattedWorkQueue,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueueOutbox({ outboxHelper, users, workQueueHelper }) {
-    const { consolidatedWorkItems } = outboxHelper;
-
+  function SectionWorkQueueOutbox({
+    formattedWorkQueue,
+    users,
+    workQueueHelper,
+  }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments
-          users={users}
-          count={consolidatedWorkItems.length}
-        />
+        <WorkQueueAssignments users={users} count={formattedWorkQueue.length} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
@@ -42,36 +41,26 @@ export const SectionWorkQueueOutbox = connect(
             </tr>
           </thead>
           <tbody>
-            {consolidatedWorkItems.map(workItem => (
+            {formattedWorkQueue.map(item => (
               <tr
-                key={workItem.key}
-                data-testid={`work-item-section-outbox-${workItem.groupLead}-${workItem.docGroup.key}`}
+                key={item.workItemId}
+                data-testid={`work-item-section-outbox-${item.docketNumber}`}
               >
                 <td className="consolidated-case-column">
-                  {workItem.memberCasesUnique.length > 1 ? (
+                  {item.groupedCases ? (
                     <div
                       className="consolidated-icons-stack"
                       aria-hidden="true"
                     >
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
-                          workItem.leadItemForIcons.consolidatedIconTooltipText
+                          item.consolidatedIconTooltipText
                         }
-                        inConsolidatedGroup={
-                          workItem.leadItemForIcons.inConsolidatedGroup
-                        }
-                        showLeadCaseIcon={
-                          workItem.leadItemForIcons.leadDocketNumber ===
-                          workItem.leadItemForIcons.docketNumber
-                        }
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.inLeadCase}
                       />
-                      {outboxHelper
-                        .sortMemberCases(workItem.memberCasesUnique)
-                        .filter(
-                          c =>
-                            c.docketNumber !==
-                            workItem.leadItemForIcons.docketNumber,
-                        )
+                      {item.groupedCases
+                        .filter(c => c.docketNumber !== item.docketNumber)
                         .map(c => (
                           <ConsolidatedCaseIcon
                             key={`icon-${c.docketNumber}`}
@@ -86,86 +75,70 @@ export const SectionWorkQueueOutbox = connect(
                   ) : (
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
-                        workItem.leadItemForIcons.consolidatedIconTooltipText
+                        item.consolidatedIconTooltipText
                       }
-                      inConsolidatedGroup={
-                        workItem.leadItemForIcons.inConsolidatedGroup
-                      }
-                      showLeadCaseIcon={
-                        workItem.leadItemForIcons.leadDocketNumber ===
-                        workItem.leadItemForIcons.docketNumber
-                      }
+                      inConsolidatedGroup={item.inConsolidatedGroup}
+                      showLeadCaseIcon={item.inLeadCase}
                     />
                   )}
                 </td>
                 <td className="message-queue-row">
-                  {workItem.memberCasesUnique.length > 1 ? (
+                  {item.groupedCases ? (
                     <div className="grouped-cases-row">
                       <div className="member-case-links">
-                        {outboxHelper
-                          .sortMemberCases(workItem.memberCasesUnique)
-                          .map(c => (
-                            <div
-                              key={c.docketNumber}
-                              className="member-case-line"
-                            >
-                              <CaseLink formattedCase={c} />
-                            </div>
-                          ))}
+                        {item.groupedCases.map(c => (
+                          <div
+                            key={c.docketNumber}
+                            className="member-case-line"
+                          >
+                            <CaseLink formattedCase={c} />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ) : (
-                    <CaseLink formattedCase={workItem.leadItemForIcons} />
+                    <CaseLink formattedCase={item} />
                   )}
                 </td>
                 <td className="message-queue-row message-queue-case-title">
-                  {workItem.leadItemForIcons.caseTitle}
+                  {item.caseTitle}
                 </td>
                 <td className="message-queue-row">
                   <div className="message-document-title">
-                    {workItem.leadItemForIcons.editLink ? (
-                      <a
-                        className="case-link"
-                        href={workItem.leadItemForIcons.editLink}
-                      >
-                        {(workItem.leadItemForIcons.docketEntry &&
-                          workItem.leadItemForIcons.docketEntry
-                            .descriptionDisplay) ||
-                          (workItem.leadItemForIcons.docketEntry &&
-                            workItem.leadItemForIcons.docketEntry.documentType)}
+                    {item.editLink ? (
+                      <a className="case-link" href={item.editLink}>
+                        {(item.docketEntry &&
+                          item.docketEntry.descriptionDisplay) ||
+                          (item.docketEntry && item.docketEntry.documentType)}
                       </a>
                     ) : (
                       <span>
-                        {(workItem.leadItemForIcons.docketEntry &&
-                          workItem.leadItemForIcons.docketEntry
-                            .descriptionDisplay) ||
-                          (workItem.leadItemForIcons.docketEntry &&
-                            workItem.leadItemForIcons.docketEntry.documentType)}
+                        {(item.docketEntry &&
+                          item.docketEntry.descriptionDisplay) ||
+                          (item.docketEntry && item.docketEntry.documentType)}
                       </span>
                     )}
                   </div>
                 </td>
                 {workQueueHelper.showFiledByColumn && (
                   <td className="message-queue-row">
-                    {workItem.representative.docketEntry.filedBy}
+                    {item.docketEntry.filedBy}
                   </td>
                 )}
                 {!workQueueHelper.hideCaseStatusColumn && (
                   <td className="message-queue-row">
-                    {workItem.representative.formattedCaseStatus}
+                    {item.formattedCaseStatus}
                   </td>
                 )}
+                <td className="message-queue-row">{item.completedBy}</td>
                 <td className="message-queue-row">
-                  {workItem.representative.completedBy}
-                </td>
-                <td className="message-queue-row">
-                  {workItem.representative.completedAtFormatted}
+                  {item.completedAtFormatted}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {consolidatedWorkItems.length === 0 && <p>There are no documents.</p>}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },

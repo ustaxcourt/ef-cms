@@ -1,23 +1,20 @@
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 
 export const IndividualWorkQueueOutbox = connect(
   {
-    outboxHelper: state.consolidateWorkQueueItemsOutboxHelper,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  function IndividualWorkQueueOutbox({ outboxHelper, workQueueHelper }) {
-    const rowsCount = outboxHelper.outboxRenderedRowCount || 0;
-    const { consolidatedWorkItems } = outboxHelper;
-
+  function IndividualWorkQueueOutbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {rowsCount}
+          {formattedWorkQueue.length}
         </div>
         <div className="padding-1"></div>
         <table
@@ -44,40 +41,27 @@ export const IndividualWorkQueueOutbox = connect(
             </tr>
           </thead>
           <tbody>
-            {consolidatedWorkItems.map(workItem => {
-              const item = workItem.representative;
-
+            {formattedWorkQueue.map(item => {
               return (
                 <tr
-                  key={workItem.key}
-                  data-testid={`section-work-item-outbox-${workItem.groupLead}`}
+                  key={item.workItemId}
+                  data-testid={`section-work-item-outbox-${item.docketNumber}`}
                 >
                   <td className="consolidated-case-column">
-                    {workItem.memberCasesUnique.length > 1 ? (
+                    {item.groupedCases ? (
                       <div
                         className="consolidated-icons-stack"
                         aria-hidden="true"
                       >
                         <ConsolidatedCaseIcon
                           consolidatedIconTooltipText={
-                            workItem.leadItemForIcons
-                              .consolidatedIconTooltipText
+                            item.consolidatedIconTooltipText
                           }
-                          inConsolidatedGroup={
-                            workItem.leadItemForIcons.inConsolidatedGroup
-                          }
-                          showLeadCaseIcon={
-                            workItem.leadItemForIcons.leadDocketNumber ===
-                            workItem.leadItemForIcons.docketNumber
-                          }
+                          inConsolidatedGroup={item.inConsolidatedGroup}
+                          showLeadCaseIcon={item.inLeadCase}
                         />
-                        {outboxHelper
-                          .sortMemberCases(workItem.memberCasesUnique)
-                          .filter(
-                            c =>
-                              c.docketNumber !==
-                              workItem.leadItemForIcons.docketNumber,
-                          )
+                        {item.groupedCases
+                          .filter(c => c.docketNumber !== item.docketNumber)
                           .map(c => (
                             <ConsolidatedCaseIcon
                               key={`icon-${c.docketNumber}`}
@@ -92,64 +76,51 @@ export const IndividualWorkQueueOutbox = connect(
                     ) : (
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
-                          workItem.leadItemForIcons.consolidatedIconTooltipText
+                          item.consolidatedIconTooltipText
                         }
-                        inConsolidatedGroup={
-                          workItem.leadItemForIcons.inConsolidatedGroup
-                        }
-                        showLeadCaseIcon={
-                          workItem.leadItemForIcons.leadDocketNumber ===
-                          workItem.leadItemForIcons.docketNumber
-                        }
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.inLeadCase}
                       />
                     )}
                   </td>
                   <td className="message-queue-row small">
-                    {workItem.memberCasesUnique.length > 1 ? (
+                    {item.groupedCases ? (
                       <div className="grouped-cases-row">
                         <div className="member-case-links">
-                          {outboxHelper
-                            .sortMemberCases(workItem.memberCasesUnique)
-                            .map(c => (
-                              <div
-                                key={c.docketNumber}
-                                className="member-case-line"
-                              >
-                                <CaseLink formattedCase={c} />
-                              </div>
-                            ))}
+                          {item.groupedCases.map(c => (
+                            <div
+                              key={c.docketNumber}
+                              className="member-case-line"
+                            >
+                              <CaseLink formattedCase={c} />
+                            </div>
+                          ))}
                         </div>
                       </div>
                     ) : (
-                      <CaseLink formattedCase={workItem.leadItemForIcons} />
+                      <CaseLink formattedCase={item} />
                     )}
                   </td>
                   <td className="message-queue-row message-queue-case-title">
-                    {workItem.leadItemForIcons.caseTitle}
+                    {item.caseTitle}
                   </td>
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
-                      {workItem.leadItemForIcons.editLink ? (
+                      {item.editLink ? (
                         <a
                           className="case-link"
                           data-testid="work-item-outbox-document-link"
-                          href={workItem.leadItemForIcons.editLink}
+                          href={item.editLink}
                         >
-                          {(workItem.leadItemForIcons.docketEntry &&
-                            workItem.leadItemForIcons.docketEntry
-                              .descriptionDisplay) ||
-                            (workItem.leadItemForIcons.docketEntry &&
-                              workItem.leadItemForIcons.docketEntry
-                                .documentType)}
+                          {(item.docketEntry &&
+                            item.docketEntry.descriptionDisplay) ||
+                            (item.docketEntry && item.docketEntry.documentType)}
                         </a>
                       ) : (
                         <span>
-                          {(workItem.leadItemForIcons.docketEntry &&
-                            workItem.leadItemForIcons.docketEntry
-                              .descriptionDisplay) ||
-                            (workItem.leadItemForIcons.docketEntry &&
-                              workItem.leadItemForIcons.docketEntry
-                                .documentType)}
+                          {(item.docketEntry &&
+                            item.docketEntry.descriptionDisplay) ||
+                            (item.docketEntry && item.docketEntry.documentType)}
                         </span>
                       )}
                     </div>
@@ -172,7 +143,7 @@ export const IndividualWorkQueueOutbox = connect(
             })}
           </tbody>
         </table>
-        {consolidatedWorkItems.length === 0 && <p>There are no documents.</p>}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },
