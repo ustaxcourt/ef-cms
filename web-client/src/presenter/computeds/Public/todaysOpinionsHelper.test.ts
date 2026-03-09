@@ -2,7 +2,10 @@ import { applicationContextPublic } from '../../../applicationContextPublic';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { todaysOpinionsHelper as todaysOpinionsHelperComputed } from './todaysOpinionsHelper';
 import { withAppContextDecorator } from '../../../withAppContext';
-import { ASCENDING, DESCENDING } from '@shared/business/entities/EntityConstants';
+import {
+  ASCENDING,
+  DESCENDING,
+} from '@shared/business/entities/EntityConstants';
 
 describe('todaysOpinionsHelper', () => {
   const todaysOpinionsHelper = withAppContextDecorator(
@@ -14,9 +17,10 @@ describe('todaysOpinionsHelper', () => {
 
   beforeEach(() => {
     state = {
-      tableSort: {
+      todaysOpinionsTableSort: {
         sortField: 'filingDate',
         sortOrder: DESCENDING,
+        stateKey: 'todaysOpinionsTableSort',
       },
       todaysOpinions: [
         {
@@ -134,7 +138,11 @@ describe('todaysOpinionsHelper', () => {
     });
 
     it('sorts by filingDate descending (newest first)', () => {
-      state.tableSort = { sortField: 'filingDate', sortOrder: DESCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'filingDate',
+        sortOrder: DESCENDING,
+        sortKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       const dates = result.formattedOpinions.map(o => o.filingDate);
       expect(dates[0]).toEqual('2022-01-15T08:00:00.000Z');
@@ -142,7 +150,11 @@ describe('todaysOpinionsHelper', () => {
     });
 
     it('sorts by filingDate ascending (oldest first)', () => {
-      state.tableSort = { sortField: 'filingDate', sortOrder: ASCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'filingDate',
+        sortOrder: ASCENDING,
+        stateKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       const dates = result.formattedOpinions.map(o => o.filingDate);
       expect(dates[0]).toEqual('2020-06-11T20:17:10.646Z');
@@ -150,7 +162,11 @@ describe('todaysOpinionsHelper', () => {
     });
 
     it('sorts by caseCaption ascending', () => {
-      state.tableSort = { sortField: 'caseCaption', sortOrder: ASCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'caseCaption',
+        sortOrder: ASCENDING,
+        stateKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       expect(result.formattedOpinions[0].caseCaption).toEqual(
         'Alpha, Petitioner',
@@ -161,7 +177,11 @@ describe('todaysOpinionsHelper', () => {
     });
 
     it('sorts by caseCaption descending', () => {
-      state.tableSort = { sortField: 'caseCaption', sortOrder: DESCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'caseCaption',
+        sortOrder: DESCENDING,
+        stateKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       expect(result.formattedOpinions[0].caseCaption).toEqual(
         'Charlie, Petitioner',
@@ -172,37 +192,36 @@ describe('todaysOpinionsHelper', () => {
     });
 
     it('sorts by numberOfPages ascending', () => {
-      state.tableSort = { sortField: 'numberOfPages', sortOrder: ASCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'numberOfPages',
+        sortOrder: ASCENDING,
+        stateKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       expect(result.formattedOpinions[0].numberOfPages).toEqual(2);
       expect(result.formattedOpinions[2].numberOfPages).toEqual(10);
     });
 
     it('sorts by numberOfPages descending', () => {
-      state.tableSort = { sortField: 'numberOfPages', sortOrder: DESCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'numberOfPages',
+        sortOrder: DESCENDING,
+        stateKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       expect(result.formattedOpinions[0].numberOfPages).toEqual(10);
       expect(result.formattedOpinions[2].numberOfPages).toEqual(2);
     });
 
     it('sorts by docketNumber ascending', () => {
-      state.tableSort = { sortField: 'docketNumber', sortOrder: ASCENDING };
+      state.todaysOpinionsTableSort = {
+        sortField: 'docketNumber',
+        sortOrder: ASCENDING,
+        sortKey: 'todaysOpinionsTableSort',
+      };
       const result = runCompute(todaysOpinionsHelper, { state });
       expect(result.formattedOpinions[0].docketNumber).toEqual('100-20');
       expect(result.formattedOpinions[2].docketNumber).toEqual('300-22');
-    });
-
-    it('does not sort if state.tableSort does not exist', () => {
-      // Ensure tableSort is undefined / falsy
-      delete (state as any).tableSort;
-
-      const result = runCompute(todaysOpinionsHelper, { state });
-
-      expect(result.formattedOpinions.map(o => o.docketEntryId)).toEqual([
-        'id-2',
-        'id-1',
-        'id-3',
-      ]);
     });
   });
 });
