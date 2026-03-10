@@ -646,7 +646,7 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null,
+  assigneeId: null as unknown as string,
   assigneeName: undefined as unknown as string,
   authentication: {
     form: {
@@ -972,7 +972,15 @@ export const baseState = {
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [] as { workItemId: string }[],
+  selectedWorkItems: [] as {
+    workItemId: string;
+    groupedCases?: {
+      workItemId: string;
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      inLeadCase: boolean;
+    }[];
+  }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],

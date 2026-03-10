@@ -10,29 +10,17 @@ export const assignSelectedWorkItemsAction = async ({
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
 
-  const workItemIdsToAssign = new Set();
+  const workItemIds: string[] = [];
 
   selectedWorkItems.forEach(workItem => {
-    workItemIdsToAssign.add(workItem.workItemId);
-
-    const { multiDocketedOn } = workItem.docketEntry;
-
-    if (multiDocketedOn.length < 2) {
-      return;
-    }
-
-    sectionWorkQueue.forEach(queueWorkItem => {
-      if (
-        queueWorkItem.docketEntryId === workItem.docketEntryId &&
-        multiDocketedOn.includes(queueWorkItem.docketNumber)
-      ) {
-        workItemIdsToAssign.add(queueWorkItem.workItemId);
-      }
+    workItemIds.push(workItem.workItemId);
+    workItem.groupedCases?.forEach(item => {
+      workItemIds.push(item.workItemId);
     });
   });
 
   await Promise.all(
-    Array.from(workItemIdsToAssign).map(workItemId =>
+    workItemIds.map(workItemId =>
       applicationContext
         .getUseCases()
         .assignWorkItemsInteractor(applicationContext, {
@@ -50,7 +38,9 @@ export const assignSelectedWorkItemsAction = async ({
   store.set(
     state.workQueue,
     sectionWorkQueue.map(workItem => {
-      if (workItemIdsToAssign.has(workItem.workItemId)) {
+      if (
+        selectedWorkItems.find(item => item.workItemId === workItem.workItemId)
+      ) {
         return {
           ...workItem,
           assigneeId,

@@ -107,6 +107,7 @@ export const formattedWorkQueue = (
     const consolidatedResult: Array<
       RawWorkItemWithCaseAndDocketEntryInfo & {
         groupedCases?: {
+          workItemId: string;
           docketNumber: string;
           docketNumberWithSuffix: string;
           inLeadCase: boolean;
@@ -117,8 +118,9 @@ export const formattedWorkQueue = (
     for (const group of consolidatedGroups.values()) {
       const groupedCases = Case.sortByDocketNumber(
         group.map(item => ({
+          workItemId: item.workItemId,
           docketNumber: item.docketNumber,
-          docketNumberWithSuffix: item.docketNumberWithSuffix,
+          docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
           inLeadCase: isLeadCase(item),
         })),
       );

@@ -11,7 +11,6 @@ import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWork
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 export const assignWorkItemsInteractor = async (
   _: ServerApplicationContext,
@@ -105,38 +104,7 @@ export const assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  let workItemsToAssign = [workItemEntity.validate().toRawObject()];
-  if (
-    workItemEntity.leadDocketNumber &&
-    workItemEntity.leadDocketNumber === workItemEntity.docketNumber
-  ) {
-    const memberWorkItems = await getWorkItemsByDocketNumber({
-      docketNumber: workItemEntity.leadDocketNumber,
-    });
-    const memberWorkItemsToAssign = memberWorkItems
-      .filter(
-        wi =>
-          wi.docketEntryId === workItemEntity.docketEntryId &&
-          wi.docketNumber !== workItemEntity.docketNumber,
-      )
-      .map(wi => {
-        wi.assignToUser({
-          assigneeId,
-          assigneeName,
-          section: WorkItem.getWorkItemSectionFromUserSection({
-            section: sectionToAssignTo,
-            documentTitle: docketEntry.documentTitle,
-          }),
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-        return wi.validate().toRawObject();
-      });
-    workItemsToAssign = workItemsToAssign.concat(memberWorkItemsToAssign);
-  }
-
   await upsertWorkItems({
-    workItems: workItemsToAssign,
+    workItems: [workItemEntity.validate().toRawObject()],
   });
 };
