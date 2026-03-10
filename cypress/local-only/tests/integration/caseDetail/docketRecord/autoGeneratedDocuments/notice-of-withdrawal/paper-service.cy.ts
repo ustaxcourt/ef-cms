@@ -6,6 +6,7 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import {
+  loginAsDocketClerk,
   loginAsDocketClerk1,
   loginAsPetitionsClerk,
   loginAsPetitionsClerk1,
@@ -62,6 +63,8 @@ describe('Notice of Withdrawal - Paper Service', () => {
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
+      loginAsDocketClerk();
+      goToCase(docketNumber);
       addPetitionerAsPartyToCase(docketNumber);
       cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
       goToCase(docketNumber);
