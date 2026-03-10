@@ -514,6 +514,10 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
+      - run:
+          name: Cleanup Entity Validation
+          command: |
+            npm run cleanup:entity-validation
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
