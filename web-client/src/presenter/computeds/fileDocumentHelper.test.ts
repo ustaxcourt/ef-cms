@@ -249,6 +249,28 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
+  it('should show default party header text and label text in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
+    expect(result.partiesLabelText).toEqual('Filing Parties');
+    expect(result.partiesHeaderText).toEqual('Parties Filing The Document(s)');
+  });
+
+  it('should show party header text and label textm for notw in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: {
+        ...state,
+        user: privatePractitionerUser,
+        form: { ...state.form, eventCode: 'NOTW' },
+      },
+    });
+    expect(result.partiesLabelText).toEqual('Parties');
+    expect(result.partiesHeaderText).toEqual(
+      "Parties You're Withdrawing From as Counsel",
+    );
+  });
+
   describe('supporting documents', () => {
     beforeEach(() => {
       state.form.hasSupportingDocuments = true;
@@ -712,48 +734,6 @@ describe('fileDocumentHelper', () => {
       });
 
       expect(showPartiesFiling).toEqual(true);
-    });
-  });
-  describe('allowExternalConsolidatedGroupFiling', () => {
-    it('should set allowExternalConsolidatedGroupFiling to false if the user is an IRS practitioner and the eventCode is explicitly not allowed', () => {
-      state.form = {
-        eventCode: 'NOTW',
-      };
-      state.caseDetail = {
-        ...state.caseDetail,
-        leadDocketNumber: '123-45',
-      };
-      const result: any = runCompute(fileDocumentHelper, {
-        state: { ...state, user: irsPractitionerUser },
-      });
-      expect(result.allowExternalConsolidatedGroupFiling).toEqual(false);
-    });
-    it('should set allowExternalConsolidatedGroupFiling to false if the user is private practitioner and the eventCode is explicitly not allowed', () => {
-      state.form = {
-        eventCode: 'NOTW',
-      };
-      const result: any = runCompute(fileDocumentHelper, {
-        state: { ...state, user: privatePractitionerUser },
-      });
-      expect(result.allowExternalConsolidatedGroupFiling).toEqual(false);
-    });
-    it('should set allowExternalConsolidatedGroupFiling to true if the user is a petitioner and the eventCode is explicity not allowed', () => {
-      state.form = {
-        eventCode: 'A',
-      };
-      const result: any = runCompute(fileDocumentHelper, {
-        state: { ...state, user: casePetitioner },
-      });
-      expect(result.allowExternalConsolidatedGroupFiling).toEqual(true);
-    });
-    it('should set allowExternalConsolidatedGroupFiling to true if the user is a practitioner and the eventCode is allowed', () => {
-      state.form = {
-        eventCode: 'A',
-      };
-      const result: any = runCompute(fileDocumentHelper, {
-        state: { ...state, user: privatePractitionerUser },
-      });
-      expect(result.allowExternalConsolidatedGroupFiling).toEqual(true);
     });
   });
 });
