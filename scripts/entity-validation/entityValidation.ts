@@ -20,12 +20,12 @@ const ENTITIES_OF_CASE = [
 ];
 
 const ENTITIES_TO_CHECK = [
-  // 'Message.ts',
-  // 'PractitionerDocument.ts',
-  // 'trialSessions/TrialSessionWorkingCopy.ts',
-  // 'trialSessions/TrialSession.ts',
-  // 'User.ts',
-  // 'WorkItem.ts',
+  'Message.ts',
+  'PractitionerDocument.ts',
+  'trialSessions/TrialSessionWorkingCopy.ts',
+  'trialSessions/TrialSession.ts',
+  'User.ts',
+  'WorkItem.ts',
   ...ENTITIES_OF_CASE,
 ];
 
