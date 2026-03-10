@@ -152,6 +152,28 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if the user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockIrsPractitionerUser.userId}`,
+    );
+  });
+
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
       fileExternalDocumentInteractor(
