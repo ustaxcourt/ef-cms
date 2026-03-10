@@ -65,7 +65,7 @@ describe('Notice of Withdrawal - Paper Service', () => {
       });
       loginAsDocketClerk();
       goToCase(docketNumber);
-      addPetitionerAsPartyToCase(docketNumber);
+      addPetitionerAsPartyToCase();
       cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
       goToCase(docketNumber);
       cy.wait('@caseDetails').then(interception => {
