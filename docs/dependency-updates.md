@@ -259,7 +259,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 **Installed Version: 24.12.0**
 The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.0 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.0, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
-- [Dependencies 03 02 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.14.0, successfully updated @types/node to 24.14.0 to match Node.js v24.14.0
+- [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
 - [Dependencies 03 02 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.14.0, successfully updated @types/node to 24.14.0 to match Node.js v24.14.0
 
