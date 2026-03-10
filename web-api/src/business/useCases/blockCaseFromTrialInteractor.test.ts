@@ -28,7 +28,7 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
-    const result = await blockCaseFromTrialInteractor(
+    await blockCaseFromTrialInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -37,10 +37,11 @@ describe('blockCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result).toMatchObject({
-      blocked: true,
-      blockedReason: 'just because',
-    });
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.blocked).toBe(true);
+    expect(casePassedToUpdate.blockedReason).toBe('just because');
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

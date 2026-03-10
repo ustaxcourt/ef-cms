@@ -39,15 +39,18 @@ describe('sealCaseInteractor', () => {
     ).rejects.toThrow('Unauthorized for sealing cases');
   });
 
-  it('should call updateCase with the sealedDate set on the case and return the updated case', async () => {
-    const result = await sealCaseInteractor(
+  it('should call updateCaseAndAssociations with the sealedDate set on the case', async () => {
+    await sealCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
       },
       mockDocketClerkUser,
     );
-    expect(result.sealedDate).toBeTruthy();
+    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.sealedDate).toBeTruthy();
   });
 
   it('should send a notification that a case has been sealed', async () => {

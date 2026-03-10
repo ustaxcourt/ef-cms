@@ -9,22 +9,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * saveCaseNote
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update case note
- * @param {string} providers.caseNote the note to update
- * @returns {object} the updated case note returned from persistence
- */
 export const saveCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -42,14 +32,10 @@ export const saveCaseNote = async (
     .validate()
     .toRawObject();
 
-  const result = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
   });
-
-  return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const saveCaseNoteInteractor = withLocking(

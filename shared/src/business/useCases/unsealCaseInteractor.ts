@@ -1,5 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -10,7 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * unsealCase
@@ -23,7 +21,7 @@ export const unsealCase = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UNSEAL_CASE)) {
     throw new UnauthorizedError('Unauthorized for unsealing cases');
   }
@@ -40,16 +38,10 @@ export const unsealCase = async (
 
   caseToUpdate.setAsUnsealed();
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
   });
-
-  return new CaseDTO(
-    CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
-      .validate()
-      .toRawObject(),
-  );
 };
 
 export const unsealCaseInteractor = withLocking(
