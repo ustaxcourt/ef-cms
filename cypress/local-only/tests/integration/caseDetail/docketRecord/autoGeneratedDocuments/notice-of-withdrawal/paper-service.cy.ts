@@ -6,6 +6,7 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import {
+  loginAsDocketClerk,
   loginAsDocketClerk1,
   loginAsPetitionsClerk,
   loginAsPetitionsClerk1,
@@ -15,7 +16,7 @@ import { addPetitionerAsPartyToCase } from 'cypress/helpers/caseDetail/caseInfor
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
@@ -62,6 +63,8 @@ describe('Notice of Withdrawal - Paper Service', () => {
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
+      loginAsDocketClerk();
+      goToCase(docketNumber);
       addPetitionerAsPartyToCase(docketNumber);
       cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
       goToCase(docketNumber);
@@ -111,7 +114,7 @@ describe('Notice of Withdrawal - Paper Service', () => {
       });
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
       cy.get<RawPetitioner[]>('@petitionersWithPaperService').then(
         petitioners => {
@@ -128,14 +131,3 @@ describe('Notice of Withdrawal - Paper Service', () => {
     });
   });
 });
-
-const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Notice of Withdrawal as Counsel',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-};

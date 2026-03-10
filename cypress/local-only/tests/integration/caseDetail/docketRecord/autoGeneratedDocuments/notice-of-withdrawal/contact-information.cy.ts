@@ -15,7 +15,6 @@ import { addPetitionerAsPartyToCase } from 'cypress/helpers/caseDetail/caseInfor
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
@@ -23,6 +22,7 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 import { scheduleTrialSession } from 'cypress/helpers/trialSession/schedule-trial-session';
 import { updateTrialSessionStartDate } from 'cypress/helpers/trialSession/update-trial-session-start-date';
 import { faker } from '@faker-js/faker';
+import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 
 describe('Notice of Withdrawal - Contact Information', () => {
   const privatePractitioner2BarNumber = 'PT9999';
@@ -81,7 +81,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       ).click();
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid^="party-label-"]').first().click();
       cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
       cy.get('[data-testid^="edit-contact-information-button-"]')
@@ -129,7 +129,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="edit-contact-information-section"]').should(
         'not.exist',
       );
@@ -187,7 +187,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       });
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
       cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
         petitionerContactIds.forEach(contactId => {
@@ -223,14 +223,3 @@ describe('Notice of Withdrawal - Contact Information', () => {
     });
   });
 });
-
-const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Notice of Withdrawal as Counsel',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-};
