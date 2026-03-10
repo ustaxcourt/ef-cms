@@ -15,7 +15,7 @@ import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseD
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
@@ -62,7 +62,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
   it('should show validation messages for private practitioner when selecting form type', () => {
     loginAsPrivatePractitioner();
     cy.get<string>('@docketNumber').then(docketNumber => {
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
         'You are the only counsel representing your party in this case.',
@@ -80,7 +80,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
         irsPractitionerBarNumber,
       );
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
         'You are the only counsel representing your party in this case.',
@@ -103,7 +103,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       });
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
@@ -131,7 +131,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       });
 
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
@@ -143,14 +143,3 @@ describe('Notice of Withdrawal - Validation Messages', () => {
     });
   });
 });
-
-const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Notice of Withdrawal as Counsel',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-};

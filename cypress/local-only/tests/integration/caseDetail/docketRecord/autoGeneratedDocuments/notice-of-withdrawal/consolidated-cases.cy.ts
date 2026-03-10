@@ -14,7 +14,7 @@ import {
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
@@ -70,7 +70,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Test private practitioner alert
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get(
         '[data-testid="alert-warning-consolidated-case-alert-warning"]',
       ).should('be.visible');
@@ -93,7 +93,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Test IRS practitioner alert
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get(
         '[data-testid="alert-warning-consolidated-case-alert-warning"]',
       ).should('be.visible');
@@ -124,7 +124,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
       ).click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       loginAsPetitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('#consolidated-case-group-radios').should('be.visible');
     });
   });
@@ -142,7 +142,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Test private practitioner alert
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get(
         '[data-testid="alert-warning-consolidated-case-alert-warning"]',
       ).should('be.visible');
@@ -165,19 +165,8 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Test IRS practitioner alert
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('#consolidated-case-group-radios').should('not.exist');
     });
   });
 });
-
-const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Notice of Withdrawal as Counsel',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-};

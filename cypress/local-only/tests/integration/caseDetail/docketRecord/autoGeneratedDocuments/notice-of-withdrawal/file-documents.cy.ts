@@ -18,7 +18,7 @@ import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseD
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { attachSamplePdfFile } from 'cypress/helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -110,7 +110,7 @@ describe('Notice of Withdrawal - File Documents', () => {
       });
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
       cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
         petitionerContactIds.forEach(contactId => {
@@ -153,7 +153,7 @@ describe('Notice of Withdrawal - File Documents', () => {
       });
 
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
       cy.get('[data-testid="party-irs-practitioner-label"]').click();
       cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
@@ -219,7 +219,7 @@ describe('Notice of Withdrawal - File Documents', () => {
       });
 
       loginAsPrivatePractitioner();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
       cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
         petitionerContactIds.forEach(contactId => {
@@ -263,7 +263,7 @@ describe('Notice of Withdrawal - File Documents', () => {
       });
 
       loginAsIrsPractitioner1();
-      enterNoticeOfWithdrawalFormType(docketNumber);
+      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
       cy.get('[data-testid="party-irs-practitioner-label"]').click();
       cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
       cy.get('[data-testid="file-document-submit-document"]').click();
@@ -276,14 +276,3 @@ describe('Notice of Withdrawal - File Documents', () => {
     });
   });
 });
-
-const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Notice of Withdrawal as Counsel',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-};
