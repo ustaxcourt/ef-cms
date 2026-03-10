@@ -118,11 +118,17 @@ async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
 async function main(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
-
-  const changedEntities = detectEntityValidationChange(
-    JSON.parse(currFingerprint ?? '{}'),
-    JSON.parse(newFingerprint),
+  const entityValidationRequired = await getSSMItem(
+    'entity-validation-required',
   );
+
+  const changedEntities =
+    entityValidationRequired === 'true'
+      ? ENTITIES_TO_CHECK
+      : detectEntityValidationChange(
+          JSON.parse(currFingerprint ?? '{}'),
+          JSON.parse(newFingerprint),
+        );
 
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');
