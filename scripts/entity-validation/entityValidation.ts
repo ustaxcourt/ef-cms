@@ -3,25 +3,30 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { createValidationIdentifier } from 'scripts/entity-validation/createValidationIdentifier';
-import { entityValidationFunctions } from 'scripts/entity-validation/EntityValidationHelper';
+import { entityValidationFunctions } from 'scripts/entity-validation/entityValidationHelper';
 import { getSSMItem, putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
 const SSM_KEY = 'entity-validation-fingerprints-map';
 const VALIDATION_REGEX = /validation/i;
 
 // TODO: Replace with dynamic entity discovery from shared/src/business/entities
+
+const ENTITIES_OF_CASE = [
+  'cases/Case.ts',
+  'DocketEntry.ts',
+  'IrsPractitioner.ts',
+  'PrivatePractitioner.ts',
+  'Correspondence.ts',
+];
+
 const ENTITIES_TO_CHECK = [
-  // 'cases/Case.ts',
-  // 'DocketEntry.ts',
-  // 'IrsPractitioner.ts',
-  // 'PrivatePractitioner.ts',
-  // 'Correspondence.ts',
-  'Message.ts',
+  // 'Message.ts',
   // 'PractitionerDocument.ts',
   // 'trialSessions/TrialSessionWorkingCopy.ts',
   // 'trialSessions/TrialSession.ts',
   // 'User.ts',
   // 'WorkItem.ts',
+  ...ENTITIES_OF_CASE,
 ];
 
 async function getEntityIdentifiers(): Promise<string> {
@@ -76,13 +81,26 @@ async function validateEntitiesWithNewRules(
   changedEntities: string[],
 ): Promise<string[]> {
   let validationOutput: string[] = [];
+  let isEntityOfCase = false;
   for (const entity of changedEntities) {
     const entityName = entity.split('.')[0];
+    if (ENTITIES_OF_CASE.includes(`${entityName}.ts`)) {
+      isEntityOfCase = true;
+    } else {
+      try {
+        const val: string[] = await entityValidationFunctions[entityName]();
+        if (val.length > 0) validationOutput = validationOutput.concat(val);
+      } catch (error) {
+        throw new Error(`Error validating entity ${entityName}: ${error}`);
+      }
+    }
+  }
+  if (isEntityOfCase) {
     try {
-      const val: string[] = await entityValidationFunctions[entityName]();
+      const val: string[] = await entityValidationFunctions['Case']();
       if (val.length > 0) validationOutput = validationOutput.concat(val);
     } catch (error) {
-      throw new Error(`Error validating entity ${entityName}: ${error}`);
+      throw new Error(`Error validating entity Case: ${error}`);
     }
   }
   console.log('All changed entities successfully validated!');
