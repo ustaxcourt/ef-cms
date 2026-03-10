@@ -147,6 +147,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
 
+      goToCase(docketNumber);
       addPetitionerAsPartyToCase();
 
       cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
