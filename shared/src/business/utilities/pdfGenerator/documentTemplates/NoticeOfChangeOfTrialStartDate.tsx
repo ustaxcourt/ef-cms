@@ -7,8 +7,8 @@ import {
 
 import React from 'react';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import { ClerkOfTheCourtSignature } from '@shared/business/utilities/pdfGenerator/components/ClerkOfTheCourtSignature';
+import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 
 export type TrialSessionStartDateChangePDFInfo = RawTrialSession;
 
@@ -29,7 +29,7 @@ export const NoticeOfChangeOfTrialStartDate = ({
 }) => {
   return (
     <div>
-      <PrimaryHeader />
+      <OrderPrimaryHeader />
       <ChangeOfTrialStartDateDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
@@ -73,14 +73,22 @@ function NoticeOfChangeRemote({
       <p>
         &emsp;The {updatedTrialSession.trialLocation}{' '}
         {updatedTrialSession.sessionType} trial session scheduled to begin on{' '}
-        {formatDateString(previousTrialSession.startDate, FORMATS.MMDDYYYY)},
-        has been changed to{' '}
-        {formatDateString(updatedTrialSession.startDate, FORMATS.MMDDYYYY)},
-        beginning at {updatedTrialSession.startTime}. The calendar will be
-        called at that date and time, and the parties are directed to appear
-        before the Court at a remote proceeding to be held using Zoom.gov and to
-        be prepared to try the case. The parties shall follow the instructions
-        below for how to participate in the remote proceeding.
+        {formatDateString(
+          previousTrialSession.startDate,
+          FORMATS.MONTH_DAY_YEAR,
+        )}
+        , has been changed to{' '}
+        {formatDateString(
+          updatedTrialSession.startDate,
+          FORMATS.MONTH_DAY_YEAR,
+        )}
+        , beginning at{' '}
+        {formatDateString(updatedTrialSession.startDate, FORMATS.TIME)}. The
+        calendar will be called at that date and time, and the parties are
+        directed to appear before the Court at a remote proceeding to be held
+        using Zoom.gov and to be prepared to try the case. The parties shall
+        follow the instructions below for how to participate in the remote
+        proceeding.
       </p>
       <div style={{ textAlign: 'center' }}>
         <p style={{ fontWeight: 'bold' }}>ACCESS REMOTE PROCEEDING</p>
@@ -95,9 +103,9 @@ function NoticeOfChangeRemote({
         </p>
       </div>
       <p>
-        &emsp;Join online: Go to www.zoomgov.com and click `Join a meeting` (blue box
-        in the middle of the page). Enter the Meeting ID and Passcode above when
-        prompted.
+        &emsp;Join online: Go to www.zoomgov.com and click `Join a meeting`
+        (blue box in the middle of the page). Enter the Meeting ID and Passcode
+        above when prompted.
       </p>
     </div>
   );

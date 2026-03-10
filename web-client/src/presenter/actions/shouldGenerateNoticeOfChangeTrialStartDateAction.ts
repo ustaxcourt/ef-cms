@@ -22,7 +22,6 @@ export const shouldGenerateNoticeOfChangeTrialStartDateAction = async ({
 
   if (!shouldGenerateNOT || !casesThatShouldReceiveNoticesCount)
     return path.unchanged();
-  console.log('should genereate not');
   return path.both({
     currentTrialSessionStartDate,
     updatedTrialSessionStartDate,
