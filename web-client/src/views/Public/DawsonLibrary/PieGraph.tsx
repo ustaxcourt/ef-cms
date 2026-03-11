@@ -159,43 +159,39 @@ export const PieGraph: React.FC<
               },
             },
           },
-          datalabels: showLabels
-            ? {
-                color: (context: Context) => {
-                  const bgColor = colors[context.dataIndex] || defaultColors[0];
-                  return isLightColor(bgColor) ? '#000' : '#fff';
-                },
-                font: {
-                  weight: 'bold' as const,
-                  size: 14,
-                },
-                formatter: (value: number) => {
-                  const percentage = ((value / total) * 100).toFixed(1);
-                  return `${percentage}%`;
-                },
-                anchor: (context: Context) => {
-                  const percentage =
-                    ((context.dataset.data[context.dataIndex] as number) /
-                      total) *
-                    100;
-                  return percentage < 5 ? 'end' : 'center';
-                },
-                align: (context: Context) => {
-                  const percentage =
-                    ((context.dataset.data[context.dataIndex] as number) /
-                      total) *
-                    100;
-                  return percentage < 5 ? 'end' : 'center';
-                },
-                offset: (context: Context) => {
-                  const percentage =
-                    ((context.dataset.data[context.dataIndex] as number) /
-                      total) *
-                    100;
-                  return percentage < 5 ? 10 : 0;
-                },
-              }
-            : false,
+          datalabels: {
+            display: showLabels,
+            color: (context: Context) => {
+              const bgColor = colors[context.dataIndex] || defaultColors[0];
+              return isLightColor(bgColor) ? '#000' : '#fff';
+            },
+            font: {
+              weight: 'bold' as const,
+              size: 14,
+            },
+            formatter: (value: number) => {
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${percentage}%`;
+            },
+            anchor: (context: Context) => {
+              const percentage =
+                ((context.dataset.data[context.dataIndex] as number) / total) *
+                100;
+              return percentage < 5 ? 'end' : 'center';
+            },
+            align: (context: Context) => {
+              const percentage =
+                ((context.dataset.data[context.dataIndex] as number) / total) *
+                100;
+              return percentage < 5 ? 'end' : 'center';
+            },
+            offset: (context: Context) => {
+              const percentage =
+                ((context.dataset.data[context.dataIndex] as number) / total) *
+                100;
+              return percentage < 5 ? 10 : 0;
+            },
+          },
         },
       },
     };
