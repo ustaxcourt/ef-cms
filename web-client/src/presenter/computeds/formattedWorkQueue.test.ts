@@ -743,7 +743,7 @@ describe('formattedWorkQueue', () => {
     expect(result[0].formattedCaseStatus).toBe(result[0].caseStatus);
   });
 
-  it('should combine multiple work items from the same consolidated group into one with proper groupedCases for section inbox', () => {
+  it('should combine multiple work items from the same consolidated group into one with proper groupedMemberCases for section inbox', () => {
     const sharedDocketEntryId = '8eef49b4-9d40-4773-84ab-49e1e59e49cd';
     const leadDocketNumber = '101-18';
 
@@ -843,25 +843,20 @@ describe('formattedWorkQueue', () => {
       item => item.workItemId === 'lead-work-item-id',
     );
     expect(leadResult).toBeDefined();
-    expect(leadResult!.groupedCases).toBeDefined();
-    expect(leadResult!.groupedCases!.length).toEqual(3);
-    expect(leadResult!.groupedCases).toEqual(
+    expect(leadResult!.groupedMemberCases).toBeDefined();
+    expect(leadResult!.groupedMemberCases!.length).toEqual(2);
+    expect(leadResult!.groupedMemberCases).toEqual(
       expect.arrayContaining([
-        {
-          docketNumber: leadDocketNumber,
-          docketNumberWithSuffix: '101-18S',
-          inLeadCase: true,
-        },
-        {
+        expect.objectContaining({
           docketNumber: '102-18',
           docketNumberWithSuffix: '102-18S',
           inLeadCase: false,
-        },
-        {
+        }),
+        expect.objectContaining({
           docketNumber: '103-18',
           docketNumberWithSuffix: '103-18S',
           inLeadCase: false,
-        },
+        }),
       ]),
     );
 
@@ -878,17 +873,17 @@ describe('formattedWorkQueue', () => {
       item => item.workItemId === 'solo-work-item-with-lead-id',
     );
     expect(soloWithLeadResult).toBeDefined();
-    expect(soloWithLeadResult!.groupedCases).toBeUndefined();
+    expect(soloWithLeadResult!.groupedMemberCases).toBeUndefined();
 
     // Solo item without lead should appear as standalone
     const soloWithoutLeadResult = result.find(
       item => item.workItemId === 'solo-work-item-without-lead-id',
     );
     expect(soloWithoutLeadResult).toBeDefined();
-    expect(soloWithoutLeadResult!.groupedCases).toBeUndefined();
+    expect(soloWithoutLeadResult!.groupedMemberCases).toBeUndefined();
   });
 
-  it('should combine multiple work items from the same consolidated group into one with proper groupedCases for my inbox', () => {
+  it('should combine multiple work items from the same consolidated group into one with proper groupedMemberCases for my inbox', () => {
     const sharedDocketEntryId = '8eef49b4-9d40-4773-84ab-49e1e59e49cd';
     const leadDocketNumber = '101-18';
 
@@ -940,20 +935,15 @@ describe('formattedWorkQueue', () => {
       item => item.workItemId === 'lead-work-item-id',
     );
     expect(leadResult).toBeDefined();
-    expect(leadResult!.groupedCases).toBeDefined();
-    expect(leadResult!.groupedCases!.length).toEqual(2);
-    expect(leadResult!.groupedCases).toEqual(
+    expect(leadResult!.groupedMemberCases).toBeDefined();
+    expect(leadResult!.groupedMemberCases!.length).toEqual(1);
+    expect(leadResult!.groupedMemberCases).toEqual(
       expect.arrayContaining([
-        {
-          docketNumber: leadDocketNumber,
-          docketNumberWithSuffix: '101-18S',
-          inLeadCase: true,
-        },
-        {
+        expect.objectContaining({
           docketNumber: '102-18',
           docketNumberWithSuffix: '102-18S',
           inLeadCase: false,
-        },
+        }),
       ]),
     );
   });
