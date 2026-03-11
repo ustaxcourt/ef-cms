@@ -17,7 +17,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
-  const getWorkItemById = getWorkItemsByIdsMock as jest.Mock;
+  const getWorkItemsByIds = getWorkItemsByIdsMock as jest.Mock;
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),
@@ -32,7 +32,7 @@ describe('completeWorkItemInteractor', () => {
   };
 
   beforeEach(() => {
-    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
+    getWorkItemsByIds.mockResolvedValue([new WorkItem(mockWorkItem)]);
     upsertWorkItems.mockResolvedValue(undefined);
 
     applicationContext
@@ -65,14 +65,14 @@ describe('completeWorkItemInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getWorkItemById.mock.calls[1][0]).toMatchObject({
-      workItemId: mockWorkItemId,
+    expect(getWorkItemsByIds.mock.calls[1][0]).toMatchObject({
+      workItemIds: [mockWorkItemId],
     });
   });
 
   it('should throw an error when the work item is not found', async () => {
     const mockWorkItemId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    getWorkItemById.mockResolvedValue(undefined);
+    getWorkItemsByIds.mockResolvedValue([]);
 
     await expect(
       completeWorkItemInteractor(

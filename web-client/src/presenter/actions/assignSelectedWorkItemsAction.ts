@@ -31,11 +31,18 @@ export const assignSelectedWorkItemsAction = async ({
   // TODO: we need a better solution for this; this is causing flaky functionality and failing cypress tests
   await new Promise(resolve => setTimeout(resolve, 3000));
 
+  const memberWorkItemIds = selectedWorkItems.flatMap(
+    item => item.groupedMemberCases?.map(member => member.workItemId) ?? [],
+  );
+
   store.set(
     state.workQueue,
     sectionWorkQueue.map(workItem => {
       if (
-        selectedWorkItems.find(item => item.workItemId === workItem.workItemId)
+        selectedWorkItems.find(
+          item => item.workItemId === workItem.workItemId,
+        ) ||
+        memberWorkItemIds.includes(workItem.workItemId)
       ) {
         return {
           ...workItem,

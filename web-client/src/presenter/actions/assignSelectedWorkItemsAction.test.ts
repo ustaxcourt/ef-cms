@@ -77,7 +77,7 @@ describe('assignSelectedWorkItemsAction', () => {
     expect(result.state.selectedWorkItems).toEqual([]);
   });
 
-  it('should update multi-docketed sibling work items for the same docket entry', async () => {
+  it('should update multi-docketed member work items for the same docket entry', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       modules: {
         presenter,
@@ -88,11 +88,14 @@ describe('assignSelectedWorkItemsAction', () => {
         selectedWorkItems: [
           {
             docketEntry: {
-              multiDocketedOn: ['101-25', '102-25'],
+              multiDocketedOn: ['101-23', '102-23', '103-23', '104-23'],
             },
-            docketEntryId: 'abc',
-            docketNumber: '101-25',
-            workItemId: 'q',
+            groupedMemberCases: [
+              {
+                workItemId: 'member-work-item-id',
+              },
+            ],
+            workItemId: 'lead-work-item-id',
           },
         ],
         user: {
@@ -100,51 +103,48 @@ describe('assignSelectedWorkItemsAction', () => {
         },
         workQueue: [
           {
-            assigneeId: 'old',
-            assigneeName: 'Old Name',
-            docketEntryId: 'abc',
-            docketNumber: '101-25',
-            workItemId: 'q',
+            assigneeId: 'docketclerk1',
+            assigneeName: 'Docket Clerk 1',
+            workItemId: 'lead-work-item-id',
           },
           {
-            assigneeId: 'old',
-            assigneeName: 'Old Name',
-            docketEntryId: 'abc',
-            docketNumber: '102-25',
-            workItemId: 'r',
+            assigneeId: 'docketclerk1',
+            assigneeName: 'Docket Clerk 1',
+            workItemId: 'member-work-item-id',
           },
           {
-            assigneeId: 'old',
-            assigneeName: 'Old Name',
-            docketEntryId: 'different',
-            docketNumber: '102-25',
-            workItemId: 'z',
+            assigneeId: 'docketclerk1',
+            assigneeName: 'Docket Clerk 1',
+            workItemId: 'member-work-item-id',
+          },
+          {
+            assigneeId: 'docketclerk1',
+            assigneeName: 'Docket Clerk 1',
+            workItemId: 'member-work-item-id',
           },
         ],
       },
     });
-
     expect(result.state.workQueue).toEqual([
       {
         assigneeId: 'docketclerk',
         assigneeName: 'Docket Clerk',
-        docketEntryId: 'abc',
-        docketNumber: '101-25',
-        workItemId: 'q',
+        workItemId: 'lead-work-item-id',
       },
       {
         assigneeId: 'docketclerk',
         assigneeName: 'Docket Clerk',
-        docketEntryId: 'abc',
-        docketNumber: '102-25',
-        workItemId: 'r',
+        workItemId: 'member-work-item-id',
       },
       {
-        assigneeId: 'old',
-        assigneeName: 'Old Name',
-        docketEntryId: 'different',
-        docketNumber: '102-25',
-        workItemId: 'z',
+        assigneeId: 'docketclerk',
+        assigneeName: 'Docket Clerk',
+        workItemId: 'member-work-item-id',
+      },
+      {
+        assigneeId: 'docketclerk',
+        assigneeName: 'Docket Clerk',
+        workItemId: 'member-work-item-id',
       },
     ]);
     expect(result.state.selectedWorkItems).toEqual([]);
