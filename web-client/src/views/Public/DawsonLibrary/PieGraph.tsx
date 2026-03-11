@@ -1,5 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import {
+  Chart,
+  ChartConfiguration,
+  ChartEvent,
+  LegendElement,
+  LegendItem,
+  registerables,
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import type { Context } from 'chartjs-plugin-datalabels';
 
@@ -122,6 +129,19 @@ export const PieGraph: React.FC<
           legend: {
             display: showLegend,
             position: 'top',
+            onClick: (
+              _: ChartEvent,
+              legendItem: LegendItem,
+              legend: LegendElement<'pie'>,
+            ) => {
+              const { index } = legendItem;
+              const { chart } = legend;
+              const { data: metaData } = chart.getDatasetMeta(0);
+              if (index === undefined) return;
+              const item = metaData[index];
+              item.hidden = !item.hidden;
+              chart.update();
+            },
             labels: {
               padding: 15,
               font: {
@@ -138,10 +158,20 @@ export const PieGraph: React.FC<
                 return (
                   chart.data.labels?.map((label, i) => {
                     const value = datasets[0].data[i] as number;
+                    const meta = chart.getDatasetMeta(0);
+                    const isHidden =
+                      (meta.data[i] as unknown as { hidden: boolean })
+                        ?.hidden ?? false;
+                    const bgColor = (datasets[0].backgroundColor as string[])[
+                      i
+                    ];
                     return {
                       text: `${label}: ${value}`,
-                      fillStyle: (datasets[0].backgroundColor as string[])[i],
-                      hidden: false,
+                      fillStyle: isHidden ? '#ccc' : bgColor,
+                      strokeStyle: isHidden ? '#999' : bgColor,
+                      fontColor: isHidden ? '#999' : undefined,
+                      textDecoration: isHidden ? 'line-through' : undefined,
+                      hidden: isHidden,
                       index: i,
                     };
                   }) || []
