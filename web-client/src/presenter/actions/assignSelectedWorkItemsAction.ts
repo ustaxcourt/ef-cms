@@ -14,22 +14,18 @@ export const assignSelectedWorkItemsAction = async ({
 
   selectedWorkItems.forEach(workItem => {
     workItemIds.push(workItem.workItemId);
-    workItem.groupedCases?.forEach(item => {
+    workItem.groupedMemberCases?.forEach(item => {
       workItemIds.push(item.workItemId);
     });
   });
 
-  await Promise.all(
-    workItemIds.map(workItemId =>
-      applicationContext
-        .getUseCases()
-        .assignWorkItemsInteractor(applicationContext, {
-          assigneeId,
-          assigneeName,
-          workItemId,
-        }),
-    ),
-  );
+  await applicationContext
+    .getUseCases()
+    .assignWorkItemsInteractor(applicationContext, {
+      assigneeId,
+      assigneeName,
+      workItemIds,
+    });
 
   // Give elasticsearch a chance to catch up
   // TODO: we need a better solution for this; this is causing flaky functionality and failing cypress tests

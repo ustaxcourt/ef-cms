@@ -106,7 +106,7 @@ export const formattedWorkQueue = (
 
     const consolidatedResult: Array<
       RawWorkItemWithCaseAndDocketEntryInfo & {
-        groupedCases?: {
+        groupedMemberCases?: {
           workItemId: string;
           docketNumber: string;
           docketNumberWithSuffix: string;
@@ -116,23 +116,29 @@ export const formattedWorkQueue = (
     > = [];
 
     for (const group of consolidatedGroups.values()) {
-      const groupedCases = Case.sortByDocketNumber(
-        group.map(item => ({
-          workItemId: item.workItemId,
-          docketNumber: item.docketNumber,
-          docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
-          inLeadCase: isLeadCase(item),
-        })),
+      const groupedMemberCases = Case.sortByDocketNumber(
+        group
+          .filter(item => !isLeadCase(item))
+          .map(item => {
+            return {
+              workItemId: item.workItemId,
+              docketNumber: item.docketNumber,
+              docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
+              inLeadCase: isLeadCase(item),
+            };
+          }),
       );
 
-      const leadOrLowestNumber =
-        Case.sortByDocketNumber(groupedCases)[0].docketNumber;
+      const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
 
       const leadOrLowestNumberedItem = group.find(item => {
         return item.docketNumber === leadOrLowestNumber;
       })!;
 
-      consolidatedResult.push({ ...leadOrLowestNumberedItem, groupedCases });
+      consolidatedResult.push({
+        ...leadOrLowestNumberedItem,
+        groupedMemberCases,
+      });
     }
 
     filtered = [...solo, ...consolidatedResult];
@@ -591,7 +597,7 @@ export type FormattedWorkItemWithCaseInfo =
     showUnassignedIcon: boolean;
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
-    groupedCases?: {
+    groupedMemberCases?: {
       docketNumber: string;
       docketNumberWithSuffix: string;
       inLeadCase: boolean;

@@ -11,7 +11,7 @@ import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
-import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds as getWorkItemsByIdsMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import {
   mockCaseServicesSupervisorUser,
   mockClerkOfTheCourtUser,
@@ -27,7 +27,7 @@ import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@w
 describe('assignWorkItemsInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getWorkItemsByIds = getWorkItemsByIdsMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
     getDocketEntriesByDocketNumberAndDocketEntryIdMock,
   );
@@ -35,7 +35,7 @@ describe('assignWorkItemsInteractor', () => {
     getWorkItemsByDocketNumberMock,
   );
 
-  const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
+  const options = { assigneeId: 'ss', assigneeName: 'ss', workItemIds: [''] };
   let mockWorkItem: RawWorkItem;
 
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe('assignWorkItemsInteractor', () => {
       section: DOCKET_SECTION,
     } as DbUser);
 
-    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
+    getWorkItemsByIds.mockResolvedValue([new WorkItem(mockWorkItem)]);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       {
         documentTitle: 'Some title',
@@ -75,12 +75,12 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should throw an error when the work item is invalid', async () => {
-    getWorkItemById.mockResolvedValue(
+    getWorkItemsByIds.mockResolvedValue([
       new WorkItem({
         ...mockWorkItem,
         docketNumber: undefined,
       }),
-    );
+    ]);
 
     await expect(
       assignWorkItemsInteractor(
@@ -99,7 +99,7 @@ describe('assignWorkItemsInteractor', () => {
           assigneeId: mockDocketClerkUser.userId,
           assigneeName: 'Ted Docket',
           workItem: undefined,
-          workItemId: undefined,
+          workItemIds: undefined,
         },
         mockDocketClerkUser,
       ),
@@ -123,7 +123,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockDocketClerkUser,
     );
@@ -154,7 +153,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockPetitionsClerkUser.userId,
         assigneeName: mockPetitionsClerkUser.name,
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockPetitionsClerkUser,
     );
@@ -188,7 +186,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockCaseServicesSupervisorUser.userId,
         assigneeName: mockCaseServicesSupervisorUser.name,
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockCaseServicesSupervisorUser,
     );
@@ -222,7 +219,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockClerkOfTheCourtUser.userId,
         assigneeName: mockClerkOfTheCourtUser.name,
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockClerkOfTheCourtUser,
     );
@@ -256,7 +252,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockCaseServicesSupervisorUser.userId,
         assigneeName: mockCaseServicesSupervisorUser.name,
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockCaseServicesSupervisorUser,
     );
@@ -290,7 +285,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockClerkOfTheCourtUser.userId,
         assigneeName: mockClerkOfTheCourtUser.name,
         workItem: mockWorkItem,
-        workItemId: undefined,
       },
       mockClerkOfTheCourtUser,
     );
@@ -317,7 +311,7 @@ describe('assignWorkItemsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
-        workItemId: mockWorkItem.workItemId,
+        workItemIds: [mockWorkItem.workItemId],
       },
       mockDocketClerkUser,
     );
@@ -398,7 +392,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
         workItem: leadWorkItem,
-        workItemId: undefined,
       },
       mockDocketClerkUser,
     );
@@ -466,7 +459,6 @@ describe('assignWorkItemsInteractor', () => {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
         workItem: memberWorkItem,
-        workItemId: undefined,
       },
       mockDocketClerkUser,
     );
@@ -492,7 +484,7 @@ describe('assignWorkItemsInteractor', () => {
         {
           assigneeId: mockDocketClerkUser.userId,
           assigneeName: 'Ted Docket',
-          workItemId: mockWorkItem.workItemId,
+          workItemIds: [mockWorkItem.workItemId],
         },
         mockDocketClerkUser,
       ),
@@ -513,7 +505,7 @@ describe('assignWorkItemsInteractor', () => {
         {
           assigneeId: 'unknown-user-id',
           assigneeName: 'Unknown User',
-          workItemId: mockWorkItem.workItemId,
+          workItemIds: [mockWorkItem.workItemId],
         },
         mockDocketClerkUser,
       ),
@@ -531,7 +523,7 @@ describe('assignWorkItemsInteractor', () => {
         section: DOCKET_SECTION,
       } as DbUser);
 
-    getWorkItemById.mockResolvedValue(undefined);
+    getWorkItemsByIds.mockResolvedValue([]);
 
     await expect(
       assignWorkItemsInteractor(
@@ -539,7 +531,7 @@ describe('assignWorkItemsInteractor', () => {
         {
           assigneeId: mockDocketClerkUser.userId,
           assigneeName: 'Ted Docket',
-          workItemId: 'non-existent-work-item-id',
+          workItemIds: ['non-existent-work-item-id'],
         },
         mockDocketClerkUser,
       ),
@@ -566,7 +558,6 @@ describe('assignWorkItemsInteractor', () => {
           assigneeId: mockDocketClerkUser.userId,
           assigneeName: 'Ted Docket',
           workItem: mockWorkItem,
-          workItemId: undefined,
         },
         mockDocketClerkUser,
       ),

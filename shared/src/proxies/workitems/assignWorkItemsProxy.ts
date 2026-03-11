@@ -7,12 +7,12 @@ export const assignWorkItemsInteractor = (
     assigneeId,
     assigneeName,
     workItem = undefined,
-    workItemId = undefined,
+    workItemIds = undefined,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItemId?: string;
     workItem?: RawWorkItem;
+    workItemIds?: string[];
   },
 ) => {
   return put({
@@ -21,7 +21,7 @@ export const assignWorkItemsInteractor = (
       assigneeId,
       assigneeName,
       workItem,
-      workItemId,
+      workItemIds,
     },
     endpoint: '/work-items',
   });

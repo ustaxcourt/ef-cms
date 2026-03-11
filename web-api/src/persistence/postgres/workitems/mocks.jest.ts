@@ -24,8 +24,8 @@ jest.mock(
   () => mockFactory('getDocumentQCServedForUser'),
 );
 
-jest.mock('@web-api/persistence/postgres/workitems/getWorkItemById', () =>
-  mockFactory('getWorkItemById'),
+jest.mock('@web-api/persistence/postgres/workitems/getWorkItemsByIds', () =>
+  mockFactory('getWorkItemsByIds'),
 );
 
 jest.mock(

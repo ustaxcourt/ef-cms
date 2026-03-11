@@ -7,7 +7,7 @@ import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
-import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
@@ -18,11 +18,11 @@ export const assignWorkItemsInteractor = async (
     assigneeId,
     assigneeName,
     workItem,
-    workItemId,
+    workItemIds,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItemId?: string;
+    workItemIds?: string[];
     workItem?: RawWorkItem;
   },
   authorizedUser: UnknownAuthUser,
@@ -49,35 +49,6 @@ export const assignWorkItemsInteractor = async (
     throw new NotFoundError(`User not found with user id ${assigneeId}`);
   }
 
-  let workItemEntity: WorkItem | undefined;
-  if (!workItem && workItemId) {
-    workItemEntity = await getWorkItemById({
-      workItemId,
-    });
-    if (!workItemEntity) {
-      throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
-    }
-  } else {
-    workItemEntity = new WorkItem(workItem);
-  }
-
-  const docketEntry = (
-    await getDocketEntriesByDocketNumberAndDocketEntryId({
-      docketNumbersAndIds: [
-        {
-          docketNumber: workItemEntity.docketNumber,
-          docketEntryId: workItemEntity.docketEntryId,
-        },
-      ],
-    })
-  ).at(0);
-
-  if (!docketEntry) {
-    throw new NotFoundError(
-      `Docket entry associated with work item ${workItemId} was not found.`,
-    );
-  }
-
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
     section: userBeingAssigned.section,
@@ -92,19 +63,59 @@ export const assignWorkItemsInteractor = async (
     sectionToAssignTo = userBeingAssigned.section;
   }
 
-  workItemEntity.assignToUser({
-    assigneeId,
-    assigneeName,
-    section: WorkItem.getWorkItemSectionFromUserSection({
-      section: sectionToAssignTo,
-      documentTitle: docketEntry.documentTitle,
+  let workItemEntities: WorkItem[] = [];
+
+  if (!workItem && workItemIds?.length) {
+    const workItems = await getWorkItemsByIds({ workItemIds });
+
+    for (let i = 0; i < workItems.length; i++) {
+      if (!workItems[i]) {
+        throw new NotFoundError(`WorkItem ${workItemIds[i]} was not found.`);
+      }
+      workItemEntities.push(workItems[i]!);
+    }
+  } else if (workItem) {
+    workItemEntities = [new WorkItem(workItem)];
+  } else {
+    throw new NotFoundError(`No work item or work item IDs provided.`);
+  }
+
+  const assignedWorkItems = await Promise.all(
+    workItemEntities.map(async workItemEntity => {
+      const docketEntry = (
+        await getDocketEntriesByDocketNumberAndDocketEntryId({
+          docketNumbersAndIds: [
+            {
+              docketNumber: workItemEntity.docketNumber,
+              docketEntryId: workItemEntity.docketEntryId,
+            },
+          ],
+        })
+      ).at(0);
+
+      if (!docketEntry) {
+        throw new NotFoundError(
+          `Docket entry associated with work item ${workItemEntity.workItemId} was not found.`,
+        );
+      }
+
+      workItemEntity.assignToUser({
+        assigneeId,
+        assigneeName,
+        section: WorkItem.getWorkItemSectionFromUserSection({
+          section: sectionToAssignTo,
+          documentTitle: docketEntry.documentTitle,
+        }),
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
+
+      return workItemEntity;
     }),
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
+  );
 
   await upsertWorkItems({
-    workItems: [workItemEntity.validate().toRawObject()],
+    workItems: assignedWorkItems.map(w => w.validate().toRawObject()),
   });
 };

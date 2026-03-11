@@ -974,7 +974,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [] as {
     workItemId: string;
-    groupedCases?: {
+    groupedMemberCases?: {
       workItemId: string;
       docketNumber: string;
       docketNumberWithSuffix: string;

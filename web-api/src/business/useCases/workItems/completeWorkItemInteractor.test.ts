@@ -9,7 +9,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
-import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds as getWorkItemsByIdsMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import {
   mockDocketClerkUser,
@@ -17,7 +17,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
-  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getWorkItemById = getWorkItemsByIdsMock as jest.Mock;
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),

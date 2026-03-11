@@ -11,7 +11,7 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
-import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {

@@ -47,7 +47,7 @@ export const SectionWorkQueueOutbox = connect(
                 data-testid={`work-item-section-outbox-${item.docketNumber}`}
               >
                 <td className="consolidated-case-column">
-                  {item.groupedCases ? (
+                  {item.groupedMemberCases ? (
                     <div
                       className="consolidated-icons-stack"
                       aria-hidden="true"
@@ -59,18 +59,16 @@ export const SectionWorkQueueOutbox = connect(
                         inConsolidatedGroup={item.inConsolidatedGroup}
                         showLeadCaseIcon={item.inLeadCase}
                       />
-                      {item.groupedCases
-                        .filter(c => c.docketNumber !== item.docketNumber)
-                        .map(c => (
-                          <ConsolidatedCaseIcon
-                            key={`icon-${c.docketNumber}`}
-                            consolidatedIconTooltipText={
-                              c.inLeadCase ? 'Lead case' : 'Consolidated case'
-                            }
-                            inConsolidatedGroup={true}
-                            showLeadCaseIcon={c.inLeadCase}
-                          />
-                        ))}
+                      {item.groupedMemberCases.map(c => (
+                        <ConsolidatedCaseIcon
+                          key={`icon-${c.docketNumber}`}
+                          consolidatedIconTooltipText={
+                            c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                          }
+                          inConsolidatedGroup={true}
+                          showLeadCaseIcon={c.inLeadCase}
+                        />
+                      ))}
                     </div>
                   ) : (
                     <ConsolidatedCaseIcon
@@ -83,10 +81,11 @@ export const SectionWorkQueueOutbox = connect(
                   )}
                 </td>
                 <td className="message-queue-row">
-                  {item.groupedCases ? (
+                  {item.groupedMemberCases ? (
                     <div className="grouped-cases-row">
+                      <CaseLink formattedCase={item} />
                       <div className="member-case-links">
-                        {item.groupedCases.map(c => (
+                        {item.groupedMemberCases.map(c => (
                           <div
                             key={c.docketNumber}
                             className="member-case-line"
