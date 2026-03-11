@@ -7,7 +7,10 @@ const DOMAIN_REPLACER = 'ef-cms.ustaxcourt.gov';
 const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
 export function sanitizeEmail(email: string) {
-  const hash = crypto.createHash('md5').update(email).digest('hex');
+  const hash = crypto
+    .createHash('shake256', { outputLength: 3 })
+    .update(email)
+    .digest('hex');
   return `${hash}@${DOMAIN_REPLACER}`;
 }
 
