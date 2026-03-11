@@ -1,3 +1,9 @@
+jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation',
+);
+jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate',
+);
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -6,6 +12,8 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { determineNoticesOfTrialChangesToGenerateAction } from './determineNoticesOfTrialChangesToGenerateAction';
+import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
 
 describe('determineNoticesOfTrialChangesToGenerateAction', () => {
   let bothMock: jest.Mock;
@@ -53,6 +61,14 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
         casesThatShouldReceiveNoticesCount: 0,
       });
 
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+      true,
+    );
+
+    (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+      true,
+    );
+
     await runAction(determineNoticesOfTrialChangesToGenerateAction, {
       modules: {
         presenter,
@@ -72,9 +88,18 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
   it('should call "unchanged" path when neither location nor start date changed', async () => {
     applicationContext
       .getUseCases()
-      .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
+      .getTrialSessionOpenCasesCountInteractor.mockReturnValue({
+        calendaredCaseEntitiesCount: 1,
         casesThatShouldReceiveNoticesCount: 1,
       });
+
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+      false,
+    );
+
+    (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+      false,
+    );
 
     await runAction(determineNoticesOfTrialChangesToGenerateAction, {
       modules: {
@@ -96,8 +121,18 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
     applicationContext
       .getUseCases()
       .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
+                calendaredCaseEntitiesCount: 1,
+
         casesThatShouldReceiveNoticesCount: 1,
       });
+
+        (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+      true,
+    );
+
+    (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+      true,
+    );
 
     const updatedTrialSession = {
       ...baseTrialSession,
@@ -130,9 +165,18 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
   it('should call "location" path when only location changed', async () => {
     applicationContext
       .getUseCases()
-      .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
+      .getTrialSessionOpenCasesCountInteractor.mockReturnValue({
+        calendaredCaseEntitiesCount: 1,
         casesThatShouldReceiveNoticesCount: 1,
       });
+
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+      true,
+    );
+
+    (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+      false,
+    );
 
     const updatedTrialSession = {
       ...baseTrialSession,
@@ -164,9 +208,18 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
   it('should call "startDate" path when only start date changed', async () => {
     applicationContext
       .getUseCases()
-      .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
+      .getTrialSessionOpenCasesCountInteractor.mockReturnValue({
+        calendaredCaseEntitiesCount: 1,
         casesThatShouldReceiveNoticesCount: 1,
       });
+
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+      false,
+    );
+
+    (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+      true,
+    );
 
     const updatedTrialSession = {
       ...baseTrialSession,
