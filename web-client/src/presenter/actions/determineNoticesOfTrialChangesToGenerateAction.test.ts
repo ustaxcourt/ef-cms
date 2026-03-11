@@ -1,3 +1,9 @@
+jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation',
+);
+jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate',
+);
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -116,11 +122,10 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
       .getUseCases()
       .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
         calendaredCaseEntitiesCount: 1,
-
         casesThatShouldReceiveNoticesCount: 1,
       });
 
-    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+        (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
       true,
     );
 
