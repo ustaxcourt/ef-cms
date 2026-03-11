@@ -12,7 +12,7 @@ const VALIDATION_REGEX = /validation/i;
 // TODO: Replace with dynamic entity discovery from shared/src/business/entities
 
 const ENTITIES_OF_CASE = [
-  'cases/Case.ts',
+  'Case.ts',
   'DocketEntry.ts',
   'IrsPractitioner.ts',
   'PrivatePractitioner.ts',
@@ -22,8 +22,8 @@ const ENTITIES_OF_CASE = [
 const ENTITIES_TO_CHECK = [
   'Message.ts',
   'PractitionerDocument.ts',
-  'trialSessions/TrialSessionWorkingCopy.ts',
-  'trialSessions/TrialSession.ts',
+  'TrialSessionWorkingCopy.ts',
+  'TrialSession.ts',
   'User.ts',
   'WorkItem.ts',
   ...ENTITIES_OF_CASE,
@@ -84,6 +84,7 @@ async function validateEntitiesWithNewRules(
   let isEntityOfCase = false;
   for (const entity of changedEntities) {
     const entityName = entity.split('.')[0];
+    console.log('Entity Name: ', entityName);
     if (ENTITIES_OF_CASE.includes(`${entityName}.ts`)) {
       isEntityOfCase = true;
     } else {
@@ -118,9 +119,12 @@ async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
 async function main(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
-  const entityValidationRequired = await getSSMItem(
-    'entity-validation-required',
-  );
+  let entityValidationRequired: string | undefined;
+  try {
+    entityValidationRequired = await getSSMItem('entity-validation-required');
+  } catch {
+    entityValidationRequired = undefined;
+  }
 
   const changedEntities =
     entityValidationRequired === 'true'
