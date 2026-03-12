@@ -1,32 +1,12 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
-import '@web-api/persistence/postgres/utils/mocks.jest';
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
-import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+jest.mock('@web-api/persistence/postgres/cases/updateCaseNote');
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseNote as updateCaseNoteMock } from '@web-api/persistence/postgres/cases/updateCaseNote';
 
 describe('saveCaseNoteInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const tryGetLocks = jest.mocked(tryGetLocksMock);
-
-  beforeAll(() => {
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
-  });
-
-  beforeEach(() => {
-    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-  });
+  const updateCaseNote = jest.mocked(updateCaseNoteMock);
 
   it('should throw an error when the user is not valid or authorized', async () => {
     await expect(
@@ -51,43 +31,9 @@ describe('saveCaseNoteInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
-  });
-
-  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
-    tryGetLocks.mockResolvedValueOnce([
-      { successfullyLocked: false, identifier: 'abc' },
-    ]);
-
-    await expect(
-      saveCaseNoteInteractor(
-        applicationContext,
-        {
-          caseNote: 'This is my case note',
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-        mockJudgeUser,
-      ),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
-  });
-
-  it('should acquire a lock on the case', async () => {
-    await saveCaseNoteInteractor(
-      applicationContext,
-      {
-        caseNote: 'This is my case note',
-        docketNumber: MOCK_CASE.docketNumber,
-      },
-      mockJudgeUser,
-    );
-
-    expect(tryGetLocks).toHaveBeenCalledWith(
-      expect.objectContaining({
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      }),
-    );
+    expect(updateCaseNote).toHaveBeenCalledWith({
+      caseNote: 'This is my case note',
+      docketNumber: MOCK_CASE.docketNumber,
+    });
   });
 });
