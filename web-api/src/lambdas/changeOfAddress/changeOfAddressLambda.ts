@@ -1,4 +1,7 @@
 import { applicationContext } from '@web-api/applicationContext';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+
+getStorageClient();
 
 export const changeOfAddressHandler = async event => {
   const { Records } = event;
