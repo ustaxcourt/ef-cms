@@ -5,11 +5,129 @@ import { Alerts } from '@web-client/views/Public/DawsonLibrary/Alerts';
 import { Tags } from '@web-client/views/Public/DawsonLibrary/Tags';
 import { Inputs } from '@web-client/views/Public/DawsonLibrary/Inputs';
 import { PieGraph } from './PieGraph';
+import { LineGraph } from './LineGraph';
+import { SingleBarGraph, MultiBarGraph } from './BarGraph';
 
 export const DawsonLibrary = () => {
   return (
     <>
       <BigHeader text="Dawson Library" />
+      <SingleBarGraph
+        title="Cases by Type"
+        xAxisLabel="Case Type"
+        yAxisLabel="Number of Cases"
+        data={[
+          { label: 'Deficiency', value: 312, color: '#005EA2' },
+          { label: 'Lien/Levy', value: 178, color: '#005EA2' },
+          { label: 'Whistleblower', value: 94, color: '#005EA2' },
+          { label: 'Passport', value: 57, color: '#005EA2' },
+          { label: 'Other', value: 130, color: '#005EA2' },
+        ]}
+      />
+      <MultiBarGraph
+        title="Filed vs Closed Cases by Month (Stacked)"
+        xAxisLabel="Month"
+        yAxisLabel="Number of Cases"
+        stacked
+        labels={[
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ]}
+        datasets={[
+          {
+            label: 'Filed',
+            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+          },
+          {
+            label: 'Closed',
+            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 10],
+          },
+        ]}
+      />
+      <MultiBarGraph
+        title="Filed vs Closed Cases by Month (Grouped)"
+        xAxisLabel="Month"
+        yAxisLabel="Number of Cases"
+        labels={[
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ]}
+        datasets={[
+          {
+            label: 'Filed',
+            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+          },
+          {
+            label: 'Closed',
+            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
+          },
+        ]}
+      />
+      <LineGraph
+        title="Cases Filed Over Time"
+        xAxisLabel="Month"
+        yAxisLabel="Number of Cases"
+        labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+        datasets={[
+          {
+            label: 'Regular Cases',
+            data: [55, 38, -100, 65, 75, -70, 20],
+          },
+          {
+            label: 'Small Tax Cases',
+            data: [-70, -10, -38, 78, -38, -33, -31],
+          },
+        ]}
+        smooth
+      />
+      <LineGraph
+        title="Case Type Breakdown by Quarter"
+        xAxisLabel="Quarter"
+        yAxisLabel="Number of Cases"
+        labels={['Q1', 'Q2', 'Q3', 'Q4']}
+        datasets={[
+          {
+            label: 'Deficiency',
+            data: [120, 145, 132, 160],
+          },
+          {
+            label: 'Lien/Levy',
+            data: [85, 92, 78, 101],
+          },
+          {
+            label: 'Whistleblower',
+            data: [34, 41, 29, 38],
+          },
+          {
+            label: 'Passport',
+            data: [18, 22, 25, 19],
+          },
+          {
+            label: 'Other',
+            data: [55, 48, 63, 57],
+          },
+        ]}
+      />
       <PieGraph
         rotation={25}
         data={[
@@ -43,6 +161,7 @@ export const DawsonLibrary = () => {
         title="Session Distribution 1"
         type="session"
       />
+
       <div className="card margin-2 padding-2">
         <Buttons />
         <Alerts />
