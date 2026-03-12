@@ -6,12 +6,45 @@ const DOMAIN_REPLACER = 'ef-cms.ustaxcourt.gov';
 // Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
 const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
+const usedEmails = {};
+
+const alreadyHashedEmails = {};
+
 export function sanitizeEmail(email: string) {
-  const hash = crypto
+  if (email === '') {
+    // console.log('Empty Email encountered');
+    return '';
+  }
+  let hash = crypto
     .createHash('shake256', { outputLength: 3 })
     .update(email)
     .digest('hex');
-  return `${hash}@${DOMAIN_REPLACER}`;
+
+  //  for user of users: does my email already have a hash?
+  const originalEmail = email;
+  // if (usedEmails[sanitizedEmail]) {
+  if (alreadyHashedEmails[originalEmail]) {
+    return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
+  }
+  if (usedEmails[hash]) {
+    let running = true;
+    while (running) {
+      hash = crypto
+        .createHash('shake256', { outputLength: 3 })
+        .update(hash)
+        .digest('hex');
+      if (!usedEmails[hash]) {
+        usedEmails[hash] = originalEmail;
+        alreadyHashedEmails[originalEmail] = hash;
+        running = false;
+      }
+    }
+  } else {
+    usedEmails[hash] = originalEmail;
+    alreadyHashedEmails[originalEmail] = hash;
+  }
+  // return `${hash}@${DOMAIN_REPLACER}`;
+  return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
 }
 
 export async function sanitizeDumpFile(
