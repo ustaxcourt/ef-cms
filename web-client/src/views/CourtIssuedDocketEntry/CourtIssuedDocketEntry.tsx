@@ -8,7 +8,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from '../InfoNotification';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
@@ -73,9 +73,18 @@ export const CourtIssuedDocketEntry = connect(
 
           {!addCourtIssuedDocketEntryHelper.showServiceWarning &&
             isEditingDocketEntry && (
-              <Hint fullWidth>
-                This docket entry has not been served on the parties.
-              </Hint>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-5">
+                  <InfoNotificationComponent
+                    alertInfo={{
+                      message:
+                        'This docket entry has not been served on the parties.',
+                    }}
+                    dismissible={false}
+                    scrollToTop={false}
+                  />
+                </div>
+              </div>
             )}
 
           {addCourtIssuedDocketEntryHelper.showServiceWarning && (
