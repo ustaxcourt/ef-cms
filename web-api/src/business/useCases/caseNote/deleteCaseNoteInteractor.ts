@@ -6,8 +6,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateCaseNote } from '@web-api/persistence/postgres/cases/updateCaseNote';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-export const deleteCaseNoteInteractor = async (
+const deleteCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -21,3 +22,10 @@ export const deleteCaseNoteInteractor = async (
     docketNumber,
   });
 };
+
+export const deleteCaseNoteInteractor = withLocking(
+  deleteCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -6,8 +6,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateCaseNote } from '@web-api/persistence/postgres/cases/updateCaseNote';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-export const saveCaseNoteInteractor = async (
+const saveCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -21,3 +22,10 @@ export const saveCaseNoteInteractor = async (
     docketNumber,
   });
 };
+
+export const saveCaseNoteInteractor = withLocking(
+  saveCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
