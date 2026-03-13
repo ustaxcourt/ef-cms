@@ -127,7 +127,7 @@ const { env, verbose } =
         await applicationContext.getPersistenceGateway().uploadDocument({
           applicationContext,
           pdfData: pdfBuffer,
-          pdfName: docketEntryId,
+          key: docketEntryId,
         });
 
         // Insert docket entry
