@@ -1,33 +1,34 @@
-import { Kysely, sql } from 'kysely';
+import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .alterTable('dwChangeOfAddress')
-    .dropColumn('remaining')
-    .addColumn('docketNumber', 'varchar')
+    .renameTo('dwChangeOfAddressOld')
     .execute();
 
-  await sql`
-  ALTER TABLE dw_change_of_address DROP CONSTRAINT dw_change_of_address_pkey
-  `.execute(db);
+  await db.schema
+    .alterTable('dwChangeOfAddressOld')
+    .renameConstraint('dwChangeOfAddressPkey', 'dwChangeOfAddressOldPkey')
+    .execute();
 
-  await sql`
-  ALTER TABLE dw_change_of_address ADD PRIMARY KEY (job_id, docket_number)
-  `.execute(db);
+  await db.schema
+    .createTable('dwChangeOfAddress')
+    .addColumn('jobId', 'varchar')
+    .addColumn('docketNumber', 'varchar')
+    .addPrimaryKeyConstraint('dwChangeOfAddressPkey', ['jobId', 'docketNumber'])
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  await db.schema.dropTable('dwChangeOfAddress').execute();
+
   await db.schema
-    .alterTable('dwChangeOfAddress')
-    .dropColumn('docketNumber')
-    .addColumn('remaining', 'integer', col => col.notNull())
+    .alterTable('dwChangeOfAddressOld')
+    .renameTo('dwChangeOfAddress')
     .execute();
 
-  await sql`
-  ALTER TABLE dw_change_of_address DROP CONSTRAINT dw_change_of_address_pkey
-  `.execute(db);
-
-  await sql`
-  ALTER TABLE dw_change_of_address ADD PRIMARY KEY (job_id)
-  `.execute(db);
+  await db.schema
+    .alterTable('dwChangeOfAddress')
+    .renameConstraint('dwChangeOfAddressOldPkey', 'dwChangeOfAddressPkey')
+    .execute();
 }
