@@ -2,7 +2,6 @@ import { appendFormAndOverwriteOrderFileAction } from '../actions/CourtIssuedOrd
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { followRedirectAction } from '../actions/followRedirectAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { getCreateOrderSelectedCases } from '@web-client/presenter/actions/getCreateOrderSelectedCases';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
@@ -15,7 +14,6 @@ import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction'
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -32,8 +30,6 @@ import { validateCourtOrderAction } from '../actions/CourtIssuedOrder/validateCo
 const onFileUploadedSuccess = [
   getCreateOrderSelectedCases,
   submitCourtIssuedOrderAction,
-  getCaseAction,
-  setCaseAction,
   setDefaultDraftDocumentIdAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,
