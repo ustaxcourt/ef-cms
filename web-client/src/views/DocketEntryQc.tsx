@@ -4,13 +4,13 @@ import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
-import { InfoNotificationComponent } from './InfoNotification';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 
 export const DocketEntryQc = connect(
@@ -46,12 +46,12 @@ export const DocketEntryQc = connect(
           data-testid="docket-entry-qc-container"
         >
           {docketEntryQcHelper.showPaperServiceWarning && (
-            <InfoNotificationComponent
+            <AlertInfo
               alertInfo={{
                 message: `This document was automatically generated and requires paper
               service.`,
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
             />
           )}
@@ -85,7 +85,7 @@ export const DocketEntryQc = connect(
               <div className="grid-col-5">
                 <div>
                   {docketEntryQcHelper.showQCHelpText && (
-                    <InfoNotificationComponent
+                    <AlertInfo
                       alertInfo={{
                         message: (
                           <div>
@@ -93,22 +93,23 @@ export const DocketEntryQc = connect(
                               This document will also be QC&apos;d for all
                               consolidated cases.
                             </b>
-                            <ul className="margin-top-0 margin-bottom-0 padding-left-3">
+                            <ul className="tw:mt-0 tw:mb-0">
                               {docketEntryQcHelper.memberCases.map(cc => (
                                 <li key={cc.docketNumber}>
                                   {cc.docketNumber} - {cc.caseTitle}
                                 </li>
                               ))}
                             </ul>
-                            <p className="margin-bottom-0 margin-top-0">
+                            <p className="tw:mb-0 tw:mt-0">
                               If a Notice of Docket Change is generated, it will
                               be filed in all cases in the group.
                             </p>
                           </div>
                         ),
                       }}
-                      dismissible={false}
+                      isDismissible={false}
                       scrollToTop={false}
+                      className="tw:mb-6"
                     />
                   )}
                 </div>

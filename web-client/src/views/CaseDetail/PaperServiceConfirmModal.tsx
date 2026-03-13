@@ -1,8 +1,8 @@
 import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
@@ -55,7 +55,7 @@ export const PaperServiceConfirmModal = connect(
           </ul>
 
           {confirmPaperServiceModalHelper.contactsNeedingPaperService && (
-            <InfoNotificationComponent
+            <AlertInfo
               alertInfo={{
                 message: (
                   <>
@@ -76,8 +76,9 @@ export const PaperServiceConfirmModal = connect(
                   </>
                 ),
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
+              className="tw:mt-6"
             />
           )}
         </ConfirmModal>

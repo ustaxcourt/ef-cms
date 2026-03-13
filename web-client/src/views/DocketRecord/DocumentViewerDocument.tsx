@@ -7,7 +7,7 @@ import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyC
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -82,7 +82,7 @@ export const DocumentViewerDocument = connect(
             )}
 
             {documentViewerHelper.showLeadCaseBanner && (
-              <InfoNotificationComponent
+              <AlertInfo
                 alertInfo={{
                   message: (
                     <>
@@ -91,8 +91,9 @@ export const DocumentViewerDocument = connect(
                     </>
                   ),
                 }}
-                dismissible={false}
+                isDismissible={false}
                 scrollToTop={false}
+                className="tw:mb-3"
               />
             )}
 

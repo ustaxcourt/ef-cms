@@ -8,7 +8,6 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { InfoNotificationComponent } from '../InfoNotification';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
@@ -21,6 +20,7 @@ import React from 'react';
 import { pullAt } from 'lodash';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { Button } from '@web-client/dawson-ui/ui/button';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 
 export const CourtIssuedDocketEntry = connect(
   {
@@ -75,13 +75,13 @@ export const CourtIssuedDocketEntry = connect(
             isEditingDocketEntry && (
               <div className="grid-row grid-gap">
                 <div className="grid-col-5">
-                  <InfoNotificationComponent
+                  <AlertInfo
                     alertInfo={{
                       message:
                         'This docket entry has not been served on the parties.',
                     }}
-                    dismissible={false}
-                    scrollToTop={false}
+                    isDismissible={false}
+                    className="tw:mb-4"
                   />
                 </div>
               </div>

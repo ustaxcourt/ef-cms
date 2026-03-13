@@ -1,12 +1,12 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
-import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
 import { ContactsNeedingPaperService } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
+import React from 'react';
 
 type ConfirmInitiateServiceModalProps = {
   confirmSequence: Function;
@@ -92,7 +92,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
             )}
 
           {confirmInitiateServiceModalHelper.contactsNeedingPaperService && (
-            <InfoNotificationComponent
+            <AlertInfo
               alertInfo={{
                 message: (
                   <>
@@ -113,8 +113,9 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
                   </>
                 ),
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
+              className="tw:mb-6"
             />
           )}
           {confirmInitiateServiceModalHelper.allowMultiDocketing && (

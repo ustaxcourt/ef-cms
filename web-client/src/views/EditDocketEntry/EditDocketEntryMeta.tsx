@@ -9,10 +9,10 @@ import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 
 export const EditDocketEntryMeta = connect(
@@ -57,12 +57,12 @@ export const EditDocketEntryMeta = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
               {editDocketEntryMetaHelper.showEditHelpText && (
-                <InfoNotificationComponent
+                <AlertInfo
                   alertInfo={{
                     message: (
-                      <div className="margin-top-2 margin-bottom-2">
+                      <div>
                         <b>Edits to Document Info will also be edited for:</b>
-                        <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
+                        <ul className="tw:mt-0 tw:mb-0">
                           {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
                             c => (
                               <li
@@ -84,8 +84,9 @@ export const EditDocketEntryMeta = connect(
                       </div>
                     ),
                   }}
-                  dismissible={false}
+                  isDismissible={false}
                   scrollToTop={false}
+                  className="tw:mb-6"
                 />
               )}
               <Tabs
