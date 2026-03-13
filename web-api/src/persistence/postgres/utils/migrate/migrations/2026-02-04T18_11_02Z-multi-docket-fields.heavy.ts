@@ -8,11 +8,16 @@ import { chunk } from 'lodash';
 
 export async function up(db: Kysely<any>): Promise<void> {
   const BATCH_SIZE = 400;
-  // const PAUSE_MS = 250;
+  const BACKFILL_BATCH_SIZE = 5_000;
+  const PAUSE_MS = 250;
+  const LOG_EVERY = 10;
+
+  let total = 0;
+  let batches = 0;
 
   await sql`set lock_timeout = '2s'`.execute(db);
 
-  await sql`set statement_timeout = '3min'`.execute(db);
+  await sql`set statement_timeout = '10min'`.execute(db);
 
   console.time('Duration of adding multiDocketedOn column with jsonb default');
   await db.schema
@@ -30,6 +35,88 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwDocketEntry')
     .addColumn('originallyFiledDocketNumber', 'varchar')
     .execute();
+
+  // Create INSERT trigger so that during blue-green deployment, rows inserted by old
+  // code (which doesn't set originallyFiledDocketNumber) are corrected by recomputing
+  // the earliest docket number across all rows sharing the same docket_entry_id.
+  await sql`
+    create or replace function dw_docket_entry_originally_filed_insert_trigger()
+    returns trigger as $$
+    declare
+      computed_original varchar;
+    begin
+      select (
+        array_agg(docket_number order by
+          case
+            when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+            else 2000 + split_part(docket_number, '-', 2)::int
+          end,
+          split_part(docket_number, '-', 1)::int
+        )
+      )[1]
+      into computed_original
+      from dw_docket_entry
+      where docket_entry_id = new.docket_entry_id;
+
+      update dw_docket_entry
+      set originally_filed_docket_number = computed_original
+      where docket_entry_id = new.docket_entry_id
+        and originally_filed_docket_number is distinct from computed_original;
+
+      return new;
+    end;
+    $$ language plpgsql
+  `.execute(db);
+
+  await sql`
+    create trigger dw_docket_entry_originally_filed_after_insert
+    after insert on dw_docket_entry
+    for each row execute function dw_docket_entry_originally_filed_insert_trigger()
+  `.execute(db);
+
+  // Backfill originallyFiledDocketNumber:
+  // Default all entries to their own docketNumber in batches.
+  console.time('Duration of backfilling originallyFiledDocketNumber');
+  while (true) {
+    const ctids = await db
+      .selectFrom('dwDocketEntry')
+      .select(sql`ctid`.as('ctid'))
+      .where('originallyFiledDocketNumber', 'is', null)
+      .limit(BACKFILL_BATCH_SIZE)
+      .forUpdate()
+      .skipLocked()
+      .execute();
+
+    if (ctids.length === 0) break;
+
+    const updatedRows = await db
+      .updateTable('dwDocketEntry')
+      .set(eb => ({ originallyFiledDocketNumber: eb.ref('docketNumber') }))
+      .where(
+        sql`ctid`,
+        'in',
+        ctids.map(row => row.ctid),
+      )
+      .returning('ctid')
+      .execute();
+
+    total += updatedRows.length;
+    batches += 1;
+
+    if (batches % LOG_EVERY === 0) {
+      console.log(
+        `Backfill progress: ${total} rows updated in ${batches} batches`,
+      );
+    }
+
+    if (PAUSE_MS > 0) {
+      await new Promise(r => setTimeout(r, PAUSE_MS));
+    }
+  }
+
+  console.timeEnd('Duration of backfilling originallyFiledDocketNumber');
+  console.log(`Backfill complete: ${total} rows updated in ${batches} batches`);
 
   let recordsToUpdate: any = await db
     .selectFrom(
@@ -108,11 +195,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     console.log('*Finished a batch*');
   }
 
-  // if (PAUSE_MS > 0) {
-  //   await new Promise(r => setTimeout(r, PAUSE_MS));
-  // }
-  // }
-
   await sql`
     alter table "dw_docket_entry"
     add constraint "dw_docket_entry_multi_docketed_on_nn"
@@ -133,9 +215,63 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwDocketEntry')
     .dropConstraint('dwDocketEntry_multiDocketedOn_nn')
     .execute();
+
+  // Create UPDATE trigger AFTER backfill to avoid recomputing on every backfill update.
+  // Handles unconsolidation during blue-green deployment: when old code updates a row
+  // without touching originallyFiledDocketNumber, this trigger recomputes the correct value.
+  await sql`
+    create or replace function dw_docket_entry_originally_filed_update_trigger()
+    returns trigger as $$
+    declare
+      computed_original varchar;
+    begin
+      select (
+        array_agg(docket_number order by
+          case
+            when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+            else 2000 + split_part(docket_number, '-', 2)::int
+          end,
+          split_part(docket_number, '-', 1)::int
+        )
+      )[1]
+      into computed_original
+      from dw_docket_entry
+      where docket_entry_id = new.docket_entry_id;
+
+      if new.originally_filed_docket_number is distinct from computed_original then
+        new.originally_filed_docket_number := computed_original;
+      end if;
+
+      return new;
+    end;
+    $$ language plpgsql
+  `.execute(db);
+
+  await sql`
+    create trigger dw_docket_entry_originally_filed_before_update
+    before update on dw_docket_entry
+    for each row execute function dw_docket_entry_originally_filed_update_trigger()
+  `.execute(db);
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  await sql`
+    drop trigger if exists dw_docket_entry_originally_filed_after_insert on dw_docket_entry
+  `.execute(db);
+
+  await sql`
+    drop trigger if exists dw_docket_entry_originally_filed_before_update on dw_docket_entry
+  `.execute(db);
+
+  await sql`
+    drop function if exists dw_docket_entry_originally_filed_insert_trigger()
+  `.execute(db);
+
+  await sql`
+    drop function if exists dw_docket_entry_originally_filed_update_trigger()
+  `.execute(db);
+
   await db.schema
     .alterTable('dwDocketEntry')
     .dropColumn('multiDocketedOn')

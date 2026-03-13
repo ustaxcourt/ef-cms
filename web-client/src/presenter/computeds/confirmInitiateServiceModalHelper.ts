@@ -8,6 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { User } from '@shared/business/entities/User';
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -130,21 +131,15 @@ export const roleToDisplay = party => {
 };
 
 export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
-  const isSavedForLater =
-    !docketEntry.originallyFiledDocketNumber && !!docketEntry.processingStatus;
-
-  const isFiled =
-    !docketEntry.originallyFiledDocketNumber && !docketEntry.processingStatus;
+  const wasExternallyFiled = User.isExternalUser(docketEntry.filedByRole);
 
   const isMultiDocketed = DocketEntry.isMultiDocketed(docketEntry);
+
+  const wasNotExternallySingleFiled = !wasExternallyFiled || isMultiDocketed;
 
   const isMultiDocketable = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(
     docketEntry.eventCode,
   );
 
-  return (
-    isLead &&
-    isMultiDocketable &&
-    (isSavedForLater || isMultiDocketed || isFiled)
-  );
+  return isLead && isMultiDocketable && wasNotExternallySingleFiled;
 };

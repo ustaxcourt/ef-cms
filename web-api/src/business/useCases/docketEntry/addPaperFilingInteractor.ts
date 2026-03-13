@@ -129,12 +129,11 @@ export const addPaperFiling = async (
         filingDate: documentMetadata.receivedAt,
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
-        multiDocketedOn: isSavingForLater
-          ? []
-          : effectiveConsolidatedGroupDocketNumbers,
-        originallyFiledDocketNumber: isSavingForLater
-          ? undefined
-          : subjectCaseDocketNumber,
+        multiDocketedOn:
+          effectiveConsolidatedGroupDocketNumbers.length > 1
+            ? effectiveConsolidatedGroupDocketNumbers
+            : [],
+        originallyFiledDocketNumber: subjectCaseDocketNumber,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       },
       { authorizedUser, petitioners: caseEntity.petitioners },
