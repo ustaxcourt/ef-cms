@@ -5,7 +5,7 @@ export const addPrivatePractitionerToCaseAndAllParties = (
   barNumber: string,
   representing: number[] = [],
 ) => {
-  cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
+  cy.intercept('GET', `/cases/${docketNumber}?*`).as('caseDetails');
   goToCase(docketNumber);
 
   // defaults to represent all if not specified
