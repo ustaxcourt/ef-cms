@@ -40,14 +40,6 @@ describe('confirmInitiateServiceModalHelper', () => {
   });
 
   describe('allowMultiDocketing', () => {
-    it('should be false when the docket entry is being served on a non-consolidated case', () => {
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: baseState,
-      });
-
-      expect(result.allowMultiDocketing).toEqual(false);
-    });
-
     it('should be true when the docket entry is being served on a lead case with a multi-docketable event code', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
@@ -63,6 +55,14 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.allowMultiDocketing).toEqual(true);
     });
 
+    it('should be false when the docket entry is being served on a non-consolidated case', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: baseState,
+      });
+
+      expect(result.allowMultiDocketing).toEqual(false);
+    });
+
     it('should be false when the docket entry has a non-multi-docketable event code', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
@@ -70,6 +70,24 @@ describe('confirmInitiateServiceModalHelper', () => {
           form: {
             ...baseState.form,
             eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+          },
+          formattedCaseDetail: {
+            ...baseState.formattedCaseDetail,
+            leadDocketNumber: MOCK_CASE.docketNumber,
+          },
+        },
+      });
+
+      expect(result.allowMultiDocketing).toEqual(false);
+    });
+
+    it('should be false when on a lead case but the docket entry was filed by an external user and not multidocketed', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          form: {
+            ...baseState.form,
+            filedByRole: ROLES.petitioner,
           },
           formattedCaseDetail: {
             ...baseState.formattedCaseDetail,
@@ -104,24 +122,6 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
 
       expect(result.allowMultiDocketing).toEqual(true);
-    });
-
-    it('should be false when the docket entry is not saved for later, not multi-docketed, and was not filed or served', () => {
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          ...baseState,
-          form: {
-            ...baseState.form,
-            originallyFiledDocketNumber: '101-20',
-          },
-          formattedCaseDetail: {
-            ...baseState.formattedCaseDetail,
-            leadDocketNumber: MOCK_CASE.docketNumber,
-          },
-        },
-      });
-
-      expect(result.allowMultiDocketing).toEqual(false);
     });
   });
 
@@ -394,15 +394,7 @@ describe('confirmInitiateServiceModalHelper', () => {
   describe('additionalServedCases', () => {
     it('should return empty array when multi-docketing is not allowed', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          ...baseState,
-          modal: {
-            form: {
-              ...baseState.modal.form,
-              consolidatedCasesToMultiDocketOn: undefined,
-            },
-          },
-        },
+        state: baseState,
       });
 
       expect(result.additionalServedCases).toEqual([]);
