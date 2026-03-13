@@ -35,6 +35,7 @@ import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/c
 import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
 import { getRequestResults } from '@web-api/persistence/postgres/polling/getRequestResults';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { countRemainingChangeOfAddressJobIds } from '@web-api/persistence/postgres/jobs/changeOfAddress/countRemainingChangeOfAddressJobIds';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -82,6 +83,7 @@ const gatewayMethods = {
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
+  countRemainingChangeOfAddressJobIds,
   createChangeOfAddressJob,
   deleteDocumentFile,
   deleteMessage,
