@@ -10,6 +10,10 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { NoticeOfWithdrawalForm } from './NoticeOfWithdrawalForm';
+import { SupportingDocuments } from './SupportingDocuments';
+import { SecondaryDocumentForm } from './SecondaryDocumentForm';
+import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
 
 export const PrimaryDocumentGeneratedTypeForm = connect(
   {
@@ -22,8 +26,8 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
-    validateCaseAssociationRequestSequence:
-      sequences.validateCaseAssociationRequestSequence,
+    validateExternalDocumentInformationSequence:
+      sequences.validateExternalDocumentInformationSequence,
     validationErrors: state.validationErrors,
   },
   function PrimaryDocumentGeneratedTypeForm({
@@ -34,19 +38,23 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     openCleanModalSequence,
     showModal,
     updateCaseAssociationFormValueSequence,
-    validateCaseAssociationRequestSequence,
+    validateExternalDocumentInformationSequence,
     validationErrors,
   }) {
     return (
       <>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
-        <PIIRedactedWarning />
+
+        {fileDocumentHelper.showNoticeOfWithdrawal && (
+          <NoticeOfWithdrawalForm />
+        )}
 
         {fileDocumentHelper.showGenerationTypeForm && (
           <>
             <div className="usa-form-group">
               <fieldset className="usa-fieldset margin-bottom-0">
-                <div className="usa-radio usa-radio__inline">
+                <legend>How do you want to file this document?</legend>
+                <div className="usa-radio">
                   <input
                     checked={
                       form.generationType === constants.GENERATION_TYPES.AUTO
@@ -60,7 +68,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                         key: 'generationType',
                         value: constants.GENERATION_TYPES.AUTO,
                       });
-                      validateCaseAssociationRequestSequence();
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
                   <label
@@ -68,8 +76,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                     data-testid="auto-generation"
                     htmlFor="auto-generation"
                   >
-                    Auto-generate Entry of Appearance PDF (Use only if you do
-                    not need to add attachments or a Certificate of Service.)
+                    {`Auto-generate ${form.documentTitle} ${fileDocumentHelper.showApplicableCOSText ? 'and applicable Certificate(s) of Service' : ''}`}
                   </label>
                 </div>
 
@@ -86,7 +93,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                       key: 'generationType',
                       value: constants.GENERATION_TYPES.MANUAL,
                     });
-                    validateCaseAssociationRequestSequence();
+                    validateExternalDocumentInformationSequence();
                   }}
                 />
                 <label
@@ -100,8 +107,10 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
             </div>
           </>
         )}
+
         {form.generationType === constants.GENERATION_TYPES.MANUAL && (
           <>
+            <PIIRedactedWarning />
             <div>
               <FormGroup errorText={validationErrors?.primaryDocumentFile}>
                 <label
@@ -127,12 +136,12 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                   id="primary-document"
                   name="primaryDocumentFile"
                   updateFormValueSequence="updateCaseAssociationFormValueSequence"
-                  validationSequence="validateCaseAssociationRequestSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
                 />
               </FormGroup>
 
               <div className="usa-form-group margin-bottom-0">
-                <fieldset className="usa-fieldset margin-bottom-0">
+                <fieldset className="usa-fieldset tw:mb-8.75">
                   <legend>
                     Select extra items to include with your document
                     <Button
@@ -146,7 +155,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                     >
                       <FontAwesomeIcon
                         className="margin-right-05"
-                        icon="question-circle"
+                        icon="circle-info"
                         size="1x"
                       />
                       What can I include with my document?
@@ -165,7 +174,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateCaseAssociationRequestSequence();
+                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <label
@@ -187,7 +196,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateCaseAssociationRequestSequence();
+                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <label
@@ -211,9 +220,16 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                         toFormat: constants.DATE_FORMATS.ISO,
                         value: e.target.value,
                       });
-                      validateCaseAssociationRequestSequence();
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
+                )}
+                <SupportingDocuments />
+                {fileDocumentHelper.showSecondaryDocument && (
+                  <>
+                    <SecondaryDocumentForm />
+                    <SecondarySupportingDocuments />
+                  </>
                 )}
               </div>
             </div>

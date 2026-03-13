@@ -89,7 +89,7 @@ describe('appends pro se checklist', () => {
           .click();
         cy.get('@spouse').then((petitioner: any) => {
           cy.get(
-            `[data-testid="representing-${petitioner.contactId}"]`,
+            `label[data-testid="representing-${petitioner.contactId}"]`,
           ).click();
         });
         cy.get(
