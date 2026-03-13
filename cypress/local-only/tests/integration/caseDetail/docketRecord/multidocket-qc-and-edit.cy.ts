@@ -190,13 +190,13 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         .contains('Administrative Record')
         .click();
 
-      cy.get('[data-testid="alert-info"]').should('exist');
+      cy.get('[data-testid="alert-info-document-qc"]').should('exist');
 
-      cy.get('[data-testid="alert-info"]').should(
+      cy.get('[data-testid="alert-info-document-qc"]').should(
         'contain',
         "This document will also be QC'd for all consolidated cases.",
       );
-      cy.get('[data-testid="alert-info"]').should(
+      cy.get('[data-testid="alert-info-document-qc"]').should(
         'contain',
         'If a Notice of Docket Change is generated, it will be filed in all cases in the group.',
       );
@@ -237,12 +237,12 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
         cy.get('[data-testid="edit-ADMR"]').click();
 
-        cy.get('[data-testid="alert-info"]').should('exist');
-        cy.get('[data-testid="alert-info"]').should(
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should('exist');
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should(
           'contain',
           'Edits to Document Info will also be edited for:',
         );
-        cy.get('[data-testid="alert-info"]').should(
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should(
           'contain',
           'Service and Action edits will only apply to this case.',
         );
@@ -285,12 +285,12 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
         cy.get('[data-testid="edit-RPT"]').click();
 
-        cy.get('[data-testid="alert-info"]').should('exist');
-        cy.get('[data-testid="alert-info"]').should(
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should('exist');
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should(
           'contain',
           'Edits to Document Info will also be edited for:',
         );
-        cy.get('[data-testid="alert-info"]').should(
+        cy.get('[data-testid="alert-info-edit-docket-entry"]').should(
           'contain',
           'Service and Action edits will only apply to this case.',
         );

@@ -87,6 +87,7 @@ export const EditDocketEntryMeta = connect(
                   isDismissible={false}
                   scrollToTop={false}
                   className="tw:mb-6"
+                  dataTestId="edit-docket-entry"
                 />
               )}
               <Tabs

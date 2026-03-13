@@ -53,6 +53,7 @@ export const DocketEntryQc = connect(
               }}
               isDismissible={false}
               scrollToTop={false}
+              dataTestId="docket-entry-paper-service"
             />
           )}
           <h2 className="heading-1">
@@ -110,6 +111,7 @@ export const DocketEntryQc = connect(
                       isDismissible={false}
                       scrollToTop={false}
                       className="tw:mb-6"
+                      dataTestId="document-qc"
                     />
                   )}
                 </div>
