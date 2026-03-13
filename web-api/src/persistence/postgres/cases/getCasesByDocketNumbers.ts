@@ -15,6 +15,7 @@ import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 import {
+  DOCKET_ENTRY_COLUMNS_WITHOUT_SERVED_PARTIES,
   docketEntriesBaseQuery,
   DocketEntryWithAffected,
 } from '@web-api/persistence/postgres/docketEntries/commonQueries';
@@ -286,7 +287,10 @@ async function getIrsPractitioners({
 
 async function getDocketEntries(docketNumbers: string[]) {
   const dbDocketEntries = await (
-    await docketEntriesBaseQuery({ docketNumbers })
+    await docketEntriesBaseQuery({
+      docketNumbers,
+      selectFields: DOCKET_ENTRY_COLUMNS_WITHOUT_SERVED_PARTIES,
+    })
   ).execute();
 
   return dbDocketEntries;
