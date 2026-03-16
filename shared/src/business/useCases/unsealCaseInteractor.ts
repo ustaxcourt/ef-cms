@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
@@ -38,10 +38,9 @@ export const unsealCase = async (
 
   caseToUpdate.setAsUnsealed();
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate,
-  });
+  const validatedCase = caseToUpdate.validate().toRawObject();
+
+  await upsertCases([validatedCase]);
 };
 
 export const unsealCaseInteractor = withLocking(

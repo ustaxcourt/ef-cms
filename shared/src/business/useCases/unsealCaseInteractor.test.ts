@@ -1,8 +1,4 @@
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -14,13 +10,11 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { unsealCaseInteractor } from './unsealCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('unsealCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  jest
-    .mocked(updateCaseAndAssociationsMock)
-    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
@@ -39,7 +33,7 @@ describe('unsealCaseInteractor', () => {
     ).rejects.toThrow('Unauthorized for unsealing cases');
   });
 
-  it('should call updateCaseAndAssociations with isSealed set to false', async () => {
+  it('should call upsertCases with isSealed set to false', async () => {
     await unsealCaseInteractor(
       applicationContext,
       {
@@ -48,9 +42,8 @@ describe('unsealCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-    const casePassedToUpdate =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(upsertCases).toHaveBeenCalled();
+    const casePassedToUpdate = upsertCases.mock.calls[0][0][0];
     expect(casePassedToUpdate.isSealed).toBe(false);
     expect(casePassedToUpdate.sealedDate).toBe(undefined);
   });

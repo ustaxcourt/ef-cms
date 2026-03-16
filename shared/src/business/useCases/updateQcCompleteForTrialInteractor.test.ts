@@ -1,8 +1,4 @@
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '../../test/mockCase';
@@ -14,14 +10,12 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('updateQcCompleteForTrialInteractor', () => {
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  jest
-    .mocked(updateCaseAndAssociationsMock)
-    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const upsertCases = jest.mocked(upsertCasesMock);
 
   beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
@@ -42,8 +36,6 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should call updateCase with the updated qcCompleteForTrial value', async () => {
-    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-
     await updateQcCompleteForTrialInteractor(
       applicationContext,
       {
@@ -54,9 +46,9 @@ describe('updateQcCompleteForTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
-    expect(caseToUpdate.qcCompleteForTrial).toEqual({
+    expect(upsertCases).toHaveBeenCalled();
+    const casePassedToUpdate = upsertCases.mock.calls[0][0][0];
+    expect(casePassedToUpdate.qcCompleteForTrial).toEqual({
       '10aa100f-0330-442b-8423-b01690c76e3f': true,
     });
   });
