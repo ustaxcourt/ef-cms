@@ -33,6 +33,6 @@ describe('updateContactInModalAction', () => {
     expect(
       applicationContext.getUseCases().updateContactInteractor,
     ).toHaveBeenCalled();
-    expect(result.state.caseDetail).toEqual('updated contact');
+    expect(result.state.caseDetail).toEqual({ docketNumber: '123-45' });
   });
 });
