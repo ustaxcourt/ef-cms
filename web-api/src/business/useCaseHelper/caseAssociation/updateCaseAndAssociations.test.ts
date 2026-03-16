@@ -257,7 +257,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(2);
     });
 
     it('should not compare work item differences when comparing docket entries', async () => {

@@ -7,7 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
@@ -47,10 +47,9 @@ export const updateQcCompleteForTrial = async (
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: newCase,
-  });
+  const validatedCase = newCase.validate().toRawObject();
+
+  await upsertCases([validatedCase]);
 };
 
 export const updateQcCompleteForTrialInteractor = withLocking(
