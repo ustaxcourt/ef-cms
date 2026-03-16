@@ -94,7 +94,7 @@ async function pollForAsyncResult(
   token: string,
   asyncSyncId: string,
 ): Promise<void> {
-  const maxAttempts = 120; // 120 * 2s = 4 min timeout
+  const maxAttempts = 120; // Timeout is maxAttempts * pollInterval
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     await sleep(pollInterval);
     const response = await axios.get(

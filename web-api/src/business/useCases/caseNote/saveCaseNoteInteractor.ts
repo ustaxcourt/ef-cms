@@ -2,10 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { updateCaseNote } from '@web-api/persistence/postgres/cases/updateCaseNote';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 const saveCaseNote = async (
@@ -17,10 +19,16 @@ const saveCaseNote = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await updateCaseNote({
-    caseNote,
+  const rawCaseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
+
+  const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+  caseEntity.caseNote = caseNote;
+
+  const validatedCase = caseEntity.validate().toRawObject();
+
+  await upsertCases([validatedCase]);
 };
 
 export const saveCaseNoteInteractor = withLocking(
