@@ -8,10 +8,11 @@ describe('updateContactInModalAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .updateContactInteractor.mockResolvedValue('updated contact');
+      .updateContactInteractor.mockResolvedValue(undefined);
   });
 
-  it('should update the contact in the modal', async () => {
+  it('should update the petitioner contact info in caseDetail state', async () => {
+    const contactId = 'abc-123';
     const result = await runAction(updateContactInModalAction, {
       modules: {
         presenter,
@@ -19,12 +20,22 @@ describe('updateContactInModalAction', () => {
       state: {
         caseDetail: {
           docketNumber: '123-45',
+          petitioners: [
+            {
+              contactId,
+              name: 'John Doe',
+              address1: '123 Main St',
+              city: 'Somewhere',
+            },
+          ],
         },
         modal: {
           form: {
             contact: {
+              contactId,
               name: 'John Doe',
-              email: 'john.doe@example.com',
+              address1: '456 New St',
+              city: 'Elsewhere',
             },
           },
         },
@@ -33,6 +44,9 @@ describe('updateContactInModalAction', () => {
     expect(
       applicationContext.getUseCases().updateContactInteractor,
     ).toHaveBeenCalled();
-    expect(result.state.caseDetail).toEqual('updated contact');
+    expect(result.state.caseDetail.petitioners[0].address1).toEqual(
+      '456 New St',
+    );
+    expect(result.state.caseDetail.petitioners[0].city).toEqual('Elsewhere');
   });
 });

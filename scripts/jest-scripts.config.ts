@@ -45,6 +45,8 @@ const config: Config = {
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
     '!create-large-case-with-exhibits.ts',
+    '!add-exhibits-to-case.ts',
+    '!insert-exhibits-via-sql.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
   ],

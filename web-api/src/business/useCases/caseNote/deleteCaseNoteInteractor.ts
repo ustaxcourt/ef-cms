@@ -2,14 +2,15 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-export const deleteCaseNote = async (
+const deleteCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -18,16 +19,16 @@ export const deleteCaseNote = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await getCaseByDocketNumber({
+  const rawCaseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
 
-  delete caseRecord.caseNote;
+  const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+  caseEntity.caseNote = undefined;
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseRecord,
-  });
+  const validatedCase = caseEntity.validate().toRawObject();
+
+  await upsertCases([validatedCase]);
 };
 
 export const deleteCaseNoteInteractor = withLocking(
