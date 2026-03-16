@@ -101,6 +101,11 @@ type ServeToIrsErrorNotification = {
   action: 'serve_to_irs_error';
 };
 
+type ServeToIrsDuplicateErrorNotification = {
+  action: 'serve_to_irs_duplicate_error';
+  error?: string;
+};
+
 type BatchDownloadDocketGeneratedNotification = {
   action: 'batch_download_docket_generated';
   filesCompleted: number;
@@ -195,6 +200,7 @@ export type NotificationMessage =
   | AdminContactInitialUpdateCompleteNotification
   | ServeToIrsCompleteNotification
   | ServeToIrsErrorNotification
+  | ServeToIrsDuplicateErrorNotification
   | BatchDownloadDocketGeneratedNotification
   | NoticeGenerationUpdatedNotification
   | PaperServiceStartedNotification
