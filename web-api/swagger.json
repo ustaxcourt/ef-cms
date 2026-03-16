@@ -66,7 +66,7 @@
         }
       }
     },
-    "/api/docket-record-pdf": {
+    "/async/docket-record-pdf": {
       "post": {
         "summary": "create a pdf of the docket record for a case",
         "description": "create a pdf of the docket record for a case.\n",
