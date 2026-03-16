@@ -6,10 +6,10 @@ export async function countRemainingChangeOfAddressCases(jobId: string) {
       .selectFrom('dwChangeOfAddress')
       .where('jobId', '=', jobId);
 
-    const remainingJobIds = await query
+    const remainingCases = await query
       .select(reader.fn.countAll().as('count'))
       .execute();
 
-    return Number(remainingJobIds[0].count);
+    return Number(remainingCases[0].count);
   });
 }
