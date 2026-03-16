@@ -12,7 +12,7 @@ export function createSpinner(initialText: string) {
 
   return {
     update: (text: string) => {
-      currentText = text; // only update the text, let the interval handle rendering
+      currentText = text;
       process.stdout.clearLine(0);
       process.stdout.write(`\r${SPINNER_FRAMES[frameIndex]} ${currentText}`);
     },

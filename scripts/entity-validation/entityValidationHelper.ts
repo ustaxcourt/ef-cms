@@ -15,6 +15,7 @@ import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/ge
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
+import { camelCase } from 'lodash';
 import { createSpinner } from 'scripts/helpers/consoleSpinner';
 
 /* HELPERS */
@@ -138,7 +139,7 @@ const performValidation = async (entityName: string) => {
           `Validating ${entityName} entities, ${validationErrors.length} error(s) found out of ${entityRecords.length} records...`,
         );
         validationErrors.push(
-          `Validation errors for ${entityName} ${record[`${entityName.toLowerCase()}Id`]}: ${JSON.stringify(errors)}`,
+          `Validation errors for ${entityName} ${record[`${camelCase(entityName)}Id`]}: ${JSON.stringify(errors)}`,
         );
       }
     }
