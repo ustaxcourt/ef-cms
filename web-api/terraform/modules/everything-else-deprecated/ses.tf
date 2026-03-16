@@ -1,6 +1,29 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
-  domain   = var.dns_domain
+  domain = var.dns_domain
+}
+
+resource "aws_ses_identity_policy" "outgoing_policy" {
+  identity = aws_ses_domain_identity.main.arn
+  name     = "smtp_policy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Deny"
+        Action   = ["ses:SendEmail", "ses:SendRawEmail"]
+        Resource = aws_ses_domain_identity.main.arn
+        Principal = {
+          AWS = "*"
+        }
+        Condition = {
+          "ForAnyValue:StringLike" : {
+            "ses:Recipients" : "*@example.com"
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_route53_record" "ses_verification_record" {

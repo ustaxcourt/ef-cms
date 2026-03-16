@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as readline from 'readline';
 
-const DOMAIN_REPLACER = 'ef-cms.ustaxcourt.gov';
+const DOMAIN_REPLACER = 'example.com';
 // Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
 const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
@@ -16,7 +16,7 @@ export function sanitizeEmail(email: string) {
     return '';
   }
   let hash = crypto
-    .createHash('shake256', { outputLength: 3 })
+    .createHash('shake256', { outputLength: 4 })
     .update(email)
     .digest('hex');
 
@@ -24,7 +24,8 @@ export function sanitizeEmail(email: string) {
   const originalEmail = email;
   // if (usedEmails[sanitizedEmail]) {
   if (alreadyHashedEmails[originalEmail]) {
-    return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
+    // return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
+    return `${hash}@${DOMAIN_REPLACER}`;
   }
   if (usedEmails[hash]) {
     let running = true;
@@ -43,8 +44,8 @@ export function sanitizeEmail(email: string) {
     usedEmails[hash] = originalEmail;
     alreadyHashedEmails[originalEmail] = hash;
   }
-  // return `${hash}@${DOMAIN_REPLACER}`;
-  return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
+  return `${hash}@${DOMAIN_REPLACER}`;
+  // return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
 }
 
 export async function sanitizeDumpFile(
