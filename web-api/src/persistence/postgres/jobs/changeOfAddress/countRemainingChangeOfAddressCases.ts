@@ -1,15 +1,15 @@
 import { getDbReader } from '@web-api/database';
 
-export async function countRemainingChangeOfAddressJobIds(jobId: string) {
+export async function countRemainingChangeOfAddressCases(jobId: string) {
   return getDbReader(async reader => {
     const query = reader
       .selectFrom('dwChangeOfAddress')
       .where('jobId', '=', jobId);
 
-    const remainingJobIds = await query
+    const remainingCases = await query
       .select(reader.fn.countAll().as('count'))
       .execute();
 
-    return Number(remainingJobIds[0].count);
+    return Number(remainingCases[0].count);
   });
 }
