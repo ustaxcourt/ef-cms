@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: ENV=local ./scripts/insert-exhibits-via-sql.ts
+// usage: ENV=local ./scripts/insert-exhibits-via-sql.ts -d 16017-21 -e 4000 -f 4c7a6796-... -r ab4aade7-...
 
 import {
   type ScriptConfig,
@@ -14,6 +14,7 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as readline from 'readline';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -21,20 +22,54 @@ const scriptConfig: ScriptConfig = {
   environment: {
     env: 'ENV',
   },
-  parameters: {},
+  parameters: {
+    docketNumber: {
+      required: true,
+      short: 'd',
+      type: 'string',
+    },
+    exhibits: {
+      default: '100',
+      short: 'e',
+      type: 'string',
+      transform: 'number',
+    },
+    filerId: {
+      required: true,
+      short: 'f',
+      type: 'string',
+    },
+    referenceEntryId: {
+      required: true,
+      short: 'r',
+      type: 'string',
+    },
+  },
   requireActiveAwsSession: false,
 };
 
-const docketNumber = '16017-21';
-const exhibits = 4000;
-const filerId = '4c7a6796-b209-4350-87cf-7a0d702b53bb';
-const referenceEntryId = 'ab4aade7-f6f6-4ee0-bec5-6f74a221e1ae';
-
-const { env, verbose } =
+const { env, verbose, docketNumber, exhibits, filerId, referenceEntryId } =
   parseArgsAndEnvVars(scriptConfig) as {
     env: string;
     verbose: boolean;
+    docketNumber: string;
+    exhibits: number;
+    filerId: string;
+    referenceEntryId: string;
   };
+
+const confirmAction = async (message: string): Promise<boolean> => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return new Promise(resolve => {
+    rl.question(`${message} (yes/no): `, answer => {
+      rl.close();
+      resolve(answer.toLowerCase() === 'yes');
+    });
+  });
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -47,7 +82,19 @@ const { env, verbose } =
   console.log(`  Environment:        ${env}`);
   console.log(`  Docket Number:      ${docketNumber}`);
   console.log(`  Exhibits to add:    ${exhibits}`);
+  console.log(`  Filer ID:           ${filerId}`);
+  console.log(`  Reference Entry ID: ${referenceEntryId}`);
   console.log('');
+
+  if (env !== 'local') {
+    const confirmed = await confirmAction(
+      `You are about to insert ${exhibits} exhibits into ${env} for case ${docketNumber}. Are you sure?`,
+    );
+    if (!confirmed) {
+      console.log('Aborted.');
+      process.exit(0);
+    }
+  }
 
   try {
     // Step 1: Get reference data from an existing docket entry
