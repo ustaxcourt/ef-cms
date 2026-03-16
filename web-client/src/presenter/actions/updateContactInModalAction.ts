@@ -10,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const updateContactInModalAction = async ({
   applicationContext,
   get,
-  store
+  store,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
