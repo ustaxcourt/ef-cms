@@ -115,9 +115,7 @@ describe('updateUserContactInformationInteractor', () => {
     getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null as any);
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getDocketNumbersByUser.mockResolvedValue([MOCK_CASE.docketNumber]);
-    setChangeOfAddressCaseAsDone.mockResolvedValue([
-      { remaining: 0, jobId: '2918' },
-    ]);
+    setChangeOfAddressCaseAsDone.mockResolvedValue([]);
   });
 
   describe('locked', () => {
