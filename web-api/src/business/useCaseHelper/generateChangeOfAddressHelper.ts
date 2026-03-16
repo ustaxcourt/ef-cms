@@ -126,7 +126,9 @@ export const generateChangeOfAddressHelper = async ({
   await applicationContext
     .getPersistenceGateway()
     .setChangeOfAddressCaseAsDone(jobId, docketNumber);
-  const remainingCases = await applicationContext.getPersistenceGateway().countRemainingChangeOfAddressCases(jobId);
+  const remainingCases = await applicationContext
+    .getPersistenceGateway()
+    .countRemainingChangeOfAddressCases(jobId);
 
   if (remainingCases === 0) {
     await deleteChangeOfAddressCaseRecord(jobId);
