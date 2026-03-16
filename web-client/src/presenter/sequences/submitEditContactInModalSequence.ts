@@ -7,6 +7,8 @@ import { updateContactInModalAction } from '../actions/updateContactInModalActio
 import { validatePetitionerInModalAction } from '../actions/validatePetitionerInModalAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { clearModalFormSequence } from './clearModalFormSequence';
+import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
+import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 
 export const submitEditContactInModalSequence = [
   startShowValidationAction,
@@ -19,6 +21,8 @@ export const submitEditContactInModalSequence = [
     ],
     success: showProgressSequenceDecorator([
       updateContactInModalAction,
+      getCaseAction,
+      setCaseAction,
       clearModalFormSequence,
       clearModalAction,
     ]),
