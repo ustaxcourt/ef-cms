@@ -337,8 +337,14 @@ app.use(expressLogger);
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
   app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
+    '/async/docket-record-pdf',
+    lambdaWrapper(
+      generateDocketRecordPdfLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
 }
 
