@@ -180,7 +180,7 @@ export async function getRecentEventsByCode(
     });
 }
 
-export async function getDocketEntryIdsByCaseAndEventCode({
+export async function getDocketEntryIdsByDocketNumberAndEventCode({
   docketNumber,
   eventCode,
 }: {

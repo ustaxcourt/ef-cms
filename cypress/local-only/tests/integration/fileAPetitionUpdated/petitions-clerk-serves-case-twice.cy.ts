@@ -12,7 +12,7 @@ describe('petitions clerk should not be able to serve a case twice', () => {
         checkNoticeOfAttachments: false,
         checkOrderForAmendedPetition: false,
       });
-      cy.task('getDocketEntryIdsByCaseAndEventCode', {
+      cy.task('getDocketEntryIdsByDocketNumberAndEventCode', {
         docketNumber,
         eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       }).as('PETITION_DOCKET_ENTRY_IDS');
