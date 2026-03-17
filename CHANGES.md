@@ -1,23 +1,5 @@
 <details><summary>Dependency Updates - Week of 2026-03-09</summary>
 
-- Updated npm packages (root, puppeteer runtime, batch docker-image)
-- Updated aws cli 2.34.4 in docker image
-- Updated Terraform aws provider 6.35.1
-
-## Manual Deployment Steps
-
-### Before Deployment
-
-#### Docker container `4.3.71` - choose expN
-```bash
-. scripts/env/set-env.zsh expN
-npm run ecr:check-version
-```
-
-- update printable trial session working copy without case notes 2 pdf
-</details>
-<details><summary>Dependency Updates - Week of 2026-03-02</summary>
-
 ## Local
 
 #### Upgrade NodeJS to `24.14.0`
@@ -37,7 +19,7 @@ tfswitch 1.14.6
 
 ### Before Deployment
 
-#### Docker container `4.3.70` - choose exp2
+#### Docker container `4.3.71` - choose exp2
 ```bash
 . scripts/env/set-env.zsh expN
 npm run ecr:check-version
