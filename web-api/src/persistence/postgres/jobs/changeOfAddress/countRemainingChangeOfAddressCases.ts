@@ -1,6 +1,8 @@
 import { getDbReader } from '@web-api/database';
 
-export async function countRemainingChangeOfAddressCases(jobId: string) {
+export async function countRemainingChangeOfAddressCases(
+  jobId: string,
+): Promise<number> {
   return getDbReader(async reader => {
     const query = reader
       .selectFrom('dwChangeOfAddress')
