@@ -110,8 +110,8 @@ dwResponseString [icon: code, color: gray]{
 }
 
 dwChangeOfAddress [icon: map-pin, color: green]{
-  jobId pk "Primary key"
-  docketNumber pk "Case to be updated"
+  changeOfAddressId string pk "Primary key"
+  userId string fk "User ID"
 }
 
 dwFeatureFlag [icon: toggle-right, color: purple]{
