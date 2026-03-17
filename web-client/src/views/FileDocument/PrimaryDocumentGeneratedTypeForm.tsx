@@ -76,7 +76,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                     data-testid="auto-generation"
                     htmlFor="auto-generation"
                   >
-                    {`Auto-generate ${form.documentTitle} ${fileDocumentHelper.showApplicableCOSText ? 'and applicable Certificate(s) of Service' : ''}`}
+                    {`Auto-generate ${form.documentTitle} ${fileDocumentHelper.showNecessaryCOSText ? 'and necessary Certificate(s) of Service' : ''}`}
                   </label>
                 </div>
 
