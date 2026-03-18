@@ -7,22 +7,12 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { NotFoundError } from '@web-api/errors/errors';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * Removes a signature from a document
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case on which to remove the signature from the document
- * @param {string} providers.docketEntryId the id of the docket entry for the signed document
- * @returns {object} the updated case
- */
 export const removeSignatureFromDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to remove signature from document is not an auth user',
@@ -51,20 +41,17 @@ export const removeSignatureFromDocumentInteractor = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      // @ts-ignore
-      key: docketEntryToUnsign.documentIdBeforeSignature,
+      key: docketEntryToUnsign.documentIdBeforeSignature!,
       useTempBucket: false,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: originalPdfNoSignature,
-    key: docketEntryId,
+    key: docketEntryToUnsign.documentStorageId,
   });
 
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new CaseDTO(caseEntity.toRawObject());
 };

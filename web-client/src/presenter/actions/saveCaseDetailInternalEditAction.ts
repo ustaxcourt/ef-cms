@@ -36,11 +36,11 @@ export const saveCaseDetailInternalEditAction = async ({
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: fileUploadProgressMap[key].file,
-            key: oldPetitionDocument.docketEntryId,
+            key: oldPetitionDocument.documentStorageId,
             onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
       } else {
-        const newDocketEntryId = await applicationContext
+        const newDocumentStorageId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: fileUploadProgressMap[key].file,
@@ -59,7 +59,8 @@ export const saveCaseDetailInternalEditAction = async ({
         }
 
         caseToUpdate.docketEntries.push({
-          docketEntryId: newDocketEntryId,
+          docketEntryId: newDocumentStorageId,
+          documentStorageId: newDocumentStorageId,
           documentTitle,
           documentType,
         });
@@ -67,7 +68,7 @@ export const saveCaseDetailInternalEditAction = async ({
     }
   }
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
@@ -75,8 +76,8 @@ export const saveCaseDetailInternalEditAction = async ({
 
   return {
     alertSuccess: {
-      message: `Case ${caseDetail.docketNumber} updated.`,
+      message: `Case ${caseToUpdate.docketNumber} updated.`,
     },
-    caseDetail,
+    docketNumber: caseToUpdate.docketNumber,
   };
 };

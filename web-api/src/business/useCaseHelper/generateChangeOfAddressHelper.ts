@@ -108,13 +108,20 @@ export const generateChangeOfAddressHelper = async ({
     | 'admin_contact_update_progress' =
     `${websocketMessagePrefix}_contact_update_progress`;
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: NOTIFICATION_ACTION,
-    },
-    userId: requestUserId || user.userId,
-  });
+  try {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: NOTIFICATION_ACTION,
+      },
+      userId: requestUserId || user.userId,
+    });
+  } catch (error) {
+    applicationContext.logger.error(
+      'Failed to notify user during change of address job',
+      error,
+    );
+  }
 
   const [updatedJob] = await applicationContext
     .getPersistenceGateway()
@@ -142,14 +149,21 @@ export const generateChangeOfAddressHelper = async ({
       | 'admin_contact_full_update_complete' =
       `${websocketMessagePrefix}_contact_full_update_complete`;
 
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: CONTACT_UPDATE_COMPLETE_ACTION,
-        user,
-      },
-      userId: requestUserId || user.userId,
-    });
+    try {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: CONTACT_UPDATE_COMPLETE_ACTION,
+          user,
+        },
+        userId: requestUserId || user.userId,
+      });
+    } catch (error) {
+      applicationContext.logger.error(
+        'Failed to notify user of completion of change of address job',
+        error,
+      );
+    }
   }
 };
 

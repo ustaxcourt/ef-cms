@@ -216,7 +216,7 @@ describe('removeCaseFromTrialInteractor', () => {
   it('sets the associatedJudge and caseStatus when provided', async () => {
     mockTrialSession.isCalendared = true;
 
-    const result = await removeCaseFromTrialInteractor(
+    await removeCaseFromTrialInteractor(
       applicationContext,
       {
         associatedJudge: 'Judge Dredd',
@@ -229,11 +229,13 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.associatedJudge).toEqual('Judge Dredd');
-    expect(result.associatedJudgeId).toEqual(
-      'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
-    );
-    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      associatedJudge: 'Judge Dredd',
+      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+      status: CASE_STATUS_TYPES.cav,
+    });
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

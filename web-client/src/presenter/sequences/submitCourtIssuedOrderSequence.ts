@@ -6,6 +6,7 @@ import { getCreateOrderSelectedCases } from '@web-client/presenter/actions/getCr
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
 import { getOrderTypeAction } from '@web-client/presenter/actions/StatusReportOrder/getOrderTypeAction';
@@ -14,8 +15,6 @@ import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction'
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
-import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -31,8 +30,6 @@ import { validateCourtOrderAction } from '../actions/CourtIssuedOrder/validateCo
 const onFileUploadedSuccess = [
   getCreateOrderSelectedCases,
   submitCourtIssuedOrderAction,
-  setDefaultDraftDocumentIdAction,
-  setCaseAction,
   setDefaultDraftDocumentIdAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,

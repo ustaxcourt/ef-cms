@@ -1738,6 +1738,7 @@ export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results 
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
+export const DOCKET_RECORD_PAGE_SIZE = 500; // number of results displayed for each page in the docket record
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
@@ -1818,11 +1819,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -2181,6 +2184,8 @@ export const NOT_PROVIDED = 'Not Provided';
 export const AWS_BATCH_POLLING_INTERVAL = 5000;
 
 export const AWS_BATCH_POLLING_TIMEOUT = 600000;
+
+export const EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES = ['NOTW'];
 
 export const EVENT_CODES_WITH_NO_ORDER = [
   'COED',

@@ -28,10 +28,6 @@ import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
-import { CaseFactory } from '../entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * updateContact
@@ -47,7 +43,7 @@ export const updateContact = async (
   applicationContext: ServerApplicationContext,
   { contactInfo, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnidentifiedUserError(
       'Unable to confirm user is an authenticated user',
@@ -157,6 +153,7 @@ export const updateContact = async (
         addToCoversheet: true,
         additionalInfo: `for ${updatedPetitioner.name}`,
         docketEntryId: newDocketEntryId,
+        documentStorageId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -226,7 +223,7 @@ export const updateContact = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: changeOfAddressPdfWithCover,
-      key: newDocketEntryId,
+      key: changeOfAddressDocketEntry.documentStorageId,
     });
   }
 
@@ -244,12 +241,6 @@ export const updateContact = async (
     });
   }
 
-  const filteredCase = CaseFactory.getCaseDTO({
-    rawCase: caseEntity,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
 };
 
 export const updateContactInteractor = withLocking(

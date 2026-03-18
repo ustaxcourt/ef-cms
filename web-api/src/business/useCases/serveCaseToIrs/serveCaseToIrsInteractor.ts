@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
@@ -39,6 +40,8 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -355,24 +358,25 @@ const generateNoticeOfReceipt = async ({
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: caseConfirmationPdfName,
+    key: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = getUniqueId();
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  const notrDocumentStorageId = getUniqueId();
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: notrDocketEntryId,
+    key: notrDocumentStorageId,
   });
 
   let urlToReturn;
 
   const notrDocketEntry = new DocketEntry(
     {
-      docketEntryId: notrDocketEntryId,
+      docketEntryId: notrDocumentStorageId,
+      documentStorageId: notrDocumentStorageId,
       documentTitle:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
       documentType:
@@ -395,12 +399,10 @@ const generateNoticeOfReceipt = async ({
   notrDocketEntry.servedPartiesCode = PARTIES_CODES.PETITIONER; //overwrite the served party code for the NOTR docket entry because this is a special one-off with special rules that don't follow the normal party code algorithm
   notrDocketEntry.setAsProcessingStatusAsCompleted();
 
-  notrDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      documentBytes: combinedNotrPdfData,
-    });
+  notrDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentBytes: combinedNotrPdfData,
+  });
 
   caseEntity.addDocketEntry(notrDocketEntry);
 
@@ -417,7 +419,7 @@ const generateNoticeOfReceipt = async ({
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: notrDocketEntry.docketEntryId,
+        key: notrDocketEntry.documentStorageId,
         useTempBucket: false,
       }));
   }

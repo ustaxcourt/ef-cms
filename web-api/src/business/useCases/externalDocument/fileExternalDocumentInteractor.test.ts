@@ -152,6 +152,28 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if the user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockIrsPractitionerUser.userId}`,
+    );
+  });
+
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
       fileExternalDocumentInteractor(
@@ -179,7 +201,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    const result = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -194,7 +216,6 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -289,7 +310,7 @@ describe('fileExternalDocumentInteractor', () => {
       consolidatedCase as any,
     ]);
 
-    const result = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -314,7 +335,6 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);

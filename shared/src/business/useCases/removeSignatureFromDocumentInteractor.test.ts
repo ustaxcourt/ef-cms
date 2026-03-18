@@ -10,12 +10,15 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeSignatureFromDocumentInteractor', () => {
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockDocumentStorageId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockDocumentIdBeforeSignature = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -90,12 +93,12 @@ describe('removeSignatureFromDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      key: mockDocketEntryId,
+      key: mockDocumentStorageId,
     });
   });
 
   it('should unsign the document and save the updated document to the case', async () => {
-    const updatedCase = await removeSignatureFromDocumentInteractor(
+    await removeSignatureFromDocumentInteractor(
       applicationContext,
       {
         docketEntryId: mockDocketEntryId,
@@ -104,6 +107,8 @@ describe('removeSignatureFromDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const unsignedDocument = updatedCase.docketEntries.find(
       doc => doc.docketEntryId === mockDocketEntryId,
     );
@@ -114,8 +119,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
     });
   });
 
-    it('throws NotFoundError if docket entry is not found', async () => {
-
+  it('throws NotFoundError if docket entry is not found', async () => {
     await expect(
       removeSignatureFromDocumentInteractor(
         applicationContext,

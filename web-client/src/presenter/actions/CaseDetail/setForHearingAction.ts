@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the alertSuccess and updated caseDetail object
+ * @returns {object} the alertSuccess object
  */
 export const setForHearingAction = async ({
   applicationContext,
@@ -14,9 +14,7 @@ export const setForHearingAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const { calendarNotes, trialSessionId } = get(state.modal);
 
-  const alertSuccess = { message: 'Case set for hearing.' };
-
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .setForHearingInteractor(applicationContext, {
       calendarNotes,
@@ -25,9 +23,6 @@ export const setForHearingAction = async ({
     });
 
   return {
-    alertSuccess,
-    caseDetail,
-    docketNumber,
-    trialSessionId,
+    alertSuccess: { message: 'Case set for hearing.' },
   };
 };

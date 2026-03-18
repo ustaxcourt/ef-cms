@@ -131,7 +131,7 @@ describe('file motion response order', function () {
       it('should be able to create a motion response order when all options are selected', function () {
         const expectedContents = [
           'respondent shall file a Response to the Motion for a New Trial',
-          `by ${formattedToday} petitioner may file a Reply. It is further`,
+          `by ${formattedToday}, petitioner may file a Reply. It is further`,
           'Test additional text box',
         ];
         cy.visit(`/case-detail/${this.docketNumber}`);
@@ -201,7 +201,7 @@ describe('file motion response order', function () {
       it('should be able to create a motion response order for a lead case ina consolidated group', () => {
         const expectedContents = [
           `On ${formattedToday}, petitioner filed a Motion for a New Trial`,
-          'Lead case Document no.',
+          'lead case doc. no.',
         ];
         const ALL_CASES = 'All cases in this group';
         cy.get('#tab-document-view').click();
@@ -249,7 +249,9 @@ describe('file motion response order', function () {
           cy.get('[data-testid="add-to-trial-session-btn"]').click();
           cy.get('#show-all-locations-true').click({ force: true });
 
-          cy.get('[data-testid="trial-session-select"]').select(this.trialSessionId)
+          cy.get('[data-testid="trial-session-select"]').select(
+            this.trialSessionId,
+          );
 
           cy.contains('Add Case').click();
 

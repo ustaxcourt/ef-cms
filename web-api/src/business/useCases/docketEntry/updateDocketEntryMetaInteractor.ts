@@ -20,8 +20,6 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { concat } from 'lodash';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
   {
@@ -29,7 +27,7 @@ export const updateDocketEntryMeta = async (
     docketNumber,
   }: { docketEntryMeta: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
@@ -181,7 +179,7 @@ export const updateDocketEntryMeta = async (
     const { numberOfPages } = await applicationContext
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
-        docketEntryId: originalDocketEntry.docketEntryId,
+        documentStorageId: originalDocketEntry.documentStorageId,
       });
 
     docketEntryEntity.setNumberOfPages(numberOfPages);
@@ -189,14 +187,10 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  const result = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({

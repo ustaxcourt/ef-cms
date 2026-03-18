@@ -15,9 +15,8 @@ export const sealCaseAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  let result;
   try {
-    result = await applicationContext
+    await applicationContext
       .getUseCases()
       .sealCaseInteractor(applicationContext, {
         docketNumber,
@@ -35,6 +34,5 @@ export const sealCaseAction = async ({
     alertSuccess: {
       message: 'Case sealed.',
     },
-    caseDetail: result,
   });
 };

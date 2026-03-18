@@ -17,16 +17,15 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
  */
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -40,7 +39,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -71,9 +70,10 @@ export const fileCourtIssuedDocketEntry = async (
     throw new Error('Docket entry has already been added to docket record');
   }
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: subjectDocketEntry.documentStorageId,
+  });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
@@ -185,15 +185,6 @@ export const fileCourtIssuedDocketEntry = async (
       false,
     );
   }
-
-  const rawSubjectCase = await getCaseByDocketNumber({
-    docketNumber: subjectDocketNumber,
-  });
-
-  const subjectCase = new Case(rawSubjectCase, {
-    authorizedUser,
-  }).validate();
-  return new CaseDTO(subjectCase.toRawObject());
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

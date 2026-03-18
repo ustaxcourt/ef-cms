@@ -3,7 +3,6 @@ import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/Uploa
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
@@ -39,7 +38,6 @@ export const uploadCourtIssuedDocumentSequence = [
           setDocumentTitleFromFreeTextAction,
           submitCourtIssuedOrderAction,
           setDefaultDraftDocumentIdAction,
-          setCaseAction,
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
