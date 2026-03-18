@@ -38,13 +38,6 @@ export const confirmInitiateServiceModalHelper = (
     docketEntry = currentDocketEntry;
   }
 
-  const isLead = isLeadCase(formattedCaseDetail);
-
-  const allowMultiDocketing = shouldAllowMultiDocketing({
-    docketEntry,
-    isLead,
-  });
-
   const checkedCases = (
     get(state.modal.form.consolidatedCasesToMultiDocketOn) || []
   )
@@ -53,6 +46,12 @@ export const confirmInitiateServiceModalHelper = (
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   let casesToIterateOver: any[] = [];
+
+  const isLead = isLeadCase(formattedCaseDetail);
+  const allowMultiDocketing = shouldAllowMultiDocketing({
+    docketEntry,
+    isLead,
+  });
 
   if (allowMultiDocketing) {
     additionalServedCases = formattedCaseDetail.consolidatedCases

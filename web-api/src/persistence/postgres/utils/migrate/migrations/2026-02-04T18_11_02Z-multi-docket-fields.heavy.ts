@@ -36,7 +36,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('originallyFiledDocketNumber', 'varchar')
     .execute();
 
-  // Create INSERT trigger so that during blue-green deployment, rows inserted by old
+  // Create INSERT trigger so that rows inserted by old
   // code (which doesn't set originallyFiledDocketNumber) are corrected by recomputing
   // the earliest docket number across all rows sharing the same docket_entry_id.
   await sql`
@@ -215,44 +215,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwDocketEntry')
     .dropConstraint('dwDocketEntry_multiDocketedOn_nn')
     .execute();
-
-  // Create UPDATE trigger AFTER backfill to avoid recomputing on every backfill update.
-  // Handles unconsolidation during blue-green deployment: when old code updates a row
-  // without touching originallyFiledDocketNumber, this trigger recomputes the correct value.
-  await sql`
-    create or replace function dw_docket_entry_originally_filed_update_trigger()
-    returns trigger as $$
-    declare
-      computed_original varchar;
-    begin
-      select (
-        array_agg(docket_number order by
-          case
-            when split_part(docket_number, '-', 2)::int >= 65
-              then 1900 + split_part(docket_number, '-', 2)::int
-            else 2000 + split_part(docket_number, '-', 2)::int
-          end,
-          split_part(docket_number, '-', 1)::int
-        )
-      )[1]
-      into computed_original
-      from dw_docket_entry
-      where docket_entry_id = new.docket_entry_id;
-
-      if new.originally_filed_docket_number is distinct from computed_original then
-        new.originally_filed_docket_number := computed_original;
-      end if;
-
-      return new;
-    end;
-    $$ language plpgsql
-  `.execute(db);
-
-  await sql`
-    create trigger dw_docket_entry_originally_filed_before_update
-    before update on dw_docket_entry
-    for each row execute function dw_docket_entry_originally_filed_update_trigger()
-  `.execute(db);
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -261,15 +223,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   `.execute(db);
 
   await sql`
-    drop trigger if exists dw_docket_entry_originally_filed_before_update on dw_docket_entry
-  `.execute(db);
-
-  await sql`
     drop function if exists dw_docket_entry_originally_filed_insert_trigger()
-  `.execute(db);
-
-  await sql`
-    drop function if exists dw_docket_entry_originally_filed_update_trigger()
   `.execute(db);
 
   await db.schema
