@@ -46,7 +46,7 @@ describe('Case Deadline - Consolidated Group', () => {
 
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').contains('Deadline saved.');
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
 
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
@@ -57,19 +57,21 @@ describe('Case Deadline - Consolidated Group', () => {
       goToCase(leadDocketNumber);
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="unconsolidate-cases-button"]').click();
-      cy.get(`.usa-checkbox`).first().click();
+      cy.get('.usa-checkbox__input').first().check({ force: true });
       cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('.modal-screen').should('not.exist');
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
         'have.text',
         'Is this the real life?',
       );
-      cy.get('[data-testid="case-deadline-edit-button"]');
+      cy.get('[data-testid="case-deadline-edit-button"]').should('exist');
 
       const newLeadCase = memberDocketNumbers[0];
       goToCase(newLeadCase);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('[data-testid="case-deadline-edit-button"]').should('be.visible');
       cy.get('[data-testid="case-deadline-edit-button"]').click();
       cy.get('[data-testid="case-deadline-description-input"]').type(
         ' Is this just fantasy?',
@@ -77,7 +79,7 @@ describe('Case Deadline - Consolidated Group', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       goToCase(memberDocketNumbers[1]);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('.case-deadline-row').should('have.length', 1);
 
       cy.get('[data-testid="case-deadline-description"]').should(
@@ -86,12 +88,12 @@ describe('Case Deadline - Consolidated Group', () => {
       );
 
       goToCase(newLeadCase);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="delete-case-deadline-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       goToCase(leadDocketNumber);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="delete-case-deadline-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
@@ -123,7 +125,7 @@ describe('Case Deadline - Consolidated Group', () => {
 
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').contains('Deadline saved.');
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
 
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
@@ -149,11 +151,12 @@ describe('Case Deadline - Consolidated Group', () => {
       goToCase(removedDocketNumber);
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="unconsolidate-cases-button"]').click();
-      cy.get(`.usa-checkbox`).last().click();
+      cy.get('.usa-checkbox__input').last().check({ force: true });
       cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('.modal-screen').should('not.exist');
 
       goToCase(leadDocketNumber);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="case-deadline-edit-button"]').click();
       cy.get('[data-testid="case-deadline-description-input"]').type(
         ' Updated',
@@ -177,7 +180,7 @@ describe('Case Deadline - Consolidated Group', () => {
       }
 
       goToCase(removedDocketNumber);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
         'have.text',
@@ -185,7 +188,7 @@ describe('Case Deadline - Consolidated Group', () => {
       );
 
       goToCase(leadDocketNumber);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="delete-case-deadline-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
@@ -202,7 +205,7 @@ describe('Case Deadline - Consolidated Group', () => {
       }
 
       goToCase(removedDocketNumber);
-      cy.get('[data-testid="tab-tracked-items"]').click({ force: true });
+      cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
         'have.text',
