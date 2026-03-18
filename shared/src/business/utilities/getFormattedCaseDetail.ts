@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  type DocketEntryRelation,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   STIPULATED_DECISION_EVENT_CODE,
@@ -21,12 +22,21 @@ import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscell
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { type ClientApplicationContext } from '@web-client/applicationContext';
 import { type ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
+import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import { type RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { type RawCorrespondence } from '@shared/business/entities/Correspondence';
 import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 import { type ServerApplicationContext } from '@web-api/applicationContext';
 import { type TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { type UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
+export type RelatedDocketEntry = DocketEntryRelation & {
+  dispositionLinkText: string[];
+  dispositionText: [];
+  docketEntryIndex?: number;
+  showDocumentViewerLink: boolean;
+  showDownloadLink: boolean;
+};
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -70,6 +80,30 @@ export type FormattedCaseDetailDocketEntry = RawDocketEntry & {
   signedAtFormatted: string;
   signedAtFormattedTZ: string;
   sortingFilingDate: string;
+};
+
+export type FormattedDocketEntry = FormattedCaseDetailDocketEntry & {
+  editDocketEntryMetaLink: string;
+  iconsToDisplay: {
+    className: string;
+    icon: IconProp;
+    size: string;
+    title: string;
+  }[];
+  relatedDocketEntries: RelatedDocketEntry[];
+  sealButtonText: string;
+  sealButtonTooltip: string;
+  sealIcon: string;
+  showDocumentDescriptionWithoutLink: boolean;
+  showDocumentProcessing: boolean;
+  showDocumentViewerLink: boolean;
+  showEditDocketRecordEntry: boolean;
+  showLinkToDocument: boolean;
+  showLoadingIcon: boolean;
+  showNotServed: boolean;
+  showSealDocketRecordEntry: boolean;
+  showServed: boolean;
+  toolTipText: string;
 };
 
 type FormattedCounsel = RawPractitioner & {
@@ -405,16 +439,16 @@ export const formatCase = (
   const formattedPreferredTrialCity =
     preformattedCase.preferredTrialCity || 'No location selected';
 
-  const showNotScheduled = !preformattedCase.trialSessionId;
+  const blocked = !!preformattedCase.blocked;
 
   const showBlockedFromTrial =
-    !!preformattedCase.blocked &&
-    preformattedCase.status !== CASE_STATUS_TYPES.calendared;
+    blocked && preformattedCase.status !== CASE_STATUS_TYPES.calendared;
 
-  const blockedDateFormatted = formatDateString(
-    preformattedCase.blockedDate,
-    'MMDDYY',
-  );
+  const showNotScheduled = !preformattedCase.trialSessionId && !blocked;
+
+  const blockedDateFormatted = blocked
+    ? formatDateString(preformattedCase.blockedDate, 'MMDDYY')
+    : '';
 
   const formattedTrialCity = preformattedCase.trialSessionId
     ? preformattedCase.trialLocation || 'Not assigned'
