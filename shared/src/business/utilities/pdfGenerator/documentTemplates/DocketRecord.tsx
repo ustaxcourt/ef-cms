@@ -2,8 +2,28 @@ import { CompressedDocketHeader } from '@shared/business/utilities/pdfGenerator/
 import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 import classNames from 'classnames';
+import type { FormattedDocketEntry } from '@web-client/presenter/computeds/formattedDocketEntries';
 
-const RenderAddress = ({ contact, countryTypes }) => {
+type PetitionerContact = TPetitioner & {
+  index: number;
+  counselDetails: { [k: string]: string }[];
+};
+type CountryTypes = { DOMESTIC: string; INTERNATIONAL: string };
+type RenderAddressProps = React.HTMLAttributes<HTMLDivElement> & {
+  contact: PetitionerContact;
+  countryTypes: CountryTypes;
+};
+type RenderContactProps = React.HTMLAttributes<HTMLDivElement> & {
+  caseTitle: string;
+  contact: PetitionerContact;
+  countryTypes: CountryTypes;
+  showContactDetails: boolean;
+};
+
+const RenderAddress = ({
+  contact,
+  countryTypes,
+}: RenderAddressProps): React.JSX.Element => {
   const isInternational = contact.countryType === countryTypes.INTERNATIONAL;
 
   return (
@@ -22,7 +42,11 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
+const RenderContact = ({
+  contact,
+  countryTypes,
+  showContactDetails,
+}: RenderContactProps): React.JSX.Element => {
   return (
     <>
       <tbody>
@@ -70,7 +94,11 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
   );
 };
 
-const RecordDescription = ({ entry }) => {
+const RecordDescription = ({
+  entry,
+}: {
+  entry: FormattedDocketEntry;
+}): React.JSX.Element => {
   return (
     <>
       <span
@@ -98,7 +126,11 @@ const RecordDescription = ({ entry }) => {
   );
 };
 
-const ServedDate = ({ document }) => {
+const ServedDate = ({
+  document,
+}: {
+  document: FormattedDocketEntry;
+}): React.JSX.Element | string => {
   const documentDateServed =
     document && document.isStatusServed ? document.servedAtFormatted : '';
 
@@ -123,7 +155,7 @@ export const DocketRecord = ({
   countryTypes,
   entries,
   options,
-}) => {
+}): React.JSX.Element => {
   return (
     <div id="document-docket-record">
       <PrimaryHeader />

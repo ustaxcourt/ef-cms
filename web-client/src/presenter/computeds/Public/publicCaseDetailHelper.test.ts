@@ -108,7 +108,7 @@ const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
     updatedAt: '2023-07-25T15:32:03.737Z',
     workItemId: 'e142cd9f-cd77-458d-abeb-960bfdfb559c',
   },
-});
+} as unknown as RawDocketEntry);
 
 describe('publicCaseDetailHelper', () => {
   let mockCase;

@@ -6,7 +6,7 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { Case, isSealedCase } from '../entities/cases/Case';
+import { Case, isLeadCase, isSealedCase } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -14,11 +14,19 @@ import {
   combineISOandEasternTime,
   formatDateString,
 } from './DateHandler';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { cloneDeep, isEmpty, sortBy } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
+import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { type ClientApplicationContext } from '@web-client/applicationContext';
+import { type ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
+import { type RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { type RawCorrespondence } from '@shared/business/entities/Correspondence';
+import { type RawPractitioner } from '@shared/business/entities/Practitioner';
+import { type ServerApplicationContext } from '@web-api/applicationContext';
+import { type TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { type UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -31,7 +39,113 @@ export type FormattedCaseInventoryReportEntry = {
   [key: string]: unknown;
 };
 
-const computeIsInProgress = ({ formattedEntry }) => {
+type PreformattedCaseDetailDocketEntry = RawDocketEntry & {
+  isCourtIssuedDocument: boolean;
+  isUnservable: boolean;
+};
+
+export type FormattedCaseDetailDocketEntry = RawDocketEntry & {
+  certificateOfServiceDateFormatted: string;
+  createdAtFormatted: string;
+  descriptionDisplay: string;
+  filingsAndProceedings: string;
+  hasWorkItemInfo: boolean;
+  isCourtIssuedDocument: boolean;
+  isInProgress: boolean;
+  isNotServedDocument: boolean;
+  isPaper: boolean;
+  isPetition: boolean;
+  isStatusServed: boolean;
+  isStipDecision: boolean;
+  isStricken: boolean;
+  isTranscript: boolean;
+  isUnservable: boolean;
+  qcNeeded: boolean;
+  qcWorkItemsCompleted: boolean;
+  qcWorkItemsUntouched: boolean;
+  sealedToTooltip: string;
+  servedAtFormatted: string;
+  showLegacySealed: boolean;
+  showServedAt: boolean;
+  signedAtFormatted: string;
+  signedAtFormattedTZ: string;
+  sortingFilingDate: string;
+};
+
+type FormattedCounsel = RawPractitioner & {
+  formattedName: string;
+  representingFormatted?: {
+    name: string;
+    secondaryName: string;
+    title: string;
+  }[];
+};
+
+export type FormattedCase = RawCase & {
+  blockedDateFormatted: string;
+  canConsolidate: boolean;
+  canUnconsolidate: boolean;
+  caseTitle: string;
+  consolidatedCases: any; // (RawConsolidatedCaseSummary & FormattedCase)[];
+  consolidatedIconTooltipText: string;
+  correspondence: (RawCorrespondence & { formattedFilingDate: string })[];
+  createdAtFormatted: string;
+  docketEntries: (RawDocketEntry & {
+    editUrl?: string;
+    signedAtFormatted?: string;
+    signedAtFormattedTZ?: string;
+    signUrl?: string;
+  })[];
+  draftDocuments: (FormattedCaseDetailDocketEntry & {
+    editUrl?: string;
+    signedAtFormatted?: string;
+    signedAtFormattedTZ?: string;
+    signUrl?: string;
+  })[];
+  draftDocumentsUnsorted: (FormattedCaseDetailDocketEntry & {
+    editUrl?: string;
+    signedAtFormatted?: string;
+    signedAtFormattedTZ?: string;
+    signUrl?: string;
+  })[];
+  filingFee: string;
+  formattedAssociatedJudge: string;
+  formattedDocketEntries: FormattedCaseDetailDocketEntry[];
+  formattedPreferredTrialCity: string;
+  formattedTrialCity: string;
+  formattedTrialDate: string;
+  inConsolidatedGroup: boolean;
+  irsNoticeDateFormatted: string;
+  irsPractitioners: FormattedCounsel[];
+  irsSendDate: string;
+  isConsolidatedSubCase: boolean;
+  isLeadCase: boolean;
+  isSealed: boolean;
+  paymentDate: string;
+  paymentMethod: string;
+  pendingItemsDocketEntries: FormattedCaseDetailDocketEntry[];
+  privatePractitioners: FormattedCounsel[];
+  receivedAtFormatted: string;
+  showBlockedFromTrial: boolean;
+  showNotScheduled: boolean;
+  showPrintConfirmationLink: boolean;
+  showScheduled: boolean;
+  shouldShowIrsNoticeDate: boolean;
+  showTrialCalendared: boolean;
+  trialLocation: string;
+  trialTime: string;
+};
+
+export type FormattedCaseDetail = FormattedCase & {
+  consolidatedCases: FormattedCase[];
+  docketRecordSort?: string;
+};
+
+const computeIsInProgress = ({
+  formattedEntry,
+}: {
+  formattedEntry: PreformattedCaseDetailDocketEntry;
+}): boolean => {
   return (
     (!formattedEntry.isCourtIssuedDocument &&
       formattedEntry.isFileAttached === false &&
@@ -43,7 +157,11 @@ const computeIsInProgress = ({ formattedEntry }) => {
   );
 };
 
-export const computeIsNotServedDocument = ({ formattedEntry }) => {
+export const computeIsNotServedDocument = ({
+  formattedEntry,
+}: {
+  formattedEntry: PreformattedCaseDetailDocketEntry | RawDocketEntry;
+}): boolean => {
   return (
     formattedEntry.isDraft ||
     (!DocketEntry.isServed(formattedEntry) &&
@@ -52,116 +170,104 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-export const formatDocketEntry = (applicationContext, docketEntry) => {
-  const formattedEntry = cloneDeep(docketEntry);
-
-  formattedEntry.servedAtFormatted = formatDateString(
-    formattedEntry.servedAt,
-    'MMDDYY',
-  );
-
-  formattedEntry.signedAtFormatted = formatDateString(
-    formattedEntry.signedAt,
-    'MMDDYY',
-  );
-
-  formattedEntry.signedAtFormattedTZ = formatDateString(
-    formattedEntry.signedAt,
-    'DATE_TIME_TZ',
-  );
-
-  if (formattedEntry.certificateOfServiceDate) {
-    formattedEntry.certificateOfServiceDateFormatted = formatDateString(
-      formattedEntry.certificateOfServiceDate,
-      'MMDDYY',
-    );
-  }
-  if (formattedEntry.lodged) {
-    formattedEntry.eventCode = 'MISCL';
-  }
-  formattedEntry.showLegacySealed = !!formattedEntry.isLegacySealed;
-  formattedEntry.showServedAt = !!formattedEntry.servedAt;
-  formattedEntry.isStatusServed = !!formattedEntry.servedAt;
-  formattedEntry.isPetition =
-    formattedEntry.documentType === 'Petition' ||
-    formattedEntry.eventCode === 'P';
-
-  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+export const formatDocketEntry = (
+  applicationContext:
+    | ServerApplicationContext
+    | ClientApplicationContext
+    | ClientPublicApplicationContext,
+  docketEntry: RawDocketEntry,
+): FormattedCaseDetailDocketEntry => {
+  const preformattedEntry = cloneDeep(docketEntry);
+  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(preformattedEntry);
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
-  ).includes(formattedEntry.eventCode);
+  ).includes(preformattedEntry.eventCode);
+  const isUnservable = DocketEntry.isUnservable(preformattedEntry);
+  const isInProgress = computeIsInProgress({
+    formattedEntry: {
+      ...preformattedEntry,
+      isCourtIssuedDocument,
+      isUnservable,
+    },
+  });
+  const qcWorkItemsUntouched = hasWorkItemInfo && !preformattedEntry.qcComplete;
 
-  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(formattedEntry);
-
-  formattedEntry.qcWorkItemsCompleted =
-    !hasWorkItemInfo || !!formattedEntry.qcComplete;
-
-  formattedEntry.isUnservable = DocketEntry.isUnservable(formattedEntry);
-
-  formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
-
-  formattedEntry.isNotServedDocument = computeIsNotServedDocument({
-    formattedEntry,
+  const createdAtISO =
+    isCourtIssuedDocument &&
+    !preformattedEntry.servedAt &&
+    !isUnservable &&
+    preformattedEntry.isOnDocketRecord
+      ? ''
+      : preformattedEntry.isOnDocketRecord
+        ? formatDateString(preformattedEntry.filingDate, FORMATS.ISO)
+        : formatDateString(preformattedEntry.createdAt, FORMATS.ISO);
+  const createdAtFormatted = formatDateString(createdAtISO, 'MMDDYY');
+  const certificateOfServiceDateFormatted =
+    preformattedEntry.certificateOfServiceDate
+      ? formatDateString(preformattedEntry.certificateOfServiceDate, 'MMDDYY')
+      : '';
+  const filingsAndProceedings = getFilingsAndProceedings({
+    ...preformattedEntry,
+    certificateOfServiceDateFormatted,
   });
 
-  formattedEntry.isTranscript =
-    formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
-
-  formattedEntry.isStipDecision =
-    formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
-
-  formattedEntry.qcWorkItemsUntouched =
-    hasWorkItemInfo && !formattedEntry.qcComplete;
-
-  formattedEntry.qcNeeded =
-    formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
-
-  if (
-    formattedEntry.isCourtIssuedDocument &&
-    !formattedEntry.servedAt &&
-    !formattedEntry.isUnservable &&
-    formattedEntry.isOnDocketRecord
-  ) {
-    formattedEntry.createdAtFormatted = '';
-  } else if (formattedEntry.isOnDocketRecord) {
-    formattedEntry.createdAtFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
-  } else {
-    formattedEntry.createdAtFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
-  }
-
-  formattedEntry.filingsAndProceedings =
-    getFilingsAndProceedings(formattedEntry);
-
-  formattedEntry.descriptionDisplay = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(formattedEntry);
-
-  if (formattedEntry.lodged) {
-    formattedEntry.eventCode = 'MISCL';
-  }
-
-  if (formattedEntry.isSealed) {
-    formattedEntry.sealedToTooltip = applicationContext
-      .getUtilities()
-      .getSealedDocketEntryTooltip(applicationContext, formattedEntry);
-  } else if (formattedEntry.isLegacySealed) {
-    formattedEntry.sealedToTooltip = 'Sealed in Blackstone';
-  }
-
-  return formattedEntry;
+  return {
+    ...preformattedEntry,
+    certificateOfServiceDateFormatted,
+    createdAtFormatted,
+    descriptionDisplay: getDescriptionDisplay({
+      ...preformattedEntry,
+      filingsAndProceedings,
+    }),
+    eventCode: preformattedEntry.lodged ? 'MISCL' : preformattedEntry.eventCode,
+    filingsAndProceedings,
+    hasWorkItemInfo,
+    isCourtIssuedDocument,
+    isInProgress,
+    isNotServedDocument: computeIsNotServedDocument({
+      formattedEntry: {
+        ...preformattedEntry,
+        isCourtIssuedDocument,
+        isUnservable,
+      },
+    }),
+    isPaper: !!preformattedEntry.isPaper,
+    isPetition:
+      preformattedEntry.documentType === 'Petition' ||
+      preformattedEntry.eventCode === 'P',
+    isStatusServed: !!preformattedEntry.servedAt,
+    isStipDecision:
+      preformattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE,
+    isStricken: !!preformattedEntry.isStricken,
+    isTranscript: preformattedEntry.eventCode === TRANSCRIPT_EVENT_CODE,
+    isUnservable,
+    qcNeeded: qcWorkItemsUntouched && !isInProgress,
+    qcWorkItemsCompleted: !hasWorkItemInfo || !!preformattedEntry.qcComplete,
+    qcWorkItemsUntouched,
+    sealedToTooltip: preformattedEntry.isLegacySealed
+      ? 'Sealed in Blackstone'
+      : preformattedEntry.isSealed
+        ? getSealedDocketEntryTooltip(applicationContext, preformattedEntry)
+        : '',
+    servedAtFormatted: formatDateString(preformattedEntry.servedAt, 'MMDDYY'),
+    showLegacySealed: !!preformattedEntry.isLegacySealed,
+    showServedAt: !!preformattedEntry.servedAt,
+    signedAtFormatted: formatDateString(preformattedEntry.signedAt, 'MMDDYY'),
+    signedAtFormattedTZ: formatDateString(
+      preformattedEntry.signedAt,
+      'DATE_TIME_TZ',
+    ),
+    sortingFilingDate: createdAtISO
+      ? formatDateString(createdAtISO, 'YYYYMMDD_NUMERIC')
+      : '',
+  };
 };
 
-export const getFilingsAndProceedings = formattedDocketEntry => {
-  //filings and proceedings string
+export const getFilingsAndProceedings = (
+  formattedDocketEntry: RawDocketEntry & {
+    certificateOfServiceDateFormatted: string;
+  },
+): string => {
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
     `${
@@ -183,22 +289,22 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
 };
 
-/**
- * formats trial session fields for display
- * @param {string} judgeName the name of the judge
- * @param {string} trialDate ISO-8601 GMT timestamp
- * @param {string} trialLocation location of the trial
- * @param {string} trialTime eastern time zone string representing hours and minutes HH:mm
- * @returns formatted trial session fields
- */
-
 const formattedTrialSessionDetails = ({
   judgeName,
   trialDate,
   trialLocation,
   trialTime,
-}) => {
-  let formattedTrialDate;
+}: {
+  judgeName: string;
+  trialDate: string;
+  trialLocation: string;
+  trialTime: string;
+}): {
+  formattedAssociatedJudge: string;
+  formattedTrialCity: string;
+  formattedTrialDate: string;
+} => {
+  let formattedTrialDate: string;
 
   const formattedTrialCity = trialLocation || 'Not assigned';
   const formattedAssociatedJudge = judgeName || 'Not assigned';
@@ -219,46 +325,134 @@ const formattedTrialSessionDetails = ({
   };
 };
 
-/**
- * sets formatted values reflecting the trial scheduling status
- * of the given case. Modify the formattedCase argument by reference.
- */
-const formatTrialSessionScheduling = ({
-  applicationContext,
-  formattedCase,
-}) => {
-  formattedCase.formattedPreferredTrialCity =
-    formattedCase.preferredTrialCity || 'No location selected';
-  if (formattedCase.trialSessionId) {
-    if (formattedCase.status === CASE_STATUS_TYPES.calendared) {
-      formattedCase.showTrialCalendared = true;
+const getEditUrl = (docketEntry: RawDocketEntry): string => {
+  const routeToEditUploadCourtIssued = isMiscellaneousDocketEntry(docketEntry);
+
+  return routeToEditUploadCourtIssued
+    ? `/case-detail/${docketEntry.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
+    : `/case-detail/${docketEntry.docketNumber}/edit-order/${docketEntry.docketEntryId}`;
+};
+
+export const formatCase = (
+  applicationContext:
+    | ServerApplicationContext
+    | ClientApplicationContext
+    | ClientPublicApplicationContext,
+  caseDetail:
+    | FormattedCaseInventoryReportEntry
+    | RawCase
+    | RawConsolidatedCaseSummary
+    | TAssociatedCase,
+  authorizedUser: UnknownAuthUser,
+): FormattedCase => {
+  if (isEmpty(caseDetail)) {
+    return {} as FormattedCase;
+  }
+  const preformattedCase = cloneDeep(caseDetail) as unknown as RawCase;
+  if (!preformattedCase.docketEntries) preformattedCase.docketEntries = [];
+  if (!preformattedCase.correspondence) preformattedCase.correspondence = [];
+
+  const draftDocumentsUnsorted = preformattedCase.docketEntries
+    .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
+    .map(docketEntry => ({
+      ...formatDocketEntry(applicationContext, docketEntry),
+      editUrl: getEditUrl(docketEntry),
+      signedAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(docketEntry.signedAt, 'MMDDYY'),
+      signedAtFormattedTZ: applicationContext
+        .getUtilities()
+        .formatDateString(docketEntry.signedAt, 'DATE_TIME_TZ'),
+      signUrl: `/case-detail/${preformattedCase.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
+    }));
+  const draftDocuments = sortDocketEntries(draftDocumentsUnsorted);
+
+  const formattedDocketEntries = preformattedCase.docketEntries.map(de =>
+    formatDocketEntry(applicationContext, de),
+  );
+  formattedDocketEntries.sort(byIndexSortFunction);
+
+  const caseIsLeadCase = isLeadCase(preformattedCase);
+  const isConsolidatedSubCase = !!(
+    preformattedCase.leadDocketNumber && !caseIsLeadCase
+  );
+  const inConsolidatedGroup = caseIsLeadCase || isConsolidatedSubCase;
+  const paymentDate =
+    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? formatDateString(preformattedCase.petitionPaymentDate, 'MMDDYY')
+      : preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.WAIVED
+        ? formatDateString(preformattedCase.petitionPaymentWaivedDate, 'MMDDYY')
+        : '';
+  const paymentMethod =
+    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? preformattedCase.petitionPaymentMethod || ''
+      : '';
+  const filingFee = `${preformattedCase.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+
+  const caseEntity = new Case(preformattedCase, { authorizedUser });
+  const canConsolidate = caseEntity.canConsolidate(caseEntity);
+  const canUnconsolidate = !!caseEntity.leadDocketNumber;
+  const caseTitle = Case.getCaseTitle(preformattedCase.caseCaption || '');
+  const correspondence = preformattedCase.correspondence.map(doc => ({
+    ...doc,
+    formattedFilingDate: formatDateString(doc.filingDate, 'MMDDYY'),
+  }));
+
+  const createdAtFormatted = formatDateString(
+    preformattedCase.createdAt,
+    'MMDDYY',
+  );
+  const formattedPreferredTrialCity =
+    preformattedCase.preferredTrialCity || 'No location selected';
+
+  const showNotScheduled = !preformattedCase.trialSessionId;
+
+  const showBlockedFromTrial =
+    !!preformattedCase.blocked &&
+    preformattedCase.status !== CASE_STATUS_TYPES.calendared;
+
+  const blockedDateFormatted = formatDateString(
+    preformattedCase.blockedDate,
+    'MMDDYY',
+  );
+
+  const formattedTrialCity = preformattedCase.trialSessionId
+    ? preformattedCase.trialLocation || 'Not assigned'
+    : 'Not assigned';
+
+  let formattedTrialDate = 'Not scheduled';
+
+  if (preformattedCase.trialSessionId && preformattedCase.trialDate) {
+    if (preformattedCase.trialTime) {
+      formattedTrialDate = formatDateString(
+        combineISOandEasternTime(
+          preformattedCase.trialDate,
+          preformattedCase.trialTime,
+        ),
+        FORMATS.DATE_TIME,
+      );
     } else {
-      formattedCase.showScheduled = true;
+      formattedTrialDate = formatDateString(
+        preformattedCase.trialDate,
+        FORMATS.MMDDYY,
+      );
     }
-
-    Object.assign(
-      formattedCase,
-      formattedTrialSessionDetails({
-        judgeName: formattedCase.associatedJudge,
-        trialDate: formattedCase.trialDate,
-        trialLocation: formattedCase.trialLocation,
-        trialTime: formattedCase.trialTime,
-      }),
-    );
-
-    // TODO: get trial session note
-  } else if (formattedCase.blocked) {
-    formattedCase.showBlockedFromTrial = true;
-    formattedCase.blockedDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-  } else {
-    formattedCase.showNotScheduled = true;
   }
 
-  // Format hearings
-  if (formattedCase.hearings && formattedCase.hearings.length) {
-    formattedCase.hearings.forEach(hearing => {
+  const irsPractitioners =
+    preformattedCase.irsPractitioners?.map(counsel =>
+      formatCounsel({ caseDetail: preformattedCase, counsel }),
+    ) ?? [];
+  const pendingItemsDocketEntries = formattedDocketEntries.filter(de =>
+    DocketEntry.isPending(de),
+  );
+  const privatePractitioners =
+    preformattedCase.privatePractitioners?.map(counsel =>
+      formatCounsel({ caseDetail: preformattedCase, counsel }),
+    ) ?? [];
+
+  if (preformattedCase.hearings && preformattedCase.hearings.length) {
+    preformattedCase.hearings.forEach(hearing => {
       Object.assign(
         hearing,
         formattedTrialSessionDetails({
@@ -270,149 +464,65 @@ const formatTrialSessionScheduling = ({
       );
     });
   }
-};
-
-const getEditUrl = (docketEntry: RawDocketEntry): string => {
-  const routeToEditUploadCourtIssued = isMiscellaneousDocketEntry(docketEntry);
-
-  return routeToEditUploadCourtIssued
-    ? `/case-detail/${docketEntry.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
-    : `/case-detail/${docketEntry.docketNumber}/edit-order/${docketEntry.docketEntryId}`;
-};
-
-export const formatCase = (
-  applicationContext,
-  caseDetail,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (isEmpty(caseDetail)) {
-    return {};
-  }
-  const result = cloneDeep(caseDetail);
-
-  if (result.docketEntries) {
-    result.draftDocumentsUnsorted = result.docketEntries
-      .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
-      .map(docketEntry => ({
-        ...formatDocketEntry(applicationContext, docketEntry),
-        editUrl: getEditUrl(docketEntry),
-        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
-        signedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(docketEntry.signedAt, 'MMDDYY'),
-        signedAtFormattedTZ: applicationContext
-          .getUtilities()
-          .formatDateString(docketEntry.signedAt, 'DATE_TIME_TZ'),
-      }));
-
-    result.draftDocuments = sortBy(result.draftDocumentsUnsorted, 'receivedAt');
-
-    result.formattedDocketEntries = result.docketEntries.map(d =>
-      formatDocketEntry(applicationContext, d),
-    );
-    // establish an initial sort by ascending index
-    result.formattedDocketEntries.sort(byIndexSortFunction);
-    result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => applicationContext.getUtilities().isPending(entry),
-    );
-  }
-
-  if (result.correspondence && result.correspondence.length) {
-    result.correspondence.forEach(doc => {
-      doc.formattedFilingDate = applicationContext
-        .getUtilities()
-        .formatDateString(doc.filingDate, 'MMDDYY');
-    });
-  }
-
-  if (result.irsPractitioners) {
-    result.irsPractitioners = result.irsPractitioners.map(counsel => {
-      return formatCounsel({ caseDetail, counsel });
-    });
-  }
-
-  if (result.privatePractitioners) {
-    result.privatePractitioners = result.privatePractitioners.map(counsel => {
-      return formatCounsel({ caseDetail, counsel });
-    });
-  }
-
-  result.createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYY');
-  result.receivedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYY');
-
-  result.irsNoticeDateFormatted = result.irsNoticeDate
-    ? applicationContext
-        .getUtilities()
-        .formatDateString(result.irsNoticeDate, 'MMDDYY')
-    : 'No notice provided';
-
-  result.shouldShowIrsNoticeDate = result.hasVerifiedIrsNotice;
-
-  result.caseTitle = applicationContext.getCaseTitle(
-    caseDetail.caseCaption || '',
-  );
-
-  result.isSealed = isSealedCase(caseDetail);
-
-  formatTrialSessionScheduling({ applicationContext, formattedCase: result });
-
-  result.isLeadCase = applicationContext.getUtilities().isLeadCase(result);
-
-  result.isConsolidatedSubCase = !!(
-    result.leadDocketNumber && !result.isLeadCase
-  );
-
-  result.inConsolidatedGroup =
-    result.isLeadCase || result.isConsolidatedSubCase;
-
-  let consolidatedIconTooltipText;
-
-  if (result.inConsolidatedGroup) {
-    if (result.isLeadCase) {
-      consolidatedIconTooltipText = 'Lead case';
-    } else {
-      consolidatedIconTooltipText = 'Consolidated case';
-    }
-  }
-
-  result.consolidatedIconTooltipText = consolidatedIconTooltipText;
-
-  let paymentDate = '';
-  let paymentMethod = '';
-  if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    paymentDate = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'MMDDYY');
-    paymentMethod = caseDetail.petitionPaymentMethod;
-  } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    paymentDate = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MMDDYY');
-  }
-  result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
-
-  const caseEntity = new Case(caseDetail, {
-    authorizedUser,
-  });
-  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
-  result.canUnconsolidate = !!caseEntity.leadDocketNumber;
-  result.irsSendDate = caseEntity.getIrsSendDate();
-  result.showPrintConfirmationLink =
-    result.irsSendDate && !result.docketEntries.some(d => d.isLegacy);
-
-  if (result.consolidatedCases) {
-    result.consolidatedCases = result.consolidatedCases.map(
-      consolidatedCase => {
-        return formatCase(applicationContext, consolidatedCase, authorizedUser);
-      },
-    );
-  }
-
-  return result;
+  return {
+    ...preformattedCase,
+    blockedDateFormatted,
+    canConsolidate,
+    canUnconsolidate,
+    caseTitle,
+    consolidatedIconTooltipText: inConsolidatedGroup
+      ? caseIsLeadCase
+        ? 'Lead case'
+        : 'Consolidated case'
+      : '',
+    correspondence,
+    createdAtFormatted,
+    draftDocuments,
+    draftDocumentsUnsorted,
+    filingFee,
+    formattedAssociatedJudge: preformattedCase.trialSessionId
+      ? preformattedCase.associatedJudge || 'Not assigned'
+      : '',
+    formattedDocketEntries,
+    formattedPreferredTrialCity,
+    formattedTrialCity,
+    formattedTrialDate,
+    inConsolidatedGroup,
+    irsNoticeDateFormatted: preformattedCase.irsNoticeDate
+      ? formatDateString(preformattedCase.irsNoticeDate, 'MMDDYY')
+      : 'No notice provided',
+    irsPractitioners,
+    irsSendDate: caseEntity.getIrsSendDate() || '',
+    isConsolidatedSubCase,
+    isLeadCase: caseIsLeadCase,
+    isSealed: isSealedCase(preformattedCase),
+    paymentDate,
+    paymentMethod,
+    pendingItemsDocketEntries,
+    privatePractitioners,
+    receivedAtFormatted: formatDateString(
+      preformattedCase.receivedAt,
+      'MMDDYY',
+    ),
+    showBlockedFromTrial,
+    showNotScheduled,
+    showPrintConfirmationLink:
+      !!caseEntity.getIrsSendDate() &&
+      !preformattedCase.docketEntries.some(de => !!de.isLegacy),
+    showScheduled:
+      !!preformattedCase.trialSessionId &&
+      preformattedCase.status !== CASE_STATUS_TYPES.calendared,
+    shouldShowIrsNoticeDate: !!preformattedCase.hasVerifiedIrsNotice,
+    showTrialCalendared:
+      !!preformattedCase.trialSessionId &&
+      preformattedCase.status === CASE_STATUS_TYPES.calendared,
+    trialLocation: preformattedCase.trialSessionId
+      ? preformattedCase.trialLocation || ''
+      : '',
+    trialTime: preformattedCase.trialSessionId
+      ? preformattedCase.trialTime || ''
+      : '',
+  };
 };
 
 const byIndexSortFunction = (a, b) => {
@@ -488,11 +598,9 @@ export const sortUndefined = (
 };
 
 export const sortDocketEntries = (
-  docketEntries: (RawDocketEntry & {
-    createdAtFormatted: string | undefined;
-  })[] = [],
+  docketEntries: FormattedCaseDetailDocketEntry[],
   sortByString = '',
-) => {
+): FormattedCaseDetailDocketEntry[] => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
   docketEntries.sort(sortFunc);
@@ -510,20 +618,25 @@ export const getFormattedCaseDetail = ({
   caseDetail,
   docketRecordSort,
 }: {
-  applicationContext: IApplicationContext | ClientApplicationContext;
+  applicationContext:
+    | ServerApplicationContext
+    | ClientApplicationContext
+    | ClientPublicApplicationContext;
   caseDetail: RawCase;
   docketRecordSort?: string;
   authorizedUser: UnknownAuthUser;
-}) => {
-  const result = {
+}): FormattedCaseDetail => {
+  const formattedCaseDetail = {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
-  result.formattedDocketEntries = sortDocketEntries(
-    result.formattedDocketEntries,
-    docketRecordSort,
-  );
-  result.docketRecordSort = docketRecordSort;
 
-  return result;
+  return {
+    ...formattedCaseDetail,
+    formattedDocketEntries: sortDocketEntries(
+      formattedCaseDetail.formattedDocketEntries,
+      docketRecordSort,
+    ),
+    docketRecordSort,
+  };
 };
