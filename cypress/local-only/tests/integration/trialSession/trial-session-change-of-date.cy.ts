@@ -90,5 +90,208 @@ describe('Trial Session - Notice Change of Date', () => {
     );
   });
 
-  it('should show Change of Date and Change of Location modals when both start date and location are changed', () => {});
+  it('should show Change of Date and Change of Location modals when both start date and location are changed', () => {
+    loginAsPetitionsClerk1();
+    createTrialSession().as('TRIAL_SESSION_INFO');
+    cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
+      (trialSessionInfo: { trialSessionId: string }) => {
+        cy.get(
+          `[data-testid="trial-location-link-${trialSessionInfo.trialSessionId}"]`,
+        ).click();
+
+        cy.get('[data-testid="edit-trial-session"]').click();
+        cy.get('[data-testid="start-date-picker"]').eq(1).clear();
+        cy.get('[data-testid="start-date-picker"]').eq(1).type('01/01/2050');
+        cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+        cy.get('[data-testid="trial-session-courthouse-name"]').type(
+          'Current Courthouse',
+        );
+        cy.get('[data-testid="submit-edit-trial-session"]').click();
+      },
+    );
+
+    cy.get('[data-testid="success-alert"]').should('exist');
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      'Trial session updated',
+    );
+
+    cy.get('[data-testid="set-calendar-button"]').click();
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    let createdDocketNumber: string;
+    loginAsPetitioner();
+    externalUserCreatesElectronicCase().then(docketNumber => {
+      loginAsCaseServicesSupervisor();
+      goToCase(docketNumber);
+      createdDocketNumber = docketNumber;
+      cy.wrap(createdDocketNumber).as('CREATED_DOCKET_NUMBER');
+    });
+
+    cy.get('[data-testid="tab-case-information"]').click();
+    cy.get('[data-testid="add-to-trial-session-btn"]').click();
+    cy.get('[data-testid="all-locations-option"]').click();
+    cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
+      ({ trialSessionId }) => {
+        cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+      },
+    );
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get('[data-testid="trial-session-location-link"]').click();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="start-date-picker"]').eq(1).clear();
+    cy.get('[data-testid="start-date-picker"]').eq(1).type('02/01/2050');
+    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+    cy.get('[data-testid="trial-session-courthouse-name"]').type(
+      'Updated Courthouse',
+    );
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+
+    cy.get('[data-testid="current-start-date-info"]').should(
+      'contain.text',
+      '01/01/2050',
+    );
+    cy.get('[data-testid="updated-start-date-info"]').should(
+      'contain.text',
+      '02/01/2050',
+    );
+
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get('[data-testid="current-location-info"]').should(
+      'contain.text',
+      'Current Courthouse',
+    );
+    cy.get('[data-testid="updated-location-info"]').should(
+      'contain.text',
+      'Updated Courthouse',
+    );
+
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get<string>('@CREATED_DOCKET_NUMBER').then((docketNumber: string) => {
+      goToCase(docketNumber);
+      cy.get('[data-testid="docket-record-table"] tr').eq(-2).as('NCTL_ROW');
+      cy.get('@NCTL_ROW').find('td').eq(3).should('contain.text', 'NCTL');
+      cy.get('@NCTL_ROW')
+        .find('td')
+        .eq(5)
+        .should('contain.text', 'Notice of Change of Trial Location');
+      cy.get('@NCTL_ROW').find('td').eq(6).should('contain.text', '1');
+      cy.get('[data-testid="docket-record-table"] tr').last().as('NCTD_ROW');
+      cy.get('@NCTD_ROW').find('td').eq(3).should('contain.text', 'NOT');
+      cy.get('@NCTD_ROW')
+        .find('td')
+        .eq(5)
+        .should('contain.text', 'Notice of Change of Trial Date');
+      cy.get('@NCTD_ROW').find('td').eq(6).should('contain.text', '1');
+      cy.get('[data-testid="document-viewer-link-NOT"]').click();
+    });
+  });
+
+  it.only('should reset the trial session form after cancelling out of either Change of Date or Change of Location modal', () => {
+    loginAsPetitionsClerk1();
+    createTrialSession().as('TRIAL_SESSION_INFO');
+    cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
+      (trialSessionInfo: { trialSessionId: string }) => {
+        cy.get(
+          `[data-testid="trial-location-link-${trialSessionInfo.trialSessionId}"]`,
+        ).click();
+
+        cy.get('[data-testid="edit-trial-session"]').click();
+        cy.get('[data-testid="start-date-picker"]').eq(1).clear();
+        cy.get('[data-testid="start-date-picker"]').eq(1).type('01/01/2050');
+        cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+        cy.get('[data-testid="trial-session-courthouse-name"]').type(
+          'Current Courthouse',
+        );
+        cy.get('[data-testid="submit-edit-trial-session"]').click();
+      },
+    );
+
+    cy.get('[data-testid="success-alert"]').should('exist');
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      'Trial session updated',
+    );
+
+    cy.get('[data-testid="set-calendar-button"]').click();
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    let createdDocketNumber: string;
+    loginAsPetitioner();
+    externalUserCreatesElectronicCase().then(docketNumber => {
+      loginAsCaseServicesSupervisor();
+      goToCase(docketNumber);
+      createdDocketNumber = docketNumber;
+      cy.wrap(createdDocketNumber).as('CREATED_DOCKET_NUMBER');
+    });
+
+    cy.get('[data-testid="tab-case-information"]').click();
+    cy.get('[data-testid="add-to-trial-session-btn"]').click();
+    cy.get('[data-testid="all-locations-option"]').click();
+    cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
+      ({ trialSessionId }) => {
+        cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+      },
+    );
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get('[data-testid="trial-session-location-link"]').click();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="start-date-picker"]').eq(1).clear();
+    cy.get('[data-testid="start-date-picker"]').eq(1).type('02/01/2050');
+    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+    cy.get('[data-testid="trial-session-courthouse-name"]').type(
+      'Updated Courthouse',
+    );
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+
+    cy.get('[data-testid="current-start-date-info"]').should(
+      'contain.text',
+      '01/01/2050',
+    );
+    cy.get('[data-testid="updated-start-date-info"]').should(
+      'contain.text',
+      '02/01/2050',
+    );
+
+    cy.get('[data-testid="modal-button-cancel"]').click();
+
+    cy.get('[data-testid="start-date-picker"]')
+      .eq(1)
+      .should('have.value', '01/01/2050');
+    cy.get('[data-testid="trial-session-courthouse-name"]')
+      .eq(1)
+      .should('have.value', 'Current Courthouse');
+
+    cy.get('[data-testid="start-date-picker"]').eq(1).clear();
+    cy.get('[data-testid="start-date-picker"]').eq(1).type('02/01/2050');
+    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
+    cy.get('[data-testid="trial-session-courthouse-name"]').type(
+      'Updated Courthouse',
+    );
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+
+    cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get('[data-testid="current-location-info"]').should(
+      'contain.text',
+      'Current Courthouse',
+    );
+    cy.get('[data-testid="updated-location-info"]').should(
+      'contain.text',
+      'Updated Courthouse',
+    );
+
+    cy.get('[data-testid="modal-button-cancel"]').click();
+
+    cy.get('[data-testid="start-date-picker"]')
+      .eq(1)
+      .should('have.value', '01/01/2050');
+    cy.get('[data-testid="trial-session-courthouse-name"]')
+      .eq(1)
+      .should('have.value', 'Current Courthouse');
+  });
 });
