@@ -26,23 +26,23 @@ type PreFormattedDocketEntry = Omit<
   FormattedDocketEntry,
   'descriptionDisplay' | 'iconsToDisplay' | 'toolTipText'
 >;
-type DoubleFormattedDocketEntry = FormattedDocketEntry & {
+type ComputedFormattedDocketEntry = FormattedDocketEntry & {
   isDocumentSelected: boolean;
   isSelectableForDownload: boolean;
   signatory: string;
 };
-type DoubleFormattedCase = FormattedCase & {
+type ComputedFormattedCase = FormattedCase & {
   allDocumentsSelectedForDownload: boolean;
   allEligibleDocumentsForDownload: { docketEntryId: string }[];
   docketRecordSort?: string;
-  formattedDocketEntries: DoubleFormattedDocketEntry[];
-  formattedDocketEntriesOnDocketRecord: DoubleFormattedDocketEntry[];
+  formattedDocketEntries: ComputedFormattedDocketEntry[];
+  formattedDocketEntriesOnDocketRecord: ComputedFormattedDocketEntry[];
   formattedDraftDocuments: (FormattedCaseDetailDocketEntry & {
     createdAtFormatted: string;
     descriptionDisplay: string;
     showDocumentViewerLink: boolean;
   })[];
-  formattedPendingDocketEntriesOnDocketRecord: DoubleFormattedDocketEntry[];
+  formattedPendingDocketEntriesOnDocketRecord: ComputedFormattedDocketEntry[];
   isDownloadLinkEnabled: boolean;
   someDocumentsSelectedForDownload: boolean;
 };
@@ -361,7 +361,7 @@ export const getFormattedDocketEntry = ({
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): DoubleFormattedCase => {
+): ComputedFormattedCase => {
   const user = get(state.user);
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);

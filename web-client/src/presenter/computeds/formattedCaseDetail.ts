@@ -4,7 +4,7 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { state } from '@web-client/presenter/app.cerebral';
 import { type FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
 
-type formattedCaseDetail = FormattedCase & {
+type ComputedFormattedCaseDetail = FormattedCase & {
   petitioners: (FormattedCase['petitioners'] & {
     contactId: string;
     isCurrentUser: boolean;
@@ -16,7 +16,7 @@ type formattedCaseDetail = FormattedCase & {
 export const formattedOpenCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): FormattedCase[] => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.openCases);
@@ -28,7 +28,7 @@ export const formattedOpenCases = (
 export const formattedClosedCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): FormattedCase[] => {
   const { formatCase } = applicationContext.getUtilities();
   const user = get(state.user);
 
@@ -40,7 +40,7 @@ export const getUserIsAssignedToSession = ({
   currentUser,
   get,
   trialSessionId,
-}) => {
+}): boolean => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
@@ -95,7 +95,7 @@ const getCalendarDetailsForTrialSession = ({
 export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): ComputedFormattedCaseDetail => {
   const { formatCase } = applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
@@ -104,7 +104,7 @@ export const formattedCaseDetail = (
   const result = {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, user),
-  } as formattedCaseDetail;
+  } as ComputedFormattedCaseDetail;
 
   result.petitioners = applicationContext
     .getUtilities()
