@@ -38,7 +38,13 @@ function validateTscResult(
     );
   }
   if (result.status !== null && result.status !== 0 && !result.stdout) {
-    const stderr = result.stderr ? result.stderr.trim() : '(no stderr)';
+    let stderr: string = '(no stderr)';
+    if (result.stderr) {
+      stderr =
+        typeof result.stderr === 'string'
+          ? result.stderr.trim()
+          : `${result.stderr}`;
+    }
     throw new Error(
       `tsc process for ${label} exited with code ${result.status} but produced no output. stderr: ${stderr}`,
     );
