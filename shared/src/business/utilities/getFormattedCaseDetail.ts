@@ -367,6 +367,146 @@ const getEditUrl = (docketEntry: RawDocketEntry): string => {
     : `/case-detail/${docketEntry.docketNumber}/edit-order/${docketEntry.docketEntryId}`;
 };
 
+export const getFilingFeeInfo = (
+  preformattedCase: RawCase,
+): { paymentDate: string; paymentMethod: string; filingFee: string } => {
+  const paymentDate =
+    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? formatDateString(preformattedCase.petitionPaymentDate, 'MMDDYY')
+      : preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.WAIVED
+        ? formatDateString(preformattedCase.petitionPaymentWaivedDate, 'MMDDYY')
+        : '';
+  const paymentMethod =
+    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? preformattedCase.petitionPaymentMethod || ''
+      : '';
+  const filingFee = `${preformattedCase.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+  return { filingFee, paymentDate, paymentMethod };
+};
+
+export const getConsolidationInfo = (
+  preformattedCase: RawCase,
+): {
+  caseIsLeadCase: boolean;
+  isConsolidatedSubCase: boolean;
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+} => {
+  const caseIsLeadCase = isLeadCase(preformattedCase);
+  const isConsolidatedSubCase = !!(
+    preformattedCase.leadDocketNumber && !caseIsLeadCase
+  );
+  const inConsolidatedGroup = caseIsLeadCase || isConsolidatedSubCase;
+  let consolidatedIconTooltipText = '';
+  if (inConsolidatedGroup) {
+    consolidatedIconTooltipText = caseIsLeadCase
+      ? 'Lead case'
+      : 'Consolidated case';
+  }
+  return {
+    caseIsLeadCase,
+    consolidatedIconTooltipText,
+    inConsolidatedGroup,
+    isConsolidatedSubCase,
+  };
+};
+
+export const getBlockedInfo = (
+  preformattedCase: RawCase,
+): {
+  blocked: boolean;
+  showBlockedFromTrial: boolean;
+  showNotScheduled: boolean;
+  blockedDateFormatted: string;
+} => {
+  const blocked = !!preformattedCase.blocked;
+  const showBlockedFromTrial =
+    blocked && preformattedCase.status !== CASE_STATUS_TYPES.calendared;
+  const showNotScheduled = !preformattedCase.trialSessionId && !blocked;
+  const blockedDateFormatted = blocked
+    ? formatDateString(preformattedCase.blockedDate, 'MMDDYY')
+    : '';
+  return {
+    blocked,
+    blockedDateFormatted,
+    showBlockedFromTrial,
+    showNotScheduled,
+  };
+};
+
+export const getTrialSessionFields = (
+  preformattedCase: RawCase,
+): {
+  formattedTrialCity: string;
+  formattedTrialDate: string;
+  formattedAssociatedJudge: string;
+  showScheduled: boolean;
+  showTrialCalendared: boolean;
+  trialLocation: string;
+  trialTime: string;
+} => {
+  const hasTrialSession = !!preformattedCase.trialSessionId;
+
+  const formattedTrialCity = hasTrialSession
+    ? preformattedCase.trialLocation || 'Not assigned'
+    : 'Not assigned';
+
+  let formattedTrialDate = 'Not scheduled';
+  if (hasTrialSession && preformattedCase.trialDate) {
+    formattedTrialDate = preformattedCase.trialTime
+      ? formatDateString(
+          combineISOandEasternTime(
+            preformattedCase.trialDate,
+            preformattedCase.trialTime,
+          ),
+          FORMATS.DATE_TIME,
+        )
+      : formatDateString(preformattedCase.trialDate, FORMATS.MMDDYY);
+  }
+
+  const formattedAssociatedJudge = hasTrialSession
+    ? preformattedCase.associatedJudge || 'Not assigned'
+    : '';
+
+  const showScheduled =
+    hasTrialSession && preformattedCase.status !== CASE_STATUS_TYPES.calendared;
+
+  const showTrialCalendared =
+    hasTrialSession && preformattedCase.status === CASE_STATUS_TYPES.calendared;
+
+  const trialLocation = hasTrialSession
+    ? preformattedCase.trialLocation || ''
+    : '';
+
+  const trialTime = hasTrialSession ? preformattedCase.trialTime || '' : '';
+
+  return {
+    formattedAssociatedJudge,
+    formattedTrialCity,
+    formattedTrialDate,
+    showScheduled,
+    showTrialCalendared,
+    trialLocation,
+    trialTime,
+  };
+};
+
+export const formatHearings = (preformattedCase: RawCase): void => {
+  if (preformattedCase.hearings && preformattedCase.hearings.length) {
+    preformattedCase.hearings.forEach(hearing => {
+      Object.assign(
+        hearing,
+        formattedTrialSessionDetails({
+          judgeName: hearing.judge && hearing.judge.name,
+          trialDate: hearing.startDate,
+          trialLocation: hearing.trialLocation,
+          trialTime: hearing.startTime,
+        }),
+      );
+    });
+  }
+};
+
 export const formatCase = (
   applicationContext:
     | ServerApplicationContext
@@ -406,22 +546,25 @@ export const formatCase = (
   );
   formattedDocketEntries.sort(byIndexSortFunction);
 
-  const caseIsLeadCase = isLeadCase(preformattedCase);
-  const isConsolidatedSubCase = !!(
-    preformattedCase.leadDocketNumber && !caseIsLeadCase
-  );
-  const inConsolidatedGroup = caseIsLeadCase || isConsolidatedSubCase;
-  const paymentDate =
-    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
-      ? formatDateString(preformattedCase.petitionPaymentDate, 'MMDDYY')
-      : preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.WAIVED
-        ? formatDateString(preformattedCase.petitionPaymentWaivedDate, 'MMDDYY')
-        : '';
-  const paymentMethod =
-    preformattedCase.petitionPaymentStatus === PAYMENT_STATUS.PAID
-      ? preformattedCase.petitionPaymentMethod || ''
-      : '';
-  const filingFee = `${preformattedCase.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+  const { filingFee, paymentDate, paymentMethod } =
+    getFilingFeeInfo(preformattedCase);
+  const {
+    caseIsLeadCase,
+    consolidatedIconTooltipText,
+    inConsolidatedGroup,
+    isConsolidatedSubCase,
+  } = getConsolidationInfo(preformattedCase);
+  const { blockedDateFormatted, showBlockedFromTrial, showNotScheduled } =
+    getBlockedInfo(preformattedCase);
+  const {
+    formattedAssociatedJudge,
+    formattedTrialCity,
+    formattedTrialDate,
+    showScheduled,
+    showTrialCalendared,
+    trialLocation,
+    trialTime,
+  } = getTrialSessionFields(preformattedCase);
 
   const caseEntity = new Case(preformattedCase, { authorizedUser });
   const canConsolidate = caseEntity.canConsolidate(caseEntity);
@@ -438,41 +581,6 @@ export const formatCase = (
   );
   const formattedPreferredTrialCity =
     preformattedCase.preferredTrialCity || 'No location selected';
-
-  const blocked = !!preformattedCase.blocked;
-
-  const showBlockedFromTrial =
-    blocked && preformattedCase.status !== CASE_STATUS_TYPES.calendared;
-
-  const showNotScheduled = !preformattedCase.trialSessionId && !blocked;
-
-  const blockedDateFormatted = blocked
-    ? formatDateString(preformattedCase.blockedDate, 'MMDDYY')
-    : '';
-
-  const formattedTrialCity = preformattedCase.trialSessionId
-    ? preformattedCase.trialLocation || 'Not assigned'
-    : 'Not assigned';
-
-  let formattedTrialDate = 'Not scheduled';
-
-  if (preformattedCase.trialSessionId && preformattedCase.trialDate) {
-    if (preformattedCase.trialTime) {
-      formattedTrialDate = formatDateString(
-        combineISOandEasternTime(
-          preformattedCase.trialDate,
-          preformattedCase.trialTime,
-        ),
-        FORMATS.DATE_TIME,
-      );
-    } else {
-      formattedTrialDate = formatDateString(
-        preformattedCase.trialDate,
-        FORMATS.MMDDYY,
-      );
-    }
-  }
-
   const irsPractitioners =
     preformattedCase.irsPractitioners?.map(counsel =>
       formatCounsel({ caseDetail: preformattedCase, counsel }),
@@ -484,39 +592,21 @@ export const formatCase = (
     preformattedCase.privatePractitioners?.map(counsel =>
       formatCounsel({ caseDetail: preformattedCase, counsel }),
     ) ?? [];
+  formatHearings(preformattedCase);
 
-  if (preformattedCase.hearings && preformattedCase.hearings.length) {
-    preformattedCase.hearings.forEach(hearing => {
-      Object.assign(
-        hearing,
-        formattedTrialSessionDetails({
-          judgeName: hearing.judge && hearing.judge.name,
-          trialDate: hearing.startDate,
-          trialLocation: hearing.trialLocation,
-          trialTime: hearing.startTime,
-        }),
-      );
-    });
-  }
   return {
     ...preformattedCase,
     blockedDateFormatted,
     canConsolidate,
     canUnconsolidate,
     caseTitle,
-    consolidatedIconTooltipText: inConsolidatedGroup
-      ? caseIsLeadCase
-        ? 'Lead case'
-        : 'Consolidated case'
-      : '',
+    consolidatedIconTooltipText,
     correspondence,
     createdAtFormatted,
     draftDocuments,
     draftDocumentsUnsorted,
     filingFee,
-    formattedAssociatedJudge: preformattedCase.trialSessionId
-      ? preformattedCase.associatedJudge || 'Not assigned'
-      : '',
+    formattedAssociatedJudge,
     formattedDocketEntries,
     formattedPreferredTrialCity,
     formattedTrialCity,
@@ -543,19 +633,11 @@ export const formatCase = (
     showPrintConfirmationLink:
       !!caseEntity.getIrsSendDate() &&
       !preformattedCase.docketEntries.some(de => !!de.isLegacy),
-    showScheduled:
-      !!preformattedCase.trialSessionId &&
-      preformattedCase.status !== CASE_STATUS_TYPES.calendared,
+    showScheduled,
     shouldShowIrsNoticeDate: !!preformattedCase.hasVerifiedIrsNotice,
-    showTrialCalendared:
-      !!preformattedCase.trialSessionId &&
-      preformattedCase.status === CASE_STATUS_TYPES.calendared,
-    trialLocation: preformattedCase.trialSessionId
-      ? preformattedCase.trialLocation || ''
-      : '',
-    trialTime: preformattedCase.trialSessionId
-      ? preformattedCase.trialTime || ''
-      : '',
+    showTrialCalendared,
+    trialLocation,
+    trialTime,
   };
 };
 
