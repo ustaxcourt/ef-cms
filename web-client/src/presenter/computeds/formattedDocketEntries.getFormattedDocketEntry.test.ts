@@ -3,7 +3,10 @@ import {
   BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   MOTION_DISPOSITIONS,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -15,10 +18,15 @@ import {
 import {
   type FormattedDocketEntry,
   getFormattedDocketEntry,
+  getShowEditDocketRecordEntry,
+  getShowSealDocketRecordEntry,
+  isSelectableForDownload,
+  setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { simpleDocketEntries } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 import { runCompute } from 'cerebral/test';
 import { type Get } from 'cerebral';
+import { FormattedCaseDetailDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 let mockIsNotServedDocument;
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
@@ -56,6 +64,11 @@ describe('getFormattedDocketEntry', () => {
     qcWorkItemsCompleted: true,
     servedAt: '2019-02-28T21:14:39.488Z',
   };
+
+  type preformattedDocketEntry = Omit<
+    FormattedDocketEntry,
+    'descriptionDisplay' | 'iconsToDisplay' | 'toolTipText'
+  >;
 
   beforeEach(() => {
     mockIsNotServedDocument = false;
@@ -707,6 +720,478 @@ describe('getFormattedDocketEntry', () => {
     });
   });
 
+  describe('isSelectableForDownload', () => {
+    it('should return true when entry is not a minute entry, has a file attached, and is on the docket record', () => {
+      const entry = {
+        eventCode: 'A',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+      } as RawDocketEntry;
+      expect(isSelectableForDownload(entry)).toBe(true);
+    });
+
+    it('should return false when entry is a minute entry', () => {
+      const entry = {
+        eventCode: 'MINC',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+      } as RawDocketEntry;
+      expect(isSelectableForDownload(entry)).toBe(false);
+    });
+
+    it('should return false when entry has no file attached', () => {
+      const entry = {
+        eventCode: 'A',
+        isFileAttached: false,
+        isOnDocketRecord: true,
+      } as RawDocketEntry;
+      expect(isSelectableForDownload(entry)).toBe(false);
+    });
+
+    it('should return false when entry is not on the docket record', () => {
+      const entry = {
+        eventCode: 'A',
+        isFileAttached: true,
+        isOnDocketRecord: false,
+      } as RawDocketEntry;
+      expect(isSelectableForDownload(entry)).toBe(false);
+    });
+  });
+
+  describe('setupIconsToDisplay', () => {
+    it('should display a sealed icon when entry has sealedTo set', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+          sealedToTooltip: 'Sealed to public',
+        } as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            className: 'sealed-docket-entry',
+            icon: 'lock',
+            title: 'Sealed to public',
+          }),
+        ]),
+      );
+    });
+
+    it('should return only the sealed icon for external users even if other flags are set', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+          sealedToTooltip: 'Sealed',
+          isPaper: true,
+        } as preformattedDocketEntry,
+        isExternalUser: true,
+      });
+      expect(icons).toHaveLength(1);
+      expect(icons[0].className).toBe('sealed-docket-entry');
+    });
+
+    it('should return empty array for external users with no sealed entry', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          isPaper: true,
+        } as preformattedDocketEntry,
+        isExternalUser: true,
+      });
+      expect(icons).toHaveLength(0);
+    });
+
+    it('should display a paper icon when entry isPaper and user is internal', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          isPaper: true,
+        } as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            className: 'fa-icon-blue',
+            title: 'Is paper',
+          }),
+        ]),
+      );
+    });
+
+    it('should display an in-progress icon when entry isInProgress and user is internal', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          isInProgress: true,
+        } as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            className: 'fa-icon-gold',
+            title: 'In progress',
+          }),
+        ]),
+      );
+    });
+
+    it('should display a qcNeeded icon when entry has qcNeeded and user is internal', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          qcNeeded: true,
+        } as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            className: 'fa-icon-red',
+            title: 'Is untouched',
+          }),
+        ]),
+      );
+    });
+
+    it('should display a loading spinner icon when entry has showLoadingIcon and user is internal', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {
+          showLoadingIcon: true,
+        } as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            className: 'fa-spin spinner',
+            title: 'Is loading',
+          }),
+        ]),
+      );
+    });
+
+    it('should return empty array for internal user with no special flags', () => {
+      const icons = setupIconsToDisplay({
+        formattedResult: {} as preformattedDocketEntry,
+        isExternalUser: false,
+      });
+      expect(icons).toHaveLength(0);
+    });
+  });
+
+  describe('getShowSealDocketRecordEntry', () => {
+    it('should return true when event code is not an opinion event code', () => {
+      expect(
+        getShowSealDocketRecordEntry({
+          entry: { eventCode: 'O' } as FormattedCaseDetailDocketEntry,
+        }),
+      ).toBe(true);
+    });
+
+    it('should return false when event code is an opinion event code with bench opinion', () => {
+      const opinionCode = OPINION_EVENT_CODES_WITH_BENCH_OPINION[0];
+      expect(
+        getShowSealDocketRecordEntry({
+          entry: { eventCode: opinionCode } as FormattedCaseDetailDocketEntry,
+        }),
+      ).toBe(false);
+    });
+  });
+
+  describe('getShowEditDocketRecordEntry with restricted event codes', () => {
+    it('should return false when entry eventCode is in the restricted event codes feature flag string', () => {
+      const systemGeneratedEventCode = Object.values(
+        SYSTEM_GENERATED_DOCUMENT_TYPES,
+      )[0].eventCode;
+
+      const result = runCompute(
+        (get: Get) =>
+          getShowEditDocketRecordEntry({
+            entry: {
+              eventCode: systemGeneratedEventCode,
+              qcWorkItemsCompleted: true,
+            } as FormattedCaseDetailDocketEntry,
+            get,
+            userPermissions: { EDIT_DOCKET_ENTRY: true },
+          }),
+        {
+          state: {
+            featureFlags: {
+              'restricted-event-codes': systemGeneratedEventCode,
+            },
+          },
+        },
+      );
+
+      expect(result).toBe(false);
+    });
+
+    it('should handle comma-separated restricted event codes', () => {
+      const systemGeneratedEventCode = Object.values(
+        SYSTEM_GENERATED_DOCUMENT_TYPES,
+      )[0].eventCode;
+
+      const result = runCompute(
+        (get: Get) =>
+          getShowEditDocketRecordEntry({
+            entry: {
+              eventCode: systemGeneratedEventCode,
+              qcWorkItemsCompleted: true,
+            } as FormattedCaseDetailDocketEntry,
+            get,
+            userPermissions: { EDIT_DOCKET_ENTRY: true },
+          }),
+        {
+          state: {
+            featureFlags: {
+              'restricted-event-codes': `ABC, ${systemGeneratedEventCode}, XYZ`,
+            },
+          },
+        },
+      );
+
+      expect(result).toBe(false);
+    });
+
+    it('should return true when restricted event codes is a string but does not include the entry eventCode', () => {
+      const systemGeneratedEventCode = Object.values(
+        SYSTEM_GENERATED_DOCUMENT_TYPES,
+      )[0].eventCode;
+
+      const result = runCompute(
+        (get: Get) =>
+          getShowEditDocketRecordEntry({
+            entry: {
+              eventCode: systemGeneratedEventCode,
+              qcWorkItemsCompleted: true,
+            } as FormattedCaseDetailDocketEntry,
+            get,
+            userPermissions: { EDIT_DOCKET_ENTRY: true },
+          }),
+        {
+          state: {
+            featureFlags: {
+              'restricted-event-codes': 'ZZZZZ',
+            },
+          },
+        },
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true for a system-generated minute entry with EDIT_DOCKET_ENTRY permission', () => {
+      const systemGeneratedEventCode = Object.values(
+        SYSTEM_GENERATED_DOCUMENT_TYPES,
+      )[0].eventCode;
+
+      const result = runCompute((get: Get) =>
+        getShowEditDocketRecordEntry({
+          entry: {
+            eventCode: systemGeneratedEventCode,
+            qcWorkItemsCompleted: true,
+          } as FormattedCaseDetailDocketEntry,
+          get,
+          userPermissions: { EDIT_DOCKET_ENTRY: true },
+        }),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true for a served court-issued document with EDIT_DOCKET_ENTRY permission', () => {
+      const result = runCompute((get: Get) =>
+        getShowEditDocketRecordEntry({
+          entry: {
+            ...servedCourtIssuedDocketEntry,
+          } as FormattedCaseDetailDocketEntry,
+          get,
+          userPermissions: { EDIT_DOCKET_ENTRY: true },
+        }),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true for an unservable court-issued document with EDIT_DOCKET_ENTRY permission', () => {
+      const unservableEventCode = UNSERVABLE_EVENT_CODES[0];
+
+      const result = runCompute((get: Get) =>
+        getShowEditDocketRecordEntry({
+          entry: {
+            eventCode: unservableEventCode,
+            isCourtIssuedDocument: true,
+            qcWorkItemsCompleted: true,
+          } as FormattedCaseDetailDocketEntry,
+          get,
+          userPermissions: { EDIT_DOCKET_ENTRY: true },
+        }),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false for an unserved court-issued document that is not unservable', () => {
+      const result = runCompute((get: Get) =>
+        getShowEditDocketRecordEntry({
+          entry: {
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            qcWorkItemsCompleted: true,
+          } as FormattedCaseDetailDocketEntry,
+          get,
+          userPermissions: { EDIT_DOCKET_ENTRY: true },
+        }),
+      );
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('sealButtonTooltip', () => {
+    it('should be "Seal to the public" when entry is not sealed', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: false,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealButtonTooltip).toBe('Seal to the public');
+    });
+
+    it('should be "Unseal to the public and parties of this case" when entry is sealed to EXTERNAL', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealButtonTooltip).toBe(
+        'Unseal to the public and parties of this case',
+      );
+    });
+
+    it('should be "Unseal to the public" when entry is sealed to PUBLIC', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealButtonTooltip).toBe('Unseal to the public');
+    });
+  });
+
+  describe('sealButtonText and sealIcon', () => {
+    it('should have sealButtonText "Unseal" and sealIcon "unlock" when entry is sealed', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealButtonText).toBe('Unseal');
+      expect(result.sealIcon).toBe('unlock');
+    });
+
+    it('should have sealButtonText "Seal" and sealIcon "lock" when entry is not sealed', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: false,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealButtonText).toBe('Seal');
+      expect(result.sealIcon).toBe('lock');
+    });
+  });
+
+  describe('sealedToTooltip', () => {
+    it('should call getSealedDocketEntryTooltip when entry is sealed and sealedToTooltip is not already set', () => {
+      applicationContext
+        .getUtilities()
+        .getSealedDocketEntryTooltip.mockReturnValue('Sealed to the public');
+
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+            sealedToTooltip: undefined,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(
+        applicationContext.getUtilities().getSealedDocketEntryTooltip,
+      ).toHaveBeenCalled();
+      expect(result.sealedToTooltip).toBe('Sealed to the public');
+    });
+
+    it('should return empty string when entry is not sealed and sealedToTooltip is not set', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: false,
+            sealedToTooltip: undefined,
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealedToTooltip).toBe('');
+    });
+
+    it('should preserve existing sealedToTooltip if already set', () => {
+      const result = runCompute((get: Get) =>
+        getFormattedDocketEntry({
+          ...baseParams,
+          get,
+          entry: {
+            ...simpleDocketEntry,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+            sealedToTooltip: 'Already set tooltip',
+          },
+        }),
+      ) as unknown as FormattedDocketEntry;
+
+      expect(result.sealedToTooltip).toBe('Already set tooltip');
+    });
+  });
+
   describe('relatedDocketEntries', () => {
     const mockMotionEntry = {
       ...simpleDocketEntry,
@@ -726,6 +1211,60 @@ describe('getFormattedDocketEntry', () => {
       isOnDocketRecord: true,
       servedAt: '2019-03-01T21:00:00.000Z',
     };
+
+    it('should throw an error when a related docket entry is not found in rawCase.docketEntries', () => {
+      const entryWithAffectedBy = {
+        ...simpleDocketEntry,
+        docketEntryId: 'entry-with-affected',
+        documentTitle: 'Some Motion',
+        affectedByDocketEntries: [
+          {
+            docketEntryId: 'nonexistent-id',
+            disposition: MOTION_DISPOSITIONS.GRANTED,
+          },
+        ],
+      };
+
+      mockCase.docketEntries = [];
+
+      expect(() =>
+        runCompute((get: Get) =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffectedBy,
+            rawCase: mockCase,
+          }),
+        ),
+      ).toThrow('Related order not found');
+    });
+
+    it('should throw an error when a related docket entry from affectedDocketEntries is not found', () => {
+      const entryWithAffected = {
+        ...simpleDocketEntry,
+        docketEntryId: 'entry-with-affected',
+        documentTitle: 'Some Order',
+        affectedDocketEntries: [
+          {
+            docketEntryId: 'nonexistent-id',
+            disposition: MOTION_DISPOSITIONS.GRANTED,
+          },
+        ],
+      };
+
+      mockCase.docketEntries = [];
+
+      expect(() =>
+        runCompute((get: Get) =>
+          getFormattedDocketEntry({
+            ...baseParams,
+            get,
+            entry: entryWithAffected,
+            rawCase: mockCase,
+          }),
+        ),
+      ).toThrow('Related order not found');
+    });
 
     describe('affectedByDocketEntries - dispositionLinkText from MOTION perspective', () => {
       it('should format dispositionLinkText as "GRANTED BY #[index]" when disposition is GRANTED', () => {
