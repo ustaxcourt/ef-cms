@@ -6,7 +6,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -70,6 +70,15 @@ export const serveExternallyFiledDocument = async (
   }
   if (originalSubjectDocketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
+  }
+
+  if (
+    DocketEntry.isMultiDocketed(originalSubjectDocketEntry) &&
+    !isLeadCase(subjectCaseEntity)
+  ) {
+    throw new Error(
+      'Multidocketed documents may only be served from the lead case',
+    );
   }
 
   const numberOfPages = await countPagesInDocument({
