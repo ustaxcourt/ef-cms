@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -115,14 +116,20 @@ type FormattedCounsel = RawPractitioner & {
   }[];
 };
 
-export type FormattedCase = RawCase & {
+export type FormattedCase = Omit<
+  RawCase,
+  'correspondence' | 'docketEntries'
+> & {
   blockedDateFormatted: string;
   canConsolidate: boolean;
   canUnconsolidate: boolean;
   caseTitle: string;
   consolidatedCases: any; // (RawConsolidatedCaseSummary & FormattedCase)[];
   consolidatedIconTooltipText: string;
-  correspondence: (RawCorrespondence & { formattedFilingDate: string })[];
+  correspondence: (RawCorrespondence & {
+    formattedFilingDate: string;
+    isStricken?: boolean;
+  })[];
   createdAtFormatted: string;
   docketEntries: (RawDocketEntry & {
     editUrl?: string;
@@ -170,7 +177,7 @@ export type FormattedCase = RawCase & {
   trialTime: string;
 };
 
-export type FormattedCaseDetail = FormattedCase & {
+export type FormattedCaseDetail = Omit<FormattedCase, 'consolidatedCases'> & {
   consolidatedCases: FormattedCase[];
   docketRecordSort?: string;
 };

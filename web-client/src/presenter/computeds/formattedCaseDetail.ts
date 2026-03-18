@@ -9,7 +9,7 @@ type tPetitioner = TPetitioner & {
   displayName: string;
   isCurrentUser: boolean;
 };
-export type ComputedFormattedCaseDetail = FormattedCase & {
+export type ComputedFormattedCaseDetail = Omit<FormattedCase, 'petitioners'> & {
   petitioners: tPetitioner[];
   trialSessionNotes?: string;
   userIsAssignedToSession?: boolean;

@@ -31,7 +31,7 @@ type ComputedFormattedDocketEntry = FormattedDocketEntry & {
   isSelectableForDownload: boolean;
   signatory: string;
 };
-type ComputedFormattedCase = FormattedCase & {
+type ComputedFormattedCase = Omit<FormattedCase, 'formattedDocketEntries'> & {
   allDocumentsSelectedForDownload: boolean;
   allEligibleDocumentsForDownload: { docketEntryId: string }[];
   docketRecordSort?: string;
