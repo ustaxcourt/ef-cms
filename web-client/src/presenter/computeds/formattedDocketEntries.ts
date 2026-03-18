@@ -3,7 +3,6 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  type DocketEntryRelation,
   MOTION_DISPOSITION_VERBIAGE,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   STATE_KEYS,
@@ -15,46 +14,18 @@ import {
   computeIsNotServedDocument,
   type FormattedCase,
   type FormattedCaseDetailDocketEntry,
+  type FormattedDocketEntry,
+  type RelatedDocketEntry,
 } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 
-type RelatedDocketEntry = DocketEntryRelation & {
-  dispositionLinkText: string[];
-  dispositionText: [];
-  docketEntryIndex?: number;
-  showDocumentViewerLink: boolean;
-  showDownloadLink: boolean;
-};
 type PreFormattedDocketEntry = Omit<
   FormattedDocketEntry,
   'descriptionDisplay' | 'iconsToDisplay' | 'toolTipText'
 >;
-export type FormattedDocketEntry = FormattedCaseDetailDocketEntry & {
-  editDocketEntryMetaLink: string;
-  iconsToDisplay: {
-    className: string;
-    icon: IconProp;
-    size: string;
-    title: string;
-  }[];
-  relatedDocketEntries: RelatedDocketEntry[];
-  sealButtonText: string;
-  sealButtonTooltip: string;
-  sealIcon: string;
-  showDocumentDescriptionWithoutLink: boolean;
-  showDocumentProcessing: boolean;
-  showDocumentViewerLink: boolean;
-  showEditDocketRecordEntry: boolean;
-  showLinkToDocument: boolean;
-  showLoadingIcon: boolean;
-  showNotServed: boolean;
-  showSealDocketRecordEntry: boolean;
-  showServed: boolean;
-  toolTipText: string;
-};
 type DoubleFormattedDocketEntry = FormattedDocketEntry & {
   isDocumentSelected: boolean;
   isSelectableForDownload: boolean;
