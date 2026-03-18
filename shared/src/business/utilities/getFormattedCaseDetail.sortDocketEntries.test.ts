@@ -1,6 +1,9 @@
 import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
-import { sortDocketEntries } from './getFormattedCaseDetail';
+import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  type FormattedCaseDetailDocketEntry,
+  sortDocketEntries,
+} from './getFormattedCaseDetail';
 
 describe('sortDocketEntries', () => {
   const getDateISO = () =>
@@ -9,7 +12,7 @@ describe('sortDocketEntries', () => {
   const mockDocketEntry = {
     ...MOCK_DOCUMENTS[0],
     createdAtFormatted: '2019-08-04T00:10:02.000Z',
-  };
+  } as FormattedCaseDetailDocketEntry;
 
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
@@ -149,8 +152,8 @@ describe('sortDocketEntries', () => {
     expect(result[0].index).toEqual(3);
   });
 
-  it('should return empty array if nothing is passed in', () => {
-    const result = sortDocketEntries();
+  it('should return empty array if empty array is passed in', () => {
+    const result = sortDocketEntries([]);
 
     expect(result).toEqual([]);
   });
@@ -165,6 +168,7 @@ describe('sortDocketEntries', () => {
         },
         {
           ...mockDocketEntry,
+          // @ts-expect-error
           createdAtFormatted: undefined,
         },
         {
@@ -174,6 +178,7 @@ describe('sortDocketEntries', () => {
         },
         {
           ...mockDocketEntry,
+          // @ts-expect-error
           createdAtFormatted: undefined,
         },
       ],
