@@ -297,7 +297,7 @@ describe('formattedDocketEntries', () => {
       document => document.docketEntryId === mockDocketEntry.docketEntryId,
     );
 
-    expect(amat.showLinkToDocument).toEqual(false);
+    expect(amat?.showLinkToDocument).toEqual(false);
   });
 
   it('should show document link for an amendment docket entry when the previous docket entry is a brief and filed after visibility policy change date', () => {
@@ -341,7 +341,7 @@ describe('formattedDocketEntries', () => {
       document => document.docketEntryId === mockDocketEntry.docketEntryId,
     );
 
-    expect(amat.showLinkToDocument).toEqual(true);
+    expect(amat?.showLinkToDocument).toEqual(true);
   });
 
   it('should mark the document selected when it is selected', () => {

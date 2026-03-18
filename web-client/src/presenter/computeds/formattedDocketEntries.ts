@@ -13,10 +13,13 @@ import {
 import { type RawUser } from '@shared/business/entities/User';
 import {
   computeIsNotServedDocument,
-  FormattedCaseDetailDocketEntry,
+  type FormattedCase,
+  type FormattedCaseDetailDocketEntry,
 } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 type RelatedDocketEntry = DocketEntryRelation & {
   dispositionLinkText: string;
@@ -32,7 +35,7 @@ export type FormattedDocketEntry = FormattedCaseDetailDocketEntry & {
   editDocketEntryMetaLink: string;
   iconsToDisplay: {
     className: string;
-    icon: string[] | string;
+    icon: IconProp;
     size: string;
     title: string;
   }[];
@@ -51,6 +54,26 @@ export type FormattedDocketEntry = FormattedCaseDetailDocketEntry & {
   showServed: boolean;
   toolTipText: string;
 };
+type DoubleFormattedDocketEntry = FormattedDocketEntry & {
+  isDocumentSelected: boolean;
+  isSelectableForDownload: boolean;
+  signatory: string;
+};
+type DoubleFormattedCase = FormattedCase & {
+  allDocumentsSelectedForDownload: boolean;
+  allEligibleDocumentsForDownload: { docketEntryId: string }[];
+  docketRecordSort?: string;
+  formattedDocketEntries: DoubleFormattedDocketEntry[];
+  formattedDocketEntriesOnDocketRecord: DoubleFormattedDocketEntry[];
+  formattedDraftDocuments: (RawDocketEntry & {
+    createdAtFormatted: string;
+    descriptionDisplay: string;
+    showDocumentViewerLink: boolean;
+  })[];
+  formattedPendingDocketEntriesOnDocketRecord: DoubleFormattedDocketEntry[];
+  isDownloadLinkEnabled: boolean;
+  someDocumentsSelectedForDownload: boolean;
+};
 
 export const isSelectableForDownload = (entry: RawDocketEntry) => {
   return (
@@ -68,13 +91,13 @@ export const setupIconsToDisplay = ({
   isExternalUser: boolean;
 }): {
   className: string;
-  icon: string[] | string;
+  icon: IconProp;
   size: string;
   title: string;
 }[] => {
   const iconsToDisplay: {
     className: string;
-    icon: string[] | string;
+    icon: IconProp;
     size: string;
     title: string;
   }[] = [];
@@ -107,14 +130,14 @@ export const setupIconsToDisplay = ({
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
       className: 'fa-icon-red',
-      icon: ['fa', 'star'],
+      icon: ['fas', 'star'],
       title: 'Is untouched',
       size: 'lg',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
-      icon: ['fa-spin', 'spinner'],
+      icon: ['fas', 'spinner'],
       title: 'Is loading',
       size: 'lg',
     });
@@ -364,7 +387,7 @@ export const getFormattedDocketEntry = ({
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): DoubleFormattedCase => {
   const user = get(state.user);
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -396,22 +419,22 @@ export const formattedDocketEntries = (
       .getUtilities()
       .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
       .toISO() || '';
-  const result = formatCase(applicationContext, caseDetail, user);
+  const formattedCase = formatCase(applicationContext, caseDetail, user);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  result.formattedDocketEntries = applicationContext
+  const preformattedDocketEntries = applicationContext
     .getUtilities()
     .getDocketEntriesByFilter(applicationContext, {
-      docketEntries: result.formattedDocketEntries,
+      docketEntries: formattedCase.formattedDocketEntries,
       docketRecordFilter,
     });
 
-  let docketEntriesFormatted = result.formattedDocketEntries
+  let docketEntriesFormatted = preformattedDocketEntries
     .map(entry =>
       getFormattedDocketEntry({
         applicationContext,
         docketNumber,
-        entry,
+        entry: { ...entry } as FormattedCaseDetailDocketEntry,
         get,
         permissions,
         rawCase: caseDetail,
@@ -425,7 +448,8 @@ export const formattedDocketEntries = (
         isDocumentSelected: documentsSelectedForDownload.some(
           docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
-        isSelectableForDownload: isSelectableForDownload(docketEntry),
+        isSelectableForDownload: !!isSelectableForDownload(docketEntry),
+        signatory: '',
       };
     });
 
@@ -450,37 +474,45 @@ export const formattedDocketEntries = (
     documentsSelectedForDownloadCount > 0 &&
     documentsSelectedForDownloadCount < selectableDocumentsCount;
 
-  result.someDocumentsSelectedForDownload = someDocumentsSelectedForDownload;
-
-  result.isDownloadLinkEnabled =
-    someDocumentsSelectedForDownload || allDocumentsSelected;
-  result.allDocumentsSelectedForDownload = allDocumentsSelected || false;
-
-  result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
+  const formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
   );
 
-  result.allEligibleDocumentsForDownload = docketEntriesFormatted
+  const allEligibleDocumentsForDownload = docketEntriesFormatted
     .filter(docEntry => isSelectableForDownload(docEntry))
     .map(docEntry => ({
       docketEntryId: docEntry.docketEntryId,
     }));
 
-  result.formattedPendingDocketEntriesOnDocketRecord =
-    result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
+  const formattedPendingDocketEntriesOnDocketRecord =
+    formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
       applicationContext.getUtilities().isPending(docketEntry),
     );
 
-  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+  const formattedDraftDocuments = formattedCase.draftDocuments.map(draftDoc => {
     return {
-      ...draftDocument,
-      descriptionDisplay: draftDocument.documentTitle,
+      ...draftDoc,
+      createdAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(draftDoc.createdAt, FORMATS.MMDDYY),
+      descriptionDisplay: draftDoc.documentTitle,
       showDocumentViewerLink: permissions.UPDATE_CASE,
     };
   });
 
-  result.docketRecordSort = docketRecordSort;
-  return result;
+  return {
+    ...formattedCase,
+    allDocumentsSelectedForDownload: allDocumentsSelected || false,
+    allEligibleDocumentsForDownload,
+    docketRecordSort,
+    formattedDocketEntries: docketEntriesFormatted,
+    formattedDocketEntriesOnDocketRecord,
+    formattedDraftDocuments,
+    formattedPendingDocketEntriesOnDocketRecord,
+    isDownloadLinkEnabled:
+      someDocumentsSelectedForDownload || allDocumentsSelected,
+    someDocumentsSelectedForDownload,
+  };
 };
 
 export function sortDocketEntryTable<T>(

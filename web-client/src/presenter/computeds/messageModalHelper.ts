@@ -1,7 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { type ClientApplicationContext } from '@web-client/applicationContext';
+import { type RawCorrespondence } from '@shared/business/entities/Correspondence';
+
 export const messageModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -42,21 +44,38 @@ export const messageModalHelper = (
   })[] = [];
   for (const entry of formattedDocketEntries) {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
-      entry.title = entry.descriptionDisplay || entry.documentType;
-      entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
-      documents.push(entry);
+      documents.push({
+        ...entry,
+        isAlreadyAttached: computeIsAlreadyAttached(entry),
+        title:
+          entry.descriptionDisplay ||
+          entry.documentTitle ||
+          entry.documentType ||
+          '',
+      });
     }
   }
 
+  const draftDocs: (RawDocketEntry & {
+    isAlreadyAttached: boolean;
+    title: string;
+  })[] = [];
   for (const entry of draftDocuments) {
-    entry.title = entry.documentTitle || entry.documentType;
-    entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
+    draftDocs.push({
+      ...entry,
+      isAlreadyAttached: computeIsAlreadyAttached(entry),
+      title: entry.documentTitle || entry.documentType || '',
+    });
   }
 
+  const corrs: (RawCorrespondence & { isAlreadyAttached: boolean })[] = [];
   for (const corr of correspondence) {
-    corr.isAlreadyAttached = currentAttachments.some(
-      attachment => attachment.docketEntryId === corr.correspondenceId,
-    );
+    corrs.push({
+      ...corr,
+      isAlreadyAttached: currentAttachments.some(
+        attachment => attachment.docketEntryId === corr.correspondenceId,
+      ),
+    });
   }
 
   const currentAttachmentCount = currentAttachments.length;
@@ -92,12 +111,12 @@ export const messageModalHelper = (
   return {
     chambersDisplay,
     chambersSections,
-    correspondence,
+    correspondence: corrs,
     documents,
-    draftDocuments,
-    hasCorrespondence: correspondence && correspondence.length > 0,
+    draftDocuments: draftDocs,
+    hasCorrespondence: corrs && corrs.length > 0,
     hasDocuments: documents.length > 0,
-    hasDraftDocuments: draftDocuments.length > 0,
+    hasDraftDocuments: draftDocs.length > 0,
     sectionDisplay,
     sectionListWithoutSupervisorRole,
     showAddDocumentForm: canAddDocument && shouldShowAddDocumentForm,

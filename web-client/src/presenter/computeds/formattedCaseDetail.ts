@@ -2,6 +2,16 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
+
+type formattedCaseDetail = FormattedCase & {
+  petitioners: (FormattedCase['petitioners'] & {
+    contactId: string;
+    isCurrentUser: boolean;
+  })[];
+  trialSessionNotes?: string;
+  userIsAssignedToSession?: boolean;
+};
 
 export const formattedOpenCases = (
   get: Get,
@@ -94,7 +104,7 @@ export const formattedCaseDetail = (
   const result = {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, user),
-  };
+  } as formattedCaseDetail;
 
   result.petitioners = applicationContext
     .getUtilities()
