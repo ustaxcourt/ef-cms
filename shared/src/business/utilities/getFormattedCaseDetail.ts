@@ -439,16 +439,16 @@ export const formatCase = (
   const formattedPreferredTrialCity =
     preformattedCase.preferredTrialCity || 'No location selected';
 
-  const showNotScheduled = !preformattedCase.trialSessionId;
+  const blocked = !!preformattedCase.blocked;
 
   const showBlockedFromTrial =
-    !!preformattedCase.blocked &&
-    preformattedCase.status !== CASE_STATUS_TYPES.calendared;
+    blocked && preformattedCase.status !== CASE_STATUS_TYPES.calendared;
 
-  const blockedDateFormatted = formatDateString(
-    preformattedCase.blockedDate,
-    'MMDDYY',
-  );
+  const showNotScheduled = !preformattedCase.trialSessionId && !blocked;
+
+  const blockedDateFormatted = blocked
+    ? formatDateString(preformattedCase.blockedDate, 'MMDDYY')
+    : '';
 
   const formattedTrialCity = preformattedCase.trialSessionId
     ? preformattedCase.trialLocation || 'Not assigned'
