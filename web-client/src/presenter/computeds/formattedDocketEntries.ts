@@ -22,7 +22,8 @@ import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 type RelatedDocketEntry = DocketEntryRelation & {
-  dispositionLinkText: string;
+  dispositionLinkText: string[];
+  dispositionText: [];
   docketEntryIndex?: number;
   showDocumentViewerLink: boolean;
   showDownloadLink: boolean;
@@ -289,6 +290,7 @@ export const getFormattedDocketEntry = ({
         showDocumentViewerLink,
         showDownloadLink,
         dispositionLinkText,
+        dispositionText: [],
       });
     }
   }
@@ -315,6 +317,7 @@ export const getFormattedDocketEntry = ({
         showDocumentViewerLink,
         showDownloadLink,
         dispositionLinkText,
+        dispositionText: [],
       });
     }
   }
