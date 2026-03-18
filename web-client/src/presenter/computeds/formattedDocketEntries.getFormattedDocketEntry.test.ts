@@ -16,7 +16,6 @@ import {
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
 import {
-  type FormattedDocketEntry,
   getFormattedDocketEntry,
   getShowEditDocketRecordEntry,
   getShowSealDocketRecordEntry,
@@ -26,7 +25,10 @@ import {
 import { simpleDocketEntries } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 import { runCompute } from 'cerebral/test';
 import { type Get } from 'cerebral';
-import { FormattedCaseDetailDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
+import {
+  type FormattedCaseDetailDocketEntry,
+  type FormattedDocketEntry,
+} from '@shared/business/utilities/getFormattedCaseDetail';
 
 let mockIsNotServedDocument;
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({

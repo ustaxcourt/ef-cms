@@ -1,8 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import {
-  type FormattedDocketEntry,
-  getShowSealDocketRecordEntry,
-} from './formattedDocketEntries';
+import { getShowSealDocketRecordEntry } from './formattedDocketEntries';
+import { type FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 describe('getShowSealDocketRecordEntry', () => {
   it('should return true when the entry is NOT an opinion', () => {
