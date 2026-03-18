@@ -16,7 +16,7 @@ type StateDriveFileInputProps = {
   file?: File;
   id: string;
   updateFormValueSequence: string;
-  validationSequence: string;
+  validationSequence?: string;
   name: string;
   accept?: string;
   ignoreSizeKey?: boolean;

@@ -97,7 +97,6 @@ export const IrsNoticeUploadForm = connect<
               ignoreSizeKey={true}
               name={index.toString()}
               updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
-              validationSequence=""
             />
           </FormGroup>
           <div>
