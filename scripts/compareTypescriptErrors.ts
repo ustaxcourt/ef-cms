@@ -43,7 +43,7 @@ function validateTscResult(
       stderr =
         typeof result.stderr === 'string'
           ? result.stderr.trim()
-          : `${result.stderr}`;
+          : `${result.stderr}`.trim();
     }
     throw new Error(
       `tsc process for ${label} exited with code ${result.status} but produced no output. stderr: ${stderr}`,
