@@ -206,6 +206,11 @@ table.ustc-table .ustc-button--unstyled {
   &:disabled {
     text-decoration: none;
   }
+
+  &.virtualized {
+    // padding: 3px 0 1px 0 !important;
+    line-height: 1.4;
+  }
 }
 
 .action-button {
