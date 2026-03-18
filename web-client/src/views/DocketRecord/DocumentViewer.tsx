@@ -89,7 +89,7 @@ export const DocumentViewer = connect(
 
     useEffect(() => {
       // Scroll to the selected document in the virtualized list
-      if (hasLargeDocketEntryCount && viewDocumentId && listRef.current && listDimensions) {
+      if (hasLargeDocketEntryCount && viewDocumentId && listRef.current) {
         const selectedIndex =
           formattedDocketEntries.formattedDocketEntriesOnDocketRecord.findIndex(
             entry => entry.docketEntryId === viewDocumentId,
@@ -105,7 +105,7 @@ export const DocumentViewer = connect(
         '#tab-docket-sub-record',
       );
       blueHeader?.scrollIntoView();
-    }, [viewDocumentId, hasLargeDocketEntryCount, listDimensions, formattedDocketEntries]);
+    }, [viewDocumentId, hasLargeDocketEntryCount]);
 
     // Row renderer for virtualized list
     const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
