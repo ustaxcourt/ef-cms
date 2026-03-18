@@ -1,8 +1,8 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
+} from '@shared/authorization/authorizationClientService';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
@@ -20,6 +20,8 @@ export const createPractitionerUserInteractor = async (
 
   user.pendingEmail = user.email;
   user.email = undefined;
+  user.firstName = user.firstName.trim();
+  user.lastName = user.lastName.trim();
 
   const practitioner = await createPractitionerUser({
     user,
