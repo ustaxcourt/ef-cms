@@ -4,6 +4,12 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+type tPetitioner = TPetitioner & {
+  contactId: string;
+  displayName: string;
+  isCurrentUser: boolean;
+};
+
 export const PartiesRepresenting = connect(
   {
     form: state.form,
@@ -33,31 +39,33 @@ export const PartiesRepresenting = connect(
                 Who are you representing?
               </legend>
               <span className="usa-hint">Check all that apply</span>
-              {formattedCaseDetail.petitioners.map(petitioner => (
-                <div className="usa-checkbox" key={petitioner.contactId}>
-                  <input
-                    checked={form.filersMap[petitioner.contactId] || false}
-                    className="usa-checkbox__input"
-                    id={`filing-${petitioner.contactId}`}
-                    name={`filersMap.${petitioner.contactId}`}
-                    type="checkbox"
-                    onChange={e => {
-                      updateCaseAssociationFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateCaseAssociationRequestSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    data-testid={`filer-${petitioner.displayName}`}
-                    htmlFor={`filing-${petitioner.contactId}`}
-                  >
-                    {petitioner.displayName}
-                  </label>
-                </div>
-              ))}
+              {formattedCaseDetail.petitioners.map(
+                (petitioner: tPetitioner) => (
+                  <div className="usa-checkbox" key={petitioner.contactId}>
+                    <input
+                      checked={form.filersMap[petitioner.contactId] || false}
+                      className="usa-checkbox__input"
+                      id={`filing-${petitioner.contactId}`}
+                      name={`filersMap.${petitioner.contactId}`}
+                      type="checkbox"
+                      onChange={e => {
+                        updateCaseAssociationFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateCaseAssociationRequestSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      data-testid={`filer-${petitioner.displayName}`}
+                      htmlFor={`filing-${petitioner.contactId}`}
+                    >
+                      {petitioner.displayName}
+                    </label>
+                  </div>
+                ),
+              )}
             </fieldset>
           </FormGroup>
         </div>

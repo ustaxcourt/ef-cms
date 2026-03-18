@@ -7,6 +7,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+type tPetitioner = TPetitioner & {
+  contactId: string;
+  displayName: string;
+  isCurrentUser: boolean;
+};
+
 export const AddPrivatePractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
@@ -132,34 +138,36 @@ export const AddPrivatePractitionerModal = connect(
                 Who is this counsel representing?
               </legend>
 
-              {formattedCaseDetail.petitioners.map((petitioner, index) => (
-                <div className="usa-checkbox" key={petitioner.contactId}>
-                  <input
-                    aria-describedby="representing-legend"
-                    checked={
-                      modal.representingMap[petitioner.contactId] || false
-                    }
-                    className="usa-checkbox__input"
-                    id={`representing-${petitioner.contactId}`}
-                    name={`representingMap.${petitioner.contactId}`}
-                    type="checkbox"
-                    onChange={e => {
-                      updateModalValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    data-testid={`practitioner-representing-${index}`}
-                    htmlFor={`representing-${petitioner.contactId}`}
-                  >
-                    {petitioner.displayName}
-                  </label>
-                </div>
-              ))}
+              {formattedCaseDetail.petitioners.map(
+                (petitioner: tPetitioner, index: number) => (
+                  <div className="usa-checkbox" key={petitioner.contactId}>
+                    <input
+                      aria-describedby="representing-legend"
+                      checked={
+                        modal.representingMap[petitioner.contactId] || false
+                      }
+                      className="usa-checkbox__input"
+                      id={`representing-${petitioner.contactId}`}
+                      name={`representingMap.${petitioner.contactId}`}
+                      type="checkbox"
+                      onChange={e => {
+                        updateModalValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      data-testid={`practitioner-representing-${index}`}
+                      htmlFor={`representing-${petitioner.contactId}`}
+                    >
+                      {petitioner.displayName}
+                    </label>
+                  </div>
+                ),
+              )}
             </fieldset>
           </FormGroup>
 
