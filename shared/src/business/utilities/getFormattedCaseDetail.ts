@@ -350,6 +350,7 @@ export const formatCase = (
   }
   const preformattedCase = cloneDeep(caseDetail) as unknown as RawCase;
   if (!preformattedCase.docketEntries) preformattedCase.docketEntries = [];
+  if (!preformattedCase.correspondence) preformattedCase.correspondence = [];
 
   const draftDocumentsUnsorted = preformattedCase.docketEntries
     .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)

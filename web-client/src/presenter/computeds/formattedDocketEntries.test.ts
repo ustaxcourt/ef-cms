@@ -1052,7 +1052,7 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           className: 'fa-icon-red',
-          icon: ['fa', 'star'],
+          icon: ['fas', 'star'],
           title: 'Is untouched',
           size: 'lg',
         },
@@ -1071,7 +1071,7 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           className: 'fa-spin spinner',
-          icon: ['fa-spin', 'spinner'],
+          icon: ['fas', 'spinner'],
           title: 'Is loading',
           size: 'lg',
         },
