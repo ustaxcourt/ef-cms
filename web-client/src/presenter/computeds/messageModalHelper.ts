@@ -64,7 +64,11 @@ export const messageModalHelper = (
     draftDocs.push({
       ...entry,
       isAlreadyAttached: computeIsAlreadyAttached(entry),
-      title: entry.documentTitle || entry.documentType || '',
+      title:
+        entry.descriptionDisplay ||
+        entry.documentTitle ||
+        entry.documentType ||
+        '',
     });
   }
 

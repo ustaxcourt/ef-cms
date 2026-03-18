@@ -221,6 +221,7 @@ describe('messageModalHelper', () => {
         {
           ...mockDraftDocuments[0],
           isAlreadyAttached: false,
+          // @ts-expect-error
           title: mockDraftDocuments[0].documentTitle,
         },
         {

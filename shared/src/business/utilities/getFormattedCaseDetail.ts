@@ -96,13 +96,13 @@ export type FormattedCase = RawCase & {
     signedAtFormattedTZ?: string;
     signUrl?: string;
   })[];
-  draftDocuments: (RawDocketEntry & {
+  draftDocuments: (FormattedCaseDetailDocketEntry & {
     editUrl?: string;
     signedAtFormatted?: string;
     signedAtFormattedTZ?: string;
     signUrl?: string;
   })[];
-  draftDocumentsUnsorted: (RawDocketEntry & {
+  draftDocumentsUnsorted: (FormattedCaseDetailDocketEntry & {
     editUrl?: string;
     signedAtFormatted?: string;
     signedAtFormattedTZ?: string;

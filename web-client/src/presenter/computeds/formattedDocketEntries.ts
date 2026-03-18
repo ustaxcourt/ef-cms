@@ -65,7 +65,7 @@ type DoubleFormattedCase = FormattedCase & {
   docketRecordSort?: string;
   formattedDocketEntries: DoubleFormattedDocketEntry[];
   formattedDocketEntriesOnDocketRecord: DoubleFormattedDocketEntry[];
-  formattedDraftDocuments: (RawDocketEntry & {
+  formattedDraftDocuments: (FormattedCaseDetailDocketEntry & {
     createdAtFormatted: string;
     descriptionDisplay: string;
     showDocumentViewerLink: boolean;
