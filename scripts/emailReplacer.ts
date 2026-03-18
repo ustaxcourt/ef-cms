@@ -12,7 +12,6 @@ const alreadyHashedEmails = {};
 
 export function sanitizeEmail(email: string) {
   if (email === '') {
-    // console.log('Empty Email encountered');
     return '';
   }
   let hash = crypto
@@ -20,18 +19,19 @@ export function sanitizeEmail(email: string) {
     .update(email)
     .digest('hex');
 
-  //  for user of users: does my email already have a hash?
   const originalEmail = email;
-  // if (usedEmails[sanitizedEmail]) {
+
+  // same email, return the same hash
   if (alreadyHashedEmails[originalEmail]) {
-    // return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
     return `${hash}@${DOMAIN_REPLACER}`;
   }
+
+  // handle hash collision, generate a new hash until we find one that is not used
   if (usedEmails[hash]) {
     let running = true;
     while (running) {
       hash = crypto
-        .createHash('shake256', { outputLength: 3 })
+        .createHash('shake256', { outputLength: 4 })
         .update(hash)
         .digest('hex');
       if (!usedEmails[hash]) {
@@ -45,7 +45,6 @@ export function sanitizeEmail(email: string) {
     alreadyHashedEmails[originalEmail] = hash;
   }
   return `${hash}@${DOMAIN_REPLACER}`;
-  // return `${originalEmail}, ${hash}@${DOMAIN_REPLACER}`;
 }
 
 export async function sanitizeDumpFile(
