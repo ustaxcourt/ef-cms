@@ -8,6 +8,7 @@ jest.mock(
 );
 jest.mock('@shared/sharedAppContext');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CONTACT_TYPES,
@@ -23,6 +24,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
+  createISODateString,
   FORMATS,
   formatDateString,
   formatNow,
@@ -133,6 +135,38 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(testPdfDoc);
+  });
+
+  it('should send duplicate error notification when petition has already been served', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: MOCK_CASE.docketEntries.map(entry =>
+        entry.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
+          ? { ...entry, servedAt: createISODateString() }
+          : entry,
+      ),
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        applicationContext,
+        clientConnectionId,
+        message: expect.objectContaining({
+          action: 'serve_to_irs_duplicate_error',
+        }),
+        userId: mockPetitionsClerkUser.userId,
+      }),
+    );
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {

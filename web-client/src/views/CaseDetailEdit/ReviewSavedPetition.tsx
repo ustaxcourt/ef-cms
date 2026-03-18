@@ -7,6 +7,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { IRSNoticeCaseReview } from '@web-client/views/CaseDetailEdit/IRSNoticeCaseReview';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
+import { ServeCaseToIrsDuplicateErrorModal } from '../ServeCaseToIrsDuplicateErrorModal';
 import { ServeCaseToIrsErrorModal } from '../ServeCaseToIrsErrorModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -285,6 +286,9 @@ export const ReviewSavedPetition = connect(
           <FormCancelModalDialog
             onCancelSequence={closeModalAndNavigateSequence}
           />
+        )}
+        {showModal === 'ServeCaseToIrsDuplicateErrorModal' && (
+          <ServeCaseToIrsDuplicateErrorModal/>
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />
