@@ -13,12 +13,12 @@
     "@types/node": "24.10.13"
   },
   "dependencies": {
-    "@aws-sdk/client-apigatewaymanagementapi": "3.996.0",
-    "@aws-sdk/client-s3": "3.996.0",
-    "@aws-sdk/client-sqs": "3.996.0",
-    "@aws-sdk/lib-storage": "3.996.0",
-    "@aws-sdk/s3-request-presigner": "3.996.0",
-    "@smithy/node-http-handler": "4.4.11",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.1004.0",
+    "@aws-sdk/client-s3": "3.1004.0",
+    "@aws-sdk/client-sqs": "3.1004.0",
+    "@aws-sdk/lib-storage": "3.1004.0",
+    "@aws-sdk/s3-request-presigner": "3.1004.0",
+    "@smithy/node-http-handler": "4.4.14",
     "fflate": "0.8.2"
   }
 }
