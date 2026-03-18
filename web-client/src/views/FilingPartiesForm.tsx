@@ -9,11 +9,7 @@ type FilingPartiesFormProps = {
   updateSequence: Function;
   validateSequence: Function;
 };
-type tPetitioner = TPetitioner & {
-  contactId: string;
-  displayName: string;
-  isCurrentUser: boolean;
-};
+
 const filingPartiesFormDeps = {
   caseDetail: state.formattedCaseDetail,
   filingPartiesFormHelper: state.filingPartiesFormHelper,
@@ -70,7 +66,7 @@ export const FilingPartiesForm: React.FC<FilingPartiesFormProps> = connect(
               </legend>
               {filingPartiesFormHelper.showFilingPartiesAsCheckboxes ? (
                 <>
-                  {caseDetail.petitioners.map((petitioner: tPetitioner) => (
+                  {caseDetail.petitioners.map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         checked={
