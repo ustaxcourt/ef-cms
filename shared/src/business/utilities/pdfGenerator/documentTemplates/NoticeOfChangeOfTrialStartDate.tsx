@@ -83,10 +83,10 @@ function NoticeOfChangeRemote({
           FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
         )}
         , beginning at{' '}
-        {formatDateString(updatedTrialSession.startTime, FORMATS.TIME_12_HOUR)}. The
-        calendar will be called at that date and time, and the parties are
+        {formatDateString(updatedTrialSession.startTime, FORMATS.TIME_12_HOUR)}.
+        The calendar will be called at that date and time, and the parties are
         directed to appear before the Court at a remote proceeding to be held
-        using Zoom.gov and to be prepared to try the case. The parties shall
+        using Zoomgov and to be prepared to try the case. The parties shall
         follow the instructions below for how to participate in the remote
         proceeding.
       </p>
@@ -123,13 +123,21 @@ function NoticeOfChangeInPerson({
       <p>
         &emsp;The {updatedTrialSession.trialLocation}{' '}
         {updatedTrialSession.sessionType} trial session scheduled to begin on{' '}
-        {formatDateString(previousTrialSession.startDate, FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK)},
-        has been changed to{' '}
-        {formatDateString(updatedTrialSession.startDate, FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK)},
-        beginning at {formatDateString(updatedTrialSession.startTime, FORMATS.TIME_12_HOUR)}. The calendar will be
-        called at that date and time, and the parties are expected to be present
-        and to be prepared to try the case. The trial session will be held at{' '}
-        {updatedTrialSession.courthouseName}, {updatedTrialSession.address1}{' '}
+        {formatDateString(
+          previousTrialSession.startDate,
+          FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+        )}
+        , has been changed to{' '}
+        {formatDateString(
+          updatedTrialSession.startDate,
+          FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+        )}
+        , beginning at{' '}
+        {formatDateString(updatedTrialSession.startTime, FORMATS.TIME_12_HOUR)}.
+        The calendar will be called at that date and time, and the parties are
+        expected to be present and to be prepared to try the case. The trial
+        session will be held at {updatedTrialSession.courthouseName},{' '}
+        {updatedTrialSession.address1}{' '}
         {updatedTrialSession.address2 ? `${updatedTrialSession.address2} ` : ''}
         {updatedTrialSession.city} {updatedTrialSession.state}{' '}
         {updatedTrialSession.postalCode}.
