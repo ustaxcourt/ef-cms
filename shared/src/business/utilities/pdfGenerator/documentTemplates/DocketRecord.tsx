@@ -2,7 +2,7 @@ import { CompressedDocketHeader } from '@shared/business/utilities/pdfGenerator/
 import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 import classNames from 'classnames';
-import type { FormattedDocketEntry } from '@web-client/presenter/computeds/formattedDocketEntries';
+import type { FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 type PetitionerContact = TPetitioner & {
   index: number;
