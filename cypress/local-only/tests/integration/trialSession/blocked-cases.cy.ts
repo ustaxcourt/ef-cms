@@ -136,11 +136,11 @@ describe('Blocked Cases', () => {
       loginAsDocketClerk1();
       goToCase(docketNumber);
       cy.get('[data-testid="tab-case-information"]').first().click();
-      cy.get('[data-testid="add-manual-block-button"]').click();
+      cy.get('[data-testid="add-manual-block-button"]').first().click();
       cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
         'This case cannot go to trial.',
       );
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').first().click();
       cy.get('[data-testid="success-alert"]').contains(
         'Case blocked from being set for trial.',
       );
@@ -149,16 +149,16 @@ describe('Blocked Cases', () => {
       cy.get('[data-testid="blocked-case-icon"]');
 
       cy.get('[data-testid="dropdown-select-report"]').first().click();
-      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').first().click();
       cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
       cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
-      cy.get(`a[href="/case-detail/${docketNumber}"]`).click();
+      cy.get(`a[href="/case-detail/${docketNumber}"]`).first().click();
       cy.get('[data-testid="tab-case-information"]').first().click();
-      cy.get('[data-testid="edit-remote-status"]').click();
+      cy.get('[data-testid="edit-remote-status"]').first().click();
       cy.get('#remote-trial-granted-date-picker').type(date);
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').first().click();
       cy.get('[data-testid="dropdown-select-report"]').first().click();
-      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').first().click();
       cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
       cy.get('@docketNumber').then(docketNumber => {
         cy.get(
