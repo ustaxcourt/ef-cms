@@ -1,8 +1,6 @@
-import {
-  type FormattedDocketEntry,
-  getShowEditDocketRecordEntry,
-} from './formattedDocketEntries';
+import { getShowEditDocketRecordEntry } from './formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
+import { type FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 describe('getShowEditDocketRecordEntry', () => {
   it('should not show the edit button if the docket entry document has not been QCed', () => {

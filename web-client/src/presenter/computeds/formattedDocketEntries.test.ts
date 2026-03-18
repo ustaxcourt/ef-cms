@@ -17,12 +17,12 @@ import {
 } from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
-  FormattedDocketEntry,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { type FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 describe('formattedDocketEntries', () => {
   const getDateISO = () =>
