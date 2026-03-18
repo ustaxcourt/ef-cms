@@ -19,7 +19,7 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex?) => {
     );
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 

@@ -1,4 +1,4 @@
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkSealsDocketEntry = (cerebralTest, draftOrderIndex) => {
@@ -22,10 +22,10 @@ export const docketClerkSealsDocketEntry = (cerebralTest, draftOrderIndex) => {
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
 
-    expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedTo).toBe(
+    expect(sealedDocketEntry?.isSealed).toBe(true);
+    expect(sealedDocketEntry?.sealedTo).toBe(
       DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     );
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
+    expect(sealedDocketEntry?.sealedToTooltip).toBe('Sealed to the public');
   });
 };
