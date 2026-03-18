@@ -35,28 +35,49 @@ export const DocumentViewer = connect(
     const getRowHeight = (index: number) => {
       const entry =
         formattedDocketEntries.formattedDocketEntriesOnDocketRecord[index];
-      if (!entry) return 48;
+      if (!entry) return 80;
 
       const descriptionLength = entry.descriptionDisplay?.length || 0;
-      const relatedEntriesCount = entry.relatedDocketEntries?.length || 0;
 
-      // Simple entries like "Exhibit(s)" or "Petition"
-      if (descriptionLength <= 15 && relatedEntriesCount === 0) {
-        return 48;
+      // Base height includes button padding (15px top + 15px bottom) + border + content padding
+      const baseHeight = 60;
+
+      // Very short entries (single words like "Exhibit", "Petition")
+      if (descriptionLength <= 20) {
+        return baseHeight;
       }
 
-      // Multi-line entries - estimate lines needed
-      // The column is roughly 25 characters wide
-      const estimatedLines = Math.ceil(descriptionLength / 25);
-      const heightPerLine = 22;
-      const baseHeight = 32;
+      // Adjust chars per line based on text length
+      // Short texts (20-100 chars): less wrapping, ~30 chars per line
+      // Medium texts (100-200 chars): moderate wrapping, ~26 chars per line
+      // Long texts (200+ chars): more wrapping, ~22 chars per line
+      let charsPerLine: number;
+      if (descriptionLength <= 100) {
+        charsPerLine = 30;
+      } else if (descriptionLength <= 200) {
+        charsPerLine = 26;
+      } else {
+        charsPerLine = 22;
+      }
 
-      const calculatedHeight =
-        baseHeight +
-        (estimatedLines * heightPerLine) +
-        (relatedEntriesCount * 25);
+      const estimatedLines = Math.ceil(descriptionLength / charsPerLine);
+      const heightPerLine = 24; // Line height with spacing
 
-      return Math.min(calculatedHeight, 200);
+      // Calculate additional height for related docket entries
+      let additionalHeight = 0;
+      if (entry.relatedDocketEntries && entry.relatedDocketEntries.length > 0) {
+        // Each related entry adds significant height (line break + disposition text)
+        entry.relatedDocketEntries.forEach(affectedEntry => {
+          const dispositionCount = affectedEntry.dispositionLinkText?.length || 0;
+          // Each disposition gets a full line + extra spacing
+          additionalHeight += (dispositionCount + 1) * heightPerLine;
+        });
+      }
+
+      const calculatedHeight = baseHeight + (estimatedLines * heightPerLine) + additionalHeight;
+
+      // Allow very tall rows for complex entries
+      return Math.min(calculatedHeight, 800);
     };
 
     useEffect(() => {
