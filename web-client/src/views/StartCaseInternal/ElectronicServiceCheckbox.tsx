@@ -1,20 +1,17 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props as cerebralProps, state } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type ElectronicServiceConsentCheckboxProps = {
   bind: string;
   contactType: string;
 };
-const electronicServiceConsentCheckboxProps =
-  cerebralProps as unknown as ElectronicServiceConsentCheckboxProps;
 const electronicServiceConsentCheckboxDeps = {
-  bind: electronicServiceConsentCheckboxProps.bind,
-  contactType: electronicServiceConsentCheckboxProps.contactType,
-  data: state[electronicServiceConsentCheckboxProps.bind],
+  bind: cerebralProps.bind,
+  contactType: cerebralProps`contactType`,
+  data: state[cerebralProps`bind`],
   updateFormValueSequence: sequences.updateFormValueSequence,
 };
 
