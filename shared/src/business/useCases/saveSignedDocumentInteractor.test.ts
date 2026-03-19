@@ -92,6 +92,37 @@ describe('saveSignedDocumentInteractor', () => {
     );
   });
 
+  it('should throw an error when a docket entry to be signed was not found', async () => {
+    await expect(
+      saveSignedDocumentInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          nameForSigning: mockSigningName,
+          originalDocketEntryId: 'incorrect docketEntryId',
+          signedDocumentStorageId: mockSignedDocumentStorageId,
+        } as any,
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Docket Entry to be signed was not found');
+  });
+
+  it('should throw an error when caseRecord was not found', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
+    await expect(
+      saveSignedDocumentInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          nameForSigning: mockSigningName,
+          originalDocketEntryId: mockOriginalDocketEntryId,
+          signedDocumentStorageId: mockSignedDocumentStorageId,
+        } as any,
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(`Case ${mockCase.docketNumber} not found`);
+  });
+
   it('should save the original, unsigned document to S3 with a new id', async () => {
     await saveSignedDocumentInteractor(
       applicationContext,
