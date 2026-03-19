@@ -84,7 +84,9 @@ describe('Trial Session - Notice Change of Date', () => {
             .eq(5)
             .should('contain.text', 'Notice of Change of Trial Date');
           cy.get('@NCTD_ROW').find('td').eq(6).should('contain.text', '1');
-          cy.get('[data-testid="document-viewer-link-NOT"]').click();
+          cy.get('@NCTD_ROW')
+            .get('[data-testid="document-viewer-link-NOT"]')
+            .click();
         }
       },
     );
@@ -186,7 +188,9 @@ describe('Trial Session - Notice Change of Date', () => {
         .eq(5)
         .should('contain.text', 'Notice of Change of Trial Date');
       cy.get('@NCTD_ROW').find('td').eq(6).should('contain.text', '1');
-      cy.get('[data-testid="document-viewer-link-NOT"]').click();
+      cy.get('@NCTD_ROW')
+        .get('[data-testid="document-viewer-link-NOT"]')
+        .click();
     });
   });
 
