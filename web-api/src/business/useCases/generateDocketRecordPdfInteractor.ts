@@ -23,7 +23,10 @@ import {
   type FormattedCaseDetailDocketEntry,
 } from '@shared/business/utilities/getFormattedCaseDetail';
 
-type DocketRecordPdfCaseDetail = FormattedCaseDetail & {
+type DocketRecordPdfCaseDetail = Omit<
+  FormattedCaseDetail,
+  'formattedDocketEntries' | 'petitioners'
+> & {
   formattedDocketEntries: (FormattedCaseDetailDocketEntry & {
     relatedDocketEntries: {
       docketEntryIndex: number | undefined;
@@ -154,7 +157,7 @@ export const generateDocketRecordPdfInteractor = async (
       }[] = [];
       const practitioners =
         getPractitionersRepresenting(
-          formattedCaseDetail,
+          formattedCaseDetail as RawCase,
           petitioner.contactId,
         ) || [];
       if (practitioners.length > 0) {
