@@ -3,10 +3,11 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
 import { createPractitionerUser } from '@shared/business/utilities/createPractitionerUser';
+import { userDataCanGenerateValidBarNumber } from '@shared/business/utilities/userDataCanGenerateValidBarNumber';
 
 export const createPractitionerUserInteractor = async (
   { user }: { user: RawPractitioner },
@@ -23,13 +24,20 @@ export const createPractitionerUserInteractor = async (
   user.firstName = user.firstName.trim();
   user.lastName = user.lastName.trim();
 
-  const practitioner = await createPractitionerUser({
-    user,
-  });
+  if (
+    !userDataCanGenerateValidBarNumber({
+      firstName: user.firstName,
+      lastName: user.lastName,
+    })
+  ) {
+    throw new InvalidRequest(
+      'Invalid user data for generating a bar number provided',
+    );
+  }
 
-  await upsertPractitioner({
-    user: practitioner,
-  });
+  const practitioner = await createPractitionerUser({ user });
+
+  await upsertPractitioner({ user: practitioner });
 
   return { barNumber: practitioner.barNumber };
 };
