@@ -19,7 +19,7 @@ export const openPractitionerDocumentDownloadUrlAction = async ({
       });
 
     applicationContext.getUtilities().openUrlInNewTab({ url });
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`Unable to open document. ${err.message}`);
   }
 };

@@ -23,7 +23,7 @@ export const docketClerkServesOrderOnPaperParties = (
     expect(orderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.getState('currentPage')).toEqual(
