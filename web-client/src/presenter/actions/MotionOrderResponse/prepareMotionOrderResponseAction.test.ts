@@ -175,6 +175,56 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentType).toEqual('Order');
   });
 
+  it('should handle having multiple petitioners as movant', async () => {
+    const petitionerDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Petr. Test Petitioner',
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          petitioners: [
+            { name: 'Test Petitioner' },
+            { name: 'Test Petitioner 2' },
+          ],
+          docketEntries: [petitionerDocketEntry],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain('petitioners filed a Motion');
+  });
+
+  it('should handle having multiple petitioners as nonmovant', async () => {
+    const respondentDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Respt. Test Respondent',
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          petitioners: [
+            { name: 'Test Petitioner' },
+            { name: 'Test Petitioner 2' },
+          ],
+          docketEntries: [respondentDocketEntry],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'petitioners shall file a Response',
+    );
+  });
+
   it('should handle consolidated cases', async () => {
     const result = await runAction(prepareMotionOrderResponseAction, {
       state: {
@@ -222,7 +272,53 @@ describe('prepareMotionOrderResponseAction', () => {
       },
     });
 
-    const expectedHtml = `<p class="indent-paragraph"> On March 22, 2024, petitioner filed a Motion to Dismiss (Document no. 1). For cause, it is </p><p class="indent-paragraph">ORDERED that by March 29, 2024 respondent shall file a Response to the Motion to Dismiss. It is further</p><p class="indent-paragraph">ORDERED that by April 22, 2024 petitioner may file a Reply.</p>`;
+    const expectedHtml = `<p class="indent-paragraph"> On March 22, 2024, petitioner filed a Motion to Dismiss (doc. no. 1). For cause, it is </p><p class="indent-paragraph">ORDERED that by March 29, 2024, respondent shall file a Response to the Motion to Dismiss. It is further</p><p class="indent-paragraph">ORDERED that by April 22, 2024, petitioner may file a Reply.</p>`;
+    expect(result.state.form.richText).toEqual(expectedHtml);
+  });
+
+  it('should correctly format the text for a consolidated case when order is issued for all cases in the group', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          consolidatedCases: [
+            { docketNumber: '123-45', docketNumberWithSuffix: '123-45S' },
+            { docketNumber: '123-46', docketNumberWithSuffix: '123-46S' },
+          ],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+        },
+      },
+    });
+
+    const expectedHtml = `<p class="indent-paragraph"> On March 22, 2024, petitioner filed a Motion to Dismiss (lead case doc. no. 1). For cause, it is </p><p class="indent-paragraph">ORDERED that by March 29, 2024, respondent shall file a Response to the Motion to Dismiss. It is further</p><p class="indent-paragraph">ORDERED that by April 22, 2024, petitioner may file a Reply.</p>`;
+    expect(result.state.form.richText).toEqual(expectedHtml);
+  });
+
+  it('should correctly format the text for a consolidated case when order is issued for just the lead case', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          consolidatedCases: [
+            { docketNumber: '123-45', docketNumberWithSuffix: '123-45S' },
+            { docketNumber: '123-46', docketNumberWithSuffix: '123-46S' },
+          ],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+        },
+      },
+    });
+
+    const expectedHtml = `<p class="indent-paragraph"> On March 22, 2024, petitioner filed a Motion to Dismiss (doc. no. 1). For cause, it is </p><p class="indent-paragraph">ORDERED that by March 29, 2024, respondent shall file a Response to the Motion to Dismiss. It is further</p><p class="indent-paragraph">ORDERED that by April 22, 2024, petitioner may file a Reply.</p>`;
     expect(result.state.form.richText).toEqual(expectedHtml);
   });
 
@@ -256,6 +352,29 @@ describe('prepareMotionOrderResponseAction', () => {
     );
     expect(richText).toContain(
       'ORDERED that The Court expects full compliance.',
+    );
+  });
+
+  it('should not display Invalid DateTime when given an invalid date string in pdf preview', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          responseDate: 'randomstring',
+          dueDate: 'randomstring',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).not.toContain(
+      'ORDERED that by Invalid DateTime, respondent shall file a Response',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'ORDERED that by Invalid DateTime, petitioner may file a Reply',
     );
   });
 });
