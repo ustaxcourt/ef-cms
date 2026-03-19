@@ -225,4 +225,282 @@ describe('petitionQcHelper', () => {
       expect(showRemovePdfButton).toEqual(false);
     });
   });
+
+  describe('selectedTabHasAttachment', () => {
+    const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_MAP } =
+      applicationContext.getConstants();
+
+    it('should return false when documentSelectedForPreview is undefined', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: undefined,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+
+    it('should return false when documentSelectedForPreview is null', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: null,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+
+    it('should return true when documentSelectedForPreview is a form key and form has the file', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'stinFile',
+        },
+        form: {
+          isPaper: true,
+          stinFile: { name: 'test-stin.pdf' },
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return false when documentSelectedForPreview is a form key but form does not have the file', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'stinFile',
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+
+    it('should return true when documentSelectedForPreview is a documentType string and form has the corresponding file', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview:
+            INITIAL_DOCUMENT_TYPES.stin.documentType,
+        },
+        form: {
+          isPaper: true,
+          stinFile: { name: 'test-stin.pdf' },
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return true when documentSelectedForPreview is a UUID matching a docketEntryId', () => {
+      const testDocketEntryId = '123e4567-e89b-12d3-a456-426614174000';
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: testDocketEntryId,
+              documentType: 'Petition',
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: testDocketEntryId,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return false when documentSelectedForPreview is a UUID but no matching docketEntryId exists', () => {
+      const testDocketEntryId = '123e4567-e89b-12d3-a456-426614174000';
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '999e4567-e89b-12d3-a456-426614174000',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: testDocketEntryId,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+
+    it('should return true when documentSelectedForPreview is a form key and docketEntry exists with matching documentType', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '123e4567-e89b-12d3-a456-426614174000',
+              documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'stinFile',
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return true when documentSelectedForPreview is a documentType string and docketEntry exists with matching documentType', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '123e4567-e89b-12d3-a456-426614174000',
+              documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview:
+            INITIAL_DOCUMENT_TYPES.stin.documentType,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return false when documentSelectedForPreview is a documentType string but no matching docketEntry exists', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '123e4567-e89b-12d3-a456-426614174000',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview:
+            INITIAL_DOCUMENT_TYPES.stin.documentType,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+
+    it('should return true when multiple conditions are met (form has file AND docketEntry exists)', () => {
+      const testDocketEntryId = '123e4567-e89b-12d3-a456-426614174000';
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: testDocketEntryId,
+              documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'stinFile',
+        },
+        form: {
+          isPaper: true,
+          stinFile: { name: 'test-stin.pdf' },
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(true);
+    });
+
+    it('should return false when none of the conditions are met', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '999e4567-e89b-12d3-a456-426614174000',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview:
+            INITIAL_DOCUMENT_TYPES.stin.documentType,
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { selectedTabHasAttachment } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+      expect(selectedTabHasAttachment).toBe(false);
+    });
+  });
 });

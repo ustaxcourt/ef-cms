@@ -25,6 +25,7 @@ export const scanBatchPreviewerHelper = (
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
+  const pdfPreviewUrl = get(state.pdfPreviewUrl);
   let selectPageImage: string | null = null;
 
   const bufferToBase64 = buf => {
@@ -59,6 +60,7 @@ export const scanBatchPreviewerHelper = (
   return {
     batches,
     currentPage: currentPageIndex,
+    pdfPreviewUrl,
     scannerSource,
     scannerSourceDisplayName,
     selectedBatch: batches.length
