@@ -19,7 +19,7 @@ export const connectLambda = event => {
       await onConnectInteractor(
         applicationContext,
         {
-          clientConnectionId,
+          clientConnectionId: clientConnectionId ?? '',
           connectionId: event.requestContext.connectionId,
           endpoint,
         },

@@ -140,7 +140,7 @@ export const messageDocumentHelper = (
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode ?? ''));
 
   const showOrderResponseButton =
     permissions.MOTION_ORDER_RESPONSE &&
@@ -150,7 +150,7 @@ export const messageDocumentHelper = (
     permissions.STATUS_REPORT_ORDER &&
     (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-        formattedDocument?.eventCode,
+        formattedDocument?.eventCode ?? '',
       ));
 
   const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(

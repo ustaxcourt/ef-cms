@@ -15,7 +15,7 @@ export const removeRespondentCounselFromCaseAction = async ({
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
 
-  const respondentCounsel = caseDetail.irsPractitioners.find(
+  const respondentCounsel = caseDetail.irsPractitioners!.find(
     practitioner => practitioner.barNumber === barNumber,
   );
 

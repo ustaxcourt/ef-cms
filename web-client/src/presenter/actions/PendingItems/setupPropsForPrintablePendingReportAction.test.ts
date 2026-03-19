@@ -3,7 +3,7 @@ import { setupPropsForPrintablePendingReportAction } from './setupPropsForPrinta
 
 describe('setupPropsForPrintablePendingReportAction', () => {
   it('should update the props with docketNumber if docketNumberFilter is true', async () => {
-    const result = await runAction<{ docketNumberFilter: string }>(setupPropsForPrintablePendingReportAction, {
+    const result = await runAction<{ docketNumberFilter?: string }>(setupPropsForPrintablePendingReportAction, {
       props: {
         caseDetail: { docketNumber: '123-45' },
         docketNumberFilter: true,

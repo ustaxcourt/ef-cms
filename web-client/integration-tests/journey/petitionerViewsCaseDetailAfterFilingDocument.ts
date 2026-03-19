@@ -75,7 +75,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       entry => entry.documentType === 'Statement',
     );
 
-    expect(statement.showLinkToDocument).toBeTruthy();
+    expect(statement?.showLinkToDocument).toBeTruthy();
 
     expect(formattedDocketEntriesOnDocketRecord[1].eventCode).toEqual('RQT');
   });
