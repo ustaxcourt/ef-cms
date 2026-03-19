@@ -69,7 +69,7 @@ describe('createPractitionerUserInteractor', () => {
     ).rejects.toThrow(InvalidRequest);
   });
 
-  it('should return the practitioner`s bar number', async () => {
+  it("should return the practitioner's bar number", async () => {
     const { barNumber } = await createPractitionerUserInteractor(
       {
         user: mockUser,
@@ -101,7 +101,7 @@ describe('createPractitionerUserInteractor', () => {
     );
   });
 
-  it('should trim the practitioner`s first and last names so that a valid bar number can be generated', async () => {
+  it("should trim the practitioner's first and last names so that a valid bar number can be generated", async () => {
     const mockFirstName = ' sideshow';
     const mockLastName = ' bob';
 
