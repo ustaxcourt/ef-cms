@@ -1818,11 +1818,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -2218,3 +2220,5 @@ export const EVENT_CODES_WITH_NO_ORDER = [
   'SORI',
   'TCOP',
 ];
+
+export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';

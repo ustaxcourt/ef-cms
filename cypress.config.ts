@@ -10,6 +10,7 @@ import {
 } from './cypress/local-only/support/database';
 import {
   expireUserConfirmationCode,
+  getDocketEntryIdsByDocketNumberAndEventCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
@@ -59,6 +60,18 @@ export default defineConfig({
           accountStatus: string;
         }) {
           return changeUserAccountStatus({ email, accountStatus });
+        },
+        getDocketEntryIdsByDocketNumberAndEventCode({
+          docketNumber,
+          eventCode,
+        }: {
+          docketNumber: string;
+          eventCode: string;
+        }) {
+          return getDocketEntryIdsByDocketNumberAndEventCode({
+            docketNumber,
+            eventCode,
+          });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
