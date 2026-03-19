@@ -41,7 +41,7 @@ describe('docket clerk updates docket entries', () => {
       primaryDocumentFile: fakeFile,
     };
 
-    for (let [key, value] of Object.entries(pdfUploadFormValues)) {
+    for (const [key, value] of Object.entries(pdfUploadFormValues)) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key,
         value,
@@ -65,7 +65,7 @@ describe('docket clerk updates docket entries', () => {
 
     expect(uploadedCourtIssuedDraft).toBeTruthy();
 
-    cerebralTest.docketEntryId = uploadedCourtIssuedDraft.docketEntryId;
+    cerebralTest.docketEntryId = uploadedCourtIssuedDraft?.docketEntryId;
   });
 
   it('add a Trial Exhibits docket entry from the draft document', async () => {
@@ -81,7 +81,7 @@ describe('docket clerk updates docket entries', () => {
       eventCode: 'TE', // Trial Exhibits, a coversheet will be added to the uploaded PDF
     };
 
-    for (let [key, value] of Object.entries(trialExhibitsFormValues)) {
+    for (const [key, value] of Object.entries(trialExhibitsFormValues)) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key,
         value,
@@ -116,12 +116,12 @@ describe('docket clerk updates docket entries', () => {
     const trialExhibitsDocketEntry = docketEntries.find(
       doc => doc.docketEntryId === cerebralTest.docketEntryId,
     );
-    cerebralTest.index = trialExhibitsDocketEntry.index;
+    cerebralTest.index = trialExhibitsDocketEntry?.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
     const pdfDoc = await PDFDocument.load(fakeFile);
 
-    expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
+    expect(trialExhibitsDocketEntry?.numberOfPages).toEqual(
       pdfDoc.getPageCount() + 1,
     );
   });
@@ -173,12 +173,12 @@ describe('docket clerk updates docket entries', () => {
     const trialExhibitsDocketEntry = docketEntries.find(
       doc => doc.docketEntryId === cerebralTest.docketEntryId,
     );
-    cerebralTest.index = trialExhibitsDocketEntry.index;
+    cerebralTest.index = trialExhibitsDocketEntry?.index;
 
     const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
     const pdfDoc = await PDFDocument.load(fakeFile);
 
-    expect(trialExhibitsDocketEntry.numberOfPages).toEqual(
+    expect(trialExhibitsDocketEntry?.numberOfPages).toEqual(
       pdfDoc.getPageCount(),
     );
   });
