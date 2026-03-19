@@ -136,7 +136,7 @@ export const fileDocumentHelper = (
     partiesLabelText = 'Parties';
   }
 
-  const showApplicableCOSText = caseDetail.petitioners.some(
+  const showNecessaryCOSText = caseDetail.petitioners.some(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
@@ -153,7 +153,7 @@ export const fileDocumentHelper = (
     partyValidationError,
     primaryDocument,
     secondaryDocument,
-    showApplicableCOSText,
+    showNecessaryCOSText,
     showFilingIncludes,
     showGenerationTypeForm,
     showNoticeOfWithdrawal,

@@ -58,9 +58,12 @@ export const draftDocumentViewerHelper = (
     formattedDocumentToDisplay.eventCode === GENERIC_ORDER_EVENT_CODE &&
     formattedDocumentToDisplay.stampData?.disposition;
 
-  const isStatusReportOrder = Object.values(
-    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
-  ).includes(formattedDocumentToDisplay?.draftOrderState?.orderType);
+  const isStatusReportOrder = formattedDocumentToDisplay?.draftOrderState
+    ?.orderType
+    ? Object.values(STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions).includes(
+        formattedDocumentToDisplay?.draftOrderState?.orderType,
+      )
+    : false;
 
   const isNotice = NOTICE_EVENT_CODES.includes(
     formattedDocumentToDisplay.eventCode,
@@ -94,7 +97,9 @@ export const draftDocumentViewerHelper = (
       ? restrictedEventCodes.split(',').map(code => code.trim())
       : [];
 
-  const isRestrictedEventCode = restrictedEventCodesArray.includes(eventCode);
+  const isRestrictedEventCode = eventCode
+    ? restrictedEventCodesArray.includes(eventCode)
+    : false;
 
   const showEditButtonSigned =
     !isRestrictedEventCode &&

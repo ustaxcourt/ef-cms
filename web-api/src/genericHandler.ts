@@ -121,7 +121,7 @@ export const genericHandler = (
       }
 
       return returnResults;
-    } catch (e) {
+    } catch (e: any) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         getDawsonLogger().error(e);

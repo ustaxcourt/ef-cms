@@ -14,7 +14,11 @@ const props = cerebralProps as unknown as {
   validationBind: string;
 };
 
-export const InclusionsForm = connect(
+export const InclusionsForm: React.FC<{
+  bind: string;
+  type: string;
+  validationBind: string;
+}> = connect(
   {
     constants: state.constants,
     data: state[props.bind],

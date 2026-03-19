@@ -25,7 +25,7 @@ export const clearCourtIssuedDocketEntryFormValuesAction = ({
     const eventCodeObject = eventCodes.find(e => e.eventCode === props.value);
 
     const shouldClearFreeTextField =
-      !scenariosWhichIncludeFreeText.includes(eventCodeObject.scenario) ||
+      !scenariosWhichIncludeFreeText.includes(eventCodeObject!.scenario) ||
       get(state.form.freeText) === 'Order' ||
       get(state.form.freeText) === 'Notice';
 

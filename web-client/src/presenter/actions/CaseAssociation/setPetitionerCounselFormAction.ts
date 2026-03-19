@@ -20,7 +20,7 @@ export const setPetitionerCounselFormAction = ({
   const { barNumber } = props;
 
   const privatePractitioners = cloneDeep(caseDetail.privatePractitioners);
-  const privatePractitioner = privatePractitioners.find(
+  const privatePractitioner = privatePractitioners!.find(
     practitioner => practitioner.barNumber === barNumber,
   );
 

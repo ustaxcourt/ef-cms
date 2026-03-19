@@ -59,17 +59,19 @@ describe('Case Deadline - Consolidated Group', () => {
       cy.get('[data-testid="unconsolidate-cases-button"]').click();
       cy.get(`#case-${leadDocketNumber}`).check({ force: true });
       cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('.modal-screen').should('not.exist');
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('.case-deadline-row').should('have.length', 1);
       cy.get('[data-testid="case-deadline-description"]').should(
         'have.text',
         'Is this the real life?',
       );
-      cy.get('[data-testid="case-deadline-edit-button"]');
+      cy.get('[data-testid="case-deadline-edit-button"]').should('exist');
 
       const newLeadCase = memberDocketNumbers[0];
       goToCase(newLeadCase);
       cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('[data-testid="case-deadline-edit-button"]').should('be.visible');
       cy.get('[data-testid="case-deadline-edit-button"]').click();
       cy.get('[data-testid="case-deadline-description-input"]').type(
         ' Is this just fantasy?',
@@ -152,6 +154,7 @@ describe('Case Deadline - Consolidated Group', () => {
       cy.get('[data-testid="unconsolidate-cases-button"]').click();
       cy.get(`#case-${removedDocketNumber}`).check({ force: true });
       cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('.modal-screen').should('not.exist');
 
       goToCase(leadDocketNumber);
       cy.get('[data-testid="tab-tracked-items"]').click();
