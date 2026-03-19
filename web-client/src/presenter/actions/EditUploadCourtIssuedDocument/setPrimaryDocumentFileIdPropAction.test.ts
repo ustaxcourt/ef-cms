@@ -6,7 +6,7 @@ describe('setPrimaryDocumentFileIdPropAction', () => {
   it('should update the props from state', async () => {
     const result = await runAction(setPrimaryDocumentFileIdPropAction, {
       modules: { presenter },
-      state: { form: { docketEntryId: '123' } },
+      state: { form: { documentStorageId: '123' } },
     });
 
     expect(result.output.primaryDocumentFileId).toEqual('123');
