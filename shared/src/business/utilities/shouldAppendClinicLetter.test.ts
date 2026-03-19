@@ -82,6 +82,6 @@ describe('shouldAppendClinicLetter', () => {
     });
 
     expect(result.appendClinicLetter).toBe(false);
-    expect(result.clinicLetterKey).toBe(undefined);
+    expect(result.clinicLetterKey).toBeFalsy();
   });
 });

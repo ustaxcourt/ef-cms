@@ -7,7 +7,7 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry for a notice from the given draft', async () => {
-    let caseDetailFormatted = runCompute(
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: cerebralTest.getState(),
@@ -23,7 +23,7 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
