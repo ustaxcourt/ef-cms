@@ -12,6 +12,8 @@ export const practitionerViewsCaseDetailWithPublicOrder = cerebralTest => {
     const publicallyAvailableOrderDocketEntry =
       formattedDocketEntriesOnDocketRecord.find(d => d.eventCode === 'O');
 
-    expect(publicallyAvailableOrderDocketEntry.showLinkToDocument).toBeTruthy();
+    expect(
+      publicallyAvailableOrderDocketEntry?.showLinkToDocument,
+    ).toBeTruthy();
   });
 };

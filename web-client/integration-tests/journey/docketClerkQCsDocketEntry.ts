@@ -15,7 +15,8 @@ export const docketClerkQCsDocketEntry = (
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
+      docketNumber:
+        formattedDocketEntriesOnDocketRecord[data.index].docketNumber,
     });
 
     await cerebralTest.runSequence('completeDocketEntryQCSequence');
@@ -28,6 +29,6 @@ export const docketClerkQCsDocketEntry = (
       document => document.docketEntryId === docketEntryId,
     );
 
-    expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
+    expect(selectedDocument?.qcWorkItemsCompleted).toEqual(true);
   });
 };

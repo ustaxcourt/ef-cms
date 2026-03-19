@@ -19,7 +19,7 @@ export const setQcCompleteOnCaseOnTrialSessionAction = ({
     myCase => myCase.docketNumber === updatedCase.docketNumber,
   );
 
-  eligibleCase.qcCompleteForTrial = updatedCase.qcCompleteForTrial;
+  eligibleCase!.qcCompleteForTrial = updatedCase.qcCompleteForTrial;
 
   store.set(state.trialSession.eligibleCases, eligibleCases);
 };
