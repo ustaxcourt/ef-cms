@@ -190,7 +190,7 @@ describe('Trial Session - Notice Change of Date', () => {
     });
   });
 
-  it.only('should reset the trial session form after cancelling out of either Change of Date or Change of Location modal', () => {
+  it('should reset the trial session form after cancelling out of either Change of Date or Change of Location modal', () => {
     loginAsPetitionsClerk1();
     createTrialSession().as('TRIAL_SESSION_INFO');
     cy.get<{ trialSessionId: string }>('@TRIAL_SESSION_INFO').then(
