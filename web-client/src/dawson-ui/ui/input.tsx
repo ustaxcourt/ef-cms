@@ -13,10 +13,10 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   optional?: boolean;
   required?: boolean;
   flexDirection?: 'vertical' | 'horizontal';
+  showReqOptionalText?: boolean;
 }
 
-interface TextAreaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   label?: string;
   helpText?: string;
@@ -25,22 +25,22 @@ interface TextAreaProps
 
 const styles = {
   border:
-    'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
+    'tw:block tw:w-full tw:rounded-md tw:border-[0.0625rem] tw:border-grey-base tw:bg-white',
   focus:
-    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-  icon: 'tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary',
-  label:
-    'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-grey-base',
+    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[0.25rem] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
+  icon: 'tw:ml-1 tw:text-base tw:xs:text-lg tw:text-primary',
+  label: 'tw:text-base tw:xs:text-lg !tw:font-semibold !tw:text-grey-base',
   optional:
-    'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
+    'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-sm tw:xs:text-base',
   text: {
-    base: 'tw:xs:text-[18px] tw:text-[16px] tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark', // mus add conditional
+    base: 'tw:xs:text-lg tw:text-base tw:outline-none tw:cursor-text',
+    help: 'tw:xs:mb-[0.8125rem] tw:text-sm tw:xs:text-base tw:text-grey-dark', // must add conditional
   },
   states: {
     disabled:
       'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
-    error: 'tw:border-red-primary tw:hover:border-red-primary tw:border-[2px]',
+    error:
+      'tw:border-red-primary tw:hover:border-red-primary tw:border-[0.125rem]',
     hover: 'tw:hover:border-grey-base tw:hover:shadow-none',
   },
 };
@@ -80,12 +80,12 @@ const useKeyboardListenerHook = () => {
 const InputError = ({ error }) => (
   <>
     {error && (
-      <div className="tw:absolute tw:mt-[5px] tw:xs:mt-[9px] tw:gap-2 tw:text-red-primary">
+      <div className="tw:absolute tw:mt-1.25 tw:xs:mt-2.25 tw:gap-2 tw:text-red-primary">
         <FontAwesomeIcon
           icon={faInfoCircle}
-          className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
+          className="tw-text-base tw:xs:text-lg tw:mr-1"
         />
-        <span className="tw-text-[16px] tw:xs:text-[18px]">{error}</span>
+        <span className="tw-text-base tw:xs:text-lg">{error}</span>
       </div>
     )}
   </>
@@ -104,6 +104,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       required,
       type = 'text',
       flexDirection = 'vertical',
+      showReqOptionalText = true,
       ...props
     },
     ref,
@@ -129,8 +130,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       styles.states.disabled,
       styles.states.hover,
       error && styles.states.error,
-      'tw:px-3 tw:xs:h-[36px] tw:h-[32px]',
-      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]',
+      'tw:px-3 tw:xs:h-[2.25rem] tw:h-[2rem]',
+      'tw:w-[23.75rem] tw:ps-[0.75rem] tw:xs:ps-[0.75rem]',
     );
 
     return (
@@ -139,7 +140,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <label
             id={labelId}
             htmlFor={inputId}
-            className={`${flexDirection === 'horizontal' && !helpText ? 'tw:!mb-[0px] ' : ''} ${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-[8px] tw:xs:mb-[12px]' : 'tw:mb-[0px]'}`}
+            className={`${flexDirection === 'horizontal' && !helpText ? 'tw:mb-0! ' : ''} ${flexDirection === 'horizontal' ? 'tw:xs:mr-4 tw:mr-3' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-1.5 tw:xs:mb-2' : 'tw:mb-0'}`}
           >
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
@@ -153,23 +154,25 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   <FontAwesomeIcon
                     icon={faInfoCircle}
                     className={cn(styles.icon)}
-                    title={typeof helpText === "string" ? helpText: ""}
+                    title={typeof helpText === 'string' ? helpText : ''}
                     role="img"
-                    aria-label={typeof helpText === "string" ? helpText: ""}
+                    aria-label={typeof helpText === 'string' ? helpText : ''}
                   />
                 )}
-                <span className={cn(styles.optional)}>
-                  {!required ? '(optional)' : '(required)'} 
-                </span>
+                {showReqOptionalText && (
+                  <span className={cn(styles.optional)}>
+                    {!required ? '(optional)' : '(required)'}
+                  </span>
+                )}
               </div>
               {helpText && (
                 <div
                   id={helpTextId}
                   className={cn(
                     styles.text.help,
-                    'tw:font-normal tw:mt-[5px] tw:xs:mt-[12px] tw:mb-[8px] tw:xs:mb-[12px]',
+                    'tw:font-normal tw:mb-2 tw:xs:mb-3',
                     flexDirection === 'horizontal' &&
-                      'tw:mt-[0px] tw:xs:mt-[0px] tw:!mb-[0px]',
+                      'tw:mt-0 tw:xs:mt-0 tw:mb-0!',
                   )}
                 >
                   {helpText}
@@ -194,6 +197,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-describedby={cn(helpTextId, errorId)}
             aria-labelledby={labelId}
             className={inputClass}
+            required={required || undefined}
             {...props}
           />
           <InputError error={error} />
@@ -204,7 +208,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, error, label, helpText, showReqOptionalText, ...props }, ref) => {
+  (
+    { className, error, label, helpText, showReqOptionalText, ...props },
+    ref,
+  ) => {
     const textareaId = React.useId();
     const labelId = React.useId();
     const helpTextId = helpText ? React.useId() : undefined;
@@ -219,21 +226,19 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       styles.text.base,
       styles.states.disabled,
       styles.states.hover,
-      'tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:rounded-br-[0px]',
-      'tw:p-[10px] tw:xs:p-[12px]',
-      'tw:min-h-[100px] tw:resize-y',
-      'tw:w-[380px]',
+      'tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:rounded-br-[0rem]',
+      'tw:p-[0.625rem] tw:xs:p-[0.75rem]',
+      'tw:min-h-[6.25rem] tw:resize-y',
+      'tw:w-[23.75rem]',
       error && styles.states.error,
     );
 
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <label className="tw:mb-[0px]" id={labelId} htmlFor={textareaId}>
+          <label className="tw:mb-0" id={labelId} htmlFor={textareaId}>
             <div className="tw:flex tw:flex-col">
-              <div
-                className={`tw:flex tw:items-center tw:mb-[8px] tw:xs:mb-[12px]`}
-              >
+              <div className={`tw:flex tw:items-center tw:mb-2 tw:xs:mb-3`}>
                 <span
                   className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
@@ -250,7 +255,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {showReqOptionalText && !props.required && (
-                  <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
+                  <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-sm tw:xs:text-base">
                     (optional)
                   </span>
                 )}
@@ -259,7 +264,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 <div
                   className={cn(
                     styles.text.help,
-                    'tw:mb-[8px] tw:xs:mb-[12px] tw:font-normal',
+                    'tw:mb-2 tw:xs:mb-3 tw:font-normal',
                   )}
                 >
                   {helpText}
