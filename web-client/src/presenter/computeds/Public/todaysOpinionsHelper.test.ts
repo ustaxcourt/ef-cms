@@ -6,6 +6,7 @@ import {
   ASCENDING,
   DESCENDING,
 } from '@shared/business/entities/EntityConstants';
+import { sortOptions } from '@web-client/views/Public/TodaysOpinionsConstants';
 
 describe('todaysOpinionsHelper', () => {
   const todaysOpinionsHelper = withAppContextDecorator(
@@ -81,8 +82,7 @@ describe('todaysOpinionsHelper', () => {
 
   it('should return sortOptions', () => {
     const result = runCompute(todaysOpinionsHelper, { state });
-    expect(Array.isArray(result.sortOptions)).toBeTruthy();
-    expect(result.sortOptions.length).toBeGreaterThan(0);
+    expect(result.sortOptions).toEqual(sortOptions);
   });
 
   describe('formattedJudgeName', () => {

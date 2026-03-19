@@ -9,7 +9,11 @@ type tPetitioner = TPetitioner & {
   displayName: string;
   isCurrentUser: boolean;
 };
-export type ComputedFormattedCaseDetail = Omit<FormattedCase, 'petitioners'> & {
+export type ComputedFormattedCaseDetail = Omit<
+  FormattedCase,
+  'petitioners' | 'consolidatedCases'
+> & {
+  consolidatedCases: FormattedCase[];
   petitioners: tPetitioner[];
   trialSessionNotes?: string;
   userIsAssignedToSession?: boolean;
@@ -113,7 +117,8 @@ export const formattedCaseDetail = (
       isCurrentUser: petitioner.contactId === user.userId,
     }));
 
-  formattedCase.consolidatedCases = formattedCase.consolidatedCases || [];
+  const consolidatedCases =
+    (formattedCase.consolidatedCases as FormattedCase[]) || [];
 
   const allTrialSessions = get(state.trialSessions);
 
@@ -157,6 +162,7 @@ export const formattedCaseDetail = (
   return {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formattedCase,
+    consolidatedCases,
     petitioners,
     trialSessionNotes,
     userIsAssignedToSession,
