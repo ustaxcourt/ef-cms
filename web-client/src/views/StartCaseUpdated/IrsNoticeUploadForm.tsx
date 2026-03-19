@@ -68,7 +68,11 @@ export const IrsNoticeUploadForm = connect<
       <>
         {index !== 0 && <LineBreak />}
         <div className="usa-form-group margin-bottom-0 irs-notice-form">
-          <FormGroup errorText={[validationError.file, validationError.size]}>
+          <FormGroup
+            errorText={
+              [validationError!.file, validationError!.size] as string[]
+            }
+          >
             <label
               className={classNames(
                 'usa-label ustc-upload-atp with-hint',
@@ -91,7 +95,7 @@ export const IrsNoticeUploadForm = connect<
               file={file}
               id={`irs-notice-upload-${index}`}
               ignoreSizeKey={true}
-              name={index}
+              name={index.toString()}
               updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
             />
           </FormGroup>
