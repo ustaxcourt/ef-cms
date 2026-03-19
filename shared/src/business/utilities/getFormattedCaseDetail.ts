@@ -124,7 +124,7 @@ export type FormattedCase = Omit<
   canConsolidate: boolean;
   canUnconsolidate: boolean;
   caseTitle: string;
-  consolidatedCases: any; // (RawConsolidatedCaseSummary & FormattedCase)[];
+  consolidatedCases: RawConsolidatedCaseSummary[] | FormattedCase[];
   consolidatedIconTooltipText: string;
   correspondence: (RawCorrespondence & {
     formattedFilingDate: string;
@@ -178,7 +178,7 @@ export type FormattedCase = Omit<
 };
 
 export type FormattedCaseDetail = Omit<FormattedCase, 'consolidatedCases'> & {
-  consolidatedCases: FormattedCase[];
+  consolidatedCases: RawConsolidatedCaseSummary[] | FormattedCase[];
   docketRecordSort?: string;
 };
 
