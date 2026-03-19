@@ -31,7 +31,7 @@ export const createPractitionerUserInteractor = async (
     })
   ) {
     throw new InvalidRequest(
-      'Invalid user data for generating a bar number provided',
+      'Unable to generate a bar number: first and last names must start with a letter after trimming whitespace.',
     );
   }
 
