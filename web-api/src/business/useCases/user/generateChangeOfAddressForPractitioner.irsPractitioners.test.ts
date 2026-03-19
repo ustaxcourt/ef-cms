@@ -90,7 +90,11 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .countRemainingChangeOfAddressCases.mockResolvedValue(0);
 
     applicationContext
       .getUtilities()

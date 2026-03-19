@@ -1,4 +1,13 @@
 import { applicationContext } from '@web-api/applicationContext';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+
+/*
+  We found that multiple lambda instances trying to open a connection to S3 causes an error, 
+  and the process fails to upload the notice of change of address. Calling getStorageClient here 
+  outside the handler will cache and maintain the connection between
+  lambda calls while the lambda is warm.
+*/
+getStorageClient();
 
 export const changeOfAddressHandler = async event => {
   const { Records } = event;

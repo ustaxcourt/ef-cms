@@ -57,7 +57,7 @@ export const petitionsClerkAddsGenericOrderToCase = cerebralTest => {
 
     expect(createdOrder.documentTitle).toEqual(cerebralTest.freeText);
     expect(createdOrder.freeText).toEqual(cerebralTest.freeText);
-    expect(createdOrder.draftOrderState.documentTitle).toEqual(
+    expect(createdOrder.draftOrderState!.documentTitle).toEqual(
       cerebralTest.freeText,
     );
     expect(createdOrder.freeText).toEqual(cerebralTest.freeText);

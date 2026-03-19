@@ -98,6 +98,32 @@ describe('generateDocketRecordPdfInteractor', () => {
     ).toMatchObject({ includePartyDetail: true });
   });
 
+  it('sets the index for each formatted petitioner', async () => {
+    caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
+    caseDetail.petitioners.push({
+      ...caseDetail.petitioners[0],
+      contactId: '98956b46-1757-4337-9f7c-58801eba2e9a',
+      contactType: CONTACT_TYPES.secondary,
+      name: 'Another Petitioner',
+    });
+
+    await generateDocketRecordPdfInteractor(
+      applicationContext,
+      {
+        docketNumber: caseDetail.docketNumber,
+        includePartyDetail: true,
+      },
+      mockDocketClerkUser,
+    );
+
+    const { petitioners } =
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data.caseDetail;
+    expect(petitioners.length).toEqual(2);
+    expect(petitioners[0].index).toEqual(0);
+    expect(petitioners[1].index).toEqual(1);
+  });
+
   it('calls docketRecord document generator with formatted counsel for all petitioners on a case', async () => {
     const mockPractitionerOnCase = {
       ...MOCK_PRACTITIONER,
