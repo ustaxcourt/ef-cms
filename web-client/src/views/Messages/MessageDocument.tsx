@@ -187,7 +187,7 @@ export const MessageDocument = connect(
             onClick={() => {
               navigateToPathAndSetRedirectUrlSequence({
                 path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
-                redirectUrl: messageDocumentHelper.messageDetailLink
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
