@@ -2,8 +2,8 @@ import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../shared/src/test/mockCase';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/test/mockCase';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import { confirmPaperServiceModalHelper as confirmPaperServiceModalHelperComputed } from './confirmPaperServiceModalHelper';
@@ -35,6 +35,17 @@ describe('confirmPaperServiceModalHelper', () => {
   });
 
   describe('wasMultiDocketed', () => {
+    it('should throw a NotFoundError when the docket entry is not found', () => {
+      expect(() =>
+        runCompute(confirmPaperServiceModalHelper, {
+          state: {
+            ...baseState,
+            docketEntryId: 'non-existent-docket-entry-id',
+          },
+        }),
+      ).toThrow('Docket entry non-existent-docket-entry-id was not found.');
+    });
+
     it('should be false when multiDocketedOn has only one docket number', () => {
       const result = runCompute(confirmPaperServiceModalHelper, {
         state: baseState,

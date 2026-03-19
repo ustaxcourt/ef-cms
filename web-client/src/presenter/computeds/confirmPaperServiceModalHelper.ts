@@ -1,6 +1,9 @@
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { roleToDisplay } from './confirmInitiateServiceModalHelper';
+import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
+import { NotFoundError } from '@web-api/errors/errors';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -12,7 +15,7 @@ export const confirmPaperServiceModalHelper = (
   get: Get,
 ): {
   wasMultiDocketed: boolean;
-  multiDocketedOn: [];
+  multiDocketedOn: FormattedCase[];
   paperFilingText: string;
   contactsNeedingPaperService?: ContactsNeedingPaperService;
 } => {
@@ -24,11 +27,15 @@ export const confirmPaperServiceModalHelper = (
     doc => doc.docketEntryId === docketEntryId,
   );
 
-  const wasMultiDocketed = currentDocketEntry.multiDocketedOn.length > 1;
+  if (!currentDocketEntry) {
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  }
 
-  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(c => {
-    return currentDocketEntry.multiDocketedOn.includes(c.docketNumber);
-  });
+  const wasMultiDocketed = DocketEntry.isMultiDocketed(currentDocketEntry);
+
+  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(c =>
+    currentDocketEntry.multiDocketedOn.includes(c.docketNumber),
+  );
 
   const paperFilingText = wasMultiDocketed
     ? 'Paper service is required for these parties:'
