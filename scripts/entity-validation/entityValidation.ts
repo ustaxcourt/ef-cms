@@ -21,9 +21,9 @@ const ENTITIES_OF_CASE = [
 
 const ENTITIES_TO_CHECK = [
   'Message.ts',
-  'PractitionerDocument.ts',
-  'TrialSessionWorkingCopy.ts',
-  'TrialSession.ts',
+  'PractitionerDocument.ts', // passing
+  'TrialSessionWorkingCopy.ts', // passing
+  'TrialSession.ts', // passing
   'User.ts',
   'WorkItem.ts',
   ...ENTITIES_OF_CASE,
@@ -38,10 +38,11 @@ async function getEntityIdentifiers(): Promise<string> {
   const files = await fs.readdir(directoryPath, { recursive: true });
 
   for (const file of files) {
+    const fileName = path.basename(file.toString());
     if (
-      !file.endsWith('.ts') ||
-      file.endsWith('.test.ts') ||
-      !ENTITIES_TO_CHECK.includes(file)
+      !fileName.endsWith('.ts') ||
+      fileName.endsWith('.test.ts') ||
+      !ENTITIES_TO_CHECK.includes(fileName)
     ) {
       continue;
     }
@@ -82,8 +83,13 @@ async function validateEntitiesWithNewRules(
 ): Promise<string[]> {
   let validationOutput: string[] = [];
   let isEntityOfCase = false;
+  const processedEntityNames = new Set<string>();
+
   for (const entity of changedEntities) {
     const entityName = entity.split('.')[0];
+    if (processedEntityNames.has(entityName)) continue;
+    processedEntityNames.add(entityName);
+
     console.log('Entity Name: ', entityName);
     if (ENTITIES_OF_CASE.includes(`${entityName}.ts`)) {
       isEntityOfCase = true;
@@ -116,6 +122,20 @@ async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
   }
 }
 
+export function resolveChangedEntities(
+  currFingerprint: string | undefined,
+  newFingerprint: string,
+  entityValidationRequired: string | undefined,
+): string[] {
+  if (entityValidationRequired === 'true') {
+    return ENTITIES_TO_CHECK;
+  }
+  return detectEntityValidationChange(
+    JSON.parse(currFingerprint ?? '{}'),
+    JSON.parse(newFingerprint),
+  );
+}
+
 async function main(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
@@ -126,13 +146,13 @@ async function main(): Promise<number> {
     entityValidationRequired = undefined;
   }
 
-  const changedEntities =
-    entityValidationRequired === 'true'
-      ? ENTITIES_TO_CHECK
-      : detectEntityValidationChange(
-          JSON.parse(currFingerprint ?? '{}'),
-          JSON.parse(newFingerprint),
-        );
+  const changedEntities = resolveChangedEntities(
+    currFingerprint,
+    newFingerprint,
+    entityValidationRequired,
+  );
+
+  console.log('changedEntities:', changedEntities);
 
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');

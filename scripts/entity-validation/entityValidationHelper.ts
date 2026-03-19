@@ -1,13 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { Case } from '@shared/business/entities/cases/Case';
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { Message } from '@shared/business/entities/Message';
-import { PractitionerDocument } from '@shared/business/entities/PractitionerDocument';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '@shared/business/entities/User';
-import { WorkItem } from '@shared/business/entities/WorkItem';
+import { Worker } from 'worker_threads';
 import { getDbReader } from '@web-api/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
@@ -15,8 +8,9 @@ import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/ge
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
-import { camelCase } from 'lodash';
 import { createSpinner } from 'scripts/helpers/consoleSpinner';
+import os from 'os';
+import path from 'path';
 
 /* HELPERS */
 const getAllDocketNumbers = async () => {
@@ -90,6 +84,19 @@ const getAllPractionerDocuments = async () => {
   return practitionerDocuments;
 };
 
+const formatElapsedTime = (startTime: number) => {
+  const elapsedMs = Date.now() - startTime;
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes === 0) {
+    return `${seconds}s`;
+  }
+
+  return `${minutes}m ${seconds}s`;
+};
+
 const entityHelperFunctions = {
   // Case: getCasesAndValidate,
   Message: getAllMessages,
@@ -100,133 +107,174 @@ const entityHelperFunctions = {
   WorkItem: getAllWorkItems,
 };
 
-const mapEntityNameToClass = (
-  entityName: string,
-  record,
-): JoiValidationEntity => {
-  switch (entityName) {
-    case 'Case':
-      return new Case(record, { authorizedUser: undefined });
-    case 'Message':
-      return new Message(record);
-    case 'PractitionerDocument':
-      return new PractitionerDocument(record, {
-        applicationContext: undefined,
-      });
-    case 'TrialSession':
-      return new TrialSession(record);
-    case 'TrialSessionWorkingCopy':
-      return new TrialSessionWorkingCopy(record);
-    case 'User':
-      return new User(record);
-    case 'WorkItem':
-      return new WorkItem(record);
-    default:
-      throw new Error(`Unknown entity name: ${entityName}`);
-  }
-};
-
 const performValidation = async (entityName: string) => {
+  const startTime = Date.now();
   const spinner = createSpinner(`Starting ${entityName} Entity Validation...`);
   const validationErrors: string[] = [];
+  const numThreads = Math.max(1, os.cpus().length - 1);
+
   try {
-    const entityRecords = await entityHelperFunctions[entityName]();
-    for (const record of entityRecords) {
-      const entity = mapEntityNameToClass(entityName, record);
-      const errors = entity.getFormattedValidationErrors();
-      if (errors) {
-        spinner.update(
-          `Validating ${entityName} entities, ${validationErrors.length} error(s) found out of ${entityRecords.length} records...`,
-        );
-        validationErrors.push(
-          `Validation errors for ${entityName} ${record[`${camelCase(entityName)}Id`]}: ${JSON.stringify(errors)}`,
-        );
+    const workers = Array.from({ length: numThreads }, () =>
+      createValidationWorker(),
+    );
+    const idleWorkers: Worker[] = [...workers];
+    const workerWaiters: ((worker: Worker) => void)[] = [];
+    const pendingValidations: Promise<void>[] = [];
+    let processedRecords = 0;
+    let totalRecords = 0;
+
+    const getIdleWorker = (): Promise<Worker> => {
+      const idle = idleWorkers.pop();
+      if (idle) return Promise.resolve(idle);
+      return new Promise<Worker>(resolve => {
+        workerWaiters.push(resolve);
+      });
+    };
+
+    const returnWorker = (worker: Worker) => {
+      const waiter = workerWaiters.shift();
+      if (waiter) {
+        waiter(worker);
+      } else {
+        idleWorkers.push(worker);
+      }
+    };
+
+    const dispatchBatch = async (batch: any[]) => {
+      const worker = await getIdleWorker();
+      const validationPromise = validateBatchInWorker(worker, entityName, batch)
+        .then(errors => {
+          validationErrors.push(...errors);
+          processedRecords += batch.length;
+          spinner.update(
+            `Validated ${processedRecords} of ${totalRecords} ${entityName} entities in ${formatElapsedTime(startTime)}. ${validationErrors.length} error(s) found...`,
+          );
+          returnWorker(worker);
+        })
+        .catch(err => {
+          console.error(`Worker error for ${entityName}:`, err);
+          returnWorker(worker);
+        });
+      pendingValidations.push(validationPromise);
+    };
+
+    if (entityName === 'Case') {
+      // Cases are too large to load at once — fetch in batches
+      const docketNumbers = await getAllDocketNumbers();
+      totalRecords = docketNumbers.length;
+      const fetchBatchSize = 1000;
+      const maxConcurrentFetches = 5;
+
+      let nextBatchIndex = 0;
+      const totalBatches = Math.ceil(docketNumbers.length / fetchBatchSize);
+
+      const fetchWorker = async () => {
+        while (nextBatchIndex < totalBatches) {
+          const batchIndex = nextBatchIndex++;
+          const start = batchIndex * fetchBatchSize;
+          const chunk = docketNumbers.slice(start, start + fetchBatchSize);
+
+          const caseData = await getCasesByDocketNumbers({
+            docketNumbers: chunk,
+          });
+
+          await dispatchBatch(caseData);
+        }
+      };
+
+      const fetchWorkerPromises = Array.from(
+        { length: Math.min(maxConcurrentFetches, totalBatches) },
+        () => fetchWorker(),
+      );
+      await Promise.all(fetchWorkerPromises);
+    } else {
+      // Other entities: load all records, split across threads
+      const entityRecords = await entityHelperFunctions[entityName]();
+      totalRecords = entityRecords.length;
+      const batchSize = Math.max(
+        1,
+        Math.ceil(entityRecords.length / numThreads),
+      );
+
+      for (let i = 0; i < entityRecords.length; i += batchSize) {
+        const batch = entityRecords.slice(i, i + batchSize);
+        await dispatchBatch(batch);
       }
     }
+
+    await Promise.all(pendingValidations);
+    await Promise.all(workers.map(w => w.terminate()));
+
     if (validationErrors.length > 0) {
       spinner.fail(
-        `Validation completed with ${validationErrors.length} error(s) found out of ${entityRecords.length} records.`,
+        `${entityName} validation completed in ${formatElapsedTime(startTime)} with ${validationErrors.length} error(s) found out of ${totalRecords} records.`,
+      );
+      console.log(
+        `${entityName} validation runtime: ${formatElapsedTime(startTime)}`,
       );
       console.log(validationErrors);
     } else {
-      spinner.succeed(`All ${entityName} entities validated!`);
+      spinner.succeed(
+        `All ${totalRecords} ${entityName} entities validated in ${formatElapsedTime(startTime)}!`,
+      );
+      console.log(
+        `${entityName} validation runtime: ${formatElapsedTime(startTime)}`,
+      );
     }
   } catch (error) {
     console.error(`Error getting ${entityName} entities:`, error);
+    console.error(
+      `${entityName} validation stopped after ${formatElapsedTime(startTime)}.`,
+    );
   }
 
   return validationErrors;
 };
 
-/* VALIDATION FUNCTIONS */
-const getTrialSessionsAndValidate = async () => {
-  return performValidation('TrialSession');
+const ENTITY_WORKER_PATH = path.resolve(
+  __dirname,
+  'workers/entityValidationWorker.ts',
+);
+
+const createValidationWorker = (): Worker => {
+  return new Worker(ENTITY_WORKER_PATH, {
+    execArgv: [
+      '--require',
+      'ts-node/register/transpile-only',
+      '--require',
+      'tsconfig-paths/register',
+    ],
+  });
 };
 
-const getMessagesAndValidate = async () => {
-  return performValidation('Message');
-};
-
-const getWorkItemsAndValidate = async () => {
-  return performValidation('WorkItem');
-};
-
-const getCasesAndValidate = async () => {
-  const validationErrors: string[] = [];
-  try {
-    console.log('Starting Case Entity Validation...');
-    const docketNumbers = await getAllDocketNumbers();
-
-    const chunkSize = 10000;
-    for (let i = 0; i < docketNumbers.length; i += chunkSize) {
-      const spinner = createSpinner(
-        `Starting validation of cases ${i}-${i + chunkSize}...`,
-      );
-      const chunk = docketNumbers.slice(i, i + chunkSize);
-      // do whatever
-      const caseData = await getCasesByDocketNumbers({ docketNumbers: chunk });
-
-      caseData.forEach(caseItem => {
-        const caseEntity = new Case(caseItem, { authorizedUser: undefined });
-        const errors = caseEntity.getFormattedValidationErrors();
-        if (errors) {
-          validationErrors.push(
-            `Validation errors for case ${caseItem.docketNumber}: ${errors}`,
-          );
-          spinner.update(
-            `Starting validation of cases ${i * chunkSize}-${(i + 1) * chunkSize}. ${validationErrors.length} errors found...`,
-          );
-        }
-      });
-      // console.log(`Processed cases ${i + 1} - ${i + chunkSize}`);
-      spinner.succeed(`Processed cases ${i + 1} - ${i + chunkSize}`);
-    }
-  } catch (error) {
-    console.error('Error getting cases:', error);
-  }
-  return validationErrors;
-};
-
-const getTrialSessionWorkingCopiesAndValidate = async () => {
-  return performValidation('TrialSessionWorkingCopy');
-};
-
-const getUsersAndValidate = async () => {
-  return performValidation('User');
-};
-
-const getPractitionerDocumentsAndValidate = async () => {
-  return performValidation('PractitionerDocument');
+const validateBatchInWorker = (
+  worker: Worker,
+  entityName: string,
+  records: any[],
+): Promise<string[]> => {
+  return new Promise((resolve, reject) => {
+    const onMessage = (data: string[]) => {
+      worker.removeListener('error', onError);
+      resolve(data);
+    };
+    const onError = (err: Error) => {
+      worker.removeListener('message', onMessage);
+      reject(err);
+    };
+    worker.once('message', onMessage);
+    worker.once('error', onError);
+    worker.postMessage({ entityName, records });
+  });
 };
 
 export const entityValidationFunctions = {
-  Case: getCasesAndValidate,
-  Message: getMessagesAndValidate,
-  PractitionerDocument: getPractitionerDocumentsAndValidate,
-  TrialSession: getTrialSessionsAndValidate,
-  TrialSessionWorkingCopy: getTrialSessionWorkingCopiesAndValidate,
-  User: getUsersAndValidate,
-  WorkItem: getWorkItemsAndValidate,
+  Case: () => performValidation('Case'),
+  Message: () => performValidation('Message'),
+  PractitionerDocument: () => performValidation('PractitionerDocument'),
+  TrialSession: () => performValidation('TrialSession'),
+  TrialSessionWorkingCopy: () => performValidation('TrialSessionWorkingCopy'),
+  User: () => performValidation('User'),
+  WorkItem: () => performValidation('WorkItem'),
 };
 
 // void (async () => {

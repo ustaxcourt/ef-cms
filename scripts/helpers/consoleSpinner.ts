@@ -3,26 +3,29 @@ const SPINNER_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', 
 export function createSpinner(initialText: string) {
   let frameIndex = 0;
   let currentText = initialText;
+  let lastRenderTime = 0;
 
-  const interval = setInterval(() => {
+  const render = () => {
     process.stdout.clearLine(0);
     process.stdout.write(`\r${SPINNER_FRAMES[frameIndex]} ${currentText}`);
     frameIndex = (frameIndex + 1) % SPINNER_FRAMES.length;
-  }, 80);
+    lastRenderTime = Date.now();
+  };
+
+  render();
 
   return {
     update: (text: string) => {
       currentText = text;
-      process.stdout.clearLine(0);
-      process.stdout.write(`\r${SPINNER_FRAMES[frameIndex]} ${currentText}`);
+      if (Date.now() - lastRenderTime >= 0) {
+        render();
+      }
     },
     succeed: (text: string) => {
-      clearInterval(interval);
       process.stdout.clearLine(0);
       process.stdout.write(`\r✔ ${text}\n`);
     },
     fail: (text: string) => {
-      clearInterval(interval);
       process.stdout.clearLine(0);
       process.stdout.write(`\r✖ ${text}\n`);
     },
