@@ -2,11 +2,23 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
+
+type tPetitioner = TPetitioner & {
+  contactId: string;
+  displayName: string;
+  isCurrentUser: boolean;
+};
+export type ComputedFormattedCaseDetail = Omit<FormattedCase, 'petitioners'> & {
+  petitioners: tPetitioner[];
+  trialSessionNotes?: string;
+  userIsAssignedToSession?: boolean;
+};
 
 export const formattedOpenCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): FormattedCase[] => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.openCases);
@@ -18,7 +30,7 @@ export const formattedOpenCases = (
 export const formattedClosedCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): FormattedCase[] => {
   const { formatCase } = applicationContext.getUtilities();
   const user = get(state.user);
 
@@ -30,7 +42,7 @@ export const getUserIsAssignedToSession = ({
   currentUser,
   get,
   trialSessionId,
-}) => {
+}): boolean => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
@@ -85,26 +97,23 @@ const getCalendarDetailsForTrialSession = ({
 export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): ComputedFormattedCaseDetail => {
   const { formatCase } = applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
-  const result = {
-    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail, user),
-  };
+  const formattedCase = formatCase(applicationContext, caseDetail, user);
 
-  result.petitioners = applicationContext
+  const petitioners: tPetitioner[] = applicationContext
     .getUtilities()
-    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners })
-    ?.map(petitioner => ({
+    .getFormattedPartiesNameAndTitle({ petitioners: formattedCase.petitioners })
+    ?.map((petitioner: TPetitioner & { displayName: string }) => ({
       ...petitioner,
       isCurrentUser: petitioner.contactId === user.userId,
     }));
 
-  result.consolidatedCases = result.consolidatedCases || [];
+  formattedCase.consolidatedCases = formattedCase.consolidatedCases || [];
 
   const allTrialSessions = get(state.trialSessions);
 
@@ -114,10 +123,8 @@ export const formattedCaseDetail = (
     trialSessions: allTrialSessions,
   });
 
-  result.trialSessionNotes = trialSessionNotes;
-
-  if (result.hearings && result.hearings.length) {
-    result.hearings.forEach(hearing => {
+  if (formattedCase.hearings && formattedCase.hearings.length) {
+    formattedCase.hearings.forEach(hearing => {
       const { addedAt, note } = getCalendarDetailsForTrialSession({
         caseDocketNumber: caseDetail.docketNumber,
         trialSessionId: hearing.trialSessionId,
@@ -134,18 +141,24 @@ export const formattedCaseDetail = (
       });
     });
 
-    result.hearings.sort((a, b) => {
+    formattedCase.hearings.sort((a, b) => {
       return applicationContext
         .getUtilities()
         .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
     });
   }
 
-  result.userIsAssignedToSession = getUserIsAssignedToSession({
+  const userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
     trialSessionId: caseDetail.trialSessionId,
   });
 
-  return result;
+  return {
+    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
+    ...formattedCase,
+    petitioners,
+    trialSessionNotes,
+    userIsAssignedToSession,
+  };
 };

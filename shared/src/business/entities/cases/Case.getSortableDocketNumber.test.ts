@@ -9,7 +9,7 @@ describe('getSortableDocketNumber', () => {
       Case.getSortableDocketNumber('1144-99'),
       Case.getSortableDocketNumber('5242-10'),
       Case.getSortableDocketNumber('1144-05'),
-    ].sort((a, b) => a - b);
+    ].sort((a, b) => a! - b!);
 
     expect(numbers).toEqual([
       1999001144, 2005001144, 2008005520, 2010005242, 2011001773, 2012019844,

@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 
 export const gatherRecords = function gatherRecords(exportColumns, output) {
-  return function () {
+  return function (this: any) {
     let record;
     while ((record = this.read())) {
       record = pick(record, exportColumns);

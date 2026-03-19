@@ -67,6 +67,6 @@ export const petitionsClerkCreatesOrderFromMessage = cerebralTest => {
     );
 
     expect(draftOrder).toBeTruthy();
-    expect(draftOrder.signedAt).toBeDefined();
+    expect(draftOrder?.signedAt).toBeDefined();
   });
 };

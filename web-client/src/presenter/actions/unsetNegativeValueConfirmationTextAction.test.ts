@@ -22,6 +22,6 @@ describe('unsetNegativeValueConfirmationTextAction', () => {
         },
       },
     );
-    expect(state.confirmationText[mockPropsKey]).toBeUndefined();
+    expect(state.confirmationText![mockPropsKey]).toBeUndefined();
   });
 });
