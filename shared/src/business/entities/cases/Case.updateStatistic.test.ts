@@ -37,8 +37,8 @@ describe('updateStatistic', () => {
 
     caseEntity.updateStatistic(statisticToUpdate, statisticId);
 
-    expect(caseEntity.statistics.length).toEqual(1);
-    expect(caseEntity.statistics[0]).toEqual(statisticToUpdate);
+    expect(caseEntity.statistics!.length).toEqual(1);
+    expect(caseEntity.statistics![0]).toEqual(statisticToUpdate);
   });
 
   it('should not update a statistic if its id is not present on the case', () => {
@@ -75,7 +75,7 @@ describe('updateStatistic', () => {
       '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
     );
 
-    expect(caseEntity.statistics.length).toEqual(1);
-    expect(caseEntity.statistics[0]).toMatchObject(originalStatistic);
+    expect(caseEntity.statistics!.length).toEqual(1);
+    expect(caseEntity.statistics![0]).toMatchObject(originalStatistic);
   });
 });

@@ -18,7 +18,7 @@ export const docketClerkAddsDocketEntryFromMessage = cerebralTest => {
       parentMessageId: cerebralTest.parentMessageId,
     });
 
-    let messageDetailFormatted = runCompute(formattedMessageDetail, {
+    const messageDetailFormatted = runCompute(formattedMessageDetail, {
       state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
@@ -60,6 +60,6 @@ export const docketClerkAddsDocketEntryFromMessage = cerebralTest => {
         d => d.docketEntryId === orderDocument.documentId,
       );
     expect(caseOrderDocketEntry).toBeDefined();
-    expect(caseOrderDocketEntry.isOnDocketRecord).toEqual(true);
+    expect(caseOrderDocketEntry?.isOnDocketRecord).toEqual(true);
   });
 };

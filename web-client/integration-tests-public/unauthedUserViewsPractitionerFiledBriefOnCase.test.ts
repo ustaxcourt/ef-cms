@@ -2,7 +2,7 @@ import {
   COUNTRY_TYPES,
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextPublic } from '../src/applicationContextPublic';
 import {
   contactPrimaryFromState,
@@ -280,8 +280,8 @@ describe('unauthed user views practitioner filed brief', () => {
       await testClient.runSequence(
         'openConfirmServePaperFiledDocumentSequence',
         {
-          docketEntryId: simultaneousBrief.docketEntryId,
-          redirectUrl: `/case-detail/${testClient.docketNumber}/document-view?docketEntryId=${simultaneousBrief.docketEntryId}`,
+          docketEntryId: simultaneousBrief?.docketEntryId,
+          redirectUrl: `/case-detail/${testClient.docketNumber}/document-view?docketEntryId=${simultaneousBrief?.docketEntryId}`,
         },
       );
 
