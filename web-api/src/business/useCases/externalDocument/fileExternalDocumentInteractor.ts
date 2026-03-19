@@ -82,6 +82,7 @@ export const fileExternalDocument = async (
 
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
+      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
