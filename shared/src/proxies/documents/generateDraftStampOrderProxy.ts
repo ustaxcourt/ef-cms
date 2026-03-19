@@ -20,7 +20,6 @@ export const generateDraftStampOrderInteractor = (
     motionDocketEntryId,
     parentMessageId,
     stampData,
-    stampedDocketEntryId,
   },
 ) => {
   return post({
@@ -30,7 +29,6 @@ export const generateDraftStampOrderInteractor = (
       motionDocketEntryId,
       parentMessageId,
       stampData,
-      stampedDocketEntryId,
     },
     endpoint: `/case-documents/${docketNumber}/${motionDocketEntryId}/stamp`,
   });
