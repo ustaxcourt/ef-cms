@@ -7,6 +7,7 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import {
   getFormattedDocketEntriesForTest,
   loginAs,
@@ -18,21 +19,13 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
-import {
-  createISODateString,
-  formatDateString,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
 
 describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Group with Paper Service', () => {
   const cerebralTest = setupTest();
 
   cerebralTest.consolidatedCases = [];
 
-  const trialLocation = `Houston, Texas, ${formatDateString(
-    createISODateString(),
-    FORMATS.UNIX_TIMESTAMP_SECONDS,
-  )}`;
+  const trialLocation = `Houston, Texas, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     procedureType: 'Small',
@@ -94,7 +87,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
     expect(orderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 

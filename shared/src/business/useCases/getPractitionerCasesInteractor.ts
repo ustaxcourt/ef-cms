@@ -40,7 +40,11 @@ export const getPractitionerCasesInteractor = async (
 
   const caseDetails: PractitionerCaseDetail[] = cases
     ? cases.map(c => {
-        const formattedCase = formatCase(applicationContext, c, authorizedUser);
+        const formattedCase = formatCase(
+          applicationContext,
+          c as RawCase,
+          authorizedUser,
+        );
 
         const {
           caseTitle,

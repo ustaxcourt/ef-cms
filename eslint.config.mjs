@@ -85,6 +85,11 @@ export default tseslint.config(
   {
     // @ts-ignore
     ...reactPlugin.configs.flat.recommended, // React recommendations
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       // @ts-ignore
       ...reactPlugin.configs.flat.recommended.rules,

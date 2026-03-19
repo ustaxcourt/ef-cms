@@ -7,7 +7,7 @@ export const assignSelectedWorkItemsAction = async ({
 }: ActionProps) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const sectionWorkQueue = get(state.workQueue);
-  const assigneeId = get(state.assigneeId);
+  const assigneeId: string = get(state.assigneeId) || '';
   const assigneeName = get(state.assigneeName);
 
   const workItemIds: string[] = [];

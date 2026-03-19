@@ -18,7 +18,7 @@ export const docketClerkAppliesSignatureFromMessage = cerebralTest => {
       parentMessageId: cerebralTest.parentMessageId,
     });
 
-    let messageDetailFormatted = runCompute(formattedMessageDetail, {
+    const messageDetailFormatted = runCompute(formattedMessageDetail, {
       state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
@@ -51,6 +51,6 @@ export const docketClerkAppliesSignatureFromMessage = cerebralTest => {
     const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       d => d.docketEntryId === orderDocument.documentId,
     );
-    expect(caseOrderDocument.signedAt).toBeDefined();
+    expect(caseOrderDocument?.signedAt).toBeDefined();
   });
 };
