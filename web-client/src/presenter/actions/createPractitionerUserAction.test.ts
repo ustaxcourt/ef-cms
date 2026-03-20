@@ -63,10 +63,11 @@ describe('createPractitionerUserAction', () => {
   });
 
   it('should return path.error when an error occurred while creating the practitioner', async () => {
+    const mockErrorMessage = 'Something went wrong.';
     applicationContext
       .getUseCases()
       .createPractitionerUserInteractor.mockImplementation(() => {
-        throw new Error('bad!');
+        throw new Error(mockErrorMessage);
       });
 
     await runAction(createPractitionerUserAction, {
@@ -80,7 +81,7 @@ describe('createPractitionerUserAction', () => {
 
     expect(errorMock).toHaveBeenCalledWith({
       alertError: {
-        message: 'Please try again.',
+        message: mockErrorMessage,
         title: 'Practitioner could not be added.',
       },
     });
