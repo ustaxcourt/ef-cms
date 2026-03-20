@@ -31,7 +31,7 @@ parseArgsAndEnvVars(scriptConfig);
       .where('isFileAttached', '=', true)
       .where('numberOfPages', 'is', null)
       .where('servedAt', 'is not', null)
-      .select(['docketNumber', 'docketEntryId'])
+      .select(['docketNumber', 'docketEntryId', 'documentStorageId'])
       .execute(),
   );
 
@@ -55,11 +55,11 @@ parseArgsAndEnvVars(scriptConfig);
             .getUseCaseHelpers()
             .countPagesInDocument({
               applicationContext,
-              docketEntryId: docketEntry.docketEntryId,
+              documentStorageId: docketEntry.documentStorageId,
             });
           return {
             ...docketEntry,
-            numberOfPages: numberOfPages,
+            numberOfPages,
           };
         } catch (e) {
           failedDocketEntryIds.push(docketEntry.docketEntryId);
@@ -94,11 +94,10 @@ parseArgsAndEnvVars(scriptConfig);
     cb: writer =>
       writer
         .mergeInto('dwDocketEntry as d')
-        .using(valuesList,
-          join =>
-            join
-              .onRef('valuesList.column2', '=', 'd.docketEntryId')
-              .onRef('valuesList.column1', '=', 'd.docketNumber'),
+        .using(valuesList, join =>
+          join
+            .onRef('valuesList.column2', '=', 'd.docketEntryId')
+            .onRef('valuesList.column1', '=', 'd.docketNumber'),
         )
         .whenMatched()
         .thenUpdate(update =>

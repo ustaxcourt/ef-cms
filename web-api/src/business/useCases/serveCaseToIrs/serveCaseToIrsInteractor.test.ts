@@ -7,6 +7,7 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock('@shared/sharedAppContext');
+jest.mock('@web-api/persistence/s3/uploadDocument');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -49,16 +50,20 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { uploadDocument as uploadDocumentMock } from '@web-api/persistence/s3/uploadDocument';
 
 describe('serveCaseToIrsInteractor', () => {
+  const mockNewUniqueId = '7805d1ab-18d0-43ec-bafb-654e83405416';
+
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  const uploadDocument = jest.mocked(uploadDocumentMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const getUniqueId = jest
     .mocked(getUniqueIdMock)
-    .mockImplementation(() => '7805d1ab-18d0-43ec-bafb-654e83405416');
+    .mockImplementation(() => mockNewUniqueId);
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
@@ -598,7 +603,8 @@ describe('serveCaseToIrsInteractor', () => {
         contactId: secondaryContactId,
         name: 'Test Petitioner Secondary',
       },
-      isPaper: false,
+      isPaper: true,
+      mailingDate: 'test date',
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: null,
       privatePractitioners: [
@@ -636,6 +642,11 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
     ).toHaveBeenCalledTimes(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
+        .calls[0][0].key,
+    ).toEqual(mockNewUniqueId);
   });
 
   it('should add Filing Fee Waived document to case entity when petitionPaymentStatus === PAYMENT_STATUS.WAIVED', async () => {
@@ -1594,9 +1605,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocument,
-    ).toHaveBeenCalled();
+    expect(uploadDocument).toHaveBeenCalled();
   });
 
   it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
@@ -1621,9 +1630,7 @@ describe('serveCaseToIrsInteractor', () => {
       eventCode: 'O',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocument,
-    ).toHaveBeenCalled();
+    expect(uploadDocument).toHaveBeenCalled();
 
     const petitionFilingDate = mockCase.docketEntries.find(
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -1671,9 +1678,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocument,
-    ).toHaveBeenCalled();
+    expect(uploadDocument).toHaveBeenCalled();
   });
 
   it('should replace brackets in orderToShowCause content with a filing date and todayPlus60', async () => {
@@ -1859,9 +1864,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocument,
-    ).toHaveBeenCalled();
+    expect(uploadDocument).toHaveBeenCalled();
 
     expect(
       await applicationContext.getUseCaseHelpers()
