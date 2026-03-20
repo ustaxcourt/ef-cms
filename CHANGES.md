@@ -5,7 +5,7 @@
 #### Upgrade Terraform to `1.14.7`
 
 ```bash
-tfswitch 1.14.6
+tfswitch 1.14.7
 ```
 
 ## Manual Deployment Steps
