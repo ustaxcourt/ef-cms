@@ -1,11 +1,8 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
-  CASE_STATUS_TYPES,
-  CHAMBERS_SECTION,
   DOCKET_SECTION,
   PETITIONS_SECTION,
-  ROLES,
 } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
