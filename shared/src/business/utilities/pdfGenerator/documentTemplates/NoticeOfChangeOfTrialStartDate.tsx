@@ -103,9 +103,12 @@ function NoticeOfChangeRemote({
         </p>
       </div>
       <p>
-        &emsp;Join online: Go to www.zoomgov.com and click `Join a meeting`
-        (blue box in the middle of the page). Enter the Meeting ID and Passcode
-        above when prompted.
+        <span className="text-italic text-bold">Join online</span>: Go to{' '}
+        <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
+          www.zoomgov.com
+        </a>{' '}
+        and click `Join a meeting` (blue box in the middle of the page). Enter
+        the Meeting ID and Passcode above when prompted.
       </p>
     </div>
   );
