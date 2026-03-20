@@ -4,11 +4,12 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  getDocumentQCInboxCountsForSection,
+  getDocumentQCInboxCountsForUser,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxCounts';
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
-import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { getQCInboxParameters } from '../utilities/getQCInboxParameters';
 
 export const getNotificationsInteractor = async (
@@ -48,11 +49,6 @@ export const getNotificationsInteractor = async (
     selectedSection,
   });
 
-  const filters = getWorkQueueFilters({
-    section: qcInboxParameters.section,
-    user: { ...authorizedUser, section: qcInboxParameters.section },
-  });
-
   applicationContext.logger.info(
     'getNotificationsInteractor about to start queries',
     {
@@ -60,69 +56,45 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const [
-    userInbox,
-    sectionInbox,
-    documentQCIndividualInbox,
-    documentQCSectionInbox,
-  ] = await Promise.all([
-    getUserInboxMessages({
-      applicationContext,
-      userId: authorizedUser.userId,
-    }),
-    getSectionInboxMessages({
-      applicationContext,
-      section: selectedSection || section,
-    }),
-    getDocumentQCInboxForUser({
-      userId: authorizedUser.userId,
-    }),
-    getDocumentQCInboxForSection(qcInboxParameters),
-  ]);
-
-  applicationContext.logger.info(
-    'getNotificationsInteractor queries complete',
-    {
-      documentQCIndividualInbox: documentQCIndividualInbox.length,
-      documentQCSectionInbox: documentQCSectionInbox?.length,
-      sectionInbox: sectionInbox.length,
-      userInbox: userInbox.length,
-    },
-  );
-
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
-
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
-    filters['section']['inbox'],
-  ).length;
+  const [userInbox, sectionInbox, userQCCounts, sectionQCCounts] =
+    await Promise.all([
+      getUserInboxMessages({
+        applicationContext,
+        userId: authorizedUser.userId,
+      }),
+      getSectionInboxMessages({
+        applicationContext,
+        section: selectedSection || section,
+      }),
+      getDocumentQCInboxCountsForUser({
+        userId: authorizedUser.userId,
+        role: authorizedUser.role,
+        section: qcInboxParameters.section,
+      }),
+      getDocumentQCInboxCountsForSection({
+        ...qcInboxParameters,
+        role: authorizedUser.role,
+      }),
+    ]);
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
   ).length;
 
   applicationContext.logger.info('getNotificationsInteractor done filtering', {
-    qcIndividualInProgressCount,
-    qcIndividualInboxCount,
-    qcSectionInProgressCount,
-    qcSectionInboxCount,
+    qcIndividualInProgressCount: userQCCounts.inProgressCount,
+    qcIndividualInboxCount: userQCCounts.inboxCount,
+    qcSectionInProgressCount: sectionQCCounts.inProgressCount,
+    qcSectionInboxCount: sectionQCCounts.inboxCount,
     unreadMessageCount,
   });
 
   return {
-    qcIndividualInProgressCount,
-    qcIndividualInboxCount,
-    qcSectionInProgressCount: qcSectionInProgressCount || 0,
-    qcSectionInboxCount: qcSectionInboxCount || 0,
-    qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
-      .length,
+    qcIndividualInProgressCount: userQCCounts.inProgressCount,
+    qcIndividualInboxCount: userQCCounts.inboxCount,
+    qcSectionInProgressCount: sectionQCCounts.inProgressCount,
+    qcSectionInboxCount: sectionQCCounts.inboxCount,
+    qcUnreadCount: userQCCounts.unreadCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
