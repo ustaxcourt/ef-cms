@@ -17,54 +17,62 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
 }) => {
   const listRef = useRef<VariableSizeList>(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
+  const rowHeightCacheRef = useRef<Map<number, number>>(new Map());
+  const correctionCountRef = useRef(0);
   const [listDimensions, setListDimensions] = useState<{width: number, height: number} | null>(null);
 
-  // Calculate row height based on content
+  // Get row height from cache or provide a generous overestimate.
+  // Overestimating is safe (extra whitespace), underestimating causes overlap.
+  // The measurement pass in useLayoutEffect corrects these to actual heights.
   const getRowHeight = (index: number) => {
+    if (rowHeightCacheRef.current.has(index)) {
+      return rowHeightCacheRef.current.get(index)!;
+    }
+
     const entry = docketEntries[index];
     if (!entry) return 80;
 
     const descriptionLength = entry.descriptionDisplay?.length || 0;
 
-    // Base height includes button padding (15px top + 15px bottom) + border + content padding
-    const baseHeight = 60;
+    // Button padding: 15px top + 15px bottom + 1px border = 31px
+    let estimatedHeight = 31;
 
-    // Very short entries (single words like "Exhibit", "Petition")
-    if (descriptionLength <= 20) {
-      return baseHeight;
-    }
+    // Use a very conservative 18 chars per line.
+    // The grid-col-5 column is narrow (~175px), and at the actual font size
+    // only about 20-22 chars fit per line. Using 18 ensures we always
+    // overestimate, which means extra whitespace (acceptable) but never overlap.
+    const charsPerLine = 18;
 
-    // Adjust chars per line based on text length
-    // Short texts (20-100 chars): less wrapping, ~30 chars per line
-    // Medium texts (100-200 chars): moderate wrapping, ~26 chars per line
-    // Long texts (200+ chars): more wrapping, ~22 chars per line
-    let charsPerLine: number;
-    if (descriptionLength <= 100) {
-      charsPerLine = 30;
-    } else if (descriptionLength <= 200) {
-      charsPerLine = 26;
-    } else {
-      charsPerLine = 22;
-    }
+    const estimatedLines = Math.max(1, Math.ceil(descriptionLength / charsPerLine));
+    // line-height: 1.4 on ~15px font ≈ 21px per line
+    estimatedHeight += estimatedLines * 21;
 
-    const estimatedLines = Math.ceil(descriptionLength / charsPerLine);
-    const heightPerLine = 24; // Line height with spacing
-
-    // Calculate additional height for related docket entries
-    let additionalHeight = 0;
+    // Related docket entries
     if (entry.relatedDocketEntries && entry.relatedDocketEntries.length > 0) {
-      // Each related entry adds significant height (line break + disposition text)
       entry.relatedDocketEntries.forEach((affectedEntry: any) => {
-        const dispositionCount = affectedEntry.dispositionLinkText?.length || 0;
-        // Each disposition gets a full line + extra spacing
-        additionalHeight += (dispositionCount + 1) * heightPerLine;
+        estimatedHeight += 21; // <br /> line break
+        const dispositionLines = affectedEntry.dispositionLinkText?.length || 0;
+        estimatedHeight += dispositionLines * 21;
       });
     }
 
-    const calculatedHeight = baseHeight + (estimatedLines * heightPerLine) + additionalHeight;
+    // Stacked icons can make the row taller than the text
+    if (entry.iconsToDisplay && entry.iconsToDisplay.length > 1) {
+      const iconHeight = entry.iconsToDisplay.length * 20;
+      const textHeight = estimatedHeight - 31;
+      if (iconHeight > textHeight) {
+        estimatedHeight = 31 + iconHeight;
+      }
+    }
 
-    // Allow very tall rows for complex entries
-    return Math.min(calculatedHeight, 800);
+    if (entry.isStricken) {
+      estimatedHeight += 21;
+    }
+
+    // Generous buffer — extra whitespace is corrected by measurement pass
+    estimatedHeight += 15;
+
+    return Math.max(estimatedHeight, 60);
   };
 
   // Measure container dimensions for VariableSizeList
@@ -79,7 +87,6 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
       }
     };
 
-    // Small delay to ensure DOM is fully rendered
     const timeout = setTimeout(updateDimensions, 0);
     window.addEventListener('resize', updateDimensions);
 
@@ -89,6 +96,54 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     };
   }, []);
 
+  // Clear cache when docketEntries change
+  useEffect(() => {
+    rowHeightCacheRef.current.clear();
+    correctionCountRef.current = 0;
+    if (listRef.current) {
+      listRef.current.resetAfterIndex(0);
+    }
+  }, [docketEntries]);
+
+  // Single parent-level measurement pass: after all Row DOMs are committed,
+  // query all visible content wrappers, measure their actual heights,
+  // cache them, and do ONE resetAfterIndex call to reposition everything.
+  // This avoids the per-Row resetAfterIndex batching issue.
+  // Limited to 5 correction cycles to prevent infinite re-render loops
+  // (e.g., when correcting heights changes the visible range, revealing
+  // new unmeasured rows that need their own correction).
+  useLayoutEffect(() => {
+    if (!listContainerRef.current || !listRef.current) return;
+    if (correctionCountRef.current >= 5) return;
+
+    const contentElements = listContainerRef.current.querySelectorAll<HTMLElement>(
+      '[data-row-index]'
+    );
+
+    let needsReset = false;
+    let minChangedIndex = Infinity;
+
+    contentElements.forEach(el => {
+      const index = parseInt(el.dataset.rowIndex!, 10);
+      const height = el.offsetHeight;
+      const cached = rowHeightCacheRef.current.get(index);
+
+      if (!cached || Math.abs(cached - height) > 1) {
+        rowHeightCacheRef.current.set(index, height);
+        needsReset = true;
+        minChangedIndex = Math.min(minChangedIndex, index);
+      }
+    });
+
+    if (needsReset) {
+      correctionCountRef.current++;
+      listRef.current.resetAfterIndex(minChangedIndex, true);
+    } else {
+      // Stable — reset correction counter for future scroll events
+      correctionCountRef.current = 0;
+    }
+  });
+
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
     if (viewDocumentId && listRef.current && listDimensions) {
@@ -96,7 +151,6 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
         entry => entry.docketEntryId === viewDocumentId,
       );
       if (selectedIndex !== -1) {
-        // Use scrollToItem with center alignment for better UX
         listRef.current.scrollToItem(selectedIndex, 'center');
       }
     }
@@ -109,111 +163,108 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     if (!entry) return null;
 
     return (
-      <div style={{
-        ...style,
-        padding: 0,
-        margin: 0,
-        boxSizing: 'border-box'
-      }}>
-        <Button
-          className={classNames(
-            'usa-button--unstyled attachment-viewer-button virtualized',
-            viewDocumentId === entry.docketEntryId && 'active',
-          )}
-          data-entry-id={entry.docketEntryId}
-          disabled={!entry.isFileAttached}
-          isActive={viewDocumentId === entry.docketEntryId}
-          key={entry.docketEntryId}
-          onClick={() => {
-            setViewerDocumentToDisplaySequence({
-              viewerDocumentToDisplay: entry,
-            });
-          }}
-        >
-          <div
-            className="grid-row margin-left-205"
-            title={entry.toolTipText}
-            style={{
-              margin: '0 0 0 2.05rem',
-              padding: 0
+      <div style={{...style, overflow: 'hidden', boxShadow: 'inset 0 -1px 0 #dfe1e2'}}>
+        <div data-row-index={index}>
+          <Button
+            className={classNames(
+              'usa-button--unstyled attachment-viewer-button virtualized',
+              viewDocumentId === entry.docketEntryId && 'active',
+            )}
+            data-entry-id={entry.docketEntryId}
+            disabled={!entry.isFileAttached}
+            isActive={viewDocumentId === entry.docketEntryId}
+            key={entry.docketEntryId}
+            onClick={() => {
+              setViewerDocumentToDisplaySequence({
+                viewerDocumentToDisplay: entry,
+              });
             }}
           >
-            <div className="grid-col-2 text-align-center">{entry.index}</div>
             <div
-              className={classNames(
-                'grid-col-3',
-                entry.isStricken && 'stricken-docket-record',
-              )}
+              className="grid-row margin-left-205"
+              title={entry.toolTipText}
+              style={{
+                margin: '0 0 0 2.05rem',
+                padding: 0
+              }}
             >
-              {entry.createdAtFormatted}
-              <div className="float-right text-align-center">
-                {entry.iconsToDisplay.map(
-                  ({ icon, className, title }: any, iconIndex: number) => (
-                    <div
-                      key={iconIndex}
-                      className={classNames('display-block', {
-                        'margin-bottom-1':
-                          iconIndex < entry.iconsToDisplay.length - 1,
-                      })}
-                    >
-                      <WrappedIcon
-                        iconClass={className}
-                        icon={icon}
-                        title={title}
-                      />
-                    </div>
-                  ),
-                )}
-              </div>
-            </div>
-            <div className="grid-col-5">
-              <span
+              <div className="grid-col-2 text-align-center">{entry.index}</div>
+              <div
                 className={classNames(
-                  'mobile-text-wrap',
-                  'word-wrap-break-word',
+                  'grid-col-3',
                   entry.isStricken && 'stricken-docket-record',
                 )}
               >
-                {entry.descriptionDisplay}
-                {entry.relatedDocketEntries?.map((affectedEntry: any) => {
-                  return (
-                    <div key={affectedEntry.docketEntryId}>
-                      <br />
-                      {affectedEntry.dispositionLinkText.map(
-                        (linkText: string, linkIndex: number) => {
-                          return (
-                            <div
-                              className="display-inline-block"
-                              key={`${linkText}-${linkIndex}`}
-                            >
-                              --- <span>{linkText}</span>
-                              {linkIndex <
-                                affectedEntry.dispositionLinkText.length -
-                                  1 && <br />}
-                            </div>
-                          );
-                        },
-                      )}
-                    </div>
-                  );
-                })}
-              </span>
-              <span
-                className={classNames(
-                  'word-wrap-break-word',
-                  'display-block',
+                {entry.createdAtFormatted}
+                <div className="float-right text-align-center">
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }: any, iconIndex: number) => (
+                      <div
+                        key={iconIndex}
+                        className={classNames('display-block', {
+                          'margin-bottom-1':
+                            iconIndex < entry.iconsToDisplay.length - 1,
+                        })}
+                      >
+                        <WrappedIcon
+                          iconClass={className}
+                          icon={icon}
+                          title={title}
+                        />
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+              <div className="grid-col-5">
+                <span
+                  className={classNames(
+                    'mobile-text-wrap',
+                    'word-wrap-break-word',
+                    entry.isStricken && 'stricken-docket-record',
+                  )}
+                >
+                  {entry.descriptionDisplay}
+                  {entry.relatedDocketEntries?.map((affectedEntry: any) => {
+                    return (
+                      <div key={affectedEntry.docketEntryId}>
+                        <br />
+                        {affectedEntry.dispositionLinkText.map(
+                          (linkText: string, linkIndex: number) => {
+                            return (
+                              <div
+                                className="display-inline-block"
+                                key={`${linkText}-${linkIndex}`}
+                              >
+                                --- <span>{linkText}</span>
+                                {linkIndex <
+                                  affectedEntry.dispositionLinkText.length -
+                                    1 && <br />}
+                              </div>
+                            );
+                          },
+                        )}
+                      </div>
+                    );
+                  })}
+                </span>
+                <span
+                  className={classNames(
+                    'word-wrap-break-word',
+                    'display-block',
+                  )}
+                >
+                  {entry.isStricken && ' (STRICKEN)'}
+                </span>
+              </div>
+              <div className="grid-col-2 padding-left-105">
+                {entry.showNotServed && (
+                  <span className="text-semibold not-served">Not served</span>
                 )}
-              >
-                {entry.isStricken && ' (STRICKEN)'}
-              </span>
+              </div>
             </div>
-            <div className="grid-col-2 padding-left-105">
-              {entry.showNotServed && (
-                <span className="text-semibold not-served">Not served</span>
-              )}
-            </div>
-          </div>
-        </Button>
+          </Button>
+        </div>
       </div>
     );
   };

@@ -41,3 +41,18 @@ jest.mock(
 jest.mock('@web-api/persistence/postgres/workitems/upsertWorkItems', () =>
   mockFactory('upsertWorkItems'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/workitems/getDocumentQCInboxCounts',
+  () => ({
+    getDocumentQCInboxCountsForUser: jest.fn().mockReturnValue({
+      inProgressCount: 0,
+      inboxCount: 0,
+      unreadCount: 0,
+    }),
+    getDocumentQCInboxCountsForSection: jest.fn().mockReturnValue({
+      inProgressCount: 0,
+      inboxCount: 0,
+    }),
+  }),
+);
