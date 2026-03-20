@@ -7,8 +7,13 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const setSectionForMessageBoxAction = ({
+  get,
   props,
   store,
 }: ActionProps) => {
-  store.set(state.messageBoxToDisplay.section, props.section);
+  const section =
+    props.section !== undefined
+      ? props.section
+      : get(state.messageBoxToDisplay.section);
+  store.set(state.messageBoxToDisplay.section, section);
 };

@@ -43,4 +43,8 @@ export const switchMessageTabSequence = [
     ],
   ]),
   setIsLoadingMessagesAction(false),
-];
+] as unknown as (props: {
+  box?: string;
+  queue?: string;
+  section?: string;
+}) => void;

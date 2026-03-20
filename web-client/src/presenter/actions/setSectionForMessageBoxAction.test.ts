@@ -12,4 +12,17 @@ describe('setSectionForMessageBoxAction', () => {
 
     expect(state.messageBoxToDisplay.section).toEqual(mockSection);
   });
+
+  it('preserves existing section when props.section is undefined', async () => {
+    const { state } = await runAction(setSectionForMessageBoxAction, {
+      props: {},
+      state: {
+        messageBoxToDisplay: {
+          section: 'petitions',
+        },
+      },
+    });
+
+    expect(state.messageBoxToDisplay.section).toEqual('petitions');
+  });
 });

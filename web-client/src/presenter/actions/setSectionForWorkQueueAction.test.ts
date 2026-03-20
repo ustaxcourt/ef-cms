@@ -13,4 +13,17 @@ describe('setSectionForWorkQueueAction', () => {
 
     expect(state.workQueueToDisplay.section).toEqual(mockSection);
   });
+
+  it('preserves existing section when props.section is undefined', async () => {
+    const { state } = await runAction(setSectionForWorkQueueAction, {
+      props: {},
+      state: {
+        workQueueToDisplay: {
+          section: DOCKET_SECTION,
+        },
+      },
+    });
+
+    expect(state.workQueueToDisplay.section).toEqual(DOCKET_SECTION);
+  });
 });

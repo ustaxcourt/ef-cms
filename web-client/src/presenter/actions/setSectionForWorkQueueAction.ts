@@ -6,6 +6,14 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const setSectionForWorkQueueAction = ({ props, store }: ActionProps) => {
-  store.set(state.workQueueToDisplay.section, props.section);
+export const setSectionForWorkQueueAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
+  const section =
+    props.section !== undefined
+      ? props.section
+      : get(state.workQueueToDisplay.section);
+  store.set(state.workQueueToDisplay.section, section);
 };

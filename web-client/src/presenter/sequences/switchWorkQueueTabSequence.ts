@@ -73,4 +73,8 @@ export const switchWorkQueueTabSequence = [
     ],
   ]),
   setIsLoadingWorkQueueAction(false),
-];
+] as unknown as (props: {
+  box: string;
+  queue: string;
+  section?: string;
+}) => void;
