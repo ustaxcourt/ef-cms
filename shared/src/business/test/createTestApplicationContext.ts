@@ -377,6 +377,7 @@ export const createTestApplicationContext = () => {
     entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialLocation: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialStartDate: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),
