@@ -73,7 +73,6 @@
     "exceljs": "4.4.0",
     "export-to-csv": "1.4.0",
     "express": "5.2.1",
-    "fast-xml-parser": "5.5.7",
     "fflate": "0.8.2",
     "form-data": "4.0.5",
     "he": "1.2.0",
@@ -281,8 +280,7 @@
       "commander": "12.1.0"
     },
     "ws": "$ws",
-    "tar-fs": "$tar-fs",
-    "fast-xml-parser": "$fast-xml-parser"
+    "tar-fs": "$tar-fs"
   },
   "devDependencies": {
     "@aws-sdk/client-ecr": "3.1013.0",
