@@ -824,6 +824,7 @@ export const baseState = {
   messageDetail: undefined as unknown as RawMessage[],
   messagesPage: {
     completionSuccess: false,
+    isLoadingMessages: false,
     messagesCompletedAt: '',
     messagesCompletedBy: '',
     selectedMessages: new Map() as Map<string, string>,
@@ -1040,6 +1041,9 @@ export const baseState = {
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
+  workQueuePage: {
+    isLoadingWorkQueue: false,
+  },
   workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
   recentFilings: [] as RecentFiling[],

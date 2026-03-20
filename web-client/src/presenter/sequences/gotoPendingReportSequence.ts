@@ -10,13 +10,12 @@ import { setDefaultPendingReportTableSortAction } from '@web-client/presenter/ac
 
 export const gotoPendingReportSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     clearScreenMetadataAction,
     clearFormAction,
     closeMobileMenuAction,
     clearErrorAlertsAction,
     clearPendingReportsAction,
+    setupCurrentPageAction('PendingReport'),
     getSetJudgesSequence,
     setDefaultPendingReportTableSortAction,
-    setupCurrentPageAction('PendingReport'),
   ]);

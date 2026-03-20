@@ -8,7 +8,6 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 export const gotoBlockedCasesReportSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     clearScreenMetadataAction,
     clearFormAction,
     clearBlockedCasesReportAction,

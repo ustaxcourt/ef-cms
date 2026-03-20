@@ -494,6 +494,8 @@ import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveC
 import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
 import { submitStatusReportOrderSequence } from './sequences/StatusReportOrder/submitStatusReportOrderSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
+import { switchMessageTabSequence } from './sequences/switchMessageTabSequence';
+import { switchWorkQueueTabSequence } from './sequences/switchWorkQueueTabSequence';
 import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitUpdateAddDocketNumbersToOrderSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
@@ -1430,6 +1432,8 @@ export const presenterSequences = {
   submitStampMotionSequence: submitStampMotionSequence as unknown as Function,
   submitStatusReportOrderSequence,
   submitTrialSessionSequence: submitTrialSessionSequence as unknown as Function,
+  switchMessageTabSequence,
+  switchWorkQueueTabSequence,
   submitUpdateAddDocketNumbersToOrderSequence:
     submitUpdateAddDocketNumbersToOrderSequence as unknown as Function,
   submitUpdateCaseModalSequence:

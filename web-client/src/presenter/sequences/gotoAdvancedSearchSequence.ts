@@ -12,11 +12,11 @@ import { clearSearchResultsAction } from '@web-client/presenter/actions/Advanced
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     clearScreenMetadataAction,
     closeMobileMenuAction,
     clearSearchResultsAction,
     defaultAdvancedSearchFormAction,
+    setupCurrentPageAction('AdvancedSearch'),
     parallel([
       [
         getUsersInSectionAction({ section: 'judge' }),
@@ -24,5 +24,4 @@ export const gotoAdvancedSearchSequence =
       ],
       [getOpinionTypesAction, setOpinionTypesAction],
     ]),
-    setupCurrentPageAction('AdvancedSearch'),
   ]);

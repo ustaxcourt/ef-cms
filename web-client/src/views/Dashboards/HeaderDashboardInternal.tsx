@@ -7,11 +7,11 @@ import React from 'react';
 
 export const HeaderDashboardInternal = connect(
   {
-    navigateToPathSequence: sequences.navigateToPathSequence,
+    switchWorkQueueTabSequence: sequences.switchWorkQueueTabSequence,
     workQueueHelper: state.workQueueHelper,
   },
   function HeaderDashboardInternal({
-    navigateToPathSequence,
+    switchWorkQueueTabSequence,
     workQueueHelper,
   }) {
     return (
@@ -26,11 +26,9 @@ export const HeaderDashboardInternal = connect(
                 className="button-switch-box"
                 data-testid="switch-to-section-document-qc-button"
                 onClick={() => {
-                  navigateToPathSequence({
-                    path: workQueueHelper.getQueuePath({
-                      box: 'inbox',
-                      queue: 'section',
-                    }),
+                  switchWorkQueueTabSequence({
+                    box: 'inbox',
+                    queue: 'section',
                   });
                 }}
               >
@@ -43,11 +41,9 @@ export const HeaderDashboardInternal = connect(
               link
               className="button-switch-box"
               onClick={() => {
-                navigateToPathSequence({
-                  path: workQueueHelper.getQueuePath({
-                    box: 'inbox',
-                    queue: 'my',
-                  }),
+                switchWorkQueueTabSequence({
+                  box: 'inbox',
+                  queue: 'my',
                 });
               }}
             >

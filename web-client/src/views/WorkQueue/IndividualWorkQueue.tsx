@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IndividualWorkQueueInProgress } from './IndividualWorkQueueInProgress';
 import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
 import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
@@ -9,19 +10,25 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const WorkQueueLoadingSpinner = () => (
+  <div className="padding-4 text-center">
+    <FontAwesomeIcon className="fa-spin spinner" icon="spinner" size="2x" />
+  </div>
+);
+
 export const IndividualWorkQueue = connect(
   {
-    navigateToPathSequence: sequences.navigateToPathSequence,
+    isLoadingWorkQueue: state.workQueuePage.isLoadingWorkQueue,
     queue: state.workQueueToDisplay.queue,
-    section: state.workQueueToDisplay.section,
     showModal: state.modal.showModal,
+    switchWorkQueueTabSequence: sequences.switchWorkQueueTabSequence,
     workQueueHelper: state.workQueueHelper,
   },
   function IndividualWorkQueue({
-    navigateToPathSequence,
+    isLoadingWorkQueue,
     queue,
-    section,
     showModal,
+    switchWorkQueueTabSequence,
     workQueueHelper,
   }) {
     return (
@@ -29,12 +36,9 @@ export const IndividualWorkQueue = connect(
         <Tabs
           bind="workQueueToDisplay.box"
           onSelect={box => {
-            navigateToPathSequence({
-              path: workQueueHelper.documentQCNavigationPath({
-                box,
-                queue,
-                section,
-              }),
+            switchWorkQueueTabSequence({
+              box,
+              queue,
             });
           }}
         >
@@ -45,7 +49,11 @@ export const IndividualWorkQueue = connect(
             title={`Inbox (${workQueueHelper.individualInboxCount})`}
           >
             <div id="individual-inbox-tab-content">
-              <IndividualWorkQueueInbox />
+              {isLoadingWorkQueue ? (
+                <WorkQueueLoadingSpinner />
+              ) : (
+                <IndividualWorkQueueInbox />
+              )}
             </div>
           </Tab>
           {workQueueHelper.showInProgressTab && (
@@ -54,7 +62,11 @@ export const IndividualWorkQueue = connect(
               tabName="inProgress"
               title={`In Progress (${workQueueHelper.individualInProgressCount})`}
             >
-              <IndividualWorkQueueInProgress />
+              {isLoadingWorkQueue ? (
+                <WorkQueueLoadingSpinner />
+              ) : (
+                <IndividualWorkQueueInProgress />
+              )}
             </Tab>
           )}
           <Tab
@@ -63,7 +75,11 @@ export const IndividualWorkQueue = connect(
             title={workQueueHelper.sentTitle}
           >
             <div id="individual-sent-tab-content">
-              <IndividualWorkQueueOutbox />
+              {isLoadingWorkQueue ? (
+                <WorkQueueLoadingSpinner />
+              ) : (
+                <IndividualWorkQueueOutbox />
+              )}
             </div>
           </Tab>
         </Tabs>

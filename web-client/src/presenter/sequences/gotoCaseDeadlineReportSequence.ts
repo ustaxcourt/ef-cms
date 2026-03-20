@@ -13,11 +13,11 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoCaseDeadlineReportSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
     clearScreenMetadataAction,
     closeMobileMenuAction,
     clearErrorAlertsAction,
+    setupCurrentPageAction('CaseDeadlines'),
     parallel([
       getSetJudgesSequence,
       [
@@ -27,5 +27,4 @@ export const gotoCaseDeadlineReportSequence =
         setCaseDeadlinesAction,
       ],
     ]),
-    setupCurrentPageAction('CaseDeadlines'),
   ]);

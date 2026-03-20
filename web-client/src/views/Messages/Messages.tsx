@@ -17,15 +17,13 @@ import React from 'react';
 export const Messages = connect(
   {
     messagesHelper: state.messagesHelper,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.messageBoxToDisplay.queue,
-    section: state.messageBoxToDisplay.section,
+    switchMessageTabSequence: sequences.switchMessageTabSequence,
   },
   function Messages({
     messagesHelper,
-    navigateToPathSequence,
     queue,
-    section,
+    switchMessageTabSequence,
   }) {
     return (
       <>
@@ -40,7 +38,12 @@ export const Messages = connect(
                 link
                 className="button-switch-box"
                 data-testid="switch-to-section-messages-button"
-                href="/messages/section/inbox"
+                onClick={() =>
+                  switchMessageTabSequence({
+                    box: 'inbox',
+                    queue: 'section',
+                  })
+                }
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
                 Switch to Section Messages
@@ -50,7 +53,12 @@ export const Messages = connect(
               <Button
                 link
                 className="button-switch-box"
-                href="/messages/my/inbox"
+                onClick={() =>
+                  switchMessageTabSequence({
+                    box: 'inbox',
+                    queue: 'my',
+                  })
+                }
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
                 Switch to My Messages
@@ -65,12 +73,9 @@ export const Messages = connect(
           <Tabs
             bind="messageBoxToDisplay.box"
             onSelect={box => {
-              navigateToPathSequence({
-                path: messagesHelper.messagesTabNavigationPath({
-                  box,
-                  queue,
-                  section,
-                }),
+              switchMessageTabSequence({
+                box,
+                queue,
               });
             }}
           >

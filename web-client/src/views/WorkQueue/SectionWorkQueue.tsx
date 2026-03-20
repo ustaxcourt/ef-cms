@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SectionWorkQueueInProgress } from './SectionWorkQueueInProgress';
 import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
@@ -8,17 +9,23 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const WorkQueueLoadingSpinner = () => (
+  <div className="padding-4 text-center">
+    <FontAwesomeIcon className="fa-spin spinner" icon="spinner" size="2x" />
+  </div>
+);
+
 export const SectionWorkQueue = connect(
   {
-    navigateToPathSequence: sequences.navigateToPathSequence,
+    isLoadingWorkQueue: state.workQueuePage.isLoadingWorkQueue,
     queue: state.workQueueToDisplay.queue,
-    section: state.workQueueToDisplay.section,
+    switchWorkQueueTabSequence: sequences.switchWorkQueueTabSequence,
     workQueueHelper: state.workQueueHelper,
   },
   function SectionWorkQueue({
-    navigateToPathSequence,
+    isLoadingWorkQueue,
     queue,
-    section,
+    switchWorkQueueTabSequence,
     workQueueHelper,
   }) {
     return (
@@ -26,12 +33,9 @@ export const SectionWorkQueue = connect(
         bind="workQueueToDisplay.box"
         className="classic-horizontal-header3 tab-border"
         onSelect={box => {
-          navigateToPathSequence({
-            path: workQueueHelper.documentQCNavigationPath({
-              box,
-              queue,
-              section,
-            }),
+          switchWorkQueueTabSequence({
+            box,
+            queue,
           });
         }}
       >
@@ -43,7 +47,11 @@ export const SectionWorkQueue = connect(
           title={`Inbox (${workQueueHelper.sectionInboxCount})`}
         >
           <div id="section-inbox-tab-content">
-            <SectionWorkQueueInbox />
+            {isLoadingWorkQueue ? (
+              <WorkQueueLoadingSpinner />
+            ) : (
+              <SectionWorkQueueInbox />
+            )}
           </div>
         </Tab>
         {workQueueHelper.showInProgressTab && (
@@ -53,7 +61,11 @@ export const SectionWorkQueue = connect(
             title={`In Progress (${workQueueHelper.sectionInProgressCount})`}
           >
             <div id="section-in-progress-tab-content">
-              <SectionWorkQueueInProgress />
+              {isLoadingWorkQueue ? (
+                <WorkQueueLoadingSpinner />
+              ) : (
+                <SectionWorkQueueInProgress />
+              )}
             </div>
           </Tab>
         )}
@@ -64,7 +76,11 @@ export const SectionWorkQueue = connect(
             title={workQueueHelper.sentTitle}
           >
             <div id="section-sent-tab-content">
-              <SectionWorkQueueOutbox />
+              {isLoadingWorkQueue ? (
+                <WorkQueueLoadingSpinner />
+              ) : (
+                <SectionWorkQueueOutbox />
+              )}
             </div>
           </Tab>
         )}

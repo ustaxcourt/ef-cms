@@ -10,11 +10,10 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoCaseInventoryReport = [
-  setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  getSetJudgesSequence,
   setupCurrentPageAction('CaseInventoryReport'),
+  getSetJudgesSequence,
 ];
 
 const gotoDashboardWithModal = [

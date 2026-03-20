@@ -6,9 +6,8 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 export const gotoCustomCaseReportSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     resetCustomCaseReportStateAction,
+    setupCurrentPageAction('CustomCaseReport'),
     getUsersInSectionAction({ section: 'judge' }),
     setAllAndCurrentJudgesAction,
-    setupCurrentPageAction('CustomCaseReport'),
   ]);

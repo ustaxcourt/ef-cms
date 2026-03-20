@@ -7,6 +7,7 @@ import {
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { ErrorNotification } from '../ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import {
   MessageColumnData,
@@ -38,6 +39,7 @@ type MessageListProps = {
 const MessageListCerebralDependencies = {
   batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
   formattedMessages: state.formattedMessages,
+  isLoadingMessages: state.messagesPage.isLoadingMessages,
   messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
   screenMetadata: state.screenMetadata,
   setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
@@ -55,6 +57,7 @@ export const MessageTable = connect<
     batchCompleteMessageSequence,
     formattedMessages,
     id,
+    isLoadingMessages,
     messageColumns,
     messageFilters,
     messagesIndividualInboxHelper,
@@ -78,6 +81,18 @@ export const MessageTable = connect<
       messagesIndividualInboxHelper.someMessagesSelected,
       messagesIndividualInboxHelper.allMessagesSelected,
     ]);
+
+    if (isLoadingMessages) {
+      return (
+        <div className="padding-4 text-center">
+          <FontAwesomeIcon
+            className="fa-spin spinner"
+            icon="spinner"
+            size="2x"
+          />
+        </div>
+      );
+    }
 
     // For cases when messages can be selected in the given view
     const getSelectAllCheckbox = () => {

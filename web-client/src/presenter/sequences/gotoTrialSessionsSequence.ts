@@ -20,10 +20,10 @@ import { trialSessionQueryParamsAction } from '@web-client/presenter/actions/Tri
 
 export const gotoTrialSessionsSequence =
   startWebSocketConnectionSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
     resetTrialSessionsFiltersAction,
     closeMobileMenuAction,
     clearErrorAlertsAction,
+    setupCurrentPageAction('TrialSessions'),
     parallel([
       [getJudgeForCurrentUserAction, setJudgeUserAction],
       [getNotificationsAction, setNotificationsAction],
@@ -39,5 +39,4 @@ export const gotoTrialSessionsSequence =
     ],
     trialSessionQueryParamsAction,
     setTrialSessionsFiltersAction,
-    setupCurrentPageAction('TrialSessions'),
   ]) as unknown as (props: ActionProps<Partial<TrialSessionsFilters>>) => void;

@@ -19,7 +19,6 @@ export const WorkQueue = connect(
           <SuccessNotification />
           <ErrorNotification />
           {workQueueHelper.showIndividualWorkQueue && <IndividualWorkQueue />}
-
           {workQueueHelper.showSectionWorkQueue && <SectionWorkQueue />}
         </section>
       </React.Fragment>

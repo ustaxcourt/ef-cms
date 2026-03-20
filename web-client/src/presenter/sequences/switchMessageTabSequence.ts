@@ -1,7 +1,6 @@
 import { chooseMessageBoxAction } from '../actions/chooseMessageBoxAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCompletedMessagesForSectionAction } from '../actions/getCompletedMessagesForSectionAction';
 import { getCompletedMessagesForUserAction } from '../actions/getCompletedMessagesForUserAction';
@@ -17,19 +16,17 @@ import { setIsLoadingMessagesAction } from '../actions/Messages/setIsLoadingMess
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBoxAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
-import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { updateMessageTabUrlAction } from '../actions/Messages/updateMessageTabUrlAction';
 
-export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
+export const switchMessageTabSequence = [
   setIsLoadingMessagesAction(true),
-  closeMobileMenuAction,
   resetCacheKeyAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   setDefaultMessagePageTableSortAction,
-  setSectionForMessageBoxAction,
   resetSelectedMessageAction,
-  setupCurrentPageAction('Messages'),
+  setSectionForMessageBoxAction,
+  updateMessageTabUrlAction,
   parallel([
     [...fetchUserNotificationsSequence, setMessageCountsAction],
     [
@@ -46,4 +43,4 @@ export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
     ],
   ]),
   setIsLoadingMessagesAction(false),
-]);
+];
