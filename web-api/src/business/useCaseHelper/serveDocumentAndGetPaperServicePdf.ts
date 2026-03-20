@@ -1,7 +1,8 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
+import { getDocumentStorageId } from '@shared/business/utilities/getDocumentStorageId';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
@@ -38,11 +39,16 @@ export const serveDocumentAndGetPaperServicePdf = async ({
         if (stampedPdf) {
           originalPdfDoc = await PDFDocument.load(stampedPdf);
         } else {
+          const documentStorageId = getDocumentStorageId({
+            caseDetail: caseEntity,
+            docketEntryId,
+          });
+
           const pdfData = await applicationContext
             .getPersistenceGateway()
             .getDocument({
               applicationContext,
-              key: docketEntryId,
+              key: documentStorageId,
             });
           originalPdfDoc = await PDFDocument.load(pdfData);
         }

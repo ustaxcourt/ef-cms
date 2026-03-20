@@ -1,13 +1,10 @@
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../shared/src/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../shared/src/test/mockCase';
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 
@@ -70,9 +67,18 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
         },
       );
 
+    const mockDocumentStorageId = 'abc';
+
     caseEntity = new Case(
       {
         ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            docketEntryId: mockDocketEntryId,
+            documentStorageId: mockDocumentStorageId,
+          },
+        ],
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
@@ -91,7 +97,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({ key: mockDocumentStorageId }),
+    );
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalled();
