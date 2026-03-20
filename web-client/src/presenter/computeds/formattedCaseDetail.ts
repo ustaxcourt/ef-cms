@@ -117,9 +117,10 @@ export const formattedCaseDetail = (
       isCurrentUser: petitioner.contactId === user.userId,
     }));
 
-  const consolidatedCases = formattedCase.consolidatedCases.map(c =>
-    formatCase(applicationContext, c, user),
-  );
+  const consolidatedCases =
+    formattedCase.consolidatedCases?.map(c =>
+      formatCase(applicationContext, c, user),
+    ) ?? [];
 
   const allTrialSessions = get(state.trialSessions);
 
