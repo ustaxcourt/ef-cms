@@ -24,11 +24,9 @@ describe('Trial Session - Notice Change of Date', () => {
       },
     );
 
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
-      'contain.text',
-      'Trial session updated',
-    );
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
 
     cy.get('[data-testid="set-calendar-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
@@ -112,11 +110,9 @@ describe('Trial Session - Notice Change of Date', () => {
       },
     );
 
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
-      'contain.text',
-      'Trial session updated',
-    );
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
 
     cy.get('[data-testid="set-calendar-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
@@ -214,11 +210,9 @@ describe('Trial Session - Notice Change of Date', () => {
       },
     );
 
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
-      'contain.text',
-      'Trial session updated',
-    );
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
 
     cy.get('[data-testid="set-calendar-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
@@ -244,23 +238,32 @@ describe('Trial Session - Notice Change of Date', () => {
 
     cy.get('[data-testid="trial-session-location-link"]').click();
     cy.get('[data-testid="edit-trial-session"]').click();
-    cy.get('[data-testid="start-date-picker"]').eq(1).clear();
-    cy.get('[data-testid="start-date-picker"]').eq(1).type('02/01/2050');
+
+    cy.get('[data-testid="start-date-picker"]').eq(1).as('START_DATE_PICKER');
+
+    cy.get('@START_DATE_PICKER').clear();
+    cy.get('@START_DATE_PICKER').type('02/01/2050');
     cy.get('[data-testid="trial-session-courthouse-name"]').clear();
     cy.get('[data-testid="trial-session-courthouse-name"]').type(
       'Updated Courthouse',
     );
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.get('[data-testid="modal-button-cancel"]').click();
-    cy.get('[data-testid="start-date-picker"]').eq(1).clear();
-    cy.get('[data-testid="start-date-picker"]').eq(1).type('01/01/2050');
+    cy.get('@START_DATE_PICKER').clear();
+    cy.get('@START_DATE_PICKER').type('01/01/2050');
     cy.get('[data-testid="submit-edit-trial-session"]').click();
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
+    cy.get('[data-testid="current-location-info"]').should(
       'contain.text',
-      'Trial session updated',
+      'Current Courthouse',
     );
+    cy.get('[data-testid="updated-location-info"]').should(
+      'contain.text',
+      'Updated Courthouse',
+    );
+    cy.get('[data-testid="modal-button-confirm"]').click();
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
   });
 
   it('should not show location change modal if location is restored to the original value after initial change', () => {
@@ -283,11 +286,9 @@ describe('Trial Session - Notice Change of Date', () => {
       },
     );
 
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
-      'contain.text',
-      'Trial session updated',
-    );
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
 
     cy.get('[data-testid="set-calendar-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
@@ -313,25 +314,32 @@ describe('Trial Session - Notice Change of Date', () => {
 
     cy.get('[data-testid="trial-session-location-link"]').click();
     cy.get('[data-testid="edit-trial-session"]').click();
+
+    cy.get('[data-testid="trial-session-courthouse-name"]').as(
+      'COURTHOUSE_NAME_INPUT',
+    );
+
     cy.get('[data-testid="start-date-picker"]').eq(1).clear();
     cy.get('[data-testid="start-date-picker"]').eq(1).type('02/01/2050');
-    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
-    cy.get('[data-testid="trial-session-courthouse-name"]').type(
-      'Updated Courthouse',
-    );
+    cy.get('@COURTHOUSE_NAME_INPUT').clear();
+    cy.get('@COURTHOUSE_NAME_INPUT').type('Updated Courthouse');
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.get('[data-testid="modal-button-cancel"]').click();
-    cy.get('[data-testid="trial-session-courthouse-name"]').clear();
-    cy.get('[data-testid="trial-session-courthouse-name"]').type(
-      'Current Courthouse',
-    );
+    cy.get('@COURTHOUSE_NAME_INPUT').clear();
+    cy.get('@COURTHOUSE_NAME_INPUT').type('Current Courthouse');
     cy.get('[data-testid="submit-edit-trial-session"]').click();
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('[data-testid="success-alert"]').should('exist');
-    cy.get('[data-testid="success-alert"]').should(
+    cy.get('[data-testid="current-start-date-info"]').should(
       'contain.text',
-      'Trial session updated',
+      '01/01/2050',
     );
+    cy.get('[data-testid="updated-start-date-info"]').should(
+      'contain.text',
+      '02/01/2050',
+    );
+    cy.get('[data-testid="modal-button-confirm"]').click();
+    cy.get('[data-testid="success-alert"]')
+      .should('exist')
+      .and('contain.text', 'Trial session updated');
   });
 });
