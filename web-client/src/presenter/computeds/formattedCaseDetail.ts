@@ -118,7 +118,9 @@ export const formattedCaseDetail = (
     }));
 
   const consolidatedCases =
-    (formattedCase.consolidatedCases as FormattedCase[]) || [];
+    formattedCase.consolidatedCases.map(c =>
+      formatCase(applicationContext, c, user),
+    ) || [];
 
   const allTrialSessions = get(state.trialSessions);
 
