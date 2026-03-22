@@ -230,7 +230,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### DWT
 **Current Installed DWT: 19.3.1**
-- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.37.3**
@@ -256,12 +256,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-**Installed Version: 24.10.13**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.13.1 so we should use a package that starts with 24.
+**Installed Version: 24.12.0**
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.0 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.0, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
-- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
-- [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
-- [Dependencies 02 16 2026](https://github.com/ustaxcourt/ef-cms/pull/9754/files), @Types/Node.js was updated from v24.10.9 to v24.10.13. Node.js version was left unchanged as the next available is Node 25+.
+- [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
 ### TypeScript
 **Installed Version: 5.9.3**
@@ -299,10 +297,16 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 
-### hashicorp/aws in .tf files
-**Installed Version: 6.32.1**
-- Updating hashicorp/aws version to 6.33.0 in .tf files caused failures during deployment to an experimental branch so it was reverted back to version 6.32.1.
-- upon updating please deploy to an experimental branch and confirm functionality.
+### eslint and @eslint/js
+**Installed Versions:**
+**eslint: 9.39.3**
+**@eslint/js: 9.39.3**
+- We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-import, eslint-plugin-jsx-a11y, eslint-plugin-react. Note that we do not use eslint-plugin-import any more so that could be removed if it remains the only one not updated to support version 10 of @eslint/js.
+- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+
+### bn.js
+**Installed Versions <5.2.3**
+- There is a new vulnerability in older versions of bn.js. Currently, this package is only used by cognito-local, one of our dev dependencies. 
 
 ## Troubleshooting
 

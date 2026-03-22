@@ -99,6 +99,7 @@ export class DocketEntry extends JoiValidationEntity {
   public docketNumbers?: string;
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
+  public documentStorageId?: string; // 8477TODO: make sure its not optional after migration
   public documentTitle: string;
   public documentType?: string;
   public eventCode: string; // technically optional as draft docketEntry does not require it
