@@ -208,7 +208,7 @@ table.ustc-table .ustc-button--unstyled {
   }
 
   &.virtualized {
-    // padding: 3px 0 1px 0 !important;
+    border-bottom: none !important;
     line-height: 1.4;
   }
 }
