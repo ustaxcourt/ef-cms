@@ -28,7 +28,10 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     start: -1,
     stop: -1,
   });
-  const [listDimensions, setListDimensions] = useState<{width: number, height: number} | null>(null);
+  const [listDimensions, setListDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   // Get row height from cache or provide a generous overestimate.
   // Overestimating is safe (extra whitespace), underestimating causes overlap.
