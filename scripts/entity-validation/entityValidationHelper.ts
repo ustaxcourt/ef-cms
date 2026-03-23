@@ -8,7 +8,8 @@ import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/ge
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
-import { createSpinner } from 'scripts/helpers/consoleSpinner';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+import { createSpinner } from '../helpers/consoleSpinner';
 import os from 'os';
 import path from 'path';
 
@@ -21,7 +22,7 @@ const getAllDocketNumbers = async () => {
   });
 };
 
-const getAllMessages = async (limit?: number, offset?: number) => {
+export const getAllMessages = async (limit?: number, offset?: number) => {
   const messages = await getDbReader(async reader => {
     let query = reader
       .selectFrom('dwMessage as m')
@@ -85,7 +86,7 @@ const getAllPractionerDocuments = async () => {
 };
 
 const formatElapsedTime = (startTime: number) => {
-  const elapsedMs = Date.now() - startTime;
+  const elapsedMs = getCurrentDateTimeInMillis() - startTime;
   const totalSeconds = Math.floor(elapsedMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -108,7 +109,7 @@ const entityHelperFunctions = {
 };
 
 const performValidation = async (entityName: string) => {
-  const startTime = Date.now();
+  const startTime = getCurrentDateTimeInMillis();
   const spinner = createSpinner(`Starting ${entityName} Entity Validation...`);
   const validationErrors: string[] = [];
   const numThreads = Math.max(1, os.cpus().length - 1);

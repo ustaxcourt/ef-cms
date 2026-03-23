@@ -2,9 +2,9 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { createValidationIdentifier } from 'scripts/entity-validation/createValidationIdentifier';
-import { entityValidationFunctions } from 'scripts/entity-validation/entityValidationHelper';
-import { getSSMItem, putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
+import { createValidationIdentifier } from './createValidationIdentifier';
+import { entityValidationFunctions } from './entityValidationHelper';
+import { getSSMItem, putSSMItem } from '../../shared/admin-tools/aws/ssmHelper';
 
 const SSM_KEY = 'entity-validation-fingerprints-map';
 const VALIDATION_REGEX = /validation/i;
@@ -29,7 +29,7 @@ const ENTITIES_TO_CHECK = [
   ...ENTITIES_OF_CASE,
 ];
 
-async function getEntityIdentifiers(): Promise<string> {
+export async function getEntityIdentifiers(): Promise<string> {
   const validationIdentityMap: Record<string, string> = {};
   const directoryPath = path.join(
     __dirname,
@@ -39,11 +39,7 @@ async function getEntityIdentifiers(): Promise<string> {
 
   for (const file of files) {
     const fileName = path.basename(file.toString());
-    if (
-      !fileName.endsWith('.ts') ||
-      fileName.endsWith('.test.ts') ||
-      !ENTITIES_TO_CHECK.includes(fileName)
-    ) {
+    if (!ENTITIES_TO_CHECK.includes(fileName)) {
       continue;
     }
 
@@ -63,7 +59,7 @@ async function getEntityIdentifiers(): Promise<string> {
   return JSON.stringify(validationIdentityMap, null, 2);
 }
 
-function detectEntityValidationChange(
+export function detectEntityValidationChange(
   currFingerprint: Record<string, string>,
   newFingerprint: Record<string, string>,
 ): string[] {
@@ -78,7 +74,7 @@ function detectEntityValidationChange(
   );
 }
 
-async function validateEntitiesWithNewRules(
+export async function validateEntitiesWithNewRules(
   changedEntities: string[],
 ): Promise<string[]> {
   let validationOutput: string[] = [];
@@ -90,7 +86,6 @@ async function validateEntitiesWithNewRules(
     if (processedEntityNames.has(entityName)) continue;
     processedEntityNames.add(entityName);
 
-    console.log('Entity Name: ', entityName);
     if (ENTITIES_OF_CASE.includes(`${entityName}.ts`)) {
       isEntityOfCase = true;
     } else {
@@ -114,7 +109,9 @@ async function validateEntitiesWithNewRules(
   return validationOutput;
 }
 
-async function getCurrentFingerprintFromSSM(): Promise<string | undefined> {
+export async function getCurrentFingerprintFromSSM(): Promise<
+  string | undefined
+> {
   try {
     return await getSSMItem(SSM_KEY);
   } catch {
@@ -136,7 +133,7 @@ export function resolveChangedEntities(
   );
 }
 
-async function main(): Promise<number> {
+export async function runEntityValidation(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
   let entityValidationRequired: string | undefined;
@@ -151,8 +148,6 @@ async function main(): Promise<number> {
     newFingerprint,
     entityValidationRequired,
   );
-
-  console.log('changedEntities:', changedEntities);
 
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');
@@ -172,12 +167,13 @@ async function main(): Promise<number> {
     return 0;
   }
 }
-
-main()
-  .then(returnVal => {
-    process.exit(returnVal);
-  })
-  .catch(err => {
-    console.log('Error:', err);
-    process.exit(1);
-  });
+export async function main(): Promise<void> {
+  await runEntityValidation()
+    .then(returnVal => {
+      process.exit(returnVal);
+    })
+    .catch(err => {
+      console.log('Error:', err);
+      process.exit(1);
+    });
+}
