@@ -24,6 +24,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d96',
+    originallyFiledDocketNumber: '103-22',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -120,6 +121,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a36cce40-903a-4fd9-984e-688109f73e68',
+    originallyFiledDocketNumber: '103-22',
   },
   {
     isStricken: false,
@@ -148,6 +150,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fa54226d-b9df-44e2-8920-f113ad09ab14',
+    originallyFiledDocketNumber: '103-22',
   },
   {
     servedParties: [{ name: 'Virginia Vincent' }],
@@ -189,6 +192,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4e3e97b1-5b5a-492f-8553-21e2a020211d',
+    originallyFiledDocketNumber: '101-11',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -221,6 +225,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2f4da222-d950-4882-a367-e1728a01f5cf',
+    originallyFiledDocketNumber: '101-11',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -253,6 +258,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'be201462-2bc7-4c22-8428-dd06dbf0d00e',
+    originallyFiledDocketNumber: '101-11',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -285,6 +291,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '002c5b96-e75d-4528-9ccc-2d37bc5ed8e4',
+    originallyFiledDocketNumber: '101-11',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -317,6 +324,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '93fa41fc-0269-4cdf-8916-2193cd251f71',
+    originallyFiledDocketNumber: '101-16',
   },
   {
     servedParties: [{ name: 'Gwendolyn Cross' }],
@@ -360,6 +368,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'bf525973-e788-4516-8bf3-b70232cb79fc',
+    originallyFiledDocketNumber: '101-16',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -392,6 +401,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '65b38aaf-6b5d-4b62-885e-447b71c01e07',
+    originallyFiledDocketNumber: '101-16',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -424,6 +434,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'eb76ba63-ba11-47c8-b6ce-e302fbde77c6',
+    originallyFiledDocketNumber: '101-16',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -452,6 +463,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '59d0a6e9-6093-4219-9b8b-be2f9cf0126f',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     isStricken: false,
@@ -544,6 +556,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '36d9f072-4d6a-46e6-aa60-e0c76386d114',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     isStricken: false,
@@ -569,6 +582,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7cfdb588-3239-4cf8-9dea-028028024415',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     isStricken: false,
@@ -594,6 +608,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0048b9e5-15e8-4315-8b9c-8a2e181205e4',
+    originallyFiledDocketNumber: '101-20',
   },
   {
     isStricken: false,
@@ -620,6 +635,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cb323daf-c541-4645-bb44-232255d03d40',
+    originallyFiledDocketNumber: '101-20',
   },
   {
     servedParties: [{ name: 'Bill Burr', email: 'petitioner@example.com' }],
@@ -650,6 +666,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd2bb9cad-831f-4ba9-bce4-d832e5b5fd5d',
+    originallyFiledDocketNumber: '101-20',
   },
   {
     servedParties: [
@@ -691,6 +708,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0665bf1e-7e02-46db-b386-09168d0a51ce',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -732,6 +750,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0a504eed-b9f1-433a-b65d-58059dfb3eae',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -773,6 +792,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0d5b0197-4e9f-4d18-b7f3-afbc60439592',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -814,6 +834,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '136641e4-7354-4cea-8afe-80b69b01e519',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -855,6 +876,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '138ef5eb-6a17-48d7-b04d-119e70dc9c2c',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -896,6 +918,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '147d1042-47ac-4c5d-b357-e0adbf14ff1b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -936,6 +959,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '188cd363-1f97-43fb-bee0-9518234e6604',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -977,6 +1001,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1bcc24f4-fbde-4558-8864-c2549e0e072e',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1018,6 +1043,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1bfa9054-7aa1-41f1-9621-c2deb237a772',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1059,6 +1085,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1c64f7e0-9542-493c-8038-de0bd70b12da',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1100,6 +1127,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1d024c16-ea77-4bc6-82df-d033ac9a259f',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     isStricken: false,
@@ -1127,6 +1155,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '9a869547-4e67-433e-a874-f9dd98358fc8',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1168,6 +1197,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '21b0d03e-872e-473c-b253-003f2bfcb31b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1209,6 +1239,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2290bf31-89b4-4e0f-b0c8-6d803d452ea7',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1250,6 +1281,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '23ccb2e3-d100-41c8-967d-cd0cd7e8591d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1291,6 +1323,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2463afed-04ed-43a3-999f-598bba8e5618',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1332,6 +1365,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '24699007-472b-4468-81c9-ce4def303d01',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1373,6 +1407,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '28104b84-5e95-498d-9e94-ce37e94b5882',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1414,6 +1449,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '282ac7db-9d05-4751-ab4d-1d2e9ff5a4d9',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1455,6 +1491,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '28893ad5-c8ed-4be8-9c99-8e81a749448e',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     isStricken: false,
@@ -1480,6 +1517,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '29cb348b-2a4e-4848-b6ee-df67867e4336',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1521,6 +1559,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2a18bafe-a3d4-459d-ad54-1ad726ac45cb',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1562,6 +1601,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2b0c806e-0568-4e5b-9be8-fdb70a80db2d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1603,6 +1643,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2c200b3a-8b35-4a9e-a4f9-d2a19cd9fe8b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1644,6 +1685,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2c9cd454-41eb-4b49-bda8-bc439cca9b94',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     isStricken: false,
@@ -1671,6 +1713,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1712,6 +1755,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '32506b52-8ca6-48ba-a06e-a164b928c3fe',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1753,6 +1797,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '32e5e090-e7aa-4372-9a7a-47a5c088fe12',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1794,6 +1839,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '339e5bb5-c72e-4623-a81c-7742c65d349f',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1834,6 +1880,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '38f3f4d9-39f2-40e8-8d3b-c52bbf85f499',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1875,6 +1922,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '39929943-d4e4-4fa7-9759-409d8478460b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1916,6 +1964,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3e76cdd7-ad55-4994-b6d1-4509a6f325e3',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1957,6 +2006,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '41c928b3-e3f8-4c4e-a934-ab6f96e33b2d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -1998,6 +2048,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '42de4ad0-415a-4187-b4a2-393eff217b14',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2039,6 +2090,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4474b40e-1d43-4285-a5c9-8a2e499c5fc2',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2080,6 +2132,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4ad4e43a-b923-4833-9a88-e96ba2c638da',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2121,6 +2174,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4f0a41ac-bf35-438c-aaa2-904b7fc48e0d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2162,6 +2216,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '52ef88e3-531e-4066-8c17-6801f5def867',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2203,6 +2258,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '55f57fc6-3eab-48e0-99a3-74a7ba0f1b32',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2244,6 +2300,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5925a8c3-4a38-4e22-914c-525240407ec7',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [{ name: 'Mona Schultz', email: 'petitioner@example.com' }],
@@ -2281,6 +2338,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '59f488a9-cc48-43c3-aeb4-cf2bfce33e77',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2322,6 +2380,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5c55d636-b54a-44e4-b833-3bc8cd5e58b7',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2363,6 +2422,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5c97e94b-6a52-4a4f-a93a-72be091c8343',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2404,6 +2464,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5eafc3b0-d615-4d60-9eb3-8a5c6a3e427b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2445,6 +2506,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '605b7af3-c9a2-4465-8248-697c1e5e7436',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2486,6 +2548,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '612966b0-3e3d-4299-9739-102b2279bcf3',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2527,6 +2590,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '61750a69-6a7d-4fe9-aa97-63791d3f689f',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     isPaper: true,
@@ -2558,6 +2622,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '619cdd0c-2be8-4fdb-b1d6-90b7bc6a1f8d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2599,6 +2664,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6af9d414-b95b-4219-9a66-1a28f1587e25',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2640,6 +2706,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6b0f83fc-5231-40d7-b955-a4c142024eb0',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2681,6 +2748,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7043e7e4-e801-431c-8a55-f65ff63fa4d6',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2722,6 +2790,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '72746ef3-9f35-47e5-8a3f-fb653c788ba3',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2763,6 +2832,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7313519e-e620-44d8-ad43-917b2da97a82',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2804,6 +2874,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '74472ec4-9aa8-456c-87bc-a760b9b3fb96',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2845,6 +2916,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '75ddcef8-ba63-4b1e-8053-8e8aad768476',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2886,6 +2958,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '776e83bb-7111-4bbf-84f0-b23811e1f33c',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2927,6 +3000,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '798d6073-abc1-45bb-a67b-16b9f9b0a06a',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -2968,6 +3042,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7a4fbd88-67a3-4a0f-b992-fe4d4f169fd5',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3009,6 +3084,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '81e68771-2b06-4679-8ee7-6a481f8ef717',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3050,6 +3126,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '861cb0e7-5e0b-458b-8fcb-8423a90e97e2',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3091,6 +3168,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '886148e2-2513-4b0f-8629-646b6d067999',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3132,6 +3210,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8afb52d4-ebff-4854-8277-4547a265cd1a',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3173,6 +3252,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8c3073f5-bfb1-4954-9c13-0873ef4f1c84',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3214,6 +3294,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8e320898-15e5-4a2a-9dd3-10056854a2b8',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3255,6 +3336,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8e490ccc-b7d0-4e74-be66-13cdc9ccbfcd',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3296,6 +3378,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '905acb0c-fe4b-4776-a1b1-a2fd80dbfab1',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3337,6 +3420,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '92c2bfac-c8b5-4f7c-a506-9051eb24b364',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3378,6 +3462,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '970ca8ab-867f-43e5-b55d-993f6943e721',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3419,6 +3504,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '9ae7a678-94c7-4309-9777-93b29635c4d9',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3460,6 +3546,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a3ad99d0-ee2b-4b8b-9416-83d2aa98170c',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3501,6 +3588,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a45c516a-801c-4042-b01c-84dc4735082b',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3542,6 +3630,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a8cf7ece-09b8-426e-95e3-209e4e1140e0',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3583,6 +3672,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a94e01dc-c3ca-4c22-a680-384efad8e391',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3624,6 +3714,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac2ef71e-0f07-4230-bceb-54a3b2d6b3da',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3665,6 +3756,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac8f1f55-6770-47a3-b380-563a9f07c808',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3706,6 +3798,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b3e0bec2-ad3b-44b0-ab14-906296db528d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3747,6 +3840,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b47acaeb-a168-4c50-a503-5411b2a8a447',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3788,6 +3882,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b6bbb8de-d739-4bc2-8b09-73eb661b2c32',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3829,6 +3924,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b76bce5a-6e2a-4ba1-a32d-e08e1520148f',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3870,6 +3966,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b782c76c-6c63-4d68-adfe-7344ebbcc695',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3911,6 +4008,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b82a72e4-2e89-436c-a183-ac92375753ab',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3952,6 +4050,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'baf2e9d7-c018-43cf-a233-997e2cdb97e6',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -3993,6 +4092,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'bbb9dce3-077d-432e-a92c-44f7df530d33',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4034,6 +4134,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'bc2b694e-033a-4b0c-8649-5a397ecb7ed8',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4075,6 +4176,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c247c24b-0203-46c6-9912-e73a70a2627d',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4116,6 +4218,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c2c5bcc8-7052-4748-93bd-02d8d81ddd77',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4157,6 +4260,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c3c78a38-cfa6-441e-81ae-f11275c671ea',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4198,6 +4302,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c608bcef-80dc-46ee-a61b-10571a51a509',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4239,6 +4344,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cc32fc65-a209-4313-a8f5-190443f486f4',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4280,6 +4386,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd21a20d8-810f-4a19-8507-3147a8140730',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4321,6 +4428,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd25906c7-ad38-4de8-83db-c88b249b03e7',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4362,6 +4470,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd5fdf594-691c-40cc-b454-3927d4797bfb',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4403,6 +4512,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd88adae6-845f-4d68-b0ad-e04abd7d88c6',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4444,6 +4554,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd88e2576-7c62-4bb6-8873-efa855bec5a1',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4485,6 +4596,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'de09d13b-d779-4d12-804a-63221b24d769',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4526,6 +4638,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'df6939f8-320a-4fce-87a5-90abd8b46454',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4567,6 +4680,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e56f8af2-6ab7-49b7-9bff-55f75087f0af',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4608,6 +4722,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e6c755a2-5a8b-4c81-a936-953e89d66831',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4649,6 +4764,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e7646159-4369-41c5-b973-2f0b889314f5',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4690,6 +4806,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e9bc8371-eeec-4519-aff8-c5febb3761d6',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4731,6 +4848,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'eef91e0d-a869-4d1c-89d2-44180e91e0e0',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4772,6 +4890,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ef55de39-639e-4658-a240-26408f56b49c',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4813,6 +4932,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f1fc75c4-6456-4d96-9b1a-29efe3cb2652',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4854,6 +4974,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f8d817ef-91a3-43ba-bad7-7711c8381e1e',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4895,6 +5016,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f9467aaf-91d8-4869-a61f-e4443a83c995',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4936,6 +5058,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fcbf5bfa-1fdc-4874-b2c9-50a8ff375ba1',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [
@@ -4977,6 +5100,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'feab0f2b-697c-4404-9ea8-073b89153ad5',
+    originallyFiledDocketNumber: '101-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -5070,6 +5194,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '29cd6ac3-5061-48b4-83e5-dd83b5d26bfe',
+    originallyFiledDocketNumber: '101-22',
   },
   {
     isStricken: false,
@@ -5098,6 +5223,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '461bafd6-4603-4659-b9b5-0c0c5b829dc3',
+    originallyFiledDocketNumber: '101-22',
   },
   {
     isStricken: false,
@@ -5126,6 +5252,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '23972755-a4db-4c41-884f-1e34e6601b3f',
+    originallyFiledDocketNumber: '101-22',
   },
   {
     stampData: {},
@@ -5151,6 +5278,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '384f04a1-9c16-4417-9620-8fcc9a5894cf',
+    originallyFiledDocketNumber: '101-23',
   },
   {
     stampData: {},
@@ -5179,6 +5307,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-23',
     multiDocketedOn: [],
     documentStorageId: '816c2c35-c645-44bc-8079-1fe162ea1c93',
+    originallyFiledDocketNumber: '101-23',
   },
   {
     stampData: {},
@@ -5207,6 +5336,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-23',
     multiDocketedOn: [],
     documentStorageId: 'ceb40c30-d2b1-4c36-b839-426a108bd4cd',
+    originallyFiledDocketNumber: '101-23',
   },
   {
     stampData: {},
@@ -5240,6 +5370,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: '077bd89c-95da-4579-9e8e-6f32b3bc7964',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5272,6 +5403,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: '3c10fe8a-d9bb-4e11-86ee-41afca5b6953',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5304,6 +5436,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: 'a46159f1-dae3-43d5-a86d-7bd0e1cd89b8',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5336,6 +5469,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: 'a96fd3bf-986b-4571-a9a5-fe1e918b7676',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5369,6 +5503,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: 'd200c00a-9f14-4fa3-a3a3-3b765d8803ea',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5400,6 +5535,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: 'db948914-b0a6-4b1d-9d6a-84ea236a433c',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     stampData: {},
@@ -5429,6 +5565,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-24',
     multiDocketedOn: [],
     documentStorageId: 'eecb6a63-cad4-4a42-8c59-dfb1fe823de0',
+    originallyFiledDocketNumber: '101-24',
   },
   {
     isStricken: false,
@@ -5455,6 +5592,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '89c781f6-71ba-4ead-93d8-c681c2183a73',
+    originallyFiledDocketNumber: '102-19',
   },
   {
     servedParties: [
@@ -5501,6 +5639,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8b32a54f-f135-4239-9eb1-cb0d437d2a51',
+    originallyFiledDocketNumber: '102-19',
   },
   {
     isStricken: false,
@@ -5526,6 +5665,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f59dd3f8-a01d-4bf7-ba4f-fea522863003',
+    originallyFiledDocketNumber: '102-19',
   },
   {
     servedParties: [
@@ -5563,6 +5703,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1c4ec981-1604-46fd-91f4-ff11d0227862',
+    originallyFiledDocketNumber: '102-20',
   },
   {
     isStricken: false,
@@ -5589,6 +5730,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a',
+    originallyFiledDocketNumber: '102-20',
   },
   {
     servedParties: [
@@ -5657,6 +5799,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd854a954-7332-4e92-93bd-dc28c9fea0a5',
+    originallyFiledDocketNumber: '102-20',
   },
   {
     stampData: {},
@@ -5682,6 +5825,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '1d78b8d4-0810-4720-8037-1f8b1031f185',
+    originallyFiledDocketNumber: '102-22',
   },
   {
     stampData: {},
@@ -5710,6 +5854,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-22',
     multiDocketedOn: [],
     documentStorageId: '578a9007-b9ad-4201-9aa7-fc87e7e69106',
+    originallyFiledDocketNumber: '102-22',
   },
   {
     stampData: {},
@@ -5738,6 +5883,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-22',
     multiDocketedOn: [],
     documentStorageId: 'f23548b8-59d3-48e7-b144-f7e69da4102e',
+    originallyFiledDocketNumber: '102-22',
   },
   {
     stampData: {},
@@ -5813,6 +5959,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-67',
     multiDocketedOn: [],
     documentStorageId: '58c73359-3f04-4912-bd18-5d8b6cd49690',
+    originallyFiledDocketNumber: '102-67',
   },
   {
     stampData: {},
@@ -5890,6 +6037,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-67',
     multiDocketedOn: [],
     documentStorageId: '8738fa09-bb16-43e0-a9c5-f528751bbd11',
+    originallyFiledDocketNumber: '102-67',
   },
   {
     stampData: {},
@@ -5933,6 +6081,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-67',
     multiDocketedOn: [],
     documentStorageId: 'c7ea55fe-1716-47bb-b2c5-8112fea11d14',
+    originallyFiledDocketNumber: '102-67',
   },
   {
     stampData: {},
@@ -5962,6 +6111,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-67',
     multiDocketedOn: [],
     documentStorageId: 'ee0c823f-8b75-4e41-82f4-ae4270fa3095',
+    originallyFiledDocketNumber: '102-67',
   },
   {
     stampData: {},
@@ -5987,6 +6137,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: 'f724b153-8ae8-4463-9eaa-f14789de1c7f',
+    originallyFiledDocketNumber: '102-67',
   },
   {
     servedParties: [
@@ -6021,6 +6172,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '27fd493a-e6b1-4e54-94fb-5363f0ba599b',
+    originallyFiledDocketNumber: '103-19',
   },
   {
     isStricken: false,
@@ -6046,6 +6198,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e9162202-5d63-4a21-ab7a-1ad1bcf533cd',
+    originallyFiledDocketNumber: '103-19',
   },
   {
     isStricken: false,
@@ -6072,6 +6225,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7cdf7995-387b-4881-9369-c7b4950701fe',
+    originallyFiledDocketNumber: '103-19',
   },
   {
     isPaper: true,
@@ -6141,6 +6295,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f1aa4aa2-c214-424c-8870-d0049c5744d7',
+    originallyFiledDocketNumber: '103-19',
   },
   {
     isStricken: false,
@@ -6211,6 +6366,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2cca1543-21b2-4783-a1de-eeaaf269d32c',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     stampData: {},
@@ -6251,6 +6407,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-20',
     multiDocketedOn: [],
     documentStorageId: '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6280,6 +6437,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4d736f72-6312-4f7f-886e-210a0074fdc3',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6344,6 +6502,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7b2a2d09-fc39-44ee-a28b-9dfd9088437d',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6372,6 +6531,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac62f25a-49f9-46a5-aed7-d6b955a2dc34',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     isStricken: false,
@@ -6397,6 +6557,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f6f9ce81-8b65-433c-8c7b-f0ffa7a74068',
+    originallyFiledDocketNumber: '103-20',
   },
   {
     stampData: {},
@@ -6465,6 +6626,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '66ce5220-1981-4612-af2d-1208475b7518',
+    originallyFiledDocketNumber: '103-67',
   },
   {
     stampData: {},
@@ -6497,6 +6659,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-67',
     multiDocketedOn: [],
     documentStorageId: '7095aadf-b330-4bb0-9920-9c55a516e853',
+    originallyFiledDocketNumber: '103-67',
   },
   {
     stampData: {},
@@ -6572,6 +6735,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-67',
     multiDocketedOn: [],
     documentStorageId: 'ac6a8ab2-92f6-4320-aade-ca36b3c8d54b',
+    originallyFiledDocketNumber: '103-67',
   },
   {
     stampData: {},
@@ -6601,6 +6765,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-67',
     multiDocketedOn: [],
     documentStorageId: 'b96ca6f3-7a97-4205-9dbc-4e343c5a25ee',
+    originallyFiledDocketNumber: '103-67',
   },
   {
     stampData: {},
@@ -6633,6 +6798,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-67',
     multiDocketedOn: [],
     documentStorageId: 'd7fece68-e193-4fed-afb4-c0c656382c09',
+    originallyFiledDocketNumber: '103-67',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6698,6 +6864,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '237ad5eb-a558-463b-8859-f55d185e2939',
+    originallyFiledDocketNumber: '104-17',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6728,6 +6895,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '596223c1-527b-46b4-98b0-1b10455e9495',
+    originallyFiledDocketNumber: '104-17',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6757,6 +6925,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fa9ecad7-f277-4e24-9485-83c1fe54dff7',
+    originallyFiledDocketNumber: '104-17',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6822,6 +6991,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5a87ec6c-f15a-4a3b-a54e-e77b24a3ac63',
+    originallyFiledDocketNumber: '104-18',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6852,6 +7022,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7d22bd59-0d08-4c35-975f-e4031f4295ec',
+    originallyFiledDocketNumber: '104-18',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6881,6 +7052,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '449013bc-f2a1-4033-bdfe-10ab5610397c',
+    originallyFiledDocketNumber: '104-18',
   },
   {
     servedParties: [{ name: 'Mufutau Wade', email: 'petitioner@example.com' }],
@@ -6911,6 +7083,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '59ff70cd-b63c-4522-9ef6-c246890383ff',
+    originallyFiledDocketNumber: '104-19',
   },
   {
     servedParties: [{ name: 'Mufutau Wade', email: 'petitioner@example.com' }],
@@ -6939,6 +7112,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'add36745-8e77-450b-a8dd-6f34272fe1d5',
+    originallyFiledDocketNumber: '104-19',
   },
   {
     isStricken: false,
@@ -6964,6 +7138,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0936977f-702c-49a8-bde2-4909ea9f2dae',
+    originallyFiledDocketNumber: '104-19',
   },
   {
     isStricken: false,
@@ -6990,6 +7165,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c63be3f2-2240-451e-b6bd-8206d52a070b',
+    originallyFiledDocketNumber: '104-19',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -7055,6 +7231,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c6056c81-44bb-46a1-a0d4-b943dbf3db8e',
+    originallyFiledDocketNumber: '104-20',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -7085,6 +7262,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '88a9ab2d-e248-4962-acd3-ceb5313477ca',
+    originallyFiledDocketNumber: '104-20',
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -7114,6 +7292,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0ba963ba-4f4f-4ba5-b7d4-46ab6a4346df',
+    originallyFiledDocketNumber: '104-20',
   },
   {
     stampData: {},
@@ -7146,6 +7325,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-23',
     multiDocketedOn: [],
     documentStorageId: '38b33b7b-2017-41fe-9453-e9732ebf28f7',
+    originallyFiledDocketNumber: '104-23',
   },
   {
     stampData: {},
@@ -7175,6 +7355,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '5157315b-1116-465e-9fa9-f81be578d6b8',
+    originallyFiledDocketNumber: '104-23',
   },
   {
     stampData: {},
@@ -7207,6 +7388,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-23',
     multiDocketedOn: [],
     documentStorageId: '86018db0-2fb6-4783-8027-3f85204da186',
+    originallyFiledDocketNumber: '104-23',
   },
   {
     stampData: {},
@@ -7236,6 +7418,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-23',
     multiDocketedOn: [],
     documentStorageId: 'a8c259e6-b6ec-4f0d-b07e-2db3c9c55737',
+    originallyFiledDocketNumber: '104-23',
   },
   {
     stampData: {},
@@ -7302,6 +7485,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '276d3782-e53d-4474-a78c-028300ae818d',
+    originallyFiledDocketNumber: '104-67',
   },
   {
     stampData: {},
@@ -7334,6 +7518,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-67',
     multiDocketedOn: [],
     documentStorageId: '4c6a51c2-8012-4bcd-9456-3b89ed2facbd',
+    originallyFiledDocketNumber: '104-67',
   },
   {
     stampData: {},
@@ -7369,6 +7554,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-67',
     multiDocketedOn: [],
     documentStorageId: '7871cca0-3f28-4496-9073-35a39ca3d3e4',
+    originallyFiledDocketNumber: '104-67',
   },
   {
     stampData: {},
@@ -7447,6 +7633,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-67',
     multiDocketedOn: [],
     documentStorageId: 'd151b42b-dc6c-461e-b6fa-81ac0c712dda',
+    originallyFiledDocketNumber: '104-67',
   },
   {
     stampData: {},
@@ -7482,6 +7669,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-67',
     multiDocketedOn: [],
     documentStorageId: 'd2afb9ca-4089-4899-b8f2-becc24b32d07',
+    originallyFiledDocketNumber: '104-67',
   },
   {
     isStricken: false,
@@ -7508,6 +7696,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '19aa34f0-49b0-402a-bcff-f4ecea7d0077',
+    originallyFiledDocketNumber: '105-19',
   },
   {
     servedParties: [
@@ -7543,6 +7732,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c03ee807-0294-47d0-8d5f-73e33e79d456',
+    originallyFiledDocketNumber: '105-19',
   },
   {
     isStricken: false,
@@ -7568,6 +7758,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f1aa4aa3-c214-424c-8870-d0049c5744d7',
+    originallyFiledDocketNumber: '105-19',
   },
   {
     servedParties: [
@@ -7703,6 +7894,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-20',
     multiDocketedOn: [],
     documentStorageId: '3eb53932-1a44-40d1-bfb8-d9e908b0b32e',
+    originallyFiledDocketNumber: '105-20',
   },
   {
     servedParties: [
@@ -7733,6 +7925,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'abba69d5-a96a-423c-937f-b4d1c5442bf4',
+    originallyFiledDocketNumber: '105-20',
   },
   {
     servedParties: [
@@ -7764,6 +7957,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
+    originallyFiledDocketNumber: '105-20',
   },
   {
     servedParties: [
@@ -7799,6 +7993,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fa531516-615e-420d-ac0a-4067905b6860',
+    originallyFiledDocketNumber: '105-20',
   },
   {
     stampData: {},
@@ -7828,6 +8023,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '08ccdb92-749c-4b4e-b932-844244451d60',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -7876,6 +8072,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '1340f1d9-1d84-402a-b78b-2e074e0efd00',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -7907,6 +8104,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '18898c47-0131-405e-a65e-54a5b832d972',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -7952,6 +8150,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '209c9dab-7d96-416f-ba3b-403450a83f12',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -7999,6 +8198,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '283e7fc3-25dc-4ae4-8870-7a111d7584da',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8050,6 +8250,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '2e8b77ec-4c14-470e-9b04-58c9c8370ff1',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8083,6 +8284,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '368cb2f3-e2ac-4a26-b0d6-4c7fc158a3c1',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8119,6 +8321,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '48b69498-f097-4a29-82af-43de8b634b4c',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8169,6 +8372,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '49b0f0f0-fb1d-4418-99b1-857ba4324d1e',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8198,6 +8402,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '49f730f8-c580-40da-bfbe-4b1a4bcb1852',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8242,6 +8447,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '5287c2df-e09f-4071-8b50-b9005a7c45e5',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8293,6 +8499,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '533322f8-b0c9-4a7b-a5d1-2d61d0191b18',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8340,6 +8547,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '5c14e783-9e0e-45e6-bbc0-eb39f3d301c2',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8365,6 +8573,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '6bb4c8e7-c39e-4a0f-b34d-1f444b483a01',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8411,6 +8620,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '708e3c41-ac8f-4267-8a33-91234d738292',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8458,6 +8668,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '774e1aee-6713-4c2c-838c-4d7699465c48',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8489,6 +8700,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '7e1eee3d-d5a5-42a6-9c5d-03e383e03591',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8534,6 +8746,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '804132ad-8aae-409e-9e7d-de2dfe4279b5',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8588,6 +8801,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '88096d9f-e3c6-46ea-a7e8-703b941458dd',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8637,6 +8851,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: '8b7920c7-d7ef-41b7-87fb-f16eaf270743',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8736,6 +8951,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'a61b57da-3931-47d5-8d5b-43e95d2829a3',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8785,6 +9001,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'b19664bb-2055-46e3-98fc-f52f6123b40d',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8835,6 +9052,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'b9dbbef9-0068-4ad7-bb52-396e811ae4d0',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8879,6 +9097,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'bda62f28-77c1-48f7-8072-bcecbbfe833a',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8924,6 +9143,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'c832356c-ad41-40ff-ad00-7fabc19b92bf',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -8970,6 +9190,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'c9e0e099-c805-43a9-a45f-958325835571',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9018,6 +9239,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'cc7bdd64-ea38-4575-b87a-40c20daf02eb',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9066,6 +9288,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'd8db611a-7577-41f2-8ea8-c501e8b164ed',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9117,6 +9340,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'e3948d50-caaa-42be-8023-5bf935476c0b',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9168,6 +9392,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9219,6 +9444,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'ff713546-dbbe-4d59-b543-3472484332aa',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9269,6 +9495,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-23',
     multiDocketedOn: [],
     documentStorageId: 'ffbf3ef1-efd3-4193-8494-3dbc20a54e4d',
+    originallyFiledDocketNumber: '105-23',
   },
   {
     stampData: {},
@@ -9388,6 +9615,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-67',
     multiDocketedOn: [],
     documentStorageId: 'c21fe610-217c-4b37-b307-9c0bf9d89540',
+    originallyFiledDocketNumber: '105-67',
   },
   {
     stampData: {},
@@ -9413,6 +9641,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: 'e7680a21-6f9e-4741-b295-e312907cf30b',
+    originallyFiledDocketNumber: '105-67',
   },
   {
     stampData: {},
@@ -9445,6 +9674,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-67',
     multiDocketedOn: [],
     documentStorageId: 'ec58ae23-9a20-499c-86d5-94bb463e2505',
+    originallyFiledDocketNumber: '105-67',
   },
   {
     stampData: {},
@@ -9477,6 +9707,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-67',
     multiDocketedOn: [],
     documentStorageId: 'f4fc88f2-e0bc-49a2-834b-0e51e51f1069',
+    originallyFiledDocketNumber: '105-67',
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9508,6 +9739,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '099eb5b6-802f-4df8-8538-22a87f2f2aa6',
+    originallyFiledDocketNumber: '106-19',
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9574,6 +9806,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2da6d239-555a-40e8-af81-1949c8270cd7',
+    originallyFiledDocketNumber: '106-19',
   },
   {
     isStricken: false,
@@ -9600,6 +9833,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3feab5a0-5fe5-4a90-9364-7b804a2bf932',
+    originallyFiledDocketNumber: '106-19',
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9632,6 +9866,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7a923abd-fc41-407a-b76b-7f724fa5d47f',
+    originallyFiledDocketNumber: '106-19',
   },
   {
     stampData: {},
@@ -9663,6 +9898,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '106-23',
     multiDocketedOn: [],
     documentStorageId: '1fdbd670-febb-44e6-a257-bb3b6e3f6b15',
+    originallyFiledDocketNumber: '106-23',
   },
   {
     stampData: {},
@@ -9688,6 +9924,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: '7d357d67-7a95-4097-872e-fce395362a7e',
+    originallyFiledDocketNumber: '106-23',
   },
   {
     stampData: {},
@@ -9719,6 +9956,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '106-23',
     multiDocketedOn: [],
     documentStorageId: 'a0f13802-5eae-43cb-b886-797e322917d6',
+    originallyFiledDocketNumber: '106-23',
   },
   {
     stampData: {},
@@ -9750,6 +9988,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '106-23',
     multiDocketedOn: [],
     documentStorageId: 'dfb11c0f-6680-4b1b-88de-7a04c79630d2',
+    originallyFiledDocketNumber: '106-23',
   },
   {
     stampData: {},
@@ -9779,6 +10018,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     addToCoversheet: false,
     multiDocketedOn: [],
     documentStorageId: 'fe45bb45-f32d-4bba-ba1f-eb8178655f2b',
+    originallyFiledDocketNumber: '106-23',
   },
   {
     stampData: {},
@@ -9823,6 +10063,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '107-19',
     multiDocketedOn: [],
     documentStorageId: '178af2d2-fab1-445a-a729-d3da63517a0a',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     servedParties: [
@@ -9975,6 +10216,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b31bf7f7-6c7f-4358-a8e3-2329efc05ea9',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     stampData: {},
@@ -10018,6 +10260,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '107-19',
     multiDocketedOn: [],
     documentStorageId: '49acedbf-978d-476c-aae9-42bb75595dd3',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     servedParties: [{ name: 'Tatum Craig', email: 'petitioner@example.com' }],
@@ -10046,6 +10289,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'afc09762-149b-4295-98e1-d7bd9e49884b',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     stampData: {},
@@ -10093,6 +10337,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '107-19',
     multiDocketedOn: [],
     documentStorageId: '61967538-5261-4bb9-b3b6-8072a536d007',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     isStricken: false,
@@ -10118,6 +10363,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '71efaa35-fd53-497b-9c92-f407961715b7',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     servedParties: [
@@ -10155,6 +10401,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ce6f0641-a0ba-4f7b-a330-fb81c873aec8',
+    originallyFiledDocketNumber: '107-19',
   },
   {
     isStricken: false,
@@ -10180,6 +10427,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3adb712b-d0c5-40e8-98c1-d2f38757e27a',
+    originallyFiledDocketNumber: '108-19',
   },
   {
     servedParties: [
@@ -10213,6 +10461,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c',
+    originallyFiledDocketNumber: '108-19',
   },
   {
     servedParties: [
@@ -10245,6 +10494,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e0818872-c21f-4358-b26e-e5b1e0d687fa',
+    originallyFiledDocketNumber: '108-19',
   },
   {
     isStricken: false,
@@ -10270,6 +10520,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '98b69e9d-aafc-4d87-b9e8-c979947a0512',
+    originallyFiledDocketNumber: '109-19',
   },
   {
     isStricken: false,
@@ -10360,6 +10611,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2d10d8f1-50cf-4374-9383-3229cc218c81',
+    originallyFiledDocketNumber: '109-19',
   },
   {
     isStricken: false,
@@ -10385,6 +10637,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '839558b3-4386-4599-bd6b-ccb447e1dde4',
+    originallyFiledDocketNumber: '109-19',
   },
   {
     isStricken: false,
@@ -10410,6 +10663,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b4ef1f95-4575-42fe-b220-c33ff63d06dc',
+    originallyFiledDocketNumber: '110-19',
   },
   {
     isStricken: false,
@@ -10501,6 +10755,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '625a9a13-f7be-4cc0-a9ae-626f5a763932',
+    originallyFiledDocketNumber: '110-19',
   },
   {
     isStricken: false,
@@ -10526,6 +10781,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e4ec6b6a-1d18-4558-b49f-382b30ea1de6',
+    originallyFiledDocketNumber: '110-19',
   },
   {
     stampData: {},
@@ -10618,6 +10874,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '111-19',
     multiDocketedOn: [],
     documentStorageId: '480bb7bb-cde6-447a-9e94-926410c61c11',
+    originallyFiledDocketNumber: '111-19',
   },
   {
     servedParties: [
@@ -10650,6 +10907,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '526d6605-15d0-41f3-a23b-4755147f6918',
+    originallyFiledDocketNumber: '111-19',
   },
   {
     stampData: {},
@@ -10680,6 +10938,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '111-19',
     multiDocketedOn: [],
     documentStorageId: '59ccf18f-5bac-48b0-a8e0-9c9e1d995b62',
+    originallyFiledDocketNumber: '111-19',
   },
   {
     stampData: {},
@@ -10710,6 +10969,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '111-19',
     multiDocketedOn: [],
     documentStorageId: '323cace8-35bb-4c82-95de-19973b09e180',
+    originallyFiledDocketNumber: '111-19',
   },
   {
     stampData: {},
@@ -10741,6 +11001,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '111-19',
     multiDocketedOn: [],
     documentStorageId: 'b56e1b11-41f7-4ad2-9ffc-dac763c1d3b3',
+    originallyFiledDocketNumber: '111-19',
   },
   {
     stampData: {},
@@ -10771,6 +11032,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '112-19',
     multiDocketedOn: [],
     documentStorageId: '1c56d0fc-b01b-4bc7-830f-0c25b4e6b803',
+    originallyFiledDocketNumber: '112-19',
   },
   {
     stampData: {},
@@ -10801,6 +11063,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '112-19',
     multiDocketedOn: [],
     documentStorageId: '337b0684-0a8e-43fd-a9e5-3a01c8158cc8',
+    originallyFiledDocketNumber: '112-19',
   },
   {
     servedParties: [
@@ -10833,6 +11096,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a1469ff1-545b-4f3c-a8a1-5430a428d312',
+    originallyFiledDocketNumber: '112-19',
   },
   {
     stampData: {},
@@ -10862,6 +11126,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '112-19',
     multiDocketedOn: [],
     documentStorageId: 'bd0cfa6d-951a-4197-9959-2da64c2fce52',
+    originallyFiledDocketNumber: '112-19',
   },
   {
     stampData: {},
@@ -10891,6 +11156,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '113-19',
     multiDocketedOn: [],
     documentStorageId: '21c91e39-8dd7-454f-a54a-7ac0a040ac28',
+    originallyFiledDocketNumber: '113-19',
   },
   {
     stampData: {},
@@ -10921,6 +11187,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '113-19',
     multiDocketedOn: [],
     documentStorageId: '3cf1f474-1dcd-47aa-8455-8f9a93d80183',
+    originallyFiledDocketNumber: '113-19',
   },
   {
     stampData: {},
@@ -10951,6 +11218,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '113-19',
     multiDocketedOn: [],
     documentStorageId: '54731088-95a9-482c-afe9-95aa5636df09',
+    originallyFiledDocketNumber: '113-19',
   },
   {
     servedParties: [{ name: 'Letti Toretto', email: 'petitioner@example.com' }],
@@ -10981,6 +11249,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ebdb363e-3475-408e-b9c7-a210a8a46c9a',
+    originallyFiledDocketNumber: '113-19',
   },
   {
     isSealed: true,
@@ -11011,6 +11280,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5fe616a2-3839-49ec-a4be-1560b73193af',
+    originallyFiledDocketNumber: '117-20',
   },
   {
     isStricken: false,
@@ -11038,6 +11308,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '50dff202-ee2a-4cd8-b7b0-0e85ad78506b',
+    originallyFiledDocketNumber: '117-20',
   },
   {
     servedParties: [{ name: 'Bart Simpson', email: 'petitioner@example.com' }],
@@ -11068,6 +11339,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'dc87c5cc-07ef-4965-a5c2-7fc66650838a',
+    originallyFiledDocketNumber: '117-20',
   },
   {
     servedParties: [{ name: 'Sean Connery', email: 'petitioner@example.com' }],
@@ -11099,6 +11371,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '32aeaf31-7d68-4351-a58c-1f70e214abf9',
+    originallyFiledDocketNumber: '120-20',
   },
   {
     isStricken: true,
@@ -11126,6 +11399,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3bef545a-b185-4101-9822-c1722856ef62',
+    originallyFiledDocketNumber: '120-20',
   },
   {
     isSealed: true,
@@ -11157,6 +11431,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd1d5ea49-bbe5-4a63-bdff-20de1fed05d7',
+    originallyFiledDocketNumber: '120-20',
   },
   {
     isPaper: true,
@@ -11184,6 +11459,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ad5e484e-6cbc-4a8f-a72c-81b730103889',
+    originallyFiledDocketNumber: '121-20',
   },
   {
     servedParties: [
@@ -11226,6 +11502,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fb125bc1-27aa-4224-b52a-46346f6d167b',
+    originallyFiledDocketNumber: '121-20',
   },
   {
     servedParties: [
@@ -11268,6 +11545,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fd468817-a88e-4c13-b32b-abb7afc04ea4',
+    originallyFiledDocketNumber: '121-20',
   },
   {
     isStricken: false,
@@ -11295,6 +11573,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7eed32c6-90f9-467c-a924-66f5a6fd9d79',
+    originallyFiledDocketNumber: '122-20',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -11321,6 +11600,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '498ba6ff-6156-4e24-90f2-b7aa28bac366',
+    originallyFiledDocketNumber: '122-20',
   },
   {
     isStricken: false,
@@ -11347,6 +11627,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '953057bb-72d2-412d-8352-fb68c6b0fe2b',
+    originallyFiledDocketNumber: '122-20',
   },
   {
     isStricken: false,
@@ -11374,6 +11655,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2d828383-2f74-49c7-8183-9f4110e6b9fe',
+    originallyFiledDocketNumber: '123-20',
   },
   {
     isStricken: false,
@@ -11398,6 +11680,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3e7be85d-5ec0-4a10-9b98-6f53df0ce1df',
+    originallyFiledDocketNumber: '123-20',
   },
   {
     isStricken: false,
@@ -11424,6 +11707,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7a9ae90c-348c-467a-8720-c3d1c195d76b',
+    originallyFiledDocketNumber: '123-20',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11454,6 +11738,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a5e3b9f7-2805-42c2-8f6a-ee9bfba28b89',
+    originallyFiledDocketNumber: '124-20',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11484,6 +11769,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'df030e4c-91c4-4589-a825-39161f0f6e6c',
+    originallyFiledDocketNumber: '124-20',
   },
   {
     servedParties: [{ name: 'Stacy Russold' }],
@@ -11585,6 +11871,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '335a20ae-8a06-4523-bc07-68ac698b420b',
+    originallyFiledDocketNumber: '125-20',
   },
   {
     isStricken: false,
@@ -11609,6 +11896,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '907e9f21-fa58-474d-a2bf-22d06aa0b582',
+    originallyFiledDocketNumber: '125-20',
   },
   {
     isStricken: false,
@@ -11635,6 +11923,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c8e28a9f-03b6-44b3-9ad8-67e9de8af308',
+    originallyFiledDocketNumber: '125-20',
   },
   {
     isStricken: false,
@@ -11662,6 +11951,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6bc2d120-c10b-4447-988e-99de62d5cb3a',
+    originallyFiledDocketNumber: '126-20',
   },
   {
     isStricken: false,
@@ -11688,6 +11978,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8439ca33-ac7a-4ae6-a228-7581e2114341',
+    originallyFiledDocketNumber: '126-20',
   },
   {
     isStricken: false,
@@ -11712,6 +12003,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd03e12eb-3fef-414c-8019-1f2b29a02bcb',
+    originallyFiledDocketNumber: '126-20',
   },
   {
     isStricken: false,
@@ -11739,6 +12031,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7e897dbe-2c5d-438f-9f9a-24e2894c9336',
+    originallyFiledDocketNumber: '127-20',
   },
   {
     isStricken: false,
@@ -11763,6 +12056,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '45dee1f6-666e-4183-9e02-c824850b859b',
+    originallyFiledDocketNumber: '127-20',
   },
   {
     isStricken: false,
@@ -11790,6 +12084,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd1760696-630b-4472-9e74-3aa8f18975fa',
+    originallyFiledDocketNumber: '127-20',
   },
   {
     isStricken: false,
@@ -11817,6 +12112,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '13178e81-a4bb-4183-b57a-d68fc75fdfaf',
+    originallyFiledDocketNumber: '128-20',
   },
   {
     isStricken: false,
@@ -11844,6 +12140,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '87652e92-729e-4d7f-aeac-83d80d9b1eb2',
+    originallyFiledDocketNumber: '128-20',
   },
   {
     isStricken: false,
@@ -11868,6 +12165,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2bc8db97-08f9-40f4-8eec-1388efb3aab0',
+    originallyFiledDocketNumber: '128-20',
   },
   {
     isSealed: true,
@@ -11907,6 +12205,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0dff390d-8851-4993-8edf-bcd46bb8b563',
+    originallyFiledDocketNumber: '129-20',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11937,6 +12236,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '422eb1ab-6f20-49f7-bc4c-f9bd9aefb31f',
+    originallyFiledDocketNumber: '129-20',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11967,6 +12267,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '49c0ab49-d5eb-4128-a945-b2314594a447',
+    originallyFiledDocketNumber: '129-20',
   },
   {
     isSealed: true,
@@ -12037,6 +12338,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a61704b7-5e8d-423d-a695-50144d72a882',
+    originallyFiledDocketNumber: '150-12',
   },
   {
     isStricken: false,
@@ -12062,6 +12364,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b54acb34-5b2b-4e3d-a92f-352d54a0639d',
+    originallyFiledDocketNumber: '150-12',
   },
   {
     servedParties: [
@@ -12152,6 +12455,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2962e02d-3349-4f6a-aeef-f2797988c4cd',
+    originallyFiledDocketNumber: '151-12',
   },
   {
     isStricken: false,
@@ -12177,6 +12481,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '62fdcb13-8370-4df6-95d0-c1cb1f50321a',
+    originallyFiledDocketNumber: '151-12',
   },
   {
     servedParties: [
@@ -12267,6 +12572,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6901b04b-ca21-401c-ab9d-8d8ca53b42df',
+    originallyFiledDocketNumber: '152-12',
   },
   {
     isStricken: false,
@@ -12292,6 +12598,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b3ecd9d6-20ff-4774-8859-02cf861046e8',
+    originallyFiledDocketNumber: '152-12',
   },
   {
     servedParties: [
@@ -12384,6 +12691,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b3928c4a-1e71-4a98-87c9-1d885183446b',
+    originallyFiledDocketNumber: '301-21',
   },
   {
     isStricken: false,
@@ -12412,6 +12720,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '9f62de12-3561-422e-93fa-a40bd8d0de14',
+    originallyFiledDocketNumber: '301-21',
   },
   {
     isStricken: false,
@@ -12437,6 +12746,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b5e8d50d-6137-4ccc-8621-e722fbe757bf',
+    originallyFiledDocketNumber: '301-21',
   },
   {
     isStricken: false,
@@ -12462,6 +12772,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0af797f5-f942-43ee-b469-a1a9d57be9c8',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     isStricken: false,
@@ -12490,6 +12801,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0da138d9-b1c3-42a1-b430-d6cd483f062f',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     isStricken: false,
@@ -12518,6 +12830,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3982431b-a104-477b-bb81-169fde65a055',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12610,6 +12923,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '65778b70-832d-46f0-b26b-3379486df8df',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     isStricken: false,
@@ -12638,6 +12952,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7f38dd4e-5179-4819-a656-e6fbc44a9aa1',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     isStricken: false,
@@ -12666,6 +12981,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '9903f2c4-d799-4b6a-b5e5-c57adf1947e1',
+    originallyFiledDocketNumber: '302-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12758,6 +13074,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3740d7d1-2189-4916-a01c-e3cd31e63e96',
+    originallyFiledDocketNumber: '303-21',
   },
   {
     isStricken: false,
@@ -12786,6 +13103,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4de7afc5-3d32-43f0-a651-ffbb2e61008a',
+    originallyFiledDocketNumber: '303-21',
   },
   {
     isStricken: false,
@@ -12814,6 +13132,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b0460f36-2f12-4f28-9db9-daf2032a36d2',
+    originallyFiledDocketNumber: '303-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12909,6 +13228,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2599eb5f-1400-4d33-9570-1bacf8b3e46b',
+    originallyFiledDocketNumber: '304-21',
   },
   {
     isStricken: false,
@@ -12934,6 +13254,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b3bee4da-ab18-480a-9cd0-adacfd06967b',
+    originallyFiledDocketNumber: '304-21',
   },
   {
     isStricken: false,
@@ -12962,6 +13283,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c77856eb-8dc8-4338-881d-c025af9ac196',
+    originallyFiledDocketNumber: '304-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13057,6 +13379,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '62b86328-8771-4e5d-8cad-55c3520a37c0',
+    originallyFiledDocketNumber: '305-21',
   },
   {
     isStricken: false,
@@ -13082,6 +13405,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '94136719-3a03-4de3-a669-f5b120c828eb',
+    originallyFiledDocketNumber: '305-21',
   },
   {
     isStricken: false,
@@ -13110,6 +13434,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f434e4d8-38e1-4c31-ba1e-60eb87ec469d',
+    originallyFiledDocketNumber: '305-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13202,6 +13527,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6695b633-9d84-4a76-85ed-ce5499d95181',
+    originallyFiledDocketNumber: '306-21',
   },
   {
     isStricken: false,
@@ -13230,6 +13556,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd8a450ec-685a-460c-ac18-dd6ec1ad9efe',
+    originallyFiledDocketNumber: '306-21',
   },
   {
     isStricken: false,
@@ -13258,6 +13585,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b36ba120-2e24-4ff1-82d3-9ac0904c8685',
+    originallyFiledDocketNumber: '306-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13353,6 +13681,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f4aede77-bf94-4508-a183-1179476f6165',
+    originallyFiledDocketNumber: '307-21',
   },
   {
     isStricken: false,
@@ -13378,6 +13707,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '97f2d16f-bdc3-4c3d-b2e0-9c258e618ec7',
+    originallyFiledDocketNumber: '307-21',
   },
   {
     isStricken: false,
@@ -13406,6 +13736,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd5e25fa5-bdd8-4df5-9083-0b572ff85571',
+    originallyFiledDocketNumber: '307-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13498,6 +13829,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2eaf28f2-6a8d-4c29-a729-335c2b97a28b',
+    originallyFiledDocketNumber: '308-21',
   },
   {
     isStricken: false,
@@ -13526,6 +13858,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '123a2441-9fbf-47c0-adea-dfbba1190334',
+    originallyFiledDocketNumber: '308-21',
   },
   {
     isStricken: false,
@@ -13554,6 +13887,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'bdd057d7-219f-46b0-bd4e-0d7b4700188e',
+    originallyFiledDocketNumber: '308-21',
   },
   {
     isStricken: false,
@@ -13582,6 +13916,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '248cd2df-ee48-4bd5-8368-e67626278605',
+    originallyFiledDocketNumber: '309-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13677,6 +14012,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'dc6eac57-f38a-4ea0-aed1-483299b40cc3',
+    originallyFiledDocketNumber: '309-21',
   },
   {
     isStricken: false,
@@ -13702,6 +14038,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c60a3b4d-646f-452d-a1fc-ec0520a4a008',
+    originallyFiledDocketNumber: '309-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13797,6 +14134,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1fe62b5e-2f45-4661-b903-d035ef330350',
+    originallyFiledDocketNumber: '310-21',
   },
   {
     isStricken: false,
@@ -13822,6 +14160,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac6cae65-a107-47d7-b2c5-6dfe441a16f4',
+    originallyFiledDocketNumber: '310-21',
   },
   {
     isStricken: false,
@@ -13850,6 +14189,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c3f325b5-3a8a-40f5-8e1e-028487a2da4e',
+    originallyFiledDocketNumber: '310-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13942,6 +14282,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '61f8ef59-069c-4ca0-981d-b37c1411d617',
+    originallyFiledDocketNumber: '311-21',
   },
   {
     isStricken: false,
@@ -13970,6 +14311,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '046d109f-7c5c-4fa4-929d-2f7a3396b62e',
+    originallyFiledDocketNumber: '311-21',
   },
   {
     isStricken: false,
@@ -13998,6 +14340,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '9d727f9a-f17d-4856-91ab-969763db3ed3',
+    originallyFiledDocketNumber: '311-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14094,6 +14437,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '59f354ba-4ebe-4656-8354-acad84d0650e',
+    originallyFiledDocketNumber: '312-21',
   },
   {
     isStricken: false,
@@ -14122,6 +14466,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7c312ec8-3b07-43f2-aea4-6972b0c1fd29',
+    originallyFiledDocketNumber: '312-21',
   },
   {
     isStricken: false,
@@ -14147,6 +14492,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8dc0992f-a249-448d-af55-61ccc771278d',
+    originallyFiledDocketNumber: '312-21',
   },
   {
     servedParties: [{ name: 'Hanae Guerrero' }],
@@ -14230,6 +14576,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7342c2dd-d73c-4cdd-9497-bedc51ea698c',
+    originallyFiledDocketNumber: '313-21',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -14262,6 +14609,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '25f9f632-2185-4347-be02-3bef4a5a803c',
+    originallyFiledDocketNumber: '313-21',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -14294,6 +14642,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f67f30da-0014-47b4-b494-35f0170091c6',
+    originallyFiledDocketNumber: '313-21',
   },
   {
     isStricken: false,
@@ -14319,6 +14668,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06c436b4-3682-4ac4-bc6b-ec9d043409bb',
+    originallyFiledDocketNumber: '314-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14415,6 +14765,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '68fd4ec8-d635-4da4-b1fe-5e939a884b59',
+    originallyFiledDocketNumber: '314-21',
   },
   {
     isStricken: false,
@@ -14443,6 +14794,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '893d75db-6a98-412a-bcb3-000b26ced15d',
+    originallyFiledDocketNumber: '314-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14539,6 +14891,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '667721e1-8634-4dbb-8d9e-4201d39a5777',
+    originallyFiledDocketNumber: '315-21',
   },
   {
     isStricken: false,
@@ -14564,6 +14917,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7b538dd8-3035-4556-8ce3-84994b22a114',
+    originallyFiledDocketNumber: '315-21',
   },
   {
     isStricken: false,
@@ -14592,6 +14946,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b68e1453-2a1c-4752-b632-9889f7c112b1',
+    originallyFiledDocketNumber: '315-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14688,6 +15043,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '27db4396-ca90-4d31-a577-dd0cdd0e6dd9',
+    originallyFiledDocketNumber: '316-21',
   },
   {
     isStricken: false,
@@ -14713,6 +15069,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5979b1dc-0ff2-482f-8f30-dcaadce29aba',
+    originallyFiledDocketNumber: '316-21',
   },
   {
     isStricken: false,
@@ -14741,6 +15098,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b1f29b4b-4f21-4381-9a81-e52a3be5d7a2',
+    originallyFiledDocketNumber: '316-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14837,6 +15195,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '225a4381-a383-44ff-9635-4102280a6b95',
+    originallyFiledDocketNumber: '317-21',
   },
   {
     isStricken: false,
@@ -14862,6 +15221,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6fefd062-82ee-47f0-b75b-f5efec1f3804',
+    originallyFiledDocketNumber: '317-21',
   },
   {
     isStricken: false,
@@ -14890,6 +15250,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e87cc4e6-ea71-4e3c-bf08-fc796756eaaa',
+    originallyFiledDocketNumber: '317-21',
   },
   {
     isStricken: false,
@@ -14915,6 +15276,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '23ad00f0-0452-497c-8293-a1628623e584',
+    originallyFiledDocketNumber: '318-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15011,6 +15373,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'be46e48f-354f-4389-bac1-d8f5a14982d6',
+    originallyFiledDocketNumber: '318-21',
   },
   {
     isStricken: false,
@@ -15039,6 +15402,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f9659b8f-039d-48ee-a44b-f37c66c48f39',
+    originallyFiledDocketNumber: '318-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15135,6 +15499,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '619b6aec-7ad5-406c-82cd-75dafaa6ce97',
+    originallyFiledDocketNumber: '319-21',
   },
   {
     isStricken: false,
@@ -15163,6 +15528,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0f027a34-8150-460a-becf-8d419244d8e8',
+    originallyFiledDocketNumber: '319-21',
   },
   {
     isStricken: false,
@@ -15188,6 +15554,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b89f2f82-b308-4bad-9f07-1ef81c673d54',
+    originallyFiledDocketNumber: '319-21',
   },
   {
     servedParties: [{ name: "Rand al'Thor", email: 'petitioner@example.com' }],
@@ -15282,6 +15649,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '320-21',
     multiDocketedOn: [],
     documentStorageId: '6b2bcbcc-bc95-4103-b5fd-3e999395c2d3',
+    originallyFiledDocketNumber: '320-21',
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -15313,6 +15681,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '008f9409-beff-4192-901a-e078d0ab9a80',
+    originallyFiledDocketNumber: '320-21',
   },
   {
     servedParties: [{ name: "Rand al'Thor", email: 'petitioner@example.com' }],
@@ -15380,6 +15749,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a51abcd4-3352-43e7-8775-810c3fed6833',
+    originallyFiledDocketNumber: '320-21',
   },
   {
     isStricken: false,
@@ -15405,6 +15775,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f2f21f29-a094-4e39-a800-de2c80a08811',
+    originallyFiledDocketNumber: '320-21',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15433,6 +15804,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b7a0f931-e648-4f7d-82f9-1104f8b76390',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -15469,6 +15841,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '400-22',
     multiDocketedOn: [],
     documentStorageId: '5ccb9535-85e0-4d84-aea5-af94bc993cca',
+    originallyFiledDocketNumber: '400-22',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15497,6 +15870,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e8845e0e-f03f-416e-afea-8717b2381bae',
+    originallyFiledDocketNumber: '400-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15525,6 +15899,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8da9804e-ada8-49f4-8fc6-10e8ff9860b6',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15553,6 +15928,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '840c8e43-297e-4056-9dc5-75854fca7973',
+    originallyFiledDocketNumber: '401-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15581,6 +15957,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5b7275e0-a8be-4fa0-907a-8d16276ef9e4',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15609,6 +15986,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ff60c38c-8a49-4c9b-a3a7-8ed0ad11b128',
+    originallyFiledDocketNumber: '402-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15637,6 +16015,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '95681b7a-aa1f-4e77-86de-1a8b8f825493',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15665,6 +16044,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5f1e2525-afba-4112-a170-a84e180b20ef',
+    originallyFiledDocketNumber: '403-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15693,6 +16073,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'eebabd0a-02f9-4f0a-89d7-86c05141b106',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -15758,6 +16139,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '31ea52ec-077b-4822-abad-c8f848c30c0a',
+    originallyFiledDocketNumber: '404-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15786,6 +16168,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6f239c2c-226d-4868-8198-d2f1b0db937b',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -15851,6 +16234,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'e44b7b87-d4eb-45df-88f1-6476d8da84c2',
+    originallyFiledDocketNumber: '405-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15879,6 +16263,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4a9c26f8-9ca0-4405-86c5-57986dbc4965',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15907,6 +16292,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd981cc9e-e4b2-4c78-8be3-e4f2523fac07',
+    originallyFiledDocketNumber: '406-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15935,6 +16321,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd66976d1-13e3-4d54-979c-c95d4360f2c4',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15963,6 +16350,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a39f8328-0c4b-43b8-ac27-79a9fccec82a',
+    originallyFiledDocketNumber: '407-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15991,6 +16379,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '699024b1-ee7f-43fd-aa49-01d84217c431',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16019,6 +16408,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'be1b075f-d2e7-440c-9372-d27d6fcaded6',
+    originallyFiledDocketNumber: '408-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16047,6 +16437,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '85ca7f8f-fcf5-4360-a9e8-64f364328fad',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -16112,6 +16503,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2de03eb6-41a9-47c8-8ec7-81e29914bec5',
+    originallyFiledDocketNumber: '409-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16140,6 +16532,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '17a1d020-b510-4f1f-a623-0a0fd37ae99f',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16168,6 +16561,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '726ad815-52a7-4dec-8e8f-9e49f58a817d',
+    originallyFiledDocketNumber: '410-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16196,6 +16590,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '54164dc2-0dff-40e1-8d61-658f63e23a4e',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -16261,6 +16656,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2d4d0933-415a-46c0-b7d9-0de52c972bb1',
+    originallyFiledDocketNumber: '411-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16289,6 +16685,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'add9885b-8f1b-48be-9968-d9cdc782130a',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16317,6 +16714,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '21aa07a9-9ecb-4e07-908e-583348615770',
+    originallyFiledDocketNumber: '412-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16345,6 +16743,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '803eb0c8-5165-44b5-8bcc-38d29a74f7fb',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     stampData: {},
@@ -16410,6 +16809,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5e569201-47a0-401a-adda-01207bd8e998',
+    originallyFiledDocketNumber: '413-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16438,6 +16838,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '175fa717-2448-4c7c-a2c8-382aecc52a61',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16466,6 +16867,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '75ff967b-fb4b-4027-8e64-6b3231c3e972',
+    originallyFiledDocketNumber: '414-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16494,6 +16896,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b82ab87c-7aed-418b-b1e5-8ba57536a4c0',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16522,6 +16925,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6f01ab0a-2b69-4ef8-bfe7-807ef678ba62',
+    originallyFiledDocketNumber: '415-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16550,6 +16954,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5d790c3e-137c-4439-b106-a40379e63c25',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16578,6 +16983,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '00a4f8bd-035f-4603-8cd5-2a2fb9c7abad',
+    originallyFiledDocketNumber: '416-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16606,6 +17012,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '72380091-33c5-415c-8517-b13cdd89e137',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16634,6 +17041,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f62e8831-3f86-4ba7-9196-03925a863566',
+    originallyFiledDocketNumber: '417-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16662,6 +17070,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4afad0d4-5e9e-437f-ab7b-a22a2d3ef679',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16690,6 +17099,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '54c0ee0f-0084-4ff0-bef8-f68fd66b2362',
+    originallyFiledDocketNumber: '418-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16718,6 +17128,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'd89358a4-a145-4dd5-bbd4-65fc1e356987',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16746,6 +17157,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b2879dde-dd5e-46fd-8c4b-ee426c35d234',
+    originallyFiledDocketNumber: '419-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16774,6 +17186,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1f7733b4-ba0f-4714-b04c-d408a193c68f',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16802,6 +17215,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '966d8fd6-8ce5-41c9-862e-89f15c9161a0',
+    originallyFiledDocketNumber: '420-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16830,6 +17244,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7ffc1a78-2f07-4e1e-bf29-917a0d82d0f4',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16858,6 +17273,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5b13008c-a55b-481e-890b-7749f5654cee',
+    originallyFiledDocketNumber: '421-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16886,6 +17302,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '68a8f974-e7b1-4baa-aa49-cfaae39f3ede',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16914,6 +17331,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cce0449e-8ee2-4c75-b180-4c70e3781aa7',
+    originallyFiledDocketNumber: '422-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16942,6 +17360,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cd028d92-7b7e-4508-a31f-0988d5c3255b',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16970,6 +17389,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac138bc4-5499-4979-a914-c6e2b77dcebc',
+    originallyFiledDocketNumber: '423-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16998,6 +17418,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '49eb0c1e-0713-489d-8084-eaecf603b0bc',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17026,6 +17447,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '65725f04-558f-4a3a-9329-b4043be95025',
+    originallyFiledDocketNumber: '424-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17054,6 +17476,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a7819481-e5f5-4094-9c3f-5c978a754874',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17082,6 +17505,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '68376ff0-c08f-40d9-aa8e-c3bb5d3a8b00',
+    originallyFiledDocketNumber: '425-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17110,6 +17534,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '7ffc0fc6-c5a6-4b8c-a5b4-86a8a363d36d',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17138,6 +17563,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fff98b0d-f4ca-4c13-8ebb-e520a9030595',
+    originallyFiledDocketNumber: '426-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17166,6 +17592,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c4fd76e7-96da-4a99-9b5f-44a362362d05',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17194,6 +17621,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3f2c5611-00a3-4353-a692-ab7ac9d4cfb5',
+    originallyFiledDocketNumber: '427-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17222,6 +17650,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b96a6433-da7b-4d70-928d-9e8222500822',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17250,6 +17679,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2dd2408b-8c40-48f6-8b97-b773a76b6ef9',
+    originallyFiledDocketNumber: '428-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17278,6 +17708,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b95a5e79-0500-47cf-8a45-6eaa9cd088f1',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17306,6 +17737,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '31f41398-76d3-4970-a9d9-b5670263e603',
+    originallyFiledDocketNumber: '429-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17334,6 +17766,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fa25fa22-3785-4c50-b6d1-3201c7ba5714',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17362,6 +17795,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '12875356-aef5-446e-92c7-11146faa72d6',
+    originallyFiledDocketNumber: '430-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17390,6 +17824,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '20bf5c23-929c-4c4b-aa34-22bdce0933b3',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17418,6 +17853,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '6989ce09-1b56-4dfd-bc62-5e7455ce4619',
+    originallyFiledDocketNumber: '431-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17446,6 +17882,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f0009cc8-4355-4622-886c-e3eee4101e5f',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17474,6 +17911,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5eea4d33-b386-4037-a758-4b9a092035f9',
+    originallyFiledDocketNumber: '432-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17502,6 +17940,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ed088b71-9b77-4ba7-a888-111336a814e8',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17530,6 +17969,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '027d812a-7063-40e9-98f9-4e14e1db9e77',
+    originallyFiledDocketNumber: '433-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17558,6 +17998,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cb02ff6b-6a57-44ca-9f77-35387f654c11',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17586,6 +18027,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3c7ea2df-10ce-4e68-aeaa-c16ef5c112d8',
+    originallyFiledDocketNumber: '434-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17614,6 +18056,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c11cb224-5857-4bd3-8b92-46aefdaf8687',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17642,6 +18085,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1f5ef81f-a1ef-410e-bda3-ead658a01d63',
+    originallyFiledDocketNumber: '435-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17670,6 +18114,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '132698ce-276e-4ba8-8249-9057664c51eb',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17698,6 +18143,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0042d9df-2241-486c-80ba-964272543f3b',
+    originallyFiledDocketNumber: '436-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17726,6 +18172,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '8e2af0c3-8239-492c-81be-f61559577e0b',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17754,6 +18201,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '0048f01e-ca35-4aea-906e-82a54b2e43be',
+    originallyFiledDocketNumber: '437-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17782,6 +18230,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '14d4e5bd-318d-4d24-9626-510413d56156',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17810,6 +18259,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'b14e8a6c-7be9-432f-9f56-efc37978674a',
+    originallyFiledDocketNumber: '438-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17838,6 +18288,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '55fbe85f-a23e-49a9-9604-9f87d06b016a',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17866,6 +18317,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'f58757ff-ad98-49c1-b048-c9c226fe7615',
+    originallyFiledDocketNumber: '439-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17894,6 +18346,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3d9f694b-5b1a-42c0-835e-6be0cf292648',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17922,6 +18375,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '24ac17f2-0853-469f-996e-a26a348ace52',
+    originallyFiledDocketNumber: '440-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17950,6 +18404,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '4c801a29-2d28-47a2-ade8-9ed5065fdb6a',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17978,6 +18433,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '2d3a563a-63f0-4d2e-a7e1-58e782819973',
+    originallyFiledDocketNumber: '441-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18006,6 +18462,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '89a92b41-6c81-4546-a809-41ada44d6eee',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18034,6 +18491,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3c01f593-33b7-46d0-9b3f-077766d7fd9c',
+    originallyFiledDocketNumber: '442-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18062,6 +18520,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'fad6200d-f7da-4d4d-b55b-65b76f61f19f',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18090,6 +18549,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'af4e6d29-8ee2-4cff-94e3-0691ff0e7a59',
+    originallyFiledDocketNumber: '443-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18118,6 +18578,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '1e800cea-6062-4507-8fa4-6ea0cfd49ee1',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18146,6 +18607,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '14dff29e-4dac-43df-b278-eb6b308670d3',
+    originallyFiledDocketNumber: '444-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18174,6 +18636,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'edecd3ad-815d-4ccd-a67e-111bafea9012',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18202,6 +18665,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '99f32e48-355e-4fb4-9de7-40748e854a17',
+    originallyFiledDocketNumber: '445-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18230,6 +18694,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'ac7dba6c-5707-4a8c-9923-df37f7c4f062',
+    originallyFiledDocketNumber: '101-19',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18258,6 +18723,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'c0d93bee-2dad-48bc-bc71-96286fb8c773',
+    originallyFiledDocketNumber: '446-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18286,6 +18752,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d47',
+    originallyFiledDocketNumber: '447-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18314,6 +18781,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d48',
+    originallyFiledDocketNumber: '448-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18342,6 +18810,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d49',
+    originallyFiledDocketNumber: '449-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18370,6 +18839,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d50',
+    originallyFiledDocketNumber: '450-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18398,6 +18868,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d51',
+    originallyFiledDocketNumber: '451-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18426,6 +18897,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d52',
+    originallyFiledDocketNumber: '452-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18454,6 +18926,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d53',
+    originallyFiledDocketNumber: '453-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18482,6 +18955,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d54',
+    originallyFiledDocketNumber: '454-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18510,6 +18984,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d55',
+    originallyFiledDocketNumber: '455-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18538,6 +19013,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d56',
+    originallyFiledDocketNumber: '456-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18566,6 +19042,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d57',
+    originallyFiledDocketNumber: '457-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18594,6 +19071,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d58',
+    originallyFiledDocketNumber: '458-23',
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -18622,6 +19100,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '06115c26-ecd8-425a-b58b-4d25649f1d59',
+    originallyFiledDocketNumber: '459-23',
   },
   {
     isStricken: false,
@@ -18648,6 +19127,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'a4ed590d-3b2a-427a-8639-37aa96a79d9c',
+    originallyFiledDocketNumber: '69312-87',
   },
   {
     isStricken: false,
@@ -18673,6 +19153,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '3638c735-351b-4f3d-aa65-e3d3313e6a64',
+    originallyFiledDocketNumber: '69312-87',
   },
   {
     isSealed: true,
@@ -18703,6 +19184,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: 'cdf5a93e-abbd-4225-88df-88fc03f8af18',
+    originallyFiledDocketNumber: '69312-87',
   },
   {
     servedParties: [
@@ -18807,6 +19289,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '999-15',
     multiDocketedOn: [],
     documentStorageId: '15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5',
+    originallyFiledDocketNumber: '999-15',
   },
   {
     servedParties: [
@@ -19031,5 +19514,6 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     multiDocketedOn: [],
     documentStorageId: '5f84d727-ac03-48da-965d-d6a9ed80c829',
+    originallyFiledDocketNumber: '999-15',
   },
 ];
