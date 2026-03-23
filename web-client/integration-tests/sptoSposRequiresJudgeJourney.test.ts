@@ -1,7 +1,7 @@
 import {
   ADVANCED_SEARCH_TABS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
   fakeFile,
@@ -12,7 +12,7 @@ import {
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('SPTO/SPOS requires a judge', () => {
@@ -131,11 +131,7 @@ describe('SPTO/SPOS requires a judge', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      type FormattedCaseDetail = ReturnType<typeof formattedCaseDetail> & {
-        formattedDocketEntries: RawDocketEntry[];
-      };
-
-      const caseDetailFormatted: FormattedCaseDetail = await runCompute(
+      const caseDetailFormatted = runCompute(
         withAppContextDecorator(formattedCaseDetail),
         {
           state: cerebralTest.getState(),

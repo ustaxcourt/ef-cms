@@ -157,6 +157,7 @@ export const updateContact = async (
         addToCoversheet: true,
         additionalInfo: `for ${updatedPetitioner.name}`,
         docketEntryId: newDocketEntryId,
+        documentStorageId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -226,7 +227,7 @@ export const updateContact = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: changeOfAddressPdfWithCover,
-      key: newDocketEntryId,
+      key: changeOfAddressDocketEntry.documentStorageId,
     });
   }
 

@@ -108,7 +108,7 @@ async function getDocketEntriesFromS3(
   return docketEntries;
 }
 
-export async function zipDocuments({
+async function zipDocuments({
   connectionId,
   documents,
   outputZipName,
@@ -222,6 +222,7 @@ export async function app({
   );
   console.log('ZIPPING DOCUMENTS');
 
+  // eslint-disable-next-line custom-rules-plugin/no-dates
   const guid = Date.now();
   const UNIQUE_ZIP_NAME = `${guid}/${zipName}`;
 
