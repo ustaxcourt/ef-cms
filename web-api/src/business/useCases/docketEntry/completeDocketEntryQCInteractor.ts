@@ -78,8 +78,8 @@ const completeDocketEntryQC = async (
     docketEntryId: string;
     docketNumber: string;
     selectedSection: any;
-    multiDocketedOn?: string[];
-    originallyFiledDocketNumber?: string;
+    multiDocketedOn: string[];
+    originallyFiledDocketNumber: string;
   } = entryMetadata;
 
   const docketNumbers = multiDocketedOn?.length
@@ -191,10 +191,9 @@ const completeDocketEntryQC = async (
   }> = [];
   const updatePersistencePromises: Promise<any>[] = [];
 
-  const cannotUseOriginalFilingCase = !canUseOriginalFilingCase({
-    multiDocketedOn,
+  const cannotUseOriginalFilingCase = !multiDocketedOn.includes(
     originallyFiledDocketNumber,
-  });
+  );
 
   for (const caseWithWorkItem of casesWithWorkItems) {
     const { currentCase, currentWorkItem } = caseWithWorkItem;
@@ -478,19 +477,3 @@ export const completeDocketEntryQCInteractor = withLocking(
   }),
   new InvalidRequest('The document is currently being updated'),
 );
-
-const canUseOriginalFilingCase = ({
-  multiDocketedOn,
-  originallyFiledDocketNumber,
-}: {
-  multiDocketedOn: string[] | undefined;
-  originallyFiledDocketNumber: string | undefined;
-}) => {
-  let canUseOriginalFilingCase = true;
-  if (!originallyFiledDocketNumber || !multiDocketedOn) {
-    canUseOriginalFilingCase = false;
-  } else if (!multiDocketedOn.includes(originallyFiledDocketNumber)) {
-    canUseOriginalFilingCase = false;
-  }
-  return canUseOriginalFilingCase;
-};

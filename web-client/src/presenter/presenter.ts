@@ -112,6 +112,7 @@ import { disengageAppMaintenanceSequence } from './sequences/disengageAppMainten
 import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { dismissModalAndClearRedirectSequence } from './sequences/dismissModalAndClearRedirectSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { handleEditedTrialSessionSequence } from '@web-client/presenter/sequences/handleEditedTrialSessionSequence';
@@ -811,6 +812,8 @@ export const presenterSequences = {
     dismissAddEditCaseWorksheetModalSequence as unknown as Function,
   dismissAlertSequence: dismissAlertSequence as unknown as Function,
   dismissModalSequence: dismissModalSequence as unknown as Function,
+  dismissModalAndClearRedirectSequence:
+    dismissModalAndClearRedirectSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
   displayProgressSpinnerSequence,

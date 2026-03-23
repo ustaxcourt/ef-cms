@@ -16,7 +16,7 @@ type ConfirmInitiateServiceModalProps = {
 export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalProps> =
   connect(
     {
-      cancelSequence: sequences.dismissModalSequence,
+      cancelSequence: sequences.dismissModalAndClearRedirectSequence,
       confirmInitiateServiceModalHelper:
         state.confirmInitiateServiceModalHelper,
       confirmSequence: props`confirmSequence`,

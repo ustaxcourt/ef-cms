@@ -82,9 +82,9 @@ const getLockInfo = (_applicationContext, { docketNumber }) => ({
 const getLockInfo = async (applicationContext, { workItemId }) => {
   const rawWorkItem = await applicationContext
     .getPersistenceGateway()
-    .getWorkItemById({ 
+    .getWorkItemsById({ 
       applicationContext, 
-      workItemId,
+      workItemIds,
     });
 
   return {

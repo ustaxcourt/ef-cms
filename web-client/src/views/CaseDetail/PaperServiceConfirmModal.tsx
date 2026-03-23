@@ -34,7 +34,7 @@ export const PaperServiceConfirmModal = connect(
           {/* 8477 TODO: Come back ask UX about this, make sure language works for both groups
           and single cases */}
           <p className="margin-0">
-            The following document was served on all cases:
+            The following document was served on all parties:
           </p>
 
           <p className="margin-0 text-bold">
