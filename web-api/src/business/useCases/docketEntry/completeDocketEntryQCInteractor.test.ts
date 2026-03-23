@@ -737,7 +737,7 @@ describe('completeDocketEntryQCInteractor', () => {
         docketEntries: [
           {
             ...caseRecord.docketEntries[0],
-            originallyFiledDocketNumber: '102-18',
+            originallyFiledDocketNumber: '999-99',
           },
         ],
       },
@@ -749,7 +749,7 @@ describe('completeDocketEntryQCInteractor', () => {
         entryMetadata: {
           ...caseRecord.docketEntries[0],
           documentTitle: 'different title',
-          multiDocketedOn: undefined,
+          multiDocketedOn: [],
         },
       },
       mockDocketClerkUser,

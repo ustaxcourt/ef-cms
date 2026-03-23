@@ -44,9 +44,46 @@ import {
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
+type CompleteDocketEntryQCEntryMetadata = Pick<
+  DocketEntry,
+  | 'addToCoversheet'
+  | 'additionalInfo'
+  | 'additionalInfo2'
+  | 'attachments'
+  | 'certificateOfService'
+  | 'certificateOfServiceDate'
+  | 'documentTitle'
+  | 'documentType'
+  | 'eventCode'
+  | 'filedBy'
+  | 'filers'
+  | 'freeText'
+  | 'hasOtherFilingParty'
+  | 'lodged'
+  | 'mailingDate'
+  | 'objections'
+  | 'ordinalValue'
+  | 'otherFilingParty'
+  | 'otherIteration'
+  | 'partyIrsPractitioner'
+  | 'pending'
+  | 'previousDocument'
+  | 'receivedAt'
+  | 'scenario'
+  | 'secondaryDocument'
+  | 'serviceDate'
+  | 'docketEntryId'
+  | 'docketNumber'
+  | 'isFileAttached'
+  | 'multiDocketedOn'
+  | 'originallyFiledDocketNumber'
+> & {
+  selectedSection?: string;
+};
+
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
-  { entryMetadata }: { entryMetadata: any },
+  { entryMetadata }: { entryMetadata: CompleteDocketEntryQCEntryMetadata },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   caseDetail: CaseDTO;
@@ -74,12 +111,6 @@ const completeDocketEntryQC = async (
     selectedSection,
     multiDocketedOn,
     originallyFiledDocketNumber,
-  }: {
-    docketEntryId: string;
-    docketNumber: string;
-    selectedSection: any;
-    multiDocketedOn: string[];
-    originallyFiledDocketNumber: string;
   } = entryMetadata;
 
   const docketNumbers = multiDocketedOn?.length
@@ -192,7 +223,7 @@ const completeDocketEntryQC = async (
   const updatePersistencePromises: Promise<any>[] = [];
 
   const cannotUseOriginalFilingCase = !multiDocketedOn.includes(
-    originallyFiledDocketNumber,
+    originallyFiledDocketNumber!,
   );
 
   for (const caseWithWorkItem of casesWithWorkItems) {
