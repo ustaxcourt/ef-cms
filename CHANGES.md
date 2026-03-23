@@ -1,3 +1,23 @@
+<details><summary>Dependency Updates - Week of 2026-03-16</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.14.7`
+
+```bash
+tfswitch 1.14.7
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.72` - choose exp7
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-03-09</summary>
 
 ## Local
