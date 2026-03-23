@@ -7,13 +7,13 @@ describe('shouldGenerateNoticeOfTrialStartDateChange', () => {
       ...MOCK_TRIAL_INPERSON,
       isCalendared: false,
       startDate: '2026-04-06T05:00:00.000Z',
-    }
+    };
 
     const updatedTrialSession = {
       ...MOCK_TRIAL_INPERSON,
       isCalendared: true,
       startDate: '2026-04-06T05:00:00.000Z',
-    }
+    };
 
     const result = shouldGenerateNoticeOfChangeTrialStartDate(
       currentTrialSession,

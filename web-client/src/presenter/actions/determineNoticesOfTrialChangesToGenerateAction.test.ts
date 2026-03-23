@@ -121,12 +121,12 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
     applicationContext
       .getUseCases()
       .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
-                calendaredCaseEntitiesCount: 1,
+        calendaredCaseEntitiesCount: 1,
 
         casesThatShouldReceiveNoticesCount: 1,
       });
 
-        (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
       true,
     );
 
