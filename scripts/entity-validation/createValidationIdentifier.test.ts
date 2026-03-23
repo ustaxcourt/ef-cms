@@ -77,4 +77,23 @@ describe('createValidationIdentifier', () => {
 
     expect(hash1).toBe(hash2);
   });
+
+  it('should produce a consistent hash when input contains a symbol value', () => {
+    const sym = Symbol('test');
+    const hash1 = createValidationIdentifier({ key: sym });
+    const hash2 = createValidationIdentifier({ key: sym });
+
+    expect(hash1).toBe(hash2);
+    expect(hash1).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('should handle a null value in the input without crashing', () => {
+    const hash = createValidationIdentifier({ key: null as any });
+    expect(hash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('should handle a bigint value in the input without crashing', () => {
+    const hash = createValidationIdentifier({ key: BigInt(42) as any });
+    expect(hash).toMatch(/^[a-f0-9]{64}$/);
+  });
 });
