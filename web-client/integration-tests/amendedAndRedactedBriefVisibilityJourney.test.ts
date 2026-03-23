@@ -79,8 +79,8 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
           );
         }
 
-        expect(found.showLinkToDocument).toBe(showLinkToDocument);
-        expect(found.eventCode).toBe(eventCode);
+        expect(found?.showLinkToDocument).toBe(showLinkToDocument);
+        expect(found?.eventCode).toBe(eventCode);
       }
     });
 
@@ -103,7 +103,7 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
         entry => entry.eventCode === 'SEAB',
       );
 
-      expect(document.showLinkToDocument).toBeTruthy();
+      expect(document?.showLinkToDocument).toBeTruthy();
     });
   });
 
@@ -172,8 +172,8 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
           );
         }
 
-        expect(found.showLinkToDocument).toBe(showLinkToDocument);
-        expect(found.eventCode).toBe(eventCode);
+        expect(found?.showLinkToDocument).toBe(showLinkToDocument);
+        expect(found?.eventCode).toBe(eventCode);
       }
     });
   });

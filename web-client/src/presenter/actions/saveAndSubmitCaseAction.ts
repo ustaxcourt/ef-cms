@@ -19,7 +19,7 @@ export const saveAndSubmitCaseAction = async ({
 
   const petitionMetadata: ElectronicCreatedCaseType = get(
     state.petitionFormatted,
-  );
+  ) as unknown as ElectronicCreatedCaseType;
 
   const user = get(state.user);
 
