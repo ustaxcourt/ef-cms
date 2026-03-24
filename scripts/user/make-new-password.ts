@@ -40,7 +40,7 @@ export const makeNewPassword = (
     .join('');
 
   // build the password
-  for (let i = result.length; i <= passwordLength; i++) {
+  for (let i = result.length; i < passwordLength; i++) {
     result += getRandomChar(allCharacters);
   }
 
