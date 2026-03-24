@@ -271,7 +271,7 @@ describe('rotate-environment-secrets.helpers', () => {
       );
     });
 
-    it('throws an error if lambda invocation fails to return a payload', async () => {
+    it('returns the invocation command response on success', async () => {
       const stsSendMock = jest.fn().mockResolvedValue({
         Credentials: {
           AccessKeyId: 'accessKeyId',
@@ -288,42 +288,19 @@ describe('rotate-environment-secrets.helpers', () => {
         send: ssmSendMock,
       }));
 
-      const lambdaSendMock = jest.fn().mockResolvedValue({});
-      lambdaClient.mockImplementation(() => ({
-        send: lambdaSendMock,
-      }));
-
-      await expect(
-        invokePasswordUpdateLambdaInVaultAccount({
-          env: 'test',
-          newPassword: 'password',
-          region: mockRegion,
-          vaultAccountId: '123456789012',
-        }),
-      ).rejects.toThrow('Lambda invocation failed to return a payload');
-    });
-
-    it('returns the parsed payload on success', async () => {
-      const stsSendMock = jest.fn().mockResolvedValue({
-        Credentials: {
-          AccessKeyId: 'accessKeyId',
-          SecretAccessKey: 'secretAccessKey',
-          SessionToken: 'sessionToken',
+      const mockResponse = {
+        StatusCode: 202,
+        $metadata: {
+          httpStatusCode: 202,
+          requestId: 'e69a657f-b670-46f9-ae04-9e9f1edc3ccc',
+          extendedRequestId: undefined,
+          cfId: undefined,
+          attempts: 1,
+          totalRetryDelay: 0,
         },
-      });
-      stsClient.mockImplementation(() => ({
-        send: stsSendMock,
-      }));
-
-      const ssmSendMock = jest.fn().mockResolvedValue({});
-      ssmClient.mockImplementation(() => ({
-        send: ssmSendMock,
-      }));
-
-      const mockResponse = { status: 'success' };
-      const lambdaSendMock = jest.fn().mockResolvedValue({
-        Payload: Buffer.from(JSON.stringify(mockResponse)),
-      });
+        Payload: null,
+      };
+      const lambdaSendMock = jest.fn().mockResolvedValue(mockResponse);
       lambdaClient.mockImplementation(() => ({
         send: lambdaSendMock,
       }));
