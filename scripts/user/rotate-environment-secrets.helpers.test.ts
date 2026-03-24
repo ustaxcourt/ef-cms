@@ -215,7 +215,7 @@ describe('rotate-environment-secrets.helpers', () => {
         region: mockRegion,
       });
       expect(InvokeCommand).toHaveBeenCalledWith({
-        FunctionName: `arn:aws:lambda:${mockSecrets.VAULT_ACCOUNT_ID}:function:vaultwarden-rotate-passwords`,
+        FunctionName: `arn:aws:lambda:${mockRegion}:${mockSecrets.VAULT_ACCOUNT_ID}:function:vaultwarden-rotate-passwords`,
         InvocationType: 'Event',
         Payload: expect.any(Buffer),
       });
