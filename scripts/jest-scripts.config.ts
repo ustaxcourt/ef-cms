@@ -48,7 +48,7 @@ const config: Config = {
     '!add-exhibits-to-case.ts',
     '!insert-exhibits-via-sql.ts',
     '!upload-practitioner-application-packages.ts',
-    '!user/**',
+    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {

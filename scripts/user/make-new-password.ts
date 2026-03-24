@@ -13,7 +13,7 @@ export const makeNewPassword = (
   const getRandomChar = charSet =>
     charSet.charAt(Math.floor(Math.random() * charSet.length));
 
-  // get number between 12 and 20
+  // use the provided length or get number between 12 and 20
   const passwordLength = length || 12 + Math.floor(Math.random() * 9);
   const availableCharacterSets = {
     characters: '^*.()@#%&/,><:;_~=+-',
@@ -27,7 +27,7 @@ export const makeNewPassword = (
       charSets[chars] = availableCharacterSets[chars];
     }
   }
-  if (!Object.keys(charSets)) {
+  if (!Object.keys(charSets).length) {
     return '';
   }
   const allCharacters = Object.keys(charSets)
@@ -35,10 +35,12 @@ export const makeNewPassword = (
     .join('');
 
   // get at least one random char from each of the sets
-  let result = Object.keys(key => getRandomChar(charSets[key])).join('');
+  let result = Object.keys(charSets)
+    .map(key => getRandomChar(charSets[key]))
+    .join('');
 
   // build the password
-  for (let i = result.length; i <= passwordLength; i++) {
+  for (let i = result.length; i < passwordLength; i++) {
     result += getRandomChar(allCharacters);
   }
 
