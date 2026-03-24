@@ -5,6 +5,9 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
 
 describe('submitCourtIssuedOrderAction', () => {
+  const mockDocketEntryId = '4234312d-7294-47ae-9f1d-182df17546a1';
+  const mockDocumentStorageId = '4234312d-7294-47ae-9f1d-182df17546a1';
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
@@ -17,13 +20,13 @@ describe('submitCourtIssuedOrderAction', () => {
       .updateCourtIssuedOrderInteractor.mockReturnValue(undefined);
   });
 
-  it('should call fileCourtIssuedOrder', async () => {
+  it('should call validatePdfInteractor and fileCourtIssuedOrderInteractor', async () => {
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
       },
       props: {
-        primaryDocumentFileId: 'abc',
+        primaryDocumentFileId: mockDocumentStorageId,
       },
       state: {
         caseDetail: {},
@@ -35,11 +38,37 @@ describe('submitCourtIssuedOrderAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().fileCourtIssuedOrderInteractor,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][1],
+    ).toEqual(expect.objectContaining({ key: mockDocumentStorageId }));
+
     expect(
-      applicationContext.getUseCases().validatePdfInteractor,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
+        .calls[0][1].primaryDocumentFileId,
+    ).toEqual(mockDocumentStorageId);
+  });
+
+  it('should call updateCourtIssuedOrderInteractor', async () => {
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocumentStorageId,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          documentType: 'Notice of Intervention',
+          primaryDocumentFile: {},
+          docketEntryIdToEdit: mockDocketEntryId,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
+        .calls[0][1].docketEntryIdToEdit,
+    ).toEqual(mockDocketEntryId);
   });
 
   it('should set document draftOrderState', async () => {
@@ -62,19 +91,20 @@ describe('submitCourtIssuedOrderAction', () => {
           leadDocketNumber: '101-20',
         },
       ];
+
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
       },
       props: {
-        primaryDocumentFileId: 'abc',
+        primaryDocumentFileId: mockDocumentStorageId,
       },
       state: {
         caseDetail: {
           docketNumber: '111-20',
         },
         form: {
-          docketEntryIdToEdit: '1234',
+          docketEntryIdToEdit: mockDocketEntryId,
           documentType: 'Notice of Intervention',
           primaryDocumentFile: {},
         },
@@ -96,24 +126,24 @@ describe('submitCourtIssuedOrderAction', () => {
     });
   });
 
-  it('should return the docketEntryId of the submitted court issued order', async () => {
+  it('should return the docketEntryId as documentStorageId of the submitted court issued order', async () => {
     const { output } = await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
       },
       props: {
-        primaryDocumentFileId: '4234312d-7294-47ae-9f1d-182df17546a1',
+        primaryDocumentFileId: mockDocumentStorageId,
       },
       state: {
         caseDetail: {},
         form: {
-          docketEntryId: '4234312d-7294-47ae-9f1d-182df17546a1',
+          docketEntryId: mockDocketEntryId,
           documentType: 'Notice of Intervention',
           primaryDocumentFile: {},
         },
       },
     });
 
-    expect(output.docketEntryId).toBe('4234312d-7294-47ae-9f1d-182df17546a1');
+    expect(output.docketEntryId).toBe(mockDocumentStorageId);
   });
 });

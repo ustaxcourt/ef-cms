@@ -15,9 +15,11 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 describe('removeSignatureFromDocumentInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
+
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockDocumentStorageId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockDocumentIdBeforeSignature = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -92,7 +94,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      key: mockDocketEntryId,
+      key: mockDocumentStorageId,
     });
   });
 
@@ -118,8 +120,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
     });
   });
 
-    it('throws NotFoundError if docket entry is not found', async () => {
-
+  it('throws NotFoundError if docket entry is not found', async () => {
     await expect(
       removeSignatureFromDocumentInteractor(
         applicationContext,

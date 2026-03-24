@@ -35,14 +35,14 @@ export const saveMinuteSheetToDraftsInteractor = async (
     throw new Error('Case and trial session could not be retrieved');
   }
 
-  const docketEntryId = getUniqueId();
+  const documentStorageId = getUniqueId();
 
   const pdf = await createAndUploadMinuteSheet(applicationContext, {
     docketNumber,
     trialSessionId,
     aCase,
     trialSession,
-    docketEntryId,
+    documentStorageId,
   });
 
   const documentTitle = `Minutes`;
@@ -56,7 +56,8 @@ export const saveMinuteSheetToDraftsInteractor = async (
   const draftDocketEntry = new DocketEntry(
     {
       ...documentMetadata,
-      docketEntryId,
+      docketEntryId: documentStorageId,
+      documentStorageId,
       filedBy: authorizedUser.name,
       isDraft: true,
       isFileAttached: true,

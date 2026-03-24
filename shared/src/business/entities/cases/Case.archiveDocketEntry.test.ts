@@ -29,7 +29,7 @@ describe('archiveDocketEntry', () => {
   it('should mark the docket entry as archived', () => {
     caseRecord.archiveDocketEntry(docketEntryToArchive);
 
-    const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
+    const archivedDocketEntry = caseRecord.archivedDocketEntries?.find(
       d => d.docketEntryId === docketEntryToArchive.docketEntryId,
     );
     expect(archivedDocketEntry!.archived).toEqual(true);
@@ -39,7 +39,7 @@ describe('archiveDocketEntry', () => {
     caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
-      caseRecord.archivedDocketEntries.find(
+      caseRecord.archivedDocketEntries?.find(
         d => d.docketEntryId === docketEntryToArchive.docketEntryId,
       ),
     ).toBeDefined();

@@ -32,7 +32,7 @@ export const removePdfFromDocketEntry = async (
   if (docketEntry && docketEntry.isFileAttached) {
     await applicationContext.getPersistenceGateway().deleteDocumentFile({
       applicationContext,
-      key: docketEntryId,
+      key: docketEntry.documentStorageId,
     });
 
     docketEntry.isFileAttached = false;

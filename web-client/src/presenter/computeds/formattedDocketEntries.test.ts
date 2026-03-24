@@ -22,6 +22,7 @@ import {
 import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { type FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
 describe('formattedDocketEntries', () => {
   const getDateISO = () =>
@@ -296,7 +297,7 @@ describe('formattedDocketEntries', () => {
       document => document.docketEntryId === mockDocketEntry.docketEntryId,
     );
 
-    expect(amat.showLinkToDocument).toEqual(false);
+    expect(amat?.showLinkToDocument).toEqual(false);
   });
 
   it('should show document link for an amendment docket entry when the previous docket entry is a brief and filed after visibility policy change date', () => {
@@ -340,7 +341,7 @@ describe('formattedDocketEntries', () => {
       document => document.docketEntryId === mockDocketEntry.docketEntryId,
     );
 
-    expect(amat.showLinkToDocument).toEqual(true);
+    expect(amat?.showLinkToDocument).toEqual(true);
   });
 
   it('should mark the document selected when it is selected', () => {
@@ -981,7 +982,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
           sealedToTooltip: 'anything',
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1003,7 +1004,7 @@ describe('formattedDocketEntries', () => {
           qcNeeded: true,
           className: 'fa-icon-blue',
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1024,7 +1025,7 @@ describe('formattedDocketEntries', () => {
           isInProgress: true,
           isPaper: false,
           qcNeeded: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
@@ -1044,14 +1045,14 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           qcNeeded: true,
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
       expect(result).toEqual([
         {
           className: 'fa-icon-red',
-          icon: ['fa', 'star'],
+          icon: ['fas', 'star'],
           title: 'Is untouched',
           size: 'lg',
         },
@@ -1063,14 +1064,14 @@ describe('formattedDocketEntries', () => {
         formattedResult: {
           ...mockDocketEntry,
           showLoadingIcon: true,
-        },
+        } as unknown as FormattedDocketEntry,
         isExternalUser: false,
       });
 
       expect(result).toEqual([
         {
           className: 'fa-spin spinner',
-          icon: ['fa-spin', 'spinner'],
+          icon: ['fas', 'spinner'],
           title: 'Is loading',
           size: 'lg',
         },

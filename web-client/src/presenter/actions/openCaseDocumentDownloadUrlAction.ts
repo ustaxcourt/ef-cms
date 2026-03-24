@@ -22,7 +22,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
         isPublic,
         key: docketEntryId,
       }));
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`Unable to open document. ${err.message}`);
   }
 

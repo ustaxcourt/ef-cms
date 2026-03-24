@@ -17,6 +17,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
@@ -69,9 +70,10 @@ export const fileCourtIssuedDocketEntry = async (
     throw new Error('Docket entry has already been added to docket record');
   }
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: subjectDocketEntry.documentStorageId,
+  });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 

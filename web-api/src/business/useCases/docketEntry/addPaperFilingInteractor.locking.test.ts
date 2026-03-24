@@ -64,7 +64,7 @@ describe('addPaperFilingInteractor', () => {
   const mockRequest = {
     clientConnectionId: mockClientConnectionId,
     consolidatedGroupDocketNumbers: [],
-    docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     documentMetadata: {
       docketNumber: MOCK_CASE.docketNumber,
       documentTitle: 'Memorandum in Support',
