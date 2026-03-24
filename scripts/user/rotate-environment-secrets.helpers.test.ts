@@ -207,7 +207,7 @@ describe('rotate-environment-secrets.helpers', () => {
       expect(secretsManagerSendMock).toHaveBeenCalledTimes(3);
     });
 
-    it('should handle missing Zendesk secrets', async () => {
+    it('handles missing Zendesk secrets', async () => {
       const mockSecrets = {
         USTC_ADMIN_USER: 'admin',
         USTC_ZENDESK_USER: 'zendesk',
@@ -240,7 +240,7 @@ describe('rotate-environment-secrets.helpers', () => {
   });
 
   describe('invokePasswordUpdateLambdaInVaultAccount', () => {
-    it('should throw error if environment is unsupported', async () => {
+    it('throws an error if the environment is unsupported', async () => {
       await expect(
         invokePasswordUpdateLambdaInVaultAccount({
           env: 'unsupported',
@@ -253,7 +253,7 @@ describe('rotate-environment-secrets.helpers', () => {
       );
     });
 
-    it('should throw error if credentials fail to return', async () => {
+    it('throws an error if credentials fail to return', async () => {
       const stsSendMock = jest.fn().mockResolvedValue({});
       stsClient.mockImplementation(() => ({
         send: stsSendMock,
@@ -271,7 +271,7 @@ describe('rotate-environment-secrets.helpers', () => {
       );
     });
 
-    it('should throw error if lambda invocation fails to return a payload', async () => {
+    it('throws an error if lambda invocation fails to return a payload', async () => {
       const stsSendMock = jest.fn().mockResolvedValue({
         Credentials: {
           AccessKeyId: 'accessKeyId',
@@ -303,7 +303,7 @@ describe('rotate-environment-secrets.helpers', () => {
       ).rejects.toThrow('Lambda invocation failed to return a payload');
     });
 
-    it('should return parsed payload on success', async () => {
+    it('returns the parsed payload on success', async () => {
       const stsSendMock = jest.fn().mockResolvedValue({
         Credentials: {
           AccessKeyId: 'accessKeyId',

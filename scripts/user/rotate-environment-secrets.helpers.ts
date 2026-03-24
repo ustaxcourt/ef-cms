@@ -129,6 +129,8 @@ export const rotateSecrets = async ({
       region,
       vaultAccountId: secrets.VAULT_ACCOUNT_ID,
     });
+
+    console.log('✅ Invoked password update lambda in Vault account');
   }
 };
 
@@ -187,15 +189,10 @@ export const invokePasswordUpdateLambdaInVaultAccount = async ({
   const lambdaClient = new LambdaClient({ credentials, region });
   const invokeCommand = new InvokeCommand({
     FunctionName: `arn:aws:lambda:${vaultAccountId}:function:vaultwarden-rotate-passwords`,
+    InvocationType: 'Event',
     Payload: Buffer.from(JSON.stringify(parameters)),
   });
-  const { Payload } = await lambdaClient.send(invokeCommand);
-
-  if (!Payload) {
-    throw new Error('Lambda invocation failed to return a payload');
-  }
-
-  return JSON.parse(Buffer.from(Payload).toString());
+  return await lambdaClient.send(invokeCommand);
 };
 
 const getLambdaParameters = (
