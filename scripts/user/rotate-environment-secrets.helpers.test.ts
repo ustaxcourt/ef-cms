@@ -21,12 +21,12 @@ jest.mock('@aws-sdk/client-ssm');
 jest.mock('@aws-sdk/client-secrets-manager');
 jest.mock('./make-new-password');
 
-const secretsManagerClient = SecretsManagerClient as jest.Mock;
-const makeNewPassword = makeNewPasswordHelper as jest.Mock;
-const cognitoIdentityProvider = CognitoIdentityProvider as jest.Mock;
-const stsClient = STSClient as jest.Mock;
-const ssmClient = SSMClient as jest.Mock;
-const lambdaClient = LambdaClient as jest.Mock;
+const secretsManagerClient = jest.mocked(SecretsManagerClient);
+const makeNewPassword = jest.mocked(makeNewPasswordHelper);
+const cognitoIdentityProvider = jest.mocked(CognitoIdentityProvider);
+const stsClient = jest.mocked(STSClient);
+const ssmClient = jest.mocked(SSMClient);
+const lambdaClient = jest.mocked(LambdaClient);
 
 describe('rotate-environment-secrets.helpers', () => {
   const mockRegion = 'us-east-1';
