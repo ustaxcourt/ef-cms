@@ -25,7 +25,6 @@ export const EditDocketEntryMeta = connect(
     showModal: state.modal.showModal,
     submitEditDocketEntryMetaSequence:
       sequences.submitEditDocketEntryMetaSequence,
-    form: state.form,
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
@@ -34,7 +33,6 @@ export const EditDocketEntryMeta = connect(
     formCancelToggleCancelSequence,
     showModal,
     submitEditDocketEntryMetaSequence,
-    form,
   }) {
     return (
       <>
@@ -63,20 +61,11 @@ export const EditDocketEntryMeta = connect(
                       <div>
                         <b>Edits to Document Info will also be edited for:</b>
                         <ul className="tw:mt-0 tw:mb-0">
-                          {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
-                            c => (
-                              <li
-                                key={c.docketNumber}
-                                className="margin-bottom-0"
-                              >
-                                {c.docketNumber}{' '}
-                                {c.caseTitle ||
-                                  c.caseCaption ||
-                                  form?.documentTitle ||
-                                  form?.eventCode}
-                              </li>
-                            ),
-                          )}
+                          {editDocketEntryMetaHelper.multiDocketedOn.map(cc => (
+                            <li key={cc.docketNumber}>
+                              {cc.docketNumber} - {cc.caseTitle}
+                            </li>
+                          ))}
                         </ul>
                         <p className="margin-bottom-0 margin-top-0">
                           Service and Action edits will only apply to this case.

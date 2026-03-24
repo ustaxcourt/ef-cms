@@ -13,10 +13,9 @@ import { isEmpty } from 'lodash';
 export const editDocketEntryMetaHelper = (
   get: Get,
 ): {
-  consolidatedCasesToDisplay: {
+  multiDocketedOn: {
     docketNumber: string;
-    caseTitle?: string;
-    caseCaption?: string;
+    caseTitle: string;
   }[];
   isStricken: boolean;
   primary: any;
@@ -60,19 +59,16 @@ export const editDocketEntryMetaHelper = (
         form.previousDocument?.documentType,
       ));
 
-  const consolidatedCasesToDisplay =
-    formattedCaseDetail?.consolidatedCases
-      ?.filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
-      .map(c => ({
-        docketNumber: c.docketNumber,
-        caseTitle: c.caseTitle,
-        caseCaption: c.caseCaption,
-      })) || [];
+  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(
+    consolidatedCase =>
+      consolidatedCase.docketNumber !== caseDetail.docketNumber &&
+      form.multiDocketedOn.includes(consolidatedCase.docketNumber),
+  );
 
   const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
 
   return {
-    consolidatedCasesToDisplay,
+    multiDocketedOn,
     isStricken,
     primary: optionsForCategory,
     showObjection,

@@ -90,12 +90,9 @@ export const DocketEntryQc = connect(
                       alertInfo={{
                         message: (
                           <div>
-                            <b>
-                              This document will also be QC&apos;d for all
-                              consolidated cases.
-                            </b>
+                            <b>This document will also be QC&apos;d for:</b>
                             <ul className="tw:mt-0 tw:mb-0">
-                              {docketEntryQcHelper.memberCases.map(cc => (
+                              {docketEntryQcHelper.multiDocketedOn.map(cc => (
                                 <li key={cc.docketNumber}>
                                   {cc.docketNumber} - {cc.caseTitle}
                                 </li>

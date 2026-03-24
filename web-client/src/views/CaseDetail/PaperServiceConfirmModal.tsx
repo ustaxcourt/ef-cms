@@ -31,10 +31,9 @@ export const PaperServiceConfirmModal = connect(
           onCancelSequence={clearModalSequence}
           onConfirmSequence={navigateToPrintPaperServiceSequence}
         >
-          {/* 8477 TODO: Come back ask UX about this, make sure language works for both groups
-          and single cases */}
           <p className="margin-0">
-            The following document was served on all parties:
+            The following document was served on all parties receiving
+            electronic service:
           </p>
 
           <p className="margin-0 text-bold">

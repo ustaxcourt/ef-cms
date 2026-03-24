@@ -20,11 +20,16 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
+            docketNumber: '101-20',
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
             docketEntryId: '123',
             documentType: 'Motion to Withdraw as Counsel',
+            multiDocketedOn: [],
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [],
           },
         },
       });
@@ -35,6 +40,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
+            docketNumber: '101-20',
             docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
@@ -42,9 +48,13 @@ describe('editDocketEntryMetaHelper', () => {
             docketEntryId: '123',
             documentType: 'Amendment [anything]',
             eventCode: 'ADMT',
+            multiDocketedOn: [],
             previousDocument: {
               documentType: 'Motion to Withdraw as Counsel',
             },
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [],
           },
         },
       });
@@ -55,6 +65,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
+            docketNumber: '101-20',
             docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
@@ -62,9 +73,13 @@ describe('editDocketEntryMetaHelper', () => {
             docketEntryId: '123',
             documentType: 'Amendment [anything]',
             eventCode: 'ADMT',
+            multiDocketedOn: [],
             previousDocument: {
               documentType: 'Answer',
             },
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [],
           },
         },
       });
@@ -75,11 +90,16 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
+            docketNumber: '101-20',
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: [],
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [],
           },
         },
       });
@@ -90,14 +110,19 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
+            docketNumber: '101-20',
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
             isStricken: true,
+            multiDocketedOn: [],
             strickenAt: '2019-03-01T21:40:46.415Z',
             strickenBy: 'Roslindis Angelino',
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [],
           },
         },
       });
@@ -110,6 +135,7 @@ describe('editDocketEntryMetaHelper', () => {
     const result = runCompute(editDocketEntryMetaHelper, {
       state: {
         caseDetail: {
+          docketNumber: '101-20',
           docketEntries: [],
           partyType: PARTY_TYPES.petitioner,
         },
@@ -118,6 +144,10 @@ describe('editDocketEntryMetaHelper', () => {
           docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
+          multiDocketedOn: [],
+        },
+        formattedCaseDetail: {
+          consolidatedCases: [],
         },
       },
     });
@@ -129,6 +159,7 @@ describe('editDocketEntryMetaHelper', () => {
     const result = runCompute(editDocketEntryMetaHelper, {
       state: {
         caseDetail: {
+          docketNumber: '101-20',
           docketEntries: [],
           partyType: PARTY_TYPES.petitioner,
         },
@@ -137,6 +168,10 @@ describe('editDocketEntryMetaHelper', () => {
           docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
           documentType: 'Notice of No Objection',
           eventCode: 'NNOB',
+          multiDocketedOn: [],
+        },
+        formattedCaseDetail: {
+          consolidatedCases: [],
         },
       },
     });
@@ -163,6 +198,10 @@ describe('editDocketEntryMetaHelper', () => {
           docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
           documentType: 'Notice of No Objection',
           eventCode: 'NNOB',
+          multiDocketedOn: [],
+        },
+        formattedCaseDetail: {
+          consolidatedCases: [],
         },
         multiDocketedOriginalCaseDetail: undefined,
       },
@@ -191,6 +230,10 @@ describe('editDocketEntryMetaHelper', () => {
           docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
           documentType: 'Notice of No Objection',
           eventCode: 'NNOB',
+          multiDocketedOn: [],
+        },
+        formattedCaseDetail: {
+          consolidatedCases: [],
         },
         multiDocketedOriginalCaseDetail: {
           ...MOCK_CASE,
@@ -206,7 +249,7 @@ describe('editDocketEntryMetaHelper', () => {
     ]);
   });
 
-  describe('consolidatedCasesToDisplay', () => {
+  describe('multiDocketedOn', () => {
     it('should return an empty array when there are no consolidated cases', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
@@ -217,17 +260,18 @@ describe('editDocketEntryMetaHelper', () => {
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: ['102-20'],
           },
           formattedCaseDetail: {
-            consolidatedCases: undefined,
+            consolidatedCases: [],
           },
         },
       });
 
-      expect(result.consolidatedCasesToDisplay).toEqual([]);
+      expect(result.multiDocketedOn).toEqual([]);
     });
 
-    it('should return an empty array when formattedCaseDetail is undefined', () => {
+    it('should return an empty array when no consolidated case matches form.multiDocketedOn', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
@@ -237,14 +281,27 @@ describe('editDocketEntryMetaHelper', () => {
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: ['999-20'],
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [
+              {
+                caseTitle: 'Lead Case Title',
+                docketNumber: '101-20',
+              },
+              {
+                caseTitle: 'Member Case 1 Title',
+                docketNumber: '102-20',
+              },
+            ],
           },
         },
       });
 
-      expect(result.consolidatedCasesToDisplay).toEqual([]);
+      expect(result.multiDocketedOn).toEqual([]);
     });
 
-    it('should filter out the current case and return other consolidated cases', () => {
+    it('should filter out the current case and return only cases in form.multiDocketedOn', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
@@ -254,6 +311,7 @@ describe('editDocketEntryMetaHelper', () => {
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: ['101-20', '102-20', '103-20'],
           },
           formattedCaseDetail: {
             docketNumber: '101-20',
@@ -273,12 +331,17 @@ describe('editDocketEntryMetaHelper', () => {
                 caseTitle: 'Member Case 2 Title',
                 docketNumber: '103-20',
               },
+              {
+                caseCaption: 'Member Case 3 Caption',
+                caseTitle: 'Member Case 3 Title',
+                docketNumber: '104-20',
+              },
             ],
           },
         },
       });
 
-      expect(result.consolidatedCasesToDisplay).toEqual([
+      expect(result.multiDocketedOn).toEqual([
         {
           caseCaption: 'Member Case 1 Caption',
           caseTitle: 'Member Case 1 Title',
@@ -292,7 +355,7 @@ describe('editDocketEntryMetaHelper', () => {
       ]);
     });
 
-    it('should return consolidated cases with only the required properties', () => {
+    it('should preserve the consolidated case properties for matches', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
@@ -302,6 +365,7 @@ describe('editDocketEntryMetaHelper', () => {
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: ['102-20'],
           },
           formattedCaseDetail: {
             docketNumber: '101-20',
@@ -323,16 +387,14 @@ describe('editDocketEntryMetaHelper', () => {
         },
       });
 
-      expect(result.consolidatedCasesToDisplay).toEqual([
+      expect(result.multiDocketedOn).toEqual([
         {
+          anotherProperty: 'should not be included',
           caseCaption: 'Member Case Caption',
           caseTitle: 'Member Case Title',
           docketNumber: '102-20',
         },
       ]);
-      expect(result.consolidatedCasesToDisplay[0]).not.toHaveProperty(
-        'anotherProperty',
-      );
     });
 
     it('should handle consolidated cases with missing optional properties', () => {
@@ -345,6 +407,7 @@ describe('editDocketEntryMetaHelper', () => {
           form: {
             docketEntryId: '123',
             documentType: 'Answer',
+            multiDocketedOn: ['102-20'],
           },
           formattedCaseDetail: {
             docketNumber: '101-20',
@@ -360,10 +423,8 @@ describe('editDocketEntryMetaHelper', () => {
         },
       });
 
-      expect(result.consolidatedCasesToDisplay).toEqual([
+      expect(result.multiDocketedOn).toEqual([
         {
-          caseCaption: undefined,
-          caseTitle: undefined,
           docketNumber: '102-20',
         },
       ]);
