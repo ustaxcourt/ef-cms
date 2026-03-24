@@ -179,7 +179,7 @@ describe('saveSignedDocumentInteractor', () => {
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
-    expect(caseToUpdate.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 2);
+    expect(caseToUpdate.docketEntries.length).toEqual(MOCK_CASE.docketEntries.length + 1);
     const signedDocument = caseToUpdate.docketEntries.find(
       e =>
         e.documentType ===
