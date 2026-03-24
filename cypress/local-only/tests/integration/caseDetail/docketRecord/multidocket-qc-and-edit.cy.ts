@@ -194,8 +194,16 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
       cy.get('[data-testid="alert-info-document-qc"]').should(
         'contain',
-        "This document will also be QC'd for all consolidated cases.",
+        "This document will also be QC'd for:",
       );
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        cy.get('[data-testid="alert-info-document-qc"]').should(
+          'contain',
+          memberDocketNumber,
+        );
+      });
+
       cy.get('[data-testid="alert-info-document-qc"]').should(
         'contain',
         'If a Notice of Docket Change is generated, it will be filed in all cases in the group.',

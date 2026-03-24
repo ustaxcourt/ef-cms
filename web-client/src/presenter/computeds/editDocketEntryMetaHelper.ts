@@ -62,7 +62,7 @@ export const editDocketEntryMetaHelper = (
   const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(
     consolidatedCase =>
       consolidatedCase.docketNumber !== caseDetail.docketNumber &&
-      form.multiDocketedOn.includes(consolidatedCase.docketNumber),
+      form.multiDocketedOn?.includes(consolidatedCase.docketNumber),
   );
 
   const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
