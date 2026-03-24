@@ -149,9 +149,6 @@ function buildInProgressCondition({
   //   (canViewDocketSection && (isFileAttached === false || inProgress))
   //   || (canViewPetitionsSection && inProgress)
   // Note: completedAt IS NULL is already in the WHERE clause.
-  if (canViewDocketSection && canViewPetitionsSection) {
-    return sql`(${isFileAttachedIsFalse} OR w.in_progress = true)`;
-  }
   if (canViewDocketSection) {
     return sql`(${isFileAttachedIsFalse} OR w.in_progress = true)`;
   }
