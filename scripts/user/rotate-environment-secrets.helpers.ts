@@ -184,7 +184,7 @@ export const invokePasswordUpdateLambdaInVaultAccount = async ({
 
   const ssmClient = new SSMClient({ credentials, region });
   const putParameterCommand = new PutParameterCommand({
-    Name: '/vaultwarden/dawson/test',
+    Name: parameters.parameter_name,
     Overwrite: true,
     Type: 'SecureString',
     Value: newPassword,
@@ -193,7 +193,7 @@ export const invokePasswordUpdateLambdaInVaultAccount = async ({
 
   const lambdaClient = new LambdaClient({ credentials, region });
   const invokeCommand = new InvokeCommand({
-    FunctionName: `arn:aws:lambda:${vaultAccountId}:function:vaultwarden-rotate-passwords`,
+    FunctionName: `arn:aws:lambda:${region}:${vaultAccountId}:function:vaultwarden-rotate-passwords`,
     InvocationType: 'Event',
     Payload: Buffer.from(JSON.stringify(parameters)),
   });
