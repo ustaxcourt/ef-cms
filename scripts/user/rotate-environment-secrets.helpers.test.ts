@@ -1,18 +1,22 @@
-import { STSClient } from '@aws-sdk/client-sts';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { LambdaClient } from '@aws-sdk/client-lambda';
-import { SSMClient } from '@aws-sdk/client-ssm';
+import {
+  AdminSetUserPasswordCommand,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import {
   GetSecretValueCommand,
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import {
   invokePasswordUpdateLambdaInVaultAccount,
   loadSecrets,
   rotateSecrets,
 } from './rotate-environment-secrets.helpers';
 import { makeNewPassword as makeNewPasswordHelper } from './make-new-password';
+import { mockClient } from 'aws-sdk-client-mock';
 
 jest.mock('@aws-sdk/client-sts');
 jest.mock('@aws-sdk/client-cognito-identity-provider');
@@ -21,32 +25,50 @@ jest.mock('@aws-sdk/client-ssm');
 jest.mock('@aws-sdk/client-secrets-manager');
 jest.mock('./make-new-password');
 
-const secretsManagerClient = SecretsManagerClient as jest.Mock;
-const makeNewPassword = makeNewPasswordHelper as jest.Mock;
-const cognitoIdentityProvider = CognitoIdentityProvider as jest.Mock;
-const stsClient = STSClient as jest.Mock;
-const ssmClient = SSMClient as jest.Mock;
-const lambdaClient = LambdaClient as jest.Mock;
+const secretsManagerClient = mockClient(SecretsManagerClient);
+const makeNewPassword = jest.mocked(makeNewPasswordHelper);
+const cognitoIdentityProvider = mockClient(CognitoIdentityProvider);
+const stsClient = mockClient(STSClient);
+const ssmClient = mockClient(SSMClient);
+const lambdaClient = mockClient(LambdaClient);
+
+const resetMocks = () => {
+  secretsManagerClient.reset();
+  cognitoIdentityProvider.reset();
+  stsClient.reset();
+  ssmClient.reset();
+  lambdaClient.reset();
+};
+
+const mockLambdaInvocationResponse = {
+  StatusCode: 202,
+  $metadata: {
+    httpStatusCode: 202,
+    requestId: 'e69a657f-b670-46f9-ae04-9e9f1edc3ccc',
+    attempts: 1,
+    totalRetryDelay: 0,
+  },
+};
 
 describe('rotate-environment-secrets.helpers', () => {
   const mockRegion = 'us-east-1';
   const mockUserPoolId = 'us-east-1_abc123';
 
   beforeEach(() => {
-    jest.clearAllMocks();
     jest.spyOn(console, 'log').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   describe('loadSecrets', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+      resetMocks();
+    });
     it('returns parsed secrets when SecretString is present', async () => {
       const mockSecrets = { key: 'value' };
-      const mockResponse = jest.fn().mockResolvedValue({
+      secretsManagerClient.on(GetSecretValueCommand).resolvesOnce({
         SecretString: JSON.stringify(mockSecrets),
       });
-      secretsManagerClient.mockImplementation(() => ({
-        send: mockResponse,
-      }));
 
       const result = await loadSecrets({
         region: mockRegion,
@@ -60,10 +82,7 @@ describe('rotate-environment-secrets.helpers', () => {
     });
 
     it('throws an error when SecretString is missing', async () => {
-      const mockResponse = jest.fn().mockResolvedValue({});
-      secretsManagerClient.mockImplementation(() => ({
-        send: mockResponse,
-      }));
+      secretsManagerClient.on(GetSecretValueCommand).resolvesOnce({});
 
       await expect(
         loadSecrets({
@@ -75,6 +94,10 @@ describe('rotate-environment-secrets.helpers', () => {
   });
 
   describe('rotateSecrets', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+      resetMocks();
+    });
     it('rotates secrets for test environment with CI', async () => {
       const mockSecrets = {
         USTC_ADMIN_USER: 'admin',
@@ -90,46 +113,29 @@ describe('rotate-environment-secrets.helpers', () => {
         .mockReturnValueOnce('new-admin-pass')
         .mockReturnValueOnce('new-zendesk-pass');
 
-      const secretsManagerSendMock = jest
-        .fn()
-        .mockResolvedValueOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
-        .mockResolvedValueOnce({}) // putSecretValue(env_deploy)
-        .mockResolvedValueOnce({
-          SecretString: JSON.stringify(mockZendeskSecrets),
-        }) // loadSecrets(ZendeskDawson)
-        .mockResolvedValueOnce({}); // putSecretValue(ZendeskDawson)
+      secretsManagerClient
+        .on(GetSecretValueCommand)
+        .resolvesOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
+        .resolvesOnce({ SecretString: JSON.stringify(mockZendeskSecrets) }); // loadSecrets(ZendeskDawson)
+      secretsManagerClient
+        .on(PutSecretValueCommand)
+        .resolvesOnce({}) // putSecretValue(env_deploy)
+        .resolvesOnce({}); // putSecretValue(ZendeskDawson)
 
-      secretsManagerClient.mockImplementation(() => ({
-        send: secretsManagerSendMock,
-      }));
+      cognitoIdentityProvider.on(AdminSetUserPasswordCommand).resolves({});
 
-      const cognitoAdminSetUserPasswordMock = jest.fn().mockResolvedValue({});
-      cognitoIdentityProvider.mockImplementation(() => ({
-        adminSetUserPassword: cognitoAdminSetUserPasswordMock,
-      }));
-
-      const stsCredentialsMockResponse = jest.fn().mockResolvedValue({
+      stsClient.on(AssumeRoleCommand).resolvesOnce({
         Credentials: {
           AccessKeyId: 'accessKeyId',
+          Expiration: undefined,
           SecretAccessKey: 'secretAccessKey',
           SessionToken: 'sessionToken',
         },
       });
-      stsClient.mockImplementation(() => ({
-        send: stsCredentialsMockResponse,
-      }));
 
-      const ssmSendMock = jest.fn().mockResolvedValue({});
-      ssmClient.mockImplementation(() => ({
-        send: ssmSendMock,
-      }));
+      ssmClient.on(PutParameterCommand).resolvesOnce({});
 
-      const lambdaSendMock = jest.fn().mockResolvedValue({
-        Payload: Buffer.from(JSON.stringify({ status: 'success' })),
-      });
-      lambdaClient.mockImplementation(() => ({
-        send: lambdaSendMock,
-      }));
+      lambdaClient.on(InvokeCommand).resolvesOnce(mockLambdaInvocationResponse);
 
       await rotateSecrets({
         ci: 'true',
@@ -138,21 +144,31 @@ describe('rotate-environment-secrets.helpers', () => {
         UserPoolId: mockUserPoolId,
       });
 
-      expect(cognitoAdminSetUserPasswordMock).toHaveBeenCalledWith({
+      expect(AdminSetUserPasswordCommand).toHaveBeenCalledTimes(2);
+      expect(AdminSetUserPasswordCommand).toHaveBeenNthCalledWith(1, {
         Password: 'new-admin-pass',
         Permanent: true,
         UserPoolId: mockUserPoolId,
         Username: 'admin',
       });
-      expect(cognitoAdminSetUserPasswordMock).toHaveBeenCalledWith({
+      expect(AdminSetUserPasswordCommand).toHaveBeenNthCalledWith(2, {
         Password: 'new-zendesk-pass',
         Permanent: true,
         UserPoolId: mockUserPoolId,
         Username: 'zendesk',
       });
 
-      expect(secretsManagerSendMock).toHaveBeenCalledTimes(4);
-      expect(PutSecretValueCommand).toHaveBeenCalledWith(
+      expect(GetSecretValueCommand).toHaveBeenCalledTimes(2);
+      expect(GetSecretValueCommand).toHaveBeenNthCalledWith(1, {
+        SecretId: 'test_deploy',
+      });
+      expect(GetSecretValueCommand).toHaveBeenNthCalledWith(2, {
+        SecretId: 'test/ZendeskDawson',
+      });
+
+      expect(PutSecretValueCommand).toHaveBeenCalledTimes(2);
+      expect(PutSecretValueCommand).toHaveBeenNthCalledWith(
+        1,
         expect.objectContaining({
           SecretId: 'test_deploy',
           SecretString: expect.stringContaining(
@@ -160,7 +176,8 @@ describe('rotate-environment-secrets.helpers', () => {
           ),
         }),
       );
-      expect(PutSecretValueCommand).toHaveBeenCalledWith(
+      expect(PutSecretValueCommand).toHaveBeenNthCalledWith(
+        2,
         expect.objectContaining({
           SecretId: 'test/ZendeskDawson',
           SecretString: expect.stringContaining(
@@ -168,6 +185,40 @@ describe('rotate-environment-secrets.helpers', () => {
           ),
         }),
       );
+
+      expect(AssumeRoleCommand).toHaveBeenCalledWith({
+        RoleArn: `arn:aws:iam::${mockSecrets.VAULT_ACCOUNT_ID}:role/vaultwarden-password-rotator`,
+        RoleSessionName: 'RotationSession',
+      });
+
+      expect(SSMClient).toHaveBeenCalledWith({
+        credentials: {
+          accessKeyId: 'accessKeyId',
+          secretAccessKey: 'secretAccessKey',
+          sessionToken: 'sessionToken',
+        },
+        region: mockRegion,
+      });
+      expect(PutParameterCommand).toHaveBeenCalledWith({
+        Name: '/vaultwarden/dawson/test',
+        Overwrite: true,
+        Type: 'SecureString',
+        Value: 'new-default-pass',
+      });
+
+      expect(LambdaClient).toHaveBeenCalledWith({
+        credentials: {
+          accessKeyId: 'accessKeyId',
+          secretAccessKey: 'secretAccessKey',
+          sessionToken: 'sessionToken',
+        },
+        region: mockRegion,
+      });
+      expect(InvokeCommand).toHaveBeenCalledWith({
+        FunctionName: `arn:aws:lambda:${mockSecrets.VAULT_ACCOUNT_ID}:function:vaultwarden-rotate-passwords`,
+        InvocationType: 'Event',
+        Payload: expect.any(Buffer),
+      });
     });
 
     it('rotates secrets for dev environment without CI', async () => {
@@ -176,20 +227,17 @@ describe('rotate-environment-secrets.helpers', () => {
         USTC_ZENDESK_USER: 'zendesk',
       };
 
-      const secretsManagerSendMock = jest
-        .fn()
-        .mockResolvedValueOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
-        .mockResolvedValueOnce({}) // putSecretValue(env_deploy)
-        .mockRejectedValueOnce(new Error('No Zendesk secrets')); // loadSecrets(ZendeskDawson) failure
+      makeNewPassword
+        .mockReturnValueOnce('new-admin-pass')
+        .mockReturnValueOnce('new-zendesk-pass');
 
-      secretsManagerClient.mockImplementation(() => ({
-        send: secretsManagerSendMock,
-      }));
+      secretsManagerClient
+        .on(GetSecretValueCommand)
+        .resolvesOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
+        .rejectsOnce(new Error('No Zendesk secrets')); // loadSecrets(ZendeskDawson) failure
+      secretsManagerClient.on(PutSecretValueCommand).resolvesOnce({}); // putSecretValue(env_deploy)
 
-      const cognitoAdminSetUserPasswordMock = jest.fn().mockResolvedValue({});
-      cognitoIdentityProvider.mockImplementation(() => ({
-        adminSetUserPassword: cognitoAdminSetUserPasswordMock,
-      }));
+      cognitoIdentityProvider.on(AdminSetUserPasswordCommand).resolves({});
 
       await rotateSecrets({
         ci: '',
@@ -203,8 +251,45 @@ describe('rotate-environment-secrets.helpers', () => {
           DEFAULT_ACCOUNT_PASS: 'Testing1234$',
         }),
       );
-      expect(cognitoAdminSetUserPasswordMock).toHaveBeenCalledTimes(2);
-      expect(secretsManagerSendMock).toHaveBeenCalledTimes(3);
+      expect(AdminSetUserPasswordCommand).toHaveBeenCalledTimes(2);
+      expect(AdminSetUserPasswordCommand).toHaveBeenNthCalledWith(1, {
+        Password: 'new-admin-pass',
+        Permanent: true,
+        UserPoolId: mockUserPoolId,
+        Username: 'admin',
+      });
+      expect(AdminSetUserPasswordCommand).toHaveBeenNthCalledWith(2, {
+        Password: 'new-zendesk-pass',
+        Permanent: true,
+        UserPoolId: mockUserPoolId,
+        Username: 'zendesk',
+      });
+
+      expect(GetSecretValueCommand).toHaveBeenCalledTimes(2);
+      expect(GetSecretValueCommand).toHaveBeenNthCalledWith(1, {
+        SecretId: 'dev_deploy',
+      });
+      expect(GetSecretValueCommand).toHaveBeenNthCalledWith(2, {
+        SecretId: 'dev/ZendeskDawson',
+      });
+
+      expect(PutSecretValueCommand).toHaveBeenCalledTimes(1);
+      expect(PutSecretValueCommand).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({
+          SecretId: 'dev_deploy',
+          SecretString: expect.stringContaining(
+            '"DEFAULT_ACCOUNT_PASS":"Testing1234$"',
+          ),
+        }),
+      );
+
+      expect(STSClient).not.toHaveBeenCalled();
+      expect(AssumeRoleCommand).not.toHaveBeenCalled();
+      expect(SSMClient).not.toHaveBeenCalled();
+      expect(PutParameterCommand).not.toHaveBeenCalled();
+      expect(LambdaClient).not.toHaveBeenCalled();
+      expect(InvokeCommand).not.toHaveBeenCalled();
     });
 
     it('handles missing Zendesk secrets', async () => {
@@ -213,20 +298,13 @@ describe('rotate-environment-secrets.helpers', () => {
         USTC_ZENDESK_USER: 'zendesk',
       };
 
-      const secretsManagerSendMock = jest
-        .fn()
-        .mockResolvedValueOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
-        .mockResolvedValueOnce({}) // putSecretValue(env_deploy)
-        .mockResolvedValueOnce({}); // loadSecrets(ZendeskDawson) returns no SecretString
+      secretsManagerClient
+        .on(GetSecretValueCommand)
+        .resolvesOnce({ SecretString: JSON.stringify(mockSecrets) }) // loadSecrets(env_deploy)
+        .resolvesOnce({}); // loadSecrets(ZendeskDawson) returns no SecretString
+      secretsManagerClient.on(PutSecretValueCommand).resolvesOnce({}); // putSecretValue(env_deploy)
 
-      secretsManagerClient.mockImplementation(() => ({
-        send: secretsManagerSendMock,
-      }));
-
-      const cognitoAdminSetUserPasswordMock = jest.fn().mockResolvedValue({});
-      cognitoIdentityProvider.mockImplementation(() => ({
-        adminSetUserPassword: cognitoAdminSetUserPasswordMock,
-      }));
+      cognitoIdentityProvider.on(AdminSetUserPasswordCommand).resolves({});
 
       await rotateSecrets({
         ci: 'true',
@@ -240,6 +318,10 @@ describe('rotate-environment-secrets.helpers', () => {
   });
 
   describe('invokePasswordUpdateLambdaInVaultAccount', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+      resetMocks();
+    });
     it('throws an error if the environment is unsupported', async () => {
       await expect(
         invokePasswordUpdateLambdaInVaultAccount({
@@ -254,10 +336,7 @@ describe('rotate-environment-secrets.helpers', () => {
     });
 
     it('throws an error if credentials fail to return', async () => {
-      const stsSendMock = jest.fn().mockResolvedValue({});
-      stsClient.mockImplementation(() => ({
-        send: stsSendMock,
-      }));
+      stsClient.on(AssumeRoleCommand).resolves({});
 
       await expect(
         invokePasswordUpdateLambdaInVaultAccount({
@@ -272,38 +351,18 @@ describe('rotate-environment-secrets.helpers', () => {
     });
 
     it('returns the invocation command response on success', async () => {
-      const stsSendMock = jest.fn().mockResolvedValue({
+      stsClient.on(AssumeRoleCommand).resolvesOnce({
         Credentials: {
           AccessKeyId: 'accessKeyId',
+          Expiration: undefined,
           SecretAccessKey: 'secretAccessKey',
           SessionToken: 'sessionToken',
         },
       });
-      stsClient.mockImplementation(() => ({
-        send: stsSendMock,
-      }));
 
-      const ssmSendMock = jest.fn().mockResolvedValue({});
-      ssmClient.mockImplementation(() => ({
-        send: ssmSendMock,
-      }));
+      ssmClient.on(PutParameterCommand).resolvesOnce({});
 
-      const mockResponse = {
-        StatusCode: 202,
-        $metadata: {
-          httpStatusCode: 202,
-          requestId: 'e69a657f-b670-46f9-ae04-9e9f1edc3ccc',
-          extendedRequestId: undefined,
-          cfId: undefined,
-          attempts: 1,
-          totalRetryDelay: 0,
-        },
-        Payload: null,
-      };
-      const lambdaSendMock = jest.fn().mockResolvedValue(mockResponse);
-      lambdaClient.mockImplementation(() => ({
-        send: lambdaSendMock,
-      }));
+      lambdaClient.on(InvokeCommand).resolves(mockLambdaInvocationResponse);
 
       const result = await invokePasswordUpdateLambdaInVaultAccount({
         env: 'test',
@@ -312,10 +371,10 @@ describe('rotate-environment-secrets.helpers', () => {
         vaultAccountId: '123456789012',
       });
 
-      expect(result).toEqual(mockResponse);
-      expect(STSClient).toHaveBeenCalled();
-      expect(SSMClient).toHaveBeenCalled();
-      expect(LambdaClient).toHaveBeenCalled();
+      expect(result).toEqual(mockLambdaInvocationResponse);
+      expect(AssumeRoleCommand).toHaveBeenCalledTimes(1);
+      expect(PutParameterCommand).toHaveBeenCalledTimes(1);
+      expect(InvokeCommand).toHaveBeenCalledTimes(1);
     });
   });
 });
