@@ -45,7 +45,7 @@ const config: Config = {
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
     '!upload-practitioner-application-packages.ts',
-    '!user/!(rotate-environment-secrets.helpers.ts)',
+    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {

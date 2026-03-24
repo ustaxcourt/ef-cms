@@ -39,7 +39,7 @@ describe('rotate-environment-secrets.helpers', () => {
   });
 
   describe('loadSecrets', () => {
-    it('should return parsed secrets when SecretString is present', async () => {
+    it('returns parsed secrets when SecretString is present', async () => {
       const mockSecrets = { key: 'value' };
       const mockResponse = jest.fn().mockResolvedValue({
         SecretString: JSON.stringify(mockSecrets),
@@ -59,7 +59,7 @@ describe('rotate-environment-secrets.helpers', () => {
       });
     });
 
-    it('should throw an error when SecretString is missing', async () => {
+    it('throws an error when SecretString is missing', async () => {
       const mockResponse = jest.fn().mockResolvedValue({});
       secretsManagerClient.mockImplementation(() => ({
         send: mockResponse,
@@ -75,7 +75,7 @@ describe('rotate-environment-secrets.helpers', () => {
   });
 
   describe('rotateSecrets', () => {
-    it('should rotate secrets for test environment with CI', async () => {
+    it('rotates secrets for test environment with CI', async () => {
       const mockSecrets = {
         USTC_ADMIN_USER: 'admin',
         USTC_ZENDESK_USER: 'zendesk',
@@ -170,7 +170,7 @@ describe('rotate-environment-secrets.helpers', () => {
       );
     });
 
-    it('should rotate secrets for dev environment without CI', async () => {
+    it('rotates secrets for dev environment without CI', async () => {
       const mockSecrets = {
         USTC_ADMIN_USER: 'admin',
         USTC_ZENDESK_USER: 'zendesk',
@@ -230,7 +230,7 @@ describe('rotate-environment-secrets.helpers', () => {
 
       await rotateSecrets({
         ci: 'true',
-        env: 'test',
+        env: 'unsupported',
         region: mockRegion,
         UserPoolId: mockUserPoolId,
       });
