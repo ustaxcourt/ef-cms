@@ -19,19 +19,9 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
   const listContainerRef = useRef<HTMLDivElement>(null);
   const rowHeightCacheRef = useRef<Map<number, number>>(new Map());
   const correctionCountRef = useRef(0);
-  const prevViewDocumentIdRef = useRef<string | undefined>(undefined);
-  const hadListDimensionsRef = useRef(false);
-  const lastListMeasurementsRef = useRef<{ width: number; height: number } | null>(
-    null,
-  );
-  const [visibleRange, setVisibleRange] = useState<{ start: number; stop: number }>({
-    start: -1,
-    stop: -1,
-  });
-  const [listDimensions, setListDimensions] = useState<{
-    width: number;
-    height: number;
-  } | null>(null);
+  const measurementFrameRef = useRef<number | null>(null);
+  const lastMeasuredRangeRef = useRef<{start: number, end: number} | null>(null);
+  const [listDimensions, setListDimensions] = useState<{width: number, height: number} | null>(null);
 
   // Get row height from cache or provide a generous overestimate.
   // Overestimating is safe (extra whitespace), underestimating causes overlap.
@@ -81,8 +71,8 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
       estimatedHeight += 21;
     }
 
-    // Generous buffer — extra whitespace is corrected by measurement pass
-    estimatedHeight += 15;
+    // Small buffer for rounding/padding — keep minimal to reduce spacing inconsistency
+    estimatedHeight += 5;
 
     return Math.max(estimatedHeight, 60);
   };
@@ -90,28 +80,13 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
   // Measure container dimensions for VariableSizeList
   useLayoutEffect(() => {
     const updateDimensions = () => {
-      if (!listContainerRef.current) return;
-
-      const rect = listContainerRef.current.getBoundingClientRect();
-      const nextW = rect.width;
-      const nextH = rect.height;
-      const prev = lastListMeasurementsRef.current;
-
-      // Invalidate before setState so the next render does not read stale row
-      // heights from a previous width (wrapping changes line counts).
-      if (
-        prev &&
-        (prev.width !== nextW || prev.height !== nextH)
-      ) {
-        rowHeightCacheRef.current.clear();
-        correctionCountRef.current = 0;
-        if (listRef.current) {
-          listRef.current.resetAfterIndex(0, true);
-        }
+      if (listContainerRef.current) {
+        const rect = listContainerRef.current.getBoundingClientRect();
+        setListDimensions({
+          width: rect.width,
+          height: rect.height
+        });
       }
-
-      lastListMeasurementsRef.current = { width: nextW, height: nextH };
-      setListDimensions({ width: nextW, height: nextH });
     };
 
     const timeout = setTimeout(updateDimensions, 0);
@@ -136,83 +111,94 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
   // query all visible content wrappers, measure their actual heights,
   // cache them, and do ONE resetAfterIndex call to reposition everything.
   // This avoids the per-Row resetAfterIndex batching issue.
-  // Limited correction cycles to prevent infinite re-render loops (e.g. when
-  // correcting heights changes the visible range). Large lists may need more
-  // than a handful of passes before visible rows stabilize.
+  // Limited to 10 correction cycles to prevent infinite re-render loops
+  // (e.g., when correcting heights changes the visible range, revealing
+  // new unmeasured rows that need their own correction).
+  // Uses requestAnimationFrame to batch measurements and prevent multiple
+  // measurements per frame during scrolling.
   useLayoutEffect(() => {
     if (!listContainerRef.current || !listRef.current) return;
-    if (correctionCountRef.current >= 15) {
-      return;
+    if (correctionCountRef.current >= 10) return;
+
+    // Cancel any pending measurement to avoid multiple measurements per frame
+    if (measurementFrameRef.current !== null) {
+      cancelAnimationFrame(measurementFrameRef.current);
     }
 
-    const contentElements = listContainerRef.current.querySelectorAll<HTMLElement>(
-      '[data-row-index]'
-    );
+    measurementFrameRef.current = requestAnimationFrame(() => {
+      if (!listContainerRef.current || !listRef.current) return;
 
-    let needsReset = false;
-    let minChangedIndex = Infinity;
-
-    contentElements.forEach(el => {
-      const index = parseInt(el.dataset.rowIndex!, 10);
-      const buttonEl = el.querySelector<HTMLElement>('.attachment-viewer-button');
-      const gridRowEl = buttonEl?.querySelector<HTMLElement>('.grid-row');
-
-      // Measure natural content height from the button (padding + grid + text).
-      // Do not use outerRow.scrollHeight in the max: after we assign a row height,
-      // outer grows to match and can compound with a buffer each pass.
-      const contentHeightPx = Math.max(
-        buttonEl?.scrollHeight ?? 0,
-        buttonEl?.offsetHeight ?? 0,
-        buttonEl?.getBoundingClientRect().height ?? 0,
-        gridRowEl?.scrollHeight ?? 0,
-        gridRowEl?.offsetHeight ?? 0,
-        el.scrollHeight,
-        el.offsetHeight,
+      const contentElements = listContainerRef.current.querySelectorAll<HTMLElement>(
+        '[data-row-index]'
       );
-      // Line-height / subpixel rounding can leave the last line half-clipped
-      // with overflow:hidden on the row slot.
-      const height = Math.ceil(contentHeightPx) + 6;
-      const cached = rowHeightCacheRef.current.get(index);
 
-      if (!cached || Math.abs(cached - height) > 1) {
-        rowHeightCacheRef.current.set(index, height);
-        needsReset = true;
-        minChangedIndex = Math.min(minChangedIndex, index);
+      if (contentElements.length === 0) return;
+
+      // Determine the current visible range
+      const indices = Array.from(contentElements).map(el => parseInt(el.dataset.rowIndex!, 10));
+      const currentStart = Math.min(...indices);
+      const currentEnd = Math.max(...indices);
+
+      // Reset correction counter if we've scrolled to a significantly different range
+      const lastRange = lastMeasuredRangeRef.current;
+      if (lastRange) {
+        const rangeSize = currentEnd - currentStart;
+        const overlap = Math.min(currentEnd, lastRange.end) - Math.max(currentStart, lastRange.start);
+        // If less than 50% overlap, we've scrolled to mostly new content
+        if (overlap < rangeSize * 0.5) {
+          correctionCountRef.current = 0;
+        }
       }
+
+      lastMeasuredRangeRef.current = { start: currentStart, end: currentEnd };
+
+      let needsReset = false;
+      let minChangedIndex = Infinity;
+
+      contentElements.forEach(el => {
+        const index = parseInt(el.dataset.rowIndex!, 10);
+        const buttonEl = el.querySelector<HTMLElement>('.attachment-viewer-button');
+
+        if (!buttonEl) return;
+
+        const height = buttonEl.offsetHeight;
+        const cached = rowHeightCacheRef.current.get(index);
+
+        if (!cached || Math.abs(cached - height) > 1) {
+          rowHeightCacheRef.current.set(index, height);
+          needsReset = true;
+          minChangedIndex = Math.min(minChangedIndex, index);
+        }
+      });
+
+      if (needsReset) {
+        correctionCountRef.current++;
+        listRef.current!.resetAfterIndex(minChangedIndex, true);
+      } else {
+        // Stable — reset correction counter for future scroll events
+        correctionCountRef.current = 0;
+      }
+
+      measurementFrameRef.current = null;
     });
 
-    if (needsReset) {
-      correctionCountRef.current++;
-      listRef.current.resetAfterIndex(minChangedIndex, true);
-    } else {
-      // Stable — reset correction counter for future scroll events
-      correctionCountRef.current = 0;
-    }
-  }, [visibleRange, listDimensions, docketEntries]);
+    return () => {
+      if (measurementFrameRef.current !== null) {
+        cancelAnimationFrame(measurementFrameRef.current);
+      }
+    };
+  });
 
-  // Scroll to the selected document when the selection changes or when the list
-  // first gets dimensions — not on window resize (listDimensions updates would
-  // otherwise re-center and feel like a jump to the top / away from browse position).
+  // Scroll to the selected document in the virtualized list
   useEffect(() => {
-    if (!viewDocumentId || !listRef.current || !listDimensions) return;
-
-    const selectedIndex = docketEntries.findIndex(
-      entry => entry.docketEntryId === viewDocumentId,
-    );
-    if (selectedIndex === -1) return;
-
-    const selectionChanged = prevViewDocumentIdRef.current !== viewDocumentId;
-    const dimensionsJustBecameAvailable =
-      !hadListDimensionsRef.current && !!listDimensions;
-
-    prevViewDocumentIdRef.current = viewDocumentId;
-    hadListDimensionsRef.current = true;
-
-    if (!selectionChanged && !dimensionsJustBecameAvailable) {
-      return;
+    if (viewDocumentId && listRef.current && listDimensions) {
+      const selectedIndex = docketEntries.findIndex(
+        entry => entry.docketEntryId === viewDocumentId,
+      );
+      if (selectedIndex !== -1) {
+        listRef.current.scrollToItem(selectedIndex, 'center');
+      }
     }
-
-    listRef.current.scrollToItem(selectedIndex, 'center');
   }, [viewDocumentId, listDimensions, docketEntries]);
 
   // Row renderer for virtualized list
@@ -221,8 +207,11 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
 
     if (!entry) return null;
 
+    // Extract height from react-window's style to apply to button
+    const { height: rowHeight, ...positionStyle } = style;
+
     return (
-      <div style={{...style, overflow: 'hidden', boxShadow: 'inset 0 -1px 0 #dfe1e2'}}>
+      <div style={{...positionStyle, boxShadow: 'inset 0 -1px 0 #dfe1e2'}}>
         <div data-row-index={index}>
           <Button
             className={classNames(
@@ -237,6 +226,11 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
               setViewerDocumentToDisplaySequence({
                 viewerDocumentToDisplay: entry,
               });
+            }}
+            style={{
+              height: rowHeight,
+              overflow: 'hidden',
+              display: 'block'
             }}
           >
             <div
@@ -336,27 +330,10 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     >
       {listDimensions && (
         <VariableSizeList
-          estimatedItemSize={100}
           height={listDimensions.height}
           itemCount={docketEntries.length}
           itemSize={getRowHeight}
-          onItemsRendered={({
-            visibleStartIndex,
-            visibleStopIndex,
-          }) => {
-            setVisibleRange(current => {
-              if (
-                current.start === visibleStartIndex &&
-                current.stop === visibleStopIndex
-              ) {
-                return current;
-              }
-              return {
-                start: visibleStartIndex,
-                stop: visibleStopIndex,
-              };
-            });
-          }}
+          overscanCount={3}
           width={listDimensions.width}
           ref={listRef}
         >
