@@ -4,8 +4,12 @@ export const setMultiDocketedOriginalCaseAction = ({
   props,
   store,
 }: ActionProps<{ multiDocketedOriginalCaseDetail: RawCase }>) => {
-  store.set(
-    state.multiDocketedOriginalCaseDetail,
-    props.multiDocketedOriginalCaseDetail,
-  );
+  if (props.multiDocketedOriginalCaseDetail) {
+    store.set(
+      state.multiDocketedOriginalCaseDetail,
+      props.multiDocketedOriginalCaseDetail,
+    );
+  } else {
+    store.unset(state.multiDocketedOriginalCaseDetail);
+  }
 };
