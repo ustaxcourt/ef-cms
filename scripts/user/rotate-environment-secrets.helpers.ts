@@ -1,5 +1,8 @@
+import {
+  AdminSetUserPasswordCommand,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import {
@@ -68,20 +71,22 @@ export const rotateSecrets = async ({
     });
   }
 
-  await cognitoClient.adminSetUserPassword({
+  const ustcAdminPassCommand = new AdminSetUserPasswordCommand({
     Password: USTC_ADMIN_PASS,
     Permanent: true,
     UserPoolId,
     Username: secrets.USTC_ADMIN_USER,
   });
+  await cognitoClient.send(ustcAdminPassCommand);
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
-  await cognitoClient.adminSetUserPassword({
+  const zendeskAdminPassCommand = new AdminSetUserPasswordCommand({
     Password: USTC_ZENDESK_PASS,
     Permanent: true,
     UserPoolId,
     Username: secrets.USTC_ZENDESK_USER,
   });
+  await cognitoClient.send(zendeskAdminPassCommand);
   console.log('✅ USTC_ZENDESK_USER Cognito Password updated');
 
   const putSecretValueCommand = new PutSecretValueCommand({
