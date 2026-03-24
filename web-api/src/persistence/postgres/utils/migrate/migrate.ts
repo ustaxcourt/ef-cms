@@ -108,11 +108,12 @@ async function migrateToLatest(migrationType = 'expand') {
       }
 
       if (didRunMigration) {
-        try {
-          await putSSMItem('entity-validation-required', 'true');
-        } catch (error) {
-          console.error('failed to write ssm parameter for entity validation');
-          console.error(error);
+        const ssmUpdated = await putSSMItem(
+          'entity-validation-required',
+          'true',
+        );
+        if (!ssmUpdated) {
+          console.error('Failed to update SSM parameter for entity validation');
           process.exit(1);
         }
       }

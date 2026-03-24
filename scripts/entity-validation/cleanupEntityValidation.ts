@@ -14,14 +14,12 @@ export async function main(): Promise<void> {
 }
 
 async function cleanupEntityValidation(): Promise<number> {
-  try {
-    await deleteSSMItem('entity-validation-required');
-  } catch (error) {
-    console.error('failed to delete ssm parameter for entity validation');
-    console.error(error);
-    process.exit(1);
-  }
+  await deleteSSMItem('entity-validation-required');
+
   return 0;
 }
 
-main();
+if (require.main === module) {
+  // Intentionally not awaiting: main() handles process exit and errors.
+  void main();
+}

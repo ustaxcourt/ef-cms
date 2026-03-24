@@ -74,7 +74,7 @@ const getAllUsers = async () => {
   return users.map(user => fromKyselyUser(user));
 };
 
-const getAllPractionerDocuments = async () => {
+const getAllPractitionerDocuments = async () => {
   const practitionerDocuments = await getDbReader(async reader => {
     return await reader
       .selectFrom('dwPractitionerDocuments')
@@ -101,7 +101,7 @@ const formatElapsedTime = (startTime: number) => {
 const entityHelperFunctions = {
   // Case: getCasesAndValidate,
   Message: getAllMessages,
-  PractitionerDocument: getAllPractionerDocuments,
+  PractitionerDocument: getAllPractitionerDocuments,
   TrialSession: getTrialSessions,
   TrialSessionWorkingCopy: getAllTrialSessionWorkingCopies,
   User: getAllUsers,
@@ -155,6 +155,7 @@ const performValidation = async (entityName: string) => {
         .catch(err => {
           console.error(`Worker error for ${entityName}:`, err);
           returnWorker(worker);
+          throw err;
         });
       pendingValidations.push(validationPromise);
     };
@@ -227,6 +228,7 @@ const performValidation = async (entityName: string) => {
     console.error(
       `${entityName} validation stopped after ${formatElapsedTime(startTime)}.`,
     );
+    throw error;
   }
 
   return validationErrors;

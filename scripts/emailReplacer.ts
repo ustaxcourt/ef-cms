@@ -14,17 +14,18 @@ export function sanitizeEmail(email: string) {
   if (email === '') {
     return '';
   }
-  let hash = crypto
-    .createHash('shake256', { outputLength: 4 })
-    .update(email)
-    .digest('hex');
-
   const originalEmail = email;
 
   // same email, return the same hash
   if (alreadyHashedEmails[originalEmail]) {
-    return `${hash}@${DOMAIN_REPLACER}`;
+    const storedHash = alreadyHashedEmails[originalEmail];
+    return `${storedHash}@${DOMAIN_REPLACER}`;
   }
+
+  let hash = crypto
+    .createHash('shake256', { outputLength: 4 })
+    .update(email)
+    .digest('hex');
 
   // handle hash collision, generate a new hash until we find one that is not used
   if (usedEmails[hash]) {

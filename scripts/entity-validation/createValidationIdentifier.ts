@@ -5,6 +5,9 @@ import joi from 'joi';
 function stringifyEverything(input): string {
   let bigOlString = '';
   function stringifyStuff(obj) {
+    if (obj === null) {
+      return '';
+    }
     const theType = typeof obj;
     if (theType === 'object' || Array.isArray(obj)) {
       for (const key in obj) {

@@ -136,6 +136,7 @@ export function resolveChangedEntities(
 export async function runEntityValidation(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
+  console.log('new fingerprint: ', newFingerprint);
   let entityValidationRequired: string | undefined;
   try {
     entityValidationRequired = await getSSMItem('entity-validation-required');
@@ -163,7 +164,13 @@ export async function runEntityValidation(): Promise<number> {
     console.log(
       'Entity validation fingerprints have changed. Writing new fingerprint to SSM.',
     );
-    await putSSMItem(SSM_KEY, newFingerprint);
+    const ssmUpdateSucceeded = await putSSMItem(SSM_KEY, newFingerprint);
+    if (!ssmUpdateSucceeded) {
+      console.log(
+        'Failed to write new entity validation fingerprint to SSM. Please check SSM permissions and retry.',
+      );
+      return 1;
+    }
     return 0;
   }
 }
@@ -176,4 +183,9 @@ export async function main(): Promise<void> {
       console.log('Error:', err);
       process.exit(1);
     });
+}
+
+if (require.main === module) {
+  // Intentionally not awaiting: main() handles process exit and errors.
+  void main();
 }

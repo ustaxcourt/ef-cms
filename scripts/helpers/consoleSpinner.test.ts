@@ -1,7 +1,19 @@
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { createSpinner } from './consoleSpinner';
+
+jest.mock('@shared/business/utilities/DateHandler', () => ({
+  getCurrentDateTimeInMillis: jest.fn().mockReturnValue(1000),
+}));
 
 describe('createSpinner', () => {
   beforeEach(() => {
+    // Each call returns a value 100ms ahead of the previous, so the throttle
+    // condition (now - lastRenderTime >= 100) always passes for updates.
+    let clock = 0;
+    (getCurrentDateTimeInMillis as jest.Mock).mockImplementation(() => {
+      clock += 100;
+      return clock;
+    });
     process.stdout.clearLine = process.stdout.clearLine ?? (() => true);
     jest.spyOn(process.stdout, 'clearLine').mockImplementation(() => true);
     jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
@@ -74,21 +86,21 @@ describe('createSpinner', () => {
       expect(clearLineCalls[1]).toBeLessThan(writeCalls[1]);
     });
 
-    it('should not render when Date.now() is behind lastRenderTime', () => {
-      jest.useFakeTimers();
-      jest.setSystemTime(1000);
+    it('should not render when getCurrentDateTimeInMillis() is behind lastRenderTime', () => {
+      // Override to: creation returns 100 (lastRenderTime=100), update returns 150 → 150-100=50 < 100
+      let callCount = 0;
+      (getCurrentDateTimeInMillis as jest.Mock).mockImplementation(() => {
+        callCount += 1;
+        return callCount === 1 ? 100 : 150;
+      });
 
-      const spinner = createSpinner('Loading...'); // lastRenderTime = 1000
+      const spinner = createSpinner('Loading...');
       const writeCountAfterCreate = (process.stdout.write as jest.Mock).mock
         .calls.length;
 
-      // Move clock backwards so Date.now() - lastRenderTime < 0
-      jest.setSystemTime(500);
       spinner.update('Should not render');
 
       expect(process.stdout.write).toHaveBeenCalledTimes(writeCountAfterCreate);
-
-      jest.useRealTimers();
     });
   });
 

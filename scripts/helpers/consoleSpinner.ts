@@ -1,3 +1,5 @@
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+
 const SPINNER_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
 export function createSpinner(initialText: string) {
@@ -9,7 +11,7 @@ export function createSpinner(initialText: string) {
     process.stdout.clearLine(0);
     process.stdout.write(`\r${SPINNER_FRAMES[frameIndex]} ${currentText}`);
     frameIndex = (frameIndex + 1) % SPINNER_FRAMES.length;
-    lastRenderTime = Date.now();
+    lastRenderTime = getCurrentDateTimeInMillis();
   };
 
   render();
@@ -17,7 +19,9 @@ export function createSpinner(initialText: string) {
   return {
     update: (text: string) => {
       currentText = text;
-      if (Date.now() - lastRenderTime >= 0) {
+      const now = getCurrentDateTimeInMillis();
+      if (now - lastRenderTime >= 100) {
+        lastRenderTime = now;
         render();
       }
     },

@@ -143,7 +143,7 @@ describe('entityValidationHelper', () => {
     expect(mockSpinner.fail).toHaveBeenCalled();
   });
 
-  it('WorkItem - catches and logs worker errors without throwing', async () => {
+  it('WorkItem - throws when a worker thread crashes', async () => {
     (Worker as jest.Mock).mockImplementation(() =>
       mockCreateWorkerInstance({ error: new Error('Worker crashed') }),
     );
@@ -151,21 +151,23 @@ describe('entityValidationHelper', () => {
       cb(mockBuildFluentChain([{ workItemId: '1' }])),
     );
 
-    const result = await entityValidationFunctions.WorkItem();
-    expect(result).toEqual([]);
+    await expect(entityValidationFunctions.WorkItem()).rejects.toThrow(
+      'Worker crashed',
+    );
     expect(console.error).toHaveBeenCalledWith(
       expect.stringContaining('WorkItem'),
       expect.any(Error),
     );
   });
 
-  it('WorkItem - catches and logs DB errors without throwing', async () => {
+  it('WorkItem - throws when a DB/infrastructure error occurs', async () => {
     (getDbReader as jest.Mock).mockRejectedValue(
       new Error('DB connection failed'),
     );
 
-    const result = await entityValidationFunctions.WorkItem();
-    expect(result).toEqual([]);
+    await expect(entityValidationFunctions.WorkItem()).rejects.toThrow(
+      'DB connection failed',
+    );
     expect(console.error).toHaveBeenCalledWith(
       expect.stringContaining('WorkItem'),
       expect.any(Error),
