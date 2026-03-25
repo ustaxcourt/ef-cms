@@ -648,6 +648,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1118,6 +1119,8 @@ export const presenterSequences = {
     openConfirmServePaperFiledDocumentSequence as unknown as Function,
   openConfirmServeToIrsModalSequence:
     openConfirmServeToIrsModalSequence as unknown as Function,
+  openConfirmTrialSessionLocationChangeModalSequence:
+    openConfirmTrialSessionLocationChangeModalSequence as unknown as Function,
   openCreateCaseDeadlineModalSequence:
     openCreateCaseDeadlineModalSequence as unknown as Function,
   openCreateMessageModalSequence:

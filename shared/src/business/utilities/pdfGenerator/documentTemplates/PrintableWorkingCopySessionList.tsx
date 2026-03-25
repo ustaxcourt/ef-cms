@@ -43,12 +43,13 @@ export const PrintableWorkingCopySessionList = ({
           formattedTrialSession={formattedTrialSession}
         />
         <SessionNotesSection sessionNotes={sessionNotes} />
-        <SelectedFiltersSection
-          count={formattedCases.length}
-          selectedFilters={filters}
-          trialStatusCounts={trialStatusCounts}
-        />
-
+        {showCaseNotes && (
+          <SelectedFiltersSection
+            count={formattedCases.length}
+            selectedFilters={filters}
+            trialStatusCounts={trialStatusCounts}
+          />
+        )}
         <table>
           <thead>
             <tr>
@@ -72,7 +73,7 @@ export const PrintableWorkingCopySessionList = ({
               </th>
               <th>Respondent Counsel</th>
               <th>PTM</th>
-              <th colSpan={2}>Trial Status</th>
+              {showCaseNotes && <th colSpan={2}>Trial Status</th>}
             </tr>
           </thead>
           <tbody>
@@ -110,7 +111,9 @@ export const PrintableWorkingCopySessionList = ({
                       ))}
                     </td>
                     <td>{formattedCase.filingPartiesCode}</td>
-                    <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
+                    {showCaseNotes && (
+                      <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
+                    )}
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan={1}></td>
