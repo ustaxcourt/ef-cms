@@ -1,7 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
-import pluginCypress from 'eslint-plugin-cypress/flat';
+import pluginCypress from 'eslint-plugin-cypress';
 import pluginJest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
@@ -85,6 +85,11 @@ export default tseslint.config(
   {
     // @ts-ignore
     ...reactPlugin.configs.flat.recommended, // React recommendations
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       // @ts-ignore
       ...reactPlugin.configs.flat.recommended.rules,

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
@@ -99,6 +100,7 @@ export class DocketEntry extends JoiValidationEntity {
   public docketNumbers?: string;
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
+  public documentStorageId: string;
   public documentTitle: string;
   public documentType?: string;
   public eventCode: string; // technically optional as draft docketEntry does not require it
@@ -233,6 +235,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.docketNumbers = rawDocketEntry.docketNumbers;
     this.documentContentsId = rawDocketEntry.documentContentsId;
     this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
+    this.documentStorageId =
+      rawDocketEntry.documentStorageId || this.docketEntryId;
     this.documentTitle = rawDocketEntry.documentTitle;
     this.documentType = rawDocketEntry.documentType;
     this.eventCode = rawDocketEntry.eventCode;
@@ -732,7 +736,10 @@ export class DocketEntry extends JoiValidationEntity {
     if (user.role === ROLES.irsSuperuser)
       return DocketEntry.isServed(petitionDocketEntry);
 
-    if (isTerminalUser) return !DocketEntry.isSealed(entry);
+    if (isTerminalUser) {
+      if (entry.isStricken) return false;
+      return !DocketEntry.isSealed(entry);
+    }
 
     const userHasAccessToCase = Case.userHasAccessToCase(rawCase, user);
 

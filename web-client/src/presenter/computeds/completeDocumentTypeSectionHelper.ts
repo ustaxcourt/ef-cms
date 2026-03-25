@@ -40,6 +40,7 @@ export const completeDocumentTypeSectionHelper = (
 
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(
+    get,
     EXTERNAL_DOCUMENTS_ARRAY,
   );
 

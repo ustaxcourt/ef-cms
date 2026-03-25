@@ -2,12 +2,50 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   MOTION_DISPOSITION_VERBIAGE,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   STATE_KEYS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
-import { concat, sortBy } from 'lodash';
+import { type RawUser } from '@shared/business/entities/User';
+import {
+  computeIsNotServedDocument,
+  type FormattedCase,
+  type FormattedCaseDetailDocketEntry,
+  type FormattedDocketEntry,
+  type RelatedDocketEntry,
+} from '@shared/business/utilities/getFormattedCaseDetail';
+import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+
+type PreFormattedDocketEntry = Omit<
+  FormattedDocketEntry,
+  'descriptionDisplay' | 'iconsToDisplay' | 'toolTipText'
+>;
+type ComputedFormattedDocketEntry = FormattedDocketEntry & {
+  isDocumentSelected: boolean;
+  isSelectableForDownload: boolean;
+  signatory: string;
+};
+type ComputedFormattedCase = Omit<FormattedCase, 'formattedDocketEntries'> & {
+  allDocumentsSelectedForDownload: boolean;
+  allEligibleDocumentsForDownload: { docketEntryId: string }[];
+  docketRecordSort?: string;
+  formattedDocketEntries: ComputedFormattedDocketEntry[];
+  formattedDocketEntriesOnDocketRecord: ComputedFormattedDocketEntry[];
+  formattedDraftDocuments: (FormattedCaseDetailDocketEntry & {
+    createdAtFormatted: string;
+    descriptionDisplay: string;
+    showDocumentViewerLink: boolean;
+  })[];
+  formattedPendingDocketEntriesOnDocketRecord: ComputedFormattedDocketEntry[];
+  isDownloadLinkEnabled: boolean;
+  someDocumentsSelectedForDownload: boolean;
+};
 
 export const isSelectableForDownload = (entry: RawDocketEntry) => {
   return (
@@ -17,8 +55,24 @@ export const isSelectableForDownload = (entry: RawDocketEntry) => {
   );
 };
 
-export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  const iconsToDisplay: any[] = [];
+export const setupIconsToDisplay = ({
+  formattedResult,
+  isExternalUser,
+}: {
+  formattedResult: PreFormattedDocketEntry;
+  isExternalUser: boolean;
+}): {
+  className: string;
+  icon: IconProp;
+  size: string;
+  title: string;
+}[] => {
+  const iconsToDisplay: {
+    className: string;
+    icon: IconProp;
+    size: string;
+    title: string;
+  }[] = [];
 
   if (formattedResult.sealedTo) {
     iconsToDisplay.push({
@@ -48,14 +102,14 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
       className: 'fa-icon-red',
-      icon: ['fa', 'star'],
+      icon: ['fas', 'star'],
       title: 'Is untouched',
       size: 'lg',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
-      icon: ['fa-spin', 'spinner'],
+      icon: ['fas', 'spinner'],
       title: 'Is loading',
       size: 'lg',
     });
@@ -65,18 +119,17 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 };
 
 export const getShowEditDocketRecordEntry = ({
-  applicationContext,
   entry,
+  get,
   userPermissions,
-}) => {
-  const { SYSTEM_GENERATED_DOCUMENT_TYPES, UNSERVABLE_EVENT_CODES } =
-    applicationContext.getConstants();
-
-  const systemGeneratedEventCodes = Object.keys(
+}: {
+  entry: FormattedCaseDetailDocketEntry;
+  get: Get;
+  userPermissions: { [k: string]: boolean };
+}): boolean => {
+  const systemGeneratedEventCodes: string[] = Object.keys(
     SYSTEM_GENERATED_DOCUMENT_TYPES,
-  ).map(key => {
-    return SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
-  });
+  ).map(key => SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode);
 
   const hasSystemGeneratedDocument =
     entry && systemGeneratedEventCodes.includes(entry.eventCode);
@@ -86,7 +139,21 @@ export const getShowEditDocketRecordEntry = ({
   const hasUnservableCourtIssuedDocument =
     entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
+  const eventCode = entry ? entry.eventCode : '';
+
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
+
+  const isRestrictedEventCode = restrictedEventCodesArray.includes(eventCode);
+
   return (
+    !isRestrictedEventCode &&
     userPermissions.EDIT_DOCKET_ENTRY &&
     (hasSystemGeneratedDocument ||
       DocketEntry.isMinuteEntry(entry) ||
@@ -97,13 +164,12 @@ export const getShowEditDocketRecordEntry = ({
   );
 };
 
-export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
-  const allOpinionEventCodes =
-    applicationContext.getConstants().OPINION_EVENT_CODES_WITH_BENCH_OPINION;
-
-  const docketEntryIsOpinion = allOpinionEventCodes.includes(entry.eventCode);
-
-  return !docketEntryIsOpinion;
+export const getShowSealDocketRecordEntry = ({
+  entry,
+}: {
+  entry: FormattedCaseDetailDocketEntry;
+}): boolean => {
+  return !OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(entry.eventCode);
 };
 
 const getRelatedDocketEntryDetails = (
@@ -111,18 +177,22 @@ const getRelatedDocketEntryDetails = (
   rawCase: RawCase,
   targetDocketEntryId: string,
   isExternalUser: boolean,
-  user: any,
-  visibilityPolicyDateFormatted: any,
-) => {
+  user: RawUser,
+  visibilityPolicyDateFormatted: string = '',
+): {
+  index: number | undefined;
+  showDocumentViewerLink: boolean;
+  showDownloadLink: boolean;
+} => {
   const relatedOrder = rawCase.docketEntries.find(
     entry => entry.docketEntryId === targetDocketEntryId,
   );
 
   if (!relatedOrder) {
     throw new Error(
-      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
-        motionEntry.documentTitle
-      }`,
+      `Related order not found for motion with id ` +
+        `${motionEntry.docketEntryId} and targetDocketEntryId ` +
+        `${targetDocketEntryId} and title ${motionEntry.documentTitle}`,
     );
   }
 
@@ -142,15 +212,125 @@ const getRelatedDocketEntryDetails = (
   };
 };
 
+const buildRelatedDocketEntries = ({
+  entry,
+  rawCase,
+  isExternalUser,
+  user,
+  visibilityPolicyDateFormatted,
+}: {
+  entry: FormattedCaseDetailDocketEntry;
+  rawCase: RawCase;
+  isExternalUser: boolean;
+  user: RawUser;
+  visibilityPolicyDateFormatted: string;
+}): RelatedDocketEntry[] => {
+  const relatedDocketEntries: RelatedDocketEntry[] = [];
+
+  const processEntries = (
+    entries: { docketEntryId: string; disposition: string }[] | undefined,
+    verbKey: 'MOTION' | 'ORDER',
+  ) => {
+    if (!entries) return;
+    for (const affectedEntry of entries) {
+      const { index, showDocumentViewerLink, showDownloadLink } =
+        getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          isExternalUser,
+          user,
+          visibilityPolicyDateFormatted,
+        );
+
+      const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+        affectedEntry.disposition
+      ][verbKey].map(d => `${d} #${index}`);
+
+      relatedDocketEntries.push({
+        ...affectedEntry,
+        docketEntryIndex: index,
+        showDocumentViewerLink,
+        showDownloadLink,
+        dispositionLinkText,
+        dispositionText: [],
+      });
+    }
+  };
+
+  processEntries(entry.affectedByDocketEntries, 'MOTION');
+  processEntries(entry.affectedDocketEntries, 'ORDER');
+
+  return relatedDocketEntries;
+};
+
+const computeSealProperties = (
+  entry: FormattedCaseDetailDocketEntry,
+  DOCKET_ENTRY_SEALED_TO_TYPES: { EXTERNAL: string },
+): {
+  sealButtonText: string;
+  sealButtonTooltip: string;
+  sealIcon: string;
+} => {
+  if (!entry.isSealed) {
+    return {
+      sealButtonText: 'Seal',
+      sealButtonTooltip: 'Seal to the public',
+      sealIcon: 'lock',
+    };
+  }
+
+  const sealButtonTooltip =
+    entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+      ? 'Unseal to the public and parties of this case'
+      : 'Unseal to the public';
+
+  return {
+    sealButtonText: 'Unseal',
+    sealButtonTooltip,
+    sealIcon: 'unlock',
+  };
+};
+
+const computeSealedToTooltip = ({
+  applicationContext,
+  entry,
+  preFormattedDocketEntry,
+}: {
+  applicationContext: ClientApplicationContext;
+  entry: FormattedCaseDetailDocketEntry;
+  preFormattedDocketEntry: PreFormattedDocketEntry;
+}): string => {
+  if (preFormattedDocketEntry.sealedToTooltip) {
+    return preFormattedDocketEntry.sealedToTooltip;
+  }
+  if (preFormattedDocketEntry.isSealed) {
+    return applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, entry);
+  }
+  return '';
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  get,
   permissions,
   rawCase,
   user,
   visibilityPolicyDateFormatted,
-}) => {
+}: {
+  applicationContext: ClientApplicationContext;
+  docketNumber: string;
+  entry: FormattedCaseDetailDocketEntry;
+  get: Get;
+  permissions: { [k: string]: boolean };
+  rawCase: RawCase;
+  user: RawUser;
+  visibilityPolicyDateFormatted: string;
+}): FormattedDocketEntry => {
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -158,96 +338,13 @@ export const getFormattedDocketEntry = ({
   const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
-  const formattedResult = {
-    numberOfPages: 0,
-    ...entry,
-    createdAtFormatted: entry.createdAtFormatted,
-  };
-
-  formattedResult.relatedDocketEntries = [];
-  if (entry.affectedByDocketEntries) {
-    formattedResult.relatedDocketEntries = concat(
-      formattedResult.relatedDocketEntries,
-      entry.affectedByDocketEntries.map(affectedEntry => {
-        const { index, showDocumentViewerLink, showDownloadLink } =
-          getRelatedDocketEntryDetails(
-            entry,
-            rawCase,
-            affectedEntry.docketEntryId,
-            isExternalUser,
-            user,
-            visibilityPolicyDateFormatted,
-          );
-
-        return {
-          ...affectedEntry,
-          docketEntryIndex: index,
-          showDocumentViewerLink,
-          showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION,
-        };
-      }),
-    );
-  }
-
-  if (entry.affectedDocketEntries) {
-    formattedResult.relatedDocketEntries = concat(
-      formattedResult.relatedDocketEntries,
-      entry.affectedDocketEntries.map(affectedEntry => {
-        const { index, showDocumentViewerLink, showDownloadLink } =
-          getRelatedDocketEntryDetails(
-            entry,
-            rawCase,
-            affectedEntry.docketEntryId,
-            isExternalUser,
-            user,
-            visibilityPolicyDateFormatted,
-          );
-
-        return {
-          ...affectedEntry,
-          docketEntryIndex: index,
-          showDocumentViewerLink,
-          showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER,
-        };
-      }),
-    );
-  }
-
-  if (!isExternalUser) {
-    formattedResult.showLoadingIcon =
-      !permissions.UPDATE_CASE &&
-      entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-  }
-
-  formattedResult.isPaper =
-    !formattedResult.isInProgress &&
-    !formattedResult.qcWorkItemsUntouched &&
-    entry.isPaper;
-
-  if (entry.isSealed) {
-    formattedResult.sealedToTooltip = applicationContext
-      .getUtilities()
-      .getSealedDocketEntryTooltip(applicationContext, entry);
-  }
-
-  if (entry.documentTitle) {
-    formattedResult.descriptionDisplay = applicationContext
-      .getUtilities()
-      .getDescriptionDisplay(entry);
-  }
-
-  formattedResult.showDocumentProcessing =
-    !permissions.UPDATE_CASE &&
-    entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-
-  formattedResult.showNotServed = computeIsNotServedDocument({
-    formattedEntry: entry,
+  const relatedDocketEntries = buildRelatedDocketEntries({
+    entry,
+    rawCase,
+    isExternalUser,
+    user,
+    visibilityPolicyDateFormatted,
   });
-  formattedResult.showServed = entry.isStatusServed;
 
   const showDocumentLinks = DocketEntry.isDownloadable(entry, {
     isTerminalUser: false,
@@ -255,50 +352,61 @@ export const getFormattedDocketEntry = ({
     user,
     visibilityChangeDate: visibilityPolicyDateFormatted,
   });
+  const showDocumentProcessing =
+    !permissions.UPDATE_CASE &&
+    entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-  formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;
+  const preFormattedDocketEntry: PreFormattedDocketEntry = {
+    numberOfPages: 0,
+    ...entry,
+    editDocketEntryMetaLink: `/case-detail/${docketNumber}/docket-entry/${entry.index}/edit-meta`,
+    isPaper:
+      !entry.isInProgress && !entry.qcWorkItemsUntouched && entry.isPaper,
+    relatedDocketEntries,
+    ...computeSealProperties(entry, DOCKET_ENTRY_SEALED_TO_TYPES),
+    showDocumentDescriptionWithoutLink:
+      !showDocumentLinks && !showDocumentProcessing,
+    showDocumentProcessing,
+    showDocumentViewerLink: !isExternalUser && showDocumentLinks,
+    showEditDocketRecordEntry: getShowEditDocketRecordEntry({
+      entry,
+      get,
+      userPermissions: permissions,
+    }),
+    showLinkToDocument: isExternalUser && showDocumentLinks,
+    showLoadingIcon:
+      !isExternalUser &&
+      !permissions.UPDATE_CASE &&
+      entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    showNotServed: computeIsNotServedDocument({ formattedEntry: entry }),
+    showSealDocketRecordEntry: getShowSealDocketRecordEntry({ entry }),
+    showServed: entry.isStatusServed,
+  };
 
-  formattedResult.showLinkToDocument = isExternalUser && showDocumentLinks;
-
-  formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
-    applicationContext,
-    entry,
-    userPermissions: permissions,
-  });
-
-  formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
-    applicationContext,
-    entry,
-  });
-
-  formattedResult.showDocumentDescriptionWithoutLink =
-    !showDocumentLinks && !formattedResult.showDocumentProcessing;
-
-  formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
-
-  formattedResult.iconsToDisplay = setupIconsToDisplay({
-    formattedResult,
-    isExternalUser,
-  });
-
-  formattedResult.sealButtonText = formattedResult.isSealed ? 'Unseal' : 'Seal';
-  formattedResult.sealIcon = formattedResult.isSealed ? 'unlock' : 'lock';
-  formattedResult.sealButtonTooltip = formattedResult.isSealed
-    ? formattedResult.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
-      ? 'Unseal to the public and parties of this case'
-      : 'Unseal to the public'
-    : 'Seal to the public';
-  formattedResult.toolTipText = !formattedResult.isFileAttached
-    ? 'No Document View'
-    : undefined;
-
-  return formattedResult;
+  return {
+    ...preFormattedDocketEntry,
+    descriptionDisplay: preFormattedDocketEntry.documentTitle
+      ? applicationContext
+          .getUtilities()
+          .getDescriptionDisplay(preFormattedDocketEntry)
+      : '',
+    iconsToDisplay: setupIconsToDisplay({
+      formattedResult: preFormattedDocketEntry,
+      isExternalUser,
+    }),
+    sealedToTooltip: computeSealedToTooltip({
+      applicationContext,
+      entry,
+      preFormattedDocketEntry,
+    }),
+    toolTipText: entry.isFileAttached ? '' : 'No Document View',
+  };
 };
 
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): ComputedFormattedCase => {
   const user = get(state.user);
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -325,26 +433,28 @@ export const formattedDocketEntries = (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
-  const result = formatCase(applicationContext, caseDetail, user);
+  const visibilityPolicyDateFormatted =
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+      .toISO() || '';
+  const formattedCase = formatCase(applicationContext, caseDetail, user);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  result.formattedDocketEntries = applicationContext
+  const preformattedDocketEntries = applicationContext
     .getUtilities()
     .getDocketEntriesByFilter(applicationContext, {
-      docketEntries: result.formattedDocketEntries,
+      docketEntries: formattedCase.formattedDocketEntries,
       docketRecordFilter,
     });
 
-  let docketEntriesFormatted = result.formattedDocketEntries
+  let docketEntriesFormatted = preformattedDocketEntries
     .map(entry =>
       getFormattedDocketEntry({
         applicationContext,
         docketNumber,
-        entry,
+        entry: { ...entry } as FormattedCaseDetailDocketEntry,
+        get,
         permissions,
         rawCase: caseDetail,
         user,
@@ -357,7 +467,8 @@ export const formattedDocketEntries = (
         isDocumentSelected: documentsSelectedForDownload.some(
           docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
-        isSelectableForDownload: isSelectableForDownload(docketEntry),
+        isSelectableForDownload: !!isSelectableForDownload(docketEntry),
+        signatory: '',
       };
     });
 
@@ -382,37 +493,45 @@ export const formattedDocketEntries = (
     documentsSelectedForDownloadCount > 0 &&
     documentsSelectedForDownloadCount < selectableDocumentsCount;
 
-  result.someDocumentsSelectedForDownload = someDocumentsSelectedForDownload;
-
-  result.isDownloadLinkEnabled =
-    someDocumentsSelectedForDownload || allDocumentsSelected;
-  result.allDocumentsSelectedForDownload = allDocumentsSelected || false;
-
-  result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
+  const formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
   );
 
-  result.allEligibleDocumentsForDownload = docketEntriesFormatted
+  const allEligibleDocumentsForDownload = docketEntriesFormatted
     .filter(docEntry => isSelectableForDownload(docEntry))
     .map(docEntry => ({
       docketEntryId: docEntry.docketEntryId,
     }));
 
-  result.formattedPendingDocketEntriesOnDocketRecord =
-    result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
+  const formattedPendingDocketEntriesOnDocketRecord =
+    formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
       applicationContext.getUtilities().isPending(docketEntry),
     );
 
-  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+  const formattedDraftDocuments = formattedCase.draftDocuments.map(draftDoc => {
     return {
-      ...draftDocument,
-      descriptionDisplay: draftDocument.documentTitle,
+      ...draftDoc,
+      createdAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(draftDoc.createdAt, FORMATS.MMDDYY),
+      descriptionDisplay: draftDoc.documentTitle,
       showDocumentViewerLink: permissions.UPDATE_CASE,
     };
   });
 
-  result.docketRecordSort = docketRecordSort;
-  return result;
+  return {
+    ...formattedCase,
+    allDocumentsSelectedForDownload: allDocumentsSelected || false,
+    allEligibleDocumentsForDownload,
+    docketRecordSort,
+    formattedDocketEntries: docketEntriesFormatted,
+    formattedDocketEntriesOnDocketRecord,
+    formattedDraftDocuments,
+    formattedPendingDocketEntriesOnDocketRecord,
+    isDownloadLinkEnabled:
+      someDocumentsSelectedForDownload || allDocumentsSelected,
+    someDocumentsSelectedForDownload,
+  };
 };
 
 export function sortDocketEntryTable<T>(

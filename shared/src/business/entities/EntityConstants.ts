@@ -119,20 +119,30 @@ export const MOTION_DISPOSITIONS = {
   DENIED: 'DENIED',
   GRANTED: 'GRANTED',
   GRANTED_IN_PART: 'GRANTED IN PART',
+  DENIED_IN_PART: 'DENIED IN PART',
+  GRANTED_IN_PART_AND_DENIED_IN_PART: 'GRANTED IN PART AND DENIED IN PART',
 };
 
 export const MOTION_DISPOSITION_VERBIAGE = {
   DENIED: {
-    MOTION: 'DENIED BY',
-    ORDER: 'DENYING',
+    MOTION: ['DENIED BY'],
+    ORDER: ['DENYING'],
   },
   GRANTED: {
-    MOTION: 'GRANTED BY',
-    ORDER: 'GRANTING',
+    MOTION: ['GRANTED BY'],
+    ORDER: ['GRANTING'],
   },
   'GRANTED IN PART': {
-    MOTION: 'GRANTED IN PART BY',
-    ORDER: 'GRANTING IN PART',
+    MOTION: ['GRANTED IN PART BY'],
+    ORDER: ['GRANTING IN PART'],
+  },
+  'DENIED IN PART': {
+    MOTION: ['DENIED IN PART BY'],
+    ORDER: ['DENYING IN PART'],
+  },
+  'GRANTED IN PART AND DENIED IN PART': {
+    MOTION: ['GRANTED IN PART BY', 'DENIED IN PART BY'],
+    ORDER: ['GRANTING IN PART', 'DENYING IN PART'],
   },
 };
 
@@ -157,6 +167,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  RESTRICTED_EVENT_CODES: {
+    key: 'restricted-event-codes',
   },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
@@ -517,9 +530,13 @@ export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(EXTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
+EXTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
+
 export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
+
+INTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
 
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
@@ -1801,11 +1818,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -2199,3 +2218,5 @@ export const EVENT_CODES_WITH_NO_ORDER = [
   'SORI',
   'TCOP',
 ];
+
+export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';

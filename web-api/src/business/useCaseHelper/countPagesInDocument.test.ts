@@ -1,5 +1,4 @@
 import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
-
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { countPagesInDocument } from './countPagesInDocument';
 
@@ -13,7 +12,7 @@ describe('countPagesInDocument', () => {
   it('returns page count of a PDF document referenced by docketEntryId', async () => {
     const pageCount = await countPagesInDocument({
       applicationContext,
-      docketEntryId: 'document-id-123',
+      documentStorageId: 'document-id-123',
     });
 
     expect(pageCount).toEqual(1);
@@ -26,5 +25,13 @@ describe('countPagesInDocument', () => {
     });
 
     expect(pageCount).toEqual(1);
+  });
+
+  it('should throw an Error if documentBytes and documentStorageId are undefined', async () => {
+    await expect(
+      countPagesInDocument({
+        applicationContext,
+      }),
+    ).rejects.toThrow();
   });
 });

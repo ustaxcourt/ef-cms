@@ -48,7 +48,9 @@ export const docketClerkQCsNoticeOfChange = ({
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
+      docketNumber:
+        formattedDocketEntriesOnDocketRecord[noticeOfChangeQCItem.index]
+          .docketNumber,
     });
 
     const addDocketEntryHelper = withAppContextDecorator(
@@ -72,6 +74,6 @@ export const docketClerkQCsNoticeOfChange = ({
       document => document.docketEntryId === docketEntryId,
     );
 
-    expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
+    expect(selectedDocument?.qcWorkItemsCompleted).toEqual(true);
   });
 };
