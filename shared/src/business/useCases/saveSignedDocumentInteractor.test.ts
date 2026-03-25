@@ -18,11 +18,14 @@ import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { Message } from '../entities/Message';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
   let mockDocketEntry;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   const mockSigningName = 'Roslindis Angelino';
   const mockDocumentIdBeforeSignature = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3857';
@@ -162,7 +165,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed Stipulated Decision to the case given a Proposed Stipulated Decision', async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor(
+    await saveSignedDocumentInteractor(
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
@@ -173,17 +176,18 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(caseEntity.docketEntries.length).toEqual(
-      mockCase.docketEntries.length + 1,
-    );
-    const signedDocument = caseEntity.docketEntries.find(
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(caseToUpdate.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 2);
+    const signedDocument = caseToUpdate.docketEntries.find(
       e =>
         e.documentType ===
         SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
     );
-    expect(signedDocument?.docketNumber).toEqual(caseEntity.docketNumber);
+    expect(signedDocument?.docketNumber).toEqual(caseToUpdate.docketNumber);
 
-    const signedDocketEntry = caseEntity.docketEntries.find(
+    const signedDocketEntry = caseToUpdate.docketEntries.find(
       doc =>
         doc.documentType === 'Stipulated Decision' &&
         doc.documentStorageId === mockSignedDocumentStorageId,
@@ -199,7 +203,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it("should set the document's processing status to complete", async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor(
+    await saveSignedDocumentInteractor(
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
@@ -210,7 +214,8 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const signedDocument = caseEntity.docketEntries.find(
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const signedDocument = caseToUpdate.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
     expect(signedDocument?.processingStatus).toBe(
@@ -219,7 +224,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should set the documentIdBeforeSignature', async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor(
+    await saveSignedDocumentInteractor(
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
@@ -230,7 +235,8 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const signedDocument = caseEntity.docketEntries.find(
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const signedDocument = caseToUpdate.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
     expect(signedDocument?.documentIdBeforeSignature).toBe(

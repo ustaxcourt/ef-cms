@@ -44,8 +44,11 @@ const config: Config = {
     '!template.ts',
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
+    '!create-large-case-with-exhibits.ts',
+    '!add-exhibits-to-case.ts',
+    '!insert-exhibits-via-sql.ts',
     '!upload-practitioner-application-packages.ts',
-    '!user/**',
+    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {
@@ -61,6 +64,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
+    '^scripts/(.*)$': '<rootDir>/$1',
     '^uuid$': 'uuid',
   },
   testEnvironment: 'node',

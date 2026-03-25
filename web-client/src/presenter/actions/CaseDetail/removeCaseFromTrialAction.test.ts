@@ -68,13 +68,10 @@ describe('removeCaseFromTrialAction', () => {
     });
   });
 
-  it('should return an alertSuccess and caseDetail', async () => {
+  it('should return an alertSuccess', async () => {
     applicationContext
       .getUseCases()
-      .removeCaseFromTrialInteractor.mockImplementationOnce(() => ({
-        docketNumber: mockDocketNumber,
-        trialSessionId: mockTrialSessionId,
-      }));
+      .removeCaseFromTrialInteractor.mockResolvedValueOnce();
 
     await runAction(removeCaseFromTrialAction, {
       modules: {
@@ -95,10 +92,6 @@ describe('removeCaseFromTrialAction', () => {
     expect(successStub).toHaveBeenCalledWith({
       alertSuccess: {
         message: 'Case removed from trial.',
-      },
-      caseDetail: {
-        docketNumber: mockDocketNumber,
-        trialSessionId: mockTrialSessionId,
       },
     });
   });

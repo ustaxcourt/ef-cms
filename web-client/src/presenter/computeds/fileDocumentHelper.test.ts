@@ -249,6 +249,28 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
+  it('should show default party header text and label text in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
+    expect(result.partiesLabelText).toEqual('Filing Parties');
+    expect(result.partiesHeaderText).toEqual('Parties Filing The Document(s)');
+  });
+
+  it('should show party header text and label textm for notw in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: {
+        ...state,
+        user: privatePractitionerUser,
+        form: { ...state.form, eventCode: 'NOTW' },
+      },
+    });
+    expect(result.partiesLabelText).toEqual('Parties');
+    expect(result.partiesHeaderText).toEqual(
+      "Parties You're Withdrawing From as Counsel",
+    );
+  });
+
   describe('supporting documents', () => {
     beforeEach(() => {
       state.form.hasSupportingDocuments = true;

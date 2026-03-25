@@ -793,9 +793,7 @@ export class Case extends JoiValidationEntity {
       this.initialCaption = rawCase.initialCaption || this.caseCaption;
     }
 
-    this.hasPendingItems = this.docketEntries.some(docketEntry =>
-      DocketEntry.isPending(docketEntry),
-    );
+    this.hasPendingItems = rawCase.hasPendingItems ?? false;
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
@@ -997,16 +995,10 @@ export class Case extends JoiValidationEntity {
       secondaryContact,
     });
   }
-
+  
   //@ts-ignore
-  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
-    const { processPendingItems = true } = options;
+  toRawObject(): RawCase {
     const result = this.toRawObjectFromJoi();
-
-    if (processPendingItems) {
-      (result as any).hasPendingItems = this.doesHavePendingItems();
-    }
-
     // @ts-ignore
     return result as RawCase;
   }
@@ -1015,6 +1007,10 @@ export class Case extends JoiValidationEntity {
     return this.docketEntries.some(docketEntry =>
       DocketEntry.isPending(docketEntry),
     );
+  }
+
+  recomputeHasPendingItems(): void {
+    this.hasPendingItems = this.doesHavePendingItems();
   }
 
   /**
@@ -1419,11 +1415,11 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
-    const hasPendingItems = this.doesHavePendingItems();
+    this.hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && hasCaseDeadline) {
+    if (this.hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-    } else if (hasPendingItems) {
+    } else if (this.hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
     } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;

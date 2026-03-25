@@ -6,12 +6,14 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDeficiencyStatisticInteractor } from '@web-api/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('updateDeficiencyStatisticInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const statistic = {
@@ -63,13 +65,13 @@ describe('updateDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should update the case statistic and return the updated statistic when statisticId is present on the case', async () => {
+  it('should update the case statistic when statisticId is present on the case', async () => {
     const statisticToUpdate = {
       ...statistic,
       determinationDeficiencyAmount: 1,
     };
 
-    const result = await updateDeficiencyStatisticInteractor(
+    await updateDeficiencyStatisticInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -77,19 +79,22 @@ describe('updateDeficiencyStatisticInteractor', () => {
       } as any,
       authorizedUser,
     );
-    expect(result).toMatchObject({
-      statistics: [statisticToUpdate],
-    });
+
+    expect(upsertCases).toHaveBeenCalled();
+    const callArg = upsertCases.mock.calls[0][0][0];
+    expect(callArg.statistics).toBeDefined();
+    expect(callArg.statistics).toHaveLength(1);
+    expect(callArg.statistics![0]).toMatchObject(statisticToUpdate);
   });
 
-  it('should return the original statistic when statisticId is not present on the case', async () => {
+  it('should not update any statistics when statisticId is not present on the case', async () => {
     const statisticToUpdate = {
       ...statistic,
       determinationDeficiencyAmount: 1,
       statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
     };
 
-    const result = await updateDeficiencyStatisticInteractor(
+    await updateDeficiencyStatisticInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -97,9 +102,12 @@ describe('updateDeficiencyStatisticInteractor', () => {
       } as any,
       authorizedUser,
     );
-    expect(result).toMatchObject({
-      statistics: [statistic],
-    });
+
+    expect(upsertCases).toHaveBeenCalled();
+    const callArg = upsertCases.mock.calls[0][0][0];
+    expect(callArg.statistics).toBeDefined();
+    expect(callArg.statistics).toHaveLength(1);
+    expect(callArg.statistics![0]).toMatchObject(statistic);
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

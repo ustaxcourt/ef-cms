@@ -76,7 +76,7 @@ describe('appends pro se checklist', () => {
     externalUserCreatesElectronicCaseWithSpouseDifferentAddress().then(
       docketNumber => {
         loginAsPetitionsClerk();
-        cy.intercept('GET', `**/cases/${docketNumber}`).as('getCaseData');
+        cy.intercept('GET', `**/cases/${docketNumber}*`).as('getCaseData');
         goToCase(docketNumber);
         cy.wait('@getCaseData').then(interception => {
           const petitioner = interception.response?.body?.petitioners?.[1];
@@ -89,7 +89,7 @@ describe('appends pro se checklist', () => {
           .click();
         cy.get('@spouse').then((petitioner: any) => {
           cy.get(
-            `[data-testid="representing-${petitioner.contactId}"]`,
+            `label[data-testid="representing-${petitioner.contactId}"]`,
           ).click();
         });
         cy.get(
