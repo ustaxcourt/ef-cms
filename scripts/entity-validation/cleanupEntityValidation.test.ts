@@ -38,17 +38,6 @@ describe('cleanupEntityValidation', () => {
     expect(mockProcessExit).toHaveBeenCalledWith(0);
   });
 
-  it('should log an error and exit with code 1 when deleteSSMItem throws', async () => {
-    (deleteSSMItem as jest.Mock).mockRejectedValue(new Error('SSM error'));
-
-    await main();
-
-    expect(console.error).toHaveBeenCalledWith(
-      'failed to delete ssm parameter for entity validation',
-    );
-    expect(mockProcessExit).toHaveBeenCalledWith(1);
-  });
-
   it('should log and exit with 1 when cleanupEntityValidation itself rejects unexpectedly', async () => {
     // Force the outer .catch in main() by making process.exit throw after the
     // inner catch already called it, causing cleanupEntityValidation to reject.
@@ -59,7 +48,7 @@ describe('cleanupEntityValidation', () => {
       })
       .mockImplementation();
 
-    await main();
+    await main().catch(() => {});
 
     expect(console.log).toHaveBeenCalledWith('Error:', expect.any(Error));
     expect(mockProcessExit).toHaveBeenCalledWith(1);

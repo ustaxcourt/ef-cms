@@ -136,7 +136,6 @@ export function resolveChangedEntities(
 export async function runEntityValidation(): Promise<number> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
-  console.log('new fingerprint: ', newFingerprint);
   let entityValidationRequired: string | undefined;
   try {
     entityValidationRequired = await getSSMItem('entity-validation-required');

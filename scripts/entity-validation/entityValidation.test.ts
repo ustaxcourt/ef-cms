@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { entityValidationFunctions } from './entityValidationHelper';
-import { getSSMItem } from '../../shared/admin-tools/aws/ssmHelper';
+import { getSSMItem, putSSMItem } from '../../shared/admin-tools/aws/ssmHelper';
 import {
   detectEntityValidationChange,
   getCurrentFingerprintFromSSM,
@@ -243,7 +243,6 @@ describe('entityValidation', () => {
       ]);
       const result = await getEntityIdentifiers();
       const parsedResult = JSON.parse(result);
-      console.log('parsed result:', parsedResult);
       //   expect(parsedResult).toHaveProperty('Case.VALIDATION_RULES');
       expect(parsedResult).toEqual(
         expect.objectContaining({
@@ -280,6 +279,7 @@ describe('entityValidation', () => {
       // entityValidationRequired — undefined (compare fingerprints)
       (getSSMItem as jest.Mock).mockResolvedValueOnce(undefined);
       // putSSMItem is called after successful validation with no errors
+      (putSSMItem as jest.Mock).mockResolvedValueOnce(true);
       (entityValidationFunctions.Case as jest.Mock).mockResolvedValueOnce([]);
 
       const result = await runEntityValidation();
