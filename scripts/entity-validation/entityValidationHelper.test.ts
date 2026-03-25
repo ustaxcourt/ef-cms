@@ -1,7 +1,9 @@
 import { Worker } from 'worker_threads';
 import { getDbReader } from '@web-api/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { createSpinner } from '../helpers/consoleSpinner';
 import os from 'os';
@@ -282,5 +284,27 @@ describe('entityValidationHelper', () => {
     expect(result).toEqual([]);
     // 3 batches of 1000 → getCasesByDocketNumbers called 3 times
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(3);
+  });
+
+  it('getAllMessages - calls fromKyselyMessage mapper for each returned message', async () => {
+    const mockMessage = { messageId: 'm1', docketNumber: '1-23' };
+    (getDbReader as jest.Mock).mockImplementation((cb: any) =>
+      cb(mockBuildFluentChain([mockMessage])),
+    );
+
+    await getAllMessages();
+
+    expect(fromKyselyMessage).toHaveBeenCalledWith(mockMessage);
+  });
+
+  it('User - calls fromKyselyUser mapper for each returned user', async () => {
+    const mockUser = { userId: 'u1' };
+    (getDbReader as jest.Mock).mockImplementation((cb: any) =>
+      cb(mockBuildFluentChain([mockUser])),
+    );
+
+    await entityValidationFunctions.User();
+
+    expect(fromKyselyUser).toHaveBeenCalledWith(mockUser);
   });
 });

@@ -19,6 +19,7 @@ async function cleanupEntityValidation(): Promise<number> {
   return 0;
 }
 
+// istanbul ignore next
 if (require.main === module) {
   // Intentionally not awaiting: main() handles process exit and errors.
   void main();

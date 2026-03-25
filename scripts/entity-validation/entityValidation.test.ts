@@ -286,6 +286,27 @@ describe('entityValidation', () => {
       expect(result).toBe(0);
     });
 
+    it('returns 1 and logs a message when putSSMItem fails', async () => {
+      (getSSMItem as jest.Mock).mockResolvedValueOnce(
+        JSON.stringify({ 'Case.VALIDATION_RULES': 'old-hash' }),
+      );
+      (fs.readdir as jest.Mock).mockResolvedValueOnce(['cases/Case.ts']);
+      (getSSMItem as jest.Mock).mockResolvedValueOnce(undefined);
+      (putSSMItem as jest.Mock).mockResolvedValueOnce(false);
+      (entityValidationFunctions.Case as jest.Mock).mockResolvedValueOnce([]);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
+
+      const result = await runEntityValidation();
+
+      expect(result).toBe(1);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to write new entity validation fingerprint to SSM. Please check SSM permissions and retry.',
+      );
+      consoleSpy.mockRestore();
+    });
+
     it('returns the error count when validation finds errors', async () => {
       (getSSMItem as jest.Mock).mockResolvedValueOnce(
         JSON.stringify({ 'Case.VALIDATION_RULES': 'old-hash' }),

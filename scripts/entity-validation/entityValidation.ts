@@ -184,6 +184,7 @@ export async function main(): Promise<void> {
     });
 }
 
+// istanbul ignore next
 if (require.main === module) {
   // Intentionally not awaiting: main() handles process exit and errors.
   void main();
