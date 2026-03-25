@@ -29,6 +29,18 @@ resource "aws_iam_role_policy" "rds_expired_records_cleanup_lambda_policy" {
 {
   "Version": "2012-10-17",
   "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
+    },
 		{
       "Sid": "RdsConnect",
       "Effect": "Allow",
