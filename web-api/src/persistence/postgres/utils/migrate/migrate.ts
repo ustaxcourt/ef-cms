@@ -3,6 +3,7 @@ import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
 import { promises as fs } from 'fs';
 import { getDbWriter } from '@web-api/database';
 import { putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
+import { environment } from '@web-api/environment';
 
 const migrationsDirectory = path.join(__dirname, 'migrations');
 const deprecatedMigrationsDirectory = path.join(
@@ -107,15 +108,8 @@ async function migrateToLatest(migrationType = 'expand') {
         }
       }
 
-      if (didRunMigration) {
-        const ssmUpdated = await putSSMItem(
-          'entity-validation-required',
-          'true',
-        );
-        if (!ssmUpdated) {
-          console.error('Failed to update SSM parameter for entity validation');
-          process.exit(1);
-        }
+      if (didRunMigration && environment.stage !== 'local') {
+        await putSSMItem('entity-validation-required', 'true');
       }
 
       await writer.destroy();
