@@ -116,9 +116,11 @@ export const formattedWorkQueue = (
     > = [];
 
     for (const group of consolidatedGroups.values()) {
+      const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
+
       const groupedMemberCases = Case.sortByDocketNumber(
         group
-          .filter(item => !isLeadCase(item))
+          .filter(item => item.docketNumber !== leadOrLowestNumber)
           .map(item => {
             return {
               workItemId: item.workItemId,
@@ -128,8 +130,6 @@ export const formattedWorkQueue = (
             };
           }),
       );
-
-      const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
 
       const leadOrLowestNumberedItem = group.find(item => {
         return item.docketNumber === leadOrLowestNumber;
