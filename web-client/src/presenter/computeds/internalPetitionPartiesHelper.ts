@@ -238,19 +238,18 @@ export const internalPetitionPartiesHelper = (
     isPaperOrPractitionerFiled;
 
   // Legacy flag for backwards compatibility - now split into two separate concerns
-  const showPaperPetitionEmailFieldAndConsentBox = showEConsentCheckbox;
+  const showContactEmailAddressFieldAndConsentBox = showEConsentCheckbox;
 
   const showSecondaryContactEmailField =
     !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     partyType === PARTY_TYPES.petitionerSpouse &&
     !isExternalUser;
 
-  // For eFiled petitions, the spouse email is provided by the filer, but consent checkbox is not needed
+  // The spouse did not eFiled themselves, so they always need the consent checkbox
   const showSecondaryEConsentCheckbox =
     !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     !isExternalUser &&
-    partyType === PARTY_TYPES.petitionerSpouse &&
-    isPaperOrPractitionerFiled;
+    partyType === PARTY_TYPES.petitionerSpouse;
 
   // Legacy flag for backwards compatibility
   const showSecondaryContactEmailFieldAndConsentBox =
@@ -262,7 +261,7 @@ export const internalPetitionPartiesHelper = (
     ...contacts,
     showContactEmailField,
     showEConsentCheckbox,
-    showPaperPetitionEmailFieldAndConsentBox,
+    showContactEmailAddressFieldAndConsentBox,
     showSecondaryContactEmailField,
     showSecondaryContactEmailFieldAndConsentBox,
     showSecondaryEConsentCheckbox,

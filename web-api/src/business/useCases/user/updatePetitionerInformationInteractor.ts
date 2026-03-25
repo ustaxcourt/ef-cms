@@ -202,7 +202,7 @@ export const updatePetitionerInformation = async (
       additionalName: undefined,
       address2: undefined,
       address3: undefined,
-      paperPetitionEmail: undefined,
+      contactEmailAddress: undefined,
       title: undefined,
     }),
     [
@@ -214,7 +214,7 @@ export const updatePetitionerInformation = async (
       'country',
       'countryType',
       'name',
-      'paperPetitionEmail',
+      'contactEmailAddress',
       'phone',
       'postalCode',
       'additionalName',

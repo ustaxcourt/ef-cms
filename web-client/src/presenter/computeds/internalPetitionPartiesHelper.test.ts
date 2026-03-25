@@ -408,7 +408,7 @@ describe('internalPetitionPartiesHelper', () => {
     });
   });
 
-  describe('showPaperPetitionEmailFieldAndConsentBox', () => {
+  describe('showContactEmailAddressFieldAndConsentBox', () => {
     const baseState = {
       featureFlags: {
         [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
@@ -433,7 +433,7 @@ describe('internalPetitionPartiesHelper', () => {
         },
       });
 
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+      expect(result.showContactEmailAddressFieldAndConsentBox).toEqual(false);
     });
 
     it('should not show email and consent fields for external user', () => {
@@ -441,7 +441,7 @@ describe('internalPetitionPartiesHelper', () => {
         state: { ...baseState, user: petitionerUser },
       });
 
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+      expect(result.showContactEmailAddressFieldAndConsentBox).toEqual(false);
     });
 
     it('should show email and consent fields for an internal user with paper filing', () => {
@@ -455,7 +455,7 @@ describe('internalPetitionPartiesHelper', () => {
         },
       });
 
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+      expect(result.showContactEmailAddressFieldAndConsentBox).toEqual(true);
     });
 
     it('should show Contact email field but NOT eConsent checkbox for an internal user with a pro-se electronic filing', () => {
@@ -476,7 +476,7 @@ describe('internalPetitionPartiesHelper', () => {
       expect(result.showContactEmailField).toEqual(true);
       expect(result.showEConsentCheckbox).toEqual(false);
       // Legacy combined flag follows eConsent checkbox behavior
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+      expect(result.showContactEmailAddressFieldAndConsentBox).toEqual(false);
     });
 
     it('should show email and consent fields when petition was filed electronically by a private practitioner', () => {
@@ -495,12 +495,12 @@ describe('internalPetitionPartiesHelper', () => {
         },
       });
 
-      expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
+      expect(result.showContactEmailAddressFieldAndConsentBox).toEqual(true);
     });
   });
 
   describe('showSecondaryContactEmailFieldAndConsentBox', () => {
-    it('should display secondary contact email field but NOT eConsent checkbox for eFiled petitioner and spouse case', () => {
+    it('should display secondary contact email field AND eConsent checkbox for eFiled petitioner and spouse case', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           featureFlags: {
@@ -517,9 +517,8 @@ describe('internalPetitionPartiesHelper', () => {
       });
 
       expect(result.showSecondaryContactEmailField).toEqual(true);
-      expect(result.showSecondaryEConsentCheckbox).toEqual(false);
-      // Legacy combined flag follows eConsent checkbox behavior
-      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(false);
+      expect(result.showSecondaryEConsentCheckbox).toEqual(true);
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
     });
 
     it('should display both secondary contact email field AND eConsent checkbox for paper filing with spouse', () => {

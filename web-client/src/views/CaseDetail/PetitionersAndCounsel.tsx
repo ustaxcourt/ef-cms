@@ -117,7 +117,7 @@ export const PetitionersAndCounsel = connect(
                     </div>
                   )}
 
-                  {petitioner.showPaperPetitionEmail && (
+                  {petitioner.showContactEmailAddress && (
                     <>
                       <p className="semi-bold margin-bottom-0">
                         Contact email address
@@ -143,7 +143,7 @@ export const PetitionersAndCounsel = connect(
                             />
                           </span>
                         )}
-                        {petitioner.formattedPaperPetitionEmail}
+                        {petitioner.formattedContactEmailAddress}
                       </span>
                     </>
                   )}

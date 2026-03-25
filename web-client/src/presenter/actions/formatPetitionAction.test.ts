@@ -61,7 +61,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         email: 'TEST_EMAIL',
-        paperPetitionEmail: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -101,7 +101,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         email: 'TEST_EMAIL',
-        paperPetitionEmail: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -150,7 +150,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.disclosure,
       contactPrimary: {
         email: 'TEST_EMAIL',
-        paperPetitionEmail: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -243,7 +243,7 @@ describe('formatPetitionAction', () => {
     );
   });
 
-  it('should set paperPetitionEmail to user email for pro-se petitioners', async () => {
+  it('should set contactEmailAddress to user email for pro-se petitioners', async () => {
     const results = await runAction(formatPetitionAction, {
       modules: {
         presenter,
@@ -256,11 +256,11 @@ describe('formatPetitionAction', () => {
     });
 
     expect(
-      results.state.petitionFormatted?.contactPrimary?.paperPetitionEmail,
+      results.state.petitionFormatted?.contactPrimary?.contactEmailAddress,
     ).toEqual('mockPetitioner@example.com');
   });
 
-  it('should NOT set paperPetitionEmail when the user is a private practitioner', async () => {
+  it('should NOT set contactEmailAddress when the user is a private practitioner', async () => {
     const practitionerProps = {
       createPetitionStep1Data: {
         contactPrimary: {},
@@ -292,7 +292,7 @@ describe('formatPetitionAction', () => {
     });
 
     expect(
-      results.state.petitionFormatted?.contactPrimary?.paperPetitionEmail,
+      results.state.petitionFormatted?.contactPrimary?.contactEmailAddress,
     ).toBeUndefined();
   });
 });

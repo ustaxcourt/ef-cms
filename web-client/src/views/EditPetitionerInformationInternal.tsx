@@ -198,8 +198,8 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
-            <FormGroup errorText={validationErrors?.contact?.paperPetitionEmail}>
-              <label className="usa-label" htmlFor="paperPetitionEmail">
+            <FormGroup errorText={validationErrors?.contact?.contactEmailAddress}>
+              <label className="usa-label" htmlFor="contactEmailAddress">
                 Contact email address{' '}
                 <span className="usa-hint">(optional)</span>
               </label>
@@ -207,10 +207,10 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 data-testid="contact-email-input"
-                id="paperPetitionEmail"
-                name="contact.paperPetitionEmail"
+                id="contactEmailAddress"
+                name="contact.contactEmailAddress"
                 type="email"
-                value={form.contact.paperPetitionEmail || ''}
+                value={form.contact.contactEmailAddress || ''}
                 onBlur={() => {
                   validatePetitionerSequence();
                 }}

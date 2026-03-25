@@ -95,7 +95,7 @@ export const SealAddressModal = connect(
               className="no-wrap"
               data-testid="seal-address-modal-address-petition-email"
             >
-              {contactToSeal.paperPetitionEmail ?? NOT_PROVIDED}
+              {contactToSeal.contactEmailAddress ?? NOT_PROVIDED}
             </span>
           </div>
         </div>

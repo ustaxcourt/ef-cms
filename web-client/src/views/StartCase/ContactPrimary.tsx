@@ -3,7 +3,7 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
+import { ContactEmailAddress } from '../StartCaseInternal/ContactEmailAddress';
 import { props } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -223,7 +223,7 @@ export const ContactPrimary: React.FC<ContactsPrimaryProps> = connect(
           )}
 
           {contactsHelper.showContactEmailField && (
-            <PaperPetitionEmail
+            <ContactEmailAddress
               bind={bind}
               contactType="contactPrimary"
               onBlur={onBlur}

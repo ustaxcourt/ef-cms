@@ -331,8 +331,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
-  it('should allow updating paperPetitionEmail (Contact email address) but preserve e-service consent information', async () => {
-    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+  it('should allow updating contactEmailAddress (Contact email address) but preserve e-service consent information', async () => {
+    mockPetitioners[0].contactEmailAddress = 'contactEmailAddress@example.com';
     mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
@@ -341,7 +341,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          paperPetitionEmail: 'newContactEmail@example.com',
+          contactEmailAddress: 'newContactEmail@example.com',
         },
       },
       mockDocketClerkUser,
@@ -351,18 +351,18 @@ describe('updatePetitionerInformationInteractor', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
       hasConsentedToElectronicService: true,
-      paperPetitionEmail: 'newContactEmail@example.com',
+      contactEmailAddress: 'newContactEmail@example.com',
     });
   });
 
-  it('should not generate a notice of change when only paperPetitionEmail (Contact email address) is updated', async () => {
+  it('should not generate a notice of change when only contactEmailAddress (Contact email address) is updated', async () => {
     await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          paperPetitionEmail: 'newContactEmail@example.com',
+          contactEmailAddress: 'newContactEmail@example.com',
         },
       },
       mockDocketClerkUser,
