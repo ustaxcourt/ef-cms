@@ -14,6 +14,10 @@ export function createSpinner(initialText: string) {
     lastRenderTime = getCurrentDateTimeInMillis();
   };
 
+  const interval = setInterval(() => {
+    render();
+  }, 80);
+
   render();
 
   return {
@@ -26,10 +30,12 @@ export function createSpinner(initialText: string) {
       }
     },
     succeed: (text: string) => {
+      clearInterval(interval);
       process.stdout.clearLine(0);
       process.stdout.write(`\r✔ ${text}\n`);
     },
     fail: (text: string) => {
+      clearInterval(interval);
       process.stdout.clearLine(0);
       process.stdout.write(`\r✖ ${text}\n`);
     },
