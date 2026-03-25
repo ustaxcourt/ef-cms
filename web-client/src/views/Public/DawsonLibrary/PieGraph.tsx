@@ -35,7 +35,6 @@ export const PieGraph: React.FC<
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
-  // Default color palette
   const defaultColors =
     type === 'default'
       ? [

@@ -48,14 +48,10 @@ export interface MultiBarGraphProps {
   stacked?: boolean;
 }
 
-// ─── Shared colors ────────────────────────────────────────────────────────────
-
 const defaultColors = [
   '#005EA2', // blue primary
   '#FFBE2E', // yellow primary
 ];
-
-// ─── SingleBarGraph ───────────────────────────────────────────────────────────
 
 export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   data,

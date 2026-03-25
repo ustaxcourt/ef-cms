@@ -71,14 +71,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             label: dataset.label,
             data: dataset.data,
             borderColor: color,
-            backgroundColor: `${color}33`, // 20% opacity fill
+            backgroundColor: `${color}33`,
             borderWidth: 2,
             pointBackgroundColor: color,
             pointBorderColor: '#fff',
             pointBorderWidth: 2,
             pointRadius: 5,
             pointHoverRadius: 7,
-            // fill: true,
             tension: 0,
           };
         }),
