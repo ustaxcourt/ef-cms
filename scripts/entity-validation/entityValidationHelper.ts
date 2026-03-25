@@ -99,7 +99,6 @@ const formatElapsedTime = (startTime: number) => {
 };
 
 const entityHelperFunctions = {
-  // Case: getCasesAndValidate,
   Message: getAllMessages,
   PractitionerDocument: getAllPractitionerDocuments,
   TrialSession: getTrialSessions,
@@ -279,13 +278,3 @@ export const entityValidationFunctions = {
   User: () => performValidation('User'),
   WorkItem: () => performValidation('WorkItem'),
 };
-
-// void (async () => {
-//   await getTrialSessionsAndValidate();
-//   await getCasesAndValidate();
-//   await getMessagesAndValidate();
-//   await getWorkItemsAndValidate();
-//   await getUsersAndValidate();
-//   await getTrialSessionWorkingCopiesAndValidate();
-//   await getPractitionerDocumentsAndValidate();
-// })();
