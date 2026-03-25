@@ -5,6 +5,6 @@ export const userDataCanGenerateValidBarNumber = ({
   firstName: string;
   lastName: string;
 }): boolean => {
-  const startsWithLetter = /^[a-zA-Z]/;
+  const startsWithLetter = /^\p{L}/u;
   return startsWithLetter.test(firstName) && startsWithLetter.test(lastName);
 };
