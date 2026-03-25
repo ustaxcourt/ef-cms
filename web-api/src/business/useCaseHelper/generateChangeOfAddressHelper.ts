@@ -84,6 +84,9 @@ export const generateChangeOfAddressHelper = async ({
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
+      applicationContext.logger.info(
+        `Starting prepareToGenerateAndServeDocketEntry for case ${docketNumber}`,
+      );
       await prepareToGenerateAndServeDocketEntry({
         applicationContext,
         authorizedUser,
@@ -100,7 +103,10 @@ export const generateChangeOfAddressHelper = async ({
       caseToUpdate: caseEntity,
     });
   } catch (error) {
-    applicationContext.logger.error(`Failed to update case ${docketNumber}`, JSON.stringify(error));
+    applicationContext.logger.error(
+      `Failed to update case ${docketNumber}`,
+      JSON.stringify(error),
+    );
   }
 
   const NOTIFICATION_ACTION:
@@ -221,6 +227,9 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
+  applicationContext.logger.info(
+    `Starting generate and serve docket Entry for case ${caseEntity.docketNumber}`,
+  );
   await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,

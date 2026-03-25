@@ -21,6 +21,8 @@ export const saveDocumentFromLambda = async ({
 
   const maxRetries = 1;
 
+  getDawsonLogger().info(`Saving document ${key}`);
+
   for (let i = 0; i <= maxRetries; i++) {
     try {
       let bufferBody: Buffer;

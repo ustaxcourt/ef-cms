@@ -79,6 +79,10 @@ const createDocketEntryForChange = async ({
     isAddressSealed,
   );
 
+  applicationContext.logger.info(
+    `Starting generating change of address document for case ${caseEntity.docketNumber}`,
+  );
+
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
     .changeOfAddress({
@@ -119,12 +123,20 @@ const createDocketEntryForChange = async ({
 
   caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
+  applicationContext.logger.info(
+    `Starting add cover to pdf for case ${caseEntity.docketNumber}`,
+  );
+
   const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
     applicationContext,
     caseEntity,
     docketEntryEntity: changeOfAddressDocketEntry,
     pdfData: changeOfAddressPdf,
   });
+
+  applicationContext.logger.info(
+    `Starting counting pages for case ${caseEntity.docketNumber}`,
+  );
 
   changeOfAddressDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -134,10 +146,18 @@ const createDocketEntryForChange = async ({
     });
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
+  applicationContext.logger.info(
+    `Saving New Docket Entry Id: ${newDocketEntryId} to S3`,
+  );
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: changeOfAddressPdfWithCover,
     key: newDocketEntryId,
   });
+
+  applicationContext.logger.info(
+    `Starting get download policy url for case ${caseEntity.docketNumber}`,
+  );
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
@@ -217,6 +237,9 @@ export const generateAndServeDocketEntry = async ({
     }
   }
 
+  applicationContext.logger.info(
+    `Starting create Docket entry for change for case ${caseEntity.docketNumber}`,
+  );
   const { changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
     authorizedUser,
@@ -229,6 +252,9 @@ export const generateAndServeDocketEntry = async ({
     user,
   });
 
+  applicationContext.logger.info(
+    `Should create work item for case ${caseEntity.docketNumber} ${shouldCreateWorkItem}`,
+  );
   if (shouldCreateWorkItem) {
     await createWorkItemForChange({
       caseEntity,

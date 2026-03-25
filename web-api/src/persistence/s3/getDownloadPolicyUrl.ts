@@ -25,12 +25,14 @@ export const getDownloadPolicyUrl = async ({
     : undefined;
 
   const client = applicationContext.getStorageClient();
+  applicationContext.logger.info('Got storage client')
   const command = new GetObjectCommand({
     Bucket: bucketName,
     Key: key,
     ResponseContentDisposition,
   });
   const url = await getSignedUrl(client, command, { expiresIn: urlTtl });
+  applicationContext.logger.info('Got Signed URL')
 
   return { url };
 };
