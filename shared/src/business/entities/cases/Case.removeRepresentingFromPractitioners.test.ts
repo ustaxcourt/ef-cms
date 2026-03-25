@@ -23,13 +23,13 @@ describe('removeRepresentingFromPractitioners', () => {
     );
 
     caseToVerify.removeRepresentingFromPractitioners('123');
-    expect(caseToVerify.privatePractitioners[0]).toMatchObject({
+    expect(caseToVerify.privatePractitioners![0]).toMatchObject({
       representing: ['abc'],
     });
-    expect(caseToVerify.privatePractitioners[1]).toMatchObject({
+    expect(caseToVerify.privatePractitioners![1]).toMatchObject({
       representing: ['ggg'],
     });
-    expect(caseToVerify.privatePractitioners[2]).toMatchObject({
+    expect(caseToVerify.privatePractitioners![2]).toMatchObject({
       representing: ['ggg'],
     });
   });

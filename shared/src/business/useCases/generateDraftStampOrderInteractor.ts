@@ -5,17 +5,6 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * generateDraftStampOrderInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.motionDocketEntryId the docket entry id of the original motion
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.parentMessageId the id of the parent message
- * @param {boolean} providers.stampData the stamp data from the form to be applied to the stamp order pdf
- * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
- */
 export const generateDraftStampOrderInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -24,7 +13,6 @@ export const generateDraftStampOrderInteractor = async (
     motionDocketEntryId,
     parentMessageId,
     stampData,
-    stampedDocketEntryId,
     filingDateUpdated = false,
   }: {
     docketNumber: string;
@@ -32,16 +20,15 @@ export const generateDraftStampOrderInteractor = async (
     motionDocketEntryId: string;
     parentMessageId: string;
     stampData: any;
-    stampedDocketEntryId: string;
     filingDateUpdated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ stampedDocketEntryId: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.STAMP_MOTION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext
+  const stampedDocketEntry = await applicationContext
     .getUseCaseHelpers()
     .addDraftStampOrderDocketEntryInteractor(
       applicationContext,
@@ -51,7 +38,6 @@ export const generateDraftStampOrderInteractor = async (
         originalDocketEntryId: motionDocketEntryId,
         parentMessageId,
         stampData,
-        stampedDocketEntryId,
       },
       authorizedUser,
     );
@@ -64,9 +50,11 @@ export const generateDraftStampOrderInteractor = async (
         docketEntryId: motionDocketEntryId,
         docketNumber,
         stampData,
-        stampedDocketEntryId,
+        stampedDocumentStorageId: stampedDocketEntry.documentStorageId,
         filingDateUpdated,
       },
       authorizedUser,
     );
+
+  return { stampedDocketEntryId: stampedDocketEntry.docketEntryId };
 };

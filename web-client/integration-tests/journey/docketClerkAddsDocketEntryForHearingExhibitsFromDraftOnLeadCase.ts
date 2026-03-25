@@ -8,7 +8,7 @@ export const docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase = (
   { draftOrderIndex, getDocketNumbersToUncheck, getLeadCaseDocketNumber },
 ) => {
   return it('Docket Clerk adds a docket entry for a notice from the given draft', async () => {
-    let caseDetailFormatted = runCompute(
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: cerebralTest.getState(),
@@ -24,7 +24,7 @@ export const docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase = (
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: getLeadCaseDocketNumber(),
     });
 
@@ -57,7 +57,7 @@ export const docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase = (
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
 
-    for (let docketNumber of getDocketNumbersToUncheck()) {
+    for (const docketNumber of getDocketNumbersToUncheck()) {
       await cerebralTest.runSequence('updateCaseCheckboxSequence', {
         docketNumber,
       });

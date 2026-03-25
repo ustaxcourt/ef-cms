@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
-import { petitionsClerkUser } from '@shared/test/mockUsers';
+import { docketClerk1User, petitionsClerkUser } from '@shared/test/mockUsers';
 
 const {
   DOCKET_SECTION,
@@ -197,12 +197,15 @@ describe('filterWorkItems', () => {
 
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
     const filtered = filterWorkItems({
-      applicationContext,
+      assignmentFilterValue: undefined,
       authorizedUser: petitionsClerkUser,
       section: PETITIONS_SECTION,
       workItems: workQueueInbox,
-      ...SECTION_DOCUMENT_QC_INBOX,
-    } as any);
+      workQueueToDisplay: {
+        ...SECTION_DOCUMENT_QC_INBOX.workQueueToDisplay,
+        section: PETITIONS_SECTION,
+      },
+    });
     let assigned: string = '';
     let unassigned: string = '';
 
@@ -225,11 +228,15 @@ describe('filterWorkItems', () => {
 
   it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', () => {
     const filtered = filterWorkItems({
-      applicationContext,
-      authorizedUser: petitionsClerk1,
+      assignmentFilterValue: undefined,
+      authorizedUser: petitionsClerkUser,
       workItems: workQueueOutbox,
-      ...SECTION_DOCUMENT_QC_OUTBOX,
-    } as any);
+      section: PETITIONS_SECTION,
+      workQueueToDisplay: {
+        ...SECTION_DOCUMENT_QC_OUTBOX.workQueueToDisplay,
+        section: PETITIONS_SECTION,
+      },
+    });
     let sentByUser = '';
     let sentByOtherUser = '';
 
@@ -257,11 +264,15 @@ describe('filterWorkItems', () => {
 
   it('Returns section work items for a Docket Clerk in Section Document QC Inbox', () => {
     const filtered = filterWorkItems({
-      applicationContext,
-      authorizedUser: docketClerk1,
+      assignmentFilterValue: undefined,
+      authorizedUser: docketClerk1User,
+      section: DOCKET_SECTION,
       workItems: workQueueInbox,
-      ...SECTION_DOCUMENT_QC_INBOX,
-    } as any);
+      workQueueToDisplay: {
+        ...SECTION_DOCUMENT_QC_INBOX.workQueueToDisplay,
+        section: DOCKET_SECTION,
+      },
+    });
     let assigned = '';
     let unassigned = '';
 
@@ -309,11 +320,15 @@ describe('filterWorkItems', () => {
 
   it('Returns docket section work items for a Docket Clerk in Section Document QC In Progress', () => {
     const filtered = filterWorkItems({
-      applicationContext,
-      authorizedUser: docketClerk1,
+      assignmentFilterValue: undefined,
+      authorizedUser: docketClerk1User,
+      section: DOCKET_SECTION,
       workItems: workQueueInProgress,
-      ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-    } as any);
+      workQueueToDisplay: {
+        ...SECTION_DOCUMENT_QC_IN_PROGRESS.workQueueToDisplay,
+        section: DOCKET_SECTION,
+      },
+    });
 
     expect(filtered).toEqual([
       workItemDocketMyDocumentQCInProgress,
