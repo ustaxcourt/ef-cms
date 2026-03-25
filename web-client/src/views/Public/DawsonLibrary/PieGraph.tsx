@@ -1,12 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  Chart,
-  ChartConfiguration,
-  ChartEvent,
-  LegendElement,
-  LegendItem,
-  registerables,
-} from 'chart.js';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import type { Context } from 'chartjs-plugin-datalabels';
 
@@ -63,13 +56,11 @@ export const PieGraph: React.FC<
           '#E5A000', // yellow darker
         ];
 
-  // Helper function to determine if a color is light or dark
   const isLightColor = (hexColor: string): boolean => {
     const hex = hexColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-    // Calculate relative luminance
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     return luminance > 0.5;
   };
@@ -77,7 +68,6 @@ export const PieGraph: React.FC<
   useEffect(() => {
     if (!chartRef.current) return;
 
-    // Destroy previous chart instance
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy();
     }
@@ -85,7 +75,6 @@ export const PieGraph: React.FC<
     const ctx = chartRef.current.getContext('2d');
     if (!ctx) return;
 
-    // Prepare data
     const labels = data.map(item => item.label);
     const values = data.map(item => item.value);
     const colors = data.map(
@@ -93,7 +82,6 @@ export const PieGraph: React.FC<
         item.color || defaultColors[index % defaultColors.length],
     );
 
-    // Calculate total for percentages
     const total = values.reduce((sum, val) => sum + val, 0);
 
     const config: ChartConfiguration<'pie'> = {
@@ -118,7 +106,7 @@ export const PieGraph: React.FC<
             display: !!title,
             text: title,
             font: {
-              size: 18,
+              size: 20,
               weight: 'bold',
             },
             padding: {
@@ -129,19 +117,7 @@ export const PieGraph: React.FC<
           legend: {
             display: showLegend,
             position: 'top',
-            onClick: (
-              _: ChartEvent,
-              legendItem: LegendItem,
-              legend: LegendElement<'pie'>,
-            ) => {
-              const { index } = legendItem;
-              const { chart } = legend;
-              const { data: metaData } = chart.getDatasetMeta(0);
-              if (index === undefined) return;
-              const item = metaData[index] as unknown as { hidden: boolean };
-              item.hidden = !item.hidden;
-              chart.update();
-            },
+            onClick: () => {},
             labels: {
               padding: 15,
               font: {
@@ -151,27 +127,21 @@ export const PieGraph: React.FC<
               usePointStyle: false,
               boxWidth: 20,
               boxHeight: 20,
+              borderRadius: 6,
               generateLabels: chart => {
                 const { datasets } = chart.data;
                 if (datasets.length === 0) return [];
-
                 return (
                   chart.data.labels?.map((label, i) => {
                     const value = datasets[0].data[i] as number;
-                    const meta = chart.getDatasetMeta(0);
-                    const isHidden =
-                      (meta.data[i] as unknown as { hidden: boolean })
-                        ?.hidden ?? false;
                     const bgColor = (datasets[0].backgroundColor as string[])[
                       i
                     ];
                     return {
                       text: `${label}: ${value}`,
-                      fillStyle: isHidden ? '#ccc' : bgColor,
-                      strokeStyle: isHidden ? '#999' : bgColor,
-                      fontColor: isHidden ? '#999' : undefined,
-                      textDecoration: isHidden ? 'line-through' : undefined,
-                      hidden: isHidden,
+                      fillStyle: bgColor,
+                      strokeStyle: '#000',
+                      borderRadius: 6,
                       index: i,
                     };
                   }) || []

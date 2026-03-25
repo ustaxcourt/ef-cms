@@ -96,7 +96,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             backgroundColor: colors,
             borderColor: colors.map(c => `${c}cc`),
             borderWidth: 1,
-            borderRadius: 4,
+            borderRadius: 0,
           },
         ],
       },
@@ -224,7 +224,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             backgroundColor: color,
             borderColor: color,
             borderWidth: 1,
-            borderRadius: stacked ? 0 : 4,
+            borderRadius: 0,
             stack: stacked ? 'stack' : undefined,
           };
         }),
@@ -242,11 +242,16 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
           legend: {
             display: showLegend,
             position: 'top',
+            onClick: () => {},
             labels: {
               padding: 15,
               font: { size: 12, weight: 'bold' },
               usePointStyle: true,
-              pointStyleWidth: 20,
+              pointStyle: 'rectRounded',
+              boxWidth: 24,
+              boxHeight: 14,
+              borderRadius: 6,
+              color: '#000',
             },
           },
           tooltip: {
@@ -296,15 +301,17 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             clamp: true,
             formatter: (value: number, context: any) => {
               if (!stacked) return `${value}`;
+              const datasetLabel = datasets[context.datasetIndex]?.label ?? '';
               const labelIndex = context.dataIndex;
               const colTotal = datasets.reduce(
                 (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
                 0,
               );
               const isSmall = value / colTotal < 0.1;
-              if (!isSmall) return `${value}`;
-              const datasetLabel = datasets[context.datasetIndex]?.label ?? '';
-              return `${value}\n${datasetLabel}`;
+              if (!isSmall) {
+                return `${value}\n${datasetLabel}`;
+              }
+              return `${value}`;
             },
           },
         },

@@ -102,6 +102,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           legend: {
             display: showLegend,
             position: 'top',
+            onClick: () => {},
             labels: {
               padding: 15,
               font: {
@@ -109,7 +110,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                 weight: 'bold',
               },
               usePointStyle: true,
-              pointStyleWidth: 20,
+              pointStyle: 'rectRounded',
+              boxWidth: 24,
+              boxHeight: 14,
+              borderRadius: 6,
+              color: '#000',
+              borderColor: '#000',
+              borderWidth: 2,
             },
           },
           tooltip: {
