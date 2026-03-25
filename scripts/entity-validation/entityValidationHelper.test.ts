@@ -102,7 +102,9 @@ describe('entityValidationHelper', () => {
     (getDbReader as jest.Mock).mockImplementation((cb: any) =>
       cb(mockBuildFluentChain()),
     );
-    (Worker as jest.Mock).mockImplementation(() => mockCreateWorkerInstance());
+    (Worker as unknown as jest.Mock).mockImplementation(() =>
+      mockCreateWorkerInstance(),
+    );
     (os.cpus as jest.Mock).mockReturnValue(new Array(4).fill({ model: 'CPU' }));
     jest.spyOn(console, 'log').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -131,7 +133,7 @@ describe('entityValidationHelper', () => {
   });
 
   it('WorkItem - returns validation errors reported by the worker', async () => {
-    (Worker as jest.Mock).mockImplementation(() =>
+    (Worker as unknown as jest.Mock).mockImplementation(() =>
       mockCreateWorkerInstance({ response: ['error1', 'error2'] }),
     );
     (getDbReader as jest.Mock).mockImplementation((cb: any) =>
@@ -144,7 +146,7 @@ describe('entityValidationHelper', () => {
   });
 
   it('WorkItem - throws when a worker thread crashes', async () => {
-    (Worker as jest.Mock).mockImplementation(() =>
+    (Worker as unknown as jest.Mock).mockImplementation(() =>
       mockCreateWorkerInstance({ error: new Error('Worker crashed') }),
     );
     (getDbReader as jest.Mock).mockImplementation((cb: any) =>
@@ -206,7 +208,7 @@ describe('entityValidationHelper', () => {
   });
 
   it('Case - fetches cases in batches and returns validation errors', async () => {
-    (Worker as jest.Mock).mockImplementation(() =>
+    (Worker as unknown as jest.Mock).mockImplementation(() =>
       mockCreateWorkerInstance({ response: ['case-error'] }),
     );
     (getDbReader as jest.Mock).mockImplementation((cb: any) =>
