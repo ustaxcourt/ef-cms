@@ -55,7 +55,7 @@ export const petitionsClerkCreateOrder = cerebralTest => {
       });
 
     cerebralTest.docketEntryId = first(draftDocuments)
-      ? first(draftDocuments).docketEntryId
+      ? (first(draftDocuments) as RawDocketEntry).docketEntryId
       : undefined;
     expect(cerebralTest.getState('draftDocumentViewerDocketEntryId')).toBe(
       cerebralTest.docketEntryId,

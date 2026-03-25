@@ -31,10 +31,10 @@ export const unauthedUserSeesStrickenDocketEntry = (
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
-    cerebralTest.docketEntryId = formattedDocketEntry.docketEntryId;
+    cerebralTest.docketEntryId = formattedDocketEntry!.docketEntryId;
 
-    expect(formattedDocketEntry.isStricken).toEqual(true);
-    expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(
+    expect(formattedDocketEntry!.isStricken).toEqual(true);
+    expect(formattedDocketEntry!.showDocumentDescriptionWithoutLink).toEqual(
       true,
     );
   });

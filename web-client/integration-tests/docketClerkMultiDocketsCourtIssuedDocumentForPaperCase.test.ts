@@ -7,6 +7,7 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import {
   getFormattedDocketEntriesForTest,
   loginAs,
@@ -24,7 +25,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
 
   cerebralTest.consolidatedCases = [];
 
-  const trialLocation = `Houston, Texas, ${Date.now()}`;
+  const trialLocation = `Houston, Texas, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     procedureType: 'Small',
@@ -86,7 +87,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
     expect(orderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 

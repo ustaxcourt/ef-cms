@@ -1,4 +1,4 @@
-import { TRANSCRIPT_EVENT_CODE } from '../../shared/src/business/entities/EntityConstants';
+import { TRANSCRIPT_EVENT_CODE } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -93,6 +93,6 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     const transDocketRecord = formattedDocketEntriesOnDocketRecord.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,
     );
-    expect(transDocketRecord.index).toBeTruthy();
+    expect(transDocketRecord?.index).toBeTruthy();
   });
 });

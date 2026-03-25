@@ -1,7 +1,8 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { type RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { type ServerApplicationContext } from '@web-api/applicationContext';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 
 export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext: ServerApplicationContext,
@@ -33,7 +34,8 @@ export const setNoticeOfChangeOfTrialJudge = async (
     .getUseCases()
     .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,
-      trialSessionInformation,
+      trialSessionInformation:
+        trialSessionInformation as unknown as RawTrialSession,
     });
 
   await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(

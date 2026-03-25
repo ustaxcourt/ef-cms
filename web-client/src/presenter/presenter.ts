@@ -389,6 +389,7 @@ import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequen
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { serveToIrsCompleteSequence } from './sequences/serveToIrsCompleteSequence';
+import { serveToIrsDuplicateErrorSequence } from './sequences/serveToIrsDuplicateErrorSequence';
 import { serveToIrsErrorSequence } from './sequences/serveToIrsErrorSequence';
 import { setBlockedCaseReportProcedureTypeSequence } from '@web-client/presenter/sequences/Reports/BlockedCases/setBlockedCaseReportProcedureTypeSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
@@ -431,6 +432,7 @@ import { setRecentFilingsTableSortSequence } from './sequences/setRecentFilingsT
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showFileUploadErrorModalSequence } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
+import { validateFileSequence } from './sequences/validateFileSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -1262,6 +1264,8 @@ export const presenterSequences = {
   serveThirtyDayNoticeOfTrialSequence:
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
   serveToIrsCompleteSequence: serveToIrsCompleteSequence as unknown as Function,
+  serveToIrsDuplicateErrorSequence:
+    serveToIrsDuplicateErrorSequence as unknown as Function,
   serveToIrsErrorSequence: serveToIrsErrorSequence as unknown as Function,
   setBlockedCaseReportProcedureTypeSequence,
   setCaseDetailPageTabSequence:
@@ -1626,6 +1630,7 @@ export const presenterSequences = {
     validateEditRespondentCounselSequence as unknown as Function,
   validateExternalDocumentInformationSequence:
     validateExternalDocumentInformationSequence as unknown as Function,
+  validateFileSequence: validateFileSequence as unknown as Function,
   validateFilePetitionStep2Sequence,
   validateFilePetitionStep5Sequence,
   validateMotionOrderResponseSequence:
