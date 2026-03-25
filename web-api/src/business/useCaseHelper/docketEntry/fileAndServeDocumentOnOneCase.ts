@@ -16,13 +16,11 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 export const fileAndServeDocumentOnOneCase = async ({
   caseEntity,
   docketEntryEntity,
-  subjectCaseDocketNumber,
   user,
   caseHasDeadline = undefined,
 }: {
   caseEntity: any;
   docketEntryEntity: DocketEntry;
-  subjectCaseDocketNumber: any;
   user: any;
   caseHasDeadline?: boolean;
 }) => {
@@ -30,13 +28,12 @@ export const fileAndServeDocumentOnOneCase = async ({
 
   docketEntryEntity.setAsServed(servedParties.all);
 
-  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
   let workItem = await getWorkItemByDocketNumberAndDocketEntryId({
     docketNumber: caseEntity.docketNumber,
     docketEntryId: docketEntryEntity.docketEntryId,
   });
 
-  if (!workItem || !isSubjectCase) {
+  if (!workItem) {
     workItem = new WorkItem({
       assigneeId: null,
       assigneeName: null,

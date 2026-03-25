@@ -245,7 +245,6 @@ export const fileAndServeCourtIssuedDocument = async (
         return fileAndServeDocumentOnOneCase({
           caseEntity,
           docketEntryEntity,
-          subjectCaseDocketNumber,
           user,
           caseHasDeadline,
         });
