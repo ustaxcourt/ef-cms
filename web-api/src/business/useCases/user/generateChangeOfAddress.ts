@@ -5,6 +5,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { RawUser } from '@shared/business/entities/User';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { Case } from '@shared/business/entities/cases/Case';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export type TUserContact = {
   address1: string;
@@ -56,9 +58,28 @@ export const generateChangeOfAddress = async ({
   websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
-  const associatedUserCases = await getDocketNumbersByUser({
+  const associatedUserCasesDocketNumbers = await getDocketNumbersByUser({
     userId: user.userId,
   });
+
+  async function getCaseData(docketNumber) {
+    const userCase = await getCaseByDocketNumber({
+      docketNumber,
+    });
+    const caseEntity = new Case(userCase, {
+      authorizedUser,
+    });
+    return caseEntity;
+  }
+
+  let associatedUserCases: Case[] = [];
+
+  for (const docketNumber of associatedUserCasesDocketNumbers) {
+    const caseEntity = await getCaseData(docketNumber);
+    associatedUserCases.push(caseEntity);
+  }
+
+  associatedUserCases = associatedUserCases.filter((caseEntity) => caseEntity.shouldGenerateNoticesForCase());
 
   if (associatedUserCases.length === 0) {
     return [];
@@ -90,7 +111,7 @@ export const generateChangeOfAddress = async ({
   const jobId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    docketNumbers: associatedUserCases,
+    docketNumbers: associatedUserCasesDocketNumbers,
     jobId,
   });
 
@@ -122,7 +143,7 @@ export const generateChangeOfAddress = async ({
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await settlePromises(
-      associatedUserCases.map(async docketNumber => {
+      associatedUserCasesDocketNumbers.map(async docketNumber => {
         return await applicationContext
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
