@@ -148,7 +148,7 @@ const createDocketEntryForChange = async ({
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   applicationContext.logger.info(
-    `Saving New Docket Entry Id: ${newDocketEntryId} to S3`,
+    `Saving New Docket Entry Id: ${newDocumentStorageId} to S3`,
   );
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
