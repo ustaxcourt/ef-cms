@@ -2,13 +2,13 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as readline from 'readline';
 
-const DOMAIN_REPLACER = 'example.com';
+const DOMAIN_REPLACER = 'ustc.gov';
 // Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
 const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
-const usedEmails = {};
+const usedEmails: Record<string, string> = {};
 
-const alreadyHashedEmails = {};
+const alreadyHashedEmails: Record<string, string> = {};
 
 export function sanitizeEmail(email: string) {
   if (email === '') {
