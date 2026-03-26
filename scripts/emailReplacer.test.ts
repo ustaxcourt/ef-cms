@@ -157,9 +157,9 @@ describe('sanitizeEmail', () => {
     expect(sanitizeEmail('')).toBe('');
   });
 
-  it('should return a hashed email with the example.com domain', () => {
+  it('should return a hashed email with the ustc.gov domain', () => {
     const result = sanitizeEmail('john@real.com');
-    expect(result).toMatch(/^[a-f0-9]+@example\.com$/);
+    expect(result).toMatch(/^[a-f0-9]+@ustc\.gov$/);
   });
 
   it('should return the same hash for the same email when called multiple times', () => {
@@ -174,7 +174,7 @@ describe('sanitizeEmail', () => {
     expect(first).not.toBe(second);
   });
 
-  it('should produce a hash of the correct length (8 hex chars + @example.com)', () => {
+  it('should produce a hash of the correct length (8 hex chars + @ustc.gov)', () => {
     const result = sanitizeEmail('test@test.com');
     const [localPart] = result.split('@');
     expect(localPart).toHaveLength(8);
@@ -182,7 +182,7 @@ describe('sanitizeEmail', () => {
 
   it('should handle emails with special allowed characters', () => {
     const result = sanitizeEmail('test.name+tag@sub.domain.com');
-    expect(result).toMatch(/^[a-f0-9]+@example\.com$/);
+    expect(result).toMatch(/^[a-f0-9]+@ustc\.gov$/);
   });
 
   it('should handle hash collisions by generating a new unique hash', () => {
@@ -200,8 +200,8 @@ describe('sanitizeEmail', () => {
     const first = sanitizeEmail('email1@test.com');
     const second = sanitizeEmail('email2@test.com');
 
-    expect(first).toBe('aabbccdd@example.com');
-    expect(second).toBe('11223344@example.com');
+    expect(first).toBe('aabbccdd@ustc.gov');
+    expect(second).toBe('11223344@ustc.gov');
     expect(first).not.toBe(second);
   });
 });

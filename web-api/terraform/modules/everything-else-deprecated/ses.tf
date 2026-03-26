@@ -18,7 +18,7 @@ resource "aws_ses_identity_policy" "outgoing_policy" {
         }
         Condition = {
           "ForAnyValue:StringLike" : {
-            "ses:Recipients" : "*@example.com"
+            "ses:Recipients" : "*@ustc.gov"
           }
         }
       }
