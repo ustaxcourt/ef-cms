@@ -908,6 +908,32 @@ only-deployed-lower-environments: &only-deployed-lower-environments
         - staging
         - test
 
+only-deployed-lower-environments-except-experimental5: &only-deployed-lower-environments-except-experimental5
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - develop
+        - experimental1
+        - experimental2
+        - experimental3
+        - experimental4
+        - experimental6
+        - experimental7
+        - experimental8
+        - experimental9
+        - irs
+        - migration
+        - staging
+        - test
+
+only-experimental5: &only-experimental5
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - experimental5
+
 workflows:
   version: 2
 
@@ -928,32 +954,42 @@ workflows:
           requires:
             - deploy
       - smoketests:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - migrate
       - loadtests:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - migrate
       - smoketests-readonly:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - migrate
       - api-hosted-environment-tests:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - migrate
       - switch-colors:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+      - switch-colors:
+          name: switch-colors-experimental5
+          <<: *only-experimental5
+          requires:
+            - migrate
       - cleanup:
-          <<: *only-deployed-lower-environments
+          <<: *only-deployed-lower-environments-except-experimental5
           requires:
             - switch-colors
+      - cleanup:
+          name: cleanup-experimental5
+          <<: *only-experimental5
+          requires:
+            - switch-colors-experimental5
 
   build-and-deploy-to-prod:
     when: << pipeline.parameters.run_build_and_deploy_to_prod >>
