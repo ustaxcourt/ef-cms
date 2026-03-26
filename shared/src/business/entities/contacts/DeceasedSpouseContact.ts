@@ -19,7 +19,7 @@ export class DeceasedSpouseContact extends ContactUpdated {
       inCareOf: JoiValidationConstants.STRING.max(100)
         .required()
         .messages({ '*': 'Enter name for in care of' }),
-      paperPetitionEmail: JoiValidationConstants.EMAIL.when(
+      contactEmailAddress: JoiValidationConstants.EMAIL.when(
         'hasConsentedToElectronicService',
         {
           is: true,
