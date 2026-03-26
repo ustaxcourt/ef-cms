@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "25.5.0"
+    "@types/node": "24.10.13"
   },
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "3.1015.0",
