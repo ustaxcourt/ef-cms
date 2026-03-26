@@ -14,7 +14,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   while (true) {
     const rows = await db
       .selectFrom('dwCase')
-      .select(sql`ctid`.as('ctid'))
+      .select('docketNumber')
       .where(sql`petitioners::text`, 'like', '%paperPetitionEmail%')
       .limit(BATCH_SIZE)
       .forUpdate()
@@ -35,7 +35,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         FROM jsonb_array_elements(petitioners) AS elem
       )
-      WHERE ctid = ANY(${rows.map(r => r.ctid)})
+      WHERE docket_number = ANY(${rows.map(r => r.docketNumber)})
     `.execute(db);
 
     total += rows.length;
@@ -71,7 +71,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   while (true) {
     const rows = await db
       .selectFrom('dwCase')
-      .select(sql`ctid`.as('ctid'))
+      .select('docketNumber')
       .where(sql`petitioners::text`, 'like', '%contactEmailAddress%')
       .limit(BATCH_SIZE)
       .forUpdate()
@@ -92,7 +92,7 @@ export async function down(db: Kysely<any>): Promise<void> {
         )
         FROM jsonb_array_elements(petitioners) AS elem
       )
-      WHERE ctid = ANY(${rows.map(r => r.ctid)})
+      WHERE docket_number = ANY(${rows.map(r => r.docketNumber)})
     `.execute(db);
 
     total += rows.length;
