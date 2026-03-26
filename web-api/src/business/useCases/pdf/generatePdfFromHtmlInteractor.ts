@@ -37,23 +37,33 @@ export const generatePdfFromHtmlInteractor = async (
   }
 
   const { currentColor, stage } = applicationContext.environment;
-  const client = getLambdaClient();
-  const command = new InvokeCommand({
-    FunctionName: `pdf_generator_${stage}_${currentColor}`,
-    InvocationType: 'RequestResponse',
-    Payload: Buffer.from(
-      JSON.stringify({
-        contentHtml,
-        displayHeaderFooter,
-        docketNumber,
-        footerHtml,
-        headerHtml,
-        overwriteFooter,
-      }),
-    ),
-  });
+  let client;
+  try {
+    client = getLambdaClient();
+  } catch (e: any) {
+    applicationContext.logger.error('failed to get lambda client:', e);
+  }
+  let response;
+  try {
+    const command = new InvokeCommand({
+      FunctionName: `pdf_generator_${stage}_${currentColor}`,
+      InvocationType: 'RequestResponse',
+      Payload: Buffer.from(
+        JSON.stringify({
+          contentHtml,
+          displayHeaderFooter,
+          docketNumber,
+          footerHtml,
+          headerHtml,
+          overwriteFooter,
+        }),
+      ),
+    });
 
-  const response = await client.send(command);
+    response = await client.send(command);
+  } catch (e: any) {
+    applicationContext.logger.error('failed to send invoke command:', e);
+  }
   const textDecoder = new TextDecoder('utf-8');
   let key: string;
   try {
