@@ -264,7 +264,7 @@ const getUsers = async (): Promise<Users> => {
       }
 
       let sourceOfUser = emailDomain;
-      if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+      if (emailDomain === 'example.com') {
         sourceOfUser = 'gluedUserId';
       } else if (emailDomain === 'dawson.ustaxcourt.gov') {
         sourceOfUser = 'bulkImportedUserId';
