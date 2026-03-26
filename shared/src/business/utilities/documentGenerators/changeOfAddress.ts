@@ -65,12 +65,24 @@ export const changeOfAddress = async ({
     }),
   );
 
+  const { docketNumber } = content;
+
+  applicationContext.logger.info(
+    `Starting generate HTML template for change of address PDF for docket ${docketNumber}`,
+  );
+
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: changeOfAddressTemplate,
   });
 
-  const { docketNumber } = content;
+  applicationContext.logger.info(
+    `Finished generate HTML template for change of address PDF for docket ${docketNumber}`,
+  );
+
+  applicationContext.logger.info(
+    `Starting generate PDF from HTML for change of address for docket ${docketNumber}`,
+  );
 
   const pdf = await applicationContext
     .getUseCases()
@@ -79,6 +91,10 @@ export const changeOfAddress = async ({
       displayHeaderFooter: true,
       docketNumber,
     });
+
+  applicationContext.logger.info(
+    `Finished generate PDF from HTML for change of address for docket ${docketNumber}`,
+  );
 
   return pdf;
 };

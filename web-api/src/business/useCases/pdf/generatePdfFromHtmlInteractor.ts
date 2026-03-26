@@ -16,8 +16,22 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter,
   }: GeneratePdfRequest,
 ): Promise<Uint8Array> => {
+  const logDocket = docketNumber ?? 'unknown';
+
   if (applicationContext.environment.stage === 'local') {
+    applicationContext.logger.info(
+      `Starting get Chromium browser for PDF generation (docket ${logDocket})`,
+    );
+
     const browserLocal = await getChromiumBrowser();
+
+    applicationContext.logger.info(
+      `Finished get Chromium browser for PDF generation (docket ${logDocket})`,
+    );
+
+    applicationContext.logger.info(
+      `Starting generate PDF from HTML helper (local Chromium) for docket ${logDocket}`,
+    );
 
     const result = await applicationContext
       .getUseCaseHelpers()
@@ -32,6 +46,10 @@ export const generatePdfFromHtmlInteractor = async (
         },
         browserLocal,
       );
+
+    applicationContext.logger.info(
+      `Finished generate PDF from HTML helper (local Chromium) for docket ${logDocket}`,
+    );
 
     return result;
   }
@@ -60,7 +78,15 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
 
+    applicationContext.logger.info(
+      `Starting PDF generator Lambda invoke for docket ${logDocket}`,
+    );
+
     response = await client.send(command);
+
+    applicationContext.logger.info(
+      `Finished PDF generator Lambda invoke for docket ${logDocket}`,
+    );
   } catch (e: any) {
     applicationContext.logger.error('failed to send invoke command:', e);
   }
@@ -81,9 +107,19 @@ export const generatePdfFromHtmlInteractor = async (
     );
   }
 
-  return await applicationContext.getPersistenceGateway().getDocument({
+  applicationContext.logger.info(
+    `Starting get temp PDF document from storage for docket ${logDocket}`,
+  );
+
+  const pdfBytes = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
     key,
     useTempBucket: true,
   });
+
+  applicationContext.logger.info(
+    `Finished get temp PDF document from storage for docket ${logDocket}`,
+  );
+
+  return pdfBytes;
 };

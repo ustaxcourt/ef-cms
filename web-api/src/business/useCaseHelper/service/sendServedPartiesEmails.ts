@@ -83,6 +83,10 @@ export const sendServedPartiesEmails = async ({
   }));
 
   if (destinations.length > 0) {
+    applicationContext.logger.info(
+      `Starting send bulk templated email for served parties (case ${docketNumberWithSuffix}, ${destinations.length} destination(s))`,
+    );
+
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
@@ -92,5 +96,9 @@ export const sendServedPartiesEmails = async ({
       destinations,
       templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE!,
     });
+
+    applicationContext.logger.info(
+      `Finished send bulk templated email for served parties (case ${docketNumberWithSuffix})`,
+    );
   }
 };

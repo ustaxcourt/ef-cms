@@ -99,6 +99,10 @@ const createDocketEntryForChange = async ({
       },
     });
 
+  applicationContext.logger.info(
+    `Finished generating change of address document for case ${caseEntity.docketNumber}`,
+  );
+
   const newDocumentStorageId = applicationContext.getUniqueId();
 
   const changeOfAddressDocketEntry = new DocketEntry(
@@ -136,6 +140,10 @@ const createDocketEntryForChange = async ({
   });
 
   applicationContext.logger.info(
+    `Finished add cover to pdf for case ${caseEntity.docketNumber}`,
+  );
+
+  applicationContext.logger.info(
     `Starting counting pages for case ${caseEntity.docketNumber}`,
   );
 
@@ -145,16 +153,25 @@ const createDocketEntryForChange = async ({
       applicationContext,
       documentBytes: changeOfAddressPdfWithCover,
     });
+
+  applicationContext.logger.info(
+    `Finished counting pages for case ${caseEntity.docketNumber}`,
+  );
+
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   applicationContext.logger.info(
-    `Saving New Docket Entry Id: ${newDocumentStorageId} to S3`,
+    `Starting save document to S3 for case ${caseEntity.docketNumber} (docket entry id ${newDocumentStorageId})`,
   );
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: changeOfAddressPdfWithCover,
     key: newDocumentStorageId,
   });
+
+  applicationContext.logger.info(
+    `Finished save document to S3 for case ${caseEntity.docketNumber} (docket entry id ${newDocumentStorageId})`,
+  );
 
   applicationContext.logger.info(
     `Starting get download policy url for case ${caseEntity.docketNumber}`,
@@ -166,6 +183,10 @@ const createDocketEntryForChange = async ({
       key: newDocumentStorageId,
     });
 
+  applicationContext.logger.info(
+    `Finished get download policy url for case ${caseEntity.docketNumber}`,
+  );
+
   return {
     changeOfAddressDocketEntry,
     changeOfAddressPdfWithCover,
@@ -175,10 +196,20 @@ const createDocketEntryForChange = async ({
 };
 
 const createWorkItemForChange = async ({
+  applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,
   user,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: any;
+  changeOfAddressDocketEntry: any;
+  user: any;
 }) => {
+  applicationContext.logger.info(
+    `Starting upsert work item for change of address for case ${caseEntity.docketNumber}`,
+  );
+
   const workItem = new WorkItem({
     assigneeId: null,
     assigneeName: null,
@@ -192,6 +223,10 @@ const createWorkItemForChange = async ({
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],
   });
+
+  applicationContext.logger.info(
+    `Finished upsert work item for change of address for case ${caseEntity.docketNumber}`,
+  );
 };
 
 export const generateAndServeDocketEntry = async ({
@@ -254,21 +289,35 @@ export const generateAndServeDocketEntry = async ({
   });
 
   applicationContext.logger.info(
+    `Finished create Docket entry for change for case ${caseEntity.docketNumber}`,
+  );
+
+  applicationContext.logger.info(
     `Should create work item for case ${caseEntity.docketNumber} ${shouldCreateWorkItem}`,
   );
   if (shouldCreateWorkItem) {
     await createWorkItemForChange({
+      applicationContext,
       caseEntity,
       changeOfAddressDocketEntry,
       user,
     });
   }
+
+  applicationContext.logger.info(
+    `Starting send served parties emails for case ${caseEntity.docketNumber}`,
+  );
+
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
     docketEntryId: changeOfAddressDocketEntry.docketEntryId,
     servedParties,
   });
+
+  applicationContext.logger.info(
+    `Finished send served parties emails for case ${caseEntity.docketNumber}`,
+  );
 
   return { caseEntity, url };
 };
