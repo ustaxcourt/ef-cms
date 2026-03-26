@@ -58,7 +58,7 @@ export const generateChangeOfAddress = async ({
   websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
-  const associatedUserCasesDocketNumbers = await getDocketNumbersByUser({
+  let associatedUserCases = await getDocketNumbersByUser({
     userId: user.userId,
   });
 
@@ -72,14 +72,16 @@ export const generateChangeOfAddress = async ({
     return caseEntity;
   }
 
-  let associatedUserCases: Case[] = [];
+  const associatedUserCasesObjects: Case[] = [];
 
-  for (const docketNumber of associatedUserCasesDocketNumbers) {
+  for (const docketNumber of associatedUserCases) {
     const caseEntity = await getCaseData(docketNumber);
-    associatedUserCases.push(caseEntity);
+    associatedUserCasesObjects.push(caseEntity);
   }
 
-  associatedUserCases = associatedUserCases.filter((caseEntity) => caseEntity.shouldGenerateNoticesForCase());
+  associatedUserCases = associatedUserCasesObjects
+    .filter(caseEntity => caseEntity.shouldGenerateNoticesForCase())
+    .map(caseEntity => caseEntity.docketNumber);
 
   if (associatedUserCases.length === 0) {
     return [];
@@ -111,7 +113,7 @@ export const generateChangeOfAddress = async ({
   const jobId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    docketNumbers: associatedUserCasesDocketNumbers,
+    docketNumbers: associatedUserCases,
     jobId,
   });
 
@@ -143,7 +145,7 @@ export const generateChangeOfAddress = async ({
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await settlePromises(
-      associatedUserCasesDocketNumbers.map(async docketNumber => {
+      associatedUserCases.map(async docketNumber => {
         return await applicationContext
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
