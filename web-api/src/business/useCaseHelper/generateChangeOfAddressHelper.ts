@@ -114,20 +114,13 @@ export const generateChangeOfAddressHelper = async ({
     | 'admin_contact_update_progress' =
     `${websocketMessagePrefix}_contact_update_progress`;
 
-  try {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: NOTIFICATION_ACTION,
-      },
-      userId: requestUserId || user.userId,
-    });
-  } catch (error) {
-    applicationContext.logger.error(
-      'Failed to notify user during change of address job',
-      error,
-    );
-  }
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: NOTIFICATION_ACTION,
+    },
+    userId: requestUserId || user.userId,
+  });
 
   await applicationContext
     .getPersistenceGateway()
@@ -151,27 +144,27 @@ export const generateChangeOfAddressHelper = async ({
 
       await upsertUsers([userEntity.validate().toRawObject()]);
     }
-
-    const CONTACT_UPDATE_COMPLETE_ACTION:
-      | 'user_contact_full_update_complete'
-      | 'admin_contact_full_update_complete' =
-      `${websocketMessagePrefix}_contact_full_update_complete`;
-
-    try {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: CONTACT_UPDATE_COMPLETE_ACTION,
-          user,
-        },
-        userId: requestUserId || user.userId,
-      });
-    } catch (error) {
-      applicationContext.logger.error(
-        'Failed to notify user of completion of change of address job',
-        error,
-      );
-    }
+    //
+    // const CONTACT_UPDATE_COMPLETE_ACTION:
+    //   | 'user_contact_full_update_complete'
+    //   | 'admin_contact_full_update_complete' =
+    //   `${websocketMessagePrefix}_contact_full_update_complete`;
+    //
+    // try {
+    //   await applicationContext.getNotificationGateway().sendNotificationToUser({
+    //     applicationContext,
+    //     message: {
+    //       action: CONTACT_UPDATE_COMPLETE_ACTION,
+    //       user,
+    //     },
+    //     userId: requestUserId || user.userId,
+    //   });
+    // } catch (error) {
+    //   applicationContext.logger.error(
+    //     'Failed to notify user of completion of change of address job',
+    //     error,
+    //   );
+    // }
   }
 };
 
@@ -227,9 +220,6 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
-  applicationContext.logger.info(
-    `Starting generate and serve docket Entry for case ${caseEntity.docketNumber}`,
-  );
   await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
