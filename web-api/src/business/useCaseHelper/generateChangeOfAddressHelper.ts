@@ -35,7 +35,7 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber,
   jobId,
   oldUser,
-  requestUserId,
+  // requestUserId,
   updatedEmail,
   updatedName,
   user,
@@ -51,7 +51,7 @@ export const generateChangeOfAddressHelper = async ({
   jobId: string;
   oldUser: RawUser;
   user: RawPractitioner;
-  requestUserId?: string;
+  // requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';
 }) => {
   try {
@@ -109,18 +109,18 @@ export const generateChangeOfAddressHelper = async ({
     );
   }
 
-  const NOTIFICATION_ACTION:
-    | 'user_contact_update_progress'
-    | 'admin_contact_update_progress' =
-    `${websocketMessagePrefix}_contact_update_progress`;
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: NOTIFICATION_ACTION,
-    },
-    userId: requestUserId || user.userId,
-  });
+  // const NOTIFICATION_ACTION:
+  //   | 'user_contact_update_progress'
+  //   | 'admin_contact_update_progress' =
+  //   `${websocketMessagePrefix}_contact_update_progress`;
+  //
+  // await applicationContext.getNotificationGateway().sendNotificationToUser({
+  //   applicationContext,
+  //   message: {
+  //     action: NOTIFICATION_ACTION,
+  //   },
+  //   userId: requestUserId || user.userId,
+  // });
 
   await applicationContext
     .getPersistenceGateway()
