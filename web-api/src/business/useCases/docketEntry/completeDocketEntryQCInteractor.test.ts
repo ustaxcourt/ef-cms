@@ -462,7 +462,11 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(countPagesInDocument).toHaveBeenCalled();
+    expect(countPagesInDocument).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: mockDocumentStorageId,
+      }),
+    );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();

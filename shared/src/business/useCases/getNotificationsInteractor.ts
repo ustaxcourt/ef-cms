@@ -81,14 +81,6 @@ export const getNotificationsInteractor = async (
     message => !message.isRead,
   ).length;
 
-  applicationContext.logger.info('getNotificationsInteractor done filtering', {
-    qcIndividualInProgressCount: userQCCounts.inProgressCount,
-    qcIndividualInboxCount: userQCCounts.inboxCount,
-    qcSectionInProgressCount: sectionQCCounts.inProgressCount,
-    qcSectionInboxCount: sectionQCCounts.inboxCount,
-    unreadMessageCount,
-  });
-
   return {
     qcIndividualInProgressCount: userQCCounts.inProgressCount,
     qcIndividualInboxCount: userQCCounts.inboxCount,
