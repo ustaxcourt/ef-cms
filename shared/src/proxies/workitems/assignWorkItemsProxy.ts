@@ -2,7 +2,17 @@ import { put } from '../requests';
 
 export const assignWorkItemsInteractor = (
   applicationContext,
-  { assigneeId, assigneeName, workItem = undefined, workItemId = undefined },
+  {
+    assigneeId,
+    assigneeName,
+    workItem = undefined,
+    workItemId = undefined,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    workItem?: object;
+    workItemId?: string;
+  },
 ) => {
   return put({
     applicationContext,

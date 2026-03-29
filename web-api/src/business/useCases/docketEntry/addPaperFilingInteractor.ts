@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
@@ -28,13 +29,14 @@ import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     consolidatedGroupDocketNumbers,
-    docketEntryId,
+    documentStorageId,
     documentMetadata,
     isSavingForLater,
   }: {
@@ -42,7 +44,7 @@ export const addPaperFiling = async (
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
-    docketEntryId: string;
+    documentStorageId?: string;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -50,9 +52,11 @@ export const addPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (!docketEntryId) {
-    throw new Error('Did not receive a docketEntryId');
+  if (!documentStorageId) {
+    documentStorageId = getUniqueId();
   }
+
+  const docketEntryId = documentStorageId;
 
   if (!documentMetadata) {
     throw new Error('Did not receive meta data for docket entry');
@@ -114,6 +118,7 @@ export const addPaperFiling = async (
       {
         ...documentMetadata,
         docketEntryId,
+        documentStorageId,
         documentTitle: documentMetadata.documentTitle,
         documentType: documentMetadata.documentType,
         editState: JSON.stringify(docketRecordEditState),
@@ -171,7 +176,7 @@ export const addPaperFiling = async (
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          docketEntryId,
+          documentStorageId,
           documentBytes: undefined,
         });
     }

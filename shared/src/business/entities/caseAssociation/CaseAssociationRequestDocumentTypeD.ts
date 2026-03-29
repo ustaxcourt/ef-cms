@@ -68,9 +68,10 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
     if (this.partyIrsPractitioner) {
       petitionerNames = 'Respondent';
     } else {
-      const petitionerNamesArray = this.filers?.map(
-        contactId => petitioners.find(p => p.contactId === contactId).name,
-      );
+      const petitionerNamesArray =
+        this.filers?.map(
+          contactId => petitioners.find(p => p.contactId === contactId).name,
+        ) || [];
 
       if (petitionerNamesArray.length > 1) {
         petitionerNames = 'Petrs. ';

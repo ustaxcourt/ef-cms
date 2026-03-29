@@ -27,7 +27,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     showCaseNotes: boolean;
     sort: string;
     userHeading: string;
-    trialStatusCounts: {[caseNumber: string]: number}
+    trialStatusCounts: { [trialStatus: string]: number };
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
@@ -58,7 +58,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
-    pdfName: key,
+    key,
     useTempBucket: true,
   });
 

@@ -11,21 +11,18 @@ describe('completeMotionStampingAction', () => {
 
   const docketNumber = '123';
 
-  const mockDocketEntryId = applicationContext.getUniqueId();
+  const stampedDocketEntryId = applicationContext.getUniqueId();
 
   applicationContext
     .getUseCases()
-    .saveSignedDocumentInteractor.mockReturnValue({
-      stampedDocketEntryId: mockDocketEntryId,
+    .generateDraftStampOrderInteractor.mockResolvedValue({
+      stampedDocketEntryId,
     });
 
   let mockState;
-  let mockStampedDocketEntryId;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-    mockStampedDocketEntryId = '20354d7a-e4fe-47af-8ff6-187bca92f3f9';
-    applicationContext.getUniqueId.mockReturnValue(mockStampedDocketEntryId);
 
     mockState = {
       caseDetail: {
@@ -88,7 +85,7 @@ describe('completeMotionStampingAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockStampedDocketEntryId}`,
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${stampedDocketEntryId}`,
     });
   });
 
@@ -106,7 +103,7 @@ describe('completeMotionStampingAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockStampedDocketEntryId}`,
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${stampedDocketEntryId}`,
     });
   });
 
@@ -118,6 +115,6 @@ describe('completeMotionStampingAction', () => {
       state: mockState,
     });
 
-    expect(result.output.docketEntryId).toEqual(mockStampedDocketEntryId);
+    expect(result.output.docketEntryId).toEqual(stampedDocketEntryId);
   });
 });

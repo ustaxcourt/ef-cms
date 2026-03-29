@@ -37,8 +37,8 @@ describe('deleteStatistic', () => {
 
     caseEntity.deleteStatistic(statistic0Id);
 
-    expect(caseEntity.statistics.length).toEqual(1);
-    expect(caseEntity.statistics[0].statisticId).toEqual(statistic1Id);
+    expect(caseEntity.statistics!.length).toEqual(1);
+    expect(caseEntity.statistics![0].statisticId).toEqual(statistic1Id);
   });
 
   it('should not delete a statistic if its statisticId is not present on the case', () => {
@@ -75,6 +75,6 @@ describe('deleteStatistic', () => {
 
     caseEntity.deleteStatistic('16fc02bc-f00a-453c-a19c-e5597a8850ba');
 
-    expect(caseEntity.statistics.length).toEqual(2);
+    expect(caseEntity.statistics!.length).toEqual(2);
   });
 });

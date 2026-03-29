@@ -66,9 +66,9 @@ describe('External user views case with sealed docket entry', () => {
       entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
     );
 
-    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
-    expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
+    expect(sealedDocketEntry?.showDocumentDescriptionWithoutLink).toBe(true);
+    expect(sealedDocketEntry?.isSealed).toBe(true);
+    expect(sealedDocketEntry?.sealedToTooltip).toBe('Sealed to the public');
   });
 
   loginAs(testClient, 'petitionsclerk@example.com');
@@ -83,10 +83,10 @@ describe('External user views case with sealed docket entry', () => {
     const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
     );
-    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
-    expect(sealedDocketEntry.showLinkToDocument).toBe(true);
-    expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
+    expect(sealedDocketEntry?.showDocumentDescriptionWithoutLink).toBe(false);
+    expect(sealedDocketEntry?.showLinkToDocument).toBe(true);
+    expect(sealedDocketEntry?.isSealed).toBe(true);
+    expect(sealedDocketEntry?.sealedToTooltip).toBe('Sealed to the public');
   });
 
   loginAs(testClient, 'docketclerk@example.com');
@@ -96,9 +96,9 @@ describe('External user views case with sealed docket entry', () => {
     const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
     );
-    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
-    expect(sealedDocketEntry.showDocumentViewerLink).toBe(true);
-    expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
+    expect(sealedDocketEntry?.showDocumentDescriptionWithoutLink).toBe(false);
+    expect(sealedDocketEntry?.showDocumentViewerLink).toBe(true);
+    expect(sealedDocketEntry?.isSealed).toBe(true);
+    expect(sealedDocketEntry?.sealedToTooltip).toBe('Sealed to the public');
   });
 });
