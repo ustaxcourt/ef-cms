@@ -85,10 +85,12 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        events: ['click'],
         plugins: {
           title: {
             display: !!title,
             text: title,
+            color: '#000',
             font: {
               size: 18,
               weight: 'bold',
@@ -114,11 +116,10 @@ export const LineGraph: React.FC<LineGraphProps> = ({
               boxHeight: 14,
               borderRadius: 6,
               color: '#000',
-              borderColor: '#000',
-              borderWidth: 2,
             },
           },
           tooltip: {
+            enabled: false,
             callbacks: {
               label: (context: TooltipItem<'line'>) => {
                 return ` ${context.dataset.label}: ${context.parsed.y}`;
@@ -137,12 +138,14 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             title: {
               display: !!xAxisLabel,
               text: xAxisLabel,
+              color: '#000',
               font: {
                 size: 13,
                 weight: 'bold',
               },
             },
             ticks: {
+              color: '#000',
               font: {
                 size: 12,
               },
@@ -155,12 +158,14 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             title: {
               display: !!yAxisLabel,
               text: yAxisLabel,
+              color: '#000',
               font: {
                 size: 13,
                 weight: 'bold',
               },
             },
             ticks: {
+              color: '#000',
               font: {
                 size: 12,
               },

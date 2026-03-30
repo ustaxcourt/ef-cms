@@ -59,6 +59,37 @@ export const DawsonLibrary = () => {
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
         labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ]}
+        datasets={[
+          {
+            label: 'Filed',
+            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+          },
+          {
+            label: 'Closed',
+            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
+          },
+        ]}
+      />
+      {/* Grouped bar - normal (0°) month labels */}
+      <MultiBarGraph
+        title="Grouped - Labels Normal"
+        xAxisLabel="Month"
+        yAxisLabel="Number of Cases"
+        xLabelRotation={0}
+        labels={[
           'Jan',
           'Feb',
           'Mar',
@@ -71,6 +102,38 @@ export const DawsonLibrary = () => {
           'Oct',
           'Nov',
           'Dec',
+        ]}
+        datasets={[
+          {
+            label: 'Filed',
+            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+          },
+          {
+            label: 'Closed',
+            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
+          },
+        ]}
+      />
+
+      {/* Grouped bar - labels rotated 90° */}
+      <MultiBarGraph
+        title="Grouped - Labels 90°"
+        xAxisLabel="Month"
+        yAxisLabel="Number of Cases"
+        xLabelRotation={90}
+        labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
         ]}
         datasets={[
           {
@@ -135,6 +198,26 @@ export const DawsonLibrary = () => {
           { label: 'Type B', value: 7.5 },
         ]}
         title="Sample Distribution 1"
+      />
+      {/* Pie with no outline */}
+      <PieGraph
+        rotation={0}
+        outline="none"
+        data={[
+          { label: 'NoOutline A', value: 60 },
+          { label: 'NoOutline B', value: 40 },
+        ]}
+        title="Pie — No Outline"
+      />
+      {/* Pie with white outline */}
+      <PieGraph
+        rotation={0}
+        outline="white"
+        data={[
+          { label: 'WhiteOutline A', value: 30 },
+          { label: 'WhiteOutline B', value: 70 },
+        ]}
+        title="Pie — White Outline"
       />
       <PieGraph
         data={[

@@ -18,6 +18,10 @@ interface PieGraphProps {
   height?: number;
   showLegend?: boolean;
   showLabels?: boolean;
+  /**
+   * Outline option for pie slices. 'none' -> no border; 'white' -> white border; 'black' -> black border (default)
+   */
+  outline?: 'none' | 'white' | 'black';
 }
 
 export const PieGraph: React.FC<
@@ -31,6 +35,7 @@ export const PieGraph: React.FC<
   height = 400,
   showLegend = true,
   showLabels = true,
+  outline = 'black',
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -83,6 +88,10 @@ export const PieGraph: React.FC<
 
     const total = values.reduce((sum, val) => sum + val, 0);
 
+    const borderColor =
+      outline === 'none' ? undefined : outline === 'white' ? '#fff' : '#000';
+    const borderWidth = outline === 'none' ? 0 : 2;
+
     const config: ChartConfiguration<'pie'> = {
       type: 'pie',
       data: {
@@ -91,8 +100,8 @@ export const PieGraph: React.FC<
           {
             data: values,
             backgroundColor: colors,
-            borderColor: '#000',
-            borderWidth: 2,
+            borderColor,
+            borderWidth,
           },
         ],
       },
@@ -100,12 +109,15 @@ export const PieGraph: React.FC<
         responsive: true,
         maintainAspectRatio: false,
         rotation, // Start from top (default is 0, which starts from right)
+        // only allow click events to avoid hover interactions/tooltips
+        events: ['click'],
         plugins: {
           title: {
             display: !!title,
             text: title,
+            color: '#000',
             font: {
-              size: 20,
+              size: 24,
               weight: 'bold',
             },
             padding: {
@@ -149,6 +161,7 @@ export const PieGraph: React.FC<
             },
           },
           tooltip: {
+            enabled: false,
             callbacks: {
               label: context => {
                 const label = context.label || '';

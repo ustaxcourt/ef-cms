@@ -46,6 +46,8 @@ export interface MultiBarGraphProps {
   xAxisLabel?: string;
   yAxisLabel?: string;
   stacked?: boolean;
+  /** Optional: force x-axis label rotation in degrees (overrides stacked/grouped defaults) */
+  xLabelRotation?: number;
 }
 
 const defaultColors = [
@@ -99,15 +101,18 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        events: ['click'],
         plugins: {
           title: {
             display: !!title,
             text: title,
+            color: '#000',
             font: { size: 18, weight: 'bold' },
             padding: { top: 10, bottom: 20 },
           },
           legend: { display: showLegend },
           tooltip: {
+            enabled: false,
             callbacks: {
               label: (context: TooltipItem<'bar'>) =>
                 ` ${context.label}: ${context.parsed.y}`,
@@ -181,6 +186,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   xAxisLabel,
   yAxisLabel,
   stacked = false,
+  xLabelRotation,
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -218,8 +224,8 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             label: dataset.label,
             data: dataset.data,
             backgroundColor: color,
-            borderColor: color,
-            borderWidth: 1,
+            borderColor: stacked ? color : '#000',
+            borderWidth: stacked ? 1 : 1,
             borderRadius: 0,
             stack: stacked ? 'stack' : undefined,
           };
@@ -228,10 +234,12 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        events: ['click'],
         plugins: {
           title: {
             display: !!title,
             text: title,
+            color: '#000',
             font: { size: 18, weight: 'bold' },
             padding: { top: 10, bottom: 20 },
           },
@@ -242,15 +250,33 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             labels: {
               padding: 15,
               font: { size: 12, weight: 'bold' },
-              usePointStyle: true,
-              pointStyle: 'rectRounded',
-              boxWidth: 24,
-              boxHeight: 14,
+              usePointStyle: false,
+              boxWidth: 20,
+              boxHeight: 20,
               borderRadius: 6,
               color: '#000',
-            },
+              generateLabels: chart => {
+                const ds = chart.data.datasets as any[];
+                return (
+                  ds?.map((dataset, i) => {
+                    const fill =
+                      dataset?.backgroundColor ||
+                      defaultColors[i % defaultColors.length];
+                    return {
+                      text: dataset?.label || `Dataset ${i + 1}`,
+                      fillStyle: fill,
+                      strokeStyle: '#000',
+                      lineWidth: 1,
+                      borderRadius: 6,
+                      datasetIndex: i,
+                    };
+                  }) || []
+                );
+              },
+            } as any,
           },
           tooltip: {
+            enabled: false,
             callbacks: {
               label: (context: TooltipItem<'bar'>) =>
                 ` ${context.dataset.label}: ${context.parsed.y}`,
@@ -289,14 +315,21 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               const color =
                 datasets[datasetIndex]?.color ||
                 defaultColors[datasetIndex % defaultColors.length];
-              // Yellow (#FFBE2E) gets black text, everything else gets white
               return color.toUpperCase() === '#FFBE2E' ? '#000000' : '#ffffff';
             },
-            font: { size: 11, weight: 'bold' },
+            font: (context: any) => {
+              const value = context.dataset.data[context.dataIndex] as number;
+              const labelIndex = context.dataIndex;
+              const colTotal = datasets.reduce(
+                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
+                0,
+              );
+              const isOutside = value / colTotal < 0.1;
+              return { size: isOutside ? 8 : 11, weight: 'bold' };
+            },
             textAlign: 'center',
             clamp: true,
             formatter: (value: number, context: any) => {
-              if (!stacked) return `${value}`;
               const datasetLabel = datasets[context.datasetIndex]?.label ?? '';
               const labelIndex = context.dataIndex;
               const colTotal = datasets.reduce(
@@ -304,9 +337,19 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 0,
               );
               const isSmall = value / colTotal < 0.1;
-              if (!isSmall) {
+
+              // For stacked charts: show dataset label only when bar is not small
+              if (stacked) {
+                if (!isSmall) return `${value}\n${datasetLabel}`;
+                return `${value}`;
+              }
+
+              // For grouped charts: if the label is outside and it's the 'Closed' (yellow) bar,
+              // include the dataset label so the text clarifies what the value refers to.
+              if (!stacked && isSmall) {
                 return `${value}\n${datasetLabel}`;
               }
+
               return `${value}`;
             },
           },
@@ -318,9 +361,32 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             title: {
               display: !!xAxisLabel,
               text: xAxisLabel,
+              color: '#000',
               font: { size: 13, weight: 'bold' },
             },
-            ticks: { font: { size: 12 } },
+            ticks: (() => {
+              let rotationVal: number;
+              if (typeof xLabelRotation === 'number') {
+                rotationVal = xLabelRotation;
+              } else {
+                rotationVal = stacked ? 0 : 45;
+              }
+
+              let autoSkipVal: boolean;
+              if (typeof xLabelRotation === 'number') {
+                autoSkipVal = false;
+              } else {
+                autoSkipVal = stacked;
+              }
+
+              return {
+                color: '#000',
+                font: { size: 12 },
+                autoSkip: autoSkipVal,
+                minRotation: rotationVal,
+                maxRotation: rotationVal,
+              };
+            })(),
           },
           y: {
             stacked,
@@ -329,9 +395,10 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             title: {
               display: !!yAxisLabel,
               text: yAxisLabel,
+              color: '#000',
               font: { size: 13, weight: 'bold' },
             },
-            ticks: { font: { size: 12 } },
+            ticks: { color: '#000', font: { size: 12 } },
             beginAtZero: true,
           },
         },
