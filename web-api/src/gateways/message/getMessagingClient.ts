@@ -4,13 +4,17 @@ import { environment } from '@web-api/environment';
 
 let sqsCache: SQSClient;
 
-export function getMessagingClient() {
+export function getMessagingClient({
+  connectionTimeout,
+}: {
+  connectionTimeout: number;
+}) {
   if (!sqsCache) {
     sqsCache = new SQSClient({
       maxAttempts: 3,
       region: environment.region,
       requestHandler: new NodeHttpHandler({
-        connectionTimeout: 10000,
+        connectionTimeout: connectionTimeout || 3000,
         requestTimeout: 5000,
       }),
     });
