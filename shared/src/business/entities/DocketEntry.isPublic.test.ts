@@ -138,7 +138,6 @@ describe('DocketEntry isPublic', () => {
         ROLES.irsPractitioner,
       ];
       const otherRoles = Object.values(ROLES).filter(
-        // @ts-ignore
         role => !practitionerRoles.includes(role),
       );
 

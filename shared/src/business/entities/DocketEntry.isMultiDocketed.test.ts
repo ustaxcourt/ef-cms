@@ -1,8 +1,5 @@
 import { DocketEntry } from './DocketEntry';
-import {
-  A_VALID_DOCKET_ENTRY,
-  MOCK_PETITIONERS,
-} from '@shared/business/entities/DocketEntryTestFixtures';
+import { A_VALID_DOCKET_ENTRY } from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('isMultiDocketed', () => {
   it('should return true when multiDocketedOn has more than one docket number', () => {
@@ -11,7 +8,7 @@ describe('isMultiDocketed', () => {
         ...A_VALID_DOCKET_ENTRY,
         multiDocketedOn: ['101-21', '102-21'],
       },
-      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined },
     );
 
     expect(DocketEntry.isMultiDocketed(docketEntry)).toBe(true);
@@ -23,7 +20,7 @@ describe('isMultiDocketed', () => {
         ...A_VALID_DOCKET_ENTRY,
         multiDocketedOn: ['101-21'],
       },
-      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined },
     );
 
     expect(DocketEntry.isMultiDocketed(docketEntry)).toBe(false);
@@ -35,7 +32,7 @@ describe('isMultiDocketed', () => {
         ...A_VALID_DOCKET_ENTRY,
         multiDocketedOn: [],
       },
-      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined },
     );
 
     expect(DocketEntry.isMultiDocketed(docketEntry)).toBe(false);
@@ -44,7 +41,7 @@ describe('isMultiDocketed', () => {
   it('should return false when multiDocketedOn is not provided', () => {
     const docketEntry = new DocketEntry(
       { ...A_VALID_DOCKET_ENTRY },
-      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined },
     );
 
     expect(DocketEntry.isMultiDocketed(docketEntry)).toBe(false);
