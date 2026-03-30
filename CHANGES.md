@@ -1,3 +1,30 @@
+<details><summary>Dependency Updates - Week of 2026-03-30</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.14.1`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+#### Upgrade Terraform to `1.14.8`
+
+```bash
+tfswitch 1.14.8
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.73` - choose exp4
+```bash
+. scripts/env/set-env.zsh exp4
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-03-16</summary>
 
 ## Local
