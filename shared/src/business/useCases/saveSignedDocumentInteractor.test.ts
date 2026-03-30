@@ -17,9 +17,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { Message } from '../entities/Message';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { Message } from '../entities/Message';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
@@ -179,7 +178,7 @@ describe('saveSignedDocumentInteractor', () => {
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
-    expect(caseToUpdate.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 2);
+    expect(caseToUpdate.docketEntries.length).toEqual(mockCase.docketEntries.length + 1);
     const signedDocument = caseToUpdate.docketEntries.find(
       e =>
         e.documentType ===
