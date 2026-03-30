@@ -10,7 +10,7 @@ export function getMessagingClient() {
       maxAttempts: 3,
       region: environment.region,
       requestHandler: new NodeHttpHandler({
-        connectionTimeout: 3000,
+        connectionTimeout: 10000,
         requestTimeout: 5000,
       }),
     });
