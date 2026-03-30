@@ -40,6 +40,8 @@ export const generateChangeOfAddressHelper = async ({
   updatedName,
   user,
   websocketMessagePrefix,
+  totalCases,
+  sendUpdateProgressWsMessage,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
@@ -53,6 +55,8 @@ export const generateChangeOfAddressHelper = async ({
   user: RawPractitioner;
   requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';
+  totalCases: number;
+  sendUpdateProgressWsMessage: boolean;
 }) => {
   try {
     const newData = contactInfo;
@@ -108,27 +112,31 @@ export const generateChangeOfAddressHelper = async ({
     | 'admin_contact_update_progress' =
     `${websocketMessagePrefix}_contact_update_progress`;
 
-  try {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: NOTIFICATION_ACTION,
-      },
-      userId: requestUserId || user.userId,
-    });
-  } catch (error) {
-    applicationContext.logger.error(
-      'Failed to notify user during change of address job',
-      error,
-    );
-  }
-
   await applicationContext
     .getPersistenceGateway()
     .setChangeOfAddressCaseAsDone(jobId, docketNumber);
   const remainingCases = await applicationContext
     .getPersistenceGateway()
     .countRemainingChangeOfAddressCases(jobId);
+
+  if (sendUpdateProgressWsMessage) {
+    try {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: NOTIFICATION_ACTION,
+          totalCases,
+          completedCases: totalCases - remainingCases
+        },
+        userId: requestUserId || user.userId,
+      });
+    } catch (error) {
+      applicationContext.logger.error(
+        'Failed to notify user during change of address job',
+        error,
+      );
+    }
+  }
 
   if (remainingCases === 0) {
     await deleteChangeOfAddressCaseRecord(jobId);
