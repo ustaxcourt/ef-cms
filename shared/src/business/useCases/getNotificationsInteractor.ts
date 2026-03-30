@@ -136,7 +136,7 @@ const countUniqueWorkItems = workItems => {
     const multiDocketedOnLength =
       workItem.docketEntry.multiDocketedOn?.length ?? 0;
 
-    if (multiDocketedOnLength < 2 || !workItem.leadDocketNumber) {
+    if (multiDocketedOnLength < 2) {
       count += 1;
     } else {
       const key = workItem.docketEntryId;
