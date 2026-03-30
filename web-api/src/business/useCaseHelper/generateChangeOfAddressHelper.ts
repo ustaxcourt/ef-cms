@@ -15,6 +15,7 @@ import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
+import { getDocketNumberChangeOfAddress } from '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { RawUser } from '@shared/business/entities/User';
@@ -59,6 +60,13 @@ export const generateChangeOfAddressHelper = async ({
   sendUpdateProgressWsMessage: boolean;
 }) => {
   try {
+    const docketChangeAddress = await getDocketNumberChangeOfAddress(
+      jobId,
+      docketNumber,
+    );
+
+    if (docketChangeAddress.length === 0) return;
+
     const newData = contactInfo;
 
     const userCase = await getCaseByDocketNumber({
@@ -126,7 +134,7 @@ export const generateChangeOfAddressHelper = async ({
         message: {
           action: NOTIFICATION_ACTION,
           totalCases,
-          completedCases: totalCases - remainingCases
+          completedCases: totalCases - remainingCases,
         },
         userId: requestUserId || user.userId,
       });
