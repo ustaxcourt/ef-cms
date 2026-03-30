@@ -9,7 +9,7 @@ import { applicationContext } from '@web-api/applicationContext';
 export const getOriginalNoticeValues = ({
   docketEntry,
 }: {
-  docketEntry: any;
+  docketEntry: RawDocketEntry;
 }): {
   documentTitleForNotice: string;
   filedBy?: string;

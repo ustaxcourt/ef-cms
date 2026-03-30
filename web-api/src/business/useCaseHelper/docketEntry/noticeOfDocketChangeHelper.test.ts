@@ -7,6 +7,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { DOCUMENT_RELATIONSHIPS } from '@shared/business/entities/EntityConstants';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT } from '@shared/test/mockDocketEntry';
 
 jest.mock('@web-api/utilities/logger/getDawsonLogger');
 
@@ -23,9 +24,12 @@ describe('noticeOfDocketChangeHelper', () => {
     };
     mockGetDawsonLogger.mockReturnValue(mockLogger as any);
   });
+
   describe('getOriginalNoticeValues', () => {
     it('should return documentTitleForNotice and filedBy from docket entry', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Motion for Leave to File',
         filedBy: 'Test Petitioner',
       };
@@ -48,6 +52,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should use values from editState when valid JSON string is provided', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Original Motion',
         filedBy: 'Original Petitioner',
         editState: JSON.stringify({
@@ -73,6 +79,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should log error when editState has invalid JSON', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Motion',
         filedBy: 'Petitioner',
         editState: 'invalid json',
@@ -93,6 +101,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should NOT parse editState when it is "{}"', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Original Motion',
         filedBy: 'Original Petitioner',
         editState: '{}',
@@ -112,6 +122,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should NOT update fields when parsedEditState is not an object', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Original Motion',
         filedBy: 'Original Petitioner',
         editState: 'null',
@@ -131,6 +143,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should NOT update documentTitleForNotice when parsedTitle is falsy', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Original Motion',
         filedBy: 'Original Petitioner',
         editState: JSON.stringify({
@@ -156,6 +170,8 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should NOT update filedBy when parsedFiledBy is not present', () => {
       const mockDocketEntry = {
+        ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
+        objections: undefined,
         documentTitle: 'Original Motion',
         filedBy: 'Original Petitioner',
         editState: JSON.stringify({
