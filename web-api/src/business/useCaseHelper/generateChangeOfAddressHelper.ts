@@ -5,6 +5,7 @@ import {
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -60,11 +61,22 @@ export const generateChangeOfAddressHelper = async ({
   totalCases: number;
   sendUpdateProgressWsMessage: boolean;
 }) => {
-  const removeLockFunction = await acquireLock({
-    applicationContext,
-    authorizedUser,
-    identifiers: [`case|${docketNumber}`],
-  });
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const isChangeOfAddressLambdaEnabled =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];
+
+  const removeLockFunction = await (isChangeOfAddressLambdaEnabled
+    ? await acquireLock({
+        applicationContext,
+        authorizedUser,
+        identifiers: [`case|${docketNumber}`],
+        retries: 10,
+      })
+    : Promise.resolve(() => Promise.resolve()));
+
   try {
     const docketChangeAddress = await getDocketNumberChangeOfAddress(
       jobId,
@@ -72,7 +84,7 @@ export const generateChangeOfAddressHelper = async ({
     );
 
     if (docketChangeAddress.length === 0) {
-      return await removeLockFunction()
+      return await removeLockFunction();
     }
 
     const newData = contactInfo;
