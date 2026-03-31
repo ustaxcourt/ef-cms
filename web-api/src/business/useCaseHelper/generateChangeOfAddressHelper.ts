@@ -19,6 +19,7 @@ import { getDocketNumberChangeOfAddress } from '@web-api/persistence/postgres/jo
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { RawUser } from '@shared/business/entities/User';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * generateChangeOfAddressHelper
@@ -59,13 +60,20 @@ export const generateChangeOfAddressHelper = async ({
   totalCases: number;
   sendUpdateProgressWsMessage: boolean;
 }) => {
+  const removeLockFunction = await acquireLock({
+    applicationContext,
+    authorizedUser,
+    identifiers: [`case|${docketNumber}`],
+  });
   try {
     const docketChangeAddress = await getDocketNumberChangeOfAddress(
       jobId,
       docketNumber,
     );
 
-    if (docketChangeAddress.length === 0) return;
+    if (docketChangeAddress.length === 0) {
+      return await removeLockFunction()
+    }
 
     const newData = contactInfo;
 
@@ -186,6 +194,8 @@ export const generateChangeOfAddressHelper = async ({
       );
     }
   }
+
+  await removeLockFunction();
 };
 
 /**
