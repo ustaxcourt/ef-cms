@@ -68,8 +68,25 @@ export const sendWithRetry = async ({
   params: SendBulkTemplatedEmailCommandInput;
   retryCount: number;
 }) => {
+  const testEmailDomains = ['@ustc.gov', '@example.com'];
   const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
+
+  let sendingToTestEmail = false;
+  params.Destinations?.forEach(bulkDestination => {
+    bulkDestination.Destination?.ToAddresses?.forEach(addr => {
+      testEmailDomains.forEach(testEmail => {
+        if (addr.includes(testEmail)) sendingToTestEmail = true;
+      });
+    });
+  });
+  if (sendingToTestEmail) {
+    applicationContext.logger.info(
+      'Skipping email, test domain found in to addresses',
+      params,
+    );
+    return;
+  }
 
   applicationContext.logger.info('Bulk Email Params', params);
 
