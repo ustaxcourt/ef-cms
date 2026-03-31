@@ -149,7 +149,7 @@ const removeConsolidatedCases = async (
       const filtered = (docketEntry.multiDocketedOn || []).filter(
         docketNumber => !docketNumbersToRemove.includes(docketNumber),
       );
-      // if filtered only contains the docket number we/re on, then we set an empty array for the current
+      // if filtered only contains the docket number we're on, then we set an empty array for the current
       docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
     } else {
       docketEntry.multiDocketedOn = [];
@@ -163,7 +163,7 @@ const removeConsolidatedCases = async (
       updateCasePromises.push(storageClient.send(storageCommand));
       docketEntry.documentStorageId = newStorageId;
 
-      if (docketEntry.documentContentsId!!) {
+      if (docketEntry.documentContentsId) {
         const newContentsId = getUniqueId();
         const oldContentsId = docketEntry.documentContentsId;
         const contentsCommand = new CopyObjectCommand({

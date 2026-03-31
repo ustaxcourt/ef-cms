@@ -293,7 +293,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('queries multiple different pdf docs when documentStorageIds differ between docket entries on cases', async () => {
+  it('should query multiple different pdf docs when documentStorageIds differ between docket entries on cases', async () => {
     caseEntity = new Case(
       {
         ...MOCK_CASE,

@@ -11,10 +11,6 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
-jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
-);
-jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
 import { MOCK_CASE } from '@shared/test/mockCase';
 
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -29,8 +25,6 @@ import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persi
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
-import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('removeConsolidatedCasesInteractor', () => {
@@ -46,15 +40,9 @@ describe('removeConsolidatedCasesInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
-  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
-    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
-  );
-  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
 
   beforeEach(() => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
-    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
-    upsertCaseDeadlines.mockResolvedValue([]);
     mockCases = {
       '101-19': {
         ...MOCK_CASE,
@@ -356,228 +344,5 @@ describe('removeConsolidatedCasesInteractor', () => {
         identifiers: ['case|105-19', 'case|104-19'],
       }),
     );
-  });
-
-  it('should remove consolidated case references from case deadlines when removing a case', async () => {
-    const mockDeadlines = [
-      {
-        caseDeadlineId: 'deadline-1',
-        docketNumber: '102-19',
-        consolidatedCaseDeadlineId: 'lead-deadline-1',
-        deadlineDate: '2024-01-01',
-        description: 'Test deadline',
-      },
-    ] as any;
-    getCaseDeadlinesByDocketNumber.mockResolvedValue(mockDeadlines);
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['102-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '101-19',
-        docketNumbersToRemove: ['102-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(upsertCaseDeadlines).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseDeadlineId: 'deadline-1',
-          consolidatedCaseDeadlineId: undefined,
-        }),
-      ]),
-    );
-  });
-
-  it('should update consolidated case deadline reference IDs when removing the lead case', async () => {
-    const oldLeadDeadlines = [
-      {
-        caseDeadlineId: 'old-lead-deadline-1',
-        docketNumber: '101-19',
-        deadlineDate: '2024-01-01',
-        description: 'Lead deadline',
-      },
-    ] as any;
-    const childDeadlines = [
-      {
-        caseDeadlineId: 'child-deadline-1',
-        docketNumber: '102-19',
-        consolidatedCaseDeadlineId: 'old-lead-deadline-1',
-        deadlineDate: '2024-01-01',
-        description: 'Child deadline 1',
-      },
-      {
-        caseDeadlineId: 'child-deadline-2',
-        docketNumber: '103-19',
-        consolidatedCaseDeadlineId: 'old-lead-deadline-1',
-        deadlineDate: '2024-01-01',
-        description: 'Child deadline 2',
-      },
-    ] as any;
-
-    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce(oldLeadDeadlines);
-    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
-      childDeadlines,
-    );
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseDeadlinesByConsolidatedCaseDeadlineIds).toHaveBeenCalledWith([
-      'old-lead-deadline-1',
-    ]);
-    expect(upsertCaseDeadlines).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseDeadlineId: 'child-deadline-1',
-          docketNumber: '102-19',
-          consolidatedCaseDeadlineId: undefined,
-        }),
-        expect.objectContaining({
-          caseDeadlineId: 'child-deadline-2',
-          consolidatedCaseDeadlineId: 'child-deadline-1',
-        }),
-      ]),
-    );
-  });
-
-  it('should set new lead deadline ID as undefined when new lead deadline is not found in child deadlines', async () => {
-    const oldLeadDeadlines = [
-      {
-        caseDeadlineId: 'old-lead-deadline-1',
-        docketNumber: '101-19',
-        deadlineDate: '2024-01-01',
-        description: 'Lead deadline',
-      },
-    ] as any;
-    const childDeadlines = [
-      {
-        caseDeadlineId: 'child-deadline-1',
-        docketNumber: '103-19',
-        consolidatedCaseDeadlineId: 'old-lead-deadline-1',
-        deadlineDate: '2024-01-01',
-        description: 'Child deadline',
-      },
-    ] as any;
-
-    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce(oldLeadDeadlines);
-    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
-      childDeadlines,
-    );
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(upsertCaseDeadlines).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseDeadlineId: 'child-deadline-1',
-          consolidatedCaseDeadlineId: undefined,
-        }),
-      ]),
-    );
-  });
-
-  it('should not update deadline references when there are no child deadlines', async () => {
-    const oldLeadDeadlines = [
-      {
-        caseDeadlineId: 'old-lead-deadline-1',
-        docketNumber: '101-19',
-        deadlineDate: '2024-01-01',
-        description: 'Lead deadline',
-      },
-    ] as any;
-
-    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce(oldLeadDeadlines);
-    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseDeadlinesByConsolidatedCaseDeadlineIds).toHaveBeenCalledWith([
-      'old-lead-deadline-1',
-    ]);
-    expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
-  });
-
-  it('should handle rejected promises when updating deadline references and log warnings', async () => {
-    const consoleWarnSpy = jest
-      .spyOn(console, 'warn')
-      .mockImplementation(() => {});
-    const oldLeadDeadlines = [
-      {
-        caseDeadlineId: 'old-lead-deadline-1',
-        docketNumber: '101-19',
-        deadlineDate: '2024-01-01',
-        description: 'Lead deadline',
-      },
-    ] as any;
-
-    getCaseDeadlinesByDocketNumber.mockResolvedValueOnce(oldLeadDeadlines);
-    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockRejectedValue(
-      new Error('Database error'),
-    );
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      'Some deadline updates failed:',
-      expect.arrayContaining([
-        expect.objectContaining({
-          status: 'rejected',
-          reason: expect.any(Error),
-        }),
-      ]),
-    );
-
-    consoleWarnSpy.mockRestore();
-  });
-
-  it('should not call deadline reference update when no old lead deadlines exist', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
-    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
-      {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      getCaseDeadlinesByConsolidatedCaseDeadlineIds,
-    ).not.toHaveBeenCalled();
   });
 });

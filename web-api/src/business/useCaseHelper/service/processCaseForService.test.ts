@@ -32,7 +32,7 @@ describe('processCaseForService', () => {
       { authorizedUser: mockDocketClerkUser },
     );
 
-    const loadPdfDocument = jest.fn().mockResolvedValue(mockPdfData);
+    const loadPdfDocument = jest.fn().mockResolvedValueOnce(mockPdfData);
 
     await processCaseForService({
       PDFDocument: mockPDFDocument,
@@ -67,7 +67,7 @@ describe('processCaseForService', () => {
     const electronicParties = [
       { email: 'test@example.com', name: 'Test Party' },
     ];
-    const loadPdfDocument = jest.fn().mockResolvedValue(mockPdfData);
+    const loadPdfDocument = jest.fn().mockResolvedValueOnce(mockPdfData);
 
     await processCaseForService({
       PDFDocument: mockPDFDocument,
@@ -105,7 +105,7 @@ describe('processCaseForService', () => {
       { authorizedUser: mockDocketClerkUser },
     );
 
-    const loadPdfDocument = jest.fn().mockResolvedValue(mockPdfData);
+    const loadPdfDocument = jest.fn().mockResolvedValueOnce(mockPdfData);
 
     await processCaseForService({
       PDFDocument: mockPDFDocument,
@@ -145,7 +145,7 @@ describe('processCaseForService', () => {
       { authorizedUser: mockDocketClerkUser },
     );
 
-    const loadPdfDocument = jest.fn().mockResolvedValue(mockPdfData);
+    const loadPdfDocument = jest.fn().mockResolvedValueOnce(mockPdfData);
 
     await processCaseForService({
       PDFDocument: mockPDFDocument,
