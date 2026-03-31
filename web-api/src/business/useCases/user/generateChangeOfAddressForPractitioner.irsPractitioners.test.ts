@@ -8,6 +8,9 @@ jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress',
+);
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -26,6 +29,7 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumberChangeOfAddress as getDocketNumberChangeOfAddressMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 jest.mock('../addCoversheetInteractor', () => ({
@@ -38,6 +42,9 @@ describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+  const getDocketNumberChangeOfAddress = jest.mocked(
+    getDocketNumberChangeOfAddressMock,
+  );
   // const upsertUsers = jest.mocked(upsertUsersMock);
   const { docketNumber } = MOCK_CASE;
   const mockIrsPractitioner = {
@@ -87,6 +94,11 @@ describe('generateChangeOfAddress', () => {
     getDocketNumbersByUser.mockResolvedValue([docketNumber]);
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
+
+    getDocketNumberChangeOfAddress.mockResolvedValue([{
+      jobId: 'abcdef',
+      docketNumber: '101-26'
+    }]);
 
     applicationContext
       .getPersistenceGateway()
@@ -190,6 +202,8 @@ describe('generateChangeOfAddress', () => {
         .calls[1][0].message,
     ).toEqual({
       action: 'user_contact_update_progress',
+      completedCases: 1,
+      totalCases: 1
     });
   });
 

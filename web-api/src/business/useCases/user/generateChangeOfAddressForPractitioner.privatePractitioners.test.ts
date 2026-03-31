@@ -13,6 +13,9 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress',
+);
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
   ACCOUNT_STATUS,
@@ -29,6 +32,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumberChangeOfAddress as getDocketNumberChangeOfAddressMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress'
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
@@ -36,6 +40,7 @@ describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+  const getDocketNumberChangeOfAddress = jest.mocked(getDocketNumberChangeOfAddressMock);
   const { docketNumber } = MOCK_CASE;
   const mockPrivatePractitioner: RawPractitioner = {
     admissionsDate: '2019-04-10',
@@ -86,6 +91,10 @@ describe('generateChangeOfAddress', () => {
   beforeEach(() => {
     getDocketNumbersByUser.mockResolvedValue([docketNumber]);
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
+    getDocketNumberChangeOfAddress.mockResolvedValue([{
+      jobId: 'abcdef',
+      docketNumber: '101-26'
+    }]);
 
     applicationContext
       .getUtilities()

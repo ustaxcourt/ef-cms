@@ -15,6 +15,7 @@ import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
+import { getDocketNumberChangeOfAddress } from '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { RawUser } from '@shared/business/entities/User';
@@ -40,6 +41,8 @@ export const generateChangeOfAddressHelper = async ({
   updatedName,
   user,
   websocketMessagePrefix,
+  totalCases,
+  sendUpdateProgressWsMessage,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
@@ -53,8 +56,17 @@ export const generateChangeOfAddressHelper = async ({
   user: RawPractitioner;
   requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';
+  totalCases: number;
+  sendUpdateProgressWsMessage: boolean;
 }) => {
   try {
+    const docketChangeAddress = await getDocketNumberChangeOfAddress(
+      jobId,
+      docketNumber,
+    );
+
+    if (docketChangeAddress.length === 0) return;
+
     const newData = contactInfo;
 
     const userCase = await getCaseByDocketNumber({
@@ -100,7 +112,10 @@ export const generateChangeOfAddressHelper = async ({
       caseToUpdate: caseEntity,
     });
   } catch (error) {
-    applicationContext.logger.error(`Failed to update case ${docketNumber}`, JSON.stringify(error));
+    applicationContext.logger.error(
+      `Failed to update case information for docket number ${docketNumber}`,
+      error,
+    );
   }
 
   const NOTIFICATION_ACTION:
@@ -108,27 +123,31 @@ export const generateChangeOfAddressHelper = async ({
     | 'admin_contact_update_progress' =
     `${websocketMessagePrefix}_contact_update_progress`;
 
-  try {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: NOTIFICATION_ACTION,
-      },
-      userId: requestUserId || user.userId,
-    });
-  } catch (error) {
-    applicationContext.logger.error(
-      'Failed to notify user during change of address job',
-      error,
-    );
-  }
-
   await applicationContext
     .getPersistenceGateway()
     .setChangeOfAddressCaseAsDone(jobId, docketNumber);
   const remainingCases = await applicationContext
     .getPersistenceGateway()
     .countRemainingChangeOfAddressCases(jobId);
+
+  if (sendUpdateProgressWsMessage) {
+    try {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: NOTIFICATION_ACTION,
+          totalCases,
+          completedCases: totalCases - remainingCases,
+        },
+        userId: requestUserId || user.userId,
+      });
+    } catch (error) {
+      applicationContext.logger.error(
+        'Failed to notify user during change of address job',
+        error,
+      );
+    }
+  }
 
   if (remainingCases === 0) {
     await deleteChangeOfAddressCaseRecord(jobId);
