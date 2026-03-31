@@ -112,7 +112,10 @@ export const generateChangeOfAddressHelper = async ({
       caseToUpdate: caseEntity,
     });
   } catch (error) {
-    applicationContext.logger.error(error);
+    applicationContext.logger.error(
+      `Failed to update case information for docket number ${docketNumber}`,
+      error,
+    );
   }
 
   const NOTIFICATION_ACTION:
