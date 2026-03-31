@@ -16,6 +16,16 @@ jest.mock('../addCoversheetInteractor', () => ({
     pdfData: '',
   }),
 }));
+jest.mock('@web-api/persistence/postgres/utils/mutex', () => {
+  const originalModule = jest.requireActual(
+    '@web-api/persistence/postgres/utils/mutex',
+  );
+  return {
+    __esModule: true,
+    ...originalModule,
+    acquireLock: jest.fn().mockImplementation(() => jest.fn()),
+  };
+});
 import {
   ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
@@ -266,7 +276,7 @@ describe('generateChangeOfAddress', () => {
       websocketMessagePrefix: 'user',
     });
 
-    // we got 106 from the intial call in generateAddress.ts, plus the job complete call, 
+    // we got 106 from the intial call in generateAddress.ts, plus the job complete call,
     // plus calling the progress notification 104 times
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
