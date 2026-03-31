@@ -25,6 +25,10 @@ export interface SingleBarGraphProps {
   showGrid?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
+  /** Optional color for the chart title text */
+  titleColor?: string;
+  /** Optional color for the datalabels */
+  datalabelColor?: string;
 }
 
 // ─── Multi-dataset bar graph (stacked or grouped) ─────────────────────────────
@@ -58,12 +62,14 @@ const defaultColors = [
 export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   data,
   title,
-  width = 600,
-  height = 400,
+  width = 1344,
+  height = 800,
   showLegend = false,
   showGrid = true,
   xAxisLabel,
   yAxisLabel,
+  titleColor = '#000',
+  datalabelColor = '#000',
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -106,8 +112,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
           title: {
             display: !!title,
             text: title,
-            color: '#000',
-            font: { size: 18, weight: 'bold' },
+            color: titleColor,
+            font: { size: 20, weight: 'bold' },
             padding: { top: 10, bottom: 20 },
           },
           legend: { display: showLegend },
@@ -122,8 +128,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             display: true,
             anchor: 'center',
             align: 'center',
-            color: '#ffffff',
-            font: { size: 13, weight: 'bold' },
+            color: datalabelColor,
+            font: { size: 20, weight: 'bold' },
             formatter: (value: number) => value,
           },
         },
@@ -133,18 +139,18 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             title: {
               display: !!xAxisLabel,
               text: xAxisLabel,
-              font: { size: 13, weight: 'bold' },
+              font: { size: 20, weight: 'bold' },
             },
-            ticks: { font: { size: 12 } },
+            ticks: { font: { size: 20 } },
           },
           y: {
             grid: { display: showGrid },
             title: {
               display: !!yAxisLabel,
               text: yAxisLabel,
-              font: { size: 13, weight: 'bold' },
+              font: { size: 20, weight: 'bold' },
             },
-            ticks: { font: { size: 12 } },
+            ticks: { font: { size: 20 } },
             beginAtZero: true,
           },
         },
@@ -179,8 +185,8 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   datasets,
   labels,
   title,
-  width = 600,
-  height = 400,
+  width = 1344,
+  height = 800,
   showLegend = true,
   showGrid = true,
   xAxisLabel,
@@ -240,7 +246,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             display: !!title,
             text: title,
             color: '#000',
-            font: { size: 18, weight: 'bold' },
+            font: { size: 20, weight: 'bold' },
             padding: { top: 10, bottom: 20 },
           },
           legend: {
@@ -249,10 +255,10 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             onClick: () => {},
             labels: {
               padding: 15,
-              font: { size: 12, weight: 'bold' },
+              font: { size: 20, weight: 'bold' },
               usePointStyle: false,
-              boxWidth: 20,
-              boxHeight: 20,
+              boxWidth: 48,
+              boxHeight: 48,
               borderRadius: 6,
               color: '#000',
               generateLabels: chart => {
@@ -317,16 +323,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 defaultColors[datasetIndex % defaultColors.length];
               return color.toUpperCase() === '#FFBE2E' ? '#000000' : '#ffffff';
             },
-            font: (context: any) => {
-              const value = context.dataset.data[context.dataIndex] as number;
-              const labelIndex = context.dataIndex;
-              const colTotal = datasets.reduce(
-                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
-                0,
-              );
-              const isOutside = value / colTotal < 0.1;
-              return { size: isOutside ? 8 : 11, weight: 'bold' };
-            },
+            font: { size: 20, weight: 'bold' },
             textAlign: 'center',
             clamp: true,
             formatter: (value: number, context: any) => {
@@ -362,7 +359,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               display: !!xAxisLabel,
               text: xAxisLabel,
               color: '#000',
-              font: { size: 13, weight: 'bold' },
+              font: { size: 20, weight: 'bold' },
             },
             ticks: (() => {
               let rotationVal: number;
@@ -381,7 +378,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
 
               return {
                 color: '#000',
-                font: { size: 12 },
+                font: { size: 20 },
                 autoSkip: autoSkipVal,
                 minRotation: rotationVal,
                 maxRotation: rotationVal,
@@ -396,9 +393,9 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               display: !!yAxisLabel,
               text: yAxisLabel,
               color: '#000',
-              font: { size: 13, weight: 'bold' },
+              font: { size: 20, weight: 'bold' },
             },
-            ticks: { color: '#000', font: { size: 12 } },
+            ticks: { color: '#000', font: { size: 20 } },
             beginAtZero: true,
           },
         },

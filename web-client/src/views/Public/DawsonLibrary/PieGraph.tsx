@@ -31,7 +31,7 @@ export const PieGraph: React.FC<
   type = 'default',
   rotation = 0, // -90 makes the pie chart start from the top aka 12 o clock position instead of default right 3 o clock
   title = 'Distribution',
-  width = 400,
+  width = 648,
   height = 400,
   showLegend = true,
   showLabels = true,
@@ -117,7 +117,7 @@ export const PieGraph: React.FC<
             text: title,
             color: '#000',
             font: {
-              size: 24,
+              size: 20,
               weight: 'bold',
             },
             padding: {
@@ -132,12 +132,12 @@ export const PieGraph: React.FC<
             labels: {
               padding: 15,
               font: {
-                size: 12,
+                size: 20,
                 weight: 'bold',
               },
               usePointStyle: false,
-              boxWidth: 20,
-              boxHeight: 20,
+              boxWidth: 48,
+              boxHeight: 48,
               borderRadius: 6,
               generateLabels: chart => {
                 const { datasets } = chart.data;
@@ -179,7 +179,7 @@ export const PieGraph: React.FC<
             },
             font: {
               weight: 'bold' as const,
-              size: 14,
+              size: 20,
             },
             formatter: (value: number) => {
               const percentage = ((value / total) * 100).toFixed(1);

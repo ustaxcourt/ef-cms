@@ -8,12 +8,19 @@ import { PieGraph } from './PieGraph';
 import { LineGraph } from './LineGraph';
 import { SingleBarGraph, MultiBarGraph } from './BarGraph';
 
+const DEFAULT_CHART_WIDTH = 1344;
+const DEFAULT_CHART_HEIGHT = 800;
+
 export const DawsonLibrary = () => {
   return (
     <>
       <BigHeader text="Dawson Library" />
       <SingleBarGraph
         title="Cases by Type"
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
+        titleColor="#000"
+        datalabelColor="#000"
         xAxisLabel="Case Type"
         yAxisLabel="Number of Cases"
         data={[
@@ -25,6 +32,8 @@ export const DawsonLibrary = () => {
         ]}
       />
       <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Filed vs Closed Cases by Month (Stacked)"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
@@ -55,6 +64,8 @@ export const DawsonLibrary = () => {
         ]}
       />
       <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Filed vs Closed Cases by Month (Grouped)"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
@@ -85,6 +96,8 @@ export const DawsonLibrary = () => {
       />
       {/* Grouped bar - normal (0°) month labels */}
       <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Grouped - Labels Normal"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
@@ -117,6 +130,8 @@ export const DawsonLibrary = () => {
 
       {/* Grouped bar - labels rotated 90° */}
       <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Grouped - Labels 90°"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
@@ -147,6 +162,8 @@ export const DawsonLibrary = () => {
         ]}
       />
       <LineGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Cases Filed Over Time"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
@@ -164,6 +181,8 @@ export const DawsonLibrary = () => {
         smooth
       />
       <LineGraph
+        width={DEFAULT_CHART_WIDTH}
+        height={DEFAULT_CHART_HEIGHT}
         title="Case Type Breakdown by Quarter"
         xAxisLabel="Quarter"
         yAxisLabel="Number of Cases"

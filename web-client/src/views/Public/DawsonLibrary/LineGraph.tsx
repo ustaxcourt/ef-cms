@@ -39,8 +39,8 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   datasets,
   labels,
   title,
-  width = 600,
-  height = 400,
+  width = 1344,
+  height = 800,
   showLegend = true,
   showGrid = true,
   xAxisLabel,
@@ -92,7 +92,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             text: title,
             color: '#000',
             font: {
-              size: 18,
+              size: 20,
               weight: 'bold',
             },
             padding: {
@@ -107,13 +107,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             labels: {
               padding: 15,
               font: {
-                size: 12,
+                size: 20,
                 weight: 'bold',
               },
               usePointStyle: true,
               pointStyle: 'rectRounded',
-              boxWidth: 24,
-              boxHeight: 14,
+              boxWidth: 48,
+              boxHeight: 48,
               borderRadius: 6,
               color: '#000',
             },
@@ -128,6 +128,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           },
           datalabels: {
             display: false,
+            font: { size: 20 },
           },
         },
         scales: {
@@ -140,14 +141,14 @@ export const LineGraph: React.FC<LineGraphProps> = ({
               text: xAxisLabel,
               color: '#000',
               font: {
-                size: 13,
+                size: 20,
                 weight: 'bold',
               },
             },
             ticks: {
               color: '#000',
               font: {
-                size: 12,
+                size: 20,
               },
             },
           },
@@ -160,14 +161,14 @@ export const LineGraph: React.FC<LineGraphProps> = ({
               text: yAxisLabel,
               color: '#000',
               font: {
-                size: 13,
+                size: 20,
                 weight: 'bold',
               },
             },
             ticks: {
               color: '#000',
               font: {
-                size: 12,
+                size: 20,
               },
             },
             beginAtZero: true,
