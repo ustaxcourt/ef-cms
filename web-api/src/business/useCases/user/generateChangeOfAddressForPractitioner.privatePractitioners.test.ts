@@ -17,6 +17,16 @@ jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress',
 );
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
+jest.mock('@web-api/persistence/postgres/utils/mutex', () => {
+  const originalModule = jest.requireActual(
+    '@web-api/persistence/postgres/utils/mutex',
+  );
+  return {
+    __esModule: true,
+    ...originalModule,
+    acquireLock: jest.fn().mockImplementation(() => jest.fn()),
+  };
+});
 import {
   ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
