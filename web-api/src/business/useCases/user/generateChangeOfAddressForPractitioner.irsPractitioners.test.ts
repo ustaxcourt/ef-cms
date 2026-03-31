@@ -95,10 +95,12 @@ describe('generateChangeOfAddress', () => {
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
 
-    getDocketNumberChangeOfAddress.mockResolvedValue([{
-      jobId: 'abcdef',
-      docketNumber: '101-26'
-    }]);
+    getDocketNumberChangeOfAddress.mockResolvedValue([
+      {
+        jobId: 'abcdef',
+        docketNumber: '101-26',
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
@@ -203,7 +205,7 @@ describe('generateChangeOfAddress', () => {
     ).toEqual({
       action: 'user_contact_update_progress',
       completedCases: 1,
-      totalCases: 1
+      totalCases: 1,
     });
   });
 
@@ -229,6 +231,46 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should only send cases for one in a hundred cases if more than one hundred cases need to be updated', async () => {
+    let docketNumberPrefix = 101;
+    const docketNumbers: string[] = [];
+    for (let i = 0; i < 310; i++) {
+      docketNumbers.push(docketNumberPrefix.toString() + '-26');
+      docketNumberPrefix++;
+    }
+
+    getDocketNumbersByUser.mockResolvedValueOnce(docketNumbers);
+
+    applicationContext
+      .getPersistenceGateway()
+      .countRemainingChangeOfAddressCases.mockImplementation(() => {
+        docketNumbers.pop();
+        return docketNumbers.length;
+      });
+
+    await generateChangeOfAddress({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+    });
+
+    // we got 106 from the intial call in generateAddress.ts, plus the job complete call, 
+    // plus calling the progress notification 104 times
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(106);
   });
 
   it('should calculate the number of pages in the generated change of address pdf', async () => {
