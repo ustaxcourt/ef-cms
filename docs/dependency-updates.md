@@ -18,6 +18,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
+0. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file.
+
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
    # Run these in order to avoid having to manually navigate to each package.json location
@@ -288,24 +290,22 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
 
-### minimatch
+### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
 - A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number vulnerabilities counted when running npm i  
 - minimatch is a dependency for glob which is a dependency of a handful of packages in our code base. The full list can be found by running:
 ```bash
    npm list minimatch
 ```
-- Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for thier respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
+- Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for their respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 
 ### eslint and @eslint/js
 **Installed Versions:**
-**eslint: 9.39.4**
-**@eslint/js: 9.39.4**
+**eslint: 9.39.3**
+**@eslint/js: 9.39.3**
 - We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-import, eslint-plugin-jsx-a11y, eslint-plugin-react. Note that we do not use eslint-plugin-import any more so that could be removed if it remains the only one not updated to support version 10 of @eslint/js.
-^^^READ BELOW
-- As of March 30, 2026, we have removed eslint-plugin-import, opens the path of upgrading eslint and @eslint/js to version 10.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
 
 ### bn.js
