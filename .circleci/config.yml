@@ -130,7 +130,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker24
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -236,7 +236,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - setup_remote_docker:
-          version: docker23
+          version: docker24
       - run:
           name: Setup Env
           command: |
@@ -255,7 +255,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker24
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -291,7 +291,7 @@ jobs:
     resource_class: large
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker24
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-and-cypress-install
