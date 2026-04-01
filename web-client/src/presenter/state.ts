@@ -447,10 +447,9 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
-  newMinuteSheetModalHelper:
-    newMinuteSheetModalHelper as unknown as ReturnType<
-      typeof newMinuteSheetModalHelper
-    >,
+  newMinuteSheetModalHelper: newMinuteSheetModalHelper as unknown as ReturnType<
+    typeof newMinuteSheetModalHelper
+  >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -927,6 +926,7 @@ export const baseState = {
   },
   practitionerDetail: {} as PractitionerDetail,
   practitionerDocuments: undefined as unknown[] | undefined,
+  printablePreview: 'trialCalendar' as 'trialCalendar' | 'publicSessionCopy',
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
