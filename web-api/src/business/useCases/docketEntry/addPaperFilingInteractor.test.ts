@@ -499,6 +499,38 @@ describe('addPaperFilingInteractor', () => {
     ).toBe(false);
   });
 
+  it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {
+    const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        documentStorageId: mockdocketEntryId,
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'ATP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
+        .mock.calls[0][0].electronicParties,
+    ).toEqual([]);
+  });
+
   describe('consolidated groups', () => {
     let mockConsolidatedGroupRequest;
 
@@ -518,6 +550,58 @@ describe('addPaperFilingInteractor', () => {
         },
         isSavingForLater: true,
       };
+    });
+
+    it('should set multiDocketedOn and originallyFiledDocketNumber on docketEntryEntity on all cases in the group', async () => {
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        mockCase,
+        { ...mockCase, docketNumber: '123-67' },
+        { ...mockCase, docketNumber: '124-67' },
+      ]);
+      const incomingGroupDocketNumbers = ['123-67', '124-67'];
+      await addPaperFilingInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          consolidatedGroupDocketNumbers: incomingGroupDocketNumbers,
+          documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentMetadata: {
+            category: 'Application',
+            docketNumber: mockCase.docketNumber,
+            documentTitle: 'Application for Examination Pursuant to Rule 73',
+            documentType: 'Application for Examination Pursuant to Rule 73',
+            eventCode: 'AFE',
+            filedBy: 'Test Petitioner',
+            isFileAttached: true,
+            isPaper: true,
+          },
+          isSavingForLater: false,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(3);
+      expect(
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+          .docketEntries[4],
+      ).toMatchObject({
+        multiDocketedOn: [mockCase.docketNumber, ...incomingGroupDocketNumbers],
+        originallyFiledDocketNumber: mockCase.docketNumber,
+      });
+      expect(
+        updateCaseAndAssociations.mock.calls[1][0].caseToUpdate
+          .docketEntries[4],
+      ).toMatchObject({
+        multiDocketedOn: [mockCase.docketNumber, ...incomingGroupDocketNumbers],
+        originallyFiledDocketNumber: mockCase.docketNumber,
+      });
+      expect(
+        updateCaseAndAssociations.mock.calls[2][0].caseToUpdate
+          .docketEntries[4],
+      ).toMatchObject({
+        multiDocketedOn: [mockCase.docketNumber, ...incomingGroupDocketNumbers],
+        originallyFiledDocketNumber: mockCase.docketNumber,
+      });
     });
 
     it('should create a work item and add it to the document qc in progress box when the docket entry is being saved for later', async () => {
@@ -562,37 +646,5 @@ describe('addPaperFilingInteractor', () => {
           .serveDocumentAndGetPaperServicePdf,
       ).toHaveBeenCalledTimes(1);
     });
-  });
-
-  it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {
-    const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-
-    await addPaperFilingInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: [],
-        documentStorageId: mockdocketEntryId,
-        documentMetadata: {
-          docketNumber: mockCase.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'ATP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-          isPaper: true,
-        },
-        isSavingForLater: false,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
-        .mock.calls[0][0].electronicParties,
-    ).toEqual([]);
   });
 });

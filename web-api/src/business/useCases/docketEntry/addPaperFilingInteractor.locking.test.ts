@@ -20,14 +20,12 @@ import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persi
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
 const getUserById = jest.mocked(getUserByIdMock);
-const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -76,14 +74,12 @@ describe('addPaperFilingInteractor', () => {
       isFileAttached: true,
       isPaper: true,
     },
-    isFiledAcrossAllCases: false,
     isSavingForLater: true,
   };
 
   beforeEach(() => {
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
-    getCaseByDocketNumber.mockResolvedValue(mockCase);
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
