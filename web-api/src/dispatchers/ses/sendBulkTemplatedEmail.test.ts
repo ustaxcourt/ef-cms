@@ -232,7 +232,59 @@ describe('sendBulkTemplatedEmail', () => {
     );
   }, 30000);
 
-  it('should not skip sending emails to specific domains', async () => {
+  it('should filter emails to specific domains', async () => {
+    applicationContext.getEmailClient().send.mockReturnValueOnce(
+      Promise.resolve({
+        ResponseMetadata: {
+          RequestId:
+            '01000176a9ec8d81-a80255bb-8ab4-4049-ba1f-6abd5b7a8098-000000',
+        },
+        Status: [
+          {
+            MessageId:
+              '01000176a9ec8d81-a80255bb-8ab4-4049-ba1f-6abd5b7a8098-000000',
+            Status: 'Success',
+          },
+        ],
+      }),
+    );
+
+    await sendWithRetry({
+      applicationContext,
+      params: {
+        DefaultTemplateData: undefined,
+        Destinations: [
+          {
+            Destination: {
+              ToAddresses: ['test.email@ustc.gov'],
+            },
+            ReplacementTemplateData: JSON.stringify({
+              name: 'Roslindis Angelino',
+              welcomeMessage: 'Welcome to Flavortown',
+              whoAmI: 'The Sauce Boss',
+            }),
+          },
+          {
+            Destination: {
+              ToAddresses: ['test.email@example.net'],
+            },
+            ReplacementTemplateData: JSON.stringify({
+              name: 'Roslindis Angelino',
+              welcomeMessage: 'Welcome to Flavortown',
+              whoAmI: 'The Sauce Boss',
+            }),
+          },
+        ],
+        Source: 'jest@example.com',
+        Template: 'case_served',
+      },
+      retryCount: 0,
+    });
+
+    expect(applicationContext.getEmailClient().send).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not send emails to specific domains', async () => {
     await sendWithRetry({
       applicationContext,
       params: {
