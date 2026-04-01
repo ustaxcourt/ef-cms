@@ -38,8 +38,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Configure sysctl limits
@@ -58,7 +58,7 @@ jobs:
           comment_on_pr: false
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             node_modules
@@ -82,13 +82,13 @@ jobs:
           export TESTFILES=$(npx ts-node split-tests.ts)
           npm run test:client:integration:ci
       - name: Store Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: server-log-output-${{ matrix.ci_node_index }}
           path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             node_modules
