@@ -16,7 +16,7 @@ export const setCustomValidationAlertErrorsFileDocumentAction = ({
       ...get(state.alertError),
       title: 'Cannot File Notice of Withdrawal as Counsel',
       message:
-        'You must file a Motion to Withdraw as Counsel because of the following: ',
+        'You must file a Motion to Withdraw as Counsel because of the following:',
     };
     store.set(state.alertError, alertError);
   }

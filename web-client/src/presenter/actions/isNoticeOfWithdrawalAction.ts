@@ -1,4 +1,4 @@
-import { state } from '../app-public.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const isNoticeOfWithdrawalAction = ({ get, path }) => {
   const { eventCode } = get(state.form);
