@@ -466,7 +466,7 @@ const completeDocketEntryQC = async (
         caseSpecificDocketEntries: caseSpecificNotices,
       });
 
-    if (Array.from(paperServiceParties).length > 0) {
+    if (paperServiceParties.length > 0) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
       paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
     }
@@ -485,18 +485,21 @@ const completeDocketEntryQC = async (
     );
   }
 
-  const { currentCase: filingCase } = casesWithWorkItems.find(co => {
-    return co.currentCase.docketNumber === docketNumber;
-  })!;
+  const { currentCase: filingCase } = casesWithWorkItems.find(
+    caseWithWorkItem => {
+      return caseWithWorkItem.currentCase.docketNumber === docketNumber;
+    },
+  )!;
 
   filingCase.consolidatedCases = casesWithWorkItems.map(
-    c => new ConsolidatedCaseSummary(c.currentCase),
+    caseWithWorkItem =>
+      new ConsolidatedCaseSummary(caseWithWorkItem.currentCase),
   );
 
   return {
     caseDetail: new CaseDTO(filingCase.toRawObject()),
     paperServiceDocumentTitle,
-    paperServiceParties: Array.from(paperServiceParties),
+    paperServiceParties,
     paperServicePdfUrl,
   };
 };

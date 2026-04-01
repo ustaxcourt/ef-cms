@@ -828,4 +828,113 @@ describe('completeDocketEntryQCInteractor', () => {
       secondMockDocketNumber,
     );
   });
+
+  it('should update work items and case records for each case in a multi-docketed QC', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertWorkItems).toHaveBeenCalledTimes(2);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+  });
+
+  it('should not evaluate coversheet for member case when cannotUseOriginalFilingCase is false', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+            receivedAt: '2018-01-01T00:00:00.000Z', // differs from entryMetadata so it would trigger coversheet if evaluated
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          // originallyFiledDocketNumber '101-18' IS in multiDocketedOn so cannotUseOriginalFilingCase is false
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    // Original case '101-18': evaluated, no receivedAt change so isNewCoverSheetNeeded is false
+    // Member case '102-20': skipped because cannotUseOriginalFilingCase is false and not the original filing case
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should evaluate coversheet for member case when cannotUseOriginalFilingCase is true', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+            receivedAt: '2018-01-01T00:00:00.000Z', // differs from entryMetadata so it would trigger coversheet when evaluated
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          originallyFiledDocketNumber: '999-99', // NOT in multiDocketedOn so cannotUseOriginalFilingCase is true
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    // Original case '101-18': evaluated, no receivedAt change so isNewCoverSheetNeeded is false
+    // Member case '102-20': evaluated cannotUseOriginalFilingCase is true and receivedAt differs so isNewCoverSheetNeeded is true
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(1);
+  });
 });
