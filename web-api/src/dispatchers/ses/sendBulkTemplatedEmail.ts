@@ -72,21 +72,28 @@ export const sendWithRetry = async ({
   const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
 
-  let sendingToTestEmail = false;
+  const validDestinations: BulkEmailDestination[] = [];
   params.Destinations?.forEach(bulkDestination => {
     bulkDestination.Destination?.ToAddresses?.forEach(addr => {
+      let sendingToTestEmail = false;
       testEmailDomains.forEach(testEmail => {
         if (addr.includes(testEmail)) sendingToTestEmail = true;
       });
+      if (!sendingToTestEmail) validDestinations.push(bulkDestination);
+      applicationContext.logger.info(
+        'Test destination found, removing destination',
+        bulkDestination,
+      );
     });
   });
-  if (sendingToTestEmail) {
+  if (validDestinations.length === 0) {
     applicationContext.logger.info(
-      'Skipping email, test domain found in to addresses',
+      'No valid destinations found, exiting',
       params,
     );
     return;
   }
+  params.Destinations = validDestinations;
 
   applicationContext.logger.info('Bulk Email Params', params);
 
