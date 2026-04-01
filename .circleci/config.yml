@@ -128,8 +128,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
-    # environment:
-    #   DOCKER_API_VERSION: '1.43'
     steps:
       - setup_remote_docker:
           version: docker29
@@ -228,8 +226,6 @@ jobs:
     docker:
       - image: cimg/node:24.14.1
     resource_class: xlarge
-    # environment:
-    #   DOCKER_API_VERSION: '1.43'
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -257,8 +253,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
-    # environment:
-    #   DOCKER_API_VERSION: '1.43'
     steps:
       - setup_remote_docker:
           version: docker29
@@ -295,8 +289,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: large
-    # environment:
-    #   DOCKER_API_VERSION: '1.43'
     steps:
       - setup_remote_docker:
           version: docker29
