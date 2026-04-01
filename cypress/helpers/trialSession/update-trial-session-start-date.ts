@@ -16,4 +16,9 @@ export const updateTrialSessionStartDate = (
       cy.get('[data-testid="modal-button-confirm"]').click();
     }
   });
+  cy.get('[data-testid="success-alert"]').should('exist');
+  cy.get('[data-testid="success-alert"]').should(
+    'contain.text',
+    'Trial session updated',
+  );
 };
