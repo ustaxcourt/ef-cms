@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
-export const gotoPrintTrialCalendarPreviewAction = ({
+export const gotoPrintPublicSessionCopyPreviewAction = ({
   get,
   props,
   router,
@@ -16,7 +16,7 @@ export const gotoPrintTrialCalendarPreviewAction = ({
   const { openNewTab = false, openNewView = true } = props;
 
   if (openNewView) {
-    store.set(state.printablePreview, 'trialCalendar');
+    store.set(state.printablePreview, 'publicSessionCopy');
     store.set(state.currentPage, 'PrintableTrialCalendar');
   }
 

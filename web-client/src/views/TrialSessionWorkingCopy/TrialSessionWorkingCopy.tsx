@@ -31,7 +31,7 @@ export const TrialSessionWorkingCopy = connect(
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     updateUserCaseNoteOnWorkingCopySequence:
       sequences.updateUserCaseNoteOnWorkingCopySequence,
-    printTrialCalendarSequence: sequences.printTrialCalendarSequence,
+    printPublicSessionCopySequence: sequences.printPublicSessionCopySequence,
   },
   function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
@@ -44,7 +44,7 @@ export const TrialSessionWorkingCopy = connect(
     trialSessionHeaderHelper,
     trialSessionWorkingCopyHelper,
     updateUserCaseNoteOnWorkingCopySequence,
-    printTrialCalendarSequence,
+    printPublicSessionCopySequence,
   }) {
     return (
       <>
@@ -74,7 +74,7 @@ export const TrialSessionWorkingCopy = connect(
                     aria-label="Print public session copy"
                     icon="print"
                     id="print-public-session-working-copy"
-                    onClick={() => printTrialCalendarSequence()}
+                    onClick={() => printPublicSessionCopySequence()}
                   >
                     Print Public Copy
                   </Button>
