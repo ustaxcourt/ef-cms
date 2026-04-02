@@ -45,11 +45,11 @@ describe('validatePractitionerSearchByBarNumberAction', () => {
     expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0]).toEqual({
       alertError: {
-        messages: ['Enter a bar number'],
+        messages: ['Enter a valid bar number'],
         title: 'Please correct the following errors:',
       },
       errors: {
-        barNumber: 'Enter a bar number',
+        barNumber: 'Enter a valid bar number',
       },
     });
     expect(successStub).not.toHaveBeenCalled();
