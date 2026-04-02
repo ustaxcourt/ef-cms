@@ -2,18 +2,18 @@ import { SQSClient } from '@aws-sdk/client-sqs';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { environment } from '@web-api/environment';
 
-let sqsCache: SQSClient;
+let sqsClient: SQSClient;
 
-export function getMessagingClient() {
-  if (!sqsCache) {
-    sqsCache = new SQSClient({
+export function getSQSMessagingClient() {
+  if (!sqsClient) {
+    sqsClient = new SQSClient({
       maxAttempts: 3,
       region: environment.region,
       requestHandler: new NodeHttpHandler({
-        connectionTimeout: 3000,
+        connectionTimeout: 10000,
         requestTimeout: 5000,
       }),
     });
   }
-  return sqsCache;
+  return sqsClient;
 }

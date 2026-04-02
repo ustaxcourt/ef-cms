@@ -111,9 +111,7 @@ export const generateChangeOfAddress = async ({
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
   if (isChangeOfAddressLambdaEnabled) {
-    const sqs: SQSClient = applicationContext.getMessagingClient({
-      connectionTimeout: 10000,
-    });
+    const sqs: SQSClient = applicationContext.getSQSMessagingClient();
     const cmds = associatedUserCases.map((docketNumber, i) => {
       return new SendMessageCommand({
         MessageBody: JSON.stringify({
