@@ -301,9 +301,11 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### eslint and @eslint/js
 **Installed Versions:**
-**eslint: 9.39.3**
-**@eslint/js: 9.39.3**
+**eslint: 9.39.4**
+**@eslint/js: 9.39.4**
 - We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-import, eslint-plugin-jsx-a11y, eslint-plugin-react. Note that we do not use eslint-plugin-import any more so that could be removed if it remains the only one not updated to support version 10 of @eslint/js.
+^^^READ BELOW
+- As of March 30, 2026, we have removed eslint-plugin-import, opens the path of upgrading eslint and @eslint/js to version 10.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
 
 ### bn.js
