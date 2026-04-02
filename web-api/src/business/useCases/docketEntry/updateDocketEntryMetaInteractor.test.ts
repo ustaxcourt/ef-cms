@@ -16,7 +16,7 @@ import {
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getContactPrimary } from '@shared/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -648,7 +648,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
   });
 
-  it('should propagate docket entry updates to all consolidated cases', async () => {
+  it('should propagate docket entry updates to all multidocketed cases', async () => {
     mockDocketEntries[0].multiDocketedOn = ['101-18', '102-20', '103-20'];
 
     const consolidatedCase1 = {
@@ -695,16 +695,16 @@ describe('updateDocketEntryMetaInteractor', () => {
           documentTitle: 'Updated Document Title',
           freeText: 'Updated free text',
         },
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: leadCase.docketNumber,
       },
       mockDocketClerkUser,
     );
 
     expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
       docketNumbers: expect.arrayContaining([
-        MOCK_CASE.docketNumber,
-        '102-20',
-        '103-20',
+        leadCase.docketNumber,
+        consolidatedCase1.docketNumber,
+        consolidatedCase2.docketNumber,
       ]),
     });
 
@@ -718,7 +718,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
   });
 
-  it('should only propagate specific editable fields to consolidated cases', async () => {
+  it('should only propagate specific editable fields to multidocketed cases', async () => {
     const consolidatedCase1 = {
       ...MOCK_CASE,
       docketNumber: '102-20',
@@ -734,6 +734,13 @@ describe('updateDocketEntryMetaInteractor', () => {
     const leadCase = {
       ...MOCK_CASE,
       consolidatedCases: [
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: MOCK_CASE.docketNumber,
+          sortableDocketNumber: Case.getSortableDocketNumber(
+            MOCK_CASE.docketNumber,
+          ),
+        },
         {
           caseCaption: MOCK_CASE.caseCaption,
           docketNumber: '102-20',
