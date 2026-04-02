@@ -480,6 +480,10 @@ export const createTestApplicationContext = () => {
     }),
   };
 
+  const mockGetSQSMessagingClient = {
+    send: jest.fn().mockResolvedValue({}),
+  };
+
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(generateDocketNumber),
   };
@@ -556,6 +560,9 @@ export const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
+    getSQSMessagingClient: jest
+      .fn()
+      .mockReturnValue(mockGetSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy({
