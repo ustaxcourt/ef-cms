@@ -1,6 +1,6 @@
 services:
   opensearch-node:
-    image: opensearchproject/opensearch:3.5.0
+    image: opensearchproject/opensearch:3.3.0
     platform: linux/amd64
     container_name: opensearch-node
     environment:
