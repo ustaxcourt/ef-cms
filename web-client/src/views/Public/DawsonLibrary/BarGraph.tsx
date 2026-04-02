@@ -69,7 +69,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   xAxisLabel,
   yAxisLabel,
   titleColor = '#000',
-  datalabelColor = '#000',
+  datalabelColor = '#fff',
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -315,14 +315,11 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
                 0,
               );
-              const isOutside = value / colTotal < 0.1;
-              if (isOutside) return '#000000';
-              const { datasetIndex } = context;
-              const color =
-                datasets[datasetIndex]?.color ||
-                defaultColors[datasetIndex % defaultColors.length];
-              return color.toUpperCase() === '#FFBE2E' ? '#000000' : '#ffffff';
+              const isSmallBar = value / colTotal < 0.1;
+              if (!stacked) return isSmallBar ? '#000000' : '#ffffff';
+              return value / colTotal < 0.15 ? '#000000' : '#ffffff';
             },
+            rotation: stacked ? 0 : -90,
             font: { size: 20, weight: 'bold' },
             textAlign: 'center',
             clamp: true,
@@ -343,11 +340,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
 
               // For grouped charts: if the label is outside and it's the 'Closed' (yellow) bar,
               // include the dataset label so the text clarifies what the value refers to.
-              if (!stacked && isSmall) {
-                return `${value}\n${datasetLabel}`;
-              }
-
-              return `${value}`;
+              return `${value} ${datasetLabel}`;
             },
           },
         },

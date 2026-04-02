@@ -20,7 +20,7 @@ export const DawsonLibrary = () => {
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
         titleColor="#000"
-        datalabelColor="#000"
+        datalabelColor="#fff"
         xAxisLabel="Case Type"
         yAxisLabel="Number of Cases"
         data={[
@@ -59,7 +59,7 @@ export const DawsonLibrary = () => {
           },
           {
             label: 'Closed',
-            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 10],
+            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 8],
           },
         ]}
       />

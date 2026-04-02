@@ -110,12 +110,30 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                 size: 20,
                 weight: 'bold',
               },
-              usePointStyle: true,
-              pointStyle: 'rectRounded',
+              usePointStyle: false,
               boxWidth: 48,
               boxHeight: 48,
               borderRadius: 6,
               color: '#000',
+              generateLabels: chart => {
+                const ds = chart.data.datasets as any[];
+                return (
+                  ds?.map((dataset, i) => {
+                    const fill =
+                      dataset?.borderColor ||
+                      dataset?.backgroundColor ||
+                      defaultColors[i % defaultColors.length];
+                    return {
+                      text: dataset?.label || `Dataset ${i + 1}`,
+                      fillStyle: fill,
+                      strokeStyle: '#000',
+                      lineWidth: 1,
+                      borderRadius: 6,
+                      datasetIndex: i,
+                    };
+                  }) || []
+                );
+              },
             },
           },
           tooltip: {
