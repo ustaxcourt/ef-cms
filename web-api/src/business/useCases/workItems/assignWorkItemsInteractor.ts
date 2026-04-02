@@ -80,40 +80,43 @@ export const assignWorkItemsInteractor = async (
     throw new NotFoundError(`No work item or work item IDs provided.`);
   }
 
-  const assignedWorkItems = await Promise.all(
-    workItemEntities.map(async workItemEntity => {
-      const docketEntry = (
-        await getDocketEntriesByDocketNumberAndDocketEntryId({
-          docketNumbersAndIds: [
-            {
-              docketNumber: workItemEntity.docketNumber,
-              docketEntryId: workItemEntity.docketEntryId,
-            },
-          ],
-        })
-      ).at(0);
-
-      if (!docketEntry) {
-        throw new NotFoundError(
-          `Docket entry associated with work item ${workItemEntity.workItemId} was not found.`,
-        );
-      }
-
-      workItemEntity.assignToUser({
-        assigneeId,
-        assigneeName,
-        section: WorkItem.getWorkItemSectionFromUserSection({
-          section: sectionToAssignTo,
-          documentTitle: docketEntry.documentTitle,
-        }),
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-
-      return workItemEntity;
+  const docketEntries = await getDocketEntriesByDocketNumberAndDocketEntryId({
+    docketNumbersAndIds: workItemEntities.map(wi => {
+      return {
+        docketNumber: wi.docketNumber,
+        docketEntryId: wi.docketEntryId,
+      };
     }),
-  );
+  });
+
+  const assignedWorkItems = workItemEntities.map(workItemEntity => {
+    const docketEntry = docketEntries.find(d => {
+      return (
+        d.docketEntryId === workItemEntity.docketEntryId &&
+        d.docketNumber === workItemEntity.docketNumber
+      );
+    });
+
+    if (!docketEntry) {
+      throw new NotFoundError(
+        `Docket entry associated with work item ${workItemEntity.workItemId} was not found.`,
+      );
+    }
+
+    workItemEntity.assignToUser({
+      assigneeId,
+      assigneeName,
+      section: WorkItem.getWorkItemSectionFromUserSection({
+        section: sectionToAssignTo,
+        documentTitle: docketEntry.documentTitle,
+      }),
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    return workItemEntity;
+  });
 
   await upsertWorkItems({
     workItems: assignedWorkItems.map(w => w.validate().toRawObject()),

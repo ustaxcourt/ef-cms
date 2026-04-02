@@ -22,6 +22,7 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('assignWorkItemsInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
@@ -32,8 +33,9 @@ describe('assignWorkItemsInteractor', () => {
   );
 
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemIds: [''] };
-  let mockWorkItem: RawWorkItem;
 
+  let mockWorkItem: RawWorkItem;
+  let baseDocketEntry: RawDocketEntry;
   beforeEach(() => {
     mockWorkItem = {
       assigneeId: '03b74100-10ac-45f1-865d-b063978cac9c',
@@ -46,6 +48,12 @@ describe('assignWorkItemsInteractor', () => {
       updatedAt: '2018-12-27T18:06:02.968Z',
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
     };
+    baseDocketEntry = {
+      ...MOCK_DOCUMENTS[3],
+      docketEntryId: mockWorkItem.docketEntryId,
+      docketNumber: mockWorkItem.docketNumber,
+      documentTitle: 'Some title',
+    };
 
     getUserById.mockResolvedValue({
       ...mockDocketClerkUser,
@@ -54,10 +62,8 @@ describe('assignWorkItemsInteractor', () => {
 
     getWorkItemsByIds.mockResolvedValue([new WorkItem(mockWorkItem)]);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      {
-        documentTitle: 'Some title',
-      },
-    ] as RawDocketEntry[]);
+      baseDocketEntry,
+    ]);
   });
 
   it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
@@ -103,16 +109,6 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current docket clerk user when given work item', async () => {
-    getUserById
-      .mockResolvedValueOnce({
-        ...mockDocketClerkUser,
-        section: DOCKET_SECTION,
-      } as DbUser)
-      .mockResolvedValueOnce({
-        ...mockDocketClerkUser,
-        section: DOCKET_SECTION,
-      } as DbUser);
-
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -174,8 +170,8 @@ describe('assignWorkItemsInteractor', () => {
       } as DbUser);
 
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Petition' },
-    ] as RawDocketEntry[]);
+      { ...baseDocketEntry, documentTitle: 'Petition' },
+    ]);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -207,8 +203,8 @@ describe('assignWorkItemsInteractor', () => {
       } as DbUser);
 
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Petition' },
-    ] as RawDocketEntry[]);
+      { ...baseDocketEntry, documentTitle: 'Petition' },
+    ]);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -240,8 +236,8 @@ describe('assignWorkItemsInteractor', () => {
       } as DbUser);
 
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Something' },
-    ] as RawDocketEntry[]);
+      { ...baseDocketEntry, documentTitle: 'Something' },
+    ]);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -273,8 +269,8 @@ describe('assignWorkItemsInteractor', () => {
       } as DbUser);
 
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Something' },
-    ] as RawDocketEntry[]);
+      { ...baseDocketEntry, documentTitle: 'Something' },
+    ]);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -372,6 +368,11 @@ describe('assignWorkItemsInteractor', () => {
     const leadDocketNumber = '101-18';
     const memberDocketNumber = '102-18';
 
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValueOnce([
+      baseDocketEntry,
+      { ...baseDocketEntry, docketNumber: memberDocketNumber },
+    ]);
+
     const memberWorkItem: RawWorkItem = {
       ...mockWorkItem,
       docketNumber: memberDocketNumber,
@@ -410,10 +411,11 @@ describe('assignWorkItemsInteractor', () => {
 
   it('should assign all work items provided by workItemIds array', async () => {
     const secondWorkItemId = 'a1b74100-10ac-45f1-865d-b063978cac9c';
+    const memberDocketNumber = '102-18';
     const secondWorkItem = new WorkItem({
       ...mockWorkItem,
       docketEntryId: '5729de69-744a-49f7-af18-3fa13bf03a37',
-      docketNumber: '102-18',
+      docketNumber: memberDocketNumber,
       workItemId: secondWorkItemId,
     });
 
@@ -432,17 +434,18 @@ describe('assignWorkItemsInteractor', () => {
       secondWorkItem,
     ]);
 
-    getDocketEntriesByDocketNumberAndDocketEntryId
-      .mockResolvedValueOnce([
-        {
-          documentTitle: 'Some title',
-        },
-      ] as RawDocketEntry[])
-      .mockResolvedValueOnce([
-        {
-          documentTitle: 'Some other title',
-        },
-      ] as RawDocketEntry[]);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValueOnce([
+      {
+        ...baseDocketEntry,
+        documentTitle: 'Some title',
+      },
+      {
+        ...baseDocketEntry,
+        docketNumber: memberDocketNumber,
+        docketEntryId: '5729de69-744a-49f7-af18-3fa13bf03a37',
+        documentTitle: 'Some other title',
+      },
+    ]);
 
     const workItemIds = [mockWorkItem.workItemId, secondWorkItemId];
 
@@ -465,7 +468,7 @@ describe('assignWorkItemsInteractor', () => {
         assigneeName: 'Ted Docket',
       },
       {
-        docketNumber: '102-18',
+        docketNumber: memberDocketNumber,
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
       },
