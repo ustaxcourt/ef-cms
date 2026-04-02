@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -201,6 +202,52 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should throw NotFoundError when user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('User not found with user id');
+  });
+
+  it('should throw NotFoundError when docket entry is not found after serving', async () => {
+    const { Case } = await import('@shared/business/entities/cases/Case');
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) => {
+      const caseWithoutDocketEntry = {
+        ...caseEntity,
+        docketEntries: [],
+      };
+      return Promise.resolve(
+        new Case(caseWithoutDocketEntry, {
+          authorizedUser: mockDocketClerkUser,
+        }),
+      );
+    });
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Could not find docket entry with id');
+  });
+
   it('should set the docket entry`s draftOrderState to null', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
@@ -322,6 +369,35 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity.isDraft,
     ).toBe(false);
+  });
+
+  it('should set isFileAttached to true on the docket entry', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isFileAttached: false,
+        } as RawDocketEntry,
+      ],
+    });
+
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isFileAttached,
+    ).toBe(true);
   });
 
   it('should mark the docket entry as on the docket record', async () => {
@@ -732,51 +808,5 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
       docketNumbers: [leadDocketNumber],
     });
-  });
-
-  it('should throw NotFoundError when user is not found', async () => {
-    getUserById.mockResolvedValue(undefined);
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('User not found with user id');
-  });
-
-  it('should throw NotFoundError when docket entry is not found after serving', async () => {
-    const { Case } = await import('@shared/business/entities/cases/Case');
-
-    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) => {
-      const caseWithoutDocketEntry = {
-        ...caseEntity,
-        docketEntries: [],
-      };
-      return Promise.resolve(
-        new Case(caseWithoutDocketEntry, {
-          authorizedUser: mockDocketClerkUser,
-        }),
-      );
-    });
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Could not find docket entry with id');
   });
 });

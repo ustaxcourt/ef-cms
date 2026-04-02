@@ -76,7 +76,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     clientConnectionId: mockClientConnectionId,
     docketEntryId: mockDocketEntryId,
     docketNumbers: [],
-    isFiledAcrossAllCases: false,
     subjectCaseDocketNumber: mockCase.docketNumber,
   };
   const fileAndServeDocumentOnOneCase = jest.mocked(
