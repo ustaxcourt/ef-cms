@@ -358,7 +358,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('should generate a second notice of receipt of petition with different access codes when contactSecondary.address is the same as contactPrimary.address, but the contactPrimary does NOT want e service (no paperPetitionEmail) but contactSecondary is setup for e service (has paperPetitionEmail set)', async () => {
+  it('should generate a second notice of receipt of petition with different access codes when contactSecondary.address is the same as contactPrimary.address, but the contactPrimary does NOT want e service (no contactEmailAddress) but contactSecondary is setup for e service (has contactEmailAddress set)', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -373,7 +373,7 @@ describe('serveCaseToIrsInteractor', () => {
           email: 'petitioner@example.com',
           hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
           phone: '1234547',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: 'Executor',
@@ -424,7 +424,7 @@ describe('serveCaseToIrsInteractor', () => {
         {
           ...MOCK_CASE.petitioners[0],
           hasConsentedToElectronicService: true,
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
         },
         {
           ...MOCK_CASE.petitioners[0],
@@ -434,7 +434,7 @@ describe('serveCaseToIrsInteractor', () => {
           email: 'petitioner@example.com',
           hasConsentedToElectronicService: false,
           name: 'Test Petitioner Secondary',
-          paperPetitionEmail: undefined,
+          contactEmailAddress: undefined,
           phone: '1234547',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: 'Executor',
@@ -454,7 +454,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should generate a second notice of receipt of petition with different access codes when both have e access to the same paperPetitionEmail AND have the same address', async () => {
+  it('should generate a second notice of receipt of petition with different access codes when both have e access to the same contactEmailAddress AND have the same address', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -463,7 +463,7 @@ describe('serveCaseToIrsInteractor', () => {
         {
           ...MOCK_CASE.petitioners[0],
           hasConsentedToElectronicService: true,
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
         },
         {
           ...MOCK_CASE.petitioners[0],
@@ -472,7 +472,7 @@ describe('serveCaseToIrsInteractor', () => {
           email: 'petitioner@example.com',
           hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
           phone: '1234547',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: 'Executor',
@@ -500,7 +500,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should generate a second notice of receipt of petition with the same access code when both have e access to the same paperPetitionEmail BUT not the same address', async () => {
+  it('should generate a second notice of receipt of petition with the same access code when both have e access to the same contactEmailAddress BUT not the same address', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -509,7 +509,7 @@ describe('serveCaseToIrsInteractor', () => {
         {
           ...MOCK_CASE.petitioners[0],
           hasConsentedToElectronicService: true,
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
         },
         {
           ...MOCK_CASE.petitioners[0],
@@ -520,7 +520,7 @@ describe('serveCaseToIrsInteractor', () => {
           email: 'petitioner@example.com',
           hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
           phone: '1234547',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: 'Executor',
@@ -548,7 +548,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should generate a second notice of receipt of petition when both have e access but they have different paperPetitionEmail', async () => {
+  it('should generate a second notice of receipt of petition when both have e access but they have different contactEmailAddress', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -557,7 +557,7 @@ describe('serveCaseToIrsInteractor', () => {
         {
           ...MOCK_CASE.petitioners[0],
           hasConsentedToElectronicService: true,
-          paperPetitionEmail: 'testing1@example.com',
+          contactEmailAddress: 'testing1@example.com',
         },
         {
           ...MOCK_CASE.petitioners[0],
@@ -567,7 +567,7 @@ describe('serveCaseToIrsInteractor', () => {
           email: 'petitioner@example.com',
           hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
-          paperPetitionEmail: 'testing@example.com',
+          contactEmailAddress: 'testing@example.com',
           phone: '1234547',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: 'Executor',

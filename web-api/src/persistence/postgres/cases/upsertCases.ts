@@ -4,11 +4,9 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 export const upsertCases = async (rawCases: RawCase[]) => {
   if (rawCases.length === 0) return;
 
-  const casesToUpsert = rawCases.map(rawCase => toKyselyNewCase(rawCase));
-
   await pgInsertInto({
     table: 'dwCase',
-    values: casesToUpsert,
+    values: rawCases.map(rawCase => toKyselyNewCase(rawCase)),
     onConflictColumns: ['docketNumber'],
   });
 };

@@ -28,6 +28,7 @@ import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
+
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
@@ -296,7 +297,7 @@ export const createCaseInteractor = async (
 
     // remove the email from contactPrimary
     // since the practitioners array should have a service email
-    // and paperPetitionEmail is used as email for the petitioner
+    // and contactEmailAddress is used as email for the petitioner
     delete petitionEntity.getContactPrimary().email;
     delete petitionEntity.getContactPrimary().serviceIndicator;
 
