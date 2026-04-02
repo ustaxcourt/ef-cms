@@ -4,17 +4,20 @@ jest.mock('../helpers/prompts', () => ({
 }));
 jest.mock('us-census-geocoder');
 jest.mock('@web-api/persistence/postgres/userContacts/upsertUserContacts');
+jest.mock('@shared/tools/helpers');
 
 import { backfillUserGeocodes } from './backfillUserGeocodes';
 import { getDbReader as getDbReaderMock } from '@web-api/database';
 import { ask as askMock } from '../helpers/prompts';
 import { Geocoder as GeocoderConstructor } from 'us-census-geocoder';
 import { upsertUserContacts as upsertUserContactsMock } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
-import { createChainable } from '../helpers/createChainable';
+import { sleep as sleepMock } from '@shared/tools/helpers';
+import { createChainable } from '../../web-api/src/persistence/postgres/createChainable.jest';
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const ask = jest.mocked(askMock);
 const Geocoder = jest.mocked(GeocoderConstructor);
+const sleep = jest.mocked(sleepMock);
 const upsertUserContacts = jest.mocked(upsertUserContactsMock);
 
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(jest.fn());
@@ -23,6 +26,7 @@ describe('backfillUserGeocodes', () => {
   beforeEach(() => {
     jest.resetAllMocks();
     upsertUserContacts.mockResolvedValue(undefined);
+    sleep.mockReturnValue(Promise.resolve());
   });
 
   it('exits early when count is 0', async () => {

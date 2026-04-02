@@ -282,6 +282,13 @@ export const updatePetitionerInformation = async (
     updatedPetitionerData.contactId,
   );
 
+  if (hasPetitionerInfoChanged) {
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
+  }
+
   const updateAddressOrPhone =
     hasPetitionerInfoChanged &&
     !updatedCaseContact.isAddressSealed &&
@@ -307,11 +314,6 @@ export const updatePetitionerInformation = async (
       user: authorizedUser,
     });
     serviceUrl = url;
-
-    await invalidateUserContactGeocode(
-      docketNumber,
-      updatedPetitionerData.contactId,
-    );
   }
 
   const shouldUpdateEmailAddress =

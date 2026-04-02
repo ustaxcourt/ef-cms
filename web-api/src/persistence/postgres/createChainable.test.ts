@@ -1,4 +1,4 @@
-import { createChainable } from '../../web-api/src/persistence/postgres/createChainable.jest';
+import { createChainable } from './createChainable.jest';
 
 describe('createChainable', () => {
   describe('chain methods', () => {
