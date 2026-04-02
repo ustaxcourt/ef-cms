@@ -426,4 +426,63 @@ describe('generateChangeOfAddress', () => {
 
     expect(returnLockMock).toHaveBeenCalled();
   });
+
+  it('should throw and log errors when process fails', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      irsPractitioners: undefined,
+      privatePractitioners: undefined,
+      ...MOCK_CASE,
+    });
+
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockImplementation(() => {
+        throw new Error('Failed to send message over websocket');
+      });
+
+    await generateChangeOfAddressHelper({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      docketNumber,
+      requestUserId: 'abc',
+      jobId: 'abc',
+      oldUser: mockIrsPractitioner,
+      updatedEmail: 'new@exaple.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+      totalCases: 1,
+      sendUpdateProgressWsMessage: true,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledTimes(3);
+
+    const loggerCalls = applicationContext.logger.error.mock.calls;
+
+    expect(loggerCalls[0][0]).toEqual(
+      `Failed to update case information for docket number ${docketNumber}`,
+    );
+    expect(loggerCalls[0][1].toString()).toMatch(
+      `Could not find ${mockIrsPractitioner.userId} barNumber: ${mockIrsPractitioner.barNumber} on ${docketNumber}`,
+    );
+
+    expect(loggerCalls[1][0]).toEqual(
+      'Failed to notify user during change of address job',
+    );
+    expect(loggerCalls[1][1].toString()).toMatch(
+      'Failed to send message over websocket',
+    );
+
+    expect(loggerCalls[2][0]).toEqual(
+      'Failed to notify user of completion of change of address job',
+    );
+    expect(loggerCalls[2][1].toString()).toMatch(
+      'Failed to send message over websocket',
+    );
+  });
 });
