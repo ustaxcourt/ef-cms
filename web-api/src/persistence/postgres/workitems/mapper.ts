@@ -61,7 +61,6 @@ export function fromKyselyWorkItemAndCase(
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
-    docketNumberSuffix: dbWorkItem?.docketNumberSuffix || undefined,
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }

@@ -38,6 +38,7 @@ export const getDocumentQCInboxForSection = async ({
 
   let items = await attachDocketEntriesToWorkItemQC({ workItems });
 
+  // get work items for entire consolidated group of cases if judge is not assigned on every case in the group
   if (judgeId) {
     const groupedItems = groupBy(items, 'docketEntryId');
 

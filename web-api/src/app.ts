@@ -409,7 +409,6 @@ app.use(expressLogger);
     '/case-documents/count',
     lambdaWrapper(getCountOfCaseDocumentsFiledByJudgesLambda),
   );
-
   // POST
   app.post(
     '/async/case-documents/:documentStorageId/append-pdf',
