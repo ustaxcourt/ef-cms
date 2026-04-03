@@ -74,17 +74,18 @@ export const sendWithRetry = async ({
 
   const validDestinations: BulkEmailDestination[] = [];
   params.Destinations?.forEach(bulkDestination => {
+    let sendingToTestEmail = false;
     bulkDestination.Destination?.ToAddresses?.forEach(addr => {
-      let sendingToTestEmail = false;
       testEmailDomains.forEach(testEmail => {
         if (addr.includes(testEmail)) sendingToTestEmail = true;
       });
-      if (!sendingToTestEmail) validDestinations.push(bulkDestination);
+    });
+    if (!sendingToTestEmail) validDestinations.push(bulkDestination);
+    else
       applicationContext.logger.info(
         'Test destination found, removing destination',
         bulkDestination,
       );
-    });
   });
   if (validDestinations.length === 0) {
     applicationContext.logger.info(
