@@ -1,12 +1,13 @@
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setTrialSessionStartDateDifferencesAction = ({
   props,
   store,
 }: ActionProps<{
-  currentTrialSession: any;
-  updatedTrialSession: any;
-  persistModal: boolean
+  currentTrialSession: RawTrialSession;
+  updatedTrialSession: RawTrialSession;
+  persistModal: boolean;
 }>) => {
   const { currentTrialSession, updatedTrialSession, persistModal } = props;
   store.set(state.trialSessionStartDateChangeModalInfo, {

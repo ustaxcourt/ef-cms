@@ -125,7 +125,7 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
         casesThatShouldReceiveNoticesCount: 1,
       });
 
-        (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+    (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
       true,
     );
 
