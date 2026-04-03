@@ -148,4 +148,12 @@ describe('trials session working copies filtering', () => {
       .find('span')
       .should('not.exist');
   });
+
+  it.only('should navigate to the public copy print page when link is clicked and navigate back to session copy page', () => {
+    cy.get('[data-testid="print-public-session-working-copy').click();
+    cy.get('[data-testid="back-to-session-link').as(
+      'BACK_TO_SESSION_LINK',
+    );
+    cy.get('@BACK_TO_SESSION_LINK').click();
+  });
 });
