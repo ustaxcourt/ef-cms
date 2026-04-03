@@ -645,6 +645,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1325,6 +1326,7 @@ export const presenterSequences = {
     setViewerDraftDocumentToDisplaySequence as unknown as Function,
   showCalculatePenaltiesModalSequence:
     showCalculatePenaltiesModalSequence as unknown as Function,
+  showCaseStatusInfoSequence: showCaseStatusInfoSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
   showFileUploadErrorModalSequence,

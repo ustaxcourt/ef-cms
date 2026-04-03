@@ -9,6 +9,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { CaseStatusInfoModal } from '@web-client/views/RecentFilings/CaseStatusInfoModal';
 
 export const CaseListTable = connect(
   {
@@ -22,6 +23,8 @@ export const CaseListTable = connect(
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
+    showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
+    showModal: state.modal.showModal,
   },
   function CaseListTable({
     caseType,
@@ -33,6 +36,8 @@ export const CaseListTable = connect(
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
+    showCaseStatusInfoSequence,
+    showModal,
   }) {
     useEffect(() => {
       return () => {
@@ -95,6 +100,7 @@ export const CaseListTable = connect(
                     <th>Docket No.</th>
                     <th>Case Title</th>
                     <th>Filed Date</th>
+                    {tabName === openTab && <th>Case Status</th>}
                     {dashboardExternalHelper.showFilingFee && (
                       <th data-testid="filing-fee">Filing Fee*</th>
                     )}
@@ -107,6 +113,8 @@ export const CaseListTable = connect(
                       isNestedCase={false}
                       key={item.docketNumber}
                       showFilingFee={dashboardExternalHelper.showFilingFee}
+                      showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                      showCaseStatus={tabName === openTab}
                     />
                   ))}
                 </tbody>
@@ -224,6 +232,8 @@ export const CaseListTable = connect(
             </div>
           </div>
         </Phone>
+
+        {showModal === 'CaseStatusInfoModal' && <CaseStatusInfoModal />}
       </>
     );
   },

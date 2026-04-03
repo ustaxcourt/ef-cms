@@ -4,15 +4,21 @@ import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import React from 'react';
 import classNames from 'classnames';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
 
 export const CaseListRowExternal = ({
   formattedCase,
   isNestedCase,
   showFilingFee,
+  showCaseStatusInfoSequence,
+  showCaseStatus,
 }: {
   formattedCase: TAssociatedCaseFormatted;
   isNestedCase: boolean;
   showFilingFee: boolean;
+  showCaseStatusInfoSequence: any;
+  showCaseStatus: boolean;
 }) => {
   return (
     <>
@@ -46,6 +52,24 @@ export const CaseListRowExternal = ({
             </td>
             <td>{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
+            {showCaseStatus && (
+              <td>
+                <Button
+                  link
+                  onClick={() =>
+                    showCaseStatusInfoSequence({
+                      status: formattedCase.status,
+                    })
+                  }
+                >
+                  {formatCaseStatus({
+                    caseStatus: formattedCase.status,
+                    trialDate: formattedCase.trialDate,
+                    trialLocation: formattedCase.trialLocation,
+                  })}
+                </Button>
+              </td>
+            )}
             {showFilingFee && (
               <td data-testid="petition-payment-status">
                 {formattedCase.petitionPaymentStatus}
@@ -60,6 +84,8 @@ export const CaseListRowExternal = ({
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
                   showFilingFee={showFilingFee}
+                  showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                  showCaseStatus
                 />
               );
             })}
@@ -110,6 +136,31 @@ export const CaseListRowExternal = ({
           >
             {formattedCase.createdAtFormatted}
           </td>
+          {showCaseStatus && (
+            <td
+              className={classNames({
+                'consolidated-case-padding':
+                  formattedCase.inConsolidatedGroup &&
+                  !formattedCase.isLeadCase,
+              })}
+              data-label="Filed Date"
+            >
+              <Button
+                link
+                onClick={() =>
+                  showCaseStatusInfoSequence({
+                    status: formattedCase.status,
+                  })
+                }
+              >
+                {formatCaseStatus({
+                  caseStatus: formattedCase.status,
+                  trialDate: formattedCase.trialDate,
+                  trialLocation: formattedCase.trialLocation,
+                })}
+              </Button>
+            </td>
+          )}
           {showFilingFee && (
             <td
               className={classNames({
@@ -132,6 +183,8 @@ export const CaseListRowExternal = ({
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
                 showFilingFee={showFilingFee}
+                showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                showCaseStatus
               />
             );
           })}
