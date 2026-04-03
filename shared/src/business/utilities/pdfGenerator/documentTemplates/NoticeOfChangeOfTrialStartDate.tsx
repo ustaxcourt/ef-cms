@@ -107,7 +107,7 @@ function NoticeOfChangeRemote({
         <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
           www.zoomgov.com
         </a>{' '}
-        and click `Join a meeting` (blue box in the middle of the page). Enter
+        and click &apos;Join&apos;. Enter
         the Meeting ID and Passcode above when prompted.
       </p>
     </div>
@@ -140,9 +140,9 @@ function NoticeOfChangeInPerson({
         The calendar will be called at that date and time, and the parties are
         expected to be present and to be prepared to try the case. The trial
         session will be held at {updatedTrialSession.courthouseName},{' '}
-        {updatedTrialSession.address1}{' '}
-        {updatedTrialSession.address2 ? `${updatedTrialSession.address2} ` : ''}
-        {updatedTrialSession.city} {updatedTrialSession.state}{' '}
+        {updatedTrialSession.address1},{' '}
+        {updatedTrialSession.address2 ? `${updatedTrialSession.address2}, ` : ''}
+        {updatedTrialSession.city}, {updatedTrialSession.state}{' '}
         {updatedTrialSession.postalCode}.
       </p>
     </div>

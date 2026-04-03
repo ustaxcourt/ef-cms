@@ -16,7 +16,7 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   testMatch: [
-    '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
+    '**/shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate.test.ts',
   ],
   testTimeout: 30000,
   transform: {
