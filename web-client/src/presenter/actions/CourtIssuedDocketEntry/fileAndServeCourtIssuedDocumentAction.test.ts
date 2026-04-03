@@ -80,6 +80,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       generatedDocumentTitle: 'Order F',
       scenario: 'Type A',
     };
+
     await runAction(fileAndServeCourtIssuedDocumentAction, {
       modules: {
         presenter,

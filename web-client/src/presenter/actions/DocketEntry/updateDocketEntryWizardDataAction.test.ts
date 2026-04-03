@@ -141,7 +141,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       });
     });
 
-    // cover lines 57-58
     it('should use multiDocketedOriginalCaseDetail to find docketEntry when it exists for an eventCode that has supporting document and there is only one previous document', async () => {
       const multiDocketedOriginalCaseDetail = {
         docketEntries: [
@@ -212,7 +211,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form).toEqual({});
     });
 
-    // cover line 63
     it('should not set default previousDocument when the document is not found in docketEntries', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
@@ -265,7 +263,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       });
     });
 
-    // cover line 93 truthy branch
     it('should unset secondaryDocument when props.value is falsy', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
@@ -287,7 +284,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.secondaryDocument).toEqual(undefined);
     });
 
-    // cover line 93 falsy branch
     it('should keep secondaryDocument when props.value is truthy', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
@@ -409,7 +405,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.primarySomething).toEqual(true);
     });
 
-    // cover lines 104-105
     it('should use multiDocketedOriginalCaseDetail to set form when key is previousDocument and screenMetadata.supporting is true', async () => {
       const secondaryMetadata = 'abc';
       const multiDocketedCaseDetail = {
@@ -447,7 +442,6 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.something).toEqual(secondaryMetadata);
     });
 
-    // cover line 116
     it('should find previous document using docketEntry documentType when documentTitle is does not exist', async () => {
       const primaryMetadata = 'abc';
       const caseDetailWithNoTitle = {

@@ -18,12 +18,12 @@ export const isDocketEntryMultiDocketableAction = ({
 
   const isLead = isLeadCase(caseDetail);
 
-  const checkAllTheCheckboxes = shouldAllowMultiDocketing({
-    docketEntry,
-    isLead,
-  });
-
-  if (checkAllTheCheckboxes) {
+  if (
+    shouldAllowMultiDocketing({
+      docketEntry,
+      isLead,
+    })
+  ) {
     return path.yes();
   }
 
