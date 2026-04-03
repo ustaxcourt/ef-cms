@@ -18,6 +18,7 @@ export const addCoverToPdf = async ({
   docketEntryEntity,
   filingDateUpdated,
   pdfData,
+  replaceCoversheet = false,
   useInitialData = false,
 }: {
   applicationContext: ServerApplicationContext;
@@ -40,6 +41,7 @@ export const addCoverToPdf = async ({
 
   const pdfDoc = await PDFDocument.load(pdfData);
 
+  // allow GC to clear original loaded pdf data
   pdfData = null;
 
   const coverPagePdf = await applicationContext
@@ -55,7 +57,12 @@ export const addCoverToPdf = async ({
     coverPageDocument.getPageIndices(),
   );
 
-  pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  if (replaceCoversheet) {
+    pdfDoc.removePage(0);
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  } else {
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  }
 
   const newPdfData = await pdfDoc.save();
   const numberOfPages = pdfDoc.getPageCount();

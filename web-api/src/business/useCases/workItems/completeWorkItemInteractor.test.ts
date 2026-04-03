@@ -33,7 +33,6 @@ describe('completeWorkItemInteractor', () => {
 
   beforeEach(() => {
     getWorkItemsByIds.mockResolvedValue([new WorkItem(mockWorkItem)]);
-    upsertWorkItems.mockResolvedValue(undefined);
 
     applicationContext
       .getPersistenceGateway()
@@ -72,7 +71,9 @@ describe('completeWorkItemInteractor', () => {
 
   it('should throw an error when the work item is not found', async () => {
     const mockWorkItemId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    getWorkItemsByIds.mockResolvedValue([]);
+    getWorkItemsByIds
+      .mockResolvedValueOnce([new WorkItem(mockWorkItem)])
+      .mockResolvedValueOnce([]);
 
     await expect(
       completeWorkItemInteractor(
@@ -83,7 +84,7 @@ describe('completeWorkItemInteractor', () => {
         },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow('was not found');
+    ).rejects.toThrow(`WorkItem ${mockWorkItemId} was not found.`);
   });
 
   it('should complete the work item with the provided message', async () => {

@@ -127,9 +127,10 @@ describe('addCoverToPdf', () => {
       pdfData: mockPdfData,
     } as any);
 
-    expect(mockPdfDoc.copyPages).toHaveBeenCalledWith(mockCoverPageDocument, [
-      0,
-    ]);
+    expect(mockPdfDoc.copyPages).toHaveBeenCalledWith(
+      mockCoverPageDocument,
+      [0],
+    );
   });
 
   it('should load PDF documents correctly', async () => {
