@@ -189,7 +189,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
 
 If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
-1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number.
+1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` and `./docker-compose.yml` to correspond to the new version number.
 1. Run the api locally to verify:
    ```bash
    npm run start:api
