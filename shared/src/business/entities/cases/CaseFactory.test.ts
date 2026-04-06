@@ -6,19 +6,7 @@ import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { compareStrings } from '@shared/business/utilities/sortFunctions';
 import { getUniqueId } from '@shared/sharedAppContext';
-
-// Mirrors the docket entry sort in Case.ts so the test is order-independent
-// against the production sort (createdAt, then docketEntryId).
-const sortLikeCase = <T extends { createdAt?: string; docketEntryId?: string }>(
-  entries: T[],
-): T[] =>
-  [...entries].sort(
-    (a, b) =>
-      compareStrings(a.createdAt, b.createdAt) ||
-      compareStrings(a.docketEntryId, b.docketEntryId),
-  );
 import {
   mockDocketClerkUser,
   mockIrsSuperuser,
@@ -85,10 +73,8 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        sortLikeCase(
-          MOCK_UNSERVED_CASE.docketEntries.filter(
-            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-          ),
+        MOCK_UNSERVED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
         ),
       );
     });
@@ -99,10 +85,8 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        sortLikeCase(
-          MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
-            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-          ),
+        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
         ),
       );
     });
@@ -275,10 +259,8 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          sortLikeCase(
-            MOCK_UNSERVED_CASE_DTO.docketEntries.filter(
-              d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-            ),
+          MOCK_UNSERVED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
           ),
         );
       });
@@ -289,10 +271,8 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          sortLikeCase(
-            MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
-              d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-            ),
+          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
           ),
         );
       });
