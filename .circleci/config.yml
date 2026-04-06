@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.72
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.73
 
 parameters:
   run_build_and_deploy:
@@ -130,7 +130,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -224,7 +224,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:24.14.0
+      - image: cimg/node:24.14.1
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -236,7 +236,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - setup_remote_docker:
-          version: docker23
+          version: docker29
       - run:
           name: Setup Env
           command: |
@@ -255,7 +255,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -291,7 +291,7 @@ jobs:
     resource_class: large
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-and-cypress-install
