@@ -5,16 +5,13 @@ export const up = async (db: Kysely<any>): Promise<void> => {
     .createTable('dwUserContact')
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
-    .addColumn('lat', 'decimal')
-    .addColumn('lng', 'decimal')
+    .addColumn('lat', 'double precision')
+    .addColumn('lng', 'double precision')
     .addColumn('geodataMatch', 'boolean')
     .addPrimaryKeyConstraint('pkUserContact', ['userId', 'docketNumber'])
-    .addForeignKeyConstraint(
-      'dwUserContactUserFK',
-      ['userId'],
-      'dwUser',
-      ['userId'],
-    )
+    .addForeignKeyConstraint('dwUserContactUserFK', ['userId'], 'dwUser', [
+      'userId',
+    ])
     .addForeignKeyConstraint(
       'dwUserContactDocketFK',
       ['docketNumber'],

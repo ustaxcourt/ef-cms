@@ -4,6 +4,7 @@ import { upsertUserContacts } from '@web-api/persistence/postgres/userContacts/u
 import { sql } from 'kysely';
 import { ask } from '../helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
+import { sleep } from '@shared/tools/helpers';
 
 type geoResults = {
   docketNumber: string;
@@ -154,6 +155,7 @@ export const backfillUserGeocodes = async ({
     );
 
     console.log(`Completed ${totalProcessed} / ${count}`);
+    await sleep(delayMs);
   }
 
   console.log(`\nBackfill complete:`);

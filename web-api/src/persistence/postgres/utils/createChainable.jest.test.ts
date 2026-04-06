@@ -1,4 +1,4 @@
-import { createChainable } from './createChainable';
+import { createChainable } from './createChainable.jest';
 
 describe('createChainable', () => {
   describe('chain methods', () => {
@@ -97,7 +97,9 @@ describe('createChainable', () => {
       const executeResult = [{ id: 1 }, { id: 2 }];
       const executeTakeFirstResult = { id: 1 };
       const chain = createChainable(executeResult, executeTakeFirstResult);
-      await expect(chain.executeTakeFirst()).resolves.toBe(executeTakeFirstResult);
+      await expect(chain.executeTakeFirst()).resolves.toBe(
+        executeTakeFirstResult,
+      );
     });
 
     it('resolves with executeResult when executeTakeFirstResult is undefined', async () => {

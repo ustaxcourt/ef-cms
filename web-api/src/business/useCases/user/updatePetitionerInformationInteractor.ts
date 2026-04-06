@@ -276,6 +276,13 @@ export const updatePetitionerInformation = async (
     updatedPetitionerData.contactId,
   );
 
+  if (hasPetitionerInfoChanged) {
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
+  }
+
   const updateAddressOrPhone =
     hasPetitionerInfoChanged &&
     !updatedCaseContact.isAddressSealed &&
