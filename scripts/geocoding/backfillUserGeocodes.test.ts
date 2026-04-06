@@ -12,7 +12,7 @@ import { ask as askMock } from '../helpers/prompts';
 import { Geocoder as GeocoderConstructor } from 'us-census-geocoder';
 import { upsertUserContacts as upsertUserContactsMock } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
 import { sleep as sleepMock } from '@shared/tools/helpers';
-import { createChainable } from '../../web-api/src/persistence/postgres/createChainable.jest';
+import { createChainable } from '@web-api/persistence/postgres/utils/createChainable.jest';
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const ask = jest.mocked(askMock);
