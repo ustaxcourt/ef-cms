@@ -18,5 +18,6 @@ export const getCaseInteractor = (
   return get({
     applicationContext,
     endpoint: `/cases/${docketNumber}`,
+    params: { excludeDocketEntries: true },
   });
 };

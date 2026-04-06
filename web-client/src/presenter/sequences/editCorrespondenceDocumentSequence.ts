@@ -6,7 +6,6 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteCorrespondenceFileAction } from '../actions/CourtIssuedOrder/overwriteCorrespondenceFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
@@ -26,7 +25,6 @@ const onError = [openFileUploadErrorModal];
 const onSuccess = [
   setDocumentTitleFromFormAction,
   submitCorrespondenceAction,
-  setCaseAction,
   getEditCorrespondenceDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,

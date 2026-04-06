@@ -5,6 +5,9 @@ jest.mock(
   '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation',
 );
 jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate',
+);
+jest.mock(
   '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions',
 );
 jest.mock('@web-api/business/useCaseHelper/saveFileAndGenerateUrl');
@@ -43,8 +46,10 @@ import {
 import { cloneDeep } from 'lodash';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
-import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
 
 describe('updateTrialSessionInteractor', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
@@ -195,6 +200,10 @@ describe('updateTrialSessionInteractor', () => {
         true,
       );
 
+      (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+        true,
+      );
+
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
         trialSessionId: TEST_TRIAL_SESSION_ID,
@@ -228,6 +237,7 @@ describe('updateTrialSessionInteractor', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: true,
         shouldSetNoticeOfChangeToRemoteProceeding: true,
         shouldSetNoticeOfTrialSessionLocationChange: true,
+        shouldSetNoticeOfTrialSessionStartDateChange: true,
       });
 
       const saveFileAndGenerateUrlCalls = (saveFileAndGenerateUrl as jest.Mock)
@@ -264,6 +274,64 @@ describe('updateTrialSessionInteractor', () => {
           trialSessionId: TEST_TRIAL_SESSION_ID,
         },
         userId: mockCaseServicesSupervisorUser.userId,
+      });
+    });
+
+    it('should not generate notices if helper methods return false', async () => {
+      (
+        shouldGenerateNoticeOfChangeToInPersonProceeding as jest.Mock
+      ).mockReturnValue(false);
+
+      (shouldGenerateNoticeOfChangeOfTrialJudge as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      (
+        shouldGenerateNoticeOfChangeToRemoteProceeding as jest.Mock
+      ).mockReturnValue(false);
+
+      (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: [{ docketNumber: '111-25' }],
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            trialClerk: {
+              userId: TEST_TRIAL_CLERK_ID,
+              name: 'TEST_TRIAL_CLERK_NAME',
+            },
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      const updateCasesAndSetNoticeOfChangeCalls = (
+        updateCasesAndSetNoticeOfChange as jest.Mock
+      ).mock.calls;
+
+      expect(updateCasesAndSetNoticeOfChangeCalls.length).toEqual(1);
+      expect(updateCasesAndSetNoticeOfChangeCalls[0][0]).toMatchObject({
+        shouldIssueNoticeOfChangeOfTrialJudge: false,
+        shouldSetNoticeOfChangeToInPersonProceeding: false,
+        shouldSetNoticeOfChangeToRemoteProceeding: false,
+        shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       });
     });
 
@@ -309,11 +377,11 @@ describe('updateTrialSessionInteractor', () => {
   describe('determineEntitiesToLock', () => {
     beforeEach(() => {
       getTrialSessionById.mockResolvedValue({
-          caseOrder: [
-            { docketNumber: '333-25' },
-            { docketNumber: '111-25' },
-            { docketNumber: '222-25' },
-          ] as TCaseOrder[],
+        caseOrder: [
+          { docketNumber: '333-25' },
+          { docketNumber: '111-25' },
+          { docketNumber: '222-25' },
+        ] as TCaseOrder[],
       } as RawTrialSession);
     });
 

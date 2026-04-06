@@ -7,9 +7,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * updateOtherStatistics
@@ -19,7 +18,6 @@ import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
  * @param {string} providers.docketNumber the docket number of the case to update statistics
  * @param {number} providers.damages damages statistic to add to the case
  * @param {number} providers.litigationCosts litigation costs statistic to add to the case
- * @returns {object} the updated case
  */
 export const updateOtherStatistics = async (
   _applicationContext: ServerApplicationContext,
@@ -29,7 +27,7 @@ export const updateOtherStatistics = async (
     litigationCosts,
   }: { damages: number; docketNumber: string; litigationCosts: number },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
@@ -43,14 +41,9 @@ export const updateOtherStatistics = async (
     { authorizedUser },
   );
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: newCase,
-  });
+  const validatedCase = newCase.validate().toRawObject();
 
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
+  await upsertCases([validatedCase]);
 };
 
 export const updateOtherStatisticsInteractor = withLocking(

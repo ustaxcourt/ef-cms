@@ -66,4 +66,23 @@ describe('navigateToReviewFileADocumentAction', () => {
 
     expect(result.state.form.redactionAcknowledgement).toEqual(undefined);
   });
+
+  it('should not set form.redactionAcknowledgement for auto generated notice of withdrawal', async () => {
+    const result = await runAction(navigateToReviewFileADocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        form: {
+          eventCode: 'NOTW',
+          generationType: GENERATION_TYPES.AUTO,
+        },
+      },
+    });
+
+    expect(result.state.form.redactionAcknowledgement).toEqual(undefined);
+  });
 });

@@ -2,11 +2,13 @@ import { Agent } from 'https';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { S3 } from '@aws-sdk/client-s3';
 import { environment } from '@web-api/environment';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 let s3Cache: S3;
 
 export function getStorageClient(): S3 {
   if (!s3Cache) {
+    getDawsonLogger().info('Creating new S3 client');
     s3Cache = new S3({
       endpoint: environment.s3Endpoint,
       forcePathStyle: true,

@@ -12,6 +12,7 @@ import {
   mockIrsSuperuser,
   mockJudgeUser,
   mockPetitionerUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 
@@ -64,6 +65,21 @@ const PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE = {
 };
 const PETITIONER_NOT_ASSOCIATED_WITH_MOCK_UNSERVED_CASE = mockPetitionerUser;
 
+const MOCK_CASE_WITH_CONTACT_EMAIL = {
+  ...MOCK_UNSERVED_CASE,
+  petitioners: MOCK_UNSERVED_CASE.petitioners.map(p => ({
+    ...p,
+    contactEmailAddress: 'petitioner-contact@example.com',
+  })),
+  privatePractitioners: [
+    {
+      userId: mockPrivatePractitionerUser.userId,
+      name: mockPrivatePractitionerUser.name,
+      role: mockPrivatePractitionerUser.role,
+    },
+  ],
+};
+
 describe('CaseFactory', () => {
   describe('internal user', () => {
     it('should get full case data for unsealed case', () => {
@@ -73,7 +89,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_CASE.docketEntries,
+        MOCK_UNSERVED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+        ),
       );
     });
     it('should get full case data for sealed case', () => {
@@ -83,7 +101,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries,
+        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+        ),
       );
     });
     it('should not show sealed addresses when user does not have permissions', () => {
@@ -118,11 +138,13 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_SERVED_CASE.docketEntries.filter(
-          d =>
-            d.isOnDocketRecord ||
-            d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        ),
+        MOCK_SERVED_CASE.docketEntries
+          .filter(
+            d =>
+              d.isOnDocketRecord ||
+              d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
+          )
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should not show sealed addresses', () => {
@@ -142,7 +164,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_CASE.docketEntries.filter(d => d.isOnDocketRecord),
+        MOCK_UNSERVED_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should get full case data for sealed case except docket entries not on the record', () => {
@@ -152,9 +176,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
-          d => d.isOnDocketRecord,
-        ),
+        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should get full data for lead case when associated with a member case', () => {
@@ -164,7 +188,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_LEAD_CASE.docketEntries.filter(d => d.isOnDocketRecord),
+        MOCK_LEAD_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should not show sealed addresses', () => {
@@ -174,6 +200,30 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect((caseData as Case).petitioners[0].address1).toBeFalsy();
+    });
+    it('should not include contactEmailAddress for associated external users', () => {
+      const caseData = CaseFactory.getCase({
+        rawCase: MOCK_CASE_WITH_CONTACT_EMAIL,
+        user: mockPrivatePractitionerUser,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+      expect(
+        (caseData as Case).petitioners[0].contactEmailAddress,
+      ).toBeUndefined();
+    });
+    it('should not include contactEmailAddress for associated petitioners', () => {
+      const mockCaseWithContactEmail = {
+        ...MOCK_CASE_WITH_CONTACT_EMAIL,
+        privatePractitioners: [],
+      };
+      const caseData = CaseFactory.getCase({
+        rawCase: mockCaseWithContactEmail,
+        user: PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+      expect(
+        (caseData as Case).petitioners[0].contactEmailAddress,
+      ).toBeUndefined();
     });
   });
   // Other scenarios should give case data that only a non-logged-in user could see
@@ -249,7 +299,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_CASE_DTO.docketEntries,
+          MOCK_UNSERVED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+          ),
         );
       });
       it('should get full case data for sealed case', () => {
@@ -259,7 +311,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries,
+          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+          ),
         );
       });
       it('should not show sealed addresses when user does not have permissions', () => {
@@ -294,11 +348,13 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_SERVED_CASE_DTO.docketEntries.filter(
-            d =>
-              d.isOnDocketRecord ||
-              d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
-          ),
+          MOCK_SERVED_CASE_DTO.docketEntries
+            .filter(
+              d =>
+                d.isOnDocketRecord ||
+                d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
+            )
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should not show sealed addresses', () => {
@@ -318,7 +374,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_CASE_DTO.docketEntries.filter(d => d.isOnDocketRecord),
+          MOCK_UNSERVED_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should get full case data for sealed case except docket entries not on the record', () => {
@@ -328,9 +386,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
-            d => d.isOnDocketRecord,
-          ),
+          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should get full data for lead case when associated with a member case', () => {
@@ -340,7 +398,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_LEAD_CASE_DTO.docketEntries.filter(d => d.isOnDocketRecord),
+          MOCK_LEAD_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should not show sealed addresses', () => {
@@ -350,6 +410,30 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect((caseData as CaseDTO).petitioners[0].address1).toBeFalsy();
+      });
+      it('should not include contactEmailAddress for associated external users', () => {
+        const caseData = CaseFactory.getCaseDTO({
+          rawCase: MOCK_CASE_WITH_CONTACT_EMAIL,
+          user: mockPrivatePractitionerUser,
+        });
+        expect(caseData).toBeInstanceOf(CaseDTO);
+        expect(
+          (caseData as CaseDTO).petitioners[0].contactEmailAddress,
+        ).toBeUndefined();
+      });
+      it('should not include contactEmailAddress for associated petitioners', () => {
+        const mockCaseWithContactEmail = {
+          ...MOCK_CASE_WITH_CONTACT_EMAIL,
+          privatePractitioners: [],
+        };
+        const caseData = CaseFactory.getCaseDTO({
+          rawCase: mockCaseWithContactEmail,
+          user: PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE,
+        });
+        expect(caseData).toBeInstanceOf(CaseDTO);
+        expect(
+          (caseData as CaseDTO).petitioners[0].contactEmailAddress,
+        ).toBeUndefined();
       });
     });
     describe.each([

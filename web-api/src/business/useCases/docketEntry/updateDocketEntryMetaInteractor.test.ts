@@ -303,7 +303,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       servedAt: '2020-01-01T00:01:00.000Z',
     };
 
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -315,6 +315,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
@@ -322,7 +324,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -333,6 +335,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       mockDocketClerkUser,
     );
+
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
@@ -604,7 +608,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
     getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -616,6 +620,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
@@ -626,7 +632,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the previousDocument', async () => {
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -639,6 +645,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       mockDocketClerkUser,
     );
+
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
