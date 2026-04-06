@@ -69,7 +69,7 @@ export const ConfirmTrialSessionStartDateChangeModalDialog = connect<
         message=""
         title="Are You Sure You Want to Change the Trial Date?"
       >
-        <div className="">
+        <div>
           <div className="tw:flex tw:pb-3">
             Changing the trial start date will automatically generate a Notice
             of Change of Trial Date.

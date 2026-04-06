@@ -9,5 +9,5 @@ const setDismissModalAction = ({ store }: ActionProps) => {
 
 export const openConfirmTrialSessionLocationChangeModalSequence = [
   setConfirmTrialSessionLocationChangeModalAction,
-  setDismissModalAction
+  setDismissModalAction,
 ];
