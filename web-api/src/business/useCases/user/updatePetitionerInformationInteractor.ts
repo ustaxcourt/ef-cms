@@ -26,6 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -54,6 +55,51 @@ export const getIsUserAuthorized = ({
     isCurrentPetitioner ||
     isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)
   );
+};
+
+const assertEmailAvailableForPetitioner = async ({
+  applicationContext,
+  authorizedUser,
+  petitionerCaseRaw,
+  updatedPetitionerData,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
+  petitionerCaseRaw: RawCase;
+  updatedPetitionerData: any;
+}): Promise<void> => {
+  const { updatedEmail } = updatedPetitionerData;
+  const { petitioners } = petitionerCaseRaw;
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const allUsers =
+    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+      {
+        userIds: contactIdArray,
+      },
+      authorizedUser,
+    )) || {};
+
+  const allPendingEmails: string[] = Object.values(allUsers);
+
+  const pendingMatchesUpdated: boolean = allPendingEmails
+    .map(email => (email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
+    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
+  }
+
+  const currentMatchesUpdated = petitionerCaseRaw.petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (updatedEmail && currentMatchesUpdated) {
+    throw new Error(
+      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+    );
+  }
 };
 
 const updateCaseEntityAndGenerateChange = async ({
@@ -157,40 +203,12 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  const { updatedEmail } = updatedPetitionerData;
-
-  const { petitioners } = petitionerCaseRaw;
-
-  const contactIdArray = petitioners.map(p => p.contactId);
-
-  // Returns as object {id#: email}, will put values into an array
-  const allUsers =
-    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
-      {
-        userIds: contactIdArray,
-      },
-      authorizedUser,
-    )) || {};
-
-  const allPendingEmails: string[] = Object.values(allUsers);
-
-  const pendingMatchesUpdated: boolean = allPendingEmails
-    .map(email => (email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
-
-  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
-    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
-  }
-
-  const currentMatchesUpdated = petitionerCaseRaw.petitioners
-    .map(p => (p.email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
-
-  if (updatedEmail && currentMatchesUpdated) {
-    throw new Error(
-      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
-    );
-  }
+  await assertEmailAvailableForPetitioner({
+    applicationContext,
+    authorizedUser,
+    petitionerCaseRaw,
+    updatedPetitionerData,
+  });
 
   const editableFields = pick(
     defaults(updatedPetitionerData, {
@@ -256,6 +274,13 @@ export const updatePetitionerInformation = async (
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
+
+  if (hasPetitionerInfoChanged) {
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
+  }
 
   const updateAddressOrPhone =
     hasPetitionerInfoChanged &&
