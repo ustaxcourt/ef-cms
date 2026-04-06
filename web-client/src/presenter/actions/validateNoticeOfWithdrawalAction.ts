@@ -7,8 +7,12 @@ import {
   calculateDifferenceInDays,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
+import { User } from '@shared/business/entities/User';
 
-export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
+export const validateNoticeOfWithdrawalAction = ({
+  get,
+  path,
+}: ActionProps) => {
   const documentMetadata = get(state.form);
   const user = get(state.user);
   const caseDetail = get(state.caseDetail);
@@ -59,7 +63,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
 
 export const getPartiesToWithdrawFrom = (
   caseDetail: RawCase,
-  user,
+  user: User,
 ): string[] => {
   if (user.role === ROLES.privatePractitioner) {
     const representedPetitioner =

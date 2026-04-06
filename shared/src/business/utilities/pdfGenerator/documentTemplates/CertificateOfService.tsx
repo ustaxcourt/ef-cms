@@ -1,14 +1,14 @@
 import React from 'react';
 import { AddressLabel } from '../components/AddressLabel';
 import { UserContact } from '@shared/business/entities/User';
-import { RawContact } from '@shared/business/entities/contacts/Contact';
+
 type CertificateOfServiceParams = {
   date: string;
-  partyInformation: RawContact;
+  partyInformation: TPetitioner;
   practitionerInformation: {
-    contact: UserContact;
-    barNumber: string;
-    email: string;
+    contact?: UserContact;
+    barNumber?: string;
+    email?: string;
     name: string;
   };
 };
@@ -46,17 +46,17 @@ export const CertificateOfService = ({
         <div className="width-50">Dated: {date}</div>
         <div className="width-50">
           <AddressLabel
-            address1={practitionerInformation.contact.address1}
-            address2={practitionerInformation.contact.address2}
-            address3={practitionerInformation.contact.address3}
-            city={practitionerInformation.contact.city}
-            country={practitionerInformation.contact.country}
-            countryType={practitionerInformation.contact.countryType}
+            address1={practitionerInformation.contact!.address1}
+            address2={practitionerInformation.contact?.address2}
+            address3={practitionerInformation.contact?.address3}
+            city={practitionerInformation.contact!.city}
+            country={practitionerInformation.contact?.country}
+            countryType={practitionerInformation.contact!.countryType}
             name={practitionerInformation.name}
-            postalCode={practitionerInformation.contact.postalCode}
-            state={practitionerInformation.contact.state}
+            postalCode={practitionerInformation.contact!.postalCode}
+            state={practitionerInformation.contact?.state}
           />
-          <div>{practitionerInformation.contact.phone}</div>
+          <div>{practitionerInformation.contact?.phone}</div>
           <div>Tax Court Bar No. {practitionerInformation.barNumber}</div>
           <div>{practitionerInformation.email}</div>
         </div>
