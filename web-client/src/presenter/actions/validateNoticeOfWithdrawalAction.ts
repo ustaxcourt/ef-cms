@@ -7,7 +7,7 @@ import {
   calculateDifferenceInDays,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
-import { User } from '@shared/business/entities/User';
+import { RawUser } from '@shared/business/entities/User';
 
 export const validateNoticeOfWithdrawalAction = ({
   get,
@@ -40,6 +40,7 @@ export const validateNoticeOfWithdrawalAction = ({
     }
     if (
       caseDetail.status === CASE_STATUS_TYPES.calendared &&
+      caseDetail.trialDate !== undefined &&
       calculateDifferenceInDays(caseDetail.trialDate, createISODateString()) <
         30
     ) {
@@ -63,7 +64,7 @@ export const validateNoticeOfWithdrawalAction = ({
 
 export const getPartiesToWithdrawFrom = (
   caseDetail: RawCase,
-  user: User,
+  user: RawUser,
 ): string[] => {
   if (user.role === ROLES.privatePractitioner) {
     const representedPetitioner =
