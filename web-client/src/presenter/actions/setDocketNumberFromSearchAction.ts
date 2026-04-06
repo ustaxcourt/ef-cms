@@ -17,6 +17,11 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
   return docketNumber;
 };
 
+const sanitizeSearchTerm = (searchTerm: string): string => {
+  // Remove all instances of "/" or "." characters from search term
+  return searchTerm && searchTerm.replace(/[/.]/g, '');
+};
+
 /**
  * sets the docket number from the search form in props
  * @param {object} providers the providers object
@@ -28,7 +33,11 @@ export const setDocketNumberFromSearchAction = ({
   get,
 }: ActionProps) => {
   const searchTerm = get(state.header.searchTerm);
-  const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
+  const sanitizedSearchTerm = sanitizeSearchTerm(searchTerm);
+  const docketNumber = trimDocketNumberSearch(
+    applicationContext,
+    sanitizedSearchTerm,
+  );
   return {
     docketNumber,
   };
