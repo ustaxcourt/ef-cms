@@ -1,6 +1,9 @@
 import { Role } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import {
+  DbUser,
+  fromKyselyUser,
+} from '@web-api/persistence/postgres/users/mapper';
 import { sql } from 'kysely';
 
 export const getPractitionersBySearchKey = async ({
@@ -14,9 +17,9 @@ export const getPractitionersBySearchKey = async ({
     reader
       .selectFrom('dwUser as u')
       .where(
-        sql<boolean>`${sql.ref('u.name')} ILIKE ${searchKey} OR ${sql.ref(
+        sql<boolean>`(${sql.ref('u.name')} ILIKE ${searchKey} OR ${sql.ref(
           'u.barNumber',
-        )} ILIKE ${searchKey}`,
+        )} ILIKE ${searchKey})`,
       )
       .where('u.role', '=', role)
       .selectAll('u')
