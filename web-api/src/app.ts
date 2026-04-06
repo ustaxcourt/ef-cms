@@ -198,6 +198,7 @@ import { updateUserContactInformationLambda } from './lambdas/users/updateUserCo
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
+import { getCaseDocketEntriesLambda as v2GetCaseDocketEntriesLambda } from './lambdas/v2/getCaseDocketEntriesLambda';
 import { getCaseLambda as v2GetCaseLambda } from './lambdas/v2/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from './lambdas/v2/getDocumentDownloadUrlLambda';
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
@@ -1133,6 +1134,10 @@ app.delete(
  */
 {
   app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+  app.get(
+    '/v2/cases/:docketNumber/docket-entries',
+    lambdaWrapper(v2GetCaseDocketEntriesLambda),
+  );
   app.get(
     '/v2/cases/:docketNumber/entries/:key/document-download-url',
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),
