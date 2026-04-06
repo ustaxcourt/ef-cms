@@ -3,6 +3,8 @@ import { Get } from 'cerebral';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { Case } from '@shared/business/entities/cases/Case';
+import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
 
 export type TAssociatedCaseFormatted = Omit<
   TAssociatedCase,
@@ -13,7 +15,54 @@ export type TAssociatedCaseFormatted = Omit<
   createdAtFormatted: string;
   inConsolidatedGroup: boolean;
   consolidatedCases: TAssociatedCaseFormatted[] | undefined;
+  formattedStatus: string;
   isLeadCase: boolean;
+};
+
+const sortExternalUserCases = (
+  cases: TAssociatedCaseFormatted[],
+  sortField: string,
+  sortOrder: string,
+): TAssociatedCaseFormatted[] => {
+  return cases.sort((caseA, caseB) => {
+    let comparison = 0;
+    const multiplier = sortOrder === 'desc' ? -1 : 1;
+
+    switch (sortField) {
+      case 'docketNumber': {
+        const aDocket = Case.getSortableDocketNumber(caseA.docketNumber);
+        const bDocket = Case.getSortableDocketNumber(caseB.docketNumber);
+        if (aDocket != null && bDocket != null) {
+          comparison = aDocket - bDocket;
+        } else {
+          comparison = caseA.docketNumber.localeCompare(caseB.docketNumber);
+        }
+        break;
+      }
+      case 'caseTitle':
+        comparison = caseA.caseTitle
+          .toLowerCase()
+          .localeCompare(caseB.caseTitle.toLowerCase());
+        break;
+      case 'filedDate':
+        comparison = caseA.createdAtFormatted.localeCompare(
+          caseB.createdAtFormatted,
+        );
+        break;
+      case 'status':
+        comparison = caseA.formattedStatus.localeCompare(caseB.formattedStatus);
+        break;
+      case 'filingFee':
+        comparison = caseA.petitionPaymentStatus.localeCompare(
+          caseB.petitionPaymentStatus,
+        );
+        break;
+      default:
+        break;
+    }
+
+    return comparison * multiplier;
+  });
 };
 
 export const externalUserCasesHelper = (
@@ -33,6 +82,10 @@ export const externalUserCasesHelper = (
   const closedCases = get(state.closedCases);
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
+  const tableSort = get(state.recentFilingsTableSort) || {
+    sortField: 'filedDate',
+    sortOrder: 'desc',
+  };
 
   const formattedOpenCases = openCases.map(openCase =>
     formatAssociatedCase(applicationContext, openCase),
@@ -41,18 +94,26 @@ export const externalUserCasesHelper = (
     formatAssociatedCase(applicationContext, closedCase),
   );
 
+  // sort open/closed cases based off sorting headers
+  const sortedOpenCases = sortExternalUserCases(
+    formattedOpenCases,
+    tableSort.sortField,
+    tableSort.sortOrder,
+  );
+  const sortedClosedCases = sortExternalUserCases(
+    formattedClosedCases,
+    tableSort.sortField,
+    tableSort.sortOrder,
+  );
+
   return {
-    closedCaseResults: formattedClosedCases.slice(
-      0,
-      closedCurrentPage * pageSize,
-    ),
-    closedCasesCount: getCountOfCases(formattedClosedCases),
-    openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
-    openCasesCount: getCountOfCases(formattedOpenCases),
+    closedCaseResults: sortedClosedCases.slice(0, closedCurrentPage * pageSize),
+    closedCasesCount: getCountOfCases(sortedClosedCases),
+    openCaseResults: sortedOpenCases.slice(0, openCurrentPage * pageSize),
+    openCasesCount: getCountOfCases(sortedOpenCases),
     showLoadMoreClosedCases:
-      formattedClosedCases.length > closedCurrentPage * pageSize,
-    showLoadMoreOpenCases:
-      formattedOpenCases.length > openCurrentPage * pageSize,
+      sortedClosedCases.length > closedCurrentPage * pageSize,
+    showLoadMoreOpenCases: sortedOpenCases.length > openCurrentPage * pageSize,
   };
 };
 
@@ -78,6 +139,11 @@ const formatAssociatedCase = (
       .getUtilities()
       .formatDateString(caseInQuestion.createdAt, 'MMDDYY'),
     inConsolidatedGroup,
+    formattedStatus: formatCaseStatus({
+      caseStatus: caseA.status,
+      trialDate: caseA.trialDate,
+      trialLocation: caseA.trialLocation,
+    }),
     isLeadCase,
   };
 };

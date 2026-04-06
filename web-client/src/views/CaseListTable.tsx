@@ -10,6 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { CaseStatusInfoModal } from '@web-client/views/RecentFilings/CaseStatusInfoModal';
+import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 
 export const CaseListTable = connect(
   {
@@ -25,6 +26,8 @@ export const CaseListTable = connect(
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
     showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
     showModal: state.modal.showModal,
+    recentFilingsTableSort: state.recentFilingsTableSort,
+    sortTableSequence: sequences.sortTableSequence,
   },
   function CaseListTable({
     caseType,
@@ -38,6 +41,8 @@ export const CaseListTable = connect(
     showMoreOpenCasesSequence,
     showCaseStatusInfoSequence,
     showModal,
+    recentFilingsTableSort,
+    sortTableSequence,
   }) {
     useEffect(() => {
       return () => {
@@ -85,7 +90,7 @@ export const CaseListTable = connect(
 
               <table
                 className={classNames({
-                  'usa-table responsive-table dashboard': !isMobile,
+                  'usa-table responsive-table dashboard ustc-table ': !isMobile,
                   'usa-table usa-table--stacked-header usa-table--borderless':
                     isMobile,
                 })}
@@ -97,12 +102,55 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket No.</th>
-                    <th>Case Title</th>
-                    <th>Filed Date</th>
-                    {tabName === openTab && <th>Case Status</th>}
+                    <SortableHeader
+                      sortField="docketNumber"
+                      sortType="string"
+                      tableSort={recentFilingsTableSort}
+                      title="Docket No."
+                      onSort={sortTableSequence}
+                      stateKey="recentFilingsTableSort"
+                      data-testid="sort-docket-number"
+                    />
+                    <SortableHeader
+                      sortField="caseTitle"
+                      sortType="string"
+                      tableSort={recentFilingsTableSort}
+                      title="Case Title"
+                      onSort={sortTableSequence}
+                      stateKey="recentFilingsTableSort"
+                      data-testid="sort-case-title"
+                    />
+                    <SortableHeader
+                      sortField="filedDate"
+                      sortType="date"
+                      tableSort={recentFilingsTableSort}
+                      title="Filed Date"
+                      onSort={sortTableSequence}
+                      stateKey="recentFilingsTableSort"
+                      data-testid="sort-filed-date"
+                    />
+                    {tabName === openTab && (
+                      <SortableHeader
+                        sortField="status"
+                        sortType="string"
+                        tableSort={recentFilingsTableSort}
+                        title="Case Status"
+                        onSort={sortTableSequence}
+                        stateKey="recentFilingsTableSort"
+                        data-testid="sort-status"
+                      />
+                    )}
                     {dashboardExternalHelper.showFilingFee && (
-                      <th data-testid="filing-fee">Filing Fee*</th>
+                      // <th data-testid="filing-fee">Filing Fee*</th>
+                      <SortableHeader
+                        sortField="filingFee"
+                        sortType="string"
+                        tableSort={recentFilingsTableSort}
+                        title="Filing Fee"
+                        onSort={sortTableSequence}
+                        stateKey="recentFilingsTableSort"
+                        data-testid="filing-fee"
+                      />
                     )}
                   </tr>
                 </thead>

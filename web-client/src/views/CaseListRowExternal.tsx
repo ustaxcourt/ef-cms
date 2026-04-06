@@ -62,11 +62,7 @@ export const CaseListRowExternal = ({
                     })
                   }
                 >
-                  {formatCaseStatus({
-                    caseStatus: formattedCase.status,
-                    trialDate: formattedCase.trialDate,
-                    trialLocation: formattedCase.trialLocation,
-                  })}
+                  {formattedCase.formattedStatus}
                 </Button>
               </td>
             )}
