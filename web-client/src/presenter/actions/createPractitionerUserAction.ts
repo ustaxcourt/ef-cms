@@ -20,10 +20,11 @@ export const createPractitionerUserAction = async ({
       },
       barNumber,
     });
-  } catch (err) {
+  } catch (err: any) {
+    const message = err.message || 'Please try again.';
     return path.error({
       alertError: {
-        message: 'Please try again.',
+        message,
         title: 'Practitioner could not be added.',
       },
     });
