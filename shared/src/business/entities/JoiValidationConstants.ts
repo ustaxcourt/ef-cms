@@ -22,7 +22,7 @@ const DATE_FORMATS = {
 const STRING = joi.string().min(1);
 
 export const JoiValidationConstants = Object.freeze({
-  BAR_NUMBER: STRING.regex(BAR_NUMBER_MATCHER).max(100),
+  BAR_NUMBER: STRING.regex(BAR_NUMBER_MATCHER).max(10),
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
   DATE_RANGE_PICKER_DATE: joi.date().iso().format([DATE_FORMATS.MMDDYYYY]),
