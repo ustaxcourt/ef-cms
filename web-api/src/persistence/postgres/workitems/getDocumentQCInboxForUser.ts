@@ -19,6 +19,7 @@ const DOCKET_ENTRY_FIELDS_FOR_WORK_ITEM_QC: DocketEntrySelectableField[] = [
   'receivedAt',
   'createdAt',
   'filedBy',
+  'multiDocketedOn',
   // Fields needed for DocketEntry.isServed() check
   'servedAt',
   'isLegacyServed',
