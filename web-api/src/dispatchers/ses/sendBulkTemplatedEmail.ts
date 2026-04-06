@@ -72,6 +72,8 @@ export const sendWithRetry = async ({
   const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
 
+  applicationContext.logger.info('Bulk Email Params', params);
+
   const validDestinations: BulkEmailDestination[] = [];
   params.Destinations?.forEach(bulkDestination => {
     let sendingToTestEmail = false;
@@ -95,8 +97,6 @@ export const sendWithRetry = async ({
     return;
   }
   params.Destinations = validDestinations;
-
-  applicationContext.logger.info('Bulk Email Params', params);
 
   const cmd = new SendBulkTemplatedEmailCommand(params);
   const response = await sesClient.send(cmd);
