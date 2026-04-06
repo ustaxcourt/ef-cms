@@ -24,7 +24,9 @@ paths:
       tags:
         - irs
       description: |
-        By passing in a docket number, you can retrieve details about that case
+        By passing in a docket number, you can retrieve details about that case.
+
+        For cases with a large number of docket entries, set `excludeDocketEntries=true` to omit the embedded `docketEntries` array from the response and then page through the entries via `GET /cases/{docketNumber}/docket-entries`.
       parameters:
         - in: path
           name: docketNumber
@@ -32,6 +34,17 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: excludeDocketEntries
+          description: |
+            When set to the literal string `true`, the response will contain an empty `docketEntries` array. All other case fields are returned unchanged. Any other value (including omitting the parameter) preserves the default behavior of returning every docket entry on the case. Use this with the paginated `/cases/{docketNumber}/docket-entries` endpoint to safely fetch large cases.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+          example: 'true'
       responses:
         '200':
           description: case object
@@ -39,6 +52,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Case'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /cases/{docketNumber}/docket-entries:
+    get:
+      summary: fetches a page of docket entries for a case
+      operationId: fetchCaseDocketEntries
+      tags:
+        - irs
+      description: |
+        Fetches a single page of docket entries for the given case. Pages are zero-indexed and contain up to 1000 docket entries each. Use the `totalCount` field on the response to determine how many pages to fetch (`Math.ceil(totalCount / pageSize)`).
+
+        This endpoint is intended for use alongside `GET /cases/{docketNumber}?excludeDocketEntries=true` so that very large cases can be retrieved without returning thousands of docket entries in a single response.
+      parameters:
+        - in: path
+          name: docketNumber
+          description: The case's docket number.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          description: |
+            Zero-indexed page number to fetch. Defaults to `0` when not specified. The maximum supported page is `20`, supporting cases with up to 20,000 docket entries.
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20
+            default: 0
+          example: 0
+      responses:
+        '200':
+          description: a page of docket entries with pagination metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocketEntries'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
@@ -314,6 +370,26 @@ components:
           type: string
           format: url
           example: 'https://app.dawson.ustaxcourt.gov/documents/4a6e9284-88aa-4954-9aa9-8e0e0fdd764e?AWSAccessKeyId=EXAMPLE&Expires=1601661807&Signature=EXAMPLE&x-amz-security-token=EXAMPLE'
+    PaginatedDocketEntries:
+      type: object
+      properties:
+        docketEntries:
+          type: array
+          description: The slice of docket entries for the requested page. May be empty if the requested page is beyond `totalCount`.
+          items:
+            $ref: '#/components/schemas/DocketEntry'
+        page:
+          type: integer
+          description: The zero-indexed page that was returned.
+          example: 0
+        pageSize:
+          type: integer
+          description: The maximum number of docket entries returned per page.
+          example: 1000
+        totalCount:
+          type: integer
+          description: The total number of docket entries on the case. Use this with `pageSize` to determine how many pages are available.
+          example: 8123
     Error:
       type: object
       properties:

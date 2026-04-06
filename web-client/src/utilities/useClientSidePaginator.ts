@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type PaginationResult<T> = {
   activePage: number;
@@ -27,15 +27,23 @@ export function useClientSidePaginator<T>(
 ): PaginationResult<T> {
   const [activePage, setActivePage] = useState(0);
 
-  useEffect(() => {
-    setActivePage(0); // If your data set changes go back to page 0;
-  }, [fullDataSet]);
+  const totalPages = Math.ceil(fullDataSet.length / pageSize);
+  // Clamp the active page so it stays within the valid range when the
+  // data set shrinks (e.g., from filtering). This preserves the user's
+  // position across data changes that don't affect length (sorting,
+  // selecting checkboxes) instead of resetting them back to page 0.
+  const clampedActivePage = Math.min(activePage, Math.max(0, totalPages - 1));
 
-  const { pageRecords, totalPages } = getPaginationResult(
+  const { pageRecords } = getPaginationResult(
     fullDataSet,
     pageSize,
-    activePage,
+    clampedActivePage,
   );
 
-  return { activePage, pageRecords, setActivePage, totalPages };
+  return {
+    activePage: clampedActivePage,
+    pageRecords,
+    setActivePage,
+    totalPages,
+  };
 }

@@ -201,7 +201,7 @@ function sortCaseFields({
   docketNumbers: string[];
 }): EnrichedCaseRow[] {
   cases.forEach(c => {
-    c.docketEntries = sortBy(c.docketEntries, 'createdAt');
+    c.docketEntries = sortBy(c.docketEntries, ['createdAt', 'docketEntryId']);
     c.archivedDocketEntries = sortBy(c.archivedDocketEntries, 'createdAt');
 
     c.correspondence = sortBy(c.correspondence, 'filingDate');

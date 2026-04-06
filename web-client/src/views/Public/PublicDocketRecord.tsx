@@ -1,13 +1,20 @@
-import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
+import {
+  DOCKET_RECORD_PAGE_SIZE,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-import React from 'react';
-import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
+import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
@@ -22,11 +29,35 @@ export const PublicDocketRecord = connect(
     sortTableSequence,
   }) {
     const noDocumentsMessage = 'There are no documents of that type.';
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord,
+        DOCKET_RECORD_PAGE_SIZE,
+      );
+
+    const hasLargeDocketEntryCount =
+      publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.length >
+      DOCKET_RECORD_PAGINATION_THRESHOLD;
+
     return (
       <>
         <PublicDocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
+        <div ref={paginatorTop} className="margin-bottom-3">
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
+        </div>
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -122,8 +153,10 @@ export const PublicDocketRecord = connect(
                 </tr>
               </thead>
               <tbody>
-                {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
+                {(hasLargeDocketEntryCount
+                  ? pageRecords
+                  : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+                ).map(entry => {
                     return (
                       <tr
                         data-testid={`public-docket-record-no-${entry.index}`}
@@ -186,6 +219,17 @@ export const PublicDocketRecord = connect(
               .length && (
               <p className="margin-bottom-10">{noDocumentsMessage}</p>
             )}
+
+            {hasLargeDocketEntryCount && totalPages > 1 && (
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+            )}
           </div>
         </NonPhone>
         <Phone>
@@ -198,8 +242,10 @@ export const PublicDocketRecord = connect(
               </tr>
             </thead>
             <tbody>
-              {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
-                entry => {
+              {(hasLargeDocketEntryCount
+                ? pageRecords
+                : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+              ).map(entry => {
                   return (
                     <tr key={entry.index}>
                       <td data-label="No.">{entry.index}</td>
@@ -227,6 +273,17 @@ export const PublicDocketRecord = connect(
           </table>
           {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
+
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
         </Phone>
       </>
     );

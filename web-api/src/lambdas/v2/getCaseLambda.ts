@@ -13,9 +13,13 @@ import { v2ApiWrapper } from './v2ApiWrapper';
 export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, () =>
     v2ApiWrapper(async () => {
+      const excludeDocketEntries =
+        event.queryStringParameters?.excludeDocketEntries === 'true';
+
       const caseObject = await getCaseInteractor(
         {
           docketNumber: event.pathParameters.docketNumber,
+          excludeDocketEntries,
         },
         authorizedUser,
       );
