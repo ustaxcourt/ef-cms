@@ -46,6 +46,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     docketEntries: [
       {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        documentStorageId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
@@ -56,6 +57,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       } as DocketEntry,
       {
         docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491',
+        documentStorageId: '1905d1ab-18d0-43ec-bafb-654e83405491',
         docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
@@ -138,6 +140,13 @@ describe('removePdfFromDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      key: MOCK_CASE.docketEntries[0].documentStorageId,
+    });
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });

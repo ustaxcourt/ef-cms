@@ -10,15 +10,15 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "24.10.13"
+    "@types/node": "24.12.0"
   },
   "dependencies": {
-    "@aws-sdk/client-apigatewaymanagementapi": "3.996.0",
-    "@aws-sdk/client-s3": "3.996.0",
-    "@aws-sdk/client-sqs": "3.996.0",
-    "@aws-sdk/lib-storage": "3.996.0",
-    "@aws-sdk/s3-request-presigner": "3.996.0",
-    "@smithy/node-http-handler": "4.4.11",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.1023.0",
+    "@aws-sdk/client-s3": "3.1023.0",
+    "@aws-sdk/client-sqs": "3.1023.0",
+    "@aws-sdk/lib-storage": "3.1023.0",
+    "@aws-sdk/s3-request-presigner": "3.1023.0",
+    "@smithy/node-http-handler": "4.5.1",
     "fflate": "0.8.2"
   }
 }

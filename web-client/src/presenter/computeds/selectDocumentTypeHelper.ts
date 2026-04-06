@@ -178,7 +178,7 @@ export const getValidPreviouslyFiledDocuments = ({
   };
 
   const formattedCaseDetail = getFormattedCaseDetail({
-    applicationContext: applicationContext as any,
+    applicationContext,
     caseDetail,
     authorizedUser,
   });
