@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-0. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
