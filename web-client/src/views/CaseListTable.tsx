@@ -109,7 +109,6 @@ export const CaseListTable = connect(
                       title="Docket No."
                       onSort={sortTableSequence}
                       stateKey="recentFilingsTableSort"
-                      data-testid="sort-docket-number"
                     />
                     <SortableHeader
                       sortField="caseTitle"
@@ -118,7 +117,6 @@ export const CaseListTable = connect(
                       title="Case Title"
                       onSort={sortTableSequence}
                       stateKey="recentFilingsTableSort"
-                      data-testid="sort-case-title"
                     />
                     <SortableHeader
                       sortField="filedDate"
@@ -127,7 +125,6 @@ export const CaseListTable = connect(
                       title="Filed Date"
                       onSort={sortTableSequence}
                       stateKey="recentFilingsTableSort"
-                      data-testid="sort-filed-date"
                     />
                     {tabName === openTab && (
                       <SortableHeader
@@ -137,11 +134,9 @@ export const CaseListTable = connect(
                         title="Case Status"
                         onSort={sortTableSequence}
                         stateKey="recentFilingsTableSort"
-                        data-testid="sort-status"
                       />
                     )}
                     {dashboardExternalHelper.showFilingFee && (
-                      // <th data-testid="filing-fee">Filing Fee*</th>
                       <SortableHeader
                         sortField="filingFee"
                         sortType="string"
@@ -149,7 +144,6 @@ export const CaseListTable = connect(
                         title="Filing Fee"
                         onSort={sortTableSequence}
                         stateKey="recentFilingsTableSort"
-                        data-testid="filing-fee"
                       />
                     )}
                   </tr>
