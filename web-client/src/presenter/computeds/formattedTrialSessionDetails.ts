@@ -39,10 +39,8 @@ export const formattedTrialSessionDetails = (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
-  console.log('trialSession', trialSession);
   if (!trialSession.trialSessionId) return {} as FormatTrialSessionHelperType;
   const currentUser = get(state.user);
-
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -50,9 +48,6 @@ export const formattedTrialSessionDetails = (
       currentUser,
       trialSession,
     });
-
-  console.log('formattedTrialSession', formattedTrialSession);
-
   const {
     DATE_FORMATS,
     HYBRID_SESSION_TYPES,
