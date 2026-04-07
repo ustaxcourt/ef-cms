@@ -71,17 +71,11 @@ export const externalUserCasesHelper = (
 ): {
   closedCaseResults: TAssociatedCaseFormatted[];
   openCaseResults: TAssociatedCaseFormatted[];
-  showLoadMoreClosedCases: boolean;
-  showLoadMoreOpenCases: boolean;
   closedCasesCount: number;
   openCasesCount: number;
 } => {
-  const pageSize = applicationContext.getConstants().CASE_LIST_PAGE_SIZE;
-
   const openCases = get(state.openCases);
   const closedCases = get(state.closedCases);
-  const openCurrentPage = get(state.openCasesCurrentPage) || 1;
-  const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
   const tableSort = get(state.recentFilingsTableSort) || {
     sortField: 'filedDate',
     sortOrder: 'desc',
@@ -107,13 +101,10 @@ export const externalUserCasesHelper = (
   );
 
   return {
-    closedCaseResults: sortedClosedCases.slice(0, closedCurrentPage * pageSize),
+    closedCaseResults: sortedClosedCases,
     closedCasesCount: getCountOfCases(sortedClosedCases),
-    openCaseResults: sortedOpenCases.slice(0, openCurrentPage * pageSize),
+    openCaseResults: sortedOpenCases,
     openCasesCount: getCountOfCases(sortedOpenCases),
-    showLoadMoreClosedCases:
-      sortedClosedCases.length > closedCurrentPage * pageSize,
-    showLoadMoreOpenCases: sortedOpenCases.length > openCurrentPage * pageSize,
   };
 };
 
