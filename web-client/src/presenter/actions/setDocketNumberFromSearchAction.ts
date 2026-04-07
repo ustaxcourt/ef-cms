@@ -18,8 +18,12 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
 };
 
 const sanitizeSearchTerm = (searchTerm: string): string => {
-  // Remove all instances of "/" or "." characters from search term
-  return searchTerm && searchTerm.replace(/[/.]/g, '');
+  if (!searchTerm) {
+    return '';
+  }
+
+  // Keep only characters that are valid for docket-number searches.
+  return searchTerm.replace(/[^0-9A-Za-z-]/g, '');
 };
 
 /**
