@@ -5,7 +5,7 @@ import { marshallCase } from './marshallers/marshallCase';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**
- * used for fetching a single case and returning it in v1 api format
+ * used for fetching a single case and returning it in v2 api format
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers

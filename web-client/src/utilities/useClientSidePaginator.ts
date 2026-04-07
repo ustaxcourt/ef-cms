@@ -13,12 +13,16 @@ export function getPaginationResult<T>(
   activePage: number,
 ) {
   const totalPages = Math.ceil(fullDataSet.length / pageSize);
-  const pageRecords = fullDataSet.slice(
+  const pageRecords = sliceForPage(fullDataSet, pageSize, activePage);
+
+  return { pageRecords, totalPages };
+}
+
+function sliceForPage<T>(fullDataSet: T[], pageSize: number, activePage: number) {
+  return fullDataSet.slice(
     activePage * pageSize,
     activePage * pageSize + pageSize,
   );
-
-  return { pageRecords, totalPages };
 }
 
 export function useClientSidePaginator<T>(
@@ -34,11 +38,7 @@ export function useClientSidePaginator<T>(
   // selecting checkboxes) instead of resetting them back to page 0.
   const clampedActivePage = Math.min(activePage, Math.max(0, totalPages - 1));
 
-  const { pageRecords } = getPaginationResult(
-    fullDataSet,
-    pageSize,
-    clampedActivePage,
-  );
+  const pageRecords = sliceForPage(fullDataSet, pageSize, clampedActivePage);
 
   return {
     activePage: clampedActivePage,
