@@ -1,4 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
+/* eslint-disable */
 
 // usage: API_URL=https://app-green.example.com DEFAULT_ACCOUNT_PASS=password ./scripts/add-exhibits-to-case.ts -d 123-24 -e 100
 // or:   API_URL=http://localhost:4000 DEFAULT_ACCOUNT_PASS=Testing1234$ ./scripts/add-exhibits-to-case.ts -d 123-24 -e 5
@@ -11,7 +12,6 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import * as path from 'path';
 import * as fs from 'fs';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const FormData = require('form-data');
 
 const scriptConfig: ScriptConfig = {
@@ -76,7 +76,12 @@ async function loginAndGetToken(): Promise<string> {
 
 async function getCaseDetails(
   token: string,
-): Promise<{ petitionerContactId: string }> {
+): Promise<{
+  petitionerContactId: string;
+  consolidatedCasesToFileAcross:
+    | { docketNumber: string; leadDocketNumber: string }[]
+    | undefined;
+}> {
   const response = await axios.get(`${apiUrl}/cases/${docketNumber}`, {
     headers: { Authorization: `Bearer ${token}` },
     params: { excludeDocketEntries: true },
@@ -87,7 +92,22 @@ async function getCaseDetails(
       'Could not find petitioner contact ID on case. Ensure the case exists and is served.',
     );
   }
-  return { petitionerContactId };
+
+  const leadDocketNumber = response.data?.leadDocketNumber;
+  const consolidatedCases: { docketNumber: string }[] =
+    response.data?.consolidatedCases || [];
+
+  let consolidatedCasesToFileAcross:
+    | { docketNumber: string; leadDocketNumber: string }[]
+    | undefined;
+  if (leadDocketNumber && consolidatedCases.length > 0) {
+    consolidatedCasesToFileAcross = consolidatedCases.map(c => ({
+      docketNumber: c.docketNumber,
+      leadDocketNumber,
+    }));
+  }
+
+  return { petitionerContactId, consolidatedCasesToFileAcross };
 }
 
 async function pollForAsyncResult(
@@ -170,9 +190,12 @@ async function fileExhibitAndWait(
   token: string,
   key: string,
   petitionerContactId: string,
+  consolidatedCasesToFileAcross:
+    | { docketNumber: string; leadDocketNumber: string }[]
+    | undefined,
 ): Promise<void> {
   const asyncSyncId = uuidv4();
-  const documentMetadata = {
+  const documentMetadata: Record<string, unknown> = {
     docketNumber,
     primaryDocumentId: key,
     documentTitle: 'Exhibit(s)',
@@ -184,6 +207,10 @@ async function fileExhibitAndWait(
     isFileAttached: true,
     scenario: 'Standard',
   };
+
+  if (consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0) {
+    documentMetadata.consolidatedCasesToFileAcross = consolidatedCasesToFileAcross;
+  }
 
   // Send the async request with an asyncSyncId header so the Lambda
   // saves its response for us to retrieve via polling.
@@ -219,8 +246,14 @@ async function fileExhibitAndWait(
 
     // Step 2: Get case details for petitioner contactId
     console.log('\nStep 2: Fetching case details...');
-    const { petitionerContactId } = await getCaseDetails(token);
+    const { petitionerContactId, consolidatedCasesToFileAcross } =
+      await getCaseDetails(token);
     console.log(`  Petitioner contact ID: ${petitionerContactId}`);
+    if (consolidatedCasesToFileAcross) {
+      console.log(
+        `  Consolidated group: filing across ${consolidatedCasesToFileAcross.length} cases`,
+      );
+    }
 
     // Step 3: Load sample PDF
     const samplePdfPath = path.join(
@@ -257,7 +290,12 @@ async function fileExhibitAndWait(
         await uploadPdfToS3(policy, key, pdfBuffer);
 
         // File the exhibit and wait for the async Lambda to finish
-        await fileExhibitAndWait(token, key, petitionerContactId);
+        await fileExhibitAndWait(
+          token,
+          key,
+          petitionerContactId,
+          consolidatedCasesToFileAcross,
+        );
 
         exhibitsCreated++;
         console.log(`  [${exhibitNumber}/${exhibits}] Confirmed`);
