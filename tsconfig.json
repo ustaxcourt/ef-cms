@@ -17,7 +17,6 @@
     "strict": true,
     "rootDir": "./",
     "baseUrl": "./",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@web-client/*": ["web-client/src/*"],
       "@web-api/*": ["web-api/src/*"],
