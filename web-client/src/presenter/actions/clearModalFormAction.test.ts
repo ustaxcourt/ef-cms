@@ -7,8 +7,8 @@ describe('clearModalFormAction', () => {
       state: {
         modal: {
           form: {
-            someOtherProperty: '1',
             someProperty: true,
+            someOtherProperty: '1',
           },
         },
       },
