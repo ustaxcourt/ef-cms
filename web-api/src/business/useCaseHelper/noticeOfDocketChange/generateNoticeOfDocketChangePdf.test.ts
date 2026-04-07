@@ -29,7 +29,8 @@ describe('generateNoticeOfDocketChangePdf', () => {
   });
 
   it('should call the document generator to create the Notice of Docket Change PDF', async () => {
-    applicationContext.getUniqueId.mockReturnValue('uniqueId');
+    const mockDocumentStorageId = 'uniqueId';
+    applicationContext.getUniqueId.mockReturnValueOnce(mockDocumentStorageId);
 
     const result = await generateNoticeOfDocketChangePdf({
       applicationContext,
@@ -50,6 +51,14 @@ describe('generateNoticeOfDocketChangePdf', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange,
     ).toHaveBeenCalled();
-    expect(result).toEqual('uniqueId');
+    expect(result).toEqual(mockDocumentStorageId);
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument.mock
+        .calls[0][0],
+    ).toEqual(
+      expect.objectContaining({
+        key: mockDocumentStorageId,
+      }),
+    );
   });
 });

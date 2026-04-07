@@ -71,5 +71,15 @@ describe('ExternalDocumentNonStandardB', () => {
         'Application to Take Deposition of Petition',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentB = ExternalDocumentFactory({
+        category: 'Application',
+        documentType: 'Application to Take Deposition',
+        scenario: 'Nonstandard B',
+      });
+
+      expect(externalDocumentB.getDocumentTitle()).toEqual('');
+    });
   });
 });

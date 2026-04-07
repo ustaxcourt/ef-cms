@@ -1,10 +1,11 @@
 import { getConstants } from '../../getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type ClientApplicationContext } from '@web-client/applicationContext';
+import { type Get } from 'cerebral';
+import { type RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 
 const { DESCENDING } = getConstants();
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const practitionerDocumentationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -14,7 +15,7 @@ export const practitionerDocumentationHelper = (
   const tableSort = get(state.tableSort);
 
   let formattedPractitionerDocuments = practitionerDocuments.map(document => {
-    const doc = document as any;
+    const doc = document as RawPractitionerDocument;
     return {
       ...doc,
       formattedUploadDate: applicationContext

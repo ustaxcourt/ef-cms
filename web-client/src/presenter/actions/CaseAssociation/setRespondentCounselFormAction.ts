@@ -20,7 +20,7 @@ export const setRespondentCounselFormAction = ({
   const { barNumber } = props;
 
   const irsPractitioners = cloneDeep(caseDetail.irsPractitioners);
-  const irsPractitioner = irsPractitioners.find(
+  const irsPractitioner = irsPractitioners!.find(
     practitioner => practitioner.barNumber === barNumber,
   );
 

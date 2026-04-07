@@ -10,7 +10,7 @@ import { asyncSyncHandler, post } from '../requests';
  */
 export const appendAmendedPetitionFormInteractor = (
   applicationContext,
-  { docketEntryId },
+  { documentStorageId },
 ) => {
   return asyncSyncHandler(
     applicationContext,
@@ -18,7 +18,7 @@ export const appendAmendedPetitionFormInteractor = (
       await post({
         applicationContext,
         asyncSyncId,
-        endpoint: `/async/case-documents/${docketEntryId}/append-pdf`,
+        endpoint: `/async/case-documents/${documentStorageId}/append-pdf`,
       }),
   );
 };

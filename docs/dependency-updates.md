@@ -18,6 +18,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file.
+
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
    # Run these in order to avoid having to manually navigate to each package.json location
@@ -187,7 +189,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
 
 If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
-1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number.
+1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` and `./docker-compose.yml` to correspond to the new version number.
 1. Run the api locally to verify:
    ```bash
    npm run start:api
@@ -230,7 +232,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### DWT
 **Current Installed DWT: 19.3.1**
-- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.37.3**
@@ -239,6 +241,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends on vulnerable version of puppeteer-core)
+- March 20 2026: added an override for tar-fs so we stop getting a vulnerability reported for it. 
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
@@ -246,6 +249,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
+- March 20 2026: the Cerebral dependency that depended on WS, universal-websocket-client, has already updated to use a newer version of WS without this vulnerability. The only usage of WS left with this vulnerability was a version of puppeteer within cypress. Until cypress updates this dependency we added an override for WS to set it to the current version.
 
 ### quill
 **Installed Version: 1.3.7**
@@ -256,12 +260,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-**Installed Version: 24.10.13**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.13.1 so we should use a package that starts with 24.
+**Installed Version: 24.12.0**
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.0 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.0, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
-- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
-- [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
-- [Dependencies 02 16 2026](https://github.com/ustaxcourt/ef-cms/pull/9754/files), @Types/Node.js was updated from v24.10.9 to v24.10.13. Node.js version was left unchanged as the next available is Node 25+.
+- [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
 ### TypeScript
 **Installed Version: 5.9.3**
@@ -288,21 +290,27 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
 
-### minimatch
+### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
-- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number vulnerabilities counted when running npm i  
+- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number of vulnerabilities counted when running npm i  
 - minimatch is a dependency for glob which is a dependency of a handful of packages in our code base. The full list can be found by running:
 ```bash
    npm list minimatch
 ```
-- Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for thier respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
-- Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
+- Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for their respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
+- Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 
-### hashicorp/aws in .tf files
-**Installed Version: 6.32.1**
-- Updating hashicorp/aws version to 6.33.0 in .tf files caused failures during deployment to an experimental branch so it was reverted back to version 6.32.1.
-- upon updating please deploy to an experimental branch and confirm functionality.
+### eslint and @eslint/js
+**Installed Versions:**
+**eslint: 9.39.3**
+**@eslint/js: 9.39.4**
+- We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
+- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+
+### bn.js
+**Installed Versions <5.2.3**
+- There is a new vulnerability in older versions of bn.js. Currently, this package is only used by cognito-local, one of our dev dependencies. 
 
 ## Troubleshooting
 

@@ -11,7 +11,7 @@ export const uploadCorrespondenceDocumentInteractor = async (
   {
     documentFile,
     keyToOverwrite,
-  }: { documentFile: string; keyToOverwrite: string },
+  }: { documentFile: string; keyToOverwrite?: string },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {

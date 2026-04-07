@@ -31,12 +31,12 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
     trialDay:
       currentDate.day.toString().length === 1
         ? '0' + currentDate.day
-        : currentDate.day,
+        : currentDate.day.toString(),
     trialLocation,
     trialMonth:
       currentDate.month.toString().length === 1
         ? '0' + currentDate.month
-        : currentDate.month,
+        : currentDate.month.toString(),
     trialYear: currentDate.year.toString(),
   };
 

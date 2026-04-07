@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Collect Workflow Telemetry
@@ -28,6 +28,6 @@ jobs:
           comment_on_pr: false
       - name: Setup
         run: |
-          docker build --platform=linux/amd64 -t efcms -f Dockerfile .
+          docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
           docker run --platform=linux/amd64 -i --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"

@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { waitAction } from './waitAction';
 
 describe('retryUpdatePractitionerUserAction', () => {
@@ -34,14 +34,14 @@ describe('retryUpdatePractitionerUserAction', () => {
     };
   });
 
-  it('should wait a default of 3 seconds', async () => {
-    await runAction(waitAction, mockCall);
+  it('should wait a default of 3 seconds', () => {
+    runAction(waitAction, mockCall);
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(3000);
   });
 
-  it('should wait the specified amount of time', async () => {
+  it('should wait the specified amount of time', () => {
     mockCall.props.retryAfter = 5000;
-    await runAction(waitAction, mockCall);
+    runAction(waitAction, mockCall);
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(5000);
   });
 });
