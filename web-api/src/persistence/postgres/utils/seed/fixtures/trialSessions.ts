@@ -586,6 +586,29 @@ export const trialSessions: RawTrialSession[] = [
     hasNottBeenServed: false,
     paperServicePdfs: [],
   },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
+    trialLocation: 'Denver, Colorado',
+    proceedingType: 'In Person',
+    createdAt: '2019-11-02T05:00:00.000Z',
+    sessionType: 'Special',
+    termYear: '2019',
+    startTime: '21:00',
+    term: 'Fall',
+    judge: {
+      name: 'Cohen',
+      userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: '2019-12-02T05:00:00.000Z',
+    estimatedEndDate: '2099-01-02T05:00:00.000Z',
+    maxCases: 30,
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    sessionScope: 'Location-based',
+    paperServicePdfs: [],
+  },
 ];
 
 export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
@@ -1003,6 +1026,29 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     sort: 'docket',
     sortOrder: 'asc',
   },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    caseMetadata: {},
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
 ];
 
 export const trialSessionCase: TrialSessionCaseKysely[] = [
@@ -1015,7 +1061,7 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
   },
   {
     docketNumber: '101-20',
@@ -1026,7 +1072,7 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
   },
   {
     docketNumber: '103-20',
@@ -1037,6 +1083,6 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
   },
 ];

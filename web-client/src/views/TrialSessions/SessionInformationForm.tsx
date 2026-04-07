@@ -15,6 +15,7 @@ const sessionInformationDeps = {
   form: state.form,
   formatAndUpdateDateFromDatePickerSequence:
     sequences.formatAndUpdateDateFromDatePickerSequence,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   updateTrialSessionFormDataSequence:
     sequences.updateTrialSessionFormDataSequence,
   user: state.user,
@@ -33,6 +34,7 @@ export const SessionInformationForm = connect<
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    formattedTrialSessionDetails,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
