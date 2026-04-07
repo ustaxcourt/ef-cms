@@ -1,6 +1,5 @@
 import {
   DOCKET_RECORD_PAGE_SIZE,
-  DOCKET_RECORD_PAGINATION_THRESHOLD,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
@@ -37,9 +36,7 @@ export const PublicDocketRecord = connect(
         DOCKET_RECORD_PAGE_SIZE,
       );
 
-    const hasLargeDocketEntryCount =
-      publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.length >
-      DOCKET_RECORD_PAGINATION_THRESHOLD;
+    const { hasLargeDocketEntryCount } = publicCaseDetailHelper;
 
     return (
       <>
