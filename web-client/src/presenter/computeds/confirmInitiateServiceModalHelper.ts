@@ -9,6 +9,8 @@ import {
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { User } from '@shared/business/entities/User';
+import { ComputedFormattedCaseDetail } from './formattedCaseDetail';
+import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -30,12 +32,10 @@ export const confirmInitiateServiceModalHelper = (
   const form = get(state.form);
   let docketEntry = form;
 
-  const currentDocketEntry = formattedCaseDetail.docketEntries.find(
-    doc => doc.docketEntryId === docketEntryId,
-  );
-
   if (!docketEntry.eventCode) {
-    docketEntry = currentDocketEntry;
+    docketEntry = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
   }
 
   const checkedCases = (
@@ -45,7 +45,7 @@ export const confirmInitiateServiceModalHelper = (
     .map(c => c.docketNumber);
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
-  let casesToIterateOver: any[] = [];
+  let casesToIterateOver: (ComputedFormattedCaseDetail | FormattedCase)[] = [];
 
   const isLead = isLeadCase(formattedCaseDetail);
   const allowMultiDocketing = shouldAllowMultiDocketing({
