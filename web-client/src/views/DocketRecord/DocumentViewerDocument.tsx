@@ -233,12 +233,9 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     navigateToStatusReportOrderSequence({
                       path: documentViewerLinksHelper.statusReportOrderFromCaseDetailsLink,
-                      statusReportFilingDate: String(
-                        viewerDocumentToDisplay.filingDate || '',
-                      ),
-                      statusReportIndex: Number(
-                        viewerDocumentToDisplay.index ?? 0,
-                      ),
+                      statusReportFilingDate:
+                        viewerDocumentToDisplay.filingDate,
+                      statusReportIndex: viewerDocumentToDisplay.index,
                     });
                   }}
                 >
