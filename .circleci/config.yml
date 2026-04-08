@@ -236,7 +236,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - setup_remote_docker:
-          version: docker24
+          version: docker24 # DO NOT UPDATE
       - run:
           name: Setup Env
           command: |
