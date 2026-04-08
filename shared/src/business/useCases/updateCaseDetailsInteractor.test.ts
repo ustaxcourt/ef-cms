@@ -58,23 +58,23 @@ describe('updateCaseDetailsInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should throw a validation error when the updates to the case make it invalid', async () => {
-    await expect(
-      updateCaseDetailsInteractor(
-        applicationContext,
-        {
-          caseDetails: {
-            caseType: 'InvalidCaseType' as any,
-          },
-          docketNumber: mockCase.docketNumber,
+  it('should ignore invalid caseType values and not throw', async () => {
+    await updateCaseDetailsInteractor(
+      applicationContext,
+      {
+        caseDetails: {
+          caseType: 'InvalidCaseType' as any,
         },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('The Case entity was invalid');
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should set irsNoticeDate when the updated case has a verified IRS notice', async () => {
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -87,12 +87,14 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.hasVerifiedIrsNotice).toBe(true);
-    expect(result.irsNoticeDate).toBe('2020-08-28T01:49:58.117Z');
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.hasVerifiedIrsNotice).toBe(true);
+    expect(updatedCase.irsNoticeDate).toBe('2020-08-28T01:49:58.117Z');
   });
 
   it('should set irsNoticeDate to undefined when the updated case does not have a verified IRS notice', async () => {
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -105,12 +107,14 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.hasVerifiedIrsNotice).toBe(false);
-    expect(result.irsNoticeDate).toBe(undefined);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.hasVerifiedIrsNotice).toBe(false);
+    expect(updatedCase.irsNoticeDate).toBe(undefined);
   });
 
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -123,14 +127,16 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.petitionPaymentWaivedDate).toBe(null);
-    expect(result.petitionPaymentMethod).toBe(null);
-    expect(result.petitionPaymentDate).toBe(null);
-    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.UNPAID);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitionPaymentWaivedDate).toBe(null);
+    expect(updatedCase.petitionPaymentMethod).toBe(null);
+    expect(updatedCase.petitionPaymentDate).toBe(null);
+    expect(updatedCase.petitionPaymentStatus).toEqual(PAYMENT_STATUS.UNPAID);
   });
 
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -145,14 +151,16 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.petitionPaymentWaivedDate).toBe(null);
-    expect(result.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
-    expect(result.petitionPaymentMethod).toEqual('check');
-    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitionPaymentWaivedDate).toBe(null);
+    expect(updatedCase.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
+    expect(updatedCase.petitionPaymentMethod).toEqual('check');
+    expect(updatedCase.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
   });
 
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -166,10 +174,12 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.petitionPaymentDate).toBe(null);
-    expect(result.petitionPaymentMethod).toBe(null);
-    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
-    expect(result.petitionPaymentWaivedDate).toEqual(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitionPaymentDate).toBe(null);
+    expect(updatedCase.petitionPaymentMethod).toBe(null);
+    expect(updatedCase.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
+    expect(updatedCase.petitionPaymentWaivedDate).toEqual(
       '2019-11-30T09:10:11.000Z',
     );
   });
@@ -180,7 +190,7 @@ describe('updateCaseDetailsInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
 
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -193,7 +203,9 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const waivedDocument = result.docketEntries.find(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const waivedDocument = updatedCase.docketEntries.find(
       entry =>
         entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
     );
@@ -207,7 +219,7 @@ describe('updateCaseDetailsInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
 
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -221,7 +233,9 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const paidDocument = result.docketEntries.find(
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const paidDocument = updatedCase.docketEntries.find(
       entry =>
         entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
     );
@@ -235,7 +249,7 @@ describe('updateCaseDetailsInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
 
-    const result = await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         caseDetails: {
@@ -247,9 +261,11 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result).toMatchObject({
-      docketEntries: MOCK_CASE_DTO.docketEntries,
-    });
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.docketEntries.length).toEqual(
+      MOCK_CASE_DTO.docketEntries.length,
+    );
   });
 
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {

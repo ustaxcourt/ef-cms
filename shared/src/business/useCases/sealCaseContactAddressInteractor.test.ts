@@ -80,7 +80,7 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should call updateCase with `isSealedAddress` on contactPrimary and return the updated case', async () => {
-    const result = await sealCaseContactAddressInteractor(
+    await sealCaseContactAddressInteractor(
       applicationContext,
       {
         contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
@@ -90,13 +90,15 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.petitioners[0].isAddressSealed).toBe(true);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[0].isAddressSealed).toBe(true);
   });
 
   it('should call updateCase with `isSealedAddress` on contactSecondary and return the updated case', async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
-    const result = await sealCaseContactAddressInteractor(
+    await sealCaseContactAddressInteractor(
       applicationContext,
       {
         contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
@@ -106,13 +108,15 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.petitioners[5].isAddressSealed).toBe(true);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updatedCase.petitioners[5].isAddressSealed).toBe(true);
   });
 
   it('should call updateCase with `isSealedAddress` on otherFilers[1] and return the updated case', async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
-    const result = await sealCaseContactAddressInteractor(
+    await sealCaseContactAddressInteractor(
       applicationContext,
       {
         contactId: '4446050f-a423-47bb-943b-a5661fe08a6b', // otherFilers[1]
@@ -122,7 +126,9 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(getOtherFilers(result)[1].isAddressSealed).toBe(true);
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(getOtherFilers(updatedCase)[1].isAddressSealed).toBe(true);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

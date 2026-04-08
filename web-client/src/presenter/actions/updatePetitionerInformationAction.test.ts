@@ -37,7 +37,6 @@ describe('updatePetitionerInformationAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-20' },
       docketNumber: '123-20',
     });
   });

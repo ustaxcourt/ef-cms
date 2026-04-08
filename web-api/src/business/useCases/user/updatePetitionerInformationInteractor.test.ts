@@ -169,7 +169,7 @@ describe('updatePetitionerInformationInteractor', () => {
         },
         mockPrivatePractitionerUser,
       ),
-    ).resolves.toBeDefined();
+    ).resolves.not.toThrow();
   });
 
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
@@ -272,8 +272,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).toBeUndefined();
   });
 
-  it('should update petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
-    const result = await updatePetitionerInformationInteractor(
+  it('should update petitioner contact when secondary contact info changes and serves the generated notice', async () => {
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -287,11 +287,11 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toEqual(mockUrl);
+    expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
-  it('should not serve a document or return a paperServicePdfUrl when only the serviceIndicator for the petitioner changes but not the address', async () => {
-    const result = await updatePetitionerInformationInteractor(
+  it('should not serve a document when only the serviceIndicator for the petitioner changes but not the address', async () => {
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -310,7 +310,6 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toBeUndefined();
   });
 
   it('should not update petitioner email even when it is provided', async () => {
@@ -332,8 +331,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
-  it("should not update the user's paper petition email and e-service consent information", async () => {
-    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+  it('should allow updating contactEmailAddress (Contact email address) but preserve e-service consent information', async () => {
+    mockPetitioners[0].contactEmailAddress = 'contactEmailAddress@example.com';
     mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
@@ -342,6 +341,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
         },
       },
       mockDocketClerkUser,
@@ -351,8 +351,24 @@ describe('updatePetitionerInformationInteractor', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
       hasConsentedToElectronicService: true,
-      paperPetitionEmail: 'paperPetitionEmail@example.com',
+      contactEmailAddress: 'newContactEmail@example.com',
     });
+  });
+
+  it('should not generate a notice of change when only contactEmailAddress (Contact email address) is updated', async () => {
+    await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should update petitioner additionalName when it is passed in', async () => {

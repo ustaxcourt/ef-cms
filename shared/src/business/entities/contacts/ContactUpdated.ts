@@ -22,7 +22,7 @@ export class ContactUpdated extends JoiValidationEntity {
   public country?: string;
   public countryType: CountryTypes;
   public email: string;
-  public paperPetitionEmail?: string;
+  public contactEmailAddress?: string;
   public inCareOf?: string;
   public name: string;
   public phone: string;
@@ -52,7 +52,7 @@ export class ContactUpdated extends JoiValidationEntity {
     this.country = rawContact.country;
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
-    this.paperPetitionEmail = rawContact.paperPetitionEmail;
+    this.contactEmailAddress = rawContact.contactEmailAddress;
     this.inCareOf = rawContact.inCareOf;
     this.name = rawContact.name;
     this.phone = formatPhoneNumber(rawContact.phone);
@@ -83,7 +83,7 @@ export class ContactUpdated extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().messages({
+    contactEmailAddress: JoiValidationConstants.EMAIL.optional().messages({
       'string.email': 'Enter email address in format: yourname@example.com',
     }),
     phone: JoiValidationConstants.STRING.max(100)

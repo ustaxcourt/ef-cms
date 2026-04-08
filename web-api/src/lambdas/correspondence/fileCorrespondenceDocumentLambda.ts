@@ -13,7 +13,7 @@ export const fileCorrespondenceDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async () => {
-    return await fileCorrespondenceDocumentInteractor(
+    await fileCorrespondenceDocumentInteractor(
       {
         ...JSON.parse(event.body),
       },

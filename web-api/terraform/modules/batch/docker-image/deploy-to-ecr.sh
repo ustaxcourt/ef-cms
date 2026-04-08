@@ -17,8 +17,9 @@ echo "Region -> ${TARGET_REGION}"
 
 LATEST_TAGS=$(aws ecr describe-images \
   --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" \
-	--query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
-	--region "${TARGET_REGION}")
+  --filter tagStatus=TAGGED \
+  --query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
+  --region "${TARGET_REGION}")
 
 LATEST_VERSION=$(echo "$LATEST_TAGS" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1)
 

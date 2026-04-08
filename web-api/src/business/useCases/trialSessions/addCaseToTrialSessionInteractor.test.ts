@@ -103,14 +103,14 @@ describe('addCaseToTrialSessionInteractor', () => {
     ).rejects.toThrow('The case is already part of this trial session.');
   });
 
-  it('should return the expected case with new trial session information', async () => {
+  it('should add the case to the trial session with the expected trial session information', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };
 
-    const latestCase = await addCaseToTrialSessionInteractor(
+    await addCaseToTrialSessionInteractor(
       applicationContext,
       {
         calendarNotes: 'testing',
@@ -120,14 +120,18 @@ describe('addCaseToTrialSessionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(latestCase).toMatchObject({
-      associatedJudge: CHIEF_JUDGE,
-      status: CASE_STATUS_TYPES.calendared,
-      trialDate: '2025-12-01T00:00:00.000Z',
-      trialLocation: 'Birmingham, Alabama',
-      trialSessionId: mockTrialSession.trialSessionId,
-      trialTime: '10:00',
-    });
+    expect(updateCaseAndAssociationsMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          associatedJudge: CHIEF_JUDGE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2025-12-01T00:00:00.000Z',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: mockTrialSession.trialSessionId,
+          trialTime: '10:00',
+        }),
+      }),
+    );
   });
 
   it('should add calendarNotes for the case to the trial session', async () => {

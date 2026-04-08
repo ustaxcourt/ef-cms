@@ -12,13 +12,21 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
         'http://example.com/mock-pdf-url',
       );
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
-      docketEntries: [
-        {
-          docketEntryId: '123',
-          documentType: 'Proposed Stipulated Decision',
-        },
-      ],
+      docketEntries: [],
     });
+    applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor.mockReturnValue({
+        docketEntries: [
+          {
+            docketEntryId: '123',
+            documentType: 'Proposed Stipulated Decision',
+          },
+        ],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      });
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       revokeObjectURL: () => {},
