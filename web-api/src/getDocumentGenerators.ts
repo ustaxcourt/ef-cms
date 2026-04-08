@@ -2,6 +2,7 @@ import { addressLabelCoverSheet } from '../../shared/src/business/utilities/docu
 import { caseInventoryReport } from '../../shared/src/business/utilities/documentGenerators/caseInventoryReport';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import { certificateOfService } from '@shared/business/utilities/documentGenerators/certificateOfService';
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
 import { entryOfAppearance } from '@shared/business/utilities/documentGenerators/entryOfAppearance';
 import { minuteSheet } from '@shared/business/utilities/documentGenerators/minuteSheet';
@@ -25,10 +26,12 @@ import { standingPretrialOrderForSmallCase } from '../../shared/src/business/uti
 import { thirtyDayNoticeOfTrial } from '../../shared/src/business/utilities/documentGenerators/thirtyDayNoticeOfTrial';
 import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
 import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
+import { noticeOfWithdrawal } from '@shared/business/utilities/documentGenerators/noticeOfWithdrawal';
 
 export const getDocumentGenerators = () => ({
   addressLabelCoverSheet,
   caseInventoryReport,
+  certificateOfService,
   changeOfAddress,
   coverSheet,
   docketRecord,
@@ -43,6 +46,7 @@ export const getDocumentGenerators = () => ({
   noticeOfReceiptOfPetition,
   noticeOfTrialIssued,
   noticeOfTrialIssuedInPerson,
+  noticeOfWithdrawal,
   order,
   pendingReport,
   petition,

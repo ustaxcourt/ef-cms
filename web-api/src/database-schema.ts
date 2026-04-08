@@ -106,6 +106,10 @@ import {
   BarNumberTable,
   DW_BAR_NUMBER_COLUMNS,
 } from '@web-api/persistence/postgres/users/barNumber/schema';
+import {
+  DW_USER_CONTACT_COLUMNS,
+  UserContactTable,
+} from '@web-api/persistence/postgres/userContacts/schema';
 
 const DEFAULT = {};
 
@@ -134,6 +138,7 @@ interface DatabaseSchemaType {
   dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
+  dwUserContact: DatabaseTableMetadata<UserContactTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -258,6 +263,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,
     columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
+  },
+  dwUserContact: {
+    table: DEFAULT as UserContactTable,
+    columns: DW_USER_CONTACT_COLUMNS,
   },
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,

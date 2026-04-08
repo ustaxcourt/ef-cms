@@ -135,6 +135,7 @@ export const EditPetitionerInformationInternal = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="additional-name-input"
                 id="additionalName"
                 name="contact.additionalName"
                 type="text"
@@ -214,7 +215,11 @@ export const EditPetitionerInformationInternal = connect(
                       });
                     }}
                   />
-                  <label className="usa-checkbox__label" htmlFor="seal-address" data-testid="seal-address-label">
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="seal-address"
+                    data-testid="seal-address-label"
+                  >
                     Seal contact information
                   </label>
                 </div>
