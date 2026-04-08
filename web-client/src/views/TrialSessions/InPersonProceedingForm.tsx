@@ -4,17 +4,27 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const InPersonProceedingForm = connect(
-  {
-    form: state.form,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+type InPersonProceedingFormProps = { addingTrialSession: boolean };
+
+const inPersonProceedingFormDeps = {
+  form: state.form,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  usStates: state.constants.US_STATES,
+  usStatesOther: state.constants.US_STATES_OTHER,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const InPersonProceedingForm = connect<
+  InPersonProceedingFormProps,
+  typeof inPersonProceedingFormDeps
+>(
+  inPersonProceedingFormDeps,
   ({
+    addingTrialSession,
+    formattedTrialSessionDetails,
     form,
     updateTrialSessionFormDataSequence,
     usStates,

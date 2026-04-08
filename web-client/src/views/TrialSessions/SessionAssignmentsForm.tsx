@@ -5,21 +5,31 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const SessionAssignmentsForm = connect(
-  {
-    TRIAL_SESSION_PROCEEDING_TYPES:
-      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
-    form: state.form,
-    getAllIrsPractitionersForSelectHelper:
-      state.getAllIrsPractitionersForSelectHelper,
-    judges: state.judges,
-    sessionAssignmentHelper: state.sessionAssignmentHelper,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-  },
+type SessionAssignmentsFormProps = { addingTrialSession: boolean };
+
+const sessionAssignmentsFormDeps = {
+  TRIAL_SESSION_PROCEEDING_TYPES:
+    state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
+  form: state.form,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+  getAllIrsPractitionersForSelectHelper:
+    state.getAllIrsPractitionersForSelectHelper,
+  judges: state.judges,
+  sessionAssignmentHelper: state.sessionAssignmentHelper,
+  updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+};
+
+export const SessionAssignmentsForm = connect<
+  SessionAssignmentsFormProps,
+  typeof sessionAssignmentsFormDeps
+>(
+  sessionAssignmentsFormDeps,
   function SessionAssignmentsForm({
+    addingTrialSession,
     form,
+    formattedTrialSessionDetails,
     getAllIrsPractitionersForSelectHelper,
     judges,
     sessionAssignmentHelper,
@@ -39,6 +49,10 @@ export const SessionAssignmentsForm = connect(
               aria-describedby="judge-label"
               className="usa-select"
               data-testid="trial-session-judge"
+              disabled={
+                !addingTrialSession &&
+                formattedTrialSessionDetails.canEditOngoingSession
+              }
               id="judgeId"
               name="judgeId"
               value={form.judgeId || ''}

@@ -67,8 +67,8 @@ export const EditTrialSession = connect(
             </p>
 
             <SessionInformationForm addingTrialSession={false} />
-            <LocationInformationForm />
-            <SessionAssignmentsForm />
+            <LocationInformationForm addingTrialSession={false} />
+            <SessionAssignmentsForm addingTrialSession={false} />
 
             <h2 className="margin-top-4">Session Notes</h2>
             <div className="blue-container margin-bottom-2">
