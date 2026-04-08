@@ -24,8 +24,8 @@ export const InPersonProceedingForm = connect<
   inPersonProceedingFormDeps,
   ({
     addingTrialSession,
-    formattedTrialSessionDetails,
     form,
+    formattedTrialSessionDetails,
     updateTrialSessionFormDataSequence,
     usStates,
     usStatesOther,
@@ -42,6 +42,10 @@ export const InPersonProceedingForm = connect<
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-courthouse-name"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.canEditOngoingSession
+            }
             id="courthouse-name"
             name="courthouseName"
             type="text"
@@ -63,6 +67,10 @@ export const InPersonProceedingForm = connect<
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-address-1-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.canEditOngoingSession
+            }
             id="address1"
             name="address1"
             type="text"
@@ -83,6 +91,10 @@ export const InPersonProceedingForm = connect<
           <input
             autoCapitalize="none"
             className="usa-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.canEditOngoingSession
+            }
             id="address2"
             name="address2"
             type="text"
@@ -106,6 +118,10 @@ export const InPersonProceedingForm = connect<
                 autoCapitalize="none"
                 className="usa-input usa-input--inline"
                 data-testid="trial-session-city-input"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
                 id="city"
                 name="city"
                 type="text"
@@ -125,6 +141,10 @@ export const InPersonProceedingForm = connect<
               <select
                 className="usa-select"
                 data-testid="trial-session-state-select"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
                 id="state"
                 name="state"
                 value={form.state || ''}
@@ -167,6 +187,10 @@ export const InPersonProceedingForm = connect<
             autoCapitalize="none"
             className="usa-input max-width-200 usa-input--medium"
             data-testid="trial-session-postal-code-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.canEditOngoingSession
+            }
             id="postal-code"
             name="postalCode"
             type="text"

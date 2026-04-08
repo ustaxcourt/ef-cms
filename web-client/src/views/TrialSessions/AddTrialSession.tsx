@@ -5,6 +5,7 @@ import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
+import { SessionNotesForm } from './SessionNotesForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -14,20 +15,15 @@ export const AddTrialSession = connect(
   {
     closeModalAndReturnToTrialSessionsSequence:
       sequences.closeModalAndReturnToTrialSessionsSequence,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitTrialSessionSequence: sequences.submitTrialSessionSequence,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
   },
   function AddTrialSession({
     closeModalAndReturnToTrialSessionsSequence,
-    form,
     formCancelToggleCancelSequence,
     showModal,
     submitTrialSessionSequence,
-    updateTrialSessionFormDataSequence,
   }) {
     return (
       <>
@@ -53,29 +49,7 @@ export const AddTrialSession = connect(
             <SessionInformationForm addingTrialSession={true} />
             <LocationInformationForm addingTrialSession={true} />
             <SessionAssignmentsForm addingTrialSession={true} />
-
-            <h2 className="margin-top-4">Session Notes</h2>
-            <div className="blue-container margin-bottom-2">
-              <div className="usa-form-group margin-bottom-0">
-                <label className="usa-label" htmlFor="notes">
-                  Trial session notes{' '}
-                  <span className="usa-hint">(optional)</span>
-                </label>
-                <textarea
-                  className="usa-textarea textarea-resize-vertical"
-                  id="notes"
-                  maxLength={400}
-                  name="notes"
-                  value={form.notes}
-                  onChange={e => {
-                    updateTrialSessionFormDataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
+            <SessionNotesForm addingTrialSession={true} />
 
             <div className="button-container">
               <Button

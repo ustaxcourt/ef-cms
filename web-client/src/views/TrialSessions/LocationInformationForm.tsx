@@ -59,6 +59,10 @@ export const LocationInformationForm = connect<
                           aria-describedby="proceeding-type-legend"
                           checked={form.proceedingType === value}
                           className="usa-radio__input"
+                          disabled={
+                            !addingTrialSession &&
+                            formattedTrialSessionDetails.canEditOngoingSession
+                          }
                           id={`${key}-proceeding`}
                           name="proceedingType"
                           type="radio"
