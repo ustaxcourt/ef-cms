@@ -1,4 +1,4 @@
-import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { QueryContainer } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getSealedQuery = () => {
   const sealedDocumentMustNotQuery: QueryContainer[] = [

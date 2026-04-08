@@ -2,7 +2,7 @@ import {
   baseAliases,
   getIndexNameFromAlias,
 } from '../../../../elasticsearch/elasticsearch-aliases';
-import { Search_Request } from '@opensearch-project/opensearch/api';
+import { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
 
 export const updateIndex = ({
   searchParameters,

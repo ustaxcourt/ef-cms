@@ -3,7 +3,7 @@ import { Database } from '@web-api/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
-import { InsertExpression } from 'kysely/dist/cjs/parser/insert-values-parser';
+import { InsertExpression } from 'node_modules/kysely/dist/cjs/parser/insert-values-parser';
 import { isEmpty } from 'lodash';
 
 export const pgInsertInto = async <T extends keyof Database>({

@@ -1,6 +1,7 @@
 import { Client } from '@opensearch-project/opensearch';
 import { environment } from '@web-api/environment';
 import { getClient, getHost } from './client';
+// import { getDestinationVersionInfo } from '@shared-admin-tools/util';
 import { getDestinationVersionInfo } from 'shared/admin-tools/util';
 import { setupAliases } from './elasticsearch-alias-settings.helpers';
 

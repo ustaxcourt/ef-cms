@@ -10,17 +10,19 @@
     "inlineSourceMap": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "noUncheckedSideEffectImports": false,
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
     "target": "ES2022",
     "jsx": "react",
     "strict": true,
     "rootDir": "./",
-    "baseUrl": "./",
     "paths": {
-      "@web-client/*": ["web-client/src/*"],
-      "@web-api/*": ["web-api/src/*"],
-      "@shared/*": ["shared/src/*"]
+      "*": ["./*"],
+      "@web-client/*": ["./web-client/src/*"],
+      "@web-api/*": ["./web-api/src/*"],
+      "@shared/*": ["./shared/src/*"],
+      "@shared-admin-tools/*": ["./shared/admin-tools/*"]
     }
   },
   "ts-node": {
