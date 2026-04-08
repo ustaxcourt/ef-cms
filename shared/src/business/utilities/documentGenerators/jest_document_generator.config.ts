@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
 import { loadTsConfigPaths } from '../../../../../utils/load-tsconfig-paths.mjs';
 
-const tsConfigPaths = loadTsConfigPaths();
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
