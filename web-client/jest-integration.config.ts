@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
 import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfigPaths('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   displayName: 'web-client-integration',
@@ -18,7 +18,7 @@ const config: Config = {
     '<rootDir>/integration-tests-public/**/?(*.)+(spec|test).[jt]s?(x)',
   ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^broadcast-channel$': '<rootDir>/jest.mock-broadcast-channel.ts',
