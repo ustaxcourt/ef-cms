@@ -9,8 +9,6 @@ import { getSSMItem, putSSMItem } from '../../shared/admin-tools/aws/ssmHelper';
 const SSM_KEY = 'entity-validation-fingerprints-map';
 const VALIDATION_REGEX = /validation/i;
 
-// TODO: Replace with dynamic entity discovery from shared/src/business/entities
-
 const ENTITIES_OF_CASE = [
   'Case.ts',
   'DocketEntry.ts',
@@ -21,9 +19,9 @@ const ENTITIES_OF_CASE = [
 
 const ENTITIES_TO_CHECK = [
   'Message.ts',
-  'PractitionerDocument.ts', // passing
-  'TrialSessionWorkingCopy.ts', // passing
-  'TrialSession.ts', // passing
+  'PractitionerDocument.ts',
+  'TrialSessionWorkingCopy.ts',
+  'TrialSession.ts',
   'User.ts',
   'WorkItem.ts',
   ...ENTITIES_OF_CASE,
