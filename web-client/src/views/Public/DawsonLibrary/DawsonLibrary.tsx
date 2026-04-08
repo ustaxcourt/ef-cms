@@ -16,59 +16,29 @@ export const DawsonLibrary = () => {
     <>
       <BigHeader text="Dawson Library" />
       <SingleBarGraph
-        title="Cases by Type"
+        title="Created Special Sessions by Location"
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
-        titleColor="#000"
-        datalabelColor="#fff"
-        xAxisLabel="Case Type"
-        yAxisLabel="Number of Cases"
+        showLabels={false}
         data={[
-          { label: 'Deficiency', value: 312, color: '#005EA2' },
-          { label: 'Lien/Levy', value: 178, color: '#005EA2' },
-          { label: 'Whistleblower', value: 94, color: '#005EA2' },
-          { label: 'Passport', value: 57, color: '#005EA2' },
-          { label: 'Other', value: 130, color: '#005EA2' },
+          { label: 'Atlanta, GA', value: 9, color: '#005EA2' },
+          { label: 'Des Moines, IA', value: 9, color: '#005EA2' },
+          { label: 'Indianapolis, IN', value: 9, color: '#005EA2' },
+          { label: 'Birmingham, AL', value: 7, color: '#005EA2' },
+          { label: 'Denver, CO', value: 5, color: '#005EA2' },
+          { label: 'Louisville, KY', value: 5, color: '#005EA2' },
         ]}
       />
+      <div style={{ marginTop: '48px' }} />
       <MultiBarGraph
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
-        title="Filed vs Closed Cases by Month (Stacked)"
-        xAxisLabel="Month"
-        yAxisLabel="Number of Cases"
+        title="Total Petitions by Month"
+        yAxisLabel="Total"
         stacked
-        labels={[
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ]}
-        datasets={[
-          {
-            label: 'Filed',
-            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
-          },
-          {
-            label: 'Closed',
-            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 8],
-          },
-        ]}
-      />
-      <MultiBarGraph
-        width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
-        title="Filed vs Closed Cases by Month (Grouped)"
-        xAxisLabel="Month"
-        yAxisLabel="Number of Cases"
+        showLabels={false}
+        legendTotals={[4209, 1608]}
+        xLabelRotation={45}
         labels={[
           'January',
           'February',
@@ -85,57 +55,26 @@ export const DawsonLibrary = () => {
         ]}
         datasets={[
           {
-            label: 'Filed',
-            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+            label: 'Electronic',
+            data: [1175, 810, 1175, 875, 125, 0, 0, 0, 0, 0, 0, 0],
+            color: '#005EA2',
           },
           {
-            label: 'Closed',
-            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
+            label: 'Paper',
+            data: [50, 45, 230, 125, 50, 0, 0, 0, 0, 0, 0, 0],
+            color: '#FFBE2E',
           },
         ]}
       />
-      {/* Grouped bar - normal (0°) month labels */}
+      <div style={{ marginTop: '48px' }} />
       <MultiBarGraph
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
-        title="Grouped - Labels Normal"
-        xAxisLabel="Month"
-        yAxisLabel="Number of Cases"
-        xLabelRotation={0}
-        labels={[
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ]}
-        datasets={[
-          {
-            label: 'Filed',
-            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
-          },
-          {
-            label: 'Closed',
-            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
-          },
-        ]}
-      />
-
-      {/* Grouped bar - labels rotated 90° */}
-      <MultiBarGraph
-        width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
-        title="Grouped - Labels 90°"
-        xAxisLabel="Month"
-        yAxisLabel="Number of Cases"
-        xLabelRotation={90}
+        title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
+        yAxisLabel="Total"
+        showLabels={false}
+        legendTotals={[4069, 19]}
+        xLabelRotation={45}
         labels={[
           'January',
           'February',
@@ -152,15 +91,18 @@ export const DawsonLibrary = () => {
         ]}
         datasets={[
           {
-            label: 'Filed',
-            data: [42, 55, 38, 61, 74, 58, 65, 70, 53, 48, 60, 72],
+            label: 'Closed/Closed-Dismissed',
+            data: [130, 113, 130, 113, 13, 0, 0, 0, 0, 0, 0, 0],
+            color: '#005EA2',
           },
           {
-            label: 'Closed',
-            data: [3, 4, 4, 6, 6, 5, 5, 6, 5, 4, 5, 6],
+            label: 'Changed to On Appeal',
+            data: [8, 8, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+            color: '#FFBE2E',
           },
         ]}
-      />
+      />{' '}
+      <div style={{ marginTop: '100px' }} />
       <LineGraph
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
@@ -180,6 +122,7 @@ export const DawsonLibrary = () => {
         ]}
         smooth
       />
+      <div style={{ marginTop: '100px' }} />
       <LineGraph
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
@@ -263,7 +206,6 @@ export const DawsonLibrary = () => {
         title="Session Distribution 1"
         type="session"
       />
-
       <div className="card margin-2 padding-2">
         <Buttons />
         <Alerts />

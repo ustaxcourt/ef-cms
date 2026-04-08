@@ -1,12 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
-  Chart,
-  ChartConfiguration,
-  registerables,
-  TooltipItem,
-} from 'chart.js';
-
-Chart.register(...registerables);
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  LabelList,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 
 // ─── Single-dataset bar graph ─────────────────────────────────────────────────
 
@@ -29,6 +32,8 @@ export interface SingleBarGraphProps {
   titleColor?: string;
   /** Optional color for the datalabels */
   datalabelColor?: string;
+  /** Whether to show value labels on bars (default true) */
+  showLabels?: boolean;
 }
 
 // ─── Multi-dataset bar graph (stacked or grouped) ─────────────────────────────
@@ -52,12 +57,99 @@ export interface MultiBarGraphProps {
   stacked?: boolean;
   /** Optional: force x-axis label rotation in degrees (overrides stacked/grouped defaults) */
   xLabelRotation?: number;
+  /** Optional: second line to show under each x-axis label (e.g. column totals) */
+  columnTotals?: number[];
+  /** Whether to show value labels on bars (default true) */
+  showLabels?: boolean;
+  /** Optional: totals to append to each dataset label in the legend (e.g. [4209, 1608]) */
+  legendTotals?: number[];
 }
 
 const defaultColors = [
   '#005EA2', // blue primary
   '#FFBE2E', // yellow primary
 ];
+
+// ─── Custom legend renderer ───────────────────────────────────────────────────
+
+const renderCustomLegend = (props: any) => {
+  const { payload } = props;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px',
+        justifyContent: 'flex-start',
+        padding: '8px 0 16px',
+      }}
+    >
+      {payload.map((entry: any, index: number) => (
+        <div
+          key={index}
+          style={{ alignItems: 'center', display: 'flex', gap: '8px' }}
+        >
+          <div
+            style={{
+              backgroundColor: entry.color,
+              border: '1px solid #000',
+              borderRadius: '6px',
+              flexShrink: 0,
+              height: '48px',
+              width: '48px',
+            }}
+          />
+          <span style={{ color: '#000', fontSize: '20px', fontWeight: 'bold' }}>
+            {entry.total != null
+              ? `${entry.value}: ${entry.total.toLocaleString()}`
+              : entry.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ─── SingleBarGraph custom x-axis tick (word-wrapped) ────────────────────────
+
+const SingleBarTickX = (props: any) => {
+  const { x, y, payload } = props;
+  const words = (payload.value as string).split(' ');
+  const lineHeight = 18;
+  // wrap into lines of ~10 chars each
+  const lines: string[] = [];
+  let current = '';
+  words.forEach((word: string) => {
+    if ((current + ' ' + word).trim().length > 10 && current.length > 0) {
+      lines.push(current.trim());
+      current = word;
+    } else {
+      current = (current + ' ' + word).trim();
+    }
+  });
+  if (current) lines.push(current);
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {lines.map((line, i) => (
+        <text
+          key={i}
+          x={0}
+          y={0}
+          dy={16 + i * lineHeight}
+          textAnchor="middle"
+          fill="#000"
+          fontSize={16}
+          fontWeight="bold"
+        >
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+};
+
+// ─── SingleBarGraph ───────────────────────────────────────────────────────────
 
 export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   data,
@@ -70,116 +162,272 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   yAxisLabel,
   titleColor = '#000',
   datalabelColor = '#fff',
+  showLabels = true,
 }) => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null);
+  const chartData = data.map(item => ({
+    label: item.label,
+    value: item.value,
+  }));
 
-  useEffect(() => {
-    if (!chartRef.current) return;
-
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    const ctx = chartRef.current.getContext('2d');
-    if (!ctx) return;
-
-    const colors = data.map(
-      (item, index) =>
-        item.color || defaultColors[index % defaultColors.length],
-    );
-
-    const config: ChartConfiguration<'bar'> = {
-      type: 'bar',
-      data: {
-        labels: data.map(item => item.label),
-        datasets: [
-          {
-            label: title || 'Value',
-            data: data.map(item => item.value),
-            backgroundColor: colors,
-            borderColor: colors.map(c => `${c}cc`),
-            borderWidth: 1,
-            borderRadius: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        events: ['click'],
-        plugins: {
-          title: {
-            display: !!title,
-            text: title,
-            color: titleColor,
-            font: { size: 20, weight: 'bold' },
-            padding: { top: 10, bottom: 20 },
-          },
-          legend: { display: showLegend },
-          tooltip: {
-            enabled: false,
-            callbacks: {
-              label: (context: TooltipItem<'bar'>) =>
-                ` ${context.label}: ${context.parsed.y}`,
-            },
-          },
-          datalabels: {
-            display: true,
-            anchor: 'center',
-            align: 'center',
-            color: datalabelColor,
-            font: { size: 20, weight: 'bold' },
-            formatter: (value: number) => value,
-          },
-        },
-        scales: {
-          x: {
-            grid: { display: showGrid },
-            title: {
-              display: !!xAxisLabel,
-              text: xAxisLabel,
-              font: { size: 20, weight: 'bold' },
-            },
-            ticks: { font: { size: 20 } },
-          },
-          y: {
-            grid: { display: showGrid },
-            title: {
-              display: !!yAxisLabel,
-              text: yAxisLabel,
-              font: { size: 20, weight: 'bold' },
-            },
-            ticks: { font: { size: 20 } },
-            beginAtZero: true,
-          },
-        },
-      },
-    };
-
-    chartInstanceRef.current = new Chart(ctx, config);
-
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, [data, title, showLegend, showGrid, xAxisLabel, yAxisLabel]);
+  // Extra bottom margin to accommodate multi-line wrapped x-axis labels
+  const maxLabelWords = Math.max(...data.map(d => d.label.split(' ').length));
+  const estimatedLabelLines = Math.ceil(maxLabelWords / 2);
+  const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
-    <div
-      style={{
-        height: `${height}px`,
-        position: 'relative',
-        width: `${width}px`,
-      }}
-    >
-      <canvas ref={chartRef} />
+    <div style={{ width: `${width}px`, height: `${height}px` }}>
+      {title && (
+        <div
+          style={{
+            color: titleColor,
+            fontSize: '20px',
+            fontWeight: 'bold',
+            padding: '10px 0 8px',
+            paddingLeft: '80px',
+            textAlign: 'left',
+          }}
+        >
+          {title}
+        </div>
+      )}
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={chartData}
+          margin={{ top: 10, right: 30, left: 20, bottom: bottomMargin }}
+        >
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          <XAxis
+            dataKey="label"
+            tick={<SingleBarTickX />}
+            interval={0}
+            label={
+              xAxisLabel
+                ? {
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: -(bottomMargin - 10),
+                    position: 'insideBottom',
+                    value: xAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          <YAxis
+            tick={{ fontSize: 20, fill: '#000', fontWeight: 'bold' }}
+            axisLine={false}
+            tickLine={false}
+            label={
+              yAxisLabel
+                ? {
+                    angle: -90,
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: 10,
+                    position: 'insideLeft',
+                    value: yAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          {showLegend && <Legend content={renderCustomLegend} />}
+          <Bar dataKey="value" isAnimationActive={false} stroke="none">
+            {data.map((item, index) => (
+              <Cell
+                key={index}
+                fill={item.color || defaultColors[index % defaultColors.length]}
+              />
+            ))}
+            {showLabels && (
+              <LabelList
+                dataKey="value"
+                content={(labelProps: any) => {
+                  const {
+                    x,
+                    y,
+                    width: bw,
+                    height: bh,
+                    value: val,
+                  } = labelProps;
+                  if (val == null) return null;
+                  const cx = x + bw / 2;
+                  // If bar is too short to fit label inside, place above in black
+                  const labelFitsInside = bh > 36;
+                  if (labelFitsInside) {
+                    return (
+                      <text
+                        x={cx}
+                        y={y + 28}
+                        textAnchor="middle"
+                        fill={datalabelColor}
+                        fontSize={20}
+                        fontWeight="bold"
+                      >
+                        {val}
+                      </text>
+                    );
+                  } else {
+                    return (
+                      <text
+                        x={cx}
+                        y={y - 6}
+                        textAnchor="middle"
+                        fill="#000000"
+                        fontSize={20}
+                        fontWeight="bold"
+                      >
+                        {val}
+                      </text>
+                    );
+                  }
+                }}
+              />
+            )}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };
 
-// ─── MultiBarGraph (stacked or grouped) ──────────────────────────────────────
+// ─── MultiBarGraph custom label ───────────────────────────────────────────────
+
+/**
+ * Renders a datalabel inside or outside a bar segment depending on its share
+ * of the column total. Mirrors the original Chart.js datalabels logic exactly.
+ */
+const MultiBarLabel = (props: any) => {
+  const {
+    x,
+    y,
+    width: barWidth,
+    height: barHeight,
+    value,
+    datasetLabel,
+    colTotal,
+    stacked,
+  } = props;
+
+  if (value == null || colTotal == null || colTotal === 0) return null;
+
+  const threshold = stacked ? 0.15 : 0.1;
+  const ratio = value / colTotal;
+  const isSmall = ratio < threshold;
+
+  const textColor = isSmall ? '#000000' : '#ffffff';
+  const fontSize = 20;
+  const fontWeight = 'bold';
+
+  if (stacked) {
+    if (isSmall) {
+      // Label above the bar segment
+      const cx = x + barWidth / 2;
+      const cy = y - 8;
+      return (
+        <text
+          dominantBaseline="auto"
+          fill={textColor}
+          fontSize={fontSize}
+          fontWeight={fontWeight}
+          textAnchor="middle"
+          x={cx}
+          y={cy}
+        >
+          {value}
+        </text>
+      );
+    } else {
+      // Label centered inside the bar: value only
+      const cx = x + barWidth / 2;
+      const cy = y + barHeight / 2;
+      return (
+        <text
+          dominantBaseline="middle"
+          fill={textColor}
+          fontSize={fontSize}
+          fontWeight={fontWeight}
+          textAnchor="middle"
+          x={cx}
+          y={cy}
+        >
+          {value}
+        </text>
+      );
+    }
+  } else {
+    // Grouped: always vertical (-90°), label centered inside bar
+    const cx = x + barWidth / 2;
+    const cy = y + barHeight / 2;
+    const labelText = `${value} ${datasetLabel}`;
+    return (
+      <text
+        dominantBaseline="middle"
+        fill={textColor}
+        fontSize={fontSize}
+        fontWeight={fontWeight}
+        textAnchor="middle"
+        transform={`rotate(-90, ${cx}, ${cy})`}
+        x={cx}
+        y={cy}
+      >
+        {labelText}
+      </text>
+    );
+  }
+};
+
+// ─── MultiBarGraph ────────────────────────────────────────────────────────────
+
+// ─── MultiBarGraph rotated x-axis tick ───────────────────────────────────────
+
+const RotatedTickX = (props: any) => {
+  const { x, y, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={6}
+        textAnchor="end"
+        fill="#000"
+        fontSize={20}
+        fontWeight="bold"
+        transform="rotate(-45)"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
+// ─── MultiBarGraph two-line x-axis tick ──────────────────────────────────────
+
+const MultiBarTickX = (props: any) => {
+  const { x, y, payload, columnTotals } = props;
+  const { index } = payload;
+  const total = columnTotals?.[index];
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="middle"
+        fill="#000"
+        fontSize={18}
+        fontWeight="bold"
+      >
+        {payload.value}
+      </text>
+      {total != null && (
+        <text x={0} y={0} dy={36} textAnchor="middle" fill="#000" fontSize={16}>
+          {total}
+        </text>
+      )}
+    </g>
+  );
+};
 
 export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   datasets,
@@ -193,235 +441,178 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   yAxisLabel,
   stacked = false,
   xLabelRotation,
+  columnTotals,
+  showLabels = true,
+  legendTotals,
 }) => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null);
+  // Build recharts row-oriented data: [{ name: 'Jan', Filed: 42, Closed: 3 }, ...]
+  const chartData = labels.map((label, i) => {
+    const row: Record<string, any> = { name: label };
+    datasets.forEach(ds => {
+      row[ds.label] = ds.data[i] ?? 0;
+    });
+    return row;
+  });
 
-  useEffect(() => {
-    if (!chartRef.current) return;
+  // Pre-compute column totals for label positioning
+  const colTotals = labels.map((_, i) =>
+    datasets.reduce((sum, ds) => sum + ((ds.data[i] as number) || 0), 0),
+  );
 
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
+  // Y-axis max with 10% breathing room
+  let maxValue = 0;
+  labels.forEach((_, i) => {
+    const total = stacked
+      ? colTotals[i]
+      : Math.max(...datasets.map(ds => (ds.data[i] as number) || 0));
+    if (total > maxValue) maxValue = total;
+  });
+  const yMax = Math.ceil(maxValue * 1.1);
 
-    const ctx = chartRef.current.getContext('2d');
-    if (!ctx) return;
+  // X-axis tick rotation
+  let xAngle: number;
+  if (typeof xLabelRotation === 'number') {
+    xAngle = xLabelRotation;
+  } else {
+    xAngle = stacked ? 0 : 45;
+  }
 
-    // Calculate the max value across all labels to give y-axis breathing room.
-    // For stacked charts sum all datasets per label; for grouped use the single max.
-    const labelCount = labels.length;
-    let maxValue = 0;
-    for (let i = 0; i < labelCount; i++) {
-      const total = stacked
-        ? datasets.reduce((sum, ds) => sum + ((ds.data[i] as number) || 0), 0)
-        : Math.max(...datasets.map(ds => (ds.data[i] as number) || 0));
-      if (total > maxValue) maxValue = total;
-    }
-    const yMax = Math.ceil(maxValue * 1.1);
+  const hasTwoLineTicks = stacked && columnTotals && columnTotals.length > 0;
+  // Give rotated 45° labels enough vertical room (longest month name ~110px at 45°)
+  const xAxisHeight = hasTwoLineTicks ? 80 : xAngle !== 0 ? 120 : undefined;
+  const bottomMargin = xAxisLabel
+    ? 60
+    : xAngle !== 0
+      ? 20
+      : hasTwoLineTicks
+        ? 30
+        : 20;
 
-    const config: ChartConfiguration<'bar'> = {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: datasets.map((dataset, index) => {
-          const color =
-            dataset.color || defaultColors[index % defaultColors.length];
-          return {
-            label: dataset.label,
-            data: dataset.data,
-            backgroundColor: color,
-            borderColor: stacked ? color : '#000',
-            borderWidth: stacked ? 1 : 1,
-            borderRadius: 0,
-            stack: stacked ? 'stack' : undefined,
-          };
-        }),
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        events: ['click'],
-        plugins: {
-          title: {
-            display: !!title,
-            text: title,
-            color: '#000',
-            font: { size: 20, weight: 'bold' },
-            padding: { top: 10, bottom: 20 },
-          },
-          legend: {
-            display: showLegend,
-            position: 'top',
-            onClick: () => {},
-            labels: {
-              padding: 15,
-              font: { size: 20, weight: 'bold' },
-              usePointStyle: false,
-              boxWidth: 48,
-              boxHeight: 48,
-              borderRadius: 6,
-              color: '#000',
-              generateLabels: chart => {
-                const ds = chart.data.datasets as any[];
-                return (
-                  ds?.map((dataset, i) => {
-                    const fill =
-                      dataset?.backgroundColor ||
-                      defaultColors[i % defaultColors.length];
-                    return {
-                      text: dataset?.label || `Dataset ${i + 1}`,
-                      fillStyle: fill,
-                      strokeStyle: '#000',
-                      lineWidth: 1,
-                      borderRadius: 6,
-                      datasetIndex: i,
-                    };
-                  }) || []
-                );
-              },
-            } as any,
-          },
-          tooltip: {
-            enabled: false,
-            callbacks: {
-              label: (context: TooltipItem<'bar'>) =>
-                ` ${context.dataset.label}: ${context.parsed.y}`,
-            },
-          },
-          datalabels: {
-            display: true,
-            anchor: (context: any) => {
-              const value = context.dataset.data[context.dataIndex] as number;
-              const labelIndex = context.dataIndex;
-              const colTotal = datasets.reduce(
-                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
-                0,
-              );
-              return value / colTotal < 0.1 ? 'end' : 'center';
-            },
-            align: (context: any) => {
-              const value = context.dataset.data[context.dataIndex] as number;
-              const labelIndex = context.dataIndex;
-              const colTotal = datasets.reduce(
-                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
-                0,
-              );
-              return value / colTotal < 0.1 ? 'end' : 'center';
-            },
-            color: (context: any) => {
-              const value = context.dataset.data[context.dataIndex] as number;
-              const labelIndex = context.dataIndex;
-              const colTotal = datasets.reduce(
-                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
-                0,
-              );
-              const isSmallBar = value / colTotal < 0.1;
-              if (!stacked) return isSmallBar ? '#000000' : '#ffffff';
-              return value / colTotal < 0.15 ? '#000000' : '#ffffff';
-            },
-            rotation: stacked ? 0 : -90,
-            font: { size: 20, weight: 'bold' },
-            textAlign: 'center',
-            clamp: true,
-            formatter: (value: number, context: any) => {
-              const datasetLabel = datasets[context.datasetIndex]?.label ?? '';
-              const labelIndex = context.dataIndex;
-              const colTotal = datasets.reduce(
-                (sum, ds) => sum + ((ds.data[labelIndex] as number) || 0),
-                0,
-              );
-              const isSmall = value / colTotal < 0.1;
-
-              // For stacked charts: show dataset label only when bar is not small
-              if (stacked) {
-                if (!isSmall) return `${value}\n${datasetLabel}`;
-                return `${value}`;
-              }
-
-              // For grouped charts: if the label is outside and it's the 'Closed' (yellow) bar,
-              // include the dataset label so the text clarifies what the value refers to.
-              return `${value} ${datasetLabel}`;
-            },
-          },
-        },
-        scales: {
-          x: {
-            stacked,
-            grid: { display: showGrid },
-            title: {
-              display: !!xAxisLabel,
-              text: xAxisLabel,
-              color: '#000',
-              font: { size: 20, weight: 'bold' },
-            },
-            ticks: (() => {
-              let rotationVal: number;
-              if (typeof xLabelRotation === 'number') {
-                rotationVal = xLabelRotation;
-              } else {
-                rotationVal = stacked ? 0 : 45;
-              }
-
-              let autoSkipVal: boolean;
-              if (typeof xLabelRotation === 'number') {
-                autoSkipVal = false;
-              } else {
-                autoSkipVal = stacked;
-              }
-
-              return {
-                color: '#000',
-                font: { size: 20 },
-                autoSkip: autoSkipVal,
-                minRotation: rotationVal,
-                maxRotation: rotationVal,
-              };
-            })(),
-          },
-          y: {
-            stacked,
-            max: yMax,
-            grid: { display: showGrid },
-            title: {
-              display: !!yAxisLabel,
-              text: yAxisLabel,
-              color: '#000',
-              font: { size: 20, weight: 'bold' },
-            },
-            ticks: { color: '#000', font: { size: 20 } },
-            beginAtZero: true,
-          },
-        },
-      },
-    };
-
-    chartInstanceRef.current = new Chart(ctx, config);
-
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, [
-    datasets,
-    labels,
-    title,
-    showLegend,
-    showGrid,
-    xAxisLabel,
-    yAxisLabel,
-    stacked,
-  ]);
+  // Legend payload for custom renderer
+  const legendPayload = datasets.map((ds, i) => ({
+    color: ds.color || defaultColors[i % defaultColors.length],
+    value: ds.label,
+    total: legendTotals?.[i],
+  }));
 
   return (
-    <div
-      style={{
-        height: `${height}px`,
-        position: 'relative',
-        width: `${width}px`,
-      }}
-    >
-      <canvas ref={chartRef} />
+    <div style={{ width: `${width}px`, height: `${height}px` }}>
+      {title && (
+        <div
+          style={{
+            color: '#000',
+            fontSize: '20px',
+            fontWeight: 'bold',
+            padding: '10px 0 8px',
+            paddingLeft: '80px',
+            textAlign: 'left',
+          }}
+        >
+          {title}
+        </div>
+      )}
+      {showLegend && (
+        <div style={{ paddingLeft: '80px' }}>
+          {renderCustomLegend({ payload: legendPayload })}
+        </div>
+      )}
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={chartData}
+          margin={{ bottom: bottomMargin, left: 20, right: 30, top: 10 }}
+        >
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          <XAxis
+            dataKey="name"
+            interval={0}
+            tickLine={false}
+            tick={
+              hasTwoLineTicks
+                ? (tickProps: any) => (
+                    <MultiBarTickX {...tickProps} columnTotals={columnTotals} />
+                  )
+                : xAngle !== 0
+                  ? (tickProps: any) => <RotatedTickX {...tickProps} />
+                  : { fill: '#000', fontSize: 20 }
+            }
+            height={xAxisHeight}
+            label={
+              xAxisLabel
+                ? {
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: -10,
+                    position: 'insideBottom',
+                    value: xAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          <YAxis
+            domain={[0, yMax]}
+            tick={{ fill: '#000', fontSize: 20, fontWeight: 'bold' }}
+            label={
+              yAxisLabel
+                ? {
+                    angle: -90,
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: 10,
+                    position: 'insideLeft',
+                    value: yAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          {datasets.map((ds, dsIndex) => {
+            const color =
+              ds.color || defaultColors[dsIndex % defaultColors.length];
+            return (
+              <Bar
+                key={ds.label}
+                dataKey={ds.label}
+                fill={color}
+                isAnimationActive={false}
+                stackId={stacked ? 'stack' : undefined}
+                stroke="#000"
+                strokeWidth={1}
+              >
+                {showLabels && (
+                  <LabelList
+                    dataKey={ds.label}
+                    content={(labelProps: any) => {
+                      const {
+                        x,
+                        y,
+                        width: bw,
+                        height: bh,
+                        value: val,
+                        index,
+                      } = labelProps;
+                      return (
+                        <MultiBarLabel
+                          key={`label-${dsIndex}-${index}`}
+                          colTotal={colTotals[index]}
+                          datasetLabel={ds.label}
+                          fill={color}
+                          height={bh}
+                          stacked={stacked}
+                          value={val}
+                          width={bw}
+                          x={x}
+                          y={y}
+                        />
+                      );
+                    }}
+                  />
+                )}
+              </Bar>
+            );
+          })}
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

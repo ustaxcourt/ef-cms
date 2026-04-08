@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
-  Chart,
-  ChartConfiguration,
-  registerables,
-  TooltipItem,
-} from 'chart.js';
-
-Chart.register(...registerables);
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Dot,
+} from 'recharts';
 
 export interface LineGraphDataset {
   label: string;
@@ -35,6 +36,46 @@ const defaultColors = [
   '#B50909', // red darker
 ];
 
+// ─── Custom legend renderer ───────────────────────────────────────────────────
+
+const renderCustomLegend = (props: any) => {
+  const { payload } = props;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '12px',
+        justifyContent: 'flex-start',
+        padding: '8px 0 16px',
+      }}
+    >
+      {payload.map((entry: any, index: number) => (
+        <div
+          key={index}
+          style={{ alignItems: 'center', display: 'flex', gap: '8px' }}
+        >
+          <div
+            style={{
+              backgroundColor: entry.color,
+              border: '1px solid #000',
+              borderRadius: '6px',
+              flexShrink: 0,
+              height: '48px',
+              width: '48px',
+            }}
+          />
+          <span style={{ color: '#000', fontSize: '20px', fontWeight: 'bold' }}>
+            {entry.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ─── LineGraph ────────────────────────────────────────────────────────────────
+
 export const LineGraph: React.FC<LineGraphProps> = ({
   datasets,
   labels,
@@ -47,181 +88,102 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   yAxisLabel,
   smooth = false,
 }) => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null);
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    const ctx = chartRef.current.getContext('2d');
-    if (!ctx) return;
-
-    const config: ChartConfiguration<'line'> = {
-      type: 'line',
-      data: {
-        labels,
-        datasets: datasets.map((dataset, index) => {
-          const color =
-            dataset.color || defaultColors[index % defaultColors.length];
-          return {
-            label: dataset.label,
-            data: dataset.data,
-            borderColor: color,
-            backgroundColor: `${color}33`,
-            borderWidth: 2,
-            pointBackgroundColor: color,
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0,
-          };
-        }),
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        events: ['click'],
-        plugins: {
-          title: {
-            display: !!title,
-            text: title,
-            color: '#000',
-            font: {
-              size: 20,
-              weight: 'bold',
-            },
-            padding: {
-              top: 10,
-              bottom: 20,
-            },
-          },
-          legend: {
-            display: showLegend,
-            position: 'top',
-            onClick: () => {},
-            labels: {
-              padding: 15,
-              font: {
-                size: 20,
-                weight: 'bold',
-              },
-              usePointStyle: false,
-              boxWidth: 48,
-              boxHeight: 48,
-              borderRadius: 6,
-              color: '#000',
-              generateLabels: chart => {
-                const ds = chart.data.datasets as any[];
-                return (
-                  ds?.map((dataset, i) => {
-                    const fill =
-                      dataset?.borderColor ||
-                      dataset?.backgroundColor ||
-                      defaultColors[i % defaultColors.length];
-                    return {
-                      text: dataset?.label || `Dataset ${i + 1}`,
-                      fillStyle: fill,
-                      strokeStyle: '#000',
-                      lineWidth: 1,
-                      borderRadius: 6,
-                      datasetIndex: i,
-                    };
-                  }) || []
-                );
-              },
-            },
-          },
-          tooltip: {
-            enabled: false,
-            callbacks: {
-              label: (context: TooltipItem<'line'>) => {
-                return ` ${context.dataset.label}: ${context.parsed.y}`;
-              },
-            },
-          },
-          datalabels: {
-            display: false,
-            font: { size: 20 },
-          },
-        },
-        scales: {
-          x: {
-            grid: {
-              display: showGrid,
-            },
-            title: {
-              display: !!xAxisLabel,
-              text: xAxisLabel,
-              color: '#000',
-              font: {
-                size: 20,
-                weight: 'bold',
-              },
-            },
-            ticks: {
-              color: '#000',
-              font: {
-                size: 20,
-              },
-            },
-          },
-          y: {
-            grid: {
-              display: showGrid,
-            },
-            title: {
-              display: !!yAxisLabel,
-              text: yAxisLabel,
-              color: '#000',
-              font: {
-                size: 20,
-                weight: 'bold',
-              },
-            },
-            ticks: {
-              color: '#000',
-              font: {
-                size: 20,
-              },
-            },
-            beginAtZero: true,
-          },
-        },
-      },
-    };
-
-    chartInstanceRef.current = new Chart(ctx, config);
-
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, [
-    datasets,
-    labels,
-    title,
-    showLegend,
-    showGrid,
-    xAxisLabel,
-    yAxisLabel,
-    smooth,
-  ]);
+  // Build recharts row-oriented data: [{ name: 'Jan', 'Regular Cases': 55, ... }, ...]
+  const chartData = labels.map((label, i) => {
+    const row: Record<string, any> = { name: label };
+    datasets.forEach(ds => {
+      row[ds.label] = ds.data[i] ?? null;
+    });
+    return row;
+  });
 
   return (
-    <div
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        position: 'relative',
-      }}
-    >
-      <canvas ref={chartRef} />
+    <div style={{ width: `${width}px`, height: `${height}px` }}>
+      {title && (
+        <div
+          style={{
+            color: '#000',
+            fontSize: '20px',
+            fontWeight: 'bold',
+            padding: '10px 0 8px',
+            paddingLeft: '80px',
+            textAlign: 'left',
+          }}
+        >
+          {title}
+        </div>
+      )}
+      {showLegend && (
+        <div style={{ paddingLeft: '80px' }}>
+          {renderCustomLegend({
+            payload: datasets.map((ds, i) => ({
+              color: ds.color || defaultColors[i % defaultColors.length],
+              value: ds.label,
+            })),
+          })}
+        </div>
+      )}
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={chartData}
+          margin={{
+            bottom: xAxisLabel ? 40 : 10,
+            left: 20,
+            right: 30,
+            top: 10,
+          }}
+        >
+          {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+          <XAxis
+            dataKey="name"
+            tick={{ fill: '#000', fontSize: 20 }}
+            label={
+              xAxisLabel
+                ? {
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: -20,
+                    position: 'insideBottom',
+                    value: xAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          <YAxis
+            tick={{ fill: '#000', fontSize: 20 }}
+            label={
+              yAxisLabel
+                ? {
+                    angle: -90,
+                    fill: '#000',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    offset: 10,
+                    position: 'insideLeft',
+                    value: yAxisLabel,
+                  }
+                : undefined
+            }
+          />
+          {datasets.map((ds, index) => {
+            const color =
+              ds.color || defaultColors[index % defaultColors.length];
+            return (
+              <Line
+                key={ds.label}
+                type={smooth ? 'monotone' : 'linear'}
+                dataKey={ds.label}
+                stroke={color}
+                strokeWidth={2}
+                dot={<Dot r={5} fill={color} stroke="#fff" strokeWidth={2} />}
+                activeDot={{ r: 7 }}
+                isAnimationActive={false}
+              />
+            );
+          })}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };
