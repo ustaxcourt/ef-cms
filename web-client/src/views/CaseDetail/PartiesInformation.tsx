@@ -52,6 +52,7 @@ export const PartiesInformation = connect(
                 >
                   <div
                     className="grid-row margin-left-205"
+                    data-testid="petitioners-and-counsel"
                     id="petitioners-and-counsel"
                   >
                     {partyViewTabs.petitionersAndCounsel}
@@ -101,7 +102,7 @@ export const PartiesInformation = connect(
             {caseInformationHelper.showAddPartyButton && (
               <Button
                 className="margin-right-0 margin-top-3"
-                data-testid="add-party-button"
+                data-testid="button-add-party"
                 href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
                 icon="plus-circle"
               >
