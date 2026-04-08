@@ -14,7 +14,6 @@ import {
   COURT_ISSUED_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   PROPOSED_STIPULATED_DECISION_EVENT_CODE,
   STAMPED_DOCUMENTS_ALLOWLIST,
   STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
@@ -122,12 +121,6 @@ export const getDocumentDisplayFlags = ({
   });
 
   const isDocumentUnserved = showNotServed || !document.servedAt;
-  const isSimultaneousDocType = Boolean(
-    document &&
-    ((document.eventCode &&
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(document.eventCode)) ||
-      document.documentTitle?.includes('Simultaneous')),
-  );
   const isPetitionDocument =
     document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
   const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
@@ -142,16 +135,9 @@ export const getDocumentDisplayFlags = ({
     !isCourtIssuedDocument &&
     !isPetitionDocument &&
     permissions.SERVE_DOCUMENT &&
-    // If not a simultaneous doc, use normal logic
-    (!isSimultaneousDocType ||
-      // unconsolidated case
-      (isSimultaneousDocType && !caseDetail.leadDocketNumber) ||
-      // in lead case of group
-      (isSimultaneousDocType && isLeadCase(caseDetail)) ||
-      // in member case and not filed across group
-      (isSimultaneousDocType &&
-        isMemberCase(caseDetail) &&
-        !DocketEntry.isMultiDocketed(document)));
+    (!caseDetail.leadDocketNumber ||
+      isLeadCase(caseDetail) ||
+      (isMemberCase(caseDetail) && !DocketEntry.isMultiDocketed(document)));
 
   const showServeCourtIssuedDocumentButton =
     canAllowDocumentService &&
@@ -190,7 +176,6 @@ export const getDocumentDisplayFlags = ({
 
   const showLeadCaseNotification =
     isMemberCase(caseDetail) &&
-    isSimultaneousDocType &&
     DocketEntry.isMultiDocketed(document) &&
     isDocumentUnserved &&
     permissions.SERVE_DOCUMENT;
