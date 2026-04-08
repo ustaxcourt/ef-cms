@@ -17,8 +17,9 @@ echo "Region -> ${TARGET_REGION}"
 
 LATEST_TAGS=$(aws ecr describe-images \
   --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" \
-	--query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
-	--region "${TARGET_REGION}")
+  --filter tagStatus=TAGGED \
+  --query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
+  --region "${TARGET_REGION}")
 
 LATEST_VERSION=$(echo "$LATEST_TAGS" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1)
 
@@ -44,6 +45,7 @@ fi
 aws ecr get-login-password --region "${TARGET_REGION}" | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.${TARGET_REGION}.amazonaws.com"
 
 docker build --no-cache \
+  --provenance=false \
   --build-arg AWS_REGION="${TARGET_REGION}" \
   --build-arg WEBSOCKET_API_GATEWAY_ID="${WEBSOCKET_API_GATEWAY_ID}" \
   -t "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}:${DESTINATION_TAG}" \

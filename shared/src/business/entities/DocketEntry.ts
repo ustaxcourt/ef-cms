@@ -320,6 +320,7 @@ export class DocketEntry extends JoiValidationEntity {
     const filedBy = generateFiledBy({
       docketEntry: this,
       petitioners,
+      user: authorizedUser,
     });
     if (filedBy) this.filedBy = filedBy;
   }

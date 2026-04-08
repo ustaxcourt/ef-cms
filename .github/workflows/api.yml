@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Collect Workflow Telemetry
@@ -28,7 +28,7 @@ jobs:
           comment_on_pr: false
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             node_modules
@@ -43,7 +43,7 @@ jobs:
         run: npm run test:api
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             node_modules
