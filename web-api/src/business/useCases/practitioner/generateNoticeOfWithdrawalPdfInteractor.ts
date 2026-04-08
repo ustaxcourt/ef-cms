@@ -89,6 +89,11 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
       const partyInformation = caseData.petitioners.find(
         petitioner => petitioner.contactId === p.contactId,
       );
+      if (partyInformation === undefined) {
+        throw new Error(
+          `Party information not found for contactId: ${p.contactId}`,
+        );
+      }
       return applicationContext.getDocumentGenerators().certificateOfService({
         applicationContext,
         data: {

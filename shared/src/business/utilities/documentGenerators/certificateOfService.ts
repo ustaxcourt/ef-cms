@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/server';
 import { FORMATS } from '../DateHandler';
 import { CertificateOfService } from '../pdfGenerator/documentTemplates/CertificateOfService';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { UserContact } from '@shared/business/entities/User';
 
 export const certificateOfService = async ({
   applicationContext,
@@ -11,8 +12,13 @@ export const certificateOfService = async ({
 }: {
   applicationContext: ServerApplicationContext;
   data: {
-    partyInformation: any;
-    practitionerInformation: any;
+    partyInformation: TPetitioner;
+    practitionerInformation: {
+      contact?: UserContact;
+      barNumber?: string;
+      email?: string;
+      name: string;
+    };
     docketNumberWithSuffix: string;
   };
 }): Promise<Uint8Array> => {

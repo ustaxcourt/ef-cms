@@ -1,3 +1,7 @@
+import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { certificateOfService } from './certificateOfService';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
@@ -19,6 +23,11 @@ describe('certificateOfService', () => {
             state: 'VA',
             postalCode: '12345',
             country: 'United States',
+            contactId: 'abc',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            isAddressSealed: false,
+            phone: '',
           },
           practitionerInformation: {
             contact: {

@@ -64,16 +64,16 @@ export const NoticeOfWithdrawal = ({
         <div className="width-50">
           <AddressLabel
             address1={practitionerInformation.contact!.address1}
-            address2={practitionerInformation.contact!.address2}
-            address3={practitionerInformation.contact!.address3}
+            address2={practitionerInformation.contact?.address2}
+            address3={practitionerInformation.contact?.address3}
             city={practitionerInformation.contact!.city}
-            country={practitionerInformation.contact!.country}
+            country={practitionerInformation.contact?.country}
             countryType={practitionerInformation.contact!.countryType}
             name={practitionerInformation.name}
             postalCode={practitionerInformation.contact!.postalCode}
-            state={practitionerInformation.contact!.state}
+            state={practitionerInformation.contact?.state}
           />
-          <div>{practitionerInformation.contact!.phone}</div>
+          <div>{practitionerInformation.contact?.phone}</div>
           <div>Tax Court Bar No. {practitionerInformation.barNumber}</div>
           <div>{practitionerInformation.email}</div>
         </div>
