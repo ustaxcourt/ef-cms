@@ -17,6 +17,7 @@ echo "Region -> ${TARGET_REGION}"
 
 LATEST_TAGS=$(aws ecr describe-images \
   --repository-name "docket-entry-zipper-${ENV}-${DEPLOYING_COLOR}-${TARGET_REGION}" \
+  --filter tagStatus=TAGGED \
 	--query "imageDetails[?contains(imageTags, \`latest\`)].imageTags" \
 	--region "${TARGET_REGION}")
 
