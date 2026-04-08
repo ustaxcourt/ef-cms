@@ -21,8 +21,7 @@
       "*": ["./*"],
       "@web-client/*": ["./web-client/src/*"],
       "@web-api/*": ["./web-api/src/*"],
-      "@shared/*": ["./shared/src/*"],
-      "@shared-admin-tools/*": ["./shared/admin-tools/*"]
+      "@shared/*": ["./shared/src/*"]
     }
   },
   "ts-node": {

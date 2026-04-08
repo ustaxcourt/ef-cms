@@ -1,8 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsconfig = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   displayName: 'web-client-integration',

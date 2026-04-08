@@ -1,8 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsconfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   displayName: 'infrastructure',
@@ -13,7 +13,7 @@ const config: Config = {
     '!lambdas/**/test/**',
   ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsconfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
