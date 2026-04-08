@@ -12,7 +12,6 @@ export const petitionsClerkViewsSectionDocumentQC = (
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/section/inbox',
     });
-
     const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
@@ -22,7 +21,6 @@ export const petitionsClerkViewsSectionDocumentQC = (
       const helper = await runCompute(workQueueHelper, {
         state: cerebralTest.getState(),
       });
-
       cerebralTest.petitionsClerkSectionDocumentQCInboxCount =
         helper.sectionInboxCount;
     }
