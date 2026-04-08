@@ -264,7 +264,11 @@ export const SessionInformationForm = connect<
                       }}
                     />
                     <label
-                      className="usa-checkbox__label"
+                      className={classNames(
+                        'usa-checkbox__label',
+                        formattedTrialSessionDetails.canEditOngoingSession &&
+                          'tw:before:bg-grey-base',
+                      )}
                       htmlFor="swing-session"
                       data-testid="swing-session-label"
                     >
