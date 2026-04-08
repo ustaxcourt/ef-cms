@@ -106,6 +106,10 @@ export const SessionInformationForm = connect<
                   });
                   validateTrialSessionSequence();
                 }}
+                showDisabledDate={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
               />
             </div>
 
