@@ -97,6 +97,30 @@ export const sendWithRetry = async ({
 
   applicationContext.logger.info('Bulk Email Params', params);
 
+  const validDestinations: BulkEmailDestination[] = [];
+  params.Destinations?.forEach(bulkDestination => {
+    let sendingToTestEmail = false;
+    bulkDestination.Destination?.ToAddresses?.forEach(addr => {
+      testEmailDomains.forEach(testEmail => {
+        if (addr.includes(testEmail)) sendingToTestEmail = true;
+      });
+    });
+    if (!sendingToTestEmail) validDestinations.push(bulkDestination);
+    else
+      applicationContext.logger.info(
+        'Test destination found, removing destination',
+        bulkDestination,
+      );
+  });
+  if (validDestinations.length === 0) {
+    applicationContext.logger.info(
+      'No valid destinations found, exiting',
+      params,
+    );
+    return;
+  }
+  params.Destinations = validDestinations;
+
   const cmd = new SendBulkTemplatedEmailCommand(params);
   const response = await sesClient.send(cmd);
   applicationContext.logger.info('Bulk Email Response', response);
