@@ -178,6 +178,7 @@ export const ModalDialog = ({
                     secondary
                     aria-label="Cancel"
                     className="modal-button-cancel"
+                    data-testid="modal-button-cancel"
                     link={cancelLink}
                     onClick={runCancelSequence}
                   >
@@ -189,6 +190,7 @@ export const ModalDialog = ({
                     link
                     aria-label="Clear"
                     className="modal-button-clear"
+                    data-testid="modal-button-clear"
                     onClick={runClearSequence}
                   >
                     {clearLabel}

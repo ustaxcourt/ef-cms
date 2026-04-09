@@ -20,6 +20,7 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
@@ -143,6 +144,12 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
+    const shouldSetNoticeOfTrialSessionStartDateChange =
+      shouldGenerateNoticeOfChangeTrialStartDate(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
     const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
@@ -151,6 +158,7 @@ export const updateTrialSession = async (
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
       shouldSetNoticeOfTrialSessionLocationChange,
+      shouldSetNoticeOfTrialSessionStartDateChange,
       updatedTrialSessionEntity,
     });
 
@@ -169,6 +177,7 @@ export const updateTrialSession = async (
         shouldSetNoticeOfChangeToInPersonProceeding,
         shouldSetNoticeOfChangeToRemoteProceeding,
         shouldSetNoticeOfTrialSessionLocationChange,
+        shouldSetNoticeOfTrialSessionStartDateChange,
       });
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
@@ -176,7 +185,6 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    
     await associateSwingTrialSessions(
       {
         swingSessionId: trialSession.swingSessionId,
@@ -209,8 +217,8 @@ export const determineEntitiesToLock = async (
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId: trialSession.trialSessionId || '',
-    });
+    trialSessionId: trialSession.trialSessionId || '',
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(
