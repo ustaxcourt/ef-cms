@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { PDFDocument } from 'pdf-lib';
 
 export const setNoticeOfChangeOfTrialStartDate = async (
   applicationContext: ServerApplicationContext,
@@ -16,7 +17,7 @@ export const setNoticeOfChangeOfTrialStartDate = async (
     previousTrialSession,
   }: {
     caseEntity: Case;
-    newPdfDoc: any;
+    newPdfDoc: PDFDocument;
     newTrialSessionEntity: TrialSession;
     previousTrialSession: RawTrialSession;
   },
