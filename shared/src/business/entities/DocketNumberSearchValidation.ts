@@ -11,7 +11,7 @@ export class DocketNumberSearchValidation extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      docketNumber: JoiValidationConstants.DOCKET_NUMBER.description(
+      docketNumber: JoiValidationConstants.DOCKET_NUMBER_SEARCH.description(
         'Unique case identifier in XXXXX-YY format.',
       )
         .messages({
