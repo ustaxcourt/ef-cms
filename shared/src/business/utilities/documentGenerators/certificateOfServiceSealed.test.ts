@@ -1,3 +1,7 @@
+import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { certificateOfService } from './certificateOfService';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
@@ -20,6 +24,10 @@ describe('certificateOfServiceSealed', () => {
             postalCode: '12345',
             country: 'United States',
             isAddressSealed: true,
+            contactId: 'abc',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            phone: '',
           },
           practitionerInformation: {
             contact: {
