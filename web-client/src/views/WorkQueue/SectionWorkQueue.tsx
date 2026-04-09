@@ -1,7 +1,7 @@
 import { SectionWorkQueueInProgress } from './SectionWorkQueueInProgress';
 import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
-import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { WorkQueueActionButtons } from './WorkQueueActionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';

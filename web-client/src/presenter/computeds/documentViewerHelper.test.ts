@@ -390,7 +390,7 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showLeadCaseBanner', () => {
-    it('should be true when viewing an unserved simultaneous document on a member case that is filed across the group', () => {
+    it('should be true when viewing an unserved multi-docketed document on a member case', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -419,7 +419,7 @@ describe('documentViewerHelper', () => {
       expect(result.showLeadCaseBanner).toBe(true);
     });
 
-    it('should be false when viewing a served simultaneous document on a member case', () => {
+    it('should be false when viewing a served multi-docketed document on a member case', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -448,7 +448,7 @@ describe('documentViewerHelper', () => {
       expect(result.showLeadCaseBanner).toBe(false);
     });
 
-    it('should be false when viewing an unserved simultaneous document on the lead case', () => {
+    it('should be false when viewing an unserved multi-docketed document on the lead case', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -470,35 +470,6 @@ describe('documentViewerHelper', () => {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
             eventCode: 'SAMB',
-          },
-        },
-      });
-
-      expect(result.showLeadCaseBanner).toBe(false);
-    });
-
-    it('should be false when the document is not a simultaneous document type', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Answer',
-                eventCode: 'A',
-                multiDocketedOn: ['101-20', '102-20'],
-                servedAt: undefined,
-              },
-            ],
-            docketNumber: '102-20',
-            leadDocketNumber: '101-20',
-            status: CASE_STATUS_TYPES.generalDocket,
-          },
-          viewerDocumentToDisplay: {
-            docketEntryId: DOCKET_ENTRY_ID,
-            documentType: 'Answer',
-            eventCode: 'A',
           },
         },
       });
