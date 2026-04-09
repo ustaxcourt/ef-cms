@@ -218,10 +218,6 @@ export const SessionInformationForm = connect<
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
               <DateSelector
                 defaultValue={form.estimatedEndDate}
-                disabled={
-                  !addingTrialSession &&
-                  !formattedTrialSessionDetails.canEditOngoingSession
-                }
                 displayOptionalHintText={!addingTrialSession}
                 errorText={validationErrors.estimatedEndDate}
                 hintText={
