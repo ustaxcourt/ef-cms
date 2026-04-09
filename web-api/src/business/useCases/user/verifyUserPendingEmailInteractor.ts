@@ -91,7 +91,12 @@ export const verifyUserPendingEmailInteractor = async (
       },
     });
   } catch (e) {
-    applicationContext.logger.error('Error verifying user pending email');
+    applicationContext.logger.error('Error verifying user pending email', {
+      error: e,
+      token,
+      userId: user.userId,
+    });
+    throw e;
   } finally {
     await removeLockFunction();
   }

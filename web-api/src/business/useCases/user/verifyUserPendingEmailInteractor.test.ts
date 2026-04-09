@@ -348,11 +348,11 @@ describe('Verify User Pending Email', () => {
         { successfullyLocked: false, identifier: 'abc' },
       ]);
 
-      await verifyUserPendingEmailInteractor(applicationContext, {
-        token: mockPetitioner.pendingEmailVerificationToken!,
-      });
-
-      expect(upsertUsers).not.toHaveBeenCalled();
+      await expect(
+        verifyUserPendingEmailInteractor(applicationContext, {
+          token: mockPetitioner.pendingEmailVerificationToken!,
+        }),
+      ).rejects.toThrow();
     });
   });
 });
