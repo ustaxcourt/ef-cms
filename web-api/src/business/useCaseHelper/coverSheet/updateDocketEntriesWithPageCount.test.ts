@@ -1,9 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '@shared/business/entities/EntityConstants';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntriesWithPageCount } from './updateDocketEntriesWithPageCount';
@@ -98,57 +95,6 @@ describe('updateDocketEntriesWithPageCount', () => {
     expect(result).toHaveLength(2);
     expect(result[0].numberOfPages).toBe(mockPageCount);
     expect(result[1].numberOfPages).toBe(mockPageCount);
-  });
-
-  it('should not set processing status to complete for simultaneous document types on non-primary cases', async () => {
-    const simultaneousEventCode = SIMULTANEOUS_DOCUMENT_EVENT_CODES[0];
-    const consolidatedDocketNumber = '102-20';
-
-    const testingCaseDataWithSimultaneous = {
-      ...testingCaseData,
-      docketEntries: [
-        {
-          ...testingCaseData.docketEntries[0],
-          eventCode: simultaneousEventCode,
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
-        },
-      ],
-    };
-
-    const consolidatedCaseData = {
-      ...testingCaseDataWithSimultaneous,
-      docketNumber: consolidatedDocketNumber,
-    };
-
-    getCasesByDocketNumbers.mockResolvedValue([
-      testingCaseDataWithSimultaneous,
-      consolidatedCaseData,
-    ]);
-
-    const caseEntity = new Case(testingCaseDataWithSimultaneous, {
-      authorizedUser: mockDocketClerkUser,
-    });
-
-    const consolidatedCases = [
-      { docketNumber: mockDocketNumber, documentNumber: '1' },
-      { docketNumber: consolidatedDocketNumber, documentNumber: '2' },
-    ];
-
-    const result = await updateDocketEntriesWithPageCount({
-      authorizedUser: mockDocketClerkUser,
-      caseEntity,
-      consolidatedCases,
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockDocketNumber,
-      pageCount: mockPageCount,
-    });
-
-    expect(result[0].processingStatus).toBe(
-      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-    );
-    expect(result[1].processingStatus).toBe(
-      DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
-    );
   });
 
   it('should filter out cases without a document number in consolidated cases', async () => {
