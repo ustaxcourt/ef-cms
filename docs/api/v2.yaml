@@ -270,11 +270,11 @@ components:
             $ref: '#/components/schemas/Practitioner'
         serviceIndicator:
           type: string
+          example: 'Electronic'
           enum:
             - Electronic
             - None
             - Paper
-          example: 'Electronic'
         sortableDocketNumber:
           type: integer
           example: 20000384
