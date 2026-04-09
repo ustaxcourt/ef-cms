@@ -83,6 +83,10 @@ export const SessionAssignmentsForm = connect<
                 autoCapitalize="none"
                 className="usa-input"
                 data-testid="edit-trial-session-chambers-phone-number"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
                 id="chambers-phone-number"
                 name="chambersPhoneNumber"
                 type="text"

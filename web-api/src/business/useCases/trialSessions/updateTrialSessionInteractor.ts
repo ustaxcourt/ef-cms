@@ -49,8 +49,24 @@ export const updateTrialSession = async (
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
-  if (currentTrialSession.startDate < createISODateString()) {
-    throw new Error('Trial session cannot be updated after its start date');
+  const isStartDateInPast =
+    currentTrialSession.startDate < createISODateString();
+
+  const isEndDateInFuture =
+    createISODateString() < currentTrialSession.estimatedEndDate!;
+
+  const ongoing = isStartDateInPast && isEndDateInFuture;
+
+  if (!isEndDateInFuture && isStartDateInPast) {
+    throw new Error(
+      'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
+    );
+  }
+
+  if (ongoing && currentTrialSession.startDate !== trialSession.startDate) {
+    throw new Error(
+      'Trial session start date cannot be updated if the trial session is ongoing.',
+    );
   }
 
   const editableFields = {
@@ -176,7 +192,6 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    
     await associateSwingTrialSessions(
       {
         swingSessionId: trialSession.swingSessionId,
@@ -209,8 +224,8 @@ export const determineEntitiesToLock = async (
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId: trialSession.trialSessionId || '',
-    });
+    trialSessionId: trialSession.trialSessionId || '',
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(

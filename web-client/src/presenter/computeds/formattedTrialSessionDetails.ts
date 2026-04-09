@@ -114,7 +114,7 @@ export const formattedTrialSessionDetails = (
     canEditOngoingSession =
       user.role === USER_ROLES.caseServicesSupervisor &&
       trialDateFormatted < nowDateFormatted &&
-      endDate >= nowDateFormatted;
+      (endDate >= nowDateFormatted || !endDate);
 
     const validTrialDate = (): boolean => {
       if (canEditOngoingSession) {
