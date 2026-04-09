@@ -303,6 +303,7 @@ const updateCognitoUserId = async ({
 
 const processUser = async (userName: string, users: Users): Promise<void> => {
   if (!users[userName].gluedUserId) {
+    console.log(`User: ${userName} is not glued user, moving on..`);
     return;
   }
   const { bulkImportedUserId, email, gluedUserId, name, role, userFullName } =
