@@ -3,6 +3,7 @@ import {
   CAV_AND_SUBMITTED_CASE_STATUS,
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SEARCH_MATCHER,
   MAX_FILE_SIZE_BYTES,
   MOTION_DISPOSITIONS,
 } from './EntityConstants';
@@ -27,6 +28,7 @@ export const JoiValidationConstants = Object.freeze({
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
   DATE_RANGE_PICKER_DATE: joi.date().iso().format([DATE_FORMATS.MMDDYYYY]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
+  DOCKET_NUMBER_SEARCH: STRING.regex(DOCKET_NUMBER_SEARCH_MATCHER),
   DOCKET_RECORD: joi
     .array()
     .unique(
