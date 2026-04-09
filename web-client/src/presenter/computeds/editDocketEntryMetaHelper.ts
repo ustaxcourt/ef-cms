@@ -59,11 +59,18 @@ export const editDocketEntryMetaHelper = (
         form.previousDocument?.documentType,
       ));
 
-  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(
-    consolidatedCase =>
-      consolidatedCase.docketNumber !== caseDetail.docketNumber &&
-      form.multiDocketedOn?.includes(consolidatedCase.docketNumber),
-  );
+  const multiDocketedOn =
+    formattedCaseDetail.consolidatedCases
+      .filter(
+        consolidatedCase =>
+          consolidatedCase.docketNumber !== caseDetail.docketNumber &&
+          form.multiDocketedOn?.includes(consolidatedCase.docketNumber),
+      )
+      .map(c => ({
+        docketNumber: c.docketNumber,
+        caseTitle: c.caseTitle,
+        caseCaption: c.caseCaption,
+      })) || [];
 
   const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
 

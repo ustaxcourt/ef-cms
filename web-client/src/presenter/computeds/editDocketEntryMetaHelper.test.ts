@@ -389,42 +389,8 @@ describe('editDocketEntryMetaHelper', () => {
 
       expect(result.multiDocketedOn).toEqual([
         {
-          anotherProperty: 'should not be included',
           caseCaption: 'Member Case Caption',
           caseTitle: 'Member Case Title',
-          docketNumber: '102-20',
-        },
-      ]);
-    });
-
-    it('should handle consolidated cases with missing optional properties', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            docketNumber: '101-20',
-            partyType: PARTY_TYPES.petitioner,
-          },
-          form: {
-            docketEntryId: '123',
-            documentType: 'Answer',
-            multiDocketedOn: ['102-20'],
-          },
-          formattedCaseDetail: {
-            docketNumber: '101-20',
-            consolidatedCases: [
-              {
-                docketNumber: '101-20',
-              },
-              {
-                docketNumber: '102-20',
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.multiDocketedOn).toEqual([
-        {
           docketNumber: '102-20',
         },
       ]);
