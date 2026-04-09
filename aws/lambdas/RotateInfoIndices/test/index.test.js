@@ -1,4 +1,4 @@
-import rotateLogs from '../src/index.js';
+const rotateLogs = require('../src/index.js');
 
 /**
  * Returns a mocked response containing a snapshot for the given index name
