@@ -13,7 +13,6 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('formattedWorkQueue', () => {
   const {
     CHIEF_JUDGE,
-    DOCKET_NUMBER_SUFFIXES,
     DOCKET_SECTION,
     STATUS_TYPES,
     TRIAL_SESSION_SCOPE_TYPES,
@@ -49,8 +48,6 @@ describe('formattedWorkQueue', () => {
       documentType: 'Answer',
     },
     docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    docketNumberWithSuffix: '101-18S',
     section: DOCKET_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -790,7 +787,6 @@ describe('formattedWorkQueue', () => {
         ...baseWorkItem,
         docketEntryId: sharedDocketEntryId,
         docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
         leadDocketNumber: '101-18',
         docketEntry: {
           ...baseWorkItem.docketEntry,
@@ -802,7 +798,6 @@ describe('formattedWorkQueue', () => {
         ...baseWorkItem,
         docketEntryId: sharedDocketEntryId,
         docketNumber: '202-18',
-        docketNumberWithSuffix: '202-18',
         leadDocketNumber: '101-18',
         docketEntry: {
           ...baseWorkItem.docketEntry,
@@ -828,9 +823,6 @@ describe('formattedWorkQueue', () => {
       expect(result[0].groupedMemberCases).toBeDefined();
       expect(result[0].groupedMemberCases!.length).toEqual(1);
       expect(result[0].groupedMemberCases![0].docketNumber).toEqual('202-18');
-      expect(result[0].groupedMemberCases![0].docketNumberWithSuffix).toEqual(
-        '202-18',
-      );
     });
 
     it('should place work items with the same docketEntryId and multiDocketedOn length >= 2 but no leadDocketNumber into solo list', () => {

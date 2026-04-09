@@ -91,6 +91,7 @@ export const formattedWorkQueue = (
         solo.push(group[0]);
       } else {
         group.forEach(item => {
+          // docket entries that were filed on a case that was later removed from a consolidated group
           if (item.docketEntry.multiDocketedOn?.length < 2) {
             solo.push(item);
           } else if (item.leadDocketNumber) {
@@ -109,7 +110,6 @@ export const formattedWorkQueue = (
         groupedMemberCases?: {
           workItemId: string;
           docketNumber: string;
-          docketNumberWithSuffix: string;
           inLeadCase: boolean;
         }[];
       }
@@ -125,7 +125,6 @@ export const formattedWorkQueue = (
             return {
               workItemId: item.workItemId,
               docketNumber: item.docketNumber,
-              docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
               inLeadCase: isLeadCase(item),
             };
           }),
@@ -599,7 +598,7 @@ export type FormattedWorkItemWithCaseInfo =
     showUnreadStatusIcon: boolean;
     groupedMemberCases?: {
       docketNumber: string;
-      docketNumberWithSuffix: string;
       inLeadCase: boolean;
+      workItemId: string;
     }[];
   };

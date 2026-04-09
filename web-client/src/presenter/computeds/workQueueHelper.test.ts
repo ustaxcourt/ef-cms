@@ -1,4 +1,4 @@
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   adcUser,
   caseServicesSupervisorUser,
@@ -7,10 +7,10 @@ import {
   judgeUser,
   petitionsClerkUser,
 } from '@shared/test/mockUsers';
-import { applicationContext } from '@web-client/applicationContext';
-import { getUserPermissions } from '@shared/authorization/getUserPermissions';
+import { applicationContext } from '../../applicationContext';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '@web-client/withAppContext';
+import { withAppContextDecorator } from '../../../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from './workQueueHelper';
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
