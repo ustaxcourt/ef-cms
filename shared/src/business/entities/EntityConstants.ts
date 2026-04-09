@@ -25,12 +25,19 @@ export const STATE_KEYS = {
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
-// a number (100 to 99999) followed by a - and a 2 digit year
+
+// any combination of alphanumeric characters only
+export const BAR_NUMBER_MATCHER = /^[a-zA-Z0-9]+$/;
+
 export const COURT_ISSUED_EVENT_CODES = COURT_ISSUED_EVENTS;
 
 export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 
+// a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+// a number (100 to 99999) followed by a - and a 2 digit year, with an optional letter suffix
+export const DOCKET_NUMBER_SEARCH_MATCHER = /^([1-9]\d{2,4}-\d{2}[a-zA-Z]?)$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
