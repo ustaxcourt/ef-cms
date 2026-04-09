@@ -61,7 +61,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-sent-tab"
             tabName="outbox"
-            title={`${workQueueHelper.sentTitle}`}
+            title={workQueueHelper.sentTitle}
           >
             <div id="section-sent-tab-content">
               <SectionWorkQueueOutbox />
