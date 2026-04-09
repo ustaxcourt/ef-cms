@@ -116,9 +116,9 @@ export const serveExternallyFiledDocument = async (
       casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
-        const { index } = caseEntity.docketEntries.find(
-          e => docketEntryId === e.docketEntryId,
-        )!;
+        const docketEntry = caseEntity.docketEntries.find(
+          e => e.docketEntryId === docketEntryId,
+        );
 
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
@@ -126,7 +126,7 @@ export const serveExternallyFiledDocument = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
-            index,
+            index: docketEntry ? docketEntry.index : undefined,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
             ...(!subjectCaseIsSimultaneousDocType && {
