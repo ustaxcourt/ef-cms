@@ -284,6 +284,9 @@ components:
           example: '2016-08-29T09:12:33.001Z'
         trialLocation:
           type: string
+        isSealed:
+          type: boolean
+          example: false
     Contact:
       type: object
       properties:
@@ -307,6 +310,13 @@ components:
           type: string
         postalCode:
           type: string
+        serviceIndicator:
+          type: string
+          example: Electronic
+          enum:
+            - Electronic
+            - None
+            - Paper
     DocketEntry:
       type: object
       properties:
@@ -339,6 +349,9 @@ components:
         isFileAttached:
           type: boolean
           example: true
+        isSealed:
+          type: boolean
+          example: false
         servedAt:
           type: string
           format: date-time
