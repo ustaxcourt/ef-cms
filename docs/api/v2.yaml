@@ -248,6 +248,9 @@ components:
         filingType:
           type: string
           example: Petitioner and spouse
+        isSealed:
+          type: boolean
+          example: false
         leadDocketNumber:
           type: string
           example: '383-20'
@@ -267,11 +270,11 @@ components:
             $ref: '#/components/schemas/Practitioner'
         serviceIndicator:
           type: string
-          example: 'Electronic'
           enum:
             - Electronic
             - None
             - Paper
+          example: 'Electronic'
         sortableDocketNumber:
           type: integer
           example: 20000384
@@ -307,6 +310,13 @@ components:
           type: string
         postalCode:
           type: string
+        serviceIndicator:
+          type: string
+          example: Electronic
+          enum:
+            - Electronic
+            - None
+            - Paper
     DocketEntry:
       type: object
       properties:
@@ -339,6 +349,9 @@ components:
         isFileAttached:
           type: boolean
           example: true
+        isSealed:
+          type: boolean
+          example: false
         servedAt:
           type: string
           format: date-time
