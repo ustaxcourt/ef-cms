@@ -6,16 +6,18 @@ import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { setNoticeOfChangeOfTrialStartDate } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialStartDate';
+import { PDFDocument } from 'pdf-lib';
 
 describe('setNoticeOfChangeOfTrialStartDate', () => {
-  const newPdfMock = 'empty pdf';
+  let newPdfDoc: PDFDocument;
   const noticePdfMock = 'notice of change of trial date';
   const mockUser = mockCaseServicesSupervisorUser;
   const mockCase = new Case(MOCK_CASE, { authorizedUser: mockUser });
   const mockPreviousTrialSession = MOCK_TRIAL_INPERSON;
   const mockNewTrialSessionEntity = new TrialSession(MOCK_TRIAL_INPERSON);
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    newPdfDoc = await PDFDocument.create();
     applicationContext
       .getUseCases()
       .generateNoticeOfChangeOfTrialStartDateInteractor.mockReturnValue(
@@ -32,7 +34,7 @@ describe('setNoticeOfChangeOfTrialStartDate', () => {
       applicationContext,
       {
         caseEntity: mockCase,
-        newPdfDoc: newPdfMock,
+        newPdfDoc,
         newTrialSessionEntity: mockNewTrialSessionEntity,
         previousTrialSession: mockPreviousTrialSession,
       },
@@ -63,7 +65,7 @@ describe('setNoticeOfChangeOfTrialStartDate', () => {
       caseEntity: mockCase,
       documentInfo:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialStartDate,
-      newPdfDoc: newPdfMock,
+      newPdfDoc,
       noticePdf: noticePdfMock,
     });
     expect(createAndServeNoticeDocketEntryCalls[0][2]).toEqual(mockUser);
