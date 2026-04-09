@@ -1,9 +1,24 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
+export const sanitizeSearchTerm = (searchTerm: string): string => {
+  if (!searchTerm) {
+    return '';
+  }
+
+  // Keep only characters that are valid for docket-number searches.
+  return searchTerm.replace(/[^0-9A-Za-z-]/g, '');
+};
+
+export const trimDocketNumberSearch = (
+  applicationContext: ClientApplicationContext,
+  searchTerm: string = '',
+): string => {
   if (searchTerm === '') {
     return '';
   }
+
+  const sanitizedSearchTerm = sanitizeSearchTerm(searchTerm);
 
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const suffixes = Object.values(DOCKET_NUMBER_SUFFIXES).join('|');
@@ -12,14 +27,9 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
     'i',
   );
 
-  const match = docketNumberMatcher.exec(searchTerm.trim());
-  const docketNumber = match && match.length > 1 ? match[1] : searchTerm;
+  const match = docketNumberMatcher.exec(sanitizedSearchTerm.trim());
+  const docketNumber = match && match.length > 1 ? match[1] : sanitizedSearchTerm;
   return docketNumber;
-};
-
-const sanitizeSearchTerm = (searchTerm: string): string => {
-  // Remove all instances of "/" or "." characters from search term
-  return searchTerm && searchTerm.replace(/[/.]/g, '');
 };
 
 /**
@@ -33,10 +43,9 @@ export const setDocketNumberFromSearchAction = ({
   get,
 }: ActionProps) => {
   const searchTerm = get(state.header.searchTerm);
-  const sanitizedSearchTerm = sanitizeSearchTerm(searchTerm);
   const docketNumber = trimDocketNumberSearch(
     applicationContext,
-    sanitizedSearchTerm,
+    searchTerm,
   );
   return {
     docketNumber,

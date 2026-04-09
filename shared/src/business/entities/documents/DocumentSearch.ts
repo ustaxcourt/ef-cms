@@ -78,9 +78,11 @@ export class DocumentSearch extends JoiValidationEntity {
         'The case title or petitioner name to filter the search results by',
       ),
       dateRange: JoiValidationConstants.STRING.allow('').optional(),
-      docketNumber: JoiValidationConstants.STRING.allow('').description(
-        'The docket number to filter the search results by',
-      ),
+      docketNumber: JoiValidationConstants.DOCKET_NUMBER.allow('')
+        .description('The docket number to filter the search results by')
+        .messages({
+          '*': 'Enter a valid docket number',
+        }),
       endDate: joi
         .alternatives()
         .conditional('startDate', {
