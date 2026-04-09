@@ -1,4 +1,4 @@
-import { QueryContainer } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import type { QueryContainer } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.query_dsl';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 
 // because searching for entityName matches is not sufficient!

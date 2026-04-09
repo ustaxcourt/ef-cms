@@ -1,4 +1,4 @@
-import { IndexSettings } from 'node_modules/@opensearch-project/opensearch/api/_types/indices._common';
+import type { IndexSettings } from 'node_modules/@opensearch-project/opensearch/api/_types/indices._common';
 
 export const settings = ({
   environment,

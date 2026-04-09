@@ -2,7 +2,7 @@ import { getDbWriter } from '@web-api/database';
 import { Database } from '@web-api/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { UpdateQueryBuilder, UpdateResult } from 'kysely';
-import { UpdateObjectExpression } from 'node_modules/kysely/dist/cjs/parser/update-set-parser';
+import type { UpdateObjectExpression } from 'node_modules/kysely/dist/cjs/parser/update-set-parser';
 
 type UpdateWhereCallback<T extends keyof Database> = (
   qb: UpdateQueryBuilder<Database, T, T, UpdateResult>,
