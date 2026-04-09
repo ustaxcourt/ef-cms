@@ -458,11 +458,11 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
-  noticeOfWithdrawalHelper: noticeOfWithdrawalHelper as unknown as ReturnType<
-    typeof noticeOfWithdrawalHelper
-  >,
   newMinuteSheetModalHelper: newMinuteSheetModalHelper as unknown as ReturnType<
     typeof newMinuteSheetModalHelper
+  >,
+  noticeOfWithdrawalHelper: noticeOfWithdrawalHelper as unknown as ReturnType<
+    typeof noticeOfWithdrawalHelper
   >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
@@ -729,6 +729,13 @@ export const baseState = {
     updatedTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
       | undefined,
+  },
+  trialSessionStartDateChangeModalInfo: {
+    currentTrialSessionStartDate: undefined as string | undefined,
+    updatedTrialSessionStartDate: undefined as string | undefined,
+  },
+  trialSessionChangeModalState: {
+    persist: false as boolean | undefined,
   },
   currentViewMetadata: {
     caseDetail: {
