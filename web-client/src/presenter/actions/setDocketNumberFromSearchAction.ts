@@ -1,5 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 
 export const sanitizeSearchTerm = (searchTerm: string): string => {
   if (!searchTerm) {
@@ -11,7 +12,7 @@ export const sanitizeSearchTerm = (searchTerm: string): string => {
 };
 
 export const trimDocketNumberSearch = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: ClientApplicationContext | ClientPublicApplicationContext,
   searchTerm: string = '',
 ): string => {
   if (searchTerm === '') {
