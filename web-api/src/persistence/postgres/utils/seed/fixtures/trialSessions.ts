@@ -1,8 +1,20 @@
 /* eslint-disable max-lines */
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 import { TrialSessionCaseKysely } from '@web-api/persistence/postgres/trialSessions/schema';
+
+const trialSessionStartingTodayStartDate = createISODateAtStartOfDayEST();
+const trialSessionStartingTodayTermYear = formatDateString(
+  trialSessionStartingTodayStartDate,
+  FORMATS.YEAR,
+);
 
 export const trialSessions: RawTrialSession[] = [
   {
@@ -589,6 +601,50 @@ export const trialSessions: RawTrialSession[] = [
   {
     caseOrder: [],
     sessionStatus: 'Open',
+    trialLocation: 'Standalone Remote',
+    proceedingType: 'Remote',
+    createdAt: createISODateString(),
+    sessionType: 'Special',
+    sessionScope: 'Standalone Remote',
+    termYear: trialSessionStartingTodayTermYear,
+    startTime: '13:00',
+    term: 'Fall',
+    judge: {
+      name: 'Colvin',
+      userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: trialSessionStartingTodayStartDate,
+    maxCases: 100,
+    trialSessionId: 'e111e600-dead-4000-beef-0000000d01e5',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    paperServicePdfs: [],
+  },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
+    trialLocation: 'Denver, Colorado',
+    proceedingType: 'In Person',
+    createdAt: createISODateString(),
+    sessionType: 'Special',
+    termYear: trialSessionStartingTodayTermYear,
+    startTime: '21:00',
+    term: 'Fall',
+    judge: {
+      name: 'Cohen',
+      userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: trialSessionStartingTodayStartDate,
+    maxCases: 30,
+    trialSessionId: 'e222f700-dead-4000-beef-0000000d01e5',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    sessionScope: 'Location-based',
+    paperServicePdfs: [],
+  },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
     trialLocation: 'Denver, Colorado',
     proceedingType: 'In Person',
     createdAt: '2019-11-02T05:00:00.000Z',
@@ -655,6 +711,52 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     caseMetadata: {},
     trialSessionId: '111ac21b-99f9-4321-98c8-b95db00af96b',
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    caseMetadata: {},
+    trialSessionId: 'e111e600-dead-4000-beef-0000000d01e5',
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    caseMetadata: {},
+    trialSessionId: 'e222f700-dead-4000-beef-0000000d01e5',
     sort: 'docket',
     sortOrder: 'asc',
   },

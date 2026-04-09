@@ -30,6 +30,11 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  formatDateString,
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -49,15 +54,20 @@ export const updateTrialSession = async (
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
+  const now = formatNow(FORMATS.YYYYMMDD);
+  const startDate = formatDateString(
+    currentTrialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
   const isStartDateInPast =
     currentTrialSession.startDate < createISODateString();
-
   const isEndDateInFuture =
     createISODateString() < currentTrialSession.estimatedEndDate!;
 
   const ongoing = isStartDateInPast && isEndDateInFuture;
+  const isToday = now === startDate;
 
-  if (!isEndDateInFuture && isStartDateInPast) {
+  if (!isEndDateInFuture && isStartDateInPast && !isToday) {
     throw new Error(
       'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
     );
