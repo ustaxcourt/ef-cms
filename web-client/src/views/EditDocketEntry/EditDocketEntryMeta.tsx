@@ -132,7 +132,7 @@ export const EditDocketEntryMeta = connect(
                 </Button>
               </div>
             </div>
-            <div className="grid-col-7"></div>
+            <div className="grid-col-7">{/* TODO: File preview */}</div>
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (
