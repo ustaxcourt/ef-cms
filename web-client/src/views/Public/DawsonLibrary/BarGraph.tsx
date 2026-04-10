@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
   Cell,
+  Tooltip,
 } from 'recharts';
 
 // ─── Single-dataset bar graph ─────────────────────────────────────────────────
@@ -99,7 +100,7 @@ const renderCustomLegend = (props: any) => {
               width: '48px',
             }}
           />
-          <span style={{ color: '#000', fontSize: '20px', fontWeight: 'bold' }}>
+          <span style={{ color: '#000', fontSize: '20px', fontWeight: '600' }}>
             {entry.total != null
               ? `${entry.value}: ${entry.total.toLocaleString()}`
               : entry.value}
@@ -175,27 +176,29 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
-    <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div
+      style={{ width: '100%', maxWidth: `${width}px`, height: `${height}px` }}
+    >
       {title && (
-        <div
+        <h2
           style={{
             color: titleColor,
-            fontSize: '20px',
-            fontWeight: 'bold',
+            margin: 0,
             padding: '10px 0 8px',
             paddingLeft: '80px',
             textAlign: 'left',
           }}
         >
           {title}
-        </div>
+        </h2>
       )}
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
-          margin={{ top: 10, right: 30, left: 20, bottom: bottomMargin }}
+          margin={{ top: 30, right: 30, left: 20, bottom: bottomMargin }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          <Tooltip />
           <XAxis
             dataKey="label"
             tick={<SingleBarTickX />}
@@ -206,7 +209,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                     fill: '#000',
                     fontSize: 20,
                     fontWeight: 'bold',
-                    offset: -(bottomMargin - 10),
+                    offset: -(bottomMargin - 25),
                     position: 'insideBottom',
                     value: xAxisLabel,
                   }
@@ -215,7 +218,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
           />
           <YAxis
             tick={{ fontSize: 20, fill: '#000', fontWeight: 'bold' }}
-            axisLine={false}
+            axisLine={true}
             tickLine={false}
             label={
               yAxisLabel
@@ -252,7 +255,6 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                   } = labelProps;
                   if (val == null) return null;
                   const cx = x + bw / 2;
-                  // If bar is too short to fit label inside, place above in black
                   const labelFitsInside = bh > 36;
                   if (labelFitsInside) {
                     return (
@@ -388,7 +390,7 @@ const RotatedTickX = (props: any) => {
       <text
         x={0}
         y={0}
-        dy={6}
+        dy={20}
         textAnchor="end"
         fill="#000"
         fontSize={20}
@@ -412,7 +414,7 @@ const MultiBarTickX = (props: any) => {
       <text
         x={0}
         y={0}
-        dy={16}
+        dy={26}
         textAnchor="middle"
         fill="#000"
         fontSize={18}
@@ -421,7 +423,7 @@ const MultiBarTickX = (props: any) => {
         {payload.value}
       </text>
       {total != null && (
-        <text x={0} y={0} dy={36} textAnchor="middle" fill="#000" fontSize={16}>
+        <text x={0} y={0} dy={46} textAnchor="middle" fill="#000" fontSize={16}>
           {total}
         </text>
       )}
@@ -483,7 +485,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   const bottomMargin = xAxisLabel
     ? 60
     : xAngle !== 0
-      ? 20
+      ? 40
       : hasTwoLineTicks
         ? 30
         : 20;
@@ -496,20 +498,21 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }));
 
   return (
-    <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div
+      style={{ width: '100%', maxWidth: `${width}px`, height: `${height}px` }}
+    >
       {title && (
-        <div
+        <h2
           style={{
             color: '#000',
-            fontSize: '20px',
-            fontWeight: 'bold',
+            margin: 0,
             padding: '10px 0 8px',
             paddingLeft: '80px',
             textAlign: 'left',
           }}
         >
           {title}
-        </div>
+        </h2>
       )}
       {showLegend && (
         <div style={{ paddingLeft: '80px' }}>
@@ -519,9 +522,10 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
-          margin={{ bottom: bottomMargin, left: 20, right: 30, top: 10 }}
+          margin={{ bottom: bottomMargin, left: 20, right: 30, top: 30 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          <Tooltip />
           <XAxis
             dataKey="name"
             interval={0}

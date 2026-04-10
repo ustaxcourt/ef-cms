@@ -34,10 +34,9 @@ export const DawsonLibrary = () => {
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
         title="Total Petitions by Month"
-        yAxisLabel="Total"
+        // yAxisLabel="Total"
         stacked
         showLabels={false}
-        legendTotals={[4209, 1608]}
         xLabelRotation={45}
         labels={[
           'January',
@@ -71,9 +70,8 @@ export const DawsonLibrary = () => {
         width={DEFAULT_CHART_WIDTH}
         height={DEFAULT_CHART_HEIGHT}
         title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
-        yAxisLabel="Total"
+        // yAxisLabel="Total"
         showLabels={false}
-        legendTotals={[4069, 19]}
         xLabelRotation={45}
         labels={[
           'January',
@@ -109,15 +107,54 @@ export const DawsonLibrary = () => {
         title="Cases Filed Over Time"
         xAxisLabel="Month"
         yAxisLabel="Number of Cases"
-        labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']}
+        labels={[
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ]}
         datasets={[
           {
             label: 'Regular Cases',
-            data: [55, 38, -100, 65, 75, -70, 20],
+            data: [
+              55,
+              38,
+              62,
+              65,
+              75,
+              48,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ] as (number | null)[],
           },
           {
             label: 'Small Tax Cases',
-            data: [-70, -10, -38, 78, -38, -33, -31],
+            data: [
+              40,
+              30,
+              38,
+              78,
+              42,
+              33,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ] as (number | null)[],
           },
         ]}
         smooth
@@ -129,7 +166,7 @@ export const DawsonLibrary = () => {
         title="Case Type Breakdown by Quarter"
         xAxisLabel="Quarter"
         yAxisLabel="Number of Cases"
-        labels={['Q1', 'Q2', 'Q3', 'Q4']}
+        labels={['Jan', 'Feb', 'Mar', 'Apr']}
         datasets={[
           {
             label: 'Deficiency',

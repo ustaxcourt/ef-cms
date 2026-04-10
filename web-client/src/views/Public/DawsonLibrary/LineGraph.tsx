@@ -7,11 +7,12 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Dot,
+  Tooltip,
 } from 'recharts';
 
 export interface LineGraphDataset {
   label: string;
-  data: number[];
+  data: (number | null)[];
   color?: string;
 }
 
@@ -65,7 +66,7 @@ const renderCustomLegend = (props: any) => {
               width: '48px',
             }}
           />
-          <span style={{ color: '#000', fontSize: '20px', fontWeight: 'bold' }}>
+          <span style={{ color: '#000', fontSize: '20px', fontWeight: '600' }}>
             {entry.value}
           </span>
         </div>
@@ -98,20 +99,21 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   });
 
   return (
-    <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div
+      style={{ width: '100%', maxWidth: `${width}px`, height: `${height}px` }}
+    >
       {title && (
-        <div
+        <h2
           style={{
             color: '#000',
-            fontSize: '20px',
-            fontWeight: 'bold',
+            margin: 0,
             padding: '10px 0 8px',
             paddingLeft: '80px',
             textAlign: 'left',
           }}
         >
           {title}
-        </div>
+        </h2>
       )}
       {showLegend && (
         <div style={{ paddingLeft: '80px' }}>
@@ -134,6 +136,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+          <Tooltip />
           <XAxis
             dataKey="name"
             tick={{ fill: '#000', fontSize: 20 }}
@@ -142,7 +145,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                 ? {
                     fill: '#000',
                     fontSize: 20,
-                    fontWeight: 'bold',
+                    fontWeight: '600',
                     offset: -20,
                     position: 'insideBottom',
                     value: xAxisLabel,
@@ -158,7 +161,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                     angle: -90,
                     fill: '#000',
                     fontSize: 20,
-                    fontWeight: 'bold',
+                    fontWeight: '600',
                     offset: 10,
                     position: 'insideLeft',
                     value: yAxisLabel,
