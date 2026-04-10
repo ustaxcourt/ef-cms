@@ -107,6 +107,10 @@ export function loginAsColvin() {
   login({ email: 'judgecolvin@example.com' });
   cy.get('h1:contains("Trial Sessions")').should('exist');
 }
+export function loginAsCohen() {
+  login({ email: 'judgecohen@example.com' });
+  cy.get('h1:contains("Trial Sessions")').should('exist');
+}
 
 export function loginAsBuch() {
   login({ email: 'judgebuch@example.com' });

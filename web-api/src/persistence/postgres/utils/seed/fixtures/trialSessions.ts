@@ -3,6 +3,7 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import {
   calculateDate,
+  calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
   formatDateString,
@@ -635,6 +636,11 @@ export const trialSessions: RawTrialSession[] = [
       userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
     },
     startDate: trialSessionStartingTodayStartDate,
+    estimatedEndDate: calculateISODate({
+      dateString: trialSessionStartingTodayStartDate,
+      howMuch: 5,
+      units: 'days',
+    }),
     maxCases: 30,
     trialSessionId: 'e222f700-dead-4000-beef-0000000d01e5',
     isCalendared: true,
