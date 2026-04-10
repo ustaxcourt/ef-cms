@@ -342,6 +342,7 @@ import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSe
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
+import { printPublicSessionCopySequence } from './sequences/printPublicSessionCopySequence';
 import { redirectToDashboardSequence } from './sequences/redirectToDashboardSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
@@ -1202,6 +1203,8 @@ export const presenterSequences = {
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
+  printPublicSessionCopySequence:
+    printPublicSessionCopySequence as unknown as Function,
   redirectToDashboardSequence:
     redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
