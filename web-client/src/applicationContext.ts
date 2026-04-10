@@ -142,6 +142,7 @@ import { generateDocumentIds } from '../../shared/src/business/useCases/generate
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
+import { generateNoticeOfWithdrawalPdfInteractor } from '@shared/proxies/documents/generateNoticeOfWithdrawalPdfProxy';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePetitionPdfInteractor } from '@shared/proxies/generatePetitionPdfProxy';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
@@ -161,6 +162,7 @@ import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/case
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
+import { getCaseDocketEntriesInteractor } from '../../shared/src/proxies/getCaseDocketEntriesProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
@@ -345,7 +347,7 @@ import { validateTrialSessionInteractor } from '../../shared/src/business/useCas
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
-import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
+import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/public/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
@@ -422,6 +424,7 @@ const allUseCases = {
   generateDocumentIds,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
+  generateNoticeOfWithdrawalPdfInteractor,
   generatePDFFromJPGDataInteractor,
   generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
@@ -440,6 +443,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getConsolidatedCaseDeadlinesInteractor,
+  getCaseDocketEntriesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,

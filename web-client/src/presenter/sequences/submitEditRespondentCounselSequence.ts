@@ -2,7 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -29,7 +28,6 @@ export const submitEditRespondentCounselSequence = [
           clearModalAction,
           clearFormAction,
           setCasePropFromStateAction,
-          setCaseAction,
           navigateToCaseDetailCaseInformationActionFactory('parties'),
         ],
       },

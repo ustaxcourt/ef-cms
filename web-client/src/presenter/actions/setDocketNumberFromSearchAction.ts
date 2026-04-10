@@ -29,7 +29,8 @@ export const trimDocketNumberSearch = (
   );
 
   const match = docketNumberMatcher.exec(sanitizedSearchTerm.trim());
-  const docketNumber = match && match.length > 1 ? match[1] : sanitizedSearchTerm;
+  const docketNumber =
+    match && match.length > 1 ? match[1] : sanitizedSearchTerm;
   return docketNumber;
 };
 
@@ -44,10 +45,7 @@ export const setDocketNumberFromSearchAction = ({
   get,
 }: ActionProps) => {
   const searchTerm = get(state.header.searchTerm);
-  const docketNumber = trimDocketNumberSearch(
-    applicationContext,
-    searchTerm,
-  );
+  const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
   return {
     docketNumber,
   };

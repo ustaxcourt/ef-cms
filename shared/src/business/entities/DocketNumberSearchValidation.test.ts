@@ -35,7 +35,7 @@ describe('DocketNumberSearchValidation', () => {
     });
   });
 
-  it('should fail validation when bar number contains only non-alphanumeric strings', () => {
+  it('should fail validation when docket number contains only non-alphanumeric strings', () => {
     const entity = new DocketNumberSearchValidation({ docketNumber: '../' });
     expect(entity.getFormattedValidationErrors()).toEqual({
       docketNumber: 'Enter a valid docket number',

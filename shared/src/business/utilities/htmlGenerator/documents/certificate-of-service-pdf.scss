@@ -1,0 +1,26 @@
+#certificate-of-service-pdf {
+  .cos-header {
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .cos-paragraph {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .cos-practitioner-info {
+    display: flex;
+    width: 100%;
+    margin-top: 60px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .width-50 {
+    width: 50%;
+  }
+}

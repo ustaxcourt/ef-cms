@@ -26,7 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -55,6 +55,51 @@ export const getIsUserAuthorized = ({
     isCurrentPetitioner ||
     isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)
   );
+};
+
+const assertEmailAvailableForPetitioner = async ({
+  applicationContext,
+  authorizedUser,
+  petitionerCaseRaw,
+  updatedPetitionerData,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
+  petitionerCaseRaw: RawCase;
+  updatedPetitionerData: any;
+}): Promise<void> => {
+  const { updatedEmail } = updatedPetitionerData;
+  const { petitioners } = petitionerCaseRaw;
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const allUsers =
+    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+      {
+        userIds: contactIdArray,
+      },
+      authorizedUser,
+    )) || {};
+
+  const allPendingEmails: string[] = Object.values(allUsers);
+
+  const pendingMatchesUpdated: boolean = allPendingEmails
+    .map(email => (email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
+    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
+  }
+
+  const currentMatchesUpdated = petitionerCaseRaw.petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (updatedEmail && currentMatchesUpdated) {
+    throw new Error(
+      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+    );
+  }
 };
 
 const updateCaseEntityAndGenerateChange = async ({
@@ -116,11 +161,7 @@ export const updatePetitionerInformation = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
   authorizedUser: UnknownAuthUser,
-): Promise<{
-  updatedCase: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: any;
-}> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to update petitioner information is not an auth user',
@@ -162,46 +203,19 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  const { updatedEmail } = updatedPetitionerData;
-
-  const { petitioners } = petitionerCaseRaw;
-
-  const contactIdArray = petitioners.map(p => p.contactId);
-
-  // Returns as object {id#: email}, will put values into an array
-  const allUsers =
-    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
-      {
-        userIds: contactIdArray,
-      },
-      authorizedUser,
-    )) || {};
-
-  const allPendingEmails: string[] = Object.values(allUsers);
-
-  const pendingMatchesUpdated: boolean = allPendingEmails
-    .map(email => (email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
-
-  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
-    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
-  }
-
-  const currentMatchesUpdated = petitionerCaseRaw.petitioners
-    .map(p => (p.email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
-
-  if (updatedEmail && currentMatchesUpdated) {
-    throw new Error(
-      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
-    );
-  }
+  await assertEmailAvailableForPetitioner({
+    applicationContext,
+    authorizedUser,
+    petitionerCaseRaw,
+    updatedPetitionerData,
+  });
 
   const editableFields = pick(
     defaults(updatedPetitionerData, {
       additionalName: undefined,
       address2: undefined,
       address3: undefined,
+      contactEmailAddress: undefined,
       title: undefined,
     }),
     [
@@ -213,6 +227,7 @@ export const updatePetitionerInformation = async (
       'country',
       'countryType',
       'name',
+      'contactEmailAddress',
       'phone',
       'postalCode',
       'additionalName',
@@ -244,7 +259,6 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.hasConsentedToElectronicService,
       hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
       isAddressSealed: existingPetitionerInfo.isAddressSealed,
-      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
       sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
       ...editableFields,
     },
@@ -258,11 +272,16 @@ export const updatePetitionerInformation = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let serviceUrl;
-
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
+
+  if (hasPetitionerInfoChanged) {
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
+  }
 
   const updateAddressOrPhone =
     hasPetitionerInfoChanged &&
@@ -276,7 +295,7 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await generateAndServeDocketEntry({
+    await generateAndServeDocketEntry({
       applicationContext,
       authorizedUser,
       caseEntity,
@@ -288,7 +307,11 @@ export const updatePetitionerInformation = async (
       servedParties,
       user: authorizedUser,
     });
-    serviceUrl = url;
+
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
   }
 
   const shouldUpdateEmailAddress =
@@ -348,16 +371,10 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return {
-    paperServiceParties: servedParties.paper,
-    paperServicePdfUrl: serviceUrl,
-    updatedCase: new CaseDTO(updatedCase),
-  };
 };
 
 export const updatePetitionerInformationInteractor = withLocking(

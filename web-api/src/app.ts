@@ -78,6 +78,7 @@ import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDea
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
@@ -202,7 +203,6 @@ import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from '
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
 import qs from 'qs';
@@ -213,7 +213,9 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
 
 export const app = express();
 
@@ -335,8 +337,14 @@ app.use(expressLogger);
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
   app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
+    '/async/docket-record-pdf',
+    lambdaWrapper(
+      generateDocketRecordPdfLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
 }
 
@@ -695,10 +703,18 @@ app.use(expressLogger);
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
+  );
+  app.post(
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
+  );
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',

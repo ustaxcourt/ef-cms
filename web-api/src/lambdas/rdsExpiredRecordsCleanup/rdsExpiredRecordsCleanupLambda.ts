@@ -3,6 +3,7 @@ import { Database } from '@web-api/database-schema';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import type { Handler } from 'aws-lambda';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+import { camelCase } from 'lodash';
 
 const TIME_TO_LIVE_COLUMN = 'ttl';
 
@@ -20,7 +21,7 @@ export const handler: Handler = async (_event, _context) => {
         const { name: tableName } = tableMetaData;
         const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
         await pgDeleteFrom({
-          table: tableName as keyof Database,
+          table: camelCase(tableName) as keyof Database,
           where: (cb: any) => cb.where(TIME_TO_LIVE_COLUMN, '<', nowSeconds),
         });
       }),
