@@ -105,16 +105,6 @@ describe('trials session working copies filtering', () => {
         expect(text).to.equal('(3)');
       });
   });
-  it('should navigate to public work copy', () => {
-    cy.get('[data-testid="print-public-session-working-copy"]').click();
-    cy.get('[data-testid="back-to-session-link"]').should(
-      'contain.text',
-      'Back to Session Copy',
-    );
-    cy.get('.big-blue-header').within(() => {
-      cy.get('h1').should('contain.text', 'Richmond, Virginia');
-    });
-  });
   it('clicking the checkbox on the filter should not change the count', () => {
     cy.get(
       '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
@@ -169,9 +159,12 @@ describe('trials session working copies filtering', () => {
 
   it('should navigate to the public copy print page when link is clicked and navigate back to session copy page', () => {
     cy.get('[data-testid="print-public-session-working-copy"]').click();
-    cy.get('[data-testid="back-to-session-link"]').as('BACK_TO_SESSION_LINK');
-    cy.get('@BACK_TO_SESSION_LINK').should('have.text', 'Back to Session Copy');
-    cy.get('@BACK_TO_SESSION_LINK').click();
+    cy.get('[data-testid="back-to-session-link"]').as('backToSessionLink');
+    cy.get('@backToSessionLink').should('have.text', 'Back to Session Copy');
+     cy.get('.big-blue-header').within(() => {
+      cy.get('h1').should('contain.text', 'Richmond, Virginia');
+    });
+    cy.get('@backToSessionLink').click();
     cy.get('[data-testid="print-public-session-working-copy"]').should(
       'have.text',
       'Print Public Copy',
