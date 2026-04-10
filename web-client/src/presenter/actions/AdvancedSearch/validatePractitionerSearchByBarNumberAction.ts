@@ -18,7 +18,7 @@ export const validatePractitionerSearchByBarNumberAction = ({
   );
 
   const errors = new BarNumberSearchValidation({
-    barNumber: barNumber.trim(),
+    barNumber: barNumber?.trim(),
   }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
