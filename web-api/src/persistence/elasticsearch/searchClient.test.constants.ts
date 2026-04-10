@@ -1,4 +1,4 @@
-import { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
+import type { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
 import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
 
