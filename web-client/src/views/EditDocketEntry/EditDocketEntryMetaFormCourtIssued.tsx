@@ -1,6 +1,6 @@
-import { CourtIssuedNonstandardForm } from '@web-client/views/CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
+import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';

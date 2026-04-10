@@ -63,7 +63,7 @@ export const editDocketEntryMetaHelper = (
     formattedCaseDetail.consolidatedCases
       .filter(
         consolidatedCase =>
-          consolidatedCase.docketNumber !== caseDetail.docketNumber &&
+          consolidatedCase.docketNumber !== formattedCaseDetail.docketNumber &&
           form.multiDocketedOn?.includes(consolidatedCase.docketNumber),
       )
       .map(c => ({

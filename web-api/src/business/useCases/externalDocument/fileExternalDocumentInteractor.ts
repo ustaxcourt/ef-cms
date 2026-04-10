@@ -165,7 +165,6 @@ export const fileExternalDocument = async (
     for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
       if (docketEntryId && metadata) {
         const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-
         const docketEntryEntity = new DocketEntry(
           {
             ...baseMetadata,

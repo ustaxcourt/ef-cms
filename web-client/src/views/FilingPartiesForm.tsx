@@ -11,7 +11,7 @@ type FilingPartiesFormProps = {
 };
 
 const filingPartiesFormDeps = {
-  formattedCaseDetail: state.formattedCaseDetail,
+  caseDetail: state.formattedCaseDetail,
   filingPartiesFormHelper: state.filingPartiesFormHelper,
   form: state.form,
   updateSequence: props`updateSequence`,
@@ -22,23 +22,13 @@ const filingPartiesFormDeps = {
 export const FilingPartiesForm: React.FC<FilingPartiesFormProps> = connect(
   filingPartiesFormDeps,
   function FilingPartiesForm({
-    formattedCaseDetail,
+    caseDetail,
     filingPartiesFormHelper,
     form,
-    validationErrors,
     updateSequence,
     validateSequence,
-  }: {
-    formattedCaseDetail;
-    filingPartiesFormHelper;
-    form;
-    validationErrors;
-    updateSequence?;
-    validateSequence?;
+    validationErrors,
   }) {
-    const petitioners =
-      (formattedCaseDetail && formattedCaseDetail.petitioners) || [];
-
     return (
       <>
         {filingPartiesFormHelper.isServed ? (
@@ -76,7 +66,7 @@ export const FilingPartiesForm: React.FC<FilingPartiesFormProps> = connect(
               </legend>
               {filingPartiesFormHelper.showFilingPartiesAsCheckboxes ? (
                 <>
-                  {petitioners.map(petitioner => (
+                  {caseDetail.petitioners.map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         checked={
@@ -101,11 +91,7 @@ export const FilingPartiesForm: React.FC<FilingPartiesFormProps> = connect(
                         data-testid="filed-by-option"
                         htmlFor={`filing-${petitioner.contactId}`}
                       >
-                        {petitioner.displayName ||
-                          petitioner.name ||
-                          petitioner.firstName ||
-                          petitioner.lastName ||
-                          petitioner.contactId}
+                        {petitioner.displayName}
                       </label>
                     </div>
                   ))}
