@@ -30,6 +30,43 @@ import {
 } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 
+const CustomTooltip = ({
+  active,
+  payload,
+  data,
+  title,
+}: {
+  active?: boolean;
+  payload?: { value: number; payload: PieGraphData }[];
+  data: PieGraphData[];
+  title: string;
+}) => {
+  if (!active || !payload?.length) return null;
+
+  const entry = payload[0].payload;
+  const { value } = payload[0];
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const percentage = ((value / total) * 100).toFixed(1);
+  const { color } = entry;
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="tw:bg-[#1B1B1B] tw:rounded tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:text-white tw:gap-1.5"
+    >
+      {title && <div className="tw:font-bold">{title}</div>}
+      <div className="tw:flex tw:items-center tw:gap-2">
+        <span
+          className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:rounded-sm tw:shrink-0"
+          style={{ backgroundColor: color }}
+        />
+        {entry.label}: {value} ({percentage}%)
+      </div>
+    </div>
+  );
+};
+
 export const PieGraph = ({
   title,
   data,
@@ -39,35 +76,6 @@ export const PieGraph = ({
   data: PieGraphData[];
   isAnimationActive?: boolean;
 }) => {
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: {
-    active?: boolean;
-    payload?: { value: number; payload: PieGraphData }[];
-  }) => {
-    if (!active || !payload?.length) return null;
-
-    const entry = payload[0].payload;
-    const { value } = payload[0];
-    const total = data.reduce((sum, d) => sum + d.value, 0);
-    const percentage = ((value / total) * 100).toFixed(1);
-    const { color } = entry;
-
-    return (
-      <div className="tw:bg-[#1B1B1B] tw:rounded tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:text-white tw:gap-1.5">
-        {title && <div className="tw:font-bold">{title}</div>}
-        <div className="tw:flex tw:items-center tw:gap-2">
-          <span
-            className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:rounded-sm tw:shrink-0"
-            style={{ backgroundColor: color }}
-          />
-          {entry.label}: {value} ({percentage}%)
-        </div>
-      </div>
-    );
-  };
-
   // Custom shape component for the pie slices.
   const MyCustomPie = (props: PieSectorShapeProps) => {
     const entry = data[props.index] as PieGraphData | undefined;
@@ -104,12 +112,13 @@ export const PieGraph = ({
             </ul>
           )}
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip data={data} title={title} />} />
         <Pie
           data={data}
           labelLine={false}
           fill="#8884d8" // default fill color (overridden by MyCustomPie)
           dataKey="value"
+          nameKey="label"
           isAnimationActive={isAnimationActive}
           shape={MyCustomPie}
           startAngle={90}
