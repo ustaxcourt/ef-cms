@@ -18,7 +18,7 @@ export const validateCaseDocketNumberSearchAction = ({
   );
 
   const errors = new DocketNumberSearchValidation({
-    docketNumber: docketNumber.trim(),
+    docketNumber: docketNumber?.trim(),
   }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
