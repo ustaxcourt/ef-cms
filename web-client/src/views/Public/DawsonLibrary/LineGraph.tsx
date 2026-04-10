@@ -99,94 +99,94 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   });
 
   return (
-    <div
-      style={{ width: '100%', maxWidth: `${width}px`, height: `${height}px` }}
-    >
-      {title && (
-        <h2
-          style={{
-            color: '#000',
-            margin: 0,
-            padding: '10px 0 8px',
-            paddingLeft: '80px',
-            textAlign: 'left',
-          }}
-        >
-          {title}
-        </h2>
-      )}
-      {showLegend && (
-        <div style={{ paddingLeft: '80px' }}>
-          {renderCustomLegend({
-            payload: datasets.map((ds, i) => ({
-              color: ds.color || defaultColors[i % defaultColors.length],
-              value: ds.label,
-            })),
-          })}
-        </div>
-      )}
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={chartData}
-          margin={{
-            bottom: xAxisLabel ? 40 : 10,
-            left: 20,
-            right: 30,
-            top: 10,
-          }}
-        >
-          {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-          <Tooltip />
-          <XAxis
-            dataKey="name"
-            tick={{ fill: '#000', fontSize: 20 }}
-            label={
-              xAxisLabel
-                ? {
-                    fill: '#000',
-                    fontSize: 20,
-                    fontWeight: '600',
-                    offset: -20,
-                    position: 'insideBottom',
-                    value: xAxisLabel,
-                  }
-                : undefined
-            }
-          />
-          <YAxis
-            tick={{ fill: '#000', fontSize: 20 }}
-            label={
-              yAxisLabel
-                ? {
-                    angle: -90,
-                    fill: '#000',
-                    fontSize: 20,
-                    fontWeight: '600',
-                    offset: 10,
-                    position: 'insideLeft',
-                    value: yAxisLabel,
-                  }
-                : undefined
-            }
-          />
-          {datasets.map((ds, index) => {
-            const color =
-              ds.color || defaultColors[index % defaultColors.length];
-            return (
-              <Line
-                key={ds.label}
-                type={smooth ? 'monotone' : 'linear'}
-                dataKey={ds.label}
-                stroke={color}
-                strokeWidth={2}
-                dot={<Dot r={5} fill={color} stroke="#fff" strokeWidth={2} />}
-                activeDot={{ r: 7 }}
-                isAnimationActive={false}
-              />
-            );
-          })}
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="tw:overflow-x-auto tw:overflow-y-hidden tw:pb-[60px] tw:scrollbar-hide">
+      <div style={{ width: `${width}px`, height: `${height}px` }}>
+        {title && (
+          <h2
+            style={{
+              color: '#000',
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        {showLegend && (
+          <div style={{ paddingLeft: '80px' }}>
+            {renderCustomLegend({
+              payload: datasets.map((ds, i) => ({
+                color: ds.color || defaultColors[i % defaultColors.length],
+                value: ds.label,
+              })),
+            })}
+          </div>
+        )}
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={chartData}
+            margin={{
+              bottom: xAxisLabel ? 40 : 10,
+              left: 20,
+              right: 30,
+              top: 10,
+            }}
+          >
+            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            <Tooltip />
+            <XAxis
+              dataKey="name"
+              tick={{ fill: '#000', fontSize: 20 }}
+              label={
+                xAxisLabel
+                  ? {
+                      fill: '#000',
+                      fontSize: 20,
+                      fontWeight: '600',
+                      offset: -20,
+                      position: 'insideBottom',
+                      value: xAxisLabel,
+                    }
+                  : undefined
+              }
+            />
+            <YAxis
+              tick={{ fill: '#000', fontSize: 20 }}
+              label={
+                yAxisLabel
+                  ? {
+                      angle: -90,
+                      fill: '#000',
+                      fontSize: 20,
+                      fontWeight: '600',
+                      offset: 10,
+                      position: 'insideLeft',
+                      value: yAxisLabel,
+                    }
+                  : undefined
+              }
+            />
+            {datasets.map((ds, index) => {
+              const color =
+                ds.color || defaultColors[index % defaultColors.length];
+              return (
+                <Line
+                  key={ds.label}
+                  type={smooth ? 'monotone' : 'linear'}
+                  dataKey={ds.label}
+                  stroke={color}
+                  strokeWidth={2}
+                  dot={<Dot r={5} fill={color} stroke="#fff" strokeWidth={2} />}
+                  activeDot={{ r: 7 }}
+                  isAnimationActive={false}
+                />
+              );
+            })}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

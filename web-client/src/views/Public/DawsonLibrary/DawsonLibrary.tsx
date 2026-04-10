@@ -199,16 +199,18 @@ export const DawsonLibrary = () => {
         title="Sample Distribution 1"
       />
       {/* Pie with no outline */}
-      <PieGraph
-        rotation={0}
-        outline="none"
-        data={[
-          { label: 'NoOutline A', value: 60 },
-          { label: 'NoOutline B', value: 40 },
-        ]}
-        title="Pie — No Outline"
-      />
-      {/* Pie with white outline */}
+      {
+        <PieGraph
+          rotation={0}
+          outline="none"
+          data={[
+            { label: 'NoOutline A', value: 60 },
+            { label: 'NoOutline B', value: 40 },
+          ]}
+          title="Pie — No Outline"
+        />
+        /* Pie with white outline */
+      }
       <PieGraph
         rotation={0}
         outline="white"

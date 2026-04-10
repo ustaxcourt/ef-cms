@@ -1,9 +1,7 @@
 @layer theme, components, utilities;
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-@import "tw-animate-css";
-
-
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
+@import 'tw-animate-css';
 
 :root {
   --background: rgb(255 255 255 / 100%);
@@ -165,3 +163,14 @@
   --color-green-success: var(--green-success);
   --color-purple-visited-link: var(--purple-visited-link);
 }
+
+/* stylelint-disable scss/at-rule-no-unknown, order/properties-order, nesting-selector-no-missing-scoping-root, rule-empty-line-before */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+/* stylelint-enable scss/at-rule-no-unknown, order/properties-order, nesting-selector-no-missing-scoping-root, rule-empty-line-before */
