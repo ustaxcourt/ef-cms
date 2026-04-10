@@ -1,0 +1,24 @@
+#notice-of-withdrawal-pdf {
+  ol {
+    padding-left: 0;
+    margin-left: 15px;
+    list-style-type: decimal;
+
+    li {
+      padding-left: 20px;
+    }
+  }
+
+  .signature-block {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 60px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .width-50 {
+    width: 50%;
+  }
+}
