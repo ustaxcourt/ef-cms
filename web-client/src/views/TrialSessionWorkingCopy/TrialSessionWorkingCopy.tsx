@@ -74,6 +74,7 @@ export const TrialSessionWorkingCopy = connect(
                     aria-label="Print public session copy"
                     icon="print"
                     id="print-public-session-working-copy"
+                    data-testid="print-public-session-working-copy"
                     onClick={() => printPublicSessionCopySequence()}
                   >
                     Print Public Copy
