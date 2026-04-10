@@ -14,7 +14,11 @@ const props = cerebralProps as unknown as {
   validationBind: string;
 };
 
-export const InclusionsForm = connect(
+export const InclusionsForm: React.FC<{
+  bind: string;
+  type: string;
+  validationBind: string;
+}> = connect(
   {
     constants: state.constants,
     data: state[props.bind],
@@ -73,7 +77,7 @@ export const InclusionsForm = connect(
               >
                 <FontAwesomeIcon
                   className="margin-right-05"
-                  icon="question-circle"
+                  icon="circle-info"
                   size="1x"
                 />
                 What can I include with my document?

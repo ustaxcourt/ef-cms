@@ -24,7 +24,7 @@ export const TodaysOrders = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     sortTableSequence: sequences.sortTableSequence,
-    tableSort: state.tableSort,
+    tableSort: state.todaysOrdersTableSort,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
@@ -40,6 +40,7 @@ export const TodaysOrders = connect(
     tableSort: {
       sortField: string;
       sortOrder: 'asc' | 'desc';
+      sortKey: string;
     };
     todaysOrdersHelper: {
       formattedCurrentDate: string;
@@ -138,6 +139,7 @@ export const TodaysOrders = connect(
                       sortTableSequence({
                         sortField,
                         sortOrder: sortOrder as 'asc' | 'desc',
+                        stateKey: tableSort.sortKey,
                       });
                     }}
                   >
@@ -248,13 +250,16 @@ const TodaysOrdersColumnHeader = ({
   tableSort: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
+    sortKey: string;
   };
   onSort: ({
     sortField,
     sortOrder,
+    stateKey,
   }: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
+    stateKey: string;
   }) => void;
 }) => {
   return (
@@ -269,7 +274,13 @@ const TodaysOrdersColumnHeader = ({
         hasRows={true}
         sortField={columnData.sortFieldInfo.sortField}
         title={columnData.columnName}
-        onClickSequence={onSort}
+        onClickSequence={({ sortField, sortOrder }) =>
+          onSort({
+            sortField,
+            sortOrder,
+            stateKey: tableSort.sortKey,
+          })
+        }
       />
     </th>
   );

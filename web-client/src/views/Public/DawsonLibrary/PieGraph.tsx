@@ -1,228 +1,122 @@
-import React, { useEffect, useRef } from 'react';
-import { Chart, ChartConfiguration, registerables } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import type { Context } from 'chartjs-plugin-datalabels';
-
-Chart.register(...registerables, ChartDataLabels);
+import React from 'react';
 
 export interface PieGraphData {
   label: string;
   value: number;
   color?: string;
+  labelColor?: string;
 }
 
-interface PieGraphProps {
-  data: PieGraphData[];
-  title?: string;
-  width?: number;
-  height?: number;
-  showLegend?: boolean;
-  showLabels?: boolean;
-  /**
-   * Outline option for pie slices. 'none' -> no border; 'white' -> white border; 'black' -> black border (default)
-   */
-  outline?: 'none' | 'white' | 'black';
-}
+// interface PieGraphProps {
+//   data: PieGraphData[];
+//   title?: string;
+//   width?: number;
+//   height?: number;
+//   showLegend?: boolean;
+//   showLabels?: boolean;
+//   /**
+//    * Outline option for pie slices. 'none' -> no border; 'white' -> white border; 'black' -> black border (default)
+//    */
+//   outline?: 'none' | 'white' | 'black';
+// }
 
-export const PieGraph: React.FC<
-  PieGraphProps & { type?: 'default' | 'session'; rotation?: number }
-> = ({
+import {
+  Pie,
+  PieChart,
+  PieSectorShapeProps,
+  Sector,
+  Legend,
+  Tooltip,
+} from 'recharts';
+import { RechartsDevtools } from '@recharts/devtools';
+
+export const PieGraph = ({
+  title,
   data,
-  type = 'default',
-  rotation = 0, // -90 makes the pie chart start from the top aka 12 o clock position instead of default right 3 o clock
-  title = 'Distribution',
-  width = 648,
-  height = 400,
-  showLegend = true,
-  showLabels = true,
-  outline = 'black',
+  isAnimationActive = true,
+}: {
+  title: string;
+  data: PieGraphData[];
+  isAnimationActive?: boolean;
 }) => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null);
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: { value: number; payload: PieGraphData }[];
+  }) => {
+    if (!active || !payload?.length) return null;
 
-  const defaultColors =
-    type === 'default'
-      ? [
-          '#005EA2', // blue primary
-          '#FFBE2E', // yellow
-          '#162E51', // blue darker
-          '#D83933', // red primary
-          '#2E8540', // green
-          '#E5A000', // yellow darker
-          '#B50909', // red darker
-        ]
-      : [
-          '#B4D0B9', // light green
-          '#FEE685', // light yellow
-          '#97D4EA', // light blue
-          '#F2938C', // light red
-          '#D0C3E9', // light purple
-          '#E5A000', // yellow darker
-        ];
+    const entry = payload[0].payload;
+    const { value } = payload[0];
+    const total = data.reduce((sum, d) => sum + d.value, 0);
+    const percentage = ((value / total) * 100).toFixed(1);
+    const { color } = entry;
 
-  // const isLightColor = (hexColor: string): boolean => {
-  //   const hex = hexColor.replace('#', '');
-  //   const r = parseInt(hex.substring(0, 2), 16);
-  //   const g = parseInt(hex.substring(2, 4), 16);
-  //   const b = parseInt(hex.substring(4, 6), 16);
-  //   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  //   return luminance > 0.5;
-  // };
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    const ctx = chartRef.current.getContext('2d');
-    if (!ctx) return;
-
-    const labels = data.map(item => item.label);
-    const values = data.map(item => item.value);
-    const colors = data.map(
-      (item, index) =>
-        item.color || defaultColors[index % defaultColors.length],
+    return (
+      <div className="tw:bg-[#1B1B1B] tw:rounded tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:text-white tw:gap-1.5">
+        {title && <div className="tw:font-bold">{title}</div>}
+        <div className="tw:flex tw:items-center tw:gap-2">
+          <span
+            className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:rounded-sm tw:shrink-0"
+            style={{ backgroundColor: color }}
+          />
+          {entry.label}: {value} ({percentage}%)
+        </div>
+      </div>
     );
+  };
 
-    const total = values.reduce((sum, val) => sum + val, 0);
-
-    const borderColor =
-      outline === 'none' ? undefined : outline === 'white' ? '#fff' : '#000';
-    const borderWidth = outline === 'none' ? 0 : 2;
-
-    const config: ChartConfiguration<'pie'> = {
-      type: 'pie',
-      data: {
-        labels,
-        datasets: [
-          {
-            data: values,
-            backgroundColor: colors,
-            borderColor,
-            borderWidth,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        rotation, // Start from top (default is 0, which starts from right)
-        // only allow click events to avoid hover interactions/tooltips
-        events: ['click'],
-        plugins: {
-          title: {
-            display: !!title,
-            text: title,
-            color: '#000',
-            font: {
-              size: 20,
-              weight: 'bold',
-            },
-            padding: {
-              top: 10,
-              bottom: 20,
-            },
-          },
-          legend: {
-            display: showLegend,
-            position: 'top',
-            onClick: () => {},
-            labels: {
-              padding: 15,
-              font: {
-                size: 20,
-                weight: 'bold',
-              },
-              usePointStyle: false,
-              boxWidth: 48,
-              boxHeight: 48,
-              borderRadius: 6,
-              generateLabels: chart => {
-                const { datasets } = chart.data;
-                if (datasets.length === 0) return [];
-                return (
-                  chart.data.labels?.map((label, i) => {
-                    const value = datasets[0].data[i] as number;
-                    const bgColor = (datasets[0].backgroundColor as string[])[
-                      i
-                    ];
-                    return {
-                      text: `${label}: ${value}`,
-                      fillStyle: bgColor,
-                      strokeStyle: '#000',
-                      borderRadius: 6,
-                      index: i,
-                    };
-                  }) || []
-                );
-              },
-            },
-          },
-          tooltip: {
-            enabled: false,
-            callbacks: {
-              label: context => {
-                const label = context.label || '';
-                const value = context.parsed;
-                const percentage = ((value / total) * 100).toFixed(1);
-                return `${label}: ${value} (${percentage}%)`;
-              },
-            },
-          },
-          datalabels: {
-            display: showLabels,
-            color: '#000',
-            font: {
-              weight: 'bold' as const,
-              size: 20,
-            },
-            formatter: (value: number) => {
-              const percentage = ((value / total) * 100).toFixed(1);
-              return `${percentage}%`;
-            },
-            anchor: (context: Context) => {
-              const percentage =
-                ((context.dataset.data[context.dataIndex] as number) / total) *
-                100;
-              return percentage < 5 ? 'end' : 'center';
-            },
-            align: (context: Context) => {
-              const percentage =
-                ((context.dataset.data[context.dataIndex] as number) / total) *
-                100;
-              return percentage < 5 ? 'end' : 'center';
-            },
-            offset: (context: Context) => {
-              const percentage =
-                ((context.dataset.data[context.dataIndex] as number) / total) *
-                100;
-              return percentage < 5 ? 10 : 0;
-            },
-          },
-        },
-      },
-    };
-
-    chartInstanceRef.current = new Chart(ctx, config);
-
-    return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
-    };
-  }, [data, title, showLegend, showLabels]);
-
+  // Custom shape component for the pie slices.
+  const MyCustomPie = (props: PieSectorShapeProps) => {
+    const entry = data[props.index] as PieGraphData | undefined;
+    const fill = entry?.color;
+    return <Sector {...props} fill={fill} stroke="#000" strokeWidth={2} />;
+  };
   return (
-    <div
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        position: 'relative',
-      }}
-    >
-      <canvas ref={chartRef} />
+    <div className="tw:inline-block">
+      {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
+      <PieChart
+        style={{
+          width: '39rem',
+          maxHeight: '80vh',
+          aspectRatio: 1,
+        }}
+        responsive
+      >
+        <Legend
+          verticalAlign="top"
+          wrapperStyle={{ paddingBottom: 0 }}
+          content={() => (
+            <ul className="tw:grid tw:grid-rows-2 tw:grid-flow-col tw:list-none tw:p-0 tw:m-0 tw:gap-4">
+              {data.map(entry => (
+                <li key={entry.label} className="tw:flex tw:items-center">
+                  <span
+                    className="tw:inline-block tw:w-12 tw:h-12 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-lg tw:shrink-0"
+                    style={{ backgroundColor: entry.color }}
+                  />
+                  <span className="tw:text-black tw:font-bold tw:text-xl tw:w-32">
+                    {entry.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        />
+        <Tooltip content={<CustomTooltip />} />
+        <Pie
+          data={data}
+          labelLine={false}
+          fill="#8884d8" // default fill color (overridden by MyCustomPie)
+          dataKey="value"
+          isAnimationActive={isAnimationActive}
+          shape={MyCustomPie}
+          startAngle={90}
+          endAngle={450}
+        />
+        <RechartsDevtools />
+      </PieChart>
     </div>
   );
 };

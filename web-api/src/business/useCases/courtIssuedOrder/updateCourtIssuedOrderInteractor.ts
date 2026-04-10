@@ -104,7 +104,7 @@ export const updateCourtIssuedOrder = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId: docketEntryIdToEdit,
+      documentStorageId: currentDocument.documentStorageId,
     });
 
   const docketEntryEntity = new DocketEntry(

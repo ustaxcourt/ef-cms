@@ -961,6 +961,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change of Trial Location',
     eventCode: 'NCTL',
   },
+  noticeOfChangeOfTrialStartDate: {
+    documentTitle: 'Notice of Change of Trial Date',
+    documentType: 'Notice of Change of Trial Date',
+    eventCode: 'NOT',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
@@ -1818,11 +1823,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -2182,6 +2189,8 @@ export const AWS_BATCH_POLLING_INTERVAL = 5000;
 
 export const AWS_BATCH_POLLING_TIMEOUT = 600000;
 
+export const EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES = ['NOTW'];
+
 export const EVENT_CODES_WITH_NO_ORDER = [
   'COED',
   'MEMO',
@@ -2216,3 +2225,5 @@ export const EVENT_CODES_WITH_NO_ORDER = [
   'SORI',
   'TCOP',
 ];
+
+export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';

@@ -190,66 +190,155 @@ export const DawsonLibrary = () => {
           },
         ]}
       />
-      <PieGraph
-        rotation={25}
-        data={[
-          { label: 'Type A', value: 92.5 },
-          { label: 'Type B', value: 7.5 },
-        ]}
-        title="Sample Distribution 1"
-      />
-      {/* Pie with no outline */}
-      {
+      <div>
+        <h1>PieGraph</h1>
         <PieGraph
-          rotation={0}
-          outline="none"
+          title="Procedure Type"
           data={[
-            { label: 'NoOutline A', value: 60 },
-            { label: 'NoOutline B', value: 40 },
+            { label: 'In Person', value: 75, color: '#005EA2' },
+            {
+              label: 'Remote',
+              value: 25,
+              color: '#FFBE2E',
+            },
           ]}
-          title="Pie — No Outline"
         />
-        /* Pie with white outline */
-      }
-      <PieGraph
-        rotation={0}
-        outline="white"
-        data={[
-          { label: 'WhiteOutline A', value: 30 },
-          { label: 'WhiteOutline B', value: 70 },
-        ]}
-        title="Pie — White Outline"
-      />
-      <PieGraph
-        data={[
-          { label: 'Type A', value: 25 },
-          { label: 'Type B', value: 15 },
-          { label: 'Type C', value: 10 },
-          { label: 'Type D', value: 20 },
-          { label: 'Type E', value: 35 },
-          { label: 'Type F', value: 5 },
-        ]}
-        title="Sample Distribution 2"
-        rotation={60}
-      />
-      <PieGraph
-        rotation={90}
-        data={[
-          { label: 'Type A', value: 75 },
-          { label: 'Type B', value: 15 },
-          { label: 'Type C', value: 15 },
-          { label: 'Type D', value: 2 },
-          { label: 'Type E', value: 2 },
-          { label: 'Type F', value: 2 },
-        ]}
-        title="Session Distribution 1"
-        type="session"
-      />
+        <PieGraph
+          title="Session Type"
+          data={[
+            { label: 'Regular', value: 40, color: '#B4D0B9' },
+            { label: 'Hybrid-S', value: 8, color: '#F2938C' },
+            { label: 'Hybrid', value: 8, color: '#FEE685' },
+            { label: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
+            { label: 'Small', value: 2.5, color: '#97D4EA' },
+            { label: 'Special', value: 2.5, color: '#E5A000' },
+          ]}
+        />
+      </div>
       <div className="card margin-2 padding-2">
         <Buttons />
         <Alerts />
         <Tags />
         <Inputs />
+        <div>
+          <div className="tw:mt-12">
+            <h1 className="tw:xs:text-4xl tw:text-2xl tw:m-0">Heading 1</h1>
+            <h1 className="tw:xs:text-4xl tw:text-2xl tw:m-0">Heading 1</h1>
+            <h1 className="tw:xs:text-4xl tw:text-2xl tw:m-0">Heading 1</h1>
+            <h1 className="tw:xs:text-4xl tw:text-2xl tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </h1>
+          </div>
+          <div className="tw:mt-12">
+            <h2 className="tw:xs:text-2xl tw:text-lg tw:m-0">Heading 2</h2>
+            <h2 className="tw:xs:text-2xl tw:text-lg tw:m-0">Heading 2</h2>
+            <h2 className="tw:xs:text-2xl tw:text-lg tw:m-0">Heading 2</h2>
+            <h2 className="tw:xs:text-2xl tw:text-lg tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </h2>
+          </div>
+          <div className="tw:mt-12">
+            <h3 className="tw:xs:text-xl tw:text-base tw:m-0">Heading 3</h3>
+            <h3 className="tw:xs:text-xl tw:text-base tw:m-0">Heading 3</h3>
+            <h3 className="tw:xs:text-xl tw:text-base tw:m-0">Heading 3</h3>
+            <h3 className="tw:xs:text-xl tw:text-base tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </h3>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Body</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Body</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Body</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-base tw:text-sm tw:m-0">Body Secondary</p>
+            <p className="tw:xs:text-base tw:text-sm tw:m-0">Body Secondary</p>
+            <p className="tw:xs:text-base tw:text-sm tw:m-0">Body Secondary</p>
+            <p className="tw:xs:text-base tw:text-sm tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Field Label</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Field Label</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">Field Label</p>
+            <p className="tw:xs:text-lg tw:text-base tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-lg tw:font-bold tw:text-bold tw:m-0">
+              Field Label Bold
+            </p>
+            <p className="tw:xs:text-lg tw:font-bold tw:text-bold tw:m-0">
+              Field Label Bold
+            </p>
+            <p className="tw:xs:text-lg tw:font-bold tw:text-bold tw:m-0">
+              Field Label Bold
+            </p>
+            <p className="tw:xs:text-lg tw:font-bold tw:text-bold tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-sm tw:font-bold tw:text-xs tw:m-0">
+              Field Label Bold Small
+            </p>
+            <p className="tw:xs:text-sm tw:font-bold tw:text-xs tw:m-0">
+              Field Label Bold Small
+            </p>
+            <p className="tw:xs:text-sm tw:font-bold tw:text-xs tw:m-0">
+              Field Label Bold Small
+            </p>
+            <p className="tw:xs:text-sm tw:font-bold tw:text-xs tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-xs tw:text-xs tw:m-0">Small</p>
+            <p className="tw:xs:text-xs tw:text-xs tw:m-0">Small</p>
+            <p className="tw:xs:text-xs tw:text-xs tw:m-0">Small</p>
+            <p className="tw:xs:text-xs tw:text-xs tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-xl tw:text-lg tw:m-0">Chart</p>
+            <p className="tw:xs:text-xl tw:text-lg tw:m-0">Chart</p>
+            <p className="tw:xs:text-xl tw:text-lg tw:m-0">Chart</p>
+            <p className="tw:xs:text-xl tw:text-lg tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+          <div className="tw:mt-12">
+            <p className="tw:xs:text-xl tw:font-bold tw:text-lg tw:m-0">
+              Chart Bold
+            </p>
+            <p className="tw:xs:text-xl tw:font-bold tw:text-lg tw:m-0">
+              Chart Bold
+            </p>
+            <p className="tw:xs:text-xl tw:font-bold tw:text-lg tw:m-0">
+              Chart Bold
+            </p>
+            <p className="tw:xs:text-xl tw:font-bold tw:text-lg tw:m-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              nam repellat aliquam dolore expedita obcaecati
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
