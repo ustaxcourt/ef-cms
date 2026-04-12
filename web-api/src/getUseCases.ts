@@ -54,6 +54,7 @@ import { generateDraftStampOrderInteractor } from '../../shared/src/business/use
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
+import { generateNoticeOfChangeOfTrialStartDateInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialStartDateInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -251,6 +252,7 @@ const useCases = {
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeOfTrialLocationInteractor,
+  generateNoticeOfChangeOfTrialStartDateInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,
