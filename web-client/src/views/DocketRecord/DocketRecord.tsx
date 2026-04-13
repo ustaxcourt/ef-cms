@@ -1,5 +1,6 @@
 import {
   DOCKET_RECORD_PAGE_SIZE,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
@@ -57,7 +58,7 @@ export const DocketRecord = connect(
 
     const hasLargeDocketEntryCount =
       formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
-        .length > 1000;
+        .length > DOCKET_RECORD_PAGINATION_THRESHOLD;
 
     const noDocumentsMessage = 'There are no documents of that type.';
 

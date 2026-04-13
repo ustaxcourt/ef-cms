@@ -605,7 +605,13 @@ describe('getCaseInteractor', () => {
         },
       )) as CaseDTO;
       for (let i = 0; i < docketEntries.length; i++) {
-        expect(result.docketEntries[i]).toMatchObject({
+        // Look up by docketEntryId rather than index, since Case sorts
+        // docket entries by (createdAt, docketEntryId) — the input order
+        // here is not preserved.
+        const actual = result.docketEntries.find(
+          de => de.docketEntryId === docketEntries[i].docketEntryId,
+        );
+        expect(actual).toMatchObject({
           workItemId: workItems[i].workItemId,
           qcViewed: !!workItems[i].isRead,
           qcComplete: !!workItems[i].completedAt,

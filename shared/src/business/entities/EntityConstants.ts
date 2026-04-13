@@ -1751,6 +1751,7 @@ export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for 
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
 export const DOCKET_RECORD_PAGE_SIZE = 500; // number of results displayed for each page in the docket record
+export const DOCKET_RECORD_PAGINATION_THRESHOLD = 1000; // paginate when docket entry count exceeds this threshold
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([

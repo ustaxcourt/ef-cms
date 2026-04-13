@@ -845,7 +845,11 @@ export class Case extends JoiValidationEntity {
               petitioners: this.petitioners,
             }),
         )
-        .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+        .sort(
+          (a, b) =>
+            compareStrings(a.createdAt, b.createdAt) ||
+            compareStrings(a.docketEntryId, b.docketEntryId),
+        );
 
       this.isSealed = isSealedCase(rawCase);
 
