@@ -93,7 +93,7 @@ export const formattedTrialSessionDetails = (
   if (formattedTrialSession.startDate) {
     const trialDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(formattedTrialSession.startDate);
+      .formatDateString(formattedTrialSession.startDate, DATE_FORMATS.YYYYMMDD);
     const nowDateFormatted = applicationContext
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
@@ -117,7 +117,7 @@ export const formattedTrialSessionDetails = (
 
     canEditOngoingSession =
       user.role === USER_ROLES.caseServicesSupervisor &&
-      trialDateFormatted < nowDateFormatted &&
+      trialDateFormatted <= nowDateFormatted &&
       (endDate >= nowDateFormatted || !endDate);
 
     const validTrialDate = (): boolean => {
