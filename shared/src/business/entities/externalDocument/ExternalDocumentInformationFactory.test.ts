@@ -93,6 +93,11 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(errors().certificateOfServiceDate).toEqual(undefined);
       });
 
+      it('should not require certificate of service date when generationType is auto', () => {
+        baseDoc.generationType = GENERATION_TYPES.AUTO;
+        expect(errors().certificateOfServiceDate).toEqual(undefined);
+      });
+
       it('should not allow certificate of service date to be in the future', () => {
         baseDoc.certificateOfServiceDate = calculateISODate({
           howMuch: 1,

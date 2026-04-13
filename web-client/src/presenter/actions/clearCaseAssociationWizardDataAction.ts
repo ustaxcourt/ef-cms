@@ -10,6 +10,10 @@ export const clearCaseAssociationWizardDataAction = ({
   store,
 }: ActionProps) => {
   switch (props.key) {
+    case 'generationType':
+      store.unset(state.form.certificateOfService);
+      store.unset(state.form.certificateOfServiceDate);
+      break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
       break;

@@ -199,7 +199,10 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       (this.currentUser.role === ROLES.privatePractitioner ||
         this.currentUser.role === ROLES.irsPractitioner);
 
-    if (this.certificateOfService === true) {
+    if (
+      this.certificateOfService === true &&
+      this.generationType !== GENERATION_TYPES.AUTO
+    ) {
       makeRequired('certificateOfServiceDate');
     }
 

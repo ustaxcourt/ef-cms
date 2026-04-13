@@ -5,6 +5,26 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('clearCaseAssociationWizardDataAction', () => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
+  it('clears certificateOfService and certificateOfServiceDate when generationType changes', async () => {
+    const result = await runAction(clearCaseAssociationWizardDataAction, {
+      props: {
+        key: 'generationType',
+        value: 'auto',
+      },
+      state: {
+        form: {
+          certificateOfService: true,
+          certificateOfServiceDate: applicationContext
+            .getUtilities()
+            .createISODateString(),
+        },
+      },
+    });
+
+    expect(result.state.form.certificateOfService).toEqual(undefined);
+    expect(result.state.form.certificateOfServiceDate).toEqual(undefined);
+  });
+
   it('clears certificateOfService', async () => {
     const result = await runAction(clearCaseAssociationWizardDataAction, {
       props: {
