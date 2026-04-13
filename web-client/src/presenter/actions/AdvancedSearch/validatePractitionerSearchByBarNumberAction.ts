@@ -12,13 +12,21 @@ import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSe
 export const validatePractitionerSearchByBarNumberAction = ({
   get,
   path,
+  store,
 }: ActionProps) => {
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );
 
+  const trimmedBarNumber = barNumber?.trim();
+
+  store.set(
+    state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
+    trimmedBarNumber,
+  );
+
   const errors = new BarNumberSearchValidation({
-    barNumber: barNumber?.trim(),
+    barNumber: trimmedBarNumber,
   }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);

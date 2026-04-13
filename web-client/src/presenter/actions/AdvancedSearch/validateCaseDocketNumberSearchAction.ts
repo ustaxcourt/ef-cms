@@ -12,13 +12,21 @@ import { DocketNumberSearchValidation } from '@shared/business/entities/DocketNu
 export const validateCaseDocketNumberSearchAction = ({
   get,
   path,
+  store,
 }: ActionProps) => {
   const { docketNumber } = get(
     state.advancedSearchForm.caseSearchByDocketNumber,
   );
 
+  const trimmedDocketNumber = docketNumber?.trim();
+
+  store.set(
+    state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
+    trimmedDocketNumber,
+  );
+
   const errors = new DocketNumberSearchValidation({
-    docketNumber: docketNumber?.trim(),
+    docketNumber: trimmedDocketNumber,
   }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
