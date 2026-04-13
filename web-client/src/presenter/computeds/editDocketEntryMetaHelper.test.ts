@@ -395,5 +395,54 @@ describe('editDocketEntryMetaHelper', () => {
         },
       ]);
     });
+
+    it('should use formattedCaseDetail to exclude the current case when editing from a member case', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          multiDocketedOriginalCaseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+            multiDocketedOn: ['101-20', '102-20', '103-20'],
+          },
+          formattedCaseDetail: {
+            docketNumber: '102-20',
+            consolidatedCases: [
+              {
+                caseCaption: 'Lead Case Caption',
+                caseTitle: 'Lead Case Title',
+                docketNumber: '101-20',
+              },
+              {
+                caseCaption: 'Member Case 1 Caption',
+                caseTitle: 'Member Case 1 Title',
+                docketNumber: '102-20',
+              },
+              {
+                caseCaption: 'Member Case 2 Caption',
+                caseTitle: 'Member Case 2 Title',
+                docketNumber: '103-20',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.multiDocketedOn).toEqual([
+        {
+          caseCaption: 'Lead Case Caption',
+          caseTitle: 'Lead Case Title',
+          docketNumber: '101-20',
+        },
+        {
+          caseCaption: 'Member Case 2 Caption',
+          caseTitle: 'Member Case 2 Title',
+          docketNumber: '103-20',
+        },
+      ]);
+    });
   });
 });

@@ -77,6 +77,30 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
       cy.get('[data-testid="redaction-acknowledgement-label"]').click();
       cy.get('[data-testid="file-document-review-submit-document"]').click();
       cy.get('[data-testid="success-alert"]').should('exist');
+
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Simultaneous Answering Brief',
+      );
+
+      cy.get('[data-testid="submit-document"]').click();
+
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
+
+      cy.get('[data-testid="party-irs-practitioner-label"]').click();
+
+      cy.get('[data-testid="file-document-submit-document"]').click();
+
+      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
     });
   });
 
@@ -111,7 +135,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
       cy.get('tr')
         .filter(
-          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]}))`,
+          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]})):contains("Administrative Record")`,
         )
         .should('have.length', 1);
     });
@@ -128,7 +152,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
       cy.get('tr')
         .filter(
-          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]}))`,
+          `:has(a:contains(${consolidatedGroupInfo.leadDocketNumber})):has(a:contains(${consolidatedGroupInfo.memberDocketNumbers[0]})):contains("Administrative Record")`,
         )
         .should('have.length', 1);
     });
@@ -400,6 +424,68 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
           .closest('tr')
           .find('[data-testid^="seal-docket-entry-button-"]')
           .should('not.be.disabled');
+      });
+    });
+  });
+
+  describe('Serve Process', () => {
+    it('should have SIAB filed on all cases in the consolidated group but not yet served', () => {
+      loginAsDocketClerk1();
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-SIAB"]').should('exist');
+      cy.get('[data-testid="document-viewer-link-SIAB"]')
+        .closest('tr')
+        .find('[data-testid="docket-record-cell-not-served"]')
+        .should('contain', 'Not served');
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-SIAB"]').should('exist');
+        cy.get('[data-testid="document-viewer-link-SIAB"]')
+          .closest('tr')
+          .find('[data-testid="docket-record-cell-not-served"]')
+          .should('contain', 'Not served');
+      });
+    });
+
+    it('should not be servable on member cases and should show lead case banner', () => {
+      loginAsDocketClerk1();
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-SIAB"]').click();
+        cy.contains(
+          'This document can only be served from the lead case',
+        ).should('exist');
+        cy.get('[data-testid="serve-paper-filed-document"]').should(
+          'not.exist',
+        );
+      });
+    });
+
+    it('should serve SIAB on all cases when served from the lead case', () => {
+      loginAsDocketClerk1();
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-SIAB"]').click();
+      cy.get('[data-testid="serve-paper-filed-document"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="print-paper-service-done-button"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-SIAB"]')
+        .closest('tr')
+        .find('[data-testid="docket-record-cell-not-served"]')
+        .should('not.contain', 'Not served');
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-SIAB"]')
+          .closest('tr')
+          .find('[data-testid="docket-record-cell-not-served"]')
+          .should('not.contain', 'Not served');
       });
     });
   });
