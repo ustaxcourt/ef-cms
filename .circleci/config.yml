@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.73
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.74
 
 parameters:
   run_build_and_deploy:
@@ -290,7 +290,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install

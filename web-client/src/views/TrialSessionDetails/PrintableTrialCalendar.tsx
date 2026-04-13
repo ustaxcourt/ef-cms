@@ -54,6 +54,7 @@ export const PrintableTrialCalendar = connect(
           <Button
             link
             className="margin-bottom-3"
+            data-testid="back-to-session-link"
             onClick={() => {
               if (printablePreview === 'trialCalendar') {
                 gotoTrialSessionDetailSequence({
