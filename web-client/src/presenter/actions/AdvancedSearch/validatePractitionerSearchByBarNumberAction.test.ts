@@ -54,4 +54,24 @@ describe('validatePractitionerSearchByBarNumberAction', () => {
     });
     expect(successStub).not.toHaveBeenCalled();
   });
+
+  it('should store a trimmed barNumber in state', async () => {
+    const result = await runAction(
+      validatePractitionerSearchByBarNumberAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            practitionerSearchByBarNumber: { barNumber: ' 123 ' },
+          },
+        },
+      },
+    );
+
+    expect(
+      result.state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
+    ).toBe('123');
+  });
 });
