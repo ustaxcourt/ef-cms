@@ -94,7 +94,9 @@ async function getCaseDetails(
 ): Promise<{
   petitionerContactId: string;
   petitionerName: string;
-  consolidatedCasesToFileAcross: any[] | undefined;
+  consolidatedCasesToFileAcross:
+    | { docketNumber: string }[]
+    | undefined;
 }> {
   const response = await axios.get(`${apiUrl}/cases/${docketNumber}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -107,18 +109,24 @@ async function getCaseDetails(
       'Could not find petitioner contact ID on case. Ensure the case exists and is served.',
     );
   }
+  if (!petitionerName) {
+    throw new Error(
+      'Could not find petitioner name on case. Ensure the case has petitioner data.',
+    );
+  }
 
   // Mirrors the UI's "File across consolidated group" choice: pass the
   // entire consolidatedCases array (which includes the lead case) straight
   // through to the external document interactor.
-  const consolidatedCases: any[] = response.data?.consolidatedCases || [];
+  const consolidatedCases: { docketNumber: string }[] =
+    response.data?.consolidatedCases || [];
   console.log(
     `  GET /cases/${docketNumber} -> leadDocketNumber=${response.data?.leadDocketNumber} consolidatedCases.length=${consolidatedCases.length}`,
   );
   if (consolidatedCases.length > 0) {
     console.log(
       `    consolidatedCases docketNumbers: [${consolidatedCases
-        .map((c: any) => c.docketNumber)
+        .map(c => c.docketNumber)
         .join(', ')}]`,
     );
   }
@@ -209,7 +217,7 @@ async function fileExhibitAndWait(
   key: string,
   petitionerContactId: string,
   consolidatedCasesToFileAcross:
-    | { docketNumber: string; leadDocketNumber: string }[]
+    | { docketNumber: string }[]
     | undefined,
 ): Promise<void> {
   const asyncSyncId = uuidv4();
@@ -313,7 +321,7 @@ async function qcCompleteExhibitAndWait(
     console.log(`  Petitioner contact ID: ${petitionerContactId}`);
     if (consolidatedCasesToFileAcross) {
       const dns = consolidatedCasesToFileAcross
-        .map((c: any) => c.docketNumber)
+        .map(c => c.docketNumber)
         .join(', ');
       console.log(
         `  Consolidated group: filing across ${consolidatedCasesToFileAcross.length} cases: [${dns}]`,
@@ -354,7 +362,7 @@ async function qcCompleteExhibitAndWait(
           `  [${exhibitNumber}/${exhibits}] docketEntryId=${key} filing on ${docketNumber}` +
             (consolidatedCasesToFileAcross
               ? ` across [${consolidatedCasesToFileAcross
-                  .map((c: any) => c.docketNumber)
+                  .map(c => c.docketNumber)
                   .join(', ')}]`
               : ''),
         );
@@ -380,7 +388,7 @@ async function qcCompleteExhibitAndWait(
         // docketEntryId).
         const docketNumbersToQc =
           consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0
-            ? consolidatedCasesToFileAcross.map((c: any) => c.docketNumber)
+            ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
             : [docketNumber];
         console.log(
           `    QC completing on: [${docketNumbersToQc.join(', ')}]`,

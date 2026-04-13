@@ -26,20 +26,19 @@ export const addPageNumbersToPdf = async ({
   const totalPages = pages.length;
 
   // PDF coordinates: origin at bottom-left, units in points (72pt = 1 inch).
-  // Letter size = 612 x 792 pt.
   // The content area uses top margin ~80px (≈60pt) and bottom margin ~100px (≈75pt).
   // We draw header/footer text within these margin areas.
 
   const HEADER_FONT_SIZE = 9;
   const FOOTER_FONT_SIZE = 7.5;
   const LEFT_MARGIN = 52; // ~40px at 96dpi → 30pt, plus some padding
-  const HEADER_Y = 760; // within the 80px (60pt) top margin, from bottom of page
-  const FOOTER_Y = 30; // within the 100px (75pt) bottom margin, from bottom of page
+  const HEADER_Y_OFFSET = 32; // distance from top of page to header text
+  const FOOTER_Y = 30; // distance from bottom of page to footer text
   const TEXT_COLOR = rgb(0, 0, 0);
 
   for (let i = 0; i < totalPages; i++) {
     const page = pages[i];
-    const { width } = page.getSize();
+    const { height, width } = page.getSize();
     const pageNumber = i + 1;
 
     // Header on pages 2+ (page 1 has the court header, no page number)
@@ -55,7 +54,7 @@ export const addPageNumbersToPdf = async ({
         font,
         size: HEADER_FONT_SIZE,
         x: LEFT_MARGIN,
-        y: HEADER_Y,
+        y: height - HEADER_Y_OFFSET,
         color: TEXT_COLOR,
       });
 
@@ -63,7 +62,7 @@ export const addPageNumbersToPdf = async ({
         font,
         size: HEADER_FONT_SIZE,
         x: width - LEFT_MARGIN - rightTextWidth,
-        y: HEADER_Y,
+        y: height - HEADER_Y_OFFSET,
         color: TEXT_COLOR,
       });
     }

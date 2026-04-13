@@ -37,11 +37,15 @@ export const docketRecord = async ({ applicationContext, data }) => {
     content: docketRecordTemplate,
   });
 
-  const footerHtml = ReactDOM.renderToString(
-    React.createElement(DatePrintedFooter, {
-      datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    }),
-  );
+  // When displayHeaderFooter is false (chunked mode), suppress the Puppeteer
+  // footer — addPageNumbersToPdf will overlay accurate footers after merging.
+  const footerHtml = displayHeaderFooter
+    ? ReactDOM.renderToString(
+        React.createElement(DatePrintedFooter, {
+          datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
+        }),
+      )
+    : '';
 
   const docketNumber = data.caseDetail.docketNumberWithSuffix;
 
