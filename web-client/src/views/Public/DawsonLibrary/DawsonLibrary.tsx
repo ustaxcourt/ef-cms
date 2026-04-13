@@ -207,12 +207,13 @@ export const DawsonLibrary = () => {
           title="Session Type"
           data={[
             { label: 'Regular', value: 40, color: '#B4D0B9' },
-            { label: 'Hybrid-S', value: 8, color: '#F2938C' },
             { label: 'Hybrid', value: 8, color: '#FEE685' },
+            { label: 'Small', value: 8, color: '#97D4EA' },
+            { label: 'Hybrid-S', value: 2.5, color: '#F2938C' },
             { label: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
-            { label: 'Small', value: 2.5, color: '#97D4EA' },
             { label: 'Special', value: 2.5, color: '#E5A000' },
           ]}
+          legendFlow="row"
         />
       </div>
       <div className="card margin-2 padding-2">

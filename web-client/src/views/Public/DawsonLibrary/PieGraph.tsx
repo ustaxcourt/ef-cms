@@ -71,16 +71,18 @@ export const PieGraph = ({
   title,
   data,
   isAnimationActive = true,
+  legendFlow = 'column',
 }: {
   title: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
+  legendFlow?: 'row' | 'column';
 }) => {
   // Custom shape component for the pie slices.
   const MyCustomPie = (props: PieSectorShapeProps) => {
     const entry = data[props.index] as PieGraphData | undefined;
     const fill = entry?.color;
-    return <Sector {...props} fill={fill} stroke="#000" strokeWidth={2} />;
+    return <Sector {...props} fill={fill} stroke="#000" />;
   };
   return (
     <div className="tw:inline-block">
@@ -97,7 +99,9 @@ export const PieGraph = ({
           verticalAlign="top"
           wrapperStyle={{ paddingBottom: 0 }}
           content={() => (
-            <ul className="tw:grid tw:grid-rows-2 tw:grid-flow-col tw:list-none tw:p-0 tw:m-0 tw:gap-4">
+            <ul
+              className={`tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 ${legendFlow === 'column' ? 'tw:grid-rows-2 tw:grid-flow-col' : 'tw:grid-cols-3 tw:grid-flow-row'}`}
+            >
               {data.map(entry => (
                 <li key={entry.label} className="tw:flex tw:items-center">
                   <span
@@ -123,6 +127,7 @@ export const PieGraph = ({
           shape={MyCustomPie}
           startAngle={90}
           endAngle={450}
+          strokeWidth={2}
         />
         <RechartsDevtools />
       </PieChart>
