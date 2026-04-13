@@ -11,6 +11,7 @@ export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   canClose?: boolean;
   canDelete?: boolean;
   canEdit?: boolean;
+  canEditOngoingSession?: boolean;
   chambersPhoneNumber?: string;
   disableHybridFilter?: boolean;
   isHybridSession?: boolean;
@@ -32,13 +33,14 @@ export const formattedTrialSessionDetails = (
   let disableHybridFilter = false;
   let canDelete = false;
   let canEdit = false;
+  let canEditOngoingSession = false;
 
   let alertMessageForNOTT: string | undefined;
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
+  if (!trialSession.trialSessionId) return {} as FormatTrialSessionHelperType;
   const currentUser = get(state.user);
-
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -46,7 +48,6 @@ export const formattedTrialSessionDetails = (
       currentUser,
       trialSession,
     });
-
   const {
     DATE_FORMATS,
     HYBRID_SESSION_TYPES,
@@ -106,9 +107,25 @@ export const formattedTrialSessionDetails = (
       return editableSessionTypes.includes(sessionType);
     };
 
+    const endDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedTrialSession.estimatedEndDate);
+
+    canEditOngoingSession =
+      user.role === USER_ROLES.caseServicesSupervisor &&
+      trialDateFormatted < nowDateFormatted &&
+      (endDate >= nowDateFormatted || !endDate);
+
+    const validTrialDate = (): boolean => {
+      if (canEditOngoingSession) {
+        return true;
+      }
+      return trialDateInFuture;
+    };
+
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
     canEdit =
-      trialDateInFuture &&
+      validTrialDate() &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
       !isChambersUser &&
       !isJudgeUser;
@@ -141,6 +158,7 @@ export const formattedTrialSessionDetails = (
     canClose,
     canDelete,
     canEdit,
+    canEditOngoingSession,
     chambersPhoneNumber,
     disableHybridFilter,
     isHybridSession,
