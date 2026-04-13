@@ -121,6 +121,10 @@ export function loginAsColvinChambers() {
   login({ email: 'colvinschambers@example.com' });
   cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
 }
+export function loginAsCohenChambers() {
+  login({ email: 'cohenschambers@example.com' });
+  cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
+}
 
 export function loginAsReportersOffice() {
   login({ email: 'reportersoffice@example.com' });

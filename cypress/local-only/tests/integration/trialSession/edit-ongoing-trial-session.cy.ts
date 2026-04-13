@@ -7,6 +7,7 @@ import {
 import {
   loginAsCaseServicesSupervisor,
   loginAsCohen,
+  loginAsCohenChambers,
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from 'cypress/helpers/authentication/login-as-helpers';
@@ -308,5 +309,136 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
       `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
     ).click();
     cy.get('[data-testid="assignments-sessions-trial-clerk"]').contains('Abu');
+  });
+
+  it('should not let trial session update minute sheets if minute sheets have already been opened', () => {
+    loginAsCohenChambers();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+    ).click();
+    cy.then(() => {
+      if (
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        )
+      ) {
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        ).click();
+      }
+    });
+    cy.get('[data-testid="minute-sheet-button-103-20"]')
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.get(
+      '[data-testid="trial-session-metadata-fieldset-trial-clerk"]',
+    ).clear();
+    cy.get('[data-testid="trial-session-metadata-fieldset-trial-clerk"]').type(
+      'Trial Clerk James May',
+    );
+    cy.get('[data-testid="courtReporter"]').clear();
+    cy.get('[data-testid="courtReporter"]').type('Trial Clerk Jeremy Clarkson');
+    cy.get('[data-testid="save-to-drafts-button-top"]').click();
+
+    loginAsCaseServicesSupervisor();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+    ).click();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="trial-session-trial-clerk"]').select(
+      'Test trialclerk1',
+    );
+    cy.get('[data-testid="trial-session-court-reporter"]').clear();
+    cy.get('[data-testid="trial-session-court-reporter"]').type(
+      'New Court Reporter',
+    );
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+    cy.get('[data-testid="success-alert"]').should('be.visible');
+    cy.get('[data-testid="trial-session-court-reporter"]').should(
+      'contain',
+      'New Court Reporter',
+    );
+    cy.get('[data-testid="assignments-sessions-trial-clerk"]').contains(
+      'Test trialclerk1',
+    );
+    loginAsCohenChambers();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+    ).click();
+    cy.then(() => {
+      if (
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        )
+      ) {
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        ).click();
+      }
+    });
+    cy.get('[data-testid="minute-sheet-button-103-20"]')
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.get(
+      '[data-testid="trial-session-metadata-fieldset-trial-clerk"]',
+    ).should('contain.value', 'Trial Clerk James May');
+    cy.get('[data-testid="courtReporter"]').should(
+      'contain.value',
+      'Trial Clerk Jeremy Clarkson',
+    );
+  });
+
+  it.only('should auto populate minute sheets if not already been opened', () => {
+    loginAsCaseServicesSupervisor();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+    ).click();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="trial-session-trial-clerk"]').select(
+      'Test trialclerk1',
+    );
+    cy.get('[data-testid="trial-session-court-reporter"]').clear();
+    cy.get('[data-testid="trial-session-court-reporter"]').type(
+      'New Court Reporter',
+    );
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+    cy.get('[data-testid="success-alert"]').should('be.visible');
+    cy.get('[data-testid="trial-session-court-reporter"]').should(
+      'contain',
+      'New Court Reporter',
+    );
+    cy.get('[data-testid="assignments-sessions-trial-clerk"]').contains(
+      'Test trialclerk1',
+    );
+    loginAsCohenChambers();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+    ).click();
+    cy.then(() => {
+      if (
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        )
+      ) {
+        cy.get(
+          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
+        ).click();
+      }
+    });
+    cy.get('[data-testid="minute-sheet-button-101-21"]')
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.get(
+      '[data-testid="trial-session-metadata-fieldset-trial-clerk"]',
+    ).should('contain.value', 'Test trialclerk1');
+    cy.get('[data-testid="courtReporter"]').should(
+      'contain.value',
+      'New Court Reporter',
+    );
   });
 });
