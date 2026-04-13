@@ -91,22 +91,25 @@ export const CaseListTable = connect(
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
             <>
-              <div ref={paginatorTop} data-testid="casePaginationTop">
+              {dashboardExternalHelper.showFilingFee && (
+                <div className="tw:mb-[30px] text-right">
+                  *Filing fee status may take 2-3 business days from payment
+                  received date or approval of waiver to update.
+                </div>
+              )}
+              <div
+                ref={paginatorTop}
+                data-testid="casePaginationTop"
+                className="tw:mb-[30px]"
+              >
                 <Paginator
                   currentPageIndex={casePagination.activePage}
                   totalPages={casePagination.totalPages}
                   onPageChange={pageChange => {
                     casePagination.setActivePage(pageChange);
-                    focusPaginatorTop(paginatorTop);
                   }}
                 />
               </div>
-              {dashboardExternalHelper.showFilingFee && (
-                <span className="float-right margin-bottom-1">
-                  *Filing fee status may take 2-3 business days from payment
-                  received date or approval of waiver to update.
-                </span>
-              )}
               <table
                 className={classNames({
                   'usa-table responsive-table dashboard ustc-table ': !isMobile,
