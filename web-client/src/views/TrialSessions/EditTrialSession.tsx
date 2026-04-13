@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmTrialSessionLocationChangeModalDialog } from '@web-client/views/ConfirmTrialSessionLocationChangeModalDialog';
+import { ConfirmTrialSessionStartDateChangeModalDialog } from '@web-client/views/ConfirmTrialSessionStartDateChangeModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
@@ -22,6 +23,8 @@ export const EditTrialSession = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.modal.showModal,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
+    persistModal: state.trialSessionChangeModalState.persist,
+    openConfirmTrialSessionLocationChangeModalSequence: sequences.openConfirmTrialSessionLocationChangeModalSequence
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
@@ -30,6 +33,8 @@ export const EditTrialSession = connect(
     formCancelToggleCancelSequence,
     showModal,
     updateTrialSessionSequence,
+    persistModal,
+    openConfirmTrialSessionLocationChangeModalSequence
   }) {
     return (
       <>
@@ -54,6 +59,12 @@ export const EditTrialSession = connect(
               <ConfirmTrialSessionLocationChangeModalDialog
                 cancelSequence={closeModalAndNavigateBackSequence}
                 confirmSequence={updateTrialSessionSequence}
+              />
+            )}
+            {showModal === 'ConfirmTrialSessionStartDateChangeModalDialog' && (
+              <ConfirmTrialSessionStartDateChangeModalDialog
+                cancelSequence={closeModalAndNavigateBackSequence}
+                confirmSequence={persistModal ? openConfirmTrialSessionLocationChangeModalSequence : updateTrialSessionSequence}
               />
             )}
             <ErrorNotification />

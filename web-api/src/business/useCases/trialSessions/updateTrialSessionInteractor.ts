@@ -20,6 +20,7 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
@@ -169,6 +170,12 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
+    const shouldSetNoticeOfTrialSessionStartDateChange =
+      shouldGenerateNoticeOfChangeTrialStartDate(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
     const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
@@ -177,6 +184,7 @@ export const updateTrialSession = async (
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
       shouldSetNoticeOfTrialSessionLocationChange,
+      shouldSetNoticeOfTrialSessionStartDateChange,
       updatedTrialSessionEntity,
     });
 
@@ -195,6 +203,7 @@ export const updateTrialSession = async (
         shouldSetNoticeOfChangeToInPersonProceeding,
         shouldSetNoticeOfChangeToRemoteProceeding,
         shouldSetNoticeOfTrialSessionLocationChange,
+        shouldSetNoticeOfTrialSessionStartDateChange,
       });
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
