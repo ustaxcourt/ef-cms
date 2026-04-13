@@ -2,6 +2,8 @@ import * as path from 'path';
 import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
 import { promises as fs } from 'fs';
 import { getDbWriter } from '@web-api/database';
+import { putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
+import { environment } from '@web-api/environment';
 
 const migrationsDirectory = path.join(__dirname, 'migrations');
 const deprecatedMigrationsDirectory = path.join(
@@ -65,7 +67,7 @@ async function migrateToLatest(migrationType = 'expand') {
       let migrator = createMigrator({ writer });
 
       const migrations = await migrator.getMigrations();
-
+      let didRunMigration = false;
       for (const migration of migrations) {
         const isContractMigration = migration.name.includes('.contract');
         const shouldRunMigration =
@@ -90,6 +92,7 @@ async function migrateToLatest(migrationType = 'expand') {
               console.log(
                 `Migration "${it.migrationName}" was executed successfully`,
               );
+              didRunMigration = true;
             } else if (it.status === 'Error') {
               console.error(
                 `Failed to execute migration "${it.migrationName}"`,
@@ -103,6 +106,10 @@ async function migrateToLatest(migrationType = 'expand') {
             process.exit(1);
           }
         }
+      }
+
+      if (didRunMigration && environment.stage !== 'local') {
+        await putSSMItem('entity-validation-required', 'true');
       }
 
       await writer.destroy();
