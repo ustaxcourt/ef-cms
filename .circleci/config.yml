@@ -143,6 +143,15 @@ jobs:
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
       - run:
+          name: Perform an Aurora blue/green deployment if the RDS engine version has changed
+          command: |
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
+            if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
+              ./scripts/postgres/upgrade-rds-engine-version.sh
+            else
+              echo "skipping…"
+            fi
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
