@@ -45,6 +45,9 @@ type DocketRecordPdfCaseDetail = Omit<
   })[];
 };
 
+type DocketRecordEntry =
+  DocketRecordPdfCaseDetail['formattedDocketEntries'][number];
+
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -233,7 +236,7 @@ async function generateDocketRecordPdf({
   caseDetail: DocketRecordPdfCaseDetail;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  entries: any[];
+  entries: DocketRecordEntry[];
   includePartyDetail: boolean;
 }): Promise<Uint8Array> {
   // For small cases, use the original single-pass generation to avoid
@@ -255,8 +258,8 @@ async function generateDocketRecordPdf({
   }
 
   // Large case: split entries into chunks and generate a PDF for each chunk,
-  // then merge them and overlay accurate page numbers.
-  const chunks: any[][] = [];
+  // then merge them incrementally to avoid holding all chunk PDFs in memory.
+  const chunks: DocketRecordEntry[][] = [];
   for (let i = 0; i < entries.length; i += DOCKET_RECORD_CHUNK_SIZE) {
     chunks.push(entries.slice(i, i + DOCKET_RECORD_CHUNK_SIZE));
   }
@@ -269,14 +272,15 @@ async function generateDocketRecordPdf({
     includePartyDetail,
   };
 
-  // Generate each chunk PDF sequentially to keep memory usage low.
-  // Each call goes through generatePdfFromHtmlInteractor which, in deployed
-  // environments, invokes the pdf_generator Lambda (separate memory space).
-  const chunkPdfs: Uint8Array[] = [];
+  // Generate each chunk PDF sequentially and merge immediately to keep
+  // memory usage low. Each call goes through generatePdfFromHtmlInteractor
+  // which, in deployed environments, invokes the pdf_generator Lambda
+  // (separate memory space).
+  const mergedPdf = await PDFDocument.create();
   for (let i = 0; i < chunks.length; i++) {
     const isFirstChunk = i === 0;
 
-    const chunkPdf = await applicationContext
+    const chunkPdfBytes = await applicationContext
       .getDocumentGenerators()
       .docketRecord({
         applicationContext,
@@ -288,13 +292,8 @@ async function generateDocketRecordPdf({
         },
       });
 
-    chunkPdfs.push(chunkPdf);
-  }
-
-  // Merge all chunk PDFs into a single document.
-  const mergedPdf = await PDFDocument.create();
-  for (const chunkPdfData of chunkPdfs) {
-    const chunkDoc = await PDFDocument.load(chunkPdfData);
+    // Immediately merge into the output document so chunk bytes can be GC'd.
+    const chunkDoc = await PDFDocument.load(chunkPdfBytes);
     const copiedPages = await mergedPdf.copyPages(
       chunkDoc,
       chunkDoc.getPageIndices(),
