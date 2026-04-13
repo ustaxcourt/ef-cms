@@ -290,7 +290,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
