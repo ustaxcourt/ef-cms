@@ -32,6 +32,10 @@ resource "aws_rds_cluster" "postgres" {
     min_capacity = var.min_capacity
   }
 
+  blue_green_update {
+    enabled = true
+  }
+
   lifecycle {
     prevent_destroy = true
     # ignore_changes  = [global_cluster_identifier] - used for a snapshot restore
