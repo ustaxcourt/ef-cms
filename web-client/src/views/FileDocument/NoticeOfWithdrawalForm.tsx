@@ -241,14 +241,14 @@ export const NoticeOfWithdrawalForm = connect(
                         >
                           Edit contact information
                         </Button>
-                        {showModal === 'EditContactInformationModal' && (
-                          <EditContactInformationModal />
-                        )}
                       </>
                     )}
                   </div>
                 ))}
               </div>
+              {showModal === 'EditContactInformationModal' && (
+                <EditContactInformationModal />
+              )}
             </FormGroup>
           )}
 
@@ -288,7 +288,7 @@ export const NoticeOfWithdrawalForm = connect(
                 ))}
               </div>
               <input
-                checked={form.paperServiceAcknowledgement}
+                checked={!!form.paperServiceAcknowledgement}
                 className="usa-checkbox__input"
                 id="paperServiceAcknowledgement"
                 name="paperServiceAcknowledgement"

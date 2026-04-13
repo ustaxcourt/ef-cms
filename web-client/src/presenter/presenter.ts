@@ -340,6 +340,7 @@ import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSe
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
+import { printPublicSessionCopySequence } from './sequences/printPublicSessionCopySequence';
 import { redirectToDashboardSequence } from './sequences/redirectToDashboardSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
@@ -647,6 +648,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1116,6 +1118,8 @@ export const presenterSequences = {
     openConfirmServePaperFiledDocumentSequence as unknown as Function,
   openConfirmServeToIrsModalSequence:
     openConfirmServeToIrsModalSequence as unknown as Function,
+  openConfirmTrialSessionLocationChangeModalSequence:
+    openConfirmTrialSessionLocationChangeModalSequence as unknown as Function,
   openCreateCaseDeadlineModalSequence:
     openCreateCaseDeadlineModalSequence as unknown as Function,
   openCreateMessageModalSequence:
@@ -1194,6 +1198,8 @@ export const presenterSequences = {
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
+  printPublicSessionCopySequence:
+    printPublicSessionCopySequence as unknown as Function,
   redirectToDashboardSequence:
     redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,

@@ -20,7 +20,7 @@ describe('setCustomValidationAlertErrorsFileDocumentAction', () => {
     expect(state.alertError).toEqual({
       title: 'Cannot File Notice of Withdrawal as Counsel',
       message:
-        'You must file a Motion to Withdraw as Counsel because of the following: ',
+        'You must file a Motion to Withdraw as Counsel because of the following:',
     });
   });
   it('should set alertError if eventCode is NOTW and user is an irs practitioner', async () => {
@@ -36,7 +36,7 @@ describe('setCustomValidationAlertErrorsFileDocumentAction', () => {
     expect(state.alertError).toEqual({
       title: 'Cannot File Notice of Withdrawal as Counsel',
       message:
-        'You must file a Motion to Withdraw as Counsel because of the following: ',
+        'You must file a Motion to Withdraw as Counsel because of the following:',
     });
   });
   it('should not set alertError if eventCode is NOTW and user is not a practitioner', async () => {

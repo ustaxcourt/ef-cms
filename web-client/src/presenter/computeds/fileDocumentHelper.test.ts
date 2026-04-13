@@ -257,7 +257,7 @@ describe('fileDocumentHelper', () => {
     expect(result.partiesHeaderText).toEqual('Parties Filing The Document(s)');
   });
 
-  it('should show party header text and label textm for notw in document review', () => {
+  it('should show party header text and label text for notw in document review', () => {
     const result: any = runCompute(fileDocumentHelper, {
       state: {
         ...state,
