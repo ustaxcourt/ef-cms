@@ -25,7 +25,9 @@ export const SessionAssignments = connect(
               </div>
               <div className="grid-col-6">
                 <p className="label">Trial clerk</p>
-                <p>{formattedTrialSessionDetails.formattedTrialClerk}</p>
+                <p data-testid="assignments-sessions-trial-clerk">
+                  {formattedTrialSessionDetails.formattedTrialClerk}
+                </p>
               </div>
             </div>
 

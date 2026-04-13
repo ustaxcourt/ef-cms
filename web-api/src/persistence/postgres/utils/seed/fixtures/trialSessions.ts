@@ -33,6 +33,7 @@ export const trialSessions: RawTrialSession[] = [
       userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
     },
     startDate: '2019-12-02T05:00:00.000Z',
+    estimatedEndDate: '2030-12-10T05:00:00.000Z',
     maxCases: 30,
     trialSessionId: '0d943468-bc2e-4631-84e3-b084cf5b1fbb',
     isCalendared: true,
