@@ -4,8 +4,11 @@ import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export function loadTsConfig(relativePath) {
+export function loadTsConfigPaths(relativePath) {
   const configPath = resolve(__dirname, '..', relativePath);
   const configContent = readFileSync(configPath, 'utf8');
-  return JSON.parse(configContent);
+  const configObj = JSON.parse(configContent);
+  const paths = configObj.compilerOptions.paths;
+  delete paths['*'];
+  return paths;
 }

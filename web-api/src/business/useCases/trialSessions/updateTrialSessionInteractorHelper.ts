@@ -53,6 +53,7 @@ type UpdateCasesAndSetNoticeOfChangeParams = {
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
 };
@@ -65,6 +66,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
   const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
@@ -135,6 +137,21 @@ export const updateCasesAndSetNoticeOfChange = async ({
         );
     }
 
+    if (shouldSetNoticeOfTrialSessionStartDateChange) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialStartDate(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+            previousTrialSession: currentTrialSession,
+          },
+          authorizedUser,
+        );
+    }
+
     if (
       caseEntity.trialSessionId === updatedTrialSessionEntity.trialSessionId
     ) {
@@ -183,11 +200,13 @@ export const getPaperServicePdfName = ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
 }: {
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
 }): string => {
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     return 'Notice of Change of Trial Judge';
@@ -197,6 +216,8 @@ export const getPaperServicePdfName = ({
     return 'Notice of Change to Remote Proceeding';
   } else if (shouldSetNoticeOfTrialSessionLocationChange) {
     return 'Notice of Change of Trial Location';
+  } else if (shouldSetNoticeOfTrialSessionStartDateChange) {
+    return 'Notice of Change of Trial Date';
   } else {
     return 'Notice of Change';
   }
@@ -247,10 +268,10 @@ export function shouldCreateWorkingCopyForNewJudge(
   return Boolean(
     (!get(currentTrialSession, 'judge.userId') &&
       get(updatedTrialSessionEntity, 'judge.userId')) ||
-      (currentTrialSession.judge &&
-        updatedTrialSessionEntity.judge &&
-        currentTrialSession.judge.userId !==
-          updatedTrialSessionEntity.judge.userId),
+    (currentTrialSession.judge &&
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId),
   );
 }
 
@@ -261,9 +282,9 @@ export function shouldCreateWorkingCopyForNewTrialClerk(
   return Boolean(
     (!get(currentTrialSession, 'trialClerk.userId') &&
       get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
-      (currentTrialSession.trialClerk &&
-        updatedTrialSessionEntity.trialClerk &&
-        currentTrialSession.trialClerk.userId !==
-          updatedTrialSessionEntity.trialClerk.userId),
+    (currentTrialSession.trialClerk &&
+      updatedTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        updatedTrialSessionEntity.trialClerk.userId),
   );
 }
