@@ -8,6 +8,7 @@
     "lib": ["es5", "dom"],
     "types": ["cypress", "node"],
     "baseUrl": "../",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@web-client/*": [
         "web-client/src/*"
