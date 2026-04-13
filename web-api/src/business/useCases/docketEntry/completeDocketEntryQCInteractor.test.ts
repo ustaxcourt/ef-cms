@@ -8,6 +8,10 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
+jest.mock(
+  '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -35,9 +39,12 @@ import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/ut
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { generateNoticeOfDocketChangePdf as generateNoticeOfDocketChangePdfMock } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const mockDocumentStorageId = '99a187df-cfee-402f-a211-7ebc2a883583';
   const getUserById = jest.mocked(getUserByIdMock);
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -48,7 +55,12 @@ describe('completeDocketEntryQCInteractor', () => {
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
+  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
+  const generateNoticeOfDocketChangePdf = jest.mocked(
+    generateNoticeOfDocketChangePdfMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  generateNoticeOfDocketChangePdf.mockResolvedValue(mockDocumentStorageId);
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -279,8 +291,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer 123 abc',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -303,8 +315,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo,
     ).toMatchObject({
       nameOfClerk: 'bob',
       titleOfClerk: 'clerk of court',
@@ -356,8 +367,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info (C/S 08/06/19) additional info 2',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -380,8 +391,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after:
         'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
@@ -408,8 +419,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -436,8 +447,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Something Different',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -459,9 +470,7 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange,
-    ).not.toHaveBeenCalled();
+    expect(generateNoticeOfDocketChangePdf).not.toHaveBeenCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
@@ -483,8 +492,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info 221',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -510,8 +519,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -534,11 +543,7 @@ describe('completeDocketEntryQCInteractor', () => {
     ]);
 
     const mockNumberOfPages = 999;
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockImplementation(() => {
-        return mockNumberOfPages;
-      });
+    countPagesInDocument.mockResolvedValueOnce(mockNumberOfPages);
 
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
@@ -552,19 +557,28 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const noticeOfDocketChange = result.caseDetail.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'NODC',
+    expect(countPagesInDocument).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: mockDocumentStorageId,
+      }),
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const noticeOfDocketChange = caseToUpdate.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'NODC',
+    );
 
     expect(noticeOfDocketChange).toMatchObject({
       isFileAttached: true,
       numberOfPages: 999,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
+
+    expect(countPagesInDocument).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: mockDocumentStorageId,
+      }),
+    );
 
     expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -678,7 +692,7 @@ describe('completeDocketEntryQCInteractor', () => {
   it('updates automaticBlocked on a case if pending is true', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -692,11 +706,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(caseDetail.automaticBlocked).toBeTruthy();
+
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.automaticBlocked).toBeTruthy();
   });
 
   it('normalizes receivedAt dates to ISO string format', async () => {
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -707,7 +723,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(caseDetail.docketEntries[0].receivedAt).toEqual(
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
     );
   });

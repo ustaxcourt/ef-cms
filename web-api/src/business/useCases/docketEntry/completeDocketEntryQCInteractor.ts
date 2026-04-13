@@ -43,6 +43,7 @@ import {
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
   DocketEntry,
@@ -399,12 +400,10 @@ const completeDocketEntryQC = async (
 
       noticeUpdatedDocketEntry.setFiledBy(user);
 
-      noticeUpdatedDocketEntry.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
-          documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
-        });
+      noticeUpdatedDocketEntry.numberOfPages = await countPagesInDocument({
+        applicationContext,
+        documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
+      });
 
       noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
