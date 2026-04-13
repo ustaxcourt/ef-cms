@@ -63,6 +63,7 @@ export const completeDocketEntryQCSequence = [
             success: [
               setPdfPreviewUrlAction,
               setDocketEntryIdAction,
+              getCaseAction,
               setCaseAction,
               setAlertSuccessAction,
               setPaperServicePartiesAction,

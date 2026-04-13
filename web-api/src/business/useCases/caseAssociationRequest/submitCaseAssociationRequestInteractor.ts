@@ -9,10 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -33,7 +29,7 @@ const submitCaseAssociationRequest = async (
     filers: string[];
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined> => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
   ) {
@@ -51,7 +47,7 @@ const submitCaseAssociationRequest = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner && filers) {
-    const theCase = await applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         authorizedUser,
@@ -59,26 +55,17 @@ const submitCaseAssociationRequest = async (
         representing: filers,
         user: user as RawPractitioner,
       });
-
-    return CaseFactory.getCaseDTO({
-      rawCase: theCase,
-      user: authorizedUser,
-    });
+    return;
   }
 
   if (isIrsPractitioner) {
-    const theCase = await applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         authorizedUser,
         docketNumber,
         user,
       });
-
-    return CaseFactory.getCaseDTO({
-      rawCase: theCase,
-      user: authorizedUser,
-    });
   }
 };
 

@@ -14,7 +14,7 @@ export const updateCourtIssuedDocketEntryLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await updateCourtIssuedDocketEntryInteractor(
+    await updateCourtIssuedDocketEntryInteractor(
       applicationContext,
       JSON.parse(event.body),
       authorizedUser,

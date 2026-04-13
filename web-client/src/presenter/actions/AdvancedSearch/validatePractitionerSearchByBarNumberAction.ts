@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSearchValidation';
 
 /**
  * validate practitioner search by bar number form
@@ -15,11 +16,10 @@ export const validatePractitionerSearchByBarNumberAction = ({
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );
-  const errors: { barNumber?: string } = {};
 
-  if (!barNumber) {
-    errors.barNumber = 'Enter a bar number';
-  }
+  const errors = new BarNumberSearchValidation({
+    barNumber: barNumber?.trim(),
+  }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
 

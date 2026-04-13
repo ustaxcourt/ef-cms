@@ -25,12 +25,19 @@ export const STATE_KEYS = {
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
-// a number (100 to 99999) followed by a - and a 2 digit year
+
+// any combination of alphanumeric characters only
+export const BAR_NUMBER_MATCHER = /^[a-zA-Z0-9]+$/;
+
 export const COURT_ISSUED_EVENT_CODES = COURT_ISSUED_EVENTS;
 
 export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 
+// a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+// a number (100 to 99999) followed by a - and a 2 digit year, with an optional letter suffix
+export const DOCKET_NUMBER_SEARCH_MATCHER = /^([1-9]\d{2,4}-\d{2}[a-zA-Z]?)$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
@@ -1770,6 +1777,8 @@ export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results 
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
+export const DOCKET_RECORD_PAGE_SIZE = 500; // number of results displayed for each page in the docket record
+export const DOCKET_RECORD_PAGINATION_THRESHOLD = 1000; // paginate when docket entry count exceeds this threshold
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
@@ -1918,7 +1927,7 @@ export type CreatedCaseType = {
     city: string;
     countryType: string;
     name: string;
-    paperPetitionEmail: string;
+    contactEmailAddress: string;
     phone: string;
     postalCode: string;
     state: string;

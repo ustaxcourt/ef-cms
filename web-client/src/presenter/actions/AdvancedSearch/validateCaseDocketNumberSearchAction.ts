@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { DocketNumberSearchValidation } from '@shared/business/entities/DocketNumberSearchValidation';
 
 /**
  * validate case advanced search form
@@ -15,11 +16,10 @@ export const validateCaseDocketNumberSearchAction = ({
   const { docketNumber } = get(
     state.advancedSearchForm.caseSearchByDocketNumber,
   );
-  const errors: { docketNumber?: string } = {};
 
-  if (!docketNumber) {
-    errors.docketNumber = 'Enter a docket number';
-  }
+  const errors = new DocketNumberSearchValidation({
+    docketNumber: docketNumber?.trim(),
+  }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
 
