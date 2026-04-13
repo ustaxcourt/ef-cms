@@ -4,10 +4,11 @@ import { DocketNumberSearchValidation } from '@shared/business/entities/DocketNu
 
 /**
  * validate case advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {Promise} async action
+ * @param {object} providers.path the next object in the path
+ * @param {Function} providers.store the cerebral store
+ *
+ * @returns {Promise<*>} the success or error path
  */
 export const validateCaseDocketNumberSearchAction = ({
   get,

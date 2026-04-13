@@ -7,6 +7,7 @@ import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSe
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
+ ≈
  * @returns {Promise<*>} the success or error path
  */
 export const validatePractitionerSearchByBarNumberAction = ({
