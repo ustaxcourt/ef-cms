@@ -11,12 +11,17 @@ export const PrintableTrialCalendar = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence: sequences.gotoTrialSessionDetailSequence,
+    gotoTrialSessionWorkingCopySequence:
+      sequences.gotoTrialSessionWorkingCopySequence,
     trialSessionId: state.trialSession.trialSessionId,
+    printablePreview: state.printablePreview,
   },
   function PrintableTrialCalendar({
     formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence,
+    gotoTrialSessionWorkingCopySequence,
     trialSessionId,
+    printablePreview,
   }) {
     return (
       <>
@@ -35,7 +40,7 @@ export const PrintableTrialCalendar = connect(
               >
                 <span aria-hidden="true">
                   {formattedTrialSessionDetails.formattedTerm}:{' '}
-                  {formattedTrialSessionDetails.status}
+                  {formattedTrialSessionDetails.sessionStatus}
                 </span>
               </span>
             </div>
@@ -49,14 +54,23 @@ export const PrintableTrialCalendar = connect(
           <Button
             link
             className="margin-bottom-3"
+            data-testid="back-to-session-link"
             onClick={() => {
-              gotoTrialSessionDetailSequence({
-                trialSessionId,
-              });
+              if (printablePreview === 'trialCalendar') {
+                gotoTrialSessionDetailSequence({
+                  trialSessionId,
+                });
+              } else {
+                gotoTrialSessionWorkingCopySequence({
+                  trialSessionId,
+                });
+              }
             }}
           >
             <FontAwesomeIcon icon={['fas', 'arrow-alt-circle-left']} />
-            Back to Session Information
+            {printablePreview === 'trialCalendar'
+              ? 'Back to Session Information'
+              : 'Back to Session Copy'}
           </Button>
           <PdfPreview />
         </div>

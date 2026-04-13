@@ -1,8 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   displayName: 'scripts',
@@ -58,7 +58,7 @@ const config: Config = {
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^scripts/(.*)$': '<rootDir>/$1',
