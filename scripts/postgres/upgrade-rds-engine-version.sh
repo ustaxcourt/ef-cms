@@ -48,6 +48,25 @@ if [ -n "$REPLICA_EXISTS" ]; then
     --apply-immediately \
     --region "$REPLICA_REGION" >/dev/null
 
+  GLOBAL_CLUSTER_IDENTIFIER="${ENV}-dawson-global"
+  
+  REPLICA_CLUSTER_ARN=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+    --region "$REPLICA_REGION" \
+    --query "DBClusters[0].DBClusterArn" \
+    --output text 2>/dev/null || echo "")
+
+  if [ -n "$REPLICA_CLUSTER_ARN" ]; then
+    echo "Removing replica cluster from global cluster ${GLOBAL_CLUSTER_IDENTIFIER}..."
+    aws rds remove-from-global-cluster \
+      --global-cluster-identifier "$GLOBAL_CLUSTER_IDENTIFIER" \
+      --db-cluster-identifier "$REPLICA_CLUSTER_ARN" \
+      --region "$REGION" >/dev/null || echo "Replica may have already been removed from the global cluster."
+
+    echo "Waiting for replica cluster to detach from the global cluster..."
+    sleep 30
+  fi
+
   REPLICA_INSTANCES=$(aws rds describe-db-clusters \
     --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
     --region "$REPLICA_REGION" \
