@@ -7,8 +7,8 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getDbReader } from '@web-api/database';
 import { formatDate } from '../helpers/formatters';
 
 const scriptConfig: ScriptConfig = {

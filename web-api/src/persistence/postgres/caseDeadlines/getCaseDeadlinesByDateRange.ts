@@ -1,6 +1,6 @@
 import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
-import { getDbReader } from '@web-api/database';
 
 export const getCaseDeadlinesByDateRange = async ({
   endDate,

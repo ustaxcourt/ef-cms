@@ -10,10 +10,10 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateCourtIssuedDocketEntry = async (
   _applicationContext: ServerApplicationContext,
@@ -95,17 +95,15 @@ export const updateCourtIssuedDocketEntry = async (
 
   const rawValidWorkItem = workItem.validate().toRawObject();
 
-  const saveItems = [
-    upsertWorkItems({
+  await withTransaction(async () => {
+    await upsertWorkItems({
       workItems: [rawValidWorkItem],
-    }),
-    updateCaseAndAssociations({
+    });
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
-    }),
-  ];
-
-  await settlePromises(saveItems);
+    });
+  });
 };
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(

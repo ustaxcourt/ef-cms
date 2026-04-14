@@ -1,5 +1,5 @@
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
-import { getDbReader } from '@web-api/database';
 
 export const getCaseDeadlinesByDocketNumber = async ({
   docketNumber,

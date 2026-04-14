@@ -1,6 +1,6 @@
 import { Correspondence } from '@shared/business/entities/Correspondence';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
-import { getDbReader } from '@web-api/database';
 
 export const getCaseCorrespondenceByDocketNumber = async ({
   docketNumber,

@@ -25,6 +25,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -123,33 +124,47 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  try {
+    await withTransaction(async () => {
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
 
-  if (documentMetadata.parentMessageId) {
-    const messages = await getMessageThreadByParentId({
-      parentMessageId: documentMetadata.parentMessageId,
+      if (documentMetadata.parentMessageId) {
+        const messages = await getMessageThreadByParentId({
+          parentMessageId: documentMetadata.parentMessageId,
+        });
+
+        const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+        const messageEntity = new Message(mostRecentMessage).validate();
+
+        const isAttached = some(
+          messageEntity.attachments,
+          attachment =>
+            attachment.documentId === docketEntryEntity.docketEntryId,
+        );
+
+        if (!isAttached) {
+          messageEntity.addAttachment({
+            documentId: docketEntryEntity.docketEntryId,
+            documentTitle: docketEntryEntity.documentTitle,
+          });
+        }
+
+        await upsertMessages([messageEntity.validate().toRawObject()]);
+      }
     });
-
-    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
-
-    const messageEntity = new Message(mostRecentMessage).validate();
-
-    const isAttached = some(
-      messageEntity.attachments,
-      attachment => attachment.documentId === docketEntryEntity.docketEntryId,
-    );
-
-    if (!isAttached) {
-      messageEntity.addAttachment({
-        documentId: docketEntryEntity.docketEntryId,
-        documentTitle: docketEntryEntity.documentTitle,
+  } catch (error) {
+    // Clean up the document contents file if the transaction fails
+    if (documentMetadata.documentContentsId) {
+      await applicationContext.getPersistenceGateway().deleteDocumentFile({
+        applicationContext,
+        key: documentMetadata.documentContentsId,
       });
     }
-
-    await upsertMessages([messageEntity.validate().toRawObject()]);
+    throw error;
   }
 };
 
