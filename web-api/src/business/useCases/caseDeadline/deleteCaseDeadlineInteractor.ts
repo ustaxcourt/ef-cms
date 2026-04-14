@@ -13,8 +13,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from 'web-api/src/persistence/postgres/utils/transactions';
 
 export const deleteCaseDeadline = async (
   _applicationContext: ServerApplicationContext,
@@ -47,7 +46,7 @@ export const deleteCaseDeadline = async (
     cd => cd.caseDeadlineId === caseDeadlineId,
   );
 
-  const result = await withTransaction(async () => {
+  await withTransaction(async () => {
     await deleteDeadline({
       caseDeadlineId,
     });
@@ -57,7 +56,7 @@ export const deleteCaseDeadline = async (
       hasCaseDeadline: deadlinesBeforeDelete.length > 1,
     });
 
-    const updatedResult = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: updatedCase,
     });
@@ -65,22 +64,14 @@ export const deleteCaseDeadline = async (
     const { leadDocketNumber } = caseToUpdate;
 
     if (!leadDocketNumber) {
-      const theCase = new Case(result, { authorizedUser })
-        .validate()
-        .toRawObject();
-      const caseDTO = new CaseDTO(theCase);
-      return caseDTO;
+      return;
     }
 
     if (
       !HANDLED_CASE_DEADLINE ||
       HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
     ) {
-      const theCase = new Case(result, { authorizedUser })
-        .validate()
-        .toRawObject();
-      const caseDTO = new CaseDTO(theCase);
-      return caseDTO;
+      return;
     }
 
     const CONSOLIDATED_CASE_DEADLINE =
@@ -101,8 +92,6 @@ export const deleteCaseDeadline = async (
       });
 
     await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
-
-    return updatedResult;
   });
 };
 
