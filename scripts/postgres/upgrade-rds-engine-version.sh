@@ -29,6 +29,81 @@ fi
 
 echo "Current DB Version: ${CURRENT_RDS_ENGINE_VERSION}"
 echo "Target DB Version: ${TARGET_VERSION}"
+
+REPLICA_REGION="us-west-1"
+REPLICA_CLUSTER_IDENTIFIER="${ENV}-dawson-replica"
+
+echo "Checking for cross-region replica ${REPLICA_CLUSTER_IDENTIFIER} that would block Blue/Green Deployment..."
+REPLICA_EXISTS=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+  --region "$REPLICA_REGION" \
+  --query "DBClusters[0].DBClusterIdentifier" \
+  --output text 2>/dev/null || echo "")
+
+if [ -n "$REPLICA_EXISTS" ]; then
+  echo "Replica found. Disabling deletion protection on replica cluster..."
+  aws rds modify-db-cluster \
+    --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+    --no-deletion-protection \
+    --apply-immediately \
+    --region "$REPLICA_REGION" >/dev/null
+
+  REPLICA_INSTANCES=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+    --region "$REPLICA_REGION" \
+    --query "DBClusters[0].DBClusterMembers[*].DBInstanceIdentifier" \
+    --output text)
+
+  for INSTANCE in $REPLICA_INSTANCES; do
+    echo "Deleting replica instance ${INSTANCE}..."
+    aws rds delete-db-instance \
+      --db-instance-identifier "$INSTANCE" \
+      --skip-final-snapshot \
+      --region "$REPLICA_REGION" >/dev/null
+  done
+
+  echo "Waiting for replica instances to be completely deleted (this can take a while)..."
+  for INSTANCE in $REPLICA_INSTANCES; do
+    while true; do
+      INSTANCE_STATUS=$(aws rds describe-db-instances \
+        --db-instance-identifier "$INSTANCE" \
+        --region "$REPLICA_REGION" \
+        --query "DBInstances[0].DBInstanceStatus" \
+        --output text 2>/dev/null || echo "deleted")
+
+      echo "Instance ${INSTANCE} status: ${INSTANCE_STATUS}"
+
+      if [[ "$INSTANCE_STATUS" == "deleted" || -z "$INSTANCE_STATUS" ]]; then
+        break
+      fi
+      sleep 30
+    done
+  done
+
+  echo "Deleting replica cluster ${REPLICA_CLUSTER_IDENTIFIER}..."
+  aws rds delete-db-cluster \
+    --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+    --skip-final-snapshot \
+    --region "$REPLICA_REGION" >/dev/null
+
+  echo "Waiting for replica cluster to be completely deleted..."
+  while true; do
+    CLUSTER_STATUS=$(aws rds describe-db-clusters \
+      --db-cluster-identifier "$REPLICA_CLUSTER_IDENTIFIER" \
+      --region "$REPLICA_REGION" \
+      --query "DBClusters[0].Status" \
+      --output text 2>/dev/null || echo "deleted")
+
+    echo "Cluster ${REPLICA_CLUSTER_IDENTIFIER} status: ${CLUSTER_STATUS}"
+
+    if [[ "$CLUSTER_STATUS" == "deleted" || -z "$CLUSTER_STATUS" ]]; then
+      break
+    fi
+    sleep 10
+  done
+  echo "Replica deleted! Terraform will automatically rebuild a new replica with the upgraded engine version in the next allColors deployment."
+fi
+
 echo "Initiating Blue/Green Deployment for ${DB_CLUSTER_IDENTIFIER}..."
 
 SOURCE_ARN=$(aws rds describe-db-clusters \
