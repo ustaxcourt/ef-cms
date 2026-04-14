@@ -199,6 +199,15 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           );
         });
 
+        it('should not display preferred language and communication method fields for deceased spouse', () => {
+          cy.get(
+            '[data-testid="contact-secondary-preferred-language"]',
+          ).should('not.exist');
+          cy.get(
+            '[data-testid="contact-secondary-preferred-communication-method"]',
+          ).should('not.exist');
+        });
+
         it('should allow user to go to step 3 if everything is filled out correctly', () => {
           const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
             {
@@ -278,6 +287,39 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           });
 
           cy.get('[data-testid="is-spouse-deceased-1"]').click();
+        });
+
+        it('should allow input into preferred language and communication method fields for primary contact', () => {
+          cy.get('[data-testid="contact-primary-preferred-language"]').type(
+            'Spanish',
+          );
+          cy.get('[data-testid="contact-primary-preferred-language"]').should(
+            'have.value',
+            'Spanish',
+          );
+          cy.get(
+            '[data-testid="contact-primary-preferred-communication-method"]',
+          ).type('ASL');
+          cy.get(
+            '[data-testid="contact-primary-preferred-communication-method"]',
+          ).should('have.value', 'ASL');
+        });
+
+        it('should allow input into preferred language and communication method fields for spouse', () => {
+          cy.get('[data-testid="have-spouse-consent-label"]').click();
+          cy.get('[data-testid="contact-secondary-preferred-language"]').type(
+            'French',
+          );
+          cy.get('[data-testid="contact-secondary-preferred-language"]').should(
+            'have.value',
+            'French',
+          );
+          cy.get(
+            '[data-testid="contact-secondary-preferred-communication-method"]',
+          ).type('TTY');
+          cy.get(
+            '[data-testid="contact-secondary-preferred-communication-method"]',
+          ).should('have.value', 'TTY');
         });
 
         it('should display error validation messages if Spouse is Deceased form is empty', () => {
@@ -503,7 +545,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       cy.get('[data-testid="filing-type-1"').click();
     });
 
-    describe('Petitioner and spouse', () => {
+      describe('Petitioner and spouse', () => {
       it('should display correct spouse header', () => {
         cy.get('[data-testid="spouse-header"]').should(
           'have.text',
@@ -516,6 +558,37 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           'have.text',
           'Is the petitioner spouse deceased?',
         );
+      });
+
+      it('should allow input into preferred language and communication method fields for practitioner', () => {
+        cy.get('[data-testid="contact-primary-preferred-language"]').type(
+          'Spanish',
+        );
+        cy.get('[data-testid="contact-primary-preferred-language"]').should(
+          'have.value',
+          'Spanish',
+        );
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).type('ASL');
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).should('have.value', 'ASL');
+
+        cy.get('[data-testid="is-spouse-deceased-1"]').click();
+        cy.get('[data-testid="contact-secondary-preferred-language"]').type(
+          'French',
+        );
+        cy.get('[data-testid="contact-secondary-preferred-language"]').should(
+          'have.value',
+          'French',
+        );
+        cy.get(
+          '[data-testid="contact-secondary-preferred-communication-method"]',
+        ).type('TTY');
+        cy.get(
+          '[data-testid="contact-secondary-preferred-communication-method"]',
+        ).should('have.value', 'TTY');
       });
       describe('Spouse is not deceased', () => {
         beforeEach(() => {

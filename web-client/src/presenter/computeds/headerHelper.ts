@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { Role } from '@shared/business/entities/EntityConstants';
 
 export const headerHelper = (
   get: Get,
@@ -32,12 +33,14 @@ export const headerHelper = (
   const pageIsRecentFilings = currentPage === 'RecentFilings';
   const pageIsHome =
     isDashboard ||
-    ([
-      USER_ROLES.caseServicesSupervisor,
-      USER_ROLES.docketClerk,
-      USER_ROLES.petitionsClerk,
-      USER_ROLES.adc,
-    ].includes(userRole) &&
+    ((
+      [
+        USER_ROLES.caseServicesSupervisor,
+        USER_ROLES.docketClerk,
+        USER_ROLES.petitionsClerk,
+        USER_ROLES.adc,
+      ] as Role[]
+    ).includes(userRole) &&
       pageIsMessages);
 
   const isCaseServicesSupervisor =
@@ -57,29 +60,35 @@ export const headerHelper = (
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
     showDocumentQC: isInternalUser && !isCaseServicesSupervisor,
-    showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
+    showHomeIcon: (
+      [USER_ROLES.judge, USER_ROLES.chambers, USER_ROLES.clerkOfCourt] as Role[]
+    ).includes(userRole),
     showMessages:
       isInternalUser &&
       userRole !== USER_ROLES.general &&
       !isCaseServicesSupervisor,
     showMessagesAndQCDropDown: isCaseServicesSupervisor,
     showMobileAccountMenu: isLoggedIn,
-    showMyAccount: [
-      USER_ROLES.privatePractitioner,
-      USER_ROLES.irsPractitioner,
-      USER_ROLES.petitioner,
-    ].includes(userRole),
+    showMyAccount: (
+      [
+        USER_ROLES.privatePractitioner,
+        USER_ROLES.irsPractitioner,
+        USER_ROLES.petitioner,
+      ] as Role[]
+    ).includes(userRole),
     showMyCases:
       isExternalUser && userRole && userRole !== USER_ROLES.irsSuperuser,
     showReports: isInternalUser,
     showSearchInHeader:
       userRole &&
-      ![
-        USER_ROLES.petitioner,
-        USER_ROLES.privatePractitioner,
-        USER_ROLES.irsPractitioner,
-        USER_ROLES.irsSuperuser,
-      ].includes(userRole),
+      !(
+        [
+          USER_ROLES.petitioner,
+          USER_ROLES.privatePractitioner,
+          USER_ROLES.irsPractitioner,
+          USER_ROLES.irsSuperuser,
+        ] as Role[]
+      ).includes(userRole),
     showSearchNavItem: userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
     showVerifyEmailWarningNotification: !!user?.pendingEmail,

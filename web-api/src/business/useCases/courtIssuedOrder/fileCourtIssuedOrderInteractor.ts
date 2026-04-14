@@ -26,6 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -34,7 +35,7 @@ export const fileCourtIssuedOrder = async (
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -167,7 +168,7 @@ export const fileCourtIssuedOrder = async (
     throw error;
   }
 
-  return caseEntity.toRawObject();
+  return new CaseDTO(caseEntity.toRawObject());
 };
 
 export const fileCourtIssuedOrderInteractor = withLocking(
@@ -201,15 +202,15 @@ function generateFreeText(documentMetadata: {
   if (eventCode === 'OJR') {
     return [
       orderType === 'statusReport' &&
-      `. Parties by ${formattedDueDate} shall file a status report.`,
+        `. Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
-      `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+        `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
       orderType !== 'statusReportStipulatedDecision' &&
-      orderType !== 'statusReport' &&
+        orderType !== 'statusReport' &&
+        strickenFromTrialSessions &&
+        '.',
       strickenFromTrialSessions &&
-      '.',
-      strickenFromTrialSessions &&
-      'Case is stricken from the current trial session.',
+        'Case is stricken from the current trial session.',
     ]
       .filter(Boolean)
       .join(' ');
@@ -222,13 +223,13 @@ function generateFreeText(documentMetadata: {
       return [
         'Order',
         orderType === 'statusReport' &&
-        `parties by ${formattedDueDate} shall file a status report.`,
+          `parties by ${formattedDueDate} shall file a status report.`,
         orderType === 'statusReportStipulatedDecision' &&
-        `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+          `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
         strickenFromTrialSessions &&
-        'Case is stricken from the current trial session.',
+          'Case is stricken from the current trial session.',
         jurisdiction === 'restoredToGeneralDocket' &&
-        'Case is no longer jurisdiction retained and is restored to the general docket.',
+          'Case is no longer jurisdiction retained and is restored to the general docket.',
       ]
         .filter(Boolean)
         .join(' ');

@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmTrialSessionLocationChangeModalDialog } from '@web-client/views/ConfirmTrialSessionLocationChangeModalDialog';
+import { ConfirmTrialSessionStartDateChangeModalDialog } from '@web-client/views/ConfirmTrialSessionStartDateChangeModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
@@ -24,6 +25,8 @@ export const EditTrialSession = connect(
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
+    persistModal: state.trialSessionChangeModalState.persist,
+    openConfirmTrialSessionLocationChangeModalSequence: sequences.openConfirmTrialSessionLocationChangeModalSequence
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
@@ -34,6 +37,8 @@ export const EditTrialSession = connect(
     showModal,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
+    persistModal,
+    openConfirmTrialSessionLocationChangeModalSequence
   }) {
     return (
       <>
@@ -44,11 +49,10 @@ export const EditTrialSession = connect(
         <section className="usa-section grid-container DocumentDetail">
           <h1 id="edit-trial-session-header">Edit Trial Session</h1>
 
-          <div
+          <form
             noValidate
             aria-labelledby="edit-trial-session-header"
             className="usa-form maxw-none"
-            role="form"
           >
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog
@@ -59,6 +63,12 @@ export const EditTrialSession = connect(
               <ConfirmTrialSessionLocationChangeModalDialog
                 cancelSequence={closeModalAndNavigateBackSequence}
                 confirmSequence={updateTrialSessionSequence}
+              />
+            )}
+            {showModal === 'ConfirmTrialSessionStartDateChangeModalDialog' && (
+              <ConfirmTrialSessionStartDateChangeModalDialog
+                cancelSequence={closeModalAndNavigateBackSequence}
+                confirmSequence={persistModal ? openConfirmTrialSessionLocationChangeModalSequence : updateTrialSessionSequence}
               />
             )}
             <ErrorNotification />
@@ -96,7 +106,7 @@ export const EditTrialSession = connect(
             <div className="button-container">
               <Button
                 data-testid="submit-edit-trial-session"
-                type="submit"
+                type="button"
                 onClick={() => {
                   handleEditedTrialSessionSequence();
                 }}
@@ -105,6 +115,7 @@ export const EditTrialSession = connect(
               </Button>
               <Button
                 link
+                type="button"
                 onClick={() => {
                   formCancelToggleCancelSequence();
                 }}
@@ -112,7 +123,7 @@ export const EditTrialSession = connect(
                 Cancel
               </Button>
             </div>
-          </div>
+          </form>
         </section>
       </>
     );

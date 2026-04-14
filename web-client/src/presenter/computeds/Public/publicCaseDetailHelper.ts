@@ -1,20 +1,59 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  MOTION_DISPOSITION_VERBIAGE,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STATE_KEYS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,
-} from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
+} from '@shared/business/utilities/getFormattedCaseDetail';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { concat } from 'lodash';
+
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawPublicCase,
+  targetDocketEntryId: string,
+  visibilityPolicyDate: any,
+  isTerminalUser: boolean,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser,
+    rawCase,
+    user: {
+      role: ROLES.petitioner,
+      userId: '',
+      email: '',
+      name: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
+  });
+  const showDownloadLink = isDownloadable;
+  return {
+    index: relatedOrder.index,
+    showDownloadLink,
+  };
+};
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
@@ -75,6 +114,56 @@ export const formatDocketEntryOnDocketRecord = (
     );
   }
 
+  let relatedDocketEntries: any[] = [];
+  if (entry.affectedByDocketEntries) {
+    relatedDocketEntries = entry.affectedByDocketEntries.map(affectedEntry => {
+      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+        visibilityPolicyDate,
+        isTerminalUser,
+      );
+
+      const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+        affectedEntry.disposition
+      ].MOTION.map(d => `${d} #${index}`);
+
+      return {
+        ...affectedEntry,
+        docketEntryIndex: index,
+        showDownloadLink,
+        dispositionLinkText,
+      };
+    });
+  }
+
+  if (entry.affectedDocketEntries) {
+    relatedDocketEntries = concat(
+      relatedDocketEntries,
+      entry.affectedDocketEntries.map(affectedEntry => {
+        const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          visibilityPolicyDate,
+          isTerminalUser,
+        );
+
+        const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+          affectedEntry.disposition
+        ].ORDER.map(d => `${d} #${index}`);
+
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDownloadLink,
+          dispositionLinkText,
+        };
+      }),
+    );
+  }
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
@@ -120,6 +209,7 @@ export const formatDocketEntryOnDocketRecord = (
     isStricken: entry.isStricken,
     numberOfPages: entry.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    relatedDocketEntries,
     sealedToTooltip: entry.sealedToTooltip,
     servedAtFormatted: entry.servedAtFormatted,
     servedPartiesCode: entry.servedPartiesCode,
@@ -172,6 +262,13 @@ export type PublicFormattedDocketEntryInfo = {
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
   hasDocument: boolean;
+  relatedDocketEntries: {
+    disposition?: string;
+    dispositionLinkText?: string[];
+    docketEntryId?: string;
+    docketEntryIndex?: number;
+    showDownloadLink: boolean;
+  }[];
 };
 
 export type PublicCaseDetailHelperResults = {

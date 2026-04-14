@@ -29,7 +29,7 @@ export const gotoCaseInventoryReportSequence =
       no: gotoDashboardWithModal,
       proceed: parallel([
         fetchUserNotificationsSequence,
-        gotoCaseInventoryReport,
+        ...gotoCaseInventoryReport,
       ]),
     },
   ]);

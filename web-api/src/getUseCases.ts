@@ -54,6 +54,7 @@ import { generateDraftStampOrderInteractor } from '../../shared/src/business/use
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
+import { generateNoticeOfChangeOfTrialStartDateInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialStartDateInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -132,7 +133,6 @@ import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCa
 import { opinionPublicSearchInteractor } from './business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
-import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
@@ -252,6 +252,7 @@ const useCases = {
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeOfTrialLocationInteractor,
+  generateNoticeOfChangeOfTrialStartDateInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,
@@ -330,7 +331,6 @@ const useCases = {
   opinionPublicSearchInteractor,
   orderAdvancedSearchInteractor,
   orderPublicSearchInteractor,
-  processStreamRecordsInteractor,
   queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,

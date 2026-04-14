@@ -76,7 +76,7 @@ describe('Judge`s chambers stamps an order', () => {
 
       // Apply stamp
       cy.get('[data-testid="clear-optional-fields"]').click();
-      cy.get('[data-testid="motion-disposition-Granted"]').click();
+      cy.get('[data-testid="motion-disposition-GRANTED"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
 
       // Make sure it's there
@@ -88,7 +88,7 @@ describe('Judge`s chambers stamps an order', () => {
           return Cypress.$(el)
             .find('*')
             .text()
-            .includes('Motion for Continuance GRANTED');
+            .includes('Motion for Continuance - GRANTED');
         })
         .should('have.length.at.least', 1);
     });
@@ -126,7 +126,7 @@ describe('Judge`s chambers stamps an order', () => {
               ).click();
             });
           cy.get('[data-testid="apply-stamp"]').click();
-          cy.get('[data-testid="motion-disposition-Granted"]').click();
+          cy.get('[data-testid="motion-disposition-GRANTED"]').click();
           cy.get('[data-testid="save-signature-button"]').click();
           cy.get('[data-testid="success-alert"]').contains(
             'Motion to Proceed Remotely stamped successfully.',
@@ -135,7 +135,7 @@ describe('Judge`s chambers stamps an order', () => {
             .contains('Motion to Proceed Remotely')
             .should('be.visible');
           cy.get('.attachment-viewer-button')
-            .contains('Motion to Proceed Remotely GRANTED')
+            .contains('Motion to Proceed Remotely - GRANTED')
             .should('be.visible');
         });
     });

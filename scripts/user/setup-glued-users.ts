@@ -9,6 +9,7 @@ import {
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import { RawUser } from '@shared/business/entities/User';
+import { runInBatches } from '../helpers/batch';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -18,6 +19,7 @@ const scriptConfig: ScriptConfig = {
     UserPoolId: 'USER_POOL_ID',
     region: 'REGION',
   },
+  preventExecutionAgainst: ['local', 'prod'],
   requireActiveAwsSession: true,
 };
 const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
@@ -36,7 +38,7 @@ type Users = {
   };
 };
 
-const cognito = new CognitoIdentityProvider({ region: region });
+const cognito = new CognitoIdentityProvider({ region });
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -237,43 +239,38 @@ const getUsers = async (): Promise<Users> => {
   const users = {};
   for (const user of results as RawUser[]) {
     const emailDomain = user.email!.split('@')[1];
-    let count = 1;
-    while (user.name in users) {
-      user.name = user.name + count;
-      count++;
-    }
-    count = 0;
 
     const fullName = user.name;
-    user.name = user.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
 
-    if (user.role in ['judge', 'legacyJudge']) {
-      users[user.name] = {
-        email: `${
-          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
-        }judge.${user.name.toLowerCase()}@example.com`,
-        name: `${user.judgeTitle} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
-    } else {
-      users[user.name] = {
-        email: `${user.role!.toLowerCase()}.${user.name.toLowerCase()}@example.com`,
-        name: `${user.role} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
-    }
+    if (user.email) {
+      if (['judge', 'legacyJudge'].includes(user.role)) {
+        users[user.email] = {
+          email: `${
+            user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
+          }judge.${user.name.toLowerCase()}@example.com`,
+          name: `${user.judgeTitle} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      } else {
+        users[user.email] = {
+          email: user.email,
+          name: `${user.role} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      }
 
-    let sourceOfUser = emailDomain;
-    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
-      sourceOfUser = 'gluedUserId';
-    } else if (emailDomain === 'dawson.ustaxcourt.gov') {
-      sourceOfUser = 'bulkImportedUserId';
+      let sourceOfUser = emailDomain;
+      if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+        sourceOfUser = 'gluedUserId';
+      } else if (emailDomain === 'dawson.ustaxcourt.gov') {
+        sourceOfUser = 'bulkImportedUserId';
+      }
+      users[user.email][sourceOfUser] = user.userId;
     }
-    users[user.name][sourceOfUser] = user.userId;
   }
   return users;
 };
@@ -338,24 +335,9 @@ const processUser = async (userName: string, users: Users): Promise<void> => {
   const users = await getUsers();
 
   // Create task functions so work is started only when invoked
-  const taskFns: (() => Promise<void>)[] = Object.keys(users).map(
+  const tasks: (() => Promise<void>)[] = Object.keys(users).map(
     user => () => processUser(user, users),
   );
 
-  // Run tasks in chunks of 15, awaiting each batch before continuing
-  const concurrency = 15;
-  for (let i = 0; i < taskFns.length; i += concurrency) {
-    const batch = taskFns.slice(i, i + concurrency);
-    console.log(
-      'running batch:',
-      batch.map((_, idx) => i + idx),
-    );
-    try {
-      await Promise.all(batch.map(fn => fn()));
-    } catch (err) {
-      console.error('Error in batch:', err);
-    }
-    // small delay between batches to avoid bursting
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+  await runInBatches(tasks);
 })();

@@ -28,7 +28,7 @@ export const addConsolidatedCase = async (
     docketNumberToConsolidateWith,
   }: { docketNumber: string; docketNumberToConsolidateWith: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }

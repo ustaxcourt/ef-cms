@@ -94,7 +94,7 @@ The example above is used specifically when we want to use a majority of the ori
 
 ## Integration Testing
 
-Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API, Dynamo, and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
+Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
 
 You can run the all of the integration tests locally with the following command, but they will take **a long time**.
 
@@ -252,8 +252,10 @@ Since our system generates a lot of PDFs, we have a set of tests that verify the
 
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  If you want to run PDF tests locally, you will need to run the following command:
 
+Add `--no-cache` to the end of the two docker build commands below if you need to double check it's not trying to test an old version code.
+
 ```
-docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
+docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile . && \
 docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
 docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
@@ -272,6 +274,8 @@ If you're getting errors, try running `docker system prune -af` and run the comm
 ### Container Resource Recommendations
 
 If you receive an out-of-memory error when running PDF tests locally, it is likely because your container environment (podman machine or docker equivalent) does not have sufficient resources to run the tests. 6 GB of memory and 200 GB of storage are recommended.
+
+Chromium/Puppeteer uses the `--disable-dev-shm-usage` flag to avoid shared memory issues in Docker by writing to `/tmp` instead of `/dev/shm`.
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.

@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -20,6 +20,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
@@ -38,7 +39,7 @@ const updateCaseContext = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -124,7 +125,7 @@ const updateCaseContext = async (
 
       const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
       if (
-        oldCase.docketNumber === oldCase.leadDocketNumber &&
+        isLeadCase(oldCase) &&
         caseDeadlines.length &&
         LEAD_CASE_DEADLINES.length
       ) {
@@ -155,9 +156,11 @@ const updateCaseContext = async (
     caseToUpdate: newCase,
   });
 
-  return new Case(updatedCase, {
-    authorizedUser,
-  }).toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, {
+      authorizedUser,
+    }).toRawObject(),
+  );
 };
 
 export const updateCaseContextInteractor = withLocking(

@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { formatCaseCaption, formatJudgeName } from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
@@ -69,17 +70,11 @@ const getFirmsCases = async ({
     { header: 'Case Status', key: 'status' },
     { header: 'Case Title', key: 'caseCaption' },
   ];
-  const rows = firmsCases.map(fc => {
-    const judge =
-      fc.associatedJudge
-        ?.replace('Chief Special Trial ', '')
-        .replace('Special Trial ', '')
-        .replace('Judge ', '') || '';
-    return {
-      ...pick(fc, ['caseCaption', 'docketNumber', 'status']),
-      judge,
-    };
-  });
+  const rows = firmsCases.map(fc => ({
+    ...pick(fc, ['docketNumber', 'status']),
+    caseCaption: formatCaseCaption(fc.caseCaption),
+    judge: formatJudgeName(fc.associatedJudge),
+  }));
   generateCsv({ columns, filename, rows });
   console.log(`Generated ${filename}`);
 })();

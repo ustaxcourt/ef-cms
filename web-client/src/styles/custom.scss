@@ -1014,22 +1014,6 @@ header.usa-header {
   color: white;
 }
 
-.background-blue {
-  background-color: color($theme-color-primary-darker);
-
-  @media only screen and (min-width: $medium-screen) {
-    padding-top: 4rem;
-  }
-
-  @media only screen and (max-width: ($medium-screen - 1)) {
-    padding-top: 2rem;
-  }
-
-  .usa-alert__body {
-    padding-right: 15px !important;
-  }
-}
-
 .create-petitioner-account {
   .usa-label {
     margin-top: 15px;
@@ -1650,6 +1634,53 @@ button.change-scanner-button {
   a:not(.usa-button):hover,
   button:hover {
     color: $color-primary-alt;
+  }
+}
+
+.clerk-of-court-accordion-header {
+  background-color: $color-blue;
+  color: $color-white;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $color-blue;
+    color: $color-white;
+  }
+}
+
+.clerk-of-court-accordion {
+  .usa-accordion__button.clerk-of-court-accordion-header {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M20 14H4v-4h16v4z"/></svg>');
+
+    &[aria-expanded='false'] {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M20 12h-6v6h-4v-6H4v-4h6V2h4v6h6v4z"/></svg>');
+    }
+  }
+}
+
+.clerk-of-court-accordion-content {
+  padding: 0;
+}
+
+.trial-session-divider {
+  border-top: 1px solid color($theme-color-base-lighter);
+}
+
+.trial-sessions-scrollable {
+  max-height: 335px;
+  padding-right: 10px;
+  overflow-y: auto;
+
+  @media (width <= 640px) {
+    max-height: 600px;
+    padding-right: 0;
+    overflow-y: auto;
   }
 }
 
@@ -2535,4 +2566,28 @@ button.change-scanner-button {
       margin-left: 0;
     }
   }
+}
+
+.recent-messages-table-mobile-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 900px;
+  }
+}
+
+#my-recent-messages {
+  .message-document-detail {
+    overflow-wrap: break-word;
+    /* stylelint-disable declaration-property-value-keyword-no-deprecated */
+    word-break: break-word;
+    /* stylelint-enable declaration-property-value-keyword-no-deprecated */
+  }
+}
+
+.dashboard-clerk-of-court-mobile-selector {
+  width: 100%;
+  border-radius: 8px;
 }

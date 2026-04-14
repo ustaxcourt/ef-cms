@@ -18,7 +18,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     expect(orderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
@@ -114,7 +114,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     });
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: orderDocument.docketEntryId,
+      docketEntryId: orderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 

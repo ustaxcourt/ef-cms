@@ -4,6 +4,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
@@ -33,6 +34,10 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import {
+  AllFeatureFlags,
+  getAllFeatureFlagsInteractor,
+} from '../featureFlag/getAllFeatureFlagsInteractor';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -60,11 +65,29 @@ export const editPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
+    applicationContext,
+    true,
+  );
+
+  const restrictedEventCodes =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
+
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
     authorizedUser,
     docketEntryId: request.docketEntryId,
     docketNumber: request.documentMetadata.docketNumber,
   });
+
+  const { eventCode } = docketEntryEntity;
+
+  if (
+    eventCode &&
+    typeof restrictedEventCodes === 'string' &&
+    restrictedEventCodes.split(',').includes(eventCode)
+  ) {
+    throw new UnauthorizedError('Unauthorized to edit this document type');
+  }
 
   validateDocketEntryCanBeEdited({
     docketEntry: docketEntryEntity,
@@ -446,7 +469,7 @@ const updateDocketEntry = async ({
       .getUseCaseHelpers()
       .countPagesInDocument({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
+        documentStorageId: docketEntry.documentStorageId,
       });
   }
 

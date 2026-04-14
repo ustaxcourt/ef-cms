@@ -96,7 +96,9 @@ describe('trials session working copies filtering', () => {
     ).should('contain', '(3)');
   });
   it('should have all docket numbers set to statusUnassigned on initial load', () => {
-    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned')
+    cy.get(
+      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
+    )
       .find('span')
       .invoke('text')
       .then(text => {
@@ -105,9 +107,11 @@ describe('trials session working copies filtering', () => {
   });
   it('clicking the checkbox on the filter should not change the count', () => {
     cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned',
+      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
     ).click();
-    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned')
+    cy.get(
+      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
+    )
       .find('span')
       .invoke('text')
       .then(text => {
@@ -118,13 +122,15 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'basisReached',
     );
-    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned')
+    cy.get(
+      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
+    )
       .find('span')
       .invoke('text')
       .then(text => {
         expect(text).to.equal('(2)');
       });
-    cy.get('[data-testid="trial-session-working-copy-filter-basisReached')
+    cy.get('[data-testid="trial-session-working-copy-filter-basisReached"]')
       .find('span')
       .invoke('text')
       .then(text => {
@@ -138,14 +144,30 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'statusUnassigned',
     );
-    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned')
+    cy.get(
+      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
+    )
       .find('span')
       .invoke('text')
       .then(text => {
         expect(text).to.equal('(3)');
       });
-    cy.get('[data-testid="trial-session-working-copy-filter-basisReached')
+    cy.get('[data-testid="trial-session-working-copy-filter-basisReached"]')
       .find('span')
       .should('not.exist');
+  });
+
+  it('should navigate to the public copy print page when link is clicked and navigate back to session copy page', () => {
+    cy.get('[data-testid="print-public-session-working-copy"]').click();
+    cy.get('[data-testid="back-to-session-link"]').as('backToSessionLink');
+    cy.get('@backToSessionLink').should('have.text', 'Back to Session Copy');
+     cy.get('.big-blue-header').within(() => {
+      cy.get('h1').should('contain.text', 'Richmond, Virginia');
+    });
+    cy.get('@backToSessionLink').click();
+    cy.get('[data-testid="print-public-session-working-copy"]').should(
+      'have.text',
+      'Print Public Copy',
+    );
   });
 });

@@ -133,6 +133,13 @@ export function loginAsTrialClerk() {
   cy.get('[data-testid="trial-session-link"]').should('exist');
 }
 
+export function loginAsPractitionerWithManyCases(email: string) {
+  login({ email });
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
 // Try to use the above account specific logins as they wait for specific content.
 function login({ email }: { email: string }) {
   cy.clearAllCookies();
@@ -142,9 +149,10 @@ function login({ email }: { email: string }) {
     getCypressEnv().defaultAccountPass,
   );
   cy.get('[data-testid="login-button"]').click();
-  cy.window().then(win =>
-    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
-  );
+  cy.window().then(win => {
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true');
+    win.localStorage.setItem('__cypressMinuteSheetInSameTab', 'true');
+  });
   cy.get('.ustc-account').should('exist');
   mockDynamsoftLibrary();
 }

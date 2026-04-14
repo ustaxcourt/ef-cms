@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   CASE_STATUS_TYPES,
   MOTION_ORDER_RESPONSE_OPTIONS,
@@ -6,17 +6,20 @@ import {
 import {
   formatDateString,
   FORMATS,
+  isValidDateString,
+  TimeFormats,
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
   const pNames = petitioners.map(p => p.name);
+  const petitioner = pNames.length > 1 ? 'petitioners' : 'petitioner';
   const cleanedFiledBy = motion.filedBy.replace(/^(?:Petr\.|Respt\.)?\s*/, '');
   const movant = pNames.some(name => cleanedFiledBy.includes(name))
-    ? 'petitioner'
+    ? petitioner
     : 'respondent';
-  const nonMovant = movant === 'petitioner' ? 'respondent' : 'petitioner';
+  const nonMovant = movant === petitioner ? 'respondent' : petitioner;
   return { movant, nonMovant };
 };
 
@@ -56,18 +59,24 @@ export const prepareMotionOrderResponseAction = ({
     FORMATS.MONTH_DAY_YEAR,
   );
 
-  const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const dueDateFormatted = formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
-  const responseDateFormatted = formatDateString(
-    responseDate,
-    FORMATS.MONTH_DAY_YEAR,
-  );
+  const dueDateFormatted = isValidDateString(dueDate, [
+    FORMATS.YYYYMMDD,
+  ] as TimeFormats[])
+    ? formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR)
+    : '';
+
+  const responseDateFormatted = isValidDateString(responseDate, [
+    FORMATS.YYYYMMDD,
+  ] as TimeFormats[])
+    ? formatDateString(responseDate, FORMATS.MONTH_DAY_YEAR)
+    : '';
 
   let createOrderSelectedCases = [] as any;
-  let documentNumberText = `(Document no. ${index}).`;
+  let documentNumberText = `(doc. no. ${index}).`;
 
   if (
     isOnLeadCase &&
@@ -81,7 +90,7 @@ export const prepareMotionOrderResponseAction = ({
       };
     });
     createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
-    documentNumberText = `(Lead case Document no. ${index}).`;
+    documentNumberText = `(lead case doc. no. ${index}).`;
   }
 
   let preamblePrepend = '';
@@ -95,11 +104,11 @@ export const prepareMotionOrderResponseAction = ({
     preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
   }
 
-  const orderVerbiage = `that by ${responseDateFormatted} ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
+  const orderVerbiage = `that by ${responseDateFormatted}, ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
   const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText} For cause, it is </p>`;
   const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
-  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} ${movant} may file a Reply.`;
+  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted}, ${movant} may file a Reply.`;
 
   const strickenLine = hasStrickenFromTrialSessions
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.'

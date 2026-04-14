@@ -8,25 +8,25 @@ import {
 
 const tagVariants = cva(
   cn(
-    'tw:rounded-[4px] tw:font-bold tw:uppercase tw:text-nowrap tw:inline-flex tw:items-center tw:justify-center',
+    'tw:rounded-[0.25rem] tw:font-bold tw:uppercase tw:text-nowrap tw:inline-flex tw:items-center tw:justify-center tw:align-middle',
     //Mobile
     'tw:text-xs',
-    'tw:px-[6px]',
-    'tw:py-[2px]',
-    'tw:[&_svg]:h-[10px]',
-    'tw:[&_svg]:w-[10px]',
+    'tw:px-1.5',
+    'tw:py-0.5',
+    'tw:[&_svg]:h-2.5',
+    'tw:[&_svg]:w-2.5',
     //Desktop
     'tw:xs:text-sm',
-    'tw:xs:py-[2px]',
-    'tw:xs:px-[8px]',
-    'tw:xs:[&_svg]:h-[12px]',
-    'tw:xs:[&_svg]:w-[12px]',
+    'tw:xs:py-0.5',
+    'tw:xs:px-2',
+    'tw:xs:[&_svg]:h-3',
+    'tw:xs:[&_svg]:w-3',
   ),
   {
     variants: {
       variant: {
-        primary: cn('tw:bg-white tw:text-primary-darker'),
-        destructive: cn('tw:bg-destructive-dark tw:text-white'),
+        primary: cn('tw:bg-white tw:text-blue-darker'),
+        destructive: cn('tw:bg-red-dark tw:text-white'),
       },
     },
     defaultVariants: {
@@ -46,7 +46,7 @@ export const Tag = ({
   iconProps,
   className = '',
   dataTestId,
-  id
+  id,
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
@@ -54,7 +54,7 @@ export const Tag = ({
 
   return (
     <span className={classes} id={id} data-testid={dataTestId}>
-      {iconProps && <FontAwesomeIcon className="tw:mr-[4px]" {...iconProps} />}
+      {iconProps && <FontAwesomeIcon className="tw:mr-1" {...iconProps} />}
       <span>{children}</span>
     </span>
   );

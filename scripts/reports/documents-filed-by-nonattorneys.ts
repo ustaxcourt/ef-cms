@@ -7,11 +7,9 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import {
-  getIsoFromJsDate,
-  getNowObject,
-} from '@shared/business/utilities/DateHandler';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { pick } from 'lodash';
+import { formatDate } from '../helpers/formatters';
 
 const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
@@ -105,7 +103,7 @@ const getDocumentsFiledByNonAttorneys = async (): Promise<
   const rows = documents.map(de => ({
     ...pick(de, ['docketNumber', 'documentTitle']),
     filedBy: de.name,
-    filedOn: getIsoFromJsDate(de.receivedAt)?.split('T')[0] || '',
+    filedOn: formatDate(de.receivedAt),
   }));
   const docType = eventCode
     ? documents[0].documentType?.replace(' ', '-').toLowerCase()

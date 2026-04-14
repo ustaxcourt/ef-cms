@@ -38,6 +38,7 @@ export const trialSessionMinutesFormOptionsHelper = (
   }));
 
   const internalDocumentTypeOptions = getDocumentTypesForSelect(
+    get,
     INTERNAL_DOCUMENTS_ARRAY,
   ).map(option => ({ label: option.label, value: option.value }));
 

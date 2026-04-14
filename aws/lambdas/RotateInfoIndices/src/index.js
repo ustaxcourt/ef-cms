@@ -5,9 +5,9 @@ const { NodeHttpHandler } = require('@smithy/node-http-handler');
 const { Sha256 } = require('@aws-crypto/sha256-browser');
 const { SignatureV4 } = require('@smithy/signature-v4');
 
-const EXPIRATION = process.env.expiration; // days
+const EXPIRATION = Number(process.env.expiration || 90); // days
 
-exports.handler = async (input, context) => {
+exports.handler = async () => {
   const responses = { createSnapshot: [], deleteIndices: [] };
   let anyError = false;
 
@@ -44,9 +44,12 @@ exports.handler = async (input, context) => {
     }
   }
 
-  return anyError
-    ? context.fail(JSON.stringify(responses))
-    : context.succeed(JSON.stringify(responses));
+  if (anyError) {
+    console.error('Error', responses);
+    throw new Error(JSON.stringify(responses));
+  }
+  console.log('Success', responses);
+  return JSON.stringify(responses);
 };
 
 /**

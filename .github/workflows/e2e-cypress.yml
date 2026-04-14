@@ -2,6 +2,12 @@ name: E2E Cypress
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -33,20 +39,14 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 3.3.0
-      - name: Setup DynamoDB Local
-        uses: codyseibert/dynamodb-action@v4.1.0
-        with:
-          port: 8000
-          cors: '*'
-          version: '2.6.1'
+          opensearch-version: 3.5.0
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
@@ -54,7 +54,7 @@ jobs:
 
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             node_modules
@@ -80,13 +80,13 @@ jobs:
           npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Videos
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/local-only/videos
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: |
             node_modules

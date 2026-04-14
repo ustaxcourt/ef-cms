@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
@@ -12,6 +12,7 @@ import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -23,7 +24,7 @@ export const createCaseDeadline = async (
     handlingConsolidatedCases?: boolean;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
@@ -55,7 +56,10 @@ export const createCaseDeadline = async (
     });
 
     const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
-    if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
+    if (
+      !handlingConsolidatedCases &&
+      isLeadCase({ docketNumber, leadDocketNumber })
+    ) {
       const ADD_DEADLINE_TO_CONSOLIDATED_CASES = consolidatedCases
         .filter(
           ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
@@ -81,7 +85,9 @@ export const createCaseDeadline = async (
     return updatedCase;
   });
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
+  const caseDTO = new CaseDTO(theCase);
+  return caseDTO;
 };
 
 export async function getcreateCaseDeadlineLockInfo(
@@ -97,7 +103,7 @@ export async function getcreateCaseDeadlineLockInfo(
     });
 
   const IDENTIFIERS = [`case|${caseDeadline.docketNumber}`];
-  if (docketNumber !== leadDocketNumber) {
+  if (!isLeadCase({ docketNumber, leadDocketNumber })) {
     return {
       identifiers: IDENTIFIERS,
     };

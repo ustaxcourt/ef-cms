@@ -2,6 +2,12 @@ name: Typescript Reduce Type Errors
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -13,16 +19,16 @@ jobs:
 
     steps:
       - name: Checkout USTC Staging
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
       - name: Checkout current branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: branchToBeCompared
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: 'branchToBeCompared/.nvmrc'
       - name: NPM Install in your branch

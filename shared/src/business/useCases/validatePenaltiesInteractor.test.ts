@@ -11,7 +11,7 @@ describe('validatePenaltiesInteractor', () => {
       statisticId: applicationContext.getUniqueId(),
     };
 
-    const errors = validatePenaltiesInteractor(applicationContext, {
+    const errors = validatePenaltiesInteractor({
       rawPenalty: mockPenalty,
     });
 
@@ -26,7 +26,7 @@ describe('validatePenaltiesInteractor', () => {
       statisticId: undefined, // must be passed in when instantiating to be valid
     };
 
-    const errors = validatePenaltiesInteractor(applicationContext, {
+    const errors = validatePenaltiesInteractor({
       rawPenalty: invalidMockPenalty,
     });
 

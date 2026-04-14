@@ -3,7 +3,11 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PetitionQcDocumentPreview = connect(
+type PetitionQcDocumentPreviewProps = {
+  title: string;
+}
+
+export const PetitionQcDocumentPreview: React.FC<PetitionQcDocumentPreviewProps> = connect(
   {
     documentSelectedForPreview:
       state.currentViewMetadata.documentSelectedForPreview,
@@ -13,11 +17,16 @@ export const PetitionQcDocumentPreview = connect(
     documentSelectedForPreview,
     petitionQcHelper,
   }) {
+    if (!documentSelectedForPreview) {
+      return null;
+    }
+
     return (
       <>
         <PetitionQcScanBatchPreviewer
           documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
+          scanOnly={false}
           title="Add Document(s)"
         />
       </>

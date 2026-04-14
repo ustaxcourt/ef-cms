@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
 import {
   flatten,
@@ -39,7 +38,30 @@ export const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
 export const COLD_CASE_LOOKBACK_IN_DAYS = 120;
 
+export const DAYS_IN_WEEK = 7;
+export const DAYS_TO_WEEK_END = 6;
+
+export const CLERK_OF_COURT_DASHBOARD_LABELS = {
+  TRIAL_SESSIONS_HEADER: 'Trial Sessions',
+  WEEK_CURRENT: 'This Week',
+  WEEK_NEXT: 'Next Week',
+  EMPTY_MESSAGE_CURRENT_WEEK: 'There are no trial sessions for this week.',
+  EMPTY_MESSAGE_NEXT_WEEK: 'There are no trial sessions for next week.',
+  FIELD_START_DATE: 'Start Date',
+  FIELD_PROC_TYPE: 'Proc. Type',
+  FIELD_CITY: 'City',
+  FIELD_EST_END_DATE: 'Est. End Date',
+  FIELD_SESSION_TYPE: 'Session Type',
+  FIELD_JUDGE: 'Judge',
+  FIELD_CLERK: 'Clerk',
+  FALLBACK_UNASSIGNED: 'Unassigned',
+  FALLBACK_EMPTY: '—',
+} as const;
+
 export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
+
+export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
+export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
 export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
@@ -88,7 +110,41 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export type DocketEntryRelation = {
+  disposition: string;
+  docketEntryId: string;
+};
+
+export const MOTION_DISPOSITIONS = {
+  DENIED: 'DENIED',
+  GRANTED: 'GRANTED',
+  GRANTED_IN_PART: 'GRANTED IN PART',
+  DENIED_IN_PART: 'DENIED IN PART',
+  GRANTED_IN_PART_AND_DENIED_IN_PART: 'GRANTED IN PART AND DENIED IN PART',
+};
+
+export const MOTION_DISPOSITION_VERBIAGE = {
+  DENIED: {
+    MOTION: ['DENIED BY'],
+    ORDER: ['DENYING'],
+  },
+  GRANTED: {
+    MOTION: ['GRANTED BY'],
+    ORDER: ['GRANTING'],
+  },
+  'GRANTED IN PART': {
+    MOTION: ['GRANTED IN PART BY'],
+    ORDER: ['GRANTING IN PART'],
+  },
+  'DENIED IN PART': {
+    MOTION: ['DENIED IN PART BY'],
+    ORDER: ['DENYING IN PART'],
+  },
+  'GRANTED IN PART AND DENIED IN PART': {
+    MOTION: ['GRANTED IN PART BY', 'DENIED IN PART BY'],
+    ORDER: ['GRANTING IN PART', 'DENYING IN PART'],
+  },
+};
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
@@ -111,6 +167,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  RESTRICTED_EVENT_CODES: {
+    key: 'restricted-event-codes',
   },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
@@ -420,7 +479,6 @@ export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
     label: 'Bench Opinion (Order of Service of Transcript)',
   },
 ];
-
 export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
@@ -472,9 +530,13 @@ export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(EXTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
+EXTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
+
 export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
+
+INTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
 
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
@@ -661,6 +723,15 @@ export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
 ])
   .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ENTERED_AND_SERVED_EVENT_CODES = [
+  'ODJ',
+  'OD',
+  'ODD',
+  'OAD',
+  'DEC',
+  'SDEC',
+];
 
 export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,
@@ -889,6 +960,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: 'Notice of Change of Trial Location',
     documentType: 'Notice of Change of Trial Location',
     eventCode: 'NCTL',
+  },
+  noticeOfChangeOfTrialStartDate: {
+    documentTitle: 'Notice of Change of Trial Date',
+    documentType: 'Notice of Change of Trial Date',
+    eventCode: 'NOT',
   },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
@@ -1747,11 +1823,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -2110,3 +2188,42 @@ export const NOT_PROVIDED = 'Not Provided';
 export const AWS_BATCH_POLLING_INTERVAL = 5000;
 
 export const AWS_BATCH_POLLING_TIMEOUT = 600000;
+
+export const EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES = ['NOTW'];
+
+export const EVENT_CODES_WITH_NO_ORDER = [
+  'COED',
+  'MEMO',
+  'MOP',
+  'MOTR',
+  'NCON',
+  'NOA',
+  'NOB',
+  'NOC',
+  'NOCE',
+  'NOEI',
+  'NOEP',
+  'NOI',
+  'NOST',
+  'NOT',
+  'NOTT',
+  'NOTW',
+  'NOU',
+  'OBJ',
+  'OBJE',
+  'OBJN',
+  'OCS',
+  'OP',
+  'OPPO',
+  'RCOM',
+  'ROA',
+  'SEOB',
+  'SIOB',
+  'SIOM',
+  'SOMB',
+  'SOP',
+  'SORI',
+  'TCOP',
+];
+
+export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';

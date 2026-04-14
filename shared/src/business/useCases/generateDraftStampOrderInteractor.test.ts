@@ -9,7 +9,19 @@ describe('generateDraftStampOrderInteractor', () => {
   const motionDocketEntryId = '67fb412e-cb00-454c-9739-fa90a09dca1d';
   const parentMessageId = '4cfd6bf2-2252-473b-ae91-e34bcd0df55f';
   const stampData = { disposition: MOTION_DISPOSITIONS.GRANTED };
-  const stampedDocketEntryId = 'e9bdeaa1-8c49-479e-9f21-6f3303307f48';
+
+  const mockStampedDocketEntry = {
+    documentStorageId: 'e9bdeaa1-8c49-479e-9f21-6f3303307f48',
+    docketEntryId: 'e9bdeaa1-8c49-479e-9f21-6f3303307f48',
+  };
+
+  beforeAll(() => {
+    applicationContext
+      .getUseCaseHelpers()
+      .addDraftStampOrderDocketEntryInteractor.mockReturnValue(
+        mockStampedDocketEntry,
+      );
+  });
 
   it('throws an Unauthorized error when the user role is not allowed to access the method', async () => {
     await expect(
@@ -21,15 +33,14 @@ describe('generateDraftStampOrderInteractor', () => {
           motionDocketEntryId,
           parentMessageId,
           stampData,
-          stampedDocketEntryId,
         },
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should add a docket entry for the draft stamp order', async () => {
-    await generateDraftStampOrderInteractor(
+  it('should add a docket entry for the draft stamp order and return said docketEntry`s docketEntryId', async () => {
+    const result = await generateDraftStampOrderInteractor(
       applicationContext,
       {
         docketNumber,
@@ -37,7 +48,6 @@ describe('generateDraftStampOrderInteractor', () => {
         motionDocketEntryId,
         parentMessageId,
         stampData,
-        stampedDocketEntryId,
       },
       mockJudgeUser,
     );
@@ -55,11 +65,14 @@ describe('generateDraftStampOrderInteractor', () => {
       originalDocketEntryId: motionDocketEntryId,
       parentMessageId,
       stampData,
-      stampedDocketEntryId,
     });
+
+    expect(result.stampedDocketEntryId).toEqual(
+      mockStampedDocketEntry.docketEntryId,
+    );
   });
 
-  it('should generate a stamped coversheet for the draft stamp order', async () => {
+  it('should generate a stamped coversheet for the draft stamp order using the docket entry created by addDraftStampOrderDocketEntryInteractor', async () => {
     await generateDraftStampOrderInteractor(
       applicationContext,
       {
@@ -68,7 +81,6 @@ describe('generateDraftStampOrderInteractor', () => {
         motionDocketEntryId,
         parentMessageId,
         stampData,
-        stampedDocketEntryId,
       },
       mockJudgeUser,
     );
@@ -84,7 +96,8 @@ describe('generateDraftStampOrderInteractor', () => {
       docketEntryId: motionDocketEntryId,
       docketNumber,
       stampData,
-      stampedDocketEntryId,
+      stampedDocumentStorageId: mockStampedDocketEntry.documentStorageId,
+      filingDateUpdated: false,
     });
   });
 });

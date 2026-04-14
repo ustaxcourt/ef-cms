@@ -50,7 +50,8 @@ describe('validatePdf', () => {
       .spyOn(pdfValidationHelpers, 'validatePermissions')
       .mockResolvedValue(true);
 
-    (global as any).FileReader = jest.fn(() => mockFileReader);
+    // @ts-expect-error
+    global.FileReader = jest.fn(() => mockFileReader);
 
     mockFile = new File([new ArrayBuffer(8)], 'test.pdf', {
       type: 'application/pdf',
@@ -72,7 +73,7 @@ describe('validatePdf', () => {
     const resultPromise = validatePdf({ file: mockFile });
     mockFileReader.onload();
     const result = await resultPromise;
-    
+
     expect(result).toMatchObject({
       isValid: false,
       errorInformation: {
@@ -198,6 +199,7 @@ describe('validatePdf', () => {
   });
 
   it('should return error message if FileReader result is invalid', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
     mockFileReader.result = null;
 
     const resultPromise = validatePdf({ file: mockFile });
@@ -214,5 +216,9 @@ describe('validatePdf', () => {
       },
       isValid: false,
     });
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      `FileReader result is invalid for file: ${mockFile.name}. Result: null`,
+    );
+    consoleErrorSpy.mockRestore();
   });
 });

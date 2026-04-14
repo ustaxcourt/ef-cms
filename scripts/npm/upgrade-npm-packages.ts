@@ -12,9 +12,9 @@ const caveats: string[] = [
   '@fortawesome/react-fontawesome',
   'puppeteer',
   'puppeteer-core',
+  'pdfjs-dist',
   '@sparticuz/chromium',
   'jest',
-  'pdfjs-dist',
   'quill',
   'quill-delta-to-html',
   'jest-environment-jsdom',
@@ -24,6 +24,8 @@ const caveats: string[] = [
   'p-queue',
   'dwt',
   'uuid',
+  'eslint',
+  '@eslint/js',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

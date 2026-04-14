@@ -40,7 +40,6 @@ export const environment = {
   documentsBucketName: isLocal
     ? 'noop-documents-local-us-east-1'
     : `${process.env.EFCMS_DOMAIN}-documents-${stage}-us-east-1`,
-  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   efcmsDomain: process.env.EFCMS_DOMAIN || 'localhost',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
@@ -64,7 +63,7 @@ export const environment = {
   },
   region,
   s3Endpoint: isLocal
-    ? 'http://0.0.0.0:9001'
+    ? 'http://localhost:9001'
     : 'https://s3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: isLocal

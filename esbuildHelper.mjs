@@ -25,7 +25,6 @@ const env = {
   CIRCLE_SHA1: process.env.CIRCLE_SHA1,
   COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
   COGNITO_SUFFIX: process.env.COGNITO_SUFFIX,
-  DYNAMODB_TABLE_NAME: process.env.DYNAMODB_TABLE_NAME,
   EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
   ENV: process.env.ENV,
   FILE_UPLOAD_MODAL_TIMEOUT: process.env.FILE_UPLOAD_MODAL_TIMEOUT,
@@ -202,7 +201,8 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    sourcemap: process.env.USTC_ENV !== 'prod' ? 'inline' : false,
+    sourcesContent: process.env.ENV !== 'local',
     splitting: true,
   };
 

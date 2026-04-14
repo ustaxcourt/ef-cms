@@ -15,6 +15,7 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -23,7 +24,7 @@ export const archiveCorrespondenceDocument = async (
     docketNumber,
   }: { correspondenceId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -45,7 +46,7 @@ export const archiveCorrespondenceDocument = async (
 
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  return withTransaction(async () => {
+  const result = await withTransaction(async () => {
     await upsertCaseCorrespondences([
       (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
     ]);
@@ -65,6 +66,8 @@ export const archiveCorrespondenceDocument = async (
 
     return updatedCase;
   });
+
+  return new CaseDTO(result);
 };
 
 export const archiveCorrespondenceDocumentInteractor = withLocking(

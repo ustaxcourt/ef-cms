@@ -1,6 +1,6 @@
 ---
-name: Bug Report
-about: 'Template for USTC bugs. '
+name: DAWSON Bug Report
+about: 'Template for DAWSON bugs. '
 title: 'BUG: '
 labels: ''
 assignees: ''
@@ -70,7 +70,7 @@ Workaround is available and easy
 Mostly related to an application’s UI
 Doesn't need a workaround, because it doesn't impact functionality
 
-## Definition of Ready for Bugs(Created 10-4-21)
+## Definition of Ready for Bugs (Created 2021-10-04)
 Definition used: A failure or flaw in the system which produces an incorrect or undesired result that deviates from the expected result or behavior. (Note: Expected results are use cases that have been documented in past user stories as acceptance criteria and test cases, and do not include strange behavior unrelated to use cases.)
 
 The following criteria must be met in order for the development team to begin work on the bug.
@@ -83,18 +83,24 @@ Process: If the unexpected results are new use cases that have been identified, 
 
 If the Court is not able to reproduce the bug, add the “Unable to reproduce” tag. This will provide visibility into the type of support that may be needed by the Court. In the event that the Court cannot reproduce the bug, the Court will work with Flexion to communicate what type of troubleshooting help may be needed.
 
-## Definition of Done (Updated 4-14-21)
-**Product Owner**
- - [ ]  Bug fix has been validated in the Court's test environment
+## Definition of Done (Updated 2026-01-28)
 
-**Engineering**
- - [ ] Automated test scripts have been written
- - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
- - [ ] Verify that language for docket record for internal users and external users is identical
- - [ ] New screens have been added to cypress accessibility axe
- - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html 
- - [ ] READMEs, other appropriate docs and swagger/APIs fully updated
- - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
- - [ ] Interactors should validate entities before calling persistence methods
- - [ ] Code refactored for clarity and to remove any known technical debt
- - [ ] Deployed to the Court's `test` environment if prod-like data is required. Otherwise, deployed to any `experimental` environment for review.
+### Product Owner
+ - [ ] Bug fix has been validated in the Court's test environment.
+ - [ ] Associated test cases defined in TestRail have been updated if necessary.
+ - [ ] Successful test run is performed in TestRail.
+
+### UX
+ - [ ] Verify that language for docket record for internal users and external users is identical.
+ - [ ] All new functionality has been verified to work with keyboard navigation and screen reader software.
+ - [ ] UI should be touch optimized and responsive for external users.
+
+### Engineering
+ - [ ] Automated test scripts have been written.
+ - [ ] Successful test run is performed in TestRail.
+ - [ ] New screens have been added to cypress accessibility axe.
+ - [ ] Interactors should validate entities before calling persistence methods.
+ - [ ] Types have been added to all added and updated functions.
+ - [ ] Code refactored for clarity and to remove any known technical debt.
+ - [ ] All schema changes are documented in the Data Dictionary (DD), and the Entity Relationship Diagram (ERD) is updated as appropriate.
+ - [ ] If there are special deployment instructions, they have been added to the `CHANGES.md` file and the PR description.

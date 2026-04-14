@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/userContacts/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
@@ -23,7 +24,6 @@ import {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -76,10 +76,6 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .createUserForContact.mockImplementation(() => new UserCase(mockCase));
   });
 
   beforeEach(() => {
@@ -89,6 +85,10 @@ describe('updatePetitionerInformationInteractor', () => {
       privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createUserForContact.mockResolvedValue(mockCase);
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     generateAndServeDocketEntry.mockResolvedValue({

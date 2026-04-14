@@ -15,7 +15,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const SingleMessage = ({ indent, message }) => (
+const SingleMessage = ({
+  indent,
+  message,
+}: {
+  indent?: boolean;
+  message: any;
+}) => (
   <>
     <div className={classNames('grid-row', indent && 'padding-left-5')}>
       <div className="grid-col-2">
@@ -220,7 +226,7 @@ export const MessageDetail = connect(
 
           <div className="grid-row grid-gap-5">
             <div className="grid-col-4 document-viewer--documents-list-container">
-              <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list">
+              <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list" data-testid="message-attachments">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}

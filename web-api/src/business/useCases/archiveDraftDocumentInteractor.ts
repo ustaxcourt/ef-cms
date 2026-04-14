@@ -12,6 +12,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const archiveDraftDocument = async (
   _applicationContext: ServerApplicationContext,
@@ -20,7 +21,7 @@ export const archiveDraftDocument = async (
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -61,7 +62,9 @@ export const archiveDraftDocument = async (
     });
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const archiveDraftDocumentInteractor = withLocking(

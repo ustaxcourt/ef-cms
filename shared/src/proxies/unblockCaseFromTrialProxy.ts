@@ -14,7 +14,6 @@ export const unblockCaseFromTrialInteractor = (
 ) => {
   return remove({
     applicationContext,
-    body: {},
     endpoint: `/case-meta/${docketNumber}/block`,
   });
 };

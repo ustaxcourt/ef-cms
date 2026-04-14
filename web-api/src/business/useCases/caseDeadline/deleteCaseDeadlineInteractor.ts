@@ -13,6 +13,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const deleteCaseDeadline = async (
@@ -25,7 +26,7 @@ export const deleteCaseDeadline = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
@@ -63,13 +64,24 @@ export const deleteCaseDeadline = async (
 
     const { leadDocketNumber } = caseToUpdate;
 
-    if (!leadDocketNumber) return updatedResult;
+    if (!leadDocketNumber) {
+      const theCase = new Case(result, { authorizedUser })
+        .validate()
+        .toRawObject();
+      const caseDTO = new CaseDTO(theCase);
+      return caseDTO;
+    }
 
     if (
       !HANDLED_CASE_DEADLINE ||
       HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
-    )
-      return updatedResult;
+    ) {
+      const theCase = new Case(result, { authorizedUser })
+        .validate()
+        .toRawObject();
+      const caseDTO = new CaseDTO(theCase);
+      return caseDTO;
+    }
 
     const CONSOLIDATED_CASE_DEADLINE =
       await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);
@@ -77,11 +89,11 @@ export const deleteCaseDeadline = async (
     const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
       CONSOLIDATED_CASE_DEADLINE.filter(
         ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
-      ).map(({ docketNumber: ccDocketNumber, caseDeadlineId: cdId }) => {
+      ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
         return deleteCaseDeadline(
           _applicationContext,
           {
-            caseDeadlineId: cdId,
+            caseDeadlineId,
             docketNumber: ccDocketNumber,
           },
           authorizedUser,
@@ -93,7 +105,9 @@ export const deleteCaseDeadline = async (
     return updatedResult;
   });
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
+  const caseDTO = new CaseDTO(theCase);
+  return caseDTO;
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(

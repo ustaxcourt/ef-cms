@@ -12,6 +12,10 @@ describe('saveCaseDetailInternalEditAction', () => {
     file: {},
     uploadProgress: jest.fn(),
   };
+  const mockDocketEntry = {
+    docketEntryId: '123',
+    documentStorageId: '456',
+  };
 
   beforeAll(() => {
     applicationContext
@@ -53,7 +57,7 @@ describe('saveCaseDetailInternalEditAction', () => {
           ...caseDetail,
           docketEntries: [
             {
-              docketEntryId: '123',
+              ...mockDocketEntry,
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
             },
           ],
@@ -65,7 +69,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][1].key,
-    ).toEqual('123');
+    ).toEqual(mockDocketEntry.documentStorageId);
   });
 
   it('should not replace an initial filing document if it is not a petition document file', async () => {
@@ -104,6 +108,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toBeUndefined();
     expect(uploadedDocument).toEqual({
       docketEntryId: mockUploadedKey,
+      documentStorageId: mockUploadedKey,
       documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentTitle,
       documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     });
@@ -159,6 +164,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       expect.arrayContaining([
         {
           docketEntryId: mockUploadedKey,
+          documentStorageId: mockUploadedKey,
           documentTitle: `Request for Place of Trial at ${MOCK_CASE.preferredTrialCity}`,
           documentType: 'Request for Place of Trial',
         },
@@ -209,6 +215,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       expect.arrayContaining([
         {
           docketEntryId: mockUploadedKey,
+          documentStorageId: mockUploadedKey,
           documentTitle: 'Request for Place of Trial at Atlantis',
           documentType: 'Request for Place of Trial',
         },

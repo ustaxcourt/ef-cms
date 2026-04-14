@@ -18,8 +18,13 @@ import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 import {
   onTransactionCommit,
   withTransaction,
@@ -29,7 +34,7 @@ export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -81,6 +86,7 @@ export const fileExternalDocument = async (
 
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
+      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
@@ -128,24 +134,48 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  const resolvedCaseEntities: RawCase[] = await withTransaction(async () => {
-    const caseEntities: RawCase[] = [];
+  const caseEntities = await withTransaction(async () => {
+    const pageCountsByDocketEntryId: Map<string, number> = new Map();
+    // Process page counts in batches of 3 to balance speed and memory usage
+    // This prevents OutOfMemory errors when filing multiple large documents
+    // while being faster than sequential processing
+    const docketEntryIds = documentsToAdd
+      .map(([docketEntryId]) => docketEntryId)
+      .filter((id): id is string => !!id);
 
-    for (const caseToUpdate of casesToUpdate) {
+    const BATCH_SIZE = 3;
+    for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
+      const batch = docketEntryIds.slice(i, i + BATCH_SIZE);
+      const batchPromises = batch.map(async docketEntryId => {
+        const numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            documentStorageId: docketEntryId,
+          });
+        return { docketEntryId, numberOfPages };
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      for (const { docketEntryId, numberOfPages } of batchResults) {
+        pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
+      }
+    }
+
+    const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const servedParties = aggregatePartiesForService(caseEntity);
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
         if (docketEntryId && metadata) {
-          const numberOfPages = await applicationContext
-            .getUseCaseHelpers()
-            .countPagesInDocument({ applicationContext, docketEntryId });
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
           const docketEntryEntity = new DocketEntry(
             {
               ...baseMetadata,
               ...metadata,
               docketEntryId,
+              documentStorageId: docketEntryId,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,
@@ -204,19 +234,29 @@ export const fileExternalDocument = async (
         includeCorrespondence: false,
       });
 
-      caseEntities.push(caseEntity.toRawObject());
-    }
+      const rawCaseEntity = caseEntity.toRawObject();
+      return rawCaseEntity;
+    });
+
+    const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
 
     await upsertWorkItems({
       workItems,
     });
 
-    return caseEntities;
+    return resolvedCaseEntities;
   });
 
-  return resolvedCaseEntities.find(
+  const theCase = caseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
+
+  const filteredCase = CaseFactory.getCaseDTO({
+    rawCase: theCase,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

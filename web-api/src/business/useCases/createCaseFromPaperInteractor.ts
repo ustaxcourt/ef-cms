@@ -25,6 +25,7 @@ import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCa
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -296,7 +297,7 @@ export const createCaseFromPaperInteractor = async (
     stinFileId?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
+): Promise<{ caseDetail: CaseDTO; workItem: RawWorkItem }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -348,7 +349,9 @@ export const createCaseFromPaperInteractor = async (
   }
 
   return {
-    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    caseDetail: new CaseDTO(
+      new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    ),
     workItem: workItem.validate().toRawObject(),
   };
 };

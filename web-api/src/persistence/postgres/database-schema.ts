@@ -24,8 +24,10 @@ import {
   DW_CASE_WORKSHEET_COLUMNS,
 } from '@web-api/persistence/postgres/caseWorksheets/schema';
 import {
+  DocketEntryRelatedDocketEntryTable,
   DocketEntryTable,
   DW_DOCKET_ENTRY_COLUMNS,
+  DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS,
 } from '@web-api/persistence/postgres/docketEntries/schema';
 import {
   DW_FEATURE_FLAG_COLUMNS,
@@ -104,6 +106,10 @@ import {
   BarNumberTable,
   DW_BAR_NUMBER_COLUMNS,
 } from '@web-api/persistence/postgres/users/barNumber/schema';
+import {
+  DW_USER_CONTACT_COLUMNS,
+  UserContactTable,
+} from '@web-api/persistence/postgres/userContacts/schema';
 
 const DEFAULT = {};
 
@@ -117,8 +123,9 @@ interface DatabaseSchemaType {
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
+  dwDocketEntryRelatedDocketEntry: DatabaseTableMetadata<DocketEntryRelatedDocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
+  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
@@ -131,6 +138,7 @@ interface DatabaseSchemaType {
   dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
+  dwUserContact: DatabaseTableMetadata<UserContactTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -189,6 +197,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     columns: DW_DOCKET_ENTRY_COLUMNS,
     transformOpenSearchMessage: transformOpenSearchDocketEntries,
     indexOpenSearchMessage: indexOpenSearchDocketEntries,
+  },
+  dwDocketEntryRelatedDocketEntry: {
+    table: DEFAULT as DocketEntryRelatedDocketEntryTable,
+    columns: DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS,
   },
   dwDocketEntryWorksheet: {
     table: DEFAULT as DocketEntryWorksheetTable,
@@ -251,6 +263,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,
     columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
+  },
+  dwUserContact: {
+    table: DEFAULT as UserContactTable,
+    columns: DW_USER_CONTACT_COLUMNS,
   },
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,

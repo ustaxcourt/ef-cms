@@ -29,10 +29,12 @@ export const confirmInitiateServiceModalHelper = (
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
   let { documentTitle, eventCode, isPaper } = form;
   if (!eventCode) {
-    ({ documentTitle, eventCode, isPaper } =
-      formattedCaseDetail.docketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      ));
+    const foundDoc = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
+    if (foundDoc) {
+      ({ documentTitle, eventCode, isPaper } = foundDoc);
+    }
   }
 
   let showConsolidatedCasesForService =

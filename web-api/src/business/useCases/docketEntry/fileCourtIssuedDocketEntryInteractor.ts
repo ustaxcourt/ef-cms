@@ -17,6 +17,10 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  *
@@ -33,11 +37,11 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: any;
+    documentMeta: CourtIssuedDocumentAnyType;
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -68,9 +72,10 @@ export const fileCourtIssuedDocketEntry = async (
     throw new Error('Docket entry has already been added to docket record');
   }
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: subjectDocketEntry.documentStorageId,
+  });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
@@ -79,8 +84,6 @@ export const fileCourtIssuedDocketEntry = async (
       `User not found with user id ${authorizedUser.userId}`,
     );
   }
-
-  const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   const casesToUpdate = await getCasesByDocketNumbers({
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
@@ -131,7 +134,7 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      if (isUnservable) {
+      if (DocketEntry.isUnservable(documentMeta)) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
 
@@ -170,6 +173,15 @@ export const fileCourtIssuedDocketEntry = async (
     }
   });
 
+  if (documentMeta.affectedDocketEntries) {
+    await addAssociatedDocketEntries(
+      casesToUpdate,
+      documentMeta,
+      subjectDocketEntry,
+      false,
+    );
+  }
+
   const rawSubjectCase = await getCaseByDocketNumber({
     docketNumber: subjectDocketNumber,
   });
@@ -177,7 +189,7 @@ export const fileCourtIssuedDocketEntry = async (
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,
   }).validate();
-  return subjectCase.toRawObject();
+  return new CaseDTO(subjectCase.toRawObject());
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

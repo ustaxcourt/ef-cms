@@ -27,7 +27,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   try {
     await batchDownloadDocketEntriesHelper(
       applicationContext,
@@ -111,7 +111,7 @@ const batchDownloadDocketEntriesHelper = async (
     const filename = generateValidDocketEntryFilename({
       documentTitle,
       filingDate,
-      index,
+      index: index ? `${index}` : '',
     });
 
     const fileDirectory =
@@ -121,7 +121,7 @@ const batchDownloadDocketEntriesHelper = async (
 
     documentsToZip.push({
       filePathInZip: `${fileDirectory}/${pdfTitle}`,
-      key: docketEntryId,
+      key: docInfo.documentStorageId,
       useTempBucket: false,
     });
   });
@@ -166,7 +166,7 @@ const batchDownloadDocketEntriesHelper = async (
     await applicationContext.getPersistenceGateway().uploadDocument({
       applicationContext,
       pdfData: JSON.stringify(documentsToZip),
-      pdfName: UUID,
+      key: UUID,
       useTempBucket: true,
     });
 

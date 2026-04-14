@@ -1,5 +1,6 @@
 # this dockerfile is needed if building the puppeteer layer from a non-unix machine
-FROM node:24.11.1-slim
+ARG TARGETARCH=amd64
+FROM node:24.14.1-slim
 
 WORKDIR /home/build
 

@@ -1,12 +1,12 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-api',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
     'elasticsearch/*.test.{js,ts}',
@@ -29,7 +29,6 @@ const config: Config = {
     '!src/persistence/sqs/deleteMessage.ts',
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',
-    '!src/persistence/dynamo/**/*.ts',
     '!src/persistence/postgres/**/*.ts',
     '!src/lambdas/websockets/websockets.ts',
     '!src/lambdas/websockets/switch-colors-cron.ts',
@@ -48,7 +47,10 @@ const config: Config = {
     '!src/gateways/lambda/getLambdaClient.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
+  testMatch: [
+    '<rootDir>/elasticsearch/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   coverageThreshold: {
     global: {
       branches: 90,
@@ -58,7 +60,7 @@ const config: Config = {
     },
   },
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
@@ -69,7 +71,6 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
-  verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],

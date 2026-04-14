@@ -27,6 +27,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -260,7 +261,7 @@ export const createCaseInteractor = async (
     stinFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -344,5 +345,5 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
   });
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  return new CaseDTO(new Case(caseToAdd, { authorizedUser }).toRawObject());
 };

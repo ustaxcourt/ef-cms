@@ -12,6 +12,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * sealCaseContactAddress
@@ -25,7 +26,7 @@ export const sealCaseContactAddress = async (
   _applicationContext: ServerApplicationContext,
   { contactId, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError(
       'Unauthorized for sealing case contact addresses',
@@ -56,7 +57,9 @@ export const sealCaseContactAddress = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(updatedCase, { authorizedUser }).toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const sealCaseContactAddressInteractor = withLocking(

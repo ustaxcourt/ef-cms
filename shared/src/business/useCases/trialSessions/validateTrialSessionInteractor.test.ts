@@ -4,21 +4,21 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {
-    const errors = validateTrialSessionInteractor(applicationContext, {
+    const errors = validateTrialSessionInteractor({
       trialSession: {} as RawNewTrialSession,
     });
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
   it('returns null for a valid trial session', () => {
     const nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
     const MOCK_TRIAL = {
+      estimatedEndDate: `${nextYear}-12-05T00:00:00.000Z`,
       maxCases: 100,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: SESSION_TYPES.regular,
@@ -28,7 +28,7 @@ describe('validateTrialSessionInteractor', () => {
       trialLocation: 'Birmingham, Alabama',
     };
 
-    const errors = validateTrialSessionInteractor(applicationContext, {
+    const errors = validateTrialSessionInteractor({
       trialSession: { ...MOCK_TRIAL } as RawNewTrialSession,
     });
 

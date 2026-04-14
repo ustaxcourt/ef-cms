@@ -20,6 +20,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * saveCaseDetailInternalEdit
@@ -33,7 +34,7 @@ export const saveCaseDetailInternalEdit = async (
   applicationContext: ServerApplicationContext,
   { caseToUpdate, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -192,7 +193,7 @@ export const saveCaseDetailInternalEdit = async (
     });
   });
 
-  return new Case(updatedCase, { authorizedUser }).toRawObject();
+  return new CaseDTO(new Case(updatedCase, { authorizedUser }).toRawObject());
 };
 
 export const saveCaseDetailInternalEditInteractor = withLocking(

@@ -44,7 +44,6 @@ describe('verify old served work items do not show up in the outbox', () => {
     };
 
     const appContext = applicationContextFactory(mockUser);
-    appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = applicationContext
       .getUtilities()
@@ -62,6 +61,7 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     const docketEntry: RawDocketEntry = {
       docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+      documentStorageId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
       docketNumber: caseDetail.docketNumber,
       createdAt: '2019-06-25T15:14:11.924Z',
       documentType: 'Petition',

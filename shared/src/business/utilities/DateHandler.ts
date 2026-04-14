@@ -22,6 +22,7 @@ export const FORMATS = {
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
+  TIME_12_HOUR: 'h:mm a',
   TIME_24_HOUR: 'HH:mm',
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
@@ -59,7 +60,7 @@ export const prepareDateFromEST = (dateString: string, inputFormat: string) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })
-    .setZone(0)
+    .setZone('utc')
     .toISO();
 
   return result;
@@ -118,7 +119,7 @@ export const getJsDateFromIso = (isoDate: string): Date => {
 };
 
 export const getIsoFromJsDate = (jsDate: Date): string | null => {
-  return DateTime.fromJSDate(jsDate).toISO();
+  return DateTime.fromJSDate(jsDate).setZone('utc').toISO();
 };
 
 export const getNowObject = (): ToObjectOutput => {
@@ -245,7 +246,7 @@ export const createEndOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.endOf('day').setZone('utc').toISO();
+  return dateObject.endOf('day').setZone('utc').toISO() || '';
 };
 
 export const createStartOfDayISO = (params?: {
@@ -264,7 +265,7 @@ export const createStartOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.startOf('day').setZone('utc').toISO();
+  return dateObject.startOf('day').setZone('utc').toISO() || '';
 };
 
 // expects a date string like 2025-09-18
@@ -775,13 +776,28 @@ export const getWeeksInRange = ({
 };
 
 export const roundDateDownToNearestHour = (isoDateString: string) => {
-  const formattedDate = calculateDate({ dateString: isoDateString });
-  formattedDate.setMinutes(0);
-  formattedDate.setSeconds(0);
-  formattedDate.setMilliseconds(0);
-  return formattedDate;
+  return prepareDateFromString(isoDateString).startOf('hour').toJSDate();
 };
 
 export const getCurrentDateTimeInMillis = (): number => {
   return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+};
+
+export const formatDateFromDatePicker = (
+  dateString: string,
+  toFormat: TimeFormats,
+) => {
+  let inputFormat: TimeFormats;
+
+  try {
+    inputFormat = getDateFormat(dateString, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
+
+    const luxonDate = prepareDateFromString(dateString, inputFormat);
+
+    const formattedDate = formatDateString(luxonDate.toString(), toFormat);
+
+    return formattedDate;
+  } catch {
+    return dateString;
+  }
 };

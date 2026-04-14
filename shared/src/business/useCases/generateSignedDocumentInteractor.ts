@@ -15,7 +15,7 @@ export const computeCoordinates = ({
   textHeight,
   titleTextWidth,
 }) => {
-  const bottomLeftBoxCoordinates = {
+  const bottomLeftBoxCoordinates: { x: number; y: number | undefined } = {
     x: posX / scale,
     y: undefined,
   };
@@ -104,7 +104,7 @@ export const generateSignedDocumentInteractor = async (
     pdfData: any;
     posX: number;
     posY: number;
-    scale: number;
+    scale?: number;
     sigTextData: any;
   },
 ) => {

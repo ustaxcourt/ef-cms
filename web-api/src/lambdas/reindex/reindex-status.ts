@@ -2,13 +2,14 @@ import { approvePendingJob } from '../../../../shared/admin-tools/circleci/circl
 import { areAllReindexTasksFinished } from '../../../../scripts/elasticsearch/check-reindex-complete';
 import type { Handler } from 'aws-lambda';
 
-export const handler: Handler = async (_event, context) => {
+export const handler: Handler = async (_event, _context) => {
   const environmentName = process.env.STAGE!;
   const migrateFlag = process.env.MIGRATE_FLAG!;
-  console.log(`Migrate flag is ${migrateFlag}`);
+  let results = `Migrate flag is ${migrateFlag}`;
+  console.log(results);
 
   if (migrateFlag === 'true') {
-    return succeed({ context, results: { migrateFlag } });
+    return results;
   }
 
   const isReindexFinished = await areAllReindexTasksFinished({
@@ -16,8 +17,8 @@ export const handler: Handler = async (_event, context) => {
   });
 
   if (!isReindexFinished) {
-    console.log('Reindex is not complete');
-    return succeed({ context, results: { isReindexFinished, migrateFlag } });
+    results = 'Reindex is not complete';
+    return succeed(results);
   }
 
   console.log('Approving CircleCI wait for reindex job');
@@ -27,10 +28,11 @@ export const handler: Handler = async (_event, context) => {
   const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
 
   await approvePendingJob({ apiToken, jobName, workflowId });
-  return succeed({ context, results: { isReindexFinished, migrateFlag } });
+  results = 'Reindex is complete';
+  return succeed(results);
 };
 
-const succeed = ({ context, results }) => {
+const succeed = (results: string) => {
   console.log(results);
-  return context.succeed(results);
+  return results;
 };

@@ -33,14 +33,10 @@ export const sendIrsSuperuserPetitionEmail = async ({
 
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
-  privatePractitioners.forEach(practitioner => {
-    const representingFormatted = [];
-
-    caseEntity.petitioners.forEach(p => {
-      if (practitioner.isRepresenting(p.contactId)) {
-        representingFormatted.push(p.name);
-      }
-    });
+  (privatePractitioners ?? []).forEach(practitioner => {
+    const representingFormatted = caseEntity.petitioners
+      .filter(p => practitioner.isRepresenting(p.contactId))
+      .map(p => p.name);
 
     practitioner.representingFormatted = representingFormatted.join(', ');
   });

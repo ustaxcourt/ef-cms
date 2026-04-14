@@ -124,6 +124,31 @@ export const DocumentViewer = connect(
                               )}
                             >
                               {entry.descriptionDisplay}
+                              {entry.relatedDocketEntries?.map(
+                                affectedEntry => {
+                                  return (
+                                    <div key={affectedEntry.docketEntryId}>
+                                      <br />
+                                      {affectedEntry.dispositionLinkText.map(
+                                        (linkText, index) => {
+                                          return (
+                                            <div
+                                              className="display-inline-block"
+                                              key={`${linkText}-${index}`}
+                                            >
+                                              --- <span>{linkText}</span>
+                                              {index <
+                                                affectedEntry
+                                                  .dispositionLinkText.length -
+                                                  1 && <br />}
+                                            </div>
+                                          );
+                                        },
+                                      )}
+                                    </div>
+                                  );
+                                },
+                              )}
                             </span>
                             <span
                               className={classNames(

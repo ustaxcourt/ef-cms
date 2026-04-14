@@ -6,12 +6,17 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-export const PetitionQc = connect(function PetitionQc() {
+export const PetitionQc = connect({}, function PetitionQc() {
   return (
     <>
       <CaseDetailHeader />
       <section className="usa-section grid-container DocumentDetail">
-        <h2 className="heading-1">Petition</h2>
+        <h2
+          className="tw:mt-0 tw:mb-4 tw:text-xxxl tw:font-bold"
+          data-testid="petition-qc-page-heading"
+        >
+          Petition
+        </h2>
         <SuccessNotification />
         <ErrorNotification />
         <div className="grid-container padding-x-0">

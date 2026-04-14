@@ -1,5 +1,7 @@
+/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   INITIAL_DOCUMENT_TYPES,
@@ -23,6 +25,11 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import {
+  AllFeatureFlags,
+  getAllFeatureFlagsInteractor,
+} from '../featureFlag/getAllFeatureFlagsInteractor';
+import { getUniqueId } from '@shared/sharedAppContext';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
@@ -30,7 +37,7 @@ export const addPaperFiling = async (
   {
     clientConnectionId,
     consolidatedGroupDocketNumbers,
-    docketEntryId,
+    documentStorageId,
     documentMetadata,
     isSavingForLater,
   }: {
@@ -38,7 +45,7 @@ export const addPaperFiling = async (
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
-    docketEntryId: string;
+    documentStorageId?: string;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -46,12 +53,30 @@ export const addPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (!docketEntryId) {
-    throw new Error('Did not receive a docketEntryId');
+  if (!documentStorageId) {
+    documentStorageId = getUniqueId();
   }
+
+  const docketEntryId = documentStorageId;
 
   if (!documentMetadata) {
     throw new Error('Did not receive meta data for docket entry');
+  }
+
+  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
+    applicationContext,
+    true,
+  );
+
+  const restrictedEventCodes =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
+
+  if (
+    documentMetadata.eventCode &&
+    typeof restrictedEventCodes === 'string' &&
+    restrictedEventCodes.split(',').includes(documentMetadata.eventCode)
+  ) {
+    throw new UnauthorizedError('Unauthorized to edit this document type');
   }
 
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
@@ -95,6 +120,7 @@ export const addPaperFiling = async (
         {
           ...documentMetadata,
           docketEntryId,
+          documentStorageId,
           documentTitle: documentMetadata.documentTitle,
           documentType: documentMetadata.documentType,
           editState: JSON.stringify(docketRecordEditState),
@@ -152,7 +178,7 @@ export const addPaperFiling = async (
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
-            docketEntryId,
+            documentStorageId,
             documentBytes: undefined,
           });
       }

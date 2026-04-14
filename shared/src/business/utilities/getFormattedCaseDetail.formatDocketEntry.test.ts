@@ -3,14 +3,14 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { formatDocketEntry } from './getFormattedCaseDetail';
 
 describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {
     const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
-    });
+    } as RawDocketEntry);
 
     expect(results).toMatchObject({
       servedAtFormatted: '03/27/19',
@@ -23,7 +23,7 @@ describe('formatDocketEntry', () => {
       documentType: 'Motion for Leave to File Administrative Record',
       eventCode: 'M115',
       lodged: true,
-    });
+    } as RawDocketEntry);
 
     expect(result.eventCode).toEqual('MISCL');
   });
@@ -33,7 +33,7 @@ describe('formatDocketEntry', () => {
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
-    });
+    } as RawDocketEntry);
 
     expect(result.isTranscript).toEqual(true);
   });
@@ -43,7 +43,7 @@ describe('formatDocketEntry', () => {
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Stipulated Decision',
       eventCode: STIPULATED_DECISION_EVENT_CODE,
-    });
+    } as RawDocketEntry);
 
     expect(result.isStipDecision).toEqual(true);
   });
@@ -53,7 +53,7 @@ describe('formatDocketEntry', () => {
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Answer',
       eventCode: 'A',
-    });
+    } as RawDocketEntry);
 
     expect(result.isTranscript).toEqual(false);
     expect(result.isStipDecision).toEqual(false);
@@ -62,7 +62,7 @@ describe('formatDocketEntry', () => {
   it('should set isCourtIssuedDocument to false when document.eventCode is not present in the list of court issued documents', () => {
     const results = formatDocketEntry(applicationContext, {
       eventCode: 'PMT',
-    });
+    } as RawDocketEntry);
 
     expect(results.isCourtIssuedDocument).toBeFalsy();
   });
@@ -75,7 +75,7 @@ describe('formatDocketEntry', () => {
       documentType: 'Petition',
       index: '1',
       servedAt: '2019-06-27T21:53:00.297Z',
-    });
+    } as unknown as RawDocketEntry);
 
     expect(result.certificateOfServiceDateFormatted).toEqual('04/27/19');
   });
@@ -83,7 +83,7 @@ describe('formatDocketEntry', () => {
   it('should correctly format legacy served docket entries', () => {
     const result = formatDocketEntry(applicationContext, {
       isLegacyServed: true,
-    });
+    } as RawDocketEntry);
 
     expect(result.isNotServedDocument).toBeFalsy();
     expect(result.isUnservable).toBeTruthy();
@@ -95,7 +95,7 @@ describe('formatDocketEntry', () => {
         eventCode: 'A',
         isLegacyServed: undefined,
         servedAt: undefined,
-      });
+      } as RawDocketEntry);
 
       expect(result.isNotServedDocument).toBe(true);
     });
@@ -105,7 +105,7 @@ describe('formatDocketEntry', () => {
         eventCode: 'A',
         isLegacyServed: true,
         servedAt: undefined,
-      });
+      } as RawDocketEntry);
 
       expect(result.isNotServedDocument).toBe(false);
     });
@@ -116,7 +116,7 @@ describe('formatDocketEntry', () => {
           MINUTE_ENTRIES_MAP[Object.keys(MINUTE_ENTRIES_MAP)[0]].eventCode,
         isLegacyServed: undefined,
         servedAt: undefined,
-      });
+      } as RawDocketEntry);
 
       expect(result.isNotServedDocument).toBe(false);
     });
@@ -126,7 +126,7 @@ describe('formatDocketEntry', () => {
         eventCode: 'A',
         isLegacyServed: undefined,
         servedAt: '2019-06-27T21:53:00.297Z',
-      });
+      } as RawDocketEntry);
 
       expect(result.isNotServedDocument).toBe(false);
     });
@@ -137,7 +137,7 @@ describe('formatDocketEntry', () => {
       const results = formatDocketEntry(applicationContext, {
         eventCode: 'A', //not unservable, not court-issued, not minute entry
         isFileAttached: false,
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(true);
     });
@@ -146,7 +146,7 @@ describe('formatDocketEntry', () => {
       const results = formatDocketEntry(applicationContext, {
         eventCode: 'A', //not unservable
         isFileAttached: true,
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(true);
     });
@@ -154,7 +154,7 @@ describe('formatDocketEntry', () => {
     it('should return isInProgress false if the document is court-issued', () => {
       const results = formatDocketEntry(applicationContext, {
         eventCode: 'O', //court-issued
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(false);
     });
@@ -163,7 +163,7 @@ describe('formatDocketEntry', () => {
       const results = formatDocketEntry(applicationContext, {
         isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(false);
     });
@@ -172,15 +172,15 @@ describe('formatDocketEntry', () => {
       const results = formatDocketEntry(applicationContext, {
         eventCode: 'CTRA', //unservable
         isFileAttached: true,
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(false);
     });
 
     it('should return isInProgress false if the document is a minute entry', () => {
       const results = formatDocketEntry(applicationContext, {
-        eventcode: 'RQT', // minute entry
-      });
+        eventCode: 'RQT', // minute entry
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(false);
     });
@@ -188,7 +188,7 @@ describe('formatDocketEntry', () => {
     it('should return isInProgress false if the document is unservable', () => {
       const results = formatDocketEntry(applicationContext, {
         eventCode: 'CTRA', //unservable
-      });
+      } as RawDocketEntry);
 
       expect(results.isInProgress).toEqual(false);
     });
@@ -204,7 +204,7 @@ describe('formatDocketEntry', () => {
         workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
         qcViewed: false,
         qcComplete: false,
-      });
+      } as RawDocketEntry);
       expect(result.qcNeeded).toBeTruthy();
     });
 
@@ -217,7 +217,7 @@ describe('formatDocketEntry', () => {
         workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
         qcViewed: false,
         qcComplete: false,
-      });
+      } as RawDocketEntry);
 
       expect(result.qcNeeded).toBeFalsy();
     });
@@ -228,7 +228,7 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-      });
+      } as RawDocketEntry);
 
       expect(result.qcNeeded).toBeFalsy();
     });
@@ -301,7 +301,10 @@ describe('formatDocketEntry', () => {
     createdAtFormattedTests.forEach(
       ({ description, docketEntry, expectation }) => {
         it(`${description}`, () => {
-          const result = formatDocketEntry(applicationContext, docketEntry);
+          const result = formatDocketEntry(
+            applicationContext,
+            docketEntry as unknown as RawDocketEntry,
+          );
 
           expect(result.createdAtFormatted).toEqual(expectation);
         });
@@ -316,7 +319,7 @@ describe('formatDocketEntry', () => {
         filingDate: '2019-03-01T21:40:46.415Z',
         isOnDocketRecord: true,
         isUnservable: true,
-      });
+      } as unknown as RawDocketEntry);
       expect(result.sortingFilingDate).toEqual('20190301');
     });
     it('should set the property "sortingFilingDate" correctly using createdAt', () => {
@@ -324,7 +327,7 @@ describe('formatDocketEntry', () => {
         createdAt: '2020-03-01T21:40:46.415Z',
         filingDate: '2019-03-01T21:40:46.415Z',
         isOnDocketRecord: false,
-      });
+      } as RawDocketEntry);
       expect(result.sortingFilingDate).toEqual('20200301');
     });
   });
