@@ -138,11 +138,27 @@ fi
 
 echo "Initiating Blue/Green Deployment for ${DB_CLUSTER_IDENTIFIER}..."
 
-SOURCE_ARN=$(aws rds describe-db-clusters \
-  --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
-  --query "DBClusters[0].DBClusterArn" \
+GLOBAL_CLUSTER_IDENTIFIER="${ENV}-dawson-global"
+GLOBAL_EXISTS=$(aws rds describe-global-clusters \
+  --global-cluster-identifier "$GLOBAL_CLUSTER_IDENTIFIER" \
   --region "$REGION" \
-  --output text)
+  --query "GlobalClusters[0].GlobalClusterIdentifier" \
+  --output text 2>/dev/null || echo "")
+
+if [ -n "$GLOBAL_EXISTS" ] && [ "$GLOBAL_EXISTS" != "null" ]; then
+  echo "Primary cluster is part of a global database. Using the global database as the source..."
+  SOURCE_ARN=$(aws rds describe-global-clusters \
+    --global-cluster-identifier "$GLOBAL_CLUSTER_IDENTIFIER" \
+    --region "$REGION" \
+    --query "GlobalClusters[0].GlobalClusterArn" \
+    --output text)
+else
+  SOURCE_ARN=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
+    --query "DBClusters[0].DBClusterArn" \
+    --region "$REGION" \
+    --output text)
+fi
 
 BG_NAME="${ENV}-bg-upgrade-$(date +%s)"
 

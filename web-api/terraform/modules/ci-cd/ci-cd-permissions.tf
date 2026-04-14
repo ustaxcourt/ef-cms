@@ -199,7 +199,8 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "rds:DescribeDBEngineVersions",
         "rds:DescribeDBClusters",
         "rds:DescribeBlueGreenDeployments",
-        "rds:DescribeDBInstances"
+        "rds:DescribeDBInstances",
+        "rds:DescribeGlobalClusters"
       ],
       "Resource": [
         "*"
