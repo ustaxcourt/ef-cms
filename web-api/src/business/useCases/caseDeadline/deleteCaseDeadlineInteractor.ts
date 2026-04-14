@@ -13,7 +13,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { withTransaction } from 'web-api/src/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const deleteCaseDeadline = async (
   _applicationContext: ServerApplicationContext,
