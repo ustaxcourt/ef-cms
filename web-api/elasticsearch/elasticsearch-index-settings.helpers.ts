@@ -104,10 +104,7 @@ export const deleteUnaliasedIndices = async ({
   // Safety check: never delete ALL efcms indices. If the unaliased list equals
   // the full index list, something has gone wrong (e.g. the domain was replaced
   // after an engine version upgrade and the indices have unexpected names).
-  if (
-    unaliasedIndices.length > 0 &&
-    unaliasedIndices.length >= indices.length
-  ) {
+  if (unaliasedIndices.length > 0 && unaliasedIndices.length === indices.length) {
     console.log(
       'SAFETY CHECK: refusing to delete indices because ALL efcms indices ' +
         'would be removed. This likely indicates the cluster was replaced or ' +

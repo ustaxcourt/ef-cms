@@ -61,7 +61,7 @@ CHECK_INTERVAL=30
 MAX_RETRIES=120  # 120 * 30s = 60 minutes max wait
 CURRENT_TRY=0
 
-while [ $CURRENT_TRY -le $MAX_RETRIES ]; do
+while [ $CURRENT_TRY -lt $MAX_RETRIES ]; do
   PROCESSING=$(aws opensearch describe-domain \
     --domain-name "${DESTINATION_DOMAIN}" \
     --region "us-east-1" \
