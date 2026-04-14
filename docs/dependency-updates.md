@@ -177,8 +177,8 @@ If a postgres engine update is available, we'll need to update the postgres engi
 1. When you see the log messages "`Status: AVAILABLE`" and "`Blue/Green deployment is available. Initiating switchover...`", submit your edit in the DAWSON tab.
 1. Observe that the edit will not complete in the DAWSON tab until soon after you see the "`Switchover completed successfully!`" log message in the CircleCI tab.
 1. In the DAWSON tab, ensure the integrity of both previous edits.
-1. Describe the required manual deployment step in the dependency updates pull request. See [PR #9899](https://github.com/ustaxcourt/ef-cms/pull/9899) for an example.
-1. Describe the same manual deployment step in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
+1. Describe the required manual deployment step in the dependency updates pull request. See [PR #9909](https://github.com/ustaxcourt/ef-cms/pull/9909) for an example.
+1. Describe the same manual deployment step in the `CHANGES.md` file. See [4169dd7](https://github.com/ustaxcourt/ef-cms/commit/4169dd76b262abd04f21877cc6ce8513acf24cbe) for an example.
 
 #### 5.2 Determine the correct Docker image tag for PostgreSQL
 
