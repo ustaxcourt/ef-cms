@@ -124,34 +124,17 @@ if [ -n "$REPLICA_EXISTS" ]; then
 fi
 
 echo "Verifying primary writer instance parameter group status before proceeding..."
-REBOOT_INITIATED="false"
-while true; do
-  PARAM_STATUS=$(aws rds describe-db-clusters \
-    --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
-    --region "$REGION" \
-    --output json 2>/dev/null | jq -r '.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
+PARAM_STATUS=$(aws rds describe-db-clusters \
+  --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
+  --region "$REGION" \
+  --output json 2>/dev/null | jq -r '.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
 
-  echo "Writer parameter group status: ${PARAM_STATUS}"
-
-  if [ "$PARAM_STATUS" == "in-sync" ]; then
-    break
-  elif [[ "$PARAM_STATUS" == "pending-reboot" && "$REBOOT_INITIATED" == "false" ]]; then
-    WRITER_INSTANCE=$(aws rds describe-db-clusters \
-      --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
-      --region "$REGION" \
-      --output json 2>/dev/null | jq -r '.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == true) | .DBInstanceIdentifier')
-
-    echo "Writer instance $WRITER_INSTANCE requires a reboot to sync parameter group changes caused by global cluster detachment."
-    aws rds reboot-db-instance \
-      --db-instance-identifier "$WRITER_INSTANCE" \
-      --region "$REGION" >/dev/null
-    REBOOT_INITIATED="true"
-    echo "Reboot initiated. Waiting for instance to apply changes and become available..."
-  elif [ -z "$PARAM_STATUS" ]; then
-    echo "Failed to query parameter group status. Retrying..."
-  fi
-  sleep 30
-done
+if [[ "$PARAM_STATUS" == "pending-reboot" ]]; then
+  echo "ERROR: The database has a pending parameter group change (likely enabling logical replication)."
+  echo "In order to achieve a ZERO-DOWNTIME upgrade, the database must be rebooted during a maintenance window first."
+  echo "Aborting the engine upgrade to prevent unexpected reboot downtime."
+  exit 1
+fi
 
 echo "Initiating Blue/Green Deployment for ${DB_CLUSTER_IDENTIFIER}..."
 
