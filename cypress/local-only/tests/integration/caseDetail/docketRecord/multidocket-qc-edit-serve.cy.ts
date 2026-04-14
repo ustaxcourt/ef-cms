@@ -230,7 +230,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
       cy.get('[data-testid="alert-info-document-qc"]').should(
         'contain',
-        'If a Notice of Docket Change is generated, it will be filed in all cases in the group.',
+        'If a Notice of Docket Change is generated, it will be filed in all of the above cases.',
       );
 
       cy.get('[data-testid="additional-info-primary-document-form"]').type(
