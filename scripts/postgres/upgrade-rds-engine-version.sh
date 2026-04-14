@@ -2,6 +2,7 @@
 
 ./check-env-variables.sh \
   "ENV" \
+  "CURRENT_COLOR" \
   "REGION" \
   "AWS_ACCOUNT_ID" \
   "AWS_ACCESS_KEY_ID" \
@@ -242,7 +243,28 @@ echo "Switchover completed successfully!"
 echo "Removing the Blue/Green deployment orchestration object..."
 aws rds delete-blue-green-deployment \
   --blue-green-deployment-identifier "$BG_IDENTIFIER" \
-  --region "$REGION"
+  --region "$REGION" >/dev/null
+
+echo "Forcing Lambda cold starts to clear poisoned database connections from active connection pools..."
+echo "Fetching active lambdas for ${ENV} (${CURRENT_COLOR})..."
+ACTIVE_LAMBDAS=$(aws lambda list-functions \
+  --region "$REGION" \
+  --output json 2>/dev/null | jq -r '.Functions[]?.FunctionName' | grep ".*_${ENV}_${CURRENT_COLOR}.*" || echo "")
+
+if [ -n "$ACTIVE_LAMBDAS" ]; then
+  TIMESTAMP=$(date +%s)
+  for LAMBDA_NAME in $ACTIVE_LAMBDAS; do
+    echo "Invalidating cache for lambda: ${LAMBDA_NAME}"
+    web-api/terraform/bin/edit-lambda-environment.sh \
+      -l "$LAMBDA_NAME" \
+      -k DEPLOYMENT_TIMESTAMP \
+      -v "$TIMESTAMP" \
+      -r "$REGION" >/dev/null
+  done
+  echo "Lambda invalidation complete. All future connections will cleanly resolve the new database!"
+else
+  echo "No active lambdas found matching _${ENV}_${CURRENT_COLOR}. Skipping lambda invalidation."
+fi
 
 echo "Upgrade to ${TARGET_VERSION} complete! Terraform will reconcile the remaining state."
 exit 0
