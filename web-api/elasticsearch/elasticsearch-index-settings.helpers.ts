@@ -86,19 +86,48 @@ export const deleteUnaliasedIndices = async ({
     ...aliasedIndices,
     ...elasticsearchIndexes,
   ];
+
+  console.log('All efcms indices on cluster:', JSON.stringify(indices));
+  console.log('Aliased indices:', JSON.stringify(aliasedIndices));
+  console.log(
+    'Protected indices (from code):',
+    JSON.stringify(elasticsearchIndexes),
+  );
+
   const unaliasedIndices =
     indices.filter(index => {
       return !aliasedAndProtectedIndices.includes(index);
     }) || [];
+
+  console.log('Unaliased indices to delete:', JSON.stringify(unaliasedIndices));
+
+  // Safety check: never delete ALL efcms indices. If the unaliased list equals
+  // the full index list, something has gone wrong (e.g. the domain was replaced
+  // after an engine version upgrade and the indices have unexpected names).
+  if (
+    unaliasedIndices.length > 0 &&
+    unaliasedIndices.length >= indices.length
+  ) {
+    console.log(
+      'SAFETY CHECK: refusing to delete indices because ALL efcms indices ' +
+        'would be removed. This likely indicates the cluster was replaced or ' +
+        'the indices have unexpected names. Skipping deletion to preserve data.',
+    );
+    return;
+  }
+
   if (unaliasedIndices.length) {
     try {
       await client.indices.delete({
         index: unaliasedIndices,
       });
+      console.log('Successfully deleted unaliased indices.');
     } catch (err) {
       console.log(
         'We were unable to delete the unaliased indices; the next deployment should get this done',
       );
     }
+  } else {
+    console.log('No unaliased indices to delete.');
   }
 };

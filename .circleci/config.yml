@@ -154,6 +154,11 @@ jobs:
               echo "skipping…"
             fi
       - run:
+          no_output_timeout: 60m
+          name: 'Upgrade OpenSearch Engine Version (if needed)'
+          command: |
+            ./web-api/upgrade-opensearch-engine-version.sh $ENV
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |

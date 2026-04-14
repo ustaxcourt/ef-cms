@@ -73,6 +73,18 @@ resource "aws_opensearch_domain" "efcms-search" {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_application_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
   }
+
+  # Engine version upgrades must be performed BEFORE terraform apply, using the
+  # dedicated upgrade-opensearch-engine-version.sh script. This lifecycle rule
+  # prevents Terraform from triggering a ForceNew (destroy + recreate) when the
+  # engine_version changes — which the AWS provider does when GetCompatibleVersions
+  # does not list the target version as a valid in-place upgrade path. On single-node
+  # clusters (e.g. t2.small.search), the ForceNew destroys the domain and all its
+  # indices/data. The separate upgrade script uses the UpgradeDomain API directly,
+  # which always performs an in-place upgrade that preserves data.
+  lifecycle {
+    ignore_changes = [engine_version]
+  }
 }
 
 locals {

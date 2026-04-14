@@ -142,4 +142,25 @@ describe('deleteUnaliasedIndices', () => {
       index: expect.arrayContaining(mockProtectedIndices), // explicitly ensure the protected indices are not deleted
     });
   });
+
+  it('refuses to delete ALL efcms indices as a safety measure', async () => {
+    // Simulate a scenario where all indices on the cluster are considered
+    // unaliased and unprotected (e.g. domain was replaced and indices have
+    // unexpected names that don't match the current code's hashes)
+    const unexpectedIndices = [
+      { index: 'efcms-case-unexpected-hash-aaa' },
+      { index: 'efcms-docket-entry-unexpected-hash-bbb' },
+      { index: 'efcms-user-unexpected-hash-ccc' },
+    ];
+    indices.mockReturnValueOnce({
+      body: unexpectedIndices,
+      statusCode: 200,
+    });
+    aliases.mockReturnValueOnce({ body: [], statusCode: 200 });
+
+    await deleteUnaliasedIndices({ client: mockedClient });
+
+    // The safety check should prevent deletion since ALL indices would be removed
+    expect(mockedClient.indices.delete).not.toHaveBeenCalled();
+  });
 });
