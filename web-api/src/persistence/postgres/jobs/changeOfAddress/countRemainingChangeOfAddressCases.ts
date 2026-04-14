@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from "web-api/src/persistence/postgres/database";
 
 export async function countRemainingChangeOfAddressCases(
   jobId: string,

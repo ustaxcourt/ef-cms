@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Worker } from 'worker_threads';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
