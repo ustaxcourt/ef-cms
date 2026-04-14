@@ -145,7 +145,7 @@ jobs:
       - run:
           name: Perform an Aurora blue/green deployment if the RDS engine version has changed
           command: |
-            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region "$REGION" --output text)
             if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
               ./scripts/postgres/upgrade-rds-engine-version.sh
             else
@@ -205,7 +205,7 @@ jobs:
               fi
               ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "$ES_DOMAIN" \
-                --region "us-east-1" \
+                --region "REGION" \
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
@@ -541,11 +541,11 @@ jobs:
               exit 1
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" >> $BASH_ENV
       - run:
           name: 'Delete Cognito users'
           command: |
-            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
+            ./scripts/user/clear-all-cognito-users.ts
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -636,7 +636,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -663,7 +663,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -690,7 +690,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -723,7 +723,7 @@ jobs:
       - run:
           name: Populate test users in Cognito
           command: |
-            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
+            ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |
@@ -795,7 +795,7 @@ jobs:
               exit 1
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" >> $BASH_ENV
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
