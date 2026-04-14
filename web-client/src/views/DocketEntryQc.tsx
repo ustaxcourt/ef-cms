@@ -100,7 +100,7 @@ export const DocketEntryQc = connect(
                             </ul>
                             <p className="tw:mb-0 tw:mt-0">
                               If a Notice of Docket Change is generated, it will
-                              be filed in all cases in the group.
+                              be filed in all of the above cases.
                             </p>
                           </div>
                         ),
