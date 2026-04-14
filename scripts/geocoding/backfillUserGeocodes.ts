@@ -4,7 +4,7 @@ import { sql } from 'kysely';
 import { ask } from '../helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
 import { sleep } from '@shared/tools/helpers';
-import { getDbReader } from 'web-api/src/persistence/postgres/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 type geoResults = {
   docketNumber: string;
