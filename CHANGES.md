@@ -1,3 +1,14 @@
+<details><summary>Postgres 17.9 Upgrade</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Set the value of the `RDS_ENGINE_VERSION` secret in the [env]_deploy secrets in Secrets Manager to `17.9`
+```bash
+scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "17.9"
+```
+</details>
 <details><summary>9764 - Zero-Downtime Postgres Upgrades</summary>
 
 ## Manual Deployment Steps
