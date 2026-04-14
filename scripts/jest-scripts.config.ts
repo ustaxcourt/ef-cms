@@ -47,6 +47,7 @@ const config: Config = {
     '!create-large-case-with-exhibits.ts',
     '!add-exhibits-to-case.ts',
     '!insert-exhibits-via-sql.ts',
+    '!pull-case-to-local.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
