@@ -35,7 +35,7 @@ describe('confirmPaperServiceModalHelper', () => {
   });
 
   describe('wasMultiDocketed', () => {
-    it('should throw a NotFoundError when the docket entry is not found', () => {
+    it('should throw an Error when the docket entry is not found', () => {
       expect(() =>
         runCompute(confirmPaperServiceModalHelper, {
           state: {

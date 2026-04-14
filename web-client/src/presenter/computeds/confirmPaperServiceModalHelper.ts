@@ -2,7 +2,6 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { roleToDisplay } from './confirmInitiateServiceModalHelper';
 import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
-import { NotFoundError } from '@web-api/errors/errors';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export type ContactsNeedingPaperService = {
@@ -28,7 +27,7 @@ export const confirmPaperServiceModalHelper = (
   );
 
   if (!currentDocketEntry) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+    throw new Error(`Docket entry ${docketEntryId} was not found.`);
   }
 
   const wasMultiDocketed = DocketEntry.isMultiDocketed(currentDocketEntry);

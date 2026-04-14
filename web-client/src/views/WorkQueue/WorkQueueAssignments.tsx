@@ -14,7 +14,6 @@ type WorkQueueAssignmentsProps = {
 const workQueueAssignmentsDeps = {
   assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
   clearSelectedWorkItemsSequence: sequences.clearSelectedWorkItemsSequence,
-  formattedWorkQueue: state.formattedWorkQueue,
   selectAssigneeSequence: sequences.selectAssigneeSequence,
   selectedWorkItemsLength: state.selectedWorkItems.length,
   workQueueHelper: state.workQueueHelper,
@@ -28,7 +27,6 @@ export const WorkQueueAssignments = connect<
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
     clearSelectedWorkItemsSequence,
-    formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItemsLength,
     users,
@@ -106,8 +104,8 @@ export const WorkQueueAssignments = connect<
               )}
             </div>
             <div className="push-right margin-top-4">
-              <b className="text-semibold">Count:</b>{' '}
-              {count !== undefined ? count : formattedWorkQueue.length}
+              <b className="text-semibold">Count:&nbsp;</b>
+              {count}
             </div>
           </>
         ) : (
