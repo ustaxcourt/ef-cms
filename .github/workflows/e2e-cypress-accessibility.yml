@@ -28,7 +28,7 @@ jobs:
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     services:
       postgres:
-        image: postgres
+        image: postgres:17.9-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-
