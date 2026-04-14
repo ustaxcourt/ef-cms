@@ -391,7 +391,7 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     );
   });
 
-  it.only('should auto populate minute sheets if not already been opened', () => {
+  it('should auto populate minute sheets if not already been opened', () => {
     loginAsCaseServicesSupervisor();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get(

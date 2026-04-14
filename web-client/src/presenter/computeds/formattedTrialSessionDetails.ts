@@ -93,7 +93,7 @@ export const formattedTrialSessionDetails = (
   if (formattedTrialSession.startDate) {
     const trialDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(formattedTrialSession.startDate);
+      .formatDateString(formattedTrialSession.startDate, DATE_FORMATS.YYYYMMDD);
     const nowDateFormatted = applicationContext
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
@@ -101,7 +101,11 @@ export const formattedTrialSessionDetails = (
     const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
     const isJudgeUser = user.role === USER_ROLES.judge;
-    const trialDateInFuture = trialDateFormatted > nowDateFormatted;
+    const trialDateInFuture =
+      applicationContext
+        .getUtilities()
+        .formatDateString(trialDateFormatted, DATE_FORMATS.YYYYMMDD) >
+      nowDateFormatted;
     const docketClerkCanEditCheck = sessionType => {
       const editableSessionTypes = ['Special', 'Motion/Hearing'];
       return editableSessionTypes.includes(sessionType);
@@ -113,14 +117,16 @@ export const formattedTrialSessionDetails = (
 
     canEditOngoingSession =
       user.role === USER_ROLES.caseServicesSupervisor &&
-      trialDateFormatted < nowDateFormatted &&
+      trialDateFormatted <= nowDateFormatted &&
       (endDate >= nowDateFormatted || !endDate);
 
     const validTrialDate = (): boolean => {
       if (canEditOngoingSession) {
         return true;
       }
-      return trialDateInFuture;
+      return (
+        trialDateInFuture || user.role === USER_ROLES.caseServicesSupervisor
+      );
     };
 
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
