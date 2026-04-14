@@ -27,6 +27,7 @@ import { generateDocketNumber } from '@web-api/persistence/postgres/cases/genera
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -86,6 +87,7 @@ describe('createCaseInteractor', () => {
     });
 
     (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
+    (upsertWorkItems as jest.Mock).mockResolvedValue(null);
 
     getUserById.mockImplementation(() => user);
 
@@ -592,5 +594,23 @@ describe('createCaseInteractor', () => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
       expect(p.email).toBeUndefined();
     });
+  });
+
+  it('should not insert the work item if creating case fails', async () => {
+    (createCase as jest.Mock).mockRejectedValueOnce(new Error('Database error'));
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+    console.log('upsertWorkItems', upsertWorkItems);
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 });
