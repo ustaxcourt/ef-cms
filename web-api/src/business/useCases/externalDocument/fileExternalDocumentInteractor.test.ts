@@ -200,6 +200,34 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should not send served parties emails if updateCaseAndAssociations fails', async () => {
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     const result = await fileExternalDocumentInteractor(
       applicationContext,
