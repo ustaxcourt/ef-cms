@@ -127,7 +127,7 @@ echo "Verifying primary writer instance parameter group status before proceeding
 PARAM_STATUS=$(aws rds describe-db-clusters \
   --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
   --region "$REGION" \
-  --output json 2>/dev/null | jq -r '.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
+  --output json 2>/dev/null | jq -r '.DBClusters[0]?.DBClusterMembers[]? | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
 
 if [[ "$PARAM_STATUS" == "pending-reboot" ]]; then
   echo "ERROR: The database has a pending parameter group change (likely enabling logical replication)."
@@ -162,20 +162,32 @@ fi
 
 BG_NAME="${ENV}-bg-upgrade-$(date +%s)"
 
-echo "Creating Blue/Green deployment: ${BG_NAME}"
-BG_RESPONSE=$(aws rds create-blue-green-deployment \
-  --blue-green-deployment-name "$BG_NAME" \
-  --source "$SOURCE_ARN" \
-  --target-engine-version "$TARGET_VERSION" \
+echo "Checking if an active Blue/Green deployment already exists for this source..."
+EXISTING_BG_RESPONSE=$(aws rds describe-blue-green-deployments \
+  --filters "Name=source,Values=$SOURCE_ARN" \
   --region "$REGION" \
-  --output json)
+  --output json 2>/dev/null || echo "{}")
 
-BG_IDENTIFIER=$(echo "$BG_RESPONSE" | jq -r '.BlueGreenDeploymentIdentifier')
+BG_IDENTIFIER=$(echo "$EXISTING_BG_RESPONSE" | jq -r '.BlueGreenDeployments[]? | select(.Status == "PROVISIONING" or .Status == "AVAILABLE") | .BlueGreenDeploymentIdentifier' | head -n 1)
 
-if [ -z "$BG_IDENTIFIER" ] || [ "$BG_IDENTIFIER" == "null" ]; then
-  echo "Failed to parse Blue/Green Deployment Identifier. Response:"
-  echo "$BG_RESPONSE"
-  exit 1
+if [ -n "$BG_IDENTIFIER" ] && [ "$BG_IDENTIFIER" != "null" ]; then
+  echo "Found an existing active Blue/Green deployment: $BG_IDENTIFIER"
+else
+  echo "Creating new Blue/Green deployment: ${BG_NAME}"
+  BG_RESPONSE=$(aws rds create-blue-green-deployment \
+    --blue-green-deployment-name "$BG_NAME" \
+    --source "$SOURCE_ARN" \
+    --target-engine-version "$TARGET_VERSION" \
+    --region "$REGION" \
+    --output json)
+
+  BG_IDENTIFIER=$(echo "$BG_RESPONSE" | jq -r '.BlueGreenDeployment?.BlueGreenDeploymentIdentifier? // empty')
+
+  if [ -z "$BG_IDENTIFIER" ] || [ "$BG_IDENTIFIER" == "null" ]; then
+    echo "Failed to parse Blue/Green Deployment Identifier. Response:"
+    echo "$BG_RESPONSE"
+    exit 1
+  fi
 fi
 
 echo "Waiting for Blue/Green deployment ${BG_IDENTIFIER} to become AVAILABLE (this can take a while)..."
