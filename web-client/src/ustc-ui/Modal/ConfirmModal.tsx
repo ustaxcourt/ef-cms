@@ -11,7 +11,6 @@ type ConfirmModalProps = {
   cancelLabel?: string;
   children?: React.ReactNode;
   className?: string;
-  clearModalSequence?: Function;
   confirmLabel?: string;
   deleteLabel?: string;
   disableTooltip?: boolean;

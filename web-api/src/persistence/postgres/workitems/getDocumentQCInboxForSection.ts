@@ -12,7 +12,6 @@ import {
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 import { groupBy } from 'lodash';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
@@ -42,13 +41,10 @@ export const getDocumentQCInboxForSection = async ({
   if (judgeId) {
     const groupedItems = groupBy(items, 'docketEntryId');
 
-    const params: Set<{
-      docketNumber: string;
-      docketEntryId: string;
-    }> = new Set();
+    const params = new Set<string>();
 
     for (const itemGroup of Object.values(groupedItems)) {
-      let missingDocketNumbers = itemGroup[0].docketEntry.multiDocketedOn;
+      let missingDocketNumbers = itemGroup[0].docketEntry.multiDocketedOn || [];
 
       itemGroup.forEach(item => {
         missingDocketNumbers = missingDocketNumbers.filter(
@@ -57,20 +53,18 @@ export const getDocumentQCInboxForSection = async ({
       });
 
       missingDocketNumbers.forEach(dn => {
-        params.add({
-          docketNumber: dn,
-          docketEntryId: itemGroup[0].docketEntryId,
-        });
+        params.add(`${dn}|${itemGroup[0].docketEntryId}`);
       });
     }
 
-    const promises: Promise<any>[] = [];
+    const pairs: { docketNumber: string; docketEntryId: string }[] = [];
 
     for (const param of params) {
-      promises.push(getMissingItems(param));
+      const [docketNumber, docketEntryId] = param.split('|');
+      pairs.push({ docketNumber, docketEntryId });
     }
 
-    const missingWorkItems = await settlePromises(promises);
+    const missingWorkItems = await getMissingItems(pairs);
 
     const missingItems = await attachDocketEntriesToWorkItemQC({
       workItems: missingWorkItems,
@@ -81,13 +75,20 @@ export const getDocumentQCInboxForSection = async ({
   return items;
 };
 
-const getMissingItems = async ({ docketNumber, docketEntryId }) => {
+const getMissingItems = async pairs => {
   const result = await getDbReader(reader => {
     return workItemQCQueryBase(reader)
-      .where('w.docketNumber', '=', docketNumber)
-      .where('w.docketEntryId', '=', docketEntryId)
-      .limit(5000)
-      .executeTakeFirst();
+      .where(qb =>
+        qb.or(
+          pairs.map(pair =>
+            qb.and([
+              qb('w.docketEntryId', '=', pair.docketEntryId),
+              qb('w.docketNumber', '=', pair.docketNumber),
+            ]),
+          ),
+        ),
+      )
+      .execute();
   });
   return result;
 };

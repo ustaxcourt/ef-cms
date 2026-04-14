@@ -29,6 +29,8 @@ export const updateCaseCheckboxAction = ({
 
   if (consolidatedCases.every(obj => obj.checked)) {
     store.set(state.modal.form.consolidatedCaseAllCheckbox, true);
+  } else {
+    store.set(state.modal.form.consolidatedCaseAllCheckbox, false);
   }
 
   store.set(
