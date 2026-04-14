@@ -47,7 +47,7 @@ export const deleteCaseDeadline = async (
     cd => cd.caseDeadlineId === caseDeadlineId,
   );
 
-  const result = await withTransaction(async () => {
+  await withTransaction(async () => {
     await deleteDeadline({
       caseDeadlineId,
     });
@@ -65,7 +65,7 @@ export const deleteCaseDeadline = async (
     const { leadDocketNumber } = caseToUpdate;
 
     if (!leadDocketNumber) {
-      const theCase = new Case(result, { authorizedUser })
+      const theCase = new Case(updatedResult, { authorizedUser })
         .validate()
         .toRawObject();
       const caseDTO = new CaseDTO(theCase);
@@ -76,7 +76,7 @@ export const deleteCaseDeadline = async (
       !HANDLED_CASE_DEADLINE ||
       HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
     ) {
-      const theCase = new Case(result, { authorizedUser })
+      const theCase = new Case(updatedResult, { authorizedUser })
         .validate()
         .toRawObject();
       const caseDTO = new CaseDTO(theCase);
