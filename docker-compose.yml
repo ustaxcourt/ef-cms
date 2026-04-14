@@ -83,7 +83,7 @@ services:
         condition: service_healthy
 
   db:
-    image: postgres:17.9-trixie
+    image: postgres:17.5-bookworm
     platform: linux/amd64
     container_name: dawson-db
     restart: always
