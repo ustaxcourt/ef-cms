@@ -24,7 +24,7 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
-import { copyPagesAndAppendToTargetPdf } from '@web-api/business/utilities/copyPagesAndAppendToTargetPdf';
+import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { formatJudgeName } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
