@@ -54,4 +54,21 @@ describe('validateCaseDocketNumberSearchAction', () => {
     });
     expect(successStub).not.toHaveBeenCalled();
   });
+
+  it('should store a trimmed docketNumber in state', async () => {
+    const result = await runAction(validateCaseDocketNumberSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          caseSearchByDocketNumber: { docketNumber: ' 123-20 ' },
+        },
+      },
+    });
+
+    expect(
+      result.state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
+    ).toBe('123-20');
+  });
 });
