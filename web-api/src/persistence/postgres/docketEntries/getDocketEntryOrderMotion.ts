@@ -1,5 +1,5 @@
 import { DocketEntryOrderMotionKysely } from '@web-api/persistence/postgres/docketEntries/schema';
-import { getDbReader } from 'web-api/src/persistence/postgres/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getDocketEntryOrderMotion = async (
   orderDocketEntityId: string,

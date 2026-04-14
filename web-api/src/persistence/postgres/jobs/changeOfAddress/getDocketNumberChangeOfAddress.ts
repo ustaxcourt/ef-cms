@@ -1,4 +1,4 @@
-import { getDbReader } from "web-api/src/persistence/postgres/database";
+import { getDbReader } from "@web-api/persistence/postgres/database";
 
 export async function getDocketNumberChangeOfAddress(
   jobId: string,
