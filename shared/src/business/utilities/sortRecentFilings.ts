@@ -39,13 +39,7 @@ export function sortRecentFilings(
 
     switch (sortField) {
       case 'docketNumber': {
-        const aDocket = Case.getSortableDocketNumber(a.docketNumber);
-        const bDocket = Case.getSortableDocketNumber(b.docketNumber);
-        if (aDocket != null && bDocket != null) {
-          comparison = aDocket - bDocket;
-        } else {
-          comparison = a.docketNumber.localeCompare(b.docketNumber);
-        }
+        comparison = Case.docketNumberSort(a.docketNumber, b.docketNumber);
         break;
       }
       case 'filedDate':

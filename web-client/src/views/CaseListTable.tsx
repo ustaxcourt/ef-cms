@@ -30,7 +30,7 @@ export const CaseListTable = connect(
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
     showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
     showModal: state.modal.showModal,
-    recentFilingsTableSort: state.recentFilingsTableSort,
+    tableSort: state.tableSort,
     sortTableSequence: sequences.sortTableSequence,
   },
   function CaseListTable({
@@ -43,7 +43,7 @@ export const CaseListTable = connect(
     setCaseTypeToDisplaySequence,
     showCaseStatusInfoSequence,
     showModal,
-    recentFilingsTableSort,
+    tableSort,
     sortTableSequence,
   }) {
     const paginatorTop = useRef<HTMLDivElement>(null);
@@ -127,45 +127,45 @@ export const CaseListTable = connect(
                     <SortableHeader
                       sortField="docketNumber"
                       sortType="string"
-                      tableSort={recentFilingsTableSort}
+                      tableSort={tableSort}
                       title="Docket No."
                       onSort={sortTableSequence}
-                      stateKey="recentFilingsTableSort"
+                      stateKey="tableSort"
                     />
                     <SortableHeader
                       sortField="caseTitle"
                       sortType="string"
-                      tableSort={recentFilingsTableSort}
+                      tableSort={tableSort}
                       title="Case Title"
                       onSort={sortTableSequence}
-                      stateKey="recentFilingsTableSort"
+                      stateKey="tableSort"
                     />
                     <SortableHeader
                       sortField="filedDate"
                       sortType="date"
-                      tableSort={recentFilingsTableSort}
+                      tableSort={tableSort}
                       title="Filed Date"
                       onSort={sortTableSequence}
-                      stateKey="recentFilingsTableSort"
+                      stateKey="tableSort"
                     />
                     {tabName === openTab && (
                       <SortableHeader
                         sortField="status"
                         sortType="string"
-                        tableSort={recentFilingsTableSort}
+                        tableSort={tableSort}
                         title="Case Status"
                         onSort={sortTableSequence}
-                        stateKey="recentFilingsTableSort"
+                        stateKey="tableSort"
                       />
                     )}
                     {dashboardExternalHelper.showFilingFee && (
                       <SortableHeader
                         sortField="filingFee"
                         sortType="string"
-                        tableSort={recentFilingsTableSort}
+                        tableSort={tableSort}
                         title="Filing Fee"
                         onSort={sortTableSequence}
-                        stateKey="recentFilingsTableSort"
+                        stateKey="tableSort"
                       />
                     )}
                   </tr>

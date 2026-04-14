@@ -30,13 +30,10 @@ const sortExternalUserCases = (
 
     switch (sortField) {
       case 'docketNumber': {
-        const aDocket = Case.getSortableDocketNumber(caseA.docketNumber);
-        const bDocket = Case.getSortableDocketNumber(caseB.docketNumber);
-        if (aDocket != null && bDocket != null) {
-          comparison = aDocket - bDocket;
-        } else {
-          comparison = caseA.docketNumber.localeCompare(caseB.docketNumber);
-        }
+        comparison = Case.docketNumberSort(
+          caseA.docketNumber,
+          caseB.docketNumber,
+        );
         break;
       }
       case 'caseTitle':
@@ -76,7 +73,7 @@ export const externalUserCasesHelper = (
 } => {
   const openCases = get(state.openCases);
   const closedCases = get(state.closedCases);
-  const tableSort = get(state.recentFilingsTableSort) || {
+  const tableSort = get(state.tableSort) || {
     sortField: 'filedDate',
     sortOrder: 'desc',
   };
