@@ -1,6 +1,10 @@
 import { applicationContext } from '@web-api/applicationContext';
 
 export const changeOfAddressHandler = async event => {
+  if (process.env.READ_ONLY_MODE === 'true') {
+    throw new Error('Cannot execute changeOfAddressHandler during read-only mode.');
+  }
+
   const { Records } = event;
   const { body } = Records[0];
   const eventBody = JSON.parse(body);

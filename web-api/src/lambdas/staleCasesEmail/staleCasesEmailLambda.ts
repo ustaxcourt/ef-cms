@@ -23,6 +23,10 @@ const body =
 type resultsType = { [recipient: string]: string } | string;
 
 export const handler: Handler = async (_event, _context) => {
+  if (process.env.READ_ONLY_MODE === 'true') {
+    return succeed('Skipped stale cases email cron due to read-only mode.');
+  }
+
   const commaDelimitedRecipients = process.env.INACTIVITY_REPORT_RECIPIENTS!;
   const recipients =
     commaDelimitedRecipients && commaDelimitedRecipients.length

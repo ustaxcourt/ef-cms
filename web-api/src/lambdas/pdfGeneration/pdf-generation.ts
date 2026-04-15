@@ -15,6 +15,12 @@ export type PdfGenerationResult = {
 };
 
 export const handler = async (event: GeneratePdfRequest) => {
+  if (process.env.READ_ONLY_MODE === 'true') {
+    const errorMessage = 'Cannot execute pdfGeneration handler during read-only mode.';
+    getDawsonLogger().error(errorMessage);
+    throw new Error(errorMessage);
+  }
+
   for (let index = 0; index < 3; index++) {
     try {
       const browser = await getChromiumBrowser();

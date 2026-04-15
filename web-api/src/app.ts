@@ -305,6 +305,19 @@ app.use((req, res, next) => {
     return;
   }
 
+  if (
+    process.env.READ_ONLY_MODE === 'true' &&
+    req.method !== 'GET' &&
+    req.method !== 'OPTIONS'
+  ) {
+    res
+      .status(503)
+      .send(
+        'System is upgrading. Please wait a few minutes and try again.',
+      );
+    return;
+  }
+
   next();
 });
 
