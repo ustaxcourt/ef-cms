@@ -212,6 +212,8 @@ while true; do
 done
 
 echo "Blue/Green deployment is available. Initiating switchover..."
+echo "Engaging read-only mode on application lambdas..."
+./scripts/maintenance/engage-read-only-mode.sh
 
 aws rds switchover-blue-green-deployment \
   --blue-green-deployment-identifier "$BG_IDENTIFIER" \
@@ -220,6 +222,7 @@ aws rds switchover-blue-green-deployment \
 
 echo "Waiting for Switchover to complete..."
 
+SWITCHED_OVER=0
 while true; do
   STATUS=$(aws rds describe-blue-green-deployments \
     --blue-green-deployment-identifier "$BG_IDENTIFIER" \
@@ -230,41 +233,49 @@ while true; do
   echo "Status: ${STATUS}"
 
   if [ "$STATUS" == "SWITCHOVER_COMPLETED" ]; then
+    SWITCHED_OVER=1
+    echo "Switchover completed successfully!"
     break
   elif [[ "$STATUS" == *"FAILED"* ]]; then
     echo "Switchover failed or encountered an error. Check AWS Console."
-    exit 1
+    break
   fi
   sleep 10
 done
 
-echo "Switchover completed successfully!"
+echo "Disengaging read-only mode on application lambdas..."
+./scripts/maintenance/disengage-read-only-mode.sh
 
-echo "Removing the Blue/Green deployment orchestration object..."
-aws rds delete-blue-green-deployment \
-  --blue-green-deployment-identifier "$BG_IDENTIFIER" \
-  --region "$REGION" >/dev/null
+if [[ "$SWITCHED_OVER" -eq 1 ]]; then
+  echo "Removing the Blue/Green deployment orchestration object..."
+  aws rds delete-blue-green-deployment \
+    --blue-green-deployment-identifier "$BG_IDENTIFIER" \
+    --region "$REGION" >/dev/null
 
-echo "Forcing Lambda cold starts to clear poisoned database connections from active connection pools..."
-echo "Fetching active lambdas for ${ENV} (${CURRENT_COLOR})..."
-ACTIVE_LAMBDAS=$(aws lambda list-functions \
-  --region "$REGION" \
-  --output json 2>/dev/null | jq -r '.Functions[]?.FunctionName' | grep ".*_${ENV}_${CURRENT_COLOR}.*" || echo "")
+  echo "Forcing a cold start of all Lambda functions to clear poisoned database connections from active connection pools..."
+  echo "Fetching active lambdas for ${ENV} (${CURRENT_COLOR})..."
+  ACTIVE_LAMBDAS=$(aws lambda list-functions \
+    --region "$REGION" \
+    --output json 2>/dev/null | jq -r '.Functions[]?.FunctionName' | grep ".*_${ENV}_${CURRENT_COLOR}.*" || echo "")
 
-if [ -n "$ACTIVE_LAMBDAS" ]; then
-  TIMESTAMP=$(date +%s)
-  for LAMBDA_NAME in $ACTIVE_LAMBDAS; do
-    echo "Invalidating cache for lambda: ${LAMBDA_NAME}"
-    web-api/terraform/bin/edit-lambda-environment.sh \
-      -l "$LAMBDA_NAME" \
-      -k DEPLOYMENT_TIMESTAMP \
-      -v "$TIMESTAMP" \
-      -r "$REGION" >/dev/null
-  done
-  echo "Lambda invalidation complete. All future connections will cleanly resolve the new database!"
+  if [ -n "$ACTIVE_LAMBDAS" ]; then
+    TIMESTAMP=$(date +%s)
+    for LAMBDA_NAME in $ACTIVE_LAMBDAS; do
+      echo "Invalidating cache for lambda: ${LAMBDA_NAME}"
+      web-api/terraform/bin/edit-lambda-environment.sh \
+        -l "$LAMBDA_NAME" \
+        -k DEPLOYMENT_TIMESTAMP \
+        -v "$TIMESTAMP" \
+        -r "$REGION" >/dev/null
+    done
+    echo "Lambda invalidation complete."
+  else
+    echo "No active lambdas found matching _${ENV}_${CURRENT_COLOR}. Skipping lambda invalidation."
+  fi
+
+  echo "Upgrade to ${TARGET_VERSION} complete! Terraform will reconcile the remaining state."
+  exit 0
 else
-  echo "No active lambdas found matching _${ENV}_${CURRENT_COLOR}. Skipping lambda invalidation."
+  echo "Switchover did not complete successfully. Please check the Blue/Green deployment ${BG_IDENTIFIER} in the AWS Console for details."
+  exit 1
 fi
-
-echo "Upgrade to ${TARGET_VERSION} complete! Terraform will reconcile the remaining state."
-exit 0

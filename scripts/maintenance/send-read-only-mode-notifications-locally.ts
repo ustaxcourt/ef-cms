@@ -3,11 +3,11 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
-import { sendMaintenanceNotificationsLambda } from '@web-api/lambdas/cases/sendMaintenanceNotificationsLambda';
+} from '../helpers/parseArgsAndEnvVars';
+import { sendReadOnlyNotificationsLambda } from '@web-api/lambdas/cases/sendReadOnlyNotificationsLambda';
 
 const scriptConfig: ScriptConfig = {
-  description: 'set-maintenance-mode-locally - Toggles Maintenance Mode',
+  description: 'set-read-only-mode-locally - Toggles read-only mode locally',
   parameters: {
     toggle: {
       position: 0,
@@ -18,13 +18,13 @@ const scriptConfig: ScriptConfig = {
 };
 const { toggle } = parseArgsAndEnvVars(scriptConfig) as { toggle: string };
 
-export const setMaintenanceModeLocally = async () => {
-  await sendMaintenanceNotificationsLambda({
-    maintenanceMode: toggle === 'true',
+export const setReadOnlyModeLocally = async () => {
+  await sendReadOnlyNotificationsLambda({
+    readOnlyMode: toggle === 'true',
   });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await setMaintenanceModeLocally();
+  await setReadOnlyModeLocally();
 })();
