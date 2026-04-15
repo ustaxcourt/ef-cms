@@ -21,7 +21,6 @@ import {
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
@@ -32,6 +31,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import {
+  createISODateString,
   formatDateString,
   formatNow,
   FORMATS,
