@@ -49,7 +49,7 @@ export const createCaseDeadline = async (
         hasCaseDeadline: true,
       });
 
-    const updatedCase = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: updatedCaseEntity,
     });
@@ -80,8 +80,6 @@ export const createCaseDeadline = async (
 
       await Promise.all(ADD_DEADLINE_TO_CONSOLIDATED_CASES);
     }
-
-    return updatedCase;
   });
 };
 
