@@ -181,15 +181,14 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.canClose).toBe(false);
   });
 
-  it('should throw error if trialSessionId is not provided', () => {
-    expect(() =>
-      runCompute(formattedTrialSessionDetails, {
-        state: {
-          trialSession: {},
-          user: trialClerkUser,
-        },
-      }),
-    ).toThrow('Trial session details not found');
+  it('should return an empty object if trialSessionId is not provided', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+        user: trialClerkUser,
+      },
+    });
+    expect(result).toEqual({});
   });
 
   describe('canDelete', () => {

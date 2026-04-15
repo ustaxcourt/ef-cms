@@ -39,8 +39,7 @@ export const formattedTrialSessionDetails = (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
-  if (!trialSession.trialSessionId)
-    throw new Error('Trial session details not found');
+  if (!trialSession.trialSessionId) return {} as FormatTrialSessionHelperType;
   const currentUser = get(state.user);
   const formattedTrialSession = applicationContext
     .getUtilities()
