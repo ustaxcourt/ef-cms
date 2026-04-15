@@ -20,6 +20,7 @@ import { withTransaction } from '@web-api/persistence/postgres/utils/transaction
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  *
@@ -88,7 +89,8 @@ export const fileCourtIssuedDocketEntry = async (
   });
 
   await withTransaction(async () => {
-    for (const caseToUpdate of casesToUpdate) {
+      await settlePromises(
+    casesToUpdate.map(async caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
@@ -158,17 +160,24 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+      const saveItems: Promise<any>[] = [
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
+      ];
 
       const rawValidWorkItem = workItem.validate().toRawObject();
 
-      await upsertWorkItems({
-        workItems: [rawValidWorkItem],
-      });
-    }
+      saveItems.push(
+        upsertWorkItems({
+          workItems: [rawValidWorkItem],
+        }),
+      );
+
+      return settlePromises(saveItems);
+    }),
+  );
   });
 
   if (documentMeta.affectedDocketEntries) {

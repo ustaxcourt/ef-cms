@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -96,13 +97,17 @@ export const updateCourtIssuedDocketEntry = async (
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   await withTransaction(async () => {
-    await upsertWorkItems({
-      workItems: [rawValidWorkItem],
-    });
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+    const saveItems = [
+      upsertWorkItems({
+        workItems: [rawValidWorkItem],
+      }),
+      updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      }),
+    ];
+
+    await settlePromises(saveItems);
   });
 };
 
