@@ -2,8 +2,8 @@
 
 ./check-env-variables.sh \
   "ENV" \
+  "CURRENT_COLOR" \
   "REGION" \
-  "AWS_ACCOUNT_ID" \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY" \
   "RDS_ENGINE_VERSION"
@@ -127,7 +127,7 @@ echo "Verifying primary writer instance parameter group status before proceeding
 PARAM_STATUS=$(aws rds describe-db-clusters \
   --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
   --region "$REGION" \
-  --output json 2>/dev/null | jq -r '.DBClusters[0].DBClusterMembers[] | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
+  --output json 2>/dev/null | jq -r '.DBClusters[0]?.DBClusterMembers[]? | select(.IsClusterWriter == true) | .DBClusterParameterGroupStatus' || echo "")
 
 if [[ "$PARAM_STATUS" == "pending-reboot" ]]; then
   echo "ERROR: The database has a pending parameter group change (likely enabling logical replication)."
@@ -138,28 +138,56 @@ fi
 
 echo "Initiating Blue/Green Deployment for ${DB_CLUSTER_IDENTIFIER}..."
 
-SOURCE_ARN=$(aws rds describe-db-clusters \
-  --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
-  --query "DBClusters[0].DBClusterArn" \
+GLOBAL_CLUSTER_IDENTIFIER="${ENV}-dawson-global"
+GLOBAL_EXISTS=$(aws rds describe-global-clusters \
+  --global-cluster-identifier "$GLOBAL_CLUSTER_IDENTIFIER" \
   --region "$REGION" \
-  --output text)
+  --query "GlobalClusters[0].GlobalClusterIdentifier" \
+  --output text 2>/dev/null || echo "")
+
+if [ -n "$GLOBAL_EXISTS" ] && [ "$GLOBAL_EXISTS" != "null" ]; then
+  echo "Primary cluster is part of a global database. Using the global database as the source..."
+  SOURCE_ARN=$(aws rds describe-global-clusters \
+    --global-cluster-identifier "$GLOBAL_CLUSTER_IDENTIFIER" \
+    --region "$REGION" \
+    --query "GlobalClusters[0].GlobalClusterArn" \
+    --output text)
+else
+  SOURCE_ARN=$(aws rds describe-db-clusters \
+    --db-cluster-identifier "$DB_CLUSTER_IDENTIFIER" \
+    --query "DBClusters[0].DBClusterArn" \
+    --region "$REGION" \
+    --output text)
+fi
 
 BG_NAME="${ENV}-bg-upgrade-$(date +%s)"
 
-echo "Creating Blue/Green deployment: ${BG_NAME}"
-BG_RESPONSE=$(aws rds create-blue-green-deployment \
-  --blue-green-deployment-name "$BG_NAME" \
-  --source "$SOURCE_ARN" \
-  --target-engine-version "$TARGET_VERSION" \
+echo "Checking if an active Blue/Green deployment already exists for this source..."
+EXISTING_BG_RESPONSE=$(aws rds describe-blue-green-deployments \
+  --filters "Name=source,Values=$SOURCE_ARN" \
   --region "$REGION" \
-  --output json)
+  --output json 2>/dev/null || echo "{}")
 
-BG_IDENTIFIER=$(echo "$BG_RESPONSE" | jq -r '.BlueGreenDeploymentIdentifier')
+BG_IDENTIFIER=$(echo "$EXISTING_BG_RESPONSE" | jq -r '.BlueGreenDeployments[]? | select(.Status == "PROVISIONING" or .Status == "AVAILABLE") | .BlueGreenDeploymentIdentifier' | head -n 1)
 
-if [ -z "$BG_IDENTIFIER" ] || [ "$BG_IDENTIFIER" == "null" ]; then
-  echo "Failed to parse Blue/Green Deployment Identifier. Response:"
-  echo "$BG_RESPONSE"
-  exit 1
+if [ -n "$BG_IDENTIFIER" ] && [ "$BG_IDENTIFIER" != "null" ]; then
+  echo "Found an existing active Blue/Green deployment: $BG_IDENTIFIER"
+else
+  echo "Creating new Blue/Green deployment: ${BG_NAME}"
+  BG_RESPONSE=$(aws rds create-blue-green-deployment \
+    --blue-green-deployment-name "$BG_NAME" \
+    --source "$SOURCE_ARN" \
+    --target-engine-version "$TARGET_VERSION" \
+    --region "$REGION" \
+    --output json)
+
+  BG_IDENTIFIER=$(echo "$BG_RESPONSE" | jq -r '.BlueGreenDeployment?.BlueGreenDeploymentIdentifier? // empty')
+
+  if [ -z "$BG_IDENTIFIER" ] || [ "$BG_IDENTIFIER" == "null" ]; then
+    echo "Failed to parse Blue/Green Deployment Identifier. Response:"
+    echo "$BG_RESPONSE"
+    exit 1
+  fi
 fi
 
 echo "Waiting for Blue/Green deployment ${BG_IDENTIFIER} to become AVAILABLE (this can take a while)..."
@@ -214,7 +242,28 @@ echo "Switchover completed successfully!"
 echo "Removing the Blue/Green deployment orchestration object..."
 aws rds delete-blue-green-deployment \
   --blue-green-deployment-identifier "$BG_IDENTIFIER" \
-  --region "$REGION"
+  --region "$REGION" >/dev/null
+
+echo "Forcing Lambda cold starts to clear poisoned database connections from active connection pools..."
+echo "Fetching active lambdas for ${ENV} (${CURRENT_COLOR})..."
+ACTIVE_LAMBDAS=$(aws lambda list-functions \
+  --region "$REGION" \
+  --output json 2>/dev/null | jq -r '.Functions[]?.FunctionName' | grep ".*_${ENV}_${CURRENT_COLOR}.*" || echo "")
+
+if [ -n "$ACTIVE_LAMBDAS" ]; then
+  TIMESTAMP=$(date +%s)
+  for LAMBDA_NAME in $ACTIVE_LAMBDAS; do
+    echo "Invalidating cache for lambda: ${LAMBDA_NAME}"
+    web-api/terraform/bin/edit-lambda-environment.sh \
+      -l "$LAMBDA_NAME" \
+      -k DEPLOYMENT_TIMESTAMP \
+      -v "$TIMESTAMP" \
+      -r "$REGION" >/dev/null
+  done
+  echo "Lambda invalidation complete. All future connections will cleanly resolve the new database!"
+else
+  echo "No active lambdas found matching _${ENV}_${CURRENT_COLOR}. Skipping lambda invalidation."
+fi
 
 echo "Upgrade to ${TARGET_VERSION} complete! Terraform will reconcile the remaining state."
 exit 0
