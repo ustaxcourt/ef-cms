@@ -13,6 +13,7 @@ import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { RecentFilingsNonMobile } from './RecentFilingsNonMobile';
 import { RecentFilingsMobile } from './RecentFilingsMobile';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
+import { CaseStatusInfoModal } from '@web-client/views/RecentFilings/CaseStatusInfoModal';
 
 type RecentFilingsProps = {
   recentFilingsTableSort: any;
@@ -22,6 +23,8 @@ type RecentFilingsProps = {
   recentFilingsHelper: any;
   waitingForResponse: boolean;
   openCaseDocumentDownloadUrlSequence: any;
+  showModal: string;
+  showCaseStatusInfoSequence: any;
 };
 
 export const RecentFilings = connect(
@@ -35,6 +38,8 @@ export const RecentFilings = connect(
     waitingForResponse: state.progressIndicator.waitingForResponse,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    showModal: state.modal.showModal,
+    showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
   },
   function RecentFilings({
     recentFilingsTableSort,
@@ -44,6 +49,8 @@ export const RecentFilings = connect(
     recentFilingsHelper,
     waitingForResponse,
     openCaseDocumentDownloadUrlSequence,
+    showModal,
+    showCaseStatusInfoSequence,
   }: RecentFilingsProps) {
     const paginatorTop = useRef<HTMLDivElement>(null);
     const paginatorBottom = useRef<HTMLDivElement>(null);
@@ -84,6 +91,7 @@ export const RecentFilings = connect(
             count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
+            showCaseStatusInfoSequence={showCaseStatusInfoSequence}
           />
         </NonMobile>
 
@@ -105,8 +113,11 @@ export const RecentFilings = connect(
             count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
+            showCaseStatusInfoSequence={showCaseStatusInfoSequence}
           />
         </Mobile>
+
+        {showModal === 'CaseStatusInfoModal' && <CaseStatusInfoModal />}
       </div>
     );
   },

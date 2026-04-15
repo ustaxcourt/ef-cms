@@ -13,6 +13,7 @@ import React from 'react';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
+import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -54,6 +55,7 @@ export const RecentFilingsMobile = ({
   count,
   totalPages,
   isLoading = false,
+  showCaseStatusInfoSequence,
 }: {
   recentFilingsTableSort: RecentFilingsTableSort;
   setRecentFilingsTableSortSequence: SequenceFunction;
@@ -67,6 +69,7 @@ export const RecentFilingsMobile = ({
   count: number;
   totalPages: number;
   isLoading?: boolean;
+  showCaseStatusInfoSequence: SequenceFunction;
 }) => {
   const renderViewMyCasesButton = () => (
     <Button link className="mobile-header-button" href="/">
@@ -234,6 +237,23 @@ export const RecentFilingsMobile = ({
                     </td>
                     <th>Case Title</th>
                     <td className="divider">{filing.caseTitle}</td>
+                    <th>Case Status</th>
+                    <td>
+                      <Button
+                        link
+                        onClick={() =>
+                          showCaseStatusInfoSequence({
+                            status: filing.status,
+                          })
+                        }
+                      >
+                        {formatCaseStatus({
+                          caseStatus: filing.status,
+                          trialDate: filing.trialDate,
+                          trialLocation: filing.trialLocation,
+                        })}
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

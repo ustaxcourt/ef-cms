@@ -20,6 +20,7 @@ export const STATE_KEYS = {
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
   RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
   CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
+  CASE_LIST_TABLE_SORT: 'CASE_LIST_TABLE_SORT',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -1742,7 +1743,7 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
+export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report when rendered in the browser

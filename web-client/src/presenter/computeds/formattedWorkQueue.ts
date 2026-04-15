@@ -234,24 +234,11 @@ export const formatWorkItem = ({
     }
   }
 
-  let formattedCaseStatus = workItem.caseStatus || '';
-
-  if (
-    workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
-    workItem.trialLocation &&
-    workItem.trialDate
-  ) {
-    let formattedTrialLocation = '';
-    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-      formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
-    } else {
-      formattedTrialLocation = workItem.trialLocation;
-    }
-
-    const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
-
-    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
-  }
+  const formattedCaseStatus = formatCaseStatus({
+    caseStatus: workItem.caseStatus,
+    trialDate: workItem.trialDate,
+    trialLocation: workItem.trialLocation,
+  });
 
   const createdAtFormatted = formatDateString(workItem.createdAt, 'MMDDYY');
 
@@ -517,3 +504,29 @@ export type FormattedWorkItemWithCaseInfo =
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
   };
+
+export function formatCaseStatus(workItem: {
+  caseStatus?: string;
+  trialLocation?: string;
+  trialDate?: string;
+}) {
+  let formattedCaseStatus = workItem.caseStatus || '';
+
+  if (
+    workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+  }
+  return formattedCaseStatus;
+}
