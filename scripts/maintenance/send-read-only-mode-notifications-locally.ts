@@ -5,6 +5,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { sendReadOnlyNotificationsLambda } from '@web-api/lambdas/cases/sendReadOnlyNotificationsLambda';
+import axios from 'axios';
 
 const scriptConfig: ScriptConfig = {
   description: 'set-read-only-mode-locally - Toggles read-only mode locally',
@@ -19,8 +20,20 @@ const scriptConfig: ScriptConfig = {
 const { toggle } = parseArgsAndEnvVars(scriptConfig) as { toggle: string };
 
 export const setReadOnlyModeLocally = async () => {
+  const readOnlyMode = toggle === 'true';
+
+  try {
+    await axios.put(`http://localhost:4000/read-only-mode`, {
+      readOnlyMode,
+    });
+  } catch (err) {
+    console.error(
+      'Warning: Could not hit local API to set READ_ONLY_MODE environment variable. Is the backend running?',
+    );
+  }
+
   await sendReadOnlyNotificationsLambda({
-    readOnlyMode: toggle === 'true',
+    readOnlyMode,
   });
 };
 
