@@ -25,6 +25,7 @@ export interface LineGraphProps {
   showLegend?: boolean;
   showGrid?: boolean;
   xAxisLabel?: string;
+  xLabelRotation?: number;
   yAxisLabel?: string;
   smooth?: boolean;
 }
@@ -59,7 +60,7 @@ const renderCustomLegend = (props: any) => {
           <div
             style={{
               backgroundColor: entry.color,
-              border: '1px solid #000',
+              border: '2px solid #000',
               borderRadius: '6px',
               flexShrink: 0,
               height: '48px',
@@ -75,6 +76,47 @@ const renderCustomLegend = (props: any) => {
   );
 };
 
+// ─── Rotated x-axis tick ────────────────────────────────────────────────────
+
+const RotatedTickX = (props: any) => {
+  const { x, y, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={20}
+        textAnchor="end"
+        fill="#000"
+        fontSize={20}
+        fontWeight="bold"
+        transform="rotate(-45)"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
+const StraightTickX = (props: any) => {
+  const { x, y, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={20}
+        textAnchor="middle"
+        fill="#000"
+        fontSize={20}
+        fontWeight="600"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
 // ─── LineGraph ────────────────────────────────────────────────────────────────
 
 export const LineGraph: React.FC<LineGraphProps> = ({
@@ -86,6 +128,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   showLegend = true,
   showGrid = true,
   xAxisLabel,
+  xLabelRotation,
   yAxisLabel,
   smooth = false,
 }) => {
@@ -124,12 +167,16 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             })}
           </div>
         )}
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          style={{ outline: 'none' }}
+        >
           <LineChart
             data={chartData}
             margin={{
               bottom: xAxisLabel ? 40 : 10,
-              left: 20,
+              left: 60,
               right: 30,
               top: 10,
             }}
@@ -138,14 +185,19 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             <Tooltip />
             <XAxis
               dataKey="name"
-              tick={{ fill: '#000', fontSize: 20 }}
+              height={xLabelRotation ? 120 : 60}
+              tick={
+                xLabelRotation
+                  ? (tickProps: any) => <RotatedTickX {...tickProps} />
+                  : (tickProps: any) => <StraightTickX {...tickProps} />
+              }
               label={
                 xAxisLabel
                   ? {
                       fill: '#000',
                       fontSize: 20,
                       fontWeight: '600',
-                      offset: -20,
+                      offset: xLabelRotation ? -70 : -20,
                       position: 'insideBottom',
                       value: xAxisLabel,
                     }
@@ -177,9 +229,9 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                   type={smooth ? 'monotone' : 'linear'}
                   dataKey={ds.label}
                   stroke={color}
-                  strokeWidth={2}
+                  strokeWidth={4}
                   dot={<Dot r={5} fill={color} stroke="#fff" strokeWidth={2} />}
-                  activeDot={{ r: 7 }}
+                  activeDot={false}
                   isAnimationActive={false}
                 />
               );

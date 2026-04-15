@@ -93,7 +93,7 @@ const renderCustomLegend = (props: any) => {
           <div
             style={{
               backgroundColor: entry.color,
-              border: '1px solid #000',
+              border: '2px solid #000',
               borderRadius: '6px',
               flexShrink: 0,
               height: '48px',
@@ -191,7 +191,11 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             {title}
           </h2>
         )}
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          style={{ outline: 'none' }}
+        >
           <BarChart
             data={chartData}
             margin={{ top: 30, right: 30, left: 20, bottom: bottomMargin }}
@@ -199,7 +203,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             {showGrid && (
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
-            <Tooltip />
+            <Tooltip cursor={false} />
             <XAxis
               dataKey="label"
               tick={<SingleBarTickX />}
@@ -236,7 +240,12 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
               }
             />
             {showLegend && <Legend content={renderCustomLegend} />}
-            <Bar dataKey="value" isAnimationActive={false} stroke="none">
+            <Bar
+              dataKey="value"
+              isAnimationActive={false}
+              stroke="none"
+              activeBar={false}
+            >
               {data.map((item, index) => (
                 <Cell
                   key={index}
@@ -522,7 +531,11 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             {renderCustomLegend({ payload: legendPayload })}
           </div>
         )}
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          style={{ outline: 'none' }}
+        >
           <BarChart
             data={chartData}
             margin={{ bottom: bottomMargin, left: 20, right: 30, top: 30 }}
@@ -530,7 +543,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             {showGrid && (
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
-            <Tooltip />
+            <Tooltip cursor={false} />
             <XAxis
               dataKey="name"
               interval={0}
@@ -590,6 +603,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                   stackId={stacked ? 'stack' : undefined}
                   stroke="#000"
                   strokeWidth={1}
+                  activeBar={false}
                 >
                   {showLabels && (
                     <LabelList

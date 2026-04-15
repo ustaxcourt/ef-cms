@@ -106,20 +106,21 @@ export const DawsonLibrary = () => {
         height={DEFAULT_CHART_HEIGHT}
         title="Cases Filed Over Time"
         xAxisLabel="Month"
+        xLabelRotation={45}
         yAxisLabel="Number of Cases"
         labels={[
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
+          'January',
+          'February',
+          'March',
+          'April',
           'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
         ]}
         datasets={[
           {
@@ -166,7 +167,7 @@ export const DawsonLibrary = () => {
         title="Case Type Breakdown by Quarter"
         xAxisLabel="Quarter"
         yAxisLabel="Number of Cases"
-        labels={['Jan', 'Feb', 'Mar', 'Apr']}
+        labels={['Q1', 'Q2', 'Q3', 'Q4']}
         datasets={[
           {
             label: 'Deficiency',
@@ -191,6 +192,7 @@ export const DawsonLibrary = () => {
         ]}
       />
       <div>
+        <div style={{ margin: '100px 0px' }}></div>
         <h1>PieGraph</h1>
         <PieGraph
           title="Procedure Type"
