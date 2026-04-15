@@ -1,10 +1,10 @@
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
 import { sql } from 'kysely';
 import { ask } from '../helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
 import { sleep } from '@shared/tools/helpers';
-import { getDbReader } from 'web-api/src/persistence/postgres/database';
 
 type geoResults = {
   docketNumber: string;

@@ -16,6 +16,7 @@ import {
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
@@ -60,23 +61,20 @@ const removeConsolidatedCases = async (
       !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
   );
 
-  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
-  // We already got the case information above via getCasesByLeadDocketNumber.
-  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
-  const casesToRemove = await getCasesByDocketNumbers({
-    docketNumbers: docketNumbersToRemove,
-  });
-
   await withTransaction(async () => {
+    const updateCasePromises: Promise<any>[] = [];
+
     if (
       docketNumbersToRemove.includes(leadDocketNumber) &&
       newConsolidatedCases.length > 1
     ) {
       const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
 
-      await updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
+      updateCasePromises.push(
+        updateConsolidatedCaseDeadlineReferenceId(
+          leadDocketNumber,
+          newLeadCase.docketNumber,
+        ),
       );
 
       for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
@@ -85,10 +83,12 @@ const removeConsolidatedCases = async (
         });
         caseEntity.setLeadCase(newLeadCase.docketNumber);
 
-        await updateCaseAndAssociations({
-          authorizedUser,
-          caseToUpdate: caseEntity,
-        });
+        updateCasePromises.push(
+          updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: caseEntity,
+          }),
+        );
       }
     } else if (newConsolidatedCases.length == 1) {
       // a case cannot be consolidated with itself
@@ -97,23 +97,38 @@ const removeConsolidatedCases = async (
       });
       caseEntity.removeConsolidation();
 
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+      updateCasePromises.push(
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
+      );
     }
+
+    // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+    // We already got the case information above via getCasesByLeadDocketNumber.
+    // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
+    const casesToRemove = await getCasesByDocketNumbers({
+      docketNumbers: docketNumbersToRemove,
+    });
 
     for (const caseToRemove of casesToRemove) {
       const caseEntity = new Case(caseToRemove, { authorizedUser });
       caseEntity.removeConsolidation();
 
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+      updateCasePromises.push(
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
+      );
 
-      await removeConsolidatedCaseReferences(caseToRemove.docketNumber);
+      updateCasePromises.push(
+        removeConsolidatedCaseReferences(caseToRemove.docketNumber),
+      );
     }
+
+    await settlePromises(updateCasePromises);
   });
 };
 
