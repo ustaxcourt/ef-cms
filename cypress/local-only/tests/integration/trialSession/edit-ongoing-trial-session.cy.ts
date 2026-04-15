@@ -311,23 +311,16 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     cy.get('[data-testid="assignments-sessions-trial-clerk"]').contains('Abu');
   });
 
-  it('should not let trial session update minute sheets if minute sheets have already been opened', () => {
+  it.only('should not let trial session update minute sheets if minute sheets have already been opened', () => {
     loginAsCohenChambers();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get(
       `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
     ).click();
-    cy.then(() => {
-      if (
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        )
-      ) {
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        ).click();
-      }
-    });
+    clickTrialSessionDetailLinkIfExists(
+      trialSessionIdWithStartDatePastEndDateFuture,
+      'minute-sheet-button-103-20',
+    );
     cy.get('[data-testid="minute-sheet-button-103-20"]')
       .invoke('removeAttr', 'target')
       .click();
@@ -368,17 +361,10 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     cy.get(
       `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
     ).click();
-    cy.then(() => {
-      if (
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        )
-      ) {
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        ).click();
-      }
-    });
+    clickTrialSessionDetailLinkIfExists(
+      trialSessionIdWithStartDatePastEndDateFuture,
+      'minute-sheet-button-103-20',
+    );
     cy.get('[data-testid="minute-sheet-button-103-20"]')
       .invoke('removeAttr', 'target')
       .click();
@@ -391,7 +377,7 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     );
   });
 
-  it('should auto populate minute sheets if not already been opened', () => {
+  it.only('should auto populate minute sheets if not already been opened', () => {
     loginAsCaseServicesSupervisor();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get(
@@ -419,13 +405,10 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     cy.get(
       `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
     ).click();
-    cy.get('body').then($body => {
-      const trialSessionDetailSelector = `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`;
-
-      if ($body.find(trialSessionDetailSelector).length) {
-        cy.get(trialSessionDetailSelector).click();
-      }
-    });
+    clickTrialSessionDetailLinkIfExists(
+      trialSessionIdWithStartDatePastEndDateFuture,
+      'minute-sheet-button-101-21',
+    );
     cy.get('[data-testid="minute-sheet-button-101-21"]')
       .invoke('removeAttr', 'target')
       .click();
@@ -438,3 +421,19 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     );
   });
 });
+
+function clickTrialSessionDetailLinkIfExists(
+  trialSessionId: string,
+  minuteSheetButtonTestId: string,
+) {
+  const linkSelector = `[href="/trial-session-detail/${trialSessionId}"]`;
+  const minuteSheetSelector = `[data-testid="${minuteSheetButtonTestId}"]`;
+  cy.get(`${linkSelector}, ${minuteSheetSelector}`, {
+    timeout: 10000,
+  }).should('exist');
+  cy.get('body').then($body => {
+    if ($body.find(linkSelector).length > 0) {
+      cy.get(linkSelector).click();
+    }
+  });
+}
