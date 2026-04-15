@@ -640,6 +640,6 @@ describe('createCaseInteractor', () => {
         user,
       ),
     ).rejects.toThrow('Database error');
-    expect(mockOpenSearchQueueSync).toHaveBeenCalled();
+    expect(mockOpenSearchQueueSync).not.toHaveBeenCalled();
   });
 });
