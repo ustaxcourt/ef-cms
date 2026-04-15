@@ -101,24 +101,25 @@ export const formattedTrialSessionDetails = (
     const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
     const isJudgeUser = user.role === USER_ROLES.judge;
-    const trialDateInFuture =
-      applicationContext
-        .getUtilities()
-        .formatDateString(trialDateFormatted, DATE_FORMATS.YYYYMMDD) >
-      nowDateFormatted;
+    const trialDateInFuture = trialDateFormatted > nowDateFormatted;
     const docketClerkCanEditCheck = sessionType => {
       const editableSessionTypes = ['Special', 'Motion/Hearing'];
       return editableSessionTypes.includes(sessionType);
     };
 
-    const endDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedTrialSession.estimatedEndDate);
+    const endDate = formattedTrialSession.estimatedEndDate
+      ? applicationContext
+          .getUtilities()
+          .formatDateString(
+            formattedTrialSession.estimatedEndDate,
+            DATE_FORMATS.YYYYMMDD,
+          )
+      : undefined;
 
     canEditOngoingSession =
       user.role === USER_ROLES.caseServicesSupervisor &&
       trialDateFormatted <= nowDateFormatted &&
-      (endDate >= nowDateFormatted || !endDate);
+      (!endDate || endDate >= nowDateFormatted);
 
     const validTrialDate = (): boolean => {
       if (canEditOngoingSession) {
