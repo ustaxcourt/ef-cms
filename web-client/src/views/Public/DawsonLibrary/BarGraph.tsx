@@ -94,7 +94,7 @@ const renderCustomLegend = (props: any) => {
             style={{
               backgroundColor: entry.color,
               border: '2px solid #000',
-              borderRadius: '6px',
+              borderRadius: '8px',
               flexShrink: 0,
               height: '48px',
               width: '48px',
@@ -140,7 +140,7 @@ const SingleBarTickX = (props: any) => {
           dy={16 + i * lineHeight}
           textAnchor="middle"
           fill="#000"
-          fontSize={16}
+          fontSize={20}
           fontWeight="bold"
         >
           {line}
@@ -170,14 +170,18 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
     value: item.value,
   }));
 
+  // Y-axis max rounded up to the nearest multiple of 10
+  const rawMax = Math.max(...data.map(d => d.value));
+  const yMax = Math.ceil((rawMax * 1.1) / 10) * 10;
+
   // Extra bottom margin to accommodate multi-line wrapped x-axis labels
   const maxLabelWords = Math.max(...data.map(d => d.label.split(' ').length));
   const estimatedLabelLines = Math.ceil(maxLabelWords / 2);
   const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
-    <div className="tw:overflow-x-auto tw:overflow-y-hidden tw:pb-[60px] tw:scrollbar-hide">
-      <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div className="tw:overflow-x-auto">
+      <div style={{ width: `${width}px` }}>
         {title && (
           <h2
             style={{
@@ -193,7 +197,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height="100%"
+          height={height}
           style={{ outline: 'none' }}
         >
           <BarChart
@@ -203,7 +207,55 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             {showGrid && (
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
-            <Tooltip cursor={false} />
+            <Tooltip
+              cursor={false}
+              content={({ active, payload, label }) => {
+                if (!active || !payload || payload.length === 0) return null;
+                const item = data.find(d => d.label === label);
+                const color = item?.color || '#005EA2';
+                return (
+                  <div
+                    style={{
+                      background: '#fff',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      padding: '8px 12px',
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: 'bold',
+                        fontSize: '20px',
+                        margin: '0 0 4px',
+                      }}
+                    >
+                      {label}
+                    </p>
+                    <div
+                      style={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        gap: '6px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: color,
+                          border: '1px solid #000',
+                          borderRadius: '3px',
+                          flexShrink: 0,
+                          height: '16px',
+                          width: '16px',
+                        }}
+                      />
+                      <span style={{ color: '#000', fontSize: '20px' }}>
+                        value : {payload[0]?.value}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }}
+            />
             <XAxis
               dataKey="label"
               tick={<SingleBarTickX />}
@@ -222,6 +274,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
               }
             />
             <YAxis
+              domain={[0, yMax]}
               tick={{ fontSize: 20, fill: '#000', fontWeight: 'bold' }}
               axisLine={true}
               tickLine={false}
@@ -243,7 +296,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             <Bar
               dataKey="value"
               isAnimationActive={false}
-              stroke="none"
+              stroke="#000"
+              strokeWidth={1}
               activeBar={false}
             >
               {data.map((item, index) => (
@@ -403,7 +457,7 @@ const RotatedTickX = (props: any) => {
       <text
         x={0}
         y={0}
-        dy={20}
+        dy={8}
         textAnchor="end"
         fill="#000"
         fontSize={20}
@@ -427,16 +481,16 @@ const MultiBarTickX = (props: any) => {
       <text
         x={0}
         y={0}
-        dy={26}
+        dy={14}
         textAnchor="middle"
         fill="#000"
-        fontSize={18}
+        fontSize={20}
         fontWeight="bold"
       >
         {payload.value}
       </text>
       {total != null && (
-        <text x={0} y={0} dy={46} textAnchor="middle" fill="#000" fontSize={16}>
+        <text x={0} y={0} dy={34} textAnchor="middle" fill="#000" fontSize={16}>
           {total}
         </text>
       )}
@@ -482,7 +536,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
       : Math.max(...datasets.map(ds => (ds.data[i] as number) || 0));
     if (total > maxValue) maxValue = total;
   });
-  const yMax = Math.ceil(maxValue * 1.1);
+  const yMax = Math.ceil((maxValue * 1.1) / 10) * 10;
 
   // X-axis tick rotation
   let xAngle: number;
@@ -494,13 +548,13 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
 
   const hasTwoLineTicks = stacked && columnTotals && columnTotals.length > 0;
   // Give rotated 45° labels enough vertical room (longest month name ~110px at 45°)
-  const xAxisHeight = hasTwoLineTicks ? 80 : xAngle !== 0 ? 120 : undefined;
+  const xAxisHeight = hasTwoLineTicks ? 60 : xAngle !== 0 ? 80 : undefined;
   const bottomMargin = xAxisLabel
     ? 60
     : xAngle !== 0
-      ? 40
+      ? 20
       : hasTwoLineTicks
-        ? 30
+        ? 20
         : 20;
 
   // Legend payload for custom renderer
@@ -511,8 +565,8 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }));
 
   return (
-    <div className="tw:overflow-x-auto tw:overflow-y-hidden tw:pb-[60px] tw:scrollbar-hide">
-      <div style={{ width: `${width}px`, height: `${height}px` }}>
+    <div className="tw:overflow-x-auto">
+      <div style={{ width: `${width}px` }}>
         {title && (
           <h2
             style={{
@@ -533,7 +587,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height="100%"
+          height={height}
           style={{ outline: 'none' }}
         >
           <BarChart
@@ -543,7 +597,57 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             {showGrid && (
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
-            <Tooltip cursor={false} />
+            <Tooltip
+              cursor={false}
+              content={({ active, payload, label }) => {
+                if (!active || !payload || payload.length === 0) return null;
+                return (
+                  <div
+                    style={{
+                      background: '#fff',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      padding: '8px 12px',
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: 'bold',
+                        fontSize: '20px',
+                        margin: '0 0 4px',
+                      }}
+                    >
+                      {label}
+                    </p>
+                    {payload.map((p: any) => (
+                      <div
+                        key={p.dataKey}
+                        style={{
+                          alignItems: 'center',
+                          display: 'flex',
+                          gap: '6px',
+                          margin: '2px 0',
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: p.fill || p.color,
+                            border: '1px solid #000',
+                            borderRadius: '3px',
+                            flexShrink: 0,
+                            height: '16px',
+                            width: '16px',
+                          }}
+                        />
+                        <span style={{ color: '#000', fontSize: '20px' }}>
+                          {p.dataKey} : {p.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }}
+            />
             <XAxis
               dataKey="name"
               interval={0}
