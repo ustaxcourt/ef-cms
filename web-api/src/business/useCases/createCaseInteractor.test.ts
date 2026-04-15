@@ -597,7 +597,9 @@ describe('createCaseInteractor', () => {
   });
 
   it('should not insert the work item if creating case fails', async () => {
-    (createCase as jest.Mock).mockRejectedValueOnce(new Error('Database error'));
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
 
     await expect(
       createCaseInteractor(
@@ -610,7 +612,34 @@ describe('createCaseInteractor', () => {
         user,
       ),
     ).rejects.toThrow('Database error');
-    console.log('upsertWorkItems', upsertWorkItems);
+
     expect(upsertWorkItems).not.toHaveBeenCalled();
+  });
+
+  it('should not sync to open search if creating case fails', async () => {
+    const mockOpenSearchQueueSync = jest.fn();
+
+    jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
+      openSearchGateway: () => ({
+        queueSync: mockOpenSearchQueueSync,
+      }),
+    }));
+
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+    expect(mockOpenSearchQueueSync).toHaveBeenCalled();
   });
 });
