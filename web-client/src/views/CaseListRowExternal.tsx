@@ -5,7 +5,6 @@ import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashbo
 import React from 'react';
 import classNames from 'classnames';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
 
 export const CaseListRowExternal = ({
   formattedCase,
@@ -149,11 +148,7 @@ export const CaseListRowExternal = ({
                   })
                 }
               >
-                {formatCaseStatus({
-                  caseStatus: formattedCase.status,
-                  trialDate: formattedCase.trialDate,
-                  trialLocation: formattedCase.trialLocation,
-                })}
+                {formattedCase.formattedStatus}
               </Button>
             </td>
           )}

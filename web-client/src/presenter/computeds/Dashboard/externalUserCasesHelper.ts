@@ -26,7 +26,7 @@ const sortExternalUserCases = (
 ): TAssociatedCaseFormatted[] => {
   return cases.sort((caseA, caseB) => {
     let comparison = 0;
-    const multiplier = sortOrder === 'desc' ? -1 : 1;
+    const direction = sortOrder === 'desc' ? -1 : 1;
 
     switch (sortField) {
       case 'docketNumber': {
@@ -58,7 +58,7 @@ const sortExternalUserCases = (
         break;
     }
 
-    return comparison * multiplier;
+    return comparison * direction;
   });
 };
 

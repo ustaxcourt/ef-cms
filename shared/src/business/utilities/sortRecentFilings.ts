@@ -3,7 +3,7 @@ import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserI
 
 type SortableField = keyof Pick<
   RecentFiling,
-  'docketNumber' | 'filedDate' | 'document' | 'caseTitle'
+  'docketNumber' | 'filedDate' | 'document' | 'caseTitle' | 'status'
 >;
 
 export function sortRecentFilings(
@@ -18,6 +18,7 @@ export function sortRecentFilings(
     'filedDate',
     'document',
     'caseTitle',
+    'status',
   ];
   const validSortOrders = ['asc', 'desc'];
 
@@ -35,7 +36,7 @@ export function sortRecentFilings(
 
   return filings.sort((a, b) => {
     let comparison = 0;
-    const multiplier = sortOrder === 'desc' ? -1 : 1;
+    const direction = sortOrder === 'desc' ? -1 : 1;
 
     switch (sortField) {
       case 'docketNumber': {
@@ -57,6 +58,9 @@ export function sortRecentFilings(
         }
         break;
       }
+      case 'status':
+        comparison = a.status.localeCompare(b.status);
+        break;
       case 'caseTitle':
         comparison = a.caseTitle
           .toLowerCase()
@@ -68,6 +72,6 @@ export function sortRecentFilings(
       comparison = b.filedDate.localeCompare(a.filedDate);
     }
 
-    return comparison * multiplier;
+    return comparison * direction;
   });
 }
