@@ -419,15 +419,11 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     cy.get(
       `[data-testid="trial-location-link-${trialSessionIdWithStartDatePastEndDateFuture}"]`,
     ).click();
-    cy.then(() => {
-      if (
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        )
-      ) {
-        cy.get(
-          `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`,
-        ).click();
+    cy.get('body').then($body => {
+      const trialSessionDetailSelector = `[href="/trial-session-detail/${trialSessionIdWithStartDatePastEndDateFuture}"]`;
+
+      if ($body.find(trialSessionDetailSelector).length) {
+        cy.get(trialSessionDetailSelector).click();
       }
     });
     cy.get('[data-testid="minute-sheet-button-101-21"]')
