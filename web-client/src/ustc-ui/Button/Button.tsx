@@ -1,6 +1,8 @@
 import { DEBOUNCE_TIME_MILLISECONDS } from '@shared/business/entities/EntityConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { debounce } from 'lodash';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -27,32 +29,39 @@ function getUpdatedOnClick(
   };
 }
 
-export const Button = (props: {
-  [key: string]: any;
-  disableOnClick?: boolean;
-}) => {
-  const [disableButton, setDisableButton] = useState(false);
+export const Button = connect(
+  {
+    readOnlyMode: state.readOnlyMode,
+  },
+  function Button(props: {
+    [key: string]: any;
+    disableOnClick?: boolean;
+    overrideReadOnly?: boolean;
+  }) {
+    const [disableButton, setDisableButton] = useState(false);
 
-  const { href } = props;
-  const {
-    children,
-    className,
-    disableOnClick,
-    icon,
-    iconColor, // e.g. blue
-    iconRight = false,
-    iconSize = '1x',
-    isActive = false,
-    link,
-    marginDirection = 'right',
-    noMargin = false,
-    onClick,
-    overrideMargin = false,
-    secondary,
-    shouldWrapText = false,
-    tooltip,
-    ...remainingProps
-  } = props;
+    const { href } = props;
+    const {
+      children,
+      className,
+      disableOnClick,
+      icon,
+      iconColor, // e.g. blue
+      iconRight = false,
+      iconSize = '1x',
+      isActive = false,
+      link,
+      marginDirection = 'right',
+      noMargin = false,
+      onClick,
+      overrideMargin = false,
+      overrideReadOnly,
+      readOnlyMode,
+      secondary,
+      shouldWrapText = false,
+      tooltip,
+      ...remainingProps
+    } = props;
 
   const isLink = Boolean(href);
   const Element = isLink ? 'a' : 'button';
@@ -75,24 +84,30 @@ export const Button = (props: {
   const iconClasses = classNames(
     iconRight ? 'margin-left-05' : noMargin ? 'margin-0' : 'margin-right-05',
     iconColor && `fa-icon-${iconColor}`,
-  );
+    );
 
-  return (
-    <Element
-      className={classes}
-      disabled={disableButton}
-      {...remainingProps}
-      title={tooltip}
-      type={type}
-      onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
-    >
-      {icon && !iconRight && (
-        <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
-      )}
-      {children}
-      {icon && iconRight && (
-        <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
-      )}
-    </Element>
-  );
-};
+    const isButtonDisabled =
+      disableButton ||
+      remainingProps.disabled ||
+      (readOnlyMode && !overrideReadOnly);
+
+    return (
+      <Element
+        className={classes}
+        disabled={isButtonDisabled}
+        {...remainingProps}
+        title={tooltip}
+        type={type}
+        onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
+      >
+        {icon && !iconRight && (
+          <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
+        )}
+        {children}
+        {icon && iconRight && (
+          <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
+        )}
+      </Element>
+    );
+  },
+);

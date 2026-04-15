@@ -8,6 +8,7 @@ import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { Privacy } from './Privacy';
+import { ReadOnlyBanner } from './ReadOnlyBanner';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
@@ -85,6 +86,7 @@ export const AppComponentPublic = connect(
             >
               Skip to main content
             </a>
+            <ReadOnlyBanner />
             <UsaBanner />
             <HeaderPublic />
           </>
