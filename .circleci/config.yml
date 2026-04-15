@@ -205,7 +205,7 @@ jobs:
               fi
               ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "$ES_DOMAIN" \
-                --region "REGION" \
+                --region "$REGION" \
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
