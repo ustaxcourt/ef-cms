@@ -77,23 +77,21 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
             <div className="grid-row grid-gap  tw:mt-[16px]">
               <div className="tablet:grid-col-12">
                 <FormGroup errorText={validationErrors.petitionerName}>
-                 
-                  
                   <TextField
                     label={
                       <label
-                      className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
-                      htmlFor="petitioner-name"
+                        className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
+                        htmlFor="petitioner-name"
                       >
                         Petitioner name
                       </label>
                     }
                     required={true}
                     helpText={
-                    <span className="usa-hint">
-                      Advanced syntax search (*, “”, - , etc. ) is not supported
-                      at this time.
-                    </span>        
+                      <span className="usa-hint">
+                        Advanced syntax search (*, “”, - , etc. ) is not
+                        supported at this time.
+                      </span>
                     }
                     aria-describedby="case-search-by-name"
                     className="usa-input"
@@ -561,6 +559,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
               <div className="button-container">
                 <Button
                   type="submit"
+                  overrideReadOnly
                   overrideMargin
                   aria-describedby="case-search-by-name"
                   className="margin-bottom-0"

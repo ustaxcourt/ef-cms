@@ -275,6 +275,7 @@ export const PractitionerSearchByName = connect(
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  overrideReadOnly
                   type="submit"
                   aria-describedby="search-by-name"
                   className="margin-bottom-0"

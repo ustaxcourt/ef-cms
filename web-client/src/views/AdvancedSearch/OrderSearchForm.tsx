@@ -273,6 +273,7 @@ export const OrderSearchForm: React.FC<OrderSearchFormProps> = connect(
           <div className="grid-row margin-top-3">
             <div className="button-container">
               <Button
+                overrideReadOnly
                 overrideMargin
                 className="margin-bottom-0"
                 data-testid="submit-order-advanced-search-button"

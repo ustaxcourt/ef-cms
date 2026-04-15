@@ -63,6 +63,7 @@ export const NewMinuteSheetModal = connect(
             }}
           />
           <Button
+            overrideReadOnly
             className="ustc-search-button"
             data-testid="new-minute-sheet-search-button"
             type="submit"
@@ -137,7 +138,8 @@ export const NewMinuteSheetModal = connect(
                     data-testid="new-minute-sheet-case-label"
                     htmlFor="case-selected"
                   >
-                    {newMinuteSheetModalHelper.caseInfo.docketNumberWithSuffix ||
+                    {newMinuteSheetModalHelper.caseInfo
+                      .docketNumberWithSuffix ||
                       newMinuteSheetModalHelper.caseInfo.docketNumber}{' '}
                     {newMinuteSheetModalHelper.caseInfo.caseCaption}
                   </label>
@@ -160,6 +162,7 @@ export const NewMinuteSheetModal = connect(
 
         <div className="margin-top-4">
           <Button
+            overrideReadOnly
             data-testid="modal-confirm"
             onClick={() => submitNewMinuteSheetSequence()}
           >
@@ -201,8 +204,7 @@ export const NewMinuteSheetModal = connect(
                         size="1x"
                         style={{ marginRight: '4px' }}
                       />
-                      {caseItem.docketNumberWithSuffix ||
-                        caseItem.docketNumber}{' '}
+                      {caseItem.docketNumberWithSuffix || caseItem.docketNumber}{' '}
                       {caseItem.caseCaption}
                     </a>
                   </div>

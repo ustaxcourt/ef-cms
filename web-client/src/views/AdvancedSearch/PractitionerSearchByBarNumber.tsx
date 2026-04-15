@@ -66,6 +66,7 @@ export const PractitionerSearchByBarNumber = connect(
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  overrideReadOnly
                   overrideMargin
                   type="submit"
                   className="margin-bottom-0"

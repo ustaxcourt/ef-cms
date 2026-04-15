@@ -361,6 +361,7 @@ export const OpinionSearchForm: React.FC<OpinionSearchFormProps> = connect(
           <div className="grid-row margin-top-3">
             <div className="button-container">
               <Button
+                overrideReadOnly
                 overrideMargin
                 className="margin-bottom-0"
                 data-testid="advanced-search-button"
