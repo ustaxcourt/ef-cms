@@ -68,7 +68,7 @@ async function establishDbPool(): Promise<Kysely<Database>> {
     } catch (e) {
       attempt++;
       getDawsonLogger().error(
-        `Error establishing connection with database on attempt ${CONNECTION_RETRY_COUNT}`,
+        `Error establishing connection with database on attempt ${attempt}`,
         e,
       );
       await sleep(20 * 2 ** attempt);

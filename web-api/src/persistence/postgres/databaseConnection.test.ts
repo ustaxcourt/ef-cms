@@ -1,10 +1,7 @@
 import { getDb, exportedForTesting } from './databaseConnection';
-const { getToken } = exportedForTesting;
 import { environment } from '@web-api/environment';
 
-jest.doMock('@web-api/persistence/postgres/databaseConnection', () => ({
-  getDbReader: cb => cb(fakeReader),
-}));
+const { getToken } = exportedForTesting;
 
 const mockGetAuthToken = jest.fn();
 jest.mock('@aws-sdk/rds-signer', () => {
@@ -30,10 +27,13 @@ jest.mock('pg', () => {
   };
 });
 
-const mockExecute = jest.fn().mockResolvedValue(undefined);
-const fakeReader = { executeQuery: mockExecute };
-
 describe('getDb', () => {
+  const originalEnvStage = environment.stage;
+
+  afterAll(() => {
+    environment.stage = originalEnvStage;
+  });
+
   it('should not establish multiple database pools at the same time', async () => {
     const [db1, db2, db3] = await Promise.all([getDb(), getDb(), getDb()]);
 
