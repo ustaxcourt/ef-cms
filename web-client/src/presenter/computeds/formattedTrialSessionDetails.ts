@@ -11,6 +11,7 @@ export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   canClose?: boolean;
   canDelete?: boolean;
   canEdit?: boolean;
+  canEditOngoingSession?: boolean;
   chambersPhoneNumber?: string;
   disableHybridFilter?: boolean;
   isHybridSession?: boolean;
@@ -32,13 +33,14 @@ export const formattedTrialSessionDetails = (
   let disableHybridFilter = false;
   let canDelete = false;
   let canEdit = false;
+  let canEditOngoingSession = false;
 
   let alertMessageForNOTT: string | undefined;
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
+  if (!trialSession.trialSessionId) return {} as FormatTrialSessionHelperType;
   const currentUser = get(state.user);
-
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -46,7 +48,6 @@ export const formattedTrialSessionDetails = (
       currentUser,
       trialSession,
     });
-
   const {
     DATE_FORMATS,
     HYBRID_SESSION_TYPES,
@@ -92,7 +93,7 @@ export const formattedTrialSessionDetails = (
   if (formattedTrialSession.startDate) {
     const trialDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(formattedTrialSession.startDate);
+      .formatDateString(formattedTrialSession.startDate, DATE_FORMATS.YYYYMMDD);
     const nowDateFormatted = applicationContext
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
@@ -106,9 +107,32 @@ export const formattedTrialSessionDetails = (
       return editableSessionTypes.includes(sessionType);
     };
 
+    const endDate = formattedTrialSession.estimatedEndDate
+      ? applicationContext
+          .getUtilities()
+          .formatDateString(
+            formattedTrialSession.estimatedEndDate,
+            DATE_FORMATS.YYYYMMDD,
+          )
+      : undefined;
+
+    canEditOngoingSession =
+      user.role === USER_ROLES.caseServicesSupervisor &&
+      trialDateFormatted <= nowDateFormatted &&
+      (!endDate || endDate >= nowDateFormatted);
+
+    const validTrialDate = (): boolean => {
+      if (canEditOngoingSession) {
+        return true;
+      }
+      return (
+        trialDateInFuture || user.role === USER_ROLES.caseServicesSupervisor
+      );
+    };
+
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
     canEdit =
-      trialDateInFuture &&
+      validTrialDate() &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
       !isChambersUser &&
       !isJudgeUser;
@@ -141,6 +165,7 @@ export const formattedTrialSessionDetails = (
     canClose,
     canDelete,
     canEdit,
+    canEditOngoingSession,
     chambersPhoneNumber,
     disableHybridFilter,
     isHybridSession,

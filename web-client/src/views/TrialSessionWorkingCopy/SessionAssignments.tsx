@@ -25,7 +25,9 @@ export const SessionAssignments = connect(
               </div>
               <div className="grid-col-6">
                 <p className="label">Trial clerk</p>
-                <p>{formattedTrialSessionDetails.formattedTrialClerk}</p>
+                <p data-testid="assignments-sessions-trial-clerk">
+                  {formattedTrialSessionDetails.formattedTrialClerk}
+                </p>
               </div>
             </div>
 
@@ -38,7 +40,10 @@ export const SessionAssignments = connect(
             >
               <div className="grid-col-6">
                 <p className="label">Court reporter</p>
-                <p className="margin-bottom-0 word-wrap-break-word">
+                <p
+                  className="margin-bottom-0 word-wrap-break-word"
+                  data-testid="trial-session-court-reporter"
+                >
                   {formattedTrialSessionDetails.formattedCourtReporter}
                 </p>
               </div>
