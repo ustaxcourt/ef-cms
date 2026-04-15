@@ -186,7 +186,7 @@ export const saveCaseDetailInternalEdit = async (
       });
     }
 
-    return updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
