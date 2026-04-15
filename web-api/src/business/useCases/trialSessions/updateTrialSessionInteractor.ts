@@ -109,6 +109,7 @@ export const updateTrialSession = async (
     term: trialSession.term,
     termYear: trialSession.termYear,
     trialClerk: trialSession.trialClerk,
+    trialClerkId: trialSession.trialClerkId,
     trialLocation: trialSession.trialLocation,
   };
 
