@@ -44,6 +44,7 @@ export const noticeOfWithdrawal = async ({
       practitionerInformation,
     }),
   );
+
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfWithdrawalTemplate,

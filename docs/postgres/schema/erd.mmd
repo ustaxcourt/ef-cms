@@ -115,14 +115,6 @@ erDiagram
         boolean geodataMatch "Whether geodata matched"
     }
 
-    dwUserContact {
-        string userId PK "Associated user ID"
-        string docketNumber PK,FK "Associated case docket number"
-        number lat "Latitude coordinate"
-        number lng "Longitude coordinate"
-        boolean geodataMatch "Whether geodata matched"
-    }
-
     dwFeatureFlag {
         string name PK "Feature flag name"
     }

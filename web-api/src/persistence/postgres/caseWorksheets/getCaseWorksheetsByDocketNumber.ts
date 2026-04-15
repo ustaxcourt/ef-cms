@@ -1,6 +1,6 @@
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyCaseWorksheet } from '@web-api/persistence/postgres/caseWorksheets/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 
 export const getCaseWorksheetsByDocketNumber = async ({

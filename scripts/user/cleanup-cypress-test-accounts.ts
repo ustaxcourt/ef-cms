@@ -38,8 +38,8 @@ import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
 import { getDb } from '@web-api/persistence/postgres/databaseConnection';
+import type { Database } from '@web-api/persistence/postgres/database-schema';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
-import { Database } from '@web-api/persistence/postgres/database-schema';
 
 // ============================================================================
 // UTILITIES
