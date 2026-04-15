@@ -122,6 +122,20 @@ describe('socketRouter', () => {
       sequence: 'disengageAppMaintenanceSequence',
     },
     {
+      args: {
+        readOnlyMode: true,
+      },
+      message: { action: 'read_only_mode_engaged' },
+      sequence: 'setReadOnlyModeSequence',
+    },
+    {
+      args: {
+        readOnlyMode: false,
+      },
+      message: { action: 'read_only_mode_disengaged' },
+      sequence: 'setReadOnlyModeSequence',
+    },
+    {
       message: { action: 'save_docket_entry_for_later_complete' },
       sequence: 'saveDocketEntryForLaterCompleteSequence',
     },

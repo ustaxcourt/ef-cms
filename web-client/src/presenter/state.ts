@@ -829,6 +829,7 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  readOnlyMode: false,
   messageBoxToDisplay: {
     box: undefined,
     queue: undefined,

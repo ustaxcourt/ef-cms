@@ -13,12 +13,16 @@ export const getMaintenanceModeForPublicAction = async ({
   path,
   store,
 }: ActionProps<{}, ClientPublicApplicationContext>) => {
-  const { data: maintenanceMode, headers } = await applicationContext
+  const { data: result, headers } = await applicationContext
     .getUseCases()
     .getMaintenanceModePublicInteractor(applicationContext);
 
+  const maintenanceMode = typeof result === 'boolean' ? result : result.maintenanceMode;
+  const readOnlyMode = typeof result === 'boolean' ? false : result.readOnlyMode;
+
   store.set(state.isTerminalUser, headers['x-terminal-user'] === 'true');
   store.set(state.maintenanceMode, maintenanceMode);
+  store.set(state.readOnlyMode, readOnlyMode);
 
   return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
 };

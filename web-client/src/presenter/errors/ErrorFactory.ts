@@ -3,6 +3,7 @@ import { GatewayTimeoutError } from './GatewayTimeoutError';
 import { InvalidRequestError } from './InvalidRequestError';
 import { NotFoundError } from './NotFoundError';
 import { ServerInvalidResponseError } from './ServerInvalidResponseError';
+import { ReadOnlyModeError } from './ReadOnlyModeError';
 import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { UnidentifiedUserError } from './UnidentifiedUserError';
 
@@ -20,6 +21,8 @@ export const ErrorFactory = {
       newError = new UnidentifiedUserError();
     } else if (504 === responseCode) {
       newError = new GatewayTimeoutError();
+    } else if (503 === responseCode) {
+      newError = new ReadOnlyModeError();
     } else if (/^4/.test(responseCode)) {
       newError = new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {

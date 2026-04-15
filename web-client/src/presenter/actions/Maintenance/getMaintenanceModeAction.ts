@@ -1,9 +1,17 @@
 export const getMaintenanceModeAction = async ({
   applicationContext,
-}: ActionProps): Promise<{ maintenanceMode: boolean }> => {
-  const maintenanceMode = await applicationContext
+}: ActionProps): Promise<{
+  maintenanceMode: boolean;
+  readOnlyMode: boolean;
+}> => {
+  const result = await applicationContext
     .getUseCases()
     .getMaintenanceModeInteractor(applicationContext);
 
-  return { maintenanceMode };
+  const maintenanceMode =
+    typeof result === 'boolean' ? result : result.maintenanceMode;
+  const readOnlyMode =
+    typeof result === 'boolean' ? false : result.readOnlyMode;
+
+  return { maintenanceMode, readOnlyMode };
 };
