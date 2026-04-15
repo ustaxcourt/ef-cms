@@ -453,11 +453,11 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
-  noticeOfWithdrawalHelper: noticeOfWithdrawalHelper as unknown as ReturnType<
-    typeof noticeOfWithdrawalHelper
-  >,
   newMinuteSheetModalHelper: newMinuteSheetModalHelper as unknown as ReturnType<
     typeof newMinuteSheetModalHelper
+  >,
+  noticeOfWithdrawalHelper: noticeOfWithdrawalHelper as unknown as ReturnType<
+    typeof noticeOfWithdrawalHelper
   >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
@@ -725,6 +725,13 @@ export const baseState = {
       | TrialSessionLocationInfo
       | undefined,
   },
+  trialSessionStartDateChangeModalInfo: {
+    currentTrialSessionStartDate: undefined as string | undefined,
+    updatedTrialSessionStartDate: undefined as string | undefined,
+  },
+  trialSessionChangeModalState: {
+    persist: false as boolean | undefined,
+  },
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
@@ -935,6 +942,7 @@ export const baseState = {
   },
   practitionerDetail: {} as PractitionerDetail,
   practitionerDocuments: undefined as unknown[] | undefined,
+  printablePreview: 'trialCalendar' as 'trialCalendar' | 'publicSessionCopy',
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
