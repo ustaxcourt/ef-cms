@@ -224,7 +224,17 @@ type MaintenanceModeDisengaged = {
   action: 'maintenance_mode_disengaged';
 };
 
+type ReadOnlyModeEngaged = {
+  action: 'read_only_mode_engaged';
+};
+
+type ReadOnlyModeDisengaged = {
+  action: 'read_only_mode_disengaged';
+};
+
 export type SocketRouterNotificationMessage =
   | NotificationMessage
   | MaintenanceModeEngaged
-  | MaintenanceModeDisengaged;
+  | MaintenanceModeDisengaged
+  | ReadOnlyModeEngaged
+  | ReadOnlyModeDisengaged;
