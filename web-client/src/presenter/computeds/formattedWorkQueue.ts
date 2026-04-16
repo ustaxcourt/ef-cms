@@ -12,14 +12,11 @@ import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   ORDER_TYPES,
   ROLES,
-  TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
-import { abbreviateState } from '@shared/business/utilities/abbreviateState';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   calculateISODate,
   formatDateString,
@@ -234,7 +231,7 @@ export const formatWorkItem = ({
     }
   }
 
-  const formattedCaseStatus = formatCaseStatus({
+  const formattedCaseStatus = Case.formatCaseStatus({
     caseStatus: workItem.caseStatus,
     trialDate: workItem.trialDate,
     trialLocation: workItem.trialLocation,
@@ -504,29 +501,3 @@ export type FormattedWorkItemWithCaseInfo =
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
   };
-
-export function formatCaseStatus(workItem: {
-  caseStatus?: string;
-  trialLocation?: string;
-  trialDate?: string;
-}) {
-  let formattedCaseStatus = workItem.caseStatus || '';
-
-  if (
-    workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
-    workItem.trialLocation &&
-    workItem.trialDate
-  ) {
-    let formattedTrialLocation = '';
-    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-      formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
-    } else {
-      formattedTrialLocation = workItem.trialLocation;
-    }
-
-    const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
-
-    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
-  }
-  return formattedCaseStatus;
-}

@@ -4,7 +4,6 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Case } from '@shared/business/entities/cases/Case';
-import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
 
 export type TAssociatedCaseFormatted = Omit<
   TAssociatedCase,
@@ -127,7 +126,7 @@ const formatAssociatedCase = (
       .getUtilities()
       .formatDateString(caseInQuestion.createdAt, 'MMDDYY'),
     inConsolidatedGroup,
-    formattedStatus: formatCaseStatus({
+    formattedStatus: Case.formatCaseStatus({
       caseStatus: caseA.status,
       trialDate: caseA.trialDate,
       trialLocation: caseA.trialLocation,
