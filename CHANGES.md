@@ -1,14 +1,12 @@
-<details><summary>Dependency Updates - Week of 2026-04-13</summary>
 ## Manual Deployment Steps
 
 ### Before Deployment
 
-#### Docker container `4.3.75` - choose exp4
+#### Run an `account-specific` terraform deployment
 ```bash
-npm run ecr:check-version
+npm run deploy:account-specific
 ```
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-04-06</summary>
 
 ## Manual Deployment Steps
