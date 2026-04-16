@@ -25,7 +25,7 @@ const buttonVariants = cva(
     'tw:text-sm tw:xs:text-base tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer',
     'tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap',
     'tw:rounded-lg tw:transition-all',
-    'tw:disabled:pointer-events-none tw:disabled:opacity-50',
+    'tw:disabled:cursor-not-allowed tw:disabled:opacity-50',
     'tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4',
     'tw:shrink-0 tw:[&_svg]:shrink-0',
 
