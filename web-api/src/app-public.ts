@@ -85,16 +85,24 @@ app.use((req, res, next) => {
     return;
   }
 
+  const readOnlyPosts = [
+    '/public-api/search',
+    '/public-api/order-search',
+    '/public-api/opinion-search',
+  ];
+
   if (
     process.env.READ_ONLY_MODE === 'true' &&
     req.method !== 'GET' &&
-    req.method !== 'OPTIONS'
+    req.method !== 'OPTIONS' &&
+    !(
+      req.method === 'POST' &&
+      readOnlyPosts.some(route => req.url.startsWith(route))
+    )
   ) {
     res
       .status(503)
-      .send(
-        'System is upgrading. Please wait a few minutes and try again.',
-      );
+      .send('System is upgrading. Please wait a few minutes and try again.');
     return;
   }
 
