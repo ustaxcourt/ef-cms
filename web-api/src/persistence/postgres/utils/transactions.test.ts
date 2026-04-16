@@ -12,6 +12,14 @@ import {
 
 jest.mock('@web-api/utilities/settlePromises');
 jest.mock('@web-api/persistence/postgres/databaseConnection');
+const mockLogger = {
+  error: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
+  return {
+    getDawsonLogger: () => mockLogger,
+  };
+});
 
 describe('inTransaction', () => {
   afterEach(() => {
@@ -166,5 +174,45 @@ describe('withTransaction', () => {
 
     expect(result).toBe('NO CALLBACKS');
     expect(settleSpy).not.toHaveBeenCalled();
+  });
+
+  it('should catch and log error if commit callbacks fail', async () => {
+    const error = new Error('Callback failure');
+    const settleSpy = jest
+      .spyOn(settleModule, 'settlePromises')
+      .mockRejectedValue(error);
+
+    fakeDb.transaction.mockReturnValue({
+      execute: async (cb: (trx: any) => Promise<any>) => cb({}),
+    });
+    jest.spyOn(dbModule, 'getDb').mockResolvedValue(fakeDb);
+    jest
+      .spyOn(ConnectionStore, 'run')
+      .mockImplementation(
+        <T>(
+          store: ConnectionInfo,
+          callback: (...args: any[]) => T,
+          ...args: any[]
+        ): T => {
+          jest.spyOn(ConnectionStore, 'getStore').mockReturnValue(store);
+          return callback(...args);
+        },
+      );
+
+    // Prepare user function that registers one onCommit callback
+    const cb = jest.fn().mockResolvedValue(undefined);
+
+    const userFn = jest.fn().mockImplementation(() => {
+      onTransactionCommit(cb);
+      return 'RESULT';
+    });
+    const result = await withTransaction(userFn);
+
+    expect(result).toBe('RESULT');
+    expect(settleSpy).toHaveBeenCalled();
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      'There was an error running onCommitCallbacks',
+      error,
+    );
   });
 });

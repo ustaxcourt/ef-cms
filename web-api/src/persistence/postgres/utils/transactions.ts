@@ -4,6 +4,7 @@ import {
   ConnectionStore,
   getDb,
 } from '@web-api/persistence/postgres/databaseConnection';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we're already in a transaction, just run the callback directly.
@@ -30,7 +31,11 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
 
   // After the transaction completes successfully, run the onCommit callbacks.
   if (transactionStore.onCommitCallbacks?.length) {
-    await settlePromises(transactionStore.onCommitCallbacks.map(cb => cb()));
+    try {
+      await settlePromises(transactionStore.onCommitCallbacks.map(cb => cb()));
+    } catch (error: any) {
+      getDawsonLogger().error('There was an error running onCommitCallbacks', error);
+    }
   }
 
   return result;
