@@ -270,6 +270,56 @@ export const CaseListTable = connect(
                 </option>
               </select>
             </div>
+            <div className="grid-row">
+              <h3 className="grid-col-4 tw:content-center">Sort By</h3>
+              <select
+                id="case-list-mobile-sort"
+                aria-label="additional case info"
+                className="usa-select margin-bottom-2 grid-col-8"
+                data-testid="case-list-mobile-sort"
+                value={`${tableSort.sortField}-${tableSort.sortOrder}`}
+                onChange={e => {
+                  const [field, key] = e.target.value.split('-');
+                  sortTableSequence({
+                    sortField: field,
+                    sortOrder: key as 'asc' | 'desc',
+                    stateKey: 'tableSort',
+                  });
+                }}
+              >
+                <option value="docketNumber-asc">
+                  Docket Number (Ascending)
+                </option>
+                <option value="docketNumber-desc">
+                  Docket Number (Descending)
+                </option>
+                <option value="caseTitle-asc">Case Title (Ascending)</option>
+                <option value="caseTitle-desc">Case Title (Descending)</option>
+
+                <option value="filedDate-asc">Filed Date (Ascending)</option>
+                <option value="filedDate-desc">Filed Date (Descending)</option>
+
+                {caseType === openTab && (
+                  <>
+                    <option value="status-asc">Case Status (Ascending)</option>
+                    <option value="status-desc">
+                      Case Status (Descending)
+                    </option>
+                  </>
+                )}
+
+                {dashboardExternalHelper.showFilingFee && (
+                  <>
+                    <option value="filingFee-asc">
+                      Filing Fee (Ascending)
+                    </option>
+                    <option value="filingFee-desc">
+                      Filing Fee (Descending)
+                    </option>
+                  </>
+                )}
+              </select>
+            </div>
             <div className="grid-row margin-top-1">
               {caseType === closedTab &&
                 renderCaseListTable({

@@ -1004,7 +1004,7 @@ export const baseState = {
   },
   tableSort: {
     sortField: 'createdAt',
-    sortOrder: ASCENDING,
+    sortOrder: ASCENDING as 'asc' | 'desc',
   },
   tabName: undefined as string | undefined,
   testUsers: [] as RawUser[],
