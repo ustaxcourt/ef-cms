@@ -191,31 +191,36 @@ export const DawsonLibrary = () => {
           },
         ]}
       />
-      <div>
-        <div style={{ margin: '100px 0px' }}></div>
-        <h1>PieGraph</h1>
-        <PieGraph
-          title="Procedure Type"
-          data={[
-            { label: 'In Person', value: 75, color: '#005EA2' },
-            {
-              label: 'Remote',
-              value: 25,
-              color: '#FFBE2E',
-            },
-          ]}
-        />
-        <PieGraph
-          title="Session Type"
-          data={[
-            { label: 'Regular', value: 40, color: '#B4D0B9' },
-            { label: 'Hybrid-S', value: 8, color: '#F2938C' },
-            { label: 'Hybrid', value: 8, color: '#FEE685' },
-            { label: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
-            { label: 'Small', value: 2.5, color: '#97D4EA' },
-            { label: 'Special', value: 2.5, color: '#E5A000' },
-          ]}
-        />
+      <div
+        style={{ marginTop: '3rem', marginLeft: '1rem', marginRight: '1rem' }}
+      >
+        <h2>Total sessions scheduled: 300</h2>
+        <div className="tw:flex tw:flex-wrap tw:gap-12">
+          <PieGraph
+            title="Procedure Type"
+            data={[
+              { name: 'In Person', value: 75, color: '#005EA2' },
+              {
+                name: 'Remote',
+                value: 25,
+                color: '#FFBE2E',
+              },
+            ]}
+          />
+
+          <PieGraph
+            title="Session Type"
+            data={[
+              { name: 'Regular', value: 40, color: '#B4D0B9' },
+              { name: 'Hybrid', value: 8, color: '#FEE685' },
+              { name: 'Small', value: 8, color: '#97D4EA' },
+              { name: 'Hybrid-S', value: 2.5, color: '#F2938C' },
+              { name: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
+              { name: 'Special', value: 2.5, color: '#E5A000' },
+            ]}
+            legendFlow="row"
+          />
+        </div>
       </div>
       <div className="card margin-2 padding-2">
         <Buttons />
