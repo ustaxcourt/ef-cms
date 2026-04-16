@@ -306,11 +306,13 @@ app.use((req, res, next) => {
   }
 
   const readOnlyPosts = [
+    '/auth/refresh',
     '/cases/search',
     '/case-documents/opinion-search',
     '/case-documents/order-search',
-    '/views/pending-report',
     '/reports/judge-activity-report',
+    '/trial-sessions/bulk-copy-notes',
+    '/views/pending-report',
   ];
 
   if (
