@@ -55,7 +55,7 @@ export const Button = connect(
       noMargin = false,
       onClick,
       overrideMargin = false,
-      overrideReadOnly,
+      overrideReadOnly = false,
       readOnlyMode,
       secondary,
       shouldWrapText = false,
@@ -63,27 +63,27 @@ export const Button = connect(
       ...remainingProps
     } = props;
 
-  const isLink = Boolean(href);
-  const Element = isLink ? 'a' : 'button';
-  if (isActive && !isLink && remainingProps['aria-pressed'] === undefined) {
-    remainingProps['aria-pressed'] = true;
-  }
-  const type = remainingProps['type'] ?? (isLink ? undefined : 'button');
+    const isLink = Boolean(href);
+    const Element = isLink ? 'a' : 'button';
+    if (isActive && !isLink && remainingProps['aria-pressed'] === undefined) {
+      remainingProps['aria-pressed'] = true;
+    }
+    const type = remainingProps['type'] ?? (isLink ? undefined : 'button');
 
-  const classes = classNames(
-    className,
-    'usa-button',
-    tooltip && 'usa-tooltip',
-    !overrideMargin && `margin-${marginDirection}-205`,
-    overrideMargin,
-    icon && !shouldWrapText && 'no-wrap',
-    secondary && 'usa-button--outline',
-    link && 'usa-button--unstyled ustc-button--unstyled',
-  );
+    const classes = classNames(
+      className,
+      'usa-button',
+      tooltip && 'usa-tooltip',
+      !overrideMargin && `margin-${marginDirection}-205`,
+      overrideMargin,
+      icon && !shouldWrapText && 'no-wrap',
+      secondary && 'usa-button--outline',
+      link && 'usa-button--unstyled ustc-button--unstyled',
+    );
 
-  const iconClasses = classNames(
-    iconRight ? 'margin-left-05' : noMargin ? 'margin-0' : 'margin-right-05',
-    iconColor && `fa-icon-${iconColor}`,
+    const iconClasses = classNames(
+      iconRight ? 'margin-left-05' : noMargin ? 'margin-0' : 'margin-right-05',
+      iconColor && `fa-icon-${iconColor}`,
     );
 
     const isButtonDisabled =
@@ -101,11 +101,19 @@ export const Button = connect(
         onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
       >
         {icon && !iconRight && (
-          <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
+          <FontAwesomeIcon
+            className={iconClasses}
+            icon={icon}
+            size={iconSize}
+          />
         )}
         {children}
         {icon && iconRight && (
-          <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
+          <FontAwesomeIcon
+            className={iconClasses}
+            icon={icon}
+            size={iconSize}
+          />
         )}
       </Element>
     );

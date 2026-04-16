@@ -185,6 +185,7 @@ export const FilingsAndProceedings = connect<
                 'view-pdf-link',
               )}
               data-testid={`document-viewer-link-${entry.eventCode}`}
+              overrideReadOnly
               onClick={() =>
                 changeTabAndSetViewerDocumentToDisplaySequence({
                   docketRecordTab: 'documentView',

@@ -162,6 +162,7 @@ export const DraftDocumentViewerDocument = connect(
                 icon="file-pdf"
                 iconColor="white"
                 id="view-full-pdf"
+                overrideReadOnly
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,

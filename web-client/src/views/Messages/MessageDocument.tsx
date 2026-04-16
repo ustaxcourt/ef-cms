@@ -229,6 +229,7 @@ export const MessageDocument = connect(
           link
           icon="file-pdf"
           iconColor="white"
+          overrideReadOnly
           onClick={() =>
             openCaseDocumentDownloadUrlSequence({
               docketEntryId: messageViewerDocumentToDisplay.documentId,

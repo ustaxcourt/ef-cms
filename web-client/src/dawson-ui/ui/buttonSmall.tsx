@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const tertiaryBaseStyles = cn(
   'tw:px-0 tw:py-0 tw:bg-transparent tw:font-[400] tw:underline', // standard
@@ -53,47 +54,57 @@ const buttonVariants = cva(
   },
 );
 
-export function ButtonSmall({
-  className,
-  variant,
-  iconPosition = 'left',
-  asChild = false,
-  icon,
-  children,
-  ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-    icon?: IconProp;
-    iconPosition?: 'left' | 'right';
-  }) {
-  const Comp = asChild ? Slot : 'button';
+export const ButtonSmall = connect(
+  {
+    readOnlyMode: state.readOnlyMode,
+  },
+  function ButtonSmall({
+    asChild = false,
+    children,
+    className,
+    icon,
+    iconPosition = 'left',
+    overrideReadOnly = false,
+    readOnlyMode,
+    variant,
+    ...props
+  }: React.ComponentProps<'button'> &
+    VariantProps<typeof buttonVariants> & {
+      asChild?: boolean;
+      icon?: IconProp;
+      iconPosition?: 'left' | 'right';
+      overrideReadOnly?: boolean;
+      readOnlyMode?: boolean;
+    }) {
+    const Comp = asChild ? Slot : 'button';
 
-  const Icon = icon ? (
-    <FontAwesomeIcon
-      className={cn(
-        iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2',
-        'tw:w-4! tw:h-4!',
-        'tw:xs:w-4.5! tw:xs:h-4.5!',
-      )}
-      icon={icon}
-      role="img"
-      aria-label="icon"
-    />
-  ) : null;
+    const Icon = icon ? (
+      <FontAwesomeIcon
+        className={cn(
+          iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2',
+          'tw:w-4! tw:h-4!',
+          'tw:xs:w-4.5! tw:xs:h-4.5!',
+        )}
+        icon={icon}
+        role="img"
+        aria-label="icon"
+      />
+    ) : null;
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, className }))}
-      {...props}
-      role="button"
-    >
-      <>
-        {iconPosition === 'left' && Icon}
-        {children}
-        {iconPosition === 'right' && Icon}
-      </>
-    </Comp>
-  );
-}
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, className }))}
+        data-slot="button"
+        {...props}
+        disabled={props.disabled || (readOnlyMode && !overrideReadOnly)}
+        role="button"
+      >
+        <>
+          {iconPosition === 'left' && Icon}
+          {children}
+          {iconPosition === 'right' && Icon}
+        </>
+      </Comp>
+    );
+  },
+);
