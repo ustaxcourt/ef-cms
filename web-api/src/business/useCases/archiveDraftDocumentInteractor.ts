@@ -55,7 +55,7 @@ export const archiveDraftDocument = async (
       });
     }
 
-    return updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
