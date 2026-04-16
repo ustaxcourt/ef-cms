@@ -73,7 +73,7 @@ export const externalUserCasesHelper = (
 } => {
   const openCases = get(state.openCases);
   const closedCases = get(state.closedCases);
-  const tableSort = get(state.tableSort) || {
+  const tableSort = get(state.caseListTableSort) || {
     sortField: 'filedDate',
     sortOrder: 'desc',
   };

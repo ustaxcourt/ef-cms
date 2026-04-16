@@ -13,7 +13,10 @@ import { CaseStatusInfoModal } from '@web-client/views/RecentFilings/CaseStatusI
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import {
+  PaginationResult,
+  useClientSidePaginator,
+} from '@web-client/utilities/useClientSidePaginator';
 import { CASE_LIST_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 
 export const CaseListTable = connect(
@@ -30,7 +33,7 @@ export const CaseListTable = connect(
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
     showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
     showModal: state.modal.showModal,
-    tableSort: state.tableSort,
+    caseListTableSort: state.caseListTableSort,
     sortTableSequence: sequences.sortTableSequence,
   },
   function CaseListTable({
@@ -43,7 +46,7 @@ export const CaseListTable = connect(
     setCaseTypeToDisplaySequence,
     showCaseStatusInfoSequence,
     showModal,
-    tableSort,
+    caseListTableSort,
     sortTableSequence,
   }) {
     const paginatorTop = useRef<HTMLDivElement>(null);
@@ -84,7 +87,7 @@ export const CaseListTable = connect(
       cases: TAssociatedCaseFormatted[];
       tabName: string;
       isMobile: boolean;
-      casePagination: any;
+      casePagination: PaginationResult<TAssociatedCaseFormatted>;
     }) => {
       return (
         <>
@@ -127,45 +130,45 @@ export const CaseListTable = connect(
                     <SortableHeader
                       sortField="docketNumber"
                       sortType="string"
-                      tableSort={tableSort}
+                      tableSort={caseListTableSort}
                       title="Docket No."
                       onSort={sortTableSequence}
-                      stateKey="tableSort"
+                      stateKey="caseListTableSort"
                     />
                     <SortableHeader
                       sortField="caseTitle"
                       sortType="string"
-                      tableSort={tableSort}
+                      tableSort={caseListTableSort}
                       title="Case Title"
                       onSort={sortTableSequence}
-                      stateKey="tableSort"
+                      stateKey="caseListTableSort"
                     />
                     <SortableHeader
                       sortField="filedDate"
                       sortType="date"
-                      tableSort={tableSort}
+                      tableSort={caseListTableSort}
                       title="Filed Date"
                       onSort={sortTableSequence}
-                      stateKey="tableSort"
+                      stateKey="caseListTableSort"
                     />
                     {tabName === openTab && (
                       <SortableHeader
                         sortField="status"
                         sortType="string"
-                        tableSort={tableSort}
+                        tableSort={caseListTableSort}
                         title="Case Status"
                         onSort={sortTableSequence}
-                        stateKey="tableSort"
+                        stateKey="caseListTableSort"
                       />
                     )}
                     {dashboardExternalHelper.showFilingFee && (
                       <SortableHeader
                         sortField="filingFee"
                         sortType="string"
-                        tableSort={tableSort}
+                        tableSort={caseListTableSort}
                         title="Filing Fee"
                         onSort={sortTableSequence}
-                        stateKey="tableSort"
+                        stateKey="caseListTableSort"
                       />
                     )}
                   </tr>
@@ -277,13 +280,13 @@ export const CaseListTable = connect(
                 aria-label="additional case info"
                 className="usa-select margin-bottom-2 grid-col-8"
                 data-testid="case-list-mobile-sort"
-                value={`${tableSort.sortField}-${tableSort.sortOrder}`}
+                value={`${caseListTableSort.sortField}-${caseListTableSort.sortOrder}`}
                 onChange={e => {
                   const [field, key] = e.target.value.split('-');
                   sortTableSequence({
                     sortField: field,
                     sortOrder: key as 'asc' | 'desc',
-                    stateKey: 'tableSort',
+                    stateKey: 'caseListTableSort',
                   });
                 }}
               >

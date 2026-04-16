@@ -1063,6 +1063,10 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  caseListTableSort: {
+    sortField: 'filedDate',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  },
 };
 
 export const initialState = {
