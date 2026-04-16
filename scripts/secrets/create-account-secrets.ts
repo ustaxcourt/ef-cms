@@ -69,7 +69,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     opensearchLogsInstanceType: {
-      default: 't2.small.search',
+      default: 't3.small.search',
       long: 'opensearch-logs-instance-type',
       type: 'string',
     },
