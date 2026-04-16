@@ -14,8 +14,8 @@ export const ReadOnlyBanner = connect(
         className="read-only-banner"
         style={{
           width: '100%',
-          backgroundColor: '#ffbe2e',
-          color: '#2a2a2a',
+          backgroundColor: '#8b1303',
+          color: '#ffffff',
           fontWeight: 'bold',
           padding: '10px',
           textAlign: 'center',
@@ -25,8 +25,8 @@ export const ReadOnlyBanner = connect(
         }}
       >
         <span>
-          ⚠️ System upgrade in progress. Write operations are temporarily paused
-          to prevent data loss. Normal operation will resume shortly.
+          ⚠️ We are performing maintenance. During this time, you cannot submit
+          filings or edit information. Normal operations will resume shortly.
         </span>
       </div>
     );

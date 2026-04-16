@@ -162,7 +162,6 @@ export const NewMinuteSheetModal = connect(
 
         <div className="margin-top-4">
           <Button
-            overrideReadOnly
             data-testid="modal-confirm"
             onClick={() => submitNewMinuteSheetSequence()}
           >
