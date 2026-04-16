@@ -1,6 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
-import { formatCaseStatus } from 'web-client/src/presenter/computeds/formattedWorkQueue';
 
 type SortableField = keyof Pick<
   RecentFiling,
@@ -60,12 +59,12 @@ export function sortRecentFilings(
         break;
       }
       case 'status': {
-        const formattedStatusA = formatCaseStatus({
+        const formattedStatusA = Case.formatCaseStatus({
           caseStatus: a.status,
           trialDate: a.trialDate,
           trialLocation: a.trialLocation,
         });
-        const formattedStatusB = formatCaseStatus({
+        const formattedStatusB = Case.formatCaseStatus({
           caseStatus: b.status,
           trialDate: b.trialDate,
           trialLocation: b.trialLocation,

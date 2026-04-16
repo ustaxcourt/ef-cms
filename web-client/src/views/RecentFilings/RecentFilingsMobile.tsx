@@ -13,7 +13,7 @@ import React from 'react';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
-import { formatCaseStatus } from '@web-client/presenter/computeds/formattedWorkQueue';
+import { Case } from 'shared/src/business/entities/cases/Case';
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -247,7 +247,7 @@ export const RecentFilingsMobile = ({
                           })
                         }
                       >
-                        {formatCaseStatus({
+                        {Case.formatCaseStatus({
                           caseStatus: filing.status,
                           trialDate: filing.trialDate,
                           trialLocation: filing.trialLocation,

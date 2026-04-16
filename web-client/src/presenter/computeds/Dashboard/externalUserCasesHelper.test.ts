@@ -206,7 +206,7 @@ describe('externalUserCasesHelper', () => {
   });
 
   it('should sort cases by docketNumber', () => {
-    baseState.tableSort = {
+    baseState.caseListTableSort = {
       sortField: 'docketNumber',
       sortOrder: 'asc',
     };
