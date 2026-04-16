@@ -341,7 +341,7 @@ export class Case extends JoiValidationEntity {
       if (
         workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       ) {
-        formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
+        formattedTrialLocation = abbreviateState(workItem.trialLocation);
       } else {
         formattedTrialLocation = workItem.trialLocation;
       }
