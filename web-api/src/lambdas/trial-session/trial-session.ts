@@ -1,12 +1,16 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { createApplicationContext } from '../../applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
+import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
 
 export const handler = async event => {
   if (process.env.READ_ONLY_MODE === 'true') {
-    throw new Error('Cannot execute trial-session handler during read-only mode.');
+    applicationContext.logger.info(
+      'Skipping trial-session handler due to read-only mode. Retrying in 180 seconds.',
+    );
+    await rescheduleLambda(applicationContext, { event }, 180);
+    return;
   }
 
-  const applicationContext = createApplicationContext({});
   try {
     const { Records } = event;
     const { body, receiptHandle } = Records[0];
