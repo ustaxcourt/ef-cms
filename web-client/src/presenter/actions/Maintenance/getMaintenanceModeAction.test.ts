@@ -9,7 +9,10 @@ describe('getMaintenanceModeAction', () => {
 
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(true);
+      .getMaintenanceModeInteractor.mockReturnValue({
+        maintenanceMode: true,
+        readOnlyMode: false,
+      });
   });
 
   it('should return true when maintenance mode is turned on', async () => {
@@ -29,7 +32,10 @@ describe('getMaintenanceModeAction', () => {
   it('should return false when maintenance mode is turned off', async () => {
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(false);
+      .getMaintenanceModeInteractor.mockReturnValue({
+        maintenanceMode: false,
+        readOnlyMode: false,
+      });
 
     const result = await runAction(getMaintenanceModeAction, {
       modules: {
