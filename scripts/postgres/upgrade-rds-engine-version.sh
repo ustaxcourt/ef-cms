@@ -236,13 +236,14 @@ while true; do
     echo "Switchover completed successfully!"
     break
   elif [[ "$STATUS" == *"FAILED"* ]]; then
-    echo "Switchover failed or encountered an error. Check AWS Console."
+    echo "Switchover failed or encountered an error. Check the blue/green deployment ${BG_IDENTIFIER} in the AWS Console for details."
     break
   fi
   sleep 10
 done
 
 echo "Disengaging read-only mode on application lambdas..."
+echo "Forcing a cold start of all Lambda functions to clear poisoned database connections from active connection pools..."
 ./scripts/maintenance/disengage-read-only-mode.sh
 
 if [[ "$SWITCHED_OVER" -eq 1 ]]; then
@@ -251,30 +252,8 @@ if [[ "$SWITCHED_OVER" -eq 1 ]]; then
     --blue-green-deployment-identifier "$BG_IDENTIFIER" \
     --region "$REGION" >/dev/null
 
-  echo "Forcing a cold start of all Lambda functions to clear poisoned database connections from active connection pools..."
-  echo "Fetching active lambdas for ${ENV} (${CURRENT_COLOR})..."
-  ACTIVE_LAMBDAS=$(aws lambda list-functions \
-    --region "$REGION" \
-    --output json 2>/dev/null | jq -r '.Functions[]?.FunctionName' | grep ".*_${ENV}_${CURRENT_COLOR}.*" || echo "")
-
-  if [ -n "$ACTIVE_LAMBDAS" ]; then
-    TIMESTAMP=$(date +%s)
-    for LAMBDA_NAME in $ACTIVE_LAMBDAS; do
-      echo "Invalidating cache for lambda: ${LAMBDA_NAME}"
-      web-api/terraform/bin/edit-lambda-environment.sh \
-        -l "$LAMBDA_NAME" \
-        -k DEPLOYMENT_TIMESTAMP \
-        -v "$TIMESTAMP" \
-        -r "$REGION" >/dev/null
-    done
-    echo "Lambda invalidation complete."
-  else
-    echo "No active lambdas found matching _${ENV}_${CURRENT_COLOR}. Skipping lambda invalidation."
-  fi
-
   echo "Upgrade to ${TARGET_VERSION} complete! Terraform will reconcile the remaining state."
   exit 0
-else
-  echo "Switchover did not complete successfully. Please check the Blue/Green deployment ${BG_IDENTIFIER} in the AWS Console for details."
-  exit 1
 fi
+
+exit 1
