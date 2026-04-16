@@ -1,8 +1,21 @@
 /* eslint-disable max-lines */
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 import { TrialSessionCaseKysely } from '@web-api/persistence/postgres/trialSessions/schema';
+
+const trialSessionStartingTodayStartDate = createISODateAtStartOfDayEST();
+const trialSessionStartingTodayTermYear = formatDateString(
+  trialSessionStartingTodayStartDate,
+  FORMATS.YEAR,
+);
 
 export const trialSessions: RawTrialSession[] = [
   {
@@ -20,6 +33,7 @@ export const trialSessions: RawTrialSession[] = [
       userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
     },
     startDate: '2019-12-02T05:00:00.000Z',
+    estimatedEndDate: '2030-12-10T05:00:00.000Z',
     maxCases: 30,
     trialSessionId: '0d943468-bc2e-4631-84e3-b084cf5b1fbb',
     isCalendared: true,
@@ -586,6 +600,78 @@ export const trialSessions: RawTrialSession[] = [
     hasNottBeenServed: false,
     paperServicePdfs: [],
   },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
+    trialLocation: 'Standalone Remote',
+    proceedingType: 'Remote',
+    createdAt: createISODateString(),
+    sessionType: 'Special',
+    sessionScope: 'Standalone Remote',
+    termYear: trialSessionStartingTodayTermYear,
+    startTime: '13:00',
+    term: 'Fall',
+    judge: {
+      name: 'Colvin',
+      userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: trialSessionStartingTodayStartDate,
+    maxCases: 100,
+    trialSessionId: 'e111e600-dead-4000-beef-0000000d01e5',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    paperServicePdfs: [],
+  },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
+    trialLocation: 'Denver, Colorado',
+    proceedingType: 'In Person',
+    createdAt: createISODateString(),
+    sessionType: 'Special',
+    termYear: trialSessionStartingTodayTermYear,
+    startTime: '21:00',
+    term: 'Fall',
+    judge: {
+      name: 'Cohen',
+      userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: trialSessionStartingTodayStartDate,
+    estimatedEndDate: calculateISODate({
+      dateString: trialSessionStartingTodayStartDate,
+      howMuch: 5,
+      units: 'days',
+    }),
+    maxCases: 30,
+    trialSessionId: 'e222f700-dead-4000-beef-0000000d01e5',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    sessionScope: 'Location-based',
+    paperServicePdfs: [],
+  },
+  {
+    caseOrder: [],
+    sessionStatus: 'Open',
+    trialLocation: 'Denver, Colorado',
+    proceedingType: 'In Person',
+    createdAt: '2019-11-02T05:00:00.000Z',
+    sessionType: 'Special',
+    termYear: '2019',
+    startTime: '21:00',
+    term: 'Fall',
+    judge: {
+      name: 'Cohen',
+      userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    },
+    startDate: '2019-12-02T05:00:00.000Z',
+    estimatedEndDate: '2099-01-02T05:00:00.000Z',
+    maxCases: 30,
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    isCalendared: true,
+    hasNottBeenServed: false,
+    sessionScope: 'Location-based',
+    paperServicePdfs: [],
+  },
 ];
 
 export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
@@ -632,6 +718,52 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     caseMetadata: {},
     trialSessionId: '111ac21b-99f9-4321-98c8-b95db00af96b',
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+    caseMetadata: {},
+    trialSessionId: 'e111e600-dead-4000-beef-0000000d01e5',
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    caseMetadata: {},
+    trialSessionId: 'e222f700-dead-4000-beef-0000000d01e5',
     sort: 'docket',
     sortOrder: 'asc',
   },
@@ -1003,6 +1135,29 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     sort: 'docket',
     sortOrder: 'asc',
   },
+  {
+    filters: {
+      definiteTrial: true,
+      probableTrial: true,
+      motionToDismiss: true,
+      settled: true,
+      dismissed: true,
+      basisReached: true,
+      continued: true,
+      submittedCAV: true,
+      showAll: true,
+      probableSettlement: true,
+      setForTrial: true,
+      recall: true,
+      rule122: true,
+      statusUnassigned: true,
+    },
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    caseMetadata: {},
+    sort: 'docket',
+    sortOrder: 'asc',
+  },
 ];
 
 export const trialSessionCase: TrialSessionCaseKysely[] = [
@@ -1015,7 +1170,7 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
   },
   {
     docketNumber: '101-20',
@@ -1026,7 +1181,7 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
   },
   {
     docketNumber: '103-20',
@@ -1037,6 +1192,39 @@ export const trialSessionCase: TrialSessionCaseKysely[] = [
     isHearing: false,
     calendarNotes: null,
     disposition: null,
-    removedFromTrialDate: null
+    removedFromTrialDate: null,
+  },
+  {
+    docketNumber: '103-20',
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    isManuallyAdded: false,
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    removedFromTrial: false,
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null,
+  },
+  {
+    docketNumber: '101-21',
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    isManuallyAdded: false,
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    removedFromTrial: false,
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null,
+  },
+  {
+    docketNumber: '103-67',
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    isManuallyAdded: false,
+    trialSessionId: '5d5e7707-4f05-4f09-aa8f-7bebba84d96b',
+    removedFromTrial: false,
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null,
   },
 ];

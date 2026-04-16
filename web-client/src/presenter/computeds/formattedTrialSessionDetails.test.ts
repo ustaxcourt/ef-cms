@@ -12,6 +12,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  caseServicesSupervisorUser,
   colvinsChambersUser,
   docketClerkUser,
   judgeUser,
@@ -50,6 +51,7 @@ describe('formattedTrialSessionDetails', () => {
     termYear: '2019',
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
+    trialSessionId: 'abc-123',
   };
 
   beforeEach(() => {
@@ -69,7 +71,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -84,7 +88,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     let result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -97,7 +103,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     result = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -129,7 +137,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -144,7 +154,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -157,7 +169,9 @@ describe('formattedTrialSessionDetails', () => {
 
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -165,6 +179,16 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.canEdit).toBe(false);
     expect(result.canDelete).toBe(false);
     expect(result.canClose).toBe(false);
+  });
+
+  it('should return an empty object if trialSessionId is not provided', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+        user: trialClerkUser,
+      },
+    });
+    expect(result).toEqual({});
   });
 
   describe('canDelete', () => {
@@ -193,7 +217,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -212,7 +238,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -231,7 +259,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -268,7 +298,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -287,7 +319,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -308,7 +342,9 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
@@ -328,7 +364,9 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
@@ -348,7 +386,9 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
@@ -368,7 +408,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: colvinsChambersUser,
         },
       });
@@ -387,7 +429,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: judgeUser,
         },
       });
@@ -406,7 +450,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -414,6 +460,46 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toMatchObject({
         canEdit: false,
       });
+    });
+
+    it('should be true when user is CSS, start date is in the past, and end date is in the future', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: PAST_DATE,
+        estimatedEndDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.canEdit).toBe(true);
+    });
+
+    it('should be true when user is CSS, start date is in the past, and end date does not exist', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: PAST_DATE,
+        estimatedEndDate: undefined,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.canEdit).toBe(true);
     });
   });
 
@@ -428,7 +514,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -446,7 +534,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -464,7 +554,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -481,7 +573,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -499,7 +593,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -517,7 +613,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
