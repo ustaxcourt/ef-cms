@@ -1,6 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { PDFDocument } from 'pdf-lib';
 
 export const processCaseForService = async ({
   applicationContext,
@@ -15,8 +16,8 @@ export const processCaseForService = async ({
   caseEntity: Case;
   docketEntryId: string;
   electronicParties?: { email: string; name: string }[];
-  loadPdfDocument: () => Promise<any>;
-  newPdfDoc: any;
+  loadPdfDocument: () => Promise<Uint8Array>;
+  newPdfDoc: PDFDocument;
   PDFDocument: any;
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);

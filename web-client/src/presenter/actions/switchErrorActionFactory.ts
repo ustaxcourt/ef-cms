@@ -7,7 +7,7 @@ export const switchErrorActionFactory =
       responseData =
         typeof data === 'string' ? data : JSON.stringify(data || '');
     } catch (e) {
-      responseData = '';
+      // Default path handles generically formatted errors
     }
 
     for (const [errorString, pathKey] of Object.entries(errorMap)) {

@@ -2,13 +2,11 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   CONTACT_TYPE_TITLES,
-  NON_MULTI_DOCKETABLE_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { User } from '@shared/business/entities/User';
+import { shouldAllowMultiDocketing } from '@shared/business/utilities/shouldAllowMultiDocketing';
 import { ComputedFormattedCaseDetail } from './formattedCaseDetail';
 import { FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
 
@@ -127,18 +125,4 @@ export const roleToDisplay = party => {
   } else {
     return CONTACT_TYPE_TITLES[party.contactType];
   }
-};
-
-export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
-  const wasExternallyFiled = User.isExternalUser(docketEntry.filedByRole);
-
-  const isMultiDocketed = DocketEntry.isMultiDocketed(docketEntry);
-
-  const wasNotExternallySingleFiled = !wasExternallyFiled || isMultiDocketed;
-
-  const isMultiDocketable = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(
-    docketEntry.eventCode,
-  );
-
-  return isLead && isMultiDocketable && wasNotExternallySingleFiled;
 };

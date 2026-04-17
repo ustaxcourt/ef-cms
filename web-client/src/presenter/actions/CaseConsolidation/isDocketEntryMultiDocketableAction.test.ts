@@ -4,7 +4,7 @@ import { isDocketEntryMultiDocketableAction } from './isDocketEntryMultiDocketab
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { MOCK_LEAD_CASE_WITH_PAPER_SERVICE } from '@shared/test/mockCase';
-import { shouldAllowMultiDocketing as shouldAllowMultiDocketingMock } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+import { shouldAllowMultiDocketing as shouldAllowMultiDocketingMock } from '@shared/business/utilities/shouldAllowMultiDocketing';
 import { MOCK_ANSWER } from '@shared/test/mockDocketEntry';
 
 describe('isDocketEntryMultiDocketableAction', () => {
