@@ -92,6 +92,7 @@ app.use(expressLogger);
 
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
+import { getPublicDocketRecordStatusLambda } from './lambdas/public-api/getPublicDocketRecordStatusLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
@@ -132,6 +133,10 @@ import { getDbReader } from '@web-api/database';
   app.post(
     '/public-api/cases/:docketNumber/generate-docket-record',
     lambdaWrapper(generatePublicDocketRecordPdfLambda),
+  );
+  app.get(
+    '/public-api/cases/:docketNumber/docket-record-status/:jobId',
+    lambdaWrapper(getPublicDocketRecordStatusLambda),
   );
 }
 
