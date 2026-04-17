@@ -36,6 +36,7 @@ import { serveDocumentAndGetPaperServicePdf } from './business/useCaseHelper/ser
 import { serveGeneratedNoticesOnCase } from './business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
 import { setNoticeOfChangeOfTrialJudge } from './business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';
 import { setNoticeOfChangeOfTrialLocation } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialLocation';
+import { setNoticeOfChangeOfTrialStartDate } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialStartDate';
 import { setNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from './business/useCaseHelper/pdf/setPdfFormFields';
@@ -83,6 +84,7 @@ const useCaseHelpers = {
   serveGeneratedNoticesOnCase,
   setNoticeOfChangeOfTrialJudge,
   setNoticeOfChangeOfTrialLocation,
+  setNoticeOfChangeOfTrialStartDate,
   setNoticeOfChangeToInPersonProceeding,
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,
