@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -43,31 +43,14 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '12px',
-        justifyContent: 'flex-start',
-        padding: '8px 0 16px',
-      }}
-    >
+    <div className="tw:flex tw:flex-wrap tw:gap-4 tw:justify-start tw:mb-8">
       {payload.map((entry: any, index: number) => (
-        <div
-          key={index}
-          style={{ alignItems: 'center', display: 'flex', gap: '8px' }}
-        >
+        <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            style={{
-              backgroundColor: entry.color,
-              border: '2px solid #000',
-              borderRadius: '6px',
-              flexShrink: 0,
-              height: '48px',
-              width: '48px',
-            }}
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-12 tw:h-12 tw:max-[480px]:w-10 tw:max-[480px]:h-10"
+            style={{ backgroundColor: entry.color }}
           />
-          <span style={{ color: '#000', fontSize: '20px', fontWeight: '600' }}>
+          <span className="tw:text-black tw:font-semibold tw:text-xl tw:max-[480px]:text-base">
             {entry.value}
           </span>
         </div>
@@ -88,8 +71,7 @@ const RotatedTickX = (props: any) => {
         dy={20}
         textAnchor="end"
         fill="#000"
-        fontSize={20}
-        fontWeight="bold"
+        className="tw:text-xl tw:max-[480px]:text-base tw:font-bold"
         transform="rotate(-45)"
       >
         {payload.value}
@@ -108,8 +90,7 @@ const StraightTickX = (props: any) => {
         dy={20}
         textAnchor="middle"
         fill="#000"
-        fontSize={20}
-        fontWeight="600"
+        className="tw:text-xl tw:max-[480px]:text-base tw:font-semibold"
       >
         {payload.value}
       </text>
@@ -132,6 +113,16 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   yAxisLabel,
   smooth = false,
 }) => {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth <= 480,
+  );
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth <= 480);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  const chartHeight = isMobile ? 600 : height;
+
   // Two data arrays:
   // chartData - uses null for gaps (drives the visible line)
   // tooltipData - uses 0 for nulls (drives the invisible tooltip-trigger line)
@@ -156,14 +147,16 @@ export const LineGraph: React.FC<LineGraphProps> = ({
 
   return (
     <div className="tw:overflow-x-auto">
-      <div style={{ width: `${width}px` }}>
+      {/* tw:max-[480px]:!w-[1000px] overrides the inline width at mobile — confirm 1000px? */}
+      <div
+        style={{ width: `${width}px` }}
+        className="tw:max-[480px]:!w-[1000px]"
+      >
         {title && (
           <h2
+            className="tw:mt-0 tw:mb-8"
             style={{
               color: '#000',
-              margin: 0,
-              padding: '10px 0 8px',
-              paddingLeft: '80px',
               textAlign: 'left',
             }}
           >
@@ -171,7 +164,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           </h2>
         )}
         {showLegend && (
-          <div style={{ paddingLeft: '80px' }}>
+          <div>
             {renderCustomLegend({
               payload: datasets.map((ds, i) => ({
                 color: ds.color || defaultColors[i % defaultColors.length],
@@ -182,7 +175,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height={height}
+          height={chartHeight}
           style={{ outline: 'none' }}
         >
           <LineChart
@@ -196,52 +189,33 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           >
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <Tooltip
+              cursor={{ stroke: '#ccc', strokeWidth: 1 }}
               content={({ active, label }) => {
                 if (!active) return null;
                 const row = mergedData.find(d => d.name === label);
                 if (!row) return null;
                 return (
                   <div
-                    style={{
-                      background: '#fff',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      padding: '8px 12px',
-                    }}
+                    role="status"
+                    aria-live="polite"
+                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                   >
-                    <p
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: '20px',
-                        margin: '0 0 4px',
-                      }}
-                    >
+                    <div className="tw:font-bold tw:text-xl tw:max-[480px]:text-base">
                       {label}
-                    </p>
+                    </div>
                     {datasets.map((ds, i) => {
                       const color =
                         ds.color || defaultColors[i % defaultColors.length];
                       return (
                         <div
                           key={ds.label}
-                          style={{
-                            alignItems: 'center',
-                            display: 'flex',
-                            gap: '6px',
-                            margin: '2px 0',
-                          }}
+                          className="tw:flex tw:items-center tw:gap-2"
                         >
-                          <div
-                            style={{
-                              backgroundColor: color,
-                              border: '1px solid #000',
-                              borderRadius: '3px',
-                              flexShrink: 0,
-                              height: '16px',
-                              width: '16px',
-                            }}
+                          <span
+                            className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded tw:max-[480px]:w-3 tw:max-[480px]:h-3"
+                            style={{ backgroundColor: color }}
                           />
-                          <span style={{ color: '#000', fontSize: '20px' }}>
+                          <span className="tw:text-xl tw:max-[480px]:text-base">
                             {ds.label} : {row[`${ds.label}_tip`]}
                           </span>
                         </div>
@@ -253,6 +227,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             />
             <XAxis
               dataKey="name"
+              interval={0}
               height={xLabelRotation ? 120 : 60}
               tick={
                 xLabelRotation
@@ -263,7 +238,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                 xAxisLabel
                   ? {
                       fill: '#000',
-                      fontSize: 20,
+                      fontSize: '1.25rem',
                       fontWeight: '600',
                       offset: xLabelRotation ? -70 : -20,
                       position: 'insideBottom',
@@ -273,13 +248,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
               }
             />
             <YAxis
-              tick={{ fill: '#000', fontSize: 20 }}
+              tick={{ fill: '#000', fontSize: '1.25rem' }}
               label={
                 yAxisLabel
                   ? {
                       angle: -90,
                       fill: '#000',
-                      fontSize: 20,
+                      fontSize: '1.25rem',
                       fontWeight: '600',
                       offset: 10,
                       position: 'insideLeft',
@@ -312,7 +287,12 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                       />
                     );
                   }}
-                  activeDot={false}
+                  activeDot={{
+                    fill: color,
+                    r: 8,
+                    stroke: '#fff',
+                    strokeWidth: 2,
+                  }}
                   isAnimationActive={false}
                 />
               );
