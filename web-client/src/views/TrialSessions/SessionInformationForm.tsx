@@ -82,7 +82,6 @@ export const SessionInformationForm = connect<
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
-              <p>HERE</p>
               <DateSelector
                 defaultValue={form.startDate}
                 disabled={
