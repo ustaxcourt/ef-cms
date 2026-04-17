@@ -179,6 +179,7 @@ export const TrialSessionInformation = connect(
                               !formattedTrialSessionDetails.showSwingSession &&
                                 'margin-bottom-0',
                             )}
+                            data-testid="trial-session-date"
                           >
                             {formattedTrialSessionDetails.formattedStartDate}{' '}
                             {formattedTrialSessionDetails.formattedStartTime}

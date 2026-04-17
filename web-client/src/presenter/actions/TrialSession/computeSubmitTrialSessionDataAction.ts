@@ -27,7 +27,6 @@ export const computeSubmitTrialSessionDataAction = ({
   );
 
   if (form.alternateTrialClerkName) {
-    store.set(state.form.trialClerkId, undefined);
     store.set(state.form.trialClerk, undefined);
   }
 };

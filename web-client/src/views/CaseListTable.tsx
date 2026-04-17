@@ -7,8 +7,17 @@ import { WarningNotification } from './WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { CaseStatusInfoModal } from '@web-client/views/RecentFilings/CaseStatusInfoModal';
+import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import {
+  PaginationResult,
+  useClientSidePaginator,
+} from '@web-client/utilities/useClientSidePaginator';
+import { CASE_LIST_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 
 export const CaseListTable = connect(
   {
@@ -22,6 +31,10 @@ export const CaseListTable = connect(
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
+    showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
+    showModal: state.modal.showModal,
+    caseListTableSort: state.caseListTableSort,
+    sortTableSequence: sequences.sortTableSequence,
   },
   function CaseListTable({
     caseType,
@@ -31,9 +44,21 @@ export const CaseListTable = connect(
     externalUserCasesHelper,
     openTab,
     setCaseTypeToDisplaySequence,
-    showMoreClosedCasesSequence,
-    showMoreOpenCasesSequence,
+    showCaseStatusInfoSequence,
+    showModal,
+    caseListTableSort,
+    sortTableSequence,
   }) {
+    const paginatorTop = useRef<HTMLDivElement>(null);
+    const closedPagination = useClientSidePaginator(
+      externalUserCasesHelper.closedCaseResults,
+      CASE_LIST_PAGE_SIZE,
+    );
+    const openPagination = useClientSidePaginator(
+      externalUserCasesHelper.openCaseResults,
+      CASE_LIST_PAGE_SIZE,
+    );
+
     useEffect(() => {
       return () => {
         clearOpenClosedCasesCurrentPageSequence();
@@ -56,15 +81,13 @@ export const CaseListTable = connect(
     const renderCaseListTable = ({
       cases = [],
       isMobile,
-      showLoadMore,
-      showMoreResultsSequence,
       tabName,
+      casePagination,
     }: {
       cases: TAssociatedCaseFormatted[];
-      showLoadMore: boolean;
-      showMoreResultsSequence: Function;
       tabName: string;
       isMobile: boolean;
+      casePagination: PaginationResult<TAssociatedCaseFormatted>;
     }) => {
       return (
         <>
@@ -72,15 +95,27 @@ export const CaseListTable = connect(
           {cases?.length > 0 && (
             <>
               {dashboardExternalHelper.showFilingFee && (
-                <span className="float-right margin-bottom-1">
+                <div className="tw:mb-[30px] text-right">
                   *Filing fee status may take 2-3 business days from payment
                   received date or approval of waiver to update.
-                </span>
+                </div>
               )}
-
+              <div
+                ref={paginatorTop}
+                data-testid="casePaginationTop"
+                className="tw:mb-[30px]"
+              >
+                <Paginator
+                  currentPageIndex={casePagination.activePage}
+                  totalPages={casePagination.totalPages}
+                  onPageChange={pageChange => {
+                    casePagination.setActivePage(pageChange);
+                  }}
+                />
+              </div>
               <table
                 className={classNames({
-                  'usa-table responsive-table dashboard': !isMobile,
+                  'usa-table responsive-table dashboard ustc-table ': !isMobile,
                   'usa-table usa-table--stacked-header usa-table--borderless':
                     isMobile,
                 })}
@@ -92,11 +127,49 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket No.</th>
-                    <th>Case Title</th>
-                    <th>Filed Date</th>
+                    <SortableHeader
+                      sortField="docketNumber"
+                      sortType="string"
+                      tableSort={caseListTableSort}
+                      title="Docket No."
+                      onSort={sortTableSequence}
+                      stateKey="caseListTableSort"
+                    />
+                    <SortableHeader
+                      sortField="caseTitle"
+                      sortType="string"
+                      tableSort={caseListTableSort}
+                      title="Case Title"
+                      onSort={sortTableSequence}
+                      stateKey="caseListTableSort"
+                    />
+                    <SortableHeader
+                      sortField="filedDate"
+                      sortType="date"
+                      tableSort={caseListTableSort}
+                      title="Filed Date"
+                      onSort={sortTableSequence}
+                      stateKey="caseListTableSort"
+                    />
+                    {tabName === openTab && (
+                      <SortableHeader
+                        sortField="status"
+                        sortType="string"
+                        tableSort={caseListTableSort}
+                        title="Case Status"
+                        onSort={sortTableSequence}
+                        stateKey="caseListTableSort"
+                      />
+                    )}
                     {dashboardExternalHelper.showFilingFee && (
-                      <th data-testid="filing-fee">Filing Fee*</th>
+                      <SortableHeader
+                        sortField="filingFee"
+                        sortType="string"
+                        tableSort={caseListTableSort}
+                        title="Filing Fee"
+                        onSort={sortTableSequence}
+                        stateKey="caseListTableSort"
+                      />
                     )}
                   </tr>
                 </thead>
@@ -107,22 +180,22 @@ export const CaseListTable = connect(
                       isNestedCase={false}
                       key={item.docketNumber}
                       showFilingFee={dashboardExternalHelper.showFilingFee}
+                      showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                      showCaseStatus={tabName === openTab}
                     />
                   ))}
                 </tbody>
               </table>
-              {showLoadMore && (
-                <Button
-                  secondary
-                  className="margin-bottom-20"
-                  margin-direction="bottom"
-                  onClick={() => {
-                    showMoreResultsSequence();
+              <div data-testid="casePaginationBottom">
+                <Paginator
+                  currentPageIndex={casePagination.activePage}
+                  totalPages={casePagination.totalPages}
+                  onPageChange={pageChange => {
+                    casePagination.setActivePage(pageChange);
+                    focusPaginatorTop(paginatorTop);
                   }}
-                >
-                  Load More
-                </Button>
-              )}
+                />
+              </div>
             </>
           )}
         </>
@@ -149,12 +222,10 @@ export const CaseListTable = connect(
                     title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
                   >
                     {renderCaseListTable({
-                      cases: externalUserCasesHelper.openCaseResults,
+                      cases: openPagination.pageRecords,
                       isMobile: false,
-                      showLoadMore:
-                        externalUserCasesHelper.showLoadMoreOpenCases,
-                      showMoreResultsSequence: showMoreOpenCasesSequence,
                       tabName: openTab,
+                      casePagination: openPagination,
                     })}
                   </Tab>
                   <Tab
@@ -164,12 +235,10 @@ export const CaseListTable = connect(
                     title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
                   >
                     {renderCaseListTable({
-                      cases: externalUserCasesHelper.closedCaseResults,
+                      cases: closedPagination.pageRecords,
                       isMobile: false,
-                      showLoadMore:
-                        externalUserCasesHelper.showLoadMoreClosedCases,
-                      showMoreResultsSequence: showMoreClosedCasesSequence,
                       tabName: closedTab,
+                      casePagination: closedPagination,
                     })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
@@ -204,26 +273,76 @@ export const CaseListTable = connect(
                 </option>
               </select>
             </div>
+            <div className="grid-row">
+              <h3 className="grid-col-4 tw:content-center">Sort By</h3>
+              <select
+                id="case-list-mobile-sort"
+                aria-label="additional case info"
+                className="usa-select margin-bottom-2 grid-col-8"
+                data-testid="case-list-mobile-sort"
+                value={`${caseListTableSort.sortField}-${caseListTableSort.sortOrder}`}
+                onChange={e => {
+                  const [field, key] = e.target.value.split('-');
+                  sortTableSequence({
+                    sortField: field,
+                    sortOrder: key as 'asc' | 'desc',
+                    stateKey: 'caseListTableSort',
+                  });
+                }}
+              >
+                <option value="docketNumber-asc">
+                  Docket Number (Ascending)
+                </option>
+                <option value="docketNumber-desc">
+                  Docket Number (Descending)
+                </option>
+                <option value="caseTitle-asc">Case Title (Ascending)</option>
+                <option value="caseTitle-desc">Case Title (Descending)</option>
+
+                <option value="filedDate-asc">Filed Date (Ascending)</option>
+                <option value="filedDate-desc">Filed Date (Descending)</option>
+
+                {caseType === openTab && (
+                  <>
+                    <option value="status-asc">Case Status (Ascending)</option>
+                    <option value="status-desc">
+                      Case Status (Descending)
+                    </option>
+                  </>
+                )}
+
+                {dashboardExternalHelper.showFilingFee && (
+                  <>
+                    <option value="filingFee-asc">
+                      Filing Fee (Ascending)
+                    </option>
+                    <option value="filingFee-desc">
+                      Filing Fee (Descending)
+                    </option>
+                  </>
+                )}
+              </select>
+            </div>
             <div className="grid-row margin-top-1">
               {caseType === closedTab &&
                 renderCaseListTable({
-                  cases: externalUserCasesHelper.closedCaseResults,
+                  cases: closedPagination.pageRecords,
                   isMobile: true,
-                  showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
-                  showMoreResultsSequence: showMoreClosedCasesSequence,
                   tabName: closedTab,
+                  casePagination: closedPagination,
                 })}
               {caseType === openTab &&
                 renderCaseListTable({
-                  cases: externalUserCasesHelper.openCaseResults,
+                  cases: openPagination.pageRecords,
                   isMobile: true,
-                  showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
-                  showMoreResultsSequence: showMoreOpenCasesSequence,
                   tabName: openTab,
+                  casePagination: openPagination,
                 })}
             </div>
           </div>
         </Phone>
+
+        {showModal === 'CaseStatusInfoModal' && <CaseStatusInfoModal />}
       </>
     );
   },

@@ -238,6 +238,10 @@ const getUsers = async (): Promise<Users> => {
 
   const users = {};
   for (const user of results as RawUser[]) {
+    if (!user.email) {
+      console.log(`User: ${user.name} does not have email`);
+      continue;
+    }
     const emailDomain = user.email!.split('@')[1];
 
     const fullName = user.name;
@@ -264,7 +268,7 @@ const getUsers = async (): Promise<Users> => {
       }
 
       let sourceOfUser = emailDomain;
-      if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+      if (emailDomain === 'ustc.gov') {
         sourceOfUser = 'gluedUserId';
       } else if (emailDomain === 'dawson.ustaxcourt.gov') {
         sourceOfUser = 'bulkImportedUserId';
@@ -303,6 +307,7 @@ const updateCognitoUserId = async ({
 
 const processUser = async (userName: string, users: Users): Promise<void> => {
   if (!users[userName].gluedUserId) {
+    console.log(`User: ${userName} is not glued user, moving on..`);
     return;
   }
   const { bulkImportedUserId, email, gluedUserId, name, role, userFullName } =

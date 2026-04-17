@@ -50,6 +50,10 @@ import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFile
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 
 describe('updateTrialSessionInteractor', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
@@ -104,7 +108,40 @@ describe('updateTrialSessionInteractor', () => {
           },
           mockCaseServicesSupervisorUser,
         ),
-      ).rejects.toThrow('Trial session cannot be updated after its start date');
+      ).rejects.toThrow(
+        'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
+      );
+    });
+
+    it('should throw an error if the trial session is ongoing and they are trying to change the start date', async () => {
+      const tomorrow = calculateISODate({
+        dateString: createISODateString(),
+        howMuch: 1,
+        units: 'days',
+      });
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+        estimatedEndDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2001-03-01T21:40:46.415Z',
+              estimatedEndDate: tomorrow,
+            } as unknown as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockCaseServicesSupervisorUser,
+        ),
+      ).rejects.toThrow(
+        'Trial session start date cannot be updated if the trial session is ongoing.',
+      );
     });
 
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {

@@ -147,6 +147,9 @@ describe('getRecentFilingsForUserInteractor', () => {
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
         isRequestingUserAssociated: true,
+        status: 'New',
+        trialDate: undefined,
+        trialLocation: undefined,
       },
     ]);
   });

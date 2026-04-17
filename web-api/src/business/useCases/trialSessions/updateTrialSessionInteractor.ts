@@ -21,7 +21,6 @@ import {
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
@@ -31,6 +30,12 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  createISODateString,
+  formatDateString,
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -50,8 +55,29 @@ export const updateTrialSession = async (
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
-  if (currentTrialSession.startDate < createISODateString()) {
-    throw new Error('Trial session cannot be updated after its start date');
+  const now = formatNow(FORMATS.YYYYMMDD);
+  const startDate = formatDateString(
+    currentTrialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+  const isStartDateInPast =
+    currentTrialSession.startDate < createISODateString();
+  const isEndDateInFuture =
+    createISODateString() < currentTrialSession.estimatedEndDate!;
+
+  const ongoing = isStartDateInPast && isEndDateInFuture;
+  const isToday = now === startDate;
+
+  if (!isEndDateInFuture && isStartDateInPast && !isToday) {
+    throw new Error(
+      'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
+    );
+  }
+
+  if (ongoing && currentTrialSession.startDate !== trialSession.startDate) {
+    throw new Error(
+      'Trial session start date cannot be updated if the trial session is ongoing.',
+    );
   }
 
   const editableFields = {
@@ -83,6 +109,7 @@ export const updateTrialSession = async (
     term: trialSession.term,
     termYear: trialSession.termYear,
     trialClerk: trialSession.trialClerk,
+    trialClerkId: trialSession.trialClerkId,
     trialLocation: trialSession.trialLocation,
   };
 

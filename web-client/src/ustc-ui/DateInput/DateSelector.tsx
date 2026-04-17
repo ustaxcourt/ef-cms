@@ -19,6 +19,7 @@ export const DateSelector = ({
   placeHolderText,
   pristine = false,
   showDateHint = false,
+  showDisabledDate = false,
 }: {
   defaultValue: string | undefined; // expects format 'YYYY-MM-DD'
   displayOptionalHintText?: boolean;
@@ -36,6 +37,7 @@ export const DateSelector = ({
   placeHolderText?: string;
   pristine?: boolean;
   showDateHint?: boolean;
+  showDisabledDate?: boolean;
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLDivElement>(null);
@@ -133,7 +135,9 @@ export const DateSelector = ({
         if (!myDatePicker)
           throw new Error('could not find expected date picker');
 
-        (myDatePicker as HTMLInputElement).value = '';
+        if (disabled && !showDisabledDate) {
+          (myDatePicker as HTMLInputElement).value = '';
+        }
 
         if (disabled) {
           datePicker.disable(input);
