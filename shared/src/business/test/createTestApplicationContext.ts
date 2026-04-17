@@ -370,12 +370,14 @@ export const createTestApplicationContext = () => {
   const getDocumentGeneratorsReturnMock = {
     addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFile),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
+    certificateOfService: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialLocation: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialStartDate: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),
@@ -384,6 +386,7 @@ export const createTestApplicationContext = () => {
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
+    noticeOfWithdrawal: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     petition: jest.fn().mockImplementation(getFakeFile),

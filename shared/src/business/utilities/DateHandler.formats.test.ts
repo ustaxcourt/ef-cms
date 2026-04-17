@@ -28,6 +28,7 @@ describe('DateHandler', () => {
       SHORT_MONTH_DAY_YEAR: 'Jul 2, 2018',
       SORTABLE_CALENDAR: '2018/07/02',
       TIME: '03:56 am',
+      TIME_12_HOUR: '3:56 AM',
       TIME_24_HOUR: '03:56',
       TIME_TZ: '3:56 am ET',
       TRIAL_SORT_TAG: '20180702035647',

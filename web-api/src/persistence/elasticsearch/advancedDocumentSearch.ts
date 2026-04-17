@@ -3,7 +3,7 @@ import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entit
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
-import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import type { QueryContainer } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.query_dsl';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
