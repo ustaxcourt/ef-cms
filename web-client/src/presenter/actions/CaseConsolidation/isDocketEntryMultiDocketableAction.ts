@@ -1,6 +1,6 @@
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
-import { shouldAllowMultiDocketing } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+import { shouldAllowMultiDocketing } from '@shared/business/utilities/shouldAllowMultiDocketing';
 
 export const isDocketEntryMultiDocketableAction = ({
   get,

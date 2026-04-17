@@ -77,8 +77,8 @@ export const needsNewCoversheet = ({
   currentDocketEntry,
   updatedDocketEntry,
 }: {
-  currentDocketEntry: any;
-  updatedDocketEntry: any;
+  currentDocketEntry: RawDocketEntry;
+  updatedDocketEntry: RawDocketEntry;
 }) => {
   const receivedAtUpdated =
     dateStringsCompared(

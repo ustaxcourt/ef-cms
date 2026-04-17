@@ -608,7 +608,6 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
     await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -657,18 +656,41 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should propagate docket entry updates to all multidocketed cases', async () => {
-    mockDocketEntries[0].multiDocketedOn = ['101-18', '102-20', '103-20'];
+    const mockLeadCaseDocketNumber = '101-18';
+    const mockconsolidatedCase1DocketNumber = '102-20';
+    const mockconsolidatedCase2DocketNumber = '103-20';
+    const mockConsolidatedDocketEntry = {
+      ...mockDocketEntries[0],
+      multiDocketedOn: [
+        mockLeadCaseDocketNumber,
+        mockconsolidatedCase1DocketNumber,
+        mockconsolidatedCase2DocketNumber,
+      ],
+      docketEntryId: '6e8100ac-1459-4d72-bffa-b9036618aacb',
+    };
 
     const consolidatedCase1 = {
       ...MOCK_CASE,
-      docketNumber: '102-20',
-      docketEntries: mockDocketEntries,
+      docketNumber: mockconsolidatedCase1DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase1DocketNumber,
+        },
+      ],
     };
 
     const consolidatedCase2 = {
       ...MOCK_CASE,
-      docketNumber: '103-20',
-      docketEntries: mockDocketEntries,
+      docketNumber: mockconsolidatedCase2DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase2DocketNumber,
+        },
+      ],
     };
 
     const leadCase = {
@@ -676,16 +698,22 @@ describe('updateDocketEntryMetaInteractor', () => {
       consolidatedCases: [
         {
           caseCaption: MOCK_CASE.caseCaption,
-          docketNumber: '102-20',
+          docketNumber: mockconsolidatedCase1DocketNumber,
           sortableDocketNumber: 102000020,
         },
         {
           caseCaption: MOCK_CASE.caseCaption,
-          docketNumber: '103-20',
+          docketNumber: mockconsolidatedCase2DocketNumber,
           sortableDocketNumber: 103000020,
         },
       ],
-      docketEntries: mockDocketEntries,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockLeadCaseDocketNumber,
+        },
+      ],
     };
 
     getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
@@ -699,7 +727,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       {
         docketEntryMeta: {
-          ...mockDocketEntries[0],
+          ...mockConsolidatedDocketEntry,
           documentTitle: 'Updated Document Title',
           freeText: 'Updated free text',
         },
@@ -716,14 +744,32 @@ describe('updateDocketEntryMetaInteractor', () => {
       ]),
     });
 
-    expect(upsertDocketEntries).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          documentTitle: 'Updated Document Title',
-          freeText: 'Updated free text',
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: leadCase.docketNumber,
+              documentTitle: 'Updated Document Title',
+              freeText: 'Updated free text',
+            }),
+          ]),
         }),
-      ]),
+      }),
     );
+
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
+      expect.objectContaining({
+        docketNumber: consolidatedCase1.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+      expect.objectContaining({
+        docketNumber: consolidatedCase2.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+    ]);
   });
 
   it('should only propagate specific editable fields to multidocketed cases', async () => {
