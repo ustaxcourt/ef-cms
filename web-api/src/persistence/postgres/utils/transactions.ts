@@ -5,6 +5,10 @@ import {
   getDb,
 } from '@web-api/persistence/postgres/databaseConnection';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import {
+  createISODateString,
+  dateStringsCompared,
+} from '@shared/business/utilities/DateHandler';
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we're already in a transaction, just run the callback directly.
@@ -18,6 +22,7 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   let transactionStore: ConnectionInfo = {} as ConnectionInfo;
 
   // Start the transaction; Kysely handles BEGIN/COMMIT/ROLLBACK.
+  const transactionStartTime = createISODateString();
   const result = await db.transaction().execute(async trx => {
     // Initialize store for this transaction.
     transactionStore = {
@@ -28,13 +33,21 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
     // Run the user-supplied function within the transaction context.
     return ConnectionStore.run(transactionStore, () => fn());
   });
+  const transactionEndTime = createISODateString();
+  const timeRan = dateStringsCompared(transactionEndTime, transactionStartTime, {
+    exact: true,
+  });
+  getDawsonLogger().info(`Transaction ran for: ${timeRan} milliseconds`);
 
   // After the transaction completes successfully, run the onCommit callbacks.
   if (transactionStore.onCommitCallbacks?.length) {
     try {
       await settlePromises(transactionStore.onCommitCallbacks.map(cb => cb()));
     } catch (error: any) {
-      getDawsonLogger().error('There was an error running onCommitCallbacks', error);
+      getDawsonLogger().error(
+        'There was an error running onCommitCallbacks',
+        error,
+      );
     }
   }
 
