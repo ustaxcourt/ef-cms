@@ -13,6 +13,8 @@ import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserI
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { Case } from 'shared/src/business/entities/cases/Case';
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -55,6 +57,7 @@ export const RecentFilingsNonMobile = ({
   count,
   totalPages,
   isLoading = false,
+  showCaseStatusInfoSequence,
 }: {
   recentFilingsTableSort: RecentFilingsTableSort;
   sortTableSequence: SequenceFunction;
@@ -69,6 +72,7 @@ export const RecentFilingsNonMobile = ({
   count: number;
   totalPages: number;
   isLoading?: boolean;
+  showCaseStatusInfoSequence: SequenceFunction;
 }) => {
   if (isLoading) {
     return (
@@ -170,6 +174,15 @@ export const RecentFilingsNonMobile = ({
                       stateKey="recentFilingsTableSort"
                       data-testid="sort-case-title"
                     />
+                    <SortableHeader
+                      sortField="status"
+                      sortType="string"
+                      tableSort={recentFilingsTableSort}
+                      title="Case Status"
+                      onSort={sortTableSequence}
+                      stateKey="recentFilingsTableSort"
+                      data-testid="sort-status"
+                    />
                   </tr>
                 </thead>
                 <tbody>
@@ -239,6 +252,22 @@ export const RecentFilingsNonMobile = ({
                         />
                       </td>
                       <td>{filing.caseTitle}</td>
+                      <td>
+                        <Button
+                          link
+                          onClick={() =>
+                            showCaseStatusInfoSequence({
+                              status: filing.status,
+                            })
+                          }
+                        >
+                          {Case.formatCaseStatus({
+                            caseStatus: filing.status,
+                            trialDate: filing.trialDate,
+                            trialLocation: filing.trialLocation,
+                          })}
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
