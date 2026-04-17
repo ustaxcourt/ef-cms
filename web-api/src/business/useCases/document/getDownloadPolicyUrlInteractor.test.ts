@@ -108,7 +108,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('should throw an unauthorized error when the document being viewed is the case confirmation pdf', async () => {
+    it('should throw an unauthorized error when the document being viewed is the case confirmation pdf and the external user is not associated with the case', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(
           applicationContext,
@@ -471,7 +471,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should return the policy url when the document requested is a case confirmation pdf', async () => {
+    it('should return the policy url for an external user is associated with the case when the document requested is a case confirmation pdf', async () => {
       const url = await getDownloadPolicyUrlInteractor(
         applicationContext,
         {
@@ -479,6 +479,19 @@ describe('getDownloadPolicyUrlInteractor', () => {
           key: 'case-101-18-confirmation.pdf',
         },
         mockPetitionerUser,
+      );
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('should return the policy url for an internal user when the document requested is a case confirmation pdf', async () => {
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: 'case-101-18-confirmation.pdf',
+        },
+        mockDocketClerkUser,
       );
 
       expect(url).toEqual('localhost');
@@ -978,7 +991,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should throw an error when the document requested is an available document and the user is not associated with the consolidated group', async () => {
+    it('should throw an error when the document requested is an available document and the user is external and not associated with the consolidated group', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(
           applicationContext,
