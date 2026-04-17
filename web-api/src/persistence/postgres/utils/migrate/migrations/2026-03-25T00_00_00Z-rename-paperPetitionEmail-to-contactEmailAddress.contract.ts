@@ -1,6 +1,13 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
+  await sql`DROP TRIGGER IF EXISTS trg_sync_petitioner_email_fields ON dw_case;`.execute(
+    db,
+  );
+  await sql`DROP FUNCTION IF EXISTS sync_petitioner_email_fields();`.execute(
+    db,
+  );
+
   await sql`
     UPDATE dw_case
     SET petitioners = (
@@ -9,13 +16,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     WHERE petitioners::text LIKE '%paperPetitionEmail%'
   `.execute(db);
-
-  await sql`DROP TRIGGER IF EXISTS trg_sync_petitioner_email_fields ON dw_case;`.execute(
-    db,
-  );
-  await sql`DROP FUNCTION IF EXISTS sync_petitioner_email_fields();`.execute(
-    db,
-  );
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

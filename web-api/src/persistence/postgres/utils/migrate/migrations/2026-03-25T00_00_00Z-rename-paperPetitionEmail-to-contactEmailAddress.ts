@@ -53,26 +53,19 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
   await sql`
-    UPDATE dw_case
-    SET petitioners = (
-      SELECT jsonb_agg(
-        CASE
-          WHEN elem ? 'paperPetitionEmail'
-               AND elem ? 'contactEmailAddress'
-          THEN elem - 'contactEmailAddress'
-          ELSE elem
-        END
-      )
-      FROM jsonb_array_elements(petitioners) AS elem
-    )
-    WHERE petitioners::text LIKE '%contactEmailAddress%'
-  `.execute(db);
-
-  await sql`
     DROP TRIGGER IF EXISTS trg_sync_petitioner_email_fields ON dw_case;
   `.execute(db);
 
   await sql`
     DROP FUNCTION IF EXISTS sync_petitioner_email_fields();
+  `.execute(db);
+
+  await sql`
+    UPDATE dw_case
+    SET petitioners = (
+      SELECT jsonb_agg(elem - 'contactEmailAddress')
+      FROM jsonb_array_elements(petitioners) AS elem
+    )
+    WHERE petitioners::text LIKE '%contactEmailAddress%'
   `.execute(db);
 }
