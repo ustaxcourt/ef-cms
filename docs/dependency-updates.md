@@ -145,7 +145,72 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
    - `web-api/terraform/modules/kibana/providers.tf`
 1. Change the version of the OpenSearch provider
 
-### 5. Update OpenSearch
+### 5. Update PostgreSQL
+Check to see if there is an updated version of the Aurora RDS postgres engine available. If an update is available, we'll need to update postgres locally, in github actions, and in deployed environments.
+
+1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+   ```bash
+   . scripts/env/set-env.zsh expN
+   ```
+1. Determine the current Aurora RDS postgres engine version in this environment:
+   ```bash
+   aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text
+   ```
+1. Check the list of available Aurora RDS postgres engine versions:
+   ```bash
+   aws rds describe-db-engine-versions --engine aurora-postgresql --query '*[].[EngineVersion]' --output text
+   ```
+
+#### 5.1 Update the Aurora RDS PostgreSQL engine to the latest version in a deployed environment
+
+If a postgres engine update is available, we'll need to update the postgres engine in deployed environments.
+
+1. Set the value of the `RDS_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager:
+   ```bash
+   scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "99.9"
+   ```
+1. Run a deployment to the experimental environment (e.g. by pushing your code changes to the experimental branch). Click on the `deploy` job and watch its output. Keep this CircleCI tab open.
+1. In a new tab, log in to this experimental environment's AWS console, navigate to Aurora RDS, and keep an eye on the progress of the blue/green deployment. Keep this AWS console tab open.
+1. Wait until the data is copying and then, in a new tab, log in to this DAWSON experimental environment and create or edit some data (file a document to an existing case, edit case metadata, edit a docket entry, etc.)
+1. In the same DAWSON tab, prepare a similar edit that does not overwrite the previous edit. Do not submit it yet, and keep this DAWSON tab open.
+1. Once the blue/green deployment is nearly complete in the AWS console tab, closely watch the output of the `upgrade-rds-engine-version.sh` script in CircleCI.
+1. When you see the log messages "`Status: AVAILABLE`" and "`Blue/Green deployment is available. Initiating switchover...`", submit your edit in the DAWSON tab.
+1. Observe that the edit will not complete in the DAWSON tab until soon after you see the "`Switchover completed successfully!`" log message in the CircleCI tab.
+1. In the DAWSON tab, ensure the integrity of both previous edits.
+1. Describe the required manual deployment step in the dependency updates pull request. See [PR #9899](https://github.com/ustaxcourt/ef-cms/pull/9899) for an example.
+1. Describe the same manual deployment step in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
+
+#### 5.2 Determine the correct Docker image tag for PostgreSQL
+
+We run postgres via Docker locally and in GitHub Actions. The postgres image we use needs to match the version of postgres to which we are upgrading and the version of debian on which our docker container is based.
+
+1. Determine the Debian version our `./Dockerfile` inherits by running:
+   ```bash
+   docker run --rm "cypress/browsers:$(cat ./Dockerfile | grep 'FROM cypress/browsers' | cut -d':' -f2)" cat /etc/os-release | grep VERSION_CODENAME
+   ```
+1. Check to see which tags are available for the `postgres` image by visiting the [Docker Hub postgres tags page](https://hub.docker.com/_/postgres/tags) or by running:
+   ```bash
+   curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
+   ```
+1. The correct tag to use is the target version of postgres plus the Debian codename (e.g. `17.5-bookworm` for postgres 17.5 on Debian bookworm). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy.
+
+#### 5.3 Update PostgreSQL to the latest version locally
+
+If a postgres update is available, we'll need to update postgres locally.
+
+1. Set the value of the `image` property in `web-api/src/persistence/postgres/docker-compose.yml` and `./docker-compose.yml` to correspond to the correct Docker image.
+1. Run the api locally to verify:
+   ```bash
+   npm run start:api
+   ```
+
+#### 5.4 Update PostgreSQL to the latest version in github actions
+
+If a postgres update is available, we'll need to update postgres in github actions.
+
+1. Search the project for `image: postgres` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
+
+### 6. Update OpenSearch
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
@@ -161,7 +226,7 @@ Check to see if there is an updated version of OpenSearch available. If an updat
    aws opensearch list-versions
    ```
 
-#### 5.1 Update OpenSearch to the latest version in a deployed environment
+#### 6.1 Update OpenSearch to the latest version in a deployed environment
 
 If an OpenSearch update is available, we'll need to update OpenSearch in deployed environments.
 
@@ -182,10 +247,10 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
    ```bash
    scripts/reports/indices.ts
    ```
-1. Describe the required manual steps in the dependency updates pull request. Be sure to indicate that `test` and `prod` will also need an `account-specific` deployment to update their `info` clusters' OpenSearch engine version as well. See [PR #9427](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the required manual steps in the dependency updates pull request. Be sure to indicate that `test` and `prod` will also need an `account-specific` deployment to update their `info` clusters' OpenSearch engine version as well. See [PR #9427](https://github.com/ustaxcourt/ef-cms/pull/9427) for an example.
 1. Describe the same manual steps in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
 
-#### 5.2 Update OpenSearch to the latest version locally
+#### 6.2 Update OpenSearch to the latest version locally
 
 If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
@@ -195,13 +260,13 @@ If an OpenSearch update is available, we'll need to update OpenSearch locally.
    npm run start:api
    ```
 
-#### 5.3 Update OpenSearch to the latest version in github actions
+#### 6.3 Update OpenSearch to the latest version in github actions
 
 If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
-1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
 
-### 6. Wrap up
+### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
@@ -231,11 +296,11 @@ Below is a list of dependencies that are locked down due to known issues with se
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-**Current Installed DWT: 19.3.1**
+**Current Installed DWT: 19.3.2**
 - Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 24.37.3**
+**Current Installed Puppeteer/Puppeteer-core: 24.40.0**
 **Current Installed @sparticuz/chromium: 143.0.4**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
@@ -260,15 +325,19 @@ Below is a list of dependencies that are locked down due to known issues with se
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-**Installed Version: 24.12.0**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.0 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.0, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.12.2**
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.1 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
+- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24. 
+
 ### TypeScript
-**Installed Version: 5.9.3**
+**Installed Version: 6.0.2**
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
+
+- As of the initial upgrade to TypeScript v6 the week of 4/6/2026, Cypress was not yet compatible, and we had to add ```"ignoreDeprecations": "6.0"``` to ```cypress/tsconfig.json```. Check to see if this is still the case, there is a PR in the works that may fix the issue. See [our PR](https://github.com/ustaxcourt/ef-cms/pull/9882) for details on this and the TypeScript upgrade in general.
 
 ### Commander override for s3rver
 **Current Installed Version: 12.1.0 (Override Version, see notes below)**
@@ -303,14 +372,10 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### eslint and @eslint/js
 **Installed Versions:**
-**eslint: 9.39.3**
+**eslint: 9.39.4**
 **@eslint/js: 9.39.4**
-- We have three eslint plugins that support only up to version 9 of @eslint/js as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
+- We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
-
-### bn.js
-**Installed Versions <5.2.3**
-- There is a new vulnerability in older versions of bn.js. Currently, this package is only used by cognito-local, one of our dev dependencies. 
 
 ## Troubleshooting
 

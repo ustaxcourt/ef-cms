@@ -334,3 +334,8 @@
 "dw_trial_session_case","removed_from_trial","boolean","If a case is removed from the trial this field is set to TRUE. If the case is still active in the trial this field is set to FALSE."
 "dw_trial_session_case","removed_from_trial_date","date","The date/timestamp that the case was removed from the trial session."
 "dw_trial_session_case","is_hearing","boolean","If the case was added to the trial session from the Hearing card then this field is set to TRUE. If the case was calendared with the calendaring workflow or manually added to the trial session this field is set to FALSE."
+"dw_user_contact","user_id","string","The ID of the user associated with this contact record."
+"dw_user_contact","docket_number","string","The docket number of the case associated with this contact record."
+"dw_user_contact","lat","number","The latitude coordinate of the user's contact address."
+"dw_user_contact","lng","number","The longitude coordinate of the user's contact address."
+"dw_user_contact","geodata_match","boolean","Whether the geocoding service was able to match the user's address to a location."

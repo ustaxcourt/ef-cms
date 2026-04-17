@@ -1,9 +1,9 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 import path from 'node:path';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   displayName: 'shared',
@@ -36,7 +36,7 @@ const config: Config = {
     '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
   ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
