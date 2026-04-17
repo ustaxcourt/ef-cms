@@ -9,8 +9,26 @@ describe('getPublicCaseAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 
-  it('gets the public case information', async () => {
-    await runAction<{ caseDetail: any }, PublicClientState>(
+  beforeEach(() => {
+    applicationContextForClient
+      .getUseCases()
+      .getCaseInteractor.mockResolvedValue({
+        docketEntries: [],
+        docketNumber: '123-20',
+      });
+
+    applicationContextForClient
+      .getUseCases()
+      .getCaseDocketEntriesInteractor.mockResolvedValue({
+        docketEntries: [{ docketEntryId: '1' }],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      });
+  });
+
+  it('gets the public case information with paginated docket entries', async () => {
+    const result = await runAction<{ caseDetail: any }, PublicClientState>(
       getPublicCaseAction,
       {
         modules: {
@@ -25,5 +43,15 @@ describe('getPublicCaseAction', () => {
     expect(
       applicationContextForClient.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .getCaseDocketEntriesInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '123-20',
+      page: 0,
+    });
+    expect(result.output.caseDetail.docketEntries).toEqual([
+      { docketEntryId: '1' },
+    ]);
   });
 });

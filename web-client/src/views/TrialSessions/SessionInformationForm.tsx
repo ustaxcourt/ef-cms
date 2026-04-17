@@ -15,6 +15,7 @@ const sessionInformationDeps = {
   form: state.form,
   formatAndUpdateDateFromDatePickerSequence:
     sequences.formatAndUpdateDateFromDatePickerSequence,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   updateTrialSessionFormDataSequence:
     sequences.updateTrialSessionFormDataSequence,
   user: state.user,
@@ -33,6 +34,7 @@ export const SessionInformationForm = connect<
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    formattedTrialSessionDetails,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -82,6 +84,10 @@ export const SessionInformationForm = connect<
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
               <DateSelector
                 defaultValue={form.startDate}
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
                 errorText={validationErrors.startDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -100,6 +106,7 @@ export const SessionInformationForm = connect<
                   });
                   validateTrialSessionSequence();
                 }}
+                showDisabledDate={true}
               />
             </div>
 
@@ -116,6 +123,10 @@ export const SessionInformationForm = connect<
                           aria-describedby="start-time-legend"
                           aria-label="hour"
                           className="usa-input usa-input-inline"
+                          disabled={
+                            !addingTrialSession &&
+                            formattedTrialSessionDetails.canEditOngoingSession
+                          }
                           id="start-time-hours"
                           max="12"
                           min="1"
@@ -135,6 +146,10 @@ export const SessionInformationForm = connect<
                           aria-describedby="start-time-legend"
                           aria-label="minutes"
                           className="usa-input usa-input-inline"
+                          disabled={
+                            !addingTrialSession &&
+                            formattedTrialSessionDetails.canEditOngoingSession
+                          }
                           id="start-time-minutes"
                           max="59"
                           min="0"
@@ -160,6 +175,10 @@ export const SessionInformationForm = connect<
                                 aria-describedby="start-time-legend"
                                 checked={form.startTimeExtension === option}
                                 className="usa-radio__input"
+                                disabled={
+                                  !addingTrialSession &&
+                                  formattedTrialSessionDetails.canEditOngoingSession
+                                }
                                 id={`startTimeExtension-${option}`}
                                 name="startTimeExtension"
                                 type="radio"
@@ -227,6 +246,10 @@ export const SessionInformationForm = connect<
                     <input
                       checked={form.swingSession || false}
                       className="usa-checkbox__input"
+                      disabled={
+                        !addingTrialSession &&
+                        formattedTrialSessionDetails.canEditOngoingSession
+                      }
                       id="swing-session"
                       name="swingSession"
                       type="checkbox"
@@ -238,7 +261,12 @@ export const SessionInformationForm = connect<
                       }}
                     />
                     <label
-                      className="usa-checkbox__label"
+                      className={classNames(
+                        'usa-checkbox__label',
+                        !addingTrialSession &&
+                          formattedTrialSessionDetails.canEditOngoingSession &&
+                          'tw:before:bg-grey-base',
+                      )}
                       htmlFor="swing-session"
                       data-testid="swing-session-label"
                     >
@@ -302,6 +330,10 @@ export const SessionInformationForm = connect<
                     aria-describedby="session-type-legend"
                     checked={form.sessionType === option}
                     className="usa-radio__input"
+                    disabled={
+                      !addingTrialSession &&
+                      formattedTrialSessionDetails.canEditOngoingSession
+                    }
                     id={`session-type-${option}`}
                     name="sessionType"
                     type="radio"
@@ -334,6 +366,10 @@ export const SessionInformationForm = connect<
                 autoCapitalize="none"
                 className="usa-input usa-input--small"
                 data-testid="trial-session-number-of-cases-allowed"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.canEditOngoingSession
+                }
                 id="max-cases"
                 name="maxCases"
                 type="text"

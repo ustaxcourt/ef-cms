@@ -98,6 +98,7 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionersByNameLambda } from '@web-api/lambdas/practitioners/getPractitionersByNameLambda';
 import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
+import { getPublicCaseDocketEntriesLambda } from '@web-api/lambdas/public-api/getPublicCaseDocketEntriesLambda';
 import { getPublicCaseLambda } from '@web-api/lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
@@ -120,6 +121,10 @@ import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPen
   app.get(
     '/public-api/cases/:docketNumber',
     lambdaWrapper(getPublicCaseLambda),
+  );
+  app.get(
+    '/public-api/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getPublicCaseDocketEntriesLambda),
   );
   app.get(
     '/public-api/:docketNumber/:key/public-document-download-url',

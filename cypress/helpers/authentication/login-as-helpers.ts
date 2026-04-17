@@ -107,6 +107,10 @@ export function loginAsColvin() {
   login({ email: 'judgecolvin@example.com' });
   cy.get('h1:contains("Trial Sessions")').should('exist');
 }
+export function loginAsCohen() {
+  login({ email: 'judgecohen@example.com' });
+  cy.get('h1:contains("Trial Sessions")').should('exist');
+}
 
 export function loginAsBuch() {
   login({ email: 'judgebuch@example.com' });
@@ -115,6 +119,10 @@ export function loginAsBuch() {
 
 export function loginAsColvinChambers() {
   login({ email: 'colvinschambers@example.com' });
+  cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
+}
+export function loginAsCohenChambers() {
+  login({ email: 'cohenschambers@example.com' });
   cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
 }
 

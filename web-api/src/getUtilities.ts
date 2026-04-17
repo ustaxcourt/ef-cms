@@ -1,4 +1,4 @@
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
@@ -11,43 +11,40 @@ import {
   formatDateString,
   formatNow,
   prepareDateFromString,
-  isValidPastDate
-} from '../../shared/src/business/utilities/DateHandler';
+  isValidPastDate,
+} from '@shared/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
-import { combineTwoPdfs } from '../../shared/src/business/utilities/pdfs/combineTwoPdfs';
+import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   getFormattedTrialSessionDetails,
-} from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
+} from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
-} from '../../shared/src/business/utilities/sortFunctions';
-import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
+} from '@shared/business/utilities/sortFunctions';
+import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
-import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatJudgeName } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
-} from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
+} from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
-import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
-import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
+import { getCropBox } from '@shared/business/utilities/getCropBox';
+import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
-import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
-import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
-import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
-import {
-  isLeadCase,
-  isSealedCase,
-} from '../../shared/src/business/entities/cases/Case';
-import { scrapePdfContents } from '../../shared/src/business/utilities/scrapePdfContents';
-import { serveCaseDocument } from '../../shared/src/business/utilities/serveCaseDocument';
-import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
-import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
+import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
+import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
+import { isLeadCase, isSealedCase } from '@shared/business/entities/cases/Case';
+import { scrapePdfContents } from '@shared/business/utilities/scrapePdfContents';
+import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
+import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
+import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { sleep } from '@shared/tools/helpers';
 
 const utilities = {

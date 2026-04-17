@@ -20,6 +20,7 @@ const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   isFileAttached: true,
   eventCode: 'P',
   servedAt: '2024-01-15T10:00:00.000Z',
+  status: 'new',
   ...overrides,
 });
 
