@@ -67,7 +67,7 @@ const CustomTooltip = ({
       role="status"
       aria-live="polite"
       // className="tw:bg-white tw:rounded tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:text-black tw:gap-1.5"
-      className="tw:bg-white tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+      className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
     >
       {title && <div className="tw:font-bold">{title}</div>}
       <div className="tw:flex tw:items-center tw:gap-2">
@@ -97,14 +97,16 @@ export const PieGraph = ({
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
     <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto">
-      <div className="tw:inline-block">
+      <div style={{ width: '39rem', maxWidth: '100%' }}>
         {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
         <PieChart
           style={{
-            width: '39rem',
+            width: '100%',
+            maxWidth: '39rem',
             maxHeight: '80vh',
             aspectRatio: 1,
           }}
+          tabIndex={-1}
           responsive
         >
           <Legend
@@ -117,10 +119,10 @@ export const PieGraph = ({
                 {data.map(entry => (
                   <li key={entry.name} className="tw:flex tw:items-center">
                     <span
-                      className="tw:inline-block tw:w-12 tw:h-12 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-lg tw:shrink-0"
+                      className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-lg tw:shrink-0"
                       style={{ backgroundColor: entry.color }}
                     />
-                    <span className="tw:text-black tw:font-semibold tw:text-xl tw:w-32">
+                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:w-32">
                       {entry.name}
                     </span>
                   </li>
