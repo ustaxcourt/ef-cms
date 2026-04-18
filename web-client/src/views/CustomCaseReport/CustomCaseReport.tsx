@@ -439,6 +439,7 @@ export const CustomCaseReport = connect(
             <Button
               data-testid="submit-custom-case-report-button"
               tooltip="Run Report"
+              overrideReadOnly
               onClick={async () => {
                 setHasRunCustomCaseReport(true);
                 await getCustomCaseReportSequence({ selectedPage: 0 });
