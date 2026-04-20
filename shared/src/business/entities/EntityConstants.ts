@@ -37,8 +37,8 @@ export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 // a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
-// a number (100 to 99999) followed by a - and a 2 digit year, with an optional letter suffix
-export const DOCKET_NUMBER_SEARCH_MATCHER = /^([1-9]\d{2,4}-\d{2}[a-zA-Z]?)$/;
+// a number (100 to 99999) followed by a - and a 2 digit year, with an optional alphabetic suffix
+export const DOCKET_NUMBER_SEARCH_MATCHER = /^([1-9]\d{2,4}-\d{2}[a-zA-Z]*)$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
