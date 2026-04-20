@@ -97,17 +97,15 @@ export const PieGraph = ({
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
     <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto">
-      <div style={{ width: '39rem', maxWidth: '100%' }}>
+      <div className="tw:xs:w-160 tw:w-120">
         {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
         <PieChart
           style={{
             width: '100%',
-            maxWidth: '39rem',
-            maxHeight: '80vh',
+            maxWidth: '100%',
             aspectRatio: 1,
           }}
           tabIndex={-1}
-          responsive
         >
           <Legend
             verticalAlign="top"
@@ -122,7 +120,7 @@ export const PieGraph = ({
                       className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-md tw:shrink-0"
                       style={{ backgroundColor: entry.color }}
                     />
-                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:w-32">
+                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:w-32 tw:leading-[1.1]">
                       {entry.name}
                     </span>
                   </li>
