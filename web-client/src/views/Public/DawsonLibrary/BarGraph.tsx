@@ -148,6 +148,26 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   datalabelColor = '#fff',
   showLabels = true,
 }) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && (
+          <h2
+            style={{
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   const chartData = data.map(item => ({
     label: item.label,
     value: item.value,
@@ -533,6 +553,27 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     value: ds.label,
     total: legendTotals?.[i],
   }));
+
+  if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && (
+          <h2
+            style={{
+              color: '#000',
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        <p>No data available</p>
+      </div>
+    );
+  }
 
   const [isMobileMulti, setIsMobileMulti] = useState(
     typeof window !== 'undefined' && window.innerWidth <= 480,

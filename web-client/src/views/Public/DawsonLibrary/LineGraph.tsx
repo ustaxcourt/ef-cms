@@ -113,6 +113,26 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   yAxisLabel,
   smooth = false,
 }) => {
+  if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && (
+          <h2
+            style={{
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' && window.innerWidth <= 480,
   );
@@ -157,6 +177,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             className="tw:mt-0 tw:mb-8"
             style={{
               color: '#000',
+              paddingLeft: '140px',
               textAlign: 'left',
             }}
           >
@@ -164,7 +185,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           </h2>
         )}
         {showLegend && (
-          <div>
+          <div style={{ paddingLeft: '140px' }}>
             {renderCustomLegend({
               payload: datasets.map((ds, i) => ({
                 color: ds.color || defaultColors[i % defaultColors.length],
@@ -248,6 +269,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
               }
             />
             <YAxis
+              width={80}
               tick={{ fill: '#000', fontSize: '1.25rem' }}
               label={
                 yAxisLabel
