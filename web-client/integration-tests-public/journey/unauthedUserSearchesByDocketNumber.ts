@@ -7,11 +7,12 @@ export const unauthedUserSearchesByDocketNumber = (cerebralTest, params) => {
       docketNumber: params.docketNumber,
     };
     cerebralTest.docketNumber = params.docketNumber;
+    const nonexistentDocketNumber = '99999-99';
 
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
-      value: '123-xx',
+      value: nonexistentDocketNumber,
     });
     await cerebralTest.runSequence(
       'submitPublicCaseDocketNumberSearchSequence',
