@@ -14,6 +14,7 @@ jest.mock('@web-api/utilities/settlePromises');
 jest.mock('@web-api/persistence/postgres/databaseConnection');
 const mockLogger = {
   error: jest.fn(),
+  info: jest.fn(),
 };
 jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
