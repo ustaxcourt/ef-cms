@@ -42,7 +42,7 @@ describe('updateDocketEntriesWithPageCount', () => {
     const result = await updateDocketEntriesWithPageCount({
       authorizedUser: mockDocketClerkUser,
       caseEntity,
-      consolidatedCases: null,
+      consolidatedCases: undefined,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
       pageCount: mockPageCount,
@@ -129,7 +129,7 @@ describe('updateDocketEntriesWithPageCount', () => {
     const result = await updateDocketEntriesWithPageCount({
       authorizedUser: mockDocketClerkUser,
       caseEntity,
-      consolidatedCases: null,
+      consolidatedCases: undefined,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
       pageCount: mockPageCount,

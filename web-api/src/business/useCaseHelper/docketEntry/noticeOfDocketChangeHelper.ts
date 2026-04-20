@@ -37,10 +37,7 @@ export const getOriginalNoticeValues = ({
         documentTitleForNotice = parsedTitle;
       }
 
-      const { filedBy: parsedFiledBy } = parsedEditState;
-      if (parsedFiledBy) {
-        filedBy = parsedFiledBy;
-      }
+      filedBy = parsedEditState.filedBy ?? filedBy;
     } catch (err) {
       getDawsonLogger().error(
         'Failed to parse docketEntry.editState for notice of docket change',
