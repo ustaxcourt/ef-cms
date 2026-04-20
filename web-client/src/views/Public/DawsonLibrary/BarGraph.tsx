@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -76,31 +76,14 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '12px',
-        justifyContent: 'flex-start',
-        padding: '8px 0 16px',
-      }}
-    >
+    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:justify-start tw:py-2">
       {payload.map((entry: any, index: number) => (
-        <div
-          key={index}
-          style={{ alignItems: 'center', display: 'flex', gap: '8px' }}
-        >
+        <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            style={{
-              backgroundColor: entry.color,
-              border: '2px solid #000',
-              borderRadius: '8px',
-              flexShrink: 0,
-              height: '48px',
-              width: '48px',
-            }}
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-12 tw:h-12"
+            style={{ backgroundColor: entry.color }}
           />
-          <span style={{ color: '#000', fontSize: '20px', fontWeight: '600' }}>
+          <span className="tw:text-black tw:font-semibold tw:text-xl">
             {entry.total != null
               ? `${entry.value}: ${entry.total.toLocaleString()}`
               : entry.value}
@@ -165,6 +148,26 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   datalabelColor = '#fff',
   showLabels = true,
 }) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && (
+          <h2
+            style={{
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   const chartData = data.map(item => ({
     label: item.label,
     value: item.value,
@@ -173,6 +176,16 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   // Y-axis max rounded up to the nearest multiple of 10
   const rawMax = Math.max(...data.map(d => d.value));
   const yMax = Math.ceil((rawMax * 1.1) / 10) * 10;
+
+  const [isMobileSingle, setIsMobileSingle] = useState(
+    typeof window !== 'undefined' && window.innerWidth <= 480,
+  );
+  useEffect(() => {
+    const update = () => setIsMobileSingle(window.innerWidth <= 480);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  const chartHeight = isMobileSingle ? 600 : height;
 
   // Extra bottom margin to accommodate multi-line wrapped x-axis labels
   const maxLabelWords = Math.max(...data.map(d => d.label.split(' ').length));
@@ -197,7 +210,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height={height}
+          height={chartHeight}
           style={{ outline: 'none' }}
         >
           <BarChart
@@ -215,40 +228,17 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 const color = item?.color || '#005EA2';
                 return (
                   <div
-                    style={{
-                      background: '#fff',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      padding: '8px 12px',
-                    }}
+                    role="status"
+                    aria-live="polite"
+                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                   >
-                    <p
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: '20px',
-                        margin: '0 0 4px',
-                      }}
-                    >
-                      {label}
-                    </p>
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        gap: '6px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: color,
-                          border: '1px solid #000',
-                          borderRadius: '3px',
-                          flexShrink: 0,
-                          height: '16px',
-                          width: '16px',
-                        }}
+                    <div className="tw:font-bold tw:text-xl">{label}</div>
+                    <div className="tw:flex tw:items-center tw:gap-2">
+                      <span
+                        className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded"
+                        style={{ backgroundColor: color }}
                       />
-                      <span style={{ color: '#000', fontSize: '20px' }}>
+                      <span className="tw:text-xl">
                         value : {payload[0]?.value}
                       </span>
                     </div>
@@ -564,6 +554,37 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     total: legendTotals?.[i],
   }));
 
+  if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && (
+          <h2
+            style={{
+              color: '#000',
+              margin: 0,
+              padding: '10px 0 8px',
+              paddingLeft: '80px',
+              textAlign: 'left',
+            }}
+          >
+            {title}
+          </h2>
+        )}
+        <p>No data available</p>
+      </div>
+    );
+  }
+
+  const [isMobileMulti, setIsMobileMulti] = useState(
+    typeof window !== 'undefined' && window.innerWidth <= 480,
+  );
+  useEffect(() => {
+    const update = () => setIsMobileMulti(window.innerWidth <= 480);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  const chartHeight = isMobileMulti ? 600 : height;
+
   return (
     <div className="tw:overflow-x-auto">
       <div style={{ width: `${width}px` }}>
@@ -587,7 +608,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height={height}
+          height={chartHeight}
           style={{ outline: 'none' }}
         >
           <BarChart
@@ -603,43 +624,21 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 if (!active || !payload || payload.length === 0) return null;
                 return (
                   <div
-                    style={{
-                      background: '#fff',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      padding: '8px 12px',
-                    }}
+                    role="status"
+                    aria-live="polite"
+                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                   >
-                    <p
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: '20px',
-                        margin: '0 0 4px',
-                      }}
-                    >
-                      {label}
-                    </p>
+                    <div className="tw:font-bold tw:text-xl">{label}</div>
                     {payload.map((p: any) => (
                       <div
                         key={p.dataKey}
-                        style={{
-                          alignItems: 'center',
-                          display: 'flex',
-                          gap: '6px',
-                          margin: '2px 0',
-                        }}
+                        className="tw:flex tw:items-center tw:gap-2"
                       >
-                        <div
-                          style={{
-                            backgroundColor: p.fill || p.color,
-                            border: '1px solid #000',
-                            borderRadius: '3px',
-                            flexShrink: 0,
-                            height: '16px',
-                            width: '16px',
-                          }}
+                        <span
+                          className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded"
+                          style={{ backgroundColor: p.fill || p.color }}
                         />
-                        <span style={{ color: '#000', fontSize: '20px' }}>
+                        <span className="tw:text-xl">
                           {p.dataKey} : {p.value}
                         </span>
                       </div>

@@ -93,6 +93,15 @@ export const PieGraph = ({
   isAnimationActive?: boolean;
   legendFlow?: 'row' | 'column';
 }) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+        {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   return (
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.

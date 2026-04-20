@@ -168,6 +168,7 @@ import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getC
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
+import { getClerkDashboardStatsInteractor } from '../../shared/src/proxies/reports/getClerkDashboardStatsProxy';
 import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
@@ -448,6 +449,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getClerkDashboardStatsInteractor,
   getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
