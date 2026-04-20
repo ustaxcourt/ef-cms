@@ -332,7 +332,9 @@ The major version of this package should match our major version of Node. At the
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
-- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24. 
+- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24.
+
+- As of April 20, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.2** remains the closest match.
 
 ### TypeScript
 **Installed Version: 6.0.2**
