@@ -337,7 +337,7 @@ The major version of this package should match our major version of Node. At the
 - As of April 20, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.2** remains the closest match.
 
 ### TypeScript
-**Installed Version: 6.0.2**
+**Installed Version: 6.0.3**
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
 
