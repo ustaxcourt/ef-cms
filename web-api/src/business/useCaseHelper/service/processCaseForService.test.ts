@@ -2,14 +2,13 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { PDFDocument } from 'pdf-lib';
 import { processCaseForService } from './processCaseForService';
 
 describe('processCaseForService', () => {
   const mockDocketEntryId = 'abc-123-def';
   const mockPdfData = Buffer.from('mock pdf data');
-  const mockNewPdfDoc = {
-    addPage: jest.fn(),
-  };
+  let mockNewPdfDoc: PDFDocument;
   const mockNoticeDoc = {
     getPages: jest.fn().mockReturnValue([]),
   };
@@ -17,7 +16,9 @@ describe('processCaseForService', () => {
     load: jest.fn().mockResolvedValue(mockNoticeDoc),
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    mockNewPdfDoc = await PDFDocument.create();
+
     applicationContext.getUseCaseHelpers.mockReturnValue({
       appendPaperServiceAddressPageToPdf: jest.fn(),
       sendServedPartiesEmails: jest.fn(),
