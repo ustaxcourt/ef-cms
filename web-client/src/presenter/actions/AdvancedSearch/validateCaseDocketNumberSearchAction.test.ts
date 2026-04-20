@@ -23,7 +23,7 @@ describe('validateCaseDocketNumberSearchAction', () => {
       },
       state: {
         advancedSearchForm: {
-          caseSearchByDocketNumber: { docketNumber: '123' },
+          caseSearchByDocketNumber: { docketNumber: '123-20' },
         },
       },
     });
@@ -45,13 +45,30 @@ describe('validateCaseDocketNumberSearchAction', () => {
     expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0]).toEqual({
       alertError: {
-        messages: ['Enter a docket number'],
+        messages: ['Enter a valid docket number'],
         title: 'Please correct the following errors:',
       },
       errors: {
-        docketNumber: 'Enter a docket number',
+        docketNumber: 'Enter a valid docket number',
       },
     });
     expect(successStub).not.toHaveBeenCalled();
+  });
+
+  it('should store a trimmed docketNumber in state', async () => {
+    const result = await runAction(validateCaseDocketNumberSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          caseSearchByDocketNumber: { docketNumber: ' 123-20 ' },
+        },
+      },
+    });
+
+    expect(
+      result.state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
+    ).toBe('123-20');
   });
 });
