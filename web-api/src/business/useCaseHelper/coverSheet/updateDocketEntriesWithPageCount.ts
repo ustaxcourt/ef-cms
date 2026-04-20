@@ -14,17 +14,19 @@ export const updateDocketEntriesWithPageCount = async ({
 }: {
   authorizedUser: UnknownAuthUser;
   caseEntity: Case;
-  consolidatedCases: Array<{
-    docketNumber: string;
-    documentNumber?: string;
-  }> | null;
+  consolidatedCases:
+    | Array<{
+        docketNumber: string;
+        documentNumber?: string;
+      }>
+    | undefined;
   docketEntryId: string;
   docketNumber: string;
   pageCount: number;
 }) => {
   let docketNumbersToUpdate = [docketNumber];
 
-  if (consolidatedCases) {
+  if (consolidatedCases && consolidatedCases.length) {
     docketNumbersToUpdate = consolidatedCases
       .filter(consolidatedCase => consolidatedCase.documentNumber)
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);

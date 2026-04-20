@@ -1,4 +1,3 @@
-jest.mock('@web-client/presenter/computeds/confirmInitiateServiceModalHelper');
 jest.mock('@shared/business/utilities/shouldAllowMultiDocketing');
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { isDocketEntryMultiDocketableAction } from './isDocketEntryMultiDocketableAction';

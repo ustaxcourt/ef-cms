@@ -268,39 +268,6 @@ describe('addCoversheetInteractor', () => {
     );
   });
 
-  it('works as expected when feature flag is off and consolidated cases returns null', async () => {
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      consolidatedCases: null,
-      numberOfPages: 5,
-      pdfData: 'gg',
-    });
-
-    await addCoversheetInteractor(
-      applicationContext,
-      {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: MOCK_CASE.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
-
-    const calls = upsertDocketEntries.mock.calls.map(call => ({
-      docketNumber: call[0][0].docketNumber,
-      numberOfPages: call[0][0].numberOfPages,
-    }));
-
-    const firstCase = calls.find(
-      call => call.docketNumber === MOCK_CASE.docketNumber,
-    );
-
-    expect(firstCase).toMatchObject({
-      docketNumber: MOCK_CASE.docketNumber,
-      numberOfPages: 5,
-    });
-  });
-
   it('should throw an error if the docket entry could not be found on the case', async () => {
     const missingId = '314fef22-39fa-43de-81ef-2c80ccb3b733';
     await expect(

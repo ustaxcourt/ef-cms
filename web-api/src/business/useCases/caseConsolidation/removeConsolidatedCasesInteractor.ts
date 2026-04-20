@@ -111,7 +111,8 @@ const removeConsolidatedCases = async (
   });
 
   const docketEnIdsToUpdate: Set<string> = new Set();
-  const docketEntriesToUpdate: Set<RawDocketEntry> = new Set();
+  const docketEntriesToUpdate: RawDocketEntry[] = [];
+
   for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
@@ -137,7 +138,7 @@ const removeConsolidatedCases = async (
     // entries are docketEntries on ALL cases in the consolidated group
     const entries = await getDocketEntriesById({ docketEntryId: id });
     entries.forEach(entry => {
-      docketEntriesToUpdate.add(entry);
+      docketEntriesToUpdate.push(entry);
     });
   }
 

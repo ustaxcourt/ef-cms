@@ -50,7 +50,7 @@ export const addCoversheetInteractor = async (
   });
 
   const {
-    consolidatedCases, // if feature flag is off, this will always be null
+    consolidatedCases,
     numberOfPages,
     pdfData: newPdfData,
   } = await addCoverToPdf({
