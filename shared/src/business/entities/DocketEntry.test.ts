@@ -178,6 +178,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           filers: ['Manually edited filers for served docket entry'],
+          originallyFiledDocketNumber: '101-18',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {

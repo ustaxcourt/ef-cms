@@ -62,6 +62,7 @@ async function serveDocument({
         role: ROLES.irsSuperuser,
       },
     ]);
+    docketEntry.originallyFiledDocketNumber = caseEntity.docketNumber;
     caseEntity.updateDocketEntry(docketEntry);
 
     if (
