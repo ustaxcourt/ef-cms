@@ -232,10 +232,12 @@ describe('noticeOfDocketChangeHelper', () => {
     it('should return true when receivedAt is different', () => {
       const result = needsNewCoversheet({
         currentDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
         },
         updatedDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-02',
           certificateOfService: false,
         },
@@ -247,10 +249,12 @@ describe('noticeOfDocketChangeHelper', () => {
     it('should return true when certificateOfService is different', () => {
       const result = needsNewCoversheet({
         currentDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
         },
         updatedDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: true,
         },
@@ -262,11 +266,13 @@ describe('noticeOfDocketChangeHelper', () => {
     it('should return true when document title is different', () => {
       const result = needsNewCoversheet({
         currentDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
           documentTitle: 'Title 1',
         },
         updatedDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
           documentTitle: 'Title 2',
@@ -279,11 +285,13 @@ describe('noticeOfDocketChangeHelper', () => {
     it('should return false when no fields are updated', () => {
       const result = needsNewCoversheet({
         currentDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
           documentTitle: 'Same Title',
         },
         updatedDocketEntry: {
+          ...MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT,
           receivedAt: '2023-01-01',
           certificateOfService: false,
           documentTitle: 'Same Title',
