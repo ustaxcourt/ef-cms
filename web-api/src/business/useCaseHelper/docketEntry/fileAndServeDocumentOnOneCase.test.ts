@@ -55,6 +55,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         {
           docketEntryId: mockDocketEntryId,
           docketNumber: MOCK_CASE.docketNumber,
+          originallyFiledDocketNumber: MOCK_CASE.docketNumber,
           documentType: eventCodeMap?.documentType,
           eventCode,
           filedByRole: ROLES.judge,
@@ -97,6 +98,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
+        originallyFiledDocketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
         filedByRole: ROLES.judge,
@@ -126,6 +128,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
+        originallyFiledDocketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
         filedByRole: ROLES.judge,
@@ -167,6 +170,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCaseEntity.docketNumber,
+        originallyFiledDocketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
         filedByRole: ROLES.judge,

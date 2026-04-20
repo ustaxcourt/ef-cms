@@ -41,6 +41,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,
+    originallyFiledDocketNumber: MOCK_CASE.docketNumber,
     filedBy: 'Test Petitioner',
     filedByRole: ROLES.petitioner,
     filers: [getContactPrimary(MOCK_CASE).contactId],
