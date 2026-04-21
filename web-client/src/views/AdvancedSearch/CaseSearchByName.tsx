@@ -573,6 +573,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                   Search
                 </Button>
                 <Button
+                  overrideReadOnly
                   type="reset"
                   link
                   overrideMargin

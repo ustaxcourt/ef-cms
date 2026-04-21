@@ -80,6 +80,7 @@ export const PractitionerSearchByBarNumber = connect(
                   Search
                 </Button>
                 <Button
+                  overrideReadOnly
                   link
                   overrideMargin
                   className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"

@@ -101,6 +101,7 @@ export const CaseSearchByDocketNumber: React.FC<CaseSearchByDocketNumberProps> =
                     Search
                   </Button>
                   <Button
+                    overrideReadOnly
                     link
                     overrideMargin
                     aria-describedby="search-by-docket-number"
