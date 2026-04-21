@@ -326,6 +326,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
@@ -353,6 +354,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: {
             email: 'me@example.com',
