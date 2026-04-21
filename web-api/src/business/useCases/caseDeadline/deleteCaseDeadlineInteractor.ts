@@ -47,7 +47,7 @@ export const deleteCaseDeadline = async (
     cd => cd.caseDeadlineId === caseDeadlineId,
   );
 
-  await withTransaction(async () => {
+  const result = await withTransaction(async () => {
     await deleteDeadline({
       caseDeadlineId,
     });

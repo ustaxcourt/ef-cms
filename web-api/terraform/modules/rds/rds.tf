@@ -10,17 +10,31 @@ resource "aws_rds_global_cluster" "global_cluster" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "postgres_parameter_group" {
+  name_prefix = "${var.environment}-dawson-cluster-pg"
+  family      = "aurora-postgresql${split(".", var.engine_version)[0]}"
+  description = "Cluster parameter group for DAWSON postgres ${var.environment}"
+
+  parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+}
+
 resource "aws_rds_cluster" "postgres" {
-  cluster_identifier        = "${var.environment}-dawson-cluster"
-  engine                    = "aurora-postgresql"
-  engine_mode               = "provisioned"
-  engine_version            = var.engine_version
-  deletion_protection       = var.delete_protection
-  database_name             = "${var.environment}_dawson"
-  master_username           = var.postgres_master_username
-  master_password           = var.postgres_master_password
-  storage_encrypted         = true
-  global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
+  cluster_identifier              = "${var.environment}-dawson-cluster"
+  engine                          = "aurora-postgresql"
+  engine_mode                     = "provisioned"
+  engine_version                  = var.engine_version
+  deletion_protection             = var.delete_protection
+  database_name                   = "${var.environment}_dawson"
+  master_username                 = var.postgres_master_username
+  master_password                 = var.postgres_master_password
+  storage_encrypted               = true
+  global_cluster_identifier       = aws_rds_global_cluster.global_cluster.id
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.postgres_parameter_group.name
+
   # snapshot_identifier                 = "exp4-dawson-cluster-1" - used for a snapshot restore
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_primary
@@ -50,6 +64,19 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "west_replica_parameter_group" {
+  provider    = aws.us-west-1
+  name_prefix = "${var.environment}-dawson-replica-pg"
+  family      = "aurora-postgresql${split(".", var.engine_version)[0]}"
+  description = "Cluster parameter group for DAWSON replica postgres ${var.environment}"
+
+  parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+}
+
 resource "aws_rds_cluster" "west_replica" {
   provider                            = aws.us-west-1
   cluster_identifier                  = "${var.environment}-dawson-replica"
@@ -59,6 +86,7 @@ resource "aws_rds_cluster" "west_replica" {
   deletion_protection                 = var.delete_protection
   storage_encrypted                   = true
   global_cluster_identifier           = aws_rds_global_cluster.global_cluster.id
+  db_cluster_parameter_group_name     = aws_rds_cluster_parameter_group.west_replica_parameter_group.name
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_replica
   replication_source_identifier       = aws_rds_cluster.postgres.arn

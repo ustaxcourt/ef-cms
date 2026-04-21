@@ -191,6 +191,15 @@ export const fileCourtIssuedDocketEntry = async (
     );
   }
 
+  if (documentMeta.affectedDocketEntries) {
+    await addAssociatedDocketEntries(
+      casesToUpdate,
+      documentMeta,
+      subjectDocketEntry,
+      false,
+    );
+  }
+
   const rawSubjectCase = await getCaseByDocketNumber({
     docketNumber: subjectDocketNumber,
   });
