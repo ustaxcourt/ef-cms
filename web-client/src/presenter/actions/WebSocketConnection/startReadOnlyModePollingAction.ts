@@ -1,7 +1,4 @@
-import { getConstants } from 'web-client/src/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-
-const { READ_ONLY_POLLING_INTERVAL } = getConstants();
 
 /**
  * starts the read-only mode polling action
@@ -17,6 +14,7 @@ export const startReadOnlyModePollingAction = ({
   socket,
   store,
 }: ActionProps & { socket: { start: () => Promise<void> } }) => {
+  const { READ_ONLY_POLLING_INTERVAL } = applicationContext.getConstants();
   const oldInterval = get(state.readOnlyPollingInterval);
 
   if (oldInterval) {
