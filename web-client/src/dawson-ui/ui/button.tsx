@@ -97,6 +97,22 @@ export const Button = connect(
     }) {
     const Comp = asChild ? Slot : 'button';
 
+    const isButtonDisabled =
+      props.disabled || (readOnlyMode && !overrideReadOnly);
+
+    const wrappedOnClick = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      if (isButtonDisabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (props.onClick) {
+        props.onClick(e);
+      }
+    };
+
     const Icon = icon ? (
       <FontAwesomeIcon
         className={`${iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2'} tw:xs:w-4.5! tw:w-4! tw:xs:h-4.5! tw:h-4!`}
@@ -108,10 +124,16 @@ export const Button = connect(
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant, className }))}
+        className={cn(
+          buttonVariants({ variant, className }),
+          isButtonDisabled && asChild && 'tw:cursor-not-allowed tw:opacity-50',
+        )}
         data-slot="button"
         {...props}
-        disabled={props.disabled || (readOnlyMode && !overrideReadOnly)}
+        onClick={wrappedOnClick}
+        aria-disabled={isButtonDisabled ? true : undefined}
+        disabled={isButtonDisabled}
+        tabIndex={isButtonDisabled && asChild ? -1 : undefined}
         role="button"
       >
         {variant === 'terminatorButton' ? (
