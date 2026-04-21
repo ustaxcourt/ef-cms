@@ -61,7 +61,11 @@ describe('getPublicDocketRecordStatusLambda', () => {
     const response = await getPublicDocketRecordStatusLambda(buildEvent());
 
     const body = JSON.parse(response.body);
-    expect(body).toEqual({ message: 'boom', status: 'error' });
+    expect(body).toEqual({
+      message: 'boom',
+      status: 'error',
+      statusCode: 403,
+    });
   });
 
   it('falls back to a default message when the error marker is not valid JSON', async () => {
@@ -75,6 +79,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
     const body = JSON.parse(response.body);
     expect(body.status).toBe('error');
     expect(body.message).toBe('Failed to generate docket record');
+    expect(body.statusCode).toBe(500);
   });
 
   it('returns pending while neither marker exists', async () => {
