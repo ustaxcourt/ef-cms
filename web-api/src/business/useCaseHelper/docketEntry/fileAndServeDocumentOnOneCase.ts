@@ -12,6 +12,7 @@ import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '@web
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { AuthUser } from 'shared/src/business/entities/authUser/AuthUser';
 
 export const fileAndServeDocumentOnOneCase = async ({
   caseEntity,
@@ -19,11 +20,11 @@ export const fileAndServeDocumentOnOneCase = async ({
   user,
   caseHasDeadline = undefined,
 }: {
-  caseEntity: any;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
-  user: any;
+  user: AuthUser;
   caseHasDeadline?: boolean;
-}) => {
+}): Promise<Case> => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
   docketEntryEntity.setAsServed(servedParties.all);
@@ -91,7 +92,7 @@ const completeWorkItem = async ({
   user,
   workItemToUpdate,
   docketEntryEntity,
-}) => {
+}): Promise<void> => {
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
