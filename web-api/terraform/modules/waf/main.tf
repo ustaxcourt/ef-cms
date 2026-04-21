@@ -141,7 +141,7 @@ resource "aws_wafv2_web_acl" "apis" {
   // Global (across all clients) cap on the public "start" endpoint that
   // kicks off docket-record PDF generation. The worker lambda is expensive
   // (up to 15 minutes of CPU + S3 writes per call), so we cap the whole
-  // system at 10 starts per minute — the WAFv2 minimum.
+  // system at 60 starts per minute.
   rule {
     name     = "public_docket_record_generation_limit"
     priority = 4

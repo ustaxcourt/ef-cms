@@ -1,11 +1,15 @@
 import { errorKey, resultKey } from './generatePublicDocketRecordPdfWorkerLambda';
 import { genericHandler } from '../../genericHandler';
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
  * Polled by the public UI while the docket-record PDF is being generated
  * by the background worker. Reports one of:
  *   - { status: 'ready', url }   — worker finished; issue a fresh presigned URL
- *   - { status: 'error', ... }   — worker wrote an error marker
+ *   - { status: 'error', ... }   — worker wrote an error marker, or the
+ *                                  marker itself was malformed
  *   - { status: 'pending' }      — keep polling
  *
  * The `jobId` is an opaque, server-generated UUID; the marker it points to
@@ -15,6 +19,16 @@ import { genericHandler } from '../../genericHandler';
 export const getPublicDocketRecordStatusLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { jobId } = event.pathParameters;
+
+    // Reject anything that isn't a UUID so clients can't craft keys like
+    // `../foo` and probe the temp bucket via the S3 client.
+    if (typeof jobId !== 'string' || !UUID_REGEX.test(jobId)) {
+      return {
+        message: 'Invalid jobId',
+        status: 'error',
+        statusCode: 400,
+      };
+    }
 
     const [isReady, hasError] = await Promise.all([
       applicationContext.getPersistenceGateway().isFileExists({
@@ -37,7 +51,21 @@ export const getPublicDocketRecordStatusLambda = event =>
           key: resultKey(jobId),
           useTempBucket: true,
         });
-      const { fileId } = JSON.parse(Buffer.from(markerBytes).toString('utf-8'));
+
+      let fileId: string | undefined;
+      try {
+        ({ fileId } = JSON.parse(Buffer.from(markerBytes).toString('utf-8')));
+      } catch {
+        // fall through to the corrupted-marker branch below
+      }
+      if (!fileId) {
+        return {
+          message: 'Failed to generate docket record',
+          status: 'error',
+          statusCode: 500,
+        };
+      }
+
       const { url } = await applicationContext
         .getPersistenceGateway()
         .getDownloadPolicyUrl({

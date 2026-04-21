@@ -135,7 +135,7 @@ import { getDbReader } from '@web-api/database';
     lambdaWrapper(generatePublicDocketRecordPdfLambda),
   );
   app.get(
-    '/public-api/cases/:docketNumber/docket-record-status/:jobId',
+    '/public-api/docket-record-status/:jobId',
     lambdaWrapper(getPublicDocketRecordStatusLambda),
   );
 }

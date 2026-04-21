@@ -41,7 +41,7 @@ describe('generatePublicDocketRecordPdfProxy', () => {
       '/public-api/cases/101-20/generate-docket-record',
     );
     expect(mockGetResponse.mock.calls[0][0].endpoint).toBe(
-      '/public-api/cases/101-20/docket-record-status/job-1',
+      '/public-api/docket-record-status/job-1',
     );
     expect(mockGetResponse).toHaveBeenCalledTimes(2);
   });

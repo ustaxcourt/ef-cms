@@ -14,11 +14,15 @@ describe('getPublicDocketRecordStatusLambda', () => {
   const getDownloadPolicyUrl = jest.mocked(getDownloadPolicyUrlMock);
   const getDocument = jest.mocked(getDocumentMock);
 
-  const buildEvent = () => ({
+  const VALID_JOB_ID = '11111111-2222-4333-8444-555555555555';
+  const resultKeyFor = (id: string) => `public-docket-record/${id}.json`;
+  const errorKeyFor = (id: string) => `public-docket-record/${id}.error`;
+
+  const buildEvent = (jobId = VALID_JOB_ID) => ({
     body: {},
     headers: {},
     path: '',
-    pathParameters: { docketNumber: '101-20', jobId: 'job-1' },
+    pathParameters: { jobId },
     queryStringParameters: {},
   });
 
@@ -30,7 +34,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
   it('reads the marker and returns a presigned URL for the interactor-chosen key', async () => {
     isFileExists.mockImplementation(({ key }) =>
-      Promise.resolve(key === 'public-docket-record/job-1.json'),
+      Promise.resolve(key === resultKeyFor(VALID_JOB_ID)),
     );
     getDocument.mockResolvedValue(
       Buffer.from(JSON.stringify({ fileId: 'random-interactor-id' })) as any,
@@ -50,7 +54,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
   it('returns the error message when the worker wrote an error marker', async () => {
     isFileExists.mockImplementation(({ key }) =>
-      Promise.resolve(key === 'public-docket-record/job-1.error'),
+      Promise.resolve(key === errorKeyFor(VALID_JOB_ID)),
     );
     getDocument.mockResolvedValue(
       Buffer.from(
@@ -80,6 +84,55 @@ describe('getPublicDocketRecordStatusLambda', () => {
     expect(body.status).toBe('error');
     expect(body.message).toBe('Failed to generate docket record');
     expect(body.statusCode).toBe(500);
+  });
+
+  it('returns a structured error when the result marker is corrupted JSON so polling terminates', async () => {
+    isFileExists.mockImplementation(({ key }) =>
+      Promise.resolve(key === resultKeyFor(VALID_JOB_ID)),
+    );
+    getDocument.mockResolvedValue(Buffer.from('not-json') as any);
+
+    const response = await getPublicDocketRecordStatusLambda(buildEvent());
+
+    const body = JSON.parse(response.body);
+    expect(body).toEqual({
+      message: 'Failed to generate docket record',
+      status: 'error',
+      statusCode: 500,
+    });
+    expect(getDownloadPolicyUrl).not.toHaveBeenCalled();
+  });
+
+  it('returns a structured error when the result marker is missing fileId so polling terminates', async () => {
+    isFileExists.mockImplementation(({ key }) =>
+      Promise.resolve(key === resultKeyFor(VALID_JOB_ID)),
+    );
+    getDocument.mockResolvedValue(Buffer.from(JSON.stringify({})) as any);
+
+    const response = await getPublicDocketRecordStatusLambda(buildEvent());
+
+    const body = JSON.parse(response.body);
+    expect(body).toEqual({
+      message: 'Failed to generate docket record',
+      status: 'error',
+      statusCode: 500,
+    });
+    expect(getDownloadPolicyUrl).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-UUID jobId without touching S3 so callers cannot probe arbitrary keys', async () => {
+    const response = await getPublicDocketRecordStatusLambda(
+      buildEvent('job-1'),
+    );
+
+    const body = JSON.parse(response.body);
+    expect(body).toEqual({
+      message: 'Invalid jobId',
+      status: 'error',
+      statusCode: 400,
+    });
+    expect(isFileExists).not.toHaveBeenCalled();
+    expect(getDocument).not.toHaveBeenCalled();
   });
 
   it('returns pending while neither marker exists', async () => {
