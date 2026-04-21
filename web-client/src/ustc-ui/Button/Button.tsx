@@ -94,8 +94,8 @@ export const Button = connect(
     return (
       <Element
         className={classes}
-        disabled={isButtonDisabled}
         {...remainingProps}
+        disabled={isButtonDisabled}
         title={tooltip}
         type={type}
         onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
