@@ -70,6 +70,10 @@ export const Button = connect(
     }
     const type = remainingProps['type'] ?? (isLink ? undefined : 'button');
 
+    const disabledByReadOnlyMode = readOnlyMode && !overrideReadOnly;
+    const isButtonDisabled =
+      disableButton || remainingProps.disabled || disabledByReadOnlyMode;
+
     const classes = classNames(
       className,
       'usa-button',
@@ -79,6 +83,7 @@ export const Button = connect(
       icon && !shouldWrapText && 'no-wrap',
       secondary && 'usa-button--outline',
       link && 'usa-button--unstyled ustc-button--unstyled',
+      disabledByReadOnlyMode && 'usa-button-read-only-disabled',
     );
 
     const iconClasses = classNames(
@@ -86,19 +91,32 @@ export const Button = connect(
       iconColor && `fa-icon-${iconColor}`,
     );
 
-    const isButtonDisabled =
-      disableButton ||
-      remainingProps.disabled ||
-      (readOnlyMode && !overrideReadOnly);
+    const wrappedOnClick = e => {
+      if (isLink && isButtonDisabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      const updatedOnClick = getUpdatedOnClick(
+        onClick,
+        disableOnClick,
+        setDisableButton,
+      );
+      if (updatedOnClick) {
+        updatedOnClick(e);
+      }
+    };
 
     return (
       <Element
         className={classes}
         {...remainingProps}
-        disabled={isButtonDisabled}
+        aria-disabled={isLink ? isButtonDisabled : undefined}
+        disabled={isLink ? undefined : isButtonDisabled}
+        tabIndex={isLink && isButtonDisabled ? -1 : undefined}
         title={tooltip}
         type={type}
-        onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
+        onClick={wrappedOnClick}
       >
         {icon && !iconRight && (
           <FontAwesomeIcon

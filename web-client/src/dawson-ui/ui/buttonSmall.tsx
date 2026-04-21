@@ -78,6 +78,22 @@ export const ButtonSmall = connect(
     }) {
     const Comp = asChild ? Slot : 'button';
 
+    const isButtonDisabled =
+      props.disabled || (readOnlyMode && !overrideReadOnly);
+
+    const wrappedOnClick = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      if (isButtonDisabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (props.onClick) {
+        props.onClick(e);
+      }
+    };
+
     const Icon = icon ? (
       <FontAwesomeIcon
         className={cn(
@@ -93,10 +109,16 @@ export const ButtonSmall = connect(
 
     return (
       <Comp
-        className={cn(buttonVariants({ variant, className }))}
+        className={cn(
+          buttonVariants({ variant, className }),
+          isButtonDisabled && asChild && 'tw:cursor-not-allowed tw:opacity-50',
+        )}
         data-slot="button"
         {...props}
-        disabled={props.disabled || (readOnlyMode && !overrideReadOnly)}
+        onClick={wrappedOnClick}
+        aria-disabled={isButtonDisabled ? true : undefined}
+        disabled={isButtonDisabled}
+        tabIndex={isButtonDisabled && asChild ? -1 : undefined}
         role="button"
       >
         <>

@@ -1,18 +1,14 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { createApplicationContext } from '../../applicationContext';
-import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
-import { sendWithRetry } from '../../dispatchers/ses/sendBulkTemplatedEmail';
-import { getDawsonLogger } from 'web-api/src/utilities/logger/getDawsonLogger';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { sendWithRetry } from '@web-api/dispatchers/ses/sendBulkTemplatedEmail';
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
 
   if (process.env.READ_ONLY_MODE === 'true') {
-    getDawsonLogger().info(
-      'Skipping send-emails due to read-only mode. Retrying in 180 seconds.',
-    );
-    await rescheduleLambda(applicationContext, { event }, 180);
-    return;
+    getDawsonLogger().info('Skipping send-emails due to read-only mode.');
+    throw new Error('System is in read-only mode.');
   }
 
   try {
