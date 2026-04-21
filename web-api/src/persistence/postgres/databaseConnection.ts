@@ -80,7 +80,7 @@ async function establishDbPool(): Promise<Kysely<Database>> {
   );
 }
 
-async function generateRDSAuthToken() {
+async function generateRDSAuthToken(): Promise<string> {
   const signer = new Signer({
     hostname: environment.rds.pool.host,
     port: 5432,
