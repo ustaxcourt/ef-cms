@@ -46,7 +46,11 @@ export const generatePublicDocketRecordPdfInteractor = async (
       return { url: result.url };
     }
     if (result.status === 'error') {
-      throw new Error(result.message || 'Failed to generate docket record');
+      const err = new Error(
+        result.message || 'Failed to generate docket record',
+      );
+      (err as any).statusCode = result.statusCode || 500;
+      throw err;
     }
 
     await sleep(POLL_INTERVAL_MS);

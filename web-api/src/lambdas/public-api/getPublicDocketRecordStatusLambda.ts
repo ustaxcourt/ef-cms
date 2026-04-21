@@ -57,14 +57,17 @@ export const getPublicDocketRecordStatusLambda = event =>
           useTempBucket: true,
         });
       let message = 'Failed to generate docket record';
+      let statusCode = 500;
       try {
         const parsed = JSON.parse(Buffer.from(errorBody).toString('utf-8'));
-        const { message: parsedMessage } = parsed ?? {};
+        const { message: parsedMessage, statusCode: parsedStatusCode } =
+          parsed ?? {};
         if (parsedMessage) message = parsedMessage;
+        if (parsedStatusCode) statusCode = parsedStatusCode;
       } catch {
-        // leave default message
+        // leave defaults
       }
-      return { message, status: 'error' };
+      return { message, status: 'error', statusCode };
     }
 
     return { status: 'pending' };

@@ -55,4 +55,21 @@ describe('generatePublicDocketRecordPdfProxy', () => {
       generatePublicDocketRecordPdfInteractor(applicationContext, args),
     ).rejects.toThrow('sealed case');
   });
+
+  it('propagates the statusCode from the status endpoint error so the client can classify it (e.g. 403 sealed case)', async () => {
+    mockGetResponse.mockResolvedValueOnce({
+      data: {
+        message: 'Unauthorized to view sealed case.',
+        status: 'error',
+        statusCode: 403,
+      },
+    });
+
+    await expect(
+      generatePublicDocketRecordPdfInteractor(applicationContext, args),
+    ).rejects.toMatchObject({
+      message: 'Unauthorized to view sealed case.',
+      statusCode: 403,
+    });
+  });
 });
