@@ -707,4 +707,57 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         .calls[0][0].message.pdfUrl,
     ).toBeUndefined();
   });
+
+  it('should not send notification if transaction fails', async () => {
+    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should clear isPendingService flag even if transaction fails', async () => {
+    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    // Finally block should still run - verify it was called with status: false
+    const lastCall =
+      updateDocketEntryPendingServiceStatus.mock.calls[
+        updateDocketEntryPendingServiceStatus.mock.calls.length - 1
+      ];
+    expect(lastCall[0]).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
+      status: false,
+    });
+  });
 });

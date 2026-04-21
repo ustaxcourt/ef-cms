@@ -17,6 +17,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -36,7 +37,7 @@ export const removeCaseFromTrial = async (
     trialSessionId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -57,42 +58,46 @@ export const removeCaseFromTrial = async (
 
   const caseEntity = new Case(myCase, { authorizedUser });
 
-  if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
-    await removeCaseFromTrialSession({
-      disposition,
-      docketNumber,
-      trialSessionId,
-    });
-    await updateTrialSession({
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-  } else {
-    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
-    await deleteCasesFromTrialSession({
-      docketNumbers: [docketNumber],
-      trialSessionId,
-    });
-  }
+  const updatedCase = await withTransaction(async () => {
+    if (trialSessionEntity.isCalendared) {
+      trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
+      await removeCaseFromTrialSession({
+        disposition,
+        docketNumber,
+        trialSessionId,
+      });
+      await updateTrialSession({
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
+      await deleteCasesFromTrialSession({
+        docketNumbers: [docketNumber],
+        trialSessionId,
+      });
+    }
 
-  if (!caseEntity.isHearing(trialSessionId)) {
-    caseEntity.removeFromTrial({
-      associatedJudge,
-      associatedJudgeId,
-      changedBy: authorizedUser?.name,
-      updatedCaseStatus: caseStatus,
+    if (!caseEntity.isHearing(trialSessionId)) {
+      caseEntity.removeFromTrial({
+        associatedJudge,
+        associatedJudgeId,
+        changedBy: authorizedUser?.name,
+        updatedCaseStatus: caseStatus,
+      });
+
+      await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({ caseEntity });
+    } else {
+      caseEntity.removeFromHearing(trialSessionId);
+    }
+
+    const updatedCaseData = await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
     });
 
-    await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ caseEntity });
-  } else {
-    caseEntity.removeFromHearing(trialSessionId);
-  }
-
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    return updatedCaseData;
   });
 
   return new CaseDTO(

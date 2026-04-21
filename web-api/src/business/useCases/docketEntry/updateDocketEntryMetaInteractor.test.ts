@@ -733,4 +733,24 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     expect(upsertDocketEntryRelatedEntries).not.toHaveBeenCalled();
   });
+
+    it('should not update the case if the transaction failed', async () => {
+      upsertDocketEntries.mockRejectedValueOnce(
+        new Error('Database error')
+      );
+    
+      await expect(updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          documentTitle: 'Updated Description',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    )).rejects.toThrow('Database error');
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
 });
