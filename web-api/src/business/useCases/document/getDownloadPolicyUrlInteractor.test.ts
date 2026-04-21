@@ -471,7 +471,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should return the policy url for an external user is associated with the case when the document requested is a case confirmation pdf', async () => {
+    it('should return the policy url for an external user who is associated with the case when the document requested is a case confirmation pdf', async () => {
       const url = await getDownloadPolicyUrlInteractor(
         applicationContext,
         {
