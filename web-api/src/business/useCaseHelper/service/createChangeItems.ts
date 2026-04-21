@@ -134,6 +134,8 @@ const createDocketEntryForChange = async ({
       documentBytes: changeOfAddressPdfWithCover,
     });
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
+  changeOfAddressDocketEntry.originallyFiledDocketNumber =
+    caseEntity.docketNumber;
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: changeOfAddressPdfWithCover,

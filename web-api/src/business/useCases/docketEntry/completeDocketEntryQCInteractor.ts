@@ -406,6 +406,9 @@ const completeDocketEntryQC = async (
       });
 
       noticeUpdatedDocketEntry.setAsServed(servedParties.all);
+      console.log('***Entry ', noticeUpdatedDocketEntry);
+      noticeUpdatedDocketEntry.originallyFiledDocketNumber =
+        currentCase.docketNumber;
 
       currentCase.addDocketEntry(noticeUpdatedDocketEntry);
 
