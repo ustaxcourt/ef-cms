@@ -44,7 +44,7 @@ export const InPersonProceedingForm = connect<
             data-testid="trial-session-courthouse-name"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="courthouse-name"
             name="courthouseName"
@@ -69,7 +69,7 @@ export const InPersonProceedingForm = connect<
             data-testid="trial-session-address-1-input"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="address1"
             name="address1"
@@ -93,7 +93,7 @@ export const InPersonProceedingForm = connect<
             className="usa-input"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="address2"
             name="address2"
@@ -120,7 +120,7 @@ export const InPersonProceedingForm = connect<
                 data-testid="trial-session-city-input"
                 disabled={
                   !addingTrialSession &&
-                  formattedTrialSessionDetails.canEditOngoingSession
+                  formattedTrialSessionDetails.editPermissions === 'limited'
                 }
                 id="city"
                 name="city"
@@ -143,7 +143,7 @@ export const InPersonProceedingForm = connect<
                 data-testid="trial-session-state-select"
                 disabled={
                   !addingTrialSession &&
-                  formattedTrialSessionDetails.canEditOngoingSession
+                  formattedTrialSessionDetails.editPermissions === 'limited'
                 }
                 id="state"
                 name="state"
@@ -189,7 +189,7 @@ export const InPersonProceedingForm = connect<
             data-testid="trial-session-postal-code-input"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="postal-code"
             name="postalCode"

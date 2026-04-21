@@ -35,7 +35,7 @@ export const RemoteProceedingForm = connect<
             data-testid="trial-session-meeting-id"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="meeting-id"
             name="meetingId"
@@ -60,7 +60,7 @@ export const RemoteProceedingForm = connect<
             data-testid="trial-session-password"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="password"
             name="password"
@@ -92,7 +92,7 @@ export const RemoteProceedingForm = connect<
             data-testid="trial-session-join-phone-number"
             disabled={
               !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="join-phone-number"
             name="joinPhoneNumber"
@@ -116,8 +116,7 @@ export const RemoteProceedingForm = connect<
             className="usa-input"
             data-testid="trial-session-chambers-phone-number"
             disabled={
-              !addingTrialSession &&
-              formattedTrialSessionDetails.canEditOngoingSession
+              formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="chambers-phone-number"
             name="chambersPhoneNumber"
