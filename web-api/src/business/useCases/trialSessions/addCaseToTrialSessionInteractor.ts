@@ -14,6 +14,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * addCaseToTrialSession
@@ -79,20 +80,24 @@ const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  const updatedCase = await withTransaction(async () => {
+    const updatedCaseData = await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
-  await createOrUpdateTrialSessionCases({
-    trialSessionCases: [
-      {
-        caseOrder,
-        docketNumber,
-        isHearing: false,
-        trialSessionId,
-      },
-    ],
+    await createOrUpdateTrialSessionCases({
+      trialSessionCases: [
+        {
+          caseOrder,
+          docketNumber,
+          isHearing: false,
+          trialSessionId,
+        },
+      ],
+    });
+
+    return updatedCaseData;
   });
 
   return new CaseDTO(

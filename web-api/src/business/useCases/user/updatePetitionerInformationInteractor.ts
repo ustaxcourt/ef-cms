@@ -28,6 +28,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -281,7 +282,7 @@ export const updatePetitionerInformation = async (
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
-
+const updatedCase = await withTransaction(async () => {
   if (hasPetitionerInfoChanged) {
     await invalidateUserContactGeocode(
       docketNumber,
@@ -373,10 +374,11 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  return updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
+});
 
   return {
     paperServiceParties: servedParties.paper,

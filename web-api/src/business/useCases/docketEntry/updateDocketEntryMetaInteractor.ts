@@ -21,6 +21,7 @@ import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { concat } from 'lodash';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -61,6 +62,8 @@ export const updateDocketEntryMeta = async (
   ) {
     throw new Error('Unable to update unserved docket entry.');
   }
+
+  const updatedCase = await withTransaction(async () => {
 
   if (
     docketEntryMeta.affectedDocketEntries ||
@@ -189,13 +192,15 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  const result = await updateCaseAndAssociations({
+  return updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
 
+});
+
   return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
   );
 };
 
