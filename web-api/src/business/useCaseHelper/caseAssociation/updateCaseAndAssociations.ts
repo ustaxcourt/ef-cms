@@ -33,6 +33,7 @@ import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateCaseAndAssociations = async ({
   authorizedUser,
@@ -111,34 +112,36 @@ export const updateCaseAndAssociations = async ({
       : [],
   ]);
 
-  // Persist primary case data first to ensure no errors
-  await upsertCases([validNewRawCaseEntity]);
+  return withTransaction(async () => {
+    // Persist primary case data first to ensure no errors
+    await upsertCases([validNewRawCaseEntity]);
 
-  // Then persist all related case data
-  await settlePromises([
-    upsertDocketEntries(docketEntries),
-    upsertMessages(messages),
-    upsertCaseCorrespondences(correspondences),
-    removeCasesFromHearings({
-      trialSessionCases: deletedHearings.map(dh => ({
-        trialSessionId: dh.trialSessionId,
-        docketNumber: caseToUpdate.docketNumber,
-      })),
-    }),
-    associateUsersWithCases([
-      ...irsPractitionersToUpdate,
-      ...privatePractitionersToUpdate,
-      ...petitionersToUpdate,
-    ]),
-    disassociateUsersFromCases([
-      ...irsPractitionersToDelete,
-      ...privatePractitionersToDelete,
-      ...petitionersToDelete,
-    ]),
-    upsertCaseDeadlines(deadlines),
-  ]);
+    // Then persist all related case data
+    await settlePromises([
+      upsertDocketEntries(docketEntries),
+      upsertMessages(messages),
+      upsertCaseCorrespondences(correspondences),
+      removeCasesFromHearings({
+        trialSessionCases: deletedHearings.map(dh => ({
+          trialSessionId: dh.trialSessionId,
+          docketNumber: caseToUpdate.docketNumber,
+        })),
+      }),
+      associateUsersWithCases([
+        ...irsPractitionersToUpdate,
+        ...privatePractitionersToUpdate,
+        ...petitionersToUpdate,
+      ]),
+      disassociateUsersFromCases([
+        ...irsPractitionersToDelete,
+        ...privatePractitionersToDelete,
+        ...petitionersToDelete,
+      ]),
+      upsertCaseDeadlines(deadlines),
+    ]);
 
-  return validNewRawCaseEntity;
+    return validNewRawCaseEntity;
+  });
 };
 
 const getDocketEntriesToUpdate = ({

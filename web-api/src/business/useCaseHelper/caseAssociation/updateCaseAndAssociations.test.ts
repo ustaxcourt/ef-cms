@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
@@ -198,6 +199,40 @@ describe('updateCaseAndAssociations', () => {
         { docketNumber, trialSessionId: trialSessionIds[2] },
       ],
     });
+  });
+
+  it('should not run other database operations if transaction fails', async () => {
+    upsertCases.mockRejectedValueOnce(new Error('Database error'));
+
+    await expect(
+      updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: {
+          ...validMockCase,
+          associatedJudge: 'Judge Arnold',
+          associatedJudgeId: '98d550c5-76d5-4f3a-9ce8-689b5c4a1b36',
+        },
+      }),
+    ).rejects.toThrow('Database error');
+
+    // updateCaseDocketEntries
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
+
+    // updateCaseMessages
+    expect(upsertMessages).not.toHaveBeenCalled();
+
+    // updateCorrespondence
+    expect(upsertCaseCorrespondences).not.toHaveBeenCalled();
+
+    // updateHearings
+    expect(removeCasesFromHearings).not.toHaveBeenCalled();
+
+    // users
+    expect(associateUsersWithCases).not.toHaveBeenCalled();
+    expect(disassociateUsersFromCases).not.toHaveBeenCalled();
+
+    // updateCaseDeadlines
+    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
   });
 
   describe('docket entries', () => {
