@@ -4,7 +4,6 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { generateStaleCasesReport } from '../../../../scripts/reports/stale-cases.helpers';
 import { existsSync } from 'fs';
 import { sendEmailWithAttachment } from '@web-api/dispatchers/ses/sendEmailWithAttachment';
-import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
 
 const today = formatNow(FORMATS.YYYYMMDD);
 const filename = `/tmp/12-month-inactivity_${today}.csv`;
@@ -23,14 +22,7 @@ const body =
 
 type resultsType = { [recipient: string]: string } | string;
 
-export const handler: Handler = async (event, _context) => {
-  if (process.env.READ_ONLY_MODE === 'true') {
-    await rescheduleLambda(applicationContext, { event }, 180);
-    return succeed(
-      'Skipping stale cases email cron due to read-only mode. Retrying in 180 seconds.',
-    );
-  }
-
+export const handler: Handler = async (_event, _context) => {
   const commaDelimitedRecipients = process.env.INACTIVITY_REPORT_RECIPIENTS!;
   const recipients =
     commaDelimitedRecipients && commaDelimitedRecipients.length
