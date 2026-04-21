@@ -19,6 +19,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * removeConsolidatedCases
@@ -49,8 +50,6 @@ const removeConsolidatedCases = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const updateCasePromises: Promise<any>[] = [];
-
   const { leadDocketNumber } = caseToUpdate;
 
   const allConsolidatedCases = await getConsolidatedCases({
@@ -62,24 +61,41 @@ const removeConsolidatedCases = async (
       !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
   );
 
-  if (
-    docketNumbersToRemove.includes(leadDocketNumber) &&
-    newConsolidatedCases.length > 1
-  ) {
-    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
+  await withTransaction(async () => {
+    const updateCasePromises: Promise<any>[] = [];
 
-    updateCasePromises.push(
-      updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
-      ),
-    );
+    if (
+      docketNumbersToRemove.includes(leadDocketNumber) &&
+      newConsolidatedCases.length > 1
+    ) {
+      const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
 
-    for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
-      const caseEntity = new Case(newConsolidatedCaseToUpdate, {
+      updateCasePromises.push(
+        updateConsolidatedCaseDeadlineReferenceId(
+          leadDocketNumber,
+          newLeadCase.docketNumber,
+        ),
+      );
+
+      for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
+        const caseEntity = new Case(newConsolidatedCaseToUpdate, {
+          authorizedUser,
+        });
+        caseEntity.setLeadCase(newLeadCase.docketNumber);
+
+        updateCasePromises.push(
+          updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: caseEntity,
+          }),
+        );
+      }
+    } else if (newConsolidatedCases.length == 1) {
+      // a case cannot be consolidated with itself
+      const caseEntity = new Case(newConsolidatedCases[0], {
         authorizedUser,
       });
-      caseEntity.setLeadCase(newLeadCase.docketNumber);
+      caseEntity.removeConsolidation();
 
       updateCasePromises.push(
         updateCaseAndAssociations({
@@ -88,45 +104,32 @@ const removeConsolidatedCases = async (
         }),
       );
     }
-  } else if (newConsolidatedCases.length == 1) {
-    // a case cannot be consolidated with itself
-    const caseEntity = new Case(newConsolidatedCases[0], {
-      authorizedUser,
+
+    // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+    // We already got the case information above via getCasesByLeadDocketNumber.
+    // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
+    const casesToRemove = await getCasesByDocketNumbers({
+      docketNumbers: docketNumbersToRemove,
     });
-    caseEntity.removeConsolidation();
 
-    updateCasePromises.push(
-      updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      }),
-    );
-  }
+    for (const caseToRemove of casesToRemove) {
+      const caseEntity = new Case(caseToRemove, { authorizedUser });
+      caseEntity.removeConsolidation();
 
-  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
-  // We already got the case information above via getCasesByLeadDocketNumber.
-  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
-  const casesToRemove = await getCasesByDocketNumbers({
-    docketNumbers: docketNumbersToRemove,
+      updateCasePromises.push(
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
+      );
+
+      updateCasePromises.push(
+        removeConsolidatedCaseReferences(caseToRemove.docketNumber),
+      );
+    }
+
+    await settlePromises(updateCasePromises);
   });
-
-  for (const caseToRemove of casesToRemove) {
-    const caseEntity = new Case(caseToRemove, { authorizedUser });
-    caseEntity.removeConsolidation();
-
-    updateCasePromises.push(
-      updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      }),
-    );
-
-    updateCasePromises.push(
-      removeConsolidatedCaseReferences(caseToRemove.docketNumber),
-    );
-  }
-
-  await settlePromises(updateCasePromises);
 };
 
 async function removeConsolidatedCaseReferences(docketNumber: string) {

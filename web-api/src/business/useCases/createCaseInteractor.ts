@@ -26,6 +26,7 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
@@ -312,30 +313,33 @@ export const createCaseInteractor = async (
   });
 
   let caseToAdd: Case;
-  let workItem: WorkItem;
 
   try {
-    ({ caseToAdd, workItem } = await createCaseMetadata(
-      applicationContext,
-      {
-        attachmentToPetitionFileIds,
-        corporateDisclosureFileId,
-        petitionEntity,
-        petitionFileId,
-        petitionMetadata,
-        privatePractitioners,
-        stinFileId,
-        user,
-      },
-      authorizedUser,
-    ));
+    ({ caseToAdd } = await withTransaction(async () => {
+      const result = await createCaseMetadata(
+        applicationContext,
+        {
+          attachmentToPetitionFileIds,
+          corporateDisclosureFileId,
+          petitionEntity,
+          petitionFileId,
+          petitionMetadata,
+          privatePractitioners,
+          stinFileId,
+          user,
+        },
+        authorizedUser,
+      );
+
+      await upsertWorkItems({
+        workItems: [result.workItem.validate().toRawObject()],
+      });
+
+      return result;
+    }));
   } finally {
     await removeLockFunction();
   }
-
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

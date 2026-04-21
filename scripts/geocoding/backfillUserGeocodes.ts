@@ -1,5 +1,5 @@
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
 import { sql } from 'kysely';
 import { ask } from '../helpers/prompts';

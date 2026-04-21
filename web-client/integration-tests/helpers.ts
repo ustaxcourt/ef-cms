@@ -35,7 +35,7 @@ import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { ModuleDefinition } from 'cerebral';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 

@@ -19,8 +19,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     completedMessage,
     workItemId,

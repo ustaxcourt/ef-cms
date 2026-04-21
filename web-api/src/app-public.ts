@@ -109,8 +109,8 @@ import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSea
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
-import { getDbReader } from '@web-api/database';
 import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 /** Case */
 {
