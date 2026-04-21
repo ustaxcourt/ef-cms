@@ -105,12 +105,12 @@ resource "aws_wafv2_web_acl" "apis" {
         custom_response {
           response_code = 429
         }
-      } 
+      }
     }
 
     statement {
       rate_based_statement {
-        limit                 = 350 
+        limit                 = 350
         evaluation_window_sec = 60
         aggregate_key_type    = "CONSTANT"
 
@@ -138,6 +138,72 @@ resource "aws_wafv2_web_acl" "apis" {
     }
   }
 
+  // Global (across all clients) cap on the public "start" endpoint that
+  // kicks off docket-record PDF generation. The worker lambda is expensive
+  // (up to 15 minutes of CPU + S3 writes per call), so we cap the whole
+  // system at 10 starts per minute — the WAFv2 minimum.
+  rule {
+    name     = "public_docket_record_generation_limit"
+    priority = 4
+
+    action {
+      block {
+        custom_response {
+          response_code = 429
+        }
+      }
+    }
+
+    statement {
+      rate_based_statement {
+        limit                 = 60
+        evaluation_window_sec = 60
+        aggregate_key_type    = "CONSTANT"
+
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "EXACTLY"
+                search_string         = "POST"
+
+                field_to_match {
+                  method {}
+                }
+
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
+            }
+
+            statement {
+              regex_pattern_set_reference_statement {
+                arn = aws_wafv2_regex_pattern_set.public_docket_record_generate.arn
+
+                field_to_match {
+                  uri_path {}
+                }
+
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "public_docket_record_generation_limit_${var.environment}"
+      sampled_requests_enabled   = false
+    }
+  }
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = "wafv2_${var.environment}"
@@ -151,6 +217,18 @@ resource "aws_wafv2_regex_pattern_set" "expensive_requests" {
 
   regular_expression {
     regex_string = "^/public-api/(order|opinion)-search"
+  }
+}
+
+// Matches only the docket-record "start" endpoint, regardless of docket
+// number. The status-polling endpoint is intentionally *not* included —
+// clients need to poll it repeatedly while generation is in progress.
+resource "aws_wafv2_regex_pattern_set" "public_docket_record_generate" {
+  name  = "public_docket_record_generate_${var.environment}"
+  scope = "REGIONAL"
+
+  regular_expression {
+    regex_string = "^/public-api/cases/[^/]+/generate-docket-record$"
   }
 }
 
