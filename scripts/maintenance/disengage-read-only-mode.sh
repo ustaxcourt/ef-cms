@@ -24,15 +24,13 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh "$ENV")
-
 DESIRED_VALUE=false
 
 get_lambda_mm_value() {
   local fn_name="$1"
   aws lambda get-function-configuration \
     --function-name "$fn_name" \
-    --region us-east-1 \
+    --region "$REGION" \
     --query 'Environment.Variables.READ_ONLY_MODE' \
     --output text 2>/dev/null || echo "None"
 }
