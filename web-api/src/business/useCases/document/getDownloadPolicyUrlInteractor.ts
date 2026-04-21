@@ -33,7 +33,8 @@ export const getDownloadPolicyUrlInteractor = async (
   if (key.includes('.pdf')) {
     if (
       caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key ||
-      !caseEntity.userHasAccessToCase(authorizedUser)
+      (!caseEntity.userHasAccessToCase(authorizedUser) &&
+        !User.isInternalUser(authorizedUser.role))
     ) {
       throw new UnauthorizedError('Unauthorized');
     }
