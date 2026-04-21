@@ -23,24 +23,28 @@ export const startReadOnlyModePollingAction = ({
   }
 
   const interval = setInterval(async () => {
-    const { readOnlyMode } = await applicationContext
-      .getUseCases()
-      .getMaintenanceModeInteractor(applicationContext);
+    try {
+      const { readOnlyMode } = await applicationContext
+        .getUseCases()
+        .getMaintenanceModeInteractor(applicationContext);
 
-    if (!readOnlyMode) {
-      const currentInterval = get(state.readOnlyPollingInterval);
-      if (currentInterval) {
-        clearInterval(currentInterval);
-        store.unset(state.readOnlyPollingInterval);
+      if (!readOnlyMode) {
+        const currentInterval = get(state.readOnlyPollingInterval);
+        if (currentInterval) {
+          clearInterval(currentInterval);
+          store.unset(state.readOnlyPollingInterval);
+        }
+
+        store.set(state.readOnlyMode, false);
+
+        try {
+          await socket.start();
+        } catch (e) {
+          // we don't handle the error since it makes the application unusable for people who disabled websocket requests
+        }
       }
-
-      store.set(state.readOnlyMode, false);
-
-      try {
-        await socket.start();
-      } catch (e) {
-        // we don't handle the error since it makes the application unusable for people who disabled websocket requests
-      }
+    } catch (e) {
+      console.error('Error polling for read-only mode status', e);
     }
   }, READ_ONLY_POLLING_INTERVAL);
 
