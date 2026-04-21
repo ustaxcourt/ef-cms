@@ -189,6 +189,7 @@ export const TodaysOrders = connect(
                         <th>Order</th>
                         <td className="divider">
                           <Button
+                            overrideReadOnly
                             link
                             aria-label={`View PDF: ${order.documentTitle}`}
                             className="text-left"
@@ -310,6 +311,7 @@ const TodaysOrdersRow = ({
       <td>{order.caseCaption}</td>
       <td>
         <Button
+          overrideReadOnly
           link
           aria-label={`View PDF: ${order.documentTitle}`}
           className="text-left line-height-standard padding-0"

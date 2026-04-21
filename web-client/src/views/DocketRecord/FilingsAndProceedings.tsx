@@ -66,6 +66,7 @@ export const FilingsAndProceedings = connect<
         <>
           <NonMobile>
             <Button
+              overrideReadOnly
               link
               aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(

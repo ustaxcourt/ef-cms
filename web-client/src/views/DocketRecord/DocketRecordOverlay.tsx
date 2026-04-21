@@ -10,7 +10,7 @@ const modalRoot = window.document.getElementById('modal-root');
 
 type DocketRecordOverlayProps = {
   runCancelSequence?: any;
-}
+};
 
 export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
   {
@@ -26,7 +26,7 @@ export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
     docketEntry,
     openCaseDocumentDownloadUrlSequence,
   }) {
-    const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;;
+    const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;
 
     const getEl = () => {
       if (!elRef.current) {
@@ -100,6 +100,7 @@ export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
               <hr className="margin-top-1 margin-bottom-2" />
               <h3 tabIndex={-1}>{docketEntry.descriptionDisplay}</h3>
               <Button
+                overrideReadOnly
                 link
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"

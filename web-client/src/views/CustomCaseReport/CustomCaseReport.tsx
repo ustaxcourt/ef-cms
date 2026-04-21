@@ -473,6 +473,7 @@ export const CustomCaseReport = connect(
           </div>
           <div className="text-right margin-bottom-2">
             <Button
+              overrideReadOnly
               link
               aria-label="export pending report"
               className="margin-top-2"
