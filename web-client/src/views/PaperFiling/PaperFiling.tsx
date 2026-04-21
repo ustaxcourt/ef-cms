@@ -114,6 +114,7 @@ export const PaperFiling = connect(
                     Save for Later
                   </Button>
                   <Button
+                    overrideReadOnly
                     link
                     id="cancel-button"
                     onClick={() => {

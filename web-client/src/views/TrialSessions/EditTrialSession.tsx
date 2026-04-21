@@ -26,7 +26,8 @@ export const EditTrialSession = connect(
       sequences.updateTrialSessionFormDataSequence,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
     persistModal: state.trialSessionChangeModalState.persist,
-    openConfirmTrialSessionLocationChangeModalSequence: sequences.openConfirmTrialSessionLocationChangeModalSequence
+    openConfirmTrialSessionLocationChangeModalSequence:
+      sequences.openConfirmTrialSessionLocationChangeModalSequence,
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
@@ -38,7 +39,7 @@ export const EditTrialSession = connect(
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     persistModal,
-    openConfirmTrialSessionLocationChangeModalSequence
+    openConfirmTrialSessionLocationChangeModalSequence,
   }) {
     return (
       <>
@@ -68,7 +69,11 @@ export const EditTrialSession = connect(
             {showModal === 'ConfirmTrialSessionStartDateChangeModalDialog' && (
               <ConfirmTrialSessionStartDateChangeModalDialog
                 cancelSequence={closeModalAndNavigateBackSequence}
-                confirmSequence={persistModal ? openConfirmTrialSessionLocationChangeModalSequence : updateTrialSessionSequence}
+                confirmSequence={
+                  persistModal
+                    ? openConfirmTrialSessionLocationChangeModalSequence
+                    : updateTrialSessionSequence
+                }
               />
             )}
             <ErrorNotification />
@@ -114,6 +119,7 @@ export const EditTrialSession = connect(
                 Save
               </Button>
               <Button
+                overrideReadOnly
                 link
                 type="button"
                 onClick={() => {

@@ -263,6 +263,7 @@ export const ReviewSavedPetition = connect(
               Save for Later
             </Button>
             <Button
+              overrideReadOnly
               link
               id="cancel-create-case"
               onClick={() => {
@@ -288,7 +289,7 @@ export const ReviewSavedPetition = connect(
           />
         )}
         {showModal === 'ServeCaseToIrsDuplicateErrorModal' && (
-          <ServeCaseToIrsDuplicateErrorModal/>
+          <ServeCaseToIrsDuplicateErrorModal />
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />
