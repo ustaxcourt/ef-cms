@@ -3,6 +3,7 @@ import { getUserAction } from '@web-client/presenter/actions/getUserAction';
 import { isMaintenanceModeEngagedAction } from '@web-client/presenter/actions/Maintenance/isMaintenanceModeEngagedAction';
 import { navigateToMaintenanceAction } from '@web-client/presenter/actions/navigateToMaintenanceAction';
 import { refreshTokenAction } from '@web-client/presenter/actions/Login/refreshTokenAction';
+import { setReadOnlyModeAction } from '@web-client/presenter/actions/setReadOnlyModeAction';
 import { setMaintenanceModeAction } from '@web-client/presenter/actions/setMaintenanceModeAction';
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
@@ -13,6 +14,7 @@ import { startRefreshIntervalSequence } from '@web-client/presenter/sequences/st
 export const initAppSequence = showProgressSequenceDecorator([
   getMaintenanceModeAction,
   setMaintenanceModeAction,
+  setReadOnlyModeAction,
   isMaintenanceModeEngagedAction,
   {
     maintenanceModeOff: [

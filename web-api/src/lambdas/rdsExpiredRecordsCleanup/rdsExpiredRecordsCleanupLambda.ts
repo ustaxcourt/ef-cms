@@ -8,6 +8,11 @@ import { camelCase } from 'lodash';
 const TIME_TO_LIVE_COLUMN = 'ttl';
 
 export const handler: Handler = async (_event, _context) => {
+  if (process.env.READ_ONLY_MODE === 'true') {
+    console.log('Read-only mode is engaged. Skipping expiration cleanup.')
+    return;
+  }
+
   await getDbReader(async reader => {
     const ALL_TABLES = await reader.introspection.getTables();
     const TABLES_WITH_TTLS = ALL_TABLES.filter(tableMetaData => {

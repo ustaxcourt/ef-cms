@@ -86,6 +86,7 @@ export const FilePetitionButtons = connect<
           </Button>
         )}
         <Button
+          overrideReadOnly
           link
           className="create-petition-navigation-buttons create-petition-navigation-follow-up-buttons"
           onClick={() => {

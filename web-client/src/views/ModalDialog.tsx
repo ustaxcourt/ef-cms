@@ -145,6 +145,7 @@ export const ModalDialog = ({
                       data-testid="close-modal-button"
                       icon="times-circle"
                       id="close-modal-button"
+                      overrideReadOnly
                       onClick={
                         useRunConfirmSequence
                           ? runConfirmSequence
@@ -180,6 +181,7 @@ export const ModalDialog = ({
                     className="modal-button-cancel"
                     data-testid="modal-button-cancel"
                     link={cancelLink}
+                    overrideReadOnly
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
@@ -191,6 +193,7 @@ export const ModalDialog = ({
                     aria-label="Clear"
                     className="modal-button-clear"
                     data-testid="modal-button-clear"
+                    overrideReadOnly
                     onClick={runClearSequence}
                   >
                     {clearLabel}

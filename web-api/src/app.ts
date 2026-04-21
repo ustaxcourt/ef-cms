@@ -307,6 +307,31 @@ app.use((req, res, next) => {
     return;
   }
 
+  const readOnlyPosts = [
+    '/auth/refresh',
+    '/cases/search',
+    '/case-documents/opinion-search',
+    '/case-documents/order-search',
+    '/reports/judge-activity-report',
+    '/trial-sessions/bulk-copy-notes',
+    '/views/pending-report',
+  ];
+
+  if (
+    process.env.READ_ONLY_MODE === 'true' &&
+    req.method !== 'GET' &&
+    req.method !== 'OPTIONS' &&
+    !(
+      req.method === 'POST' &&
+      readOnlyPosts.some(route => req.url.startsWith(route))
+    )
+  ) {
+    res
+      .status(503)
+      .send('System is upgrading. Please wait a few minutes and try again.');
+    return;
+  }
+
   next();
 });
 
@@ -1203,11 +1228,21 @@ app.post(
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
 }
 
-// This endpoint is used for testing purpose only which exposes the
-// CRON lambda which runs nightly to update cases to be ready for trial.
+/**
+ * local only
+ */
 if (applicationContext.environment.stage === 'local') {
+  // This endpoint is used for testing purpose only which exposes the
+  // CRON lambda which runs nightly to update cases to be ready for trial.
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
+
+  // deployed lambdas read the value of the READ_ONLY_MODE environment variable
+  // we expose this endpoint locally to allow toggling of this value without restarting the API
+  app.put('/read-only-mode', (req, res) => {
+    process.env.READ_ONLY_MODE = req.body.readOnlyMode ? 'true' : 'false';
+    res.status(200).send('OK');
+  });
 }

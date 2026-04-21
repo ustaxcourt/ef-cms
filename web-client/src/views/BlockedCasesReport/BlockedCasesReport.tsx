@@ -52,6 +52,7 @@ export const BlockedCasesReport = connect(
             <h1>Blocked Cases</h1>
             <span>
               <Button
+                overrideReadOnly
                 link
                 aria-label="export pending report"
                 className="margin-top-2"
@@ -106,7 +107,7 @@ export const BlockedCasesReport = connect(
                         </span>
                       </div>
                     </div>
-                    <div className='padding-2'></div>
+                    <div className="padding-2"></div>
                   </div>
 
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
@@ -137,13 +138,18 @@ export const BlockedCasesReport = connect(
                           >
                             <td className="consolidated-case-column">
                               <span
-                                className={classNames('tw:flex tw:items-baseline',{
-                                  'margin-left-2':
-                                    item.inConsolidatedGroup &&
-                                    !item.isLeadCase,
-                                })}
+                                className={classNames(
+                                  'tw:flex tw:items-baseline',
+                                  {
+                                    'margin-left-2':
+                                      item.inConsolidatedGroup &&
+                                      !item.isLeadCase,
+                                  },
+                                )}
                               >
-                                <RemoteTrialGrantedIcon remoteTrialGranted={item.remoteTrialGranted} />
+                                <RemoteTrialGrantedIcon
+                                  remoteTrialGranted={item.remoteTrialGranted}
+                                />
                                 <ConsolidatedCaseIcon
                                   consolidatedIconTooltipText={
                                     item.consolidatedIconTooltipText

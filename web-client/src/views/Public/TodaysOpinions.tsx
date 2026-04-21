@@ -105,6 +105,7 @@ export const TodaysOpinions = connect(
                           <td>{opinion.caseCaption}</td>
                           <td>
                             <Button
+                              overrideReadOnly
                               link
                               aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                               className="text-left line-height-standard padding-0"
@@ -182,6 +183,7 @@ export const TodaysOpinions = connect(
                           <td>{opinion.caseCaption}</td>
                           <td>
                             <Button
+                              overrideReadOnly
                               link
                               aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                               className="text-left line-height-standard padding-0"

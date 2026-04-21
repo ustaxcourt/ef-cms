@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -74,14 +75,15 @@ export const RespondentSearch = connect(
                     });
                   }}
                 />
-                <button
+                <Button
+                  overrideReadOnly
                   className="small-search-button usa-button"
                   data-testid="search-for-respondent"
                   id="search-for-respondent"
                   type="submit"
                 >
                   <span className="usa-search__submit-text">Search</span>
-                </button>
+                </Button>
               </div>
             </form>
           </FormGroup>

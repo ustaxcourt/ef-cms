@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { CircleXmark } from './icons';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const tertiaryBaseStyles = cn(
   'tw:px-0 tw:py-0 tw:bg-transparent tw:font-normal tw:underline', // standard
@@ -21,7 +22,7 @@ const primaryColors = cn(
 
 const buttonVariants = cva(
   cn(
-    'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
+    'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:cursor-not-allowed tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
     'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
     'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
     'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
@@ -72,50 +73,60 @@ const buttonVariants = cva(
   },
 );
 
-export function Button({
-  className,
-  variant,
-  iconPosition = 'left',
-  asChild = false,
-  icon,
-  children,
-  ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-    icon?: IconProp;
-    iconPosition?: 'left' | 'right';
-  }) {
-  const Comp = asChild ? Slot : 'button';
+export const Button = connect(
+  {
+    readOnlyMode: state.readOnlyMode,
+  },
+  function Button({
+    asChild = false,
+    children,
+    className,
+    icon,
+    iconPosition = 'left',
+    overrideReadOnly = false,
+    readOnlyMode,
+    variant,
+    ...props
+  }: React.ComponentProps<'button'> &
+    VariantProps<typeof buttonVariants> & {
+      asChild?: boolean;
+      icon?: IconProp;
+      iconPosition?: 'left' | 'right';
+      overrideReadOnly?: boolean;
+      readOnlyMode?: boolean;
+    }) {
+    const Comp = asChild ? Slot : 'button';
 
-  const Icon = icon ? (
-    <FontAwesomeIcon
-      className={`${iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2'} tw:xs:w-4.5! tw:w-4! tw:xs:h-4.5! tw:h-4!`}
-      icon={icon}
-      role="img"
-      aria-label={'icon'}
-    />
-  ) : null;
+    const Icon = icon ? (
+      <FontAwesomeIcon
+        className={`${iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2'} tw:xs:w-4.5! tw:w-4! tw:xs:h-4.5! tw:h-4!`}
+        icon={icon}
+        role="img"
+        aria-label={'icon'}
+      />
+    ) : null;
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, className }))}
-      {...props}
-      role="button"
-    >
-      {variant === 'terminatorButton' ? (
-        <div>
-          <span>{children}</span>
-          <CircleXmark />
-        </div>
-      ) : (
-        <>
-          {iconPosition === 'left' && Icon}
-          {children}
-          {iconPosition === 'right' && Icon}
-        </>
-      )}
-    </Comp>
-  );
-}
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, className }))}
+        data-slot="button"
+        {...props}
+        disabled={props.disabled || (readOnlyMode && !overrideReadOnly)}
+        role="button"
+      >
+        {variant === 'terminatorButton' ? (
+          <div>
+            <span>{children}</span>
+            <CircleXmark />
+          </div>
+        ) : (
+          <>
+            {iconPosition === 'left' && Icon}
+            {children}
+            {iconPosition === 'right' && Icon}
+          </>
+        )}
+      </Comp>
+    );
+  },
+);

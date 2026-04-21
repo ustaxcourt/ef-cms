@@ -120,6 +120,7 @@ export const EditUploadCourtIssuedDocument = connect(
                       Save
                     </Button>
                     <Button
+                      overrideReadOnly
                       link
                       onClick={() => {
                         formCancelToggleCancelSequence();

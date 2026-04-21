@@ -195,6 +195,7 @@ export const BeforeStartingCase = connect(
               {"I'm Ready to Start"}
             </Button>
             <Button
+              overrideReadOnly
               className="before-case-button before-case-follow-up-button"
               data-testid="print-this-page"
               secondary={true}

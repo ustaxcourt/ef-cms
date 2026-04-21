@@ -134,6 +134,7 @@ export const EditPetitionerCounsel = connect(
                 Save
               </Button>
               <Button
+                overrideReadOnly
                 link
                 onClick={() => {
                   formCancelToggleCancelSequence();

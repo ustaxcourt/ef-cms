@@ -3,7 +3,7 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
+} from '../helpers/parseArgsAndEnvVars';
 import { sendMaintenanceNotificationsLambda } from '@web-api/lambdas/cases/sendMaintenanceNotificationsLambda';
 
 const scriptConfig: ScriptConfig = {

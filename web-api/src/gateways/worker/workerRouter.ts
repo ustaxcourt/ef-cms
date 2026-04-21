@@ -1,10 +1,13 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { reinvoke } from '@web-api/dispatchers/lambda/reinvoke';
+import { pick } from 'lodash';
 
 export type WorkerMessage = {
   payload: any;
   type: WorkerMessageType;
   authorizedUser: AuthUser;
+  delay?: number; // seconds
 };
 
 export const MESSAGE_TYPES = {
@@ -12,6 +15,7 @@ export const MESSAGE_TYPES = {
   QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES: 'QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES',
   QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
   UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
+  RESCHEDULE_LAMBDA: 'RESCHEDULE_LAMBDA',
 } as const;
 export type WorkerMessageType =
   (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
@@ -61,6 +65,12 @@ export const workerRouter = async (
           message.payload,
           message.authorizedUser,
         );
+      break;
+    case MESSAGE_TYPES.RESCHEDULE_LAMBDA:
+      await reinvoke(
+        applicationContext,
+        pick(message.payload, ['functionName', 'originalEvent']),
+      );
       break;
     default:
       throw new Error(
