@@ -1,8 +1,8 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { createApplicationContext } from '../../applicationContext';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
-import { sendWithRetry } from '../../dispatchers/ses/sendBulkTemplatedEmail';
-import { getDawsonLogger } from 'web-api/src/utilities/logger/getDawsonLogger';
+import { sendWithRetry } from '@web-api/dispatchers/ses/sendBulkTemplatedEmail';
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
