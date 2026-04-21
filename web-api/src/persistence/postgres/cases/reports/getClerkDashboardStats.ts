@@ -1,4 +1,8 @@
-import { calculateDate, FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  FORMATS,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 

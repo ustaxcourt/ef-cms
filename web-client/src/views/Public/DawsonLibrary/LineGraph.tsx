@@ -71,7 +71,8 @@ const RotatedTickX = (props: any) => {
         dy={20}
         textAnchor="end"
         fill="#000"
-        className="tw:text-xl tw:max-[480px]:text-base tw:font-bold"
+        fontSize="1rem"
+        fontWeight="600"
         transform="rotate(-45)"
       >
         {payload.value}
@@ -90,11 +91,55 @@ const StraightTickX = (props: any) => {
         dy={20}
         textAnchor="middle"
         fill="#000"
-        className="tw:text-xl tw:max-[480px]:text-base tw:font-semibold"
+        fontSize="1rem"
+        fontWeight="600"
       >
         {payload.value}
       </text>
     </g>
+  );
+};
+
+// ─── Tooltip content ─────────────────────────────────────────────────────────
+
+const TooltipContent = ({
+  active,
+  datasets,
+  label,
+  mergedData,
+}: {
+  active?: boolean;
+  datasets: LineGraphDataset[];
+  label?: string | number;
+  mergedData: Record<string, any>[];
+}) => {
+  if (!active || !label) return null;
+  const row = mergedData.find(d => d.name === label);
+  if (!row) return null;
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+    >
+      <div className="tw:font-bold tw:text-xl tw:max-[480px]:text-base">
+        {label}
+      </div>
+      {datasets.map((ds, i) => {
+        const color = ds.color || defaultColors[i % defaultColors.length];
+        return (
+          <div key={ds.label} className="tw:flex tw:items-center tw:gap-2">
+            <span
+              className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
+              style={{ backgroundColor: color }}
+            />
+            <span className="tw:text-xl tw:max-[480px]:text-base">
+              {ds.label} : {row[`${ds.label}_tip`]}
+            </span>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
@@ -141,7 +186,13 @@ export const LineGraph: React.FC<LineGraphProps> = ({
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
-  const chartHeight = isMobile ? 600 : height;
+  const rootFontSize =
+    typeof window !== 'undefined'
+      ? parseFloat(getComputedStyle(window.document.documentElement).fontSize)
+      : 16;
+  const chartHeightPx = isMobile
+    ? 37.5 * rootFontSize
+    : (height / 16) * rootFontSize;
 
   // Two data arrays:
   // chartData - uses null for gaps (drives the visible line)
@@ -177,7 +228,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             className="tw:mt-0 tw:mb-8"
             style={{
               color: '#000',
-              paddingLeft: '140px',
+              paddingLeft: '80px',
               textAlign: 'left',
             }}
           >
@@ -185,7 +236,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
           </h2>
         )}
         {showLegend && (
-          <div style={{ paddingLeft: '140px' }}>
+          <div style={{ paddingLeft: '80px' }}>
             {renderCustomLegend({
               payload: datasets.map((ds, i) => ({
                 color: ds.color || defaultColors[i % defaultColors.length],
@@ -196,7 +247,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         )}
         <ResponsiveContainer
           width="100%"
-          height={chartHeight}
+          height={chartHeightPx}
           style={{ outline: 'none' }}
         >
           <LineChart
@@ -211,45 +262,19 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             {showGrid && <CartesianGrid strokeDasharray="3 3" />}
             <Tooltip
               cursor={{ stroke: '#ccc', strokeWidth: 1 }}
-              content={({ active, label }) => {
-                if (!active) return null;
-                const row = mergedData.find(d => d.name === label);
-                if (!row) return null;
-                return (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
-                  >
-                    <div className="tw:font-bold tw:text-xl tw:max-[480px]:text-base">
-                      {label}
-                    </div>
-                    {datasets.map((ds, i) => {
-                      const color =
-                        ds.color || defaultColors[i % defaultColors.length];
-                      return (
-                        <div
-                          key={ds.label}
-                          className="tw:flex tw:items-center tw:gap-2"
-                        >
-                          <span
-                            className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded tw:max-[480px]:w-3 tw:max-[480px]:h-3"
-                            style={{ backgroundColor: color }}
-                          />
-                          <span className="tw:text-xl tw:max-[480px]:text-base">
-                            {ds.label} : {row[`${ds.label}_tip`]}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              }}
+              content={({ active, label }) => (
+                <TooltipContent
+                  active={active}
+                  datasets={datasets}
+                  label={label}
+                  mergedData={mergedData}
+                />
+              )}
             />
             <XAxis
               dataKey="name"
               interval={0}
-              height={xLabelRotation ? 120 : 60}
+              height={xLabelRotation ? 120 : 55}
               tick={
                 xLabelRotation
                   ? (tickProps: any) => <RotatedTickX {...tickProps} />
@@ -259,9 +284,9 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                 xAxisLabel
                   ? {
                       fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '600',
-                      offset: xLabelRotation ? -70 : -20,
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                      offset: xLabelRotation ? -70 : -10,
                       position: 'insideBottom',
                       value: xAxisLabel,
                     }
@@ -270,15 +295,15 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             />
             <YAxis
               width={80}
-              tick={{ fill: '#000', fontSize: '1.25rem' }}
+              tick={{ fill: '#000', fontSize: '1rem', fontWeight: '600' }}
               label={
                 yAxisLabel
                   ? {
                       angle: -90,
                       fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '600',
-                      offset: 10,
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                      offset: 20,
                       position: 'insideLeft',
                       value: yAxisLabel,
                     }
