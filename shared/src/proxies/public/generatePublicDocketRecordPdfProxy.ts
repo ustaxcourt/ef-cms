@@ -11,7 +11,8 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
  * API Gateway caps synchronous responses at 29 seconds, but very large
  * docket records take longer than that to render. Instead we POST to the
  * public "start" endpoint, which kicks off a background worker and returns
- * a `fileId`, then poll the status endpoint for the presigned URL.
+ * a `jobId`, then poll the status endpoint until it returns a presigned
+ * `url`.
  */
 export const generatePublicDocketRecordPdfInteractor = async (
   applicationContext,
@@ -38,7 +39,7 @@ export const generatePublicDocketRecordPdfInteractor = async (
     // otherwise every poll returns the first `pending` response until deadline.
     const response = await getResponse({
       applicationContext,
-      endpoint: `/public-api/cases/${docketNumber}/docket-record-status/${jobId}`,
+      endpoint: `/public-api/docket-record-status/${jobId}`,
     });
     const result = response.data;
 
