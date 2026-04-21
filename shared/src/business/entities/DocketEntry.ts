@@ -392,6 +392,11 @@ export class DocketEntry extends JoiValidationEntity {
       this.servedParties = servedParties;
       this.servedPartiesCode = getServedPartiesCode(servedParties);
     }
+
+    if (!this.originallyFiledDocketNumber) {
+      this.originallyFiledDocketNumber = this.docketNumber;
+    }
+
     return this;
   }
 
