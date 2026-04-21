@@ -24,7 +24,6 @@ export const Login = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
     dismissAlertSequence: sequences.dismissAlertSequence,
-    readOnlyMode: state.readOnlyMode,
   },
   ({
     alertInfo,
@@ -37,7 +36,6 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
-    readOnlyMode,
   }) => {
     return (
       <>
@@ -132,7 +130,6 @@ export const Login = connect(
                           aria-label="Login"
                           data-testid="login-button"
                           variant="primary"
-                          disabled={readOnlyMode}
                         >
                           Log in
                         </Button>

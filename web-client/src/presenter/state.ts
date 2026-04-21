@@ -951,6 +951,7 @@ export const baseState = {
     waitingForResponseRequests: 0,
     waitText: undefined as string | undefined,
   },
+  readOnlyPollingInterval: undefined as unknown as NodeJS.Timeout,
   redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
