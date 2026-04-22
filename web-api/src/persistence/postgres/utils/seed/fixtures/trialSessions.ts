@@ -275,11 +275,7 @@ export const trialSessions: RawTrialSession[] = [
       userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
     },
     startDate: '2030-11-25T05:00:00.000Z',
-    estimatedEndDate: calculateISODate({
-      dateString: trialSessionStartingTodayStartDate,
-      howMuch: 30,
-      units: 'days',
-    }),
+    estimatedEndDate: '2031-11-25T05:00:00.000Z',
     maxCases: 125,
     trialSessionId: 'a1b04943-8ea8-422b-8990-dec3ca644c83',
     isCalendared: false,
