@@ -60,4 +60,17 @@ describe('rdsExpiredRecordsCleanupLambda', () => {
     expect(whereCalls[0][0]).toEqual('ttl');
     expect(whereCalls[0][1]).toEqual('<');
   });
+
+  it('should skip the cleanup entirely when read-only mode is engaged', async () => {
+    const ORIGINAL_READ_ONLY_MODE = process.env.READ_ONLY_MODE;
+    process.env.READ_ONLY_MODE = 'true';
+
+    try {
+      await rdsExpiredRecordsCleanupLambda(undefined, contextMock, jest.fn());
+      expect(getDbReader).not.toHaveBeenCalled();
+      expect(pgDeleteFrom).not.toHaveBeenCalled();
+    } finally {
+      process.env.READ_ONLY_MODE = ORIGINAL_READ_ONLY_MODE;
+    }
+  });
 });
