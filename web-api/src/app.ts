@@ -1226,7 +1226,12 @@ if (applicationContext.environment.stage === 'local') {
   // deployed lambdas read the value of the READ_ONLY_MODE environment variable
   // we expose this endpoint locally to allow toggling of this value without restarting the API
   app.put('/read-only-mode', (req, res) => {
-    process.env.READ_ONLY_MODE = req.body.readOnlyMode ? 'true' : 'false';
+    // Use a strict check so that a stringified "false" (e.g. "false") is not
+    // treated as truthy. Only boolean true or the exact string "true" engages
+    // read-only mode.
+    const requestedValue = req.body?.readOnlyMode;
+    const isReadOnly = requestedValue === true || requestedValue === 'true';
+    process.env.READ_ONLY_MODE = isReadOnly ? 'true' : 'false';
     res.status(200).send('OK');
   });
 }
