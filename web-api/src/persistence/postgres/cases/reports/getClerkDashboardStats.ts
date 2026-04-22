@@ -209,14 +209,41 @@ export const getClerkDashboardStats = async ({
       casesFiledByMonth,
       closedCasesByMonth: closedByMonth,
       petitionsByMonth,
-      proceedingTypeCounts: proceedingTypeRows.map(r => ({
-        count: Number(r.count),
-        proceedingType: r.proceedingType,
-      })),
-      sessionTypeCounts: sessionTypeRows.map(r => ({
-        count: Number(r.count),
-        sessionType: r.sessionType,
-      })),
+      proceedingTypeCounts: (() => {
+        const PROCEEDING_TYPE_ORDER = ['In Person', 'Remote'];
+        const mapped = proceedingTypeRows.map(r => ({
+          count: Number(r.count),
+          proceedingType: r.proceedingType,
+        }));
+        return mapped.sort((a, b) => {
+          const aIdx = PROCEEDING_TYPE_ORDER.indexOf(a.proceedingType);
+          const bIdx = PROCEEDING_TYPE_ORDER.indexOf(b.proceedingType);
+          const aOrder = aIdx === -1 ? PROCEEDING_TYPE_ORDER.length : aIdx;
+          const bOrder = bIdx === -1 ? PROCEEDING_TYPE_ORDER.length : bIdx;
+          return aOrder - bOrder;
+        });
+      })(),
+      sessionTypeCounts: (() => {
+        const SESSION_TYPE_ORDER = [
+          'Regular',
+          'Hybrid',
+          'Small',
+          'Hybrid-S',
+          'Motion/Hearing',
+          'Special',
+        ];
+        const mapped = sessionTypeRows.map(r => ({
+          count: Number(r.count),
+          sessionType: r.sessionType,
+        }));
+        return mapped.sort((a, b) => {
+          const aIdx = SESSION_TYPE_ORDER.indexOf(a.sessionType);
+          const bIdx = SESSION_TYPE_ORDER.indexOf(b.sessionType);
+          const aOrder = aIdx === -1 ? SESSION_TYPE_ORDER.length : aIdx;
+          const bOrder = bIdx === -1 ? SESSION_TYPE_ORDER.length : bIdx;
+          return aOrder - bOrder;
+        });
+      })(),
       specialSessionsByLocation: specialSessionRows
         .filter(r => r.trialLocation !== null)
         .map(r => ({
