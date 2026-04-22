@@ -22,6 +22,7 @@ export const FormCancelModalDialog = connect<Props, typeof deps>(
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         confirmLabel="Yes, Cancel"
+        confirmOverrideReadOnly
         confirmSequence={onCancelSequence}
         message="If you cancel, your form selections will be lost."
         title="Are You Sure You Want to Cancel?"

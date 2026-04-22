@@ -64,6 +64,7 @@ export const FilePetitionButtons = connect<
           className="create-petition-navigation-buttons"
           data-testid={`step-${currentStep}-next-button`}
           disabled={isNextButtonDisabled}
+          overrideReadOnly={currentStep < 6}
           onClick={e => {
             if (resetFocus) {
               e.preventDefault();
@@ -78,6 +79,7 @@ export const FilePetitionButtons = connect<
           <Button
             secondary
             className="create-petition-navigation-buttons create-petition-navigation-follow-up-buttons"
+            overrideReadOnly
             onClick={() => {
               filePetitionGoBackAStepSequence();
             }}
