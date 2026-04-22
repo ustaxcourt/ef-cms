@@ -77,8 +77,6 @@ export const updateTrialSession = async (
     'estimatedEndDate',
     'irsCalendarAdministrator',
     'irsCalendarAdministratorInfo',
-    'term',
-    'termYear',
     'trialClerk',
     'trialClerkId',
   ];
@@ -121,20 +119,12 @@ export const updateTrialSession = async (
     authorizedUser?.role === ROLES.caseServicesSupervisor;
 
   if (isCaseServicesSupervisorLimitedEdit) {
-    const normalizedIncoming = new TrialSession({
-      ...currentTrialSession,
-      ...trialSession,
-    }).toRawObject();
-    const normalizedCurrent = new TrialSession(
-      currentTrialSession,
-    ).toRawObject();
-
     const limitedEditableFieldSet = new Set<string>(LIMITED_EDITABLE_FIELDS);
-    const disallowedChanges = Object.keys(normalizedIncoming).filter(key => {
+    const disallowedChanges = Object.keys(currentTrialSession).filter(key => {
       if (limitedEditableFieldSet.has(key)) return false;
       return (
-        JSON.stringify(normalizedIncoming[key]) !==
-        JSON.stringify(normalizedCurrent[key])
+        JSON.stringify(trialSession[key]) !==
+        JSON.stringify(currentTrialSession[key])
       );
     });
 
@@ -150,9 +140,7 @@ export const updateTrialSession = async (
     : ALL_EDITABLE_FIELDS;
 
   const editableFields = Object.fromEntries(
-    allowedFields
-      .filter(key => key in trialSession)
-      .map(key => [key, trialSession[key]]),
+    allowedFields.map(key => [key, trialSession[key]]),
   );
 
   const updatedTrialSessionEntity = new TrialSession({

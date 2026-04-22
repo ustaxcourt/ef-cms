@@ -96,7 +96,6 @@ describe('updateTrialSessionInteractor', () => {
     it('should update estimated end date if CSS user and start date is in the past', async () => {
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
-        createdAt: '2000-02-01T21:40:46.415Z',
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
       });
@@ -105,10 +104,11 @@ describe('updateTrialSessionInteractor', () => {
         applicationContext,
         {
           trialSession: {
-            createdAt: '2000-02-01T21:40:46.415Z',
+            ...TEST_TRIAL_SESSION,
             trialSessionId: TEST_TRIAL_SESSION_ID,
+            startDate: '2000-03-01T21:40:46.415Z',
             estimatedEndDate: '2000-04-01T21:40:46.415Z',
-          } as RawTrialSession,
+          },
           clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         },
         mockCaseServicesSupervisorUser,
