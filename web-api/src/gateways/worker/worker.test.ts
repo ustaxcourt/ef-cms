@@ -36,4 +36,34 @@ describe('worker', () => {
       }),
     );
   });
+
+  it('should propagate the message.delay value to the SQS DelaySeconds', async () => {
+    const mockMessage: WorkerMessage = {
+      authorizedUser: {
+        email: 'person@hello.com',
+        name: 'ignored',
+        role: 'adc',
+        userId: 'ignored',
+      },
+      delay: 180,
+      payload: {
+        abc: 'def',
+      },
+      type: MESSAGE_TYPES.RESCHEDULE_LAMBDA,
+    };
+    const mockQueueUrl = 'www.send_a_message.com';
+    applicationContext.environment.workerQueueUrl = mockQueueUrl;
+
+    await worker(applicationContext, {
+      message: mockMessage,
+    });
+
+    expect(applicationContext.getMessagingClient().send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: expect.objectContaining({
+          DelaySeconds: 180,
+        }),
+      }),
+    );
+  });
 });
