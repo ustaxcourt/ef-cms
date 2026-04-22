@@ -31,11 +31,11 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import {
-  createISODateString,
   formatDateString,
   formatNow,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -55,63 +55,101 @@ export const updateTrialSession = async (
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
-  const now = formatNow(FORMATS.YYYYMMDD);
-  const startDate = formatDateString(
+  const startDateFormatted = formatDateString(
     currentTrialSession.startDate,
     FORMATS.YYYYMMDD,
   );
-  const isStartDateInPast =
-    currentTrialSession.startDate < createISODateString();
-  const isEndDateInFuture =
-    createISODateString() < currentTrialSession.estimatedEndDate!;
+  const nowFormatted = formatNow(FORMATS.YYYYMMDD);
 
-  const ongoing = isStartDateInPast && isEndDateInFuture;
-  const isToday = now === startDate;
-
-  if (!isEndDateInFuture && isStartDateInPast && !isToday) {
+  if (
+    startDateFormatted <= nowFormatted &&
+    authorizedUser &&
+    authorizedUser.role !== ROLES.caseServicesSupervisor
+  ) {
     throw new Error(
-      'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
+      'Trial session cannot be updated after its start date and you are not a case services supervisor.',
     );
   }
 
-  if (ongoing && currentTrialSession.startDate !== trialSession.startDate) {
-    throw new Error(
-      'Trial session start date cannot be updated if the trial session is ongoing.',
-    );
+  const LIMITED_EDITABLE_FIELDS: string[] = [
+    'alternateTrialClerkName',
+    'courtReporter',
+    'estimatedEndDate',
+    'irsCalendarAdministrator',
+    'irsCalendarAdministratorInfo',
+    'trialClerk',
+    'trialClerkId',
+  ];
+
+  const ALL_EDITABLE_FIELDS: string[] = [
+    'address1',
+    'address2',
+    'alternateTrialClerkName',
+    'chambersPhoneNumber',
+    'city',
+    'courtReporter',
+    'courthouseName',
+    'dismissedAlertForNott',
+    'estimatedEndDate',
+    'irsCalendarAdministrator',
+    'irsCalendarAdministratorInfo',
+    'joinPhoneNumber',
+    'judge',
+    'maxCases',
+    'meetingId',
+    'notes',
+    'password',
+    'postalCode',
+    'proceedingType',
+    'sessionType',
+    'startDate',
+    'startTime',
+    'state',
+    'swingSession',
+    'swingSessionId',
+    'term',
+    'termYear',
+    'trialClerk',
+    'trialClerkId',
+    'trialLocation',
+  ];
+
+  const isCaseServicesSupervisorLimitedEdit =
+    startDateFormatted <= nowFormatted &&
+    authorizedUser?.role === ROLES.caseServicesSupervisor;
+
+  if (isCaseServicesSupervisorLimitedEdit) {
+    const normalizedIncoming = new TrialSession({
+      ...currentTrialSession,
+      ...trialSession,
+    }).toRawObject();
+    const normalizedCurrent = new TrialSession(
+      currentTrialSession,
+    ).toRawObject();
+
+    const limitedEditableFieldSet = new Set<string>(LIMITED_EDITABLE_FIELDS);
+    const disallowedChanges = Object.keys(normalizedIncoming).filter(key => {
+      if (limitedEditableFieldSet.has(key)) return false;
+      return (
+        JSON.stringify(normalizedIncoming[key]) !==
+        JSON.stringify(normalizedCurrent[key])
+      );
+    });
+
+    if (disallowedChanges.length > 0) {
+      throw new UnauthorizedError(
+        `Case services supervisor can only edit: ${LIMITED_EDITABLE_FIELDS.join(', ')}. Unauthorized changes: ${disallowedChanges.join(', ')}`,
+      );
+    }
   }
 
-  const editableFields = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    alternateTrialClerkName: trialSession.alternateTrialClerkName,
-    chambersPhoneNumber: trialSession.chambersPhoneNumber,
-    city: trialSession.city,
-    courtReporter: trialSession.courtReporter,
-    courthouseName: trialSession.courthouseName,
-    dismissedAlertForNott: trialSession.dismissedAlertForNott,
-    estimatedEndDate: trialSession.estimatedEndDate,
-    irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
-    irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
-    joinPhoneNumber: trialSession.joinPhoneNumber,
-    judge: trialSession.judge,
-    maxCases: trialSession.maxCases,
-    meetingId: trialSession.meetingId,
-    notes: trialSession.notes,
-    password: trialSession.password,
-    postalCode: trialSession.postalCode,
-    proceedingType: trialSession.proceedingType,
-    sessionType: trialSession.sessionType,
-    startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
-    state: trialSession.state,
-    swingSession: trialSession.swingSession,
-    swingSessionId: trialSession.swingSessionId,
-    term: trialSession.term,
-    termYear: trialSession.termYear,
-    trialClerk: trialSession.trialClerk,
-    trialClerkId: trialSession.trialClerkId,
-    trialLocation: trialSession.trialLocation,
-  };
+  const allowedFields = isCaseServicesSupervisorLimitedEdit
+    ? LIMITED_EDITABLE_FIELDS
+    : ALL_EDITABLE_FIELDS;
+
+  const editableFields = Object.fromEntries(
+    allowedFields.map(key => [key, trialSession[key]]),
+  );
 
   const updatedTrialSessionEntity = new TrialSession({
     ...currentTrialSession,
