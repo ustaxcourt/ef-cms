@@ -80,10 +80,10 @@ const renderCustomLegend = (props: any) => {
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-12 tw:h-12"
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-semibold tw:text-xl">
+          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
             {entry.total != null
               ? `${entry.value}: ${entry.total.toLocaleString()}`
               : entry.value}
@@ -123,8 +123,8 @@ const SingleBarTickX = (props: any) => {
           dy={16 + i * lineHeight}
           textAnchor="middle"
           fill="#000"
-          fontSize={20}
-          fontWeight="bold"
+          fontSize="1.25rem"
+          fontWeight="600"
         >
           {line}
         </text>
@@ -178,10 +178,10 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   const yMax = Math.ceil((rawMax * 1.1) / 10) * 10;
 
   const [isMobileSingle, setIsMobileSingle] = useState(
-    typeof window !== 'undefined' && window.innerWidth <= 480,
+    typeof window !== 'undefined' && window.innerWidth < 480,
   );
   useEffect(() => {
-    const update = () => setIsMobileSingle(window.innerWidth <= 480);
+    const update = () => setIsMobileSingle(window.innerWidth < 480);
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
@@ -221,7 +221,6 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
             <Tooltip
-              cursor={false}
               content={({ active, payload, label }) => {
                 if (!active || !payload || payload.length === 0) return null;
                 const item = data.find(d => d.label === label);
@@ -230,17 +229,15 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                   <div
                     role="status"
                     aria-live="polite"
-                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+                    className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                   >
-                    <div className="tw:font-bold tw:text-xl">{label}</div>
+                    <div className="tw:font-bold">{label}</div>
                     <div className="tw:flex tw:items-center tw:gap-2">
                       <span
-                        className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded"
+                        className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
                         style={{ backgroundColor: color }}
                       />
-                      <span className="tw:text-xl">
-                        value : {payload[0]?.value}
-                      </span>
+                      <span>value : {payload[0]?.value}</span>
                     </div>
                   </div>
                 );
@@ -254,8 +251,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 xAxisLabel
                   ? {
                       fill: '#000',
-                      fontSize: 20,
-                      fontWeight: 'bold',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
                       offset: -(bottomMargin - 25),
                       position: 'insideBottom',
                       value: xAxisLabel,
@@ -265,7 +262,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
             />
             <YAxis
               domain={[0, yMax]}
-              tick={{ fontSize: 20, fill: '#000', fontWeight: 'bold' }}
+              tick={{ fontSize: '1.25rem', fill: '#000', fontWeight: '400' }}
               axisLine={true}
               tickLine={false}
               label={
@@ -273,8 +270,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                   ? {
                       angle: -90,
                       fill: '#000',
-                      fontSize: 20,
-                      fontWeight: 'bold',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
                       offset: 10,
                       position: 'insideLeft',
                       value: yAxisLabel,
@@ -287,8 +284,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
               dataKey="value"
               isAnimationActive={false}
               stroke="#000"
-              strokeWidth={1}
-              activeBar={false}
+              strokeWidth={2}
             >
               {data.map((item, index) => (
                 <Cell
@@ -319,7 +315,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                           y={y + 28}
                           textAnchor="middle"
                           fill={datalabelColor}
-                          fontSize={20}
+                          fontSize="1.25rem"
                           fontWeight="bold"
                         >
                           {val}
@@ -332,7 +328,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                           y={y - 6}
                           textAnchor="middle"
                           fill="#000000"
-                          fontSize={20}
+                          fontSize="1.25rem"
                           fontWeight="bold"
                         >
                           {val}
@@ -375,7 +371,7 @@ const MultiBarLabel = (props: any) => {
   const isSmall = ratio < threshold;
 
   const textColor = isSmall ? '#000000' : '#ffffff';
-  const fontSize = 20;
+  const fontSize = '1.25rem';
   const fontWeight = 'bold';
 
   if (stacked) {
@@ -450,8 +446,8 @@ const RotatedTickX = (props: any) => {
         dy={8}
         textAnchor="end"
         fill="#000"
-        fontSize={20}
-        fontWeight="bold"
+        fontSize="1.25rem"
+        fontWeight="600"
         transform="rotate(-45)"
       >
         {payload.value}
@@ -474,13 +470,20 @@ const MultiBarTickX = (props: any) => {
         dy={14}
         textAnchor="middle"
         fill="#000"
-        fontSize={20}
-        fontWeight="bold"
+        fontSize="1.25rem"
+        fontWeight="600"
       >
         {payload.value}
       </text>
       {total != null && (
-        <text x={0} y={0} dy={34} textAnchor="middle" fill="#000" fontSize={16}>
+        <text
+          x={0}
+          y={0}
+          dy={34}
+          textAnchor="middle"
+          fill="#000"
+          fontSize="1rem"
+        >
           {total}
         </text>
       )}
@@ -576,10 +579,10 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }
 
   const [isMobileMulti, setIsMobileMulti] = useState(
-    typeof window !== 'undefined' && window.innerWidth <= 480,
+    typeof window !== 'undefined' && window.innerWidth < 480,
   );
   useEffect(() => {
-    const update = () => setIsMobileMulti(window.innerWidth <= 480);
+    const update = () => setIsMobileMulti(window.innerWidth < 480);
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
@@ -619,26 +622,25 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
             )}
             <Tooltip
-              cursor={false}
               content={({ active, payload, label }) => {
                 if (!active || !payload || payload.length === 0) return null;
                 return (
                   <div
                     role="status"
                     aria-live="polite"
-                    className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+                    className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                   >
-                    <div className="tw:font-bold tw:text-xl">{label}</div>
+                    <div className="tw:font-bold">{label}</div>
                     {payload.map((p: any) => (
                       <div
                         key={p.dataKey}
                         className="tw:flex tw:items-center tw:gap-2"
                       >
                         <span
-                          className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:shrink-0 tw:border tw:rounded"
+                          className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
                           style={{ backgroundColor: p.fill || p.color }}
                         />
-                        <span className="tw:text-xl">
+                        <span>
                           {p.dataKey} : {p.value}
                         </span>
                       </div>
@@ -650,7 +652,6 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             <XAxis
               dataKey="name"
               interval={0}
-              tickLine={false}
               tick={
                 hasTwoLineTicks
                   ? (tickProps: any) => (
@@ -661,15 +662,15 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                     )
                   : xAngle !== 0
                     ? (tickProps: any) => <RotatedTickX {...tickProps} />
-                    : { fill: '#000', fontSize: 20 }
+                    : { fill: '#000', fontSize: '1.25rem', fontWeight: '600' }
               }
               height={xAxisHeight}
               label={
                 xAxisLabel
                   ? {
                       fill: '#000',
-                      fontSize: 20,
-                      fontWeight: 'bold',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
                       offset: -10,
                       position: 'insideBottom',
                       value: xAxisLabel,
@@ -679,14 +680,14 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
             />
             <YAxis
               domain={[0, yMax]}
-              tick={{ fill: '#000', fontSize: 20, fontWeight: 'bold' }}
+              tick={{ fill: '#000', fontSize: '1.25rem', fontWeight: '400' }}
               label={
                 yAxisLabel
                   ? {
                       angle: -90,
                       fill: '#000',
-                      fontSize: 20,
-                      fontWeight: 'bold',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
                       offset: 10,
                       position: 'insideLeft',
                       value: yAxisLabel,
@@ -705,8 +706,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                   isAnimationActive={false}
                   stackId={stacked ? 'stack' : undefined}
                   stroke="#000"
-                  strokeWidth={1}
-                  activeBar={false}
+                  strokeWidth={2}
                 >
                   {showLabels && (
                     <LabelList
