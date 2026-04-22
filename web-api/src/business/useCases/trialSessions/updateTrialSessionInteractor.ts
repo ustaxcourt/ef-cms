@@ -150,7 +150,9 @@ export const updateTrialSession = async (
     : ALL_EDITABLE_FIELDS;
 
   const editableFields = Object.fromEntries(
-    allowedFields.map(key => [key, trialSession[key]]),
+    allowedFields
+      .filter(key => key in trialSession)
+      .map(key => [key, trialSession[key]]),
   );
 
   const updatedTrialSessionEntity = new TrialSession({
