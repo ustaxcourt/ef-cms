@@ -96,7 +96,7 @@ export const CaseListTable = connect(
             <>
               {dashboardExternalHelper.showFilingFee && (
                 <div
-                  className={`tw:mb-[30px] ${isMobile ? '' : 'text-right'} `}
+                  className={`margin-bottom-1 ${isMobile ? '' : 'text-right'} `}
                 >
                   *Filing fee status may take 2-3 business days from payment
                   received date or approval of waiver to update.
@@ -105,7 +105,7 @@ export const CaseListTable = connect(
               <div
                 ref={paginatorTop}
                 data-testid="casePaginationTop"
-                className="tw:mb-[30px] grid-col"
+                className="tw:mb-[30px] tw:mt-[30px] grid-col"
               >
                 <Paginator
                   currentPageIndex={casePagination.activePage}
@@ -168,7 +168,7 @@ export const CaseListTable = connect(
                         sortField="filingFee"
                         sortType="string"
                         tableSort={caseListTableSort}
-                        title="Filing Fee"
+                        title="Filing Fee*"
                         onSort={sortTableSequence}
                         stateKey="caseListTableSort"
                       />
@@ -316,10 +316,10 @@ export const CaseListTable = connect(
                 {dashboardExternalHelper.showFilingFee && (
                   <>
                     <option value="filingFee-asc">
-                      Filing Fee (Ascending)
+                      Filing Fee* (Ascending)
                     </option>
                     <option value="filingFee-desc">
-                      Filing Fee (Descending)
+                      Filing Fee* (Descending)
                     </option>
                   </>
                 )}
