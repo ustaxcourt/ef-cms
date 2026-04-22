@@ -22,6 +22,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { concat } from 'lodash';
+
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
   {

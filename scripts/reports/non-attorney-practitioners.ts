@@ -13,7 +13,7 @@ import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandle
 import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pick, sortBy } from 'lodash';
 import { substantiveEventCodes } from './non-attorney-practitioners-constants';
 

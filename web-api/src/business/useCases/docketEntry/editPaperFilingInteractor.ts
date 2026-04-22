@@ -22,7 +22,6 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -31,6 +30,10 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
@@ -127,7 +130,7 @@ const getEditPaperFilingStrategy = ({
   throw new Error('No strategy found to edit paper filing');
 };
 
-const saveForLaterStrategy = async ({
+  const saveForLaterStrategy = async ({
   applicationContext,
   authorizedUser,
   caseEntity,
@@ -148,24 +151,26 @@ const saveForLaterStrategy = async ({
     );
   }
 
-  const updatedDocketEntryEntity = await updateDocketEntry({
-    applicationContext,
-    authorizedUser,
-    caseEntity,
-    docketEntry: docketEntryEntity,
-    documentMetadata: request.documentMetadata,
-    userId: user.userId,
-  });
+  await withTransaction(async () => {
+    const updatedDocketEntryEntity = await updateDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketEntry: docketEntryEntity,
+      documentMetadata: request.documentMetadata,
+      userId: user.userId,
+    });
 
-  await updateAndSaveWorkItem({
-    applicationContext,
-    docketEntry: updatedDocketEntryEntity,
-    user,
-  });
+    await updateAndSaveWorkItem({
+      applicationContext,
+      docketEntry: updatedDocketEntryEntity,
+      user,
+    });
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
 
   const { clientConnectionId, docketEntryId } = request;
@@ -259,7 +264,7 @@ const singleDocketServeStrategy = async ({
   });
 };
 
-// *********************************** Small Helper Functions ***********************************
+  // *********************************** Small Helper Functions ***********************************
 const serveDocketEntry = async ({
   applicationContext,
   authorizedUser,
@@ -296,48 +301,52 @@ const serveDocketEntry = async ({
       );
     }
 
-    const updatedDocketEntry = await updateDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity: subjectCaseEntity,
-      docketEntry: docketEntryEntity,
-      documentMetadata,
-      userId: user.userId,
-    });
+    await withTransaction(async () => {
+      const updatedDocketEntry = await updateDocketEntry({
+        applicationContext,
+        authorizedUser,
+        caseEntity: subjectCaseEntity,
+        docketEntry: docketEntryEntity,
+        documentMetadata,
+        userId: user.userId,
+      });
 
-    caseEntitiesToFileOn = await settlePromises(
-      caseEntitiesToFileOn.map(aCase =>
-        fileAndServeDocumentOnOneCase({
+      for (const aCase of caseEntitiesToFileOn) {
+        await fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
           user,
-        }),
-      ),
-    );
+        });
+      }
 
-    const paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities: caseEntitiesToFileOn,
-        docketEntryId: updatedDocketEntry.docketEntryId,
+      onTransactionCommit(async () => {
+        const paperServiceResult = await applicationContext
+          .getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf({
+            applicationContext,
+            caseEntities: caseEntitiesToFileOn,
+            docketEntryId: updatedDocketEntry.docketEntryId,
+          });
+
+        const paperServicePdfUrl = paperServiceResult?.pdfUrl;
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            clientConnectionId,
+            message: {
+              action: 'serve_document_complete',
+              alertSuccess: { message, overwritable: false },
+              docketEntryId: docketEntryEntity.docketEntryId,
+              generateCoversheet: true,
+              pdfUrl: paperServicePdfUrl,
+            },
+            userId: user.userId,
+          });
       });
-
-    const paperServicePdfUrl = paperServiceResult?.pdfUrl;
-
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_complete',
-        alertSuccess: { message, overwritable: false },
-        docketEntryId: docketEntryEntity.docketEntryId,
-        generateCoversheet: true,
-        pdfUrl: paperServicePdfUrl,
-      },
-      userId: user.userId,
     });
 
     await updateDocketEntryPendingServiceStatus({

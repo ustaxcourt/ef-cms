@@ -21,7 +21,6 @@ import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialS
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
-
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
   {

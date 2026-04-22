@@ -43,6 +43,7 @@ import {
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
@@ -475,7 +476,9 @@ const completeDocketEntryQC = async (
     }
   }
 
-  await settlePromises(updatePersistencePromises);
+  await withTransaction(async () => {
+    await settlePromises(updatePersistencePromises);
+  });
 
   if (isNewCoverSheetNeeded) {
     await applicationContext.getUseCases().addCoversheetInteractor(

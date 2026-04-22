@@ -1,5 +1,5 @@
-import { Database } from '@web-api/database-schema';
-import { getDbReader } from '@web-api/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { SelectQueryBuilder, sql } from 'kysely';
 import { DocketEntryKysely } from './schema';
 import { DW_DOCKET_ENTRY_COLUMNS } from './schema';
