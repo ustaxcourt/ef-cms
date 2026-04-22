@@ -1,3 +1,7 @@
 import { setReadOnlyModeAction } from '../actions/setReadOnlyModeAction';
+import { setReadOnlyModeModalAction } from '../actions/setReadOnlyModeModalAction';
 
-export const setReadOnlyModeSequence = [setReadOnlyModeAction];
+export const setReadOnlyModeSequence = [
+  setReadOnlyModeModalAction,
+  setReadOnlyModeAction,
+];
