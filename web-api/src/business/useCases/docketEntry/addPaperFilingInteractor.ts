@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
@@ -82,12 +81,16 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
+  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
+
+  let effectiveConsolidatedGroupDocketNumbers: string[] = [];
+
   if (isSavingForLater) {
-    consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
+    effectiveConsolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
-    consolidatedGroupDocketNumbers = [
+    effectiveConsolidatedGroupDocketNumbers = [
       subjectCaseDocketNumber,
-      ...consolidatedGroupDocketNumbers,
+      ...incomingGroupDocketNumbers,
     ];
   }
 
@@ -106,16 +109,16 @@ export const addPaperFiling = async (
   }
 
   const caseEntities: Case[] = [];
+
   let filedByFromLeadCase;
 
   const consolidatedGroupCases = await getCasesByDocketNumbers({
-    docketNumbers: consolidatedGroupDocketNumbers,
+    docketNumbers: effectiveConsolidatedGroupDocketNumbers,
   });
 
   await withTransaction(async () => {
     for (const rawCase of consolidatedGroupCases) {
       let caseEntity = new Case(rawCase, { authorizedUser });
-
       const docketEntryEntity = new DocketEntry(
         {
           ...documentMetadata,
@@ -127,6 +130,11 @@ export const addPaperFiling = async (
           filingDate: documentMetadata.receivedAt,
           isOnDocketRecord: true,
           mailingDate: documentMetadata.mailingDate,
+          multiDocketedOn:
+            effectiveConsolidatedGroupDocketNumbers.length > 1
+              ? effectiveConsolidatedGroupDocketNumbers
+              : [],
+          originallyFiledDocketNumber: subjectCaseDocketNumber,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
         },
         { authorizedUser, petitioners: caseEntity.petitioners },
@@ -226,7 +234,7 @@ export const addPaperFiling = async (
   }
 
   const successMessage =
-    consolidatedGroupDocketNumbers.length > 1
+    effectiveConsolidatedGroupDocketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
@@ -262,7 +270,7 @@ const saveWorkItemInternal = async ({ workItem }) => {
   });
 };
 
-type DocumentMetadata = {
+export type DocumentMetadata = {
   docketNumber: string;
   isFileAttached: boolean;
   documentTitle: string;

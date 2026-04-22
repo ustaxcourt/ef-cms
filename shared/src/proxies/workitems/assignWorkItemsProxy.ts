@@ -1,3 +1,4 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { put } from '../requests';
 
 export const assignWorkItemsInteractor = (
@@ -6,12 +7,12 @@ export const assignWorkItemsInteractor = (
     assigneeId,
     assigneeName,
     workItem = undefined,
-    workItemId = undefined,
+    workItemIds = undefined,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItem?: object;
-    workItemId?: string;
+    workItem?: RawWorkItem;
+    workItemIds?: string[];
   },
 ) => {
   return put({
@@ -20,7 +21,7 @@ export const assignWorkItemsInteractor = (
       assigneeId,
       assigneeName,
       workItem,
-      workItemId,
+      workItemIds,
     },
     endpoint: '/work-items',
   });

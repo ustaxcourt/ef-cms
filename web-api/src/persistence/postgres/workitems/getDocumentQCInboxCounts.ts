@@ -6,7 +6,7 @@ import {
   Role,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { sql } from 'kysely';
+import { RawBuilder, sql } from 'kysely';
 
 /**
  * Computes QC inbox/inProgress/unread counts directly in SQL,
@@ -19,7 +19,8 @@ const isFileAttachedIsNotFalse = sql`de.is_file_attached IS DISTINCT FROM false`
 function getRoleBooleans(role: Role) {
   const isCaseServicesSupervisor = role === ROLES.caseServicesSupervisor;
   return {
-    canViewDocketSection: role === ROLES.docketClerk || isCaseServicesSupervisor,
+    canViewDocketSection:
+      role === ROLES.docketClerk || isCaseServicesSupervisor,
     canViewPetitionsSection:
       role === ROLES.petitionsClerk || isCaseServicesSupervisor,
   };
@@ -36,7 +37,6 @@ export const getDocumentQCInboxCountsForUser = async ({
 }): Promise<{
   inProgressCount: number;
   inboxCount: number;
-  unreadCount: number;
 }> => {
   const { canViewDocketSection, canViewPetitionsSection } =
     getRoleBooleans(role);
@@ -60,15 +60,8 @@ export const getDocumentQCInboxCountsForUser = async ({
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', 'is', null)
       .select([
-        sql<string>`COUNT(*) FILTER (WHERE ${inProgressCondition})`.as(
-          'inProgressCount',
-        ),
-        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as(
-          'inboxCount',
-        ),
-        sql<string>`COUNT(*) FILTER (WHERE w.is_read IS NOT TRUE)`.as(
-          'unreadCount',
-        ),
+        buildUniqueCount(inProgressCondition).as('inProgressCount'),
+        buildUniqueCount(inboxCondition).as('inboxCount'),
       ])
       .executeTakeFirstOrThrow(),
   );
@@ -76,7 +69,6 @@ export const getDocumentQCInboxCountsForUser = async ({
   return {
     inProgressCount: Number(result.inProgressCount),
     inboxCount: Number(result.inboxCount),
-    unreadCount: Number(result.unreadCount),
   };
 };
 
@@ -122,12 +114,8 @@ export const getDocumentQCInboxCountsForSection = async ({
 
     return builder
       .select([
-        sql<string>`COUNT(*) FILTER (WHERE ${inProgressCondition})`.as(
-          'inProgressCount',
-        ),
-        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as(
-          'inboxCount',
-        ),
+        buildUniqueCount(inProgressCondition).as('inProgressCount'),
+        buildUniqueCount(inboxCondition).as('inboxCount'),
       ])
       .executeTakeFirstOrThrow();
   });
@@ -156,6 +144,18 @@ function buildInProgressCondition({
     return sql`w.in_progress = true`;
   }
   return sql`false`;
+}
+
+/**
+ * SQL equivalent of countUniqueWorkItems:
+ * - items where multiDocketedOn.length < 2 are each counted individually
+ * - items where multiDocketedOn.length >= 2 are counted once per docketEntryId
+ */
+function buildUniqueCount(condition: RawBuilder<unknown>) {
+  return sql<string>`(
+    COUNT(*) FILTER (WHERE ${condition} AND jsonb_array_length(de.multi_docketed_on) < 2)
+    + COUNT(DISTINCT w.docket_entry_id) FILTER (WHERE ${condition} AND jsonb_array_length(de.multi_docketed_on) >= 2)
+  )`;
 }
 
 function buildInboxCondition({

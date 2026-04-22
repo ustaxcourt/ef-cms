@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '@shared/test/mockCase';
+import {
+  MOCK_CASE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { formatConsolidatedCaseCoversheetData } from './formatConsolidatedCaseCoversheetData';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
@@ -98,5 +101,35 @@ describe('formatConsolidatedCaseCoversheetData', () => {
     expect(result.consolidatedCases[1]).toMatchObject({
       documentNumber: 3,
     });
+  });
+
+  it('should format the case title and caption from the lead case', async () => {
+    getConsolidatedCases.mockResolvedValue([
+      {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        caseCaption: 'Test User On Lead Case, Petitioner',
+      },
+      {
+        caseCaption: 'Test User On Member Case, Intervenor',
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntry.docketEntryId,
+            index: 2,
+          },
+        ],
+        docketNumber: '102-19',
+      },
+    ]);
+
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      coverSheetData: {},
+      docketEntryEntity: mockDocketEntry,
+      useInitialData: false,
+    });
+
+    expect(result.caseTitle).toEqual('Test User On Lead Case, ');
+    expect(result.caseCaptionExtension).toEqual('Petitioner');
   });
 });

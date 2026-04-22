@@ -2166,6 +2166,15 @@ export const isLeadCase = (rawCase: {
   leadDocketNumber?: string;
 }): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
 
+export const isMemberCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean =>
+  Boolean(
+    rawCase.leadDocketNumber &&
+    rawCase.leadDocketNumber !== rawCase.docketNumber,
+  );
+
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>
     DocketEntry.isServed(docketEntry),
