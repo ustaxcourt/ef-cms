@@ -160,16 +160,6 @@ export const serveExternallyFiledDocument = async (
         );
       }
 
-      await applicationContext.getUseCases().addCoversheetInteractor(
-        applicationContext,
-        {
-          caseEntity: updatedSubjectCaseEntity,
-          docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-          docketNumber: updatedSubjectCaseEntity!.docketNumber,
-        },
-        authorizedUser,
-      );
-
       paperServiceResult = await applicationContext
         .getUseCaseHelpers()
         .serveDocumentAndGetPaperServicePdf({
@@ -184,6 +174,17 @@ export const serveExternallyFiledDocument = async (
           : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
       onTransactionCommit(async () => {
+        // Add coversheet after transaction commits successfully
+        await applicationContext.getUseCases().addCoversheetInteractor(
+          applicationContext,
+          {
+            caseEntity: updatedSubjectCaseEntity,
+            docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+            docketNumber: updatedSubjectCaseEntity!.docketNumber,
+          },
+          authorizedUser,
+        );
+
         await applicationContext.getNotificationGateway().sendNotificationToUser(
           {
             applicationContext,

@@ -760,4 +760,31 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       status: false,
     });
   });
+
+  it('should not add coversheet if transaction fails', async () => {
+    // Make serveDocumentAndGetPaperServicePdf fail
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('Service failed'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Service failed');
+
+    // Verify coversheet was NOT added since transaction failed
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
 });
