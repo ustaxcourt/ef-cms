@@ -9,7 +9,7 @@ const TIME_TO_LIVE_COLUMN = 'ttl';
 
 export const handler: Handler = async (_event, _context) => {
   if (process.env.READ_ONLY_MODE === 'true') {
-    console.log('Read-only mode is engaged. Skipping expiration cleanup.')
+    console.log('Read-only mode is engaged. Skipping expiration cleanup.');
     return;
   }
 
