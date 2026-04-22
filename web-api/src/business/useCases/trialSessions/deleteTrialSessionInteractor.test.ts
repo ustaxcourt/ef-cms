@@ -38,6 +38,7 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
@@ -197,4 +198,77 @@ describe('deleteTrialSessionInteractor', () => {
       }),
     );
   });
+
+  it('should not delete the trial session if the transaction fails', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    updateCaseAndAssociations.mockImplementationOnce(() => {
+      throw new Error('Transaction failed');
+    });
+
+    await expect(
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Transaction failed');
+
+    expect(deleteTrialSession).not.toHaveBeenCalled();
+  });
+
+  it('should not update the case if one of the cases fail to update', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    getCasesByDocketNumbers.mockResolvedValue([
+      { ...MOCK_CASE, docketNumber: '101-20' },                                    
+      { ...MOCK_CASE, docketNumber: '102-20' },      
+      { ...MOCK_CASE, docketNumber: '102-20' },                              
+    ]); 
+
+    updateCaseAndAssociations.mockResolvedValueOnce(MOCK_CASE);
+    updateCaseAndAssociations.mockRejectedValueOnce(new Error('Transaction failed'));
+
+    await expect(
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Transaction failed');
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+    expect(deleteTrialSession).not.toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).not.toHaveBeenCalled();
+  });
+
+  it('should delete the trial session and working copy when there are no cases', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [],
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(deleteTrialSessionWorkingCopy).toHaveBeenCalled();
+    expect(deleteTrialSession).toHaveBeenCalled();
+  });
+   
 });

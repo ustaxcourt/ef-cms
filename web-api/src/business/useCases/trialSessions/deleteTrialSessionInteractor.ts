@@ -13,6 +13,7 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * deleteTrialSession
@@ -31,8 +32,8 @@ export const deleteTrialSessionInteractor = async (
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -62,32 +63,48 @@ export const deleteTrialSessionInteractor = async (
       identifiers: docketNumbers?.map(item => `case|${item}`),
     });
 
-    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+    await withTransaction(async () => {
+      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-    for (const myCase of casesToUpdate) {
-      const caseEntity = new Case(myCase, { authorizedUser });
+      for (const myCase of casesToUpdate) {
+        const caseEntity = new Case(myCase, { authorizedUser });
 
-      caseEntity.removeFromTrial({});
+        caseEntity.removeFromTrial({});
 
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
+        await updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        });
+      }
+
+      if (trialSessionEntity.judge) {
+        await deleteTrialSessionWorkingCopy({
+          trialSessionId,
+          userId: trialSessionEntity.judge.userId,
+        });
+      }
+
+      await deleteTrialSession({
+        trialSessionId,
       });
-    }
+    });
 
     await removeLockFunction();
-  }
+  } else {
+    // No cases to remove, just delete the trial session
+    await withTransaction(async () => {
+      if (trialSessionEntity.judge) {
+        await deleteTrialSessionWorkingCopy({
+          trialSessionId,
+          userId: trialSessionEntity.judge.userId,
+        });
+      }
 
-  if (trialSessionEntity.judge) {
-    await deleteTrialSessionWorkingCopy({
+      await deleteTrialSession({
         trialSessionId,
-        userId: trialSessionEntity.judge.userId,
       });
+    });
   }
-
-  await deleteTrialSession({
-    trialSessionId,
-  });
 
   return trialSessionEntity.toRawObject();
 };
