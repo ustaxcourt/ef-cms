@@ -56,6 +56,15 @@ export type ClerkDashboardStats = {
   specialSessionsByLocation: ClerkDashboardSpecialSessionLocation[];
 };
 
+const sortByOrder = <T>(items: T[], order: string[], key: keyof T): T[] =>
+  [...items].sort((a, b) => {
+    const aIdx = order.indexOf(a[key] as string);
+    const bIdx = order.indexOf(b[key] as string);
+    const aOrder = aIdx === -1 ? order.length : aIdx;
+    const bOrder = bIdx === -1 ? order.length : bIdx;
+    return aOrder - bOrder;
+  });
+
 export const getClerkDashboardStats = async ({
   year,
 }: {
@@ -209,14 +218,22 @@ export const getClerkDashboardStats = async ({
       casesFiledByMonth,
       closedCasesByMonth: closedByMonth,
       petitionsByMonth,
-      proceedingTypeCounts: proceedingTypeRows.map(r => ({
-        count: Number(r.count),
-        proceedingType: r.proceedingType,
-      })),
-      sessionTypeCounts: sessionTypeRows.map(r => ({
-        count: Number(r.count),
-        sessionType: r.sessionType,
-      })),
+      proceedingTypeCounts: sortByOrder(
+        proceedingTypeRows.map(r => ({
+          count: Number(r.count),
+          proceedingType: r.proceedingType,
+        })),
+        ['In Person', 'Remote'],
+        'proceedingType',
+      ),
+      sessionTypeCounts: sortByOrder(
+        sessionTypeRows.map(r => ({
+          count: Number(r.count),
+          sessionType: r.sessionType,
+        })),
+        ['Regular', 'Hybrid', 'Small', 'Hybrid-S', 'Motion/Hearing', 'Special'],
+        'sessionType',
+      ),
       specialSessionsByLocation: specialSessionRows
         .filter(r => r.trialLocation !== null)
         .map(r => ({
