@@ -77,6 +77,8 @@ export const updateTrialSession = async (
     'estimatedEndDate',
     'irsCalendarAdministrator',
     'irsCalendarAdministratorInfo',
+    'term',
+    'termYear',
     'trialClerk',
     'trialClerkId',
   ];
