@@ -26,7 +26,10 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
+import {
+  mockCaseServicesSupervisorUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import {
   determineEntitiesToLock,
@@ -90,30 +93,35 @@ describe('updateTrialSessionInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('should throw an error when start date is in the past', async () => {
+    it('should update estimated end date if CSS user and start date is in the past', async () => {
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
+        createdAt: '2000-02-01T21:40:46.415Z',
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
       });
 
-      await expect(
-        updateTrialSession(
-          applicationContext,
-          {
-            trialSession: {
-              trialSessionId: TEST_TRIAL_SESSION_ID,
-            } as unknown as RawTrialSession,
-            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-          },
-          mockCaseServicesSupervisorUser,
-        ),
-      ).rejects.toThrow(
-        'Trial session cannot be updated if it is not ongoing and the start date is in the past.',
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            createdAt: '2000-02-01T21:40:46.415Z',
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            estimatedEndDate: '2000-04-01T21:40:46.415Z',
+          } as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
       );
+
+      const updateTrialSessionCalls = updateTrialSessionMocked.mock.calls;
+      expect(updateTrialSessionCalls.length).toEqual(1);
+      expect(updateTrialSessionCalls[0][0].trialSessionToUpdate).toMatchObject({
+        estimatedEndDate: '2000-04-01T21:40:46.415Z',
+      });
     });
 
-    it('should throw an error if the trial session is ongoing and they are trying to change the start date', async () => {
+    it('should throw an error if the non CSS user tries to edit any field when start date is today or in the past', async () => {
       const tomorrow = calculateISODate({
         dateString: createISODateString(),
         howMuch: 1,
@@ -134,14 +142,43 @@ describe('updateTrialSessionInteractor', () => {
               trialSessionId: TEST_TRIAL_SESSION_ID,
               startDate: '2001-03-01T21:40:46.415Z',
               estimatedEndDate: tomorrow,
-            } as unknown as RawTrialSession,
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Trial session cannot be updated after its start date and you are not a case services supervisor.',
+      );
+    });
+
+    it('should throw an error if CSS user tries to edit non allowed field when start date is today or in the past', async () => {
+      const tomorrow = calculateISODate({
+        dateString: createISODateString(),
+        howMuch: 1,
+        units: 'days',
+      });
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+        estimatedEndDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2001-03-01T21:40:46.415Z',
+              estimatedEndDate: tomorrow,
+            } as RawTrialSession,
             clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           },
           mockCaseServicesSupervisorUser,
         ),
-      ).rejects.toThrow(
-        'Trial session start date cannot be updated if the trial session is ongoing.',
-      );
+      ).rejects.toThrow('Case services supervisor can only edit:');
     });
 
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {
