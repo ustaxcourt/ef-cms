@@ -62,10 +62,10 @@ describe('updateCaseContextInteractor', () => {
     ).rejects.toThrow('Unauthorized for update case');
   });
 
-  it('should call updateCase with the updated case status and return the updated case', async () => {
+  it('should call updateCaseAndAssociations with the updated case status', async () => {
     getCaseByDocketNumber.mockResolvedValue(Promise.resolve(MOCK_CASE));
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.cav,
@@ -73,12 +73,16 @@ describe('updateCaseContextInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
   });
 
   it('should not remove the case from trial if the old and new case status match', async () => {
     const rachaelId = 'dabbad00-18d0-43ec-bafb-654e83405416';
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.new,
@@ -91,13 +95,16 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.new);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.new);
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
     ).not.toHaveBeenCalled();
   });
 
-  it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
+  it('should call updateCaseAndAssociations and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
     const rachaelId = 'dabbad00-18d0-43ec-bafb-654e83405416';
 
     getCaseByDocketNumber.mockResolvedValue(
@@ -106,7 +113,7 @@ describe('updateCaseContextInteractor', () => {
 
     getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REMOTE);
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.cav,
@@ -119,14 +126,17 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
-    expect(result.associatedJudge).toEqual('Judge Rachael');
-    expect(result.associatedJudgeId).toEqual(rachaelId);
-    expect(result.trialSessionId).toBeUndefined();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+    expect(casePassedToUpdate.associatedJudge).toEqual('Judge Rachael');
+    expect(casePassedToUpdate.associatedJudgeId).toEqual(rachaelId);
+    expect(casePassedToUpdate.trialSessionId).toBeUndefined();
   });
 
-  it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is General Docket - Not At Issue', async () => {
-    const result = await updateCaseContextInteractor(
+  it('should call updateCaseAndAssociations and remove the case from trial if the old case status was calendared and the new case status is General Docket - Not At Issue', async () => {
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -135,19 +145,22 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
-    expect(result.associatedJudge).toEqual(CHIEF_JUDGE);
-    expect(result.associatedJudgeId).toEqual(undefined);
-    expect(result.trialSessionId).toBeUndefined();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.generalDocket);
+    expect(casePassedToUpdate.associatedJudge).toEqual(CHIEF_JUDGE);
+    expect(casePassedToUpdate.associatedJudgeId).toEqual(undefined);
+    expect(casePassedToUpdate.trialSessionId).toBeUndefined();
   });
 
-  it('should call updateCase if the old case status was Ready for Trial and the new status is different', async () => {
+  it('should call updateCaseAndAssociations if the old case status was Ready for Trial and the new status is different', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -156,7 +169,10 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.generalDocket);
   });
 
   it('should remove case deadlines if case is status is closed', async () => {
@@ -165,7 +181,7 @@ describe('updateCaseContextInteractor', () => {
     ]);
     deleteCaseDeadline.mockResolvedValue({} as any);
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.closed,
@@ -174,7 +190,10 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.closed);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.closed);
     expect(deleteCaseDeadline).toHaveBeenCalledWith({
       caseDeadlineId: '123',
     });
@@ -203,7 +222,7 @@ describe('updateCaseContextInteractor', () => {
 
     deleteCaseDeadline.mockResolvedValue({} as any);
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.closed,
@@ -212,7 +231,10 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.closed);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.closed);
 
     const deleteCaseDeadlineCalls = deleteCaseDeadline.mock.calls;
     expect(deleteCaseDeadlineCalls.length).toEqual(1);
@@ -270,7 +292,7 @@ describe('updateCaseContextInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.closed,
@@ -278,13 +300,17 @@ describe('updateCaseContextInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(result.automaticBlocked).toEqual(false);
-    expect(result.automaticBlockedReason).toBeUndefined();
-    expect(result.automaticBlockedDate).toBeUndefined();
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.automaticBlocked).toEqual(false);
+    expect(casePassedToUpdate.automaticBlockedReason).toBeUndefined();
+    expect(casePassedToUpdate.automaticBlockedDate).toBeUndefined();
   });
 
-  it('should call updateCase if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
-    const result = await updateCaseContextInteractor(
+  it('should call updateCaseAndAssociations if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -294,11 +320,14 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-
-    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    );
   });
 
-  it('should call updateCase if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
+  it('should call updateCaseAndAssociations if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       trialDate: '2019-03-01T21:40:46.415Z',
@@ -309,7 +338,7 @@ describe('updateCaseContextInteractor', () => {
       return caseToUpdate;
     });
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -318,8 +347,12 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    );
   });
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
@@ -330,7 +363,7 @@ describe('updateCaseContextInteractor', () => {
       status: CASE_STATUS_TYPES.submitted,
     });
 
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -342,13 +375,16 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
-    expect(result.associatedJudge).toEqual('Judge Carluzzo');
-    expect(result.associatedJudgeId).toEqual('carluzzo-id');
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.submitted);
+    expect(casePassedToUpdate.associatedJudge).toEqual('Judge Carluzzo');
+    expect(casePassedToUpdate.associatedJudgeId).toEqual('carluzzo-id');
   });
 
   it('should only update the associated judge without changing the status if the associated judge and the same case status are passed in', async () => {
-    const result = await updateCaseContextInteractor(
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseStatus: CASE_STATUS_TYPES.submitted,
@@ -361,13 +397,16 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
-    expect(result.associatedJudge).toEqual('Judge Carluzzo');
-    expect(result.associatedJudgeId).toEqual('carluzzo-id');
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.status).toEqual(CASE_STATUS_TYPES.submitted);
+    expect(casePassedToUpdate.associatedJudge).toEqual('Judge Carluzzo');
+    expect(casePassedToUpdate.associatedJudgeId).toEqual('carluzzo-id');
   });
 
-  it('should call updateCase with the updated case caption and return the updated case', async () => {
-    const result = await updateCaseContextInteractor(
+  it('should call updateCaseAndAssociations with the updated case caption', async () => {
+    await updateCaseContextInteractor(
       applicationContext,
       {
         caseCaption: 'The new case caption',
@@ -376,6 +415,9 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.caseCaption).toEqual('The new case caption');
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.caseCaption).toEqual('The new case caption');
   });
 });

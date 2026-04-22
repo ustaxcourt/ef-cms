@@ -100,15 +100,24 @@ export const genericHandler = (
         applicationContext,
         clientConnectionId,
       });
-
       const returnResults = dataSecurityFilter(results, {
         authorizedUser: user,
       });
 
       if (options.logResults !== false) {
-        getDawsonLogger().debug('Results:', {
-          results: returnResults,
-        });
+        const shouldSkipDetailedLog =
+          returnResults?.response &&
+          typeof returnResults.response === 'string' &&
+          returnResults.response.length > 100_000;
+        if (shouldSkipDetailedLog) {
+          getDawsonLogger().debug('Results: [SKIPPED - response too large]', {
+            responseLength: returnResults.response.length,
+          });
+        } else {
+          getDawsonLogger().debug('Results:', {
+            results: returnResults,
+          });
+        }
       }
 
       return returnResults;

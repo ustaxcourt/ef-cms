@@ -12,7 +12,7 @@ export const updateQcCompleteForTrialLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }): Promise<RawCase> => {
+  genericHandler(event, async ({ applicationContext }) => {
     return await updateQcCompleteForTrialInteractor(
       applicationContext,
       {
