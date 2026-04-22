@@ -57,5 +57,5 @@ export const generatePublicDocketRecordPdfWorkerLambda = event =>
         throw err;
       }
     },
-    { logResults: false },
+    { logResults: true },
   );
