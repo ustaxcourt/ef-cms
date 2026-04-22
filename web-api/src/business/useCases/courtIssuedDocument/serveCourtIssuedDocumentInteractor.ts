@@ -130,6 +130,7 @@ export const serveCourtIssuedDocument = async (
             ...omit(docketEntryToServe, ['index']),
             filingDate: createISODateString(),
             isOnDocketRecord: true,
+            originallyFiledDocketNumber: subjectCaseDocketNumber,
           },
           { authorizedUser },
         );

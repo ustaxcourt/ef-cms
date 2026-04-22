@@ -109,8 +109,8 @@ describe('editPaperFilingInteractor', () => {
       new WorkItem(workItem),
     );
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
   });
 

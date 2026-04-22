@@ -39,8 +39,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
 
     applicationContext

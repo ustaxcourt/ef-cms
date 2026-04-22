@@ -398,6 +398,14 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
+   * Set originallyFiledDocketNumber for the docket entry
+   * @param {string} docketNumber the docket number used to set originallyFiledDocketNumber
+   */
+  setOriginallyFiledDocketNumber(docketNumber: string) {
+    this.originallyFiledDocketNumber = docketNumber;
+  }
+
+  /**
    * Determines if the deadline should be auto-generated for the docket entry
    * @returns {Boolean} true or false if the deadline should be auto-generated
    */

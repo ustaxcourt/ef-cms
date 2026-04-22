@@ -405,6 +405,10 @@ const completeDocketEntryQC = async (
         documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
       });
 
+      noticeUpdatedDocketEntry.setOriginallyFiledDocketNumber(
+        currentCase.docketNumber,
+      );
+
       noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
       currentCase.addDocketEntry(noticeUpdatedDocketEntry);
