@@ -3,11 +3,15 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+interface ReadOnlyBannerProps {
+  readOnlyMode: boolean;
+}
+
 export const ReadOnlyBanner = connect(
   {
     readOnlyMode: state.readOnlyMode,
   },
-  function ReadOnlyBanner({ readOnlyMode }) {
+  function ReadOnlyBanner({ readOnlyMode }: ReadOnlyBannerProps): React.JSX.Element | null {
     if (!readOnlyMode) return null;
 
     return (
