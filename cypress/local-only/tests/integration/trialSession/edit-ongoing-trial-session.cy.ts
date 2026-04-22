@@ -311,7 +311,7 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     cy.get('[data-testid="assignments-sessions-trial-clerk"]').contains('Abu');
   });
 
-  it.only('should not let trial session update minute sheets if minute sheets have already been opened', () => {
+  it('should not let trial session update minute sheets if minute sheets have already been opened', () => {
     loginAsCohenChambers();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get(
@@ -377,7 +377,7 @@ describe('Case Services Supervisor edits an ongoing trial session', () => {
     );
   });
 
-  it.only('should auto populate minute sheets if not already been opened', () => {
+  it('should auto populate minute sheets if not already been opened', () => {
     loginAsCaseServicesSupervisor();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get(
