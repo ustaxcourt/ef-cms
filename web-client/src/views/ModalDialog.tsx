@@ -28,6 +28,7 @@ export const ModalDialog = ({
   showButtons = true,
   title,
   useRunConfirmSequence = false,
+  confirmOverrideReadOnly = false,
 }: {
   cancelLabel?: string;
   cancelLink?: boolean;
@@ -51,6 +52,7 @@ export const ModalDialog = ({
   title?: string;
   useRunConfirmSequence?: boolean;
   preventCancelOnBlur?: any;
+  confirmOverrideReadOnly?: boolean;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
@@ -167,6 +169,7 @@ export const ModalDialog = ({
                   className="modal-button-confirm"
                   data-testid="modal-button-confirm"
                   disabled={disableSubmit}
+                  overrideReadOnly={confirmOverrideReadOnly}
                   href={confirmHref}
                   id="modal-button-confirm"
                   target={confirmTarget}
