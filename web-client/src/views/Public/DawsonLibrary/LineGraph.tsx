@@ -47,10 +47,10 @@ const renderCustomLegend = (props: any) => {
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-12 tw:h-12 tw:max-[480px]:w-10 tw:max-[480px]:h-10"
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-semibold tw:text-xl tw:max-[480px]:text-base">
+          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
             {entry.value}
           </span>
         </div>
@@ -122,9 +122,7 @@ const TooltipContent = ({
       aria-live="polite"
       className="tw:bg-white tw:py-2 tw:px-3 tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
     >
-      <div className="tw:font-bold tw:text-xl tw:max-[480px]:text-base">
-        {label}
-      </div>
+      <div className="tw:font-bold tw:text-base tw:xs:text-xl">{label}</div>
       {datasets.map((ds, i) => {
         const color = ds.color || defaultColors[i % defaultColors.length];
         return (
@@ -133,7 +131,7 @@ const TooltipContent = ({
               className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
               style={{ backgroundColor: color }}
             />
-            <span className="tw:text-xl tw:max-[480px]:text-base">
+            <span className="tw:text-base tw:xs:text-xl">
               {ds.label} : {row[`${ds.label}_tip`]}
             </span>
           </div>
@@ -179,10 +177,10 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   }
 
   const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth <= 480,
+    typeof window !== 'undefined' && window.innerWidth < 480,
   );
   useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth <= 480);
+    const update = () => setIsMobile(window.innerWidth < 480);
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
@@ -218,10 +216,10 @@ export const LineGraph: React.FC<LineGraphProps> = ({
 
   return (
     <div className="tw:overflow-x-auto">
-      {/* tw:max-[480px]:!w-[1000px] overrides the inline width at mobile — confirm 1000px? */}
+      {/* tw:max-[479px]:!w-[1000px] overrides the inline width at mobile — confirm 1000px? */}
       <div
         style={{ width: `${width}px` }}
-        className="tw:max-[480px]:!w-[1000px]"
+        className="tw:sw:max-[480px]:!w-[1000px]"
       >
         {title && (
           <h2
@@ -295,7 +293,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             />
             <YAxis
               width={80}
-              tick={{ fill: '#000', fontSize: '1rem', fontWeight: '600' }}
+              tick={{ fill: '#000', fontSize: '1rem', fontWeight: '400' }}
               label={
                 yAxisLabel
                   ? {
