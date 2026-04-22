@@ -65,7 +65,6 @@ export const DashboardClerkOfCourt = connect(
                         data={procedureTypePieData}
                       />
                       <PieGraph
-                        legendFlow="row"
                         title="Session Type"
                         data={sessionTypePieData}
                       />

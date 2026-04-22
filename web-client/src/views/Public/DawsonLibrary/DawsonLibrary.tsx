@@ -218,7 +218,6 @@ export const DawsonLibrary = () => {
               { name: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
               { name: 'Special', value: 2.5, color: '#E5A000' },
             ]}
-            legendFlow="row"
           />
         </div>
       </div>

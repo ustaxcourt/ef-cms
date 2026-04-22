@@ -93,6 +93,8 @@ export const PieGraph = ({
   isAnimationActive?: boolean;
   legendFlow?: 'row' | 'column';
 }) => {
+  const resolvedLegendFlow = data.length > 2 ? 'row' : legendFlow;
+
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
@@ -121,7 +123,7 @@ export const PieGraph = ({
             wrapperStyle={{ paddingBottom: 0 }}
             content={() => (
               <ul
-                className={`tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 ${legendFlow === 'column' ? 'tw:grid-rows-2 tw:grid-flow-col' : 'tw:grid-cols-3 tw:grid-flow-row'}`}
+                className={`tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 ${resolvedLegendFlow === 'column' ? 'tw:grid-rows-2 tw:grid-flow-col' : 'tw:grid-cols-3 tw:grid-flow-row'}`}
               >
                 {data.map(entry => (
                   <li key={entry.name} className="tw:flex tw:items-center">
