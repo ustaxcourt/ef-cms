@@ -14,7 +14,7 @@
 #
 # Usage examples:
 #   ENV=dev CURRENT_COLOR=blue REGION=us-east-1 AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KEY=... \
-#     ./scripts/engage-read-only-mode.sh
+#     ./scripts/maintenance/engage-read-only-mode.sh
 #   npm run read-only:engage
 
 ./check-env-variables.sh \
