@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   BarChart,
   Bar,
@@ -24,7 +24,6 @@ export interface SingleBarGraphProps {
   data: BarGraphData[];
   title?: string;
   width?: number;
-  height?: number;
   showLegend?: boolean;
   showGrid?: boolean;
   xAxisLabel?: string;
@@ -50,7 +49,6 @@ export interface MultiBarGraphProps {
   labels: string[];
   title?: string;
   width?: number;
-  height?: number;
   showLegend?: boolean;
   showGrid?: boolean;
   xAxisLabel?: string;
@@ -76,11 +74,11 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:justify-start tw:py-2">
+    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:justify-start tw:pb-5 tw:xs:pb-8">
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
           <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
@@ -91,6 +89,48 @@ const renderCustomLegend = (props: any) => {
         </div>
       ))}
     </div>
+  );
+};
+
+// ─── Shared Y-axis tick ──────────────────────────────────────────────────────
+
+const YAxisTick = (props: any) => {
+  const { x, y, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="#000"
+        className="tw:text-base tw:xs:text-xl"
+        fontWeight="400"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
+// ─── Shared Y-axis label ─────────────────────────────────────────────────────
+
+const BarYAxisLabel = ({ value, viewBox }: any) => {
+  const { x, y, height: h, width: w } = viewBox;
+  const cx = x + (w ?? 60) / 2;
+  const cy = y + h / 2;
+  return (
+    <text
+      x={cx}
+      y={cy}
+      textAnchor="middle"
+      fill="#000"
+      className="tw:text-base tw:xs:text-xl"
+      fontWeight="bold"
+      transform={`rotate(-90, ${cx}, ${cy})`}
+    >
+      {value}
+    </text>
   );
 };
 
@@ -123,7 +163,7 @@ const SingleBarTickX = (props: any) => {
           dy={16 + i * lineHeight}
           textAnchor="middle"
           fill="#000"
-          fontSize="1.25rem"
+          className="tw:text-base tw:xs:text-xl"
           fontWeight="600"
         >
           {line}
@@ -139,12 +179,10 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   data,
   title,
   width = 1344,
-  height = 800,
   showLegend = false,
   showGrid = true,
   xAxisLabel,
   yAxisLabel,
-  titleColor = '#000',
   datalabelColor = '#fff',
   showLabels = true,
 }) => {
@@ -177,16 +215,6 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   const rawMax = Math.max(...data.map(d => d.value));
   const yMax = Math.ceil((rawMax * 1.1) / 10) * 10;
 
-  const [isMobileSingle, setIsMobileSingle] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 480,
-  );
-  useEffect(() => {
-    const update = () => setIsMobileSingle(window.innerWidth < 480);
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  const chartHeight = isMobileSingle ? 600 : height;
-
   // Extra bottom margin to accommodate multi-line wrapped x-axis labels
   const maxLabelWords = Math.max(...data.map(d => d.label.split(' ').length));
   const estimatedLabelLines = Math.ceil(maxLabelWords / 2);
@@ -194,153 +222,143 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
 
   return (
     <div className="tw:overflow-x-auto">
-      <div style={{ width: `${width}px` }}>
+      <div
+        style={
+          {
+            '--chart-width': `${width / 16}rem`,
+            '--chart-width-mobile': '50rem',
+          } as React.CSSProperties
+        }
+        className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
+      >
         {title && (
-          <h2
-            style={{
-              color: titleColor,
-              margin: 0,
-              padding: '10px 0 8px',
-              paddingLeft: '80px',
-              textAlign: 'left',
-            }}
-          >
-            {title}
-          </h2>
+          <h2 className="tw:xs:text-4xl tw:text-2xl tw:m-0">{title}</h2>
         )}
-        <ResponsiveContainer
-          width="100%"
-          height={chartHeight}
-          style={{ outline: 'none' }}
-        >
-          <BarChart
-            data={chartData}
-            margin={{ top: 30, right: 30, left: 20, bottom: bottomMargin }}
+        <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            style={{ outline: 'none' }}
           >
-            {showGrid && (
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            )}
-            <Tooltip
-              content={({ active, payload, label }) => {
-                if (!active || !payload || payload.length === 0) return null;
-                const item = data.find(d => d.label === label);
-                const color = item?.color || '#005EA2';
-                return (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
-                  >
-                    <div className="tw:font-bold">{label}</div>
-                    <div className="tw:flex tw:items-center tw:gap-2">
-                      <span
-                        className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
-                        style={{ backgroundColor: color }}
-                      />
-                      <span>value : {payload[0]?.value}</span>
-                    </div>
-                  </div>
-                );
-              }}
-            />
-            <XAxis
-              dataKey="label"
-              tick={<SingleBarTickX />}
-              interval={0}
-              label={
-                xAxisLabel
-                  ? {
-                      fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '700',
-                      offset: -(bottomMargin - 25),
-                      position: 'insideBottom',
-                      value: xAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            <YAxis
-              domain={[0, yMax]}
-              tick={{ fontSize: '1.25rem', fill: '#000', fontWeight: '400' }}
-              axisLine={true}
-              tickLine={false}
-              label={
-                yAxisLabel
-                  ? {
-                      angle: -90,
-                      fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '700',
-                      offset: 10,
-                      position: 'insideLeft',
-                      value: yAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            {showLegend && <Legend content={renderCustomLegend} />}
-            <Bar
-              dataKey="value"
-              isAnimationActive={false}
-              stroke="#000"
-              strokeWidth={2}
+            <BarChart
+              data={chartData}
+              margin={{ top: 30, right: 30, left: 0, bottom: bottomMargin }}
             >
-              {data.map((item, index) => (
-                <Cell
-                  key={index}
-                  fill={
-                    item.color || defaultColors[index % defaultColors.length]
-                  }
-                />
-              ))}
-              {showLabels && (
-                <LabelList
-                  dataKey="value"
-                  content={(labelProps: any) => {
-                    const {
-                      x,
-                      y,
-                      width: bw,
-                      height: bh,
-                      value: val,
-                    } = labelProps;
-                    if (val == null) return null;
-                    const cx = x + bw / 2;
-                    const labelFitsInside = bh > 36;
-                    if (labelFitsInside) {
-                      return (
-                        <text
-                          x={cx}
-                          y={y + 28}
-                          textAnchor="middle"
-                          fill={datalabelColor}
-                          fontSize="1.25rem"
-                          fontWeight="bold"
-                        >
-                          {val}
-                        </text>
-                      );
-                    } else {
-                      return (
-                        <text
-                          x={cx}
-                          y={y - 6}
-                          textAnchor="middle"
-                          fill="#000000"
-                          fontSize="1.25rem"
-                          fontWeight="bold"
-                        >
-                          {val}
-                        </text>
-                      );
-                    }
-                  }}
-                />
+              {showGrid && (
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
               )}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+              <Tooltip
+                content={({ active, payload, label }) => {
+                  if (!active || !payload || payload.length === 0) return null;
+                  const item = data.find(d => d.label === label);
+                  const color = item?.color || '#005EA2';
+                  return (
+                    <div
+                      role="status"
+                      aria-live="polite"
+                      className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+                    >
+                      <div className="tw:font-bold">{label}</div>
+                      <div className="tw:flex tw:items-center tw:gap-2">
+                        <span
+                          className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
+                          style={{ backgroundColor: color }}
+                        />
+                        <span>value : {payload[0]?.value}</span>
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+              <XAxis
+                dataKey="label"
+                tick={<SingleBarTickX />}
+                interval={0}
+                label={
+                  xAxisLabel
+                    ? {
+                        fill: '#000',
+                        fontSize: '1.25rem',
+                        fontWeight: '700',
+                        offset: -(bottomMargin - 25),
+                        position: 'insideBottom',
+                        value: xAxisLabel,
+                      }
+                    : undefined
+                }
+              />
+              <YAxis
+                domain={[0, yMax]}
+                tick={<YAxisTick />}
+                axisLine={true}
+                tickLine={false}
+                label={
+                  yAxisLabel ? <BarYAxisLabel value={yAxisLabel} /> : undefined
+                }
+              />
+              {showLegend && <Legend content={renderCustomLegend} />}
+              <Bar
+                dataKey="value"
+                isAnimationActive={false}
+                stroke="#000"
+                strokeWidth={2}
+              >
+                {data.map((item, index) => (
+                  <Cell
+                    key={index}
+                    fill={
+                      item.color || defaultColors[index % defaultColors.length]
+                    }
+                  />
+                ))}
+                {showLabels && (
+                  <LabelList
+                    dataKey="value"
+                    content={(labelProps: any) => {
+                      const {
+                        x,
+                        y,
+                        width: bw,
+                        height: bh,
+                        value: val,
+                      } = labelProps;
+                      if (val == null) return null;
+                      const cx = x + bw / 2;
+                      const labelFitsInside = bh > 36;
+                      if (labelFitsInside) {
+                        return (
+                          <text
+                            x={cx}
+                            y={y + 28}
+                            textAnchor="middle"
+                            fill={datalabelColor}
+                            fontSize="1.25rem"
+                            fontWeight="bold"
+                          >
+                            {val}
+                          </text>
+                        );
+                      } else {
+                        return (
+                          <text
+                            x={cx}
+                            y={y - 6}
+                            textAnchor="middle"
+                            fill="#000000"
+                            fontSize="1.25rem"
+                            fontWeight="bold"
+                          >
+                            {val}
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                )}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
@@ -446,7 +464,7 @@ const RotatedTickX = (props: any) => {
         dy={8}
         textAnchor="end"
         fill="#000"
-        fontSize="1.25rem"
+        className="tw:text-base tw:xs:text-xl"
         fontWeight="600"
         transform="rotate(-45)"
       >
@@ -470,7 +488,7 @@ const MultiBarTickX = (props: any) => {
         dy={14}
         textAnchor="middle"
         fill="#000"
-        fontSize="1.25rem"
+        className="tw:text-base tw:xs:text-xl"
         fontWeight="600"
       >
         {payload.value}
@@ -496,7 +514,6 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   labels,
   title,
   width = 1344,
-  height = 800,
   showLegend = true,
   showGrid = true,
   xAxisLabel,
@@ -578,170 +595,159 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     );
   }
 
-  const [isMobileMulti, setIsMobileMulti] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 480,
-  );
-  useEffect(() => {
-    const update = () => setIsMobileMulti(window.innerWidth < 480);
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  const chartHeight = isMobileMulti ? 600 : height;
-
   return (
     <div className="tw:overflow-x-auto">
-      <div style={{ width: `${width}px` }}>
+      <div
+        style={
+          {
+            '--chart-width': `${width / 16}rem`,
+            '--chart-width-mobile': '50rem',
+          } as React.CSSProperties
+        }
+        className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
+      >
         {title && (
-          <h2
-            style={{
-              color: '#000',
-              margin: 0,
-              padding: '10px 0 8px',
-              paddingLeft: '80px',
-              textAlign: 'left',
-            }}
-          >
+          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
             {title}
           </h2>
         )}
         {showLegend && (
-          <div style={{ paddingLeft: '80px' }}>
-            {renderCustomLegend({ payload: legendPayload })}
-          </div>
+          <div>{renderCustomLegend({ payload: legendPayload })}</div>
         )}
-        <ResponsiveContainer
-          width="100%"
-          height={chartHeight}
-          style={{ outline: 'none' }}
-        >
-          <BarChart
-            data={chartData}
-            margin={{ bottom: bottomMargin, left: 20, right: 30, top: 30 }}
+        <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            style={{ outline: 'none' }}
           >
-            {showGrid && (
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            )}
-            <Tooltip
-              content={({ active, payload, label }) => {
-                if (!active || !payload || payload.length === 0) return null;
-                return (
-                  <div
-                    role="status"
-                    aria-live="polite"
-                    className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
-                  >
-                    <div className="tw:font-bold">{label}</div>
-                    {payload.map((p: any) => (
-                      <div
-                        key={p.dataKey}
-                        className="tw:flex tw:items-center tw:gap-2"
-                      >
-                        <span
-                          className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
-                          style={{ backgroundColor: p.fill || p.color }}
-                        />
-                        <span>
-                          {p.dataKey} : {p.value}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                );
-              }}
-            />
-            <XAxis
-              dataKey="name"
-              interval={0}
-              tick={
-                hasTwoLineTicks
-                  ? (tickProps: any) => (
-                      <MultiBarTickX
-                        {...tickProps}
-                        columnTotals={columnTotals}
-                      />
-                    )
-                  : xAngle !== 0
-                    ? (tickProps: any) => <RotatedTickX {...tickProps} />
-                    : { fill: '#000', fontSize: '1.25rem', fontWeight: '600' }
-              }
-              height={xAxisHeight}
-              label={
-                xAxisLabel
-                  ? {
-                      fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '700',
-                      offset: -10,
-                      position: 'insideBottom',
-                      value: xAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            <YAxis
-              domain={[0, yMax]}
-              tick={{ fill: '#000', fontSize: '1.25rem', fontWeight: '400' }}
-              label={
-                yAxisLabel
-                  ? {
-                      angle: -90,
-                      fill: '#000',
-                      fontSize: '1.25rem',
-                      fontWeight: '700',
-                      offset: 10,
-                      position: 'insideLeft',
-                      value: yAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            {datasets.map((ds, dsIndex) => {
-              const color =
-                ds.color || defaultColors[dsIndex % defaultColors.length];
-              return (
-                <Bar
-                  key={ds.label}
-                  dataKey={ds.label}
-                  fill={color}
-                  isAnimationActive={false}
-                  stackId={stacked ? 'stack' : undefined}
-                  stroke="#000"
-                  strokeWidth={2}
-                >
-                  {showLabels && (
-                    <LabelList
-                      dataKey={ds.label}
-                      content={(labelProps: any) => {
-                        const {
-                          x,
-                          y,
-                          width: bw,
-                          height: bh,
-                          value: val,
-                          index,
-                        } = labelProps;
-                        return (
-                          <MultiBarLabel
-                            key={`label-${dsIndex}-${index}`}
-                            colTotal={colTotals[index]}
-                            datasetLabel={ds.label}
-                            fill={color}
-                            height={bh}
-                            stacked={stacked}
-                            value={val}
-                            width={bw}
-                            x={x}
-                            y={y}
+            <BarChart
+              data={chartData}
+              margin={{ bottom: bottomMargin, left: 0, right: 30, top: 30 }}
+            >
+              {showGrid && (
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              )}
+              <Tooltip
+                content={({ active, payload, label }) => {
+                  if (!active || !payload || payload.length === 0) return null;
+                  const labelIndex = labels.indexOf(label as string);
+                  const colTotal =
+                    stacked && labelIndex >= 0 ? colTotals[labelIndex] : null;
+                  return (
+                    <div
+                      role="status"
+                      aria-live="polite"
+                      className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
+                    >
+                      <div className="tw:font-bold">{label}</div>
+                      {payload.map((p: any) => (
+                        <div
+                          key={p.dataKey}
+                          className="tw:flex tw:items-center tw:gap-2"
+                        >
+                          <span
+                            className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
+                            style={{ backgroundColor: p.fill || p.color }}
                           />
-                        );
-                      }}
-                    />
-                  )}
-                </Bar>
-              );
-            })}
-          </BarChart>
-        </ResponsiveContainer>
+                          <span>
+                            {p.dataKey} : {p.value}
+                          </span>
+                        </div>
+                      ))}
+                      {colTotal != null && (
+                        <div className="tw:border-t tw:border-gray-300 tw:pt-1 tw:mt-0.5">
+                          Total : {colTotal}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
+              />
+              <XAxis
+                dataKey="name"
+                interval={0}
+                tickMargin={8}
+                tick={
+                  hasTwoLineTicks
+                    ? (tickProps: any) => (
+                        <MultiBarTickX
+                          {...tickProps}
+                          columnTotals={columnTotals}
+                        />
+                      )
+                    : xAngle !== 0
+                      ? (tickProps: any) => <RotatedTickX {...tickProps} />
+                      : { fill: '#000', fontSize: '1.25rem', fontWeight: '600' }
+                }
+                height={xAxisHeight}
+                label={
+                  xAxisLabel
+                    ? {
+                        fill: '#000',
+                        fontSize: '1.25rem',
+                        fontWeight: '700',
+                        offset: -10,
+                        position: 'insideBottom',
+                        value: xAxisLabel,
+                      }
+                    : undefined
+                }
+              />
+              <YAxis
+                domain={[0, yMax]}
+                tick={<YAxisTick />}
+                label={
+                  yAxisLabel ? <BarYAxisLabel value={yAxisLabel} /> : undefined
+                }
+              />
+              {datasets.map((ds, dsIndex) => {
+                const color =
+                  ds.color || defaultColors[dsIndex % defaultColors.length];
+                return (
+                  <Bar
+                    key={ds.label}
+                    dataKey={ds.label}
+                    fill={color}
+                    isAnimationActive={false}
+                    stackId={stacked ? 'stack' : undefined}
+                    stroke="#000"
+                    strokeWidth={2}
+                  >
+                    {showLabels && (
+                      <LabelList
+                        dataKey={ds.label}
+                        content={(labelProps: any) => {
+                          const {
+                            x,
+                            y,
+                            width: bw,
+                            height: bh,
+                            value: val,
+                            index,
+                          } = labelProps;
+                          return (
+                            <MultiBarLabel
+                              key={`label-${dsIndex}-${index}`}
+                              colTotal={colTotals[index]}
+                              datasetLabel={ds.label}
+                              fill={color}
+                              height={bh}
+                              stacked={stacked}
+                              value={val}
+                              width={bw}
+                              x={x}
+                              y={y}
+                            />
+                          );
+                        }}
+                      />
+                    )}
+                  </Bar>
+                );
+              })}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

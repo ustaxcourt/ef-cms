@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   LineChart,
   Line,
@@ -21,7 +21,6 @@ export interface LineGraphProps {
   labels: string[];
   title?: string;
   width?: number;
-  height?: number;
   showLegend?: boolean;
   showGrid?: boolean;
   xAxisLabel?: string;
@@ -43,11 +42,11 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div className="tw:flex tw:flex-wrap tw:gap-4 tw:justify-start tw:mb-8">
+    <div className="tw:flex tw:flex-wrap tw:gap-4 tw:justify-start tw:mb-5 tw:xs:mb-8">
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
-            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-lg tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
+            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
           <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
@@ -71,7 +70,7 @@ const RotatedTickX = (props: any) => {
         dy={20}
         textAnchor="end"
         fill="#000"
-        fontSize="1rem"
+        className="tw:text-base tw:xs:text-xl"
         fontWeight="600"
         transform="rotate(-45)"
       >
@@ -91,12 +90,54 @@ const StraightTickX = (props: any) => {
         dy={20}
         textAnchor="middle"
         fill="#000"
-        fontSize="1rem"
+        className="tw:text-base tw:xs:text-xl"
         fontWeight="600"
       >
         {payload.value}
       </text>
     </g>
+  );
+};
+
+// ─── Y-axis tick ─────────────────────────────────────────────────────────────
+
+const LineYAxisTick = (props: any) => {
+  const { x, y, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="#000"
+        className="tw:text-base tw:xs:text-xl"
+        fontWeight="400"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
+// ─── Y-axis label ───────────────────────────────────────────────────────────
+
+const LineYAxisLabel = ({ value, viewBox }: any) => {
+  const { x, y, height: h, width: w } = viewBox;
+  const cx = x + (w ?? 80) / 2;
+  const cy = y + h / 2;
+  return (
+    <text
+      x={cx}
+      y={cy}
+      textAnchor="middle"
+      fill="#000"
+      className="tw:text-base tw:xs:text-xl"
+      fontWeight="bold"
+      transform={`rotate(-90, ${cx}, ${cy})`}
+    >
+      {value}
+    </text>
   );
 };
 
@@ -148,7 +189,6 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   labels,
   title,
   width = 1344,
-  height = 800,
   showLegend = true,
   showGrid = true,
   xAxisLabel,
@@ -160,14 +200,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
         {title && (
-          <h2
-            style={{
-              margin: 0,
-              padding: '10px 0 8px',
-              paddingLeft: '80px',
-              textAlign: 'left',
-            }}
-          >
+          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
             {title}
           </h2>
         )}
@@ -175,22 +208,6 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       </div>
     );
   }
-
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 480,
-  );
-  useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth < 480);
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  const rootFontSize =
-    typeof window !== 'undefined'
-      ? parseFloat(getComputedStyle(window.document.documentElement).fontSize)
-      : 16;
-  const chartHeightPx = isMobile
-    ? 37.5 * rootFontSize
-    : (height / 16) * rootFontSize;
 
   // Two data arrays:
   // chartData - uses null for gaps (drives the visible line)
@@ -216,25 +233,22 @@ export const LineGraph: React.FC<LineGraphProps> = ({
 
   return (
     <div className="tw:overflow-x-auto">
-      {/* tw:max-[479px]:!w-[1000px] overrides the inline width at mobile — confirm 1000px? */}
       <div
-        style={{ width: `${width}px` }}
-        className="tw:sw:max-[480px]:!w-[1000px]"
+        style={
+          {
+            '--chart-width': `${width / 16}rem`,
+            '--chart-width-mobile': '50rem',
+          } as React.CSSProperties
+        }
+        className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2
-            className="tw:mt-0 tw:mb-8"
-            style={{
-              color: '#000',
-              paddingLeft: '80px',
-              textAlign: 'left',
-            }}
-          >
+          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
             {title}
           </h2>
         )}
         {showLegend && (
-          <div style={{ paddingLeft: '80px' }}>
+          <div>
             {renderCustomLegend({
               payload: datasets.map((ds, i) => ({
                 color: ds.color || defaultColors[i % defaultColors.length],
@@ -243,123 +257,115 @@ export const LineGraph: React.FC<LineGraphProps> = ({
             })}
           </div>
         )}
-        <ResponsiveContainer
-          width="100%"
-          height={chartHeightPx}
-          style={{ outline: 'none' }}
-        >
-          <LineChart
-            data={mergedData}
-            margin={{
-              bottom: xAxisLabel ? 40 : 10,
-              left: 60,
-              right: 30,
-              top: 10,
-            }}
+        <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            style={{ outline: 'none' }}
           >
-            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-            <Tooltip
-              cursor={{ stroke: '#ccc', strokeWidth: 1 }}
-              content={({ active, label }) => (
-                <TooltipContent
-                  active={active}
-                  datasets={datasets}
-                  label={label}
-                  mergedData={mergedData}
-                />
-              )}
-            />
-            <XAxis
-              dataKey="name"
-              interval={0}
-              height={xLabelRotation ? 120 : 55}
-              tick={
-                xLabelRotation
-                  ? (tickProps: any) => <RotatedTickX {...tickProps} />
-                  : (tickProps: any) => <StraightTickX {...tickProps} />
-              }
-              label={
-                xAxisLabel
-                  ? {
-                      fill: '#000',
-                      fontSize: '1rem',
-                      fontWeight: 'bold',
-                      offset: xLabelRotation ? -70 : -10,
-                      position: 'insideBottom',
-                      value: xAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            <YAxis
-              width={80}
-              tick={{ fill: '#000', fontSize: '1rem', fontWeight: '400' }}
-              label={
-                yAxisLabel
-                  ? {
-                      angle: -90,
-                      fill: '#000',
-                      fontSize: '1rem',
-                      fontWeight: 'bold',
-                      offset: 20,
-                      position: 'insideLeft',
-                      value: yAxisLabel,
-                    }
-                  : undefined
-              }
-            />
-            {datasets.map((ds, index) => {
-              const color =
-                ds.color || defaultColors[index % defaultColors.length];
-              return (
-                <Line
-                  key={ds.label}
-                  type={smooth ? 'monotone' : 'linear'}
-                  dataKey={ds.label}
-                  stroke={color}
-                  strokeWidth={4}
-                  dot={(dotProps: any) => {
-                    const isNull = dotProps.payload[ds.label] === null;
-                    if (isNull) return <g key={dotProps.key} />;
-                    return (
-                      <Dot
-                        key={dotProps.key}
-                        {...dotProps}
-                        r={5}
-                        fill={color}
-                        stroke="#fff"
-                        strokeWidth={2}
-                      />
-                    );
-                  }}
-                  activeDot={{
-                    fill: color,
-                    r: 8,
-                    stroke: '#fff',
-                    strokeWidth: 2,
-                  }}
-                  isAnimationActive={false}
-                />
-              );
-            })}
-            {/* Invisible lines using _tip keys — fill null gaps so tooltip fires everywhere */}
-            {datasets.map(ds => {
-              return (
-                <Line
-                  key={`${ds.label}_tip`}
-                  dataKey={`${ds.label}_tip`}
-                  stroke="transparent"
-                  strokeWidth={0}
-                  dot={false}
-                  activeDot={false}
-                  legendType="none"
-                  isAnimationActive={false}
-                  hide={false}
-                />
-              );
-            })}
-          </LineChart>
-        </ResponsiveContainer>
+            <LineChart
+              data={mergedData}
+              margin={{
+                bottom: xAxisLabel ? 40 : 10,
+                left: 0,
+                right: 30,
+                top: 10,
+              }}
+            >
+              {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+              <Tooltip
+                cursor={{ stroke: '#ccc', strokeWidth: 1 }}
+                content={({ active, label }) => (
+                  <TooltipContent
+                    active={active}
+                    datasets={datasets}
+                    label={label}
+                    mergedData={mergedData}
+                  />
+                )}
+              />
+              <XAxis
+                dataKey="name"
+                interval={0}
+                height={xLabelRotation ? 70 : 55}
+                tick={
+                  xLabelRotation
+                    ? (tickProps: any) => <RotatedTickX {...tickProps} />
+                    : (tickProps: any) => <StraightTickX {...tickProps} />
+                }
+                label={
+                  xAxisLabel
+                    ? {
+                        fill: '#000',
+                        fontSize: '1.25rem',
+                        fontWeight: 'bold',
+                        offset: xLabelRotation ? -70 : -10,
+                        position: 'insideBottom',
+                        value: xAxisLabel,
+                      }
+                    : undefined
+                }
+              />
+              <YAxis
+                width={80}
+                tick={<LineYAxisTick />}
+                label={
+                  yAxisLabel ? <LineYAxisLabel value={yAxisLabel} /> : undefined
+                }
+              />
+              {datasets.map((ds, index) => {
+                const color =
+                  ds.color || defaultColors[index % defaultColors.length];
+                return (
+                  <Line
+                    key={ds.label}
+                    type={smooth ? 'monotone' : 'linear'}
+                    dataKey={ds.label}
+                    stroke={color}
+                    strokeWidth={4}
+                    dot={(dotProps: any) => {
+                      const isNull = dotProps.payload[ds.label] === null;
+                      if (isNull) return <g key={dotProps.key} />;
+                      return (
+                        <Dot
+                          key={dotProps.key}
+                          {...dotProps}
+                          r={5}
+                          fill={color}
+                          stroke="#fff"
+                          strokeWidth={2}
+                        />
+                      );
+                    }}
+                    activeDot={{
+                      fill: color,
+                      r: 8,
+                      stroke: '#fff',
+                      strokeWidth: 2,
+                    }}
+                    isAnimationActive={false}
+                  />
+                );
+              })}
+              {/* Invisible lines using _tip keys — fill null gaps so tooltip fires everywhere */}
+              {datasets.map(ds => {
+                return (
+                  <Line
+                    key={`${ds.label}_tip`}
+                    dataKey={`${ds.label}_tip`}
+                    stroke="transparent"
+                    strokeWidth={0}
+                    dot={false}
+                    activeDot={false}
+                    legendType="none"
+                    isAnimationActive={false}
+                    hide={false}
+                  />
+                );
+              })}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
