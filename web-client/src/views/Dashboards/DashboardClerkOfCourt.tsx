@@ -59,14 +59,15 @@ export const DashboardClerkOfCourt = connect(
                 </Tab>
                 <Tab tabName="pieChart" title="Pie Chart">
                   <div className="tw:mt-6 tw:mx-4">
-                    <h2>Total sessions scheduled: {totalSessionsScheduled}</h2>
+                    <h2 className="tw:xs:text-2xl tw:text-lg">
+                      Total sessions scheduled: {totalSessionsScheduled}
+                    </h2>
                     <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
                       <PieGraph
                         title="Procedure Type"
                         data={procedureTypePieData}
                       />
                       <PieGraph
-                        legendFlow="row"
                         title="Session Type"
                         data={sessionTypePieData}
                       />

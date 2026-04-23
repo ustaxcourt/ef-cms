@@ -194,7 +194,9 @@ export const DawsonLibrary = () => {
       <div
         style={{ marginTop: '3rem', marginLeft: '1rem', marginRight: '1rem' }}
       >
-        <h2>Total sessions scheduled: 300</h2>
+        <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-4">
+          Total sessions scheduled: 300
+        </h2>
         <div className="tw:flex tw:flex-wrap tw:gap-12">
           <PieGraph
             title="Procedure Type"
@@ -218,7 +220,6 @@ export const DawsonLibrary = () => {
               { name: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
               { name: 'Special', value: 2.5, color: '#E5A000' },
             ]}
-            legendFlow="row"
           />
         </div>
       </div>

@@ -86,17 +86,19 @@ export const PieGraph = ({
   title,
   data,
   isAnimationActive = true,
-  legendFlow = 'column',
 }: {
   title: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
-  legendFlow?: 'row' | 'column';
 }) => {
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
-        {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
+        {title && (
+          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
+            {title}
+          </h2>
+        )}
         <p>No data available</p>
       </div>
     );
@@ -107,7 +109,11 @@ export const PieGraph = ({
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
     <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto">
       <div className="tw:xs:w-160 tw:w-120">
-        {title && <h2 className="tw:mb-4 tw:text-left tw:text-2xl">{title}</h2>}
+        {title && (
+          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
+            {title}
+          </h2>
+        )}
         <PieChart
           style={{
             width: '100%',
@@ -120,16 +126,14 @@ export const PieGraph = ({
             verticalAlign="top"
             wrapperStyle={{ paddingBottom: 0 }}
             content={() => (
-              <ul
-                className={`tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 ${legendFlow === 'column' ? 'tw:grid-rows-2 tw:grid-flow-col' : 'tw:grid-cols-3 tw:grid-flow-row'}`}
-              >
+              <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 tw:grid-rows-2 tw:grid-flow-col">
                 {data.map(entry => (
                   <li key={entry.name} className="tw:flex tw:items-center">
                     <span
                       className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-md tw:shrink-0"
                       style={{ backgroundColor: entry.color }}
                     />
-                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:w-32 tw:leading-[1.1]">
+                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:leading-[1.1] tw:w-24 tw:xs:w-32">
                       {entry.name}
                     </span>
                   </li>
