@@ -607,7 +607,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
+          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}
