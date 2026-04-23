@@ -7,9 +7,9 @@ describe('updateContactAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    applicationContext.getUseCases().updateContactInteractor.mockReturnValue({
-      docketNumber: '101-20',
-    });
+    applicationContext.getUseCases().updateContactInteractor.mockReturnValue(
+      undefined,
+    );
   });
 
   it('updates primary contact for the current case', async () => {
@@ -20,9 +20,9 @@ describe('updateContactAction', () => {
       state: {
         form: {
           contact: {
-            docketNumber: '101-20',
             name: 'Rachael Ray',
           },
+          docketNumber: '101-20',
         },
       },
     });

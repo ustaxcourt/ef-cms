@@ -112,6 +112,7 @@ import { disengageAppMaintenanceSequence } from './sequences/disengageAppMainten
 import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { dismissModalAndClearRedirectSequence } from './sequences/dismissModalAndClearRedirectSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { handleEditedTrialSessionSequence } from '@web-client/presenter/sequences/handleEditedTrialSessionSequence';
@@ -229,7 +230,6 @@ import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
-import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
@@ -649,6 +649,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 
 export const presenterSequences = {
@@ -816,6 +817,8 @@ export const presenterSequences = {
     dismissAddEditCaseWorksheetModalSequence as unknown as Function,
   dismissAlertSequence: dismissAlertSequence as unknown as Function,
   dismissModalSequence: dismissModalSequence as unknown as Function,
+  dismissModalAndClearRedirectSequence:
+    dismissModalAndClearRedirectSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
   displayProgressSpinnerSequence,
@@ -998,7 +1001,6 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
@@ -1336,6 +1338,7 @@ export const presenterSequences = {
     setViewerDraftDocumentToDisplaySequence as unknown as Function,
   showCalculatePenaltiesModalSequence:
     showCalculatePenaltiesModalSequence as unknown as Function,
+  showCaseStatusInfoSequence: showCaseStatusInfoSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
   showFileUploadErrorModalSequence,

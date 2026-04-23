@@ -92,12 +92,14 @@ app.use(expressLogger);
 
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
+import { getPublicDocketRecordStatusLambda } from './lambdas/public-api/getPublicDocketRecordStatusLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionersByNameLambda } from '@web-api/lambdas/practitioners/getPractitionersByNameLambda';
 import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
+import { getPublicCaseDocketEntriesLambda } from '@web-api/lambdas/public-api/getPublicCaseDocketEntriesLambda';
 import { getPublicCaseLambda } from '@web-api/lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
@@ -108,7 +110,8 @@ import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSea
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
-import { getDbReader } from '@web-api/database';
+import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 /** Case */
 {
@@ -121,12 +124,20 @@ import { getDbReader } from '@web-api/database';
     lambdaWrapper(getPublicCaseLambda),
   );
   app.get(
+    '/public-api/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getPublicCaseDocketEntriesLambda),
+  );
+  app.get(
     '/public-api/:docketNumber/:key/public-document-download-url',
     lambdaWrapper(getPublicDocumentDownloadUrlLambda),
   );
   app.post(
     '/public-api/cases/:docketNumber/generate-docket-record',
     lambdaWrapper(generatePublicDocketRecordPdfLambda),
+  );
+  app.get(
+    '/public-api/docket-record-status/:jobId',
+    lambdaWrapper(getPublicDocketRecordStatusLambda),
   );
 }
 
@@ -195,4 +206,11 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  */
 {
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+}
+
+{
+  app.put(
+    '/public-api/verify-email',
+    lambdaWrapper(verifyUserPendingEmailLambda),
+  );
 }

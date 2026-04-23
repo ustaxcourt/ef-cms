@@ -1,4 +1,4 @@
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 import { CompiledQuery, Kysely } from 'kysely';
 

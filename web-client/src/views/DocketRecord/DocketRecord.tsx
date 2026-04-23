@@ -1,14 +1,21 @@
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import {
+  DOCKET_RECORD_PAGE_SIZE,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
@@ -41,6 +48,17 @@ export const DocketRecord = connect(
     sortTableSequence,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord,
+        DOCKET_RECORD_PAGE_SIZE,
+      );
+
+    const hasLargeDocketEntryCount =
+      formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+        .length > DOCKET_RECORD_PAGINATION_THRESHOLD;
 
     const noDocumentsMessage = 'There are no documents of that type.';
 
@@ -61,6 +79,20 @@ export const DocketRecord = connect(
         <DocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
+
+        <div ref={paginatorTop} className="margin-bottom-3">
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+            )}
+        </div>
+
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -179,8 +211,10 @@ export const DocketRecord = connect(
                 </tr>
               </thead>
               <tbody>
-                {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
+                {(hasLargeDocketEntryCount
+                  ? pageRecords
+                  : formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+                ).map(entry => {
                     return (
                       <tr
                         className={classNames(
@@ -332,6 +366,17 @@ export const DocketRecord = connect(
               .length && (
               <p className="margin-bottom-10">{noDocumentsMessage}</p>
             )}
+
+            {hasLargeDocketEntryCount && totalPages > 1 && (
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+            )}
           </div>
         </NonPhone>
         <Phone>
@@ -344,10 +389,12 @@ export const DocketRecord = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                entry => {
+              {(hasLargeDocketEntryCount
+                ? pageRecords
+                : formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+              ).map(entry => {
                   return (
-                    <tr key={entry.index}>
+                    <tr key={entry.docketEntryId}>
                       <td data-label="No.">{entry.index}</td>
                       <td data-label="Filed Date">
                         {entry.createdAtFormatted}
@@ -373,6 +420,17 @@ export const DocketRecord = connect(
           </table>
           {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
+
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
         </Phone>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
         {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}

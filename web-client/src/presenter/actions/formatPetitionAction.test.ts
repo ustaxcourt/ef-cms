@@ -61,6 +61,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         email: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -100,6 +101,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         email: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -148,6 +150,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.disclosure,
       contactPrimary: {
         email: 'TEST_EMAIL',
+        contactEmailAddress: 'TEST_EMAIL',
       },
       irsNotices: [
         {
@@ -238,5 +241,58 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
       'mockPrivatePractitioner@example.com',
     );
+  });
+
+  it('should set contactEmailAddress to user email for pro-se petitioners', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: PROPS,
+      state: {
+        petitionFormatted: undefined,
+        user: mockPetitionerUser,
+      },
+    });
+
+    expect(
+      results.state.petitionFormatted?.contactPrimary?.contactEmailAddress,
+    ).toEqual('mockPetitioner@example.com');
+  });
+
+  it('should NOT set contactEmailAddress when the user is a private practitioner', async () => {
+    const practitionerProps = {
+      createPetitionStep1Data: {
+        contactPrimary: {},
+      },
+      createPetitionStep2Data: {},
+      createPetitionStep3Data: {
+        caseType: CASE_TYPES_MAP.cdp,
+        irsNotices: [
+          {
+            caseType: CASE_TYPES_MAP.cdp,
+            noticeIssuedDate: 'TEST_noticeIssuedDate',
+            taxYear: 'TEST_taxYear',
+          },
+        ],
+      },
+      createPetitionStep4Data: {},
+      createPetitionStep5Data: {},
+    };
+
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: practitionerProps,
+      state: {
+        petitionFormatted: undefined,
+        user: mockPrivatePractitionerUser,
+      },
+    });
+
+    expect(
+      results.state.petitionFormatted?.contactPrimary?.contactEmailAddress,
+    ).toBeUndefined();
   });
 });

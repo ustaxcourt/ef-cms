@@ -12,31 +12,29 @@ import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '@web
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { AuthUser } from 'shared/src/business/entities/authUser/AuthUser';
 
 export const fileAndServeDocumentOnOneCase = async ({
   caseEntity,
   docketEntryEntity,
-  subjectCaseDocketNumber,
   user,
   caseHasDeadline = undefined,
 }: {
-  caseEntity: any;
+  caseEntity: Case;
   docketEntryEntity: DocketEntry;
-  subjectCaseDocketNumber: any;
-  user: any;
+  user: AuthUser;
   caseHasDeadline?: boolean;
-}) => {
+}): Promise<Case> => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
   docketEntryEntity.setAsServed(servedParties.all);
 
-  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
   let workItem = await getWorkItemByDocketNumberAndDocketEntryId({
     docketNumber: caseEntity.docketNumber,
     docketEntryId: docketEntryEntity.docketEntryId,
   });
 
-  if (!workItem || !isSubjectCase) {
+  if (!workItem) {
     workItem = new WorkItem({
       assigneeId: null,
       assigneeName: null,
@@ -94,7 +92,7 @@ const completeWorkItem = async ({
   user,
   workItemToUpdate,
   docketEntryEntity,
-}) => {
+}): Promise<void> => {
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,

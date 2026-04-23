@@ -14,13 +14,13 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateCourtIssuedDocketEntry = async (
   _applicationContext: ServerApplicationContext,
   { documentMeta }: { documentMeta: any },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -96,19 +96,19 @@ export const updateCourtIssuedDocketEntry = async (
 
   const rawValidWorkItem = workItem.validate().toRawObject();
 
-  const saveItems = [
-    upsertWorkItems({
-      workItems: [rawValidWorkItem],
-    }),
-    updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    }),
-  ];
+  await withTransaction(async () => {
+    const saveItems = [
+      upsertWorkItems({
+        workItems: [rawValidWorkItem],
+      }),
+      updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      }),
+    ];
 
-  await settlePromises(saveItems);
-
-  return new CaseDTO(caseEntity.toRawObject());
+    await settlePromises(saveItems);
+  });
 };
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(

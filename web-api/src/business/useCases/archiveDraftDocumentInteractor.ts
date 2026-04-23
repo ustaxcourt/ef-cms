@@ -11,7 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const archiveDraftDocument = async (
   _applicationContext: ServerApplicationContext,
@@ -20,7 +20,7 @@ export const archiveDraftDocument = async (
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -48,20 +48,18 @@ export const archiveDraftDocument = async (
     docketEntryId,
   });
 
-  if (workItem) {
-    await deleteWorkItem({
-      workItem,
+  await withTransaction(async () => {
+    if (workItem) {
+      await deleteWorkItem({
+        workItem,
+      });
+    }
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
     });
-  }
-
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
   });
-
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const archiveDraftDocumentInteractor = withLocking(

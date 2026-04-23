@@ -1,18 +1,23 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    FROM_PAGES: state.constants.FROM_PAGES,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
   function IndividualWorkQueueInbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {formattedWorkQueue.length}
+        </div>
+        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
@@ -34,34 +39,65 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case Status</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <tbody key={item.workItemId}>
-                <tr>
+          <tbody>
+            {formattedWorkQueue.map(item => {
+              return (
+                <tr key={item.workItemId}>
                   <td className="consolidated-case-column">
-                    {item.inConsolidatedGroup && (
-                      <span
-                        className="fa-layers fa-fw"
-                        title={item.consolidatedIconTooltipText}
+                    {item.groupedMemberCases ? (
+                      <div
+                        className="consolidated-icons-stack"
+                        aria-hidden="true"
                       >
-                        <Icon
-                          aria-label={item.consolidatedIconTooltipText}
-                          className="fa-icon-blue"
-                          icon="copy"
+                        <ConsolidatedCaseIcon
+                          consolidatedIconTooltipText={
+                            item.consolidatedIconTooltipText
+                          }
+                          inConsolidatedGroup={item.inConsolidatedGroup}
+                          showLeadCaseIcon={item.inLeadCase}
                         />
-                        {item.inLeadCase && (
-                          <span className="fa-inverse lead-case-icon-text">
-                            L
-                          </span>
-                        )}
-                      </span>
+                        {item.groupedMemberCases.map(c => (
+                          <ConsolidatedCaseIcon
+                            key={`icon-${c.docketNumber}`}
+                            consolidatedIconTooltipText={
+                              c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                            }
+                            inConsolidatedGroup={true}
+                            showLeadCaseIcon={c.inLeadCase}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          item.consolidatedIconTooltipText
+                        }
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.inLeadCase}
+                      />
                     )}
                   </td>
                   <td
                     className="message-queue-row small"
                     data-testid={`message-queue-docket-number-${item.docketNumber}`}
                   >
-                    <CaseLink formattedCase={item} />
+                    {item.groupedMemberCases ? (
+                      <div className="grouped-cases-row">
+                        <CaseLink formattedCase={item} />
+                        <div className="member-case-links">
+                          {item.groupedMemberCases.map(c => (
+                            <div
+                              key={c.docketNumber}
+                              className="member-case-line"
+                            >
+                              <CaseLink formattedCase={c} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <CaseLink formattedCase={item} />
+                    )}
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
@@ -116,9 +152,9 @@ export const IndividualWorkQueueInbox = connect(
                     {item.formattedCaseStatus}
                   </td>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>

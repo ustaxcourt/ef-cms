@@ -209,7 +209,7 @@ const generateNoticeOfReceipt = async ({
   const isSetupForEService = contactInfo => {
     return (
       contactInfo.hasConsentedToElectronicService &&
-      !!contactInfo.paperPetitionEmail
+      !!contactInfo.contactEmailAddress
     );
   };
 
@@ -224,7 +224,7 @@ const generateNoticeOfReceipt = async ({
 
   if (shouldGenerateNotrForSecondary) {
     if (
-      contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
+      contactPrimary.contactEmailAddress !== contactSecondary.contactEmailAddress
     ) {
       accessCode = generateAccessCode();
     }
@@ -385,6 +385,7 @@ const generateNoticeOfReceipt = async ({
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
     },
     {
       authorizedUser: userServingPetition,

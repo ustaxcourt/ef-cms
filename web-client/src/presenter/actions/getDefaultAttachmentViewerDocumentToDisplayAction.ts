@@ -1,25 +1,19 @@
 import { state } from '@web-client/presenter/app.cerebral';
-/**
- * gets the first attachment document from the most recent message to set as the default messageViewerDocumentToDisplay
- * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
- * @returns {object} object containing messageViewerDocumentToDisplay
- */
+import { formatMessage } from '../computeds/formattedMessageDetail';
+
 export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
+  applicationContext,
   get,
   props,
 }: ActionProps) => {
   const viewerDocumentToDisplayFromState = get(
     state.messageViewerDocumentToDisplay,
   );
-
   let documentId = get(state.documentId);
   const { mostRecentMessage } = props;
-
   if (!documentId) {
     ({ documentId } = props);
   }
-
   const existingDocumentId = viewerDocumentToDisplayFromState?.documentId;
 
   if (
@@ -31,13 +25,25 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   }
 
   const { attachments } = mostRecentMessage;
+
   let messageViewerDocumentToDisplay = null;
 
   if (attachments && attachments.length) {
-    messageViewerDocumentToDisplay = attachments[0];
+    const caseDetail = get(state.caseDetail);
+    const formattedMessage = formatMessage({
+      applicationContext,
+      caseDetail,
+      message: mostRecentMessage,
+    });
+
+    messageViewerDocumentToDisplay = formattedMessage.attachments.find(
+      attachment => {
+        return attachment.documentId === attachments[0].documentId;
+      },
+    );
 
     if (documentId) {
-      const foundDocument = attachments.find(
+      const foundDocument = formattedMessage.attachments.find(
         attachment => attachment.documentId === documentId,
       );
 
@@ -48,6 +54,6 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   }
 
   return {
-    messageViewerDocumentToDisplay,
+    messageViewerDocumentToDisplay: messageViewerDocumentToDisplay || {},
   };
 };

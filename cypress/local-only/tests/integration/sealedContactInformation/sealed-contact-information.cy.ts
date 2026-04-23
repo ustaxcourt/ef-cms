@@ -39,7 +39,7 @@ describe('Sealed Contact Information', () => {
       );
       cy.get(
         '[data-testid="seal-address-modal-address-petition-email"]',
-      ).contains('Not Provided');
+      ).contains('petitioner1@example.com');
       cy.get('[data-testid="confirm-modal-close-btn"]').click();
       cy.get('#seal-address').should('not.be.checked');
       goToCase(docketNumber);
@@ -72,7 +72,7 @@ describe('Sealed Contact Information', () => {
         'sealed-address',
       );
       cy.get('[data-testid="petitioner-paper-petition-email"]').contains(
-        'Not Provided',
+        'petitioner1@example.com',
       );
     });
   });

@@ -8,16 +8,13 @@ import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 import { viewMyOutbox } from 'cypress/local-only/support/pages/dashboard';
-import {
-  formatNow,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('Document title updates correctly', () => {
   it('should see the document title update when additional info is added during the QC process', () => {
     const primaryFilerName = 'John';
     const additionalInfo = 'This is additional info';
-    const date = formatNow(FORMATS.MMDDYY)
+    const date = formatNow(FORMATS.MMDDYY);
 
     loginAsPrivatePractitioner();
     externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
@@ -62,7 +59,7 @@ describe('Document title updates correctly', () => {
       });
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       viewMyOutbox();
-      cy.get(`[data-testid=work-item-outbox-row-${docketNumber}]`)
+      cy.contains('tr', docketNumber)
         .find('[data-testid=work-item-outbox-document-link]')
         .should('contain', `Exhibit(s) ${additionalInfo}`);
 
@@ -110,7 +107,7 @@ describe('Document title updates correctly', () => {
         .click();
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       viewMyOutbox();
-      cy.get(`[data-testid=work-item-outbox-row-${docketNumber}]`)
+      cy.contains('tr', docketNumber)
         .find('[data-testid=work-item-outbox-document-link]')
         .should(
           'contain',

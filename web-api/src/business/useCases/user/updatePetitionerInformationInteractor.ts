@@ -26,7 +26,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 export const getIsUserAuthorized = ({
@@ -162,11 +161,7 @@ export const updatePetitionerInformation = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
   authorizedUser: UnknownAuthUser,
-): Promise<{
-  updatedCase: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: any;
-}> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to update petitioner information is not an auth user',
@@ -220,6 +215,7 @@ export const updatePetitionerInformation = async (
       additionalName: undefined,
       address2: undefined,
       address3: undefined,
+      contactEmailAddress: undefined,
       title: undefined,
     }),
     [
@@ -231,6 +227,7 @@ export const updatePetitionerInformation = async (
       'country',
       'countryType',
       'name',
+      'contactEmailAddress',
       'phone',
       'postalCode',
       'additionalName',
@@ -262,7 +259,6 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.hasConsentedToElectronicService,
       hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
       isAddressSealed: existingPetitionerInfo.isAddressSealed,
-      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
       sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
       ...editableFields,
     },
@@ -275,8 +271,6 @@ export const updatePetitionerInformation = async (
   ).validate();
 
   const servedParties = aggregatePartiesForService(caseEntity);
-
-  let serviceUrl;
 
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
@@ -301,7 +295,7 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await generateAndServeDocketEntry({
+    await generateAndServeDocketEntry({
       applicationContext,
       authorizedUser,
       caseEntity,
@@ -313,7 +307,11 @@ export const updatePetitionerInformation = async (
       servedParties,
       user: authorizedUser,
     });
-    serviceUrl = url;
+
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
   }
 
   const shouldUpdateEmailAddress =
@@ -373,16 +371,10 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return {
-    paperServiceParties: servedParties.paper,
-    paperServicePdfUrl: serviceUrl,
-    updatedCase: new CaseDTO(updatedCase),
-  };
 };
 
 export const updatePetitionerInformationInteractor = withLocking(

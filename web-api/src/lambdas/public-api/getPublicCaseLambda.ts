@@ -11,5 +11,7 @@ export const getPublicCaseLambda = event =>
   genericHandler(event, () =>
     getPublicCaseInteractor({
       docketNumber: event.pathParameters.docketNumber,
+      excludeDocketEntries:
+        event.queryStringParameters?.excludeDocketEntries === 'true',
     }),
   );
