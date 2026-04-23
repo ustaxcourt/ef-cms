@@ -73,6 +73,29 @@ describe('workerRouter', () => {
     );
   });
 
+  it('should call addCoversheetWorker when the message type is ADD_COVERSHEET', async () => {
+    const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
+      payload: {
+        docketEntryId: '0000-0000-0000-0001',
+        docketNumber: '101-25',
+      },
+      type: MESSAGE_TYPES.ADD_COVERSHEET,
+    };
+
+    await workerRouter(applicationContext, {
+      message: mockMessage,
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetWorker,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      mockMessage.payload,
+      mockMessage.authorizedUser,
+    );
+  });
+
   it('should throw an error when the message type provided was not recognized by the router', async () => {
     const mockMessage: WorkerMessage = {
       authorizedUser: mockDocketClerkUser,

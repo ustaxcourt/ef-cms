@@ -13,6 +13,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coversheet/enqueueAddCoversheet';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
@@ -234,6 +235,16 @@ export const fileExternalDocument = async (
   await upsertWorkItems({
     workItems,
   });
+
+  await Promise.all(
+    docketEntryIds.map(docketEntryId =>
+      enqueueAddCoversheet(applicationContext, {
+        authorizedUser,
+        docketEntryId,
+        docketNumber,
+      }),
+    ),
+  );
 
   const theCase = resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,

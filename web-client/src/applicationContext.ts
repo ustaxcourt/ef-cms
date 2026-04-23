@@ -33,6 +33,7 @@ import { abbreviateState } from '../../shared/src/business/utilities/abbreviateS
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
+import { getDocketEntryProcessingStatusInteractor } from '../../shared/src/proxies/documents/getDocketEntryProcessingStatusProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
@@ -366,6 +367,7 @@ const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  getDocketEntryProcessingStatusInteractor,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,

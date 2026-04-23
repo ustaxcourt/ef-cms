@@ -2,6 +2,7 @@
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
 import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
+import { getDocketEntryProcessingStatusLambda } from './lambdas/documents/getDocketEntryProcessingStatusLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
@@ -431,6 +432,10 @@ app.use(expressLogger);
       { isAsyncSync: true },
       applicationContext,
     ),
+  );
+  app.get(
+    '/case-documents/:docketNumber/:docketEntryId/processing-status',
+    lambdaWrapper(getDocketEntryProcessingStatusLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
