@@ -55,6 +55,10 @@ const countOpenCasesWithRepresentation = async (): Promise<number> => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const totalCases = await countOpenCases();
+  if (totalCases === 0) {
+    console.error('No open cases found');
+    process.exit(1);
+  }
   const numberOfCasesWithRepresentation =
     await countOpenCasesWithRepresentation();
   const numberOfProSeCases = totalCases - numberOfCasesWithRepresentation;
