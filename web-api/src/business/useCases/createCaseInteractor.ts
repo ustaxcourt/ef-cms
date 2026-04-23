@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coversheet/enqueueAddCoversheet';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,

@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coversheet/enqueueAddCoversheet';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { genericHandler } from '../../genericHandler';
 
 /**
