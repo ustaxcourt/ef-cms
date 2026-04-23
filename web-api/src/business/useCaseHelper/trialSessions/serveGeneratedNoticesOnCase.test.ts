@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -5,6 +6,10 @@ import { getFakeFile, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { serveGeneratedNoticesOnCase } from '@web-api/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
 import { PDFDocument } from 'pdf-lib';
+import {
+  inTransaction as inTransactionMock,
+  onTransactionCommit as onTransactionCommitMock,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 describe('serveGeneratedNoticesOnCase', () => {
   const mockOpenCaseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
@@ -15,6 +20,13 @@ describe('serveGeneratedNoticesOnCase', () => {
     },
     { authorizedUser: undefined },
   );
+
+  const inTransaction = jest.mocked(inTransactionMock);
+  const onTransactionCommit = jest.mocked(onTransactionCommitMock);
+
+  beforeEach(() => {
+    inTransaction.mockReturnValue(false);
+  })
 
   it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
     const mockServedParties = {
@@ -71,5 +83,29 @@ describe('serveGeneratedNoticesOnCase', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should send service emails to onTransactionCommit if in a transaction', async () => {
+    inTransaction.mockReturnValueOnce(true);
+
+    const mockServedParties = {
+      paper: [],
+      all: [],
+      electronic: [],
+    };
+
+    await serveGeneratedNoticesOnCase({
+      applicationContext,
+      caseEntity: mockOpenCaseEntity,
+      newPdfDoc: getFakeFile as unknown as PDFDocument,
+      noticeDocketEntryEntity: mockNoticeDocketEntryEntity,
+      noticeDocumentPdfData: testPdfDoc,
+      servedParties: mockServedParties,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+    expect(onTransactionCommit).toHaveBeenCalledTimes(1);
   });
 });
