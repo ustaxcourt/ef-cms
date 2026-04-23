@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 export class CoversheetPollTimeoutError extends Error {
   public readonly pendingDocketEntryIds: string[];
@@ -30,12 +31,12 @@ export const pollForCoversheetComplete = async ({
   const pending = new Set(docketEntryIds);
   if (pending.size === 0) return;
 
-  const deadline = Date.now() + expirationSeconds * 1000;
-  const sleep = applicationContext.getUtilities().sleep;
+  const deadline = getCurrentDateTimeInMillis() + expirationSeconds * 1000;
+  const { sleep } = applicationContext.getUtilities();
 
   let attempt = 0;
   while (pending.size > 0) {
-    if (Date.now() > deadline) {
+    if (getCurrentDateTimeInMillis() > deadline) {
       throw new CoversheetPollTimeoutError([...pending]);
     }
 
