@@ -116,6 +116,7 @@ export const RemoteProceedingForm = connect<
             className="usa-input"
             data-testid="trial-session-chambers-phone-number"
             disabled={
+              !addingTrialSession &&
               formattedTrialSessionDetails.editPermissions === 'limited'
             }
             id="chambers-phone-number"
