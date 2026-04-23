@@ -194,7 +194,9 @@ export const DawsonLibrary = () => {
       <div
         style={{ marginTop: '3rem', marginLeft: '1rem', marginRight: '1rem' }}
       >
-        <h2>Total sessions scheduled: 300</h2>
+        <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-4">
+          Total sessions scheduled: 300
+        </h2>
         <div className="tw:flex tw:flex-wrap tw:gap-12">
           <PieGraph
             title="Procedure Type"
