@@ -1,6 +1,7 @@
 import {
   FORMATS,
   calculateISODate,
+  createISODateString,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
@@ -28,6 +29,7 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
+  const TODAY = createISODateString();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
 
   const formattedTrialSessionDetails = withAppContextDecorator(
@@ -466,7 +468,7 @@ describe('formattedTrialSessionDetails', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
-        startDate: PAST_DATE,
+        startDate: TODAY,
       };
 
       const result = runCompute(formattedTrialSessionDetails, {
