@@ -74,9 +74,12 @@ export const updateTrialSession = async (
   const LIMITED_EDITABLE_FIELDS: string[] = [
     'alternateTrialClerkName',
     'courtReporter',
+    'dismissedAlertForNott',
     'estimatedEndDate',
     'irsCalendarAdministrator',
     'irsCalendarAdministratorInfo',
+    'term',
+    'termYear',
     'trialClerk',
     'trialClerkId',
   ];
@@ -120,17 +123,21 @@ export const updateTrialSession = async (
 
   if (isCaseServicesSupervisorLimitedEdit) {
     const limitedEditableFieldSet = new Set<string>(LIMITED_EDITABLE_FIELDS);
-    const disallowedChanges = Object.keys(currentTrialSession).filter(key => {
-      if (limitedEditableFieldSet.has(key)) return false;
-      return (
-        JSON.stringify(trialSession[key]) !==
-        JSON.stringify(currentTrialSession[key])
-      );
-    });
+    const disallowedChanges = Object.keys(trialSession)
+      .filter(key => ALL_EDITABLE_FIELDS.includes(key))
+      .filter(key => {
+        if (limitedEditableFieldSet.has(key)) return false;
+        if (
+          JSON.stringify(trialSession[key]) !==
+          JSON.stringify(currentTrialSession[key])
+        ) {
+          return true;
+        }
+      });
 
     if (disallowedChanges.length > 0) {
       throw new UnauthorizedError(
-        `Case services supervisor can only edit: ${LIMITED_EDITABLE_FIELDS.join(', ')}. Unauthorized changes: ${disallowedChanges.join(', ')}`,
+        `Unauthorized changes: ${disallowedChanges.join(', ')}`,
       );
     }
   }

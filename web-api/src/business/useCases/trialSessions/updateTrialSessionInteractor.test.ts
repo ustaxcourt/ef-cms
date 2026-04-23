@@ -178,7 +178,7 @@ describe('updateTrialSessionInteractor', () => {
           },
           mockCaseServicesSupervisorUser,
         ),
-      ).rejects.toThrow('Case services supervisor can only edit:');
+      ).rejects.toThrow('Unauthorized changes: startDate');
     });
 
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {
