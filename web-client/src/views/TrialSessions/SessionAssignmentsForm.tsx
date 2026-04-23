@@ -51,7 +51,7 @@ export const SessionAssignmentsForm = connect<
               data-testid="trial-session-judge"
               disabled={
                 !addingTrialSession &&
-                formattedTrialSessionDetails.canEditOngoingSession
+                formattedTrialSessionDetails.editPermissions === 'limited'
               }
               id="judgeId"
               name="judgeId"
@@ -85,7 +85,7 @@ export const SessionAssignmentsForm = connect<
                 data-testid="edit-trial-session-chambers-phone-number"
                 disabled={
                   !addingTrialSession &&
-                  formattedTrialSessionDetails.canEditOngoingSession
+                  formattedTrialSessionDetails.editPermissions === 'limited'
                 }
                 id="chambers-phone-number"
                 name="chambersPhoneNumber"

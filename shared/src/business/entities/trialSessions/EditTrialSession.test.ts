@@ -64,7 +64,7 @@ describe('EditTrialSession', () => {
 
     expect(trialSession.isValid()).toEqual(false);
     expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-      estimatedEndDate: 'Enter a valid estimated end date',
+      estimatedEndDate: 'Estimated end date must be after start date',
     });
   });
 });
