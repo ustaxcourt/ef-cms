@@ -31,7 +31,6 @@ describe('formattedTrialSessionDetails', () => {
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
   const TODAY = createISODateString();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
-
   const formattedTrialSessionDetails = withAppContextDecorator(
     formattedTrialSessionDetailsComputed,
     applicationContext,
