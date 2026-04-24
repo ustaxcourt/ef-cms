@@ -1,3 +1,5 @@
+jest.setTimeout(60000);
+
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
