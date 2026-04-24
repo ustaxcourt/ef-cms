@@ -17,9 +17,6 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
 
-  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
-    applicationContext.getConstants();
-
   const documentMeta = {
     ...get(state.form),
     docketEntryId,
@@ -33,10 +30,5 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
       subjectDocketNumber: docketNumber,
     });
 
-  return {
-    docketEntryId,
-    generateCoversheet: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      documentMeta.eventCode,
-    ),
-  };
+  return { docketEntryId };
 };

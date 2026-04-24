@@ -220,6 +220,14 @@ export const addPaperFiling = async (
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(
+        applicationContext,
+        { docketEntryId, docketNumber: subjectCaseDocketNumber },
+        authorizedUser,
+      );
   }
 
   const successMessage =
@@ -237,7 +245,6 @@ export const addPaperFiling = async (
         overwritable: false,
       },
       docketEntryId,
-      generateCoversheet: isReadyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,

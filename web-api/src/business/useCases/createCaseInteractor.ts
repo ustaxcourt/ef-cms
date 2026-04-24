@@ -337,6 +337,25 @@ export const createCaseInteractor = async (
     workItems: [workItem.validate().toRawObject()],
   });
 
+  const coversheetDocketEntryIds = [
+    petitionFileId,
+    stinFileId,
+    ...(corporateDisclosureFileId ? [corporateDisclosureFileId] : []),
+    ...(attachmentToPetitionFileIds ?? []),
+  ];
+
+  await Promise.all(
+    coversheetDocketEntryIds.map(docketEntryId =>
+      applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(
+          applicationContext,
+          { docketEntryId, docketNumber: caseToAdd.docketNumber },
+          authorizedUser,
+        ),
+    ),
+  );
+
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,
   });

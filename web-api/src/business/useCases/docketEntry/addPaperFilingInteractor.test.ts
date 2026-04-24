@@ -444,7 +444,7 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+  it('should call addCoversheetInteractor when the docket entry has a file attached and the user is NOT saving for later', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -466,12 +466,11 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(true);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+  it('should NOT call addCoversheetInteractor when the docket entry does NOT have a file attached', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -493,9 +492,8 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(false);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   describe('consolidated groups', () => {

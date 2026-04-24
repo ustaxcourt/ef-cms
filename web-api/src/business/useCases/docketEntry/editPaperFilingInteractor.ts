@@ -328,6 +328,17 @@ const serveDocketEntry = async ({
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: docketEntryEntity.docketEntryId,
+          docketNumber: subjectCaseEntity.docketNumber,
+        },
+        authorizedUser,
+      );
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
@@ -335,7 +346,6 @@ const serveDocketEntry = async ({
         action: 'serve_document_complete',
         alertSuccess: { message, overwritable: false },
         docketEntryId: docketEntryEntity.docketEntryId,
-        generateCoversheet: true,
         pdfUrl: paperServicePdfUrl,
       },
       userId: user.userId,

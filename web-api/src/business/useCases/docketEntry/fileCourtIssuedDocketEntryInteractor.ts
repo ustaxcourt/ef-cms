@@ -1,5 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -186,6 +189,20 @@ export const fileCourtIssuedDocketEntry = async (
       subjectDocketEntry,
       false,
     );
+  }
+
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    )
+  ) {
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(
+        applicationContext,
+        { docketEntryId, docketNumber: subjectDocketNumber },
+        authorizedUser,
+      );
   }
 
   const rawSubjectCase = await getCaseByDocketNumber({
