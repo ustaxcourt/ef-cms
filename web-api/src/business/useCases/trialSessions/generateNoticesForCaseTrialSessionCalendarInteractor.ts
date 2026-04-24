@@ -19,6 +19,10 @@ import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/p
 import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { NotFoundError } from '@web-api/errors/errors';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -47,19 +51,27 @@ const serveNoticesForCase = async ({
   standingPretrialDocketEntryEntity,
   standingPretrialFile,
 }) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+  const sendEmails = async () => {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: noticeDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
+  };
+
+  if (inTransaction()) {
+    onTransactionCommit(sendEmails);
+  } else {
+    await sendEmails();
+  }
 
   const standingPretrialPdf = await PDFDocument.load(standingPretrialFile);
   const combinedDocumentsPdf = await PDFDocument.create();

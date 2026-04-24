@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
@@ -7,6 +8,10 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
+import {
+  inTransaction as inTransactionMock,
+  onTransactionCommit as onTransactionCommitMock,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
@@ -14,12 +19,17 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   const mockPdfUrl = 'www.example.com';
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
+  const inTransaction = jest.mocked(inTransactionMock);
+  const onTransactionCommit = jest.mocked(onTransactionCommitMock);
+
   beforeEach(() => {
     caseEntity = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
 
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: mockPdfUrl });
+
+    inTransaction.mockReturnValue(false);
   });
 
   it('should call sendServedPartiesEmails with the case entity, docket entry id, and aggregated served parties from the case', async () => {
@@ -236,5 +246,20 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0].servedParties.electronic,
     ).toEqual([]);
+  });
+
+  it('should send service emails to onTransactionCommit if in a transaction', async () => {
+    inTransaction.mockReturnValueOnce(true);
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+    expect(onTransactionCommit).toHaveBeenCalledTimes(1);
   });
 });
