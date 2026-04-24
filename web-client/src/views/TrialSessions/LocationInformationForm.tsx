@@ -61,7 +61,8 @@ export const LocationInformationForm = connect<
                           className="usa-radio__input"
                           disabled={
                             !addingTrialSession &&
-                            formattedTrialSessionDetails.canEditOngoingSession
+                            formattedTrialSessionDetails.editPermissions ===
+                              'limited'
                           }
                           id={`${key}-proceeding`}
                           name="proceedingType"
@@ -101,7 +102,7 @@ export const LocationInformationForm = connect<
                   data-testid="trial-session-trial-location"
                   disabled={
                     !addingTrialSession &&
-                    formattedTrialSessionDetails.canEditOngoingSession
+                    formattedTrialSessionDetails.editPermissions === 'limited'
                   }
                   id="trial-location"
                   name="trialLocation"

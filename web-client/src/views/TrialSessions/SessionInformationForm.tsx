@@ -86,7 +86,7 @@ export const SessionInformationForm = connect<
                 defaultValue={form.startDate}
                 disabled={
                   !addingTrialSession &&
-                  formattedTrialSessionDetails.canEditOngoingSession
+                  formattedTrialSessionDetails.editPermissions === 'limited'
                 }
                 errorText={validationErrors.startDate}
                 hintText={
@@ -125,7 +125,8 @@ export const SessionInformationForm = connect<
                           className="usa-input usa-input-inline"
                           disabled={
                             !addingTrialSession &&
-                            formattedTrialSessionDetails.canEditOngoingSession
+                            formattedTrialSessionDetails.editPermissions ===
+                              'limited'
                           }
                           id="start-time-hours"
                           max="12"
@@ -148,7 +149,8 @@ export const SessionInformationForm = connect<
                           className="usa-input usa-input-inline"
                           disabled={
                             !addingTrialSession &&
-                            formattedTrialSessionDetails.canEditOngoingSession
+                            formattedTrialSessionDetails.editPermissions ===
+                              'limited'
                           }
                           id="start-time-minutes"
                           max="59"
@@ -177,7 +179,8 @@ export const SessionInformationForm = connect<
                                 className="usa-radio__input"
                                 disabled={
                                   !addingTrialSession &&
-                                  formattedTrialSessionDetails.canEditOngoingSession
+                                  formattedTrialSessionDetails.editPermissions ===
+                                    'limited'
                                 }
                                 id={`startTimeExtension-${option}`}
                                 name="startTimeExtension"
@@ -248,7 +251,8 @@ export const SessionInformationForm = connect<
                       className="usa-checkbox__input"
                       disabled={
                         !addingTrialSession &&
-                        formattedTrialSessionDetails.canEditOngoingSession
+                        formattedTrialSessionDetails.editPermissions ===
+                          'limited'
                       }
                       id="swing-session"
                       name="swingSession"
@@ -264,7 +268,8 @@ export const SessionInformationForm = connect<
                       className={classNames(
                         'usa-checkbox__label',
                         !addingTrialSession &&
-                          formattedTrialSessionDetails.canEditOngoingSession &&
+                          formattedTrialSessionDetails.editPermissions ===
+                            'limited' &&
                           'tw:before:bg-grey-base',
                       )}
                       htmlFor="swing-session"
@@ -332,7 +337,7 @@ export const SessionInformationForm = connect<
                     className="usa-radio__input"
                     disabled={
                       !addingTrialSession &&
-                      formattedTrialSessionDetails.canEditOngoingSession
+                      formattedTrialSessionDetails.editPermissions === 'limited'
                     }
                     id={`session-type-${option}`}
                     name="sessionType"
@@ -368,7 +373,7 @@ export const SessionInformationForm = connect<
                 data-testid="trial-session-number-of-cases-allowed"
                 disabled={
                   !addingTrialSession &&
-                  formattedTrialSessionDetails.canEditOngoingSession
+                  formattedTrialSessionDetails.editPermissions === 'limited'
                 }
                 id="max-cases"
                 name="maxCases"

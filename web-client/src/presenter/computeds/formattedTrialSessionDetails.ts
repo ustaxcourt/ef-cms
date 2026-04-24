@@ -6,12 +6,13 @@ import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
 
+type EditPermissionsType = 'all' | 'limited' | 'none';
+
 export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
   canClose?: boolean;
   canDelete?: boolean;
-  canEdit?: boolean;
-  canEditOngoingSession?: boolean;
+  editPermissions?: EditPermissionsType;
   chambersPhoneNumber?: string;
   disableHybridFilter?: boolean;
   isHybridSession?: boolean;
@@ -32,8 +33,7 @@ export const formattedTrialSessionDetails = (
   let isHybridSession = false;
   let disableHybridFilter = false;
   let canDelete = false;
-  let canEdit = false;
-  let canEditOngoingSession = false;
+  let editPermissions: EditPermissionsType = 'none';
 
   let alertMessageForNOTT: string | undefined;
   let chambersPhoneNumber: string | undefined;
@@ -107,38 +107,26 @@ export const formattedTrialSessionDetails = (
       return editableSessionTypes.includes(sessionType);
     };
 
-    const endDate = formattedTrialSession.estimatedEndDate
-      ? applicationContext
-          .getUtilities()
-          .formatDateString(
-            formattedTrialSession.estimatedEndDate,
-            DATE_FORMATS.YYYYMMDD,
-          )
-      : undefined;
-
-    canEditOngoingSession =
-      user.role === USER_ROLES.caseServicesSupervisor &&
-      trialDateFormatted <= nowDateFormatted &&
-      (!endDate || endDate >= nowDateFormatted);
-
-    const validTrialDate = (): boolean => {
-      if (canEditOngoingSession) {
-        return true;
-      }
-      return (
-        trialDateInFuture || user.role === USER_ROLES.caseServicesSupervisor
-      );
-    };
-
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
-    canEdit =
-      validTrialDate() &&
+    if (
+      trialDateInFuture &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
       !isChambersUser &&
-      !isJudgeUser;
+      !isJudgeUser
+    ) {
+      editPermissions = 'all';
+    }
 
-    if (user.role === USER_ROLES.docketClerk && canEdit) {
-      canEdit = docketClerkCanEditCheck(formattedTrialSession.sessionType);
+    if (user.role === USER_ROLES.docketClerk && editPermissions === 'all') {
+      editPermissions = docketClerkCanEditCheck(
+        formattedTrialSession.sessionType,
+      )
+        ? 'all'
+        : 'none';
+    }
+
+    if (user.role === USER_ROLES.caseServicesSupervisor && !trialDateInFuture) {
+      editPermissions = 'limited';
     }
 
     const allCases = formattedTrialSession.caseOrder || [];
@@ -164,8 +152,7 @@ export const formattedTrialSessionDetails = (
     alertMessageForNOTT,
     canClose,
     canDelete,
-    canEdit,
-    canEditOngoingSession,
+    editPermissions,
     chambersPhoneNumber,
     disableHybridFilter,
     isHybridSession,

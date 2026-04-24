@@ -1,6 +1,7 @@
 import {
   FORMATS,
   calculateISODate,
+  createISODateString,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
@@ -28,8 +29,8 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
+  const TODAY = createISODateString();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
-
   const formattedTrialSessionDetails = withAppContextDecorator(
     formattedTrialSessionDetailsComputed,
     applicationContext,
@@ -164,7 +165,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: true });
   });
 
-  it('should NOT set canDelete, canEdit, or canClose to true if the trial session does NOT have a start date', () => {
+  it('should NOT set canDelete or canClose to true and editPermissions to none if the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
     const result: any = runCompute(formattedTrialSessionDetails, {
@@ -176,7 +177,7 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
 
-    expect(result.canEdit).toBe(false);
+    expect(result.editPermissions).toBe('none');
     expect(result.canDelete).toBe(false);
     expect(result.canClose).toBe(false);
   });
@@ -272,8 +273,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  describe('canEdit', () => {
-    it('should be false when trial session start date is in the past and it is NOT closed', () => {
+  describe('editPermissions', () => {
+    it('should be none when trial session start date is in the past and it is NOT closed', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {
@@ -285,11 +286,11 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be false when trial session start date is in the past and it is closed', () => {
+    it('should be none when trial session start date is in the past and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.closed,
@@ -306,11 +307,11 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be true when trial session start date is in the future, it is NOT closed, the user is not a chambers role', () => {
+    it('should be all when trial session start date is in the future, it is NOT closed, the user is not a chambers role', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -327,12 +328,12 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result).toMatchObject({
-        canEdit: true,
+        editPermissions: 'all',
       });
     });
 
-    describe('docketClerk user canEdit', () => {
-      it('should be true when canEdit is true and docketClerk user is editing a Special TrialSession', () => {
+    describe('docketClerk user editPermissions', () => {
+      it('should be all when editPermissions is all and docketClerk user is editing a Special TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -350,11 +351,11 @@ describe('formattedTrialSessionDetails', () => {
         });
 
         expect(result).toMatchObject({
-          canEdit: true,
+          editPermissions: 'all',
         });
       });
 
-      it('should be true when canEdit is true and docketClerk user is editing a Motion/Hearing TrialSession', () => {
+      it('should be all when editPermissions is all and docketClerk user is editing a Motion/Hearing TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -372,11 +373,11 @@ describe('formattedTrialSessionDetails', () => {
         });
 
         expect(result).toMatchObject({
-          canEdit: true,
+          editPermissions: 'all',
         });
       });
 
-      it('should be false when docketClerk user sees a non- Motion/Hearing or Special TrialSession', () => {
+      it('should be none when docketClerk user sees a non- Motion/Hearing or Special TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -394,12 +395,12 @@ describe('formattedTrialSessionDetails', () => {
         });
 
         expect(result).toMatchObject({
-          canEdit: false,
+          editPermissions: 'none',
         });
       });
     });
 
-    it('should be false when trial session start date is in the future, it is NOT closed, the user is a chambers role', () => {
+    it('should be none when trial session start date is in the future, it is NOT closed, the user is a chambers role', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -416,11 +417,11 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should  NOT allow judge to edit trial session info page', () => {
+    it('should NOT allow judge to edit trial session info page', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -437,11 +438,11 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be false when trial session start date is in the future and it is closed', () => {
+    it('should be none when trial session start date is in the future and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.closed,
@@ -458,16 +459,15 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be true when user is CSS, start date is in the past, and end date is in the future', () => {
+    it('should have edit permissions be limited if CSS user and start date is today', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
-        startDate: PAST_DATE,
-        estimatedEndDate: FUTURE_DATE,
+        startDate: TODAY,
       };
 
       const result = runCompute(formattedTrialSessionDetails, {
@@ -479,15 +479,14 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canEdit).toBe(true);
+      expect(result.editPermissions).toBe('limited');
     });
 
-    it('should be true when user is CSS, start date is in the past, and end date does not exist', () => {
+    it('should have edit permissions be limited if CSS user and start date is in the past', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: PAST_DATE,
-        estimatedEndDate: undefined,
       };
 
       const result = runCompute(formattedTrialSessionDetails, {
@@ -499,7 +498,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canEdit).toBe(true);
+      expect(result.editPermissions).toBe('limited');
     });
   });
 
