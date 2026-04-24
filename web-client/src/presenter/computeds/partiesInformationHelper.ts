@@ -97,8 +97,8 @@ export const partiesInformationHelper = (
         : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
     }
 
-    petitioner.formattedPaperPetitionEmail =
-      petitioner.paperPetitionEmail ?? NOT_PROVIDED;
+    petitioner.formattedContactEmailAddress =
+      petitioner.contactEmailAddress ?? NOT_PROVIDED;
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
@@ -136,7 +136,7 @@ export const partiesInformationHelper = (
       ],
     );
 
-    const showPaperPetitionEmail =
+    const showContactEmailAddress =
       E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
       !petitioner.sealedAndUnavailable &&
       !isExternalUser;
@@ -155,7 +155,7 @@ export const partiesInformationHelper = (
         : false,
       representingPractitioners,
       showExternalHeader: isExternalUser,
-      showPaperPetitionEmail,
+      showContactEmailAddress,
       showRemoveEmailButton,
     };
   });

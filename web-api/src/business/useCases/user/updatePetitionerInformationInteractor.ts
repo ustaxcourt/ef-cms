@@ -220,6 +220,7 @@ export const updatePetitionerInformation = async (
       additionalName: undefined,
       address2: undefined,
       address3: undefined,
+      contactEmailAddress: undefined,
       title: undefined,
     }),
     [
@@ -231,6 +232,7 @@ export const updatePetitionerInformation = async (
       'country',
       'countryType',
       'name',
+      'contactEmailAddress',
       'phone',
       'postalCode',
       'additionalName',
@@ -262,7 +264,6 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.hasConsentedToElectronicService,
       hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
       isAddressSealed: existingPetitionerInfo.isAddressSealed,
-      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
       sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
       ...editableFields,
     },
