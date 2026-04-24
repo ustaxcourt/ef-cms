@@ -1,4 +1,12 @@
 <details><summary>Dependency Updates - Week of 2026-04-20</summary>
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.76` - choose exp5
+```bash
+npm run ecr:check-version
+```
 
 ## Local
 
