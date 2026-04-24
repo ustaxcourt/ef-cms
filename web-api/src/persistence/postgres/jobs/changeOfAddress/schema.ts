@@ -2,7 +2,7 @@ const DEFAULT = {};
 
 export const changeOfAddressTableDefinition = {
   jobId: DEFAULT as string,
-  remaining: DEFAULT as number,
+  docketNumber: DEFAULT as string,
 };
 
 export type ChangeOfAddressTable = typeof changeOfAddressTableDefinition;
