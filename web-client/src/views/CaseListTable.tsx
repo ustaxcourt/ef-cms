@@ -102,19 +102,21 @@ export const CaseListTable = connect(
                   received date or approval of waiver to update.
                 </div>
               )}
-              <div
-                ref={paginatorTop}
-                data-testid="casePaginationTop"
-                className="tw:mb-[30px] tw:mt-[30px] grid-col"
-              >
-                <Paginator
-                  currentPageIndex={casePagination.activePage}
-                  totalPages={casePagination.totalPages}
-                  onPageChange={pageChange => {
-                    casePagination.setActivePage(pageChange);
-                  }}
-                />
-              </div>
+              {casePagination.totalPages > 1 && (
+                <div
+                  ref={paginatorTop}
+                  data-testid="casePaginationTop"
+                  className="tw:mb-[30px] tw:mt-[30px] grid-col"
+                >
+                  <Paginator
+                    currentPageIndex={casePagination.activePage}
+                    totalPages={casePagination.totalPages}
+                    onPageChange={pageChange => {
+                      casePagination.setActivePage(pageChange);
+                    }}
+                  />
+                </div>
+              )}
               <table
                 className={classNames({
                   'usa-table responsive-table dashboard ustc-table ': !isMobile,
