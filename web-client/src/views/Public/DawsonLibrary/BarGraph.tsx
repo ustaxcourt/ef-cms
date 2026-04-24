@@ -74,7 +74,7 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:justify-start tw:pb-5 tw:xs:pb-8">
+    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:xs:gap-4 tw:justify-start tw:pb-5 tw:xs:pb-8">
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
@@ -221,7 +221,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
-    <div className="tw:overflow-x-auto">
+    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
       <div
         style={
           {
@@ -232,7 +232,9 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:xs:text-4xl tw:text-2xl tw:m-0">{title}</h2>
+          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
+            {title}
+          </h2>
         )}
         <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
           <ResponsiveContainer
@@ -291,7 +293,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 domain={[0, yMax]}
                 tick={<YAxisTick />}
                 axisLine={true}
-                tickLine={false}
+                tickLine={true}
                 label={
                   yAxisLabel ? <BarYAxisLabel value={yAxisLabel} /> : undefined
                 }
@@ -596,7 +598,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }
 
   return (
-    <div className="tw:overflow-x-auto">
+    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
       <div
         style={
           {
@@ -607,7 +609,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
+          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}

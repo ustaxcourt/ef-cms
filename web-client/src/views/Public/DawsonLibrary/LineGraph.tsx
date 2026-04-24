@@ -42,7 +42,7 @@ const defaultColors = [
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div className="tw:flex tw:flex-wrap tw:gap-4 tw:justify-start tw:mb-5 tw:xs:mb-8">
+    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:xs:gap-4 tw:justify-start tw:mb-5 tw:xs:mb-8">
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div
@@ -124,7 +124,7 @@ const LineYAxisTick = (props: any) => {
 
 const LineYAxisLabel = ({ value, viewBox }: any) => {
   const { x, y, height: h, width: w } = viewBox;
-  const cx = x + (w ?? 80) / 2;
+  const cx = x + (w ?? 80) / 2 - 20;
   const cy = y + h / 2;
   return (
     <text
@@ -200,7 +200,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
         {title && (
-          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
+          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}
@@ -232,7 +232,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   const mergedData = chartData.map((row, i) => ({ ...row, ...tooltipData[i] }));
 
   return (
-    <div className="tw:overflow-x-auto">
+    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
       <div
         style={
           {
@@ -243,7 +243,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:xs:pb-8 tw:pb-5 tw:xs:text-4xl tw:text-2xl tw:m-0">
+          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}
