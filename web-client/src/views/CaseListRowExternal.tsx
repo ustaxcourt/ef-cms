@@ -49,7 +49,7 @@ export const CaseListRowExternal = ({
                 />
               </div>
             </td>
-            <td>{formattedCase.caseTitle}</td>
+            <td className="tw:max-w-[250px]">{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
             {showCaseStatus && (
               <td className="tw:max-w-[175px]">
