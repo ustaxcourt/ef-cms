@@ -1,9 +1,11 @@
-import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
- * Enqueues a coversheet generation job for the docket entry set on state
- * and awaits completion so callers see the same wait behavior as before.
+ * Generates a coversheet for the docket entry set on state
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.props the cerebral props function
  */
 export const generateCoversheetAction = async ({
   applicationContext,
@@ -19,10 +21,4 @@ export const generateCoversheetAction = async ({
       docketEntryId,
       docketNumber,
     });
-
-  await pollForCoversheetComplete({
-    applicationContext,
-    docketEntryIds: [docketEntryId],
-    docketNumber,
-  });
 };

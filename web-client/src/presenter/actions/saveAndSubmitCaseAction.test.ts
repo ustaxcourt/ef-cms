@@ -1,17 +1,14 @@
-jest.mock('@web-client/presenter/utilities/pollForCoversheetComplete');
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { saveAndSubmitCaseAction } from '@web-client/presenter/actions/saveAndSubmitCaseAction';
 
 describe('saveAndSubmitCaseAction', () => {
-  const mockPollForCoversheetComplete = jest.mocked(pollForCoversheetComplete);
   let path: { error: jest.Mock; success: jest.Mock };
   let docketEntries: any[];
 
@@ -21,9 +18,6 @@ describe('saveAndSubmitCaseAction', () => {
       error: jest.fn(),
       success: jest.fn(),
     };
-
-    mockPollForCoversheetComplete.mockReset();
-    mockPollForCoversheetComplete.mockResolvedValue(undefined);
 
     applicationContext.getUseCases().generateDocumentIds.mockImplementation(
       () =>
@@ -47,11 +41,15 @@ describe('saveAndSubmitCaseAction', () => {
         }),
     );
 
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockImplementation(() => {});
+
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = path;
   });
 
-  it('generates document Ids, creates case, polls processing status, and calls success path for a user uploaded petition', async () => {
+  it('should generate document Ids, create case, add coversheets to all docket entries and call success path for a user uploaded petition', async () => {
     docketEntries.push({ docketEntryId: '1', isFileAttached: true });
     docketEntries.push({ docketEntryId: '2', isFileAttached: true });
     docketEntries.push({ docketEntryId: '3', isFileAttached: false });
@@ -103,13 +101,21 @@ describe('saveAndSubmitCaseAction', () => {
       stinFileId: 'TEST_stinFileId',
     });
 
-    expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
-    expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketEntryIds: ['1', '2', 'TEST_stinFileId'],
-        docketNumber: 'TEST_docketNumber',
-      }),
-    );
+    const addCoversheetInteractorCalls =
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls;
+    expect(addCoversheetInteractorCalls.length).toEqual(3);
+    expect(addCoversheetInteractorCalls[0][1]).toEqual({
+      docketEntryId: '1',
+      docketNumber: 'TEST_docketNumber',
+    });
+    expect(addCoversheetInteractorCalls[1][1]).toEqual({
+      docketEntryId: '2',
+      docketNumber: 'TEST_docketNumber',
+    });
+    expect(addCoversheetInteractorCalls[2][1]).toEqual({
+      docketEntryId: 'TEST_stinFileId',
+      docketNumber: 'TEST_docketNumber',
+    });
 
     const successCalls = path.success.mock.calls;
     expect(successCalls.length).toEqual(1);
@@ -126,7 +132,7 @@ describe('saveAndSubmitCaseAction', () => {
     });
   });
 
-  it('generates document Ids, creates case, polls processing status, and calls success path for a generated petition', async () => {
+  it('should generate document Ids, create case, add coversheets to all docket entries and call success path for a generated petition', async () => {
     docketEntries.push({ docketEntryId: '1', isFileAttached: true });
     docketEntries.push({ docketEntryId: '2', isFileAttached: true });
     docketEntries.push({ docketEntryId: '3', isFileAttached: false });
@@ -153,6 +159,16 @@ describe('saveAndSubmitCaseAction', () => {
       },
     });
 
+    const generateDocumentIdsCalls =
+      applicationContext.getUseCases().generateDocumentIds.mock.calls;
+    expect(generateDocumentIdsCalls.length).toEqual(1);
+    expect(generateDocumentIdsCalls[0][1]).toEqual({
+      attachmentToPetitionUploadProgress: ['TEST_attachmentToPetition'],
+      corporateDisclosureUploadProgress: 'TEST_corporateDisclosure',
+      petitionUploadProgress: 'TEST_petition',
+      stinUploadProgress: 'TEST_stin',
+    });
+
     const createCaseInteractorCalls =
       applicationContext.getUseCases().createCaseInteractor.mock.calls;
     expect(createCaseInteractorCalls.length).toEqual(1);
@@ -168,13 +184,21 @@ describe('saveAndSubmitCaseAction', () => {
       stinFileId: 'TEST_stinFileId',
     });
 
-    expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
-    expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketEntryIds: ['1', '2', 'TEST_stinFileId'],
-        docketNumber: 'TEST_docketNumber',
-      }),
-    );
+    const addCoversheetInteractorCalls =
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls;
+    expect(addCoversheetInteractorCalls.length).toEqual(3);
+    expect(addCoversheetInteractorCalls[0][1]).toEqual({
+      docketEntryId: '1',
+      docketNumber: 'TEST_docketNumber',
+    });
+    expect(addCoversheetInteractorCalls[1][1]).toEqual({
+      docketEntryId: '2',
+      docketNumber: 'TEST_docketNumber',
+    });
+    expect(addCoversheetInteractorCalls[2][1]).toEqual({
+      docketEntryId: 'TEST_stinFileId',
+      docketNumber: 'TEST_docketNumber',
+    });
 
     const successCalls = path.success.mock.calls;
     expect(successCalls.length).toEqual(1);
@@ -191,7 +215,7 @@ describe('saveAndSubmitCaseAction', () => {
     });
   });
 
-  it('sets the correct success message when a case is filed by a private practitioner', async () => {
+  it('should set correct success message case is filed by private practitioner', async () => {
     await runAction(saveAndSubmitCaseAction, {
       modules: {
         presenter,
@@ -229,15 +253,12 @@ describe('saveAndSubmitCaseAction', () => {
     });
   });
 
-  it('runs the error path if there was an error thrown in the interactor', async () => {
+  it('should run the error path if there was an error thrown in the interactor', async () => {
     applicationContext
       .getUseCases()
       .generateDocumentIds.mockImplementation(
         () => new Promise((_resolve, reject) => reject(new Error())),
       );
-
-    const originalError = console.error;
-    console.error = jest.fn();
 
     await runAction(saveAndSubmitCaseAction, {
       modules: {
@@ -267,44 +288,19 @@ describe('saveAndSubmitCaseAction', () => {
     const generateDocumentIdsCalls =
       applicationContext.getUseCases().generateDocumentIds.mock.calls;
     expect(generateDocumentIdsCalls.length).toEqual(1);
+    expect(generateDocumentIdsCalls[0][1]).toEqual({
+      attachmentToPetitionUploadProgress: 'TEST_attachmentToPetition',
+      corporateDisclosureUploadProgress: 'TEST_corporateDisclosure',
+      petitionUploadProgress: 'TEST_petition',
+      stinUploadProgress: 'TEST_stin',
+    });
 
     const createCaseInteractorCalls =
       applicationContext.getUseCases().createCaseInteractor.mock.calls;
     expect(createCaseInteractorCalls.length).toEqual(0);
 
-    expect(mockPollForCoversheetComplete).not.toHaveBeenCalled();
-    console.error = originalError;
-  });
-
-  it('runs the error path if the coversheet poll rejects', async () => {
-    docketEntries.push({ docketEntryId: '1', isFileAttached: true });
-    mockPollForCoversheetComplete.mockRejectedValue(new Error('poll timeout'));
-
-    const originalError = console.error;
-    console.error = jest.fn();
-
-    await runAction(saveAndSubmitCaseAction, {
-      modules: { presenter },
-      props: {
-        fileUploadProgressMap: {
-          attachmentToPetition: ['TEST_attachmentToPetition'],
-          corporateDisclosure: 'TEST_corporateDisclosure',
-          petition: 'TEST_petition',
-          stin: 'TEST_stin',
-        },
-      },
-      state: {
-        petitionFormatted: {
-          petitionFileId: 'STATE_TEST_petitionFileId',
-          petitionFormatted: 'petitionFormattedData',
-          petitionType: PETITION_TYPES.autoGenerated,
-        },
-        user: mockPetitionerUser,
-      },
-    });
-
-    expect(path.error).toHaveBeenCalledTimes(1);
-    expect(path.success).not.toHaveBeenCalled();
-    console.error = originalError;
+    const addCoversheetInteractorCalls =
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls;
+    expect(addCoversheetInteractorCalls.length).toEqual(0);
   });
 });

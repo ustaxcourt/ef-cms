@@ -230,21 +230,6 @@ describe('fileExternalDocumentInteractor', () => {
     );
     expect(entry).toBeDefined();
     expect(entry?.servedAt).toBeDefined();
-
-    expect(
-      applicationContext.getWorkerGateway().queueWork,
-    ).toHaveBeenCalledWith(
-      applicationContext,
-      expect.objectContaining({
-        message: expect.objectContaining({
-          type: 'ADD_COVERSHEET',
-          payload: {
-            docketEntryId: mockDocketEntryId,
-            docketNumber: caseRecord.docketNumber,
-          },
-        }),
-      }),
-    );
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {

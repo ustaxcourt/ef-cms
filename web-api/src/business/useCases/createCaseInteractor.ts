@@ -1,5 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -337,23 +336,6 @@ export const createCaseInteractor = async (
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],
   });
-
-  const coversheetDocketEntryIds = [
-    petitionFileId,
-    stinFileId,
-    ...(corporateDisclosureFileId ? [corporateDisclosureFileId] : []),
-    ...(attachmentToPetitionFileIds ?? []),
-  ];
-
-  await Promise.all(
-    coversheetDocketEntryIds.map(docketEntryId =>
-      enqueueAddCoversheet(applicationContext, {
-        authorizedUser,
-        docketEntryId,
-        docketNumber: caseToAdd.docketNumber,
-      }),
-    ),
-  );
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

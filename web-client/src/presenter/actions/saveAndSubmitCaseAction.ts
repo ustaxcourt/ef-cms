@@ -5,7 +5,6 @@ import {
   PETITION_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveAndSubmitCaseAction = async ({
@@ -63,30 +62,26 @@ export const saveAndSubmitCaseAction = async ({
         stinFileId: stinFile,
       });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('saveAndSubmitCaseAction failed', err);
     return path.error();
   }
+
+  const addCoversheet = docketEntryId => {
+    return applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
+  };
 
   const documentsThatNeedCoverSheet = caseDetail.docketEntries
     .filter(d => d.isFileAttached)
     .map(d => d.docketEntryId);
 
-  // STIN is not included in the API response for security reasons, but we
-  // already know its docketEntryId from the upload step above
+  // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
   documentsThatNeedCoverSheet.push(stinFile);
 
-  try {
-    await pollForCoversheetComplete({
-      applicationContext,
-      docketEntryIds: documentsThatNeedCoverSheet,
-      docketNumber: caseDetail.docketNumber,
-    });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('saveAndSubmitCaseAction coversheet poll failed', err);
-    return path.error();
-  }
+  await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
   const isPetitioner = user.role === ROLES.petitioner;
   const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`;
