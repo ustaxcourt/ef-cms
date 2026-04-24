@@ -15,7 +15,7 @@ export async function createChangeOfAddressJob({
   });
 
   await pgInsertInto({
-    table: 'dwChangeOfAddress',
+    table: 'dwChangeOfAddressNew',
     values,
   });
 }
