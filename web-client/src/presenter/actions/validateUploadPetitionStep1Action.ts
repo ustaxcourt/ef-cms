@@ -22,7 +22,7 @@ export const validateUploadPetitionStep1Action = ({
       'postalCode',
       'placeOfLegalResidence',
       'phone',
-      'paperPetitionEmail',
+      'contactEmailAddress',
       'preferredLanguage',
       'preferredCommunicationMethod',
     ];

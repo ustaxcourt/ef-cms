@@ -150,9 +150,15 @@ function constructCaseForUser({
 
   // Petitioners and practitioners on a case have full read access to the case
   if (userIsAssociated) {
-    return useDTO
+    const caseResult = useDTO
       ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
       : new Case(rawCase, { authorizedUser: user });
+
+    for (const petitioner of caseResult.petitioners) {
+      delete petitioner.contactEmailAddress;
+    }
+
+    return caseResult;
   }
 
   // IRS super users have full read access to all cases with served petitions
