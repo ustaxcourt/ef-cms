@@ -190,16 +190,21 @@ export const CaseListTable = connect(
                   ))}
                 </tbody>
               </table>
-              <div data-testid="casePaginationBottom" className="grid-col">
-                <Paginator
-                  currentPageIndex={casePagination.activePage}
-                  totalPages={casePagination.totalPages}
-                  onPageChange={pageChange => {
-                    casePagination.setActivePage(pageChange);
-                    focusPaginatorTop(paginatorTop);
-                  }}
-                />
-              </div>
+              {casePagination.totalPages > 1 && (
+                <div
+                  data-testid="casePaginationBottom"
+                  className={`grid-col  ${isMobile ? '' : 'tw:mb-[30px]'}`}
+                >
+                  <Paginator
+                    currentPageIndex={casePagination.activePage}
+                    totalPages={casePagination.totalPages}
+                    onPageChange={pageChange => {
+                      casePagination.setActivePage(pageChange);
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                </div>
+              )}
             </>
           )}
         </>
