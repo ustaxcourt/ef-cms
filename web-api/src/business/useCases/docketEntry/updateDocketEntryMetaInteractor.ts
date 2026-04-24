@@ -64,140 +64,141 @@ export const updateDocketEntryMeta = async (
   }
 
   const updatedCase = await withTransaction(async () => {
-
-  if (
-    docketEntryMeta.affectedDocketEntries ||
-    originalDocketEntry.affectedDocketEntries
-  )
-    await handleRelatedDocketEntries(
-      originalDocketEntry,
-      docketEntryMeta,
-      docketNumber,
-    );
-
-  const editableFields = {
-    action: docketEntryMeta.action,
-    addToCoversheet: docketEntryMeta.addToCoversheet,
-    additionalInfo: docketEntryMeta.additionalInfo,
-    additionalInfo2: docketEntryMeta.additionalInfo2,
-    attachments: docketEntryMeta.attachments,
-    certificateOfService: docketEntryMeta.certificateOfService,
-    certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
-    date: docketEntryMeta.date,
-    docketNumbers: docketEntryMeta.docketNumbers,
-    documentTitle: docketEntryMeta.documentTitle,
-    documentType: docketEntryMeta.documentType,
-    eventCode: docketEntryMeta.eventCode,
-    filedBy: docketEntryMeta.filedBy,
-    filers: docketEntryMeta.filers,
-    filingDate: docketEntryMeta.filingDate,
-    freeText: docketEntryMeta.freeText,
-    hasOtherFilingParty: docketEntryMeta.hasOtherFilingParty,
-    judge: docketEntryMeta.judge,
-    lodged: docketEntryMeta.lodged,
-    objections: docketEntryMeta.objections,
-    ordinalValue: docketEntryMeta.ordinalValue,
-    otherFilingParty: docketEntryMeta.otherFilingParty,
-    otherIteration: docketEntryMeta.otherIteration,
-    partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
-    pending: docketEntryMeta.pending,
-    previousDocument: docketEntryMeta.previousDocument,
-    scenario: docketEntryMeta.scenario,
-    secondaryDocument: docketEntryMeta.secondaryDocument,
-    servedAt:
-      docketEntryMeta.servedAt && createISODateString(docketEntryMeta.servedAt),
-    servedPartiesCode: docketEntryMeta.servedPartiesCode,
-    serviceDate: docketEntryMeta.serviceDate,
-    trialLocation: docketEntryMeta.trialLocation,
-  };
-
-  const servedAtUpdated =
-    editableFields.servedAt &&
-    editableFields.servedAt !== originalDocketEntry.servedAt;
-  const filingDateUpdated: boolean =
-    editableFields.filingDate &&
-    editableFields.filingDate !== originalDocketEntry.filingDate;
-
-  const entryRequiresCoverSheet =
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      editableFields.eventCode,
-    );
-  const originalEntryRequiresCoversheet =
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      originalDocketEntry.eventCode,
-    );
-  const shouldAddNewCoverSheet =
-    !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
-
-  const shouldRemoveExistingCoverSheet =
-    originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
-
-  const documentTitleUpdated =
-    getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
-    getDocumentTitleWithAdditionalInfo({ docketEntry: docketEntryMeta });
-
-  const certificateOfServiceUpdated =
-    originalDocketEntry.certificateOfService !==
-    docketEntryMeta.certificateOfService;
-
-  const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
-    certificateOfServiceUpdated,
-    documentTitleUpdated,
-    entryRequiresCoverSheet,
-    filingDateUpdated,
-    originalDocketEntry,
-    servedAtUpdated,
-    shouldAddNewCoverSheet,
-  });
-
-  const docketEntryEntity = new DocketEntry(
-    {
-      ...originalDocketEntry,
-      ...editableFields,
-    },
-    { authorizedUser, petitioners: caseEntity.petitioners },
-  ).validate();
-
-  caseEntity.updateDocketEntry(docketEntryEntity);
-
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ caseEntity });
-
-  if (shouldGenerateCoversheet) {
-    await upsertDocketEntries([docketEntryEntity.validate()]);
-
-    const updatedDocketEntry = await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(
-        applicationContext,
-        {
-          docketEntryId: originalDocketEntry.docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          filingDateUpdated,
-        },
-        authorizedUser,
+    if (
+      docketEntryMeta.affectedDocketEntries ||
+      originalDocketEntry.affectedDocketEntries
+    )
+      await handleRelatedDocketEntries(
+        originalDocketEntry,
+        docketEntryMeta,
+        docketNumber,
       );
 
-    caseEntity.updateDocketEntry(updatedDocketEntry);
-  } else if (shouldRemoveExistingCoverSheet) {
-    const { numberOfPages } = await applicationContext
-      .getUseCaseHelpers()
-      .removeCoversheet(applicationContext, {
-        documentStorageId: originalDocketEntry.documentStorageId,
-      });
+    const editableFields = {
+      action: docketEntryMeta.action,
+      addToCoversheet: docketEntryMeta.addToCoversheet,
+      additionalInfo: docketEntryMeta.additionalInfo,
+      additionalInfo2: docketEntryMeta.additionalInfo2,
+      attachments: docketEntryMeta.attachments,
+      certificateOfService: docketEntryMeta.certificateOfService,
+      certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
+      date: docketEntryMeta.date,
+      docketNumbers: docketEntryMeta.docketNumbers,
+      documentTitle: docketEntryMeta.documentTitle,
+      documentType: docketEntryMeta.documentType,
+      eventCode: docketEntryMeta.eventCode,
+      filedBy: docketEntryMeta.filedBy,
+      filers: docketEntryMeta.filers,
+      filingDate: docketEntryMeta.filingDate,
+      freeText: docketEntryMeta.freeText,
+      hasOtherFilingParty: docketEntryMeta.hasOtherFilingParty,
+      judge: docketEntryMeta.judge,
+      lodged: docketEntryMeta.lodged,
+      objections: docketEntryMeta.objections,
+      ordinalValue: docketEntryMeta.ordinalValue,
+      otherFilingParty: docketEntryMeta.otherFilingParty,
+      otherIteration: docketEntryMeta.otherIteration,
+      partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
+      pending: docketEntryMeta.pending,
+      previousDocument: docketEntryMeta.previousDocument,
+      scenario: docketEntryMeta.scenario,
+      secondaryDocument: docketEntryMeta.secondaryDocument,
+      servedAt:
+        docketEntryMeta.servedAt &&
+        createISODateString(docketEntryMeta.servedAt),
+      servedPartiesCode: docketEntryMeta.servedPartiesCode,
+      serviceDate: docketEntryMeta.serviceDate,
+      trialLocation: docketEntryMeta.trialLocation,
+    };
 
-    docketEntryEntity.setNumberOfPages(numberOfPages);
+    const servedAtUpdated =
+      editableFields.servedAt &&
+      editableFields.servedAt !== originalDocketEntry.servedAt;
+    const filingDateUpdated: boolean =
+      editableFields.filingDate &&
+      editableFields.filingDate !== originalDocketEntry.filingDate;
+
+    const entryRequiresCoverSheet =
+      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+        editableFields.eventCode,
+      );
+    const originalEntryRequiresCoversheet =
+      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+        originalDocketEntry.eventCode,
+      );
+    const shouldAddNewCoverSheet =
+      !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
+
+    const shouldRemoveExistingCoverSheet =
+      originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
+
+    const documentTitleUpdated =
+      getDocumentTitleWithAdditionalInfo({
+        docketEntry: originalDocketEntry,
+      }) !==
+      getDocumentTitleWithAdditionalInfo({ docketEntry: docketEntryMeta });
+
+    const certificateOfServiceUpdated =
+      originalDocketEntry.certificateOfService !==
+      docketEntryMeta.certificateOfService;
+
+    const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+      certificateOfServiceUpdated,
+      documentTitleUpdated,
+      entryRequiresCoverSheet,
+      filingDateUpdated,
+      originalDocketEntry,
+      servedAtUpdated,
+      shouldAddNewCoverSheet,
+    });
+
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...originalDocketEntry,
+        ...editableFields,
+      },
+      { authorizedUser, petitioners: caseEntity.petitioners },
+    ).validate();
 
     caseEntity.updateDocketEntry(docketEntryEntity);
-  }
 
-  return updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({ caseEntity });
+
+    if (shouldGenerateCoversheet) {
+      await upsertDocketEntries([docketEntryEntity.validate()]);
+
+      const updatedDocketEntry = await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(
+          applicationContext,
+          {
+            docketEntryId: originalDocketEntry.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            filingDateUpdated,
+          },
+          authorizedUser,
+        );
+
+      caseEntity.updateDocketEntry(updatedDocketEntry);
+    } else if (shouldRemoveExistingCoverSheet) {
+      const { numberOfPages } = await applicationContext
+        .getUseCaseHelpers()
+        .removeCoversheet(applicationContext, {
+          documentStorageId: originalDocketEntry.documentStorageId,
+        });
+
+      docketEntryEntity.setNumberOfPages(numberOfPages);
+
+      caseEntity.updateDocketEntry(docketEntryEntity);
+    }
+
+    return updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
-
-});
 
   return new CaseDTO(
     new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
