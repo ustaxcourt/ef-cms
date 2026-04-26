@@ -12,6 +12,7 @@ import {
   mockIrsSuperuser,
   mockJudgeUser,
   mockPetitionerUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 
@@ -63,6 +64,21 @@ const PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE = {
   userId: MOCK_UNSERVED_CASE.petitioners[0].contactId,
 };
 const PETITIONER_NOT_ASSOCIATED_WITH_MOCK_UNSERVED_CASE = mockPetitionerUser;
+
+const MOCK_CASE_WITH_CONTACT_EMAIL = {
+  ...MOCK_UNSERVED_CASE,
+  petitioners: MOCK_UNSERVED_CASE.petitioners.map(p => ({
+    ...p,
+    contactEmailAddress: 'petitioner-contact@example.com',
+  })),
+  privatePractitioners: [
+    {
+      userId: mockPrivatePractitionerUser.userId,
+      name: mockPrivatePractitionerUser.name,
+      role: mockPrivatePractitionerUser.role,
+    },
+  ],
+};
 
 describe('CaseFactory', () => {
   describe('internal user', () => {
@@ -174,6 +190,30 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect((caseData as Case).petitioners[0].address1).toBeFalsy();
+    });
+    it('should not include contactEmailAddress for associated external users', () => {
+      const caseData = CaseFactory.getCase({
+        rawCase: MOCK_CASE_WITH_CONTACT_EMAIL,
+        user: mockPrivatePractitionerUser,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+      expect(
+        (caseData as Case).petitioners[0].contactEmailAddress,
+      ).toBeUndefined();
+    });
+    it('should not include contactEmailAddress for associated petitioners', () => {
+      const mockCaseWithContactEmail = {
+        ...MOCK_CASE_WITH_CONTACT_EMAIL,
+        privatePractitioners: [],
+      };
+      const caseData = CaseFactory.getCase({
+        rawCase: mockCaseWithContactEmail,
+        user: PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE,
+      });
+      expect(caseData).toBeInstanceOf(Case);
+      expect(
+        (caseData as Case).petitioners[0].contactEmailAddress,
+      ).toBeUndefined();
     });
   });
   // Other scenarios should give case data that only a non-logged-in user could see
@@ -350,6 +390,30 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect((caseData as CaseDTO).petitioners[0].address1).toBeFalsy();
+      });
+      it('should not include contactEmailAddress for associated external users', () => {
+        const caseData = CaseFactory.getCaseDTO({
+          rawCase: MOCK_CASE_WITH_CONTACT_EMAIL,
+          user: mockPrivatePractitionerUser,
+        });
+        expect(caseData).toBeInstanceOf(CaseDTO);
+        expect(
+          (caseData as CaseDTO).petitioners[0].contactEmailAddress,
+        ).toBeUndefined();
+      });
+      it('should not include contactEmailAddress for associated petitioners', () => {
+        const mockCaseWithContactEmail = {
+          ...MOCK_CASE_WITH_CONTACT_EMAIL,
+          privatePractitioners: [],
+        };
+        const caseData = CaseFactory.getCaseDTO({
+          rawCase: mockCaseWithContactEmail,
+          user: PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE,
+        });
+        expect(caseData).toBeInstanceOf(CaseDTO);
+        expect(
+          (caseData as CaseDTO).petitioners[0].contactEmailAddress,
+        ).toBeUndefined();
       });
     });
     describe.each([
