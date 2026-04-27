@@ -1185,10 +1185,7 @@ app.post(
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
-  app.put(
-    '/public-api/verify-email',
-    lambdaWrapper(verifyUserPendingEmailLambda),
-  );
+  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the
