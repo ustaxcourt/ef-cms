@@ -25,12 +25,16 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -130,14 +134,15 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  await withTransaction(async () => {
+  const docketEntryIds = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  const resolvedCaseEntities = await withTransaction(async () => {
     const pageCountsByDocketEntryId: Map<string, number> = new Map();
     // Process page counts in batches of 3 to balance speed and memory usage
     // This prevents OutOfMemory errors when filing multiple large documents
     // while being faster than sequential processing
-    const docketEntryIds = documentsToAdd
-      .map(([docketEntryId]) => docketEntryId)
-      .filter((id): id is string => !!id);
 
     const BATCH_SIZE = 3;
     for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
@@ -244,6 +249,30 @@ export const fileExternalDocument = async (
 
     return resolvedCaseEntities;
   });
+
+  await Promise.all(
+    docketEntryIds.map(eachDocketEntryId =>
+      applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: eachDocketEntryId,
+          docketNumber,
+        },
+        authorizedUser,
+      ),
+    ),
+  );
+
+  const theCase = resolvedCaseEntities.find(
+    caseEntity => caseEntity.docketNumber === docketNumber,
+  );
+
+  const filteredCase = CaseFactory.getCaseDTO({
+    rawCase: theCase,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

@@ -1,5 +1,9 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -40,7 +44,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<CaseDTO> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -189,6 +193,30 @@ export const fileCourtIssuedDocketEntry = async (
       false,
     );
   }
+
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    )
+  ) {
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId,
+        docketNumber: subjectDocketNumber,
+      },
+      authorizedUser,
+    );
+  }
+
+  const rawSubjectCase = await getCaseByDocketNumber({
+    docketNumber: subjectDocketNumber,
+  });
+
+  const subjectCase = new Case(rawSubjectCase, {
+    authorizedUser,
+  }).validate();
+  return new CaseDTO(subjectCase.toRawObject());
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
