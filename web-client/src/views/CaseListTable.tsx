@@ -106,7 +106,7 @@ export const CaseListTable = connect(
                 <div
                   ref={paginatorTop}
                   data-testid="casePaginationTop"
-                  className="tw:mb-[30px] tw:mt-[30px] grid-col"
+                  className="tw:mb-[1.875rem] tw:mt-[1.875rem] grid-col"
                 >
                   <Paginator
                     currentPageIndex={casePagination.activePage}
@@ -193,7 +193,7 @@ export const CaseListTable = connect(
               {casePagination.totalPages > 1 && (
                 <div
                   data-testid="casePaginationBottom"
-                  className={`grid-col  ${isMobile ? '' : 'tw:mb-[30px]'}`}
+                  className={`grid-col  ${isMobile ? 'tw:mb-[1.875rem]' : ''}`}
                 >
                   <Paginator
                     currentPageIndex={casePagination.activePage}
