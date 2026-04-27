@@ -29,7 +29,7 @@ const StandardNOTRText = () => (
 const ElectronicServiceNOTRText = ({ accessCode, contact }) => (
   <div className="info-box-content">
     You indicated on your Petition that you wish to receive electronic service
-    for your case at <strong>{contact.paperPetitionEmail}</strong>. You must
+    for your case at <strong>{contact.contactEmailAddress}</strong>. You must
     verify your electronic service address by e-mailing{' '}
     <strong>
       <a href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}>
@@ -113,7 +113,7 @@ export const NoticeOfReceiptOfPetition = ({
 
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">Electronic Access to Your Case:</div>
-        {!!contact.paperPetitionEmail &&
+        {!!contact.contactEmailAddress &&
         contact.hasConsentedToElectronicService ? (
           <ElectronicServiceNOTRText
             accessCode={accessCode}

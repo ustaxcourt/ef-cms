@@ -202,7 +202,7 @@ export const Petition = ({
             {!isPetitioner && (
               <div>
                 <b>Email: </b>
-                {contactPrimary.paperPetitionEmail || 'Email not provided'}
+                {contactPrimary.contactEmailAddress || 'Email not provided'}
               </div>
             )}
             {contactPrimary.placeOfLegalResidence && (
@@ -269,7 +269,7 @@ export const Petition = ({
 
                 <div>
                   <b>Email: </b>
-                  {contactSecondary.paperPetitionEmail || 'Email not provided'}
+                  {contactSecondary.contactEmailAddress || 'Email not provided'}
                 </div>
 
                 {isPetitioner && (
