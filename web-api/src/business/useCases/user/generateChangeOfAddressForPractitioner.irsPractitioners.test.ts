@@ -8,11 +8,24 @@ jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress',
+);
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
   }),
 }));
+jest.mock('@web-api/persistence/postgres/utils/mutex', () => {
+  const originalModule = jest.requireActual(
+    '@web-api/persistence/postgres/utils/mutex',
+  );
+  return {
+    __esModule: true,
+    ...originalModule,
+    acquireLock: jest.fn().mockImplementation(() => jest.fn()),
+  };
+});
 import {
   ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
@@ -23,10 +36,13 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumberChangeOfAddress as getDocketNumberChangeOfAddressMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/getDocketNumberChangeOfAddress';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { acquireLock as acquireLockMock } from '@web-api/persistence/postgres/utils/mutex';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -38,7 +54,10 @@ describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
-  // const upsertUsers = jest.mocked(upsertUsersMock);
+  const getDocketNumberChangeOfAddress = jest.mocked(
+    getDocketNumberChangeOfAddressMock,
+  );
+  const acquireLock = jest.mocked(acquireLockMock);
   const { docketNumber } = MOCK_CASE;
   const mockIrsPractitioner = {
     admissionsDate: '2019-04-10',
@@ -88,9 +107,20 @@ describe('generateChangeOfAddress', () => {
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
 
+    getDocketNumberChangeOfAddress.mockResolvedValue([
+      {
+        jobId: 'abcdef',
+        docketNumber: '101-26',
+      },
+    ]);
+
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .countRemainingChangeOfAddressCases.mockResolvedValue(0);
 
     applicationContext
       .getUtilities()
@@ -110,7 +140,7 @@ describe('generateChangeOfAddress', () => {
         address1: '23456 Main St',
       } as any,
       requestUserId: 'abc',
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
       oldUser: mockIrsPractitioner as any,
@@ -139,7 +169,7 @@ describe('generateChangeOfAddress', () => {
         address1: '23456 Main St',
       } as any,
       requestUserId: 'abc',
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       oldUser: mockIrsPractitioner as any,
       updatedName: 'rich',
       user: { ...mockIrsPractitioner, role: ROLES.adc } as any,
@@ -164,7 +194,7 @@ describe('generateChangeOfAddress', () => {
       } as any,
       requestUserId: 'abc',
       oldUser: mockIrsPractitioner as any,
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
       websocketMessagePrefix: 'user',
@@ -186,6 +216,8 @@ describe('generateChangeOfAddress', () => {
         .calls[1][0].message,
     ).toEqual({
       action: 'user_contact_update_progress',
+      completedCases: 1,
+      totalCases: 1,
     });
   });
 
@@ -202,7 +234,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       } as any,
       requestUserId: 'abc',
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       updatedName: 'rich',
       user: {} as any,
       websocketMessagePrefix: 'user',
@@ -211,6 +243,46 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should only send cases for one in a hundred cases if more than one hundred cases need to be updated', async () => {
+    let docketNumberPrefix = 101;
+    const docketNumbers: string[] = [];
+    for (let i = 0; i < 310; i++) {
+      docketNumbers.push(docketNumberPrefix.toString() + '-26');
+      docketNumberPrefix++;
+    }
+
+    getDocketNumbersByUser.mockResolvedValueOnce(docketNumbers);
+
+    applicationContext
+      .getPersistenceGateway()
+      .countRemainingChangeOfAddressCases.mockImplementation(() => {
+        docketNumbers.pop();
+        return docketNumbers.length;
+      });
+
+    await generateChangeOfAddress({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
+      updatedEmail: 'new@example.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+    });
+
+    // we got 106 from the intial call in generateAddress.ts, plus the job complete call,
+    // plus calling the progress notification 104 times
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(106);
   });
 
   it('should calculate the number of pages in the generated change of address pdf', async () => {
@@ -229,7 +301,7 @@ describe('generateChangeOfAddress', () => {
       } as any,
       oldUser: mockIrsPractitioner as any,
       requestUserId: 'abc',
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
       websocketMessagePrefix: 'user',
@@ -258,7 +330,7 @@ describe('generateChangeOfAddress', () => {
       } as any,
       requestUserId: 'abc',
       oldUser: mockIrsPractitioner as any,
-      updatedEmail: 'new@exaple.com',
+      updatedEmail: 'new@example.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
       websocketMessagePrefix: 'user',
@@ -272,5 +344,145 @@ describe('generateChangeOfAddress', () => {
     ).toMatchObject({
       isAutoGenerated: true,
     });
+  });
+
+  it('should call SQS sequence and set a lock if change of address lambda is enabled', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        'use-change-of-address-lambda': true,
+      });
+
+    await generateChangeOfAddress({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
+      updatedEmail: 'new@example.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+    });
+
+    expect(applicationContext.getSQSMessagingClient).toHaveBeenCalled();
+
+    await generateChangeOfAddressHelper({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      docketNumber,
+      requestUserId: 'abc',
+      jobId: 'abc',
+      oldUser: mockIrsPractitioner,
+      updatedEmail: 'new@example.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+      totalCases: 1,
+      sendUpdateProgressWsMessage: false,
+    });
+
+    expect(acquireLock).toHaveBeenCalledWith({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      identifiers: [`case|${docketNumber}`],
+      retries: 10,
+    });
+  });
+
+  it('should call remove lock function if case has already been processed', async () => {
+    const returnLockMock = jest.fn();
+    acquireLock.mockResolvedValue(returnLockMock);
+    getDocketNumberChangeOfAddress.mockResolvedValue([]);
+
+    await generateChangeOfAddressHelper({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      docketNumber,
+      requestUserId: 'abc',
+      jobId: 'abc',
+      oldUser: mockIrsPractitioner,
+      updatedEmail: 'new@example.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+      totalCases: 1,
+      sendUpdateProgressWsMessage: false,
+    });
+
+    expect(returnLockMock).toHaveBeenCalled();
+  });
+
+  it('should throw and log errors when process fails', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      irsPractitioners: undefined,
+      privatePractitioners: undefined,
+      ...MOCK_CASE,
+    });
+
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockImplementation(() => {
+        throw new Error('Failed to send message over websocket');
+      });
+
+    await generateChangeOfAddressHelper({
+      applicationContext,
+      authorizedUser: mockDocketClerkUser,
+      bypassDocketEntry: false,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      } as any,
+      docketNumber,
+      requestUserId: 'abc',
+      jobId: 'abc',
+      oldUser: mockIrsPractitioner,
+      updatedEmail: 'new@example.com',
+      updatedName: 'rich',
+      user: mockIrsPractitioner as any,
+      websocketMessagePrefix: 'user',
+      totalCases: 1,
+      sendUpdateProgressWsMessage: true,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledTimes(3);
+
+    const loggerCalls = applicationContext.logger.error.mock.calls;
+
+    expect(loggerCalls[0][0]).toEqual(
+      `Failed to update case information for docket number ${docketNumber}`,
+    );
+    expect(loggerCalls[0][1].toString()).toMatch(
+      `Could not find ${mockIrsPractitioner.userId} barNumber: ${mockIrsPractitioner.barNumber} on ${docketNumber}`,
+    );
+
+    expect(loggerCalls[1][0]).toEqual(
+      'Failed to notify user during change of address job',
+    );
+    expect(loggerCalls[1][1].toString()).toMatch(
+      'Failed to send message over websocket',
+    );
+
+    expect(loggerCalls[2][0]).toEqual(
+      'Failed to notify user of completion of change of address job',
+    );
+    expect(loggerCalls[2][1].toString()).toMatch(
+      'Failed to send message over websocket',
+    );
   });
 });
