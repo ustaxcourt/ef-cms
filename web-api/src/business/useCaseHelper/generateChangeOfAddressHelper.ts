@@ -78,136 +78,142 @@ export const generateChangeOfAddressHelper = async ({
     : Promise.resolve(() => Promise.resolve()));
 
   try {
-    const docketChangeAddress = await getDocketNumberChangeOfAddress(
-      jobId,
-      docketNumber,
-    );
-
-    if (docketChangeAddress.length === 0) {
-      return await removeLockFunction();
-    }
-
-    const newData = contactInfo;
-
-    const userCase = await getCaseByDocketNumber({
-      docketNumber,
-    });
-    const caseEntity = new Case(userCase, {
-      authorizedUser,
-    });
-
-    const practitionerName = updatedName || user.name;
-    const practitionerObject = (caseEntity.privatePractitioners || [])
-      .concat(caseEntity.irsPractitioners)
-      .find(practitioner => practitioner.userId === user.userId);
-
-    if (!practitionerObject) {
-      throw new Error(
-        `Could not find ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+    try {
+      const docketChangeAddress = await getDocketNumberChangeOfAddress(
+        jobId,
+        docketNumber,
       );
-    }
 
-    const oldData = clone(oldUser.contact);
+      if (docketChangeAddress.length === 0) {
+        return;
+      }
 
-    if (updatedEmail) {
-      // This updates the case by reference!
-      practitionerObject.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-    }
+      const newData = contactInfo;
 
-    if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
-      await prepareToGenerateAndServeDocketEntry({
-        applicationContext,
+      const userCase = await getCaseByDocketNumber({
+        docketNumber,
+      });
+      const caseEntity = new Case(userCase, {
         authorizedUser,
-        caseEntity,
-        newData,
-        oldData,
-        practitionerName,
-        user,
-      });
-    }
-
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
-  } catch (error) {
-    applicationContext.logger.error(
-      `Failed to update case information for docket number ${docketNumber}`,
-      error,
-    );
-  }
-
-  const NOTIFICATION_ACTION:
-    | 'user_contact_update_progress'
-    | 'admin_contact_update_progress' =
-    `${websocketMessagePrefix}_contact_update_progress`;
-
-  await applicationContext
-    .getPersistenceGateway()
-    .setChangeOfAddressCaseAsDone(jobId, docketNumber);
-  const remainingCases = await applicationContext
-    .getPersistenceGateway()
-    .countRemainingChangeOfAddressCases(jobId);
-
-  if (sendUpdateProgressWsMessage) {
-    try {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: NOTIFICATION_ACTION,
-          totalCases,
-          completedCases: totalCases - remainingCases,
-        },
-        userId: requestUserId || user.userId,
-      });
-    } catch (error) {
-      applicationContext.logger.error(
-        'Failed to notify user during change of address job',
-        error,
-      );
-    }
-  }
-
-  if (remainingCases === 0) {
-    await deleteChangeOfAddressCaseRecord(jobId);
-
-    applicationContext.logger.info(
-      `"change-of-address-job|${jobId}" job finished`,
-    );
-
-    if (websocketMessagePrefix === 'user') {
-      const userEntity = new Practitioner({
-        ...user,
-        isUpdatingInformation: false,
       });
 
-      await upsertUsers([userEntity.validate().toRawObject()]);
-    }
+      const practitionerName = updatedName || user.name;
+      const practitionerObject = (caseEntity.privatePractitioners || [])
+        .concat(caseEntity.irsPractitioners)
+        .find(practitioner => practitioner.userId === user.userId);
 
-    const CONTACT_UPDATE_COMPLETE_ACTION:
-      | 'user_contact_full_update_complete'
-      | 'admin_contact_full_update_complete' =
-      `${websocketMessagePrefix}_contact_full_update_complete`;
+      if (!practitionerObject) {
+        throw new Error(
+          `Could not find ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        );
+      }
 
-    try {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: CONTACT_UPDATE_COMPLETE_ACTION,
+      const oldData = clone(oldUser.contact);
+
+      if (updatedEmail) {
+        // This updates the case by reference!
+        practitionerObject.serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+
+      if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
+        await prepareToGenerateAndServeDocketEntry({
+          applicationContext,
+          authorizedUser,
+          caseEntity,
+          newData,
+          oldData,
+          practitionerName,
           user,
-        },
-        userId: requestUserId || user.userId,
+        });
+      }
+
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
       });
     } catch (error) {
       applicationContext.logger.error(
-        'Failed to notify user of completion of change of address job',
+        `Failed to update case information for docket number ${docketNumber}`,
         error,
       );
     }
-  }
 
-  await removeLockFunction();
+    const NOTIFICATION_ACTION:
+      | 'user_contact_update_progress'
+      | 'admin_contact_update_progress' =
+      `${websocketMessagePrefix}_contact_update_progress`;
+
+    await applicationContext
+      .getPersistenceGateway()
+      .setChangeOfAddressCaseAsDone(jobId, docketNumber);
+    const remainingCases = await applicationContext
+      .getPersistenceGateway()
+      .countRemainingChangeOfAddressCases(jobId);
+
+    if (sendUpdateProgressWsMessage) {
+      try {
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: NOTIFICATION_ACTION,
+              totalCases,
+              completedCases: totalCases - remainingCases,
+            },
+            userId: requestUserId || user.userId,
+          });
+      } catch (error) {
+        applicationContext.logger.error(
+          'Failed to notify user during change of address job',
+          error,
+        );
+      }
+    }
+
+    if (remainingCases === 0) {
+      await deleteChangeOfAddressCaseRecord(jobId);
+
+      applicationContext.logger.info(
+        `"change-of-address-job|${jobId}" job finished`,
+      );
+
+      if (websocketMessagePrefix === 'user') {
+        const userEntity = new Practitioner({
+          ...user,
+          isUpdatingInformation: false,
+        });
+
+        await upsertUsers([userEntity.validate().toRawObject()]);
+      }
+
+      const CONTACT_UPDATE_COMPLETE_ACTION:
+        | 'user_contact_full_update_complete'
+        | 'admin_contact_full_update_complete' =
+        `${websocketMessagePrefix}_contact_full_update_complete`;
+
+      try {
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: CONTACT_UPDATE_COMPLETE_ACTION,
+              user,
+            },
+            userId: requestUserId || user.userId,
+          });
+      } catch (error) {
+        applicationContext.logger.error(
+          'Failed to notify user of completion of change of address job',
+          error,
+        );
+      }
+    }
+  } finally {
+    await removeLockFunction();
+  }
 };
 
 /**

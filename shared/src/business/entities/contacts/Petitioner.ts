@@ -22,7 +22,7 @@ export class Petitioner extends JoiValidationEntity {
   public country?: string;
   public countryType: string;
   public email?: string;
-  public paperPetitionEmail?: string;
+  public contactEmailAddress?: string;
   public hasConsentedToElectronicService?: boolean;
   public hasElectronicAccess?: boolean;
   public inCareOf?: string;
@@ -52,7 +52,7 @@ export class Petitioner extends JoiValidationEntity {
     this.country = rawProps.country;
     this.countryType = rawProps.countryType;
     this.email = rawProps.email;
-    this.paperPetitionEmail = rawProps.paperPetitionEmail;
+    this.contactEmailAddress = rawProps.contactEmailAddress;
     this.hasConsentedToElectronicService =
       rawProps.hasConsentedToElectronicService ?? undefined;
     this.hasElectronicAccess = rawProps.hasElectronicAccess ?? undefined;
@@ -111,7 +111,7 @@ export class Petitioner extends JoiValidationEntity {
       '*': 'Enter name',
       'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
     }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+    contactEmailAddress: JoiValidationConstants.EMAIL.optional()
       .description('Email provided by the petitioner on a paper petition')
       .messages({
         'string.email': 'Enter email address in format: yourname@example.com',

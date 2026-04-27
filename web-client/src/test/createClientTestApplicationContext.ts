@@ -425,7 +425,7 @@ const createTestApplicationContext = () => {
 
   const mockGetLongTimeoutSQSMessagingClient = {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockResolvedValue({}),
   };
 
   const mockBroadcastGateway = {
