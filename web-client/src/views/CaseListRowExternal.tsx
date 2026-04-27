@@ -49,10 +49,10 @@ export const CaseListRowExternal = ({
                 />
               </div>
             </td>
-            <td className="tw:max-w-[250px]">{formattedCase.caseTitle}</td>
+            <td className="tw:max-w-[15.6rem]">{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
             {showCaseStatus && (
-              <td className="tw:max-w-[175px]">
+              <td className="tw:max-w-[11rem]">
                 <Button
                   link
                   onClick={() =>
