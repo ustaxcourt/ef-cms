@@ -5,7 +5,7 @@ export async function setChangeOfAddressCaseAsDone(
   docketNumber: string,
 ) {
   return await pgDeleteFrom({
-    table: 'dwChangeOfAddress',
+    table: 'dwChangeOfAddressNew',
     where: qb =>
       qb.where('jobId', '=', jobId).where('docketNumber', '=', docketNumber),
   });

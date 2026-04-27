@@ -11,7 +11,7 @@ export async function getDocketNumberChangeOfAddress(
 > {
   return getDbReader(async reader => {
     const result = reader
-      .selectFrom('dwChangeOfAddress')
+      .selectFrom('dwChangeOfAddressNew')
       .where('jobId', '=', jobId)
       .where('docketNumber', '=', docketNumber)
       .selectAll()

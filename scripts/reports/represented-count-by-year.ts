@@ -74,6 +74,10 @@ const countCasesWithRepresentation = async (): Promise<number> => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const totalCases = await countCasesFiledInYear();
+  if (totalCases === 0) {
+    console.error(`No cases filed in ${fiscal ? 'FY ' : ''}${year}`);
+    process.exit(1);
+  }
   const numberOfCasesWithRepresentation = await countCasesWithRepresentation();
   const numberOfProSeCases = totalCases - numberOfCasesWithRepresentation;
   console.log(`${fiscal ? 'Fiscal' : 'Calendar'} Year ${year}`);
