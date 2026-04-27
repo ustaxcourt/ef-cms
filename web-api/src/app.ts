@@ -1095,6 +1095,10 @@ app.delete(
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
   app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
+  app.put(
+    '/public-api/verify-email',
+    lambdaWrapper(verifyUserPendingEmailLambda),
+  );
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
