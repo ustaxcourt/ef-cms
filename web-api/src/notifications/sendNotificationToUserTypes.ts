@@ -33,7 +33,6 @@ type ServeDocumentCompleteNotification = {
     message: string;
     overwritable: boolean;
   };
-  generateCoversheet?: boolean;
   docketEntryId?: string;
   pdfUrl?: string;
 };

@@ -341,5 +341,22 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
   });
 
+  const docketEntryIdsNeedingCoversheet = caseToAdd.docketEntries
+    .filter(d => d.isFileAttached)
+    .map(d => d.docketEntryId);
+
+  await Promise.all(
+    docketEntryIdsNeedingCoversheet.map(docketEntryId =>
+      applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId,
+          docketNumber: caseToAdd.docketNumber,
+        },
+        authorizedUser,
+      ),
+    ),
+  );
+
   return new CaseDTO(new Case(caseToAdd, { authorizedUser }).toRawObject());
 };

@@ -235,6 +235,19 @@ export const fileExternalDocument = async (
     workItems,
   });
 
+  await Promise.all(
+    docketEntryIds.map(eachDocketEntryId =>
+      applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: eachDocketEntryId,
+          docketNumber,
+        },
+        authorizedUser,
+      ),
+    ),
+  );
+
   const theCase = resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
