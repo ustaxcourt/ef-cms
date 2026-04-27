@@ -53,7 +53,7 @@ import * as sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
-import { getLongTimeoutSQSMessagingClient } from 'web-api/src/gateways/message/getLongTimeoutSQSMessagingClient';
+import { getLongTimeoutSQSMessagingClient } from '@web-api/gateways/message/getLongTimeoutSQSMessagingClient';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
