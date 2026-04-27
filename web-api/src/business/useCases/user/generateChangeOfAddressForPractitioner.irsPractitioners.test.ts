@@ -369,7 +369,7 @@ describe('generateChangeOfAddress', () => {
       websocketMessagePrefix: 'user',
     });
 
-    expect(applicationContext.getSQSMessagingClient).toHaveBeenCalled();
+    expect(applicationContext.getLongTimeoutSQSMessagingClient).toHaveBeenCalled();
 
     await generateChangeOfAddressHelper({
       applicationContext,

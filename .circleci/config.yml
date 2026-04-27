@@ -1002,6 +1002,11 @@ workflows:
           <<: *only-prod
           requires:
             - migrate
+      - wait-for-empty-change-of-address-queue:
+          <<: *only-deployed-lower-environments
+          requires:
+            - loadtests
+            - smoketests-readonly
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:

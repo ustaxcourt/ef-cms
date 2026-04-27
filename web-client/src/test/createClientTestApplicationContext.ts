@@ -423,9 +423,9 @@ const createTestApplicationContext = () => {
     sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
-  const mockGetSQSMessagingClient = {
+  const mockGetLongTimeoutSQSMessagingClient = {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockBroadcastGateway = {
@@ -491,7 +491,7 @@ const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getSQSMessagingClient: jest.fn().mockReturnValue(mockGetSQSMessagingClient),
+    mockGetLongTimeoutSQSMessagingClient: jest.fn().mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
