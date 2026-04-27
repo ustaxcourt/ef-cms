@@ -82,6 +82,17 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
+  let numberOfPages: number;
+  if (isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId,
+        documentBytes: undefined,
+      });
+  }
+
   if (isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
@@ -174,13 +185,7 @@ export const addPaperFiling = async (
       });
 
       if (isFileAttached) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            documentStorageId,
-            documentBytes: undefined,
-          });
+        docketEntryEntity.numberOfPages = numberOfPages;
       }
 
       caseEntity.addDocketEntry(docketEntryEntity);

@@ -12,6 +12,7 @@ import {
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we're already in a transaction, just run the callback directly.
+  console.log('In transaction: ', inTransaction());
   if (inTransaction()) {
     return fn();
   }
@@ -34,15 +35,31 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
     return ConnectionStore.run(transactionStore, () => fn());
   });
   const transactionEndTime = createISODateString();
-  const timeRan = dateStringsCompared(transactionEndTime, transactionStartTime, {
-    exact: true,
-  });
-  getDawsonLogger().info(`Transaction ran for: ${timeRan} milliseconds`);
+  const timeRan = dateStringsCompared(
+    transactionEndTime,
+    transactionStartTime,
+    {
+      exact: true,
+    },
+  );
+  if (timeRan >= 500) {
+    getDawsonLogger().info(`Transaction ran for: ${timeRan} milliseconds`);
+  }
 
   // After the transaction completes successfully, run the onCommit callbacks.
+  // We chunk the callbacks to avoid overwhelming downstream services (e.g., SQS,
+  // OpenSearch) when a transaction has registered many post-commit hooks. SQS
+  // SendMessageBatch has a hard limit of 10 messages, but our queueSync calls
+  // are individual SendMessage calls; a chunk size of 25 keeps fan-out modest
+  // without significantly slowing the small-N case.
   if (transactionStore.onCommitCallbacks?.length) {
+    const callbacks = transactionStore.onCommitCallbacks;
+    const ON_COMMIT_CHUNK_SIZE = 25;
     try {
-      await settlePromises(transactionStore.onCommitCallbacks.map(cb => cb()));
+      for (let i = 0; i < callbacks.length; i += ON_COMMIT_CHUNK_SIZE) {
+        const chunk = callbacks.slice(i, i + ON_COMMIT_CHUNK_SIZE);
+        await settlePromises(chunk.map(cb => cb()));
+      }
     } catch (error: any) {
       getDawsonLogger().error(
         'There was an error running onCommitCallbacks',

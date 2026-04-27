@@ -130,7 +130,7 @@ const getEditPaperFilingStrategy = ({
   throw new Error('No strategy found to edit paper filing');
 };
 
-  const saveForLaterStrategy = async ({
+const saveForLaterStrategy = async ({
   applicationContext,
   authorizedUser,
   caseEntity,
@@ -264,7 +264,7 @@ const singleDocketServeStrategy = async ({
   });
 };
 
-  // *********************************** Small Helper Functions ***********************************
+// *********************************** Small Helper Functions ***********************************
 const serveDocketEntry = async ({
   applicationContext,
   authorizedUser,
