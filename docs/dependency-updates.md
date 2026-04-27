@@ -297,9 +297,26 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### DWT
 **Current Installed DWT: 19.3.3**
-- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
-- Open a support ticket support@ustaxcourt.gov explaining about the upgrade, and also let Tenille know it needs updated.  You will have to update test with only the dwt change so that Tenille can test it on her machine.  Once she tests it for backwards compatibility then she will work with IT
- 
+
+Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
+
+If an update is available for DWT:
+- Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
+   1. Open a support ticket by emailing `support@ustaxcourt.gov`. In the email body, provide:
+      1. the currently installed DWT server version
+      1. the DWT server version to which we are upgrading
+      1. the link to download the latest DWT client installer: `https://www.dynamsoft.com/dotnet-twain/downloads`
+- Deploy the DWT server update to the `test` environment.
+  1. Open a PR to `test` in which only the DWT server version is incremented.
+  1. Merge the PR
+  1. Trigger a deployment to the `test` environment.
+- Coordinate with the DAWSON Product Specialist to test client/server backwards compatibility.
+   1. With the old client version installed, navigate to the `test` environment and attempt to scan a document. If the "client upgrade" modal is shown, the new server version is **not** backwards compatible with the old client version.
+   1. Install the new Windows client version. Navigate to DAWSON production and attempt to scan a document. If the "client upgrade" (which is actually a downgrade) modal is shown, the new client version is **not** backwards compatible with the old server version.
+   1. With the new client version installed, navigate to the `test` environment and attempt to scan a document. Ensure the "client upgrade" modal is not shown.
+- Only update DWT when:
+   1. The Windows clients have **all** been confirmed to have received the client update, OR
+   1. The old Windows client and new server version are backwards-compatible. 
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.42.0**
