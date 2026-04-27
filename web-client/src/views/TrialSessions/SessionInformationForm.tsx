@@ -96,7 +96,7 @@ export const SessionInformationForm = connect<
                 }
                 id="start-date"
                 label="Start date"
-                minDate={addTrialSessionInformationHelper.today}
+                minDate={addTrialSessionInformationHelper.tomorrow}
                 showDateHint={true}
                 onChange={e => {
                   formatAndUpdateDateFromDatePickerSequence({
@@ -227,7 +227,7 @@ export const SessionInformationForm = connect<
                 }
                 id="estimated-end-date"
                 label="Estimated end date"
-                minDate={addTrialSessionInformationHelper.today}
+                minDate={addTrialSessionInformationHelper.tomorrow}
                 showDateHint={true}
                 onChange={e => {
                   formatAndUpdateDateFromDatePickerSequence({
