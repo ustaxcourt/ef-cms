@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-24.14.1-chrome-146.0.7680.177-1-ff-149.0.2-edge-146.0.3856.97-1
+FROM cypress/browsers:node-24.15.0-chrome-147.0.7727.101-1-ff-149.0.2-edge-147.0.3912.60-1
 WORKDIR /home/app
 
 # needed to install jre successfully
