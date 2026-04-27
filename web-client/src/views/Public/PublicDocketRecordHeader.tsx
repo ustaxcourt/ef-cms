@@ -56,6 +56,7 @@ export const PublicDocketRecordHeader = connect<
               className="hide-on-mobile float-right margin-right-0 margin-top-1"
               data-testid="print-public-docket-record-button"
               icon="print"
+              overrideReadOnly
               onClick={() => {
                 gotoPublicPrintableDocketRecordSequence({ docketNumber });
               }}

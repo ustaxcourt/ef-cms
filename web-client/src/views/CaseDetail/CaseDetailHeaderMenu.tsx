@@ -99,6 +99,7 @@ export const CaseDetailHeaderMenu = connect(
       <ul className="usa-nav__submenu position-right-0">
         <li className="usa-nav__submenu-item" id="menu-button-new-tab">
           <Button
+            overrideReadOnly
             onClick={() => {
               resetCaseMenuSequence();
               openCaseInNewTabSequence();
@@ -123,6 +124,7 @@ export const CaseDetailHeaderMenu = connect(
             id="menu-button-add-new-message"
           >
             <Button
+              overrideReadOnly
               onClick={() => {
                 resetCaseMenuSequence();
                 openCreateMessageModalSequence();
@@ -139,8 +141,13 @@ export const CaseDetailHeaderMenu = connect(
             <hr className="margin-0" />
           </li>
         )}
-        <li className="usa-nav__submenu-item" id="menu-button-add-deadline" data-testid="menu-button-create-deadline">
+        <li
+          className="usa-nav__submenu-item"
+          id="menu-button-add-deadline"
+          data-testid="menu-button-create-deadline"
+        >
           <Button
+            overrideReadOnly
             onClick={() => {
               resetCaseMenuSequence();
               openCreateCaseDeadlineModalSequence();
@@ -164,6 +171,7 @@ export const CaseDetailHeaderMenu = connect(
             id="menu-button-create-order"
           >
             <Button
+              overrideReadOnly
               onClick={() => {
                 resetCaseMenuSequence();
                 openCreateOrderChooseTypeModalSequence();
@@ -186,6 +194,7 @@ export const CaseDetailHeaderMenu = connect(
             data-testid="menu-button-add-paper-filing"
           >
             <Button
+              overrideReadOnly
               onClick={() => {
                 navigateToPathSequence({
                   path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,
@@ -210,6 +219,7 @@ export const CaseDetailHeaderMenu = connect(
             data-testid="menu-button-upload-pdf"
           >
             <Button
+              overrideReadOnly
               onClick={() => {
                 navigateToPathSequence({
                   path: `/case-detail/${caseDetail.docketNumber}/upload-court-issued`,
@@ -231,6 +241,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showAddCorrespondenceButton && (
           <li className="usa-nav__submenu-item" id="correspondence-button">
             <Button
+              overrideReadOnly
               onClick={() => {
                 navigateToPathSequence({
                   path: `/case-detail/${caseDetail.docketNumber}/upload-correspondence`,

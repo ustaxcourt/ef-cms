@@ -122,6 +122,24 @@ describe('socketRouter', () => {
       sequence: 'disengageAppMaintenanceSequence',
     },
     {
+      action: 'read_only_mode_engaged',
+      args: {
+        readOnlyMode: true,
+      },
+      message: { action: 'read_only_mode_engaged' },
+      noMessageInArgs: true,
+      sequence: 'setReadOnlyModeSequence',
+    },
+    {
+      action: 'read_only_mode_disengaged',
+      args: {
+        readOnlyMode: false,
+      },
+      message: { action: 'read_only_mode_disengaged' },
+      noMessageInArgs: true,
+      sequence: 'setReadOnlyModeSequence',
+    },
+    {
       message: { action: 'save_docket_entry_for_later_complete' },
       sequence: 'saveDocketEntryForLaterCompleteSequence',
     },
@@ -161,11 +179,11 @@ describe('socketRouter', () => {
 
   it.each(mockSocketRouterCalls)(
     'should call the expected sequence with the expected args and message',
-    async ({ args = {}, message, sequence }) => {
+    async ({ args = {}, message, sequence, noMessageInArgs = false }) => {
       const socketrouterEvent = { data: JSON.stringify(message) };
       await socketRouter(mockApp)(socketrouterEvent);
       expect(mockSequence).toHaveBeenCalledWith({
-        ...message,
+        ...(noMessageInArgs ? {} : message),
         ...args,
       });
       expect(mockGetSequence).toHaveBeenCalledWith(sequence);

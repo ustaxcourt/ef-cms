@@ -369,6 +369,18 @@ select[disabled] {
   }
 }
 
+.read-only-banner {
+  position: relative;
+  z-index: 9999;
+  width: 100%;
+  padding: 15px;
+  background-color: color($theme-color-error-dark);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 15%);
+  color: $color-white;
+  font-weight: bold;
+  text-align: left;
+}
+
 .create-case-step {
   position: relative;
   height: 100%;

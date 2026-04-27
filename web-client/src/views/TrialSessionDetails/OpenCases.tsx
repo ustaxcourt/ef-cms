@@ -83,7 +83,7 @@ export const OpenCases = connect(
                   <td>
                     {item.displayMinuteSheetFormButton && (
                       <Button
-                        data-testId={`minute-sheet-button-${item.docketNumber}`}
+                        data-testid={`minute-sheet-button-${item.docketNumber}`}
                         link
                         href={item.minuteSheetRoute}
                         rel="noreferrer noopener"

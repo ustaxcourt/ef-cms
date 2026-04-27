@@ -15,7 +15,7 @@ export const getHttpClient = (
 
   axiosClient.interceptors.response.use(undefined, async error => {
     const shouldForceRefresh =
-      error.response.headers.get(X_FORCE_REFRESH) === 'true';
+      error.response?.headers?.get(X_FORCE_REFRESH) === 'true';
 
     if (shouldForceRefresh) {
       await forceRefreshCallback();

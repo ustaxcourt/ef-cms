@@ -46,6 +46,7 @@ export const ModalCaseSearchBox = connect(
             }}
           />
           <Button
+            overrideReadOnly
             className="ustc-search-button"
             data-testid="consolidated-search"
             type="submit"

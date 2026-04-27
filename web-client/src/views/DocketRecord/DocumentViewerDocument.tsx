@@ -246,6 +246,7 @@ export const DocumentViewerDocument = connect(
                 link
                 icon="file-pdf"
                 iconColor="white"
+                overrideReadOnly
                 onClick={() => {
                   return openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDocumentToDisplay.docketEntryId,
