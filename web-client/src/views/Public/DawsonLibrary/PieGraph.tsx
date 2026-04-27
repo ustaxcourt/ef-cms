@@ -137,7 +137,7 @@ export const PieGraph = ({
             verticalAlign="top"
             wrapperStyle={{ paddingBottom: 0 }}
             content={() => (
-              <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-4 tw:grid-rows-2 tw:grid-flow-col">
+              <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-x-4 tw:gap-y-3 tw:xs:gap-y-4 tw:grid-rows-2 tw:grid-flow-col">
                 {data.map(entry => (
                   <li key={entry.name} className="tw:flex tw:items-center">
                     <span
@@ -154,11 +154,7 @@ export const PieGraph = ({
           />
           <Tooltip
             content={
-              <CustomTooltip
-                data={data}
-                title={title}
-                onAnnounce={announce}
-              />
+              <CustomTooltip data={data} title={title} onAnnounce={announce} />
             }
           />
           <Pie

@@ -185,7 +185,7 @@ export const DawsonLibrary = () => {
         ]}
       />
       <div className="tw:mt-12 tw:mx-4">
-        <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-4">
+        <h2 className="tw:xs:text-2xl tw:text-lg tw:xs:mb-8 tw:mb-5">
           Total sessions scheduled: 300
         </h2>
         <div className="tw:flex tw:flex-wrap tw:gap-12">
