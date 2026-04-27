@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 export interface PieGraphData {
   name: string;
@@ -48,11 +48,13 @@ const CustomTooltip = ({
   payload,
   data,
   title,
+  onAnnounce,
 }: {
   active?: boolean;
   payload?: { value: number; payload: PieGraphData }[];
   data: PieGraphData[];
   title: string;
+  onAnnounce: (text: string) => void;
 }) => {
   if (!active || !payload?.length) return null;
 
@@ -62,11 +64,12 @@ const CustomTooltip = ({
   const percentage = ((value / total) * 100).toFixed(1);
   const { color } = entry;
 
+  const announcement = `${title ? title + ': ' : ''}${entry.name}: ${value} (${percentage}%)`;
+  onAnnounce(announcement);
+
   return (
     <div
-      role="status"
-      aria-live="polite"
-      // className="tw:bg-white tw:rounded tw:py-2 tw:px-3 tw:text-base tw:flex tw:flex-col tw:text-black tw:gap-1.5"
+      aria-hidden="true"
       className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-md tw:text-black tw:gap-1.5"
     >
       {title && <div className="tw:font-bold">{title}</div>}
@@ -91,6 +94,11 @@ export const PieGraph = ({
   data: PieGraphData[];
   isAnimationActive?: boolean;
 }) => {
+  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const announce = (text: string) => {
+    if (liveRegionRef.current) liveRegionRef.current.textContent = text;
+  };
+
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
@@ -108,6 +116,12 @@ export const PieGraph = ({
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
     <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto">
+      <div
+        ref={liveRegionRef}
+        aria-live="polite"
+        aria-atomic="true"
+        className="tw:sr-only"
+      />
       <div className="tw:xs:w-160 tw:w-120">
         {title && (
           <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
@@ -138,7 +152,15 @@ export const PieGraph = ({
               </ul>
             )}
           />
-          <Tooltip content={<CustomTooltip data={data} title={title} />} />
+          <Tooltip
+            content={
+              <CustomTooltip
+                data={data}
+                title={title}
+                onAnnounce={announce}
+              />
+            }
+          />
           <Pie
             data={data}
             labelLine={false}
