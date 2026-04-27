@@ -3,7 +3,7 @@ import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserI
 
 type SortableField = keyof Pick<
   RecentFiling,
-  'docketNumber' | 'filedDate' | 'document' | 'caseTitle'
+  'docketNumber' | 'filedDate' | 'document' | 'caseTitle' | 'status'
 >;
 
 export function sortRecentFilings(
@@ -18,6 +18,7 @@ export function sortRecentFilings(
     'filedDate',
     'document',
     'caseTitle',
+    'status',
   ];
   const validSortOrders = ['asc', 'desc'];
 
@@ -35,17 +36,11 @@ export function sortRecentFilings(
 
   return filings.sort((a, b) => {
     let comparison = 0;
-    const multiplier = sortOrder === 'desc' ? -1 : 1;
+    const direction = sortOrder === 'desc' ? -1 : 1;
 
     switch (sortField) {
       case 'docketNumber': {
-        const aDocket = Case.getSortableDocketNumber(a.docketNumber);
-        const bDocket = Case.getSortableDocketNumber(b.docketNumber);
-        if (aDocket != null && bDocket != null) {
-          comparison = aDocket - bDocket;
-        } else {
-          comparison = a.docketNumber.localeCompare(b.docketNumber);
-        }
+        comparison = Case.docketNumberSort(a.docketNumber, b.docketNumber);
         break;
       }
       case 'filedDate':
@@ -63,6 +58,20 @@ export function sortRecentFilings(
         }
         break;
       }
+      case 'status': {
+        const formattedStatusA = Case.formatCaseStatus({
+          caseStatus: a.status,
+          trialDate: a.trialDate,
+          trialLocation: a.trialLocation,
+        });
+        const formattedStatusB = Case.formatCaseStatus({
+          caseStatus: b.status,
+          trialDate: b.trialDate,
+          trialLocation: b.trialLocation,
+        });
+        comparison = formattedStatusA.localeCompare(formattedStatusB);
+        break;
+      }
       case 'caseTitle':
         comparison = a.caseTitle
           .toLowerCase()
@@ -74,6 +83,6 @@ export function sortRecentFilings(
       comparison = b.filedDate.localeCompare(a.filedDate);
     }
 
-    return comparison * multiplier;
+    return comparison * direction;
   });
 }

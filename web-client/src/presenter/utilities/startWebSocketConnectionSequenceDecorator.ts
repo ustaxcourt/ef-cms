@@ -1,4 +1,5 @@
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
+import { startReadOnlyModePollingAction } from '../actions/WebSocketConnection/startReadOnlyModePollingAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 
 export const startWebSocketConnectionSequenceDecorator = actionsList => {
@@ -6,6 +7,7 @@ export const startWebSocketConnectionSequenceDecorator = actionsList => {
     startWebSocketConnectionAction,
     {
       error: [setShowModalFactoryAction('WebSocketErrorModal')],
+      startPolling: [startReadOnlyModePollingAction],
       success: [],
     },
     ...actionsList,

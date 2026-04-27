@@ -1,9 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
+import { VirtualizedDocumentList } from './VirtualizedDocumentList';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
@@ -22,28 +23,21 @@ export const DocumentViewer = connect(
     setViewerDocumentToDisplaySequence,
     viewDocumentId,
   }) {
-    const documentsListRef = useRef<HTMLDivElement>(null);
+    const hasLargeDocketEntryCount =
+      formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length >
+      1000;
 
     useEffect(() => {
       loadDefaultDocketViewerDocumentToDisplaySequence();
-      return;
     }, []);
 
     useEffect(() => {
-      // this scrolls the documents list to the element
-      const elToScrollIntoView = documentsListRef.current?.querySelector(
-        `button[data-entry-id="${viewDocumentId}"]`,
-      );
-      if (elToScrollIntoView && documentsListRef.current) {
-        elToScrollIntoView.scrollIntoView();
-        documentsListRef.current.scrollTop -= 200;
-      }
-      // we now scroll the entire page back up to the blue header since the nested scroll bar is in position
+      // Scroll the page to the blue header
       const blueHeader = window.document.querySelector(
         '#tab-docket-sub-record',
       );
       blueHeader?.scrollIntoView();
-    }, []);
+    }, [viewDocumentId]);
 
     return (
       <>
@@ -59,12 +53,16 @@ export const DocumentViewer = connect(
                 <div className="grid-col-5">Filings and Proceedings</div>
                 <div className="grid-col-2"></div>
               </div>
-              <div
-                className="document-viewer--documents-list"
-                ref={documentsListRef}
-              >
-                {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
+              {hasLargeDocketEntryCount ? (
+                <VirtualizedDocumentList
+                  docketEntries={formattedDocketEntries.formattedDocketEntriesOnDocketRecord}
+                  viewDocumentId={viewDocumentId}
+                  setViewerDocumentToDisplaySequence={setViewerDocumentToDisplaySequence}
+                />
+              ) : (
+                <div className="document-viewer--documents-list">
+                  {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
+                    entry => {
                     return (
                       <Button
                         className={classNames(
@@ -171,7 +169,8 @@ export const DocumentViewer = connect(
                     );
                   },
                 )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 

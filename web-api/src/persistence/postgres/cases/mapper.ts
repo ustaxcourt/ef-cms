@@ -6,11 +6,9 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { DatabaseSchema } from '@web-api/database-schema';
-import {
-  CaseKysely,
-  NewCaseKysely,
-} from '@web-api/persistence/postgres/cases/schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
+import { NewCaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
 // Select the relevant RawCase fields from dwCase and map them correctly.

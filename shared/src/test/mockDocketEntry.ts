@@ -3,8 +3,13 @@ import {
   ROLES,
 } from '../business/entities/EntityConstants';
 
+// Note: createdAt values across MOCK_PETITION, MOCK_STIN, MOCK_ANSWER_2,
+// and PENDING_DOCKET_ENTRY are deliberately distinct and ordered to match
+// their `index` field. This keeps the (createdAt, docketEntryId) sort in
+// Case.ts in agreement with the by-`index` sort used by getFormattedCaseDetail
+// — without it the two sorts disagree and a number of tests become flaky.
 export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
-  createdAt: '2018-11-21T20:49:28.192Z',
+  createdAt: '2018-11-21T20:49:28.195Z',
   docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
@@ -18,6 +23,8 @@ export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
   filers: [],
   filingDate: '2018-03-01T05:00:00.000Z',
   index: 5,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '101-18',
   isFileAttached: true,
   isOnDocketRecord: false,
   pending: true,
@@ -53,6 +60,8 @@ export const MOCK_MINUTE_ENTRY: RawDocketEntry = {
   filingDate: '2023-02-08T05:00:00.000Z',
   index: 3,
   isDraft: false,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '983-23',
   isFileAttached: false,
   isOnDocketRecord: true,
   isStricken: false,
@@ -81,6 +90,8 @@ export const MOCK_ANSWER: RawDocketEntry = {
   hasSupportingDocuments: false,
   index: 9,
   isDraft: false,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '983-23',
   isFileAttached: true,
   isOnDocketRecord: true,
   isStricken: false,
@@ -106,7 +117,7 @@ export const MOCK_ANSWER: RawDocketEntry = {
 };
 
 export const MOCK_PETITION: RawDocketEntry = {
-  createdAt: '2018-11-21T20:49:28.192Z',
+  createdAt: '2018-11-21T20:49:28.191Z',
   docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
   documentStorageId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
   docketNumber: '101-18',
@@ -120,6 +131,8 @@ export const MOCK_PETITION: RawDocketEntry = {
   filers: [],
   filingDate: '2018-03-01T05:00:00.000Z',
   index: 1,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '101-18',
   isFileAttached: true,
   isOnDocketRecord: true,
   pending: false,
@@ -130,7 +143,7 @@ export const MOCK_PETITION: RawDocketEntry = {
 };
 
 export const MOCK_STIN: RawDocketEntry = {
-  createdAt: '2018-11-21T20:49:28.192Z',
+  createdAt: '2018-11-21T20:49:28.193Z',
   docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
   documentStorageId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
@@ -143,6 +156,8 @@ export const MOCK_STIN: RawDocketEntry = {
   filers: [],
   filingDate: '2018-03-01T05:00:00.000Z',
   index: 3,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '101-18',
   isFileAttached: true,
   isOnDocketRecord: false,
   pending: false,
@@ -153,7 +168,7 @@ export const MOCK_STIN: RawDocketEntry = {
 };
 
 export const MOCK_ANSWER_2: RawDocketEntry = {
-  createdAt: '2018-11-21T20:49:28.192Z',
+  createdAt: '2018-11-21T20:49:28.194Z',
   docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
@@ -167,6 +182,8 @@ export const MOCK_ANSWER_2: RawDocketEntry = {
   filers: [],
   filingDate: '2018-03-01T05:00:00.000Z',
   index: 4,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '101-18',
   isFileAttached: true,
   isOnDocketRecord: false,
   pending: false,
@@ -277,6 +294,7 @@ export const MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT: RawDocketEntry = {
   addToCoversheet: false,
   hasSupportingDocuments: false,
   filedByRole: 'privatePractitioner',
+  multiDocketedOn: [],
   index: 27,
   isFileAttached: true,
   userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -303,6 +321,8 @@ export const ATP_DOCKET_ENTRY: RawDocketEntry = {
   filers: [],
   filingDate: '2017-03-01T09:00:00.000Z',
   index: 4,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '101-18',
   isFileAttached: true,
   isOnDocketRecord: true,
   pending: false,
@@ -342,6 +362,8 @@ export const STANDING_PRETRIAL_ORDER_ENTRY: RawDocketEntry = {
   freeText: 'test',
   index: 6,
   isDraft: false,
+  multiDocketedOn: [],
+  originallyFiledDocketNumber: '102-67',
   isFileAttached: true,
   isOnDocketRecord: true,
   isPendingService: false,

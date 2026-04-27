@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
@@ -15,7 +16,7 @@ import {
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getContactPrimary } from '@shared/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -40,6 +41,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,
+    originallyFiledDocketNumber: MOCK_CASE.docketNumber,
     filedBy: 'Test Petitioner',
     filedByRole: ROLES.petitioner,
     filers: [getContactPrimary(MOCK_CASE).contactId],
@@ -303,7 +305,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       servedAt: '2020-01-01T00:01:00.000Z',
     };
 
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -315,6 +317,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
@@ -322,7 +326,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -333,6 +337,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       mockDocketClerkUser,
     );
+
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
@@ -603,8 +609,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -616,6 +621,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
@@ -626,7 +633,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the previousDocument', async () => {
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -640,11 +647,195 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const result = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
     expect(updatedDocketEntry?.previousDocument).toBeDefined();
     expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
+  });
+
+  it('should propagate docket entry updates to all multidocketed cases', async () => {
+    const mockLeadCaseDocketNumber = '101-18';
+    const mockconsolidatedCase1DocketNumber = '102-20';
+    const mockconsolidatedCase2DocketNumber = '103-20';
+    const mockConsolidatedDocketEntry = {
+      ...mockDocketEntries[0],
+      multiDocketedOn: [
+        mockLeadCaseDocketNumber,
+        mockconsolidatedCase1DocketNumber,
+        mockconsolidatedCase2DocketNumber,
+      ],
+      docketEntryId: '6e8100ac-1459-4d72-bffa-b9036618aacb',
+    };
+
+    const consolidatedCase1 = {
+      ...MOCK_CASE,
+      docketNumber: mockconsolidatedCase1DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase1DocketNumber,
+        },
+      ],
+    };
+
+    const consolidatedCase2 = {
+      ...MOCK_CASE,
+      docketNumber: mockconsolidatedCase2DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase2DocketNumber,
+        },
+      ],
+    };
+
+    const leadCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: mockconsolidatedCase1DocketNumber,
+          sortableDocketNumber: 102000020,
+        },
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: mockconsolidatedCase2DocketNumber,
+          sortableDocketNumber: 103000020,
+        },
+      ],
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockLeadCaseDocketNumber,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      leadCase,
+      consolidatedCase1,
+      consolidatedCase2,
+    ]);
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockConsolidatedDocketEntry,
+          documentTitle: 'Updated Document Title',
+          freeText: 'Updated free text',
+        },
+        docketNumber: leadCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: expect.arrayContaining([
+        leadCase.docketNumber,
+        consolidatedCase1.docketNumber,
+        consolidatedCase2.docketNumber,
+      ]),
+    });
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: leadCase.docketNumber,
+              documentTitle: 'Updated Document Title',
+              freeText: 'Updated free text',
+            }),
+          ]),
+        }),
+      }),
+    );
+
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
+      expect.objectContaining({
+        docketNumber: consolidatedCase1.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+      expect.objectContaining({
+        docketNumber: consolidatedCase2.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+    ]);
+  });
+
+  it('should only propagate specific editable fields to multidocketed cases', async () => {
+    const consolidatedCase1 = {
+      ...MOCK_CASE,
+      docketNumber: '102-20',
+      docketEntries: mockDocketEntries,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: 'different-contact-id',
+        },
+      ],
+    };
+
+    const leadCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: MOCK_CASE.docketNumber,
+          sortableDocketNumber: Case.getSortableDocketNumber(
+            MOCK_CASE.docketNumber,
+          ),
+        },
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: '102-20',
+          sortableDocketNumber: 102000020,
+        },
+      ],
+      docketEntries: mockDocketEntries,
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      leadCase,
+      consolidatedCase1,
+    ]);
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'new additional info',
+          documentTitle: 'Updated Title',
+          pending: true,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntries).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          addToCoversheet: true,
+          additionalInfo: 'new additional info',
+          documentTitle: 'Updated Title',
+          pending: true,
+        }),
+      ]),
+    );
   });
 
   it('should add affected docket entries if body has new records', async () => {

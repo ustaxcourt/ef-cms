@@ -11,6 +11,8 @@ describe('completeDocketEntryQCAction', () => {
       {
         docketEntryId: mockDocketEntryId,
         documentTitle: "bob's burgers",
+        addToCoversheet: false,
+        additionalInfo: '',
       },
     ] as Array<{
       docketEntryId: string;
@@ -49,6 +51,7 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },
@@ -58,27 +61,20 @@ describe('completeDocketEntryQCAction', () => {
         .calls.length,
     ).toEqual(1);
 
-    expect(successMock.mock.calls[0][0]).toEqual({
+    expect(successMock.mock.calls[0][0]).toMatchObject({
       alertSuccess: {
         message: "bob's burgers has been completed.",
         title: 'QC Completed',
       },
-      caseDetail,
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
-      updatedDocument: {
-        docketEntryId: mockDocketEntryId,
-        documentTitle: "bob's burgers",
-      },
+      paperServiceDocumentTitle: undefined,
+      paperServiceParties: undefined,
+      pdfUrl: undefined,
     });
   });
 
   it('should return the full document title with additional info as a part of props.alertSuccess.message without appending additional text when props.qcCompletionAndMessageFlag is falsy', async () => {
-    caseDetail.docketEntries[0] = {
-      ...caseDetail.docketEntries[0],
-      addToCoversheet: true,
-      additionalInfo: 'More title information',
-    };
-
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
@@ -87,6 +83,8 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          additionalInfo: 'More title information',
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },
@@ -98,12 +96,6 @@ describe('completeDocketEntryQCAction', () => {
   });
 
   it('should return the full document title with the addition of "and message sent" as a part of props.alertSuccess.message when props.qcCompletionAndMessageFlag is true', async () => {
-    caseDetail.docketEntries[0] = {
-      ...caseDetail.docketEntries[0],
-      addToCoversheet: true,
-      additionalInfo: 'More title information',
-    };
-
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
@@ -115,6 +107,8 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          additionalInfo: 'More title information',
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },
@@ -123,5 +117,25 @@ describe('completeDocketEntryQCAction', () => {
     expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
       "bob's burgers More title information QC completed and message sent.",
     );
+  });
+
+  it('should return error path when an error is thrown', async () => {
+    const mockError = new Error('An error');
+    applicationContext
+      .getUseCases()
+      .completeDocketEntryQCInteractor.mockRejectedValueOnce(mockError);
+
+    await runAction(completeDocketEntryQCAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: mockDocketEntryId,
+        form: {},
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({ error: mockError });
   });
 });

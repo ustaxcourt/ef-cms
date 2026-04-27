@@ -7,21 +7,30 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import React from 'react';
+type LocationInformationFormProps = { addingTrialSession: boolean };
 
-export const LocationInformationForm = connect(
-  {
-    TRIAL_SESSION_PROCEEDING_TYPES:
-      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
-    addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
-    form: state.form,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+const locationInformationFormDeps = {
+  TRIAL_SESSION_PROCEEDING_TYPES:
+    state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
+  addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
+  form: state.form,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const LocationInformationForm = connect<
+  LocationInformationFormProps,
+  typeof locationInformationFormDeps
+>(
+  locationInformationFormDeps,
   function LocationInformationForm({
+    addingTrialSession,
     addTrialSessionInformationHelper,
     form,
+    formattedTrialSessionDetails,
     TRIAL_SESSION_PROCEEDING_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -50,6 +59,11 @@ export const LocationInformationForm = connect(
                           aria-describedby="proceeding-type-legend"
                           checked={form.proceedingType === value}
                           className="usa-radio__input"
+                          disabled={
+                            !addingTrialSession &&
+                            formattedTrialSessionDetails.editPermissions ===
+                              'limited'
+                          }
                           id={`${key}-proceeding`}
                           name="proceedingType"
                           type="radio"
@@ -86,6 +100,10 @@ export const LocationInformationForm = connect(
                 <select
                   className="usa-select"
                   data-testid="trial-session-trial-location"
+                  disabled={
+                    !addingTrialSession &&
+                    formattedTrialSessionDetails.editPermissions === 'limited'
+                  }
                   id="trial-location"
                   name="trialLocation"
                   value={form.trialLocation}
@@ -105,10 +123,10 @@ export const LocationInformationForm = connect(
           )}
 
           {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
-            <InPersonProceedingForm />
+            <InPersonProceedingForm addingTrialSession={addingTrialSession} />
           )}
           {addTrialSessionInformationHelper.displayRemoteProceedingForm && (
-            <RemoteProceedingForm />
+            <RemoteProceedingForm addingTrialSession={addingTrialSession} />
           )}
         </div>
       </>

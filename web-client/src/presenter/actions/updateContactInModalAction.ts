@@ -5,15 +5,20 @@ export const updateContactInModalAction = async ({
   get,
   store,
 }: ActionProps) => {
-  const { docketNumber } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
+  const { docketNumber } = caseDetail;
   const { contact } = get(state.modal.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .updateContactInteractor(applicationContext, {
       contactInfo: contact,
       docketNumber,
     });
 
-  store.set(state.caseDetail, updatedCase);
+  const updatedPetitioners = caseDetail.petitioners.map(p =>
+    p.contactId === contact.contactId ? { ...p, ...contact } : p,
+  );
+
+  store.set(state.caseDetail.petitioners, updatedPetitioners);
 };

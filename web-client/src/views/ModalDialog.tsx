@@ -28,6 +28,7 @@ export const ModalDialog = ({
   showButtons = true,
   title,
   useRunConfirmSequence = false,
+  confirmOverrideReadOnly = false,
 }: {
   cancelLabel?: string;
   cancelLink?: boolean;
@@ -51,6 +52,7 @@ export const ModalDialog = ({
   title?: string;
   useRunConfirmSequence?: boolean;
   preventCancelOnBlur?: any;
+  confirmOverrideReadOnly?: boolean;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
@@ -145,6 +147,7 @@ export const ModalDialog = ({
                       data-testid="close-modal-button"
                       icon="times-circle"
                       id="close-modal-button"
+                      overrideReadOnly
                       onClick={
                         useRunConfirmSequence
                           ? runConfirmSequence
@@ -166,6 +169,7 @@ export const ModalDialog = ({
                   className="modal-button-confirm"
                   data-testid="modal-button-confirm"
                   disabled={disableSubmit}
+                  overrideReadOnly={confirmOverrideReadOnly}
                   href={confirmHref}
                   id="modal-button-confirm"
                   target={confirmTarget}
@@ -180,6 +184,7 @@ export const ModalDialog = ({
                     className="modal-button-cancel"
                     data-testid="modal-button-cancel"
                     link={cancelLink}
+                    overrideReadOnly
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
@@ -191,6 +196,7 @@ export const ModalDialog = ({
                     aria-label="Clear"
                     className="modal-button-clear"
                     data-testid="modal-button-clear"
+                    overrideReadOnly
                     onClick={runClearSequence}
                   >
                     {clearLabel}

@@ -25,6 +25,7 @@ import {
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
 import {
   AuthUser,
@@ -57,6 +58,7 @@ import {
   calculateISODate,
   createISODateString,
   dateStringsCompared,
+  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -75,6 +77,7 @@ import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -320,6 +323,34 @@ export class Case extends JoiValidationEntity {
   static formatDocketNumber(docketNumber) {
     const regex = /^0*(\d+-\d{2}).*/;
     return docketNumber.replace(regex, '$1');
+  }
+
+  static formatCaseStatus(workItem: {
+    caseStatus?: string;
+    trialLocation?: string;
+    trialDate?: string;
+  }) {
+    let formattedCaseStatus = workItem.caseStatus || '';
+
+    if (
+      workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
+      workItem.trialLocation &&
+      workItem.trialDate
+    ) {
+      let formattedTrialLocation = '';
+      if (
+        workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      ) {
+        formattedTrialLocation = abbreviateState(workItem.trialLocation);
+      } else {
+        formattedTrialLocation = workItem.trialLocation;
+      }
+
+      const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
+
+      formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+    }
+    return formattedCaseStatus;
   }
 
   /**
@@ -793,9 +824,7 @@ export class Case extends JoiValidationEntity {
       this.initialCaption = rawCase.initialCaption || this.caseCaption;
     }
 
-    this.hasPendingItems = this.docketEntries.some(docketEntry =>
-      DocketEntry.isPending(docketEntry),
-    );
+    this.hasPendingItems = rawCase.hasPendingItems ?? false;
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
@@ -847,7 +876,11 @@ export class Case extends JoiValidationEntity {
               petitioners: this.petitioners,
             }),
         )
-        .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+        .sort(
+          (a, b) =>
+            compareStrings(a.createdAt, b.createdAt) ||
+            compareStrings(a.docketEntryId, b.docketEntryId),
+        );
 
       this.isSealed = isSealedCase(rawCase);
 
@@ -999,14 +1032,8 @@ export class Case extends JoiValidationEntity {
   }
 
   //@ts-ignore
-  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
-    const { processPendingItems = true } = options;
+  toRawObject(): RawCase {
     const result = this.toRawObjectFromJoi();
-
-    if (processPendingItems) {
-      (result as any).hasPendingItems = this.doesHavePendingItems();
-    }
-
     // @ts-ignore
     return result as RawCase;
   }
@@ -1015,6 +1042,10 @@ export class Case extends JoiValidationEntity {
     return this.docketEntries.some(docketEntry =>
       DocketEntry.isPending(docketEntry),
     );
+  }
+
+  recomputeHasPendingItems(): void {
+    this.hasPendingItems = this.doesHavePendingItems();
   }
 
   /**
@@ -1419,11 +1450,11 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
-    const hasPendingItems = this.doesHavePendingItems();
+    this.hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && hasCaseDeadline) {
+    if (this.hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-    } else if (hasPendingItems) {
+    } else if (this.hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
     } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
@@ -2134,6 +2165,15 @@ export const isLeadCase = (rawCase: {
   docketNumber: string;
   leadDocketNumber?: string;
 }): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
+
+export const isMemberCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean =>
+  Boolean(
+    rawCase.leadDocketNumber &&
+    rawCase.leadDocketNumber !== rawCase.docketNumber,
+  );
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>

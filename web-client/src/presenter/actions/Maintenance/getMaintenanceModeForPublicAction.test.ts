@@ -32,6 +32,7 @@ describe('getMaintenanceModeForPublicAction', () => {
     });
 
     expect(result.state.maintenanceMode).toEqual(true);
+    expect(result.state.readOnlyMode).toBeDefined(); // defaults to false
     expect(result.state.isTerminalUser).toEqual(false);
   });
 
@@ -52,6 +53,28 @@ describe('getMaintenanceModeForPublicAction', () => {
 
     expect(result.state.maintenanceMode).toEqual(false);
     expect(result.state.isTerminalUser).toEqual(true);
+  });
+
+  it('sets readOnlyMode on state when passing an object payload from API', async () => {
+    applicationContext
+      .getUseCases()
+      .getMaintenanceModePublicInteractor.mockReturnValue({
+        data: {
+          maintenanceMode: false,
+          readOnlyMode: true,
+        },
+        headers: { 'x-terminal-user': 'false' },
+      });
+
+    const result = await runAction(getMaintenanceModeForPublicAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(result.state.maintenanceMode).toEqual(false);
+    expect(result.state.readOnlyMode).toEqual(true);
   });
 
   it('returns path.maintenanceOn if maintenance mode is turned on', async () => {

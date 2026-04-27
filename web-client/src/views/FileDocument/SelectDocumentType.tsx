@@ -37,6 +37,7 @@ export const SelectDocumentType = connect(
                   Continue
                 </Button>
                 <Button
+                  overrideReadOnly
                   link
                   onClick={() => {
                     formCancelToggleCancelSequence();

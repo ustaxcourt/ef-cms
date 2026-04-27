@@ -1,7 +1,8 @@
-import { Database } from '@web-api/database-schema';
-import { getDbReader } from '@web-api/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { SelectQueryBuilder, sql } from 'kysely';
 import { DocketEntryKysely } from './schema';
+import { DW_DOCKET_ENTRY_COLUMNS } from './schema';
 
 export type DocketEntrySelectableField = keyof Database['dwDocketEntry'];
 
@@ -13,6 +14,11 @@ export type DocketEntryWithAffected = DocketEntryKysely & {
     | { docketEntryId: string; disposition: string }[]
     | null;
 };
+
+export const DOCKET_ENTRY_COLUMNS_WITHOUT_SERVED_PARTIES =
+  DW_DOCKET_ENTRY_COLUMNS.filter(
+    col => col !== 'servedParties',
+  ) as DocketEntrySelectableField[];
 
 export const docketEntriesBaseQuery = ({
   docketNumbers,

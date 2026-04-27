@@ -135,6 +135,7 @@ export const ContactEdit = connect(
               Save
             </Button>
             <Button
+              overrideReadOnly
               link
               onClick={() => {
                 formCancelToggleCancelSequence();

@@ -114,6 +114,7 @@ export const recentFilingsHelper = (get: Get) => {
     'filedDate',
     'document',
     'caseTitle',
+    'status',
   ] as const;
   const sortField = validSortFields.includes(tableSort.sortField as any)
     ? (tableSort.sortField as (typeof validSortFields)[number])

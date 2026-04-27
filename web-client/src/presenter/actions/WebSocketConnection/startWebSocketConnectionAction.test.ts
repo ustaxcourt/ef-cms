@@ -3,11 +3,17 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { startWebSocketConnectionAction } from './startWebSocketConnectionAction';
 
 describe('startWebSocketConnectionAction', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   const pathSuccessStub = jest.fn();
   const pathErrorStub = jest.fn();
+  const pathStartPollingStub = jest.fn();
 
   presenter.providers.path = {
     error: pathErrorStub,
+    startPolling: pathStartPollingStub,
     success: pathSuccessStub,
   };
 
@@ -35,5 +41,22 @@ describe('startWebSocketConnectionAction', () => {
     });
 
     expect(pathSuccessStub).toHaveBeenCalled();
+  });
+
+  it('should call the startPolling path if readOnlyMode is true', async () => {
+    const start = jest.fn();
+    presenter.providers.socket = { start };
+
+    await runAction(startWebSocketConnectionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        readOnlyMode: true,
+      },
+    });
+
+    expect(pathStartPollingStub).toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
   });
 });

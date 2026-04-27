@@ -1,5 +1,5 @@
 import { Role } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import {
   DbUser,
   fromKyselyUser,

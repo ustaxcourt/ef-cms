@@ -41,6 +41,7 @@ export const TrialLocation = connect(
         <section className="usa-section grid-container">
           <div>
             <Button
+              overrideReadOnly
               link
               noMargin
               className="margin-right-0"

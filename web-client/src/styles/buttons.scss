@@ -206,6 +206,11 @@ table.ustc-table .ustc-button--unstyled {
   &:disabled {
     text-decoration: none;
   }
+
+  &.virtualized {
+    border-bottom: none !important;
+    line-height: 1.4;
+  }
 }
 
 .action-button {
@@ -306,5 +311,16 @@ table.ustc-table .ustc-button--unstyled {
 
   100% {
     transform: translateY(0);
+  }
+}
+
+.usa-button.usa-button-read-only-disabled {
+  cursor: not-allowed;
+  filter: grayscale(100%);
+  opacity: 0.6;
+
+  &:hover {
+    filter: grayscale(100%);
+    opacity: 0.6;
   }
 }
