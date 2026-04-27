@@ -200,7 +200,7 @@ describe('updateTrialSessionInteractor', () => {
           mockTrialClerkUser,
         ),
       ).rejects.toThrow(
-        'Trial session start date cannot be today or in the past.',
+        'Cannot change the start date to today or a past date.',
       );
     });
 
@@ -223,7 +223,7 @@ describe('updateTrialSessionInteractor', () => {
           mockTrialClerkUser,
         ),
       ).rejects.toThrow(
-        'Trial session start date cannot be today or in the past.',
+        'Cannot change the start date to today or a past date.',
       );
     });
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {

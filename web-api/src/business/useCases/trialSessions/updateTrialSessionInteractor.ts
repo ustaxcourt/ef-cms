@@ -77,11 +77,10 @@ export const updateTrialSession = async (
   );
 
   if (
-    inputStartDateFormatted <= nowFormatted &&
-    authorizedUser &&
-    authorizedUser.role !== ROLES.caseServicesSupervisor
+    startDateFormatted !== inputStartDateFormatted &&
+    inputStartDateFormatted <= nowFormatted
   ) {
-    throw new Error('Trial session start date cannot be today or in the past.');
+    throw new Error('Cannot change the start date to today or a past date.');
   }
 
   const LIMITED_EDITABLE_FIELDS: string[] = [
