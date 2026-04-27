@@ -3,84 +3,66 @@
 .Dawson_heading_1 {
     font-family: $font-serif;
     font-size: 32px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
 
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 24px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
 .Dawson_heading_2 {
     font-family: $font-serif;
     font-size: 24px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
 
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 18px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
 .Dawson_heading_3 {
     font-family: $font-serif;
     font-size: 20px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
 
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 16px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
 .Dawson_body {
-    font-family: $font-source-san;
+    font-family: $font-source-sans;
     font-size: 18px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
 
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 16px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
 .Dawson_body_secondary {
-    font-family: $font-source-san;
+    font-family: $font-source-sans;
     font-size: 16px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
 
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 14px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
 .Dawson_field_label {
-    font-family: $font-source-san;
+    font-family: $font-source-sans;
     font-size: 18px;
-    src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-    format('woff2');
+    font-weight: $font-normal;
     
     // color: Base-Darkest
     @media only screen and (max-width: $medium-screen) {
         font-size: 16px;
-        src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
-        format('woff2');
       }
 }
 
