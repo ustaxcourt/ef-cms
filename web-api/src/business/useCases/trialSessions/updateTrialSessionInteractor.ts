@@ -71,6 +71,19 @@ export const updateTrialSession = async (
     );
   }
 
+  const inputStartDateFormatted = formatDateString(
+    trialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+
+  if (
+    inputStartDateFormatted <= nowFormatted &&
+    authorizedUser &&
+    authorizedUser.role !== ROLES.caseServicesSupervisor
+  ) {
+    throw new Error('Trial session start date cannot be today or in the past.');
+  }
+
   const LIMITED_EDITABLE_FIELDS: string[] = [
     'alternateTrialClerkName',
     'courtReporter',

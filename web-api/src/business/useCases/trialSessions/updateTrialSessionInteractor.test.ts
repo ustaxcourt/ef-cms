@@ -70,9 +70,16 @@ describe('updateTrialSessionInteractor', () => {
     const TEST_TRIAL_CLERK_ID = getUniqueId();
     const MOCK_SAVE_RESULTS = 'MOCK_SAVE_RESULTS';
     const MOCK_FILE_URL = 'MOCK_FILE_URL';
+    const tomorrow = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: 1,
+      units: 'days',
+    });
 
     beforeEach(() => {
       TEST_TRIAL_SESSION = cloneDeep(MOCK_TRIAL_INPERSON);
+
+      updateTrialSessionMocked.mockResolvedValue(undefined);
 
       (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
         getPageCount: () => 1,
@@ -122,11 +129,6 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     it('should throw an error if the non CSS user tries to edit any field when start date is today or in the past', async () => {
-      const tomorrow = calculateISODate({
-        dateString: createISODateString(),
-        howMuch: 1,
-        units: 'days',
-      });
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
         trialSessionId: TEST_TRIAL_SESSION_ID,
@@ -153,13 +155,9 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     it('should throw an error if CSS user tries to edit non allowed field when start date is today or in the past', async () => {
-      const tomorrow = calculateISODate({
-        dateString: createISODateString(),
-        howMuch: 1,
-        units: 'days',
-      });
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
+        address1: 'old',
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
         estimatedEndDate: tomorrow,
@@ -170,17 +168,64 @@ describe('updateTrialSessionInteractor', () => {
           applicationContext,
           {
             trialSession: {
+              address1: 'new',
               trialSessionId: TEST_TRIAL_SESSION_ID,
-              startDate: '2001-03-01T21:40:46.415Z',
+              startDate: '2000-03-01T21:40:46.415Z',
               estimatedEndDate: tomorrow,
             } as RawTrialSession,
             clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           },
           mockCaseServicesSupervisorUser,
         ),
-      ).rejects.toThrow('Unauthorized changes: startDate');
+      ).rejects.toThrow('Unauthorized changes: address1');
     });
 
+    it('should throw an error if user tries to update start date to a past date', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2000-03-01T21:40:46.415Z',
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Trial session start date cannot be today or in the past.',
+      );
+    });
+
+    it('should throw an error if user tries to update start date to today', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: tomorrow,
+      });
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: createISODateString(),
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Trial session start date cannot be today or in the past.',
+      );
+    });
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {
       (shouldCreateWorkingCopyForNewJudge as jest.Mock).mockReturnValue(true);
 
