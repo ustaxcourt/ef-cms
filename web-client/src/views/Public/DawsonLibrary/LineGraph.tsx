@@ -197,13 +197,10 @@ export const LineGraph: React.FC<LineGraphProps> = ({
     );
   }
 
-  // Two data arrays:
-  // chartData - uses null for gaps (drives the visible line)
-  // tooltipData - uses 0 for nulls (drives the invisible tooltip-trigger line)
   const chartData = labels.map((label, i) => {
     const row: Record<string, any> = { name: label };
     datasets.forEach(ds => {
-      row[ds.label] = ds.data[i] ?? null;
+      row[ds.label] = ds.data[i] ?? 0;
     });
     return row;
   });
@@ -312,20 +309,16 @@ export const LineGraph: React.FC<LineGraphProps> = ({
                     dataKey={ds.label}
                     stroke={color}
                     strokeWidth={4}
-                    dot={(dotProps: any) => {
-                      const isNull = dotProps.payload[ds.label] === null;
-                      if (isNull) return <g key={dotProps.key} />;
-                      return (
-                        <Dot
-                          key={dotProps.key}
-                          {...dotProps}
-                          r={5}
-                          fill={color}
-                          stroke="#fff"
-                          strokeWidth={2}
-                        />
-                      );
-                    }}
+                    dot={(dotProps: any) => (
+                      <Dot
+                        key={dotProps.key}
+                        {...dotProps}
+                        r={5}
+                        fill={color}
+                        stroke="#fff"
+                        strokeWidth={2}
+                      />
+                    )}
                     activeDot={{
                       fill: color,
                       r: 8,
