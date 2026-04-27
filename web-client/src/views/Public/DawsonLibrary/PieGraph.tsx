@@ -115,12 +115,9 @@ export const PieGraph = ({
           </h2>
         )}
         <PieChart
-          style={{
-            width: '100%',
-            maxWidth: '100%',
-            aspectRatio: 1,
-          }}
+          style={{ width: '100%', maxWidth: '100%', aspectRatio: 1 }}
           tabIndex={-1}
+          responsive
         >
           <Legend
             verticalAlign="top"
