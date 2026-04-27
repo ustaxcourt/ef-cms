@@ -444,7 +444,7 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+  it('should call addCoversheetInteractor when the docket entry has a file attached and the user is NOT saving for later', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -466,12 +466,22 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: mockCase.docketNumber,
+    });
+    expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(true);
+        .calls[0][0].message,
+    ).not.toHaveProperty('generateCoversheet');
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+  it('should NOT call addCoversheetInteractor when the docket entry does NOT have a file attached', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -493,9 +503,38 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(false);
+        .calls[0][0].message,
+    ).not.toHaveProperty('generateCoversheet');
+  });
+
+  it('should NOT call addCoversheetInteractor when isSavingForLater is true even with a file attached', async () => {
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: true,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   describe('consolidated groups', () => {

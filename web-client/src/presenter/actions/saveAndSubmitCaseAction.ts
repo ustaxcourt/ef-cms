@@ -24,7 +24,6 @@ export const saveAndSubmitCaseAction = async ({
   const user = get(state.user);
 
   let caseDetail;
-  let stinFile;
 
   try {
     const {
@@ -47,8 +46,6 @@ export const saveAndSubmitCaseAction = async ({
       user,
     );
 
-    stinFile = stinFileId;
-
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
@@ -59,29 +56,11 @@ export const saveAndSubmitCaseAction = async ({
             ? petitionFileId
             : petitionMetadata.petitionFileId!,
         petitionMetadata,
-        stinFileId: stinFile,
+        stinFileId,
       });
   } catch (err) {
     return path.error();
   }
-
-  const addCoversheet = docketEntryId => {
-    return applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
-  };
-
-  const documentsThatNeedCoverSheet = caseDetail.docketEntries
-    .filter(d => d.isFileAttached)
-    .map(d => d.docketEntryId);
-
-  // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
-  documentsThatNeedCoverSheet.push(stinFile);
-
-  await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
   const isPetitioner = user.role === ROLES.petitioner;
   const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`;
