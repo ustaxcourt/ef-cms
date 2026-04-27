@@ -1,23 +1,25 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseDetailHeader } from '@web-client/views/CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
-import { ErrorNotification } from '../ErrorNotification';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
     closeModalAndReturnToCaseDetailSequence:
       sequences.closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     editType: state.screenMetadata.editType,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -26,6 +28,7 @@ export const EditDocketEntryMeta = connect(
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper,
     editType,
     formCancelToggleCancelSequence,
     showModal,
@@ -51,6 +54,31 @@ export const EditDocketEntryMeta = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
+              {editDocketEntryMetaHelper.showEditHelpText && (
+                <AlertInfo
+                  alertInfo={{
+                    message: (
+                      <div>
+                        <b>Edits to Document Info will also be edited for:</b>
+                        <ul className="tw:mt-0 tw:mb-0">
+                          {editDocketEntryMetaHelper.multiDocketedOn.map(cc => (
+                            <li key={cc.docketNumber}>
+                              {cc.docketNumber} - {cc.caseTitle}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="margin-bottom-0 margin-top-0">
+                          Service and Action edits will only apply to this case.
+                        </p>
+                      </div>
+                    ),
+                  }}
+                  isDismissible={false}
+                  scrollToTop={false}
+                  className="tw:mb-6"
+                  dataTestId="edit-docket-entry"
+                />
+              )}
               <Tabs
                 boxed
                 bind="editDocketEntryMetaTab"

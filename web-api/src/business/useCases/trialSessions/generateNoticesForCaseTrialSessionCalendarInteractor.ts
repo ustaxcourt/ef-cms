@@ -209,6 +209,7 @@ const setNoticeForCase = async ({
       eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
@@ -276,6 +277,7 @@ const setNoticeForCase = async ({
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },

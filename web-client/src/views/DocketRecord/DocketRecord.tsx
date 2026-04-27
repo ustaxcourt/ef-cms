@@ -394,7 +394,7 @@ export const DocketRecord = connect(
                 : formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
               ).map(entry => {
                   return (
-                    <tr key={entry.index}>
+                    <tr key={entry.docketEntryId}>
                       <td data-label="No.">{entry.index}</td>
                       <td data-label="Filed Date">
                         {entry.createdAtFormatted}

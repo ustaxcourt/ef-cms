@@ -20,6 +20,7 @@ export class WorkItem extends JoiValidationEntity {
   public createdAt: string;
   public docketEntryId: string;
   public docketNumber: string;
+  public leadDocketNumber?: string;
   public inProgress?: boolean;
   public isRead?: boolean;
   public section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
@@ -41,6 +42,7 @@ export class WorkItem extends JoiValidationEntity {
     this.createdAt = rawWorkItem.createdAt || createISODateString();
     this.docketEntryId = rawWorkItem.docketEntryId;
     this.docketNumber = rawWorkItem.docketNumber;
+    this.leadDocketNumber = rawWorkItem.leadDocketNumber;
     this.inProgress = rawWorkItem.inProgress;
     this.isRead = rawWorkItem.isRead;
     this.section = rawWorkItem.section;
@@ -65,6 +67,7 @@ export class WorkItem extends JoiValidationEntity {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
+    leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
     entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
     inProgress: joi.boolean().optional(),
     isRead: joi.boolean().optional(),

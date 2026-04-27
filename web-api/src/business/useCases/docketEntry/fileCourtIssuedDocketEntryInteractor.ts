@@ -113,6 +113,7 @@ export const fileCourtIssuedDocketEntry = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: documentMeta.judge,
+            originallyFiledDocketNumber: subjectDocketNumber,
             numberOfPages,
             scenario: documentMeta.scenario,
             serviceStamp: documentMeta.serviceStamp,

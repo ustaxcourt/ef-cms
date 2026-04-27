@@ -13,10 +13,11 @@ export class EditTrialSession extends TrialSession {
       estimatedEndDate: JoiValidationConstants.ISO_DATE.min(
         joi.ref('startDate'),
       )
-        .required()
+        .optional()
+        .allow(null)
         .messages({
           '*': 'Enter a valid estimated end date',
-          'date.min': 'Enter a valid estimated end date',
+          'date.min': 'Estimated end date must be after start date',
         }),
     };
   }

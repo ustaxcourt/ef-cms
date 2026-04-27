@@ -317,7 +317,6 @@ const serveDocketEntry = async ({
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
-          subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         });
       }

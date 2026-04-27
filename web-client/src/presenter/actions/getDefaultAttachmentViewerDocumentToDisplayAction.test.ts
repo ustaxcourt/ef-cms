@@ -1,11 +1,18 @@
 import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultAttachmentViewerDocumentToDisplayAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { presenter } from '../presenter-mock';
 
 describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
-  it('returns state.messageViewerDocumentToDisplay when it is defined and props.documentId is defined', async () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  it('returns state.messageViewerDocumentToDisplay when it is defined and matches props.documentId', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           documentId: '9999',
           mostRecentMessage: {
@@ -22,46 +29,66 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('does NOT return state.messageViewerDocumentToDisplay when it is defined and props.documentId does not match', async () => {
+  it('does NOT return state.messageViewerDocumentToDisplay when it is defined it`s documentId does not match props.documentId', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           documentId: '1234',
           mostRecentMessage: {
-            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+            attachments: [
+              {
+                documentId: '1234',
+              },
+              { documentId: '2345' },
+            ],
           },
         },
         state: {
           messageViewerDocumentToDisplay: { documentId: '9999' },
-        },
-      },
-    );
-    expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: { documentId: '1234' },
-    });
-  });
-
-  it('returns the first item in the attachments array as the messageViewerDocumentToDisplay', async () => {
-    const result = await runAction(
-      getDefaultAttachmentViewerDocumentToDisplayAction,
-      {
-        props: {
-          mostRecentMessage: {
-            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '1234',
+                documentTitle: 'Test Document One',
+                documentId: '1234',
+                index: 0,
+              },
+              {
+                docketEntryId: '2345',
+                documentTitle: 'Test Document Two',
+                documentId: '2345',
+                index: 1,
+              },
+            ],
           },
         },
       },
     );
+
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: { documentId: '1234' },
+      messageViewerDocumentToDisplay: {
+        documentId: '1234',
+        archived: false,
+        documentTitle: 'Test Document One',
+        index: 0,
+      },
     });
   });
 
-  it('returns messageViewerDocumentToDisplay null if there are no attachments on the message', async () => {
+  it('returns messageViewerDocumentToDisplay empty object if there are no attachments on the message', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           mostRecentMessage: {
             attachments: [],
@@ -70,7 +97,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: null,
+      messageViewerDocumentToDisplay: {},
     });
   });
 
@@ -78,17 +105,46 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           documentId: '2345',
           mostRecentMessage: {
             attachments: [{ documentId: '1234' }, { documentId: '2345' }],
           },
         },
+        state: {
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '1234',
+                documentTitle: 'Test Document One',
+                documentId: '1234',
+                index: 0,
+              },
+              {
+                docketEntryId: '2345',
+                documentTitle: 'Test Document Two',
+                documentId: '2345',
+                index: 1,
+              },
+            ],
+          },
+        },
       },
     );
 
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: { documentId: '2345' },
+      messageViewerDocumentToDisplay: {
+        documentId: '2345',
+        archived: false,
+        documentTitle: 'Test Document Two',
+        index: 1,
+      },
     });
   });
 
@@ -96,17 +152,46 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           documentId: '3456', // does not exist in attachments array
           mostRecentMessage: {
             attachments: [{ documentId: '1234' }, { documentId: '2345' }],
           },
         },
+        state: {
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '1234',
+                documentTitle: 'Test Document One',
+                documentId: '1234',
+                index: 0,
+              },
+              {
+                docketEntryId: '2345',
+                documentTitle: 'Test Document Two',
+                documentId: '2345',
+                index: 1,
+              },
+            ],
+          },
+        },
       },
     );
 
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: { documentId: '1234' },
+      messageViewerDocumentToDisplay: {
+        documentId: '1234',
+        archived: false,
+        documentTitle: 'Test Document One',
+        index: 0,
+      },
     });
   });
 
@@ -114,6 +199,9 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         props: {
           documentId: '1234',
           mostRecentMessage: {
@@ -128,7 +216,9 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     );
 
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: { documentId: '9999' },
+      messageViewerDocumentToDisplay: {
+        documentId: '9999',
+      },
     });
   });
 });

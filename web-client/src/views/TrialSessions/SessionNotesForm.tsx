@@ -35,7 +35,7 @@ export const SessionNotesForm = connect<
               className="usa-textarea textarea-resize-vertical"
               disabled={
                 !addingTrialSession &&
-                formattedTrialSessionDetails.canEditOngoingSession
+                formattedTrialSessionDetails.editPermissions === 'limited'
               }
               id="notes"
               maxLength={400}
