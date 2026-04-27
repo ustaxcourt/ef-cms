@@ -199,8 +199,5 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 }
 
 {
-  app.put(
-    '/public-api/verify-email',
-    lambdaWrapper(verifyUserPendingEmailLambda),
-  );
+  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
