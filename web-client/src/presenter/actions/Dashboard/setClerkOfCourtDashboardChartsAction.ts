@@ -15,11 +15,9 @@ const MONTHS = [
   'December',
 ];
 
-// Colors for pie charts and bar charts
 const COLOR_BLUE = '#005EA2';
 const COLOR_YELLOW = '#FFBE2E';
 
-// Session type colors matching the Dawson Library examples
 const SESSION_TYPE_COLORS: Record<string, string> = {
   Regular: '#B4D0B9',
   Hybrid: '#FEE685',
@@ -29,10 +27,6 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   Special: '#E5A000',
 };
 
-/**
- * Fetches Clerk of Court dashboard stats from the API and populates
- * the clerkOfCourtDashboard state slice with real data.
- */
 export const setClerkOfCourtDashboardChartsAction = async ({
   applicationContext,
   store,
@@ -47,7 +41,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     return;
   }
 
-  // ── Single bar: special sessions by location ─────────────────────────────
   store.set(
     state.clerkOfCourtDashboard.specialSessionsByLocation,
     stats.specialSessionsByLocation.map(({ trialLocation, count }) => ({
@@ -57,7 +50,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     })),
   );
 
-  // ── Multi bar: petitions by month (electronic / paper) ───────────────────
   store.set(state.clerkOfCourtDashboard.petitionsByMonthLabels, MONTHS);
   store.set(state.clerkOfCourtDashboard.petitionsByMonthDatasets, [
     {
@@ -72,7 +64,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     },
   ]);
 
-  // ── Multi bar: closed cases (closed / closed-dismissed) ──────────────────
   store.set(state.clerkOfCourtDashboard.closedCasesLabels, MONTHS);
   store.set(state.clerkOfCourtDashboard.closedCasesDatasets, [
     {
@@ -87,7 +78,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     },
   ]);
 
-  // ── Line: cases filed over time (Regular / Small) ─────────────────────────
   store.set(state.clerkOfCourtDashboard.casesFiledLabels, MONTHS);
   store.set(state.clerkOfCourtDashboard.casesFiledDatasets, [
     {
@@ -102,7 +92,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     },
   ]);
 
-  // ── Line: case type breakdown by quarter ──────────────────────────────────
   const quarterLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
   const caseTypeMap = new Map<string, number[]>();
   for (const { caseType, quarter, count } of stats.caseTypeByQuarter) {
@@ -118,7 +107,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     Array.from(caseTypeMap.entries()).map(([label, data]) => ({ data, label })),
   );
 
-  // ── Pie: proceeding type (In Person / Remote) ─────────────────────────────
   const totalProceedingSessions = stats.proceedingTypeCounts.reduce(
     (sum, r) => sum + r.count,
     0,
@@ -134,7 +122,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
       : [],
   );
 
-  // ── Pie: session type breakdown ───────────────────────────────────────────
   const totalSessionTypeSessions = stats.sessionTypeCounts.reduce(
     (sum, r) => sum + r.count,
     0,
@@ -150,7 +137,6 @@ export const setClerkOfCourtDashboardChartsAction = async ({
       : [],
   );
 
-  // ── Total sessions scheduled ──────────────────────────────────────────────
   store.set(
     state.clerkOfCourtDashboard.totalSessionsScheduled,
     totalSessionTypeSessions,

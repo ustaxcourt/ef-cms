@@ -37,8 +37,6 @@ const defaultColors = [
   '#B50909', // red darker
 ];
 
-// ─── Custom legend renderer ───────────────────────────────────────────────────
-
 const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
@@ -57,8 +55,6 @@ const renderCustomLegend = (props: any) => {
     </div>
   );
 };
-
-// ─── Rotated x-axis tick ────────────────────────────────────────────────────
 
 const RotatedTickX = (props: any) => {
   const { x, y, payload } = props;
@@ -99,8 +95,6 @@ const StraightTickX = (props: any) => {
   );
 };
 
-// ─── Y-axis tick ─────────────────────────────────────────────────────────────
-
 const LineYAxisTick = (props: any) => {
   const { x, y, payload } = props;
   return (
@@ -120,8 +114,6 @@ const LineYAxisTick = (props: any) => {
   );
 };
 
-// ─── Y-axis label ───────────────────────────────────────────────────────────
-
 const LineYAxisLabel = ({ value, viewBox }: any) => {
   const { x, y, height: h, width: w } = viewBox;
   const cx = x + (w ?? 80) / 2 - 20;
@@ -140,8 +132,6 @@ const LineYAxisLabel = ({ value, viewBox }: any) => {
     </text>
   );
 };
-
-// ─── Tooltip content ─────────────────────────────────────────────────────────
 
 const TooltipContent = ({
   active,
@@ -181,8 +171,6 @@ const TooltipContent = ({
     </div>
   );
 };
-
-// ─── LineGraph ────────────────────────────────────────────────────────────────
 
 export const LineGraph: React.FC<LineGraphProps> = ({
   datasets,
@@ -234,6 +222,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   return (
     <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
       <div
+        // Must use style for width to work with recharts' ResponsiveContainer and maintain aspect ratio
         style={
           {
             '--chart-width': `${width / 16}rem`,

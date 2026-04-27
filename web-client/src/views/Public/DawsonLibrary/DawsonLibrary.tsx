@@ -9,7 +9,6 @@ import { LineGraph } from './LineGraph';
 import { SingleBarGraph, MultiBarGraph } from './BarGraph';
 
 const DEFAULT_CHART_WIDTH = 1344;
-const DEFAULT_CHART_HEIGHT = 800;
 
 export const DawsonLibrary = () => {
   return (
@@ -18,7 +17,6 @@ export const DawsonLibrary = () => {
       <SingleBarGraph
         title="Created Special Sessions by Location"
         width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
         showLabels={false}
         data={[
           { label: 'Atlanta, GA', value: 9, color: '#005EA2' },
@@ -29,12 +27,10 @@ export const DawsonLibrary = () => {
           { label: 'Louisville, KY', value: 5, color: '#005EA2' },
         ]}
       />
-      <div style={{ marginTop: '48px' }} />
+      <div className="tw:mt-12" />
       <MultiBarGraph
         width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
         title="Total Petitions by Month"
-        // yAxisLabel="Total"
         stacked
         showLabels={false}
         xLabelRotation={45}
@@ -68,7 +64,6 @@ export const DawsonLibrary = () => {
       <div style={{ marginTop: '48px' }} />
       <MultiBarGraph
         width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
         title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
         // yAxisLabel="Total"
         showLabels={false}
@@ -100,10 +95,9 @@ export const DawsonLibrary = () => {
           },
         ]}
       />{' '}
-      <div style={{ marginTop: '100px' }} />
+      <div className="tw:mt-12" />
       <LineGraph
         width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
         title="Cases Filed Over Time"
         xAxisLabel="Month"
         xLabelRotation={45}
@@ -160,10 +154,9 @@ export const DawsonLibrary = () => {
         ]}
         smooth
       />
-      <div style={{ marginTop: '100px' }} />
+      <div className="tw:mt-[6.25rem]" />
       <LineGraph
         width={DEFAULT_CHART_WIDTH}
-        height={DEFAULT_CHART_HEIGHT}
         title="Case Type Breakdown by Quarter"
         xAxisLabel="Quarter"
         yAxisLabel="Number of Cases"
@@ -191,9 +184,7 @@ export const DawsonLibrary = () => {
           },
         ]}
       />
-      <div
-        style={{ marginTop: '3rem', marginLeft: '1rem', marginRight: '1rem' }}
-      >
+      <div className="tw:mt-12 tw:mx-4">
         <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-4">
           Total sessions scheduled: 300
         </h2>

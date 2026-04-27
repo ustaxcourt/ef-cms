@@ -6,26 +6,48 @@ import {
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 
+export enum Month {
+  January = 1,
+  February = 2,
+  March = 3,
+  April = 4,
+  May = 5,
+  June = 6,
+  July = 7,
+  August = 8,
+  September = 9,
+  October = 10,
+  November = 11,
+  December = 12,
+}
+
+export enum Quarter {
+  Q1 = 1,
+  Q2 = 2,
+  Q3 = 3,
+  Q4 = 4,
+}
+
 export type ClerkDashboardMonthlyCount = {
-  month: number; // 1–12
+  month: Month;
   electronic: number;
   paper: number;
 };
 
 export type ClerkDashboardProcedureTypeMonthlyCount = {
-  month: number; // 1–12
+  month: Month;
   regular: number;
   small: number;
 };
 
 export type ClerkDashboardCaseTypeQuarterCount = {
-  quarter: number; // 1–4
+  quarter: Quarter;
   caseType: string;
   count: number;
 };
 
 export type ClerkDashboardClosedMonthlyCount = {
-  month: number;
+  month: Month;
   closed: number;
   closedDismissed: number;
 };
@@ -186,7 +208,7 @@ export const getClerkDashboardStats = async ({
       const row = petitionRows.find(r => Number(r.month) === i + 1);
       return {
         electronic: row ? Number(row.electronic) : 0,
-        month: i + 1,
+        month: (i + 1) as Month,
         paper: row ? Number(row.paper) : 0,
       };
     });
@@ -194,7 +216,7 @@ export const getClerkDashboardStats = async ({
     const casesFiledByMonth = Array.from({ length: 12 }, (_, i) => {
       const row = procedureTypeRows.find(r => Number(r.month) === i + 1);
       return {
-        month: i + 1,
+        month: (i + 1) as Month,
         regular: row ? Number(row.regular) : 0,
         small: row ? Number(row.small) : 0,
       };
@@ -205,7 +227,7 @@ export const getClerkDashboardStats = async ({
       return {
         closed: row ? Number(row.closed) : 0,
         closedDismissed: row ? Number(row.closedDismissed) : 0,
-        month: i + 1,
+        month: (i + 1) as Month,
       };
     });
 
@@ -213,7 +235,7 @@ export const getClerkDashboardStats = async ({
       caseTypeByQuarter: caseTypeRows.map(r => ({
         caseType: r.caseType,
         count: Number(r.count),
-        quarter: Number(r.quarter),
+        quarter: Number(r.quarter) as Quarter,
       })),
       casesFiledByMonth,
       closedCasesByMonth: closedByMonth,

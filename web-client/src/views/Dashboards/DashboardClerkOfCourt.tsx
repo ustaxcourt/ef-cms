@@ -48,10 +48,7 @@ export const DashboardClerkOfCourt = connect(
             <SuccessNotification />
             <ErrorNotification />
 
-            {/* ── Trial Sessions Summary ───────────────────────────────── */}
             <ClerkOfCourtTrialSessionsSummary />
-
-            {/* ── Tabbed content ───────────────────────────────────────── */}
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="recentMessages" title="Recent Messages">
@@ -82,7 +79,7 @@ export const DashboardClerkOfCourt = connect(
                       width={CHART_WIDTH}
                       data={specialSessionsByLocation}
                     />
-                    <div style={{ marginTop: '48px' }} />
+                    <div className="tw:mt-12" />
                     <MultiBarGraph
                       showLabels={false}
                       stacked
@@ -92,7 +89,7 @@ export const DashboardClerkOfCourt = connect(
                       datasets={petitionsByMonthDatasets}
                       labels={petitionsByMonthLabels}
                     />
-                    <div style={{ marginTop: '48px' }} />
+                    <div className="tw:mt-12" />
                     <MultiBarGraph
                       showLabels={false}
                       title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
@@ -115,7 +112,7 @@ export const DashboardClerkOfCourt = connect(
                       datasets={casesFiledDatasets}
                       labels={casesFiledLabels}
                     />
-                    <div style={{ marginTop: '100px' }} />
+                    <div className="tw:mt-[6.25rem]" />
                     <LineGraph
                       title="Case Type Breakdown by Quarter"
                       width={CHART_WIDTH}
@@ -156,11 +153,7 @@ export const DashboardClerkOfCourt = connect(
                       title="Procedure Type"
                       data={procedureTypePieData}
                     />
-                    <PieGraph
-                      legendFlow="row"
-                      title="Session Type"
-                      data={sessionTypePieData}
-                    />
+                    <PieGraph title="Session Type" data={sessionTypePieData} />
                   </div>
                 </div>
               )}
@@ -172,7 +165,7 @@ export const DashboardClerkOfCourt = connect(
                     width={CHART_WIDTH}
                     data={specialSessionsByLocation}
                   />
-                  <div style={{ marginTop: '48px' }} />
+                  <div className="tw:mt-12" />
                   <MultiBarGraph
                     showLabels={false}
                     stacked
@@ -182,7 +175,7 @@ export const DashboardClerkOfCourt = connect(
                     datasets={petitionsByMonthDatasets}
                     labels={petitionsByMonthLabels}
                   />
-                  <div style={{ marginTop: '48px' }} />
+                  <div className="tw:mt-12" />
                   <MultiBarGraph
                     showLabels={false}
                     title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
@@ -205,7 +198,7 @@ export const DashboardClerkOfCourt = connect(
                     datasets={casesFiledDatasets}
                     labels={casesFiledLabels}
                   />
-                  <div style={{ marginTop: '48px' }} />
+                  <div className="tw:mt-12" />
                   <LineGraph
                     title="Case Type Breakdown by Quarter"
                     width={CHART_WIDTH}

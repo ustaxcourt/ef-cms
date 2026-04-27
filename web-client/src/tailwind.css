@@ -186,8 +186,6 @@ g:focus:not(:focus-visible) {
   }
 }
 
-/* stylelint-enable scss/at-rule-no-unknown, order/properties-order, nesting-selector-no-missing-scoping-root, rule-empty-line-before */
-
 /* from custom.scss */
 @layer components {
   .background-blue {
@@ -212,7 +210,8 @@ g:focus:not(:focus-visible) {
   font-family: 'Noto Serif';
   font-style: normal;
   font-weight: 700;
-  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2') format('woff2');
+  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2')
+    format('woff2');
 }
 
 /* Custom utility */
