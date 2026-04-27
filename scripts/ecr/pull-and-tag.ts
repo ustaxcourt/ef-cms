@@ -156,7 +156,7 @@ async function app() {
   }
 
   console.log(`Retrieving temporary AWS credentials for ${srcEnv}...`);
-  const envSwitcherCommand = `. scripts/env/set-env.zsh ${sourceEnv} --quiet`;
+  const envSwitcherCommand = `. scripts/env/set-env.zsh ${sourceEnv} --quiet --aws-only`;
   const echoInfoCommand = `echo "{
     \\"AWS_ACCESS_KEY_ID\\": \\"$AWS_ACCESS_KEY_ID\\",
     \\"AWS_ACCOUNT_ID\\": \\"$AWS_ACCOUNT_ID\\",
