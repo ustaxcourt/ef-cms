@@ -192,7 +192,6 @@
     "maintenance:disengage:local": ". ./setup-local-env.sh && ./scripts/send-maintenance-mode-notifications-locally.ts false",
     "maintenance:engage": "./scripts/engage-maintenance-mode.sh",
     "maintenance:engage:local": ". ./setup-local-env.sh && ./scripts/send-maintenance-mode-notifications-locally.ts true",
-    "migrate:local": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 ts-node --transpile-only ./web-api/run-local-migration.ts",
     "migration:cleanup": "./scripts/migration/update-deploy-table-after-migration.sh",
     "migration:generate:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/generateMigration.ts",
     "migration:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrate.ts",
