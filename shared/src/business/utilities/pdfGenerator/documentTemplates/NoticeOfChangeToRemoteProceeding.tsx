@@ -84,8 +84,8 @@ export const NoticeOfChangeToRemoteProceeding = ({
           <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
             www.zoomgov.com
           </a>{' '}
-          and click `Join`. Enter the Meeting ID and Passcode above when
-          prompted.
+          and click &apos;Join&apos;. Enter the Meeting ID and Passcode above
+          when prompted.
         </p>
 
         <p>
