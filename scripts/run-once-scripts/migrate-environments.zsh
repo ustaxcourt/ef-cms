@@ -39,7 +39,7 @@ IRS_SUPERUSER_PASS=""' "$f"
 
   # 4. Add the echo line for IRS_SUPERUSER_PASS if missing
   if grep -q 'IRS_SUPERUSER_EMAIL=' "$f"; then
-     if ! grep -q '\[\[ -n "$IRS_SUPERUSER_PASS" \]\] && echo "IRS_SUPERUSER_PASS=' "$f"; then
+     if ! grep -qF 'IRS_SUPERUSER_PASS=' "$f"; then
         perl -i -pe 's/(if \[\[ -n "\$IRS_SUPERUSER_EMAIL" \]\]; then.*?fi\n)/$1\[\[ -n "\$IRS_SUPERUSER_PASS" \]\] && echo "IRS_SUPERUSER_PASS='\''\${IRS_SUPERUSER_PASS}'\''" >> .env\n/sg' "$f"
         modified=1
      fi
