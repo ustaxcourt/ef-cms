@@ -5,7 +5,7 @@ import * as readline from 'readline';
 const DOMAIN_REPLACER = 'ustc.gov';
 // Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
 const emailRegex: RegExp =
-  /(?<!\\)(?<!@)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+\b/g;
+  /(?<!\\)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+\b/g;
 const usedEmails: Record<string, string> = {};
 
 const alreadyHashedEmails: Record<string, string> = {};
