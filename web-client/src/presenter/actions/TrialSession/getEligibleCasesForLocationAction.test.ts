@@ -1,9 +1,9 @@
-jest.mock('@shared/proxies/trialSessions/getEligibleCasesForCityProxy');
+jest.mock('@web-client/proxies/trialSessions/getEligibleCasesForCityProxy');
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getEligibleCasesForLocationAction } from './getEligibleCasesForLocationAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { getEligibleCasesForCityInteractor as getEligibleCasesForCityInteractorMock } from '@shared/proxies/trialSessions/getEligibleCasesForCityProxy';
+import { getEligibleCasesForCityInteractor as getEligibleCasesForCityInteractorMock } from '@web-client/proxies/trialSessions/getEligibleCasesForCityProxy';
 
 describe('getEligibleCasesForLocationAction', () => {
   const getEligibleCasesForCityInteractor = jest.mocked(

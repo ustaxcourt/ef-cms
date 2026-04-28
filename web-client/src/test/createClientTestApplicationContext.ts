@@ -74,14 +74,14 @@ import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCo
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { sealCaseInteractor } from '@shared/proxies/sealCaseProxy';
-import { sealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/sealDocketEntryProxy';
+import { sealCaseInteractor } from '@web-client/proxies/sealCaseProxy';
+import { sealDocketEntryInteractor } from '@web-client/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
-import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
+import { setNoticesForCalendaredTrialSessionInteractor } from '@web-client/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
-import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
+import { unsealDocketEntryInteractor } from '@web-client/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import pug from 'pug';

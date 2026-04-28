@@ -1,0 +1,261 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  NotFoundError,
+  UnauthorizedError,
+  UnidentifiedUserError,
+} from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { cloneDeep, isEmpty } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
+} from '@shared/business/utilities/calculateEmail';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+
+/**
+ * updateContact
+ *
+ * this interactor is invoked when a petitioner updates a case they are associated with from the parties tab.
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {string} providers.docketNumber the docket number of the case to update the primary contact
+ * @param {object} providers.contactInfo the contact info to update on the case
+ * @returns {object} the updated case
+ */
+export const updateContact = async (
+  applicationContext: ServerApplicationContext,
+  { contactInfo, docketNumber },
+  authorizedUser: UnknownAuthUser,
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnidentifiedUserError(
+      'Unable to confirm user is an authenticated user',
+    );
+  }
+
+  const editableFields = {
+    address1: contactInfo.address1,
+    address2: contactInfo.address2,
+    address3: contactInfo.address3,
+    city: contactInfo.city,
+    country: contactInfo.country,
+    countryType: contactInfo.countryType,
+    phone: contactInfo.phone,
+    postalCode: contactInfo.postalCode,
+    state: contactInfo.state,
+  };
+
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
+  let caseEntity = new Case(
+    {
+      ...caseToUpdate,
+    },
+    { authorizedUser },
+  );
+
+  const oldCaseContact = cloneDeep(
+    caseEntity.getPetitionerById(contactInfo.contactId),
+  );
+
+  const updatedCaseContact = {
+    ...oldCaseContact,
+    ...editableFields,
+  };
+
+  try {
+    caseEntity.updatePetitioner({ updatedPetitioner: updatedCaseContact });
+  } catch (e) {
+    throw new NotFoundError(e);
+  }
+
+  const rawUpdatedCase = caseEntity.validate().toRawObject();
+  caseEntity = new Case(rawUpdatedCase, { authorizedUser });
+
+  const updatedPetitioner = caseEntity.getPetitionerById(contactInfo.contactId);
+
+  const userIsAssociated = caseEntity.isAssociatedUser({
+    user: authorizedUser,
+  });
+
+  if (!userIsAssociated) {
+    throw new UnauthorizedError('Unauthorized for update case contact');
+  }
+
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({
+      newData: editableFields,
+      oldData: oldCaseContact,
+    });
+
+  if (
+    !oldCaseContact.isAddressSealed &&
+    documentType &&
+    caseEntity.shouldGenerateNoticesForCase()
+  ) {
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
+    const { isAddressSealed } = updatedPetitioner;
+
+    oldCaseContact.email = formattedOldEmailForChangeOfAddress(
+      oldCaseContact.email,
+      isAddressSealed,
+    );
+    contactInfo.email = formattedNewEmailForChangeOfAddress(
+      contactInfo.email,
+      isAddressSealed,
+    );
+
+    const changeOfAddressPdf = await applicationContext
+      .getDocumentGenerators()
+      .changeOfAddress({
+        applicationContext,
+        content: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          documentType,
+          name: contactInfo.name,
+          newData: contactInfo,
+          oldData: oldCaseContact,
+        },
+      });
+
+    const newDocketEntryId = applicationContext.getUniqueId();
+
+    const changeOfAddressDocketEntry = new DocketEntry(
+      {
+        addToCoversheet: true,
+        additionalInfo: `for ${updatedPetitioner.name}`,
+        docketEntryId: newDocketEntryId,
+        documentStorageId: newDocketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        documentTitle: documentType.title,
+        documentType: documentType.title,
+        eventCode: documentType.eventCode,
+        filers: [updatedPetitioner.contactId],
+        isAutoGenerated: true,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      },
+      { authorizedUser, petitioners: caseEntity.petitioners },
+    );
+
+    changeOfAddressDocketEntry.setFiledBy(authorizedUser);
+
+    const servedParties = aggregatePartiesForService(caseEntity);
+
+    changeOfAddressDocketEntry.setAsServed(servedParties.all);
+
+    const isContactRepresented = Case.isPetitionerRepresented(
+      caseEntity,
+      contactInfo.contactId,
+    );
+
+    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+
+    if (!isContactRepresented || partyWithPaperService) {
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        section: DOCKET_SECTION,
+        sentBy: authorizedUser.name,
+        sentByUserId: authorizedUser.userId,
+      });
+
+      await upsertWorkItems({
+        workItems: [workItem.validate().toRawObject()],
+      });
+    }
+
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
+    const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
+      applicationContext,
+      caseEntity,
+      docketEntryEntity: changeOfAddressDocketEntry,
+      pdfData: changeOfAddressPdf,
+    });
+
+    changeOfAddressDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentBytes: changeOfAddressPdfWithCover,
+      });
+
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
+    });
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      document: changeOfAddressPdfWithCover,
+      key: changeOfAddressDocketEntry.documentStorageId,
+    });
+  }
+
+  const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
+    newData: editableFields,
+    oldData: oldCaseContact,
+  });
+
+  const shouldUpdateCase = !isEmpty(contactDiff) || documentType;
+
+  if (shouldUpdateCase) {
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
+  }
+
+  const filteredCase = CaseFactory.getCaseDTO({
+    rawCase: caseEntity,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
+};
+
+export const updateContactInteractor = withLocking(
+  updateContact,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

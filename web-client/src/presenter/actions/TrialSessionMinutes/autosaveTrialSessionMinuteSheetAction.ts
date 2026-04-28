@@ -1,5 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
+import { updateMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import hash from 'object-hash';

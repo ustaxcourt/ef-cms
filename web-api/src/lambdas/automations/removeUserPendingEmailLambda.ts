@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { removeUserPendingEmailInteractor } from '@shared/business/useCases/automations/removeUserPendingEmailInteractor';
+import { removeUserPendingEmailInteractor } from '@web-api/business/useCases/automations/removeUserPendingEmailInteractor';
 
 export const removeUserPendingEmailLambda = (
   event,

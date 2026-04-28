@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getReconciliationReportInteractor } from '@shared/business/useCases/getReconciliationReportInteractor';
+import { getReconciliationReportInteractor } from '@web-api/business/useCases/getReconciliationReportInteractor';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**

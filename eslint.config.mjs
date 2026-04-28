@@ -216,4 +216,21 @@ export default tseslint.config(
       'custom-rules-plugin/no-dates': 'error',
     },
   },
+  {
+    files: ['web-api/**/*.ts', 'web-api/**/*.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@web-client/proxies', '@web-client/proxies/*'],
+              message:
+                'HTTP client proxies live under web-client only; import interactors from web-api or shared instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );
