@@ -4,13 +4,13 @@
   "version": "0.0.2",
   "license": "CC0-1.0",
   "engines": {
-    "node": ">=24.14.1 <25.0.0",
+    "node": ">=24.15.0 <25.0.0",
     "npm": ">=11.11.0 <12.0.0"
   },
   "dependencies": {
-    "@sparticuz/chromium": "143.0.4",
+    "@sparticuz/chromium": "147.0.2",
     "pug": "3.0.4",
-    "puppeteer-core": "24.40.0",
+    "puppeteer-core": "24.42.0",
     "sass": "1.99.0"
   },
   "scripts": {},
