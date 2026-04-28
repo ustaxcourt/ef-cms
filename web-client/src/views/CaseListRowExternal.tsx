@@ -80,7 +80,7 @@ export const CaseListRowExternal = ({
                   key={consolidatedCase.docketNumber}
                   showFilingFee={showFilingFee}
                   showCaseStatusInfoSequence={showCaseStatusInfoSequence}
-                  showCaseStatus
+                  showCaseStatus={showCaseStatus}
                 />
               );
             })}
@@ -175,7 +175,7 @@ export const CaseListRowExternal = ({
                 key={consolidatedCase.docketNumber}
                 showFilingFee={showFilingFee}
                 showCaseStatusInfoSequence={showCaseStatusInfoSequence}
-                showCaseStatus
+                showCaseStatus={showCaseStatus}
               />
             );
           })}
