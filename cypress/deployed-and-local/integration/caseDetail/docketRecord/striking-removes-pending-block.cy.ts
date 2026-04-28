@@ -21,8 +21,10 @@ describe('Striking removes pending items', () => {
       // Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
+      cy.get('[data-testid="modal-button-confirm"]')
+        .should('be.visible')
+        .click();
 
       cy.get('[data-testid="edit-APW"]'); // Wait for page to be fully loaded before next assert
       cy.get('[data-testid="blocked-case-icon"]').should('not.exist'); // Assert case is not blocked
@@ -45,8 +47,10 @@ describe('Striking removes pending items', () => {
       // Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
+      cy.get('[data-testid="modal-button-confirm"]')
+        .should('be.visible')
+        .click();
 
       cy.get('[data-testid="blocked-case-icon"]').should('exist'); // Assert case is blocked
     });
@@ -68,16 +72,20 @@ describe('Striking removes pending items', () => {
       //Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
+      cy.get('[data-testid="modal-button-confirm"]')
+        .should('be.visible')
+        .click();
 
       cy.get('[data-testid="blocked-case-icon"]').should('exist'); // Assert case is still blocked
 
       //Strike MOTR
       cy.get('[data-testid="edit-MOTR"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
+      cy.get('[data-testid="modal-button-confirm"]')
+        .should('be.visible')
+        .click();
 
       cy.get('[data-testid="edit-APW"]'); // Wait for page to be fully loaded before next assert
       cy.get('[data-testid="blocked-case-icon"]').should('not.exist'); // Assert case is not blocked
