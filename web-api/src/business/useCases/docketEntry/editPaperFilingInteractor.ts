@@ -300,6 +300,7 @@ const serveDocketEntry = async ({
       applicationContext,
       authorizedUser,
       caseEntity: subjectCaseEntity,
+      docketNumbers: caseEntitiesToFileOn.map(e => e.docketNumber),
       docketEntry: docketEntryEntity,
       documentMetadata,
       userId: user.userId,
@@ -405,12 +406,14 @@ const updateDocketEntry = async ({
   authorizedUser,
   caseEntity,
   docketEntry,
+  docketNumbers,
   documentMetadata,
   userId,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
+  docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
@@ -446,6 +449,7 @@ const updateDocketEntry = async ({
     {
       ...docketEntry,
       ...editableFields,
+      multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
