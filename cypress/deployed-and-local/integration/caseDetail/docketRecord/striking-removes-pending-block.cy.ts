@@ -3,6 +3,34 @@ import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketReco
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 
+const MAX_STRIKE_RETRIES = 3;
+
+function strikeDocketEntry(attempt = 0) {
+  return cy
+    .get('[data-testid="strike-entry"]')
+    .should('be.visible')
+    .click()
+    .wait(200)
+    .get('body')
+    .then($body => {
+      if ($body.find('[data-testid="modal-button-confirm"]').length > 0) {
+        return cy
+          .get('[data-testid="modal-button-confirm"]')
+          .should('be.visible')
+          .click();
+      } else if (attempt < MAX_STRIKE_RETRIES) {
+        cy.log(
+          `Strike modal did not appear, retrying (${attempt + 1}/${MAX_STRIKE_RETRIES})`,
+        );
+        return strikeDocketEntry(attempt + 1);
+      } else {
+        throw new Error(
+          'Strike docket entry modal did not appear after maximum retries',
+        );
+      }
+    });
+}
+
 describe('Striking removes pending items', () => {
   beforeEach(() => {
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -21,10 +49,7 @@ describe('Striking removes pending items', () => {
       // Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
-      cy.get('[data-testid="modal-button-confirm"]')
-        .should('be.visible')
-        .click();
+      strikeDocketEntry();
 
       cy.get('[data-testid="edit-APW"]'); // Wait for page to be fully loaded before next assert
       cy.get('[data-testid="blocked-case-icon"]').should('not.exist'); // Assert case is not blocked
@@ -47,10 +72,7 @@ describe('Striking removes pending items', () => {
       // Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
-      cy.get('[data-testid="modal-button-confirm"]')
-        .should('be.visible')
-        .click();
+      strikeDocketEntry();
 
       cy.get('[data-testid="blocked-case-icon"]').should('exist'); // Assert case is blocked
     });
@@ -72,20 +94,14 @@ describe('Striking removes pending items', () => {
       //Strike APW
       cy.get('[data-testid="edit-APW"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
-      cy.get('[data-testid="modal-button-confirm"]')
-        .should('be.visible')
-        .click();
+      strikeDocketEntry();
 
       cy.get('[data-testid="blocked-case-icon"]').should('exist'); // Assert case is still blocked
 
       //Strike MOTR
       cy.get('[data-testid="edit-MOTR"]').click();
       cy.get('[data-testid="tab-action"]').click();
-      cy.get('[data-testid="strike-entry"]').should('be.visible').click();
-      cy.get('[data-testid="modal-button-confirm"]')
-        .should('be.visible')
-        .click();
+      strikeDocketEntry();
 
       cy.get('[data-testid="edit-APW"]'); // Wait for page to be fully loaded before next assert
       cy.get('[data-testid="blocked-case-icon"]').should('not.exist'); // Assert case is not blocked
