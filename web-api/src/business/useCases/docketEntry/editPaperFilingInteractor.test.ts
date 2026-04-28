@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -539,12 +540,44 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const expectedCount = [
+          const expectedMultiDocketedOn = [
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
-          ].length;
+          ];
+          const expectedCount = expectedMultiDocketedOn.length;
+
           expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
             expectedCount,
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: caseRecord.docketNumber,
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[0],
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[1],
+              }),
+            }),
           );
         });
 

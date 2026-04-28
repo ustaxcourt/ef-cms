@@ -130,7 +130,7 @@ const getEditPaperFilingStrategy = ({
   throw new Error('No strategy found to edit paper filing');
 };
 
-  const saveForLaterStrategy = async ({
+const saveForLaterStrategy = async ({
   applicationContext,
   authorizedUser,
   caseEntity,
@@ -264,7 +264,7 @@ const singleDocketServeStrategy = async ({
   });
 };
 
-  // *********************************** Small Helper Functions ***********************************
+// *********************************** Small Helper Functions ***********************************
 const serveDocketEntry = async ({
   applicationContext,
   authorizedUser,
@@ -306,6 +306,7 @@ const serveDocketEntry = async ({
         applicationContext,
         authorizedUser,
         caseEntity: subjectCaseEntity,
+        docketNumbers: caseEntitiesToFileOn.map(e => e.docketNumber),
         docketEntry: docketEntryEntity,
         documentMetadata,
         userId: user.userId,
@@ -422,12 +423,14 @@ const updateDocketEntry = async ({
   authorizedUser,
   caseEntity,
   docketEntry,
+  docketNumbers,
   documentMetadata,
   userId,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
+  docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
@@ -463,6 +466,7 @@ const updateDocketEntry = async ({
     {
       ...docketEntry,
       ...editableFields,
+      multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
