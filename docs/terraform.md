@@ -30,9 +30,9 @@ If you make changes to the account specific terraform you will need to manually 
 To run an account specific deploy:
 1. Use the environment switcher to point to an environment in the account you would like to deploy the changes to.
 1. Run the following command:
-```sh
-npm run deploy:account-specific
-```
+   ```sh
+   npm run deploy:account-specific
+   ```
 
 ## Terraform State Locking
 
@@ -42,19 +42,34 @@ Terraform uses a DynamoDB table called `efcms-terraform-lock` to prevent multipl
 
 Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes - verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
+These instructions assume the `allColors` terraform applyable is locked. Adjust them as necessary to unlock a different terraform applyable.
+
 1. Switch to the correct environment using the environment switcher.
 1. Switch to the correct terraform version (example: `tfswitch 1.4.5`).
 1. Navigate locally to the `web-api/terraform/applyables/allColors` directory.
-1. Edit the `web-api/terraform/bin/deploy-app-all-colors.sh script` by commenting out both the terraform `plan` and `apply` commands (not `terraform init`).
-```sh
-# terraform plan -out execution-plan
-# terraform apply -auto-approve execution-plan
-```
+   ```sh
+   cd web-api/terraform/applyables/allColors
+   ```
+1. Edit the `web-api/terraform/bin/deploy-app-all-colors.sh` script by commenting out both the `terraform plan` and `terraform apply` commands (not `terraform init`).
+   ```sh
+   # terraform plan -out execution-plan
+   # terraform apply -auto-approve execution-plan
+   ```
 1. Start up Docker Desktop if you don't have it running already.
-1. Set up terraform for the specific environment in question by running the deploy-app-all-colors.sh script (this will eventually run the `terraform init` command)  (i.e., `../../bin/deploy-app-all-colors.sh "$ENV"`).
+1. Set up terraform for the specific environment in question by running the deploy-app-all-colors.sh script (this will eventually run the `terraform init` command).
+   ```sh
+   ../../bin/deploy-app-all-colors.sh "$ENV"
+   ```
 1. Determine the lock ID that needs to be unlocked (lockID). You will find this in CircleCI logs if a deployment failed due to a locked state file.
-1. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
-1. Uncomment the `terraform plan` and `apply` command in the deploy-app-all-colors.sh script.
+1. Force unlock the state file (see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock) for more information).
+   ```sh
+   terraform force-unlock <lock ID>
+   ```
+1. Restore the commented lines to the deploy-app-all-colors.sh script.
+   ```sh
+   cd ../../../..
+   git restore web-api/terraform/bin/deploy-app-all-colors.sh
+   ```
 
 ## Resources
 
