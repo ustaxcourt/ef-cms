@@ -183,7 +183,7 @@
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:file": "TIMING=1 eslint --",
     "lint:fix": "npm run lint:css:fix & npm run lint:js/ts:fix",
-    "lint:js/ts": "TIMING=1 eslint shared/ web-api/ web-api/ web-client/ scripts/",
+    "lint:js/ts": "TIMING=1 eslint scripts/ shared/ web-api/ web-client/",
     "lint:js/ts:fix": "npm run lint:js/ts -- --fix",
     "lint:js/ts:fix:plain": "npm run lint:js/ts:fix -- --rule 'prettier/prettier: 0'",
     "lint:swagger": "swagger-cli validate web-api/swagger.json && swagger-cli validate docs/api/v1.yaml && swagger-cli validate docs/api/v2.yaml",
