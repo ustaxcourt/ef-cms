@@ -4,8 +4,9 @@ import * as readline from 'readline';
 
 const DOMAIN_REPLACER = 'ustc.gov';
 // Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
-const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
-
+// Includes & and ' to capture malformed emails where those characters appear in the local part
+const emailRegex: RegExp =
+  /(?<!\\)\b[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+\b/g;
 const usedEmails: Record<string, string> = {};
 
 const alreadyHashedEmails: Record<string, string> = {};
@@ -14,6 +15,7 @@ export function sanitizeEmail(email: string) {
   if (email === '') {
     return '';
   }
+
   const originalEmail = email;
 
   // same email, return the same hash
