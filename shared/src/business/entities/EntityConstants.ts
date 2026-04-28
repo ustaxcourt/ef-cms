@@ -273,20 +273,22 @@ export type CaseStatus =
   (typeof CASE_STATUS_TYPES)[keyof typeof CASE_STATUS_TYPES];
 
 export const CASE_STATUS_EXPLAINERS = {
-  [CASE_STATUS_TYPES.assignedCase]: 'Case is assigned to a judge',
-  [CASE_STATUS_TYPES.assignedMotion]: 'Motion is assigned to a judge.',
+  [CASE_STATUS_TYPES.assignedCase]: 'Case is before a judge.',
+  [CASE_STATUS_TYPES.assignedMotion]: 'Motion is before a judge.',
   [CASE_STATUS_TYPES.cav]: 'Awaiting resolution.',
   [CASE_STATUS_TYPES.generalDocket]:
     'Case is awaiting calendaring or assignment.',
   [CASE_STATUS_TYPES.generalDocketReadyForTrial]:
     'Case is awaiting calendaring or assignment.',
   [CASE_STATUS_TYPES.new]: 'Petition has been filed with the court.',
-  [CASE_STATUS_TYPES.jurisdictionRetained]: 'Case is assigned to a judge.',
+  [CASE_STATUS_TYPES.jurisdictionRetained]: 'Case is before a judge.',
   [CASE_STATUS_TYPES.onAppeal]: 'Case is on appeal.',
   [CASE_STATUS_TYPES.rule155]: 'Case is awaiting computations.',
   [CASE_STATUS_TYPES.submitted]: 'Awaiting resolution.',
   [CASE_STATUS_TYPES.submittedRule122]: 'Awaiting resolution.',
-  [CASE_STATUS_TYPES.calendared]: 'Case is scheduled for trial.',
+  [CASE_STATUS_TYPES.calendared]: 'Case is scheduled for trial or hearing.',
+  [CASE_STATUS_TYPES.closed]: 'Case is closed',
+  [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed',
 };
 
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
