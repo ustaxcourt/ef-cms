@@ -1,8 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
-import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -15,11 +13,6 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 
 export const serveDocumentCompleteSequence = [
   clearModalAction,
-  isCoversheetNeededAction,
-  {
-    no: [],
-    yes: [generateCoversheetAction],
-  },
   unsetWaitingForResponseAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
