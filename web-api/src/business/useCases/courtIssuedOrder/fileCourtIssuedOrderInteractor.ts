@@ -25,10 +25,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import {
-  onTransactionCommit,
-  withTransaction,
-} from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const fileCourtIssuedOrder = async (
@@ -130,15 +127,11 @@ export const fileCourtIssuedOrder = async (
     if (documentContentsId !== undefined && contentToStore !== undefined) {
       const capturedId = documentContentsId;
       const capturedContent = contentToStore;
-      onTransactionCommit(async () => {
-        await applicationContext
-          .getPersistenceGateway()
-          .saveDocumentFromLambda({
-            contentType: 'application/json',
-            document: Buffer.from(JSON.stringify(capturedContent)),
-            key: capturedId,
-            useTempBucket: false,
-          });
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        contentType: 'application/json',
+        document: Buffer.from(JSON.stringify(capturedContent)),
+        key: capturedId,
+        useTempBucket: false,
       });
     }
 

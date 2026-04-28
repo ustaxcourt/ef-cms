@@ -30,10 +30,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import {
-  onTransactionCommit,
-  withTransaction,
-} from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
@@ -322,31 +319,27 @@ const serveDocketEntry = async ({
         });
       }
 
-      onTransactionCommit(async () => {
-        const paperServiceResult = await applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf({
-            applicationContext,
-            caseEntities: caseEntitiesToFileOn,
-            docketEntryId: updatedDocketEntry.docketEntryId,
-          });
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities: caseEntitiesToFileOn,
+          docketEntryId: updatedDocketEntry.docketEntryId,
+        });
 
-        const paperServicePdfUrl = paperServiceResult?.pdfUrl;
+      const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
-        await applicationContext
-          .getNotificationGateway()
-          .sendNotificationToUser({
-            applicationContext,
-            clientConnectionId,
-            message: {
-              action: 'serve_document_complete',
-              alertSuccess: { message, overwritable: false },
-              docketEntryId: docketEntryEntity.docketEntryId,
-              generateCoversheet: true,
-              pdfUrl: paperServicePdfUrl,
-            },
-            userId: user.userId,
-          });
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_document_complete',
+          alertSuccess: { message, overwritable: false },
+          docketEntryId: docketEntryEntity.docketEntryId,
+          generateCoversheet: true,
+          pdfUrl: paperServicePdfUrl,
+        },
+        userId: user.userId,
       });
     });
 

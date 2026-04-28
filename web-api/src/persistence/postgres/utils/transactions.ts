@@ -12,7 +12,6 @@ import {
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we're already in a transaction, just run the callback directly.
-  console.log('In transaction: ', inTransaction());
   if (inTransaction()) {
     return fn();
   }

@@ -3,6 +3,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 import { getDocumentStorageId } from '@shared/business/utilities/getDocumentStorageId';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
@@ -27,12 +31,20 @@ export const serveDocumentAndGetPaperServicePdf = async ({
     const servedParties = aggregatePartiesForService(caseEntity);
     if (electronicParties) servedParties.electronic = electronicParties;
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryId,
-      servedParties,
-    });
+    const sendEmails = async () => {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId,
+        servedParties,
+      });
+    };
+
+    if (inTransaction()) {
+      onTransactionCommit(sendEmails);
+    } else {
+      await sendEmails();
+    }
 
     if (servedParties.paper.length > 0) {
       if (!originalPdfDoc) {
