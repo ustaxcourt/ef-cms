@@ -321,16 +321,16 @@ const serveDocketEntry = async ({
         });
       }
 
-      await applicationContext.getUseCases().addCoversheetInteractor(
-        applicationContext,
-        {
-          docketEntryId: updatedDocketEntry.docketEntryId,
-          docketNumber: subjectCaseEntity.docketNumber,
-        },
-        authorizedUser,
-      );
-
       onTransactionCommit(async () => {
+        await applicationContext.getUseCases().addCoversheetInteractor(
+          applicationContext,
+          {
+            docketEntryId: updatedDocketEntry.docketEntryId,
+            docketNumber: subjectCaseEntity.docketNumber,
+          },
+          authorizedUser,
+        );
+
         const paperServiceResult = await applicationContext
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({

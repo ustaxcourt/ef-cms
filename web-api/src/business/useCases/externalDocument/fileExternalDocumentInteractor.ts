@@ -242,21 +242,25 @@ export const fileExternalDocument = async (
       workItems,
     });
 
-    await Promise.all(
-      docketEntryIds.map(eachDocketEntryId =>
-        applicationContext.getUseCases().addCoversheetInteractor(
-          applicationContext,
-          {
-            docketEntryId: eachDocketEntryId,
-            docketNumber,
-          },
-          authorizedUser,
-        ),
-      ),
-    );
-
     return resolvedCaseEntities;
   });
+
+  const docketEntryIdsForCoversheet = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  await Promise.all(
+    docketEntryIdsForCoversheet.map(eachDocketEntryId =>
+      applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: eachDocketEntryId,
+          docketNumber,
+        },
+        authorizedUser,
+      ),
+    ),
+  );
 };
 
 export const fileExternalDocumentInteractor = withLocking(
