@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
