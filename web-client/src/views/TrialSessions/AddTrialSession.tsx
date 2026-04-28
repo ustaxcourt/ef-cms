@@ -63,6 +63,7 @@ export const AddTrialSession = connect(
                 Add Session
               </Button>
               <Button
+                overrideReadOnly
                 link
                 id="cancel"
                 type="button"

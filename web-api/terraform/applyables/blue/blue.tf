@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.40.0"
+      version = "6.41.0"
     }
   }
 }
@@ -118,6 +118,7 @@ module "api-east-blue" {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    READ_ONLY_MODE         = "false"
     REGION                 = "us-east-1"
     DISABLE_HTTP_TRAFFIC   = "true"
   })
@@ -147,6 +148,7 @@ module "worker-east-blue" {
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    READ_ONLY_MODE         = "false"
     REGION                 = "us-east-1"
   })
   providers = {
@@ -163,6 +165,7 @@ module "opensearch-sync-east-blue" {
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    READ_ONLY_MODE         = "false"
     REGION                 = "us-east-1"
   })
   providers = {

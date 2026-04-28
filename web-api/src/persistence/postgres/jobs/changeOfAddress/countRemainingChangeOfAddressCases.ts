@@ -5,7 +5,7 @@ export async function countRemainingChangeOfAddressCases(
 ): Promise<number> {
   return getDbReader(async reader => {
     const query = reader
-      .selectFrom('dwChangeOfAddress')
+      .selectFrom('dwChangeOfAddressNew')
       .where('jobId', '=', jobId);
 
     const remainingCases = await query

@@ -939,6 +939,14 @@ const router = {
       }),
     );
 
+    registerRoute('/verify-email..', () => {
+      setPageTitle('Verify Email');
+      const { token } = route.query();
+      return app.getSequence('gotoVerifyEmailSequence')({
+        token,
+      });
+    });
+
     registerRoute(
       '/document-qc/my',
       ifHasAccess({ app }, () => {

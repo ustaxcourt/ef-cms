@@ -290,18 +290,37 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.4.624**
+**Current Version Installed: 5.6.205**
 
-- Upgraded to version 5.4.624. The newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
+- When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
 **Current Installed DWT: 19.3.3**
-- Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. If an update is available for DWT, coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines. Only update DWT once the Windows clients have all been confirmed to have received the update.
+
+Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
+
+If an update is available for DWT:
+- Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
+   1. Open a support ticket by emailing `support@ustaxcourt.gov`. In the email body, provide:
+      1. the currently installed DWT server version
+      1. the DWT server version to which we are upgrading
+      1. the link to download the latest DWT client installer: `https://www.dynamsoft.com/dotnet-twain/downloads`
+- Deploy the DWT server update to the `test` environment.
+  1. Open a PR to `test` in which only the DWT server version is incremented.
+  1. Merge the PR
+  1. Trigger a deployment to the `test` environment.
+- Coordinate with the DAWSON Product Specialist to test client/server backwards compatibility.
+   1. With the old client version installed, navigate to the `test` environment and attempt to scan a document. If the "client upgrade" modal is shown, the new server version is **not** backwards compatible with the old client version.
+   1. Install the new Windows client version. Navigate to DAWSON production and attempt to scan a document. If the "client upgrade" (which is actually a downgrade) modal is shown, the new client version is **not** backwards compatible with the old server version.
+   1. With the new client version installed, navigate to the `test` environment and attempt to scan a document. Ensure the "client upgrade" modal is not shown.
+- Only update DWT when:
+   1. The Windows clients have **all** been confirmed to have received the client update, OR
+   1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 24.40.0**
-**Current Installed @sparticuz/chromium: 143.0.4**
+**Current Installed Puppeteer/Puppeteer-core: 24.42.0**
+**Current Installed @sparticuz/chromium: 147.0.2**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -330,10 +349,12 @@ The major version of this package should match our major version of Node. At the
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
-- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24. 
+- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24.
+
+- As of April 20, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.2** remains the closest match.
 
 ### TypeScript
-**Installed Version: 6.0.2**
+**Installed Version: 6.0.3**
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
 

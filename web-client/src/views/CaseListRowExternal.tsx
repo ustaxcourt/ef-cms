@@ -52,7 +52,7 @@ export const CaseListRowExternal = ({
             <td>{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
             {showCaseStatus && (
-              <td>
+              <td className="tw:max-w-[175px]">
                 <Button
                   link
                   onClick={() =>
@@ -138,7 +138,7 @@ export const CaseListRowExternal = ({
                   formattedCase.inConsolidatedGroup &&
                   !formattedCase.isLeadCase,
               })}
-              data-label="Filed Date"
+              data-label="status"
             >
               <Button
                 link

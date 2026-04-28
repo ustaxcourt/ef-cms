@@ -123,6 +123,7 @@ export const EditDocketEntryMeta = connect(
                 </Button>
 
                 <Button
+                  overrideReadOnly
                   link
                   onClick={() => {
                     formCancelToggleCancelSequence();
