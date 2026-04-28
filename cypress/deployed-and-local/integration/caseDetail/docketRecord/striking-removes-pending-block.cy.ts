@@ -6,25 +6,29 @@ import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/creat
 const MAX_STRIKE_RETRIES = 3;
 
 function strikeDocketEntry(attempt = 0) {
-  cy.get('[data-testid="strike-entry"]').should('be.visible').click();
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(200);
-  cy.get('body').then($body => {
-    if ($body.find('[data-testid="modal-button-confirm"]').length > 0) {
-      cy.get('[data-testid="modal-button-confirm"]')
-        .should('be.visible')
-        .click();
-    } else if (attempt < MAX_STRIKE_RETRIES) {
-      cy.log(
-        `Strike modal did not appear, retrying (${attempt + 1}/${MAX_STRIKE_RETRIES})`,
-      );
-      strikeDocketEntry(attempt + 1);
-    } else {
-      throw new Error(
-        'Strike docket entry modal did not appear after maximum retries',
-      );
-    }
-  });
+  return cy
+    .get('[data-testid="strike-entry"]')
+    .should('be.visible')
+    .click()
+    .wait(200)
+    .get('body')
+    .then($body => {
+      if ($body.find('[data-testid="modal-button-confirm"]').length > 0) {
+        return cy
+          .get('[data-testid="modal-button-confirm"]')
+          .should('be.visible')
+          .click();
+      } else if (attempt < MAX_STRIKE_RETRIES) {
+        cy.log(
+          `Strike modal did not appear, retrying (${attempt + 1}/${MAX_STRIKE_RETRIES})`,
+        );
+        return strikeDocketEntry(attempt + 1);
+      } else {
+        throw new Error(
+          'Strike docket entry modal did not appear after maximum retries',
+        );
+      }
+    });
 }
 
 describe('Striking removes pending items', () => {
