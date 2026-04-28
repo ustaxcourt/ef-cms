@@ -45,13 +45,13 @@ Cancelling a Terraform run before it completes often results in a locked state f
 1. Switch to the correct environment using the environment switcher.
 1. Switch to the correct terraform version (example: `tfswitch 1.4.5`).
 1. Navigate locally to the `web-api/terraform/applyables/allColors` directory.
-1. Edit the deploy-app-all-colors.sh script by commenting out both the terraform `plan` and `apply` commands (not `terraform init`).
+1. Edit the `web-api/terraform/bin/deploy-app-all-colors.sh script` by commenting out both the terraform `plan` and `apply` commands (not `terraform init`).
 ```sh
 # terraform plan -out execution-plan
 # terraform apply -auto-approve execution-plan
 ```
 1. Start up Docker Desktop if you don't have it running already.
-1. Set up terraform for the specific environment in question by running the deploy-all-colors.sh script (this will eventually run the `terraform init` command)  (i.e., `../../bin/deploy-app-all-colors.sh "$ENV"`).
+1. Set up terraform for the specific environment in question by running the deploy-app-all-colors.sh script (this will eventually run the `terraform init` command)  (i.e., `../../bin/deploy-app-all-colors.sh "$ENV"`).
 1. Determine the lock ID that needs to be unlocked (lockID). You will find this in CircleCI logs if a deployment failed due to a locked state file.
 1. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
 1. Uncomment the `terraform plan` and `apply` command in the deploy-app-all-colors.sh script.
