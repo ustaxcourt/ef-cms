@@ -1,8 +1,9 @@
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getColdCaseReportInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
 ): Promise<{
   results: ColdCaseEntry[];
 }> => {

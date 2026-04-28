@@ -1,16 +1,9 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getTrialSessionDetailsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session to get the details
- * @returns {Promise<*>} the promise of the api call
- */
 export const getTrialSessionDetailsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionId },
 ): Promise<RawTrialSession> => {
   return get({

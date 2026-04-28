@@ -1,8 +1,9 @@
 import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import { post } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const createCaseInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   requestBody: {
     attachmentToPetitionFileIds: string[];
     corporateDisclosureFileId: string;

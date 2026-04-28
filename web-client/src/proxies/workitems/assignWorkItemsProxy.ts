@@ -1,7 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const assignWorkItemsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     assigneeId,
     assigneeName,

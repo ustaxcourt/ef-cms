@@ -1,7 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const setMessageAsReadInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { messageId },
 ) => {
   return post({

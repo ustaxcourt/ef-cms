@@ -1,7 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const createPractitionerUserInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { user },
 ): Promise<{ barNumber: string }> => {
   return post({

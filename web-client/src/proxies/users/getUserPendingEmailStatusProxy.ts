@@ -1,16 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getUserPendingEmailStatusInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.pendingEmail the pendingEmail to update the pendingEmail
- * @param {string} providers.userId the userId to update the pendingEmail
- * @returns {Promise<*>} the promise of the api call
- */
 export const getUserPendingEmailStatusInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { userId },
 ) => {
   return get({

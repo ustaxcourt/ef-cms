@@ -3,9 +3,10 @@ import {
   GetCasesByStatusAndByJudgeResponse,
 } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getCaseWorksheetsByJudgeInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];

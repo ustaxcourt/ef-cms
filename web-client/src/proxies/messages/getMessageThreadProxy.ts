@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getMessageThreadInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @returns {Promise<*>} the promise of the api call
- */
 export const getMessageThreadInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { parentMessageId },
 ) => {
   return get({

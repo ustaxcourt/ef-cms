@@ -1,7 +1,8 @@
 import { put } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const updateCaseContextInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { caseCaption, caseStatus, docketNumber, judgeData },
 ) => {
   return put({

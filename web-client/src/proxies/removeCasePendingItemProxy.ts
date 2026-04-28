@@ -1,16 +1,8 @@
 import { remove } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * removeCasePendingItemInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update
- * @param {string} providers.docketEntryId the id of docket entry no longer pending
- * @returns {Promise<object>} the updated case data
- */
 export const removeCasePendingItemInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketEntryId, docketNumber },
 ) => {
   return remove({

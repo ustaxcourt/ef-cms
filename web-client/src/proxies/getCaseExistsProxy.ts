@@ -1,15 +1,8 @@
 import { head } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getCaseExistsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the id of the case to retrieve
- * @returns {Promise<*>} the promise of the api call
- */
 export const getCaseExistsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumber },
 ) => {
   return head({

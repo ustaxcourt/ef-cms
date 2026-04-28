@@ -1,15 +1,8 @@
 import { remove } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * deleteUserCaseNoteInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number to delete note from
- * @returns {Promise<*>} the promise of the api call
- */
 export const deleteUserCaseNoteInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumber },
 ) => {
   return remove({

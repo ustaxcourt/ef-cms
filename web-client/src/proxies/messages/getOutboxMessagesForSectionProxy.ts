@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getOutboxMessagesForSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section
- * @returns {Promise<*>} the promise of the api call
- */
 export const getOutboxMessagesForSectionInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { section },
 ) => {
   return get({

@@ -1,16 +1,9 @@
 import { get } from './requests';
 import { omit } from 'lodash';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * opinionPublicSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.searchParams the search params
- * @returns {Promise<*>} the promise of the api call
- */
 export const opinionPublicSearchInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { searchParams },
 ) => {
   const opinionTypesQuery = searchParams.opinionTypes.join(',');

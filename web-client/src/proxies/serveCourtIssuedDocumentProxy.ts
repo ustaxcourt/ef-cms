@@ -1,15 +1,8 @@
 import { post } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * serveCourtIssuedDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.data the data being forwarded to the API call
- * @returns {Promise<*>} the promise of the api call
- */
 export const serveCourtIssuedDocumentInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   data,
 ) => {
   const { docketEntryId, subjectCaseDocketNumber } = data;

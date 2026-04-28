@@ -1,15 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * updateTrialSessionWorkingCopyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
- * @returns {Promise<*>} the promise of the api call
- */
 export const updateTrialSessionWorkingCopyInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionWorkingCopyToUpdate },
 ) => {
   return put({

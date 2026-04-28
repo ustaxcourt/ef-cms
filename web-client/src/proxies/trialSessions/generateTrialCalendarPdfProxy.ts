@@ -1,15 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * generateTrialCalendarPdfInteractor (proxy)
- *
- * @param {object} providers the providers object
- * @param {object} applicationContext the application context
- * @param {string} providers.trialSessionId the trial session number
- * @returns {Promise<*>} the promise of the api call
- */
 export const generateTrialCalendarPdfInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionId },
 ) => {
   return post({

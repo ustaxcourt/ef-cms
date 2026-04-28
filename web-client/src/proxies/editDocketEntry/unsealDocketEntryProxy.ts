@@ -1,16 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * unsealDocketEntryInteractor proxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketEntryId the docketEntryId to be unsealed
- * @param {object} providers.docketNumber the docket number for the case
- * @returns {Promise<*>} the promise of the api call
- */
 export const unsealDocketEntryInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketEntryId, docketNumber },
 ) => {
   return put({

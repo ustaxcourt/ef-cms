@@ -1,7 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const serveThirtyDayNoticeInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { clientConnectionId, trialSessionId },
 ) => {
   return post({

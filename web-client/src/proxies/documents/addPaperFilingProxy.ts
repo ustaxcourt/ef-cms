@@ -1,14 +1,12 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * addPaperFilingProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.data the data being forwarded to the API call
- * @returns {Promise<*>} the promise of the api call
- */
-export const addPaperFilingInteractor = (applicationContext, data) => {
+export const addPaperFilingInteractor = (
+  applicationContext: ClientApplicationContext,
+  data: Record<string, unknown> & {
+    documentMetadata: { docketNumber: string };
+  },
+) => {
   const { documentMetadata } = data;
   const { docketNumber } = documentMetadata;
 

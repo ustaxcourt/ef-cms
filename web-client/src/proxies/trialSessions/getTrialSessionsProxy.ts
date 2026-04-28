@@ -1,14 +1,9 @@
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getTrialSessionsInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {Promise<*>} the promise of the api call
- */
 export const getTrialSessionsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
 ): Promise<TrialSessionInfoDTO[]> => {
   return get({
     applicationContext,

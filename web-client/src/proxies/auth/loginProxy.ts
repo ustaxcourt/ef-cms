@@ -1,7 +1,8 @@
 import { post } from '@web-client/proxies/requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const loginInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { email, password }: { email: string; password: string },
 ): Promise<{
   accessToken: string;

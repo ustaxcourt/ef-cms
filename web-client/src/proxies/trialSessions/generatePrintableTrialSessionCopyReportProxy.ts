@@ -1,15 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * generatePrintableTrialSessionCopyReportInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the optional trialSessionId filter
- * @returns {Promise<*>} the promise of the api call
- */
 export const generatePrintableTrialSessionCopyReportInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     filters,
     formattedCases,

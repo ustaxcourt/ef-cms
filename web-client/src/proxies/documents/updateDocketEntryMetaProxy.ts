@@ -1,17 +1,8 @@
 import { asyncSyncHandler, put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * updateDocketEntryMetaProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to be updated
- * @param {object} providers.docketRecordIndex the index of the docket record entry to be updated
- * @param {object} providers.docketEntryMeta the docket entry metadata
- * @returns {Promise<*>} the promise of the api call
- */
 export const updateDocketEntryMetaInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketEntryMeta, docketNumber },
 ) => {
   return asyncSyncHandler(

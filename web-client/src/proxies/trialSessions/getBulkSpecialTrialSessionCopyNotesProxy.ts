@@ -3,9 +3,10 @@ import {
   TrialSessionWorkingCopyNotes,
 } from '@shared/business/entities/trialSessions/SpecialTrialSessions';
 import { post } from '@web-client/proxies/requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getBulkSpecialTrialSessionCopyNotesInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     specialTrialSessions,
   }: {

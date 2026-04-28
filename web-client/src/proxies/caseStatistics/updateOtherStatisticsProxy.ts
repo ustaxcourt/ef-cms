@@ -1,17 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * updateOtherStatisticsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update statistics
- * @param {number} providers.damages damages statistic to add to the case
- * @param {number} providers.litigationCosts litigation costs statistic to add to the case
- * @returns {Promise<*>} the promise of the api call
- */
 export const updateOtherStatisticsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { damages, docketNumber, litigationCosts },
 ) => {
   return post({

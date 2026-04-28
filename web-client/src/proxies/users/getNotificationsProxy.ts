@@ -1,17 +1,9 @@
 import { get } from '../requests';
 import qs from 'qs';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getNotificationsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.caseServicesSupervisorData optional caseServicesSupervisorData
- * @param {string} providers.judgeUserId optional judge user id to filter on
- * @returns {Promise<*>} the promise of the api call
- */
 export const getNotificationsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { judgeId, section, selectedSection },
 ) => {
   const queryString = qs.stringify({

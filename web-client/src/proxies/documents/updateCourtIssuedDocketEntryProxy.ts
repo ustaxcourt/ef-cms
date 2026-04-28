@@ -1,15 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * updateCourtIssuedDocketEntryProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMeta the document data
- * @returns {Promise<*>} the promise of the api call
- */
 export const updateCourtIssuedDocketEntryInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { documentMeta },
 ) => {
   const { docketNumber } = documentMeta;

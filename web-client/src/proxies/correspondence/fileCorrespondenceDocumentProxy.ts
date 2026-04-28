@@ -1,16 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * fileCorrespondenceDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the correspondence document
- * @returns {Promise<*>} the promise of the api call
- */
 export const fileCorrespondenceDocumentInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { documentMetadata, primaryDocumentFileId },
 ) => {
   const { docketNumber } = documentMetadata;

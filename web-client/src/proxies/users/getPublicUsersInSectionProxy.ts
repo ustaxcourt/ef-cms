@@ -1,8 +1,9 @@
 import { RawUser } from '@shared/business/entities/User';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getPublicUsersInSectionInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { section }: { section: string },
 ): Promise<RawUser[]> => {
   return get({

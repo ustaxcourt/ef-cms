@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getDocumentContentsForDocketEntryInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.documentContentsId the documentContentsId
- * @returns {Promise<*>} the promise of the api call
- */
 export const getDocumentContentsForDocketEntryInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { documentContentsId },
 ) => {
   return get({

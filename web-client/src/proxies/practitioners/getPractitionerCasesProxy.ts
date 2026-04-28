@@ -1,8 +1,9 @@
 import { PractitionerCaseDetail } from '@web-client/presenter/state';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getPractitionerCasesInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { userId },
 ): Promise<{
   openCases: PractitionerCaseDetail[];

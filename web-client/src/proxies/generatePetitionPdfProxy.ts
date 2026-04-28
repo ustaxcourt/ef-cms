@@ -3,9 +3,10 @@ import {
   PetitionPdfBase,
 } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { post } from '@web-client/proxies/requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const generatePetitionPdfInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     caseCaptionExtension,
     caseTitle,

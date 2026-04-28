@@ -1,15 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * serveCaseToIrsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber docket number for serving a case
- * @returns {Promise<*>} the promise of the api call
- */
 export const serveCaseToIrsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { clientConnectionId, docketNumber },
 ) => {
   return post({

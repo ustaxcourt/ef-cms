@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * batchDownloadTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- * @returns {Promise<*>} the promise of the api call
- */
 export const batchDownloadTrialSessionInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionId, clientConnectionId },
 ) => {
   return get({

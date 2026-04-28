@@ -1,16 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getCaseDeadlinesInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the end date
- * @param {string} providers.startDate the start date
- * @returns {Promise<*>} the promise of the api call
- */
 export const getCaseDeadlinesInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { endDate, from, judgeId, startDate },
 ) => {
   return get({

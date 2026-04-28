@@ -1,15 +1,8 @@
 import { asyncSyncHandler, post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * createCaseDeadlineInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseDeadline the case deadline data
- * @returns {Promise<*>} the promise of the api call
- */
 export const createCaseDeadlineInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { caseDeadline },
 ) => {
   return asyncSyncHandler(

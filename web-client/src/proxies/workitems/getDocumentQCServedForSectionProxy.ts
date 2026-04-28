@@ -1,16 +1,9 @@
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getDocumentQCServedForSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc served box
- * @returns {Promise<*>} the promise of the api call
- */
 export const getDocumentQCServedForSectionInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { section },
 ): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   return get({

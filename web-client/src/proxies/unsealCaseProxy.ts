@@ -1,14 +1,10 @@
 import { put } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * unsealCaseInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update
- * @returns {Promise<object>} the updated case data
- */
-export const unsealCaseInteractor = (applicationContext, { docketNumber }) => {
+export const unsealCaseInteractor = (
+  applicationContext: ClientApplicationContext,
+  { docketNumber }: { docketNumber: string },
+) => {
   return put({
     applicationContext,
     endpoint: `/case-meta/${docketNumber}/unseal`,

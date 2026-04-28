@@ -1,11 +1,12 @@
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const startPollingForResultsInteractor = async (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   requestId: string,
   expirationTimestamp: number,
-  resolver,
+  resolver: (result: { statusCode: number; [key: string]: unknown }) => void,
   attemptNumber = 1,
 ) => {
   const WAIT_TIME = attemptNumber < 10 ? 1500 : 5000;

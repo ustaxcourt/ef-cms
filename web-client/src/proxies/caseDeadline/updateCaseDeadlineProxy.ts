@@ -1,16 +1,9 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { asyncSyncHandler, put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * updateCaseDeadlineInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.caseDeadline the case deadline data
- * @returns {Promise<*>} the promise of the api call
- */
 export const updateCaseDeadlineInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { caseDeadline },
 ): Promise<RawCaseDeadline> => {
   return asyncSyncHandler(

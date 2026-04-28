@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getPractitionerDocumentsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.barNumber the bar number
- * @returns {Promise<object>} the document data
- */
 export const getPractitionerDocumentsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { barNumber },
 ) => {
   return get({

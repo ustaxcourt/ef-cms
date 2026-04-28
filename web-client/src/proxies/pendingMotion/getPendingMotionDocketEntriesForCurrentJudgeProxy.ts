@@ -1,8 +1,9 @@
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   params: { judgeIds: string[] },
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];

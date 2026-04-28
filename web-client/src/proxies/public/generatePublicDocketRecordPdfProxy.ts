@@ -1,15 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * generatePublicDocketRecordPdfInteractor (proxy)
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the case docket number
- * @returns {Promise<*>} the promise of the api call
- */
 export const generatePublicDocketRecordPdfInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     docketNumber,
     docketRecordTableSort,

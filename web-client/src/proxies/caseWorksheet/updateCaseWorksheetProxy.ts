@@ -1,8 +1,9 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const updateCaseWorksheetInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     worksheet,
   }: {

@@ -1,15 +1,8 @@
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getUserCaseNoteForCasesInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {Array<string>} providers.docketNumbers the docket numbers to get notes for
- * @returns {Promise<*>} the promise of the api call
- */
 export const getUserCaseNoteForCasesInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumbers },
 ) => {
   return post({

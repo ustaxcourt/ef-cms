@@ -1,15 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * editPractitionerDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.user the user data
- * @returns {Promise<object>} the created user data
- */
 export const editPractitionerDocumentInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { barNumber, documentMetadata },
 ) => {
   return put({

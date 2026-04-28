@@ -1,15 +1,8 @@
 import { asyncSyncHandler, post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * fileExternalDocumentProxy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentMetadata the metadata for all the documents
- * @returns {Promise<*>} the promise of the api call
- */
 export const fileExternalDocumentInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { documentMetadata },
 ) => {
   const { docketNumber } = documentMetadata;

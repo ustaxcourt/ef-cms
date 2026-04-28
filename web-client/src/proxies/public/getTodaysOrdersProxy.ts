@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getTodaysOrdersInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.sortOrder the requested order of search results
- * @returns {Promise<*>} the promise of the api call
- */
 export const getTodaysOrdersInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { page, todaysOrdersSort },
 ) => {
   return get({

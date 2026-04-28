@@ -1,7 +1,8 @@
 import { head } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getPublicCaseExistsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumber },
 ) => {
   return head({

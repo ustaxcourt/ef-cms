@@ -1,8 +1,9 @@
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { post } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const updateDocketEntryWorksheetInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     worksheet,
   }: {

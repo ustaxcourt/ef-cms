@@ -1,16 +1,8 @@
 import { remove } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * deleteDeficiencyStatisticInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update statistics
- * @param {string} providers.statisticId the id of the statistic to update
- * @returns {Promise<*>} the promise of the api call
- */
 export const deleteDeficiencyStatisticInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumber, statisticId },
 ) => {
   return remove({

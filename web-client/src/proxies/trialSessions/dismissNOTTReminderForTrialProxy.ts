@@ -1,14 +1,8 @@
 import { put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * dismissNOTTReminderForTrialInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSessionId the trial session ID
- * @returns {Promise<*>} the promise of the api call
- */
 export const dismissNOTTReminderForTrialInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionId },
 ) => {
   return put({

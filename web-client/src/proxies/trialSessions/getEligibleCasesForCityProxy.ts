@@ -1,7 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getEligibleCasesForCityInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialCity },
 ) => {
   return get({

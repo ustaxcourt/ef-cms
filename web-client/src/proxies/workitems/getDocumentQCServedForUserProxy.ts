@@ -1,8 +1,9 @@
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getDocumentQCServedForUserInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { userId }: { userId: string },
 ): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   return get({

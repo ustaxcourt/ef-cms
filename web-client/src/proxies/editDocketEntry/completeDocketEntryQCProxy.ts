@@ -1,15 +1,8 @@
 import { asyncSyncHandler, put } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * completeDocketEntryQCInteractorProxy
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.entryMetadata the entry metadata
- * @returns {Promise<*>} the promise of the api call
- */
 export const completeDocketEntryQCInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { entryMetadata },
 ) => {
   const { docketNumber } = entryMetadata;

@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getTrialSessionWorkingCopyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise<*>} the promise of the api call
- */
 export const getTrialSessionWorkingCopyInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { trialSessionId },
 ) => {
   return get({

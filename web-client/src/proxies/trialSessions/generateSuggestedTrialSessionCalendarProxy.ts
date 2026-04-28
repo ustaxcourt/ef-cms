@@ -1,9 +1,10 @@
 import { CalendarGeneratorMessage } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { post } from '../requests';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const generateSuggestedTrialSessionCalendarInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     termEndDate,
     termStartDate,

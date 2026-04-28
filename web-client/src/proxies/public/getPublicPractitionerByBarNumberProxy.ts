@@ -1,7 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getPublicPractitionerByBarNumberInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { barNumber }: { barNumber: string },
 ) => {
   return get({

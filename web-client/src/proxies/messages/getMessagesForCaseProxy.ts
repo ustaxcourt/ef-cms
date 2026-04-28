@@ -1,15 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getMessagesForCaseInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise<*>} the promise of the api call
- */
 export const getMessagesForCaseInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { docketNumber },
 ) => {
   return get({

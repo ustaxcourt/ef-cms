@@ -1,9 +1,10 @@
 import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { post } from './requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const createCaseFromPaperInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
     attachmentToPetitionFileId,

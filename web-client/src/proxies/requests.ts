@@ -10,15 +10,6 @@ export const setCurrentUserToken = (newToken: string) => {
   token = newToken;
 };
 
-/**
- *
- *head
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.params the params to send to the endpoint
- * @returns {Promise<*>} the response data
- */
 export const head = async ({
   applicationContext,
   endpoint,
@@ -37,15 +28,6 @@ export const head = async ({
     .then(response => response.data);
 };
 
-/**
- *
- *get
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.params the params to send to the endpoint
- * @returns {Promise<*>} the response body data
- */
 const internalGet = async ({
   applicationContext,
   asyncSyncId = undefined,
@@ -66,15 +48,6 @@ const internalGet = async ({
   return response.data;
 };
 
-/**
- *
- *getResponse
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.params the params to send to the endpoint
- * @returns {Promise<*>} the complete http response
- */
 export const getResponse = ({
   applicationContext,
   asyncSyncId,
@@ -108,16 +81,6 @@ const getMemoized = moize({
 
 export const get = process.env.CI ? internalGet : getMemoized;
 
-/**
- *
- *post
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.body the body to send with the request
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.options the options we can pass through to the http client
- * @returns {Promise<*>} the response data
- */
 export const post = async ({
   applicationContext,
   asyncSyncId = undefined,
@@ -125,6 +88,13 @@ export const post = async ({
   endpoint,
   headers = {},
   options = {},
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  body?: unknown;
+  endpoint: string;
+  headers?: Record<string, unknown>;
+  options?: Record<string, unknown>;
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -141,14 +111,14 @@ export const post = async ({
 };
 
 export const asyncSyncHandler = (
-  applicationContext,
-  request,
+  applicationContext: ClientApplicationContext,
+  request: (asyncSyncId: string) => void,
   asyncSyncId = applicationContext.getUniqueId(),
 ) => {
   getMemoized.clear();
 
   return new Promise((resolve, reject) => {
-    const callback = results => {
+    const callback = (results: { statusCode: number; body?: string }) => {
       if (+results.statusCode === 200) {
         resolve(results.body);
       } else {
@@ -172,16 +142,6 @@ export const asyncSyncHandler = (
       );
   });
 };
-
-/**
- *
- *put
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.body the body to send with the request
- * @param {string} providers.endpoint the endpoint to call
- * @returns {Promise<*>} the response data
- */
 
 export const put = async ({
   applicationContext,
@@ -207,16 +167,7 @@ export const put = async ({
 
   return res;
 };
-/**
- *
- *remove
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.params the params to send to the endpoint
- * @param {object} providers.options the options we can pass through to the http client
- * @returns {Promise<*>} the response data
- */
+
 export const remove = async ({
   applicationContext,
   endpoint,
@@ -224,11 +175,11 @@ export const remove = async ({
   options = {},
   params = {},
 }: {
-  applicationContext: any;
+  applicationContext: ClientApplicationContext;
   endpoint: string;
-  options?: any;
+  options?: Record<string, unknown>;
   asyncSyncId?: string;
-  params?: any;
+  params?: Record<string, unknown>;
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -244,7 +195,7 @@ export const remove = async ({
     .then(response => response.data);
 };
 
-const getDefaultHeaders = userToken => {
+const getDefaultHeaders = (userToken: string | undefined) => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
   const authorizationHeaderObject = {};

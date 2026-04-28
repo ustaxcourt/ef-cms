@@ -1,13 +1,8 @@
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getTrialSessionsForJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {Promise<*>} the promise of the api call
- */
 export const getTrialSessionsForJudgeInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   judgeId,
 ) => {
   return get({

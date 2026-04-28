@@ -1,16 +1,9 @@
 import { RawUser } from '@shared/business/entities/User';
 import { get } from '../requests';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
-/**
- * getJudgeInSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to find the judge in
- * @returns {Promise<*>} the promise of the api call
- */
 export const getJudgeInSectionInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { section },
 ): Promise<RawUser> => {
   return get({
