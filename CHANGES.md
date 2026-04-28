@@ -1,3 +1,22 @@
+<details><summary>Dependency Updates - Week of 2026-04-20</summary>
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.76` - choose exp5
+```bash
+npm run ecr:check-version
+```
+
+## Local
+
+#### Upgrade NodeJS to `24.15.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-04-13</summary>
 
 ## Manual Deployment Steps
