@@ -287,8 +287,8 @@ export const CASE_STATUS_EXPLAINERS = {
   [CASE_STATUS_TYPES.submitted]: 'Awaiting resolution.',
   [CASE_STATUS_TYPES.submittedRule122]: 'Awaiting resolution.',
   [CASE_STATUS_TYPES.calendared]: 'Case is scheduled for trial or hearing.',
-  [CASE_STATUS_TYPES.closed]: 'Case is closed',
-  [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed',
+  [CASE_STATUS_TYPES.closed]: 'Case is closed.',
+  [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed.',
 };
 
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
