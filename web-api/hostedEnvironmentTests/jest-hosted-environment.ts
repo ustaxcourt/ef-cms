@@ -17,6 +17,7 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  transformIgnorePatterns: ['node_modules/(?!(@nodable/entities)/)'],
 };
 
 export default config;
