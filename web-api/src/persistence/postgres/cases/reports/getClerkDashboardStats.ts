@@ -241,18 +241,27 @@ export const getClerkDashboardStats = async ({
       closedCasesByMonth: closedByMonth,
       petitionsByMonth,
       proceedingTypeCounts: sortByOrder(
-        proceedingTypeRows.map(r => ({
-          count: Number(r.count),
-          proceedingType: r.proceedingType,
-        })),
+        ['In Person', 'Remote'].map(proceedingType => {
+          const row = proceedingTypeRows.find(
+            r => r.proceedingType === proceedingType,
+          );
+          return { count: row ? Number(row.count) : 0, proceedingType };
+        }),
         ['In Person', 'Remote'],
         'proceedingType',
       ),
       sessionTypeCounts: sortByOrder(
-        sessionTypeRows.map(r => ({
-          count: Number(r.count),
-          sessionType: r.sessionType,
-        })),
+        [
+          'Regular',
+          'Hybrid',
+          'Small',
+          'Hybrid-S',
+          'Motion/Hearing',
+          'Special',
+        ].map(sessionType => {
+          const row = sessionTypeRows.find(r => r.sessionType === sessionType);
+          return { count: row ? Number(row.count) : 0, sessionType };
+        }),
         ['Regular', 'Hybrid', 'Small', 'Hybrid-S', 'Motion/Hearing', 'Special'],
         'sessionType',
       ),
