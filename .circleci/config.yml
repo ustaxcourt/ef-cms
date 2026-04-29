@@ -1010,8 +1010,7 @@ workflows:
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - loadtests
-- wait-for-empty-change-of-address-queue
+            - wait-for-empty-change-of-address-queue
       - wait-for-switch:
           <<: *only-prod
           type: approval
