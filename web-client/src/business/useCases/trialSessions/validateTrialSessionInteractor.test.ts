@@ -1,10 +1,10 @@
-import { FORMATS, formatNow } from '../../utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { RawNewTrialSession } from '@shared/business/entities/trialSessions/NewTrialSession';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
-import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
+} from '@shared/business/entities/EntityConstants';
+import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 
 describe('validateTrialSessionInteractor', () => {
