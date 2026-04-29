@@ -1011,7 +1011,7 @@ workflows:
           <<: *only-prod
           requires:
             - loadtests
-            - smoketests-readonly
+- wait-for-empty-change-of-address-queue
       - wait-for-switch:
           <<: *only-prod
           type: approval
