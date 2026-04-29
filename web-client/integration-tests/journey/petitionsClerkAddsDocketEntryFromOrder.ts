@@ -1,13 +1,11 @@
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
+import { formattedDocketEntries } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {
   return it('Petitions Clerk adds a docket entry from the given order', async () => {
-    let helper;
-
-    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
       state: cerebralTest.getState(),
     });
 
@@ -20,7 +18,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
@@ -31,11 +29,11 @@ export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {
     expect(legacyJudge).toBeFalsy();
 
     expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
+      draftOrderDocument?.eventCode,
     );
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
+      draftOrderDocument?.documentType,
     );
 
     await cerebralTest.runSequence(

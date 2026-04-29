@@ -1,6 +1,6 @@
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from '../../src/presenter/computeds/trialSessionWorkingCopyHelper';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from '@web-client/presenter/computeds/trialSessionWorkingCopyHelper';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
@@ -18,7 +18,7 @@ export const trialClerkViewsTrialSessionWorkingCopyWithNotes = cerebralTest => {
       cerebralTest.getState('trialSessionWorkingCopy.trialSessionId'),
     ).toEqual(cerebralTest.trialSessionId);
 
-    let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
+    const workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
       state: cerebralTest.getState(),
     });
 

@@ -1,17 +1,17 @@
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
   loginAs,
   setupTest,
 } from './helpers';
-import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { formattedCaseDetail } from '@web-client/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Petitioner Service Indicator Journey', () => {
   const cerebralTest = setupTest();
@@ -311,7 +311,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
+  it('IRS Practitioner once again verifies service indicator for contact is electronic, with sealed address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
