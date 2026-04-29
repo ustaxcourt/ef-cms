@@ -313,3 +313,14 @@ table.ustc-table .ustc-button--unstyled {
     transform: translateY(0);
   }
 }
+
+.usa-button.usa-button-read-only-disabled {
+  cursor: not-allowed;
+  filter: grayscale(100%);
+  opacity: 0.6;
+
+  &:hover {
+    filter: grayscale(100%);
+    opacity: 0.6;
+  }
+}

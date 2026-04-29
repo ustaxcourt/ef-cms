@@ -1,6 +1,6 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
 import { NewDocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
@@ -59,6 +59,9 @@ export function toKyselyNewDocketEntry(
     judge: docketEntry.judge ?? null,
     lodged: docketEntry.lodged ?? null,
     mailingDate: docketEntry.mailingDate ?? null,
+    multiDocketedOn: JSON.stringify(docketEntry.multiDocketedOn),
+    originallyFiledDocketNumber:
+      docketEntry.originallyFiledDocketNumber ?? null,
     noticeIssuedDate: docketEntry.noticeIssuedDate
       ? calculateDate({ dateString: docketEntry.noticeIssuedDate })
       : null,

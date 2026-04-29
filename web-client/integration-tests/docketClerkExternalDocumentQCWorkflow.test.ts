@@ -11,7 +11,6 @@ import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
   getIndividualInboxCount,
-  getNotifications,
   getSectionInboxCount,
   loginAs,
   refreshElasticsearchIndex,
@@ -32,7 +31,6 @@ describe('Create a work item', () => {
   let caseDetail;
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;
-  let notificationsBefore;
   let decisionWorkItem;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -42,8 +40,6 @@ describe('Create a work item', () => {
 
     await getFormattedDocumentQCSectionInbox(cerebralTest);
     qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
-
-    notificationsBefore = getNotifications(cerebralTest);
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -124,14 +120,6 @@ describe('Create a work item', () => {
     });
     const qcMyInboxCountAfter = getIndividualInboxCount(cerebralTest);
     expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 4);
-  });
-
-  it('verify the docketclerk has the expected unread count', async () => {
-    await refreshElasticsearchIndex();
-    const notifications = getNotifications(cerebralTest);
-    expect(notifications).toMatchObject({
-      qcUnreadCount: notificationsBefore.qcUnreadCount + 4,
-    });
   });
 
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {

@@ -74,7 +74,6 @@ describe('gotoEditDocketEntryMetaSequence', () => {
 
     expect(cerebralTest.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
-      docketRecordIndex: 1,
       form: {
         ...mockDocketEntry,
         documentTitle: '[Anything]',

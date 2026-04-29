@@ -20,6 +20,7 @@ export const STATE_KEYS = {
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
   RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
   CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
+  CASE_LIST_TABLE_SORT: 'CASE_LIST_TABLE_SORT',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -271,6 +272,25 @@ export const CASE_STATUS_TYPES = {
 export type CaseStatus =
   (typeof CASE_STATUS_TYPES)[keyof typeof CASE_STATUS_TYPES];
 
+export const CASE_STATUS_EXPLAINERS = {
+  [CASE_STATUS_TYPES.assignedCase]: 'Case is before a judge.',
+  [CASE_STATUS_TYPES.assignedMotion]: 'Motion is before a judge.',
+  [CASE_STATUS_TYPES.cav]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.generalDocket]:
+    'Case is awaiting calendaring or assignment.',
+  [CASE_STATUS_TYPES.generalDocketReadyForTrial]:
+    'Case is awaiting calendaring or assignment.',
+  [CASE_STATUS_TYPES.new]: 'Petition has been filed with the court.',
+  [CASE_STATUS_TYPES.jurisdictionRetained]: 'Case is before a judge.',
+  [CASE_STATUS_TYPES.onAppeal]: 'Case is on appeal.',
+  [CASE_STATUS_TYPES.rule155]: 'Case is awaiting computations.',
+  [CASE_STATUS_TYPES.submitted]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.submittedRule122]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.calendared]: 'Case is scheduled for trial or hearing.',
+  [CASE_STATUS_TYPES.closed]: 'Case is closed',
+  [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed',
+};
+
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.submitted,
@@ -514,6 +534,33 @@ export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
 export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
+export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
+  'addToCoversheet',
+  'additionalInfo',
+  'additionalInfo2',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filers',
+  'filingDate',
+  'freeText',
+  'hasOtherFilingParty',
+  'ordinalValue',
+  'otherFilingParty',
+  'otherIteration',
+  'partyIrsPractitioner',
+  'pending',
+  'previousDocument',
+  'secondaryDocument',
+  'trialLocation',
+  'docketNumbers',
+  'objections',
+] as const;
 
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
@@ -1742,7 +1789,7 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
+export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report when rendered in the browser

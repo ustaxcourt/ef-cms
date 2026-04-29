@@ -47,7 +47,7 @@ describe('uploadExternalDocumentsAction', () => {
     };
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the case docketNumber for the added document', async () => {
+  it('should call uploadExternalDocumentsInteractor for a single document file', async () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
@@ -84,16 +84,6 @@ describe('uploadExternalDocumentsAction', () => {
         docketNumber: MOCK_CASE.docketNumber,
         fileAcrossConsolidatedGroup: false,
       },
-    });
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
-        .length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
@@ -148,16 +138,6 @@ describe('uploadExternalDocumentsAction', () => {
         docketNumber: testCase.docketNumber,
         fileAcrossConsolidatedGroup: true,
       },
-    });
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
-        .length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: testCase.docketNumber,
     });
   });
 

@@ -1,19 +1,19 @@
 import {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@web-client/applicationContext';
 import {
   adcUser,
   clerkOfCourtUser,
   colvinsChambersUser,
   docketClerkUser,
   judgeUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
@@ -386,6 +386,160 @@ describe('documentViewerHelper', () => {
       });
 
       expect(result.showOrderResponseButton).toBe(false);
+    });
+  });
+
+  describe('showLeadCaseBanner', () => {
+    it('should be true when viewing an unserved multi-docketed document on a member case', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Simultaneous Answering Memorandum Brief',
+                eventCode: 'SAMB',
+                multiDocketedOn: ['101-20', '102-20'],
+                servedAt: undefined,
+              },
+            ],
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Simultaneous Answering Memorandum Brief',
+            eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(true);
+    });
+
+    it('should be false when viewing a served multi-docketed document on a member case', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: ['101-20', '102-20'],
+                eventCode: 'SAMB',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Simultaneous Answering Memorandum Brief',
+            eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(false);
+    });
+
+    it('should be false when viewing an unserved multi-docketed document on the lead case', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Simultaneous Answering Memorandum Brief',
+                eventCode: 'SAMB',
+                multiDocketedOn: ['101-20', '102-20'],
+                servedAt: undefined,
+              },
+            ],
+            docketNumber: '101-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Simultaneous Answering Memorandum Brief',
+            eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(false);
+    });
+
+    it('should be false when it was not multi-docketed', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: [],
+                eventCode: 'SAMB',
+                servedAt: undefined,
+              },
+            ],
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Simultaneous Answering Memorandum Brief',
+            eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(false);
+    });
+
+    it('should be false when user does not have SERVE_DOCUMENT permission', () => {
+      const petitionerUser = {
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner',
+        role: 'petitioner',
+        userId: '9ea5b102-d142-4106-b1e2-e80fe7d754ce',
+      };
+
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: ['101-20', '102-20'],
+                eventCode: 'SAMB',
+                servedAt: undefined,
+              },
+            ],
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Simultaneous Answering Memorandum Brief',
+            eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(false);
     });
   });
 });

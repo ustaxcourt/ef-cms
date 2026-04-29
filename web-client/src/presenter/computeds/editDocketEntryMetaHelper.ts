@@ -7,19 +7,28 @@ import {
   INTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { isEmpty } from 'lodash';
 
 export const editDocketEntryMetaHelper = (
   get: Get,
 ): {
+  multiDocketedOn: {
+    docketNumber: string;
+    caseTitle: string;
+  }[];
   isStricken: boolean;
   primary: any;
   showObjection: boolean;
   strickenAtFormatted: string;
   strickenBy: string;
+  showEditHelpText: boolean;
 } => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
-  const caseDetail = get(state.caseDetail);
+  const caseDetail =
+    get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
+  const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
   const user = get(state.user);
 
@@ -50,11 +59,28 @@ export const editDocketEntryMetaHelper = (
         form.previousDocument?.documentType,
       ));
 
+  const multiDocketedOn =
+    formattedCaseDetail.consolidatedCases
+      .filter(
+        consolidatedCase =>
+          consolidatedCase.docketNumber !== formattedCaseDetail.docketNumber &&
+          form.multiDocketedOn?.includes(consolidatedCase.docketNumber),
+      )
+      .map(c => ({
+        docketNumber: c.docketNumber,
+        caseTitle: c.caseTitle,
+        caseCaption: c.caseCaption,
+      })) || [];
+
+  const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
+
   return {
+    multiDocketedOn,
     isStricken,
     primary: optionsForCategory,
     showObjection,
     strickenAtFormatted,
     strickenBy,
+    showEditHelpText,
   };
 };

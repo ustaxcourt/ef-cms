@@ -342,6 +342,7 @@ export const DocumentSearchResults = connect(
                         </td>
                         <td>
                           <Button
+                            overrideReadOnly
                             link
                             className="padding-0"
                             data-testid={`docket-number-link-${result.docketNumber}`}
@@ -509,6 +510,7 @@ export const DocumentSearchResults = connect(
                         </th>
                         <td className="divider">
                           <Button
+                            overrideReadOnly
                             link
                             aria-label={`View PDF: ${result.documentTitle}`}
                             className="text-left"

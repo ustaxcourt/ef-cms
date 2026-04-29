@@ -1,5 +1,5 @@
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyTrialSession } from './mapper';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { TrialSessionCaseKysely } from '@web-api/persistence/postgres/trialSessions/schema';

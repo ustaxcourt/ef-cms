@@ -50,6 +50,13 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('GatewayTimeoutError');
     expect(result.title).toEqual('The system is taking too long to respond');
   });
+  it('creates ReadOnlyModeError errors for status code 503', () => {
+    const error = new Error();
+    error['response'] = { data: 'foo', status: 503 };
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('ReadOnlyModeError');
+    expect(result.title).toEqual('System Upgrade in Progress');
+  });
   it('creates InvalidRequestError errors for other 4XX status codes', () => {
     const error = new Error();
     error['response'] = { data: 'foo', status: 418 };

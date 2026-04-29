@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
-import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
@@ -307,6 +306,31 @@ app.use((req, res, next) => {
     return;
   }
 
+  const readOnlyPosts = [
+    '/auth/refresh',
+    '/cases/search',
+    '/case-documents/opinion-search',
+    '/case-documents/order-search',
+    '/reports/judge-activity-report',
+    '/trial-sessions/bulk-copy-notes',
+    '/views/pending-report',
+  ];
+
+  if (
+    process.env.READ_ONLY_MODE === 'true' &&
+    req.method !== 'GET' &&
+    req.method !== 'OPTIONS' &&
+    !(
+      req.method === 'POST' &&
+      readOnlyPosts.some(route => req.url.startsWith(route))
+    )
+  ) {
+    res
+      .status(503)
+      .send('System is upgrading. Please wait a few minutes and try again.');
+    return;
+  }
+
   next();
 });
 
@@ -432,14 +456,6 @@ app.use(expressLogger);
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
 
-  app.post(
-    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(
-      addCoversheetLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
-  );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
     lambdaWrapper(generateDraftStampOrderLambda),
@@ -1204,11 +1220,26 @@ app.post(
   app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
-// This endpoint is used for testing purpose only which exposes the
-// CRON lambda which runs nightly to update cases to be ready for trial.
+/**
+ * local only
+ */
 if (applicationContext.environment.stage === 'local') {
+  // This endpoint is used for testing purpose only which exposes the
+  // CRON lambda which runs nightly to update cases to be ready for trial.
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
+
+  // deployed lambdas read the value of the READ_ONLY_MODE environment variable
+  // we expose this endpoint locally to allow toggling of this value without restarting the API
+  app.put('/read-only-mode', (req, res) => {
+    // Use a strict check so that a stringified "false" (e.g. "false") is not
+    // treated as truthy. Only boolean true or the exact string "true" engages
+    // read-only mode.
+    const requestedValue = req.body?.readOnlyMode;
+    const isReadOnly = requestedValue === true || requestedValue === 'true';
+    process.env.READ_ONLY_MODE = isReadOnly ? 'true' : 'false';
+    res.status(200).send('OK');
+  });
 }

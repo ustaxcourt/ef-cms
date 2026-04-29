@@ -14,6 +14,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateCourtIssuedDocketEntry = async (
   _applicationContext: ServerApplicationContext,
@@ -95,17 +96,19 @@ export const updateCourtIssuedDocketEntry = async (
 
   const rawValidWorkItem = workItem.validate().toRawObject();
 
-  const saveItems = [
-    upsertWorkItems({
-      workItems: [rawValidWorkItem],
-    }),
-    updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    }),
-  ];
+  await withTransaction(async () => {
+    const saveItems = [
+      upsertWorkItems({
+        workItems: [rawValidWorkItem],
+      }),
+      updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      }),
+    ];
 
-  await settlePromises(saveItems);
+    await settlePromises(saveItems);
+  });
 };
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(

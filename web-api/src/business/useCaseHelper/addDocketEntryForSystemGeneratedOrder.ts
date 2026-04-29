@@ -37,6 +37,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       isDraft: true,
       isFileAttached: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
     },
     { authorizedUser },
   );

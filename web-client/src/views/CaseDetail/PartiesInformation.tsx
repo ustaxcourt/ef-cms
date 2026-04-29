@@ -44,6 +44,7 @@ export const PartiesInformation = connect(
                     currentViewMetadata.caseDetail.partyViewTab ===
                       partyViewTabs.petitionersAndCounsel && 'active',
                   )}
+                  overrideReadOnly
                   onClick={() => {
                     updatePartyViewTabSequence({
                       tab: partyViewTabs.petitionersAndCounsel,
@@ -65,6 +66,7 @@ export const PartiesInformation = connect(
                       currentViewMetadata.caseDetail.partyViewTab ===
                         partyViewTabs.participantsAndCounsel && 'active',
                     )}
+                    overrideReadOnly
                     onClick={() => {
                       updatePartyViewTabSequence({
                         tab: partyViewTabs.participantsAndCounsel,
@@ -87,6 +89,7 @@ export const PartiesInformation = connect(
                   )}
                   data-testid="respondent-counsel"
                   id="respondent-counsel"
+                  overrideReadOnly
                   onClick={() => {
                     updatePartyViewTabSequence({
                       tab: partyViewTabs.respondentCounsel,

@@ -1,10 +1,10 @@
-jest.mock('@web-api/database');
+jest.mock('@web-api/persistence/postgres/database');
 jest.mock('@web-api/persistence/postgres/utils/operation/pgDeleteFrom');
 import { handler as rdsExpiredRecordsCleanupLambda } from '@web-api/lambdas/rdsExpiredRecordsCleanup/rdsExpiredRecordsCleanupLambda';
-import { getDbReader as getDbReaderMock } from '@web-api/database';
+import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';
 import { pgDeleteFrom as pgDeleteFromMock } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import { Kysely } from 'kysely';
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import type { Context } from 'aws-lambda';
 
 const getDbReader = jest.mocked(getDbReaderMock);
@@ -59,5 +59,18 @@ describe('rdsExpiredRecordsCleanupLambda', () => {
     expect(whereCalls.length).toEqual(1);
     expect(whereCalls[0][0]).toEqual('ttl');
     expect(whereCalls[0][1]).toEqual('<');
+  });
+
+  it('should skip the cleanup entirely when read-only mode is engaged', async () => {
+    const ORIGINAL_READ_ONLY_MODE = process.env.READ_ONLY_MODE;
+    process.env.READ_ONLY_MODE = 'true';
+
+    try {
+      await rdsExpiredRecordsCleanupLambda(undefined, contextMock, jest.fn());
+      expect(getDbReader).not.toHaveBeenCalled();
+      expect(pgDeleteFrom).not.toHaveBeenCalled();
+    } finally {
+      process.env.READ_ONLY_MODE = ORIGINAL_READ_ONLY_MODE;
+    }
   });
 });

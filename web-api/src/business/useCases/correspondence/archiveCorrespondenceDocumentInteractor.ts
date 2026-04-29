@@ -11,6 +11,10 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { Correspondence } from '@shared/business/entities/Correspondence';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -23,11 +27,6 @@ export const archiveCorrespondenceDocument = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  await applicationContext.getPersistenceGateway().deleteDocumentFile({
-    applicationContext,
-    key: correspondenceId,
-  });
 
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
@@ -46,13 +45,23 @@ export const archiveCorrespondenceDocument = async (
 
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  await upsertCaseCorrespondences([
-    (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
-  ]);
+  await withTransaction(async () => {
+    await upsertCaseCorrespondences([
+      (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
+    ]);
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
+
+    // Delete the document file only after the transaction commits successfully
+    onTransactionCommit(async () => {
+      await applicationContext.getPersistenceGateway().deleteDocumentFile({
+        applicationContext,
+        key: correspondenceId,
+      });
+    });
   });
 };
 

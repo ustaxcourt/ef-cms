@@ -8,7 +8,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pick } from 'lodash';
 import { formatDate } from '../helpers/formatters';
 

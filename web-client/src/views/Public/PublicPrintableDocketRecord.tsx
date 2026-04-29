@@ -15,6 +15,7 @@ export const PublicPrintableDocketRecord = connect(
         <PublicCaseDetailHeader />
         <div className="grid-container print-docket-record">
           <Button
+            overrideReadOnly
             link
             className="margin-bottom-3"
             icon={['fa', 'arrow-alt-circle-left']}

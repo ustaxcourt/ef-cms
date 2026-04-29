@@ -36,13 +36,11 @@ export const CorrespondenceViewerCorrespondence = connect(
     iframeSrc: string;
     openCaseDocumentDownloadUrlSequence: Function;
     openConfirmDeleteCorrespondenceModalSequence: Function;
-    viewerCorrespondenceToDisplay?:
-      | {
-          correspondenceId: string;
-          documentTitle?: string;
-          filedBy?: string;
-        }
-      | null;
+    viewerCorrespondenceToDisplay?: {
+      correspondenceId: string;
+      documentTitle?: string;
+      filedBy?: string;
+    } | null;
   }) {
     return (
       <div
@@ -102,6 +100,7 @@ export const CorrespondenceViewerCorrespondence = connect(
                 link
                 icon="file-pdf"
                 iconColor="white"
+                overrideReadOnly
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId:

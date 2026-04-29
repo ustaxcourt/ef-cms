@@ -31,6 +31,12 @@ const scriptConfig: ScriptConfig = {
       short: 'u',
       type: 'string',
     },
+    qcEmail: {
+      default: 'docketclerk1@example.com',
+      description:
+        'Email of a docket clerk used to QC-complete each filed exhibit.',
+      type: 'string',
+    },
     exhibits: {
       default: '100',
       short: 'e',
@@ -47,23 +53,32 @@ const scriptConfig: ScriptConfig = {
   },
 };
 
-const { apiUrl, defaultPassword, pollInterval, docketNumber, email, exhibits, verbose } =
-  parseArgsAndEnvVars(scriptConfig) as {
-    apiUrl: string;
-    defaultPassword: string;
-    pollInterval: number;
-    docketNumber: string;
-    email: string;
-    exhibits: number;
-    verbose: boolean;
-  };
+const {
+  apiUrl,
+  defaultPassword,
+  pollInterval,
+  docketNumber,
+  email,
+  qcEmail,
+  exhibits,
+  verbose,
+} = parseArgsAndEnvVars(scriptConfig) as {
+  apiUrl: string;
+  defaultPassword: string;
+  pollInterval: number;
+  docketNumber: string;
+  email: string;
+  qcEmail: string;
+  exhibits: number;
+  verbose: boolean;
+};
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function loginAndGetToken(): Promise<string> {
-  console.log(`  Logging in as ${email}...`);
+async function loginAndGetToken(loginEmail: string = email): Promise<string> {
+  console.log(`  Logging in as ${loginEmail}...`);
   const response = await axios.post(`${apiUrl}/auth/login`, {
-    email,
+    email: loginEmail,
     password: defaultPassword,
   });
   const { idToken } = response.data;
@@ -78,8 +93,9 @@ async function getCaseDetails(
   token: string,
 ): Promise<{
   petitionerContactId: string;
+  petitionerName: string;
   consolidatedCasesToFileAcross:
-    | { docketNumber: string; leadDocketNumber: string }[]
+    | { docketNumber: string }[]
     | undefined;
 }> {
   const response = await axios.get(`${apiUrl}/cases/${docketNumber}`, {
@@ -87,27 +103,37 @@ async function getCaseDetails(
     params: { excludeDocketEntries: true },
   });
   const petitionerContactId = response.data?.petitioners?.[0]?.contactId;
+  const petitionerName = response.data?.petitioners?.[0]?.name;
   if (!petitionerContactId) {
     throw new Error(
       'Could not find petitioner contact ID on case. Ensure the case exists and is served.',
     );
   }
-
-  const leadDocketNumber = response.data?.leadDocketNumber;
-  const consolidatedCases: { docketNumber: string }[] =
-    response.data?.consolidatedCases || [];
-
-  let consolidatedCasesToFileAcross:
-    | { docketNumber: string; leadDocketNumber: string }[]
-    | undefined;
-  if (leadDocketNumber && consolidatedCases.length > 0) {
-    consolidatedCasesToFileAcross = consolidatedCases.map(c => ({
-      docketNumber: c.docketNumber,
-      leadDocketNumber,
-    }));
+  if (!petitionerName) {
+    throw new Error(
+      'Could not find petitioner name on case. Ensure the case has petitioner data.',
+    );
   }
 
-  return { petitionerContactId, consolidatedCasesToFileAcross };
+  // Mirrors the UI's "File across consolidated group" choice: pass the
+  // entire consolidatedCases array (which includes the lead case) straight
+  // through to the external document interactor.
+  const consolidatedCases: { docketNumber: string }[] =
+    response.data?.consolidatedCases || [];
+  console.log(
+    `  GET /cases/${docketNumber} -> leadDocketNumber=${response.data?.leadDocketNumber} consolidatedCases.length=${consolidatedCases.length}`,
+  );
+  if (consolidatedCases.length > 0) {
+    console.log(
+      `    consolidatedCases docketNumbers: [${consolidatedCases
+        .map(c => c.docketNumber)
+        .join(', ')}]`,
+    );
+  }
+  const consolidatedCasesToFileAcross =
+    consolidatedCases.length > 0 ? consolidatedCases : undefined;
+
+  return { petitionerContactId, petitionerName, consolidatedCasesToFileAcross };
 }
 
 async function pollForAsyncResult(
@@ -191,7 +217,7 @@ async function fileExhibitAndWait(
   key: string,
   petitionerContactId: string,
   consolidatedCasesToFileAcross:
-    | { docketNumber: string; leadDocketNumber: string }[]
+    | { docketNumber: string }[]
     | undefined,
 ): Promise<void> {
   const asyncSyncId = uuidv4();
@@ -229,6 +255,45 @@ async function fileExhibitAndWait(
   await pollForAsyncResult(token, asyncSyncId);
 }
 
+async function qcCompleteExhibitAndWait(
+  token: string,
+  docketEntryId: string,
+  filers: string[],
+  filedBy: string,
+  targetDocketNumber: string = docketNumber,
+): Promise<void> {
+  const asyncSyncId = uuidv4();
+  const nowIso = new Date().toISOString();
+  const entryMetadata: Record<string, unknown> = {
+    docketEntryId,
+    docketNumber: targetDocketNumber,
+    createdAt: nowIso,
+    receivedAt: nowIso,
+    documentTitle: 'Exhibit(s)',
+    documentType: 'Exhibit(s)',
+    eventCode: 'EXH',
+    category: 'Miscellaneous',
+    scenario: 'Standard',
+    filers,
+    filedBy,
+    isFileAttached: true,
+    overridePaperServiceAddress: false,
+  };
+
+  await axios.put(
+    `${apiUrl}/async/case-documents/${targetDocketNumber}/docket-entry-complete`,
+    { entryMetadata },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Asyncsyncid: asyncSyncId,
+      },
+    },
+  );
+
+  await pollForAsyncResult(token, asyncSyncId);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   console.log('\n--- ADD EXHIBITS TO CASE ---');
@@ -240,19 +305,29 @@ async function fileExhibitAndWait(
   console.log('');
 
   try {
-    // Step 1: Login
+    // Step 1: Login (filer + QC docket clerk)
     console.log('Step 1: Authenticating...');
-    const token = await loginAndGetToken();
+    const token = await loginAndGetToken(email);
+    const qcToken = await loginAndGetToken(qcEmail);
 
     // Step 2: Get case details for petitioner contactId
     console.log('\nStep 2: Fetching case details...');
-    const { petitionerContactId, consolidatedCasesToFileAcross } =
-      await getCaseDetails(token);
+    // Use the docket clerk token for case details — petitioner-role GETs go
+    // through PublicCase and drop consolidatedCases unless the user is an
+    // IRS practitioner, which would hide the consolidated group from us.
+    const { petitionerContactId, petitionerName, consolidatedCasesToFileAcross } =
+      await getCaseDetails(qcToken);
+    const filedBy = `Petr. ${petitionerName}`;
     console.log(`  Petitioner contact ID: ${petitionerContactId}`);
     if (consolidatedCasesToFileAcross) {
+      const dns = consolidatedCasesToFileAcross
+        .map(c => c.docketNumber)
+        .join(', ');
       console.log(
-        `  Consolidated group: filing across ${consolidatedCasesToFileAcross.length} cases`,
+        `  Consolidated group: filing across ${consolidatedCasesToFileAcross.length} cases: [${dns}]`,
       );
+    } else {
+      console.log('  No consolidated group detected — filing on this case only.');
     }
 
     // Step 3: Load sample PDF
@@ -283,6 +358,15 @@ async function fileExhibitAndWait(
       const key = uuidv4();
 
       try {
+        console.log(
+          `  [${exhibitNumber}/${exhibits}] docketEntryId=${key} filing on ${docketNumber}` +
+            (consolidatedCasesToFileAcross
+              ? ` across [${consolidatedCasesToFileAcross
+                  .map(c => c.docketNumber)
+                  .join(', ')}]`
+              : ''),
+        );
+
         // Get upload policy
         const policy = await getUploadPolicy(token, key);
 
@@ -297,8 +381,31 @@ async function fileExhibitAndWait(
           consolidatedCasesToFileAcross,
         );
 
+        // QC-complete the newly created docket entry as a docket clerk.
+        // The docketEntryId is the same as the upload key (primaryDocumentId).
+        // QC complete on every case the exhibit was filed across (the filing
+        // creates a separate work item per case, all sharing the same
+        // docketEntryId).
+        const docketNumbersToQc =
+          consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0
+            ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
+            : [docketNumber];
+        console.log(
+          `    QC completing on: [${docketNumbersToQc.join(', ')}]`,
+        );
+        for (const dn of docketNumbersToQc) {
+          console.log(`      QC -> ${dn}`);
+          await qcCompleteExhibitAndWait(
+            qcToken,
+            key,
+            [petitionerContactId],
+            filedBy,
+            dn,
+          );
+        }
+
         exhibitsCreated++;
-        console.log(`  [${exhibitNumber}/${exhibits}] Confirmed`);
+        console.log(`  [${exhibitNumber}/${exhibits}] Filed + QC completed`);
       } catch (error: unknown) {
         exhibitsFailed++;
         const errorMessage =

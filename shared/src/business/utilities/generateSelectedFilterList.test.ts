@@ -29,19 +29,30 @@ describe('generateCaseStatus', () => {
 });
 
 describe('isMemberCase', () => {
-  it('return true if case in a member case and not lead case', () => {
-    const formattedCase = {
+  it('should return true when case is a member of a consolidated group', () => {
+    const result = isMemberCase({
       inConsolidatedGroup: true,
       isLeadCase: false,
-    };
-    const result = isMemberCase(formattedCase);
-    expect(result).toEqual(true);
+    });
+
+    expect(result).toBe(true);
   });
-  it('return false if case is not a member of consolidated group', () => {
-    const formattedCase = {
+
+  it('should return false when case is the lead case', () => {
+    const result = isMemberCase({
+      inConsolidatedGroup: true,
+      isLeadCase: true,
+    });
+
+    expect(result).toBe(false);
+  });
+
+  it('should return false when case is not consolidated', () => {
+    const result = isMemberCase({
       inConsolidatedGroup: false,
-    };
-    const result = isMemberCase(formattedCase);
-    expect(result).toEqual(false);
+      isLeadCase: false,
+    });
+
+    expect(result).toBe(false);
   });
 });

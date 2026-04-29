@@ -66,6 +66,7 @@ export const FilingsAndProceedings = connect<
         <>
           <NonMobile>
             <Button
+              overrideReadOnly
               link
               aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
@@ -185,6 +186,7 @@ export const FilingsAndProceedings = connect<
                 'view-pdf-link',
               )}
               data-testid={`document-viewer-link-${entry.eventCode}`}
+              overrideReadOnly
               onClick={() =>
                 changeTabAndSetViewerDocumentToDisplaySequence({
                   docketRecordTab: 'documentView',

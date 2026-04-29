@@ -57,6 +57,7 @@ export const SortableColumn = ({
       link
       className={'sortable-header-button margin-right-0'}
       data-testid={props['data-testid']}
+      overrideReadOnly
       onClick={() => {
         if (hasRows) {
           setIsLoading(true);

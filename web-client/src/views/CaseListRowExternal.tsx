@@ -4,15 +4,20 @@ import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import React from 'react';
 import classNames from 'classnames';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const CaseListRowExternal = ({
   formattedCase,
   isNestedCase,
   showFilingFee,
+  showCaseStatusInfoSequence,
+  showCaseStatus,
 }: {
   formattedCase: TAssociatedCaseFormatted;
   isNestedCase: boolean;
   showFilingFee: boolean;
+  showCaseStatusInfoSequence: any;
+  showCaseStatus: boolean;
 }) => {
   return (
     <>
@@ -44,8 +49,22 @@ export const CaseListRowExternal = ({
                 />
               </div>
             </td>
-            <td>{formattedCase.caseTitle}</td>
+            <td className="tw:max-w-[15.6rem]">{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
+            {showCaseStatus && (
+              <td className="tw:max-w-[11rem]">
+                <Button
+                  link
+                  onClick={() =>
+                    showCaseStatusInfoSequence({
+                      status: formattedCase.status,
+                    })
+                  }
+                >
+                  {formattedCase.formattedStatus}
+                </Button>
+              </td>
+            )}
             {showFilingFee && (
               <td data-testid="petition-payment-status">
                 {formattedCase.petitionPaymentStatus}
@@ -60,6 +79,8 @@ export const CaseListRowExternal = ({
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
                   showFilingFee={showFilingFee}
+                  showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                  showCaseStatus={showCaseStatus}
                 />
               );
             })}
@@ -110,6 +131,27 @@ export const CaseListRowExternal = ({
           >
             {formattedCase.createdAtFormatted}
           </td>
+          {showCaseStatus && (
+            <td
+              className={classNames({
+                'consolidated-case-padding':
+                  formattedCase.inConsolidatedGroup &&
+                  !formattedCase.isLeadCase,
+              })}
+              data-label="status"
+            >
+              <Button
+                link
+                onClick={() =>
+                  showCaseStatusInfoSequence({
+                    status: formattedCase.status,
+                  })
+                }
+              >
+                {formattedCase.formattedStatus}
+              </Button>
+            </td>
+          )}
           {showFilingFee && (
             <td
               className={classNames({
@@ -132,6 +174,8 @@ export const CaseListRowExternal = ({
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
                 showFilingFee={showFilingFee}
+                showCaseStatusInfoSequence={showCaseStatusInfoSequence}
+                showCaseStatus={showCaseStatus}
               />
             );
           })}

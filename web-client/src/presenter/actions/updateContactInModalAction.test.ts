@@ -19,6 +19,7 @@ describe('updateContactInModalAction', () => {
       },
       state: {
         caseDetail: {
+          docketEntries: [{ docketEntryId: '1' }],
           docketNumber: '123-45',
           petitioners: [
             {

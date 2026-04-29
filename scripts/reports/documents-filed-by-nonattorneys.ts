@@ -6,7 +6,7 @@ import {
   getJsTimeframeForYear,
 } from '../helpers/parseArgsAndEnvVars';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { pick } from 'lodash';
 import { formatDate } from '../helpers/formatters';
