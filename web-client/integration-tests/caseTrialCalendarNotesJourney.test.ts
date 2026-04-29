@@ -1,4 +1,4 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { docketClerkAddEditsCalendarNote } from './journey/docketClerkAddEditsCalendarNote';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkDeletesCalendarNote } from './journey/docketClerkDeletesCalendarNote';
@@ -7,6 +7,7 @@ import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTr
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { docketClerkViewsTrialSessionWithNote } from './journey/docketClerkViewsTrialSessionWithNote';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 describe('case trial calendar notes journey', () => {
   const cerebralTest = setupTest();
@@ -17,8 +18,7 @@ describe('case trial calendar notes journey', () => {
     cerebralTest.closeSocket();
   });
 
-  // eslint-disable-next-line @miovision/disallow-date/no-static-date
-  const trialLocation1 = `Boulder, Colorado, ${Date.now()}`;
+  const trialLocation1 = `Boulder, Colorado, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation1,

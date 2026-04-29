@@ -2,10 +2,11 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsClerkCompletesAndSetsTrialSession';
@@ -18,7 +19,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   cerebralTest.casesReadyForTrial = [];
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     contactSecondary: {
       address1: '123 Paper St.',

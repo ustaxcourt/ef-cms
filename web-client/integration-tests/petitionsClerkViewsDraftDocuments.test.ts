@@ -1,10 +1,10 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '@web-client/presenter/computeds/formattedCaseDetail';
 import { loginAs, setupTest, viewCaseDetail } from './helpers';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Petitions Clerk Views Draft Documents', () => {
   const cerebralTest = setupTest();
@@ -57,7 +57,7 @@ describe('Petitions Clerk Views Draft Documents', () => {
       state: cerebralTest.getState(),
     });
 
-    let { draftDocuments } = formattedCase;
+    const { draftDocuments } = formattedCase;
 
     const viewerDraftDocumentIdToDisplay = cerebralTest.getState(
       'viewerDraftDocumentToDisplay.docketEntryId',
