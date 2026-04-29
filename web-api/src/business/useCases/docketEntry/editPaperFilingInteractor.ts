@@ -30,7 +30,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { onTransactionCommit, withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
@@ -148,14 +148,25 @@ const saveForLaterStrategy = async ({
     );
   }
 
+  let numberOfPages: number | undefined;
+  if (request.documentMetadata.isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId: docketEntryEntity.documentStorageId,
+      });
+  }
+
   await withTransaction(async () => {
-    const updatedDocketEntryEntity = await updateDocketEntry({
+    const updatedDocketEntryEntity = updateDocketEntry({
       applicationContext,
       authorizedUser,
       caseEntity,
       docketEntry: docketEntryEntity,
       documentMetadata: request.documentMetadata,
       userId: user.userId,
+      numberOfPages,
     });
 
     await updateAndSaveWorkItem({
@@ -168,20 +179,23 @@ const saveForLaterStrategy = async ({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
+
+    const { clientConnectionId, docketEntryId } = request;
+
+    onTransactionCommit(async () => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'save_docket_entry_for_later_complete',
+          alertSuccess: { message: 'Entry updated.', overwritable: false },
+          docketEntryId,
+        },
+        userId: user.userId,
+      });
+    });
   });
 
-  const { clientConnectionId, docketEntryId } = request;
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'save_docket_entry_for_later_complete',
-      alertSuccess: { message: 'Entry updated.', overwritable: false },
-      docketEntryId,
-    },
-    userId: user.userId,
-  });
 };
 
 const multiDocketServeStrategy = async ({
@@ -298,14 +312,25 @@ const serveDocketEntry = async ({
       );
     }
 
+    let numberOfPages: number | undefined;
+    if (documentMetadata.isFileAttached) {
+      numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryEntity.documentStorageId,
+        });
+    }
+
     await withTransaction(async () => {
-      const updatedDocketEntry = await updateDocketEntry({
+      const updatedDocketEntry = updateDocketEntry({
         applicationContext,
         authorizedUser,
         caseEntity: subjectCaseEntity,
         docketEntry: docketEntryEntity,
         documentMetadata,
         userId: user.userId,
+        numberOfPages,
       });
 
       for (const aCase of caseEntitiesToFileOn) {
@@ -319,27 +344,29 @@ const serveDocketEntry = async ({
         });
       }
 
-      const paperServiceResult = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
+      onTransactionCommit(async () => {
+        const paperServiceResult = await applicationContext
+          .getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf({
+            applicationContext,
+            caseEntities: caseEntitiesToFileOn,
+            docketEntryId: updatedDocketEntry.docketEntryId,
+          });
+
+        const paperServicePdfUrl = paperServiceResult?.pdfUrl;
+
+        await applicationContext.getNotificationGateway().sendNotificationToUser({
           applicationContext,
-          caseEntities: caseEntitiesToFileOn,
-          docketEntryId: updatedDocketEntry.docketEntryId,
+          clientConnectionId,
+          message: {
+            action: 'serve_document_complete',
+            alertSuccess: { message, overwritable: false },
+            docketEntryId: docketEntryEntity.docketEntryId,
+            generateCoversheet: true,
+            pdfUrl: paperServicePdfUrl,
+          },
+          userId: user.userId,
         });
-
-      const paperServicePdfUrl = paperServiceResult?.pdfUrl;
-
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'serve_document_complete',
-          alertSuccess: { message, overwritable: false },
-          docketEntryId: docketEntryEntity.docketEntryId,
-          generateCoversheet: true,
-          pdfUrl: paperServicePdfUrl,
-        },
-        userId: user.userId,
       });
     });
 
@@ -403,13 +430,13 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const updateDocketEntry = async ({
-  applicationContext,
+const updateDocketEntry = ({
   authorizedUser,
   caseEntity,
   docketEntry,
   documentMetadata,
   userId,
+  numberOfPages,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
@@ -417,7 +444,8 @@ const updateDocketEntry = async ({
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
-}): Promise<DocketEntry> => {
+  numberOfPages?: number;
+}): DocketEntry => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -450,21 +478,13 @@ const updateDocketEntry = async ({
       ...docketEntry,
       ...editableFields,
       editState: JSON.stringify(editableFields),
+      numberOfPages,
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   );
-
-  if (editableFields.isFileAttached) {
-    updatedDocketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentStorageId: docketEntry.documentStorageId,
-      });
-  }
 
   caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
