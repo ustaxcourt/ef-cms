@@ -1,8 +1,7 @@
-import { post } from '../requests';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RequestApplicationContext, post } from '../requests';
 
 export const generatePublicDocketRecordPdfInteractor = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: RequestApplicationContext,
   {
     docketNumber,
     docketRecordTableSort,

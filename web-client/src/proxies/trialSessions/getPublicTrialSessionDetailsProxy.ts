@@ -1,9 +1,8 @@
 import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
-import { get } from '../requests';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RequestApplicationContext, get } from '../requests';
 
 export const getPublicTrialSessionDetailsInteractor = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: RequestApplicationContext,
   { trialSessionId },
 ): Promise<PublicTrialSessionDetails> => {
   return get({

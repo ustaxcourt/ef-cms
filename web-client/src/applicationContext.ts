@@ -774,4 +774,5 @@ const applicationContext = {
 
 export { applicationContext };
 
-export type ClientApplicationContext = typeof applicationContext;
+type _ClientApplicationContext = typeof applicationContext;
+export interface ClientApplicationContext extends _ClientApplicationContext {}

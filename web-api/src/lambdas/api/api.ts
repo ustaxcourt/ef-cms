@@ -1,7 +1,7 @@
 import { app } from '../../app';
 import awsServerlessExpress from '@codegenie/serverless-express';
 
-export const handler = (event, context) => {
+export const handler = (event, context, callback) => {
   // This hack is added because serverless-express doesn't seem to work with lambda proxy integrations.
   // Without this, the deployed /auth endpoint has to be reached via /auth/auth/*
   // Bug Detail: https://github.com/vendia/serverless-express/issues/400
@@ -21,5 +21,5 @@ export const handler = (event, context) => {
     typeof event.body === 'string' ? event.body : JSON.stringify(event.body);
   return awsServerlessExpress({
     app,
-  })(event, context);
+  })(event, context, callback);
 };

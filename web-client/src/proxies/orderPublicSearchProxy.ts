@@ -1,8 +1,7 @@
-import { get } from './requests';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RequestApplicationContext, get } from './requests';
 
 export const orderPublicSearchInteractor = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: RequestApplicationContext,
   { searchParams },
 ) => {
   return get({

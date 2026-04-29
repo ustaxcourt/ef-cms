@@ -1,6 +1,11 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import moize from 'moize';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+
+export type RequestApplicationContext =
+  | ClientApplicationContext
+  | ClientPublicApplicationContext;
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
@@ -15,7 +20,7 @@ export const head = async ({
   endpoint,
   params,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   endpoint: string;
   params?: Record<string, any>;
 }) => {
@@ -34,7 +39,7 @@ const internalGet = async ({
   endpoint,
   params,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   endpoint: string;
   asyncSyncId?: string;
   params?: any;
@@ -54,7 +59,7 @@ export const getResponse = ({
   endpoint,
   params,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   endpoint: string;
   asyncSyncId?: string;
   params?: Record<string, any>;
@@ -89,7 +94,7 @@ export const post = async ({
   headers = {},
   options = {},
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   asyncSyncId?: string;
   body?: unknown;
   endpoint: string;
@@ -149,7 +154,7 @@ export const put = async ({
   body,
   endpoint,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   asyncSyncId?: string;
   body?: Record<string, any>;
   endpoint: string;
@@ -175,7 +180,7 @@ export const remove = async ({
   options = {},
   params = {},
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: RequestApplicationContext;
   endpoint: string;
   options?: Record<string, unknown>;
   asyncSyncId?: string;
