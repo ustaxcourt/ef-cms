@@ -28,7 +28,7 @@ export class Contact extends JoiValidationEntity {
   public inCareOf?: string;
   public isAddressSealed: boolean;
   public sealedAndUnavailable?: boolean;
-  public paperPetitionEmail?: string;
+  public contactEmailAddress?: string;
   public hasConsentedToElectronicService?: boolean;
   public name: string;
   public phone: string;
@@ -58,7 +58,7 @@ export class Contact extends JoiValidationEntity {
     this.inCareOf = rawContact.inCareOf;
     this.isAddressSealed = rawContact.isAddressSealed ?? false;
     this.sealedAndUnavailable = rawContact.sealedAndUnavailable ?? false;
-    this.paperPetitionEmail = rawContact.paperPetitionEmail;
+    this.contactEmailAddress = rawContact.contactEmailAddress;
     this.hasConsentedToElectronicService =
       rawContact.hasConsentedToElectronicService;
     this.name = rawContact.name;
@@ -117,7 +117,7 @@ export class Contact extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+    contactEmailAddress: JoiValidationConstants.EMAIL.optional()
       .allow(null)
       .description('Email provided by the petitioner on their petition form')
       .messages({ '*': 'Enter email address in format: yourname@example.com' }),

@@ -1925,7 +1925,7 @@ export type CreatedCaseType = {
     city: string;
     countryType: string;
     name: string;
-    paperPetitionEmail: string;
+    contactEmailAddress: string;
     phone: string;
     postalCode: string;
     state: string;
