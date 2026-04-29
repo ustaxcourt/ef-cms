@@ -66,7 +66,7 @@ NodeJS, npm (see [package.json](package.json) `engines`). All commands run from 
   - Read-only: `npm run cypress:readonly` (headless) or `npm run cypress:readonly:open` (headed). Single file: `npm run cypress:readonly:file -- path/to/file.cy.ts`.
   - Read-only (Public): `npm run cypress:readonly:public` (headless) or `npm run cypress:readonly:public:open` (headed). Single file: `npm run cypress:readonly:public:file -- path/to/file.cy.ts`.
   - Smoke tests: `npm run cypress:smoketests` (headless) or `npm run cypress:smoketests:open` (headed). Single file: `npm run cypress:smoketests:file -- path/to/file.cy.ts`.
-  - Real-user tests: `npm run cypress:real-user-tests` (headless) or `npm run cypress:real-user-tests:open` (headed).
+  - Real-user tests: `npm run cypress:real-users` (headless) or `npm run cypress:real-users:open` (headed).
 - Postgres migrations: `npm run migration:generate:postgres`, `migration:postgres`, `migration:rollback:postgres` (Kysely; sources in [`web-api/src/persistence/postgres/utils/migrate/`](web-api/src/persistence/postgres/utils/migrate/)).
 - Reindex OpenSearch: [`./reindex-elasticsearch.sh`](reindex-elasticsearch.sh). Reset local data: [`./clear-env.sh`](clear-env.sh) (`npm run reset-cases`).
 - Stack readiness (required before Cypress and `test:client:_integration`):
