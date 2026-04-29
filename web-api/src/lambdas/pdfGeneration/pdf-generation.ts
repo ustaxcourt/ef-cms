@@ -1,6 +1,5 @@
 import { getChromiumBrowser } from '@shared/business/utilities/chromium/getChromiumBrowser';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
 import { sleep } from '@shared/tools/helpers';
 import {
   generatePdfFromHtmlHelper,
@@ -10,21 +9,17 @@ import { environment } from '@web-api/environment';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { saveDocumentFromLambda } from '@web-api/persistence/s3/saveDocumentFromLambda';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { applicationContext } from '@web-api/applicationContext';
 
 export type PdfGenerationResult = {
   tempId: string;
 };
 
+// Note: this lambda is intentionally NOT gated by READ_ONLY_MODE. It is invoked
+// synchronously (RequestResponse) by `generatePdfFromHtmlInteractor`, which
+// expects a `{ tempId }` response; rescheduling here would return `undefined`
+// and crash the caller. PDF rendering only reads HTML and writes to S3 (never
+// to Postgres), so it is safe to run during the Aurora Blue/Green switchover.
 export const handler = async (event: GeneratePdfRequest) => {
-  if (process.env.READ_ONLY_MODE === 'true') {
-    getDawsonLogger().info(
-      'Skipping pdfGeneration handler due to read-only mode. Retrying in 180 seconds.',
-    );
-    await rescheduleLambda(applicationContext, { event }, 180);
-    return;
-  }
-
   for (let index = 0; index < 3; index++) {
     try {
       const browser = await getChromiumBrowser();

@@ -85,20 +85,14 @@ app.use((req, res, next) => {
     return;
   }
 
-  const readOnlyPosts = [
-    '/public-api/search',
-    '/public-api/order-search',
-    '/public-api/opinion-search',
-  ];
-
+  // The public API does not expose any write endpoints, so during read-only
+  // mode we simply 503 anything that isn't a safe (read) HTTP method. All
+  // public search endpoints are GETs, so allowlisting POSTs is unnecessary.
   if (
     process.env.READ_ONLY_MODE === 'true' &&
     req.method !== 'GET' &&
-    req.method !== 'OPTIONS' &&
-    !(
-      req.method === 'POST' &&
-      readOnlyPosts.some(route => req.url.startsWith(route))
-    )
+    req.method !== 'HEAD' &&
+    req.method !== 'OPTIONS'
   ) {
     res
       .status(503)
