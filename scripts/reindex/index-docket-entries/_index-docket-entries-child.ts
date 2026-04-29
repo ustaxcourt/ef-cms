@@ -11,7 +11,10 @@ import {
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  getCurrentDateTimeInMillis,
+} from '@shared/business/utilities/DateHandler';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -56,7 +59,7 @@ async function main() {
         docketNumber: data.docketNumber,
       })),
       type: 'dwDocketEntry' as OpenSearchSyncMessageType,
-      timestamp: Date.now().toString(),
+      timestamp: `${getCurrentDateTimeInMillis()}`,
       action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     };
     await indexOpenSearchDocketEntries({ message });

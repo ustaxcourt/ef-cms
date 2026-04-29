@@ -20,7 +20,7 @@ export const docketClerkEditsHearingNote = (cerebralTest, updatedNote) => {
       state: cerebralTest.getState(),
     });
 
-    let hearing = caseDetail.hearings[caseDetail.hearings.length - 1];
+    const hearing = caseDetail.hearings[caseDetail.hearings.length - 1];
 
     await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       docketNumber: caseDetail.docketNumber,
