@@ -435,6 +435,11 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          no_output_timeout: 65m
+          name: Wait for Change of Address SQS Queue to Drain
+          command: |
+            ./scripts/circleci/wait-for-empty-sqs-queue.sh
+      - run:
           name: 'Switch Colors'
           command: npm run switch-colors
 
@@ -479,26 +484,6 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
-
-  wait-for-empty-change-of-address-queue:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          no_output_timeout: 65m
-          name: Wait for Change of Address SQS Queue to Drain
-          command: |
-            ./scripts/circleci/wait-for-empty-sqs-queue.sh
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -961,13 +946,6 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - migrate
-      - wait-for-empty-change-of-address-queue:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests
-            - loadtests
-            - smoketests-readonly
-            - api-hosted-environment-tests
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -975,7 +953,6 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-            - wait-for-empty-change-of-address-queue
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
