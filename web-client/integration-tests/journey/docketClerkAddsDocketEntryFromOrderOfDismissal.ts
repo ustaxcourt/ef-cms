@@ -9,7 +9,6 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
 ) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
     let caseDetailFormatted;
-    let helperComputed;
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -31,7 +30,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    helperComputed = runCompute(
+    const helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: cerebralTest.getState(),
