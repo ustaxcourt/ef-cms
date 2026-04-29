@@ -64,7 +64,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     contact={{
                       ...petitionFormatted.contactPrimary,
                       email:
-                        petitionFormatted.contactPrimary.paperPetitionEmail ||
+                        petitionFormatted.contactPrimary.contactEmailAddress ||
                         'Email not provided',
                     }}
                     showEmail={!isPetitioner}
@@ -159,7 +159,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     contact={{
                       ...petitionFormatted.contactSecondary,
                       email:
-                        petitionFormatted.contactSecondary.paperPetitionEmail ||
+                        petitionFormatted.contactSecondary.contactEmailAddress ||
                         'Email not provided',
                       phone:
                         petitionFormatted.contactSecondary.phone ||
