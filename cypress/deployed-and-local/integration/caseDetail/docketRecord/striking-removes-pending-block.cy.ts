@@ -2,33 +2,14 @@ import { loginAsDocketClerk1 } from 'cypress/helpers/authentication/login-as-hel
 import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { assertExists, retry } from 'cypress/helpers/retry';
 
-const MAX_STRIKE_RETRIES = 3;
-
-function strikeDocketEntry(attempt = 0) {
-  return cy
-    .get('[data-testid="strike-entry"]')
-    .should('be.visible')
-    .click()
-    .wait(200)
-    .get('body')
-    .then($body => {
-      if ($body.find('[data-testid="modal-button-confirm"]').length > 0) {
-        return cy
-          .get('[data-testid="modal-button-confirm"]')
-          .should('be.visible')
-          .click();
-      } else if (attempt < MAX_STRIKE_RETRIES) {
-        cy.log(
-          `Strike modal did not appear, retrying (${attempt + 1}/${MAX_STRIKE_RETRIES})`,
-        );
-        return strikeDocketEntry(attempt + 1);
-      } else {
-        throw new Error(
-          'Strike docket entry modal did not appear after maximum retries',
-        );
-      }
-    });
+function strikeDocketEntry(): void {
+  retry(() => {
+    cy.get('[data-testid="strike-entry"]').should('be.visible').click();
+    return assertExists('[data-testid="modal-button-confirm"]');
+  });
+  cy.get('[data-testid="modal-button-confirm"]').click();
 }
 
 describe('Striking removes pending items', () => {
