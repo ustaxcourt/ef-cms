@@ -23,8 +23,9 @@ export const truncateS3DocumentsBucket = async ({
   let totalDeleted = 0;
   let keyMarker: string | undefined;
   let versionIdMarker: string | undefined;
+  let isTruncated = true;
 
-  do {
+  while (isTruncated) {
     const listResponse: ListObjectVersionsCommandOutput = await s3Client.send(
       new ListObjectVersionsCommand({
         Bucket: bucketName,
@@ -44,23 +45,34 @@ export const truncateS3DocumentsBucket = async ({
 
     for (let i = 0; i < objectsToDelete.length; i += S3_DELETE_BATCH_SIZE) {
       const batch = objectsToDelete.slice(i, i + S3_DELETE_BATCH_SIZE);
-      await s3Client.send(
+      const deleteResponse = await s3Client.send(
         new DeleteObjectsCommand({
           Bucket: bucketName,
-          Delete: { Objects: batch, Quiet: true },
+          Delete: { Objects: batch, Quiet: false },
         }),
       );
-      totalDeleted += batch.length;
+
+      const errors = deleteResponse.Errors || [];
+      if (errors.length > 0) {
+        const failedDeletes = errors
+          .map(
+            ({ Key, VersionId, Code, Message }) =>
+              `${Key ?? 'unknown-key'}${VersionId ? ` (${VersionId})` : ''}: ${Code ?? 'UnknownError'}${Message ? ` - ${Message}` : ''}`,
+          )
+          .join(', ');
+
+        throw new Error(
+          `Failed to delete one or more S3 object(s) from bucket ${bucketName}: ${failedDeletes}`,
+        );
+      }
+
+      totalDeleted += deleteResponse.Deleted?.length ?? 0;
     }
 
-    if (listResponse.IsTruncated) {
-      keyMarker = listResponse.NextKeyMarker;
-      versionIdMarker = listResponse.NextVersionIdMarker;
-    } else {
-      keyMarker = undefined;
-      versionIdMarker = undefined;
-    }
-  } while (keyMarker || versionIdMarker);
+    isTruncated = !!listResponse.IsTruncated;
+    keyMarker = listResponse.NextKeyMarker;
+    versionIdMarker = listResponse.NextVersionIdMarker;
+  }
 
   console.log(
     `Deleted ${totalDeleted} object(s) from S3 bucket: ${bucketName}`,

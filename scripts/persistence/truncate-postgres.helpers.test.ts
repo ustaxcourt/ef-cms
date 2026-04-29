@@ -1,9 +1,11 @@
 import {
+  CompiledQuery,
   DummyDriver,
   Kysely,
   PostgresAdapter,
   PostgresIntrospector,
   PostgresQueryCompiler,
+  QueryResult,
 } from 'kysely';
 import {
   PRESERVED_TABLES,
@@ -40,13 +42,19 @@ const buildKyselyWithExecutionSpy = (
   });
 
   const executor = db.getExecutor();
-  jest.spyOn(executor, 'executeQuery').mockImplementation((query: any) => {
-    executedSql.push(query.sql);
-    if (query.sql && query.sql.includes('information_schema.tables')) {
-      return { rows } as any;
-    }
-    return { rows: [] } as any;
-  });
+  jest
+    .spyOn(executor, 'executeQuery')
+    .mockImplementation(<R>(query: CompiledQuery): Promise<QueryResult<R>> => {
+      executedSql.push(query.sql);
+      const matchingRows: { table_name: string }[] = query.sql.includes(
+        'information_schema.tables',
+      )
+        ? rows
+        : [];
+      return Promise.resolve({
+        rows: matchingRows as unknown as R[],
+      });
+    });
 
   return { db, executedSql };
 };

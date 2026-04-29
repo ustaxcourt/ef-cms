@@ -35,7 +35,18 @@ describe('truncateS3DocumentsBucket', () => {
         IsTruncated: false,
       });
 
-    s3Mock.on(DeleteObjectsCommand).resolves({});
+    s3Mock
+      .on(DeleteObjectsCommand)
+      .resolvesOnce({
+        Deleted: [
+          { Key: 'a.pdf', VersionId: 'v1' },
+          { Key: 'b.pdf', VersionId: 'v2' },
+          { Key: 'c.pdf', VersionId: 'v3' },
+        ],
+      })
+      .resolvesOnce({
+        Deleted: [{ Key: 'd.pdf', VersionId: 'v4' }],
+      });
 
     const s3Client = new S3Client({});
     const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
@@ -59,7 +70,7 @@ describe('truncateS3DocumentsBucket', () => {
           { Key: 'b.pdf', VersionId: 'v2' },
           { Key: 'c.pdf', VersionId: 'v3' },
         ],
-        Quiet: true,
+        Quiet: false,
       },
     });
   });
@@ -79,7 +90,9 @@ describe('truncateS3DocumentsBucket', () => {
       Versions: [{ VersionId: 'orphan' }, { Key: 'real.pdf', VersionId: 'v1' }],
       IsTruncated: false,
     });
-    s3Mock.on(DeleteObjectsCommand).resolves({});
+    s3Mock
+      .on(DeleteObjectsCommand)
+      .resolves({ Deleted: [{ Key: 'real.pdf', VersionId: 'v1' }] });
 
     const s3Client = new S3Client({});
     const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
@@ -89,5 +102,71 @@ describe('truncateS3DocumentsBucket', () => {
     expect(deleteCalls[0].args[0].input.Delete?.Objects).toEqual([
       { Key: 'real.pdf', VersionId: 'v1' },
     ]);
+  });
+
+  it('counts zero when DeleteObjects response omits Deleted', async () => {
+    s3Mock.on(ListObjectVersionsCommand).resolves({
+      Versions: [{ Key: 'a.pdf', VersionId: 'v1' }],
+      IsTruncated: false,
+    });
+    s3Mock.on(DeleteObjectsCommand).resolves({});
+
+    const s3Client = new S3Client({});
+    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+
+    expect(total).toBe(0);
+  });
+
+  it('throws when DeleteObjects returns errors', async () => {
+    s3Mock.on(ListObjectVersionsCommand).resolves({
+      Versions: [{ Key: 'a.pdf', VersionId: 'v1' }],
+      IsTruncated: false,
+    });
+    s3Mock.on(DeleteObjectsCommand).resolves({
+      Deleted: [],
+      Errors: [
+        {
+          Key: 'a.pdf',
+          VersionId: 'v1',
+          Code: 'AccessDenied',
+          Message: 'nope',
+        },
+        {},
+      ],
+    });
+
+    const s3Client = new S3Client({});
+
+    await expect(
+      truncateS3DocumentsBucket({ bucketName, s3Client }),
+    ).rejects.toThrow(
+      `Failed to delete one or more S3 object(s) from bucket ${bucketName}: a.pdf (v1): AccessDenied - nope, unknown-key: UnknownError`,
+    );
+  });
+
+  it('continues paginating when IsTruncated is true even with empty markers', async () => {
+    s3Mock
+      .on(ListObjectVersionsCommand)
+      .resolvesOnce({
+        Versions: [{ Key: 'a.pdf', VersionId: 'v1' }],
+        IsTruncated: true,
+        NextKeyMarker: '',
+        NextVersionIdMarker: '',
+      })
+      .resolvesOnce({
+        Versions: [{ Key: 'b.pdf', VersionId: 'v2' }],
+        IsTruncated: false,
+      });
+
+    s3Mock
+      .on(DeleteObjectsCommand)
+      .resolvesOnce({ Deleted: [{ Key: 'a.pdf', VersionId: 'v1' }] })
+      .resolvesOnce({ Deleted: [{ Key: 'b.pdf', VersionId: 'v2' }] });
+
+    const s3Client = new S3Client({});
+    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+
+    expect(total).toBe(2);
+    expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(2);
   });
 });

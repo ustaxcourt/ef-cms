@@ -1,6 +1,11 @@
+import { Client } from '@opensearch-project/opensearch';
 import { setupAliases } from '../../web-api/elasticsearch/elasticsearch-alias-settings.helpers';
 import { setupIndexes } from '../../web-api/elasticsearch/elasticsearch-index-settings.helpers';
 import { truncateAllOpenSearchIndices } from './truncate-opensearch.helpers';
+
+type OpenSearchClientStub = {
+  indices: Pick<Client['indices'], 'exists' | 'delete'>;
+};
 
 jest.mock('../../web-api/elasticsearch/client', () => ({
   getClient: jest.fn(),
@@ -35,24 +40,24 @@ describe('truncateAllOpenSearchIndices', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  const buildClient = (existingIndices: string[]) => {
+  const buildClient = (
+    existingIndices: string[],
+  ): { client: OpenSearchClientStub; deleteCalls: { index: string }[] } => {
     const deleteCalls: { index: string }[] = [];
-    return {
-      client: {
-        indices: {
-          exists: jest
-            .fn()
-            .mockImplementation(({ index }: { index: string }) =>
-              Promise.resolve({ body: existingIndices.includes(index) }),
-            ),
-          delete: jest.fn().mockImplementation(({ index }) => {
-            deleteCalls.push({ index });
-            return Promise.resolve({});
-          }),
-        },
-      } as any,
-      deleteCalls,
+    const client: OpenSearchClientStub = {
+      indices: {
+        exists: jest
+          .fn()
+          .mockImplementation(({ index }: { index: string }) =>
+            Promise.resolve({ body: existingIndices.includes(index) }),
+          ),
+        delete: jest.fn().mockImplementation(({ index }) => {
+          deleteCalls.push({ index });
+          return Promise.resolve({});
+        }),
+      } as OpenSearchClientStub['indices'],
     };
+    return { client, deleteCalls };
   };
 
   it('deletes every existing index defined in mappings, then recreates indexes and aliases', async () => {
@@ -61,7 +66,7 @@ describe('truncateAllOpenSearchIndices', () => {
     const result = await truncateAllOpenSearchIndices({
       elasticsearchEndpoint: 'http://localhost:9200',
       environmentName: 'local',
-      client,
+      client: client as unknown as Client,
     });
 
     expect(result.deleted.sort()).toEqual(['efcms-case', 'efcms-user']);
@@ -82,7 +87,7 @@ describe('truncateAllOpenSearchIndices', () => {
     const result = await truncateAllOpenSearchIndices({
       elasticsearchEndpoint: 'http://localhost:9200',
       environmentName: 'local',
-      client,
+      client: client as unknown as Client,
     });
 
     expect(result.deleted).toEqual([]);
@@ -92,18 +97,18 @@ describe('truncateAllOpenSearchIndices', () => {
   });
 
   it('rethrows when index deletion fails', async () => {
-    const failingClient = {
+    const failingClient: OpenSearchClientStub = {
       indices: {
         exists: jest.fn().mockResolvedValue({ body: true }),
         delete: jest.fn().mockRejectedValue(new Error('boom')),
-      },
-    } as any;
+      } as OpenSearchClientStub['indices'],
+    };
 
     await expect(
       truncateAllOpenSearchIndices({
         elasticsearchEndpoint: 'http://localhost:9200',
         environmentName: 'local',
-        client: failingClient,
+        client: failingClient as unknown as Client,
       }),
     ).rejects.toThrow('boom');
   });
