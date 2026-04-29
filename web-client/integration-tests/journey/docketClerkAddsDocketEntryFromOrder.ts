@@ -12,7 +12,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
   return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
     let caseDetailFormatted;
     let nonstandardHelperComputed;
-    let addCourtIssuedDocketEntryHelperComputed;
 
     const decisionTypeDocumentEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
 
@@ -60,7 +59,7 @@ export const docketClerkAddsDocketEntryFromOrder = (
       },
     );
 
-    addCourtIssuedDocketEntryHelperComputed = runCompute(
+    const addCourtIssuedDocketEntryHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryHelper),
       {
         state: cerebralTest.getState(),

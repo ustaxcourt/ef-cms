@@ -4,6 +4,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
 import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Docket Clerk updates a hearing session', () => {
@@ -24,7 +25,7 @@ describe('Docket Clerk updates a hearing session', () => {
     cerebralTest.docketNumber = docketNumber;
   });
 
-  const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
+  const trialLocation = `Hartford, Connecticut, ${getCurrentDateTimeInMillis()}`;
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, {
     sessionType: SESSION_TYPES.motionHearing,

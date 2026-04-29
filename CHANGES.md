@@ -1,3 +1,13 @@
+<details><summary>Support `--aws-only` Flag in the Environment Switcher</summary>
+
+## Local
+
+#### Migrate Local Environment Scripts to Support the `--aws-only` Flag
+
+```bash
+./scripts/run-once-scripts/migrate-environments.zsh
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-04-20</summary>
 ## Manual Deployment Steps
 
