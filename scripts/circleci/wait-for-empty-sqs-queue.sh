@@ -1,5 +1,26 @@
 #!/bin/bash -e
 
+# This script can be used in circle to wait for an SQS queue to clear before proceeding, for example:
+# wait-for-empty-change-of-address-queue:
+#     docker:
+#       - image: *efcms-docker-image
+#         aws_auth:
+#           aws_access_key_id: $AWS_ACCESS_KEY_ID
+#           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#     resource_class: medium+
+#     steps:
+#       - git-shallow-clone/checkout
+#       - npm-install
+#       - run:
+#           name: Setup Env
+#           command: |
+#             ./scripts/env/env-for-circle.sh
+#       - run:
+#           no_output_timeout: 65m
+#           name: Wait for Change of Address SQS Queue to Drain
+#           command: |
+#             ./scripts/circleci/wait-for-empty-sqs-queue.sh "change_of_address_queue_${ENV}_${CURRENT_COLOR}"
+
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \
   "AWS_ACCOUNT_ID" \
@@ -8,9 +29,16 @@
   "ENV" \
   "REGION"
 
-QUEUE_URL="https://sqs.${REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/change_of_address_queue_${ENV}_${CURRENT_COLOR}"
-POLL_INTERVAL="${1:-30}"
-MAX_WAIT="${2:-3600}"
+QUEUE_NAME="${1:-}"
+POLL_INTERVAL="${2:-30}"
+MAX_WAIT="${3:-3600}"
+
+if [[ -z "${QUEUE_NAME}" ]]; then
+  echo "Usage: $0 <queue-name> [poll-interval-seconds] [max-wait-seconds]"
+  exit 1
+fi
+
+QUEUE_URL="https://sqs.${REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/${QUEUE_NAME}"
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 echo "Waiting for SQS queue to drain: ${QUEUE_URL}"
