@@ -1,3 +1,4 @@
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
 import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
 import { loginAs, setupTest, uploadPetition } from './helpers';
@@ -17,8 +18,8 @@ describe('Judge messages journey', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  const message1Subject = `message 1 ${Date.now()}`;
-  const message2Subject = `message 2 ${Date.now()}`;
+  const message1Subject = `message 1 ${getCurrentDateTimeInMillis()}`;
+  const message2Subject = `message 2 ${getCurrentDateTimeInMillis()}`;
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   userSendsMessage(cerebralTest, message1Subject);
