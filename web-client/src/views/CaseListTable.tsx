@@ -102,19 +102,21 @@ export const CaseListTable = connect(
                   received date or approval of waiver to update.
                 </div>
               )}
-              <div
-                ref={paginatorTop}
-                data-testid="casePaginationTop"
-                className="tw:mb-[30px] tw:mt-[30px] grid-col"
-              >
-                <Paginator
-                  currentPageIndex={casePagination.activePage}
-                  totalPages={casePagination.totalPages}
-                  onPageChange={pageChange => {
-                    casePagination.setActivePage(pageChange);
-                  }}
-                />
-              </div>
+              {casePagination.totalPages > 1 && (
+                <div
+                  ref={paginatorTop}
+                  data-testid="casePaginationTop"
+                  className="tw:mb-[1.875rem] tw:mt-[1.875rem] grid-col"
+                >
+                  <Paginator
+                    currentPageIndex={casePagination.activePage}
+                    totalPages={casePagination.totalPages}
+                    onPageChange={pageChange => {
+                      casePagination.setActivePage(pageChange);
+                    }}
+                  />
+                </div>
+              )}
               <table
                 className={classNames({
                   'usa-table responsive-table dashboard ustc-table ': !isMobile,
@@ -188,16 +190,21 @@ export const CaseListTable = connect(
                   ))}
                 </tbody>
               </table>
-              <div data-testid="casePaginationBottom" className="grid-col">
-                <Paginator
-                  currentPageIndex={casePagination.activePage}
-                  totalPages={casePagination.totalPages}
-                  onPageChange={pageChange => {
-                    casePagination.setActivePage(pageChange);
-                    focusPaginatorTop(paginatorTop);
-                  }}
-                />
-              </div>
+              {casePagination.totalPages > 1 && (
+                <div
+                  data-testid="casePaginationBottom"
+                  className={`grid-col  ${isMobile ? 'tw:mb-[1.875rem]' : ''}`}
+                >
+                  <Paginator
+                    currentPageIndex={casePagination.activePage}
+                    totalPages={casePagination.totalPages}
+                    onPageChange={pageChange => {
+                      casePagination.setActivePage(pageChange);
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                </div>
+              )}
             </>
           )}
         </>

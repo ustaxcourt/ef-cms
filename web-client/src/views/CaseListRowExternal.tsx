@@ -49,10 +49,10 @@ export const CaseListRowExternal = ({
                 />
               </div>
             </td>
-            <td>{formattedCase.caseTitle}</td>
+            <td className="tw:max-w-[15.6rem]">{formattedCase.caseTitle}</td>
             <td>{formattedCase.createdAtFormatted}</td>
             {showCaseStatus && (
-              <td className="tw:max-w-[175px]">
+              <td className="tw:max-w-[11rem]">
                 <Button
                   link
                   onClick={() =>
@@ -80,7 +80,7 @@ export const CaseListRowExternal = ({
                   key={consolidatedCase.docketNumber}
                   showFilingFee={showFilingFee}
                   showCaseStatusInfoSequence={showCaseStatusInfoSequence}
-                  showCaseStatus
+                  showCaseStatus={showCaseStatus}
                 />
               );
             })}
@@ -175,7 +175,7 @@ export const CaseListRowExternal = ({
                 key={consolidatedCase.docketNumber}
                 showFilingFee={showFilingFee}
                 showCaseStatusInfoSequence={showCaseStatusInfoSequence}
-                showCaseStatus
+                showCaseStatus={showCaseStatus}
               />
             );
           })}
