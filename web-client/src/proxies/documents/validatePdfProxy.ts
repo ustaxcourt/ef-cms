@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const validatePdfInteractor = (
   applicationContext: ClientApplicationContext,
   { key }: { key: string },
-) => {
+): Promise<void> => {
   return asyncSyncHandler(
     applicationContext,
     async asyncSyncId =>
@@ -13,5 +13,5 @@ export const validatePdfInteractor = (
         asyncSyncId,
         endpoint: `/async/documents/${key}/validate`,
       }),
-  );
+  ) as Promise<void>;
 };

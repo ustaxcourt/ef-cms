@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { post } from '../requests';
+import { RawMessage } from '@shared/business/entities/Message';
 
 export const replyToMessageInteractor = (
   applicationContext: ClientApplicationContext,
@@ -13,7 +14,7 @@ export const replyToMessageInteractor = (
     toSection,
     toUserId,
   }: ReplyMessageType,
-) => {
+): Promise<RawMessage> => {
   return post({
     applicationContext,
     body: {

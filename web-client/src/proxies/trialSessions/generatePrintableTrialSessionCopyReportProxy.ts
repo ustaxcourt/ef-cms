@@ -14,7 +14,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = (
     userHeading,
     trialStatusCounts,
   },
-) => {
+): Promise<string> => {
   return post({
     applicationContext,
     body: {

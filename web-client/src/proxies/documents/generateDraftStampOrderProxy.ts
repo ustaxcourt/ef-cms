@@ -10,7 +10,7 @@ export const generateDraftStampOrderInteractor = (
     parentMessageId,
     stampData,
   },
-) => {
+): Promise<{ stampedDocketEntryId: string }> => {
   return post({
     applicationContext,
     body: {

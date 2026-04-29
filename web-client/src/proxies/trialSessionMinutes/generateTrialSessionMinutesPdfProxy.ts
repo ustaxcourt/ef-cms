@@ -4,7 +4,7 @@ import { post } from '../requests';
 export const generateTrialSessionMinutesPdfInteractor = ({
   docketNumber,
   trialSessionId,
-}) => {
+}): Promise<string> => {
   return post({
     applicationContext,
     endpoint: `/trial-sessions/${trialSessionId}/case/${docketNumber}/minutes`,

@@ -4,9 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getColdCaseReportInteractor = (
   applicationContext: ClientApplicationContext,
-): Promise<{
-  results: ColdCaseEntry[];
-}> => {
+): Promise<ColdCaseEntry[]> => {
   return get({
     applicationContext,
     endpoint: '/reports/cold-case-report',

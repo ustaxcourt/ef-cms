@@ -5,7 +5,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const batchDownloadDocketEntriesInteractor = (
   applicationContext: ClientApplicationContext,
   params: DownloadDocketEntryRequestType,
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: params,

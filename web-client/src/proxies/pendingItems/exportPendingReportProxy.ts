@@ -9,7 +9,7 @@ export const exportPendingReportInteractor = (
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
-) => {
+): Promise<string> => {
   const queryString = qs.stringify(queryParams);
 
   return get({

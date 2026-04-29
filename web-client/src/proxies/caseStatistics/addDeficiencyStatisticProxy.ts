@@ -1,5 +1,6 @@
 import { post } from '../requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const addDeficiencyStatisticInteractor = (
   applicationContext: ClientApplicationContext,
@@ -14,7 +15,7 @@ export const addDeficiencyStatisticInteractor = (
     year,
     yearOrPeriod,
   },
-) => {
+): Promise<CaseDTO> => {
   return post({
     applicationContext,
     body: {

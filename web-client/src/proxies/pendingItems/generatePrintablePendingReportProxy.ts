@@ -10,7 +10,7 @@ export const generatePrintablePendingReportInteractor = (
     sortField?: string;
     sortOrder?: string;
   },
-) => {
+): Promise<string> => {
   const queryString = qs.stringify(params);
 
   return get({

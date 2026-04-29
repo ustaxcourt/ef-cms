@@ -9,7 +9,7 @@ export const getDownloadPolicyUrl = ({
   applicationContext: ClientApplicationContext;
   docketNumber: string;
   key: string;
-}) => {
+}): Promise<{ url: string }> => {
   return get({
     applicationContext,
     endpoint: `/case-documents/${docketNumber}/${key}/download-policy-url`,

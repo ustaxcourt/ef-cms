@@ -8,7 +8,7 @@ export const getDocumentDownloadUrlInteractor = (
     isPublic,
     key,
   }: { docketNumber: string; isPublic?: boolean; key: string },
-) => {
+): Promise<{ url: string }> => {
   return get({
     applicationContext,
     endpoint: isPublic

@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const batchDownloadTrialSessionInteractor = (
   applicationContext: ClientApplicationContext,
   { trialSessionId, clientConnectionId },
-) => {
+): Promise<void> => {
   return get({
     applicationContext,
     params: { clientConnectionId },

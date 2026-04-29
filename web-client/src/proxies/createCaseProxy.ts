@@ -1,6 +1,7 @@
 import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import { post } from './requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const createCaseInteractor = (
   applicationContext: ClientApplicationContext,
@@ -11,7 +12,7 @@ export const createCaseInteractor = (
     petitionMetadata: ElectronicCreatedCaseType;
     stinFileId: string;
   },
-): Promise<RawCase> => {
+): Promise<CaseDTO> => {
   return post({
     applicationContext,
     body: requestBody,

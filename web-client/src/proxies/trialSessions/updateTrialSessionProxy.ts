@@ -8,7 +8,7 @@ export const updateTrialSessionInteractor = (
     clientConnectionId,
     trialSession,
   }: { clientConnectionId: string; trialSession: RawTrialSession },
-) => {
+): Promise<void> => {
   return put({
     applicationContext,
     body: {

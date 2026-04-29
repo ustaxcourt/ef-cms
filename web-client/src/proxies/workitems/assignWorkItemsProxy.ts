@@ -14,7 +14,7 @@ export const assignWorkItemsInteractor = (
     workItem?: object;
     workItemId?: string;
   },
-) => {
+): Promise<void> => {
   return put({
     applicationContext,
     body: {

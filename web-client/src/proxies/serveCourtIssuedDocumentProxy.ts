@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const serveCourtIssuedDocumentInteractor = (
   applicationContext: ClientApplicationContext,
   data,
-) => {
+): Promise<void> => {
   const { docketEntryId, subjectCaseDocketNumber } = data;
 
   return post({

@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const serveThirtyDayNoticeInteractor = (
   applicationContext: ClientApplicationContext,
   { clientConnectionId, trialSessionId },
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: { clientConnectionId, trialSessionId },

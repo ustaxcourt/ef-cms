@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext: ClientApplicationContext,
   data,
-) => {
+): Promise<void> => {
   const { subjectCaseDocketNumber } = data;
   return post({
     applicationContext,

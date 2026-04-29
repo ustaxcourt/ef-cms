@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const appendAmendedPetitionFormInteractor = (
   applicationContext: ClientApplicationContext,
   { documentStorageId },
-) => {
+): Promise<void> => {
   return asyncSyncHandler(
     applicationContext,
     async asyncSyncId =>
@@ -13,5 +13,5 @@ export const appendAmendedPetitionFormInteractor = (
         asyncSyncId,
         endpoint: `/async/case-documents/${documentStorageId}/append-pdf`,
       }),
-  );
+  ) as Promise<void>;
 };

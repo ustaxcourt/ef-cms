@@ -13,7 +13,7 @@ import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseD
 import { pick } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
-type CaseDeadlineResponseInfo = {
+export type CaseDeadlineResponseInfo = {
   associatedJudge: string;
   caseCaption?: string;
   caseDeadlineId: string;

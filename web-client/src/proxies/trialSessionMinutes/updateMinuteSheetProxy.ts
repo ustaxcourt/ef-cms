@@ -6,7 +6,7 @@ export const updateMinuteSheetInteractor = ({
   docketNumber,
   minuteSheet,
   trialSessionId,
-}: MinuteSheetUpdateBody) => {
+}: MinuteSheetUpdateBody): Promise<any> => {
   return put({
     applicationContext,
     body: {

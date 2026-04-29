@@ -9,7 +9,7 @@ export const updateCaseWorksheetInteractor = (
   }: {
     worksheet: RawCaseWorksheet;
   },
-) => {
+): Promise<RawCaseWorksheet> => {
   return post({
     applicationContext,
     body: { worksheet },

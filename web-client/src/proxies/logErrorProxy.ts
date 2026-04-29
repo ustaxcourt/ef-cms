@@ -4,7 +4,7 @@ import { post } from './requests';
 export const logErrorInteractor = (
   applicationContext: ClientApplicationContext,
   { error },
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: {

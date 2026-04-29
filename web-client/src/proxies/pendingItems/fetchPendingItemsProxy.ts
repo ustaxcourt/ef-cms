@@ -8,7 +8,6 @@ export const fetchPendingItemsInteractor = (
   { judge, page = 0 },
 ): Promise<{
   foundDocuments: PendingItem[];
-  total: number;
 }> => {
   const queryString = qs.stringify({ judge, page });
 

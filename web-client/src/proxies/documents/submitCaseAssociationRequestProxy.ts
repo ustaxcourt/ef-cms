@@ -15,7 +15,7 @@ export const submitCaseAssociationRequestInteractor = (
     userId: string;
     filers?: string[];
   },
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined> => {
   return put({
     applicationContext,
     body: {

@@ -4,7 +4,17 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const getCaseInventoryReportInteractor = (
   applicationContext: ClientApplicationContext,
   { associatedJudge, selectedPage = 0, status },
-): Promise<{ foundCases: RawCase[]; totalCount: number }> => {
+): Promise<{
+  foundCases: Omit<
+    RawCase,
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
+  >[];
+  totalCount: number;
+}> => {
   const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
 
   return get({

@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const generatePrintableFilingReceiptInteractor = (
   applicationContext: ClientApplicationContext,
   { docketNumber, documentsFiled, fileAcrossConsolidatedGroup },
-) => {
+): Promise<string> => {
   return post({
     applicationContext,
     body: {

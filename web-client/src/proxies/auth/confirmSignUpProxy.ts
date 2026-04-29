@@ -8,7 +8,7 @@ export const confirmSignUpInteractor = (
     email,
     userId,
   }: { confirmationCode: string; userId: string; email: string },
-) => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: { confirmationCode, email, userId },

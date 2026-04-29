@@ -8,7 +8,7 @@ export const updatePractitionerUserInteractor = (
     user,
     clientConnectionId,
   }: { barNumber: string; user: any; clientConnectionId: string },
-) => {
+): Promise<void> => {
   return put({
     applicationContext,
     body: { user, clientConnectionId },

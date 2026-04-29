@@ -16,7 +16,10 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = (
     documentTitle: string;
     eventCode: string;
   },
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   return post({
     applicationContext,
     body: {

@@ -6,7 +6,7 @@ export const addPaperFilingInteractor = (
   data: Record<string, unknown> & {
     documentMetadata: { docketNumber: string };
   },
-) => {
+): Promise<void> => {
   const { documentMetadata } = data;
   const { docketNumber } = documentMetadata;
 

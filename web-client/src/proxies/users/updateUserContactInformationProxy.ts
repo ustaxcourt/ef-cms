@@ -14,7 +14,7 @@ export const updateUserContactInformationInteractor = (
     userId: string;
     clientConnectionId: string;
   },
-) => {
+): Promise<void> => {
   return put({
     applicationContext,
     body: { contactInfo, firmName, clientConnectionId },
