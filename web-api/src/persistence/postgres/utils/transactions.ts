@@ -54,16 +54,16 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   if (transactionStore.onCommitCallbacks?.length) {
     const callbacks = transactionStore.onCommitCallbacks;
     const ON_COMMIT_CHUNK_SIZE = 25;
-    try {
-      for (let i = 0; i < callbacks.length; i += ON_COMMIT_CHUNK_SIZE) {
-        const chunk = callbacks.slice(i, i + ON_COMMIT_CHUNK_SIZE);
+    for (let i = 0; i < callbacks.length; i += ON_COMMIT_CHUNK_SIZE) {
+      const chunk = callbacks.slice(i, i + ON_COMMIT_CHUNK_SIZE);
+      try {
         await settlePromises(chunk.map(cb => cb()));
+      } catch (error: any) {
+        getDawsonLogger().error(
+          'There was an error running onCommitCallbacks',
+          error,
+        );
       }
-    } catch (error: any) {
-      getDawsonLogger().error(
-        'There was an error running onCommitCallbacks',
-        error,
-      );
     }
   }
 
