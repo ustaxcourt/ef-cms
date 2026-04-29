@@ -1,20 +1,7 @@
 #!/bin/bash -e
 
-# This script can be used in circle to wait for an SQS queue to clear before proceeding, for example:
-# wait-for-empty-change-of-address-queue:
-#     docker:
-#       - image: *efcms-docker-image
-#         aws_auth:
-#           aws_access_key_id: $AWS_ACCESS_KEY_ID
-#           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-#     resource_class: medium+
-#     steps:
-#       - git-shallow-clone/checkout
-#       - npm-install
-#       - run:
-#           name: Setup Env
-#           command: |
-#             ./scripts/env/env-for-circle.sh
+# This script can be used in CircleCI to wait for an SQS queue to clear before proceeding. For example,
+# insert the following immediately before the call to `npm run switch-colors` in the 'switch-colors' job:
 #       - run:
 #           no_output_timeout: 65m
 #           name: Wait for Change of Address SQS Queue to Drain
@@ -25,7 +12,6 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_ACCOUNT_ID" \
   "AWS_SECRET_ACCESS_KEY" \
-  "CURRENT_COLOR" \
   "ENV" \
   "REGION"
 

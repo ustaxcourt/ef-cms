@@ -435,11 +435,6 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          no_output_timeout: 65m
-          name: Wait for Change of Address SQS Queue to Drain
-          command: |
-            ./scripts/circleci/wait-for-empty-sqs-queue.sh
-      - run:
           name: 'Switch Colors'
           command: npm run switch-colors
 
