@@ -1003,7 +1003,7 @@ workflows:
           requires:
             - migrate
       - wait-for-empty-change-of-address-queue:
-          <<: *only-deployed-lower-environments
+          <<: *only-prod
           requires:
             - loadtests
             - smoketests-readonly
