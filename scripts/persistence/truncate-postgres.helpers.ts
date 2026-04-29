@@ -1,3 +1,4 @@
+import { Database } from '@web-api/database-schema';
 import { Kysely, sql } from 'kysely';
 import { getDbWriter } from '@web-api/database';
 
@@ -22,9 +23,9 @@ export const PRESERVED_TABLES: string[] = [
 export const getTruncatableTables = async ({
   db,
 }: {
-  db: Kysely<any>;
+  db: Kysely<Database>;
 }): Promise<string[]> => {
-  const result = await sql<{ table_name: string }>`
+  const result = await sql<{ table_name?: string; tableName?: string }>`
     SELECT table_name
     FROM information_schema.tables
     WHERE table_schema = 'public'
@@ -33,8 +34,11 @@ export const getTruncatableTables = async ({
   `.execute(db);
 
   return result.rows
-    .map(row => row.table_name)
-    .filter(tableName => !PRESERVED_TABLES.includes(tableName));
+    .map(row => row.table_name || row.tableName)
+    .filter(
+      (tableName): tableName is string =>
+        !!tableName && !PRESERVED_TABLES.includes(tableName),
+    );
 };
 
 /**
@@ -45,7 +49,7 @@ export const getTruncatableTables = async ({
  */
 export const truncateAllPostgresTables = async (): Promise<string[]> => {
   return await getDbWriter({
-    cb: async (db: Kysely<any>) => {
+    cb: async (db: Kysely<Database>) => {
       const tables: string[] = await getTruncatableTables({ db });
       if (tables.length === 0) {
         console.log('No DAWSON tables found to truncate.');

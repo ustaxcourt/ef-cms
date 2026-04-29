@@ -7,6 +7,7 @@ import {
   PostgresQueryCompiler,
   QueryResult,
 } from 'kysely';
+import { Database } from '@web-api/database-schema';
 import {
   PRESERVED_TABLES,
   getTruncatableTables,
@@ -20,19 +21,21 @@ jest.mock('@web-api/database', () => ({
 
 const getDbWriterMock = jest.mocked(getDbWriter);
 
+type TableNameRow = { table_name?: string; tableName?: string };
+
 /**
  * Builds a Kysely instance whose query execution is replaced by a spy. Uses
  * the real Postgres query compiler so the assertions exercise the SQL that
  * would actually be sent to Postgres.
  */
 const buildKyselyWithExecutionSpy = (
-  rows: { table_name: string }[],
+  rows: TableNameRow[],
 ): {
-  db: Kysely<any>;
+  db: Kysely<Database>;
   executedSql: string[];
 } => {
   const executedSql: string[] = [];
-  const db = new Kysely<any>({
+  const db = new Kysely<Database>({
     dialect: {
       createAdapter: () => new PostgresAdapter(),
       createDriver: () => new DummyDriver(),
@@ -46,7 +49,7 @@ const buildKyselyWithExecutionSpy = (
     .spyOn(executor, 'executeQuery')
     .mockImplementation(<R>(query: CompiledQuery): Promise<QueryResult<R>> => {
       executedSql.push(query.sql);
-      const matchingRows: { table_name: string }[] = query.sql.includes(
+      const matchingRows: TableNameRow[] = query.sql.includes(
         'information_schema.tables',
       )
         ? rows
@@ -89,6 +92,17 @@ describe('truncate-postgres.helpers', () => {
       const tables = await getTruncatableTables({ db });
 
       expect(tables).toEqual(['dw_case', 'dw_docket_entry', 'dw_user']);
+    });
+
+    it('returns all tables when the CamelCasePlugin maps table_name to tableName', async () => {
+      const { db } = buildKyselyWithExecutionSpy([
+        { tableName: 'dw_case' },
+        { tableName: 'dw_feature_flag' },
+      ]);
+
+      const tables = await getTruncatableTables({ db });
+
+      expect(tables).toEqual(['dw_case']);
     });
   });
 
