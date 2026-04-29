@@ -103,7 +103,7 @@ export const PieGraph = ({
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
         {title && (
-          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
+          <h2 className="tw:xs:mb-8 tw:mb-5 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}
@@ -124,7 +124,7 @@ export const PieGraph = ({
       />
       <div className="tw:xs:w-160 tw:w-120">
         {title && (
-          <h2 className="tw:mb-4 tw:text-left tw:xs:text-2xl tw:text-lg">
+          <h2 className="tw:xs:mb-8 tw:mb-5 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
         )}
