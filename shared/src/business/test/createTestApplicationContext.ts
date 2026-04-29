@@ -480,7 +480,7 @@ export const createTestApplicationContext = () => {
     }),
   };
 
-  const mockGetSQSMessagingClient = {
+  const mockGetLongTimeoutSQSMessagingClient = {
     send: jest.fn().mockResolvedValue({}),
   };
 
@@ -560,9 +560,9 @@ export const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getSQSMessagingClient: jest
+    getLongTimeoutSQSMessagingClient: jest
       .fn()
-      .mockReturnValue(mockGetSQSMessagingClient),
+      .mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy({
