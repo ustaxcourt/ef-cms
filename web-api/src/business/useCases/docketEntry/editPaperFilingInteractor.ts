@@ -168,7 +168,7 @@ const saveForLaterStrategy = async ({
       docketEntry: docketEntryEntity,
       documentMetadata: request.documentMetadata,
       userId: user.userId,
-      numberOfPages
+      numberOfPages,
     });
 
     await updateAndSaveWorkItem({
@@ -181,20 +181,23 @@ const saveForLaterStrategy = async ({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
+
+    const { clientConnectionId, docketEntryId } = request;
+
+    onTransactionCommit(async () => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'save_docket_entry_for_later_complete',
+          alertSuccess: { message: 'Entry updated.', overwritable: false },
+          docketEntryId,
+        },
+        userId: user.userId,
+      });
+    });
   });
 
-  const { clientConnectionId, docketEntryId } = request;
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'save_docket_entry_for_later_complete',
-      alertSuccess: { message: 'Entry updated.', overwritable: false },
-      docketEntryId,
-    },
-    userId: user.userId,
-  });
 };
 
 const multiDocketServeStrategy = async ({
@@ -329,7 +332,7 @@ const serveDocketEntry = async ({
         docketEntry: docketEntryEntity,
         documentMetadata,
         userId: user.userId,
-        numberOfPages
+        numberOfPages,
       });
 
       for (const aCase of caseEntitiesToFileOn) {
@@ -445,7 +448,7 @@ const updateDocketEntry = ({
   docketNumbers,
   documentMetadata,
   userId,
-  numberOfPages
+  numberOfPages,
 }: {
   caseEntity: Case;
   docketEntry: DocketEntry;
@@ -453,7 +456,7 @@ const updateDocketEntry = ({
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
-  numberOfPages?: number
+  numberOfPages?: number;
 }): DocketEntry => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
@@ -488,16 +491,13 @@ const updateDocketEntry = ({
       ...editableFields,
       multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
+      numberOfPages,
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   );
-
-  if (numberOfPages) {
-    updatedDocketEntryEntity.numberOfPages = numberOfPages
-  }
 
   caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
