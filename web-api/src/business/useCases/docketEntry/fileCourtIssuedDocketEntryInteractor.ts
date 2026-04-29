@@ -193,15 +193,6 @@ export const fileCourtIssuedDocketEntry = async (
     }
   });
 
-  if (documentMeta.affectedDocketEntries) {
-    await addAssociatedDocketEntries(
-      casesToUpdate,
-      documentMeta,
-      subjectDocketEntry,
-      false,
-    );
-  }
-
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       documentMeta.eventCode,
