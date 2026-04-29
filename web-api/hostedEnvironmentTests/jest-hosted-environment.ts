@@ -1,14 +1,12 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import fs from 'node:fs';
-import path from 'node:path';
+import { loadTsConfigPaths } from '../../utils/load-tsconfig-paths.mjs';
 
-const tsconfigPath = path.resolve(process.cwd(), './tsconfig.json');
-const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+  moduleNameMapper: pathsToModuleNameMapper(tsConfigPaths, {
     prefix: '<rootDir>/../../',
   }),
   testEnvironment: 'node',
@@ -19,6 +17,7 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  transformIgnorePatterns: ['node_modules/(?!(@nodable/entities)/)'],
 };
 
 export default config;

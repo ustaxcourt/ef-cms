@@ -1,14 +1,12 @@
-/* eslint-disable spellcheck/spell-checker */
-const fs = require('fs');
-
-const sass = require('sass');
+import * as fs from 'fs';
+import * as sass from 'sass';
 
 const { css } = sass.compile(
   'shared/src/business/utilities/htmlGenerator/index-main.scss',
 );
 fs.writeFileSync('shared/src/business/utilities/htmlGenerator/index.scss', css);
 
-// USAGE EXAMPLE: node createModule.js path1/file1 path2/file2
+// USAGE EXAMPLE: npx ts-node --transpile-only createModule.ts path1/file1 path2/file2
 const targets = [
   'shared/src/business/utilities/htmlGenerator/index.pug',
   'shared/src/business/utilities/htmlGenerator/index.scss',
@@ -17,17 +15,10 @@ const targets = [
 // specify mime-types for supported base64 encodings here.
 const BINARY_BASE64 = { png: 'image/png' };
 
-/**
- * Generates a JS file based on name and path of original file.
- * If you change this, you'll need to alter rules to .gitignore,
- * test coverage exclusions, and linter exclusions
- *
- * @param {string} filePath path of original file
- * @returns {string} name of file, but with a JS extension
- */
-const asModulePath = filePath => `${filePath}_.js`;
+// returns the name of original file, but with a JS extension
+const asModulePath = (filePath: string): string => `${filePath}_.js`;
 
-const createModule = filePath => {
+const createModule = (filePath: string): void => {
   const contents = readFile(filePath);
   const escapedContents = contents.replace(/`/gs, '\\`');
   const theCode = `// This is a generated file, do not edit\nmodule.exports =\n  \`${escapedContents}\`;\n`;
@@ -36,15 +27,16 @@ const createModule = filePath => {
   fs.writeFileSync(outputPath, theCode);
 };
 
-const readFile = filePath => {
+const readFile = (filePath: string): string => {
   const base64Ext = Object.keys(BINARY_BASE64).find(extension =>
     filePath.toLowerCase().endsWith(extension),
   );
   const contents = fs.readFileSync(filePath, {
     encoding: base64Ext ? 'base64' : 'utf8',
   });
-  const mimeType = BINARY_BASE64[base64Ext];
-  return base64Ext ? `data:${mimeType};base64,${contents}` : contents;
+  return base64Ext
+    ? `data:${BINARY_BASE64[base64Ext]};base64,${contents}`
+    : contents;
 };
 
 const files = [...targets, ...process.argv.slice(2)];

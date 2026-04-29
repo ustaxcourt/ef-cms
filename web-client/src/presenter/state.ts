@@ -944,6 +944,7 @@ export const baseState = {
   },
   practitionerDetail: {} as PractitionerDetail,
   practitionerDocuments: undefined as unknown[] | undefined,
+  printablePreview: 'trialCalendar' as 'trialCalendar' | 'publicSessionCopy',
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses

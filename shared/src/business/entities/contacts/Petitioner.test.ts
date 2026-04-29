@@ -90,15 +90,15 @@ describe('Petitioner', () => {
   });
 
   describe('optional fields', () => {
-    it('should populate paperPetitionEmail when one is provided', () => {
+    it('should populate contactEmailAddress when one is provided', () => {
       const mockEmail = 'petitioner@example.com';
 
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        paperPetitionEmail: mockEmail,
+        contactEmailAddress: mockEmail,
       });
 
-      expect(entity.paperPetitionEmail).toEqual(mockEmail);
+      expect(entity.contactEmailAddress).toEqual(mockEmail);
     });
 
     it('should populate hasConsentedToElectronicService when one is provided', () => {
