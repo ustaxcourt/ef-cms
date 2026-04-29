@@ -10,6 +10,7 @@ DEPLOYING=0
 for param in "$@"; do
   { [[ "$param" == "--deploying" ]] || [[ "$param" == "-d" ]]; } && DEPLOYING=1
   { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && quiet=1
+  { [[ "$param" == "--aws-only" ]] || [[ "$param" == "-a" ]]; } && AWS_ONLY=1
 done
 
 # friendly aliases
@@ -58,6 +59,9 @@ if [ "${EXIT_CODE}" != "0" ]; then
   return $EXIT_CODE
 fi
 
+if [[ -n "$AWS_ONLY" ]]; then
+  return 0
+fi
 
 if [[ $environment != "local" ]]; then
   source "./scripts/env/environments/00-common"

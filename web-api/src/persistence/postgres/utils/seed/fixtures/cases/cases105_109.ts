@@ -322,7 +322,7 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
         hasConsentedToElectronicService: true,
         isAddressSealed: false,
         name: 'Magee Schmidt',
-        paperPetitionEmail: 'petitioner1@example.com',
+        contactEmailAddress: 'petitioner1@example.com',
         phone: '+1 (477) 509-4351',
         postalCode: '45089',
         sealedAndUnavailable: false,
