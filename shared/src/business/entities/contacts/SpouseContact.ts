@@ -16,7 +16,7 @@ export class SpouseContact extends ContactUpdated {
         .description(
           'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
         ),
-      paperPetitionEmail: JoiValidationConstants.EMAIL.when(
+      contactEmailAddress: JoiValidationConstants.EMAIL.when(
         'hasConsentedToElectronicService',
         {
           is: true,

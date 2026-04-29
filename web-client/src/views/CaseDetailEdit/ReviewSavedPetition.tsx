@@ -99,9 +99,9 @@ export const ReviewSavedPetition = connect(
                             </address>
                             {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                               <>
-                                {form.contactPrimary.paperPetitionEmail && (
+                                {form.contactPrimary.contactEmailAddress && (
                                   <div className="margin-top-1 word-wrap-break-word">
-                                    {form.contactPrimary.paperPetitionEmail}
+                                    {form.contactPrimary.contactEmailAddress}
                                   </div>
                                 )}
                                 {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
@@ -133,9 +133,9 @@ export const ReviewSavedPetition = connect(
                               </address>
                               {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                                 <>
-                                  {form.contactSecondary.paperPetitionEmail && (
+                                  {form.contactSecondary.contactEmailAddress && (
                                     <div className="margin-top-1 word-wrap-break-word">
-                                      {form.contactSecondary.paperPetitionEmail}
+                                      {form.contactSecondary.contactEmailAddress}
                                     </div>
                                   )}
                                   {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (

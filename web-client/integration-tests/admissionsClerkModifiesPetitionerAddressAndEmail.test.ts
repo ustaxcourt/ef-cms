@@ -1,4 +1,4 @@
-import { COUNTRY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -53,7 +53,7 @@ describe('Admissions Clerk modified petitioner address and email', () => {
       'contact.state': 'Adamstown',
     };
 
-    for (let [key, value] of Object.entries(formValues)) {
+    for (const [key, value] of Object.entries(formValues)) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key,
         value,
@@ -85,7 +85,7 @@ describe('Admissions Clerk modified petitioner address and email', () => {
       'contact.updatedEmail': 'thiswillbreak@example.com',
     };
 
-    for (let [key, value] of Object.entries(formValues)) {
+    for (const [key, value] of Object.entries(formValues)) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key,
         value,
