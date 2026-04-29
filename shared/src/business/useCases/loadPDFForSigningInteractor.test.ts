@@ -42,6 +42,18 @@ describe('loadPDFForSigningInteractor', () => {
     expect(result).toEqual('pdf data');
   });
 
+  it('should pass the wasm asset path to pdf.js when loading a document', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockReturnValue(null);
+
+    await loadPDFForSigningInteractor(applicationContext, {} as any);
+
+    expect(mockGetDocument).toHaveBeenCalledWith(
+      expect.objectContaining({ wasmUrl: '/wasm/' }),
+    );
+  });
+
   it('should remove the first page of the PDF if `removeCover` is set to true', async () => {
     applicationContext
       .getPersistenceGateway()
