@@ -18,10 +18,10 @@
     "strict": true,
     "rootDir": "./",
     "paths": {
-      "*": ["./*"],
       "@web-client/*": ["./web-client/src/*"],
       "@web-api/*": ["./web-api/src/*"],
-      "@shared/*": ["./shared/src/*"]
+      "@shared/*": ["./shared/src/*"],
+      "*": ["./*"]
     }
   },
   "ts-node": {

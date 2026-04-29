@@ -29,6 +29,13 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 
+const mockOpenSearchQueueSync = jest.fn();
+jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
+  openSearchGateway: () => ({
+    queueSync: mockOpenSearchQueueSync,
+  }),
+}));
+
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
     '@shared/business/utilities/DateHandler',
@@ -651,13 +658,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should not sync to open search if creating case fails', async () => {
-    const mockOpenSearchQueueSync = jest.fn();
-
-    jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
-      openSearchGateway: () => ({
-        queueSync: mockOpenSearchQueueSync,
-      }),
-    }));
+    mockOpenSearchQueueSync.mockClear();
 
     (createCase as jest.Mock).mockRejectedValueOnce(
       new Error('Database error'),

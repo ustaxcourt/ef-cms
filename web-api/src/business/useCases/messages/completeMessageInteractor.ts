@@ -11,6 +11,7 @@ import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messag
 import { orderBy } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -34,27 +35,33 @@ export const completeMessageInteractor = async (
   const completedMessageIds: string[] = [];
 
   try {
-    for (const message of messages) {
-      await markMessageThreadRepliedTo({
-        parentMessageId: message.parentMessageId,
-      });
+    await withTransaction(async () => {
+      for (const message of messages) {
+        await markMessageThreadRepliedTo({
+          parentMessageId: message.parentMessageId,
+        });
 
-      const messageThread = await getMessageThreadByParentId({
-        parentMessageId: message.parentMessageId,
-      });
+        const messageThread = await getMessageThreadByParentId({
+          parentMessageId: message.parentMessageId,
+        });
 
-      const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
+        const mostRecentMessage = orderBy(
+          messageThread,
+          'createdAt',
+          'desc',
+        )[0];
 
-      const updatedMessage = new Message(mostRecentMessage).validate();
+        const updatedMessage = new Message(mostRecentMessage).validate();
 
-      updatedMessage.markAsCompleted({ message: message.messageBody, user });
+        updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
-      const validatedRawMessage = updatedMessage.validate().toRawObject();
+        const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-      await upsertMessages([validatedRawMessage]);
+        await upsertMessages([validatedRawMessage]);
 
-      completedMessageIds.push(validatedRawMessage.messageId);
-    }
+        completedMessageIds.push(validatedRawMessage.messageId);
+      }
+    });
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
