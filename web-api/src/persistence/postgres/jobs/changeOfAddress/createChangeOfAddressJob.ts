@@ -7,13 +7,15 @@ export async function createChangeOfAddressJob({
   jobId: string;
   docketNumbers: string[];
 }) {
+  const values = docketNumbers.map(docketNumber => {
+    return {
+      jobId,
+      docketNumber,
+    };
+  });
+
   await pgInsertInto({
-    table: 'dwChangeOfAddress',
-    values: [
-      {
-        jobId,
-        remaining: docketNumbers.length,
-      },
-    ],
+    table: 'dwChangeOfAddressNew',
+    values,
   });
 }
