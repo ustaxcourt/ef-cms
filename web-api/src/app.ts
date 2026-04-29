@@ -1217,6 +1217,7 @@ app.post(
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
+  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
 /**
