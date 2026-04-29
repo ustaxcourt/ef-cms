@@ -188,6 +188,10 @@ export default async function ({
             keepStructure: true,
             to: ['.'],
           },
+          {
+            from: ['node_modules/pdfjs-dist/wasm/*'],
+            to: ['./wasm'],
+          },
         ],
       }),
       {
