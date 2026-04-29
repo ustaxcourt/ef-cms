@@ -164,7 +164,6 @@ describe('setDocketNumberFromSearchAction', () => {
     });
     expect(output.docketNumber).toEqual('101-18');
   });
-
   it('returns an empty string if searchTerm is not defined', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
       modules: {
@@ -172,6 +171,19 @@ describe('setDocketNumberFromSearchAction', () => {
       },
       state: {
         header: {},
+      },
+    });
+    expect(output.docketNumber).toEqual('');
+  });
+  it('strips out "/" and "." characters from the search term', async () => {
+    const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        header: {
+          searchTerm: '../',
+        },
       },
     });
     expect(output.docketNumber).toEqual('');

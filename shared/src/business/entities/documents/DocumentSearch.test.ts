@@ -10,6 +10,16 @@ describe('Document Search entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
+  it('fails validation when a path traversal input is supplied in the docketNumber', () => {
+    const documentSearch = new DocumentSearch({
+      docketNumber: '../',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(validationErrors!.docketNumber).toEqual('Enter a valid docket number');
+  });
+
   it('fails validation when both caseTitle and docketNumber are provided as search terms', () => {
     const documentSearch = new DocumentSearch({
       caseTitleOrPetitioner: 'Sam Jackson',
