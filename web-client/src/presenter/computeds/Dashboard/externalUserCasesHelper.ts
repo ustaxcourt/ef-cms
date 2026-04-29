@@ -4,7 +4,7 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Case } from '@shared/business/entities/cases/Case';
-import { dateStringsCompared } from 'shared/src/business/utilities/DateHandler';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 
 export type TAssociatedCaseFormatted = Omit<
   TAssociatedCase,
