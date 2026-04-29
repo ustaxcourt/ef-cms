@@ -25,13 +25,13 @@ describe('DeceasedSpouseContact', () => {
   });
 
   describe('VALIDATION', () => {
-    describe('paperPetitionEmail', () => {
-      it('should return an error message for "paperPetitionEmail" when "hasConsentedToElectronicService" is true', () => {
+    describe('contactEmailAddress', () => {
+      it('should return an error message for "contactEmailAddress" when "hasConsentedToElectronicService" is true', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
             hasConsentedToElectronicService: true,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -39,7 +39,7 @@ describe('DeceasedSpouseContact', () => {
 
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
-          paperPetitionEmail:
+          contactEmailAddress:
             'Enter an email address to register for electronic service',
         });
       });
@@ -49,7 +49,7 @@ describe('DeceasedSpouseContact', () => {
           {
             ...VALID_ENTITY,
             hasConsentedToElectronicService: false,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -59,12 +59,12 @@ describe('DeceasedSpouseContact', () => {
         expect(errors).toEqual(null);
       });
 
-      it('should return an error message for "paperPetitionEmail" if not a valid email string', () => {
+      it('should return an error message for "contactEmailAddress" if not a valid email string', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
             hasConsentedToElectronicService: true,
-            paperPetitionEmail: 'not a valid email string',
+            contactEmailAddress: 'not a valid email string',
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -72,7 +72,7 @@ describe('DeceasedSpouseContact', () => {
 
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
-          paperPetitionEmail:
+          contactEmailAddress:
             'Enter email address in format: yourname@example.com',
         });
       });

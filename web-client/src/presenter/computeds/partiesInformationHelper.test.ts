@@ -358,12 +358,12 @@ describe('partiesInformationHelper', () => {
       );
     });
 
-    it('should set formattedPaperPetitionEmail to "Not provided" when a paper petition email has not been provided for the petitioner', () => {
+    it('should set formattedContactEmailAddress to "Not provided" when a paper petition email has not been provided for the petitioner', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockPrivatePractitioner),
           caseDetail: {
-            petitioners: [{ ...mockPetitioner, paperPetitionEmail: undefined }],
+            petitioners: [{ ...mockPetitioner, contactEmailAddress: undefined }],
             privatePractitioners: [mockPrivatePractitioner],
           },
           screenMetadata: {
@@ -374,20 +374,20 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
+      expect(result.formattedPetitioners[0].formattedContactEmailAddress).toBe(
         'Not Provided',
       );
     });
 
-    it('should set formattedPaperPetitionEmail to the value of paper petition email when it has been provided for the petitioner', () => {
-      const mockPaperPetitionEmail = 'mockUser@example.com';
+    it('should set formattedContactEmailAddress to the value of paper petition email when it has been provided for the petitioner', () => {
+      const mockContactEmailAddress = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockPrivatePractitioner),
           caseDetail: {
             petitioners: [
-              { ...mockPetitioner, paperPetitionEmail: mockPaperPetitionEmail },
+              { ...mockPetitioner, contactEmailAddress: mockContactEmailAddress },
             ],
             privatePractitioners: [mockPrivatePractitioner],
           },
@@ -399,13 +399,13 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
-        mockPaperPetitionEmail,
+      expect(result.formattedPetitioners[0].formattedContactEmailAddress).toBe(
+        mockContactEmailAddress,
       );
     });
 
-    it('should set showPaperPetitionEmail flag to true when their contact info is not sealed and the user is an internal user', () => {
-      const mockPaperPetitionEmail = 'mockUser@example.com';
+    it('should set showContactEmailAddress flag to true when their contact info is not sealed and the user is an internal user', () => {
+      const mockContactEmailAddress = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -414,7 +414,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [
               {
                 ...mockPetitioner,
-                paperPetitionEmail: mockPaperPetitionEmail,
+                contactEmailAddress: mockContactEmailAddress,
                 sealedAndUnavailable: false,
               },
             ],
@@ -424,11 +424,11 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(true);
+      expect(result.formattedPetitioners[0].showContactEmailAddress).toBe(true);
     });
 
-    it('should set showPaperPetitionEmail flag to false when their contact info is sealed and the user is an internal user', () => {
-      const mockPaperPetitionEmail = 'mockUser@example.com';
+    it('should set showContactEmailAddress flag to false when their contact info is sealed and the user is an internal user', () => {
+      const mockContactEmailAddress = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -437,7 +437,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [
               {
                 ...mockPetitioner,
-                paperPetitionEmail: mockPaperPetitionEmail,
+                contactEmailAddress: mockContactEmailAddress,
                 sealedAndUnavailable: true,
               },
             ],
@@ -447,11 +447,11 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+      expect(result.formattedPetitioners[0].showContactEmailAddress).toBe(false);
     });
 
-    it('should set showPaperPetitionEmail flag to false when their contact info is not sealed and the user is an external user', () => {
-      const mockPaperPetitionEmail = 'mockUser@example.com';
+    it('should set showContactEmailAddress flag to false when their contact info is not sealed and the user is an external user', () => {
+      const mockContactEmailAddress = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -460,7 +460,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [
               {
                 ...mockPetitioner,
-                paperPetitionEmail: mockPaperPetitionEmail,
+                contactEmailAddress: mockContactEmailAddress,
                 sealedAndUnavailable: false,
               },
             ],
@@ -470,11 +470,11 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+      expect(result.formattedPetitioners[0].showContactEmailAddress).toBe(false);
     });
 
     it('should not display paper petition email when the feature flag is off', () => {
-      const mockPaperPetitionEmail = 'mockUser@example.com';
+      const mockContactEmailAddress = 'mockUser@example.com';
 
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -483,7 +483,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [
               {
                 ...mockPetitioner,
-                paperPetitionEmail: mockPaperPetitionEmail,
+                contactEmailAddress: mockContactEmailAddress,
                 sealedAndUnavailable: false,
               },
             ],
@@ -495,7 +495,7 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+      expect(result.formattedPetitioners[0].showContactEmailAddress).toBe(false);
     });
 
     describe('showRemoveEmailButton', () => {
