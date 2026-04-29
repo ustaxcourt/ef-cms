@@ -1,3 +1,5 @@
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+
 export const respondentUpdatesAddress = cerebralTest => {
   return it('respondent updates address', async () => {
     await cerebralTest.runSequence('gotoUserContactEditSequence');
@@ -15,7 +17,7 @@ export const respondentUpdatesAddress = cerebralTest => {
       contact: { address1: expect.anything() },
     });
 
-    cerebralTest.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
+    cerebralTest.updatedRespondentAddress = `UPDATED ADDRESS ${getCurrentDateTimeInMillis()}`;
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
