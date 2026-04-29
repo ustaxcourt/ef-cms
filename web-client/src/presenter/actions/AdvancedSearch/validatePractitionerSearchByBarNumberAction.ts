@@ -7,18 +7,27 @@ import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSe
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
+ * @param {object} providers.store the cerebral store object
  * @returns {Promise<*>} the success or error path
  */
 export const validatePractitionerSearchByBarNumberAction = ({
   get,
   path,
+  store,
 }: ActionProps) => {
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );
 
+  const trimmedBarNumber = barNumber?.trim();
+
+  store.set(
+    state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
+    trimmedBarNumber,
+  );
+
   const errors = new BarNumberSearchValidation({
-    barNumber: barNumber?.trim(),
+    barNumber: trimmedBarNumber,
   }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);

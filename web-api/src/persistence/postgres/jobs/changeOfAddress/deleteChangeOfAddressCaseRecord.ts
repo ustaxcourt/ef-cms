@@ -2,7 +2,7 @@ import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDe
 
 export async function deleteChangeOfAddressCaseRecord(jobId: string) {
   await pgDeleteFrom({
-    table: 'dwChangeOfAddress',
+    table: 'dwChangeOfAddressNew',
     where: cb => cb.where('jobId', '=', jobId),
   });
 }
