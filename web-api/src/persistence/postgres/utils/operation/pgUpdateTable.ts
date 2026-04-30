@@ -1,5 +1,5 @@
-import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-schema';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { UpdateQueryBuilder, UpdateResult } from 'kysely';
 import type { UpdateObjectExpression } from 'node_modules/kysely/dist/cjs/parser/update-set-parser';

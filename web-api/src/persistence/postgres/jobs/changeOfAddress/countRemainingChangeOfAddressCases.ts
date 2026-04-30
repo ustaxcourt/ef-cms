@@ -1,11 +1,11 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export async function countRemainingChangeOfAddressCases(
   jobId: string,
 ): Promise<number> {
   return getDbReader(async reader => {
     const query = reader
-      .selectFrom('dwChangeOfAddressNew')
+      .selectFrom('dwChangeOfAddress')
       .where('jobId', '=', jobId);
 
     const remainingCases = await query

@@ -7,7 +7,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getUniqueValues } from './trial-sessions-report-helpers';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 
