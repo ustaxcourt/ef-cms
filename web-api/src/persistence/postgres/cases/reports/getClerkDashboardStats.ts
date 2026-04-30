@@ -3,7 +3,7 @@ import {
   FORMATS,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
 
 export enum Month {
