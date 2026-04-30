@@ -10,7 +10,10 @@ import {
   OPENSEARCH_SYNC_ACTIONS,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  getCurrentDateTimeInMillis,
+} from '@shared/business/utilities/DateHandler';
 import { indexOpenSearchCases } from 'web-api/elasticsearch/cases/indexOpenSearchCases';
 
 const scriptConfig: ScriptConfig = {
@@ -53,7 +56,7 @@ async function main() {
     const message = {
       payload: casesToIndex.map(c => c.docketNumber),
       type: 'dwCase' as OpenSearchSyncMessageType,
-      timestamp: Date.now().toString(),
+      timestamp: `${getCurrentDateTimeInMillis()}`,
       action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     };
     await indexOpenSearchCases({ message });
