@@ -27,7 +27,7 @@ jest.mock('pg', () => {
     Pool,
   };
 });
-import { getConnection } from '@web-api/getConnection';
+import { getConnection } from '@web-api/persistence/postgres/getConnection';
 import { environment } from '@web-api/environment';
 import { formatNow as formatNowMock } from '@shared/business/utilities/DateHandler';
 

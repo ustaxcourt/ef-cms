@@ -42,7 +42,7 @@ import {
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
 import type { Database } from '@web-api/persistence/postgres/database-schema';
-import { getConnection } from '@web-api/getConnection';
+import { getConnection } from '@web-api/persistence/postgres/getConnection';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 
 // ============================================================================
