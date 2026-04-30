@@ -15,7 +15,7 @@ import {
 } from './truncate-postgres.helpers';
 import { getDbWriter } from '@web-api/persistence/postgres/database';
 
-jest.mock('@web-api/database', () => ({
+jest.mock('@web-api/persistence/postgres/database', () => ({
   getDbWriter: jest.fn(),
 }));
 
