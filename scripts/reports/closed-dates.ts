@@ -8,7 +8,7 @@ import {
 import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 
 const thisYear = getNowObject().year;

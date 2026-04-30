@@ -4,7 +4,7 @@ import {
   formatDateString,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const incrementCounter = async (twoDigitYear: string): Promise<number> => {
   const nextTwoDigitYear = parseInt(twoDigitYear) + 1;

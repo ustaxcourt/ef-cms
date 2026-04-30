@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { CasesClosedReturnType } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { roundDateDownToNearestHour } from '@shared/business/utilities/DateHandler';
 
 type ClosedCaseResult = {

@@ -35,7 +35,7 @@ import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { ModuleDefinition } from 'cerebral';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
@@ -539,7 +539,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
-    httpAgent: new Agent({ keepAlive: false })
+    httpAgent: new Agent({ keepAlive: false }),
   });
 
   cerebralTest.setState('caseDetail', response.data);
@@ -568,9 +568,9 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = require('form-data');
   // @ts-expect-error
-  global.Blob = (() => fakeFile);
+  global.Blob = () => fakeFile;
   // @ts-expect-error
-  global.File = (() => fakeFile);
+  global.File = () => fakeFile;
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
