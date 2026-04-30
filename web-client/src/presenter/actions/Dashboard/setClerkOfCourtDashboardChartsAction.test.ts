@@ -1,8 +1,5 @@
-jest.mock('@shared/proxies/reports/getClerkDashboardStatsProxy');
-
 import { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { getClerkDashboardStatsInteractor } from '@shared/proxies/reports/getClerkDashboardStatsProxy';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setClerkOfCourtDashboardChartsAction } from './setClerkOfCourtDashboardChartsAction';
@@ -47,10 +44,14 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
   };
 
   beforeEach(() => {
-    (getClerkDashboardStatsInteractor as jest.Mock).mockResolvedValue(
-      mockStats,
-    );
     presenter.providers.applicationContext = applicationContext;
+
+    applicationContext.getUseCases = () =>
+      ({
+        getClerkDashboardStatsInteractor: jest
+          .fn()
+          .mockResolvedValue(mockStats),
+      }) as any;
   });
 
   it('should set petitionsByMonth datasets with electronic and paper series', async () => {
