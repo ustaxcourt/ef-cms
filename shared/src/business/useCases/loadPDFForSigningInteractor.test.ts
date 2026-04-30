@@ -53,7 +53,7 @@ describe('loadPDFForSigningInteractor', () => {
     });
 
     expect(mockGetDocument).toHaveBeenCalledWith(
-      expect.objectContaining({ wasmUrl: 'wasm/' }),
+      expect.objectContaining({ wasmUrl: '/wasm/' }),
     );
   });
 
