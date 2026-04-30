@@ -8,7 +8,7 @@ import {
 } from './helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { petitionerUser } from '@shared/test/mockUsers';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
