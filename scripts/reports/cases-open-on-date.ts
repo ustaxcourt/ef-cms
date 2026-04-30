@@ -7,7 +7,7 @@ import {
 import { appendFileSync } from 'fs';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import {
   getJsDateFromIso,
   getNowObject,
