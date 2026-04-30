@@ -118,7 +118,12 @@ function constructCaseForUser({
     isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)
   ) {
     return useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user, filtered: true }).toRawObject())
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
       : new Case(rawCase, { authorizedUser: user, filtered: true });
   }
 
@@ -150,9 +155,20 @@ function constructCaseForUser({
 
   // Petitioners and practitioners on a case have full read access to the case
   if (userIsAssociated) {
-    return useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user, filtered: true }).toRawObject())
+    const caseResult = useDTO
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
       : new Case(rawCase, { authorizedUser: user, filtered: true });
+
+    for (const petitioner of caseResult.petitioners) {
+      delete petitioner.contactEmailAddress;
+    }
+
+    return caseResult;
   }
 
   // IRS super users have full read access to all cases with served petitions
@@ -163,7 +179,12 @@ function constructCaseForUser({
     })
   ) {
     return useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user, filtered: true }).toRawObject())
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
       : new Case(rawCase, { authorizedUser: user, filtered: true });
   }
 

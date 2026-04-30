@@ -11,6 +11,7 @@ import {
   uploadPetition,
   wait,
 } from './helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
@@ -28,7 +29,7 @@ describe('petitioner files document', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
+  const trialLocation = `Jacksonville, Florida, ${getCurrentDateTimeInMillis()}`;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, { trialLocation });

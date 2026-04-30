@@ -277,9 +277,7 @@ const createTestApplicationContext = () => {
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),
-    isValidPastDate: jest
-      .fn()
-      .mockImplementation(DateHandler.isValidPastDate),
+    isValidPastDate: jest.fn().mockImplementation(DateHandler.isValidPastDate),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
@@ -425,6 +423,11 @@ const createTestApplicationContext = () => {
     sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
+  const mockGetLongTimeoutSQSMessagingClient = {
+    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockResolvedValue({}),
+  };
+
   const mockBroadcastGateway = {
     postMessage: jest.fn(),
   };
@@ -488,6 +491,7 @@ const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
+    mockGetLongTimeoutSQSMessagingClient: jest.fn().mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
