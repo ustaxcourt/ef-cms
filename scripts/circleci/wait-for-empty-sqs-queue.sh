@@ -12,6 +12,7 @@ QUEUE_URL="https://sqs.${REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/change_of_addre
 POLL_INTERVAL="${1:-30}"
 MAX_WAIT="${2:-3600}"
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 echo "Waiting for SQS queue to drain: ${QUEUE_URL}"
 
 elapsed=0
