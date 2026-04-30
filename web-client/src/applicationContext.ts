@@ -91,7 +91,6 @@ import { createCaseDeadlineInteractor } from '@web-client/proxies/caseDeadline/c
 import { createCaseFromPaperInteractor } from '@web-client/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '@web-client/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@web-client/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
-import { createJudgeUserInteractor } from '@web-client/proxies/judges/createJudgeUserProxy';
 import { createMessageInteractor } from '@web-client/proxies/messages/createMessageProxy';
 import { createPractitionerDocumentInteractor } from '@web-client/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '@web-client/proxies/practitioners/createPractitionerUserProxy';
@@ -392,7 +391,6 @@ const allUseCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createJudgeUserInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
