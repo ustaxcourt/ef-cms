@@ -6,7 +6,7 @@ import {
   getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
 
