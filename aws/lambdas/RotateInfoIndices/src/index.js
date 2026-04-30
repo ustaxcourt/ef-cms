@@ -1,9 +1,9 @@
-import { DateTime } from 'luxon';
-import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import { HttpRequest } from '@smithy/protocol-http';
-import { NodeHttpHandler } from '@smithy/node-http-handler';
-import { Sha256 } from '@aws-crypto/sha256-browser';
-import { SignatureV4 } from '@smithy/signature-v4';
+const { DateTime } = require('luxon');
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+const { HttpRequest } = require('@smithy/protocol-http');
+const { NodeHttpHandler } = require('@smithy/node-http-handler');
+const { Sha256 } = require('@aws-crypto/sha256-browser');
+const { SignatureV4 } = require('@smithy/signature-v4');
 
 const EXPIRATION = Number(process.env.expiration || 90); // days
 
@@ -206,7 +206,6 @@ exports.req = async (verb, path, body) => {
       }
       try {
         responseBody = JSON.parse(responseBody);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         // do nothing
       }

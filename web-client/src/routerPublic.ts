@@ -97,15 +97,6 @@ const router = {
       });
     });
 
-    route('/verify-email..', () => {
-      setPageTitle('Verify Email');
-      const { token } = route.query();
-
-      return app.getSequence('gotoVerifyEmailSequence')({
-        token,
-      });
-    });
-
     // only visible on lower envs
     route('/dawson-library', () => {
       if (process.env.ENV === 'prod') {

@@ -17,6 +17,6 @@ export const verifyUserPendingEmailInteractor = (
     body: {
       token,
     },
-    endpoint: '/auth/verify-email',
+    endpoint: '/users/verify-email',
   });
 };

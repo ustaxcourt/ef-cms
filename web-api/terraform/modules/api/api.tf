@@ -311,12 +311,10 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_method.api_auth_method_options,
       aws_api_gateway_method.api_auth_method_get,
       aws_api_gateway_method.api_auth_method_post,
-      aws_api_gateway_method.api_auth_method_put,
       aws_api_gateway_integration.api_auth_integration_get,
       aws_api_gateway_integration.api_auth_integration_post,
       aws_api_gateway_integration.api_auth_integration_options,
       aws_api_gateway_integration.api_auth_integration_delete,
-      aws_api_gateway_integration.api_auth_integration_put,
       // AUTHORIZER
       aws_api_gateway_authorizer.custom_authorizer,
       // SYSTEM
