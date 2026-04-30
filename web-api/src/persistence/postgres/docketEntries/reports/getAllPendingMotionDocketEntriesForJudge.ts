@@ -7,7 +7,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds,

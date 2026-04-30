@@ -1,6 +1,6 @@
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Kysely, sql } from 'kysely';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 
 /**
  * Tables that must NOT be truncated. `dw_feature_flag` carries application
