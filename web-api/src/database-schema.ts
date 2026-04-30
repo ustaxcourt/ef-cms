@@ -120,7 +120,7 @@ interface DatabaseSchemaType {
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwTrialSessionCase: DatabaseTableMetadata<TrialSessionCaseTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
-  dwChangeOfAddressNew: DatabaseTableMetadata<ChangeOfAddressTable>;
+  dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryRelatedDocketEntry: DatabaseTableMetadata<DocketEntryRelatedDocketEntryTable>;
@@ -184,7 +184,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
   },
-  dwChangeOfAddressNew: {
+  dwChangeOfAddress: {
     table: DEFAULT as ChangeOfAddressTable,
     columns: DW_CHANGE_OF_ADDRESS_COLUMNS,
   },
