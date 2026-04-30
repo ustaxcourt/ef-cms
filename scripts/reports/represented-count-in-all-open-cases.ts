@@ -8,9 +8,9 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from 'web-api/src/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:

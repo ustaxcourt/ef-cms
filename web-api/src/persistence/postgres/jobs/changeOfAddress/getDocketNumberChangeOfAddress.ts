@@ -1,4 +1,4 @@
-import { getDbReader } from "../../database";
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export async function getDocketNumberChangeOfAddress(
   jobId: string,
@@ -11,7 +11,7 @@ export async function getDocketNumberChangeOfAddress(
 > {
   return getDbReader(async reader => {
     const result = reader
-      .selectFrom('dwChangeOfAddressNew')
+      .selectFrom('dwChangeOfAddress')
       .where('jobId', '=', jobId)
       .where('docketNumber', '=', docketNumber)
       .selectAll()
