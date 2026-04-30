@@ -1,8 +1,9 @@
-import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
-import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
+import { PETITIONS_SECTION } from '@shared/business/entities/EntityConstants';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+import { messageModalHelper as messageModalHelperComputed } from '@web-client/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';
 
@@ -65,7 +66,7 @@ export const createNewMessageOnCase = (
     );
 
     cerebralTest.testMessageSubject =
-      subject || `what kind of bear is best? ${Date.now()}`;
+      subject || `what kind of bear is best? ${getCurrentDateTimeInMillis()}`;
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
