@@ -2,7 +2,7 @@ import { Kysely, PostgresDialect } from 'kysely';
 import { Database } from './database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
-import { environment } from './environment';
+import { environment } from '@web-api/environment';
 import fs from 'fs';
 
 let poolConfig: PoolConfig;

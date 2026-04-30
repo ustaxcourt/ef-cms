@@ -4,7 +4,7 @@ import {
   GetCustomCaseReportRequest,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { Case } from '@shared/business/entities/cases/Case';
 

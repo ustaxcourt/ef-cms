@@ -8,7 +8,7 @@ import {
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { getConnection } from '@web-api/getConnection';
+import { getConnection } from '@web-api/persistence/postgres/getConnection';
 
 export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
