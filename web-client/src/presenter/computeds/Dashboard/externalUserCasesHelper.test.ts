@@ -152,22 +152,6 @@ describe('externalUserCasesHelper', () => {
 
     const expectedClosedCasesResult = [
       {
-        caseTitle: 'Case Title for 101-20',
-        createdAtFormatted: '12/22/19',
-        docketNumber: '101-20',
-      },
-      {
-        caseTitle: 'Case Title for 200-20',
-        createdAtFormatted: '12/22/19',
-        docketNumber: '200-20',
-      },
-      {
-        caseCaption: 'Case Title for 104-20',
-        createdAt: '2019-12-22T12:49:10.949Z',
-        docketNumber: '104-20',
-        isRequestingUserAssociated: true,
-      },
-      {
         caseTitle: 'Case Title for 103-20',
         consolidatedCases: [
           {
@@ -188,6 +172,22 @@ describe('externalUserCasesHelper', () => {
         ],
         createdAtFormatted: '',
         docketNumber: '103-20',
+      },
+      {
+        caseTitle: 'Case Title for 101-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '101-20',
+      },
+      {
+        caseTitle: 'Case Title for 200-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '200-20',
+      },
+      {
+        caseCaption: 'Case Title for 104-20',
+        createdAt: '2019-12-22T12:49:10.949Z',
+        docketNumber: '104-20',
+        isRequestingUserAssociated: true,
       },
     ];
     const { closedCaseResults, openCaseResults } = runCompute(
