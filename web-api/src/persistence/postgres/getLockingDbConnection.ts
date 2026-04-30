@@ -3,8 +3,8 @@ import { Database } from './database-schema';
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
-import fs from 'fs';
 import { environment } from '@web-api/environment';
+import fs from 'fs';
 
 let poolConfig: PoolConfig;
 export const getLockingDbConnection = async (): Promise<{
