@@ -316,7 +316,7 @@ If an update is available for DWT:
    1. With the new client version installed, navigate to the `test` environment and attempt to scan a document. Ensure the "client upgrade" modal is not shown.
 - Only update DWT when:
    1. The Windows clients have **all** been confirmed to have received the client update, OR
-   1. The old Windows client and new server version are backwards-compatible. 
+   1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 24.42.0**

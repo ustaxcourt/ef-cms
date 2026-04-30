@@ -38,11 +38,13 @@ export const docketClerkServesOrderWithPaperService = (
       },
     );
 
-    expect(modalHelper.showPaperAlert).toEqual(true);
+    expect(modalHelper.contactsNeedingPaperService).toBeDefined();
     expect(modalHelper.contactsNeedingPaperService).toEqual([
-      {
-        name: 'Daenerys Stormborn, Petitioner',
-      },
+      expect.objectContaining({
+        name: 'Daenerys Stormborn',
+        docketNumber: cerebralTest.docketNumber,
+        formattedContactType: 'Petitioner',
+      }),
     ]);
 
     await cerebralTest.runSequence(

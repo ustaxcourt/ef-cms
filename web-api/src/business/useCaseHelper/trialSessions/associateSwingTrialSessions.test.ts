@@ -11,7 +11,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { updateTrialSession as updateTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('associateSwingTrialSessions', () => {
   let mockCurrentTrialSessionEntity;
@@ -65,10 +65,9 @@ describe('associateSwingTrialSessions', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      getTrialSessionById.mock
-        .calls[0][0].trialSessionId,
-    ).toEqual(MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId);
+    expect(getTrialSessionById.mock.calls[0][0].trialSessionId).toEqual(
+      MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
+    );
   });
 
   it('updates the trial session to be associated with swing session information', async () => {
@@ -81,8 +80,7 @@ describe('associateSwingTrialSessions', () => {
     );
 
     expect(
-      updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
+      updateTrialSession.mock.calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...MOCK_TRIAL_SESSION_FOR_ASSOCIATION,
       swingSession: true,

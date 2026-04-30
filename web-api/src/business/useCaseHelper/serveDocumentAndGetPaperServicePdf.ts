@@ -1,67 +1,98 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
+import { processCaseForService } from './service/processCaseForService';
 import { getDocumentStorageId } from '@shared/business/utilities/getDocumentStorageId';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
   docketEntryId,
+  caseSpecificDocketEntries,
   electronicParties,
   stampedPdf,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntities: Case[];
   docketEntryId: string;
-  stampedPdf?: any;
+  caseSpecificDocketEntries?: Array<{
+    caseEntity: Case;
+    docketEntryId: string;
+  }>;
+  stampedPdf?: Uint8Array;
   electronicParties?: { email: string; name: string }[];
 }): Promise<{ pdfUrl: string } | undefined> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
-  let originalPdfDoc;
-
   const newPdfDoc = await PDFDocument.create();
 
-  for (const caseEntity of caseEntities) {
-    const servedParties = aggregatePartiesForService(caseEntity);
-    if (electronicParties) servedParties.electronic = electronicParties;
-
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
+  if (caseSpecificDocketEntries && caseSpecificDocketEntries.length > 0) {
+    for (const {
       caseEntity,
-      docketEntryId,
-      servedParties,
-    });
+      docketEntryId: caseSpecificDocketEntryId,
+    } of caseSpecificDocketEntries) {
+      await processCaseForService({
+        PDFDocument,
+        applicationContext,
+        caseEntity,
+        docketEntryId: caseSpecificDocketEntryId,
+        electronicParties,
+        loadPdfDocument: async () => {
+          const documentStorageId = getDocumentStorageId({
+            caseDetail: caseEntity,
+            docketEntryId: caseSpecificDocketEntryId,
+          });
+          return await applicationContext.getPersistenceGateway().getDocument({
+            applicationContext,
+            key: documentStorageId,
+          });
+        },
+        newPdfDoc,
+      });
+    }
+  } else {
+    let cachedPdfData: any = null;
+    let cachedDocumentStorageId: string | undefined = undefined;
 
-    if (servedParties.paper.length > 0) {
-      if (!originalPdfDoc) {
-        if (stampedPdf) {
-          originalPdfDoc = await PDFDocument.load(stampedPdf);
-        } else {
+    for (const caseEntity of caseEntities) {
+      await processCaseForService({
+        PDFDocument,
+        applicationContext,
+        caseEntity,
+        docketEntryId,
+        electronicParties,
+        loadPdfDocument: async () => {
+          if (stampedPdf) {
+            return stampedPdf;
+          }
+
           const documentStorageId = getDocumentStorageId({
             caseDetail: caseEntity,
             docketEntryId,
           });
 
-          const pdfData = await applicationContext
-            .getPersistenceGateway()
-            .getDocument({
-              applicationContext,
-              key: documentStorageId,
-            });
-          originalPdfDoc = await PDFDocument.load(pdfData);
-        }
-      }
-      await applicationContext
-        .getUseCaseHelpers()
-        .appendPaperServiceAddressPageToPdf({
-          applicationContext,
-          caseEntity,
-          newPdfDoc,
-          noticeDoc: originalPdfDoc,
-          servedParties,
-        });
+          if (!cachedDocumentStorageId) {
+            cachedDocumentStorageId = documentStorageId;
+            cachedPdfData = await applicationContext
+              .getPersistenceGateway()
+              .getDocument({
+                applicationContext,
+                key: documentStorageId,
+              });
+          }
+
+          if (cachedDocumentStorageId !== documentStorageId) {
+            cachedPdfData = await applicationContext
+              .getPersistenceGateway()
+              .getDocument({
+                applicationContext,
+                key: documentStorageId,
+              });
+          }
+          return cachedPdfData;
+        },
+        newPdfDoc,
+      });
     }
   }
 
@@ -69,7 +100,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
     const paperServicePdfData = await newPdfDoc.save();
     const { url } = await saveFileAndGenerateUrl({
       applicationContext,
-      file: paperServicePdfData,
+      file: paperServicePdfData.buffer,
       useTempBucket: true,
     });
 

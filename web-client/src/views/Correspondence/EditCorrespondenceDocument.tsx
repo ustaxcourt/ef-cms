@@ -113,6 +113,7 @@ export const EditCorrespondenceDocument = connect(
                       Save
                     </Button>
                     <Button
+                      overrideReadOnly
                       link
                       onClick={() => {
                         formCancelToggleCancelSequence();

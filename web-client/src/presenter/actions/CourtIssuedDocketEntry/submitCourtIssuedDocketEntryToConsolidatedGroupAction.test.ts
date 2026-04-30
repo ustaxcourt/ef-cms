@@ -9,16 +9,6 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  } = applicationContext.getConstants();
-
-  const COURT_ISSUED_EVENT_CODES_NO_COVERSHEET =
-    COURT_ISSUED_EVENT_CODES.filter(d => !d.requiresCoversheet).map(
-      d => d.eventCode,
-    );
-
   it('should make a call to file the court issued docket entry', async () => {
     await runAction(submitCourtIssuedDocketEntryToConsolidatedGroupAction, {
       modules: {
@@ -117,52 +107,6 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
     });
   });
 
-  it('should return generateCoversheet true when the eventCode being filed requires a coversheet', async () => {
-    const { output } = await runAction(
-      submitCourtIssuedDocketEntryToConsolidatedGroupAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          caseDetail: {
-            docketNumber: mockDocketNumber,
-          },
-          docketEntryId: mockDocketEntryId,
-          form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
-          },
-        },
-      },
-    );
-
-    expect(output.generateCoversheet).toBe(true);
-  });
-
-  it('should return generateCoversheet false when the eventCode being filed does NOT require a coversheet', async () => {
-    const { output } = await runAction(
-      submitCourtIssuedDocketEntryToConsolidatedGroupAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          caseDetail: {
-            docketNumber: mockDocketNumber,
-          },
-          docketEntryId: mockDocketEntryId,
-          form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
-          },
-        },
-      },
-    );
-
-    expect(output.generateCoversheet).toBe(false);
-  });
-
   it('should return the docketEntryId to props', async () => {
     const { output } = await runAction(
       submitCourtIssuedDocketEntryToConsolidatedGroupAction,
@@ -177,7 +121,7 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
           },
           docketEntryId: mockDocketEntryId,
           form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
+            eventCode: 'O',
           },
         },
       },

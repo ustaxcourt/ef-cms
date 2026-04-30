@@ -54,4 +54,15 @@ describe('getDocumentStorageId', () => {
 
     expect(result).toEqual(mockDocumentStorageId);
   });
+
+  it('should throw an error when no docket entry matches the given id', () => {
+    const nonExistentId = 'non-existent-id';
+
+    expect(() =>
+      getDocumentStorageId({
+        caseDetail: MOCK_CASE,
+        docketEntryId: nonExistentId,
+      }),
+    ).toThrow(`Could not find docketEntry for id: ${nonExistentId}`);
+  });
 });

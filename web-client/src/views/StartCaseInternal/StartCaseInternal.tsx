@@ -103,6 +103,7 @@ export const StartCaseInternal = connect(
                   Create Case
                 </Button>
                 <Button
+                  overrideReadOnly
                   link
                   onClick={() => {
                     formCancelToggleCancelSequence();

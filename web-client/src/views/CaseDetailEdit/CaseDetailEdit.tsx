@@ -64,7 +64,7 @@ export const CaseDetailEdit = connect(
           >
             Review Petition
           </Button>
-          <Button link onClick={() => navigateBackSequence()}>
+          <Button overrideReadOnly link onClick={() => navigateBackSequence()}>
             Cancel
           </Button>
         </div>

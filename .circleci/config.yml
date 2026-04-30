@@ -279,6 +279,29 @@ jobs:
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
+  validate-entities:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    steps:
+      - setup_remote_docker:
+          version: docker29
+          docker_layer_caching: true
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          no_output_timeout: 90m
+          name: Run Entity Validation
+          command: |
+            npm run validation:fingerprint
+
   smoketests:
     parallelism: 9
     docker:
@@ -484,6 +507,10 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
+      - run:
+          name: Cleanup Entity Validation
+          command: |
+            npm run cleanup:entity-validation
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -930,6 +957,10 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
+      - validate-entities:
+          <<: *only-deployed-lower-environments
+          requires:
+            - migrate
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
@@ -949,6 +980,7 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
+            - validate-entities
             - smoketests
             - loadtests
             - smoketests-readonly

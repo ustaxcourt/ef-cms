@@ -164,7 +164,7 @@ export const fileAndServeCourtIssuedDocument = async (
       caseEntities.map(async caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
-            ...omit(docketEntryToServe, 'filedBy'),
+            ...omit(docketEntryToServe, ['filedBy', 'index']),
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
@@ -187,6 +187,8 @@ export const fileAndServeCourtIssuedDocument = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: form.judge,
+            multiDocketedOn: docketNumbers,
+            originallyFiledDocketNumber: subjectCaseDocketNumber,
             numberOfPages,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             scenario: form.scenario,
@@ -243,7 +245,6 @@ export const fileAndServeCourtIssuedDocument = async (
         return fileAndServeDocumentOnOneCase({
           caseEntity,
           docketEntryEntity,
-          subjectCaseDocketNumber,
           user,
           caseHasDeadline,
         });

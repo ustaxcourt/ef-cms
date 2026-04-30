@@ -1,6 +1,7 @@
 import {
   FORMATS,
   calculateISODate,
+  createISODateString,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
@@ -12,6 +13,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  caseServicesSupervisorUser,
   colvinsChambersUser,
   docketClerkUser,
   judgeUser,
@@ -27,8 +29,8 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
+  const TODAY = createISODateString();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
-
   const formattedTrialSessionDetails = withAppContextDecorator(
     formattedTrialSessionDetailsComputed,
     applicationContext,
@@ -50,6 +52,7 @@ describe('formattedTrialSessionDetails', () => {
     termYear: '2019',
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
+    trialSessionId: 'abc-123',
   };
 
   beforeEach(() => {
@@ -69,7 +72,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -84,7 +89,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     let result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -97,7 +104,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     result = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -129,7 +138,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -144,7 +155,9 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
-        trialSession: {},
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
         user: trialClerkUser,
       },
     });
@@ -152,19 +165,31 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: true });
   });
 
-  it('should NOT set canDelete, canEdit, or canClose to true if the trial session does NOT have a start date', () => {
+  it('should NOT set canDelete or canClose to true and editPermissions to none if the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
     const result: any = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          trialSessionId: 'abc-123',
+        },
+        user: trialClerkUser,
+      },
+    });
+
+    expect(result.editPermissions).toBe('none');
+    expect(result.canDelete).toBe(false);
+    expect(result.canClose).toBe(false);
+  });
+
+  it('should return an empty object if trialSessionId is not provided', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
         user: trialClerkUser,
       },
     });
-
-    expect(result.canEdit).toBe(false);
-    expect(result.canDelete).toBe(false);
-    expect(result.canClose).toBe(false);
+    expect(result).toEqual({});
   });
 
   describe('canDelete', () => {
@@ -193,7 +218,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -212,7 +239,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -231,7 +260,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -242,8 +273,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  describe('canEdit', () => {
-    it('should be false when trial session start date is in the past and it is NOT closed', () => {
+  describe('editPermissions', () => {
+    it('should be none when trial session start date is in the past and it is NOT closed', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {
@@ -255,11 +286,11 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be false when trial session start date is in the past and it is closed', () => {
+    it('should be none when trial session start date is in the past and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.closed,
@@ -268,17 +299,19 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be true when trial session start date is in the future, it is NOT closed, the user is not a chambers role', () => {
+    it('should be all when trial session start date is in the future, it is NOT closed, the user is not a chambers role', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -287,18 +320,20 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
 
       expect(result).toMatchObject({
-        canEdit: true,
+        editPermissions: 'all',
       });
     });
 
-    describe('docketClerk user canEdit', () => {
-      it('should be true when canEdit is true and docketClerk user is editing a Special TrialSession', () => {
+    describe('docketClerk user editPermissions', () => {
+      it('should be all when editPermissions is all and docketClerk user is editing a Special TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -308,17 +343,19 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
 
         expect(result).toMatchObject({
-          canEdit: true,
+          editPermissions: 'all',
         });
       });
 
-      it('should be true when canEdit is true and docketClerk user is editing a Motion/Hearing TrialSession', () => {
+      it('should be all when editPermissions is all and docketClerk user is editing a Motion/Hearing TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -328,17 +365,19 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
 
         expect(result).toMatchObject({
-          canEdit: true,
+          editPermissions: 'all',
         });
       });
 
-      it('should be false when docketClerk user sees a non- Motion/Hearing or Special TrialSession', () => {
+      it('should be none when docketClerk user sees a non- Motion/Hearing or Special TrialSession', () => {
         mockTrialSession = {
           ...TRIAL_SESSION,
           sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -348,18 +387,20 @@ describe('formattedTrialSessionDetails', () => {
 
         const result: any = runCompute(formattedTrialSessionDetails, {
           state: {
-            trialSession: {},
+            trialSession: {
+              trialSessionId: 'abc-123',
+            },
             user: docketClerkUser,
           },
         });
 
         expect(result).toMatchObject({
-          canEdit: false,
+          editPermissions: 'none',
         });
       });
     });
 
-    it('should be false when trial session start date is in the future, it is NOT closed, the user is a chambers role', () => {
+    it('should be none when trial session start date is in the future, it is NOT closed, the user is a chambers role', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -368,17 +409,19 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: colvinsChambersUser,
         },
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should  NOT allow judge to edit trial session info page', () => {
+    it('should NOT allow judge to edit trial session info page', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.open,
@@ -387,17 +430,19 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: judgeUser,
         },
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
     });
 
-    it('should be false when trial session start date is in the future and it is closed', () => {
+    it('should be none when trial session start date is in the future and it is closed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         sessionStatus: SESSION_STATUS_GROUPS.closed,
@@ -406,14 +451,54 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
 
       expect(result).toMatchObject({
-        canEdit: false,
+        editPermissions: 'none',
       });
+    });
+
+    it('should have edit permissions be limited if CSS user and start date is today', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: TODAY,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.editPermissions).toBe('limited');
+    });
+
+    it('should have edit permissions be limited if CSS user and start date is in the past', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.editPermissions).toBe('limited');
     });
   });
 
@@ -428,7 +513,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -446,7 +533,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -464,7 +553,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -481,7 +572,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -499,7 +592,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });
@@ -517,7 +612,9 @@ describe('formattedTrialSessionDetails', () => {
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
-          trialSession: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
           user: trialClerkUser,
         },
       });

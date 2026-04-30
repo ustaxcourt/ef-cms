@@ -119,6 +119,7 @@ export const ApplyStamp = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <Button
+                overrideReadOnly
                 link
                 icon={['fa', 'arrow-alt-circle-left']}
                 onClick={() => navigateBackSequence()}

@@ -5,9 +5,18 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
+import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 
 describe('validateTrialSessionInteractor', () => {
-  it('returns a list of errors when the trial session is invalid', () => {
+  it('returns a list of erros when the edit trial session is invalid', () => {
+    const errors = validateTrialSessionInteractor({
+      trialSession: { trialSessionId: '123' } as RawEditTrialSession,
+    });
+
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
+  });
+
+  it('returns a list of errors when the new trial session is invalid', () => {
     const errors = validateTrialSessionInteractor({
       trialSession: {} as RawNewTrialSession,
     });
@@ -15,7 +24,7 @@ describe('validateTrialSessionInteractor', () => {
     expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
-  it('returns null for a valid trial session', () => {
+  it('returns null for a valid new trial session', () => {
     const nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
     const MOCK_TRIAL = {
       estimatedEndDate: `${nextYear}-12-05T00:00:00.000Z`,

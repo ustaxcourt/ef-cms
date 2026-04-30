@@ -10,10 +10,12 @@ export const pgInsertInto = async <T extends keyof Database>({
   table,
   values,
   onConflictColumns = [],
+  excludeFromUpdateColumns = [],
 }: {
   table: T;
   values: InsertExpression<Database, T>;
   onConflictColumns?: AnyColumn<Database, T>[];
+  excludeFromUpdateColumns?: AnyColumn<Database, T>[];
 }) => {
   if (isEmpty(values)) {
     return [];
@@ -24,11 +26,15 @@ export const pgInsertInto = async <T extends keyof Database>({
       let query = writer.insertInto(table).values(values);
 
       if (onConflictColumns.length > 0) {
+        const columnsToSkip = [
+          ...onConflictColumns,
+          ...excludeFromUpdateColumns,
+        ];
         query = query.onConflict(oc =>
           oc.columns(onConflictColumns).doUpdateSet(c => {
             return Object.fromEntries(
               getColumnsForTable(table)
-                .filter(x => !onConflictColumns.includes(x))
+                .filter(x => !columnsToSkip.includes(x))
                 .map(column => [
                   column,
                   // Needed for excluded.${column} to be dynamically filled in
@@ -43,6 +49,6 @@ export const pgInsertInto = async <T extends keyof Database>({
       return await query.returningAll().execute();
     },
     table,
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };

@@ -67,6 +67,7 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
+import { getPublicCaseDocketEntriesInteractor } from '@shared/proxies/getPublicCaseDocketEntriesProxy';
 import { getPublicCaseInteractor } from '@shared/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
@@ -89,6 +90,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
+import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/public/verifyUserPendingEmailProxy';
 import deepFreeze from 'deep-freeze';
 
 const ADVANCED_SEARCH_TABS = {
@@ -104,6 +106,7 @@ const allUseCases = {
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
+  getCaseDocketEntriesInteractor: getPublicCaseDocketEntriesInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
@@ -127,6 +130,7 @@ const allUseCases = {
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
+  verifyUserPendingEmailInteractor,
 };
 tryCatchDecorator(allUseCases);
 

@@ -844,7 +844,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,
-    caseCaption: 'Something Absurd',
+    caseCaption: 'Dacey Cox',
     caseStatusHistory: [
       {
         changedBy: 'Test Petitionsclerk',
@@ -868,7 +868,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     docketNumberSuffix: 'L',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
-    initialCaption: 'Something Absurd',
+    initialCaption: 'Dacey Cox',
     initialDocketNumberSuffix: 'L',
     isPaper: true,
     isSealed: false,
