@@ -5,7 +5,7 @@ import {
   ROLES,
   Role,
 } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
 
 /**
@@ -19,7 +19,8 @@ const isFileAttachedIsNotFalse = sql`de.is_file_attached IS DISTINCT FROM false`
 function getRoleBooleans(role: Role) {
   const isCaseServicesSupervisor = role === ROLES.caseServicesSupervisor;
   return {
-    canViewDocketSection: role === ROLES.docketClerk || isCaseServicesSupervisor,
+    canViewDocketSection:
+      role === ROLES.docketClerk || isCaseServicesSupervisor,
     canViewPetitionsSection:
       role === ROLES.petitionsClerk || isCaseServicesSupervisor,
   };
@@ -63,9 +64,7 @@ export const getDocumentQCInboxCountsForUser = async ({
         sql<string>`COUNT(*) FILTER (WHERE ${inProgressCondition})`.as(
           'inProgressCount',
         ),
-        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as(
-          'inboxCount',
-        ),
+        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as('inboxCount'),
         sql<string>`COUNT(*) FILTER (WHERE w.is_read IS NOT TRUE)`.as(
           'unreadCount',
         ),
@@ -125,9 +124,7 @@ export const getDocumentQCInboxCountsForSection = async ({
         sql<string>`COUNT(*) FILTER (WHERE ${inProgressCondition})`.as(
           'inProgressCount',
         ),
-        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as(
-          'inboxCount',
-        ),
+        sql<string>`COUNT(*) FILTER (WHERE ${inboxCondition})`.as('inboxCount'),
       ])
       .executeTakeFirstOrThrow();
   });
