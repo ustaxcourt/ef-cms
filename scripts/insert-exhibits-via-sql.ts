@@ -71,7 +71,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+// eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
 (async () => {
   if (env === 'local') {
     process.env.AWS_ACCESS_KEY_ID = 'S3RVER';
@@ -124,9 +124,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
     ]);
 
     if (!referenceEntry) {
-      throw new Error(
-        `Reference docket entry ${referenceEntryId} not found.`,
-      );
+      throw new Error(`Reference docket entry ${referenceEntryId} not found.`);
     }
 
     let currentIndex = (maxIndexResult?.maxIndex as number) || 0;
@@ -174,7 +172,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
         await applicationContext.getPersistenceGateway().uploadDocument({
           applicationContext,
           pdfData: pdfBuffer,
-          pdfName: docketEntryId,
+          key: docketEntryId,
         });
 
         // Insert docket entry
@@ -201,9 +199,10 @@ const confirmAction = async (message: string): Promise<boolean> => {
             addToCoversheet: false,
             filedBy: referenceEntry.filedBy,
             filedByRole: 'petitioner',
-            filers: typeof referenceEntry.filers === 'string'
-              ? referenceEntry.filers
-              : JSON.stringify(referenceEntry.filers || [filerId]),
+            filers:
+              typeof referenceEntry.filers === 'string'
+                ? referenceEntry.filers
+                : JSON.stringify(referenceEntry.filers || [filerId]),
             index: currentIndex,
             isDraft: false,
             isFileAttached: true,
@@ -211,24 +210,30 @@ const confirmAction = async (message: string): Promise<boolean> => {
             processingStatus: 'pending',
             relationship: 'primaryDocument',
             scenario: 'Standard',
-            servedParties: typeof referenceEntry.servedParties === 'string'
-              ? referenceEntry.servedParties
-              : JSON.stringify(referenceEntry.servedParties || []),
+            servedParties:
+              typeof referenceEntry.servedParties === 'string'
+                ? referenceEntry.servedParties
+                : JSON.stringify(referenceEntry.servedParties || []),
             servedPartiesCode: referenceEntry.servedPartiesCode || 'B',
-            stampData: typeof referenceEntry.stampData === 'string'
-              ? referenceEntry.stampData
-              : JSON.stringify(referenceEntry.stampData || {}),
+            stampData:
+              typeof referenceEntry.stampData === 'string'
+                ? referenceEntry.stampData
+                : JSON.stringify(referenceEntry.stampData || {}),
             userId: referenceEntry.userId,
           } as any,
         });
 
         exhibitsCreated++;
-        console.log(`  [${exhibitNumber}/${exhibits}] Confirmed (index: ${currentIndex})`);
+        console.log(
+          `  [${exhibitNumber}/${exhibits}] Confirmed (index: ${currentIndex})`,
+        );
       } catch (error: unknown) {
         exhibitsFailed++;
         const errorMessage =
           error instanceof Error ? error.message : String(error);
-        console.error(`  [${exhibitNumber}/${exhibits}] FAILED: ${errorMessage}`);
+        console.error(
+          `  [${exhibitNumber}/${exhibits}] FAILED: ${errorMessage}`,
+        );
         if (verbose) {
           console.error(error);
         }
@@ -250,8 +255,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
       process.exit(1);
     }
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('\nFatal Error:', errorMessage);
     if (verbose) {
       console.error(error);

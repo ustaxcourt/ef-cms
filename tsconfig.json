@@ -38,8 +38,6 @@
     "./cypress-smoketests-readonly.config.ts",
     "./cypress-smoketests-readonly-public.config.ts",
     "./cypress-public.config.ts",
-    "./cypress-real-user-tests.config.ts",
-    "./scripts/create-large-case-with-exhibits.ts",
-    "./scripts/insert-exhibits-via-sql.ts"
+    "./cypress-real-user-tests.config.ts"
   ]
 }
