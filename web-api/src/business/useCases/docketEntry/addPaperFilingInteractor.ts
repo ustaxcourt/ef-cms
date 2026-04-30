@@ -29,7 +29,7 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -230,7 +230,7 @@ export const addPaperFiling = async (
       });
       const electronicParties =
         currentDocketEntry?.eventCode ===
-        INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
           ? []
           : undefined;
 
@@ -252,20 +252,24 @@ export const addPaperFiling = async (
         ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
         : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_complete',
-        alertSuccess: {
-          message: successMessage,
-          overwritable: false,
+    onTransactionCommit(async () => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_document_complete',
+          alertSuccess: {
+            message: successMessage,
+            overwritable: false,
+          },
+          docketEntryId,
+          pdfUrl: paperServicePdfUrl,
         },
-        docketEntryId,
-        pdfUrl: paperServicePdfUrl,
-      },
-      userId: user.userId,
+        userId: user.userId,
+      });
     });
+
+
   });
 };
 
