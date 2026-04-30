@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getDbReader, getDbWriter } from '@web-api/database';
+import { getDbReader, getDbWriter } from '@web-api/persistence/postgres/database';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { sql } from 'kysely';
 import pLimit from 'p-limit';

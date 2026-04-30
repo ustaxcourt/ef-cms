@@ -20,7 +20,7 @@ jest.mock('pg', () => {
     Pool,
   };
 });
-import { getConnection } from '@web-api/getConnection';
+import { getConnection } from '@web-api/persistence/postgres/getConnection';
 import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
