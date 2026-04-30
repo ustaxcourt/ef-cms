@@ -34,10 +34,10 @@ describe('loadPDFForSigningInteractor', () => {
       .getPersistenceGateway()
       .getDocument.mockReturnValue(null);
 
-    const result = await loadPDFForSigningInteractor(
-      applicationContext,
-      {} as any,
-    );
+    const result = await loadPDFForSigningInteractor(applicationContext, {
+      docketNumber: '101-20',
+      documentStorageId: 'abc',
+    });
 
     expect(result).toEqual('pdf data');
   });
@@ -47,10 +47,13 @@ describe('loadPDFForSigningInteractor', () => {
       .getPersistenceGateway()
       .getDocument.mockReturnValue(null);
 
-    await loadPDFForSigningInteractor(applicationContext, {} as any);
+    await loadPDFForSigningInteractor(applicationContext, {
+      docketNumber: '101-20',
+      documentStorageId: 'abc',
+    });
 
     expect(mockGetDocument).toHaveBeenCalledWith(
-      expect.objectContaining({ wasmUrl: '/wasm/' }),
+      expect.objectContaining({ wasmUrl: 'wasm/' }),
     );
   });
 
@@ -60,8 +63,10 @@ describe('loadPDFForSigningInteractor', () => {
       .getDocument.mockReturnValue(null);
 
     await loadPDFForSigningInteractor(applicationContext, {
+      docketNumber: '101-20',
+      documentStorageId: 'abc',
       removeCover: true,
-    } as any);
+    });
 
     expect(removePageMock).toHaveBeenCalled();
     expect(saveMock).toHaveBeenCalled();
@@ -73,8 +78,10 @@ describe('loadPDFForSigningInteractor', () => {
       .getDocument.mockReturnValue(testPdfDoc);
 
     await loadPDFForSigningInteractor(applicationContext, {
+      docketNumber: '101-20',
+      documentStorageId: 'abc',
       onlyCover: true,
-    } as any);
+    });
 
     expect(removePageMock).toHaveBeenCalledTimes(fakePdfPages.length - 1);
     expect(saveMock).toHaveBeenCalled();
@@ -90,8 +97,9 @@ describe('loadPDFForSigningInteractor', () => {
 
     await expect(
       loadPDFForSigningInteractor(applicationContext, {
+        docketNumber: '101-20',
         documentStorageId: mockDocumentStorageId,
-      } as any),
+      }),
     ).rejects.toThrow(
       new Error(`error loading PDF for signing: ${mockDocumentStorageId}`),
     );
