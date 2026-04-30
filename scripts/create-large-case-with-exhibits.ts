@@ -19,7 +19,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const scriptConfig: ScriptConfig = {
-  description: 'Create a petition, serve it, and add exhibits to test large cases',
+  description:
+    'Create a petition, serve it, and add exhibits to test large cases',
   environment: {
     env: 'ENV',
   },
@@ -44,9 +45,13 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: false,
 };
 
-const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
+const {
+  docketNumber: existingDocketNumber,
+  env,
+  exhibits,
+  userId,
+  verbose,
+} = parseArgsAndEnvVars(scriptConfig) as {
   docketNumber: string;
   env: string;
   exhibits: number;
@@ -54,7 +59,7 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
   verbose: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+// eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
 (async () => {
   // For local environment, override AWS credentials to use S3RVER
   if (env === 'local') {
@@ -195,7 +200,7 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
         petitionerAuthorizedUser,
       );
 
-      docketNumber = createCaseResult.docketNumber;
+      ({ docketNumber } = createCaseResult);
       const { docketNumberWithSuffix } = createCaseResult;
       caseCreated = true;
       console.log(`✓ Petition created successfully!`);
@@ -217,13 +222,18 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
         caseServed = true;
         console.log(`✓ Case ${docketNumber} successfully served to IRS!`);
       } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
         console.error(`✗ Failed to serve case: ${errorMessage}`);
         console.log(`  ⚠ Case ${docketNumber} created but NOT served`);
-        console.log(`  → You can manually serve it by logging in as a petitions clerk`);
+        console.log(
+          `  → You can manually serve it by logging in as a petitions clerk`,
+        );
       }
     } else {
-      console.log(`\nSkipping Steps 2 & 3: Using existing case ${existingDocketNumber}`);
+      console.log(
+        `\nSkipping Steps 2 & 3: Using existing case ${existingDocketNumber}`,
+      );
       caseCreated = true;
       caseServed = true;
     }
@@ -233,7 +243,8 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
     console.log('This may take several minutes...\n');
 
     // Get the case to retrieve petitioner contact ID for filers
-    const { getCaseByDocketNumber } = await import('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
+    const { getCaseByDocketNumber } =
+      await import('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
     const caseRecord = await getCaseByDocketNumber({ docketNumber });
     const petitionerContactId = caseRecord.petitioners?.[0]?.contactId;
 
@@ -247,10 +258,7 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
     const totalBatches = Math.ceil(exhibits / batchSize);
 
     for (let batch = 0; batch < totalBatches; batch++) {
-      const exhibitsInBatch = Math.min(
-        batchSize,
-        exhibits - batch * batchSize,
-      );
+      const exhibitsInBatch = Math.min(batchSize, exhibits - batch * batchSize);
 
       // Prepare all exhibit file IDs and upload PDFs in parallel
       const exhibitFileIds: string[] = [];
@@ -278,7 +286,9 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
         const exhibitFileId = exhibitFileIds[i];
         const exhibitNumber = batch * batchSize + i + 1;
 
-        console.log(`  → Filing exhibit ${exhibitNumber} (ID: ${exhibitFileId})...`);
+        console.log(
+          `  → Filing exhibit ${exhibitNumber} (ID: ${exhibitFileId})...`,
+        );
 
         // Create exhibit metadata
         const exhibitMetadata = {
@@ -305,7 +315,8 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
           console.log(`    ✓ Exhibit ${exhibitNumber} filed successfully`);
         } catch (error: unknown) {
           exhibitsFailed++;
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           console.error(
             `    ✗ Failed to file exhibit ${exhibitNumber}: ${errorMessage}`,
           );
@@ -314,9 +325,7 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
 
       const exhibitsCompleted = Math.min((batch + 1) * batchSize, exhibits);
       const percentComplete = ((exhibitsCompleted / exhibits) * 100).toFixed(1);
-      console.log(
-        `\n  ━━━ Batch ${batch + 1}/${totalBatches} Complete ━━━`,
-      );
+      console.log(`\n  ━━━ Batch ${batch + 1}/${totalBatches} Complete ━━━`);
       console.log(
         `  Progress: ${exhibitsCompleted}/${exhibits} exhibits filed (${percentComplete}%)\n`,
       );
@@ -343,7 +352,8 @@ const { docketNumber: existingDocketNumber, env, exhibits, userId, verbose } = p
       console.log('');
     }
 
-    const allSuccess = caseCreated && caseServed && exhibitsCreated === exhibits;
+    const allSuccess =
+      caseCreated && caseServed && exhibitsCreated === exhibits;
     if (allSuccess) {
       console.log('✓ Script completed successfully!\n');
     } else {
