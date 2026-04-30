@@ -1,5 +1,5 @@
 import { Message, RawMessage } from '@shared/business/entities/Message';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { toKyselyNewMessage } from './mapper';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';

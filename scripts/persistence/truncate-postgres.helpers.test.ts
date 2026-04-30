@@ -7,15 +7,15 @@ import {
   PostgresQueryCompiler,
   QueryResult,
 } from 'kysely';
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import {
   PRESERVED_TABLES,
   getTruncatableTables,
   truncateAllPostgresTables,
 } from './truncate-postgres.helpers';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 
-jest.mock('@web-api/database', () => ({
+jest.mock('@web-api/persistence/postgres/database', () => ({
   getDbWriter: jest.fn(),
 }));
 
