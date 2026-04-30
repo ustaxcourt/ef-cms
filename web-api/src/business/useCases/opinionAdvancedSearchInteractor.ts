@@ -5,7 +5,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
-import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
+import {
+  InternalDocumentSearchResult,
+  RawInternalDocumentSearchResult,
+} from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -35,7 +38,9 @@ export const opinionAdvancedSearchInteractor = async (
     limit?: number;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  results: RawInternalDocumentSearchResult[];
+}> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }

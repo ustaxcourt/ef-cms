@@ -4,7 +4,10 @@ import {
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
-import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import {
+  PublicDocumentSearchResult,
+  RawPublicDocumentSearchResult,
+} from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -29,7 +32,9 @@ export const orderPublicSearchInteractor = async (
     startDate: string;
     limit?: number;
   },
-) => {
+): Promise<{
+  results: RawPublicDocumentSearchResult[];
+}> => {
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,

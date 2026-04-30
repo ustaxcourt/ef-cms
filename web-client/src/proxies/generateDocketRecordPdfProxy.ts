@@ -10,7 +10,10 @@ export const generateDocketRecordPdfInteractor = (
     includePartyDetail,
     isIndirectlyAssociated,
   },
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   return post({
     applicationContext,
     body: {

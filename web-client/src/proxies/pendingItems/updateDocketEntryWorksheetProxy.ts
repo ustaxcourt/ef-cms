@@ -9,7 +9,7 @@ export const updateDocketEntryWorksheetInteractor = (
   }: {
     worksheet: RawDocketEntryWorksheet;
   },
-) => {
+): Promise<RawDocketEntryWorksheet> => {
   return post({
     applicationContext,
     body: { worksheet },

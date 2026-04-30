@@ -22,12 +22,11 @@ export const getUserPendingEmailAction = async ({
   const contactIdArray = petitioners.map(p => p.contactId);
 
   // Returns as object {id#: email}, will put values into an array
-  const pendingEmails =
-    (await applicationContext
-      .getUseCases()
-      .getUsersPendingEmailInteractor(applicationContext, {
-        userIds: contactIdArray,
-      })) || {};
+  const pendingEmails = await applicationContext
+    .getUseCases()
+    .getUsersPendingEmailInteractor(applicationContext, {
+      userIds: contactIdArray,
+    });
 
   const allPendingEmails = Object.values(pendingEmails);
 

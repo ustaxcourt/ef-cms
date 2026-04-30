@@ -19,7 +19,6 @@ export const autosaveTrialSessionMinuteSheetAction = async ({
   const currentMinuteSheetFormStateSnapshot = hash(currentMinuteSheetFormState);
   const hasFormChanged =
     oldMinuteSheetFormStateSnapshot !== currentMinuteSheetFormStateSnapshot;
-  let updateMinuteSheetFormState;
   if (hasFormChanged || forceAutosave) {
     const transformedMinuteSheet = transformFormStateToMinuteSheet(
       currentMinuteSheetFormState,
@@ -27,7 +26,7 @@ export const autosaveTrialSessionMinuteSheetAction = async ({
       caseDetail.docketNumber,
     );
 
-    updateMinuteSheetFormState = await updateMinuteSheetInteractor({
+    const updateMinuteSheetFormState = await updateMinuteSheetInteractor({
       docketNumber: caseDetail.docketNumber,
       minuteSheet: transformedMinuteSheet,
       trialSessionId: trialSession.trialSessionId,

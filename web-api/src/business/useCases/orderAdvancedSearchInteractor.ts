@@ -10,7 +10,10 @@ import {
 import { User } from '@shared/business/entities/User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
-import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
+import {
+  InternalDocumentSearchResult,
+  RawInternalDocumentSearchResult,
+} from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -20,7 +23,9 @@ export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
   rawParams: any,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  results: RawInternalDocumentSearchResult[];
+}> => {
   const params =
     rawParams && rawParams.searchParams ? rawParams.searchParams : rawParams;
   const {

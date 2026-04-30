@@ -74,13 +74,14 @@ const assertEmailAvailableForPetitioner = async ({
   const contactIdArray = petitioners.map(p => p.contactId);
 
   // Returns as object {id#: email}, will put values into an array
-  const allUsers =
-    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+  const allUsers = await applicationContext
+    .getUseCases()
+    .getUsersPendingEmailInteractor(
       {
         userIds: contactIdArray,
       },
       authorizedUser,
-    )) || {};
+    );
 
   const allPendingEmails: string[] = Object.values(allUsers);
 
@@ -165,7 +166,7 @@ export const updatePetitionerInformation = async (
 ): Promise<{
   updatedCase: CaseDTO;
   paperServiceParties: any[];
-  paperServicePdfUrl: any;
+  paperServicePdfUrl: string;
 }> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
@@ -277,7 +278,7 @@ export const updatePetitionerInformation = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let serviceUrl;
+  let serviceUrl: string = '';
 
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,

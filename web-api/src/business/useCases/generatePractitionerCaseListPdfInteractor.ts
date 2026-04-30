@@ -16,7 +16,7 @@ export const generatePractitionerCaseListPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ fileId: string; url: string }> => {
   const practitionerUser = (await getUserById({ userId })) as RawPractitioner;
 
   if (!practitionerUser || !practitionerUser.barNumber) {

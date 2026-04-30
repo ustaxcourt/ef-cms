@@ -6,7 +6,7 @@ export const getCaseExistsInteractor = async ({
   docketNumber,
 }: {
   docketNumber: string;
-}) => {
+}): Promise<boolean> => {
   const caseExists = await getCaseExists({
     docketNumber: Case.formatDocketNumber(docketNumber),
   });

@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const unsealDocketEntryInteractor = (
   applicationContext: ClientApplicationContext,
   { docketEntryId, docketNumber },
-) => {
+): Promise<RawDocketEntry> => {
   return put({
     applicationContext,
     body: {

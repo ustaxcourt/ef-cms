@@ -1,26 +1,25 @@
-import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 
-/**
- * getPractitionerByBarNumberInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.barNumber the bar number for the practitioner to get
- * @returns {Practitioner} the retrieved practitioner
- */
 export const getPractitionerByBarNumberInteractor = async (
   _applicationContext: ServerApplicationContext,
   { barNumber }: { barNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<
+  | RawPractitioner
+  | Partial<RawPractitioner & { contact: { state: string } }>[]
+  | undefined
+> => {
   const isLoggedInUser = !!authorizedUser?.userId;
 
   if (
@@ -31,7 +30,7 @@ export const getPractitionerByBarNumberInteractor = async (
   }
   const foundPractitioner = await getPractitionerByBarNumber({ barNumber });
 
-  let practitioner;
+  let practitioner: RawPractitioner | undefined;
 
   if (foundPractitioner) {
     practitioner = new Practitioner(foundPractitioner).validate().toRawObject();
