@@ -4,7 +4,7 @@ import { environment } from '@web-api/environment';
 
 let sqsClient: SQSClient;
 
-export function getSQSMessagingClient() {
+export function getLongTimeoutSQSMessagingClient() {
   if (!sqsClient) {
     sqsClient = new SQSClient({
       maxAttempts: 3,
