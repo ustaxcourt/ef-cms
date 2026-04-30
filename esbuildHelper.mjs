@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable import/no-default-export */
-/* eslint-disable promise/no-nesting */
 import { clean } from 'esbuild-plugin-clean';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
