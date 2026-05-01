@@ -980,6 +980,7 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
+            - validate-entities
             - smoketests
             - loadtests
             - smoketests-readonly
