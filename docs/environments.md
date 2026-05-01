@@ -42,7 +42,7 @@ Once CircleCI is configured, any merge to the corresponding branch will be eligi
 
 ## Teardown
 
-Sometimes you'll find the need to remove an environment to start from a fresh state.  To remove an environment, configure your local machine the same as you would during the [setup](/environments?id=setup) section.
+Sometimes you'll find the need to remove an environment to start from a fresh state.  To remove an environment, first point your terminal session to the environment using the [environment switcher](./additional-resources/environment-switcher.md), then run the following:
 
 ```bash
 npm run destroy:env
@@ -56,5 +56,7 @@ npm run destroy:stale-cases-email-cron <ENV>
 npm run destroy:switch-colors-cron <ENV>
 npm run destroy:wait-for-workflow-cron <ENV>
 ```
+
+## Troubleshooting
 
 See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during the setup and teardown processes.
