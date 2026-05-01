@@ -11,6 +11,7 @@ import {
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 describe('case inventory report journey', () => {
   const cerebralTest = setupTest();
@@ -113,7 +114,7 @@ describe('case inventory report journey', () => {
       name: 'Judge Colvin',
       userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     },
-    trialLocation: `Indianapolis, Indiana, ${Date.now()}`,
+    trialLocation: `Indianapolis, Indiana, ${getCurrentDateTimeInMillis()}`,
   });
   docketClerkViewsTrialSessionList(cerebralTest);
   loginAs(cerebralTest, 'petitionsclerk@example.com');

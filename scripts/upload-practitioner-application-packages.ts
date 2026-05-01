@@ -19,7 +19,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { extname, parse } from 'path';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { toKyselyNewPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
 import { v4 as uuidv4 } from 'uuid';

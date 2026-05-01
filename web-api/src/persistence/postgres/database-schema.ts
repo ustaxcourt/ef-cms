@@ -1,8 +1,8 @@
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { indexOpenSearchCases } from '../elasticsearch/cases/indexOpenSearchCases';
-import { transformOpenSearchCases } from '../elasticsearch/cases/transformOpenSearchCases';
-import { transformOpenSearchDocketEntries } from '../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
-import { indexOpenSearchDocketEntries } from '../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
+import { indexOpenSearchCases } from '../../../elasticsearch/cases/indexOpenSearchCases';
+import { transformOpenSearchCases } from '../../../elasticsearch/cases/transformOpenSearchCases';
+import { transformOpenSearchDocketEntries } from '../../../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
+import { indexOpenSearchDocketEntries } from '../../../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   DW_USER_CASE_NOTE_COLUMNS,
   UserCaseNoteTable,
@@ -76,7 +76,7 @@ import {
   TrialSessionPaperPdfTable,
   TrialSessionTable,
   TrialSessionWorkingCopyTable,
-} from './persistence/postgres/trialSessions/schema';
+} from '@web-api/persistence/postgres/trialSessions/schema';
 import {
   DW_PRACTITIONER_DOCUMENT_COLUMNS,
   PractitionerDocumentTable,
@@ -100,8 +100,8 @@ import {
 import {
   indexOpenSearchUser,
   transformOpenSearchUser,
-} from '../elasticsearch/index-users';
-import { transformOpenSearchUserOnCase } from '../elasticsearch/cases/transformOpenSearchUserOnCase';
+} from '../../../elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from '../../../elasticsearch/cases/transformOpenSearchUserOnCase';
 import {
   BarNumberTable,
   DW_BAR_NUMBER_COLUMNS,
@@ -120,7 +120,7 @@ interface DatabaseSchemaType {
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwTrialSessionCase: DatabaseTableMetadata<TrialSessionCaseTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
-  dwChangeOfAddressNew: DatabaseTableMetadata<ChangeOfAddressTable>;
+  dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryRelatedDocketEntry: DatabaseTableMetadata<DocketEntryRelatedDocketEntryTable>;
@@ -184,7 +184,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
   },
-  dwChangeOfAddressNew: {
+  dwChangeOfAddress: {
     table: DEFAULT as ChangeOfAddressTable,
     columns: DW_CHANGE_OF_ADDRESS_COLUMNS,
   },

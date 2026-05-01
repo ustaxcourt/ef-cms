@@ -8,7 +8,7 @@ import {
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { formatCurrency, formatDate } from '../helpers/formatters';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
 
 const scriptConfig: ScriptConfig = {
