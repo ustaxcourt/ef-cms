@@ -122,17 +122,18 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
+  if (documentContentsId !== undefined && contentToStore !== undefined) {
+    const capturedId = documentContentsId;
+    const capturedContent = contentToStore;
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      contentType: 'application/json',
+      document: Buffer.from(JSON.stringify(capturedContent)),
+      key: capturedId,
+      useTempBucket: false,
+    });
+  }
+
   await withTransaction(async () => {
-    if (documentContentsId !== undefined && contentToStore !== undefined) {
-      const capturedId = documentContentsId;
-      const capturedContent = contentToStore;
-      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        contentType: 'application/json',
-        document: Buffer.from(JSON.stringify(capturedContent)),
-        key: capturedId,
-        useTempBucket: false,
-      });
-    }
 
     await updateCaseAndAssociations({
       authorizedUser,

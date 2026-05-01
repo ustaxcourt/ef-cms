@@ -11,7 +11,7 @@ import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messag
 import { orderBy } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { onTransactionCommit, withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -61,6 +61,17 @@ export const completeMessageInteractor = async (
 
         completedMessageIds.push(validatedRawMessage.messageId);
       }
+
+      onTransactionCommit(async () => {
+        await applicationContext.getNotificationGateway().sendNotificationToUser({
+          applicationContext,
+          message: {
+            action: 'message_completion_success',
+            completedMessageIds,
+          },
+          userId: user.userId,
+        });
+      });
     });
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -75,12 +86,4 @@ export const completeMessageInteractor = async (
       userId: user.userId,
     });
   }
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'message_completion_success',
-      completedMessageIds,
-    },
-    userId: user.userId,
-  });
 };
