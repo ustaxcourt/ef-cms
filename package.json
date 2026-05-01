@@ -165,7 +165,7 @@
     "destroy:api": "cd web-api/terraform/main && ../bin/destroy-app.sh",
     "destroy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/destroy-app-color.sh",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh",
-    "destroy:env": "npx ts-node --transpile-only env-destroy-utils/destroyEnvironment.ts",
+    "destroy:env": "scripts/persistence/truncate-all-persistence.ts",
     "destroy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/destroy-app-color.sh",
     "destroy:reindex-cron": "cd web-api/terraform/applyables/reindex-cron && ../../bin/destroy-reindex-cron.sh",
     "destroy:stale-cases-email-cron": "cd web-api/terraform/applyables/stale-cases-email-cron && ../../bin/destroy-stale-cases-email-cron.sh",
