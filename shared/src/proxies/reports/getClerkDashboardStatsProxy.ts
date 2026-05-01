@@ -1,4 +1,4 @@
-import { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
+import type { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import { get } from '../requests';
 
 export const getClerkDashboardStatsInteractor = (

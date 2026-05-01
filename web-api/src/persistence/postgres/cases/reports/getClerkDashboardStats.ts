@@ -98,8 +98,10 @@ export const getClerkDashboardStats = async ({
     if (!resolvedYear) {
       const latestRow = await reader
         .selectFrom('dwCase')
-        .select(sql<number>`EXTRACT(YEAR FROM received_at)`.as('year'))
-        .orderBy(sql`EXTRACT(YEAR FROM received_at)`, 'desc')
+        .select(
+          sql<number>`EXTRACT(YEAR FROM ${sql.ref('receivedAt')})`.as('year'),
+        )
+        .orderBy(sql`EXTRACT(YEAR FROM ${sql.ref('receivedAt')})`, 'desc')
         .limit(1)
         .executeTakeFirst();
       resolvedYear = latestRow
@@ -115,15 +117,15 @@ export const getClerkDashboardStats = async ({
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
       .select(({ fn }) => [
-        sql<number>`EXTRACT(MONTH FROM received_at)`.as('month'),
+        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`.as('month'),
         fn
           .countAll<number>()
           .filterWhere('isPaper', 'is not', true)
           .as('electronic'),
         fn.countAll<number>().filterWhere('isPaper', '=', true).as('paper'),
       ])
-      .groupBy(sql`EXTRACT(MONTH FROM received_at)`)
-      .orderBy(sql`EXTRACT(MONTH FROM received_at)`, 'asc')
+      .groupBy(sql`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`)
+      .orderBy(sql`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`, 'asc')
       .execute();
 
     // ── Cases filed by month (Regular vs Small procedureType split) ──────────
@@ -132,7 +134,7 @@ export const getClerkDashboardStats = async ({
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
       .select(({ fn }) => [
-        sql<number>`EXTRACT(MONTH FROM received_at)`.as('month'),
+        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`.as('month'),
         fn
           .countAll<number>()
           .filterWhere('procedureType', '=', 'Regular')
@@ -142,8 +144,8 @@ export const getClerkDashboardStats = async ({
           .filterWhere('procedureType', '=', 'Small')
           .as('small'),
       ])
-      .groupBy(sql`EXTRACT(MONTH FROM received_at)`)
-      .orderBy(sql`EXTRACT(MONTH FROM received_at)`, 'asc')
+      .groupBy(sql`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`)
+      .orderBy(sql`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`, 'asc')
       .execute();
 
     // ── Closed cases by month (closedDate) ───────────────────────────────────
@@ -152,15 +154,15 @@ export const getClerkDashboardStats = async ({
       .where('closedDate', '>=', yearStart)
       .where('closedDate', '<', yearEnd)
       .select(({ fn }) => [
-        sql<number>`EXTRACT(MONTH FROM closed_date)`.as('month'),
+        sql<number>`EXTRACT(MONTH FROM ${sql.ref('closedDate')})`.as('month'),
         fn.countAll<number>().filterWhere('status', '=', 'Closed').as('closed'),
         fn
           .countAll<number>()
           .filterWhere('status', '=', 'Closed - Dismissed')
           .as('closedDismissed'),
       ])
-      .groupBy(sql`EXTRACT(MONTH FROM closed_date)`)
-      .orderBy(sql`EXTRACT(MONTH FROM closed_date)`, 'asc')
+      .groupBy(sql`EXTRACT(MONTH FROM ${sql.ref('closedDate')})`)
+      .orderBy(sql`EXTRACT(MONTH FROM ${sql.ref('closedDate')})`, 'asc')
       .execute();
 
     // ── Case type counts by quarter (receivedAt) ─────────────────────────────
@@ -169,12 +171,17 @@ export const getClerkDashboardStats = async ({
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
       .select(({ fn }) => [
-        sql<number>`EXTRACT(QUARTER FROM received_at)`.as('quarter'),
+        sql<number>`EXTRACT(QUARTER FROM ${sql.ref('receivedAt')})`.as(
+          'quarter',
+        ),
         'caseType',
         fn.countAll<number>().as('count'),
       ])
-      .groupBy([sql`EXTRACT(QUARTER FROM received_at)`, 'caseType'])
-      .orderBy(sql`EXTRACT(QUARTER FROM received_at)`, 'asc')
+      .groupBy([
+        sql`EXTRACT(QUARTER FROM ${sql.ref('receivedAt')})`,
+        'caseType',
+      ])
+      .orderBy(sql`EXTRACT(QUARTER FROM ${sql.ref('receivedAt')})`, 'asc')
       .execute();
 
     // ── Trial session proceeding type counts ─────────────────────────────────

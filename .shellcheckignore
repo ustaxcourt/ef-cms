@@ -1,3 +1,0 @@
-node_modules/
-scripts/env/set-env.zsh
-scripts/run-once-scripts/migrate-environments.zsh
