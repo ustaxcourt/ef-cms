@@ -1,4 +1,4 @@
-import { saveMinuteSheetToDraftsInteractor } from '@shared/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy';
+import { saveMinuteSheetToDraftsInteractor } from '@web-client/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveMinuteSheetToDraftsAction = async ({ get, path }) => {

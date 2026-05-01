@@ -1,7 +1,10 @@
 import { omit } from 'lodash';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
-import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import {
+  PublicDocumentSearchResult,
+  RawPublicDocumentSearchResult,
+} from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -28,7 +31,9 @@ export const opinionPublicSearchInteractor = async (
     startDate: string;
     limit?: number;
   },
-) => {
+): Promise<{
+  results: RawPublicDocumentSearchResult[];
+}> => {
   const opinionSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,

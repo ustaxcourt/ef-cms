@@ -84,12 +84,12 @@ import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNo
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { sealCaseInteractor } from '@shared/business/useCases/sealCaseInteractor';
+import { sealCaseInteractor } from '@web-api/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/sealDocketEntryInteractor';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
-import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
+import { setNoticesForCalendaredTrialSessionInteractor } from '@web-client/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';

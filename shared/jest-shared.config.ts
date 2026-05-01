@@ -15,7 +15,6 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/business/test/**/*.ts',
     '!src/business/assets/*.ts',
-    '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
     '!src/**/*_.ts',

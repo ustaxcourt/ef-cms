@@ -41,9 +41,9 @@ import {
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
-import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
+import { casePublicSearchInteractor } from '@web-client/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
-import { confirmSignUpInteractor } from '@shared/proxies/auth/confirmSignUpProxy';
+import { confirmSignUpInteractor } from '@web-client/proxies/auth/confirmSignUpProxy';
 import {
   createISODateString,
   formatDateString,
@@ -54,37 +54,37 @@ import {
   formatDocketEntry,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
-import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
-import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
-import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
+import { generatePublicDocketRecordPdfInteractor } from '@web-client/proxies/public/generatePublicDocketRecordPdfProxy';
+import { getAllFeatureFlagsInteractor } from '@web-client/proxies/featureFlag/getAllFeatureFlagsProxy';
+import { getCurrentVersionInteractor } from '@web-client/proxies/getCurrentVersionProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
-import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
-import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getDocumentDownloadUrlInteractor } from '@web-client/proxies/getDocumentDownloadUrlProxy';
+import { getHealthCheckInteractor } from '@web-client/proxies/health/getHealthCheckProxy';
 import { getHttpClient } from '@web-client/providers/httpClient';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
-import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
-import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
-import { getPublicCaseInteractor } from '@shared/proxies/getPublicCaseProxy';
-import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
-import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
-import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
-import { getPublicTrialSessionDetailsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
-import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
-import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
+import { getMaintenanceModePublicInteractor } from '@web-client/proxies/maintenance/getMaintenanceModePublicProxy';
+import { getPublicCaseExistsInteractor } from '@web-client/proxies/getPublicCaseExistsProxy';
+import { getPublicCaseInteractor } from '@web-client/proxies/getPublicCaseProxy';
+import { getPublicJudgesInteractor } from '@web-client/proxies/public/getPublicJudgesProxy';
+import { getPublicPractitionerByBarNumberInteractor } from '@web-client/proxies/public/getPublicPractitionerByBarNumberProxy';
+import { getPublicPractitionersByNameInteractor } from '@web-client/proxies/public/getPublicPractitionersByNameProxy';
+import { getPublicTrialSessionDetailsInteractor } from '@web-client/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
+import { getPublicTrialSessionsInteractor } from '@web-client/proxies/trialSessions/getPublicTrialSessionsProxy';
+import { getPublicUsersInSectionInteractor } from '@web-client/proxies/users/getPublicUsersInSectionProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
-import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
-import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
+import { getTodaysOpinionsInteractor } from '@web-client/proxies/public/getTodaysOpinionsProxy';
+import { getTodaysOrdersInteractor } from '@web-client/proxies/public/getTodaysOrdersProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
-import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
-import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { opinionPublicSearchInteractor } from '@web-client/proxies/opinionPublicSearchProxy';
+import { orderPublicSearchInteractor } from '@web-client/proxies/orderPublicSearchProxy';
 import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
-import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
+import { signUpUserInteractor } from '@web-client/proxies/signUpUserProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';

@@ -9,7 +9,7 @@ export const getPublicCaseInteractor = async ({
   docketNumber,
 }: {
   docketNumber: string;
-}) => {
+}): Promise<PublicCaseDTO | RestrictedCaseDTO> => {
   const rawCaseRecord = await getCaseByDocketNumber({
     docketNumber: Case.formatDocketNumber(docketNumber),
   });
