@@ -19,12 +19,13 @@ export const truncateAllEnvironmentS3Buckets = async ({
   const totals: { [key: string]: number } = {};
 
   const { Buckets } = await s3Client.send(new ListBucketsCommand({}));
-  const environmentBuckets = (Buckets || []).filter(bucket =>
-    bucket.Name?.includes(environmentName),
+  const environmentBuckets = (Buckets || []).filter(
+    (bucket): bucket is { Name: string } =>
+      !!bucket.Name && bucket.Name.includes(environmentName),
   );
 
   for (const bucket of environmentBuckets) {
-    const bucketName = bucket.Name!;
+    const bucketName = bucket.Name;
     let bucketDeleted = 0;
     let keyMarker: string | undefined;
     let versionIdMarker: string | undefined;

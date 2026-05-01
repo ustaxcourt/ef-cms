@@ -110,6 +110,23 @@ describe('truncateAllEnvironmentS3Buckets', () => {
     expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(0);
   });
 
+  it('skips buckets without a Name', async () => {
+    s3Mock.on(ListBucketsCommand).resolves({
+      Buckets: [{ Name: bucketName }, {}], // Last bucket has no Name
+    });
+
+    s3Mock.on(ListObjectVersionsCommand).resolves({ IsTruncated: false });
+
+    const s3Client = new S3Client({});
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
+
+    expect(total).toEqual({ [bucketName]: 0 });
+    expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(1);
+  });
+
   it('skips entries without a Key', async () => {
     s3Mock.on(ListObjectVersionsCommand).resolves({
       Versions: [{ VersionId: 'orphan' }, { Key: 'real.pdf', VersionId: 'v1' }],
