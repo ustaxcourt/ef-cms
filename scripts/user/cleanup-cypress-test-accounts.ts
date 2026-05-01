@@ -34,11 +34,15 @@
  * - This script performs destructive deletes. Verify ENV and target pools before running.
  */
 
-import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  CognitoIdentityProvider,
+  ListUsersCommandOutput,
+  UserType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
-import type { Database } from '../../web-api/src/database-schema';
-import { getConnection } from '../../web-api/src/getConnection';
+import type { Database } from '@web-api/persistence/postgres/database-schema';
+import { getConnection } from '@web-api/persistence/postgres/getConnection';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 
 // ============================================================================
@@ -68,7 +72,9 @@ function sleep(ms: number): Promise<void> {
 // COGNITO
 // ============================================================================
 
-function extractUserInfo(user: UserType): { email: string; userId: string } | null {
+function extractUserInfo(
+  user: UserType,
+): { email: string; userId: string } | null {
   const email = user.Attributes?.find(a => a.Name === 'email')?.Value;
   const userId = user.Attributes?.find(a => a.Name === 'custom:userId')?.Value;
   if (!email || !userId) return null;
@@ -127,7 +133,11 @@ async function deleteCognitoUser({
         return;
       }
       // Handle throttling with retries + jitter
-      if (name === 'TooManyRequestsException' || name === 'LimitExceededException' || name === 'ThrottlingException') {
+      if (
+        name === 'TooManyRequestsException' ||
+        name === 'LimitExceededException' ||
+        name === 'ThrottlingException'
+      ) {
         const maxRetries = COGNITO_MAX_RETRIES;
         let attempt = 0;
         while (attempt < maxRetries) {
@@ -144,7 +154,13 @@ async function deleteCognitoUser({
           } catch (e2: any) {
             const n2 = e2?.name || e2?.__type;
             if (n2 === 'UserNotFoundException') return;
-            if (!(n2 === 'TooManyRequestsException' || n2 === 'LimitExceededException' || n2 === 'ThrottlingException')) {
+            if (
+              !(
+                n2 === 'TooManyRequestsException' ||
+                n2 === 'LimitExceededException' ||
+                n2 === 'ThrottlingException'
+              )
+            ) {
               throw e2;
             }
             // else loop and retry
@@ -161,7 +177,10 @@ async function deleteCognitoUser({
 // POSTGRES
 // ============================================================================
 
-async function deleteAllUserRecords(db: Kysely<Database>, userId: string): Promise<void> {
+async function deleteAllUserRecords(
+  db: Kysely<Database>,
+  userId: string,
+): Promise<void> {
   const deleteUserRecord = db
     .deleteFrom('dwUser')
     .where('userId', '=', userId)
@@ -184,12 +203,14 @@ async function listDbUsersByEmailPrefix(
       db.or([
         db('email', 'ilike', `${emailPrefix}%`),
         db('pendingEmail', 'ilike', `${emailPrefix}%`),
-      ])
+      ]),
     )
     .execute();
 
-  return rows
-    .map(r => ({ email: r.email?.toLowerCase() ?? null, userId: r.userId }));
+  return rows.map(r => ({
+    email: r.email?.toLowerCase() ?? null,
+    userId: r.userId,
+  }));
 }
 
 // ============================================================================
@@ -235,7 +256,10 @@ async function runDbFirstCleanup({
               await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
             }
           } catch (e) {
-            console.error(`[db][${pool.label}] Failed to delete Cognito user ${email}`, e);
+            console.error(
+              `[db][${pool.label}] Failed to delete Cognito user ${email}`,
+              e,
+            );
           }
         }
 
@@ -272,7 +296,9 @@ async function runCognitoCleanupForPool({
     });
 
     if (users.length === 0) {
-      console.log(`[${pool.label}] No users found with prefix "${emailPrefix}"`);
+      console.log(
+        `[${pool.label}] No users found with prefix "${emailPrefix}"`,
+      );
       return;
     }
 
@@ -283,13 +309,19 @@ async function runCognitoCleanupForPool({
         try {
           await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
         } catch (e) {
-          console.error(`[${pool.label}] Failed to delete Cognito user ${email}`, e);
+          console.error(
+            `[${pool.label}] Failed to delete Cognito user ${email}`,
+            e,
+          );
         }
 
         try {
           await deleteAllUserRecords(db, userId);
         } catch (e) {
-          console.error(`[${pool.label}] Failed to delete DB records for ${userId}`, e);
+          console.error(
+            `[${pool.label}] Failed to delete DB records for ${userId}`,
+            e,
+          );
         }
       }),
     );
@@ -332,5 +364,3 @@ main().catch(err => {
   console.error('Unexpected error during cleanup', err);
   process.exit(1);
 });
-
-

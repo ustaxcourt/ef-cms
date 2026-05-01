@@ -1,6 +1,6 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Kysely } from 'kysely';
 import {
   RawWorkItemWithCaseAndDocketEntryInfo,
