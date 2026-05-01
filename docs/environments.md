@@ -45,7 +45,7 @@ Once CircleCI is configured, any merge to the corresponding branch will be eligi
 Sometimes you'll find the need to remove an environment to start from a fresh state.  To remove an environment, first point your terminal session to the environment using the [environment switcher](./additional-resources/environment-switcher.md), then run the following:
 
 ```bash
-npm run destroy:env
+npm run reset:env
 npm run destroy:client <ENV>
 npm run destroy:api <ENV>
 npm run destroy:allColors <ENV>
