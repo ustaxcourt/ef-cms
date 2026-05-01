@@ -193,19 +193,19 @@ export const DocumentViewerDocument = connect(
                   Order Response
                 </Button>
               )}
-              {documentViewerHelper.showApplyStampButton && (
+              {documentViewerHelper.showGrantDenyMotionButton && (
                 <Button
                   link
-                  data-testid="apply-stamp"
-                  icon="stamp"
+                  data-testid="grant-deny-motion"
+                  icon="gavel"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({
-                      path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
+                      path: documentViewerLinksHelper.grantDenyMotionFromCaseDetailsLink,
                       redirectUrl: documentViewerLinksHelper.redirectUrl,
                     });
                   }}
                 >
-                  Apply Stamp
+                  Grant/Deny
                 </Button>
               )}
               {documentViewerHelper.showStatusReportOrderButton && (

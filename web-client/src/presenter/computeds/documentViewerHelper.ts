@@ -108,7 +108,7 @@ export const documentViewerHelper = (
     formattedDocumentToDisplay.qcNeeded &&
     !isRestricted;
 
-  const showApplyStampButton =
+  const showGrantDenyMotionButton =
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
@@ -129,7 +129,7 @@ export const documentViewerHelper = (
     filedLabel,
     servedLabel,
     sealedToTooltip: formattedDocumentToDisplay.sealedToTooltip,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showOrderResponseButton,
     showCompleteQcButton,
     showNotServed,

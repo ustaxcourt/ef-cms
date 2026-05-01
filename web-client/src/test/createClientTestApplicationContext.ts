@@ -70,7 +70,6 @@ import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getF
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
-import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -254,9 +253,6 @@ const createTestApplicationContext = () => {
     getSortableDocketNumber: jest
       .fn()
       .mockImplementation(Case.getSortableDocketNumber),
-    getStampBoxCoordinates: jest
-      .fn()
-      .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     isDateWithinGivenInterval: jest
       .fn()

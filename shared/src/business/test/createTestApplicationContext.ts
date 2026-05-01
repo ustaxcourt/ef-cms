@@ -78,7 +78,6 @@ import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
-import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -265,9 +264,6 @@ export const createTestApplicationContext = () => {
     getSortableDocketNumber: jest
       .fn()
       .mockImplementation(Case.getSortableDocketNumber),
-    getStampBoxCoordinates: jest
-      .fn()
-      .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     isDateWithinGivenInterval: jest
       .fn()

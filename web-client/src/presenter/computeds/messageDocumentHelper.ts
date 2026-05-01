@@ -124,7 +124,7 @@ export const messageDocumentHelper = (
   // It seems like we should be able to get formattedDocumentToDisplay like we do in draftDocumentViewerHelper
   // to avoid the duplication with caseDocument and formattedDocument in this file. However, we are using
   // slightly different properties to pull up caseDocument and formattedDocument. This may be unnecessary.
-  // The variables affected by formattedDocument are showApplyStampButton and showStatusReportOrderButton.
+  // The variables affected by formattedDocument are showGrantDenyMotionButton and showStatusReportOrderButton.
   const { draftDocuments } = applicationContext
     .getUtilities()
     .formatCase(applicationContext, caseDetail, user);
@@ -137,7 +137,7 @@ export const messageDocumentHelper = (
     draftDocuments,
   });
 
-  const showApplyStampButton =
+  const showGrantDenyMotionButton =
     permissions.STAMP_MOTION &&
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode ?? ''));
@@ -194,7 +194,7 @@ export const messageDocumentHelper = (
 
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplayDocumentId}/add-court-issued-docket-entry/${parentMessageId}`;
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplayDocumentId}/sign/${parentMessageId}`;
-  const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
+  const grantDenyMotionFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/grant-deny-motion-create`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
   const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
@@ -203,19 +203,19 @@ export const messageDocumentHelper = (
   return {
     addDocketEntryLink,
     applySignatureLink,
-    applyStampFromMessagesLink,
     archived: isArchived,
     docketEntryId: caseDocument.docketEntryId,
     documentType: caseDocument.documentType,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
+    grantDenyMotionFromMessagesLink,
     index: caseDocument.index,
     messageDetailLink,
     motionOrderResponseFromMessagesLink,
     servePetitionLink,
     showAddDocketEntryButton,
     showApplySignatureButton,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned,
     showEditButtonSigned,

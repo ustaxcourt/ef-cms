@@ -1293,8 +1293,8 @@ describe('messageDocumentHelper', () => {
     expect(result.addDocketEntryLink).toEqual(
       `/case-detail/101-20/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
     );
-    expect(result.applyStampFromMessagesLink).toEqual(
-      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
+    expect(result.grantDenyMotionFromMessagesLink).toEqual(
+      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/grant-deny-motion-create`,
     );
     expect(result.editCorrespondenceLink).toEqual(
       `/case-detail/101-20/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
