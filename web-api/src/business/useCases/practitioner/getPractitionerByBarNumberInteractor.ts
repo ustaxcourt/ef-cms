@@ -1,5 +1,6 @@
 import {
   Practitioner,
+  PublicPractitionerByBarNumberSummary,
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
 import {
@@ -16,9 +17,7 @@ export const getPractitionerByBarNumberInteractor = async (
   { barNumber }: { barNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<
-  | RawPractitioner
-  | Partial<RawPractitioner & { contact: { state: string } }>[]
-  | undefined
+  RawPractitioner | PublicPractitionerByBarNumberSummary[] | undefined
 > => {
   const isLoggedInUser = !!authorizedUser?.userId;
 

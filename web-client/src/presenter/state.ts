@@ -1102,13 +1102,13 @@ export type ServiceIndicatorType =
 
 export type PractitionerDetail = {
   admissionsDate: string;
-  admissionStatus: string;
+  admissionsStatus: string;
   barNumber: string;
   name: string;
   practiceType: PracticeType;
   serviceIndicator?: ServiceIndicatorType;
   userId: string;
-  birthYear?: string;
+  birthYear?: number;
   originalBarState?: string;
   practitionerType?: string;
   middleName?: string;
