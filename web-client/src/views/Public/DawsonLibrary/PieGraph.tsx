@@ -1,11 +1,4 @@
 import React, { useRef } from 'react';
-
-export interface PieGraphData {
-  name: string;
-  value: number;
-  color?: string;
-}
-
 import {
   Pie,
   PieChart,
@@ -15,6 +8,12 @@ import {
   Tooltip,
 } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
+
+export interface PieGraphData {
+  name: string;
+  value: number;
+  color?: string;
+}
 
 const PieSector = (props: PieSectorShapeProps) => {
   // recharts spreads each data entry into the shape props, so color is available directly.
@@ -161,16 +160,15 @@ export const PieGraph = ({
             data={data}
             labelLine={false}
             dataKey="value"
-            nameKey="label"
+            nameKey="name"
             isAnimationActive={isAnimationActive}
             shape={PieSector}
             startAngle={90}
             endAngle={450}
             strokeWidth={2}
             stroke="#000"
-            // className="tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none"
           />
-          <RechartsDevtools />
+          {process.env.NODE_ENV !== 'production' && <RechartsDevtools />}
         </PieChart>
       </div>
     </div>

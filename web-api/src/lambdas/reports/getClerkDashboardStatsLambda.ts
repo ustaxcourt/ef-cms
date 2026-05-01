@@ -7,12 +7,16 @@ export const getClerkDashboardStatsLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async () => {
+    const rawYear = event.queryStringParameters?.year;
+    const parsedYear = rawYear ? parseInt(rawYear, 10) : undefined;
+    if (parsedYear !== undefined && !Number.isFinite(parsedYear)) {
+      return {
+        message: 'Invalid year parameter',
+        statusCode: 400,
+      };
+    }
     return await getClerkDashboardStatsInteractor(
-      {
-        year: event.queryStringParameters?.year
-          ? parseInt(event.queryStringParameters.year)
-          : undefined,
-      },
+      { year: parsedYear },
       authorizedUser,
     );
   });
