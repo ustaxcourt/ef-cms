@@ -114,12 +114,13 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwCase')
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
-      .select([
+      .select(({ fn }) => [
         sql<number>`EXTRACT(MONTH FROM received_at)`.as('month'),
-        sql<number>`COUNT(*) FILTER (WHERE is_paper IS NOT TRUE)`.as(
-          'electronic',
-        ),
-        sql<number>`COUNT(*) FILTER (WHERE is_paper IS TRUE)`.as('paper'),
+        fn
+          .countAll<number>()
+          .filterWhere('isPaper', 'is not', true)
+          .as('electronic'),
+        fn.countAll<number>().filterWhere('isPaper', '=', true).as('paper'),
       ])
       .groupBy(sql`EXTRACT(MONTH FROM received_at)`)
       .orderBy(sql`EXTRACT(MONTH FROM received_at)`, 'asc')
@@ -130,14 +131,16 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwCase')
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
-      .select([
+      .select(({ fn }) => [
         sql<number>`EXTRACT(MONTH FROM received_at)`.as('month'),
-        sql<number>`COUNT(*) FILTER (WHERE procedure_type = 'Regular')`.as(
-          'regular',
-        ),
-        sql<number>`COUNT(*) FILTER (WHERE procedure_type = 'Small')`.as(
-          'small',
-        ),
+        fn
+          .countAll<number>()
+          .filterWhere('procedureType', '=', 'Regular')
+          .as('regular'),
+        fn
+          .countAll<number>()
+          .filterWhere('procedureType', '=', 'Small')
+          .as('small'),
       ])
       .groupBy(sql`EXTRACT(MONTH FROM received_at)`)
       .orderBy(sql`EXTRACT(MONTH FROM received_at)`, 'asc')
@@ -148,12 +151,13 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwCase')
       .where('closedDate', '>=', yearStart)
       .where('closedDate', '<', yearEnd)
-      .select([
+      .select(({ fn }) => [
         sql<number>`EXTRACT(MONTH FROM closed_date)`.as('month'),
-        sql<number>`COUNT(*) FILTER (WHERE status = 'Closed')`.as('closed'),
-        sql<number>`COUNT(*) FILTER (WHERE status = 'Closed - Dismissed')`.as(
-          'closedDismissed',
-        ),
+        fn.countAll<number>().filterWhere('status', '=', 'Closed').as('closed'),
+        fn
+          .countAll<number>()
+          .filterWhere('status', '=', 'Closed - Dismissed')
+          .as('closedDismissed'),
       ])
       .groupBy(sql`EXTRACT(MONTH FROM closed_date)`)
       .orderBy(sql`EXTRACT(MONTH FROM closed_date)`, 'asc')
@@ -164,10 +168,10 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwCase')
       .where('receivedAt', '>=', yearStart)
       .where('receivedAt', '<', yearEnd)
-      .select([
+      .select(({ fn }) => [
         sql<number>`EXTRACT(QUARTER FROM received_at)`.as('quarter'),
         'caseType',
-        sql<number>`COUNT(*)`.as('count'),
+        fn.countAll<number>().as('count'),
       ])
       .groupBy([sql`EXTRACT(QUARTER FROM received_at)`, 'caseType'])
       .orderBy(sql`EXTRACT(QUARTER FROM received_at)`, 'asc')
@@ -178,7 +182,7 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwTrialSession')
       .where('startDate', '>=', yearStart)
       .where('startDate', '<', yearEnd)
-      .select(['proceedingType', sql<number>`COUNT(*)`.as('count')])
+      .select(({ fn }) => ['proceedingType', fn.countAll<number>().as('count')])
       .groupBy('proceedingType')
       .execute();
 
@@ -187,7 +191,7 @@ export const getClerkDashboardStats = async ({
       .selectFrom('dwTrialSession')
       .where('startDate', '>=', yearStart)
       .where('startDate', '<', yearEnd)
-      .select(['sessionType', sql<number>`COUNT(*)`.as('count')])
+      .select(({ fn }) => ['sessionType', fn.countAll<number>().as('count')])
       .groupBy('sessionType')
       .execute();
 
@@ -197,9 +201,9 @@ export const getClerkDashboardStats = async ({
       .where('startDate', '>=', yearStart)
       .where('startDate', '<', yearEnd)
       .where('sessionType', '=', 'Special')
-      .select(['trialLocation', sql<number>`COUNT(*)`.as('count')])
+      .select(({ fn }) => ['trialLocation', fn.countAll<number>().as('count')])
       .groupBy('trialLocation')
-      .orderBy(sql`COUNT(*)`, 'desc')
+      .orderBy(eb => eb.fn.countAll(), 'desc')
       .limit(10)
       .execute();
 
