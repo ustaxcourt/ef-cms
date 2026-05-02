@@ -29,9 +29,9 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - Infrastructure: `npm run test:infrastructure`. Single file: `npm run test:infrastructure:file -- path/to/file.test.ts`.
   - Document generation: `npm run test:document-generation`. Single file: `npm run test:document-generation:file -- path/to/file.test.ts`.
 - Test-suite ownership (use this to pick the correct suite for an edited file):
-  - `shared/src/**` → `test:shared` (except `shared/src/business/utilities/documentGenerators/**` → `test:document-generation`).
-  - `web-api/src/**` → `test:api`.
-  - `web-client/src/**` unit specs → `test:client:unit`; Cerebral integration specs (`*.integration.test.ts`, `*.e2e.test.ts` under `web-client/integration-tests/`) → `test:client:_integration`.
+  - `shared/**` (including `shared/src/**` and `shared/admin-tools/**`) → `test:shared` (except `shared/src/business/utilities/documentGenerators/**` → `test:document-generation`).
+  - `web-api/**` (including `web-api/src/**` and `web-api/elasticsearch/**`) → `test:api` (except `web-api/hostedEnvironmentTests/**` → `test:api:hosted-environment`).
+  - `web-client/src/**` unit specs → `test:client:unit`; Cerebral integration specs (any `*.test.ts` under `web-client/integration-tests/` or `web-client/integration-tests-public/`) → `test:client:_integration`.
   - `scripts/**` → `test:scripts`.
   - `aws/**` (infrastructure lambdas) → `test:infrastructure`.
 - Cypress: dispatched via [`scripts/run-cypress.sh`](scripts/run-cypress.sh) against configs `cypress.config.ts`, `cypress-public.config.ts`, `cypress-smoketests*.config.ts`, `cypress-real-user-tests.config.ts`. Specs live under [`cypress/`](cypress/) (`deployed-and-local/`, `local-only/`, `readonly/`, `real-users/`).
