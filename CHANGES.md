@@ -12,11 +12,10 @@ npm run ecr:check-version
 #### Upgrade Terraform to `1.15.0`
 
 ```bash
-tfswitch 1.14.8
+tfswitch 1.15.0
 ```
 
 </details>
-
 <details><summary>Support `--aws-only` Flag in the Environment Switcher</summary>
 
 ## Local
