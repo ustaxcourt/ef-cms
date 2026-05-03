@@ -73,10 +73,10 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 - Routing & views
   - Private route table: [`web-client/src/router.ts`](web-client/src/router.ts); public: [`web-client/src/routerPublic.ts`](web-client/src/routerPublic.ts).
   - Sequence registry: [`web-client/src/presenter/presenter.ts`](web-client/src/presenter/presenter.ts) and [`web-client/src/presenter/presenter-public.ts`](web-client/src/presenter/presenter-public.ts).
-  - Cerebral state shape: [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts) — do not introduce top-level state paths without editing this file.
+  - Cerebral state shape: private app: [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts); public app: [`web-client/src/presenter/state-public.ts`](web-client/src/presenter/state-public.ts) — do not introduce top-level state paths without editing the appropriate file.
   - Computeds / derived state: [`web-client/src/presenter/computeds/`](web-client/src/presenter/computeds/).
 - HTTP surface
-  - OpenAPI document (hand-maintained, single file): [`web-api/swagger.json`](web-api/swagger.json); formatting is validated by `npm run lint:swagger`.
+  - OpenAPI specs: hand-maintained single-file spec [`web-api/swagger.json`](web-api/swagger.json), plus versioned docs [`docs/api/v1.yaml`](docs/api/v1.yaml) and [`docs/api/v2.yaml`](docs/api/v2.yaml); `npm run lint:swagger` runs Swagger CLI schema validation against these specs.
   - Lambda handlers live under [`web-api/src/lambdas/`](web-api/src/lambdas/) (`*Lambda.ts`, wrapped with `genericHandler`). Adding a *new* Lambda requires coordinated Terraform and routing changes — prefer extending an existing handler/interactor over introducing a new Lambda.
 - Data stores
   - Postgres: schema in [`web-api/src/persistence/postgres/database-schema.ts`](web-api/src/persistence/postgres/database-schema.ts); migrations in [`web-api/src/persistence/postgres/utils/migrate/`](web-api/src/persistence/postgres/utils/migrate/); docs in [`docs/postgres/schema/data-dictionary.csv`](docs/postgres/schema/data-dictionary.csv) and [`docs/postgres/schema/erd.mmd`](docs/postgres/schema/erd.mmd).
@@ -88,7 +88,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - Feature flags: persisted in Postgres ([`web-api/src/persistence/postgres/featureFlag/schema.ts`](web-api/src/persistence/postgres/featureFlag/schema.ts)), cached per-runner on first read by [`web-api/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor.ts`](web-api/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor.ts), and pulled into client state at login by [`web-client/src/presenter/actions/getAllFeatureFlagsAction.ts`](web-client/src/presenter/actions/getAllFeatureFlagsAction.ts).
 - Domain constants
   - Event (document filing) codes: `ALL_EVENT_CODES` in [`shared/src/business/entities/EntityConstants.ts`](shared/src/business/entities/EntityConstants.ts).
-  - Date/time handling: [`shared/src/business/utilities/DateHandler.ts`](shared/src/business/utilities/DateHandler.ts). An ESLint rule blocks direct imports of luxon/date-fns; use `DateHandler`.
+  - Date/time handling: [`shared/src/business/utilities/DateHandler.ts`](shared/src/business/utilities/DateHandler.ts). A custom ESLint rule forbids direct use of the global `Date`; use `DateHandler`.
   - DAWSON has no i18n; user-facing copy is inline in the views.
 - Document generation
   - Generators: [`shared/src/business/utilities/documentGenerators/`](shared/src/business/utilities/documentGenerators/). Visual-diff helper `generateAndVerifyPdfDiff` lives in the same directory; see neighboring `*.test.ts` files for usage.
