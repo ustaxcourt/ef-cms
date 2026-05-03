@@ -1,17 +1,14 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import fs from 'node:fs';
-import path from 'node:path';
+import { loadTsConfigPaths } from '../../../../../utils/load-tsconfig-paths.mjs';
 
-const tsconfigPath = path.resolve(process.cwd(), './tsconfig.json');
-const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
-  collectCoverage: false,
   maxWorkers: 1, // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../../../../../',
     }),
     '^uuid$': 'uuid',
@@ -25,7 +22,6 @@ const config: Config = {
     // '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`, //this is to ignore imported html files
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid|pixelmatch)'],
-  verbose: false,
   workerIdleMemoryLimit: '5%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
 

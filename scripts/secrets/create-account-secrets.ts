@@ -45,6 +45,23 @@ const scriptConfig: ScriptConfig = {
       transform: 'number',
       type: 'string',
     },
+    opensearchLogsClusterArn: {
+      description:
+        'ARN of the remote OpenSearch info cluster if this account will not have its own info cluster',
+      long: 'opensearch-logs-cluster-arn',
+      type: 'string',
+    },
+    opensearchLogsEndpoint: {
+      description:
+        'Endpoint for the remote OpenSearch info cluster if this account will not have its own info cluster',
+      long: 'opensearch-logs-endpoint',
+      type: 'string',
+    },
+    opensearchLogsEngineVersion: {
+      default: 'OpenSearch_3.3',
+      long: 'opensearch-logs-engine-version',
+      type: 'string',
+    },
     opensearchLogsInstanceCount: {
       default: '1',
       long: 'opensearch-logs-instance-count',
@@ -52,7 +69,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     opensearchLogsInstanceType: {
-      default: 't2.small.search',
+      default: 't3.small.search',
       long: 'opensearch-logs-instance-type',
       type: 'string',
     },
@@ -79,6 +96,9 @@ const {
   env,
   externalTrustedRoleArn,
   logExpirationDays,
+  opensearchLogsClusterArn,
+  opensearchLogsEndpoint,
+  opensearchLogsEngineVersion,
   opensearchLogsInstanceCount,
   opensearchLogsInstanceType,
   opensearchLogsVolumeSize,
@@ -89,6 +109,9 @@ const {
   env: string;
   externalTrustedRoleArn: string;
   logExpirationDays: number;
+  opensearchLogsClusterArn: string;
+  opensearchLogsEndpoint: string;
+  opensearchLogsEngineVersion: string;
   opensearchLogsInstanceCount: number;
   opensearchLogsInstanceType: string;
   opensearchLogsVolumeSize: number;
@@ -115,19 +138,34 @@ if (env === 'prod') {
     dawsonDevTrustedRoleArns.push(externalTrustedRoleArn);
   }
 
-  const accountSecrets = {
+  const requiredSecrets = {
     COGNITO_SUFFIX: `${repoSlug}-${env}`,
     // eslint-disable-next-line no-useless-escape
     DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
     EFCMS_DOMAIN: `${env}.${repoName}.${baseDomain}`,
-    ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     ES_LOGS_INSTANCE_COUNT: opensearchLogsInstanceCount,
-    ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,
     // eslint-disable-next-line no-useless-escape
     LOG_GROUP_ENVIRONMENTS: `[\\\"${env}\\\"]`,
+  };
+  const infoClusterSecrets = {
+    ...requiredSecrets,
+    ES_LOGS_ENGINE_VERSION: opensearchLogsEngineVersion,
+    ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
+    ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,
     LOG_SNAPSHOT_BUCKET_NAME: `${repoSlug}-${env}-log-snapshots`,
     NUM_DAYS_TO_KEEP_LOGS: logExpirationDays,
   };
+  const infoNoInfoSecrets =
+    opensearchLogsInstanceCount == 0 ? requiredSecrets : infoClusterSecrets;
+  const logsToRemoteOpensearchSecrets = {
+    ...infoNoInfoSecrets,
+    ES_LOGS_CLUSTER_ARN: opensearchLogsClusterArn,
+    ES_LOGS_ENDPOINT: opensearchLogsEndpoint,
+  };
+  const accountSecrets =
+    opensearchLogsClusterArn.length > 0 && opensearchLogsEndpoint.length > 0
+      ? logsToRemoteOpensearchSecrets
+      : infoNoInfoSecrets;
 
   const secretsClient = new SecretsManagerClient({ region });
   if (update) {

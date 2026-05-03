@@ -1,10 +1,13 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
+import path from 'node:path';
+
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-client-unit',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!integration-tests/**/*.js',
@@ -24,7 +27,6 @@ const config: Config = {
     '!src/test/createClientTestApplicationContext.ts',
   ],
   coverageDirectory: './coverage-unit',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   globals: {
     FileReader() {},
@@ -33,20 +35,24 @@ const config: Config = {
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
-  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
+  testEnvironment: path.resolve(
+    process.cwd(),
+    'web-client/JsdomWithTextEncoderEnvironment.ts',
+  ),
+  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
+    '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
-  verbose: false,
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+  ],
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],

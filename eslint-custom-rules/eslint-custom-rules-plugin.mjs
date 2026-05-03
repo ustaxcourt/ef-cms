@@ -1,7 +1,7 @@
-import noNewDatesRule from './eslint-no-new-dates-rule.mjs';
+import noDatesRule from './eslint-no-new-dates-rule.mjs';
 
-const noNewDatesPlugin = {
-  rules: { 'no-new-dates': noNewDatesRule },
+const noDatesPlugin = {
+  rules: { 'no-dates': noDatesRule },
 };
 
-export default noNewDatesPlugin;
+export default noDatesPlugin;

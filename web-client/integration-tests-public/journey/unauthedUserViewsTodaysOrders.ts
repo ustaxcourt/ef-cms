@@ -26,6 +26,6 @@ export const unauthedUserViewsTodaysOrders = (cerebralTest, testClient) => {
     });
 
     expect(window.location.href).toContain(testClient.docketEntryId);
-    window.location.href = undefined;
+    window.location.href = '';
   });
 };

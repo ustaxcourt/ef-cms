@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import {
@@ -10,6 +11,8 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('closeTrialSessionInteractor', () => {
   let mockTrialSession;
@@ -17,14 +20,15 @@ describe('closeTrialSessionInteractor', () => {
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
 
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+
   beforeEach(() => {
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -194,7 +198,7 @@ describe('closeTrialSessionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate.sessionStatus,
     ).toBe('Closed');
   });

@@ -2,7 +2,7 @@ import { find, includes, omit, pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   DOCUMENT_RELATIONSHIPS,
-  SYSTEM_AND_INTERNAL_DOCUMENT_TYPES,
+  INTERNAL_DOCUMENT_TYPES_AND_NOTR,
 } from '@shared/business/entities/EntityConstants';
 
 const setDocumentPropsFromFormAndBaseDocument = ({
@@ -10,7 +10,7 @@ const setDocumentPropsFromFormAndBaseDocument = ({
   formProperties,
   propertyList,
 }) => {
-  const entry = SYSTEM_AND_INTERNAL_DOCUMENT_TYPES.find(
+  const entry = INTERNAL_DOCUMENT_TYPES_AND_NOTR.find(
     d => d.eventCode === eventCode,
   );
 

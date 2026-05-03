@@ -11,7 +11,7 @@ import pixelmatch from 'pixelmatch';
 const convertPdfPageToImageFile = async ({ fileName, pageNumber }) => {
   const outputPath = './shared/test-output/document-generation';
   const storeOutputImage = fromPath(path.join(outputPath, fileName), {
-    density: 100,
+    density: 300,
     format: 'png',
     height: 1000,
     saveFilename: fileName,

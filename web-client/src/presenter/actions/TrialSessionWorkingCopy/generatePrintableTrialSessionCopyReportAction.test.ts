@@ -22,21 +22,22 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     { key: 'statusUnassigned', label: 'Unassigned' },
   ];
   const formattedCaseMock = {
-    calendarNotes: MOCK_CASE.calendarNotes,
+    calendarNotes: (MOCK_CASE as { calendarNotes?: string }).calendarNotes,
     caseTitle: 'Case Notes Title',
     docketNumber: '678-90',
     docketNumberWithSuffix: 'L',
     filingPartiesCode: 'OTP',
-    inConsolidatedGroup: MOCK_CASE.inConsolidatedGroup,
+    inConsolidatedGroup: (MOCK_CASE as { inConsolidatedGroup?: boolean })
+      .inConsolidatedGroup,
     irsPractitioners: MOCK_CASE.irsPractitioners,
-    isLeadCase: MOCK_CASE.isLeadCase,
+    isLeadCase: (MOCK_CASE as { isLeadCase?: boolean }).isLeadCase,
     notes: {
       docketNumber: '678-90',
       notes: 'this is a note added',
       userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     },
     privatePractitioners: MOCK_CASE.privatePractitioners,
-    trialStatus: MOCK_CASE.trialStatus,
+    trialStatus: (MOCK_CASE as { trialStatus?: string }).trialStatus,
     userNotes: 'user notes',
   };
   beforeAll(() => {
@@ -93,7 +94,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
-      formattedJudge: MOCK_TRIAL_REGULAR.judge.name,
+      formattedJudge: MOCK_TRIAL_REGULAR.judge!.name,
       formattedStartDateFull: '2020-11-27T05:00:00.000Z',
       formattedTerm: MOCK_TRIAL_REGULAR.term,
       formattedTrialClerk: 'Test Trial Clerk',
@@ -216,7 +217,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
-      formattedJudge: MOCK_TRIAL_REGULAR.judge.name,
+      formattedJudge: MOCK_TRIAL_REGULAR.judge!.name,
       formattedStartDateFull: '2020-11-27T05:00:00.000Z',
       formattedTerm: MOCK_TRIAL_REGULAR.term,
       formattedTrialClerk: 'Test Trial Clerk',

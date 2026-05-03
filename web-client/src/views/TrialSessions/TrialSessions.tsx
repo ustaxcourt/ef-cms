@@ -86,7 +86,7 @@ export const TrialSessions = connect(
             )}
           </div>
           <Tabs
-            defaultActiveTab={'calendared'}
+            defaultActiveTab={trialSessionsPageFilters.currentTab}
             headingLevel="2"
             id="trial-sessions-tabs"
             value={trialSessionsPageFilters.currentTab}

@@ -4,7 +4,7 @@ jest.mock('./searchClient');
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import {
   CASE_TYPES_MAP,
-  MAX_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { search as searchMock } from './searchClient';
 
@@ -89,7 +89,7 @@ describe('casePublicSearch', () => {
     };
     expect(search).toHaveBeenCalledTimes(1);
     expect(search.mock.calls[0][0].searchParameters.body?.size).toEqual(
-      MAX_SEARCH_RESULTS,
+      MAX_CASE_SEARCH_RESULTS,
     );
 
     expect(search.mock.calls[0][0].searchParameters.body?.query).toEqual(

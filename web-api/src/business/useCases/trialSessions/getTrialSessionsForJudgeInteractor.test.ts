@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -8,49 +9,45 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-
-const MOCK_TRIAL_SESSION = {
-  maxCases: 100,
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-  sessionType: SESSION_TYPES.regular,
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2009',
-  trialLocation: 'Birmingham, Alabama',
-};
-
-const JUDGE_ID = 'abc';
+import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('getTrialSessionsForJudgeInteractor', () => {
+  const MOCK_TRIAL_SESSION = {
+    maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    sessionType: SESSION_TYPES.regular,
+    startDate: '3000-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '2009',
+    trialLocation: 'Birmingham, Alabama',
+  };
+
+  const JUDGE_ID = 'abc';
+
+  const getTrialSessions = jest.mocked(getTrialSessionsMock);
   it('throws error if user is unauthorized', async () => {
     applicationContext.getUniqueId.mockReturnValue(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
 
     await expect(
-      getTrialSessionsForJudgeInteractor(
-        applicationContext,
-        JUDGE_ID,
-        mockPetitionerUser,
-      ),
+      getTrialSessionsForJudgeInteractor(JUDGE_ID, mockPetitionerUser),
     ).rejects.toThrow();
   });
 
   it('should only return trial sessions associated with the judgeId', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([
-        MOCK_TRIAL_SESSION,
-        {
-          ...MOCK_TRIAL_SESSION,
-          judge: {
-            userId: JUDGE_ID,
-          },
+    getTrialSessions.mockResolvedValue([
+      MOCK_TRIAL_SESSION as RawTrialSession,
+      {
+        ...MOCK_TRIAL_SESSION,
+        judge: {
+          userId: JUDGE_ID,
         },
-      ]);
+      } as RawTrialSession,
+    ]);
 
     const trialSessions = await getTrialSessionsForJudgeInteractor(
-      applicationContext,
       JUDGE_ID,
       mockPetitionsClerkUser,
     );

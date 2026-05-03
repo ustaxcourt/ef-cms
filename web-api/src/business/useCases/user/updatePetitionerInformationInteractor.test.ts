@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/userContacts/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
@@ -23,7 +24,6 @@ import {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -76,10 +76,6 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .createUserForContact.mockImplementation(() => new UserCase(mockCase));
   });
 
   beforeEach(() => {
@@ -89,6 +85,10 @@ describe('updatePetitionerInformationInteractor', () => {
       privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createUserForContact.mockResolvedValue(mockCase);
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     generateAndServeDocketEntry.mockResolvedValue({
@@ -332,8 +332,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
-  it("should not update the user's paper petition email and e-service consent information", async () => {
-    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+  it('should allow updating contactEmailAddress (Contact email address) but preserve e-service consent information', async () => {
+    mockPetitioners[0].contactEmailAddress = 'contactEmailAddress@example.com';
     mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
@@ -342,6 +342,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
         },
       },
       mockDocketClerkUser,
@@ -351,8 +352,24 @@ describe('updatePetitionerInformationInteractor', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
       hasConsentedToElectronicService: true,
-      paperPetitionEmail: 'paperPetitionEmail@example.com',
+      contactEmailAddress: 'newContactEmail@example.com',
     });
+  });
+
+  it('should not generate a notice of change when only contactEmailAddress (Contact email address) is updated', async () => {
+    await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should update petitioner additionalName when it is passed in', async () => {

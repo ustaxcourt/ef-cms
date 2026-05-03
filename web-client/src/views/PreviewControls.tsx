@@ -1,21 +1,39 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PreviewControls = connect(
-  {
-    currentPage: props.currentPage,
-    disableLeftButtons: props.disableLeftButtons,
-    disableRightButtons: props.disableRightButtons,
-    onFirstPage: props.onFirstPage,
-    onLastPage: props.onLastPage,
-    onNextPage: props.onNextPage,
-    onPreviousPage: props.onPreviousPage,
-    totalPages: props.totalPages,
-  },
+export type PreviewControlsProps = {
+  currentPage: number;
+  disableLeftButtons: boolean;
+  disableRightButtons: boolean;
+  onFirstPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onLastPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onNextPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onPreviousPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  totalPages: number;
+};
+
+const props = cerebralProps as unknown as PreviewControlsProps;
+
+const previewControlsDeps = {
+  currentPage: props.currentPage,
+  disableLeftButtons: props.disableLeftButtons,
+  disableRightButtons: props.disableRightButtons,
+  onFirstPage: props.onFirstPage,
+  onLastPage: props.onLastPage,
+  onNextPage: props.onNextPage,
+  onPreviousPage: props.onPreviousPage,
+  totalPages: props.totalPages,
+};
+
+export const PreviewControls = connect<
+  PreviewControlsProps,
+  typeof previewControlsDeps
+>(
+  previewControlsDeps,
   function PreviewControls({
     currentPage,
     disableLeftButtons,
@@ -38,7 +56,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'step-backward']}
             id="firstPage"
-            size="2x"
+            size="2xl"
           />
         </Button>
         <Button
@@ -51,12 +69,14 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'caret-left']}
             id="previous"
-            size="2x"
+            size="2xl"
           />
         </Button>
-        <span className="pages">
-          Page {currentPage} of {totalPages}
-        </span>
+        <div className="pages">
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+        </div>
         <Button
           link
           className={classNames(disableRightButtons && 'disabled')}
@@ -67,7 +87,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'caret-right']}
             id="next"
-            size="2x"
+            size="2xl"
           />
         </Button>
         <Button
@@ -80,7 +100,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'step-forward']}
             id="lastPage"
-            size="2x"
+            size="2xl"
           />
         </Button>
       </div>

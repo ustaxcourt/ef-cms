@@ -1,15 +1,34 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import type { FunctionComponent } from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const ConfirmReplacePetitionModal = connect(
-  {
-    cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence],
-  },
-  function ConfirmReplacePetitionModal({ cancelSequence, confirmSequence }) {
+type ConfirmReplacePetitionModalProps = {
+  confirmSequence: string;
+};
+
+const props = cerebralProps as unknown as ConfirmReplacePetitionModalProps;
+
+const confirmReplacePetitionModalDeps = {
+  cancelSequence: sequences.dismissModalSequence,
+  confirmSequence: sequences[props.confirmSequence],
+};
+
+const ConfirmReplacePetitionModalComponent = connect<
+  ConfirmReplacePetitionModalProps,
+  typeof confirmReplacePetitionModalDeps
+>(
+  confirmReplacePetitionModalDeps,
+  function ConfirmReplacePetitionModal({
+    cancelSequence,
+    confirmSequence,
+  }: {
+    cancelSequence: Function | RunnableSequence;
+    confirmSequence: Function | RunnableSequence;
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Keep Current PDF"
@@ -23,5 +42,8 @@ export const ConfirmReplacePetitionModal = connect(
     );
   },
 );
+
+export const ConfirmReplacePetitionModal =
+  ConfirmReplacePetitionModalComponent as FunctionComponent<ConfirmReplacePetitionModalProps>;
 
 ConfirmReplacePetitionModal.displayName = 'ConfirmReplacePetitionModal';

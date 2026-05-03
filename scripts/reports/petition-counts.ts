@@ -3,20 +3,17 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { applicationContext } from '@web-api/applicationContext';
-import {
-  dateStringsCompared,
-  validateDateAndCreateISO,
-} from '@shared/business/utilities/DateHandler';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:
     'petition-counts - Generates a table of petition counts in each month of the given year',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -37,45 +34,21 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
   year: string;
 };
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const getAllPetitions = async (): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  'eventCode.S': 'P',
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? `${Number(year) - 1}` : year,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? year : `${Number(year) + 1}`,
-                    }),
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.eventCode', '=', 'P')
+        .where('de.receivedAt', '>=', begin)
+        .where('de.receivedAt', '<', end)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 const getCounts = ({
@@ -105,13 +78,7 @@ const getCounts = ({
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const petitions = await getAllPetitions();
-  const start = DateTime.fromISO(
-    validateDateAndCreateISO({
-      day: '1',
-      month: fiscal ? '10' : '1',
-      year: fiscal ? `${Number(year) - 1}` : year,
-    })!,
-  );
+  const start = DateTime.fromJSDate(begin);
 
   for (let month = 0; month < 12; month++) {
     const [gte, lt] = [

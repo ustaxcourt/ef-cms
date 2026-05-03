@@ -14,7 +14,6 @@ import {
   getChambersNameFromJudgeName,
   judgeTitleIsInExpectedFormat,
   phoneIsInExpectedFormat,
-  promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
 import { environment } from '@web-api/environment';
 import { getUserPoolId } from '../../shared/admin-tools/util';
@@ -22,6 +21,7 @@ import { isEmpty } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { ask } from '../helpers/prompts';
 
 /**
  * This script will update the judge user in a deployed environment.
@@ -104,7 +104,7 @@ const updateCognitoRecord = async ({
   userPoolId: string;
 }) => {
   console.log('Setting up the updated Cognito user info ...');
-  const cognitoAttributesToUpdate = {} as { name: string; email: string };
+  const cognitoAttributesToUpdate: { name?: string; email?: string } = {};
   if (updates.name) {
     cognitoAttributesToUpdate.name = updates.name;
   }
@@ -274,7 +274,7 @@ const updatePostgresChambersRecords = async ({
       judgeName: updates.name || currentName,
     })
   ) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(updates.name || currentName).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -282,7 +282,7 @@ const updatePostgresChambersRecords = async ({
     }
   }
   if (updates.phone && !phoneIsInExpectedFormat(updates.phone)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -290,7 +290,7 @@ const updatePostgresChambersRecords = async ({
     }
   }
   if (updates.judgeTitle && !judgeTitleIsInExpectedFormat(updates.judgeTitle)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The judgeTitle you entered does not match expected values: ${expectedJudgeTitles.join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {

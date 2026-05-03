@@ -23,7 +23,7 @@ describe('haveNOTTsBeenServedAction', () => {
       },
       state: {
         trialSession: {
-          hasNOTTBeenServed: true,
+          hasNottBeenServed: true,
         },
       },
     });
@@ -38,7 +38,7 @@ describe('haveNOTTsBeenServedAction', () => {
       },
       state: {
         trialSession: {
-          hasNOTTBeenServed: false,
+          hasNottBeenServed: false,
         },
       },
     });

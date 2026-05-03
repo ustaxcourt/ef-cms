@@ -60,11 +60,13 @@ import {
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENTS_ARRAY,
   JURISDICTIONAL_OPTIONS,
+  MAX_ELASTICSEARCH_PAGINATION,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
   MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
   MOTION_DISPOSITIONS,
   MOTION_EVENT_CODES,
@@ -126,13 +128,12 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
+  ENTERED_AND_SERVED_EVENT_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { DocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  SERVICE_STAMP_OPTIONS,
-} from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ERROR_429 } from '../../shared/src/sharedAppContext';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
@@ -211,6 +212,7 @@ export const getConstants = () => ({
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ENTERED_AND_SERVED_EVENT_CODES,
+  ERROR_429,
   ESTATE_TYPES,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
@@ -233,11 +235,13 @@ export const getConstants = () => ({
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENTS_ARRAY,
   JURISDICTIONAL_OPTIONS,
+  MAX_ELASTICSEARCH_PAGINATION,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
   MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
   MOTION_DISPOSITIONS,
   MOTION_EVENT_CODES,

@@ -319,12 +319,12 @@ describe('ContactUpdated', () => {
         });
       });
 
-      describe('paperPetitionEmail', () => {
-        it('should not return an error message for "paperPetitionEmail" if its undefined', () => {
+      describe('contactEmailAddress', () => {
+        it('should not return an error message for "contactEmailAddress" if its undefined', () => {
           const entity = new ContactUpdated(
             {
               ...VALID_ENTITY,
-              paperPetitionEmail: undefined,
+              contactEmailAddress: undefined,
             },
             CONTACT_NAME,
             PETITION_TYPE,
@@ -335,11 +335,11 @@ describe('ContactUpdated', () => {
           expect(errors).toEqual(null);
         });
 
-        it('should return an error message for "paperPetitionEmail" if it is not a valid email format', () => {
+        it('should return an error message for "contactEmailAddress" if it is not a valid email format', () => {
           const entity = new ContactUpdated(
             {
               ...VALID_ENTITY,
-              paperPetitionEmail: 'Iceland',
+              contactEmailAddress: 'Iceland',
             },
             CONTACT_NAME,
             PETITION_TYPE,
@@ -348,7 +348,7 @@ describe('ContactUpdated', () => {
 
           const errors = entity.getFormattedValidationErrors();
           expect(errors).toEqual({
-            paperPetitionEmail:
+            contactEmailAddress:
               'Enter email address in format: yourname@example.com',
           });
         });
@@ -492,6 +492,40 @@ describe('ContactUpdated', () => {
           const errors = entity.getFormattedValidationErrors();
           expect(errors).toEqual({ postalCode: 'Enter postal code' });
         });
+      });
+    });
+  });
+
+  describe('optional fields', () => {
+    describe('preferredLanguage', () => {
+      it('should populate preferredLanguage field', () => {
+        const entity = new ContactUpdated(
+          {
+            ...VALID_ENTITY,
+            preferredLanguage: 'Spanish',
+          },
+          CONTACT_NAME,
+          PETITION_TYPE,
+          PARTY_TYPE,
+        );
+
+        expect(entity.preferredLanguage).toEqual('Spanish');
+      });
+    });
+
+    describe('preferredCommunicationMethod', () => {
+      it('should populate preferredCommunicationMethod field', () => {
+        const entity = new ContactUpdated(
+          {
+            ...VALID_ENTITY,
+            preferredCommunicationMethod: 'ASL',
+          },
+          CONTACT_NAME,
+          PETITION_TYPE,
+          PARTY_TYPE,
+        );
+
+        expect(entity.preferredCommunicationMethod).toEqual('ASL');
       });
     });
   });

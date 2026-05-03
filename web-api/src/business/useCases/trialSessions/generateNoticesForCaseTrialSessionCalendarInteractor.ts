@@ -15,6 +15,10 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+import { NotFoundError } from '@web-api/errors/errors';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -161,7 +165,8 @@ const setNoticeForCase = async ({
 
   let clinicLetter;
   let noticeOfTrialIssuedWithClinicLetter;
-  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
+  const newNoticeOfTrialIssuedDocumentStorageId =
+    applicationContext.getUniqueId();
   if (appendClinicLetter) {
     clinicLetter = await applicationContext
       .getPersistenceGateway()
@@ -179,12 +184,12 @@ const setNoticeForCase = async ({
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssuedWithClinicLetter,
-      key: newNoticeOfTrialIssuedDocketEntryId,
+      key: newNoticeOfTrialIssuedDocumentStorageId,
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssued,
-      key: newNoticeOfTrialIssuedDocketEntryId,
+      key: newNoticeOfTrialIssuedDocumentStorageId,
     });
   }
 
@@ -197,7 +202,8 @@ const setNoticeForCase = async ({
   const noticeOfTrialDocketEntry = new DocketEntry(
     {
       date: trialSessionEntity.startDate,
-      docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
+      docketEntryId: newNoticeOfTrialIssuedDocumentStorageId,
+      documentStorageId: newNoticeOfTrialIssuedDocumentStorageId,
       documentTitle: noticeOfTrialDocumentTitle,
       documentType: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
@@ -212,12 +218,10 @@ const setNoticeForCase = async ({
 
   noticeOfTrialDocketEntry.setFiledBy(user);
 
-  noticeOfTrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
-    });
+  noticeOfTrialDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: noticeOfTrialDocketEntry.documentStorageId,
+  });
 
   caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
   caseEntity.setNoticeOfTrialDate();
@@ -254,18 +258,19 @@ const setNoticeForCase = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode;
   }
 
-  const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
+  const newStandingPretrialDocumentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: standingPretrialFile,
-    key: newStandingPretrialDocketEntryId,
+    key: newStandingPretrialDocumentStorageId,
   });
 
   const standingPretrialDocketEntry = new DocketEntry(
     {
       attachments: false,
       description: standingPretrialDocumentTitle,
-      docketEntryId: newStandingPretrialDocketEntryId,
+      docketEntryId: newStandingPretrialDocumentStorageId,
+      documentStorageId: newStandingPretrialDocumentStorageId,
       documentTitle: standingPretrialDocumentTitle,
       documentType: standingPretrialDocumentTitle,
       eventCode: standingPretrialDocumentEventCode,
@@ -279,12 +284,10 @@ const setNoticeForCase = async ({
 
   standingPretrialDocketEntry.setFiledBy(user);
 
-  standingPretrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: standingPretrialDocketEntry.docketEntryId,
-    });
+  standingPretrialDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: standingPretrialDocketEntry.documentStorageId,
+  });
 
   caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
@@ -343,14 +346,15 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     userId: string;
   },
 ) => {
-  const jobStatus = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionJobStatusForCase({
-      applicationContext,
-      jobId,
-    });
+  const processingJob = await getTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+  });
+  if (!processingJob)
+    throw new NotFoundError(
+      `Could not get notification processing job with id ${jobId}`,
+    );
 
-  if (jobStatus[docketNumber] === 'processed') {
+  if (processingJob.caseStatuses[docketNumber] === 'processed') {
     applicationContext.logger.warn(
       `skipping the processing of the docketNumber ${docketNumber} for job ${jobId} because it was already processed`,
     );
@@ -361,14 +365,10 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionJobStatusForCase({
-      applicationContext,
-      docketNumber,
-      jobId,
-      status: 'processing',
-    });
+  await updateTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+    caseStatus: { [docketNumber]: 'processing' },
+  });
 
   const trialSessionEntity = new TrialSession(trialSession);
 
@@ -386,19 +386,11 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     user,
   });
 
-  await applicationContext.getPersistenceGateway().decrementJobCounter({
-    applicationContext,
-    jobId,
+  await updateTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+    decrementUnfinishedCases: true,
+    caseStatus: { [docketNumber]: 'processed' },
   });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionJobStatusForCase({
-      applicationContext,
-      docketNumber,
-      jobId,
-      status: 'processed',
-    });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

@@ -1,35 +1,37 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
 import { appendFileSync } from 'fs';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import {
+  getJsDateFromIso,
+  getNowObject,
+  validateDateAndCreateISO,
+} from '@shared/business/utilities/DateHandler';
+import { formatDate } from '../helpers/formatters';
 
+const nowObject = getNowObject();
 const scriptConfig: ScriptConfig = {
   description:
     'cases-open-on-date - Generates spreadsheets containing a list of cases ' +
     'open on a given date in each of the previous 5 years and, if necessary, ' +
     'spreadsheets containing a list of cases with a NOA filed afterwards.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
     day: {
-      default: `${DateTime.now().toObject().day}`,
+      default: `${nowObject.day}`,
       position: 1,
       type: 'string',
     },
     month: {
-      default: `${DateTime.now().toObject().month}`,
+      default: `${nowObject.month}`,
       position: 0,
       type: 'string',
     },
@@ -43,106 +45,45 @@ const { day, month } = parseArgsAndEnvVars(scriptConfig) as {
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenOnDate = async ({
-  applicationContext,
   targetDate,
 }: {
-  applicationContext: ServerApplicationContext;
   targetDate: string;
 }): Promise<RawCase[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': {
-                    value: 'Case',
-                  },
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    lte: targetDate,
-                  },
-                },
-              },
-              {
-                bool: {
-                  should: [
-                    {
-                      range: {
-                        'closedDate.S': {
-                          gt: targetDate,
-                        },
-                      },
-                    },
-                    {
-                      bool: {
-                        must_not: [
-                          {
-                            exists: {
-                              field: 'closedDate.S',
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'sortableDocketNumber.N': 'asc' }],
-      },
-      index: 'efcms-case',
-    },
-  });
-  return results;
+  const targetJsDate = getJsDateFromIso(targetDate);
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .selectAll('c')
+        .where('c.receivedAt', '<=', targetJsDate)
+        .where(eb =>
+          eb.or([
+            eb('c.closedDate', 'is', null),
+            eb('c.closedDate', '>', targetJsDate),
+          ]),
+        )
+        .orderBy('c.sortableDocketNumber', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyCase) as RawCase[];
 };
 
 const getAllNoticesOfAppealFiledInCases = async ({
-  applicationContext,
   docketNumbers,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': 'NOA',
-                },
-              },
-              {
-                terms: {
-                  'docketNumber.S': docketNumbers,
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.eventCode', '=', 'NOA')
+        .where('de.docketNumber', 'in', docketNumbers)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 const generateCsv = ({
@@ -161,23 +102,20 @@ const generateCsv = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const thisYear = DateTime.now().toObject().year;
+  const thisYear = nowObject.year!;
   const totals: { [year: string]: number } = {};
   const filesGenerated: string[] = [];
 
   for (let y = thisYear - 4; y <= thisYear; y++) {
     const year = `${y}`;
     const targetDate = validateDateAndCreateISO({ day, month, year })!;
-    const targetDateHumanized = targetDate.split('T')[0];
+    const targetDateHumanized = formatDate(targetDate);
     console.log(`Retrieving cases open on ${targetDateHumanized}...`);
     const casesPotentiallyOpenOnDate = await getAllCasesOpenOnDate({
-      applicationContext,
       targetDate,
     });
     const docketNumbers = casesPotentiallyOpenOnDate.map(c => c.docketNumber);
     const noas = await getAllNoticesOfAppealFiledInCases({
-      applicationContext,
       docketNumbers,
     });
     const noasFiledAfterDate = noas.filter(de => {
@@ -202,9 +140,10 @@ const generateCsv = ({
       })
       .map(c => ({
         docketNumber: c.docketNumber,
-        noaFiledOn: noasFiledAfterDate
-          .find(noa => noa.docketNumber === c.docketNumber)!
-          .receivedAt.split('T')[0],
+        noaFiledOn: formatDate(
+          noasFiledAfterDate.find(noa => noa.docketNumber === c.docketNumber)!
+            .receivedAt,
+        ),
       }));
     if (casesToExamineManually.length) {
       console.log(
@@ -220,7 +159,7 @@ const generateCsv = ({
   let totalsOutput = '"Date","Cases Open"';
   for (const year of Object.keys(totals)) {
     const targetDate = validateDateAndCreateISO({ day, month, year })!;
-    const date = targetDate.split('T')[0];
+    const date = formatDate(targetDate);
     totalsOutput += `\n"${date}","${totals[year]}"`;
   }
   const monthAndDay = validateDateAndCreateISO({

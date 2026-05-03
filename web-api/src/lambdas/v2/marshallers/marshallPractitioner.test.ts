@@ -22,6 +22,7 @@ describe('marshallPractitioner', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
 
+    // @ts-expect-error - Testing with mock object that intentionally has additional properties for verification
     expect(mock.barNumber).toBeDefined();
     expect(mock.contact).toBeDefined();
     expect(mock.email).toBeDefined();
@@ -31,6 +32,7 @@ describe('marshallPractitioner', () => {
 
     const marshalled = marshallPractitioner(mock);
 
+    // @ts-expect-error - Testing marshalled object properties that exist at runtime but aren't in strict type definition
     expect(marshalled.barNumber).toEqual(mock.barNumber);
     expect(marshalled.email).toEqual(mock.email);
     expect(marshalled.name).toEqual(mock.name);

@@ -237,7 +237,7 @@ export const formatTrialSessions = ({
   const trialSessionRows: TrialSessionRow[] = trialSessions.map(
     trialSession => {
       const showAlertForNOTTReminder =
-        !trialSession.dismissedAlertForNOTT &&
+        !trialSession.dismissedAlertForNott &&
         TrialSession.isStartDateWithinNOTTReminderRange({
           isCalendared: trialSession.isCalendared,
           startDate: trialSession.startDate,
@@ -267,9 +267,11 @@ export const formatTrialSessions = ({
         Look at how formattedTrialSessions.ts calculates userIsAssignedToSession for reference
       */
       const userIsAssignedToSession = isJudgeUserAssigned;
+      const { trialClerk } = trialSession;
 
       return {
         alertMessageForNOTT,
+        estimatedEndDate: trialSession.estimatedEndDate,
         formattedEstimatedEndDate,
         formattedNoticeIssuedDate,
         formattedStartDate,
@@ -280,6 +282,7 @@ export const formatTrialSessions = ({
         showAlertForNOTTReminder,
         startDate: trialSession.startDate,
         swingSession: !!trialSession.swingSession,
+        trialClerk,
         trialLocation: trialSession.trialLocation || '',
         trialSessionId: trialSession.trialSessionId || '',
         userIsAssignedToSession,
@@ -330,6 +333,7 @@ export type TrialSessionRow = {
   alertMessageForNOTT: string;
   formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
+  estimatedEndDate?: string; // ISO format
   swingSession: boolean;
   userIsAssignedToSession: boolean;
   trialLocation: string;
@@ -339,6 +343,7 @@ export type TrialSessionRow = {
   judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
+  trialClerk?: { name: string; userId: string };
 };
 export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;

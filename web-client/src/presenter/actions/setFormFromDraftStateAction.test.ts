@@ -8,6 +8,7 @@ describe('setFormFromDraftStateAction', () => {
   const documentToMatch = {
     docketEntryId: docketEntryIdToEdit,
     documentType: 'Order',
+    draftOrderState: {} as RawDocketEntry['draftOrderState'],
   };
 
   documentToMatch.draftOrderState = { ...documentToMatch };

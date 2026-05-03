@@ -9,9 +9,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk adds and serves a docket entry from the given order ${draftOrderIndex}`, async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: cerebralTest.getState(),
@@ -27,17 +25,17 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
     // default
     expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
+      draftOrderDocument?.eventCode,
     );
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
+      draftOrderDocument?.documentType,
     );
 
     await cerebralTest.runSequence(

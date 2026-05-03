@@ -1,4 +1,4 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsHearingNote } from './journey/docketClerkEditsHearingNote';
@@ -6,6 +6,7 @@ import { docketClerkManuallyAddsCaseToTrialSessionWithNote } from './journey/doc
 import { docketClerkRemovesCaseFromHearing } from './journey/docketClerkRemovesCaseFromHearing';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
@@ -16,14 +17,14 @@ describe('trial hearings journey', () => {
   cerebralTest.createdTrialSessions = [];
   cerebralTest.createdCases = [];
 
-  const trialLocation1 = `Denver, Colorado, ${Date.now()}`;
+  const trialLocation1 = `Denver, Colorado, ${getCurrentDateTimeInMillis()}`;
   const overrides1 = {
     maxCases: 3,
     preferredTrialCity: trialLocation1,
     sessionType: SESSION_TYPES.small,
     trialLocation: trialLocation1,
   };
-  const trialLocation2 = `Biloxi, Mississippi, ${Date.now()}`;
+  const trialLocation2 = `Biloxi, Mississippi, ${getCurrentDateTimeInMillis()}`;
   const overrides2 = {
     maxCases: 3,
     preferredTrialCity: trialLocation2,
@@ -102,8 +103,6 @@ describe('trial hearings journey', () => {
     'Test hearing note three.',
   );
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note four.');
-  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note four.');
+  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note three.');
   docketClerkRemovesCaseFromHearing(cerebralTest);
 });

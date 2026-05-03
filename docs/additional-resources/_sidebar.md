@@ -15,7 +15,6 @@
 * [Code Toggles](/additional-resources/code-toggles.md)
 * [Dates](/additional-resources/dates.md)
 * [Import Practitioner User](/additional-resources/importing-practitioner-users.md)
-* [Dynamo Recovery](/additional-resources/dynamodb-recovery.md)
 * [Dev Team Process](/additional-resources/development-team-process.md)
 * [Importing Judge Users](/additional-resources/importing-judge-users.md)
 * [Developer Guidelines](/additional-resources/developer-guidelines.md)

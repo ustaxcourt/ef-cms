@@ -11,16 +11,22 @@ export const scanBatchPreviewerHelper = (
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
   );
-  const batches =
+  const batches: Array<{
+    index: number;
+    pages: any[];
+    scanMode?: string;
+    scanModeLabel?: string;
+  }> =
     (documentSelectedForScan &&
       get(state.scanner.batches[documentSelectedForScan])) ||
-    [];
+    [] as any[];
   const selectedBatch = batches.length
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
-  let selectPageImage = null;
+  const pdfPreviewUrl = get(state.pdfPreviewUrl);
+  let selectPageImage: string | null = null;
 
   const bufferToBase64 = buf => {
     const binstr = Array.prototype.map
@@ -32,7 +38,7 @@ export const scanBatchPreviewerHelper = (
   };
 
   if (batches.length && currentPageIndex !== null) {
-    const page = selectedBatch.pages[currentPageIndex];
+    const page = selectedBatch!.pages[currentPageIndex];
     const b64encoded = bufferToBase64(page);
     selectPageImage = b64encoded;
   }
@@ -54,6 +60,7 @@ export const scanBatchPreviewerHelper = (
   return {
     batches,
     currentPage: currentPageIndex,
+    pdfPreviewUrl,
     scannerSource,
     scannerSourceDisplayName,
     selectedBatch: batches.length
@@ -62,7 +69,7 @@ export const scanBatchPreviewerHelper = (
     selectedPageImage: selectPageImage,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
-    totalPages: selectedBatch.pages.length,
+    totalPages: selectedBatch!.pages.length,
     uploadMode: documentUploadMode,
   };
 };

@@ -23,9 +23,17 @@ import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Publi
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
+type PublicAdvancedSearchForm = {
+  caseSearchByName: { petitionerName: string };
+  opinionSearch?: Record<string, boolean>;
+  orderSearch?: Record<string, boolean>;
+};
 
 const computeds = {
-  advancedDocumentSearchHelper,
+  advancedDocumentSearchHelper:
+    advancedDocumentSearchHelper as unknown as ReturnType<
+      typeof advancedDocumentSearchHelper
+    >,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
@@ -48,8 +56,12 @@ const computeds = {
     typeof publicTrialSessionsHelper
   >,
   templateHelper,
-  todaysOpinionsHelper,
-  todaysOrdersHelper,
+  todaysOpinionsHelper: todaysOpinionsHelper as unknown as ReturnType<
+    typeof todaysOpinionsHelper
+  >,
+  todaysOrdersHelper: todaysOrdersHelper as unknown as ReturnType<
+    typeof todaysOrdersHelper
+  >,
 };
 
 export const baseState = {
@@ -64,9 +76,14 @@ export const baseState = {
     pageNumber?: number;
     proceedingType?: string;
   },
-  advancedSearchForm: {},
+  advancedSearchForm: undefined as PublicAdvancedSearchForm | undefined,
   advancedSearchTab: 'case',
-  alertError: null,
+  alertError: null as null | {
+    title?: string;
+    message?: string;
+    messages?: string[];
+    responseCode?: number;
+  },
   alertSuccess: null,
   caseDetail: {} as RawPublicCase,
   cognitoResendVerificationLinkUrl: '',
@@ -75,8 +92,18 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  constants: {} as { [key: string]: any },
+  constants: {} as Record<string, any>,
   currentPage: 'Interstitial',
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
+  orderDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
@@ -94,20 +121,39 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
     todaysOrdersSort: '',
   },
   showPassword: false,
-  tableSort: {
+  todaysOpinionsTableSort: {
     sortField: 'filingDate',
     sortOrder: DESCENDING,
+    sortKey: 'todaysOpinionsTableSort',
   },
-  todaysOpinions: [],
+  todaysOpinions: [] as Array<{
+    filingDate: string;
+    judge?: string;
+    signedJudgeName?: string;
+    numberOfPages?: number;
+  }>,
+  todaysOrdersTableSort: {
+    sortField: 'filingDate',
+    sortOrder: DESCENDING,
+    sortKey: 'todaysOrdersTableSort',
+  },
   todaysOrders: {
     page: 1,
-    results: [],
+    results: [] as Array<{
+      eventCode: string;
+      judge?: string;
+      signedJudgeName?: string;
+      filingDate: string;
+      numberOfPages?: number;
+      docketNumber: string;
+    }>,
     totalCount: 0,
   },
   trialSessionDetailsPage: {
@@ -125,4 +171,5 @@ export const initialPublicState = {
   ...computeds,
 };
 
+// @ts-expect-error
 export type PublicClientState = typeof initialPublicState;

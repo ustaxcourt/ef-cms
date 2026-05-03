@@ -1,4 +1,4 @@
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { Icon, WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
 // This might be useful for more than just practitioners
@@ -11,9 +11,9 @@ export function PractitionerCaseIcons({
   return (
     <div className="multi-filing-type-icon">
       {formattedCase.isSealed && (
-        <Icon
-          aria-label="sealed"
-          className="sealed-case-entry"
+        <WrappedIcon
+          iconAriaLabel="sealed"
+          iconClass="sealed-case-entry"
           icon="lock"
           title="sealed"
         />

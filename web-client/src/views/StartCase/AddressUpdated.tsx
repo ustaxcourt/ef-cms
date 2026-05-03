@@ -19,9 +19,11 @@ export interface AddressType {
   state?: string;
   postalCode?: string;
   email?: string;
-  paperPetitionEmail?: string;
+  contactEmailAddress?: string;
   phone?: string;
   hasConsentedToElectronicService?: string;
+  preferredLanguage?: string;
+  preferredCommunicationMethod?: string;
 }
 
 export type OnBlurHandler = (params: { validationKey: string[] }) => void;

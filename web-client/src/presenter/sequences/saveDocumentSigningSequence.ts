@@ -13,25 +13,31 @@ import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 
 export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   setSaveAlertsForNavigationAction,
   setSuccessFromDocumentTitleAction,
   completeDocumentSigningAction,
-  setDefaultDraftDocumentIdAction,
-  setRedirectUrlAction,
-  completeWorkItemForDocumentSigningAction,
-  setDocumentDetailTabAction,
-  clearPDFSignatureDataAction,
-  clearFormAction,
-  setAlertSuccessAction,
-  followRedirectAction,
   {
-    default: [
-      setCaseDetailPageTabActionGenerator('drafts'),
-      navigateToDraftDocumentsAction,
+    error: [setAlertErrorAction],
+    success: [
+      setDefaultDraftDocumentIdAction,
+      setRedirectUrlAction,
+      completeWorkItemForDocumentSigningAction,
+      setDocumentDetailTabAction,
+      clearPDFSignatureDataAction,
+      clearFormAction,
+      setAlertSuccessAction,
+      followRedirectAction,
+      {
+        default: [
+          setCaseDetailPageTabActionGenerator('drafts'),
+          navigateToDraftDocumentsAction,
+        ],
+        success: [],
+      },
     ],
-    success: [],
   },
 ]);

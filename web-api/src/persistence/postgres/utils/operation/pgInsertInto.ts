@@ -1,9 +1,9 @@
-import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-schema';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
-import { InsertExpression } from 'kysely/dist/cjs/parser/insert-values-parser';
+import type { InsertExpression } from 'node_modules/kysely/dist/cjs/parser/insert-values-parser';
 import { isEmpty } from 'lodash';
 
 export const pgInsertInto = async <T extends keyof Database>({

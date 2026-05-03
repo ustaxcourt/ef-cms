@@ -1,35 +1,41 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * generates an action for completing document signing
- * @param {object} providers the providers object
- * @param {string} providers.get the cerebral get function
- * @param {string} providers.applicationContext the applicationContext
- * @returns {Function} the action to complete the document signing
- */
 export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
+  path,
 }: ActionProps) => {
   const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
-  if (get(state.pdfForSigning.signatureData.x)) {
-    const {
-      nameForSigning,
-      nameForSigningLine2,
-      pageNumber,
-      signatureData: { scale, x, y },
-    } = get(state.pdfForSigning);
+  const signatureData = get(state.pdfForSigning.signatureData);
+  if (signatureData?.x) {
+    const appContext = applicationContext as unknown as IApplicationContext;
+    const { nameForSigning, nameForSigningLine2, pageNumber } = get(
+      state.pdfForSigning,
+    );
+    const { scale, x, y } = signatureData;
 
-    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+    const windowWithPdfjs = window as Window & {
+      pdfjsObj?: { getData: () => Promise<unknown> };
+    };
+    const pdfjsObj: { getData: () => Promise<unknown> } | null =
+      windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+
+    if (!pdfjsObj) {
+      return path.error({
+        alertError: {
+          message: 'Unable to complete signing. Please try again.',
+        },
+      });
+    }
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
       .getUseCases()
-      .generateSignedDocumentInteractor(applicationContext, {
+      .generateSignedDocumentInteractor(appContext, {
         pageIndex: pageNumber - 1,
         // pdf.js starts at 1
         pdfData: await pdfjsObj.getData(),
@@ -55,12 +61,12 @@ export const completeDocumentSigningAction = async ({
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
-      .saveSignedDocumentInteractor(applicationContext, {
+      .saveSignedDocumentInteractor(appContext, {
         docketNumber,
         nameForSigning,
         originalDocketEntryId,
         parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
+        signedDocumentStorageId: signedDocumentFromUploadId,
       }));
   }
 
@@ -72,10 +78,10 @@ export const completeDocumentSigningAction = async ({
     redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
   }
 
-  return {
+  return path.success({
     docketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',
-  };
+  });
 };

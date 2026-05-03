@@ -1,6 +1,9 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
+export const docketClerkQCsDocketEntry = (
+  cerebralTest,
+  data: { index?: number } = {},
+) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -12,7 +15,8 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
+      docketNumber:
+        formattedDocketEntriesOnDocketRecord[data.index].docketNumber,
     });
 
     await cerebralTest.runSequence('completeDocketEntryQCSequence');
@@ -25,6 +29,6 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
       document => document.docketEntryId === docketEntryId,
     );
 
-    expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
+    expect(selectedDocument?.qcWorkItemsCompleted).toEqual(true);
   });
 };

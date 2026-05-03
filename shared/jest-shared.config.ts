@@ -1,10 +1,13 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
+import path from 'node:path';
+
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'shared',
   clearMocks: true,
-  collectCoverage: true,
   // type files ignored
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
@@ -25,25 +28,32 @@ const config: Config = {
     '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  testMatch: [
+    '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
+  testEnvironment: path.resolve(
+    process.cwd(),
+    'web-client/JsdomWithTextEncoderEnvironment.ts',
+  ),
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+  ],
   // After a jest runner uses X% of total system memory, recreate the runner.
-  verbose: false,
   workerIdleMemoryLimit: '20%',
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

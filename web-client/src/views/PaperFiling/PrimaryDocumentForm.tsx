@@ -92,7 +92,7 @@ export const PrimaryDocumentForm = connect(
             <input
               className="usa-input usa-input-inline"
               id="mailing-date"
-              maxLength="25"
+              maxLength={25}
               name="mailingDate"
               value={form.mailingDate || ''}
               onBlur={() => validateDocketEntrySequence()}
@@ -233,6 +233,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
+
           </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">
@@ -272,6 +273,7 @@ export const PrimaryDocumentForm = connect(
               autoCapitalize="none"
               className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info2"
+              data-testid="additional-info-2-textarea"
               name="additionalInfo2"
               value={form.additionalInfo2 || ''}
               onBlur={() => {

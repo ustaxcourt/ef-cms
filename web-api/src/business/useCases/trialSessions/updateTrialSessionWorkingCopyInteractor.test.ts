@@ -1,13 +1,15 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
+import { getTrialSessionWorkingCopies as getTrialSessionWorkingCopiesMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
 
 let user;
 
-const MOCK_WORKING_COPY = {
+const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
   caseMetadata: {
     '101-19': { trialStatus: 'dismissed' },
   },
@@ -15,14 +17,33 @@ const MOCK_WORKING_COPY = {
   sortOrder: 'desc',
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  filters: {
+    basisReached: false,
+    continued: false,
+    definiteTrial: false,
+    dismissed: false,
+    motionToDismiss: false,
+    probableSettlement: false,
+    probableTrial: false,
+    recall: false,
+    rule122: false,
+    setForTrial: false,
+    settled: false,
+    showAll: false,
+    statusUnassigned: false,
+    submittedCAV: false,
+  },
 };
 
+const trialSessionWorkingCopy: RawTrialSessionWorkingCopy = MOCK_WORKING_COPY;
+
 describe('Update trial session working copy', () => {
+  const getTrialSessionWorkingCopies = jest.mocked(
+    getTrialSessionWorkingCopiesMock,
+  );
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockReturnValue(MOCK_WORKING_COPY);
+    getTrialSessionWorkingCopies.mockResolvedValue([MOCK_WORKING_COPY]);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -31,16 +52,10 @@ describe('Update trial session working copy', () => {
       userId: 'unauthorizedUser',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateTrialSessionWorkingCopy.mockReturnValue({});
-
     await expect(
       updateTrialSessionWorkingCopyInteractor(
-        applicationContext,
         {
-          trialSessionWorkingCopyToUpdate:
-            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+          trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
         },
         user,
       ),
@@ -48,18 +63,15 @@ describe('Update trial session working copy', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockResolvedValue(
-        omit(MOCK_WORKING_COPY, 'userId'),
-      );
+    getTrialSessionWorkingCopies.mockResolvedValue(
+      // @ts-expect-error - Intentionally testing with incomplete mock data missing userId field
+      [omit(MOCK_WORKING_COPY, 'userId')],
+    );
 
     await expect(
       updateTrialSessionWorkingCopyInteractor(
-        applicationContext,
         {
-          trialSessionWorkingCopyToUpdate:
-            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+          trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
         },
         mockJudgeUser,
       ),
@@ -67,15 +79,9 @@ describe('Update trial session working copy', () => {
   });
 
   it('correctly returns data from persistence', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .updateTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
-
     const result = await updateTrialSessionWorkingCopyInteractor(
-      applicationContext,
       {
-        trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+        trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
       },
       mockJudgeUser,
     );

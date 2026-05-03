@@ -17,7 +17,7 @@ export const deleteCalendarNoteAction = async ({
   const trialSession = await applicationContext
     .getUseCases()
     .saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: null,
+      calendarNote: undefined,
       docketNumber,
       trialSessionId,
     });

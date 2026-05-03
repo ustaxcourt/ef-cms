@@ -1,3 +1,4 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { BigHeader } from '@web-client/views/BigHeader';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -147,12 +148,11 @@ function TrialSessionPlanningReportTable({
                 >
                   <td>
                     {trialLocation.hasNotBeenCalendared && (
-                      <FontAwesomeIcon
-                        className="fa-icon-blue margin-right-2"
+                      <WrappedIcon
+                        iconClass="fa-icon-blue margin-right-2"
                         icon="info-circle"
                         size="lg"
-                        title={trialLocation.lastVisitedDateFormatted}
-                      />
+                        title={trialLocation.lastVisitedDateFormatted} />
                     )}
                   </td>
                   <td

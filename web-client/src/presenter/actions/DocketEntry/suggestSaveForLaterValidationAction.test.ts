@@ -36,7 +36,7 @@ describe('suggestSaveForLaterValidationAction', () => {
       },
     });
 
-    expect(result.output.errors.primaryDocumentFile).toBe(
+    expect(result.output!.errors.primaryDocumentFile).toBe(
       'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     );
   });

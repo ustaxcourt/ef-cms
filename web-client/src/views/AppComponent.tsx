@@ -30,6 +30,7 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardClerkOfCourt } from './Dashboards/DashboardClerkOfCourt';
 import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -81,6 +82,7 @@ import { PrintableTrialCalendar } from './TrialSessionDetails/PrintableTrialCale
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
+import { RecentFilings } from './RecentFilings/RecentFilings';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -143,6 +145,7 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardClerkOfCourt,
   DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
@@ -188,6 +191,7 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
+  RecentFilings,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,

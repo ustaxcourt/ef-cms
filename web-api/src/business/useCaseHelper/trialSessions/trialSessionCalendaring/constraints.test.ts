@@ -347,6 +347,32 @@ describe('constraints', () => {
         `More than one special trial per week scheduled: ${mockSession.trialLocation}, ${dateString}. \n`,
       );
     });
+
+    it('should return true when the week is not initialized in calendarState', () => {
+      // Arrange
+      const mockCalendaringConfig = getMockCalendaringConfig();
+      const uninitializedWeek = '12/25'; // week not in sessionScheduledPerCityPerWeek
+      const mockCalendarState = getMockCalendarState({
+        sessionScheduledPerCityPerWeek: {
+          [mockWeekString]: new Set(),
+        },
+      });
+      const mockSession: ScheduledTrialSession = {
+        sessionType: SESSION_TYPES.regular,
+        trialLocation: mockRegularCityString,
+        weekOf: uninitializedWeek,
+      };
+
+      // Act
+      const result = oneSessionPerLocationPerWeekConstraint({
+        calendarState: mockCalendarState,
+        calendaringConfig: mockCalendaringConfig,
+        session: mockSession,
+      });
+
+      // Assert
+      expect(result).toBe(true);
+    });
   });
 
   describe('reservedWeekOfAtLocationConstraint', () => {
@@ -507,5 +533,34 @@ describe('constraints', () => {
         );
       },
     );
+
+    it('should return true when the week is not initialized in calendarState', () => {
+      // Arrange
+      const mockCalendaringConfig = getMockCalendaringConfig();
+      const uninitializedWeek = '12/25'; // week not in sessionScheduledPerCityPerWeek
+      const mockCalendarState = getMockCalendarState({
+        sessionCountPerCity: {
+          [WASHINGTON_DC_SOUTH_STRING]: 3,
+        },
+        sessionScheduledPerCityPerWeek: {
+          [mockWeekString]: new Set(),
+        },
+      });
+      const mockSession: ScheduledTrialSession = {
+        sessionType: SESSION_TYPES.special,
+        trialLocation: WASHINGTON_DC_SOUTH_STRING,
+        weekOf: uninitializedWeek,
+      };
+
+      // Act
+      const result = washingtonDcSpecialConstraint({
+        calendarState: mockCalendarState,
+        calendaringConfig: mockCalendaringConfig,
+        session: mockSession,
+      });
+
+      // Assert
+      expect(result).toBe(true);
+    });
   });
 });

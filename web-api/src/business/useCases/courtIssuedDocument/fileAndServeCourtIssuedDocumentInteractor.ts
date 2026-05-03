@@ -8,7 +8,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -29,6 +29,8 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -42,7 +44,7 @@ export const fileAndServeCourtIssuedDocument = async (
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    form: any;
+    form: CourtIssuedDocumentAnyType;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -102,7 +104,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
+      documentStorageId: docketEntryToServe.documentStorageId,
       documentToStamp: form,
     });
 
@@ -110,7 +112,6 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId,
       documentBytes: stampedPdf,
     });
 
@@ -141,7 +142,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         contentType: 'application/json',
-        document: Buffer.from(JSON.stringify(contentToStore)),
+        document: Buffer.from(JSON.stringify(contentToStore)) as any,
         key: documentContentsId,
         useTempBucket: false,
       });
@@ -213,9 +214,9 @@ export const fileAndServeCourtIssuedDocument = async (
             })
           )[0];
 
-          if (caseEntity.leadDocketNumber === caseEntity.docketNumber) {
+          if (isLeadCase(caseEntity)) {
             const consolidatedCases = await getConsolidatedCases({
-              leadDocketNumber: caseEntity.leadDocketNumber,
+              leadDocketNumber: caseEntity.leadDocketNumber!,
             });
 
             const childCaseDeadlines: RawCaseDeadline[] = [];
@@ -249,6 +250,15 @@ export const fileAndServeCourtIssuedDocument = async (
       }),
     );
 
+    if (form.affectedDocketEntries) {
+      await addAssociatedDocketEntries(
+        casesToUpdate,
+        form,
+        docketEntryToServe,
+        true,
+      );
+    }
+
     serviceResults = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
@@ -276,7 +286,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: stampedPdf,
-    key: docketEntryToServe.docketEntryId,
+    key: docketEntryToServe.documentStorageId,
   });
 
   const successMessage =

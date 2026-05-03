@@ -7,9 +7,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
 import { generateMinuteSheetFilename } from '@web-api/business/useCaseHelper/trialSessionMinutes/generateMinuteSheetFilename';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createAndUploadMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
@@ -26,7 +26,6 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   });
 
   const trialSession = await getTrialSessionById({
-    applicationContext,
     trialSessionId,
   });
 
@@ -34,19 +33,19 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     throw new Error('Case and trial session could not be retrieved');
   }
 
-  const docketEntryId = getUniqueId();
+  const documentStorageId = getUniqueId();
 
   await createAndUploadMinuteSheet(applicationContext, {
     docketNumber,
     trialSessionId,
     aCase,
     trialSession,
-    docketEntryId,
+    documentStorageId,
   });
 
   const { url } = await getDownloadPolicyUrl({
     applicationContext,
-    key: docketEntryId,
+    key: documentStorageId,
     filename: generateMinuteSheetFilename({ trialSession, caseDetail: aCase }),
   });
 

@@ -1,10 +1,12 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
+
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'scripts',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
     '!archived/**',
@@ -12,13 +14,10 @@ const config: Config = {
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
-    '!cloudwatch/perform-query.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
-    '!dynamo/fix-race-condition-served-in-drafts.ts',
-    '!dynamo/set-maintenance-mode.ts',
-    '!ecr/**',
+    '!ecr/pull-and-tag.ts',
     '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',
@@ -30,33 +29,27 @@ const config: Config = {
     '!elasticsearch/scrape-practitioner-briefs.ts',
     '!email/**',
     '!generate-uuid.ts',
-    '!glue/**',
-    '!helpers/runCommand.ts',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
     '!judge/update-judge-isSeniorJudge.ts',
     '!judge/update-judge-titles.ts',
-    '!migration/is-migration-needed.ts',
-    '!migration/migrationFilesHelper.ts',
-    '!migration/read-segment.ts',
-    '!migration/set-local-migration-complete-marker.ts',
-    '!migration/track-successful-migrations.ts',
     '!npm/upgrade-npm-packages.ts',
+    '!persistence/truncate-all-persistence.ts',
     '!postgres/**',
     '!reindex/**',
     '!reports/**',
     '!run-once-scripts/**',
     '!secrets/**',
-    '!set-maintenance-mode-locally.ts',
+    '!seed/add-missing-seed-docket-entries-pdfs.js',
+    '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
     '!upload-practitioner-application-packages.ts',
-    '!user/**',
+    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 97,
@@ -67,18 +60,18 @@ const config: Config = {
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^scripts/(.*)$': '<rootDir>/$1',
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
-  testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
-  verbose: false,
 };
 
 export default config;

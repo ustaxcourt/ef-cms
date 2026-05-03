@@ -1,7 +1,17 @@
-name: Node.js Client Integration Tests
+name: Node.js Public Client Integration Tests
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   client_integration_public:
@@ -28,8 +38,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Configure sysctl limits
@@ -41,22 +51,28 @@ jobs:
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 2.11
-      - name: Setup DynamoDB Local
-        uses: codyseibert/dynamodb-action@v4.1.0
-        with:
-          port: 8000
-          cors: '*'
-          version: '2.6.1'
+          opensearch-version: 3.5.0
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Install Node Dependencies
+      - name: Restore Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Node Dependencies - Cache Miss Install
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
       - name: Setup Postgres
         run: |
           npm run migration:postgres
+          npm run migration:postgres:contract
           npm run seed:postgres
       - name: Web Client - Integration Tests Public
         run: |
@@ -66,7 +82,16 @@ jobs:
           export TESTFILES=$(npx ts-node split-tests.ts -public)
           npm run test:client:integration:ci
       - name: Store Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: server-log-output-${{ matrix.ci_node_index }}
           path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

@@ -196,7 +196,7 @@ export const SessionInformationForm = connect<
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
               <DateSelector
                 defaultValue={form.estimatedEndDate}
-                displayOptionalHintText={true}
+                displayOptionalHintText={!addingTrialSession}
                 errorText={validationErrors.estimatedEndDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -240,6 +240,7 @@ export const SessionInformationForm = connect<
                     <label
                       className="usa-checkbox__label"
                       htmlFor="swing-session"
+                      data-testid="swing-session-label"
                     >
                       This is part of a Swing session
                     </label>

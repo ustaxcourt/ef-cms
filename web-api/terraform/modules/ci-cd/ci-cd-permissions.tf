@@ -195,39 +195,22 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Sid": "RdsConnect",
       "Effect": "Allow",
       "Action": [
-        "rds-db:connect"
+        "rds-db:connect",
+        "rds:DescribeDBEngineVersions",
+        "rds:DescribeDBClusters",
+        "rds:DescribeBlueGreenDeployments",
+        "rds:DescribeDBInstances",
+        "rds:DescribeGlobalClusters"
       ],
       "Resource": [
         "*"
       ]
     },
     {
-      "Sid": "DynamoGranular",
+      "Sid": "DynamoNoLongerGranular",
       "Effect": "Allow",
       "Action": [
-        "dynamodb:Scan",
-        "dynamodb:BatchWriteItem",
-        "dynamodb:PutItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:CreateTable",
-        "dynamodb:DescribeTable",
-        "dynamodb:DeleteTableReplica",
-        "dynamodb:GetItem",
-        "dynamodb:Query",
-        "dynamodb:BatchGetItem",
-        "dynamodb:UpdateTable",
-        "dynamodb:UpdateTimeToLive",
-        "dynamodb:CreateGlobalTable",
-        "dynamodb:DescribeContinuousBackups",
-        "dynamodb:DescribeGlobalTable",
-        "dynamodb:DescribeLimits",
-        "dynamodb:DescribeStream",
-        "dynamodb:GetRecords",
-        "dynamodb:GetShardIterator",
-        "dynamodb:UpdateItem",
-        "dynamodb:ListStreams",
-        "dynamodb:UpdateGlobalTable",
-        "dynamodb:CreateTableReplica"
+        "dynamodb:*"
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
@@ -268,12 +251,12 @@ resource "aws_iam_policy" "ci_cd_policy" {
        "Resource": [
           "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:global-cluster:*",
           "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster:*",
-          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:deployment:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster-pg:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:pg:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:subgrp:*",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
-          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*"
        ]
     },
     {
@@ -344,16 +327,6 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "ssm:GetParameter"
       ],
       "Resource": "*",
-      "Effect": "Allow"
-    },
-    {
-      "Action": [
-        "glue:GetJobRuns",
-        "glue:StartJobRun"
-      ],
-      "Resource": [
-        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
-      ],
       "Effect": "Allow"
     },
     {
@@ -459,16 +432,11 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_elasticsearch_execution_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",

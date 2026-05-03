@@ -1,0 +1,104 @@
+#!/bin/bash
+
+function is_ide_running() {
+  pgrep -f -i "$1" >/dev/null 2>&1 || pgrep -i "$1" >/dev/null 2>&1
+}
+
+function open_vscode_diff() {
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    VSCODE_APP="/Applications/Visual Studio Code.app"
+    if [ ! -d "$VSCODE_APP" ]; then
+      VSCODE_APP="$HOME/Applications/Visual Studio Code.app"
+    fi
+
+    if [ -d "$VSCODE_APP" ]; then
+      CONTENTS="$VSCODE_APP/Contents"
+      ELECTRON="$CONTENTS/MacOS/Electron"
+      CLI="$CONTENTS/Resources/app/out/cli.js"
+
+      if [ -f "$ELECTRON" ] && [ -f "$CLI" ]; then
+        ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" --diff "$1" "$2" 2>/dev/null
+      else
+        open -a "Visual Studio Code.app" --args --diff "$1" "$2" 2>/dev/null
+      fi
+    elif command -v code >/dev/null 2>&1; then
+      code --diff "$1" "$2" 2>/dev/null
+    else
+      open -a "Visual Studio Code.app" --args --diff "$1" "$2" 2>/dev/null
+    fi
+  else
+    if command -v code >/dev/null 2>&1; then
+      code --diff "$1" "$2" 2>/dev/null
+    else
+      ide_bin=$(pgrep -a -f -i "/code/code" 2>/dev/null | head -n 1 | awk '{print $2}')
+      if [[ -n "$ide_bin" && -x "$ide_bin" ]]; then
+        "$ide_bin" --diff "$1" "$2" 2>/dev/null
+      fi
+    fi
+  fi
+}
+
+function open_jetbrains_diff() {
+  ide="$1"
+  temp_file="$2"
+  current_file="$3"
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    if [[ "$ide" == "idea" ]]; then
+      open -a "IntelliJ IDEA Ultimate.app" --args diff "$temp_file" "$current_file" 2>/dev/null || open -a "IntelliJ IDEA.app" --args diff "$temp_file" "$current_file" 2>/dev/null
+    elif [[ "$ide" == "webstorm" ]]; then
+      open -a "WebStorm.app" --args diff "$temp_file" "$current_file" 2>/dev/null
+    fi
+  else
+    if command -v "$ide" >/dev/null 2>&1; then
+      "$ide" diff "$temp_file" "$current_file" 2>/dev/null
+    else
+      ide_bin=$(pgrep -a -f -i "/bin/${ide}" 2>/dev/null | head -n 1 | awk '{print $2}')
+      if [[ -n "$ide_bin" && -x "$ide_bin" ]]; then
+        "$ide_bin" diff "$temp_file" "$current_file" 2>/dev/null
+      fi
+    fi
+  fi
+}
+
+EFCMS_ROOT=$(realpath "$(dirname "$0")/..")
+
+if [ -f "CHANGES.md" ]; then
+  CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
+  ADDED_LINES=$(printf "%s\n" "$CHANGES_DIFF" | grep "^+" | grep -v "^+++" | grep -v "No newline" || true)
+
+  if [ -n "$ADDED_LINES" ]; then
+    {
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "⚠️  CHANGES.md has been updated. Please review the manual steps below:"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+      echo "$ADDED_LINES" | while IFS= read -r line; do
+        printf '%s\n' "${line#+}"
+      done
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+    } >&2
+
+    NO_IDE_POP="${EFCMS_ROOT}/.husky/.post-merge-no-ide-pop"
+    [[ -f "$NO_IDE_POP" ]] && exit 0
+
+    TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
+    CURRENT_FILE="${EFCMS_ROOT}/CHANGES.md"
+    git show ORIG_HEAD:CHANGES.md >"$TEMP_FILE" 2>/dev/null || touch "$TEMP_FILE"
+
+    if is_ide_running "idea"; then
+      open_jetbrains_diff idea "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    elif is_ide_running "webstorm"; then
+      open_jetbrains_diff webstorm "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    elif is_ide_running "code"; then
+      open_vscode_diff "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    else
+      rm -f "$TEMP_FILE" 2>/dev/null || true
+    fi
+  fi
+fi

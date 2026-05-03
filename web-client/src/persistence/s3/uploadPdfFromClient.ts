@@ -1,4 +1,11 @@
 import promiseRetry from 'promise-retry';
+import { DateTime } from 'luxon';
+
+const resetIdleTimerDuringUpload = () => {
+  if (typeof window !== 'undefined' && window.dispatchEvent) {
+    window.dispatchEvent(new Event('resetIdleTimer'));
+  }
+};
 
 function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
@@ -75,10 +82,9 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
-  const nowDateString = new Date();
-  pdfDoc.setCreationDate(nowDateString);
-  pdfDoc.setModificationDate(nowDateString);
+  const nowJSDate = DateTime.now().toJSDate();
+  pdfDoc.setCreationDate(nowJSDate);
+  pdfDoc.setModificationDate(nowJSDate);
 
   const modifiedPdfBytes: number[] = await pdfDoc.save();
   const finalModifiedPdfBytes: BlobPart =
@@ -179,7 +185,10 @@ export const uploadPdfFromClient = async ({
               (formData as any)._boundary
             }`,
           },
-          onUploadProgress,
+          onUploadProgress: progressEvent => {
+            resetIdleTimerDuringUpload();
+            onUploadProgress(progressEvent);
+          },
         })
         .then(r => {
           onUploadProgress({ isDone: true });

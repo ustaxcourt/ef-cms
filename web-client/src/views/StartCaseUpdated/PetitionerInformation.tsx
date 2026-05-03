@@ -64,7 +64,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     contact={{
                       ...petitionFormatted.contactPrimary,
                       email:
-                        petitionFormatted.contactPrimary.paperPetitionEmail ||
+                        petitionFormatted.contactPrimary.contactEmailAddress ||
                         'Email not provided',
                     }}
                     showEmail={!isPetitioner}
@@ -107,6 +107,36 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                       </span>
                     </div>
                   )}
+                  {petitionFormatted.contactPrimary.preferredLanguage && (
+                    <div className="margin-top-1">
+                      <span className="text-semibold">
+                        Preferred language:{' '}
+                      </span>
+                      <span
+                        className="margin-left-05"
+                        data-testid="primary-preferred-language"
+                      >
+                        {petitionFormatted.contactPrimary.preferredLanguage}
+                      </span>
+                    </div>
+                  )}
+                  {petitionFormatted.contactPrimary
+                    .preferredCommunicationMethod && (
+                    <div className="margin-top-1">
+                      <span className="text-semibold">
+                        Preferred method of communication:{' '}
+                      </span>
+                      <span
+                        className="margin-left-05"
+                        data-testid="primary-preferred-communication-method"
+                      >
+                        {
+                          petitionFormatted.contactPrimary
+                            .preferredCommunicationMethod
+                        }
+                      </span>
+                    </div>
+                  )}
                 </address>
               )}
             </div>
@@ -129,7 +159,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     contact={{
                       ...petitionFormatted.contactSecondary,
                       email:
-                        petitionFormatted.contactSecondary.paperPetitionEmail ||
+                        petitionFormatted.contactSecondary.contactEmailAddress ||
                         'Email not provided',
                       phone:
                         petitionFormatted.contactSecondary.phone ||
@@ -167,6 +197,36 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                           petitionFormatted.contactSecondary
                             .placeOfLegalResidence
                         ]
+                      }
+                    </span>
+                  </div>
+                )}
+                {petitionFormatted.contactSecondary.preferredLanguage && (
+                  <div className="margin-top-1">
+                    <span className="text-semibold">
+                      Preferred language:{' '}
+                    </span>
+                    <span
+                      className="margin-left-05"
+                      data-testid="secondary-preferred-language"
+                    >
+                      {petitionFormatted.contactSecondary.preferredLanguage}
+                    </span>
+                  </div>
+                )}
+                {petitionFormatted.contactSecondary
+                  .preferredCommunicationMethod && (
+                  <div className="margin-top-1">
+                    <span className="text-semibold">
+                      Preferred method of communication:{' '}
+                    </span>
+                    <span
+                      className="margin-left-05"
+                      data-testid="secondary-preferred-communication-method"
+                    >
+                      {
+                        petitionFormatted.contactSecondary
+                          .preferredCommunicationMethod
                       }
                     </span>
                   </div>

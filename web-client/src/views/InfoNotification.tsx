@@ -49,7 +49,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
             'usa-alert--info',
             isMessageOnly && 'usa-alert-info-message-only',
           )}
-          data-testid="info-alert"
+          data-testid="alert-info"
           ref={notificationRef}
           role="alert"
         >

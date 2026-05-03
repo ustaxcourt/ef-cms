@@ -1,4 +1,4 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
@@ -9,18 +9,20 @@ import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkVerifiesConsolidatedCases } from './journey/docketClerkVerifiesConsolidatedCases';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { removePendingItemFromCase } from './journey/removePendingItemFromCase';
 import { updateACaseCaption } from './journey/updateACaseCaption';
+import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
 
 describe('Docket Clerk verifies Consolidated Cases', () => {
   const cerebralTest = setupTest();
 
   cerebralTest.createdTrialSessions = [];
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const caseOverrides = {
     caseCaption: 'Mona Schultz, Petitioner',
     docketNumberSuffix: 'L',
@@ -51,10 +53,13 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
-    docketClerkRemovesCaseFromHearing(cerebralTest);
+    docketClerkRemovesCaseFromHearing(cerebralTest, 0);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     manuallyAddCaseToTrial(cerebralTest);
+    docketClerkVerifiesConsolidatedCases(cerebralTest);
+
+    docketClerkRemovesCaseFromTrial(cerebralTest);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');

@@ -1,18 +1,22 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('Get trial session details', () => {
-  const MOCK_TRIAL_SESSION = {
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+
+  const MOCK_TRIAL_SESSION: Partial<RawTrialSession> = {
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: SESSION_TYPES.regular,
@@ -24,15 +28,12 @@ describe('Get trial session details', () => {
   };
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({});
+    getTrialSessionById.mockResolvedValue(undefined);
 
     await expect(
       getTrialSessionDetailsInteractor(
-        applicationContext,
         {
-          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId!,
         },
         mockPetitionerUser,
       ),
@@ -40,17 +41,15 @@ describe('Get trial session details', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(
-        omit(MOCK_TRIAL_SESSION, 'maxCases'),
-      );
+    getTrialSessionById.mockResolvedValue(
+      // @ts-expect-error - Intentionally testing with incomplete mock data missing maxCases field
+      omit(MOCK_TRIAL_SESSION, 'maxCases'),
+    );
 
     await expect(
       getTrialSessionDetailsInteractor(
-        applicationContext,
         {
-          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId!,
         },
         mockPetitionsClerkUser,
       ),
@@ -58,15 +57,12 @@ describe('Get trial session details', () => {
   });
 
   it('throws a not found error if persistence does not return any results', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(null);
+    getTrialSessionById.mockResolvedValue(undefined);
 
     await expect(
       getTrialSessionDetailsInteractor(
-        applicationContext,
         {
-          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId!,
         },
         mockPetitionsClerkUser,
       ),
@@ -76,14 +72,13 @@ describe('Get trial session details', () => {
   });
 
   it('correctly returns data from persistence', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION);
+    getTrialSessionById.mockResolvedValue(
+      MOCK_TRIAL_SESSION as RawTrialSession,
+    );
 
     const result = await getTrialSessionDetailsInteractor(
-      applicationContext,
       {
-        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId!,
       },
       mockPetitionsClerkUser,
     );

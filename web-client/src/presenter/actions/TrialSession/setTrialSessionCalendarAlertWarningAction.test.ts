@@ -3,7 +3,7 @@ import { setTrialSessionCalendarAlertWarningAction } from './setTrialSessionCale
 
 describe('setTrialSessionCalendarAlertWarningAction', () => {
   it('should set state.alertWarning with the print paper service for parties message', async () => {
-    const result = await runAction(setTrialSessionCalendarAlertWarningAction);
+    const result = await runAction(setTrialSessionCalendarAlertWarningAction, { state: {} });
 
     expect(result.output).toEqual({
       alertWarning: {

@@ -18,11 +18,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.12.0"
+      version = "6.41.0"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
-      version = "2.2.0"
+      version = "2.3.2"
     }
   }
 }
@@ -36,20 +36,24 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source               = "../../modules/ci-cd"
+  source                  = "../../modules/ci-cd"
   lower_env_restore_roles = var.lower_env_restore_roles
 }
 
 module "kibana" {
   source                           = "../../modules/kibana"
   cognito_suffix                   = var.cognito_suffix
+  es_logs_cluster_arn              = var.es_logs_cluster_arn
+  es_logs_consumer_account_ids     = var.es_logs_consumer_account_ids
   es_logs_ebs_volume_size_gb       = var.es_logs_ebs_volume_size_gb
+  es_logs_endpoint                 = var.es_logs_endpoint
+  es_logs_engine_version           = var.es_logs_engine_version
   es_logs_instance_count           = var.es_logs_instance_count
   es_logs_instance_type            = var.es_logs_instance_type
-  sns_alarm_arn                    = module.health-alarms-east.topic_arn
   log_group_environments           = var.log_group_environments
-  number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
   log_snapshot_bucket_name         = var.log_snapshot_bucket_name
+  number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
+  sns_alarm_arn                    = module.health-alarms-east.topic_arn
 }
 
 module "dawson-developer-permissions" {
@@ -82,4 +86,10 @@ module "default_vpc_west" {
   providers = {
     aws = aws.us-west-1
   }
+}
+
+module "zendesk-automations" {
+  source                 = "../../modules/zendesk-automations"
+  cognito_user_pool      = var.cognito_user_pool
+  zendesk_aws_account_id = var.zendesk_aws_account_id
 }

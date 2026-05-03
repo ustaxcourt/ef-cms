@@ -12,9 +12,6 @@ import {
 
 describe('Admissions Clerk Grants E-Access', () => {
   const password = getCypressEnv().defaultAccountPass;
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();

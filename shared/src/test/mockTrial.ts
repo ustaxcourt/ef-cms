@@ -12,7 +12,7 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: true,
   joinPhoneNumber: '0987654321',
   judge: {
@@ -35,9 +35,17 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
 };
 
 export const MOCK_TRIAL_REGULAR: RawTrialSession = {
-  caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
+  caseOrder: [
+    {
+      docketNumber: MOCK_CASE.docketNumber,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
+  ],
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: 'Judge Yggdrasil',
@@ -60,13 +68,25 @@ export const MOCK_TRIAL_REGULAR: RawTrialSession = {
 export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   address1: '123 Street Lane',
   caseOrder: [
-    { docketNumber: MOCK_CASE.docketNumber },
-    { docketNumber: '123-45' },
+    {
+      docketNumber: MOCK_CASE.docketNumber,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
+    {
+      docketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
   ],
   chambersPhoneNumber: '3609087782',
   city: 'Scottsburg',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: 'A Judge',
@@ -91,7 +111,7 @@ export const MOCK_TRIAL_STANDALONE_REMOTE: RawTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: true,
   joinPhoneNumber: '0987654321',
   judge: {
@@ -116,7 +136,8 @@ export const MOCK_NEW_TRIAL_REMOTE: RawNewTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '4509876612',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  estimatedEndDate: '2099-11-15T00:00:00.000Z',
+  hasNottBeenServed: false,
   isCalendared: false,
   joinPhoneNumber: '8737762291',
   judge: {

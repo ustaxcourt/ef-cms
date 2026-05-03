@@ -6,9 +6,8 @@ export const generateSuggestedTrialSessionCalendarLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await generateSuggestedTrialSessionCalendarInteractor(
-      applicationContext,
       {
         ...JSON.parse(event.body),
       },

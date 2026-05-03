@@ -46,7 +46,6 @@ describe('getUsersWithSimilarEmails', () => {
       UserPoolId: environment.userPoolId,
       AttributesToGet: ['email', 'custom:role', 'custom:userId'],
       Filter: `email ^= "${mockUserName}"`,
-      Limit: 60,
     });
 
     expect(result).toEqual([
@@ -144,6 +143,7 @@ describe('getUsersWithSimilarEmails', () => {
 
   it('should return an empty array when SDK returns no Users', async () => {
     mockSend.mockResolvedValueOnce([]);
+    mockSend.mockResolvedValueOnce([]);
 
     const result = await getUsersWithSimilarEmails({
       userEmail: 'nobody@ustaxcourt.gov',
@@ -203,5 +203,123 @@ describe('getUsersWithSimilarEmails', () => {
       'john@ustaxcourt.gov',
     ]);
     expect(res).toHaveLength(2);
+  });
+
+  it('should paginate results if query returns a pagination token', async () => {
+    const users = [
+      {
+        email: 'user.name@ustaxcourt.gov',
+        role: ROLES.docketClerk,
+        status: 'CONFIRMED',
+        userId: 'abc-123',
+        enabled: true,
+      },
+      {
+        email: 'user.name+2@ustaxcourt.gov',
+        role: ROLES.docketClerk,
+        status: 'CONFIRMED',
+        userId: 'def-456',
+        enabled: true,
+      },
+    ];
+    mockSend.mockReturnValueOnce({
+      Users: [
+        {
+          Username: 'real user',
+          Enabled: true,
+          UserStatus: 'CONFIRMED',
+          Attributes: [
+            { Name: 'email', Value: users[0].email },
+            { Name: 'custom:role', Value: ROLES.docketClerk },
+            { Name: 'custom:userId', Value: users[0].userId },
+          ],
+        },
+      ],
+      PaginationToken: '12345',
+    });
+    mockSend.mockReturnValueOnce({
+      Users: [
+        {
+          Username: 'real user 2',
+          Enabled: true,
+          UserStatus: 'CONFIRMED',
+          Attributes: [
+            { Name: 'email', Value: users[1].email },
+            { Name: 'custom:role', Value: ROLES.docketClerk },
+            { Name: 'custom:userId', Value: users[1].userId },
+          ],
+        },
+      ],
+      PaginationToken: null,
+    });
+
+    const result = await getUsersWithSimilarEmails({
+      userEmail: users[0].email,
+    });
+
+    expect(getCognito().send).toHaveBeenCalledTimes(2);
+    expect(result).toEqual(users);
+  });
+
+  it('should search by exact email if initial query does not return an exact match', async () => {
+    const users = [
+      {
+        email: 'user.name@ustaxcourt.gov',
+        role: ROLES.docketClerk,
+        status: 'CONFIRMED',
+        userId: 'abc-123',
+        enabled: true,
+      },
+      {
+        email: 'user.name+2@ustaxcourt.gov',
+        role: ROLES.docketClerk,
+        status: 'CONFIRMED',
+        userId: 'def-456',
+        enabled: true,
+      },
+    ];
+    mockSend.mockReturnValueOnce({
+      Users: [
+        {
+          Username: 'real user',
+          Enabled: true,
+          UserStatus: 'CONFIRMED',
+          Attributes: [
+            { Name: 'email', Value: users[0].email },
+            { Name: 'custom:role', Value: ROLES.docketClerk },
+            { Name: 'custom:userId', Value: users[0].userId },
+          ],
+        },
+      ],
+    });
+    mockSend.mockReturnValueOnce({
+      Users: [
+        {
+          Username: 'real user 2',
+          Enabled: true,
+          UserStatus: 'CONFIRMED',
+          Attributes: [
+            { Name: 'email', Value: users[1].email },
+            { Name: 'custom:role', Value: ROLES.docketClerk },
+            { Name: 'custom:userId', Value: users[1].userId },
+          ],
+        },
+      ],
+    });
+
+    const result = await getUsersWithSimilarEmails({
+      userEmail: users[1].email,
+    });
+
+    expect(getCognito().send).toHaveBeenCalledTimes(2);
+
+    const cognitoSend = (getCognito().send as jest.Mock).mock.lastCall[0];
+    expect(cognitoSend.input).toMatchObject({
+      UserPoolId: environment.userPoolId,
+      AttributesToGet: ['email', 'custom:role', 'custom:userId'],
+      Filter: `email = "${users[1].email}"`,
+    });
+
+    expect(result).toEqual(users);
   });
 });

@@ -2,13 +2,23 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const InclusionsForm = connect(
+const props = cerebralProps as unknown as {
+  bind: string;
+  type: string;
+  validationBind: string;
+};
+
+export const InclusionsForm: React.FC<{
+  bind: string;
+  type: string;
+  validationBind: string;
+}> = connect(
   {
     constants: state.constants,
     data: state[props.bind],
@@ -33,6 +43,16 @@ export const InclusionsForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
+  }: {
+    constants: Record<string, any>;
+    data: Record<string, any>;
+    fileDocumentHelper: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    openCleanModalSequence: Function | RunnableSequence;
+    type: string;
+    updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
+    validateExternalDocumentInformationSequence: Function | RunnableSequence;
+    validationData: Record<string, any>;
   }) {
     return (
       <>
@@ -57,7 +77,7 @@ export const InclusionsForm = connect(
               >
                 <FontAwesomeIcon
                   className="margin-right-05"
-                  icon="question-circle"
+                  icon="circle-info"
                   size="1x"
                 />
                 What can I include with my document?

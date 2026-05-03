@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -85,6 +83,7 @@ describe('formattedEligibleCasesHelper', () => {
     termYear: '2019',
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
+    maxCases: 50,
   };
 
   const formattedEligibleCasesHelper = withAppContextDecorator(
@@ -165,6 +164,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '102-19',
@@ -201,6 +201,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '105-19',
@@ -256,6 +257,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '103-22',
@@ -283,25 +285,13 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '108-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '107-22',
-      }),
+    expect(result.map(c => c.docketNumber)).toEqual([
+      '108-22',
+      '103-22',
+      '104-22',
+      '106-22',
+      '105-22',
+      '107-22',
     ]);
   });
 
@@ -309,6 +299,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '106-22',
@@ -346,25 +337,13 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '108-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '107-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
+    expect(result.map(c => c.docketNumber)).toEqual([
+      '108-22',
+      '107-22',
+      '103-22',
+      '104-22',
+      '106-22',
+      '105-22',
     ]);
   });
 
@@ -372,6 +351,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '105-21',
@@ -412,280 +392,63 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '105-21',
-      }),
-      expect.objectContaining({
-        docketNumber: '108-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '103-21',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-21',
-      }),
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '107-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-23',
-      }),
+    expect(result.map(c => c.docketNumber)).toEqual([
+      '108-22',
+      '103-21',
+      '105-21',
+      '104-21',
+      '103-22',
+      '104-22',
+      '106-22',
+      '107-22',
+      '105-23',
     ]);
   });
 
-  it('groups the cases correctly when the eligible lead case is not in the list', () => {
+  it('sorts aged cases correctly', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
-              docketNumber: '106-22',
-              leadDocketNumber: '103-22',
+              docketNumber: '105-21',
+              leadDocketNumber: '103-21',
+              isAgedCase: true,
             },
             {
-              docketNumber: '104-22',
-              leadDocketNumber: '103-22',
+              docketNumber: '103-21',
+              leadDocketNumber: '103-21',
             },
             {
-              docketNumber: '105-22',
+              docketNumber: '105-23',
+              isAgedCase: true,
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY
             },
             {
               docketNumber: '107-22',
+              isAgedCase: true,
             },
             {
               docketNumber: '108-22',
-              isManuallyAdded: true,
+              isAgedCase: false,
+            },
+            {
+              docketNumber: '104-21',
+              leadDocketNumber: '103-21',
             },
           ],
         },
       },
     });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '108-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '107-22',
-      }),
+    expect(result.map(c => c.docketNumber)).toEqual([ //AD_23-000105, AD_22-000107
+      '105-23',
+      '107-22',
+      '103-21',
+      '105-21',
+      '104-21',
+      '108-22',
     ]);
-  });
-
-  it('should not group the consolidated cases when the lead case is manually added', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '103-22',
-              isManuallyAdded: true,
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '104-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '106-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '105-22',
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-    ]);
-  });
-
-  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '103-22',
-              docketNumberSuffix: 'P',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '104-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '106-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '105-22',
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-    ]);
-  });
-
-  it('should not group the consolidated cases when the lead case has high priority suffix 2', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '104-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '103-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '105-22',
-            },
-            {
-              docketNumber: '102-22',
-            },
-            {
-              docketNumber: '101-22',
-            },
-            {
-              docketNumber: '106-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '115-22',
-              isManuallyAdded: true,
-            },
-            {
-              docketNumber: '112-22',
-              isManuallyAdded: true,
-            },
-            {
-              docketNumber: '114-23',
-              isManuallyAdded: true,
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '112-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '115-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '114-23',
-      }),
-      expect.objectContaining({
-        docketNumber: '101-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '102-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-    ]);
-  });
-
-  it('should not group the consolidated cases when the lead case has high priority suffix 3', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '30535-15',
-              isManuallyAdded: true,
-              leadDocketNumber: '30533-15',
-            },
-            {
-              docketNumber: '33089-21',
-              docketNumberSuffix: 'L',
-              leadDocketNumber: '6450-19',
-            },
-            {
-              docketNumber: '6450-19',
-              leadDocketNumber: '6450-19',
-            },
-            {
-              docketNumber: '30533-15',
-              leadDocketNumber: '30533-15',
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '30535-15',
-      }),
-      expect.objectContaining({
-        docketNumber: '33089-21',
-      }),
-      expect.objectContaining({
-        docketNumber: '30533-15',
-      }),
-      expect.objectContaining({
-        docketNumber: '6450-19',
-      }),
-    ]);
-    expect(result.every(({ shouldIndent }) => !shouldIndent)).toBeTruthy();
   });
 
   it('should display all cases when filter is falsy', () => {
@@ -697,6 +460,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
@@ -714,6 +478,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
@@ -741,6 +506,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
@@ -757,5 +523,18 @@ describe('formattedEligibleCasesHelper', () => {
         }),
       ]),
     );
+  });
+
+  it('should handle there being no eligible cases', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: undefined,
+        },
+      },
+    });
+
+    expect(result).toEqual([]);
   });
 });

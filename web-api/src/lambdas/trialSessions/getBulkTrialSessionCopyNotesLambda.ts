@@ -6,10 +6,9 @@ export const getBulkTrialSessionCopyNotesLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { specialTrialSessions } = JSON.parse(event.body || '{}');
     return await getBulkTrialSessionCopyNotesInteractor(
-      applicationContext,
       {
         specialTrialSessions,
       },

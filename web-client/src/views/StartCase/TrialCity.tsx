@@ -9,12 +9,13 @@ type TrialCityType = {
   label: string;
   onBlur?: () => void;
   onChange: (event: any) => void;
-  procedureType: string;
+  procedureType?: string;
   showDefaultOption: boolean;
   showHint?: boolean;
   showRegularTrialCitiesHint?: boolean;
   showSmallTrialCitiesHint?: boolean;
   value: string;
+  trialCitiesByState?: any;
 };
 
 const trialCityDependencies = {

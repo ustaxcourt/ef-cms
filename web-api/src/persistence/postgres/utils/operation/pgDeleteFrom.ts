@@ -1,8 +1,8 @@
-import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-schema';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DeleteQueryBuilder, DeleteResult } from 'kysely';
-import { DeleteFrom } from 'kysely/dist/cjs/parser/delete-from-parser';
+import type { DeleteFrom } from 'node_modules/kysely/dist/cjs/parser/delete-from-parser';
 
 type DeleteWhereCallback<T extends keyof Database> = (
   qb: DeleteFrom<Database, T>,

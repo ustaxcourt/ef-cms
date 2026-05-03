@@ -10,19 +10,12 @@ const gunzip = promisify(zlib.gunzip);
 // to CloudWatch Logs.
 const logFailedResponses = true;
 
-exports.handler = async (input, context) => {
-  let payload;
-
-  try {
-    payload = await decompressAndParse(input.awslogs.data);
-  } catch (error) {
-    context.fail(error);
-    return;
-  }
+exports.handler = async input => {
+  const payload = await decompressAndParse(input.awslogs.data);
 
   if (payload.messageType === 'CONTROL_MESSAGE') {
     console.log('Received a control message');
-    context.succeed('Control message handled successfully');
+    console.log('Control message handled successfully');
     return;
   }
 
@@ -45,10 +38,9 @@ exports.handler = async (input, context) => {
 
   if (error) {
     logFailure(error, failedItems);
-    context.fail(JSON.stringify(error));
+    throw new Error(JSON.stringify(error));
   } else {
     console.log(`Success: ${JSON.stringify(success)}`);
-    context.succeed('Success');
   }
 };
 
@@ -59,7 +51,7 @@ const decompressAndParse = async data => {
 };
 
 const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
+  // eslint-disable-next-line custom-rules-plugin/no-dates
   const timestamp = new Date(1 * logEvent.timestamp);
 
   // index name format: cwl-YYYY.MM.DD
@@ -215,7 +207,7 @@ function buildRequest(endpoint, body) {
   );
   let region = endpointParts[2];
   let service = endpointParts[3];
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
+  // eslint-disable-next-line custom-rules-plugin/no-dates
   let datetime = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
   let date = datetime.substr(0, 8);
   let kDate = hmac('AWS4' + process.env.AWS_SECRET_ACCESS_KEY, date);

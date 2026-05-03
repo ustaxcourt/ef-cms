@@ -1,5 +1,36 @@
+import { emptyUserState } from '@web-client/presenter/state/userState';
+import {
+  ROLES,
+  PRACTICE_TYPE,
+} from '@shared/business/entities/EntityConstants';
 import React from 'react';
-export function SearchBoilerplateText({ formTypeText, isOpinion = false }) {
+
+export function SearchBoilerplateText({
+  formTypeText,
+  isOpinion = false,
+  user = { ...emptyUserState },
+}) {
+  const practitionerRoles = new Set([
+    ROLES.privatePractitioner,
+    ROLES.irsPractitioner,
+    ROLES.inactivePractitioner,
+  ]);
+
+  const practitionerTypes = new Set([
+    PRACTICE_TYPE.Private,
+    PRACTICE_TYPE.IRS,
+    PRACTICE_TYPE.DOJ,
+  ]);
+
+  const isPractitionerUser =
+    practitionerRoles.has((user as any)?.role) ||
+    practitionerTypes.has((user as any)?.practiceType);
+
+  const showBullets =
+    isPractitionerUser ||
+    (formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
+    !user?.userId;
+
   return (
     <>
       <p className="margin-top-0">
@@ -13,19 +44,22 @@ export function SearchBoilerplateText({ formTypeText, isOpinion = false }) {
           </>
         )}
       </p>
-      <ul>
-        <li>
-          {' '}
-          If you aren’t affiliated with a case, you will only see limited
-          information about that case.
-        </li>
-        {!isOpinion && (
+      {/* Only render bullets if external user, not an order, not an opinion */}
+      {showBullets && (
+        <ul>
           <li>
-            Sealed cases and affiliated documents will not display in search
-            results.
+            {' '}
+            If you aren’t affiliated with a case, you will only see limited
+            information about that case.
           </li>
-        )}
-      </ul>
+          {!isOpinion && (
+            <li>
+              Sealed cases and affiliated documents will not display in search
+              results.
+            </li>
+          )}
+        </ul>
+      )}
     </>
   );
 }

@@ -1,26 +1,24 @@
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { GENERIC_ORDER_DOCUMENT_TYPE } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const stampDocumentForService = async ({
   applicationContext,
-  docketEntryId,
+  documentStorageId,
   documentToStamp,
 }: {
   applicationContext: ServerApplicationContext;
-  docketEntryId: string;
+  documentStorageId: string;
   documentToStamp: {
     documentType: string;
     eventCode: string;
-    serviceStamp: string;
+    serviceStamp?: string;
   };
 }) => {
   let serviceStampType = 'Served';
 
   if (documentToStamp.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = documentToStamp.serviceStamp;
+    serviceStampType = documentToStamp.serviceStamp!;
   } else if (
     ENTERED_AND_SERVED_EVENT_CODES.includes(documentToStamp.eventCode)
   ) {
@@ -34,7 +32,7 @@ export const stampDocumentForService = async ({
 
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
-    key: docketEntryId,
+    key: documentStorageId,
   });
 
   return await applicationContext.getUseCaseHelpers().addServedStampToDocument({

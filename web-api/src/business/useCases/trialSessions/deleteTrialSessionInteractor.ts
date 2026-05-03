@@ -10,6 +10,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
+import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
 
 /**
  * deleteTrialSession
@@ -27,10 +30,7 @@ export const deleteTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -78,19 +78,16 @@ export const deleteTrialSessionInteractor = async (
     await removeLockFunction();
   }
 
-  await applicationContext.getPersistenceGateway().deleteTrialSession({
-    applicationContext,
-    trialSessionId,
-  });
-
   if (trialSessionEntity.judge) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteTrialSessionWorkingCopy({
-        applicationContext,
+    await deleteTrialSessionWorkingCopy({
         trialSessionId,
         userId: trialSessionEntity.judge.userId,
       });
   }
+
+  await deleteTrialSession({
+    trialSessionId,
+  });
+
   return trialSessionEntity.toRawObject();
 };

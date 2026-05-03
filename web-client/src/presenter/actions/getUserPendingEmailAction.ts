@@ -16,5 +16,20 @@ export const getUserPendingEmailAction = async ({
       userId: contactId,
     });
 
-  return { userPendingEmail };
+  const { caseDetail } = props;
+  const { petitioners = [] } = caseDetail || {};
+
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const pendingEmails =
+    (await applicationContext
+      .getUseCases()
+      .getUsersPendingEmailInteractor(applicationContext, {
+        userIds: contactIdArray,
+      })) || {};
+
+  const allPendingEmails = Object.values(pendingEmails);
+
+  return { userPendingEmail, allPendingEmails };
 };

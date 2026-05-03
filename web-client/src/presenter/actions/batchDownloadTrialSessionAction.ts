@@ -14,6 +14,7 @@ export const batchDownloadTrialSessionAction = async ({
   get,
   path,
 }: ActionProps) => {
+  const clientConnectionId = get(state.clientConnectionId);
   const { trialSessionId } = get(state.trialSession);
 
   try {
@@ -21,6 +22,7 @@ export const batchDownloadTrialSessionAction = async ({
       .getUseCases()
       .batchDownloadTrialSessionInteractor(applicationContext, {
         trialSessionId,
+        clientConnectionId,
       });
 
     return path.success();

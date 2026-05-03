@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WrappedIcon } from '../../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   isTrialSessionRow,
@@ -17,12 +17,14 @@ export const PublicTrialSessionsTable = connect<
   PublicTrialSessionsTableProps,
   typeof PublicTrialSessionsTableDeps
 >(PublicTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
+  const { filteredTrialSessionRows, publicTrialSessionCount } =
+    publicTrialSessionsHelper;
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="text-right width-full">
         <span className="text-semibold">Count: </span>
-        {publicTrialSessionsHelper.trialSessionsCount}
+        {publicTrialSessionCount}
       </div>
       <div className="padding-1"></div>
       <div className="overflow-x-auto">
@@ -40,7 +42,7 @@ export const PublicTrialSessionsTable = connect<
               <th className="width-mobile">Judge</th>
             </tr>
           </thead>
-          {publicTrialSessionsHelper.trialSessionRows.map(row => {
+          {filteredTrialSessionRows.map(row => {
             if (isTrialSessionWeek(row)) {
               return (
                 <tbody key={row.formattedSessionWeekStartDate}>
@@ -64,8 +66,8 @@ export const PublicTrialSessionsTable = connect<
                   >
                     <td>
                       {row.showAlertForNOTTReminder && (
-                        <FontAwesomeIcon
-                          className="fa-icon-blue margin-right-05"
+                        <WrappedIcon
+                          iconClass="fa-icon-blue margin-right-05"
                           icon="clock"
                           size="sm"
                           title={row.alertMessageForNOTT}
@@ -75,9 +77,9 @@ export const PublicTrialSessionsTable = connect<
                     </td>
                     <td>
                       {row.swingSession && (
-                        <FontAwesomeIcon
-                          aria-label="Swing session: will be held in two cities"
-                          className="fa-icon-blue"
+                        <WrappedIcon
+                          iconAriaLabel="Swing session: will be held in two cities"
+                          iconClass="fa-icon-blue"
                           icon="link"
                           size="sm"
                           title="Swing session: will be held in two cities"

@@ -1,32 +1,9 @@
-module "dynamo_table_alpha" {
-  source = "../dynamo-table"
-
-  environment = var.environment
-  table_name  = "efcms-${var.environment}-alpha"
-
-  providers = {
-    aws           = aws
-    aws.us-west-1 = aws.us-west-1
-  }
-}
-
-module "dynamo_table_beta" {
-  source = "../dynamo-table"
-
-  environment = var.environment
-  table_name  = "efcms-${var.environment}-beta"
-
-  providers = {
-    aws           = aws
-    aws.us-west-1 = aws.us-west-1
-  }
-}
-
 module "elasticsearch_alpha" {
   source = "../elasticsearch"
 
   count = var.should_es_alpha_exist ? 1 : 0
 
+  es_engine_version   = var.es_engine_version
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-alpha"
   es_instance_count   = var.es_instance_count
@@ -46,6 +23,7 @@ module "elasticsearch_beta" {
 
   count = var.should_es_beta_exist ? 1 : 0
 
+  es_engine_version   = var.es_engine_version
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-beta"
   es_instance_count   = var.es_instance_count

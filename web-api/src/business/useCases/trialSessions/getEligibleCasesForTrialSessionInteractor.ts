@@ -5,13 +5,12 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  TCaseOrder,
-  TrialSession,
-} from '@shared/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getEligibleCasesWithIsAgedCase } from '@shared/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
 
 /**
  * get eligible cases for trial session
@@ -30,12 +29,9 @@ export const getEligibleCasesForTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -43,14 +39,11 @@ export const getEligibleCasesForTrialSessionInteractor = async (
 
   // Some manually added cases are considered calendared even when the
   // trial session itself is not considered calendared (see issue #3254).
-  let calendaredCases: (Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[] = [];
+  let calendaredCases: Omit<RawCase, 'consolidatedCases'>[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
-    calendaredCases = await applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession({
-        applicationContext,
-        trialSessionId,
-      });
+    calendaredCases = await getCalendaredCasesForTrialSession({
+      trialSessionId,
+    });
   }
 
   const trialSessionEntity = new TrialSession(trialSession);
@@ -60,19 +53,18 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
-      limit:
-        trialSessionEntity.maxCases! +
-        TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
-        calendaredCases.length,
       sessionType: trialSessionEntity.getCaseProcedureForTrial(),
       trialCity: trialSessionEntity.trialLocation!,
     });
 
-  const eligibleCasesFiltered = calendaredCases
-    .concat(eligibleCases)
-    .map(rawCase => {
-      return new EligibleCase(rawCase).validate().toRawObject();
-    });
+  const eligibleCasesWithIsAgedCase = getEligibleCasesWithIsAgedCase([
+    ...calendaredCases,
+    ...eligibleCases,
+  ]);
+
+  const eligibleCasesFiltered = eligibleCasesWithIsAgedCase.map(rawCase => {
+    return new EligibleCase(rawCase).validate().toRawObject();
+  });
 
   return eligibleCasesFiltered;
 };

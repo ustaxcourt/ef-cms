@@ -2,22 +2,19 @@
 
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import PQueue from 'p-queue';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { formatDate } from '../helpers/formatters';
 
 const scriptConfig: ScriptConfig = {
   description:
     'lea-stats - Generates statistics related to Limited Entry of Appearance documents.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -28,78 +25,33 @@ const scriptConfig: ScriptConfig = {
     year: {
       position: 0,
       required: true,
-      transform: 'number',
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-const caseCache: { [k: string]: RawCase } = {};
-const concurrency = 50;
+const caseCache: { [k: string]: Omit<RawCase, 'consolidatedCases'> } = {};
 
-const getLEAsFiledInYear = async ({
-  applicationContext,
-  fiscal,
-  year,
-}: {
-  applicationContext: ServerApplicationContext;
-  fiscal: boolean;
-  year: number;
-}): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': 'LEA',
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: fiscal
-                      ? `${year - 1}-10-01T05:00:00Z`
-                      : `${year}-01-01T04:00:00Z`,
-                    lt: fiscal
-                      ? `${year}-10-01T05:00:00Z`
-                      : `${year + 1}-01-01T04:00:00Z`,
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
-};
-
-const getCaseEntity = async ({
-  docketNumber,
-}: {
-  docketNumber: string;
-}): Promise<RawCase> => {
-  if (!(docketNumber in caseCache)) {
-    caseCache[docketNumber] = await getCaseByDocketNumber({
-      docketNumber,
-      includeConsolidatedCases: false,
-    });
-  }
-  return caseCache[docketNumber];
+const getLEAsFiledInYear = async (): Promise<RawDocketEntry[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.eventCode', '=', 'LEA')
+        .where('de.receivedAt', '>=', begin)
+        .where('de.receivedAt', '<', end)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 const getNocFiledAfterLeaInCase = ({
@@ -123,23 +75,17 @@ const getNocFiledAfterLeaInCase = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
-    fiscal: boolean;
-    year: number;
-  };
-  const applicationContext = createApplicationContext({});
-
-  const leas = await getLEAsFiledInYear({ applicationContext, fiscal, year });
+  const leas = await getLEAsFiledInYear();
   console.log(
     `Found ${leas.length} Limited Entry of Appearance documents filed in ` +
       `in ${fiscal ? 'fiscal' : 'calendar'} year ${year}.`,
   );
   const docketNumbers = [...new Set(leas.map(de => de.docketNumber))];
-  const queue = new PQueue({ concurrency });
-  const funcs = docketNumbers.map(
-    (docketNumber: string) => async () => await getCaseEntity({ docketNumber }),
-  );
-  await queue.addAll(funcs);
+
+  const cases = await getCasesByDocketNumbers({ docketNumbers });
+  cases.forEach(c => {
+    caseCache[c.docketNumber] = c;
+  });
 
   const procedureTypeAggs: { [k: string]: number } = {};
   for (const caseEntity of Object.values(caseCache)) {
@@ -160,9 +106,9 @@ const getNocFiledAfterLeaInCase = ({
     }
     rows.push({
       docketNumber: lea.docketNumber,
-      leaFiledDate: lea.receivedAt.split('T')[0],
+      leaFiledDate: formatDate(lea.receivedAt),
       leaIndex: lea.index,
-      nocFiledDate: subsequentNoc?.receivedAt.split('T')[0] ?? '',
+      nocFiledDate: formatDate(subsequentNoc?.receivedAt),
       nocIndex: subsequentNoc?.index ?? '',
       procedureType: caseCache[lea.docketNumber].procedureType,
     });

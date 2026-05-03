@@ -32,9 +32,6 @@ const server = http.createServer((request, response) => {
       connections[connectionId].sendUTF(requestBody);
       response.writeHead(200);
       return response.end();
-    } else if (request.url?.includes('isDone')) {
-      response.writeHead(200);
-      return response.end();
     } else {
       response.writeHead(410);
       return response.end();
@@ -45,7 +42,7 @@ const server = http.createServer((request, response) => {
 const PORT = 3011;
 
 server.listen(PORT, function () {
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
+  // eslint-disable-next-line custom-rules-plugin/no-dates
   console.log(new Date() + ` Server is listening on port ${PORT}`);
 });
 

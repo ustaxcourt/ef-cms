@@ -9,9 +9,12 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const setForHearingInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     calendarNotes,
     docketNumber,
@@ -23,12 +26,9 @@ export const setForHearingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -54,14 +54,25 @@ export const setForHearingInteractor = async (
     throw new Error('That Hearing is already assigned to the Case');
   }
 
-  trialSessionEntity
-    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
+  // Removing and adding the case in memory to match the change we will make in the DB
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseEntity.docketNumber,
+  });
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing: true,
+  });
 
-  await applicationContext.getPersistenceGateway().addCaseToHearing({
-    applicationContext,
-    docketNumber,
-    trialSession: trialSessionEntity.validate().toRawObject(),
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: [
+      {
+        docketNumber,
+        caseOrder,
+        trialSessionId,
+        isHearing: true,
+      },
+    ],
   });
 
   // retrieve the case again since we've added the mapped hearing record :)
@@ -69,5 +80,5 @@ export const setForHearingInteractor = async (
     docketNumber,
   });
 
-  return updatedCase;
+  return new CaseDTO(updatedCase);
 };

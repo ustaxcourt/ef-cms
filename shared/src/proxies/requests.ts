@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import moize from 'moize';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
@@ -18,7 +19,15 @@ export const setCurrentUserToken = (newToken: string) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-export const head = async ({ applicationContext, endpoint, params }) => {
+export const head = async ({
+  applicationContext,
+  endpoint,
+  params,
+}: {
+  applicationContext: ClientApplicationContext;
+  endpoint: string;
+  params?: Record<string, any>;
+}) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
@@ -71,6 +80,11 @@ export const getResponse = ({
   asyncSyncId,
   endpoint,
   params,
+}: {
+  applicationContext: ClientApplicationContext;
+  endpoint: string;
+  asyncSyncId?: string;
+  params?: Record<string, any>;
 }) => {
   return applicationContext
     .getHttpClient()
@@ -145,7 +159,9 @@ export const asyncSyncHandler = (
 
     request(asyncSyncId);
 
-    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
+    const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+    const futureSeconds = 16 * 60;
+    const expirationTimestamp = nowSeconds + futureSeconds;
     applicationContext
       .getUseCases()
       .startPollingForResultsInteractor(
@@ -172,6 +188,11 @@ export const put = async ({
   asyncSyncId = undefined,
   body,
   endpoint,
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  body?: Record<string, any>;
+  endpoint: string;
 }) => {
   getMemoized.clear();
   const res = await applicationContext

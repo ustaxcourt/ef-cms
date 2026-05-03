@@ -40,7 +40,7 @@ export const retrySendNotificationToConnections = async ({
                 });
             } catch (error) {
               applicationContext.logger.error(
-                'An error occurred while attempting to clean up the connection, it will be cleared via the dynamo TTL',
+                'An error occurred while attempting to clean up the connection, it will be cleared via the TTL',
                 { error },
               );
             }

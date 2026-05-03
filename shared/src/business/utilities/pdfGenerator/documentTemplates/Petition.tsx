@@ -202,7 +202,7 @@ export const Petition = ({
             {!isPetitioner && (
               <div>
                 <b>Email: </b>
-                {contactPrimary.paperPetitionEmail || 'Email not provided'}
+                {contactPrimary.contactEmailAddress || 'Email not provided'}
               </div>
             )}
             {contactPrimary.placeOfLegalResidence && (
@@ -219,6 +219,18 @@ export const Petition = ({
               <div>
                 <b>Service email: </b>
                 {contactPrimary.email}
+              </div>
+            )}
+            {contactPrimary.preferredLanguage && (
+              <div>
+                <b>Preferred language: </b>
+                {contactPrimary.preferredLanguage}
+              </div>
+            )}
+            {contactPrimary.preferredCommunicationMethod && (
+              <div>
+                <b>Preferred method of communication: </b>
+                {contactPrimary.preferredCommunicationMethod}
               </div>
             )}
           </div>
@@ -257,7 +269,7 @@ export const Petition = ({
 
                 <div>
                   <b>Email: </b>
-                  {contactSecondary.paperPetitionEmail || 'Email not provided'}
+                  {contactSecondary.contactEmailAddress || 'Email not provided'}
                 </div>
 
                 {isPetitioner && (
@@ -272,6 +284,18 @@ export const Petition = ({
                   <div>
                     <b>Place of legal residence: </b>
                     {ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]}
+                  </div>
+                )}
+                {contactSecondary.preferredLanguage && (
+                  <div>
+                    <b>Preferred language: </b>
+                    {contactSecondary.preferredLanguage}
+                  </div>
+                )}
+                {contactSecondary.preferredCommunicationMethod && (
+                  <div>
+                    <b>Preferred method of communication: </b>
+                    {contactSecondary.preferredCommunicationMethod}
                   </div>
                 )}
               </div>

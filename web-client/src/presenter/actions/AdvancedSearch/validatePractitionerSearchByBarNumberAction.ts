@@ -1,25 +1,34 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSearchValidation';
 
 /**
  * validate practitioner search by bar number form
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
+ * @param {object} providers.store the cerebral store object
  * @returns {Promise<*>} the success or error path
  */
 export const validatePractitionerSearchByBarNumberAction = ({
   get,
   path,
+  store,
 }: ActionProps) => {
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );
-  const errors = {};
 
-  if (!barNumber) {
-    errors.barNumber = 'Enter a bar number';
-  }
+  const trimmedBarNumber = barNumber?.trim();
+
+  store.set(
+    state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
+    trimmedBarNumber,
+  );
+
+  const errors = new BarNumberSearchValidation({
+    barNumber: trimmedBarNumber,
+  }).getFormattedValidationErrors();
 
   const isValid = isEmpty(errors);
 

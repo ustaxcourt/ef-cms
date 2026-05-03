@@ -1,12 +1,37 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Kysely } from 'kysely';
 import {
   RawWorkItemWithCaseAndDocketEntryInfo,
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { DocketEntrySelectableField } from '@web-api/persistence/postgres/docketEntries/commonQueries';
+
+const DOCKET_ENTRY_FIELDS_FOR_WORK_ITEM_QC: DocketEntrySelectableField[] = [
+  'docketEntryId',
+  'docketNumber',
+  'eventCode',
+  'documentType',
+  'documentTitle',
+  'additionalInfo',
+  'receivedAt',
+  'createdAt',
+  'filedBy',
+  // Fields needed for DocketEntry.isServed() check
+  'servedAt',
+  'isLegacyServed',
+  // Fields needed for formatDocketEntry and getWorkItemDocumentLink
+  'isPaper',
+  'lodged',
+  'isLegacySealed',
+  'signedAt',
+  'certificateOfServiceDate',
+  // Additional fields accessed by tests/UI
+  'userId',
+  'otherFilingParty',
+];
 
 export const getDocumentQCInboxForUser = async ({
   userId,
@@ -53,8 +78,10 @@ export const attachDocketEntriesToWorkItemQC = async ({
 
   // We could get docket entries in workItemQCQueryBase, but it made getting good types extremely tricky, and the query is more difficult.
   // Instead, we make a separate query for docket entries and do an in-app join.
+  // Only fetch the fields needed for QC work item display.
   const docketEntries = await getDocketEntriesByDocketNumberAndDocketEntryId({
     docketNumbersAndIds,
+    selectFields: DOCKET_ENTRY_FIELDS_FOR_WORK_ITEM_QC,
   });
 
   const entryByCompositeKey = new Map<string, RawDocketEntry>(); // We need to join on both docketEntryId and docketNumber

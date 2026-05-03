@@ -1,3 +1,4 @@
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { get } from '../requests';
 
 export const startPollingForResultsInteractor = async (
@@ -13,8 +14,8 @@ export const startPollingForResultsInteractor = async (
     applicationContext,
     endpoint: `/results/fetch/${requestId}`,
   }).then(async (results: { response: any }) => {
-    const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
-    if (expirationTimestamp < nowUnixTimeInSeconds) {
+    const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+    if (expirationTimestamp < nowSeconds) {
       return resolver({ statusCode: 504 });
     }
 

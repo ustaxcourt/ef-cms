@@ -24,6 +24,14 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
+} from '@shared/business/utilities/calculateEmail';
+import { CaseFactory } from '../entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * updateContact
@@ -39,7 +47,7 @@ export const updateContact = async (
   applicationContext: ServerApplicationContext,
   { contactInfo, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnidentifiedUserError(
       'Unable to confirm user is an authenticated user',
@@ -115,6 +123,17 @@ export const updateContact = async (
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
+    const { isAddressSealed } = updatedPetitioner;
+
+    oldCaseContact.email = formattedOldEmailForChangeOfAddress(
+      oldCaseContact.email,
+      isAddressSealed,
+    );
+    contactInfo.email = formattedNewEmailForChangeOfAddress(
+      contactInfo.email,
+      isAddressSealed,
+    );
+
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()
       .changeOfAddress({
@@ -138,6 +157,7 @@ export const updateContact = async (
         addToCoversheet: true,
         additionalInfo: `for ${updatedPetitioner.name}`,
         docketEntryId: newDocketEntryId,
+        documentStorageId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -207,7 +227,7 @@ export const updateContact = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: changeOfAddressPdfWithCover,
-      key: newDocketEntryId,
+      key: changeOfAddressDocketEntry.documentStorageId,
     });
   }
 
@@ -225,7 +245,12 @@ export const updateContact = async (
     });
   }
 
-  return caseEntity.toRawObject();
+  const filteredCase = CaseFactory.getCaseDTO({
+    rawCase: caseEntity,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
 };
 
 export const updateContactInteractor = withLocking(

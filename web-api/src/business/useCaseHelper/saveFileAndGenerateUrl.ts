@@ -10,7 +10,7 @@ export const saveFileAndGenerateUrl = async ({
   useTempBucket = false,
 }: {
   applicationContext: ServerApplicationContext;
-  file: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer>;
+  file: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer | Uint8Array>;
   fileNamePrefix?: string;
   contentType?: string;
   useTempBucket?: boolean;

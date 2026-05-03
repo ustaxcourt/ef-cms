@@ -1,8 +1,11 @@
 import {
+  BAR_NUMBER_MATCHER,
   CAV_AND_SUBMITTED_CASE_STATUS,
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SEARCH_MATCHER,
   MAX_FILE_SIZE_BYTES,
+  MOTION_DISPOSITIONS,
 } from './EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
@@ -20,10 +23,12 @@ const DATE_FORMATS = {
 const STRING = joi.string().min(1);
 
 export const JoiValidationConstants = Object.freeze({
+  BAR_NUMBER: STRING.regex(BAR_NUMBER_MATCHER).max(10),
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
   DATE_RANGE_PICKER_DATE: joi.date().iso().format([DATE_FORMATS.MMDDYYYY]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
+  DOCKET_NUMBER_SEARCH: STRING.regex(DOCKET_NUMBER_SEARCH_MATCHER),
   DOCKET_RECORD: joi
     .array()
     .unique(
@@ -40,6 +45,17 @@ export const JoiValidationConstants = Object.freeze({
       .valid(...CAV_AND_SUBMITTED_CASE_STATUS),
   ),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
+  RELATED_DOCKET_ENTRY: {
+    disposition: joi
+      .string()
+      .required()
+      .valid(...Object.values(MOTION_DISPOSITIONS))
+      .messages({ '*': 'Requires a disposition' }),
+    docketEntryId: joi
+      .string()
+      .required()
+      .messages({ '*': 'Requires a Motion' }),
+  },
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(
     /^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/,

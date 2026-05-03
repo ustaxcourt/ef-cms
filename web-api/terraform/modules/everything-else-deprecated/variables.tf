@@ -54,3 +54,6 @@ variable "should_es_beta_exist" {
   type = bool
 }
 
+variable "es_engine_version" {
+  type = string
+}

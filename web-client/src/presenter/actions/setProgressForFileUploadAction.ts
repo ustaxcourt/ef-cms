@@ -1,4 +1,5 @@
 import { FileUploadProgressValueType } from '../../../../shared/src/business/entities/EntityConstants';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setProgressForFileUploadAction = ({
@@ -19,8 +20,7 @@ export const setProgressForFileUploadAction = ({
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
-  const startTime = new Date();
+  const startSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const sizeOfFiles: Record<string, number> = {};
 
   const calculateTotalSize = () => {
@@ -61,10 +61,10 @@ export const setProgressForFileUploadAction = ({
 
       loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
       const totalSize = calculateTotalSize();
-      // eslint-disable-next-line custom-rules-plugin/no-new-dates
-      const timeElapsed = new Date() - startTime;
+      const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+      const timeElapsed = nowSeconds - startSeconds;
       const uploadedBytes = calculateTotalLoaded();
-      const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
+      const uploadSpeed = uploadedBytes / timeElapsed;
       const timeRemaining = Math.floor(
         (totalSize - uploadedBytes) / uploadSpeed,
       );

@@ -29,10 +29,12 @@ export const confirmInitiateServiceModalHelper = (
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
   let { documentTitle, eventCode, isPaper } = form;
   if (!eventCode) {
-    ({ documentTitle, eventCode, isPaper } =
-      formattedCaseDetail.docketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      ));
+    const foundDoc = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
+    if (foundDoc) {
+      ({ documentTitle, eventCode, isPaper } = foundDoc);
+    }
   }
 
   let showConsolidatedCasesForService =
@@ -56,7 +58,12 @@ export const confirmInitiateServiceModalHelper = (
 
   let parties;
   if (showConsolidatedCasesForService) {
-    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form) as {
+      consolidatedCasesToMultiDocketOn: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     const paperServiceParties: {
       contactId: string;
@@ -116,7 +123,12 @@ export const confirmInitiateServiceModalHelper = (
 
   let caseOrGroup = 'case';
   if (showConsolidatedCasesForService) {
-    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form) as {
+      consolidatedCasesToMultiDocketOn: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     if (consolidatedCasesToMultiDocketOn.filter(c => c.checked).length > 1) {
       caseOrGroup = 'group';

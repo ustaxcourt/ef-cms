@@ -27,11 +27,13 @@ export interface Contact {
   address2?: string;
   address3?: string;
   city: string;
-  paperPetitionEmail?: string;
+  contactEmailAddress?: string;
   postalCode: string;
   phone: string;
   state: string;
   placeOfLegalResidence?: string;
+  preferredLanguage?: string;
+  preferredCommunicationMethod?: string;
   contactType: 'primary' | 'secondary';
   email: string;
 }
@@ -39,7 +41,7 @@ export interface Contact {
 export type ContactSecondary = Contact & {
   hasConsentedToElectronicService?: boolean;
   phone?: string;
-  paperPetitionEmail?: string;
+  contactEmailAddress?: string;
 };
 
 export type ContactCounsel = {

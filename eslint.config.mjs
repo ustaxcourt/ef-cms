@@ -1,11 +1,12 @@
 // @ts-check
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
-import pluginCypress from 'eslint-plugin-cypress/flat';
+import pluginCypress from 'eslint-plugin-cypress';
 import pluginJest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import globals from 'globals';
 import customRulesPlugin from './eslint-custom-rules/eslint-custom-rules-plugin.mjs';
 
 export default tseslint.config(
@@ -85,6 +86,11 @@ export default tseslint.config(
   {
     // @ts-ignore
     ...reactPlugin.configs.flat.recommended, // React recommendations
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       // @ts-ignore
       ...reactPlugin.configs.flat.recommended.rules,
@@ -102,7 +108,13 @@ export default tseslint.config(
         ecmaVersion: 2020,
         sourceType: 'module',
         projectService: {
-          allowDefaultProject: ['*.js', '*.mjs'],
+          allowDefaultProject: [
+            '*.js',
+            '*.mjs',
+            '*/*.mjs',
+            '*/*/*/*/*.mjs',
+            '*/*/*/.*.cjs',
+          ],
         },
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
@@ -208,7 +220,16 @@ export default tseslint.config(
       'custom-rules-plugin': customRulesPlugin,
     },
     rules: {
-      'custom-rules-plugin/no-new-dates': 'error',
+      'custom-rules-plugin/no-dates': 'error',
+    },
+  },
+  {
+    // Node.js build/config scripts written as ESM modules need access to Node globals (process, etc.)
+    files: ['**/*.mjs', '**/*.cjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
     },
   },
 );

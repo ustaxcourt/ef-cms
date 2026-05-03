@@ -72,7 +72,8 @@ export const MinuteSheet = ({
         formattedMinuteSheet.notCalled ||
         formattedMinuteSheet.recalled.length > 0 ||
         formattedMinuteSheet.pretrialConference ||
-        formattedMinuteSheet.trialHearing) && <hr />}
+        formattedMinuteSheet.trial ||
+        formattedMinuteSheet.hearing) && <hr />}
       <div>
         {formattedMinuteSheet.called && (
           <div className="minute-sheet-field">
@@ -134,16 +135,29 @@ export const MinuteSheet = ({
             />
           </div>
         )}
-        {formattedMinuteSheet.trialHearing && (
+        {(formattedMinuteSheet.trial || formattedMinuteSheet.hearing) && (
           <div className="minute-sheet-field">
             <div>
-              <strong>Trial/Hearing</strong>
+              {formattedMinuteSheet.trial && formattedMinuteSheet.hearing ? (
+                <strong>Proceedings</strong>
+              ) : (
+                <strong>Proceeding</strong>
+              )}
             </div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: formattedMinuteSheet.trialHearing,
-              }}
-            />
+            {formattedMinuteSheet.trial && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: formattedMinuteSheet.trial,
+                }}
+              />
+            )}
+            {formattedMinuteSheet.hearing && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: formattedMinuteSheet.hearing,
+                }}
+              />
+            )}
           </div>
         )}
       </div>

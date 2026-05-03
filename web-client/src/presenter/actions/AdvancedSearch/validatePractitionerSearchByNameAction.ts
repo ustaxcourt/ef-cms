@@ -15,7 +15,7 @@ export const validatePractitionerSearchByNameAction = ({
   const { practitionerName } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );
-  const errors = {};
+  const errors: { practitionerName?: string } = {};
 
   if (!practitionerName) {
     errors.practitionerName = 'Enter a practitioner name';

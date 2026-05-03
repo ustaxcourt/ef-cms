@@ -1,21 +1,18 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:
     'lookup-user - Looks up users and roles in a deployed DAWSON environment.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     environmentName: 'ENV',
   },
   parameters: {
@@ -36,52 +33,32 @@ const { role, userName } = parseArgsAndEnvVars(scriptConfig) as {
   userName: string;
 };
 
-if (!role.length && !userName.length) {
-  console.log(`Lookup User IDs and roles for the specified environment.
-  
-  Usage:
-
-  $ npm run admin:lookup-user -- <ROLE> [<NAME>]
-  
-  - ROLE: The role to find
-  - NAME: The name of the user you're looking for (optional)
-
-  Example:
-
-  $ npm run admin:lookup-user -- admissionsClerk "Joe Burns"
-
-`);
-  process.exit();
-}
-
-const lookupUsers = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<{ [k: string]: string }[]> => {
-  const query = userName
-    ? {
-        bool: {
-          must: [
-            { match: { 'role.S': role } },
-            { match: { 'name.S': userName } },
-          ],
-        },
+const lookupUsers = async (): Promise<{ [k: string]: string }[]> => {
+  const results = (
+    await getDbReader(reader => {
+      let query = reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.role', '=', ROLES[role]);
+      if (userName) {
+        if (userName.includes(' ')) {
+          query = query.where(eb =>
+            eb.and(
+              userName
+                .split(' ')
+                .map(term => eb('u.name', 'ilike', `%${term}%`)),
+            ),
+          );
+        } else {
+          query = query.where('u.name', 'ilike', `%${userName}%`);
+        }
       }
-    : {
-        match: { 'role.S': role },
-      };
-
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: { query },
-      index: 'efcms-user',
-    },
-  });
+      return query.selectAll('u').execute();
+    })
+  ).map(fromKyselyUser) as RawUser[];
 
   return results.map((hit: RawUser) => ({
-    Email: hit.email,
+    Email: hit.email || '',
     Name: hit.name,
     Role: hit.role,
     UserId: hit.userId,
@@ -90,7 +67,6 @@ const lookupUsers = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const users = await lookupUsers({ applicationContext });
+  const users = await lookupUsers();
   console.table(users);
 })();

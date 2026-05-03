@@ -16,12 +16,13 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const updateCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
   { docketEntryIdToEdit, documentMetadata },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -103,7 +104,7 @@ export const updateCourtIssuedOrder = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId: docketEntryIdToEdit,
+      documentStorageId: currentDocument.documentStorageId,
     });
 
   const docketEntryEntity = new DocketEntry(
@@ -132,7 +133,9 @@ export const updateCourtIssuedOrder = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(result, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const updateCourtIssuedOrderInteractor = withLocking(

@@ -3,21 +3,19 @@
 import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pick } from 'lodash';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { formatDate } from '../helpers/formatters';
 
 const scriptConfig: ScriptConfig = {
   description:
     'attorneys-admitted-in-year - Generates a CSV of attorneys admitted in the given year.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -28,71 +26,37 @@ const scriptConfig: ScriptConfig = {
     year: {
       position: 0,
       required: true,
-      transform: 'number',
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
-const getAttorneysAdmittedInYear = async ({
-  applicationContext,
-  fiscal,
-  year,
-}: {
-  applicationContext: ServerApplicationContext;
-  fiscal: boolean;
-  year: number;
-}): Promise<RawPractitioner[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'practitionerType.S': 'Attorney',
-                },
-              },
-              {
-                range: {
-                  'admissionsDate.S': {
-                    gte: fiscal
-                      ? `${year - 1}-10-01T05:00:00Z`
-                      : `${year}-01-01T04:00:00Z`,
-                    lt: fiscal
-                      ? `${year}-10-01T05:00:00Z`
-                      : `${year + 1}-01-01T04:00:00Z`,
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'admissionsDate.S': 'asc' }],
-      },
-      index: 'efcms-user',
-    },
-  });
-  return results;
+const getAttorneysAdmittedInYear = async (): Promise<RawPractitioner[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.practitionerType', '=', 'Attorney')
+        .where('u.admissionsDate', '>=', begin)
+        .where('u.admissionsDate', '<', end)
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
-    fiscal: boolean;
-    year: number;
-  };
-  const attorneys: RawPractitioner[] = await getAttorneysAdmittedInYear({
-    applicationContext,
-    fiscal,
-    year,
-  });
+  const attorneys: RawPractitioner[] = await getAttorneysAdmittedInYear();
   console.log(
     `Found ${attorneys.length} attorneys admitted in ${fiscal ? 'fiscal' : 'calendar'} year ${year}.`,
   );
@@ -105,7 +69,7 @@ const getAttorneysAdmittedInYear = async ({
   ];
   const rows = attorneys.map(attorney => ({
     ...pick(attorney, ['barNumber', 'firmName', 'name', 'practiceType']),
-    admissionsDate: attorney.admissionsDate.split('T')[0],
+    admissionsDate: formatDate(attorney.admissionsDate),
   }));
   const filename = `${OUTPUT_DIR}/attorneys-admitted-in${fiscal ? '-fiscal-year' : ''}-${year}.csv`;
   generateCsv({ columns, filename, rows });

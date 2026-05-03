@@ -133,19 +133,34 @@ const NavigationItems = (
         </li>
       )}
       {headerHelper.showMyCases && (
-        <li className={classNames('usa-nav__primary-item')}>
-          <a
-            className={classNames(
-              'usa-nav__link',
-              headerHelper.pageIsMyCases && 'usa-current',
-            )}
-            data-testid="my-cases-link"
-            href="/"
-            onClick={() => toggleMobileMenuSequence()}
-          >
-            My Cases
-          </a>
-        </li>
+        <>
+          <li className={classNames('usa-nav__primary-item')}>
+            <a
+              className={classNames(
+                'usa-nav__link',
+                headerHelper.pageIsMyCases && 'usa-current',
+              )}
+              data-testid="my-cases-link"
+              href="/"
+              onClick={() => toggleMobileMenuSequence()}
+            >
+              My Cases
+            </a>
+          </li>
+          <li className={classNames('usa-nav__primary-item')}>
+            <a
+              className={classNames(
+                'usa-nav__link',
+                headerHelper.pageIsRecentFilings && 'usa-current',
+              )}
+              data-testid="header-recent-filings-link"
+              href="/cases/recent-filings"
+              onClick={() => toggleMobileMenuSequence()}
+            >
+              Recent Filings
+            </a>
+          </li>
+        </>
       )}
       {headerHelper.showSearchNavItem && (
         <li className={classNames('usa-nav__primary-item')}>
@@ -236,7 +251,7 @@ export const Header = connect(
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
   }) {
-    const headerRef = useRef(null);
+    const headerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       window.document.addEventListener('mousedown', reset, false);
@@ -254,7 +269,7 @@ export const Header = connect(
     };
 
     const reset = e => {
-      const clickedWithinComponent = headerRef.current.contains(e.target);
+      const clickedWithinComponent = headerRef.current?.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
       const clickedOnSubNav = e.target.closest('.usa-nav__submenu-item');
       if (!clickedWithinComponent) {

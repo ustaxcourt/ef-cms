@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -7,45 +8,54 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
+  RawCaseAndCaseOrder,
+} from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+import { createTrialSessionNotificationProcessing as createTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/createTrialSessionNotificationProcessing';
+import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const clientConnectionId = '334304ba-79e6-4a1d-bd36-1e61f657a7ff';
 
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
+  const updateTrialSessionNotificationProcessing = jest.mocked(
+    updateTrialSessionNotificationProcessingMock,
+  );
+  const createTrialSessionNotificationProcessing = jest.mocked(
+    createTrialSessionNotificationProcessingMock,
+  );
+  const getTrialSessionNotificationProcessing = jest.mocked(
+    getTrialSessionNotificationProcessingMock,
+  );
+
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([
-        {
-          docketNumber: '101-20',
-        },
-        {
-          docketNumber: '102-20',
-        },
-        {
-          docketNumber: '103-20',
-        },
-      ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
-        unfinishedCases: 0,
-      })
-      .mockResolvedValueOnce({
-        unfinishedCases: 1,
-      });
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        docketNumber: '101-20',
+      },
+      {
+        docketNumber: '102-20',
+      },
+      {
+        docketNumber: '103-20',
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
+
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_REGULAR,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    });
+
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
 
     applicationContext.logger.warn.mockResolvedValue(
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
@@ -79,6 +89,20 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should NOT attempt to paper service a case with no corresponding case data information', async () => {
+    getTrialSessionNotificationProcessing
+      .mockResolvedValueOnce(undefined)
+      .mockResolvedValueOnce({
+        unfinishedCases: 3,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
+      })
+      .mockResolvedValueOnce({
+        unfinishedCases: 0,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
+      });
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
@@ -101,9 +125,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should NOT attempt to start a trial session calendering event if its already processing or completed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValueOnce('processing');
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      unfinishedCases: 1,
+      status: 'processing',
+      trialSessionId,
+      caseStatuses: {},
+    });
 
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
@@ -120,9 +147,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       `A duplicate event was received for setting the notices for trial session: ${trialSessionId}`,
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValueOnce('complete');
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      unfinishedCases: 1,
+      status: 'complete',
+      trialSessionId,
+      caseStatuses: {},
+    });
 
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
@@ -141,30 +171,19 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should set trialSessionStatus to processing if this is the first trial session calendering event', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(
-      applicationContext,
-      {
-        clientConnectionId,
+    getTrialSessionNotificationProcessing
+      .mockResolvedValueOnce(undefined)
+      .mockResolvedValueOnce({
+        unfinishedCases: 3,
+        status: 'processing',
         trialSessionId,
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .setTrialSessionProcessingStatus,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        trialSessionStatus: 'processing',
-      }),
-    );
-  });
-
-  it('should set the trial session status as complete after all the calendering jobs is completed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
+        caseStatuses: {},
+      })
+      .mockResolvedValueOnce({
         unfinishedCases: 0,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
       });
 
     await setNoticesForCalendaredTrialSessionInteractor(
@@ -176,20 +195,46 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .setTrialSessionProcessingStatus,
-    ).toHaveBeenCalledWith(
+    expect(createTrialSessionNotificationProcessing).toHaveBeenCalledWith({
+      trialSessionId,
+      unfinishedCasesCount: 3,
+    });
+  });
+
+  it('should set the trial session status as complete after all the calendering jobs is completed', async () => {
+    getTrialSessionNotificationProcessing
+      .mockResolvedValueOnce(undefined)
+      .mockResolvedValueOnce({
+        unfinishedCases: 3,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
+      })
+      .mockResolvedValueOnce({
+        unfinishedCases: 0,
+        status: 'processing',
+        trialSessionId,
+        caseStatuses: {},
+      });
+
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(updateTrialSessionNotificationProcessing).toHaveBeenCalledWith(
       expect.objectContaining({
-        trialSessionStatus: 'complete',
+        status: 'complete',
       }),
     );
   });
 
   it('should send a notification with no paper service indicator and no pdf keys for trial sessions with no calendared cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,

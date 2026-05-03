@@ -1,9 +1,9 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
 const props = cerebralProps as unknown as {
   bind: string;
@@ -11,7 +11,13 @@ const props = cerebralProps as unknown as {
   onBlur: () => void;
 };
 
-export const EConsent = connect(
+type EConsentProps = {
+  bind: any;
+  contactType: string;
+  onBlur: Function;
+}
+
+export const EConsent: React.FC<EConsentProps> = connect(
   {
     bind: props.bind,
     contactType: props.contactType,
@@ -25,11 +31,19 @@ export const EConsent = connect(
     data,
     onBlur,
     updateFormValueAndSecondaryContactInfoSequence,
+  }: {
+    contactType: string;
+    data: Record<string, Record<string, any>>;
+    onBlur: () => void;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
   }) {
     return (
       <FormGroup className="grid-col-4">
         <input
-          checked={data[contactType].hasConsentedToElectronicService || false}
+          checked={
+            (data[contactType]?.hasConsentedToElectronicService as boolean) ||
+            false
+          }
           className="usa-checkbox__input"
           id={`electronic-service-consent-${contactType}`}
           name={`${contactType}.hasConsentedToElectronicService`}

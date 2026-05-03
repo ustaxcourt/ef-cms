@@ -1,19 +1,41 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+const props = cerebralProps as unknown as {
+  bind: string;
+  validationErrorsBind: string;
+};
+
 interface ComponentProps {
-  onUpdate: (args: Record<string, any>) => void;
-  validateFormData: (args: Record<string, any>) => void;
+  onUpdate: Function;
+  validateFormData: Function;
 }
 
-// It would be better to use ComponentProps & CerebralProps, but
-// typing won't work nicely with CerebralProps. Hence the & any.
-const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
+interface CerebralProps {
+  DATE_FORMATS: { ISO: string };
+  bind: {
+    petitionPaymentStatus: string;
+    petitionPaymentDate?: string;
+    petitionPaymentMethod?: string;
+    petitionPaymentWaivedDate?: string;
+  };
+  formatAndUpdateDateFromDatePickerSequence: Function;
+  paymentStatus: {
+    PAID: string;
+    UNPAID: string;
+    WAIVED: string;
+  };
+  validationErrors: Record<string, string | undefined>;
+}
+
+const PetitionPaymentFormComponent: React.FC<
+  ComponentProps & CerebralProps
+> = ({
   bind,
   DATE_FORMATS,
   formatAndUpdateDateFromDatePickerSequence,
@@ -172,7 +194,14 @@ const PetitionPaymentFormComponent: React.FC<ComponentProps & any> = ({
   );
 };
 
-export const PetitionPaymentForm = connect(
+type PetitionPaymentFormProps = {
+  bind: string;
+  validateFormData: Function;
+  validationErrorsBind: string;
+  onUpdate: Function;
+};
+
+export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     bind: state[props.bind],

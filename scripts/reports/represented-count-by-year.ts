@@ -1,23 +1,21 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { applicationContext } from '@web-api/applicationContext';
-import {
-  count,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'represented-count-by-year - Generates a table comparing counts of ' +
     'represented and pro se cases in a given calendar or fiscal year',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -27,7 +25,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },
@@ -38,97 +36,49 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
   year: string;
 };
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
-const getDocketNumbersOfCasesFiledInYear = async (): Promise<string[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': 'P',
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? `${Number(year) - 1}` : year,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? year : `${Number(year) + 1}`,
-                    }),
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return Array.from(
-    new Set(results.map((p: RawDocketEntry) => p.docketNumber)),
+const countCasesFiledInYear = async (): Promise<number> => {
+  const result = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry as de')
+      .where('de.eventCode', '=', 'P')
+      .where('de.filingDate', '>=', begin)
+      .where('de.filingDate', '<', end)
+      .select(({ ref }) =>
+        sql<number>`count(distinct ${ref('de.docketNumber')})`.as('count'),
+      )
+      .executeTakeFirst(),
   );
+  return Number(result?.count) || 0;
 };
 
-const countCasesWithRepresentation = async ({
-  docketNumbers,
-}: {
-  docketNumbers: string[];
-}): Promise<number> => {
-  return await count({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-              {
-                terms: {
-                  'docketNumber.S': docketNumbers,
-                },
-              },
-              {
-                exists: {
-                  field: 'privatePractitioners.L.M.userId.S',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-case',
-    },
-  });
+const countCasesWithRepresentation = async (): Promise<number> => {
+  const result = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry as de')
+      .innerJoin('dwUserOnCase as uc', 'uc.docketNumber', 'de.docketNumber')
+      .where('de.eventCode', '=', 'P')
+      .where('de.filingDate', '>=', begin)
+      .where('de.filingDate', '<', end)
+      .where('uc.actingAsRole', '=', ROLES.privatePractitioner)
+      .select(({ ref }) =>
+        sql<number>`count(distinct ${ref('de.docketNumber')})`.as('count'),
+      )
+      .executeTakeFirst(),
+  );
+
+  return Number(result?.count) || 0;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketNumbers = await getDocketNumbersOfCasesFiledInYear();
-  const totalCases = docketNumbers.length;
-  const numberOfCasesWithRepresentation = await countCasesWithRepresentation({
-    docketNumbers,
-  });
+  const totalCases = await countCasesFiledInYear();
+  if (totalCases === 0) {
+    console.error(`No cases filed in ${fiscal ? 'FY ' : ''}${year}`);
+    process.exit(1);
+  }
+  const numberOfCasesWithRepresentation = await countCasesWithRepresentation();
   const numberOfProSeCases = totalCases - numberOfCasesWithRepresentation;
   console.log(`${fiscal ? 'Fiscal' : 'Calendar'} Year ${year}`);
   console.table([

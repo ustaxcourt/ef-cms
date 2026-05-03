@@ -1,90 +1,63 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { formatCaseCaption, formatDate } from '../helpers/formatters';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'closed-dates - Generates a spreadsheet of the closed date of all cases opened in the given year.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
-const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
+
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
-const getAllCasesOpenedInYear = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<RawCase[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': {
-                    value: 'Case',
-                  },
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: '1',
-                      month: '1',
-                      year,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: '1',
-                      month: '1',
-                      year: String(Number(year) + 1),
-                    }),
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'sortableDocketNumber.N': 'asc' }],
-      },
-      index: 'efcms-case',
-    },
-  });
-  return results;
+const getAllCasesOpenedInYear = async (): Promise<RawCase[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .selectAll('c')
+        .where('c.receivedAt', '>=', begin)
+        .where('c.receivedAt', '<', end)
+        .orderBy('c.sortableDocketNumber', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyCase) as RawCase[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const casesOpenedInYear = await getAllCasesOpenedInYear({
-    applicationContext,
-  });
-  const filename = `${OUTPUT_DIR}/closed-dates-of-cases-opened-in-${year}.csv`;
+  const casesOpenedInYear = await getAllCasesOpenedInYear();
+  const filename = `${OUTPUT_DIR}/closed-dates-of-cases-opened-in-${fiscal ? 'fy-' : ''}${year}.csv`;
   const columns = [
     { header: 'Docket Number', key: 'docketNumber' },
     { header: 'Date Created', key: 'rcvdAtHumanized' },
@@ -94,11 +67,11 @@ const getAllCasesOpenedInYear = async ({
     { header: 'Case Type', key: 'caseType' },
   ];
   const rows = casesOpenedInYear.map(c => ({
-    caseCaption: c.caseCaption,
+    caseCaption: formatCaseCaption(c.caseCaption),
     caseType: c.caseType,
-    closedHumanized: c.closedDate?.split('T')[0] || '',
+    closedHumanized: formatDate(c.closedDate),
     docketNumber: c.docketNumber,
-    rcvdAtHumanized: c.receivedAt.split('T')[0],
+    rcvdAtHumanized: formatDate(c.receivedAt),
     status: c.status,
   }));
   generateCsv({ columns, filename, rows });

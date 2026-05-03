@@ -1,13 +1,16 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { ALL_TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { TrialSessionWorkingCopyCase } from '@web-client/presenter/computeds/trialSessionWorkingCopyHelper';
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 
 const getCaseRow = ({
   formattedCase,
@@ -35,13 +38,12 @@ const getCaseRow = ({
         </td>
         <td>
           {formattedCase.isManuallyAdded && (
-            <span aria-label="Manually added indicator">
-              <FontAwesomeIcon
-                className="mini-success"
-                icon="calendar-plus"
-                title="Manually added"
-              />
-            </span>
+            <WrappedIcon
+              iconAriaLabel="Manually added indicator"
+              iconClass="mini-success"
+              icon="calendar-plus"
+              title="Manually added"
+            />
           )}
         </td>
         <td className="minw-80">{formattedCase.caseTitle}</td>
@@ -172,7 +174,17 @@ const getCaseRow = ({
   );
 };
 
-export const CaseListRowTrialSession = connect(
+type CaseListRowTrialSessionProps = {
+  formattedCase: TrialSessionWorkingCopyCase;
+  key: string;
+  trialSessionWorkingCopy: RawTrialSessionWorkingCopy & {
+    userNotes: {
+      [docketNumber: string]: UserCaseNote;
+    };
+  };
+};
+
+export const CaseListRowTrialSession: React.FC<CaseListRowTrialSessionProps> = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
@@ -181,13 +193,28 @@ export const CaseListRowTrialSession = connect(
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
   },
-  ({
-    autoSaveTrialSessionWorkingCopySequence,
-    formattedCase,
-    openAddEditUserCaseNoteModalFromListSequence,
-    openDeleteUserCaseNoteConfirmModalSequence,
-    trialSessionWorkingCopy,
+  (props: {
+    autoSaveTrialSessionWorkingCopySequence: Function;
+    openAddEditUserCaseNoteModalFromListSequence: Function;
+    openDeleteUserCaseNoteConfirmModalSequence: Function;
+    formattedCase?: { docketNumber: string; [key: string]: unknown };
+    trialSessionWorkingCopy?: {
+      caseMetadata: Record<string, { trialStatus?: string }>;
+    };
   }) => {
+    const {
+      autoSaveTrialSessionWorkingCopySequence,
+      formattedCase,
+      openAddEditUserCaseNoteModalFromListSequence,
+      openDeleteUserCaseNoteConfirmModalSequence,
+      trialSessionWorkingCopy,
+    } = props as typeof props & {
+      formattedCase: { docketNumber: string; [key: string]: unknown };
+      trialSessionWorkingCopy: {
+        caseMetadata: Record<string, { trialStatus?: string }>;
+      };
+    };
+
     return getCaseRow({
       formattedCase,
       trialSequences: {

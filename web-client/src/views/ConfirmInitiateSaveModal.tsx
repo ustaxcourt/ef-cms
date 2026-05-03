@@ -6,10 +6,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
-export const ConfirmInitiateSaveModal = connect(
+type ConfirmInitiateSaveModalProps = {
+  documentTitle: string;
+}
+
+export const ConfirmInitiateSaveModal: React.FC<ConfirmInitiateSaveModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    documentTitle: props.documentTitle,
+    documentTitle: props`documentTitle`,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
@@ -18,6 +22,10 @@ export const ConfirmInitiateSaveModal = connect(
     cancelSequence,
     documentTitle,
     submitCourtIssuedDocketEntrySequence,
+  }: {
+    cancelSequence: Function;
+    documentTitle: string;
+    submitCourtIssuedDocketEntrySequence: Function;
   }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     return (

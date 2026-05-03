@@ -7,11 +7,20 @@ import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/c
 import {
   loginAsCaseServicesSupervisor,
   loginAsColvin,
+  loginAsDocketClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import { retry } from 'cypress/helpers/retry';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
+import {
+  selectSection,
+  selectRecipient,
+  fillOutMessageField,
+  sendMessage,
+  selectChambers,
+  enterSubject,
+} from 'cypress/local-only/support/pages/document-qc';
 
 describe('file motion response order', function () {
   const today = formatNow(FORMATS.MMDDYYYY);
@@ -131,7 +140,7 @@ describe('file motion response order', function () {
       it('should be able to create a motion response order when all options are selected', function () {
         const expectedContents = [
           'respondent shall file a Response to the Motion for a New Trial',
-          `by ${formattedToday} petitioner may file a Reply. It is further`,
+          `by ${formattedToday}, petitioner may file a Reply. It is further`,
           'Test additional text box',
         ];
         cy.visit(`/case-detail/${this.docketNumber}`);
@@ -157,6 +166,7 @@ describe('file motion response order', function () {
         });
       });
     });
+
     describe('pdf preview', function () {
       it('should show a pdf preview when clicking preview pdf', function () {
         cy.visit(`/case-detail/${this.docketNumber}`);
@@ -179,6 +189,58 @@ describe('file motion response order', function () {
           });
         });
       });
+
+      it('should not show invalid date in pdf preview when entered', function () {
+        const unexpectedContents = [
+          'ORDERED that by Invalid DateTime, respondent shall file a Response',
+          'ORDERED that by Invalid DateTime, petitioner may file a Reply',
+        ];
+        cy.visit(`/case-detail/${this.docketNumber}`);
+        cy.get(
+          '[data-testid="docket-entry-filingsAndProceedings-7"] > button',
+        ).click();
+        cy.get('[data-testid="order-response-button"]').click();
+        cy.get('#response-date-input-orderResponseResponseDate-picker').type(
+          'randomstring',
+        );
+        cy.get('#motion-order-reply').check({ force: true });
+        cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(
+          'randomstring',
+        );
+        cy.get('#additional-text').type('Test additional text box');
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+
+        cy.get('[data-testid="preview-pdf-button"]').click();
+        cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+          unexpectedContents.forEach(text => {
+            expect(req.body.contentHtml).to.not.include(text);
+          });
+        });
+      });
+
+      it('should allow user to cancel and return to document view', function () {
+        cy.visit(`/case-detail/${this.docketNumber}`);
+        cy.get(
+          '[data-testid="docket-entry-filingsAndProceedings-7"] > button',
+        ).click();
+        cy.get('[data-testid="order-response-button"]').click();
+        cy.get('#response-date-input-orderResponseResponseDate-picker').type(
+          today,
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.get('#motion-order-reply').check({ force: true });
+        cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
+        cy.get('#additional-text').type('Test additional text box');
+
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.get('[data-testid="cancel-button"]').click();
+
+        cy.url().should('contain', `/case-detail/${this.docketNumber}`);
+      });
     });
 
     describe('Consolidated Cases', () => {
@@ -198,10 +260,10 @@ describe('file motion response order', function () {
         });
       });
 
-      it('should be able to create a motion response order for a lead case ina consolidated group', () => {
+      it('should be able to create a motion response order for a lead case in a consolidated group', () => {
         const expectedContents = [
           `On ${formattedToday}, petitioner filed a Motion for a New Trial`,
-          'Lead case Document no.',
+          'lead case doc. no.',
         ];
         const ALL_CASES = 'All cases in this group';
         cy.get('#tab-document-view').click();
@@ -238,7 +300,7 @@ describe('file motion response order', function () {
         });
         createAndServePaperPetition({
           yearReceived: '2025',
-        }).then(({ docketNumber }) => {
+        }).then(function ({ docketNumber }) {
           loginAsCaseServicesSupervisor();
           cy.visit(`/case-detail/${docketNumber}`);
           createAndServePaperFiling({
@@ -249,12 +311,9 @@ describe('file motion response order', function () {
           cy.get('[data-testid="add-to-trial-session-btn"]').click();
           cy.get('#show-all-locations-true').click({ force: true });
 
-          cy.get('[data-testid="trial-session-select"] option')
-            .eq(1)
-            .then($option => {
-              const value: string = $option.val() as string;
-              cy.get('[data-testid="trial-session-select"]').select(value);
-            });
+          cy.get('[data-testid="trial-session-select"]').select(
+            this.trialSessionId,
+          );
 
           cy.contains('Add Case').click();
 
@@ -288,6 +347,89 @@ describe('file motion response order', function () {
             expect(req.body.contentHtml).to.include(text);
           });
         });
+      });
+    });
+
+    describe('Message Workflow', () => {
+      beforeEach(() => {
+        createAndServePaperPetition({
+          yearReceived: '2025',
+        }).then(function ({ docketNumber }) {
+          loginAsCaseServicesSupervisor();
+          cy.visit(`/case-detail/${docketNumber}`);
+          createAndServePaperFiling({
+            dateReceived: today,
+            documentType: motionType,
+          });
+          loginAsDocketClerk();
+          cy.visit(`/case-detail/${docketNumber}`);
+          cy.get('[data-testid="case-detail-menu-button"]').click();
+          cy.get('[data-testid="menu-button-add-new-message"]').click();
+          selectSection('Chambers');
+          selectChambers('colvinsChambers');
+          selectRecipient('Judge Colvin');
+          enterSubject();
+          fillOutMessageField();
+          cy.get('[data-testid="select-document"]')
+            .find('option')
+            .its('length')
+            .then(len => {
+              cy.get('[data-testid="select-document"]').select(len - 1);
+            });
+          sendMessage();
+
+          loginAsColvin();
+          cy.visit('/messages/my/inbox');
+          cy.get(
+            `.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell-${docketNumber}"]`,
+          )
+            .first()
+            .click();
+          cy.get('[data-testid="order-response-button"]').click();
+        });
+      });
+
+      it('should allow user to cancel and return to message view', () => {
+        cy.get('#response-date-input-orderResponseResponseDate-picker').type(
+          today,
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.get('#motion-order-reply').check({ force: true });
+        cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
+        cy.get('#additional-text').type('Test additional text box');
+
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.get('[data-testid="cancel-button"]').click();
+
+        const urlRegExp = /messages\/\d{3}-\d{2}\/message-detail/;
+        cy.url().should('match', urlRegExp);
+      });
+
+      it('should send user back to message page after saving and signing draft order', () => {
+        cy.get('#response-date-input-orderResponseResponseDate-picker').type(
+          today,
+        );
+
+        cy.get('[data-testid="save-draft-button"]').click();
+
+        cy.contains('Apply Signature').should('exist');
+
+        cy.get('[data-testid="sign-pdf-canvas"]').click();
+        cy.get('[data-testid="save-signature-button"]').click();
+
+        const urlRegExp = /messages\/\d{3}-\d{2}\/message-detail/;
+        cy.url().should('match', urlRegExp);
+
+        cy.get('[data-testid="message-attachments"]')
+          .children()
+          .should('have.length', 2);
+
+        cy.get('[data-testid="message-attachments"]')
+          .children()
+          .eq(1)
+          .should('contain.text', 'Order');
       });
     });
   });

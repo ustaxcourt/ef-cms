@@ -3,7 +3,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { uploadDocumentAndMakeSafeInteractor } from './uploadDocumentAndMakeSafeInteractor';
 
 describe('uploadDocumentAndMakeSafeInteractor', () => {
-  const mockDocument = MOCK_DOCUMENTS;
+  const mockDocument = MOCK_DOCUMENTS[0];
 
   beforeAll(() => {
     applicationContext
@@ -58,8 +58,8 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][1]
         .key,
-    ).toEqual(mockDocument.key);
+    ).toEqual(mockDocument.docketEntryId);
   });
 });

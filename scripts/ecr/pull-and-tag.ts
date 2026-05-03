@@ -147,18 +147,16 @@ async function app() {
     console.log(
       'Pruning local docker registry to remove unused containers, images, volumes, and build artifacts...',
     );
-    const pruneOutput = await runCommand('docker', [
-      'system',
-      'prune',
-      '--all',
-      '--force',
-      '--volumes',
-    ]);
-    console.log(pruneOutput);
+    await runCommand(
+      'docker',
+      ['system', 'prune', '--all', '--force', '--volumes'],
+      undefined,
+      { captureStdout: false, streamStdout: true },
+    );
   }
 
   console.log(`Retrieving temporary AWS credentials for ${srcEnv}...`);
-  const envSwitcherCommand = `. scripts/env/set-env.zsh ${sourceEnv} --quiet`;
+  const envSwitcherCommand = `. scripts/env/set-env.zsh "${sourceEnv}" --quiet --aws-only`;
   const echoInfoCommand = `echo "{
     \\"AWS_ACCESS_KEY_ID\\": \\"$AWS_ACCESS_KEY_ID\\",
     \\"AWS_ACCOUNT_ID\\": \\"$AWS_ACCOUNT_ID\\",
@@ -187,40 +185,56 @@ async function app() {
   );
 
   console.log(`Logging in to the ${srcEnv} ECR...`);
-  const sourceDockerLoginOutput = await runCommand('docker', [
-    'login',
-    '-u',
-    'AWS',
-    '--password',
-    sourceEcrLoginPassword,
-    `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com`,
-  ]);
-  console.log(sourceDockerLoginOutput);
+  await runCommand(
+    'docker',
+    [
+      'login',
+      '-u',
+      'AWS',
+      '--password',
+      sourceEcrLoginPassword,
+      `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   console.log(`Pulling docker image ${tag} from the ${srcEnv} ECR...`);
-  const sourceDockerPullOutput = await runCommand('docker', [
-    'pull',
-    `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
-  ]);
-  console.log(sourceDockerPullOutput);
+  await runCommand(
+    'docker',
+    [
+      'pull',
+      `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   console.log(`Tagging docker image ${tag} locally...`);
-  const localDockerTagOuput = await runCommand('docker', [
-    'tag',
-    `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
-    `ef-cms-${region}:${tag}`,
-  ]);
-  console.log(localDockerTagOuput);
+  await runCommand(
+    'docker',
+    [
+      'tag',
+      `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
+      `ef-cms-${region}:${tag}`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   console.log(
     `Re-tagging docker image ${tag} so it can be pushed to the ${targetEnv} ECR...`,
   );
-  const targetDockerTagOutput = await runCommand('docker', [
-    'tag',
-    `ef-cms-${region}:${tag}`,
-    `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
-  ]);
-  console.log(targetDockerTagOutput);
+  await runCommand(
+    'docker',
+    [
+      'tag',
+      `ef-cms-${region}:${tag}`,
+      `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   const targetEcrLoginPassword = await runCommand('aws', [
     'ecr',
@@ -228,22 +242,31 @@ async function app() {
     '--region',
     region,
   ]);
-  const targetDockerLoginOutput = await runCommand('docker', [
-    'login',
-    '-u',
-    'AWS',
-    '--password',
-    targetEcrLoginPassword,
-    `${targetAccountId}.dkr.ecr.${region}.amazonaws.com`,
-  ]);
-  console.log(`Logging in to the ${targetEnv} ECR...`, targetDockerLoginOutput);
+  console.log(`Logging in to the ${targetEnv} ECR...`);
+  await runCommand(
+    'docker',
+    [
+      'login',
+      '-u',
+      'AWS',
+      '--password',
+      targetEcrLoginPassword,
+      `${targetAccountId}.dkr.ecr.${region}.amazonaws.com`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   console.log(`Pushing docker image ${tag} to the ${targetEnv} ECR...`);
-  const targetDockerPushOutput = await runCommand('docker', [
-    'push',
-    `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
-  ]);
-  console.log(targetDockerPushOutput);
+  await runCommand(
+    'docker',
+    [
+      'push',
+      `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
+    ],
+    undefined,
+    { captureStdout: false, streamStdout: true },
+  );
 
   console.log(
     `Successfully pulled ${tag} from ${srcEnv} and tagged it to ${targetEnv}`,

@@ -135,7 +135,7 @@ describe('createTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
-        .calls[0][1].swingSessionId,
+        .calls[0][0].swingSessionId,
     ).toEqual('1234');
   });
 

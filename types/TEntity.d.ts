@@ -15,20 +15,24 @@ type TPetitioner = {
   contactType: string;
   country?: string;
   countryType: string;
-  entityName: string;
+  entityName?: string;
   isAddressSealed: boolean;
   inCareOf?: string;
   name: string;
-  paperPetitionEmail?: string;
+  contactEmailAddress?: string;
   phone: string;
   postalCode: string;
-  sealedAndUnavailable: boolean;
+  sealedAndUnavailable?: boolean;
   secondaryName?: string;
   serviceIndicator?: string;
-  state: string;
+  state?: string;
   title?: string;
   hasConsentedToElectronicService?: boolean;
   hasElectronicAccess?: boolean;
+  formattedTitle?: string;
+  formattedPendingEmail?: string;
+  formattedEmail?: string;
+  formattedContactEmailAddress?: string;
 };
 
 interface IValidateRawCollection<I> {

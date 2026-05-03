@@ -330,7 +330,8 @@ button {
   }
 }
 
-.add-consolidated-case-search-modal {
+.add-consolidated-case-search-modal,
+.new-minute-sheet-modal {
   .usa-button {
     &.ustc-search-button {
       min-width: 90px;
@@ -347,5 +348,13 @@ button {
 #confirm-modal-delete-btn {
   svg {
     margin-right: 5px;
+  }
+}
+
+.edit-remote-status-modal {
+  overflow: visible;
+
+  .usa-date-picker__calendar {
+    z-index: 9999;
   }
 }

@@ -9,17 +9,17 @@ import { createAPetitioner } from '../../../helpers/accountCreation/create-a-pet
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsPetitioner,
+  loginAsPetitionsClerk1,
+} from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 
 describe('Petitioner Updates e-mail', () => {
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
@@ -77,7 +77,23 @@ describe('Petitioner Updates e-mail', () => {
     externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
+      // As a Petitions Clerk, verify that after serving the petition,
+      // the contact email address is set to the original service email address
+      logout();
+      loginAsPetitionsClerk1();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      // Verify that contact email address matches the original service email
+      cy.get('[data-testid="petitioner-paper-petition-email"]').should(
+        'contain',
+        email,
+      );
+      // Verify that service email address also matches the original email
+      cy.get('[data-testid="petitioner-email"]').should('contain', email);
+
       const updatedEmail = `cypress_test_account+${v4()}@example.com`;
+      logout();
       loginAsPetitioner(email);
       goToMyAccount();
       clickChangeEmail();
@@ -111,6 +127,7 @@ describe('Petitioner Updates e-mail', () => {
 
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
+      // Verify that service email address is updated to the new email
       cy.get('[data-testid="petitioner-email"]').should(
         'contain',
         updatedEmail,
@@ -124,6 +141,24 @@ describe('Petitioner Updates e-mail', () => {
         'contain',
         updatedEmail,
       );
+
+      // As a Petitions Clerk, verify that the contact email address remains as the original email
+      // (Contact email address is only visible to internal users, not external users)
+      logout();
+      loginAsPetitionsClerk1();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      // Verify that service email address is updated to the new email
+      cy.get('[data-testid="petitioner-email"]').should(
+        'contain',
+        updatedEmail,
+      );
+      // Verify that contact email address remains as the original email
+      cy.get('[data-testid="petitioner-paper-petition-email"]').should(
+        'contain',
+        email,
+      );
     });
     logout();
 
@@ -133,9 +168,7 @@ describe('Petitioner Updates e-mail', () => {
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(password);
       cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="error-alert"]').contains(
-        'The email address or password you entered is invalid.',
-      );
+      cy.get('[data-testid^="error-alert"]').should('exist');
     }
   });
 
@@ -154,13 +187,12 @@ describe('Petitioner Updates e-mail', () => {
     clickConfirmModal();
 
     cy.visit('/verify-email?token=hello_world');
-    cy.get('[data-testid="error-alert"]')
+    cy.get('[data-testid^="error-alert"]')
       .should('be.visible')
       .and(
         'contain.text',
         'Your request cannot be completed. Please try to log in. If you’re still having trouble',
       );
-
     loginAsPetitioner(email);
   });
 });

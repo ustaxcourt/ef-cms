@@ -13,6 +13,10 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+
+jest.mock('@web-api/dispatchers/batch/pollAWSBatchProgress');
+import { pollAWSBatchProgress as mockPollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -41,6 +45,15 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     printableDocketRecordFileId?: string;
   };
 
+  const mockSendNotificationToUser = jest.fn();
+
+  const pollAWSBatchProgress = jest.mocked(mockPollAWSBatchProgress);
+
+  beforeAll(() => {
+    applicationContext.getNotificationGateway().sendNotificationToUser =
+      mockSendNotificationToUser;
+  });
+
   beforeEach(() => {
     requestParams = {
       clientConnectionId: mockClientConnectionId,
@@ -61,6 +74,10 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockReturnValue('pdf data');
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -190,19 +207,19 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       documents: [
         {
           filePathInZip: '101-18, Test Petitioner/2018-03-01_0001_Petition.pdf',
-          key: PETITION_DOCKET_ENTRY.docketEntryId,
+          key: PETITION_DOCKET_ENTRY.documentStorageId,
           useTempBucket: false,
         },
         {
           filePathInZip:
             '101-18, Test Petitioner/2017-03-01_0004_Attachment to Petition.pdf',
-          key: ATP_DOCKET_ENTRY.docketEntryId,
+          key: ATP_DOCKET_ENTRY.documentStorageId,
           useTempBucket: false,
         },
         {
           filePathInZip:
             '101-18, Test Petitioner/2023-08-15_0006_Standing Pretrial Order.pdf',
-          key: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+          key: STANDING_PRETRIAL_ORDER_ENTRY.documentStorageId,
           useTempBucket: false,
         },
         {
@@ -234,5 +251,48 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       },
       userId: mockDocketClerkUser.userId,
     });
+  });
+
+  it('should test batchDownloadDocketEntriesHelper', async () => {
+    pollAWSBatchProgress.mockImplementation(async ({ onProgress }) => {
+      // Simulate progress by calling onProgress callback
+      if (onProgress) {
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+      }
+      // Return a completed job status
+      return {
+        jobName: 'testjob',
+        jobId: 'jobid',
+        jobQueue: '1234',
+        startedAt: 0,
+        jobDefinition: 'testjobdef',
+        status: 'SUCCEEDED',
+      };
+    });
+
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: 2,
+      });
+
+    applicationContext.environment.stage = 'not-local';
+
+    applicationContext
+      .getDispatchers()
+      .sendZipperBatchJob.mockResolvedValueOnce({ jobId: '123' });
+
+    await batchDownloadDocketEntriesInteractor(
+      applicationContext,
+      requestParams,
+      mockDocketClerkUser,
+    );
+
+    expect(mockSendNotificationToUser).toHaveBeenCalledTimes(2);
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
   });
 });

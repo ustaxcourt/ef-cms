@@ -1,16 +1,26 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FilingPartiesForm = connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    filingPartiesFormHelper: state.filingPartiesFormHelper,
-    form: state.form,
-    validationErrors: state.validationErrors,
-  },
+type FilingPartiesFormProps = {
+  updateSequence: Function;
+  validateSequence: Function;
+};
+
+const filingPartiesFormDeps = {
+  caseDetail: state.formattedCaseDetail,
+  filingPartiesFormHelper: state.filingPartiesFormHelper,
+  form: state.form,
+  updateSequence: props`updateSequence`,
+  validateSequence: props`validateSequence`,
+  validationErrors: state.validationErrors,
+};
+
+export const FilingPartiesForm: React.FC<FilingPartiesFormProps> = connect(
+  filingPartiesFormDeps,
   function FilingPartiesForm({
     caseDetail,
     filingPartiesFormHelper,

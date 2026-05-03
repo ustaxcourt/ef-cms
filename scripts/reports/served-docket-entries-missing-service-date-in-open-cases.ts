@@ -1,115 +1,58 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { CLOSED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { applicationContext } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import { CLOSED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:
     'served-docket-entries-missing-service-date-in-open-cases - Generates a ' +
     'CSV of legacy-served documents that are missing a service timestamp',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   requireActiveAwsSession: true,
 };
-
 parseArgsAndEnvVars(scriptConfig);
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
-const getDocketNumbersOfAllOpenCases = async (): Promise<string[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: ['docketNumber.S'],
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-            ],
-            must_not: [
-              {
-                terms: {
-                  'status.S': CLOSED_CASE_STATUSES,
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-case',
-    },
-  });
-  return results.map((c: RawCase) => c.docketNumber);
+type slimDocketEntry = {
+  docketNumber: string;
+  documentType: string | null;
+  eventCode: string;
+  index: number | null;
 };
 
-const getDocketEntriesMissingServiceDate = async ({
-  openCases,
-}: {
-  openCases: string[];
-}): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'docketEntryId.S',
-          'docketNumber.S',
-          'documentType.S',
-          'eventCode.S',
-          'index.N',
-        ],
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'isLegacyServed.BOOL': true,
-                },
-              },
-              {
-                terms: {
-                  'docketNumber.S': openCases,
-                },
-              },
-            ],
-            must_not: [
-              {
-                exists: {
-                  field: 'servedAt.S',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+const getDocketEntriesMissingServiceDateInOpenCases = async (): Promise<
+  slimDocketEntry[]
+> => {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase as c')
+      .innerJoin('dwDocketEntry as de', 'de.docketNumber', 'c.docketNumber')
+      .select([
+        'de.docketNumber',
+        'de.documentType',
+        'de.eventCode',
+        'de.index',
+      ])
+      .where('c.status', 'not in', CLOSED_CASE_STATUSES)
+      .where('de.isLegacyServed', '=', true)
+      .where('de.servedAt', 'is', null)
+      .orderBy('de.receivedAt', 'asc')
+      .execute(),
+  );
 };
 
 const outputCSV = ({
-  docketEntriesMissingServiceDateInOpenCases,
+  docketEntries,
 }: {
-  docketEntriesMissingServiceDateInOpenCases: RawDocketEntry[];
+  docketEntries: slimDocketEntry[];
 }): void => {
   const filename = `${OUTPUT_DIR}/docs-missing-service-date.csv`;
   const columns = [
@@ -121,24 +64,22 @@ const outputCSV = ({
   generateCsv({
     columns,
     filename,
-    rows: docketEntriesMissingServiceDateInOpenCases,
+    rows: docketEntries.map(de => ({
+      ...de,
+      documentType: de.documentType || '',
+      index: `${de.index}` || '',
+    })),
   });
   console.log(`Generated ${filename}`);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const openCases = await getDocketNumbersOfAllOpenCases();
-  const docketEntriesMissingServiceDateInOpenCases =
-    await getDocketEntriesMissingServiceDate({ openCases });
-  const uniqueCases = Array.from(
-    new Set(
-      docketEntriesMissingServiceDateInOpenCases.map(de => de.docketNumber),
-    ),
-  );
+  const docketEntries = await getDocketEntriesMissingServiceDateInOpenCases();
+  const uniqueCases = [...new Set(docketEntries.map(de => de.docketNumber))];
   console.log(
-    `Found ${docketEntriesMissingServiceDateInOpenCases.length} docket ` +
-      `entries missing service date across ${uniqueCases.length} open cases.`,
+    `Found ${docketEntries.length} docket entries missing ` +
+      `service date across ${uniqueCases.length} open cases.`,
   );
-  outputCSV({ docketEntriesMissingServiceDateInOpenCases });
+  outputCSV({ docketEntries });
 })();

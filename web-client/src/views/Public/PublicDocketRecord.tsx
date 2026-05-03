@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
@@ -27,7 +27,6 @@ export const PublicDocketRecord = connect(
         <PublicDocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
-
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -128,7 +127,7 @@ export const PublicDocketRecord = connect(
                     return (
                       <tr
                         data-testid={`public-docket-record-no-${entry.index}`}
-                        key={entry.index}
+                        key={entry.docketEntryId}
                       >
                         <td className="center-column hide-on-mobile">
                           {entry.index}
@@ -148,8 +147,8 @@ export const PublicDocketRecord = connect(
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
                           {entry.isSealed && (
-                            <FontAwesomeIcon
-                              className="sealed-in-blackstone icon-sealed"
+                            <WrappedIcon
+                              iconClass="sealed-in-blackstone icon-sealed"
                               icon="lock"
                               size="1x"
                               title={entry.sealedToTooltip}
@@ -189,7 +188,6 @@ export const PublicDocketRecord = connect(
             )}
           </div>
         </NonPhone>
-
         <Phone>
           <table className="usa-table usa-table--stacked-header usa-table--borderless">
             <thead>

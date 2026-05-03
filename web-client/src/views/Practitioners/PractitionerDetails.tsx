@@ -1,5 +1,5 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -98,12 +98,11 @@ export const PractitionerDetails = connect(
                         </div>
                       )}
                       {practitionerDetailHelper.showEAccessFlag && (
-                        <FontAwesomeIcon
-                          className="margin-left-05 fa-icon-blue"
+                        <WrappedIcon
+                          iconClass="margin-left-05 fa-icon-blue"
                           icon="flag"
                           size="1x"
-                          title="has e-access"
-                        />
+                          title="has e-access" />
                       )}
                     </div>
                   </div>

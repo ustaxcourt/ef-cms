@@ -3,31 +3,32 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
-import { props as cerebralProps } from 'cerebral';
+import { ContactEmailAddress } from '../StartCaseInternal/ContactEmailAddress';
+import { props } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  contactsHelper: string;
+type ContactsPrimaryProps = {
+  contactsHelper: Record<string, any>;
   bind: string;
-  onBlur: () => void;
+  onBlur: Function;
   onChange: string;
   parentView: string;
+  wrapperClassName?: string; 
 };
 
-export const ContactPrimary = connect(
+export const ContactPrimary: React.FC<ContactsPrimaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,
-    contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    parentView: props.parentView,
+    contactsHelper: props`contactsHelper`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChange: props`onChange`,
+    onChangeSequence: sequences[props`onChange`],
+    parentView: props`parentView`,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -221,19 +222,19 @@ export const ContactPrimary = connect(
             />
           )}
 
-          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
-            <>
-              <PaperPetitionEmail
-                bind={bind}
-                contactType="contactPrimary"
-                onBlur={onBlur}
-              />
-              <EConsent
-                bind={bind}
-                contactType="contactPrimary"
-                onBlur={onBlur}
-              />
-            </>
+          {contactsHelper.showContactEmailField && (
+            <ContactEmailAddress
+              bind={bind}
+              contactType="contactPrimary"
+              onBlur={onBlur}
+            />
+          )}
+          {contactsHelper.showEConsentCheckbox && (
+            <EConsent
+              bind={bind}
+              contactType="contactPrimary"
+              onBlur={onBlur}
+            />
           )}
 
           <FormGroup

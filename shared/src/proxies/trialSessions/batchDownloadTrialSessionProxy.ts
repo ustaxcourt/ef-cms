@@ -10,11 +10,11 @@ import { get } from '../requests';
  */
 export const batchDownloadTrialSessionInteractor = (
   applicationContext,
-  { trialSessionId },
+  { trialSessionId, clientConnectionId },
 ) => {
   return get({
     applicationContext,
-    body: {},
+    params: { clientConnectionId },
     endpoint: `/async/trial-sessions/${trialSessionId}/batch-download`,
   });
 };

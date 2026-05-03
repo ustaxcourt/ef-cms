@@ -6,10 +6,10 @@ export const getDocumentSelectedForPreviewAction = ({
   props,
 }: ActionProps) => {
   const { documentId } = props;
-  const { docketEntries } = get(state.form);
+  const { docketEntries = [] } = get(state.form);
 
   if (documentId) {
-    const selectedDocument = get(docketEntries).find(
+    const selectedDocument = docketEntries.find(
       docketEntry => docketEntry.docketEntryId === documentId,
     );
 
@@ -23,6 +23,20 @@ export const getDocumentSelectedForPreviewAction = ({
     state.currentViewMetadata.documentSelectedForPreview,
   );
 
+  if (!documentSelectedForPreview) {
+    return {};
+  }
+
+  const documentFromDocketEntryId = docketEntries.find(
+    docketEntry => docketEntry.docketEntryId === documentSelectedForPreview,
+  );
+
+  if (documentFromDocketEntryId) {
+    return {
+      documentInS3: documentFromDocketEntryId,
+    };
+  }
+
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {
@@ -32,7 +46,7 @@ export const getDocumentSelectedForPreviewAction = ({
   const documentTypeSelectedForPreview =
     INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
 
-  const selectedDocument = get(docketEntries).find(
+  const selectedDocument = docketEntries.find(
     document => document.documentType === documentTypeSelectedForPreview,
   );
 

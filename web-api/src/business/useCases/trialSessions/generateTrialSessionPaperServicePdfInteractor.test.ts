@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateTrialSessionPaperServicePdfInteractor } from './generateTrialSessionPaperServicePdfInteractor';
@@ -6,10 +7,15 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('generateTrialSessionPaperServicePdfInteractor', () => {
   const mockPdfUrl = 'www.example.com';
   const mockFileId = '46f3244d-aaca-48c8-a7c1-de561d000c90';
+
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
   beforeEach(() => {
     applicationContext
@@ -31,6 +37,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
         {
           trialNoticePdfsKeys: ['1234-56'],
           trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+          clientConnectionId: 'id"',
         },
         mockPetitionerUser,
       ),
@@ -39,15 +46,14 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
 
   it('should combine each of the provided paper trial notices into one pdf and save the the combined document as a paper service PDF on the trial session', async () => {
     const mockTrialNoticePdfsKeys = ['123-123', '456-456', '789-789'];
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_INPERSON);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_INPERSON);
 
     await generateTrialSessionPaperServicePdfInteractor(
       applicationContext,
       {
         trialNoticePdfsKeys: mockTrialNoticePdfsKeys,
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        clientConnectionId: 'id"',
       },
       mockPetitionsClerkUser,
     );
@@ -64,10 +70,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     const { PDFDocument } = await applicationContext.getPdfLib();
     const pdfDoc = await PDFDocument.load(bytes);
     expect(pdfDoc.getPageCount()).toBe(mockTrialNoticePdfsKeys.length);
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+    expect(updateTrialSession).toHaveBeenCalledWith({
       trialSessionToUpdate: expect.objectContaining({
         paperServicePdfs: [
           { fileId: mockFileId, title: 'Initial Calendaring' },
@@ -82,6 +85,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       {
         trialNoticePdfsKeys: ['123-56'],
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        clientConnectionId: 'id"',
       },
       mockPetitionsClerkUser,
     );

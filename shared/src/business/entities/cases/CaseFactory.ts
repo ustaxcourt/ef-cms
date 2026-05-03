@@ -24,6 +24,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 
 function assertInstanceOf<T>(
   instance: any,
@@ -66,7 +69,23 @@ export class CaseFactory {
   }
 
   static getCase({ rawCase, user }: { rawCase: any; user: UnknownAuthUser }) {
-    return constructCaseForUser({ rawCase, user });
+    return constructCaseForUser({ rawCase, user }) as
+      | Case
+      | PublicCase
+      | RestrictedCase;
+  }
+
+  static getCaseDTO({
+    rawCase,
+    user,
+  }: {
+    rawCase: any;
+    user: UnknownAuthUser;
+  }) {
+    return constructCaseForUser({ rawCase, user, useDTO: true }) as
+      | CaseDTO
+      | PublicCaseDTO
+      | RestrictedCaseDTO;
   }
 }
 
@@ -74,10 +93,18 @@ export class CaseFactory {
 function constructCaseForUser({
   rawCase,
   user,
+  useDTO = false,
 }: {
   rawCase: any;
   user: UnknownAuthUser;
-}): Case | PublicCase | RestrictedCase {
+  useDTO?: boolean;
+}):
+  | Case
+  | PublicCase
+  | RestrictedCase
+  | CaseDTO
+  | PublicCaseDTO
+  | RestrictedCaseDTO {
   const userIsLoggedIn = isAuthUser(user);
   const caseIsSealed = isSealedCase(rawCase);
   rawCase.isSealed = caseIsSealed;
@@ -90,7 +117,9 @@ function constructCaseForUser({
     userIsLoggedIn &&
     isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)
   ) {
-    return new Case(rawCase, { authorizedUser: user });
+    return useDTO
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
+      : new Case(rawCase, { authorizedUser: user });
   }
 
   // Users who do not have access to all case data should not see docket entries that are not on the record, like drafts,
@@ -101,9 +130,17 @@ function constructCaseForUser({
 
   // If the user is not logged in, return whatever subset of data is allowed to the public
   if (!userIsLoggedIn) {
-    return caseIsSealed
-      ? new RestrictedCase(rawCase)
-      : new PublicCase(rawCase, { authorizedUser: user });
+    if (caseIsSealed) {
+      return useDTO
+        ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
+        : new RestrictedCase(rawCase);
+    } else {
+      return useDTO
+        ? new PublicCaseDTO(
+            new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
+          )
+        : new PublicCase(rawCase, { authorizedUser: user });
+    }
   }
 
   const userIsAssociated = userIsAssociatedWithCase({
@@ -113,7 +150,15 @@ function constructCaseForUser({
 
   // Petitioners and practitioners on a case have full read access to the case
   if (userIsAssociated) {
-    return new Case(rawCase, { authorizedUser: user });
+    const caseResult = useDTO
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
+      : new Case(rawCase, { authorizedUser: user });
+
+    for (const petitioner of caseResult.petitioners) {
+      delete petitioner.contactEmailAddress;
+    }
+
+    return caseResult;
   }
 
   // IRS super users have full read access to all cases with served petitions
@@ -123,14 +168,24 @@ function constructCaseForUser({
       rawCase,
     })
   ) {
-    return new Case(rawCase, { authorizedUser: user });
+    return useDTO
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
+      : new Case(rawCase, { authorizedUser: user });
   }
 
   // User is logged in but neither has permissions to view all cases nor is associated with the case,
   // so they see whatever subset of data is allowed to the public
-  return caseIsSealed
-    ? new RestrictedCase(rawCase)
-    : new PublicCase(rawCase, { authorizedUser: user });
+  if (caseIsSealed) {
+    return useDTO
+      ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
+      : new RestrictedCase(rawCase);
+  } else {
+    return useDTO
+      ? new PublicCaseDTO(
+          new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
+        )
+      : new PublicCase(rawCase, { authorizedUser: user });
+  }
 }
 
 export const decorateForCaseStatus = (caseRecord: RawCase) => {

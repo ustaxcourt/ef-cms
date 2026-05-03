@@ -1,5 +1,3 @@
-import * as readline from 'node:readline/promises';
-
 const defaultEmailHost = 'ustaxcourt.gov';
 
 export const getChambersNameFromJudgeName = (judgeName: string) => {
@@ -7,16 +5,6 @@ export const getChambersNameFromJudgeName = (judgeName: string) => {
     ? `${judgeName.toLowerCase()}Chambers`
     : `${judgeName.toLowerCase()}sChambers`;
 };
-
-export async function promptUser(query: string): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  const answer = await rl.question(query);
-  rl.close();
-  return answer;
-}
 
 export const expectedEmailFormats = (name: string): string[] => {
   const lowerCaseName = name.toLowerCase();

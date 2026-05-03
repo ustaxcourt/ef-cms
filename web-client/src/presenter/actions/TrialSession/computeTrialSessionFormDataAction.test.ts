@@ -161,7 +161,7 @@ describe('computeTrialSessionFormDataAction', () => {
       },
       state: { form: {} },
     });
-    expect((result.state as any).startTime).toBeUndefined();
+    expect(result.state).not.toHaveProperty('startTime');
   });
 
   describe('should store a startTime deliberately created as invalid', () => {

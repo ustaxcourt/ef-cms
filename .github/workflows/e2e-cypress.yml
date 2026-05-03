@@ -2,6 +2,16 @@ name: E2E Cypress
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   e2e_cypress:
@@ -10,8 +20,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [6]
-        ci_node_index: [0, 1, 2, 3, 4, 5]
+        ci_node_total: [9]
+        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8]
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
@@ -29,29 +39,36 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 2.11
-      - name: Setup DynamoDB Local
-        uses: codyseibert/dynamodb-action@v4.1.0
-        with:
-          port: 8000
-          cors: '*'
-          version: '2.6.1'
+          opensearch-version: 3.5.0
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Install Node Dependencies
+
+      - name: Restore Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Node Dependencies - Cache Miss Install
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
       - name: Setup Postgres
         run: |
           npm run migration:postgres
+          npm run migration:postgres:contract
           npm run seed:postgres
       - name: Run E2E Cypress
         run: |
@@ -63,7 +80,16 @@ jobs:
           npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Videos
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/local-only/videos
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

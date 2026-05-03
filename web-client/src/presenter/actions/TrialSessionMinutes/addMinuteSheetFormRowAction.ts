@@ -6,7 +6,10 @@ export const addMinuteSheetFormRowAction = ({ get, props, store }) => {
   const rows = get(state.minuteSheetForm[section][name]);
   const newEmptyFormRow = getEmptyFormRowByName(name);
 
-  if (props.name === 'exhibits' && props.index !== undefined) {
+  if (
+    (props.name === 'exhibits' || props.name === 'actionsAndFilings') &&
+    props.index !== undefined
+  ) {
     const newObj = {};
     const entries = Object.entries(rows);
 

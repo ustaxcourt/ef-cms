@@ -1,14 +1,34 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_STATUS_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   batchDownloadTrialSessionInteractor,
+  batchDownloadTrialSessionInteractorHelper,
   generateValidDocketEntryFilename,
 } from './batchDownloadTrialSessionInteractor';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+
+jest.mock('@web-api/dispatchers/batch/pollAWSBatchProgress');
+import { pollAWSBatchProgress as mockPollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let mockCase;
+
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
+
+  const mockSendNotificationToUser = jest.fn();
+
+  const pollAWSBatchProgress = jest.mocked(mockPollAWSBatchProgress);
 
   beforeEach(() => {
     mockCase = {
@@ -45,24 +65,20 @@ describe('batchDownloadTrialSessionInteractor', () => {
       },
     ];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...mockCase,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...mockCase,
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'something' });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        startDate: '2019-09-26T12:00:00.000Z',
-        trialLocation: 'Birmingham',
-      });
+    getTrialSessionById.mockResolvedValue({
+      startDate: '2019-09-26T12:00:00.000Z',
+      trialLocation: 'Birmingham',
+    } as RawTrialSession);
 
     applicationContext
       .getUseCases()
@@ -73,6 +89,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
+  });
+
+  beforeAll(() => {
+    applicationContext.getNotificationGateway().sendNotificationToUser =
+      mockSendNotificationToUser;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('file name generation', () => {
@@ -111,6 +136,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -150,6 +176,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -168,6 +195,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockPetitionerUser,
     );
@@ -180,6 +208,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -189,14 +218,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('throws an unknown error if an error is thrown without a message', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
+    getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -209,6 +237,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -219,14 +248,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
   it('throws an NotFound error if a case does not exist', async () => {
     const mockTrialSessionId = '100-10';
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(false);
+    getTrialSessionById.mockResolvedValue(undefined);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId: mockTrialSessionId,
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -239,6 +267,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -252,47 +281,41 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalled();
   });
 
   it('should filter closed cases from batch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.closed,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.closed,
+        isManuallyAdded: false,
+        addedToSessionAt: '3000-03-01T00:00:00.000Z',
+        removedFromTrial: false,
+        isHearing: false,
+      },
+    ]);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
@@ -303,30 +326,28 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('should filter removed cases from batch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          removedFromTrial: true,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        removedFromTrial: true,
+        isManuallyAdded: false,
+        addedToSessionAt: '3000-03-01T00:00:00.000Z',
+        removedFromTrialDate: '3000-03-01T00:00:00.000Z',
+        isHearing: false,
+      },
+    ]);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
@@ -334,5 +355,77 @@ describe('batchDownloadTrialSessionInteractor', () => {
       onProgress: expect.anything(),
       outputZipName: 'September_26_2019-Birmingham.zip',
     });
+  });
+
+  it('should test batchDownloadTrialSessionInteractorHelper', async () => {
+    pollAWSBatchProgress.mockImplementation(async ({ onProgress }) => {
+      // Simulate progress by calling onProgress callback
+      if (onProgress) {
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+      }
+      // Return a completed job status
+      return {
+        jobName: 'testjob',
+        jobId: 'jobid',
+        jobQueue: '1234',
+        startedAt: 0,
+        jobDefinition: 'testjobdef',
+        status: 'SUCCEEDED',
+      };
+    });
+
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: 2,
+      });
+
+    applicationContext.environment.stage = 'not-local';
+
+    applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+
+    applicationContext.getDispatchers().sendZipperBatchJob = jest
+      .fn()
+      .mockResolvedValue({ jobId: '123' });
+
+    applicationContext.getPersistenceGateway().zipDocuments = jest.fn();
+
+    await batchDownloadTrialSessionInteractorHelper(
+      applicationContext,
+      { trialSessionId: 'test-123', clientConnectionId: 'abc-123' },
+      mockJudgeUser,
+    );
+
+    expect(mockSendNotificationToUser).toHaveBeenCalledTimes(5);
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
+  });
+  it('should throw an error if AWS batch job fails to start', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: 2,
+      });
+
+    applicationContext.environment.stage = 'not-local';
+
+    applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+
+    const err = 'AWS batch job failed to start';
+
+    applicationContext.getDispatchers().sendZipperBatchJob = jest
+      .fn()
+      .mockRejectedValue(new Error(err));
+
+    await expect(
+      batchDownloadTrialSessionInteractorHelper(
+        applicationContext,
+        { trialSessionId: 'test-123', clientConnectionId: 'abc-123' },
+        mockJudgeUser,
+      ),
+    ).rejects.toThrow(`Error starting AWS batch job: Error: ${err}`);
   });
 });

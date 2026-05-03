@@ -11,9 +11,10 @@ const caseDetailSubnavHelper = withAppContextDecorator(
 );
 
 const getBaseState = user => {
+  const docketEntries: Array<{ isDraft: boolean }> = [];
   return {
     caseDetail: {
-      docketEntries: [],
+      docketEntries,
     },
     permissions: getUserPermissions(user),
     user,
@@ -21,7 +22,7 @@ const getBaseState = user => {
 };
 
 const generateDocketEntries = (numberInDraft, numberNotInDraft) => {
-  const docketEntries = [];
+  const docketEntries: Array<{ isDraft: boolean }> = [];
 
   for (let i = 0; i < numberInDraft; i++) {
     docketEntries.push({
@@ -45,7 +46,26 @@ const computeState = state => {
 };
 
 describe('caseDetailSubnavHelper', () => {
-  let state = {};
+  let state: ReturnType<typeof getBaseState> & {
+    caseDetail: ReturnType<typeof getBaseState>['caseDetail'] & {
+      hasPendingItems?: boolean;
+      caseNote?: string;
+      docketEntries?: Array<{ isDraft?: boolean }>;
+    };
+    caseDeadlines?: unknown[];
+    currentViewMetadata?: {
+      caseDetail?: {
+        caseInformationTab?: string;
+        primaryTab?: string;
+      };
+    };
+    screenMetadata?: {
+      isAssociated?: boolean;
+    };
+    judgesNote?: {
+      notes?: string;
+    };
+  };
 
   const petitionsClerkUser = {
     role: ROLES.petitionsClerk,

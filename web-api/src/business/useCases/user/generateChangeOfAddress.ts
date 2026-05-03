@@ -94,11 +94,25 @@ export const generateChangeOfAddress = async ({
     jobId,
   });
 
+  let alwaysSendUpdateWsMessages = true;
+  let indexesToSendUpdateMessage;
+
+  if (associatedUserCases.length > 100) {
+    alwaysSendUpdateWsMessages = false;
+    const numCasesPerPercentagePoint = Math.floor(
+      associatedUserCases.length / 100,
+    );
+
+    indexesToSendUpdateMessage = new Array<boolean>(associatedUserCases.length)
+      .fill(false)
+      .map((_caseBoolean, index) => index % numCasesPerPercentagePoint === 0);
+  }
+
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
   if (isChangeOfAddressLambdaEnabled) {
-    const sqs: SQSClient = await applicationContext.getMessagingClient();
-    const cmds = associatedUserCases.map(docketNumber => {
+    const sqs: SQSClient = applicationContext.getLongTimeoutSQSMessagingClient();
+    const cmds = associatedUserCases.map((docketNumber, i) => {
       return new SendMessageCommand({
         MessageBody: JSON.stringify({
           bypassDocketEntry,
@@ -115,6 +129,10 @@ export const generateChangeOfAddress = async ({
           updatedName,
           user,
           websocketMessagePrefix,
+          totalCases: associatedUserCases.length,
+          sendUpdateProgressWsMessage: alwaysSendUpdateWsMessages
+            ? true
+            : indexesToSendUpdateMessage[i],
         }),
         QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
       });
@@ -122,7 +140,7 @@ export const generateChangeOfAddress = async ({
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await settlePromises(
-      associatedUserCases.map(async docketNumber => {
+      associatedUserCases.map(async (docketNumber, i) => {
         return await applicationContext
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
@@ -138,6 +156,10 @@ export const generateChangeOfAddress = async ({
             updatedName,
             user,
             websocketMessagePrefix,
+            totalCases: associatedUserCases.length,
+            sendUpdateProgressWsMessage: alwaysSendUpdateWsMessages
+              ? true
+              : indexesToSendUpdateMessage[i],
           });
       }),
     );

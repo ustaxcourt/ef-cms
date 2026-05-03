@@ -42,7 +42,6 @@ import {
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createMockDocumentClient } from './createMockDocumentClient';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
@@ -81,9 +80,7 @@ import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
-import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -367,17 +364,20 @@ export const createTestApplicationContext = () => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    associateSwingTrialSessions: jest.fn(),
   });
 
   const getDocumentGeneratorsReturnMock = {
     addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFile),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
+    certificateOfService: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialLocation: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialStartDate: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),
@@ -386,6 +386,7 @@ export const createTestApplicationContext = () => {
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
+    noticeOfWithdrawal: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     petition: jest.fn().mockImplementation(getFakeFile),
@@ -421,6 +422,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetPersistenceGateway = appContextProxy({
     addCaseToHearing: jest.fn(),
+    countRemainingChangeOfAddressCases: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteDocumentFile: jest.fn(),
@@ -447,12 +449,10 @@ export const createTestApplicationContext = () => {
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
-    getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
     getTrialSessionProcessingStatus: jest.fn(),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
-    incrementCounter,
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
@@ -480,7 +480,9 @@ export const createTestApplicationContext = () => {
     }),
   };
 
-  const mockDocumentClient = createMockDocumentClient();
+  const mockGetLongTimeoutSQSMessagingClient = {
+    send: jest.fn().mockResolvedValue({}),
+  };
 
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(generateDocketNumber),
@@ -507,7 +509,6 @@ export const createTestApplicationContext = () => {
     environment: {
       appEndpoint: 'localhost:1234',
       cognitoClientId: 'bvjrggnd3co403c0aahscinne',
-      dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
       userPoolId: 'local_2pHzece7',
@@ -537,8 +538,8 @@ export const createTestApplicationContext = () => {
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
       sendSlackNotification: jest.fn(),
+      sendZipperBatchJob: jest.fn(),
     }),
-    getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
@@ -559,6 +560,9 @@ export const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
+    getLongTimeoutSQSMessagingClient: jest
+      .fn()
+      .mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy({

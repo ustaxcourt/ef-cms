@@ -4,7 +4,13 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ArchiveDraftDocumentModal = connect(
+type ArchiveDraftDocumentModalProps = {
+  message?: string;
+  showDocumentTitle?: boolean;
+  title?: string;
+}
+
+export const ArchiveDraftDocumentModal: React.FC<ArchiveDraftDocumentModalProps> = connect(
   {
     archiveDraftDocument: state.archiveDraftDocument,
     cancelSequence: sequences.dismissModalSequence,
@@ -14,9 +20,16 @@ export const ArchiveDraftDocumentModal = connect(
     archiveDraftDocument,
     cancelSequence,
     confirmSequence,
-    message = 'Once deleted, it can’t be restored.',
+    message = "Once deleted, it can't be restored.",
     showDocumentTitle = true,
     title = 'Are You Sure You Want to Delete This Document?',
+  }: {
+    archiveDraftDocument: { documentTitle: string | null };
+    cancelSequence: Function;
+    confirmSequence: Function;
+    message?: string;
+    showDocumentTitle?: boolean;
+    title?: string;
   }) {
     return (
       <ModalDialog

@@ -35,7 +35,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
+                "logs:DescribeLogStreams",
+                "logs:GetLogEvents"
             ],
             "Resource": [
                 "arn:aws:logs:*:*:*"
@@ -53,7 +54,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "batch:SubmitJob"
+                "batch:SubmitJob",
+                "batch:DescribeJobs"
             ],
             "Resource": [
                 "*"
@@ -133,27 +135,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Resource": [
                 "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}"
             ]
-        },
-        {
-            "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeStream",
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams",
-                "dynamodb:PutItem",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*",
-                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*"
-            ],
-            "Effect": "Allow"
         },
         {
             "Action": [

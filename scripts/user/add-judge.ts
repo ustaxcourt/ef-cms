@@ -1,6 +1,9 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { ACCOUNT_STATUS, JudgeTitle } from '@shared/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  JudgeTitle,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
@@ -15,13 +18,13 @@ import {
   getChambersNameFromJudgeName,
   judgeTitleIsInExpectedFormat,
   phoneIsInExpectedFormat,
-  promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
 import { getNewPasswordForEnvironment } from './make-new-password';
+import { ask } from '../helpers/prompts';
 
 /**
  * This script will add a judge user to a deployed environment.
- * It creates both the Cognito record and the associated Dynamo record.
+ * It creates both the Cognito record and the associated database record.
  * Required parameters: name, judgeFullName, and email
  * Optional parameters: phone (defaults to none), judgeTitle (defaults to "Judge"), isSeniorJudge (defaults to false)
  * Note that a phone number is eventually required; otherwise, trial information will
@@ -38,11 +41,6 @@ import { getNewPasswordForEnvironment } from './make-new-password';
 const scriptConfig: ScriptConfig = {
   description:
     'add-judge - Creates a new Judge user in a deployed environment.',
-  environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
-    env: 'ENV',
-    userPoolId: 'USER_POOL_ID',
-  },
   parameters: {
     email: {
       position: 2,
@@ -75,6 +73,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
   requireActiveAwsSession: true,
+  environment: {
+    userPoolId: 'USER_POOL_ID',
+    env: 'ENV',
+  },
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -93,7 +95,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken emails
   if (!emailIsInExpectedFormat({ email, judgeName: name })) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -103,7 +105,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken phone numbers
   if (phone && !phoneIsInExpectedFormat(phone)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -113,7 +115,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken judgeTitle
   if (!judgeTitleIsInExpectedFormat(judgeTitle)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The judgeTitle you entered does not match expected values: ${expectedJudgeTitles.join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -125,7 +127,7 @@ const scriptConfig: ScriptConfig = {
   const section = getChambersNameFromJudgeName(name);
   const role = 'judge';
 
-  const dynamoUserInfo: RawUser = {
+  const userInfo: RawUser = {
     email,
     entityName: 'User',
     isSeniorJudge,
@@ -136,11 +138,11 @@ const scriptConfig: ScriptConfig = {
     role,
     section,
     userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
-    accountStatus: ACCOUNT_STATUS.active
+    accountStatus: ACCOUNT_STATUS.active,
   };
-  const rawUser = new User(dynamoUserInfo).validate().toRawObject();
+  const rawUser = new User(userInfo).validate().toRawObject();
 
-  console.log('Adding user information to Dynamo and Cognito ... ');
+  console.log('Adding user information to Postgres and Cognito ... ');
   const { userId } = await createOrUpdateUser(applicationContext, {
     password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: false,

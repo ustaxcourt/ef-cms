@@ -8,6 +8,8 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
+type CalendaredPublicCase = Omit<RawCase | PublicCase, 'consolidatedCases'>;
 
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
@@ -69,9 +71,10 @@ export const publicTrialSessionDetailsHelper = (
     formattedCityStateZip,
   ]);
 
-  const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(
-    trialSession.calendaredCases,
-  ).map(c => formatPublicCase(c));
+  const formattedCases =
+    Case.sortByDocketNumberAndGroupConsolidatedCases<CalendaredPublicCase>(
+      trialSession.calendaredCases,
+    ).map(formatPublicCase);
 
   const formattedTrialSession = {
     address1: trialSession.address1,
@@ -95,7 +98,7 @@ export const publicTrialSessionDetailsHelper = (
 };
 
 const formatPublicCase = (
-  calendaredCase: Omit<RawCase | RawPublicCase, 'consolidatedCases'>,
+  calendaredCase: CalendaredPublicCase,
 ): TrialSessionPublicCaseRow => {
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);

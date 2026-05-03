@@ -12,11 +12,10 @@ export const getTrialSessionDetailsLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { trialSessionId } = event.pathParameters || {};
 
     return await getTrialSessionDetailsInteractor(
-      applicationContext,
       {
         trialSessionId,
       },

@@ -9,14 +9,11 @@ import { verifyPasswordRequirements } from '../../../helpers/authentication/veri
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Account Creation', () => {
+  // eslint-disable-next-line custom-rules-plugin/no-dates
   const GUID = Date.now();
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
-  });
-
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
   });
 
   describe('Form Validation', () => {
@@ -210,9 +207,7 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.get('[data-testid="error-alert"]')
-        .should('be.visible')
-        .and('contain.text', 'Verification email link expired');
+      cy.get('[data-testid^="error-alert"]').should('contain', 'Enter your email address and password below, then log in to be sent a new verification email.');
     });
   });
 
@@ -256,9 +251,8 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.get('[data-testid="error-alert"]')
-        .should('be.visible')
-        .and('contain.text', 'Verification email link expired');
+      cy.get('[data-testid^="error-alert"]')
+      .should("contain", "Enter your email address and password below, then log in to be sent a new verification email.");
     });
   });
 });

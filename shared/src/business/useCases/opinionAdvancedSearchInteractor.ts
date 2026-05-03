@@ -1,15 +1,15 @@
-import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
-import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
+import { omit } from 'lodash';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { omit } from 'lodash';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
+import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,6 +22,7 @@ export const opinionAdvancedSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
+    limit = MAX_DOCUMENT_SEARCH_RESULTS,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -31,6 +32,7 @@ export const opinionAdvancedSearchInteractor = async (
     keyword: string;
     opinionTypes: string[];
     startDate: string;
+    limit?: number;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -46,29 +48,58 @@ export const opinionAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
+    from: 0,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results, totalCount } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: opinionTypes,
-      isOpinionSearch: true,
-      ...rawSearch,
-    });
+  const accessible: any[] = [];
+  let searchAfter: any[] | undefined = undefined;
+  const maxCeiling = Math.min(MAX_DOCUMENT_SEARCH_RESULTS, limit);
+
+  while (accessible.length < limit) {
+    const sizeNeeded = limit - accessible.length;
+    const { results: rawBatch } = await applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: opinionTypes,
+        isOpinionSearch: true,
+        ...rawSearch,
+        overrideResultSize: sizeNeeded,
+        searchAfter,
+      });
+
+    if (rawBatch.length === 0) break;
+
+    for (const r of rawBatch) {
+      if (accessible.length >= limit) break;
+      accessible.push(r);
+    }
+
+    const lastRaw = rawBatch[rawBatch.length - 1];
+
+    if (lastRaw && lastRaw.sort) {
+      searchAfter = lastRaw.sort;
+    } else {
+      break;
+    }
+    if (accessible.length >= maxCeiling) break;
+  }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
-    totalCount,
     userId: authorizedUser.userId,
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
+  const validated =
+    InternalDocumentSearchResult.validateRawCollection(accessible);
 
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults);
+  return {
+    results: validated,
+  };
 };

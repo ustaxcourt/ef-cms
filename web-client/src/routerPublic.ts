@@ -24,7 +24,8 @@ const router = {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
 
-    window.__cy_route = path => router.route(path || '/');
+    (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
+      path => route(path || '/');
 
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
@@ -96,9 +97,15 @@ const router = {
       });
     });
 
-    route('/dawson-ui-components', () => {
-      setPageTitle('UI Components');
-      return app.getSequence('goToDawsonUIComponentSequence')();
+    // only visible on lower envs
+    route('/dawson-library', () => {
+      if (process.env.ENV === 'prod') {
+        return app.getSequence('notFoundErrorSequence')({
+          error: {},
+        });
+      }
+      setPageTitle('Dawson Library');
+      return app.getSequence('gotoDawsonLibrarySequence')();
     });
 
     route('..', () => {

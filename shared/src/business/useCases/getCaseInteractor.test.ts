@@ -28,6 +28,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { docketClerk1User } from '@shared/test/mockUsers';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
@@ -227,11 +228,10 @@ describe('getCaseInteractor', () => {
         docketNumber: '00101-00',
       },
       mockPetitionerUser,
-    )) as RawCase;
+    )) as CaseDTO;
 
     expect(result.docketNumber).toEqual('101-00');
     expect(result.petitioners[0].address1).toBeDefined();
-    expect(result.entityName).toEqual('Case');
   });
 
   it('should return the case when the currentUser is the contactSecondary on the case', async () => {
@@ -258,11 +258,10 @@ describe('getCaseInteractor', () => {
         docketNumber: '00101-00',
       },
       mockPetitionerUser,
-    )) as RawCase;
+    )) as CaseDTO;
 
     expect(result.docketNumber).toEqual('101-00');
     expect(result.petitioners[0].address1).toBeDefined();
-    expect(result.entityName).toEqual('Case');
   });
 
   it('should return the full case (non public) when the user is part of the consolidated group', async () => {
@@ -291,7 +290,7 @@ describe('getCaseInteractor', () => {
       mockPetitionerUser,
     );
 
-    expect(result.entityName).toEqual('Case');
+    expect(result.entityName).toEqual('CaseDTO');
   });
 
   it('should throw UnauthorizedError if user is not a valid AuthUser', async () => {
@@ -345,7 +344,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       const contactSecondary = result.petitioners[1];
@@ -365,7 +364,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockPrivatePractitionerUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       expect(result.petitioners[0].city).toBeUndefined();
       expect(result.petitioners[1].city).toBeUndefined();
@@ -412,11 +411,10 @@ describe('getCaseInteractor', () => {
         },
         mockPrivatePractitionerUser,
       );
-
-      expect(result).toEqual({
+      expect(result.entityName).toEqual('RestrictedCaseDTO');
+      expect(result).toMatchObject({
         docketEntries: [],
         docketNumber: '101-18',
-        entityName: 'RestrictedCase',
         isSealed: true,
       });
     });
@@ -427,7 +425,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -445,7 +443,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.privatePractitioner,
           userId: practitionerId,
         },
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -476,7 +474,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -508,7 +506,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.privatePractitioner,
           userId: practitioner2Id,
         },
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -605,7 +603,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.docketClerk,
           userId: docketClerk1User.userId,
         },
-      )) as RawCase;
+      )) as CaseDTO;
       for (let i = 0; i < docketEntries.length; i++) {
         expect(result.docketEntries[i]).toMatchObject({
           workItemId: workItems[i].workItemId,
@@ -614,5 +612,19 @@ describe('getCaseInteractor', () => {
         });
       }
     });
+  });
+  it('should not return servedParties', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+    });
+
+    const result = await getCaseInteractor(
+      {
+        docketNumber: '000123-19S',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect((result.docketEntries[0] as any).servedParties).toBeUndefined();
   });
 });

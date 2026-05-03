@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const IndividualWorkQueueOutbox = connect(
   {
@@ -44,9 +45,7 @@ export const IndividualWorkQueueOutbox = connect(
                       item.consolidatedIconTooltipText
                     }
                     inConsolidatedGroup={item.inConsolidatedGroup}
-                    showLeadCaseIcon={
-                      item.leadDocketNumber === item.docketNumber
-                    }
+                    showLeadCaseIcon={isLeadCase(item)}
                   />
                 </td>
                 <td
@@ -60,14 +59,21 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
-                    <a
-                      className="case-link"
-                      data-testid="work-item-outbox-document-link"
-                      href={item.editLink}
-                    >
-                      {item.docketEntry.descriptionDisplay ||
-                        item.docketEntry.documentType}
-                    </a>
+                    {item.editLink ? (
+                      <a
+                        className="case-link"
+                        data-testid="work-item-outbox-document-link"
+                        href={item.editLink}
+                      >
+                        {item.docketEntry.descriptionDisplay ||
+                          item.docketEntry.documentType}
+                      </a>
+                    ) : (
+                      <span>
+                        {item.docketEntry.descriptionDisplay ||
+                          item.docketEntry.documentType}
+                      </span>
+                    )}
                   </div>
                 </td>
                 {workQueueHelper.showFiledByColumn && (

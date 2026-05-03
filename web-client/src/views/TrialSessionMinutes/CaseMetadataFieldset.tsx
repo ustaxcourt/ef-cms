@@ -6,8 +6,9 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
+  HEARING_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
-  TRIAL_HEARING_OPTIONS,
+  TRIAL_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
@@ -410,27 +411,29 @@ export const CaseMetadataFieldset = ({
           </FormGroup>
         </div>
       </div>
-      <div className="grid-row grid-gap align-items-center">
+      <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-fill" style={{ minWidth: '100px' }}>
-          <span className="usa-label margin-bottom-0">Trial/Hearing</span>
+          <span className="usa-label margin-bottom-0">Trial</span>
         </div>
         <div className="grid-col-auto">
           <FormGroup className="flex-justify-end margin-bottom-0 display-flex align-items-center">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="trialHearingDate"
+              htmlFor="trialDate"
             >
               Date(s)
             </label>
             <input
               className="usa-input"
-              id="trialHearingDate"
+              id="trialDate"
               type="text"
-              value={caseMetadataFormState.trialHearing.date || ''}
+              value={caseMetadataFormState.trial?.date || ''}
               onBlur={() => onBlurHandler()}
               onChange={e => {
+                console.log('Event: ', e);
+                console.log('Trial formstate: ', caseMetadataFormState.trial);
                 onChangeHandler({
-                  name: 'trialHearing',
+                  name: 'trial',
                   rowInfo: {
                     key: 'date',
                   },
@@ -445,19 +448,19 @@ export const CaseMetadataFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="trialHearingType"
+              htmlFor="trialType"
             >
               Type
             </label>
             <select
               className="usa-select display-inline-block"
-              id="trialHearingType"
-              name="trialHearingType"
-              value={caseMetadataFormState.trialHearing.trialHearingType}
+              id="trialType"
+              name="trialType"
+              value={caseMetadataFormState.trial.trialHearingType}
               onBlur={() => onBlurHandler()}
               onChange={e => {
                 onChangeHandler({
-                  name: 'trialHearing',
+                  name: 'trial',
                   rowInfo: {
                     key: 'trialHearingType',
                   },
@@ -467,10 +470,10 @@ export const CaseMetadataFieldset = ({
               }}
             >
               <option value="">- Select -</option>
-              {Object.keys(TRIAL_HEARING_OPTIONS).map(optionKey => {
+              {Object.keys(TRIAL_OPTIONS).map(optionKey => {
                 return (
                   <option key={optionKey} value={optionKey}>
-                    {TRIAL_HEARING_OPTIONS[optionKey]}
+                    {TRIAL_OPTIONS[optionKey]}
                   </option>
                 );
               })}
@@ -481,20 +484,20 @@ export const CaseMetadataFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center">
             <label
               className="margin-right-2 margin-bottom-0 display-inline-block"
-              htmlFor="trialHearingNote"
+              htmlFor="trialNote"
             >
               Note
             </label>
             <input
               className="usa-input display-inline-block"
-              id="trialHearingNote"
-              name="trialHearingNote"
+              id="trialNote"
+              name="trialNote"
               type="text"
-              value={caseMetadataFormState.trialHearing.note}
+              value={caseMetadataFormState.trial.note}
               onBlur={() => onBlurHandler()}
               onChange={e => {
                 onChangeHandler({
-                  name: 'trialHearing',
+                  name: 'trial',
                   rowInfo: {
                     key: 'note',
                   },
@@ -510,15 +513,15 @@ export const CaseMetadataFieldset = ({
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"
-                checked={caseMetadataFormState.trialHearing.transcriptOrdered}
+                checked={caseMetadataFormState.trial.transcriptOrdered}
                 className="usa-checkbox__input"
-                id="trialHearingTranscriptOrdered"
-                name="trialHearingTranscriptOrdered"
+                id="trialTranscriptOrdered"
+                name="trialTranscriptOrdered"
                 type="checkbox"
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
                   onChangeHandler({
-                    name: 'trialHearing',
+                    name: 'trial',
                     rowInfo: {
                       key: 'transcriptOrdered',
                     },
@@ -529,7 +532,134 @@ export const CaseMetadataFieldset = ({
               />
               <label
                 className="usa-checkbox__label margin-0"
-                htmlFor="trialHearingTranscriptOrdered"
+                htmlFor="trialTranscriptOrdered"
+              >
+                Transcript ordered
+              </label>
+            </div>
+          </FormGroup>
+        </div>
+      </div>
+      <div className="grid-row grid-gap align-items-center">
+        <div className="grid-col-fill" style={{ minWidth: '100px' }}>
+          <span className="usa-label margin-bottom-0">Hearing</span>
+        </div>
+        <div className="grid-col-auto">
+          <FormGroup className="flex-justify-end margin-bottom-0 display-flex align-items-center">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor="hearingDate"
+            >
+              Date(s)
+            </label>
+            <input
+              className="usa-input"
+              id="hearingDate"
+              type="text"
+              value={caseMetadataFormState.hearing.date || ''}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'hearing',
+                  rowInfo: {
+                    key: 'date',
+                  },
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+        </div>
+        <div className="grid-col-3">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor="hearingType"
+            >
+              Type
+            </label>
+            <select
+              className="usa-select display-inline-block"
+              id="hearingType"
+              name="hearingType"
+              value={caseMetadataFormState.hearing.trialHearingType} // add state for hearing seperately?
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'hearing',
+                  rowInfo: {
+                    key: 'trialHearingType',
+                  },
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {Object.keys(HEARING_OPTIONS).map(optionKey => {
+                return (
+                  <option key={optionKey} value={optionKey}>
+                    {HEARING_OPTIONS[optionKey]}
+                  </option>
+                );
+              })}
+            </select>
+          </FormGroup>
+        </div>
+        <div className="grid-col-3">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor="hearingNote"
+            >
+              Note
+            </label>
+            <input
+              className="usa-input display-inline-block"
+              id="hearingNote"
+              name="hearingNote"
+              type="text"
+              value={caseMetadataFormState.hearing.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e => {
+                onChangeHandler({
+                  name: 'hearing',
+                  rowInfo: {
+                    key: 'note',
+                  },
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+        </div>
+        <div className="grid-col-2">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <div className="usa-checkbox">
+              <input
+                aria-describedby="representing-legend"
+                checked={caseMetadataFormState.hearing.transcriptOrdered} // add state for hearing seperately?
+                className="usa-checkbox__input"
+                id="hearingTranscriptOrdered"
+                name="hearingTranscriptOrdered"
+                type="checkbox"
+                onBlur={() => onBlurHandler()}
+                onChange={e => {
+                  onChangeHandler({
+                    name: 'hearing',
+                    rowInfo: {
+                      key: 'transcriptOrdered',
+                    },
+                    section: MINUTE_SHEET_FORM_SECTION_MAP.caseMetadataSection,
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label margin-0"
+                htmlFor="hearingTranscriptOrdered"
               >
                 Transcript ordered
               </label>

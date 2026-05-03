@@ -1,11 +1,11 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
 export const DocumentViewer = connect(
   {
@@ -95,13 +95,25 @@ export const DocumentViewer = connect(
                             )}
                           >
                             {entry.createdAtFormatted}
-                            {entry.qcNeeded && (
-                              <FontAwesomeIcon
-                                className="top-neg-2px fa-icon-red float-right position-relative"
-                                icon={['fa', 'star']}
-                                title="Is untouched"
-                              />
-                            )}
+                            <div className="float-right text-align-center">
+                              {entry.iconsToDisplay.map(
+                                ({ icon, className, title }, index) => (
+                                  <div
+                                    key={index}
+                                    className={classNames('display-block', {
+                                      'margin-bottom-1':
+                                        index < entry.iconsToDisplay.length - 1,
+                                    })}
+                                  >
+                                    <WrappedIcon
+                                      iconClass={className}
+                                      icon={icon}
+                                      title={title}
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
                           </div>
                           <div className="grid-col-5">
                             <span
@@ -112,6 +124,31 @@ export const DocumentViewer = connect(
                               )}
                             >
                               {entry.descriptionDisplay}
+                              {entry.relatedDocketEntries?.map(
+                                affectedEntry => {
+                                  return (
+                                    <div key={affectedEntry.docketEntryId}>
+                                      <br />
+                                      {affectedEntry.dispositionLinkText.map(
+                                        (linkText, index) => {
+                                          return (
+                                            <div
+                                              className="display-inline-block"
+                                              key={`${linkText}-${index}`}
+                                            >
+                                              --- <span>{linkText}</span>
+                                              {index <
+                                                affectedEntry
+                                                  .dispositionLinkText.length -
+                                                  1 && <br />}
+                                            </div>
+                                          );
+                                        },
+                                      )}
+                                    </div>
+                                  );
+                                },
+                              )}
                             </span>
                             <span
                               className={classNames(

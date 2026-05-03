@@ -90,15 +90,15 @@ describe('Petitioner', () => {
   });
 
   describe('optional fields', () => {
-    it('should populate paperPetitionEmail when one is provided', () => {
+    it('should populate contactEmailAddress when one is provided', () => {
       const mockEmail = 'petitioner@example.com';
 
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        paperPetitionEmail: mockEmail,
+        contactEmailAddress: mockEmail,
       });
 
-      expect(entity.paperPetitionEmail).toEqual(mockEmail);
+      expect(entity.contactEmailAddress).toEqual(mockEmail);
     });
 
     it('should populate hasConsentedToElectronicService when one is provided', () => {
@@ -108,6 +108,24 @@ describe('Petitioner', () => {
       });
 
       expect(entity.hasConsentedToElectronicService).toBeFalsy();
+    });
+
+    it('should populate preferredLanguage field', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        preferredLanguage: 'Spanish',
+      });
+
+      expect(entity.preferredLanguage).toEqual('Spanish');
+    });
+
+    it('should populate preferredCommunicationMethod field', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        preferredCommunicationMethod: 'ASL',
+      });
+
+      expect(entity.preferredCommunicationMethod).toEqual('ASL');
     });
   });
 });

@@ -1,4 +1,3 @@
-import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setAdvancedSearchResultsAction = ({
@@ -6,7 +5,7 @@ export const setAdvancedSearchResultsAction = ({
   props,
   store,
 }: ActionProps<{
-  searchResults: CaseSearchResult[];
+  searchResults: { results: any[]; totalCount: number };
 }>) => {
   const tabName = get(state.advancedSearchTab);
   store.set(state.searchResults[tabName], props.searchResults);

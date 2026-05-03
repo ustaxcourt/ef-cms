@@ -9,7 +9,7 @@ export const trialSessionDetailsHelper = (
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
-  const { eligibleCases, hasNOTTBeenServed, sessionType, trialSessionId } = get(
+  const { eligibleCases, hasNottBeenServed, sessionType, trialSessionId } = get(
     state.trialSession,
   );
   const permissions = get(state.permissions);
@@ -36,10 +36,12 @@ export const trialSessionDetailsHelper = (
   ).length;
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
+  const HYBRID_SESSION_TYPES_ARRAY: string[] =
+    Object.values(HYBRID_SESSION_TYPES);
   const showSmallAndRegularQcComplete =
-    Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
+    HYBRID_SESSION_TYPES_ARRAY.includes(sessionType) && showQcComplete;
 
-  const nottReminderAction = hasNOTTBeenServed
+  const nottReminderAction = hasNottBeenServed
     ? 'Yes, Dismiss'
     : 'Serve/Dismiss';
 
@@ -49,6 +51,7 @@ export const trialSessionDetailsHelper = (
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,
     nottReminderAction,
+    showNewMinuteSheetButton: permissions.MANAGE_MINUTE_SHEET,
     showQcComplete,
     showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showSmallAndRegularQcComplete,

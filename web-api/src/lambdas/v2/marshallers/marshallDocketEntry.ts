@@ -17,5 +17,6 @@ export const marshallDocketEntry = (docketEntryObject: RawDocketEntry) => {
     index: docketEntryObject.index,
     isFileAttached: docketEntryObject.isFileAttached || false,
     servedAt: docketEntryObject.servedAt,
+    isSealed: docketEntryObject.isSealed,
   };
 };

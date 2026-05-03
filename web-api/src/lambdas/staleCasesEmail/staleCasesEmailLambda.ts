@@ -1,11 +1,11 @@
 import type { Handler } from 'aws-lambda';
 import { applicationContext } from '@web-api/applicationContext';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { generateStaleCasesReport } from '../../../../scripts/reports/stale-cases.helpers';
 import { existsSync } from 'fs';
 import { sendEmailWithAttachment } from '@web-api/dispatchers/ses/sendEmailWithAttachment';
 
-const today = createISODateString().split('T')[0];
+const today = formatNow(FORMATS.YYYYMMDD);
 const filename = `/tmp/12-month-inactivity_${today}.csv`;
 const subject = `12 Month Inactivity List - ${today}`;
 const body =
@@ -20,26 +20,27 @@ const body =
   '"Chief Judge" indicates cases in the General Docket.\n\n' +
   'Thank You,\nThe DAWSON Team';
 
-export const handler: Handler = async (_event, context) => {
+type resultsType = { [recipient: string]: string } | string;
+
+export const handler: Handler = async (_event, _context) => {
   const commaDelimitedRecipients = process.env.INACTIVITY_REPORT_RECIPIENTS!;
   const recipients =
     commaDelimitedRecipients && commaDelimitedRecipients.length
       ? commaDelimitedRecipients.split(',')
       : [];
   if (!recipients.length) {
-    return fail({ context, results: 'No Recipients found.' });
+    return fail('No Recipients found.');
   }
   try {
-    await generateStaleCasesReport({ applicationContext, filename });
+    await generateStaleCasesReport({ filename });
   } catch (err) {
     const results = 'Unable to generate stale cases report.';
-    console.error(results, err);
-    return fail({ context, results });
+    return fail(results, err);
   }
   if (!existsSync(filename)) {
-    return fail({ context, results: 'Unable to generate stale cases report.' });
+    return fail('Unable to generate stale cases report.');
   }
-  const results = {};
+  const results: resultsType = {};
   for (const recipient of recipients) {
     let result: string;
     try {
@@ -59,18 +60,22 @@ export const handler: Handler = async (_event, context) => {
     results[recipient] = result;
   }
   if (Object.values(results).filter(res => res === 'error').length) {
-    return fail({ context, results });
+    return fail(results);
   } else {
-    return succeed({ context, results });
+    return succeed(results);
   }
 };
 
-const succeed = ({ context, results }) => {
+const succeed = (results: resultsType) => {
   console.log(results);
-  return context.succeed(results);
+  return results;
 };
 
-const fail = ({ context, results }) => {
-  console.error(results);
-  return context.fail(results);
+const fail = (results: resultsType, err?: unknown) => {
+  if (err) {
+    console.error(results, err);
+  } else {
+    console.error(results);
+  }
+  throw new Error(JSON.stringify(results));
 };

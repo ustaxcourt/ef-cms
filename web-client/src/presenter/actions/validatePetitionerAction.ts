@@ -1,6 +1,28 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+const checkEmails = (
+  confirmEmail: string,
+  allPendingEmails: string[],
+  petitioners: any[],
+): { confirmEmail?: string } => {
+  const errors: { confirmEmail?: string } = {};
+
+  const pendingMatchesConfirm = allPendingEmails
+    .map(p => (p || '').toLowerCase())
+    .includes((confirmEmail || '').toLowerCase());
+
+  const currentMatchesConfirm = petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((confirmEmail || '').toLowerCase());
+
+  if (confirmEmail && (pendingMatchesConfirm || currentMatchesConfirm)) {
+    errors.confirmEmail =
+      'This email is already associated with another petitioner on this case. Please use a different email address.';
+  }
+  return errors;
+};
+
 /**
  * Validates petitioner information and redirects user to success or error path
  * @param {object} providers the providers object
@@ -15,19 +37,26 @@ export const validatePetitionerAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
 
-  const errors = applicationContext
-    .getUseCases()
-    .validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
-      existingPetitioners: caseDetail.petitioners,
-    });
+  const { contact } = get(state.form);
 
-  if (isEmpty(errors)) {
-    return path.success();
-  } else {
-    return path.error({ errors: { contact: errors } });
-  }
+  const { allPendingEmails = [] } = get(state.screenMetadata) || {};
+
+  const { petitioners = [] } = caseDetail || {};
+
+  const { confirmEmail } = contact;
+
+  const errors = checkEmails(confirmEmail, allPendingEmails, petitioners);
+
+  const result = applicationContext.getUseCases().validatePetitionerInteractor({
+    contactInfo: contact,
+    existingPetitioners: caseDetail.petitioners,
+  });
+
+  if (result) Object.assign(errors, result);
+
+  return isEmpty(errors)
+    ? path.success()
+    : path.error({ errors: { contact: errors } });
 };

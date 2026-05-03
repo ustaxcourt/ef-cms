@@ -3,7 +3,9 @@ import { setCaseDetailPageTabFrozenAction } from './setCaseDetailPageTabFrozenAc
 
 describe('setCaseDetailPageTabFrozenAction', () => {
   it('should set the currentViewMetadata.caseDetail.frozen state to true', async () => {
-    const result = await runAction(setCaseDetailPageTabFrozenAction);
+    const result = await runAction(setCaseDetailPageTabFrozenAction, {
+      state: {},
+    });
 
     expect(result.state.currentViewMetadata.caseDetail.frozen).toEqual(true);
   });

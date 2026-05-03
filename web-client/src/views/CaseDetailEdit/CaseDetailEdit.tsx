@@ -23,7 +23,7 @@ export const CaseDetailEdit = connect(
     validateCaseDetailSequence,
   }) {
     return (
-      <div noValidate id="case-edit-form" role="form">
+      <form noValidate id="case-edit-form">
         <Tabs
           boxed
           bind="currentViewMetadata.documentDetail.tab"
@@ -74,7 +74,7 @@ export const CaseDetailEdit = connect(
             Your changes have been saved.
           </span>
         )}
-      </div>
+      </form>
     );
   },
 );

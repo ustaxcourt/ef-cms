@@ -478,13 +478,13 @@ describe('TrialSession entity', () => {
     });
   });
 
-  describe('dismissedAlertForNOTT', () => {
+  describe('dismissedAlertForNott', () => {
     it('should have a default value of false', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
       });
 
-      expect(trialSession.dismissedAlertForNOTT).toBe(false);
+      expect(trialSession.dismissedAlertForNott).toBe(false);
     });
   });
 
@@ -505,8 +505,8 @@ describe('TrialSession entity', () => {
       });
 
       expect(trialSession.getFormattedValidationErrors()).toEqual({
-        fileId: '"paperServicePdfs[0].fileId" is required',
-        title: '"paperServicePdfs[0].title" is required',
+        'paperServicePdfs-0-fileId': '"paperServicePdfs[0].fileId" is required',
+        'paperServicePdfs-0-title': '"paperServicePdfs[0].title" is required',
       });
     });
   });

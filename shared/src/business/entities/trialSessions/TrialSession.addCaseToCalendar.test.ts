@@ -13,7 +13,12 @@ describe('TrialSession entity', () => {
 
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
 
-      expect(trialSession.caseOrder![0]).toEqual({ docketNumber: '123-45' });
+      expect(trialSession.caseOrder![0]).toMatchObject({
+        docketNumber: '123-45',
+        isHearing: false,
+        isManuallyAdded: false,
+        addedToSessionAt: expect.anything(),
+      });
     });
 
     it('should add case to calendar once', () => {
@@ -26,7 +31,12 @@ describe('TrialSession entity', () => {
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
 
-      expect(trialSession.caseOrder![0]).toEqual({ docketNumber: '123-45' });
+      expect(trialSession.caseOrder![0]).toMatchObject({
+        docketNumber: '123-45',
+        isHearing: false,
+        isManuallyAdded: false,
+        addedToSessionAt: expect.anything(),
+      });
       expect(trialSession.caseOrder![1]).toBeUndefined();
     });
   });

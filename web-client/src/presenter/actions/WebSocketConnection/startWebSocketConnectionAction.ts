@@ -8,7 +8,7 @@
 export const startWebSocketConnectionAction = async ({
   path,
   socket,
-}: ActionProps) => {
+}: ActionProps & { socket: { start: () => Promise<void> } }) => {
   try {
     await socket.start();
     // 7095 - We don't do anything with the error anymore because it will make

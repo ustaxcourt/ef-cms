@@ -37,13 +37,17 @@ Here is a list of the **Tax Court**'s deployed Dawson instances:
 - [https://test.ef-cms.ustaxcourt.gov/](https://test.ef-cms.ustaxcourt.gov/) (test)
 - [https://irs.ef-cms.ustaxcourt.gov/](https://irs.ef-cms.ustaxcourt.gov/) (irs)
 
-And the **Flexion** environments:
+And the **Experimental** environments:
 
-- [https://exp1.ustc-case-mgmt.flexion.us/](https://exp1.ustc-case-mgmt.flexion.us/) (flexion experimental1)
-- [https://exp2.ustc-case-mgmt.flexion.us/](https://exp2.ustc-case-mgmt.flexion.us/) (flexion experimental2)
-- [https://exp3.ustc-case-mgmt.flexion.us/](https://exp3.ustc-case-mgmt.flexion.us/) (flexion experimental3)
-- [https://exp4.ustc-case-mgmt.flexion.us/](https://exp4.ustc-case-mgmt.flexion.us/) (flexion experimental4)
-- [https://exp5.ustc-case-mgmt.flexion.us/](https://exp5.ustc-case-mgmt.flexion.us/) (flexion experimental5)
+- [https://exp1.ef-cms.ustaxcourt.gov/](https://exp1.ef-cms.ustaxcourt.gov/) (ustc experimental1)
+- [https://exp2.ef-cms.ustaxcourt.gov/](https://exp2.ef-cms.ustaxcourt.gov/) (ustc experimental2)
+- [https://exp3.ef-cms.ustaxcourt.gov/](https://exp3.ef-cms.ustaxcourt.gov/) (ustc experimental3)
+- [https://exp4.ef-cms.ustaxcourt.gov/](https://exp4.ef-cms.ustaxcourt.gov/) (ustc experimental4)
+- [https://exp5.ef-cms.ustaxcourt.gov/](https://exp5.ef-cms.ustaxcourt.gov/) (ustc experimental5)
+- [https://exp6.ef-cms.ustaxcourt.gov/](https://exp6.ef-cms.ustaxcourt.gov/) (ustc experimental6)
+- [https://exp7.ef-cms.ustaxcourt.gov/](https://exp7.ef-cms.ustaxcourt.gov/) (ustc experimental7)
+- [https://exp8.ef-cms.ustaxcourt.gov/](https://exp8.ef-cms.ustaxcourt.gov/) (ustc experimental8)
+- [https://exp9.ef-cms.ustaxcourt.gov/](https://exp9.ef-cms.ustaxcourt.gov/) (ustc experimental9)
 
 
 ## Dawson User Roles

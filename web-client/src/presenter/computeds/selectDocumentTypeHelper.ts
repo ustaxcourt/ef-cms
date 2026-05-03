@@ -24,6 +24,7 @@ export const getOptionsForCategory = ({
   showTrialLocationSelect?: boolean;
   ordinalField?: string;
   showSecondaryDocumentSelect?: boolean;
+  showSecondaryDocumentForm?: boolean;
   textInputLabel2?: string;
 } => {
   let options: {
@@ -36,6 +37,7 @@ export const getOptionsForCategory = ({
     showTrialLocationSelect?: boolean;
     ordinalField?: string;
     showSecondaryDocumentSelect?: boolean;
+    showSecondaryDocumentForm?: boolean;
     textInputLabel2?: string;
   } = {};
   if (!categoryInformation) {
@@ -176,7 +178,7 @@ export const getValidPreviouslyFiledDocuments = ({
   };
 
   const formattedCaseDetail = getFormattedCaseDetail({
-    applicationContext: applicationContext as any,
+    applicationContext,
     caseDetail,
     authorizedUser,
   });

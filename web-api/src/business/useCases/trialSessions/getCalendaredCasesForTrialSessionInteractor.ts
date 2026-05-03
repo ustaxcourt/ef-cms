@@ -3,12 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 export const getCalendaredCasesForTrialSessionInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -16,10 +15,7 @@ export const getCalendaredCasesForTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
+  const cases = await getCalendaredCasesForTrialSession({
       trialSessionId,
     });
 

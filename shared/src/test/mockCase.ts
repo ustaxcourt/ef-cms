@@ -15,6 +15,7 @@ import {
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
@@ -63,6 +64,15 @@ export const MOCK_CASE: RawCase = {
   receivedAt: '2018-03-01T21:40:46.415Z',
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
+};
+
+export const MOCK_CASE_DTO: CaseDTO = {
+  ...MOCK_CASE,
+  entityName: 'Case',
+  docketEntries: MOCK_CASE.docketEntries.map(d => ({
+    ...d,
+    servedParties: undefined,
+  })),
 };
 
 export const MOCK_CONSOLIDATED_CASE_SUMMARY: RawConsolidatedCaseSummary =
@@ -131,6 +141,7 @@ export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
@@ -235,6 +246,7 @@ export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   irsPractitioners: [],
@@ -415,8 +427,11 @@ export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   isSealed: false,
   procedureType: PROCEDURE_TYPES_MAP.regular,
   docketNumberSuffix: 'W',
+  isAgedCase: false,
   irsPractitioners: [],
   privatePractitioners: [],
+  remoteTrialGranted: false,
+  inConsolidatedGroup: false,
 };
 
 export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {

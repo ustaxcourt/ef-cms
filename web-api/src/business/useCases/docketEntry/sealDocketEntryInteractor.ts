@@ -1,12 +1,13 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 export const sealDocketEntryInteractor = async (
   {
@@ -19,7 +20,7 @@ export const sealDocketEntryInteractor = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawDocketEntry> => {
   if (!docketEntrySealedTo) {
     throw new Error('Docket entry sealed to is required');
   }
@@ -33,17 +34,28 @@ export const sealDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await getCaseByDocketNumber({
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [{ docketEntryId, docketNumber }],
+    })
+  )[0];
+
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketEntryId,
     docketNumber,
   });
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser });
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...docketEntry,
+      qcComplete: !!workItem?.completedAt,
+      qcViewed: !!workItem?.isRead,
+      workItemId: workItem?.workItemId,
+    },
+    { authorizedUser },
+  );
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 

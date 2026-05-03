@@ -99,11 +99,11 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption: string;
+  public caseCaption: string = '';
   public caseType: CaseType;
   public closedDate?: string;
-  public createdAt: string;
-  public docketNumber: string;
+  public createdAt?: string;
+  public docketNumber: string = '';
   public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
@@ -117,8 +117,10 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
+  public remoteTrialGranted?: boolean;
+  public remoteTrialGrantedDate?: string | null;
   public procedureType: string;
-  public receivedAt: string;
+  public receivedAt?: string;
   public sealedDate?: string;
   public status: CaseStatus;
   public sortableDocketNumber: number;
@@ -134,10 +136,10 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: DocketEntry[];
+  public docketEntries: DocketEntry[] = [];
   public isSealed?: boolean;
-  public hearings: any[];
-  public privatePractitioners?: any[];
+  public hearings: any[] = [];
+  public privatePractitioners?: any[] = [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
@@ -169,6 +171,17 @@ export class Case extends JoiValidationEntity {
         rawCase,
       });
     }
+
+    // assigning some fields here to avoid type error
+    this.caseType = rawCase.caseType;
+    this.partyType = rawCase.partyType;
+    this.procedureType = rawCase.procedureType;
+    this.petitionPaymentStatus =
+      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
+    this.status = rawCase.status || CASE_STATUS_TYPES.new;
+    this.sortableDocketNumber =
+      rawCase.sortableDocketNumber ||
+      Case.getSortableDocketNumber(rawCase.docketNumber);
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -257,7 +270,7 @@ export class Case extends JoiValidationEntity {
     for (const c of cases) {
       if (
         c.leadDocketNumber &&
-        c.leadDocketNumber !== c.docketNumber &&
+        !isLeadCase(c) &&
         docketNumbers.has(c.leadDocketNumber) // Check if the lead case exists; if not, treat this case as a non-member case
       ) {
         (memberCases[c.leadDocketNumber] ||= []).push(c);
@@ -368,6 +381,8 @@ export class Case extends JoiValidationEntity {
     this.orderForCds = rawCase.orderForCds || false;
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
+    this.remoteTrialGranted = rawCase.remoteTrialGranted;
+    this.remoteTrialGrantedDate = rawCase.remoteTrialGrantedDate;
 
     this.assignArchivedDocketEntries({
       authorizedUser,
@@ -489,10 +504,9 @@ export class Case extends JoiValidationEntity {
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketNumberWithSuffix:
-      JoiValidationConstants.STRING.optional().description(
-        'Auto-generated from docket number and the suffix.',
-      ),
+    docketNumberWithSuffix: JoiValidationConstants.STRING.optional()
+      .description('Auto-generated from docket number and the suffix.')
+      .min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
@@ -651,6 +665,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Procedure type of the case.')
       .messages({ '*': 'Select a case procedure' }),
+    remoteTrialGranted: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether the case has been granted a motion to proceed remotely.',
+      )
+      .meta({ tags: ['Restricted'] }),
+    remoteTrialGrantedDate: JoiValidationConstants.ISO_DATE.optional()
+      .allow(null)
+      .description(
+        'A date stamp indicating the date permission was granted to proceed remotely.',
+      ),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -736,7 +762,6 @@ export class Case extends JoiValidationEntity {
 
   assignFieldsForAllUsers({ rawCase }) {
     this.caseCaption = rawCase.caseCaption;
-    this.caseType = rawCase.caseType;
     this.closedDate = rawCase.closedDate;
     this.createdAt = rawCase.createdAt || createISODateString();
     if (rawCase.docketNumber) {
@@ -749,20 +774,12 @@ export class Case extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.mailingDate = rawCase.mailingDate;
-    this.partyType = rawCase.partyType;
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
-    this.petitionPaymentStatus =
-      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
     this.preferredTrialCity = rawCase.preferredTrialCity;
-    this.procedureType = rawCase.procedureType;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;
-    this.status = rawCase.status || CASE_STATUS_TYPES.new;
-    this.sortableDocketNumber =
-      rawCase.sortableDocketNumber ||
-      Case.getSortableDocketNumber(rawCase.docketNumber);
     this.trialDate = rawCase.trialDate;
     this.trialLocation = rawCase.trialLocation;
     this.trialSessionId = rawCase.trialSessionId;
@@ -1554,9 +1571,8 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
-    
     this.caseCaption = caseCaption;
-    
+
     if (this.consolidatedCases && this.consolidatedCases.length > 0) {
       this.setCaseCaptionInSingleCase();
     }
@@ -1565,13 +1581,13 @@ export class Case extends JoiValidationEntity {
   }
 
   setCaseCaptionInSingleCase() {
-
-    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
 
     if (currentCase) {
       currentCase.caseCaption = this.caseCaption;
     }
-
   }
 
   /**
@@ -1919,6 +1935,22 @@ export class Case extends JoiValidationEntity {
    */
   setNoticeOfTrialDate() {
     this.noticeOfTrialDate = createISODateString();
+    return this;
+  }
+
+  /**
+   * sets the remote trial granted date and boolean flag
+   * @param {string | null | undefined} remoteTrialGrantedDate the date when motion to proceed remotely was granted, or null/undefined to clear
+   * @returns {Case} this case entity
+   */
+  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
+    const hasDate = Boolean(
+      remoteTrialGrantedDate &&
+      typeof remoteTrialGrantedDate === 'string' &&
+      remoteTrialGrantedDate.trim() !== '',
+    );
+    this.remoteTrialGranted = hasDate;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
     return this;
   }
 

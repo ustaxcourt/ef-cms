@@ -1,30 +1,56 @@
-import { getDbReader } from '@web-api/database';
+import {
+  DocketEntrySelectableField,
+  docketEntriesBaseQuery,
+} from '@web-api/persistence/postgres/docketEntries/commonQueries';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+
+// Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
+// when building deeply nested OR queries. 2000 provides safety margin.
+const BATCH_SIZE = 2000;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   docketNumbersAndIds,
+  selectFields,
 }: {
   docketNumbersAndIds: {
     docketNumber: string;
     docketEntryId: string;
   }[];
+  selectFields?: DocketEntrySelectableField[];
 }): Promise<RawDocketEntry[]> => {
-  const dbDocketEntries = await getDbReader(reader =>
-    reader
-      .selectFrom('dwDocketEntry')
-      .where(qb =>
-        qb.or(
-          docketNumbersAndIds.map(pair =>
-            qb.and([
-              qb('docketEntryId', '=', pair.docketEntryId),
-              qb('docketNumber', '=', pair.docketNumber),
-            ]),
-          ),
-        ),
+  if (docketNumbersAndIds.length === 0) {
+    return [];
+  }
+
+  // Batch the queries to avoid stack overflow from deeply nested OR conditions
+  const batches: { docketNumber: string; docketEntryId: string }[][] = [];
+  for (let i = 0; i < docketNumbersAndIds.length; i += BATCH_SIZE) {
+    batches.push(docketNumbersAndIds.slice(i, i + BATCH_SIZE));
+  }
+
+  const results = await Promise.all(
+    batches.map(async batch => {
+      const batchDocketNumbers = [...new Set(batch.map(p => p.docketNumber))];
+      const dbDocketEntries = await (
+        await docketEntriesBaseQuery({
+          docketNumbers: batchDocketNumbers,
+          selectFields,
+        })
       )
-      .selectAll()
-      .execute(),
+        .where(qb =>
+          qb.or(
+            batch.map(pair =>
+              qb.and([
+                qb('de.docketEntryId', '=', pair.docketEntryId),
+                qb('de.docketNumber', '=', pair.docketNumber),
+              ]),
+            ),
+          ),
+        )
+        .execute();
+      return dbDocketEntries;
+    }),
   );
 
-  return dbDocketEntries.map(d => fromKyselyDocketEntry(d));
+  return results.flat().map(d => fromKyselyDocketEntry(d)) as RawDocketEntry[];
 };

@@ -19,7 +19,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.12.0"
+      version = "6.41.0"
     }
   }
 }
@@ -37,6 +37,7 @@ module "ef-cms_apis" {
   dns_domain                      = var.dns_domain
   email_dmarc_policy              = var.email_dmarc_policy
   environment                     = var.environment
+  es_engine_version               = var.es_engine_version
   es_instance_count               = var.es_instance_count
   es_instance_type                = var.es_instance_type
   es_volume_size                  = var.es_volume_size
@@ -106,6 +107,7 @@ module "rds" {
   max_capacity             = var.rds_max_capacity
   delete_protection        = true
   restoring_aws_account_id = var.restoring_aws_account_id
+  engine_version           = var.rds_engine_version
 
   providers = {
     aws           = aws.us-east-1

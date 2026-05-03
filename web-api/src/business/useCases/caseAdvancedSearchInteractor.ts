@@ -12,7 +12,7 @@ import {
   AbbreviatedStates,
   CaseType,
   ProcedureType,
-  MAX_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -95,7 +95,7 @@ export const caseAdvancedSearchInteractor = async (
   const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
     foundCases,
     authorizedUser,
-  ).slice(0, MAX_SEARCH_RESULTS);
+  ).slice(0, MAX_CASE_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {

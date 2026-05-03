@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import {
   SESSION_TYPES,
   TrialSessionTypes,
@@ -7,11 +7,9 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { eligibleCasesQuery } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 
 export const getEligibleCasesForTrialSession = async ({
-  limit,
   trialCity,
   sessionType,
 }: {
-  limit: number;
   trialCity: string;
   sessionType: TrialSessionTypes;
 }): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
@@ -22,7 +20,7 @@ export const getEligibleCasesForTrialSession = async ({
       query = query.where('procedureType', '=', sessionType);
     }
 
-    return query.select('docketNumber').limit(limit).execute();
+    return query.select('docketNumber').execute();
   });
 
   const docketNumbers = ecDocketNumbers.map(n => n.docketNumber);

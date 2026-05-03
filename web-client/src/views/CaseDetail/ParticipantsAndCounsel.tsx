@@ -6,6 +6,7 @@ import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import classNames from 'classnames';
 import React from 'react';
 
 export const ParticipantsAndCounsel = connect(
@@ -56,8 +57,17 @@ export const ParticipantsAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line">
-                    {petitioner.formattedEmail}
+                  <span
+                    className={classNames({
+                      'margin-left-205': petitioner.isAddressSealed,
+                      'sealed-address': petitioner.isAddressSealed,
+                      'address-line': true,
+                    })}
+                    data-testid={`participant-email`}
+                  >
+                    {!petitioner.sealedAndUnavailable && (
+                      <span>{petitioner.formattedEmail}</span>
+                    )}
                     {petitioner.showEAccessFlag && (
                       <FontAwesomeIcon
                         aria-label="has e-access"
@@ -67,7 +77,15 @@ export const ParticipantsAndCounsel = connect(
                       />
                     )}
                   </span>
-                  {petitioner.formattedPendingEmail}
+                  <div
+                    data-testid="participant-pending-email"
+                    className={classNames(
+                      petitioner.isAddressSealed &&
+                        'margin-left-205 sealed-address',
+                    )}
+                  >
+                    {petitioner.formattedPendingEmail}
+                  </div>
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">

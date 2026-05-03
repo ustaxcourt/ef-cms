@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WrappedIcon } from '../../../ustc-ui/Icon/Icon';
 import React from 'react';
 
 type PublicMobileTrialSessionsDataRowProps = {
@@ -38,12 +38,11 @@ export const PublicMobileTrialSessionsDataRow = function ({
           <div className="padding-bottom-2">
             {swingSession && (
               <span className="padding-right-1">
-                <FontAwesomeIcon
-                  className="fa-icon-blue"
+                <WrappedIcon
+                  iconClass="fa-icon-blue"
                   icon="link"
                   size="sm"
-                  title="Swing session: will be held in two cities"
-                />
+                  title="Swing session: will be held in two cities" />
               </span>
             )}
             <a href={`/trial-session-detail/${trialSessionId}`}>

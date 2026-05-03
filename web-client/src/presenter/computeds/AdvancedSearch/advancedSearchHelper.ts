@@ -1,6 +1,11 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { US_STATES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_SEARCH_PAGE_SIZE,
+  COUNTRY_TYPES,
+  MAX_CASE_SEARCH_RESULTS,
+  US_STATES,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
@@ -33,8 +38,6 @@ export const advancedSearchHelper = (
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
-    applicationContext.getConstants();
 
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
@@ -65,13 +68,12 @@ export const advancedSearchHelper = (
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
 
-    const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
-
-    const showManyResultsMessage = searchResults.length >= MAX_SEARCH_RESULTS;
+    const showManyResultsMessage =
+      searchResults.length >= MAX_CASE_SEARCH_RESULTS;
 
     Object.assign(result, {
       ...paginatedResults,
-      manyResults: MAX_SEARCH_RESULTS,
+      manyResults: MAX_CASE_SEARCH_RESULTS,
       showManyResultsMessage,
     });
   }

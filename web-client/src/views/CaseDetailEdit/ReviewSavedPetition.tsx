@@ -7,6 +7,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { IRSNoticeCaseReview } from '@web-client/views/CaseDetailEdit/IRSNoticeCaseReview';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
+import { ServeCaseToIrsDuplicateErrorModal } from '../ServeCaseToIrsDuplicateErrorModal';
 import { ServeCaseToIrsErrorModal } from '../ServeCaseToIrsErrorModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -76,12 +77,12 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <span
+                        <label
                           className="usa-label usa-label-display"
                           htmlFor="filing-parties"
                         >
                           Party type
-                        </span>
+                        </label>
                         {form.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
@@ -98,9 +99,9 @@ export const ReviewSavedPetition = connect(
                             </address>
                             {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                               <>
-                                {form.contactPrimary.paperPetitionEmail && (
+                                {form.contactPrimary.contactEmailAddress && (
                                   <div className="margin-top-1 word-wrap-break-word">
-                                    {form.contactPrimary.paperPetitionEmail}
+                                    {form.contactPrimary.contactEmailAddress}
                                   </div>
                                 )}
                                 {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
@@ -132,9 +133,9 @@ export const ReviewSavedPetition = connect(
                               </address>
                               {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                                 <>
-                                  {form.contactSecondary.paperPetitionEmail && (
+                                  {form.contactSecondary.contactEmailAddress && (
                                     <div className="margin-top-1 word-wrap-break-word">
-                                      {form.contactSecondary.paperPetitionEmail}
+                                      {form.contactSecondary.contactEmailAddress}
                                     </div>
                                   )}
                                   {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
@@ -184,12 +185,12 @@ export const ReviewSavedPetition = connect(
                           {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
                             Requested trial location
-                          </span>
+                          </label>
                           {
                             reviewSavedPetitionHelper.preferredTrialCityFormatted
                           }
@@ -198,33 +199,33 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {form.mailingDate && (
                           <div className="margin-bottom-2">
-                            <span
+                            <label
                               className="usa-label usa-label-display"
                               htmlFor="mailing-date"
                             >
                               Mailing date
-                            </span>
+                            </label>
                             {form.mailingDate}
                           </div>
                         )}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-procedure"
                           >
                             Case procedure
-                          </span>
+                          </label>
                           {form.procedureType}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-fee"
                           >
                             Filing fee
-                          </span>
+                          </label>
                           {
                             reviewSavedPetitionHelper.petitionPaymentStatusFormatted
                           }
@@ -285,6 +286,9 @@ export const ReviewSavedPetition = connect(
           <FormCancelModalDialog
             onCancelSequence={closeModalAndNavigateSequence}
           />
+        )}
+        {showModal === 'ServeCaseToIrsDuplicateErrorModal' && (
+          <ServeCaseToIrsDuplicateErrorModal/>
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />

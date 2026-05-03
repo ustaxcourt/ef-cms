@@ -3,6 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
+  NOT_PROVIDED,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -77,16 +78,9 @@ export const partiesInformationHelper = (
   );
 
   const formattedParties = (caseDetail.petitioners || []).map(petitioner => {
-    const practitionersWithEmail = {
-      privatePractitioners: formattedPrivatePractitioners,
-    };
-
     const representingPractitioners = applicationContext
       .getUtilities()
-      .getPractitionersRepresenting(
-        practitionersWithEmail,
-        petitioner.contactId,
-      );
+      .getPractitionersRepresenting(caseDetail, petitioner.contactId);
 
     petitioner.formattedTitle = otherContactTypes.includes(
       petitioner.contactType,
@@ -103,8 +97,8 @@ export const partiesInformationHelper = (
         : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
     }
 
-    petitioner.formattedPaperPetitionEmail =
-      petitioner.paperPetitionEmail ?? 'Not provided';
+    petitioner.formattedContactEmailAddress =
+      petitioner.contactEmailAddress ?? NOT_PROVIDED;
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
@@ -142,7 +136,7 @@ export const partiesInformationHelper = (
       ],
     );
 
-    const showPaperPetitionEmail =
+    const showContactEmailAddress =
       E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
       !petitioner.sealedAndUnavailable &&
       !isExternalUser;
@@ -156,10 +150,12 @@ export const partiesInformationHelper = (
       ...petitioner,
       canEditPetitioner,
       editPetitionerLink,
-      hasCounsel: representingPractitioners.length > 0,
+      hasCounsel: representingPractitioners
+        ? representingPractitioners.length > 0
+        : false,
       representingPractitioners,
       showExternalHeader: isExternalUser,
-      showPaperPetitionEmail,
+      showContactEmailAddress,
       showRemoveEmailButton,
     };
   });

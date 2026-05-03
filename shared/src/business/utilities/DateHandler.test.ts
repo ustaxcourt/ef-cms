@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-/* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable custom-rules-plugin/no-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
@@ -37,6 +37,8 @@ import {
   roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
+  isValidPastDate,
+  formatDateFromDatePicker
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1028,11 +1030,11 @@ describe('DateHandler', () => {
       const weeks = getWeeksInRange({ startDate: start, endDate: end });
 
       expect(weeks).toEqual([
-        '2023-01-02',
-        '2023-01-09',
-        '2023-01-16',
-        '2023-01-23',
-        '2023-01-30',
+        { start: '2023-01-02', end: '2023-01-06' },
+        { start: '2023-01-09', end: '2023-01-13' },
+        { start: '2023-01-16', end: '2023-01-20' },
+        { start: '2023-01-23', end: '2023-01-27' },
+        { start: '2023-01-30', end: '2023-02-03' },
       ]);
     });
 
@@ -1058,6 +1060,60 @@ describe('DateHandler', () => {
 
       const resultDate = roundDateDownToNearestHour(inputISO);
       expect(resultDate.toISOString()).toBe(inputISO);
+    });
+  });
+
+  describe('isValidPastDate', () => {
+    const originalNow = Settings.now.bind(Settings);
+    const originalDefaultZone = Settings.defaultZone;
+    beforeAll(() => {
+      // Mock current time to 2024-10-30T12:00:00.000Z (1730289600000 ms)
+      Settings.now = () => 1730289600000;
+      Settings.defaultZone = 'system';
+    });
+
+    afterAll(() => {
+      Settings.now = originalNow;
+      Settings.defaultZone = originalDefaultZone;
+    });
+
+    it('returns true for today', () => {
+      const iso = '2024-10-30T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns true for a past date', () => {
+      const iso = '2024-10-29T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns false for a future date', () => {
+      const iso = '2024-10-31T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(false);
+    });
+
+    it('returns false for invalid input', () => {
+      expect(isValidPastDate('not-a-date')).toBe(false);
+    });
+  });
+
+  describe('formatDateFromDatePicker', () => {
+    it('should return a date, formatted using the pattern provided when the input date is valid', () => {
+      const output = formatDateFromDatePicker('08/29/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-08-29');
+    });
+
+    it('should return the exact date provided when the input date is invalid', () => {
+      const output = formatDateFromDatePicker('08/xy/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('08/xy/2023');
+    });
+
+    it('should format the date when month and day is only one digit', () => {
+      const output = formatDateFromDatePicker('9/9/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-09-09');
     });
   });
 });

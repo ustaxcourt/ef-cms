@@ -1,4 +1,9 @@
-import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import {
+  CONTACT_TYPES,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
+  SERVICE_INDICATOR_TYPES,
+} from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { User } from '@shared/business/entities/User';
@@ -17,7 +22,7 @@ export class Petitioner extends JoiValidationEntity {
   public country?: string;
   public countryType: string;
   public email?: string;
-  public paperPetitionEmail?: string;
+  public contactEmailAddress?: string;
   public hasConsentedToElectronicService?: boolean;
   public hasElectronicAccess?: boolean;
   public inCareOf?: string;
@@ -31,6 +36,8 @@ export class Petitioner extends JoiValidationEntity {
   public state?: string;
   public title?: string;
   public placeOfLegalResidence?: string;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
 
   constructor(rawProps) {
     super('Petitioner');
@@ -45,7 +52,7 @@ export class Petitioner extends JoiValidationEntity {
     this.country = rawProps.country;
     this.countryType = rawProps.countryType;
     this.email = rawProps.email;
-    this.paperPetitionEmail = rawProps.paperPetitionEmail;
+    this.contactEmailAddress = rawProps.contactEmailAddress;
     this.hasConsentedToElectronicService =
       rawProps.hasConsentedToElectronicService ?? undefined;
     this.hasElectronicAccess = rawProps.hasElectronicAccess ?? undefined;
@@ -60,6 +67,9 @@ export class Petitioner extends JoiValidationEntity {
     this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
     this.title = rawProps.title;
+    this.preferredLanguage = rawProps.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawProps.preferredCommunicationMethod?.trim() || undefined;
   }
 
   static VALIDATION_RULES = {
@@ -101,7 +111,7 @@ export class Petitioner extends JoiValidationEntity {
       '*': 'Enter name',
       'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
     }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+    contactEmailAddress: JoiValidationConstants.EMAIL.optional()
       .description('Email provided by the petitioner on a paper petition')
       .messages({
         'string.email': 'Enter email address in format: yourname@example.com',
@@ -113,6 +123,12 @@ export class Petitioner extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Select a service indicator' }),
     title: JoiValidationConstants.STRING.max(100).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   };
 
   getValidationRules() {

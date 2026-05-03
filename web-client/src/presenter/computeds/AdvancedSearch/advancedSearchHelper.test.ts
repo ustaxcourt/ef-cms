@@ -12,8 +12,6 @@ describe('advancedSearchHelper', () => {
   const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, US_STATES, USER_ROLES } =
     applicationContext.getConstants();
 
-  const maxSearchResultsOverride = 3;
-  let pageSizeOverride = 5;
   let globalUser;
 
   const getBaseState = user => {
@@ -27,13 +25,6 @@ describe('advancedSearchHelper', () => {
     advancedSearchHelperComputed,
     {
       ...applicationContext,
-      getConstants: () => {
-        return {
-          ...applicationContext.getConstants(),
-          CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-          MAX_SEARCH_RESULTS: maxSearchResultsOverride,
-        };
-      },
     },
   );
 
@@ -107,7 +98,6 @@ describe('advancedSearchHelper', () => {
             countryType: COUNTRY_TYPES.DOMESTIC,
           },
         },
-
         advancedSearchTab: 'case',
       },
     });
@@ -219,200 +209,64 @@ describe('advancedSearchHelper', () => {
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
         petitionerFullStateNames: [
-          {
-            contactId: mockPetitionerOne.contactId,
-            state: US_STATES.TN,
-          },
-          {
-            contactId: mockPetitionerTwo.contactId,
-            state: US_STATES.TX,
-          },
+          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
+          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TX },
         ],
       },
     ]);
   });
 
-  it(`shows warning of maximum (${maxSearchResultsOverride}) search results if threshold is reached`, () => {
+  it('shows warning of maximum search results if threshold is reached', () => {
+    const actualMax =
+      applicationContext.getConstants().MAX_DOCUMENT_SEARCH_RESULTS;
+    const resultsAtThreshold = Array.from({ length: actualMax }, (_, i) => ({
+      docketNumber: `${i + 1}-19`,
+      petitioners: [mockPetitionerOne],
+    }));
+
     const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab: 'case',
-        searchResults: {
-          case: [
-            {
-              caseCaption: 'Test Petitioner, Petitioner',
-              docketNumber: '101-19',
-              docketNumberWithSuffix: '101-19',
-              petitioners: [mockPetitionerOne],
-              receivedAt: '2019-03-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '102-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '102-18W',
-              petitioners: [mockPetitionerOne, mockPetitionerTwo],
-              receivedAt: '2019-05-01T05:00:00.000Z',
-            },
-            {
-              caseCaption: 'Test Petitioner, Petitioner',
-              docketNumber: '103-19',
-              docketNumberWithSuffix: '103-19',
-              petitioners: [mockPetitionerOne],
-              receivedAt: '2019-03-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '104-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '104-18W',
-              petitioners: [mockPetitionerOne, mockPetitionerTwo],
-              receivedAt: '2019-05-01T05:00:00.000Z',
-            },
-          ],
-        },
+        searchResults: { case: resultsAtThreshold },
       },
     });
+
     expect(result.showManyResultsMessage).toBe(true);
     expect(result.manyResults).toBeDefined();
   });
 
-  it('only returns formatted results that should be currently shown based on form.currentPage for a case search', () => {
-    pageSizeOverride = 1;
-    let result = runCompute(advancedSearchHelper, {
+  it('returns all formatted results regardless of currentPage since load more is removed', () => {
+    const searchResultsData = [
+      {
+        caseCaption: 'Test Petitioner, Petitioner',
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19',
+        petitioners: [mockPetitionerOne],
+        receivedAt: '2019-03-01T05:00:00.000Z',
+      },
+      {
+        caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
+        docketNumber: '102-18',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        docketNumberWithSuffix: '102-18W',
+        petitioners: [mockPetitionerOne, mockPetitionerTwo],
+        receivedAt: '2018-05-01T05:00:00.000Z',
+      },
+    ];
+
+    const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab: 'case',
-        searchResults: {
-          case: [
-            {
-              caseCaption: 'Test Petitioner, Petitioner',
-              docketNumber: '101-19',
-              docketNumberWithSuffix: '101-19',
-              petitioners: [mockPetitionerOne],
-              receivedAt: '2019-03-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '102-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              petitioners: [mockPetitionerOne, mockPetitionerTwo],
-              receivedAt: '2018-05-01T05:00:00.000Z',
-            },
-          ],
-        },
+        searchResults: { case: searchResultsData },
       },
     });
-    expect(result.showLoadMore).toEqual(true);
-    expect(result.formattedSearchResults.length).toEqual(1);
-    expect(result.formattedSearchResults).toMatchObject([
-      {
-        caseTitle: 'Test Petitioner',
-        docketNumberWithSuffix: '101-19',
-        receivedAt: '2019-03-01T05:00:00.000Z',
-      },
-    ]);
 
-    result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 4 },
-        advancedSearchTab: 'case',
-        searchResults: {
-          case: [
-            {
-              caseCaption: 'Test Petitioner, Petitioner',
-              docketNumber: '101-19',
-              docketNumberWithSuffix: '101-19',
-              petitioners: [mockPetitionerOne],
-              receivedAt: '2019-03-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '102-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '102-18W',
-              petitioners: [mockPetitionerOne, mockPetitionerTwo],
-              receivedAt: '2018-05-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '101-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '101-18W',
-              petitioners: [
-                {
-                  ...mockPetitionerOne,
-                  state: 'CA',
-                },
-                {
-                  ...mockPetitionerTwo,
-                  state: 'TN',
-                },
-              ],
-              receivedAt: '2018-04-01T05:00:00.000Z',
-            },
-            {
-              docketNumber: '102-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '102-18W',
-              petitioners: [
-                {
-                  ...mockPetitionerOne,
-                  state: 'AX',
-                },
-              ],
-              receivedAt: '2018-05-01T05:00:00.000Z',
-            },
-          ],
-        },
-      },
-    });
     expect(result.showLoadMore).toEqual(false);
-    expect(result.formattedSearchResults.length).toEqual(4);
-    expect(result.formattedSearchResults).toMatchObject([
-      {
-        caseTitle: 'Test Petitioner',
-        docketNumberWithSuffix: '101-19',
-        formattedFiledDate: '03/01/19',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
-        ],
-      },
-      {
-        caseTitle: 'Test Petitioner & Another Petitioner',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
-          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TX },
-        ],
-      },
-      {
-        caseTitle: 'Test Petitioner & Another Petitioner',
-        docketNumberWithSuffix: '101-18W',
-        formattedFiledDate: '04/01/18',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.CA },
-          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TN },
-        ],
-      },
-      {
-        caseTitle: '',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: 'AX' },
-        ],
-      },
-    ]);
+    expect(result.formattedSearchResults.length).toEqual(2);
   });
 
   it('should return without formatting if on the practitioner tab', () => {
@@ -444,7 +298,6 @@ describe('advancedSearchHelper', () => {
   describe('paginationHelper', () => {
     it('should return an empty object when searchResults are undefined', () => {
       const result = paginationHelper(undefined, 1, 25);
-
       expect(result).toEqual({});
     });
   });

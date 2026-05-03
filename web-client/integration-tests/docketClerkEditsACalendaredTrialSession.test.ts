@@ -9,6 +9,7 @@ import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCase
 import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '@web-client/presenter/computeds/formattedTrialSessionDetails';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import {
   loginAs,
   setupTest,
@@ -29,7 +30,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
     formattedTrialSessionDetailsComputed,
   );
 
-  const trialLocation = `Helena, Montana, ${Date.now()}`;
+  const trialLocation = `Helena, Montana, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     fieldToUpdate: 'judge',
     valueToUpdate: {

@@ -31,6 +31,7 @@ describe('messageModalHelper', () => {
   const mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription = {
     docketEntryId: mockDocketEntryIdAlsoOnDocketRecord,
     documentTitle: 'Some Document',
+    documentType: 'Some Document',
     index: 2,
     isFileAttached: true,
     isOnDocketRecord: true,
@@ -98,7 +99,12 @@ describe('messageModalHelper', () => {
         state: baseState,
       });
 
-      expect(correspondence).toBe(mockCorrespondences);
+      expect(correspondence).toEqual([
+        {
+          ...mockCorrespondences[0],
+          isAlreadyAttached: false,
+        },
+      ]);
     });
 
     it('should set a title on each entry from the documentTitle or documentType', () => {
@@ -211,7 +217,19 @@ describe('messageModalHelper', () => {
         state: baseState,
       });
 
-      expect(draftDocuments).toBe(mockDraftDocuments);
+      expect(draftDocuments).toEqual([
+        {
+          ...mockDraftDocuments[0],
+          isAlreadyAttached: false,
+          // @ts-expect-error
+          title: mockDraftDocuments[0].documentTitle,
+        },
+        {
+          ...mockDraftDocuments[1],
+          isAlreadyAttached: false,
+          title: mockDraftDocuments[1].documentType,
+        },
+      ]);
     });
   });
 

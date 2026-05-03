@@ -1,4 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const groupKeySymbol = Symbol('group');
 
@@ -13,9 +18,9 @@ export const addGroupSymbol = (object, value) => {
 
 export const getPriorityGroups = eligibleCases => {
   const groups = {
-    default: [] as FormattedTrialSessionCase[],
-    manuallyAdded: [] as FormattedTrialSessionCase[],
-    suffixHighPriority: [] as FormattedTrialSessionCase[],
+    default: [] as (FormattedTrialSessionCase | EligibleCase)[],
+    manuallyAdded: [] as (FormattedTrialSessionCase | EligibleCase)[],
+    suffixHighPriority: [] as (FormattedTrialSessionCase | EligibleCase)[],
   };
 
   eligibleCases.forEach(theCase => {
@@ -39,45 +44,75 @@ const getSortableDocketNumber = docketNumber => {
   return `${year}-${number.padStart(6, '0')}`;
 };
 
-const getFullSortString = (theCase, cases) => {
-  if (!Array.isArray(cases)) {
-    return '';
+const getFullSortString = theCase => {
+  let priorityPrefix = '';
+
+  if (theCase.isAgedCase) {
+    priorityPrefix += 'A';
   }
-  const leadCase = cases.find(
-    aCase => aCase.docketNumber === theCase.leadDocketNumber,
-  );
-
-  const isLeadInEligible = !!theCase.leadDocketNumber && !!leadCase;
-
-  let priorityPrefix = 'C';
-
   if (theCase.isManuallyAdded) {
-    priorityPrefix = 'A';
-  } else if (theCase.isDocketSuffixHighPriority) {
-    priorityPrefix = 'B';
+    priorityPrefix += 'B';
+  }
+  if (theCase.isDocketSuffixHighPriority) {
+    priorityPrefix += 'C';
   }
 
-  return `${priorityPrefix}_${getSortableDocketNumber(
-    isLeadInEligible
-      ? theCase.docketNumber === theCase.leadDocketNumber
-        ? theCase.docketNumber
-        : theCase.leadDocketNumber
-      : theCase.docketNumber,
-  )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+  priorityPrefix += 'D';
+
+  return `${priorityPrefix}_${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-export const compareTrialSessionEligibleCases = eligibleCases => {
-  const groups = getPriorityGroups(eligibleCases);
+export const compareTrialSessionEligibleCases = () => {
   return (a, b) => {
-    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
-    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
+    const aSortString = getFullSortString(a);
+    const bSortString = getFullSortString(b);
     return aSortString.localeCompare(bSortString);
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
+export const getFormattedEligibleCases = formattedCases => {
+  const memberCasesObj = {} as Record<
+    string,
+    EligibleCase[] | FormattedTrialSessionCase[]
+  >;
+
+  formattedCases.forEach(caseItem => {
+    if (
+      caseItem.leadDocketNumber &&
+      caseItem.leadDocketNumber !== caseItem.docketNumber
+    ) {
+      const { leadDocketNumber } = caseItem;
+      if (!memberCasesObj[leadDocketNumber])
+        memberCasesObj[leadDocketNumber] = [];
+      memberCasesObj[leadDocketNumber].push(caseItem);
+    }
+  });
+
+  formattedCases.forEach(caseItem => {
+    if (
+      caseItem.leadDocketNumber &&
+      caseItem.leadDocketNumber === caseItem.docketNumber &&
+      memberCasesObj[caseItem.leadDocketNumber]
+    ) {
+      caseItem.memberCases = memberCasesObj[caseItem.leadDocketNumber];
+      caseItem.memberCases.sort((a, b) => {
+        const aSortString = getFullSortString(a);
+        const bSortString = getFullSortString(b);
+        return aSortString.localeCompare(bSortString);
+      });
+    }
+  });
+
+  const formattedCasesWithoutMembers = formattedCases.filter(caseItem => {
+    return !(
+      caseItem.leadDocketNumber &&
+      caseItem.leadDocketNumber !== caseItem.docketNumber
+    );
+  });
+
+  return formattedCasesWithoutMembers;
+};
+
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -88,6 +123,10 @@ export const formattedEligibleCasesHelper = (
 
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
+  const { maxCases, caseOrder } = get(state.trialSession);
+  const caseLimit =
+    maxCases! + (TRIAL_SESSION_ELIGIBLE_CASES_BUFFER - caseOrder.length);
+
   const filter = get(
     state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
   );
@@ -96,9 +135,12 @@ export const formattedEligibleCasesHelper = (
     formatCaseForTrialSession({ applicationContext, caseItem, eligibleCases }),
   );
 
-  const groups = getPriorityGroups(formattedCases);
+  const formattedCasesWithoutMembers =
+    getFormattedEligibleCases(formattedCases);
 
-  const sortedCases = formattedCases
+  const groups = getPriorityGroups(formattedCasesWithoutMembers);
+
+  const sortedCases = formattedCasesWithoutMembers
     .map(caseItem => {
       return addGroupSymbol(
         setConsolidationFlagsForDisplay(
@@ -108,7 +150,7 @@ export const formattedEligibleCasesHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases(formattedCases))
+    .sort(compareTrialSessionEligibleCases())
     .filter(eligibleCase => {
       if (filter === 'Small') {
         return (
@@ -126,7 +168,16 @@ export const formattedEligibleCasesHelper = (
       } else {
         return true;
       }
-    });
+    })
+    .splice(0, caseLimit); //10493: consider removing limit entirely
 
-  return sortedCases;
+  const flattenedCases = sortedCases.reduce((acc, c) => {
+    acc.push(c);
+    if (c.memberCases) {
+      acc = acc.concat(c.memberCases);
+    }
+    return acc;
+  }, []);
+
+  return flattenedCases;
 };

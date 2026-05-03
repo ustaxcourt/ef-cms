@@ -10,7 +10,7 @@ export const saveDocumentFromLambda = async ({
   useTempBucket = false,
 }: {
   contentType?: string;
-  document: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer>;
+  document: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer | Uint8Array>;
   key: string;
   useTempBucket?: boolean;
 }): Promise<void> => {
@@ -23,8 +23,19 @@ export const saveDocumentFromLambda = async ({
 
   for (let i = 0; i <= maxRetries; i++) {
     try {
+      let bufferBody: Buffer;
+
+      if (body instanceof ArrayBuffer || body instanceof SharedArrayBuffer) {
+        bufferBody = Buffer.from(new Uint8Array(body));
+      } else if (body instanceof Uint8Array) {
+        bufferBody = Buffer.from(body);
+      } else {
+        // catch all cases
+        bufferBody = Buffer.from(body as any);
+      }
+
       await getStorageClient().putObject({
-        Body: Buffer.from(body),
+        Body: bufferBody,
         Bucket,
         ContentType,
         Key: key,

@@ -122,9 +122,13 @@ export const ActionsAndFilingsFieldset = ({
             isMulti={false}
             name={`actionsAndFilingsDocumentType-${rowIndex}`}
             options={formOptions[row.renderKey]}
-            tooltip={(formOptions[row.renderKey].find(
-              option => option.value === row.documentType,
-            )||{label: '- Select -'}).label}
+            tooltip={
+              (
+                formOptions[row.renderKey].find(
+                  option => option.value === row.documentType,
+                ) || { label: '- Select -' }
+              ).label
+            }
             value={formOptions[row.renderKey].filter(
               option => option.value === row.documentType,
             )}
@@ -242,6 +246,10 @@ export const ActionsAndFilingsFieldset = ({
     }
   };
 
+  const actionsAndFilingsValues = Object.values(
+    actionsAndFilingsFormState.actionsAndFilings,
+  );
+
   return (
     <fieldset className="border-0 padding-0">
       <div className="usa-label">Actions & Filings</div>
@@ -252,61 +260,96 @@ export const ActionsAndFilingsFieldset = ({
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>
-      {Object.values(actionsAndFilingsFormState.actionsAndFilings).map(
-        (row, rowIndex) => (
-          <React.Fragment key={row.renderKey}>
-            <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
-              {getFieldsByRow(row, rowIndex)}
-              <div className="grid-col-fill">
-                <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-                  <input
-                    className="usa-input display-inline-block maxw-full"
-                    id={`actionsAndFilingsNote-${rowIndex}`}
-                    aria-label={`actionsAndFilingsNote-${rowIndex}`}
-                    name={`actionsAndFilingsNote-${rowIndex}`}
-                    type="text"
-                    value={row.note}
-                    onBlur={() => onBlurHandler()}
-                    onChange={e =>
-                      onChangeHandler({
-                        name: 'actionsAndFilings',
-                        rowInfo: {
-                          key: row.renderKey,
-                          nestedName: 'note',
-                        },
-                        section:
-                          MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </FormGroup>
-              </div>
-              <div className="grid-col-1">
-                <Button
-                  link
-                  className="padding-0"
-                  icon="times"
-                  type="button"
-                  onClick={e => {
-                    e.preventDefault();
-                    removeRowHandler({
-                      key: row.renderKey,
+      {actionsAndFilingsValues.length === 0 && (
+        <Button
+          link
+          className="padding-0"
+          icon="plus"
+          type="button"
+          onClick={e => {
+            e.preventDefault();
+            addRowHandler({
+              name: 'actionsAndFilings',
+              section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+            });
+          }}
+        >
+          Add Action/Filing
+        </Button>
+      )}
+      {actionsAndFilingsValues.map((row, rowIndex) => (
+        <React.Fragment key={row.renderKey}>
+          <div className="grid-row grid-gap-2 align-items-center margin-bottom-1">
+            {getFieldsByRow(row, rowIndex)}
+            <div className="grid-col-fill">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                <input
+                  className="usa-input display-inline-block maxw-full"
+                  id={`actionsAndFilingsNote-${rowIndex}`}
+                  aria-label={`actionsAndFilingsNote-${rowIndex}`}
+                  name={`actionsAndFilingsNote-${rowIndex}`}
+                  type="text"
+                  value={row.note}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
                       name: 'actionsAndFilings',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'note',
+                      },
                       section:
                         MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
-                    });
-                  }}
-                >
-                  Remove
-                </Button>
-              </div>
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
             </div>
-            {getMotionDetailsByRow(row, rowIndex)}
-          </React.Fragment>
-        ),
-      )}
-      <div className="grid-row grid-gap align-items-center margin-bottom-1">
+            <div className="grid-col-1">
+              <Button
+                link
+                className="padding-0"
+                icon="times"
+                type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  removeRowHandler({
+                    key: row.renderKey,
+                    name: 'actionsAndFilings',
+                    section:
+                      MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                  });
+                }}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+          <div className="grid-row align-items-center margin-bottom-1">
+            <Button
+              link
+              data-testid={`add-actions-and-filings-button-${rowIndex}`}
+              className="padding-0"
+              icon="plus"
+              type="button"
+              onClick={e => {
+                e.preventDefault();
+                addRowHandler({
+                  index: rowIndex,
+                  name: 'actionsAndFilings',
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                });
+              }}
+            >
+              Add Action/Filing
+            </Button>
+          </div>
+          {getMotionDetailsByRow(row, rowIndex)}
+        </React.Fragment>
+      ))}
+      {/* <div className="grid-row grid-gap align-items-center margin-bottom-1">
         <div className="grid-col-auto">
           <Button
             link
@@ -324,7 +367,7 @@ export const ActionsAndFilingsFieldset = ({
             Add Action/Filing
           </Button>
         </div>
-      </div>
+      </div> */}
     </fieldset>
   );
 };

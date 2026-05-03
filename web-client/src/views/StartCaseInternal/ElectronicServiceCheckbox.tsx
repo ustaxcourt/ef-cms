@@ -1,22 +1,34 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps, state } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ElectronicServiceConsentCheckbox = connect(
-  {
-    bind: props.bind,
-    contactType: props.contactType,
-    data: state[props.bind],
-    updateFormValueSequence: sequences.updateFormValueSequence,
-  },
+type ElectronicServiceConsentCheckboxProps = {
+  bind: string;
+  contactType: string;
+};
+const electronicServiceConsentCheckboxDeps = {
+  bind: cerebralProps.bind,
+  contactType: cerebralProps`contactType`,
+  data: state[cerebralProps`bind`],
+  updateFormValueSequence: sequences.updateFormValueSequence,
+};
+
+export const ElectronicServiceConsentCheckbox = connect<
+  ElectronicServiceConsentCheckboxProps,
+  typeof electronicServiceConsentCheckboxDeps
+>(
+  electronicServiceConsentCheckboxDeps,
   function ElectronicServiceConsentCheckbox({
     contactType,
     data,
     updateFormValueSequence,
-  }) {
+  }: {
+    contactType: string;
+    data: any;
+    updateFormValueSequence: Function;
+  }): React.JSX.Element {
     return (
       <FormGroup
         className="max-width-fit-content margin-bottom-4"

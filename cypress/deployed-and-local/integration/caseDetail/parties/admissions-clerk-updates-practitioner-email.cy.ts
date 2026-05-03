@@ -185,7 +185,6 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-
           // new practitioner, can login, is associated to a case
           const updatedPractitionerUserName = `cypress_test_account+${v4()}`;
           const updatedPractitionerEmail = `${updatedPractitionerUserName}@example.com`;

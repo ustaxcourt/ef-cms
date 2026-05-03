@@ -108,7 +108,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('should throw an unauthorized error when the document being viewed is the case confirmation pdf', async () => {
+    it('should throw an unauthorized error when the document being viewed is the case confirmation pdf and the external user is not associated with the case', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(
           applicationContext,
@@ -254,6 +254,45 @@ describe('getDownloadPolicyUrlInteractor', () => {
           mockPetitionerUser,
         ),
       ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('should pass in a key of docketEntryEntity.documentStorageId to getDownloadPolicyUrl', async () => {
+      await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
+          .calls[0][0],
+      ).toMatchObject({
+        key: baseDocketEntry.documentStorageId,
+      });
+    });
+
+    it('should use key to look up docketEntry by documentStorage if lookup by docketEntryId fails', async () => {
+      baseDocketEntry.docketEntryId = 'different-id';
+      await expect(
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.documentStorageId,
+          },
+          mockPetitionerUser,
+        ),
+      ).resolves.not.toThrow();
+
+      expect(
+        applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
+          .calls[0][0],
+      ).toMatchObject({
+        key: baseDocketEntry.documentStorageId,
+      });
     });
 
     it('should NOT receive the policy url when the Non-Court issued document being viewed is sealed to all external users', async () => {
@@ -432,7 +471,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should return the policy url when the document requested is a case confirmation pdf', async () => {
+    it('should return the policy url for an external user who is associated with the case when the document requested is a case confirmation pdf', async () => {
       const url = await getDownloadPolicyUrlInteractor(
         applicationContext,
         {
@@ -440,6 +479,19 @@ describe('getDownloadPolicyUrlInteractor', () => {
           key: 'case-101-18-confirmation.pdf',
         },
         mockPetitionerUser,
+      );
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('should return the policy url for an internal user when the document requested is a case confirmation pdf', async () => {
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: 'case-101-18-confirmation.pdf',
+        },
+        mockDocketClerkUser,
       );
 
       expect(url).toEqual('localhost');
@@ -939,7 +991,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should throw an error when the document requested is an available document and the user is not associated with the consolidated group', async () => {
+    it('should throw an error when the document requested is an available document and the user is external and not associated with the consolidated group', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(
           applicationContext,

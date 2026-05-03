@@ -15,6 +15,8 @@ export const ModalDialog = ({
   closeLink = true,
   confirmHref,
   confirmLabel,
+  clearLabel,
+  clearSequence,
   confirmSequence,
   confirmTarget = '_self',
   dataTestId = 'modal-dialog',
@@ -30,13 +32,15 @@ export const ModalDialog = ({
   cancelLabel?: string;
   cancelLink?: boolean;
   messageClass?: string;
-  cancelSequence: any;
+  cancelSequence?: any;
   children?: ReactNode;
   className?: string;
   closeLink?: boolean;
   confirmHref?: string;
   confirmLabel?: string;
-  confirmSequence: any;
+  clearLabel?: string;
+  clearSequence?: any;
+  confirmSequence?: any;
   confirmTarget?: string;
   dataTestId?: string;
   disableSubmit?: boolean;
@@ -44,12 +48,13 @@ export const ModalDialog = ({
   onModalMount?: () => void;
   preventScrolling?: boolean;
   showButtons?: boolean;
-  title: string;
+  title?: string;
   useRunConfirmSequence?: boolean;
+  preventCancelOnBlur?: any;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
-  const elRef = useRef(null);
+  const elRef = useRef<HTMLDivElement | null>(null);
 
   const getEl = () => {
     if (!elRef.current) {
@@ -66,9 +71,7 @@ export const ModalDialog = ({
       });
     } else {
       window.document.body.classList.remove('no-scroll');
-      window.document.removeEventListener('touchmove', touchmoveTriggered, {
-        passive: false,
-      });
+      window.document.removeEventListener('touchmove', touchmoveTriggered);
     }
   };
 
@@ -82,6 +85,11 @@ export const ModalDialog = ({
     confirmSequence.call();
   };
 
+  const runClearSequence = evt => {
+    evt.stopPropagation();
+    clearSequence?.call();
+  };
+
   const touchmoveTriggered = evt => {
     return evt.preventDefault();
   };
@@ -91,11 +99,11 @@ export const ModalDialog = ({
       onModalMount();
     }
 
-    modalRoot.appendChild(getEl());
+    modalRoot?.appendChild(getEl());
     toggleNoScroll(true);
 
     return () => {
-      modalRoot.removeChild(getEl());
+      modalRoot?.removeChild(getEl());
       toggleNoScroll(false);
     };
   }, []);
@@ -170,10 +178,22 @@ export const ModalDialog = ({
                     secondary
                     aria-label="Cancel"
                     className="modal-button-cancel"
+                    data-testid="modal-button-cancel"
                     link={cancelLink}
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
+                  </Button>
+                )}
+                {clearLabel && (
+                  <Button
+                    link
+                    aria-label="Clear"
+                    className="modal-button-clear"
+                    data-testid="modal-button-clear"
+                    onClick={runClearSequence}
+                  >
+                    {clearLabel}
                   </Button>
                 )}
               </div>

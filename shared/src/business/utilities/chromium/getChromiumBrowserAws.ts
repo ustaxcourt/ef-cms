@@ -12,18 +12,20 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
   for (let i = 0; i < 5; i++) {
     try {
       // There is a 1/1000 chance that launching a browser will spontaneously fail. In that event we can recover simply by retrying
-      const theBrowser = await puppeteerCore.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
+      const browser = await puppeteerCore.launch({
+        args: puppeteerCore.defaultArgs({
+          args: chromium.args,
+          headless: 'shell',
+        }),
         executablePath: await chromium.executablePath(),
-        headless: chromium.headless as 'shell' | boolean,
+        headless: 'shell',
         env: {
           LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH, // be careful editing this; see 10658
           PATH: process.env.PATH,
           FONTCONFIG_PATH: process.env.FONTCONFIG_PATH,
         },
       });
-      return theBrowser;
+      return browser;
     } catch (e) {
       getDawsonLogger().error(
         `Unable to launch chromium browser on attempt: ${i}`,

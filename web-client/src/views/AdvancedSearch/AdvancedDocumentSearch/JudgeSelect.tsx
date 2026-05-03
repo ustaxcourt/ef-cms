@@ -3,12 +3,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 
-export const JudgeSelect = connect(
+type JudgeSelectProps = {
+  formValue: string;
+  judges: any;
+};
+
+export const JudgeSelect: React.FC<JudgeSelectProps> = connect(
   {
-    formValue: props.formValue,
-    judges: props.judges,
+    formValue: props`formValue`,
+    judges: props`judges`,
   },
-  function JudgeSelect({ formValue, judges }) {
+  function JudgeSelect({ formValue, judges }: any) {
     return (
       <>
         <label className="usa-label" htmlFor="date-range">

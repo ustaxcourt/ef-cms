@@ -99,4 +99,20 @@ describe('generateExternalDocumentTitle', () => {
       'Title',
     );
   });
+
+  it('should generate document title for notice', async () => {
+    const title = await generateExternalDocumentTitle(applicationContext, {
+      documentMetadata: {
+        eventCode: 'NOT',
+        category: 'Notice',
+        documentType: 'Notice',
+        documentTitle: 'Notice [anything]',
+        scenario: 'Nonstandard B',
+        freeText: 'test title',
+        additionalInfo: 'add1',
+        additionalInfo2: 'add2',
+      },
+    });
+    expect(title).toBe('Notice test title');
+  });
 });

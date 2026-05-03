@@ -3,7 +3,7 @@ import {
   CaseSearchResult,
 } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import {
-  MAX_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
@@ -51,7 +51,7 @@ export const casePublicSearch = async ({
         _source: sourceFields,
         min_score: 0.1,
         query,
-        size: MAX_SEARCH_RESULTS,
+        size: MAX_CASE_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },

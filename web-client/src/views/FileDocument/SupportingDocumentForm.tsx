@@ -9,12 +9,16 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const SupportingDocumentForm = connect(
+type SupportingDocumentFormProps = {
+  index: number;
+};
+
+export const SupportingDocumentForm: React.FC<SupportingDocumentFormProps> = connect(
   {
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    index: props.index,
+    index: props`index`,
     removeSupportingDocumentSequence:
       sequences.removeSupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence:
@@ -58,8 +62,8 @@ export const SupportingDocumentForm = connect(
         <div className="blue-container">
           <FormGroup
             className={
-              !form.supportingDocuments[index].supportingDocument &&
-              'margin-bottom-0'
+              !form.supportingDocuments[index].supportingDocument ?
+              'margin-bottom-0' : undefined
             }
             errorText={fileValidationErrors?.supportingDocument}
           >

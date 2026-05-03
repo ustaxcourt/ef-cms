@@ -1,16 +1,18 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
+const interstitialDeps = {
+  alertHelper: state.alertHelper,
+  gotoPublicSearchSequence:
+    sequences.gotoPublicSearchSequence as unknown as () => void,
+  isPublic: state.isPublic,
+};
+
 export const Interstitial = connect(
-  {
-    alertHelper: state.alertHelper,
-    gotoPublicSearchSequence: sequences.gotoPublicSearchSequence,
-    isPublic: state.isPublic,
-  },
+  interstitialDeps,
   function Interstitial({ alertHelper, gotoPublicSearchSequence, isPublic }) {
     return (
       <>

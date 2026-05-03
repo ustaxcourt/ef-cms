@@ -2,7 +2,7 @@
 
 // usage: ./scripts/upload-practitioner-application-packages.ts > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
-import { DateTime } from 'luxon';
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -11,16 +11,20 @@ import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { PractitionerDocumentTable } from '@web-api/persistence/postgres/practitionerDocuments/schema';
+import {
+  createISODateString,
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 import { extname, parse } from 'path';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { toKyselyNewPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import tiff2pdf from 'tiff2pdf';
-import type { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
-import { toKyselyNewPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
-import { PractitionerDocumentTable } from '@web-api/persistence/postgres/practitionerDocuments/schema';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -62,29 +66,17 @@ const output = {
   },
 };
 
-const getAllBarNumbers = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<string[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: ['barNumber.S'],
-        query: {
-          bool: {
-            filter: {
-              exists: {
-                field: 'barNumber.S',
-              },
-            },
-          },
-        },
-      },
-      index: 'efcms-user',
-    },
-  });
+const getAllBarNumbers = async (): Promise<string[]> => {
+  const results = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.barNumber', 'is not', null)
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
   return results.map((practitioner: RawPractitioner) => practitioner.barNumber);
 };
 
@@ -198,7 +190,7 @@ const convertAllTifsAndConstructDocumentEntities = async ({
       categoryType: 'Application Package',
       description: 'Imported from Blackstone',
       fileName,
-      barNumber: barNumber.toLowerCase(),
+      barNumber,
       practitionerDocumentFileId,
       uploadDate: createISODateString(),
       location: '',
@@ -404,7 +396,7 @@ const batchUploadPractitionerApplicationPackages = async ({
   }
 
   console.time('Duration of retrieval of practitioner records');
-  const allBarNumbers = await getAllBarNumbers({ applicationContext });
+  const allBarNumbers = await getAllBarNumbers();
   console.timeEnd('Duration of retrieval of practitioner records');
 
   console.time('Duration of conversion from .tif to .pdf');
@@ -437,7 +429,7 @@ const batchUploadPractitionerApplicationPackages = async ({
   }
   console.timeEnd('Duration of file upload and document creation');
 
-  const now = DateTime.now().toUnixInteger();
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const outputFilePath = `${INPUT_DIR}/results-${now}.json`;
   fs.writeFileSync(outputFilePath, JSON.stringify(output));
   outputStatistics();

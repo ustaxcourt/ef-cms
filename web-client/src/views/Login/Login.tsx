@@ -1,11 +1,13 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import { ButtonSmall } from '@web-client/dawson-ui/ui/buttonSmall';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
+import { TextField } from '@web-client/dawson-ui/ui/input';
 
 export const Login = connect(
   {
@@ -19,6 +21,9 @@ export const Login = connect(
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence:
       sequences.updateAuthenticationFormValueSequence,
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+    dismissAlertSequence: sequences.dismissAlertSequence,
   },
   ({
     alertInfo,
@@ -28,110 +33,126 @@ export const Login = connect(
     submitLoginSequence,
     toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence,
+    alertError,
+    alertHelper,
+    dismissAlertSequence,
   }) => {
     return (
       <>
-        <section className="grid-container usa-section">
-          <div className="grid-row flex-justify-center">
-            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
+        <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
+          <div className="tw:flex tw:justify-center">
+            <div className="tw:w-full tw:xs:w-135">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
               {alertInfo && (
                 <InfoNotificationComponent
                   alertInfo={alertInfo}
                   dismissible={false}
-                ></InfoNotificationComponent>
+                />
               )}
-              <ErrorNotification />
-              <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
-                <div className="display-flex flex-column">
-                  <div className="flex-align-center">
+
+              {alertError && alertHelper && (
+                <div className="tw:xs:mb-12 tw:mb-8">
+                  <AlertError
+                    alertError={alertError}
+                    alertHelper={alertHelper}
+                    closeButtonOnClick={() => dismissAlertSequence()}
+                    isDismissible={false}
+                  />
+                </div>
+              )}
+
+              <div className="tw:bg-white tw:xs:p-12 tw:px-3 tw:py-8 tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
+                <div className="tw:flex tw:flex-col">
+                  <div>
                     <h1
-                      className="margin-bottom-1 inherit-body-font-family"
+                      className="tw:xs:mb-8 tw:mb-5 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-2xl"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
                     </h1>
                     <form
-                      className="usa-form margin-top-4 max-width-unset login-form"
                       onSubmit={e => {
                         e.preventDefault();
                         submitLoginSequence();
                       }}
                     >
-                      <label className="usa-label" htmlFor="email">
-                        Email address
-                      </label>
-                      <input
+                      <TextField
                         required
                         autoCapitalize="off"
                         autoCorrect="off"
-                        className="usa-input"
+                        className="tw:xs:mb-4 tw:mb-3"
                         data-testid="email-input"
                         id="email"
                         name="email"
                         type="email"
+                        label="Email address"
+                        showReqOptionalText={false}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             email: e.target.value,
                           });
                         }}
                       />
-                      <label
-                        className="usa-label margin-top-2"
-                        htmlFor="password"
-                      >
-                        Password
-                      </label>
-                      <input
+                      <TextField
                         required
-                        className="usa-input"
+                        className="tw:mt-0"
                         data-testid="password-input"
                         id="password"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
+                        label="Password"
+                        showReqOptionalText={false}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             password: e.target.value,
                           });
                         }}
                       />
-                      <button
-                        className="usa-show-password"
-                        data-hide-text="Hide password"
-                        data-show-text="Show password"
-                        type="button"
-                        onClick={() =>
-                          toggleShowPasswordSequence({
-                            passwordType: 'showPassword',
-                          })
-                        }
-                      >
-                        {showPassword ? 'Hide password' : 'Show password'}
-                      </button>
-                      <Button
-                        className="usa-button margin-top-3"
-                        data-testid="login-button"
-                      >
-                        Log in
-                      </Button>
+                      <div className="tw:xs:mt-2 tw:mt-1.5 tw:flex tw:w-full">
+                        <ButtonSmall
+                          variant="primaryTertiary"
+                          type="button"
+                          data-hide-text="Hide password"
+                          data-show-text="Show password"
+                          className="tw:ml-auto tw:w-auto"
+                          onClick={() =>
+                            toggleShowPasswordSequence({
+                              passwordType: 'showPassword',
+                            })
+                          }
+                        >
+                          {showPassword ? 'Hide password' : 'Show password'}
+                        </ButtonSmall>
+                      </div>
+                      <div className="tw:xs:my-4 tw:my-3">
+                        <Button
+                          aria-label="Login"
+                          data-testid="login-button"
+                          variant="primary"
+                        >
+                          Log in
+                        </Button>
+                      </div>
                     </form>
-                    <div className="button-container">
+                    <div className="tw:xs:mb-4 tw:mb-3 tw:flex tw:w-full">
                       <Button
-                        className="margin-top-1 display-block"
+                        aria-label="Forgot password"
+                        variant="primaryTertiary"
                         data-testid="forgot-password-button"
-                        link={true}
-                        type="button"
+                        className="tw:mr-auto tw:w-auto"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
                       </Button>
                     </div>
-                    <span>
+                    <div className="tw:my-0 tw:text-base tw:xs:text-lg">
                       Don&apos;t have an account?{' '}
+                    </div>
+                    <div className="tw:flex tw:w-full">
                       <Button
-                        className="padding-top-0"
-                        link={true}
+                        className="tw:pt-0 tw:pl-0 tw:mr-auto tw:w-auto"
+                        variant="primaryTertiary"
                         type="button"
                         onClick={e => {
                           e.preventDefault();
@@ -140,7 +161,7 @@ export const Login = connect(
                       >
                         Create your account now.
                       </Button>
-                    </span>
+                    </div>
                   </div>
                 </div>
               </div>

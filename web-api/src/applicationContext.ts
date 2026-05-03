@@ -5,8 +5,10 @@ import {
   CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   MAX_SEARCH_CLIENT_RESULTS,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   ORDER_TYPES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -20,9 +22,7 @@ import {
   getCognito,
   getLocalCognito,
 } from '@web-api/persistence/cognito/getCognito';
-import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
-import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
@@ -53,6 +53,7 @@ import * as sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
+import { getLongTimeoutSQSMessagingClient } from '@web-api/gateways/message/getLongTimeoutSQSMessagingClient';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
@@ -80,8 +81,10 @@ export const createApplicationContext = (appContextUser = {}) => {
         : undefined,
       CLERK_OF_THE_COURT_CONFIGURATION,
       CONFIGURATION_ITEM_KEYS,
+      DOCKET_ENTRY_SEALED_TO_TYPES,
       MAX_SEARCH_CLIENT_RESULTS,
-      MAX_SEARCH_RESULTS,
+      MAX_DOCUMENT_SEARCH_RESULTS,
+      MAX_CASE_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => !CLOSED_CASE_STATUSES.includes(status as any),
@@ -102,9 +105,7 @@ export const createApplicationContext = (appContextUser = {}) => {
       sendSlackNotification,
       sendZipperBatchJob,
     }),
-    getDocumentClient,
     getDocumentGenerators,
-    getDynamoClient,
     getEmailClient,
     getEntityByName,
     getEnvironment,
@@ -143,6 +144,7 @@ export const createApplicationContext = (appContextUser = {}) => {
       },
     }),
     getMessagingClient,
+    getLongTimeoutSQSMessagingClient,
     getNodeSass: () => {
       return sass;
     },

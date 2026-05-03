@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
@@ -18,6 +19,7 @@ import {
   PAYMENT_STATUS,
   PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  PETITION_DUPLICATE_ERROR,
 } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -38,6 +40,8 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -165,10 +169,13 @@ const generateNoticeOfReceipt = async ({
     CLERK_OF_THE_COURT_CONFIGURATION,
   ]);
 
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+  const {
+    name,
+    title,
+  }: {
     name: string;
     title: string;
-  };
+  } = CLERK_OF_THE_COURT_RECORD.value.current;
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
@@ -202,7 +209,7 @@ const generateNoticeOfReceipt = async ({
   const isSetupForEService = contactInfo => {
     return (
       contactInfo.hasConsentedToElectronicService &&
-      !!contactInfo.paperPetitionEmail
+      !!contactInfo.contactEmailAddress
     );
   };
 
@@ -217,7 +224,7 @@ const generateNoticeOfReceipt = async ({
 
   if (shouldGenerateNotrForSecondary) {
     if (
-      contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
+      contactPrimary.contactEmailAddress !== contactSecondary.contactEmailAddress
     ) {
       accessCode = generateAccessCode();
     }
@@ -351,24 +358,25 @@ const generateNoticeOfReceipt = async ({
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: caseConfirmationPdfName,
+    key: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = getUniqueId();
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  const notrDocumentStorageId = getUniqueId();
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: notrDocketEntryId,
+    key: notrDocumentStorageId,
   });
 
   let urlToReturn;
 
   const notrDocketEntry = new DocketEntry(
     {
-      docketEntryId: notrDocketEntryId,
+      docketEntryId: notrDocumentStorageId,
+      documentStorageId: notrDocumentStorageId,
       documentTitle:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
       documentType:
@@ -391,12 +399,10 @@ const generateNoticeOfReceipt = async ({
   notrDocketEntry.servedPartiesCode = PARTIES_CODES.PETITIONER; //overwrite the served party code for the NOTR docket entry because this is a special one-off with special rules that don't follow the normal party code algorithm
   notrDocketEntry.setAsProcessingStatusAsCompleted();
 
-  notrDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      documentBytes: combinedNotrPdfData,
-    });
+  notrDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentBytes: combinedNotrPdfData,
+  });
 
   caseEntity.addDocketEntry(notrDocketEntry);
 
@@ -413,7 +419,7 @@ const generateNoticeOfReceipt = async ({
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: notrDocketEntry.docketEntryId,
+        key: notrDocketEntry.documentStorageId,
         useTempBucket: false,
       }));
   }
@@ -536,11 +542,22 @@ export const serveCaseToIrs = async (
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
-    caseEntity.markAsSentToIRS();
-
     if (caseEntity.isPaper) {
       addDocketEntries({ caseEntity });
     }
+
+    const petitionDocument = caseEntity.getPetitionDocketEntry();
+
+    if (!petitionDocument) {
+      throw new Error(
+        `Could not find petition document on case ${caseEntity.docketNumber}`,
+      );
+    }
+    if (petitionDocument.servedAt) {
+      throw new Error(PETITION_DUPLICATE_ERROR);
+    }
+
+    caseEntity.markAsSentToIRS();
 
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
       await applicationContext.getUtilities().serveCaseDocument({
@@ -554,6 +571,8 @@ export const serveCaseToIrs = async (
       caseEntity,
       user: authorizedUser,
     });
+
+    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
@@ -574,14 +593,6 @@ export const serveCaseToIrs = async (
             caseEntity,
             systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
           }),
-      );
-    }
-
-    const petitionDocument = caseEntity.getPetitionDocketEntry();
-
-    if (!petitionDocument) {
-      throw new Error(
-        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
       );
     }
 
@@ -708,19 +719,30 @@ export const serveCaseToIrs = async (
       },
       userId: authorizedUser.userId,
     });
-  } catch (err) {
+  } catch (err: any) {
     applicationContext.logger.error('Error serving case to IRS', {
       docketNumber,
       error: err,
     });
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_to_irs_error',
-      },
-      userId: authorizedUser?.userId || '',
-    });
+    if (err.message === PETITION_DUPLICATE_ERROR) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_duplicate_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    } else {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    }
   }
 };
 

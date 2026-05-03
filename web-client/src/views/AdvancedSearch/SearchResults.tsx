@@ -3,6 +3,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { WarningNotificationComponent } from '../WarningNotification';
+import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,15 +11,10 @@ import React from 'react';
 
 export const SearchResults = connect(
   {
-    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedSearchHelper: state.advancedSearchHelper,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  function SearchResults({
-    advancedSearchHelper,
-    MAX_SEARCH_RESULTS,
-    showMoreResultsSequence,
-  }) {
+  function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
@@ -28,7 +24,7 @@ export const SearchResults = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message: 'Narrow your search by adding search terms.',
-                    title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
+                    title: `Displaying the first ${MAX_CASE_SEARCH_RESULTS} matches of your search.`,
                   }}
                   dismissible={false}
                   messageNotBold={true}

@@ -39,7 +39,7 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner(
-  irsPractitionerUser:string = 'irsPractitioner@example.com',
+  irsPractitionerUser: string = 'irsPractitioner@example.com',
 ) {
   login({ email: irsPractitionerUser });
   cy.get('[data-testid="advanced-search-link"]').should('exist');
@@ -108,6 +108,11 @@ export function loginAsColvin() {
   cy.get('h1:contains("Trial Sessions")').should('exist');
 }
 
+export function loginAsBuch() {
+  login({ email: 'judgebuch@example.com' });
+  cy.get('h1:contains("Trial Sessions")').should('exist');
+}
+
 export function loginAsColvinChambers() {
   login({ email: 'colvinschambers@example.com' });
   cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
@@ -128,6 +133,13 @@ export function loginAsTrialClerk() {
   cy.get('[data-testid="trial-session-link"]').should('exist');
 }
 
+export function loginAsPractitionerWithManyCases(email: string) {
+  login({ email });
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
 // Try to use the above account specific logins as they wait for specific content.
 function login({ email }: { email: string }) {
   cy.clearAllCookies();
@@ -137,9 +149,10 @@ function login({ email }: { email: string }) {
     getCypressEnv().defaultAccountPass,
   );
   cy.get('[data-testid="login-button"]').click();
-  cy.window().then(win =>
-    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
-  );
+  cy.window().then(win => {
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true');
+    win.localStorage.setItem('__cypressMinuteSheetInSameTab', 'true');
+  });
   cy.get('.ustc-account').should('exist');
   mockDynamsoftLibrary();
 }

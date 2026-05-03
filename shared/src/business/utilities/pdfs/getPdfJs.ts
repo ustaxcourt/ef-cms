@@ -20,13 +20,19 @@ Both web-api/terraform/modules/lambda/esbuildLambda.mjs and ./esbuildHelper.mjs 
 type PDFJSModule = typeof import('pdfjs-dist/legacy/build/pdf.mjs');
 export async function getPdfJs(): Promise<PDFJSModule> {
   try {
+    if (typeof DOMMatrix === 'undefined') {
+      const DOMMatrixPolyfill = require('@thednp/dommatrix');
+      (global as any).DOMMatrix =
+        DOMMatrixPolyfill.default || DOMMatrixPolyfill;
+    }
     const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
     pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
 
     return pdfJs;
   } catch (error) {
-    if (!clientSupportsES2022()) { // If we end up here the browser cannot even import pdfjs-dist
+    if (!clientSupportsES2022()) {
+      // If we end up here the browser cannot even import pdfjs-dist
       console.error(
         'Client does not support ES2022 features required by pdfjs-dist. Please update your browser.',
       );

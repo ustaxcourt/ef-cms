@@ -65,9 +65,10 @@ export type TCaseOrder = {
   calendarNotes?: string;
   disposition?: string;
   docketNumber: string;
-  isManuallyAdded?: boolean;
-  removedFromTrial?: boolean;
+  isManuallyAdded: boolean;
+  removedFromTrial: boolean;
   removedFromTrialDate?: string;
+  isHearing: boolean;
 };
 
 export class TrialSession extends JoiValidationEntity {
@@ -80,8 +81,8 @@ export class TrialSession extends JoiValidationEntity {
   public courthouseName?: string;
   public courtReporter?: string;
   public createdAt?: string;
-  public dismissedAlertForNOTT?: boolean;
-  public hasNOTTBeenServed: boolean;
+  public dismissedAlertForNott?: boolean;
+  public hasNottBeenServed: boolean;
   public estimatedEndDate?: string;
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
@@ -141,6 +142,7 @@ export class TrialSession extends JoiValidationEntity {
       calendarNotes: caseOrder.calendarNotes,
       disposition: caseOrder.disposition,
       docketNumber: caseOrder.docketNumber,
+      isHearing: caseOrder.isHearing,
       isManuallyAdded: caseOrder.isManuallyAdded,
       removedFromTrial: caseOrder.removedFromTrial,
       removedFromTrialDate: caseOrder.removedFromTrialDate,
@@ -150,7 +152,7 @@ export class TrialSession extends JoiValidationEntity {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
-    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
+    this.dismissedAlertForNott = rawSession.dismissedAlertForNott || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
@@ -163,7 +165,7 @@ export class TrialSession extends JoiValidationEntity {
     this.noticeIssuedDate = rawSession.noticeIssuedDate;
     this.password = rawSession.password;
     this.postalCode = rawSession.postalCode;
-    this.hasNOTTBeenServed = rawSession.hasNOTTBeenServed || false;
+    this.hasNottBeenServed = rawSession.hasNottBeenServed || false;
     this.sessionScope =
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
@@ -253,7 +255,7 @@ export class TrialSession extends JoiValidationEntity {
         .allow('')
         .optional(),
       createdAt: JoiValidationConstants.ISO_DATE.optional(),
-      dismissedAlertForNOTT: joi.boolean().optional(),
+      dismissedAlertForNott: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
       estimatedEndDate: joi
@@ -268,9 +270,9 @@ export class TrialSession extends JoiValidationEntity {
           '*': 'Enter a valid estimated end date',
           'date.max': 'Enter a valid estimated end date',
         }),
-      hasNOTTBeenServed: joi.boolean().required(),
+      hasNottBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
-        JoiValidationConstants.STRING.max(100).optional(),
+        JoiValidationConstants.STRING.max(300).optional(),
       irsCalendarAdministratorInfo: joi
         .object(IrsCalendarAdministratorInfo.VALIDATIONS)
         .optional(),
@@ -290,7 +292,7 @@ export class TrialSession extends JoiValidationEntity {
         })
         .messages({ '*': 'Enter a valid number of maximum cases' }),
       meetingId: stringRequiredForRemoteProceedings,
-      notes: JoiValidationConstants.STRING.max(400).optional(),
+      notes: JoiValidationConstants.STRING.max(450).optional(),
       noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
       paperServicePdfs: joi
         .array()
@@ -434,26 +436,40 @@ export class TrialSession extends JoiValidationEntity {
   addCaseToCalendar(caseEntity) {
     const { docketNumber } = caseEntity;
 
-    const caseExists = (this.caseOrder || []).find(
+    let caseOrderObject = (this.caseOrder || []).find(
       _caseOrder => _caseOrder.docketNumber === docketNumber,
     );
 
-    if (!caseExists) {
-      this.caseOrder.push({ docketNumber });
+    if (!caseOrderObject) {
+      caseOrderObject = {
+        docketNumber,
+        isManuallyAdded: false,
+        removedFromTrial: false,
+        isHearing: false,
+        addedToSessionAt: createISODateString(),
+      };
+      this.caseOrder.push(caseOrderObject);
     }
 
-    return this;
+    return caseOrderObject;
   }
 
-  manuallyAddCaseToCalendar({ calendarNotes, caseEntity }) {
+  manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing,
+  }): TCaseOrder {
     const { docketNumber } = caseEntity;
-    this.caseOrder.push({
+    const caseOrderObject = {
       addedToSessionAt: createISODateString(),
       calendarNotes,
       docketNumber,
       isManuallyAdded: true,
-    });
-    return this;
+      removedFromTrial: false,
+      isHearing,
+    };
+    this.caseOrder.push(caseOrderObject);
+    return caseOrderObject;
   }
 
   isCaseAlreadyCalendared(caseEntity) {
@@ -487,20 +503,21 @@ export class TrialSession extends JoiValidationEntity {
       this.sessionStatus = SESSION_STATUS_GROUPS.closed;
     }
 
-    return this;
+    return caseToUpdate;
   }
 
   /**
    * removes the case totally from the trial session
    */
-  deleteCaseFromCalendar({ docketNumber }) {
+  deleteCaseFromCalendar({ docketNumber }): TCaseOrder | undefined {
     const index = (this.caseOrder || []).findIndex(
       trialCase => trialCase.docketNumber === docketNumber,
     );
+    let caseOrderObject: TCaseOrder | undefined = undefined;
     if (index >= 0) {
-      this.caseOrder!.splice(index, 1);
+      caseOrderObject = this.caseOrder!.splice(index, 1)[0];
     }
-    return this;
+    return caseOrderObject;
   }
 
   /**

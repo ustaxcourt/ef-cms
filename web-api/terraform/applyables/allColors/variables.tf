@@ -29,7 +29,7 @@ variable "es_instance_count" {
 
 variable "es_instance_type" {
   type    = string
-  default = "t2.small.search"
+  default = "t3.small.search"
 }
 
 variable "es_volume_size" {
@@ -86,4 +86,13 @@ variable "restoring_aws_account_id" {
 
 variable "rum_sample_rate" {
   type = number
+}
+
+variable "rds_engine_version" {
+  type    = string
+  default = "15.4"
+}
+
+variable "es_engine_version" {
+  type = string
 }

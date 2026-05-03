@@ -2,6 +2,8 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   CountryTypes,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -20,7 +22,7 @@ export class ContactUpdated extends JoiValidationEntity {
   public country?: string;
   public countryType: CountryTypes;
   public email: string;
-  public paperPetitionEmail?: string;
+  public contactEmailAddress?: string;
   public inCareOf?: string;
   public name: string;
   public phone: string;
@@ -30,6 +32,8 @@ export class ContactUpdated extends JoiValidationEntity {
   public petitionType: string;
   public partyType: string;
   public hasConsentedToElectronicService?: boolean;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
   public secondaryName?: string;
   public title?: string;
 
@@ -48,7 +52,7 @@ export class ContactUpdated extends JoiValidationEntity {
     this.country = rawContact.country;
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
-    this.paperPetitionEmail = rawContact.paperPetitionEmail;
+    this.contactEmailAddress = rawContact.contactEmailAddress;
     this.inCareOf = rawContact.inCareOf;
     this.name = rawContact.name;
     this.phone = formatPhoneNumber(rawContact.phone);
@@ -59,6 +63,9 @@ export class ContactUpdated extends JoiValidationEntity {
     this.partyType = partyType;
     this.hasConsentedToElectronicService =
       rawContact.hasConsentedToElectronicService;
+    this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawContact.preferredCommunicationMethod?.trim() || undefined;
     this.secondaryName = rawContact.secondaryName;
     this.title = rawContact.title;
   }
@@ -76,7 +83,7 @@ export class ContactUpdated extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().messages({
+    contactEmailAddress: JoiValidationConstants.EMAIL.optional().messages({
       'string.email': 'Enter email address in format: yourname@example.com',
     }),
     phone: JoiValidationConstants.STRING.max(100)
@@ -93,6 +100,12 @@ export class ContactUpdated extends JoiValidationEntity {
         'Other',
       )
       .messages({ '*': 'Enter a place of legal residence' }),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

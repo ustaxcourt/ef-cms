@@ -1,11 +1,21 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const ObjectionsForm = connect(
+const props = cerebralProps as unknown as {
+  bind: string;
+  type: string;
+  validationBind: string;
+};
+
+export const ObjectionsForm: React.FC<{
+  bind: string;
+  type: string;
+  validationBind: string;
+}> = connect(
   {
     DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
     OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
@@ -25,6 +35,14 @@ export const ObjectionsForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
+  }: {
+    data: Record<string, any>;
+    DOCUMENT_RELATIONSHIPS: Record<string, any>;
+    OBJECTIONS_OPTIONS: string[];
+    type: string;
+    updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
+    validateExternalDocumentInformationSequence: Function | RunnableSequence;
+    validationData: Record<string, any>;
   }) {
     return (
       <>

@@ -3,7 +3,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
@@ -13,6 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
+import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
 export const DocketRecord = connect(
   {
@@ -61,7 +61,6 @@ export const DocketRecord = connect(
         <DocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
-
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -191,7 +190,6 @@ export const DocketRecord = connect(
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
-                        {' '}
                         {docketRecordHelper.showBatchDownloadControls && (
                           <td>
                             {entry.isSelectableForDownload && (
@@ -236,12 +234,16 @@ export const DocketRecord = connect(
                           {entry.eventCode}
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
-                          {entry.iconsToDisplay.map(iconInfo => (
-                            <FontAwesomeIcon
-                              key={iconInfo.icon}
-                              {...iconInfo}
-                            />
-                          ))}
+                          {entry.iconsToDisplay.map(
+                            ({ icon, className, title }, index) => (
+                              <WrappedIcon
+                                key={index}
+                                icon={icon}
+                                iconClass={className}
+                                title={title}
+                              />
+                            ),
+                          )}
                         </td>
                         <td
                           data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}
@@ -332,7 +334,6 @@ export const DocketRecord = connect(
             )}
           </div>
         </NonPhone>
-
         <Phone>
           <table className="usa-table usa-table--stacked-header usa-table--borderless">
             <thead>
@@ -373,7 +374,6 @@ export const DocketRecord = connect(
           {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
-
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
         {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
         {showModal == 'UnsealDocketEntryModal' && <UnsealDocketEntryModal />}

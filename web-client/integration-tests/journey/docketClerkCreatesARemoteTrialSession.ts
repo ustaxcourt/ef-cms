@@ -6,7 +6,13 @@ import {
 
 export const docketClerkCreatesARemoteTrialSession = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    maxCases?: number;
+    sessionType?: string;
+    trialLocation?: string;
+    trialClerk?: { name: string; userId: string };
+    judge?: { name: string; userId: string };
+  } = {},
 ) => {
   return it('Docket clerk starts a remote trial session', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
@@ -16,6 +22,7 @@ export const docketClerkCreatesARemoteTrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
+      estimatedEndDate: 'Enter a valid estimated end date',
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',
@@ -69,6 +76,7 @@ export const docketClerkCreatesARemoteTrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
+      estimatedEndDate: 'Enter a valid estimated end date',
       startDate: 'Enter a valid start date',
     });
 
@@ -77,19 +85,28 @@ export const docketClerkCreatesARemoteTrialSession = (
       {
         key: 'startDate',
         toFormat: FORMATS.ISO,
-        value: '12/12/2025',
+        value: '12/12/2099',
       },
     );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
-    expect(cerebralTest.getState('form.termYear')).toEqual('2025');
+    expect(cerebralTest.getState('form.termYear')).toEqual('2099');
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
     });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '12/15/2099',
+      },
+    );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 

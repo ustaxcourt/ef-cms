@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -116,24 +116,18 @@ export const TrialSessionsTable = connect(
                         >
                           <td>
                             {row.showAlertForNOTTReminder && (
-                              <FontAwesomeIcon
-                                className="fa-icon-blue margin-right-05"
+                              <WrappedIcon
+                                iconClass="fa-icon-blue margin-right-05"
                                 icon="clock"
                                 size="sm"
-                                title={row.alertMessageForNOTT}
-                              />
+                                title={row.alertMessageForNOTT} />
                             )}
                             {row.formattedStartDate}
                           </td>
                           <td>{row.formattedEstimatedEndDate}</td>
                           <td>
                             {row.swingSession && (
-                              <FontAwesomeIcon
-                                className="fa-icon-blue"
-                                icon="link"
-                                size="sm"
-                                title="swing session"
-                              />
+                              <WrappedIcon iconClass="fa-icon-blue" icon="link" size="sm" title="swing session" />
                             )}
                           </td>
                           <td>
@@ -171,7 +165,6 @@ export const TrialSessionsTable = connect(
           <p>There are no trial sessions for the selected filters.</p>
         )}
         <div className="padding-1" />
-
         <Paginator
           currentPageIndex={trialSessionsPage.filters.pageNumber}
           totalPages={trialSessionsHelper.totalPages}

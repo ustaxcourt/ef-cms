@@ -63,6 +63,7 @@ import {
   isDateWithinGivenInterval,
   isStringISOFormatted,
   isValidDateString,
+  isValidPastDate,
   prepareDateFromString,
   validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
@@ -141,6 +142,7 @@ import { generateDocumentIds } from '../../shared/src/business/useCases/generate
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
+import { generateNoticeOfWithdrawalPdfInteractor } from '@shared/proxies/documents/generateNoticeOfWithdrawalPdfProxy';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePetitionPdfInteractor } from '@shared/proxies/generatePetitionPdfProxy';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
@@ -331,6 +333,8 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validateCaseForNewMinuteSheetInteractor } from '../../shared/src/proxies/trialSessionMinutes/validateCaseForNewMinuteSheetProxy';
+import { getUnscheduledMinuteSheetsInteractor } from '../../shared/src/proxies/trialSessionMinutes/getUnscheduledMinuteSheetsProxy';
 import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
@@ -419,6 +423,7 @@ const allUseCases = {
   generateDocumentIds,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
+  generateNoticeOfWithdrawalPdfInteractor,
   generatePDFFromJPGDataInteractor,
   generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
@@ -581,6 +586,8 @@ const allUseCases = {
   validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
+  validateCaseForNewMinuteSheetInteractor,
+  getUnscheduledMinuteSheetsInteractor,
   validatePenaltiesInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
@@ -742,6 +749,7 @@ const applicationContext = {
       isStringISOFormatted,
       isUserPartOfGroup,
       isValidDateString,
+      isValidPastDate,
       openUrlInNewTab,
       prepareDateFromString,
       replaceBracketed,

@@ -11,6 +11,8 @@ import livereload from 'livereload';
 import postcss from 'postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import resolve from 'esbuild-plugin-resolve';
+import tailwindcssPlugin from '@tailwindcss/postcss';
+import fs from 'fs';
 
 const watch = !!process.env.WATCH;
 
@@ -23,7 +25,6 @@ const env = {
   CIRCLE_SHA1: process.env.CIRCLE_SHA1,
   COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
   COGNITO_SUFFIX: process.env.COGNITO_SUFFIX,
-  DYNAMODB_TABLE_NAME: process.env.DYNAMODB_TABLE_NAME,
   EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
   ENV: process.env.ENV,
   FILE_UPLOAD_MODAL_TIMEOUT: process.env.FILE_UPLOAD_MODAL_TIMEOUT,
@@ -56,6 +57,7 @@ export default async function ({
     server = livereload.createServer({ port: reloadServerPort });
   }
   const sassMap = new Map();
+  const cssMap = new Map();
   const buildOptions = {
     bundle: true,
     define: {
@@ -90,6 +92,32 @@ export default async function ({
         crypto: 'crypto-browserify',
         stream: 'stream-browserify',
       }),
+      {
+        name: 'postcss-tailwind',
+        setup(build) {
+          // Watch for changes in TSX/TS/JS files and invalidate CSS cache
+          build.onLoad({ filter: /\.(tsx|ts|js|jsx)$/ }, async args => {
+            // Invalidate CSS cache when TSX/TS/JS files change
+            cssMap.clear();
+            return null; // Let esbuild handle these files normally
+          });
+
+          build.onLoad({ filter: /\.css$/ }, async args => {
+            const source = await fs.promises.readFile(args.path, 'utf8');
+            let value = cssMap.get(args.path);
+            if (!value || value.source !== source) {
+              const { css } = await postcss([
+                tailwindcssPlugin(),
+                autoprefixer,
+                postcssPresetEnv({ stage: 0 }),
+              ]).process(source, { from: args.path });
+              value = { css, source };
+              cssMap.set(args.path, value);
+            }
+            return { contents: value.css, loader: 'css' };
+          });
+        },
+      },
       sassPlugin({
         loadPaths: [
           './node_modules/@uswds',
@@ -173,7 +201,8 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    sourcemap: process.env.USTC_ENV !== 'prod' ? 'inline' : false,
+    sourcesContent: process.env.ENV !== 'local',
     splitting: true,
   };
 

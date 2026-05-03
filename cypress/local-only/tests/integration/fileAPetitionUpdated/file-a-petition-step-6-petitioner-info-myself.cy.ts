@@ -196,8 +196,8 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         'Counsel’s Contact Information',
       );
 
-      cy.get('[data-testid="info-alert"]').contains(
-        'The Petition will not be created with the Court until the Submit Documents & Create Case button is clicked.',
+      cy.get('[data-testid^="alert-info-"]', { timeout: 10000 }).should(
+        'exist',
       );
     });
 

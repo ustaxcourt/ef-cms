@@ -1,7 +1,7 @@
-/* eslint-disable custom-rules-plugin/no-new-dates */
 import { cloneDeep, get } from 'lodash';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const expressLogger = (req, res, next) => {
   const logger = getDawsonLogger();
@@ -35,14 +35,15 @@ export const expressLogger = (req, res, next) => {
 
   req.locals = req.locals || {};
   req.locals.logger = logger;
-  req.locals.startTime = new Date();
+  req.locals.startTime = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
 
   const { end } = res;
 
   res.end = function () {
     // eslint-disable-next-line prefer-rest-params
     end.apply(this, arguments);
-    const responseTimeMs = new Date() - req.locals.startTime;
+    const nowMillis = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+    const responseTimeMs = nowMillis - req.locals.startTime;
 
     logger.addContext({
       response: {

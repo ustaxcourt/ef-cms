@@ -1,6 +1,6 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
 import { NewDocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
@@ -29,6 +29,7 @@ export function toKyselyNewDocketEntry(
     docketNumbers: docketEntry.docketNumbers ?? null,
     documentContentsId: docketEntry.documentContentsId ?? null,
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
+    documentStorageId: docketEntry.documentStorageId,
     documentTitle: docketEntry.documentTitle,
     documentType: docketEntry.documentType ?? null,
     draftOrderState: docketEntry.draftOrderState
@@ -148,8 +149,10 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value?.toISOString(),
   } as const;
 
+  const keyRenameMap = {} as const;
+
   return new DatabaseToAppCodeMapper({
-    keyRenameMap: {},
+    keyRenameMap,
     transformMap,
   }).transform(record);
 }

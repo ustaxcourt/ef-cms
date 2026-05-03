@@ -1,22 +1,24 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { dismissNOTTReminderForTrialInteractor } from './dismissNOTTReminderForTrialInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { updateTrialSession as updateTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('dismissNOTTReminderForTrialInteractor', () => {
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REGULAR);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REGULAR);
   });
 
   it('should throw an error when the user is unauthorized to dismiss NOTT alerts', async () => {
     await expect(
       dismissNOTTReminderForTrialInteractor(
-        applicationContext,
         {
           trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
         },
@@ -27,7 +29,6 @@ describe('dismissNOTTReminderForTrialInteractor', () => {
 
   it('should update the trial session with a flag indicating that the NOTT filing reminder has been dismissed', async () => {
     await dismissNOTTReminderForTrialInteractor(
-      applicationContext,
       {
         trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
       },
@@ -35,10 +36,10 @@ describe('dismissNOTTReminderForTrialInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      dismissedAlertForNOTT: true,
+      dismissedAlertForNott: true,
       trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
     });
   });

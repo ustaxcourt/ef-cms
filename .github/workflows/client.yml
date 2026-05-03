@@ -2,6 +2,16 @@ name: Node.js CI - Client Unit Tests
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   Client:
@@ -15,15 +25,26 @@ jobs:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Install Node Dependencies
+      - name: Restore Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Node Dependencies - Cache Miss Install
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
       - name: Test Client Unit
         run: |
@@ -34,23 +55,32 @@ jobs:
           mkdir -p coverage
           cp web-client/coverage/${{ matrix.ci_node_index }}/lcov.info coverage/lcov-${{ matrix.ci_node_index }}.info
           cp web-client/coverage/${{ matrix.ci_node_index }}/coverage-final.json coverage/coverage-${{ matrix.ci_node_index }}.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: coverage-artifacts-${{ matrix.ci_node_index }}
           path: coverage
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
   check-coverage:
     runs-on: ubuntu-latest
     needs: [Client]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v7
         with:
           pattern: coverage-artifacts-*
           merge-multiple: true
           path: coverage
       - name: Process Coverage
         run: npx nyc report --check-coverage --branches 90 --functions 90 --lines 90 --statements 90 --reporter lcov --reporter text --reporter clover -t coverage
-      - uses: geekyeggo/delete-artifact@v1
+      - uses: geekyeggo/delete-artifact@v5
         with:
           name: coverage-artifacts
           failOnError: false

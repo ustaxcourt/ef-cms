@@ -1,5 +1,5 @@
 import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { practitionerDocumentEntity } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
 
 export const getPractitionerDocumentByFileId = async ({
@@ -9,8 +9,6 @@ export const getPractitionerDocumentByFileId = async ({
   barNumber: string;
   fileId: string;
 }): Promise<RawPractitionerDocument> => {
-  barNumber = barNumber.toLowerCase();
-
   const practitionerDocument = await getDbReader(reader =>
     reader
       .selectFrom('dwPractitionerDocuments as p')

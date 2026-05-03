@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 export const getDocketEntriesByDocketNumber = async ({
@@ -6,13 +6,9 @@ export const getDocketEntriesByDocketNumber = async ({
 }: {
   docketNumber: string;
 }): Promise<RawDocketEntry[]> => {
-  const dbDocketEntries = await getDbReader(reader =>
-    reader
-      .selectFrom('dwDocketEntry')
-      .where('docketNumber', '=', docketNumber)
-      .selectAll()
-      .execute(),
-  );
+  const dbDocketEntries = await (
+    await docketEntriesBaseQuery({ docketNumbers: [docketNumber] })
+  ).execute();
 
   return dbDocketEntries.map(d => fromKyselyDocketEntry(d));
 };

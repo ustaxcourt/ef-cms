@@ -152,6 +152,28 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if the user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockIrsPractitionerUser.userId}`,
+    );
+  });
+
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
       fileExternalDocumentInteractor(
@@ -179,7 +201,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    const updatedCase = await fileExternalDocumentInteractor(
+    const result = await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -194,13 +216,20 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
+    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const entry = savedCase.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
@@ -282,7 +311,7 @@ describe('fileExternalDocumentInteractor', () => {
       consolidatedCase as any,
     ]);
 
-    const updatedCase = await fileExternalDocumentInteractor(
+    const result = await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -307,6 +336,7 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
+    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
@@ -314,11 +344,17 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const entry = savedCase.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
-    const updatedCase = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -362,38 +398,43 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries).toMatchObject([
-      {}, // first 4 docs were already on the case
-      {},
-      {},
-      {},
-      {
-        eventCode: 'M115',
-        isOnDocketRecord: true,
-        // primary document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'CIVP',
-        isOnDocketRecord: true,
-        // supporting document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'M121', //secondary document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-      {
-        eventCode: 'M135', // secondary supporting document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-    ]);
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(savedCase.docketEntries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({
+          eventCode: 'M115',
+          isOnDocketRecord: true,
+          // primary document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'CIVP',
+          isOnDocketRecord: true,
+          // supporting document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'M121', //secondary document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+        expect.objectContaining({
+          eventCode: 'M135', // secondary supporting document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+      ]),
+    );
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
-    const updatedCase = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -414,7 +455,13 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const entry = savedCase.docketEntries.find(
+      de => de.documentType === 'Simultaneous Memoranda of Law',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeUndefined();
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {

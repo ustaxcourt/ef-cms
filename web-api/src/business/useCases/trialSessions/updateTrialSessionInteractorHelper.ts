@@ -12,15 +12,18 @@ import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
   authorizedUser: AuthUser;
+  includeHearings?: boolean;
 };
 
 export async function getCasesInTrialSession({
   trialSession,
   authorizedUser,
+  includeHearings = false,
 }: GetCasesInTrialSessionParams): Promise<{
   calendaredCaseEntities: Case[];
   casesThatShouldReceiveNotices: Case[];
@@ -35,7 +38,10 @@ export async function getCasesInTrialSession({
 
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
-    .filter(aCase => aCase.trialSessionId === trialSession.trialSessionId);
+    .filter(
+      aCase =>
+        includeHearings || aCase.trialSessionId === trialSession.trialSessionId,
+    );
 
   return { calendaredCaseEntities, casesThatShouldReceiveNotices };
 }
@@ -47,6 +53,7 @@ type UpdateCasesAndSetNoticeOfChangeParams = {
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
 };
@@ -59,13 +66,14 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const { calendaredCaseEntities, casesThatShouldReceiveNotices } =
-    await getCasesInTrialSession({
-      trialSession: currentTrialSession,
-      authorizedUser,
-    });
+  const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
+    trialSession: currentTrialSession,
+    includeHearings: true,
+    authorizedUser,
+  });
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -129,7 +137,26 @@ export const updateCasesAndSetNoticeOfChange = async ({
         );
     }
 
-    caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    if (shouldSetNoticeOfTrialSessionStartDateChange) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialStartDate(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+            previousTrialSession: currentTrialSession,
+          },
+          authorizedUser,
+        );
+    }
+
+    if (
+      caseEntity.trialSessionId === updatedTrialSessionEntity.trialSessionId
+    ) {
+      caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    }
 
     await updateCaseAndAssociations({
       authorizedUser,
@@ -144,33 +171,15 @@ export const updateCasesAndSetNoticeOfChange = async ({
     .getUtilities()
     .combineAllPdfDocuments(applicationContext, casePdfDocuments);
 
-  const updatedHearingPromises = calendaredCaseEntities.map(async aCase => {
-    const matchingHearing = aCase.hearings.find(
-      hearing =>
-        hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
-    );
-
-    if (matchingHearing) {
-      await applicationContext.getPersistenceGateway().updateCaseHearing({
-        applicationContext,
-        docketNumber: aCase.docketNumber,
-        hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-      });
-    }
-  });
-
-  await settlePromises(updatedHearingPromises);
   return paperServicePdfsCombined;
 };
 
 type CreateWorkingCopyForNewUserOnSessionParams = {
-  applicationContext: ServerApplicationContext;
   trialSessionId: string | undefined;
   userId: string | undefined;
 };
 
 export const createWorkingCopyForNewUserOnSession = async ({
-  applicationContext,
   trialSessionId,
   userId,
 }: CreateWorkingCopyForNewUserOnSessionParams) => {
@@ -179,14 +188,11 @@ export const createWorkingCopyForNewUserOnSession = async ({
     userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .createTrialSessionWorkingCopy({
-      applicationContext,
-      trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-        .validate()
-        .toRawObject(),
-    });
+  await createTrialSessionWorkingCopy({
+    trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+      .validate()
+      .toRawObject(),
+  });
 };
 
 export const getPaperServicePdfName = ({
@@ -194,11 +200,13 @@ export const getPaperServicePdfName = ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
 }: {
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
 }): string => {
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     return 'Notice of Change of Trial Judge';
@@ -208,6 +216,8 @@ export const getPaperServicePdfName = ({
     return 'Notice of Change to Remote Proceeding';
   } else if (shouldSetNoticeOfTrialSessionLocationChange) {
     return 'Notice of Change of Trial Location';
+  } else if (shouldSetNoticeOfTrialSessionStartDateChange) {
+    return 'Notice of Change of Trial Date';
   } else {
     return 'Notice of Change';
   }
@@ -258,10 +268,10 @@ export function shouldCreateWorkingCopyForNewJudge(
   return Boolean(
     (!get(currentTrialSession, 'judge.userId') &&
       get(updatedTrialSessionEntity, 'judge.userId')) ||
-      (currentTrialSession.judge &&
-        updatedTrialSessionEntity.judge &&
-        currentTrialSession.judge.userId !==
-          updatedTrialSessionEntity.judge.userId),
+    (currentTrialSession.judge &&
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId),
   );
 }
 
@@ -272,9 +282,9 @@ export function shouldCreateWorkingCopyForNewTrialClerk(
   return Boolean(
     (!get(currentTrialSession, 'trialClerk.userId') &&
       get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
-      (currentTrialSession.trialClerk &&
-        updatedTrialSessionEntity.trialClerk &&
-        currentTrialSession.trialClerk.userId !==
-          updatedTrialSessionEntity.trialClerk.userId),
+    (currentTrialSession.trialClerk &&
+      updatedTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        updatedTrialSessionEntity.trialClerk.userId),
   );
 }

@@ -62,7 +62,7 @@ export const formattedTrialSessionDetails = (
     formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
   showAlertForNOTTReminder =
-    !formattedTrialSession.dismissedAlertForNOTT &&
+    !formattedTrialSession.dismissedAlertForNott &&
     TrialSession.isStartDateWithinNOTTReminderRange({
       isCalendared: formattedTrialSession.isCalendared,
       startDate: formattedTrialSession.startDate,

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   PROCEDURE_TYPES_MAP,
@@ -14,9 +15,8 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getBlockedCasesCount as getBlockedCasesCountMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
 import { getEligibleCasesCount as getEligibleCasesCountMock } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
-
-const getBlockedCasesCount = jest.mocked(getBlockedCasesCountMock);
-const getEligibleCasesCount = jest.mocked(getEligibleCasesCountMock);
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -133,14 +133,16 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
     } as RawTrialSession,
   ];
 
+  const getBlockedCasesCount = jest.mocked(getBlockedCasesCountMock);
+  const getEligibleCasesCount = jest.mocked(getEligibleCasesCountMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const getTrialSessions = jest.mocked(getTrialSessionsMock);
   const BLOCKED_CASES_COUNT_MOCK = 3;
   const REGULAR_ELIGIBLE_CASES_COUNT = 2;
   const SMALL_ELIGIBLE_CASES_COUNT = 1;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue(ALL_TRIAL_SESSIONS_MOCK);
+    getTrialSessions.mockResolvedValue(ALL_TRIAL_SESSIONS_MOCK);
 
     getEligibleCasesCount.mockImplementation(({ procedureType }) => {
       if (procedureType === PROCEDURE_TYPES_MAP.regular) {
@@ -154,9 +156,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({});
+    getTrialSessionById.mockResolvedValue(undefined);
 
     await expect(
       getTrialSessionPlanningReportDataInteractor(

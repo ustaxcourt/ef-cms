@@ -1,19 +1,23 @@
 # PR (Pull Request) Workflow
 
-Let's say you've been assigned to work on a bug or story... where do you branch from and to where to you create a PR?  Our current process of maintaining Dawson involves dealing with two separate forks of the repository.  Knowing where from where to base branches when working on bugs and stories can get confusing.  This part of the documentation is to help clarify the exact process a developer should follow if assigned to an issue.
+Let's say you've been assigned to work on a bug or story... where do you branch from and to where to you create a PR?  Our current process of maintaining Dawson involves dealing with two separate forks of the repository.  Knowing from where to base branches when working on bugs and stories can get confusing.  This part of the documentation is to help clarify the exact process a developer should follow if assigned to an issue.
 
 ## Branches of Interest
 
-Since we mentioned we work from two forks of the repo, it is useful to understand the main branches we typically use to develop on this project.  A majority of Flexion developers will work off of the Flexion fork, but we often need to get work merged into the Court's repo.  Take note of the following branches:
+Since we mentioned we work from two forks of the repo, it is useful to understand the main branches we typically use to develop on this project.  A majority of Gunnison developers will work off of feature branches based off of court/staging fork, but we often need to new features in court/test or one of the court experimental branches. Take note of the following branches:
 
-### Flexion Fork Branches
+### USTC Experimental Branches
 
-- `flexion/develop`
-- `flexion/experimental1` (for deploying to a test environment)
-- `flexion/experimental2` (for deploying to a test environment)
-- `flexion/experimental3` (for deploying to a test environment)
-- `flexion/experimental4` (for deploying to a test environment)
-- `flexion/experimental5` (for deploying to a test environment)
+- `court/experimental1` (for deploying to a experimental test environment)
+- `court/experimental2` (for deploying to a experimental test environment)
+- `court/experimental3` (for deploying to a experimental test environment)
+- `court/experimental4` (for deploying to a experimental test environment)
+- `court/experimental5` (for deploying to a experimental test environment)
+- `court/experimental6` (for deploying to a experimental test environment)
+- `court/experimental7` (for deploying to a experimental test environment)
+- `court/experimental8` (for deploying to a experimental test environment)
+- `court/experimental9` (for deploying to a experimental test environment)
+
 
 You will occasionally push your changes to an experimental branch to verify if major devops or AWS work is required.
 
@@ -25,7 +29,7 @@ We need to interact with the US Tax Court fork often.  Take note of the followin
 - `court/staging` (kept up to date with `court/prod`, but also a staging environment for the upcoming deploy; our second PR merges into this after testing is complete; any new work branches off this branch)
 - `court/prod` (the current version which is running on production)
 
-If you are at Flexion, you will never need to touch `court/prod`.
+If you are at Gunnison, you will never need to touch `court/prod`.
 
 ?> Changes are committed to the `court/staging` branch which requires us to back merge changes into our in-progress branches so we are up-to-date.
 
@@ -40,25 +44,25 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 - PO = Product Owner.
 - PS = Product Specialist.
 
-### Flexion Developer
+### Gunnison Developer
 
-1. Branch from `court/staging` into a branch in the Flexion fork.  Name the branch off the work you are working on (a story, a bug, a devex/opex item, etc.).
+1. Branch from `court/staging` into a separate feature-branch.  Name the branch off the work you are working on (a story, a bug, a devex/opex item, etc.).
    1. If work item is simple enough, work directly on this new branch.
    2. If work item is more complex, you can choose to branch from the new branch and make sub-branches for the tasks.
 2. Work on the work item.
-   1. Feel free to push to the Flexion experimental branches as you go and do quick demos at stand-up.
+   1. Feel free to push to the Court experimental branches as you go and do quick demos at stand-up.
    2. While work is ongoing, other work may be merged into `court/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest.
 3. At some point, you presume the work is done.  The work needs to be reviewed by the Court and PRs created and merged.
    - This can be accomplished in two ways.
-     - Verification occurs in a Flexion environment.
+     - Verification occurs in an experimental environmental.
        1. Directly merge work to an experimental branch.
        2. Give the PO/PS a link to the environment that has your deployed work for PO/PS sign-off.
        3. Once verified by PO/PS, create the PR from your branch to `court/test`.  Close your PR and see below if there are merge conflicts between your feature branch and `court/test`.
-       4. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+       4. Ask for PR reviews.  Reviews can come from both Gunnison and the Court.
        5. Merge the PR.  Do not delete your feature branch.
      - Verification occurs in the `test` environment.
        1. Create the PR from your branch to `court/test`.  Close your PR and see below if there are merge conflicts between your feature branch and `court/test`.
-       2. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+       2. Ask for PR reviews.  Reviews can come from both Gunnison and the Court.
        3. Merge the PR.  Do not delete your feature branch.
        4. As mentioned under [Court Ops](#court-ops) below, tell the PO/PS that we're ready for review in the `test` environment.
    - _If_ merge conflicts exist between your feature branch and `court/test`.
@@ -72,7 +76,7 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 
 ### Court Developer
 
-1. Very similar to Flexion developer.  Branch from `court/staging`, but branch into the same USTC fork.
+1. Very similar to Gunnison developer.  Branch from `court/staging`, but branch into the same USTC fork.
 2. Rest of the steps are the same.
 
 ### Court Ops
@@ -81,7 +85,7 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 2. Tests after PRs are merged into `court/test`.
    1. PO/PS verifies the work in the `test` environment which has prod-like data.  This step can be skipped if the PO/PS is confident enough with their initial verification earlier.
    2. Merge work into `court/irs` for IRS environment verification.  This step can be skipped if no testing with IRS is necessary.
-   3. If tests fail, see step 4 above in the [Flexion Developer section](#flexion-developer).
+   3. If tests fail, see step 4 above in the [Gunnison Developer section](#gunnison-developer).
 3. Once a PR exists to `court/staging`, approve and merge the PR assuming it had already passed PO/PS review.
 4. We need to keep `court/test` up-to-date with the canonical code that is merged into `court/staging`.  From time to time `court/staging` must be merged into `court/test`.
 5. Once a deploy window opens, merge `court/staging` into `court/prod`.

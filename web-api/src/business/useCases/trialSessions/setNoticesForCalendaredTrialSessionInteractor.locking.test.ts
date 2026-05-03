@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -10,8 +11,21 @@ import {
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
+  RawCaseAndCaseOrder,
+} from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 
 const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+const getCalendaredCasesForTrialSession = jest.mocked(
+  getCalendaredCasesForTrialSessionMock,
+);
+const getTrialSessionNotificationProcessing = jest.mocked(
+  getTrialSessionNotificationProcessingMock,
+);
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -19,25 +33,19 @@ describe('determineEntitiesToLock', () => {
     MOCK_CASE,
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
-  ];
+  ] as unknown as RawCaseAndCaseOrder[];
   let mockParams;
 
   beforeEach(() => {
     mockParams = {
       trialSessionId,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+    getCalendaredCasesForTrialSession.mockResolvedValue(mockCases);
   });
 
   it('should lookup the docket numbers for the specified trial session', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
       trialSessionId,
     });
   });
@@ -60,35 +68,29 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     MOCK_CASE,
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
-  ];
+  ] as unknown as RawCaseAndCaseOrder[];
   const mockRequest = {
     clientConnectionId: '8916f743-a22d-4946-ab06-57ddcf386912',
     trialSessionId,
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockReturnValue({
-        unfinishedCases: 0,
-      });
+    getTrialSessionNotificationProcessing.mockResolvedValue({
+      unfinishedCases: 0,
+      status: 'complete',
+      trialSessionId,
+      caseStatuses: {},
+    });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+    getCalendaredCasesForTrialSession.mockResolvedValue(mockCases);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      });
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_REGULAR,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    });
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
   });
 
   describe('is locked', () => {

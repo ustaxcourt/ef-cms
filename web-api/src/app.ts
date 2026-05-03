@@ -85,7 +85,7 @@ import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
@@ -104,6 +104,7 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
+import { getUnscheduledMinuteSheetsLambda } from './lambdas/trialSessionMinutes/getUnscheduledMinuteSheetsLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -204,17 +205,38 @@ import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCas
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
+import qs from 'qs';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
 
-// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
-app.set('query parser', 'extended');
+// We explicitly use qs as our query parser: it was the default in express 4.x.,
+// but was no longer the default in express 5.x, so we need to explicitly set it
+// here. See https://github.com/ustaxcourt/ef-cms/pull/6020
+//
+// By default, qs limits arrays to a maximum of 20:
+//
+// > qs will also limit arrays to a maximum of 20 elements. Any array members
+// > with an index of 20 or greater will instead be converted to an object with
+// > the index as the key. This is needed to handle cases when someone sent,
+// > for example, a[999999999] and it will take significant time to iterate over
+// > this huge array. (https://www.npmjs.com/package/qs)
+//
+// Some API requests involve more than 20 query string parameters by necessity
+// due to the number of judges (for example, searching for all judges using
+// getPendingMotionDocketEntriesForCurrentJudgeInteractor). Here we set the
+// array length to 200 to prohibit DoS attacks, while at the same time
+// accommodating cases when we need to pass more than 20 items in an array as
+// query string parameters.
+app.set('query parser', str => qs.parse(str, { arrayLimit: 200 }));
 
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
@@ -285,6 +307,7 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(expressLogger);
 
 /**
@@ -389,7 +412,7 @@ app.use(expressLogger);
   );
   // POST
   app.post(
-    '/async/case-documents/:docketEntryId/append-pdf',
+    '/async/case-documents/:documentStorageId/append-pdf',
     lambdaWrapper(
       appendAmendedPetitionFormLambda,
       { isAsyncSync: true },
@@ -430,8 +453,12 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
@@ -647,6 +674,10 @@ app.use(expressLogger);
 {
   app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+  app.get(
+    '/cases/recent-filings',
+    lambdaWrapper(getRecentFilingsForUserLambda),
+  );
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
@@ -663,6 +694,10 @@ app.use(expressLogger);
   app.post(
     '/cases/:docketNumber/generate-entry-of-appearance',
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
   );
   app.post(
     '/cases/generate-petition',
@@ -904,6 +939,10 @@ app.delete(
  */
 {
   app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.get(
+    '/trial-sessions/minutes/unscheduled',
+    lambdaWrapper(getUnscheduledMinuteSheetsLambda),
+  );
   app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
@@ -960,6 +999,10 @@ app.delete(
   app.put(
     '/trial-sessions/:trialSessionId/set-calendar-note',
     lambdaWrapper(saveCalendarNoteLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/validate-case-for-minute-sheet',
+    lambdaWrapper(validateCaseForNewMinuteSheetLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',

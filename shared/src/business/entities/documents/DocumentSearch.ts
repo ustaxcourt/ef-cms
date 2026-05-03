@@ -78,24 +78,26 @@ export class DocumentSearch extends JoiValidationEntity {
         'The case title or petitioner name to filter the search results by',
       ),
       dateRange: JoiValidationConstants.STRING.allow('').optional(),
-      docketNumber: JoiValidationConstants.STRING.allow('').description(
-        'The docket number to filter the search results by',
-      ),
+      docketNumber: JoiValidationConstants.DOCKET_NUMBER_SEARCH.allow('')
+        .description('The docket number to filter the search results by')
+        .messages({
+          '*': 'Enter a valid docket number',
+        }),
       endDate: joi
         .alternatives()
         .conditional('startDate', {
           is: joi.exist().not(null),
-          otherwise: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-          )
+          otherwise: JoiValidationConstants.ISO_DATE.format([
+            ...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          ])
             .less(joi.ref('tomorrow'))
             .optional()
             .description(
               'The end date search filter is not required if there is no start date',
             ),
-          then: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-          )
+          then: JoiValidationConstants.ISO_DATE.format([
+            ...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          ])
             .less(joi.ref('tomorrow'))
             .min(joi.ref('startDate'))
             .optional()
@@ -127,9 +129,9 @@ export class DocumentSearch extends JoiValidationEntity {
         .conditional('dateRange', {
           is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           otherwise: joi.forbidden(),
-          then: JoiValidationConstants.ISO_DATE.format(
-            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-          )
+          then: JoiValidationConstants.ISO_DATE.format([
+            ...DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          ])
             .max('now')
             .required()
             .description(

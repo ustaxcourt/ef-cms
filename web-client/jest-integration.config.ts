@@ -1,24 +1,26 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
+
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-client-integration',
   clearMocks: true,
-  collectCoverage: false,
   globals: {
     File() {},
     FileReader: () => {},
     atob: x => x,
   },
   maxWorkers: 1, // because running integration tests are heavy and can interfere with one another, we are locking this to 1 worker
-  // testMatch: [
-  //   '**/web-client/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)',
-  //   '**/web-client/integration-tests-public/**/?(*.)+(spec|test).[jt]s?(x)',
-  // ], // Uncomment testMatch to run all integration tests in integration-tests + integration-tests-public
+  testMatch: [
+    '<rootDir>/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/integration-tests-public/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
+    ...pathsToModuleNameMapper(tsConfigPaths, {
+      prefix: '<rootDir>/../',
+    }),
     '^broadcast-channel$': '<rootDir>/jest.mock-broadcast-channel.ts',
   },
   testEnvironment: 'node',
@@ -26,8 +28,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!export-to-csv|@faker-js/faker)'],
-  verbose: false,
+  transformIgnorePatterns: [
+    '/node_modules/(?!(export-to-csv|@faker-js/faker|uuid)/)',
+  ],
   workerIdleMemoryLimit: '10%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
 

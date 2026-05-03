@@ -153,7 +153,7 @@ describe('trialSessionDetailsHelper', () => {
           permissions: { TRIAL_SESSION_QC_COMPLETE: true },
           trialSession: {
             ...MOCK_TRIAL_INPERSON,
-            hasNOTTBeenServed: true,
+            hasNottBeenServed: true,
           },
         },
       });
@@ -167,7 +167,7 @@ describe('trialSessionDetailsHelper', () => {
           permissions: { TRIAL_SESSION_QC_COMPLETE: true },
           trialSession: {
             ...MOCK_TRIAL_INPERSON,
-            hasNOTTBeenServed: false,
+            hasNottBeenServed: false,
           },
         },
       });
@@ -197,6 +197,30 @@ describe('trialSessionDetailsHelper', () => {
       });
 
       expect(showQcComplete).toEqual(false);
+    });
+  });
+
+  describe('showNewMinuteSheetButton', () => {
+    it('should be true when the current user has MANAGE_MINUTE_SHEET permission', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { MANAGE_MINUTE_SHEET: true },
+          trialSession: MOCK_TRIAL_INPERSON,
+        },
+      });
+
+      expect(result.showNewMinuteSheetButton).toEqual(true);
+    });
+
+    it('should be false when the current user does NOT have MANAGE_MINUTE_SHEET permission', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { MANAGE_MINUTE_SHEET: false },
+          trialSession: MOCK_TRIAL_INPERSON,
+        },
+      });
+
+      expect(result.showNewMinuteSheetButton).toEqual(false);
     });
   });
 

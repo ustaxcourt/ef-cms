@@ -1,7 +1,7 @@
+import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
-import { TrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
@@ -17,7 +17,7 @@ export const NoticeOfTrialIssued = ({
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  trialInfo: TrialInfoType;
+  trialInfo: FormattedTrialInfoType;
 }) => {
   return (
     <div id="notice-of-trial-pdf">
@@ -75,8 +75,8 @@ export const NoticeOfTrialIssued = ({
           <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
             www.zoomgov.com
           </a>{' '}
-          and click `Join a meeting` (blue box in the middle of the page). Enter
-          the Meeting ID and Passcode above when prompted.
+          and click &apos;Join&apos;. Enter the Meeting ID and Passcode above
+          when prompted.
         </p>
 
         <p>

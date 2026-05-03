@@ -1,3 +1,4 @@
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { get } from '../requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from '../requests';
 export const getTrialSessionDetailsInteractor = (
   applicationContext,
   { trialSessionId },
-) => {
+): Promise<RawTrialSession> => {
   return get({
     applicationContext,
     endpoint: `/trial-sessions/${trialSessionId}`,

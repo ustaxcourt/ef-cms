@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   PublicTrialSessionDetails,
   getPublicTrialSessionDetailsInteractor,
@@ -7,10 +8,16 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
   let mockTrial;
+
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
 
   const MOCK_TRIAL = {
     address1: '123 E Underwater',
@@ -33,13 +40,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
   beforeEach(() => {
     mockTrial = MOCK_TRIAL;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrial);
+    getTrialSessionById.mockResolvedValue(mockTrial);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockImplementation(() => []);
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
   });
 
   it('should get the relevant session details for public users', async () => {
@@ -56,12 +59,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       trialLocation: 'Birmingham, Alabama',
     };
 
-    const result = await getPublicTrialSessionDetailsInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
+    const result = await getPublicTrialSessionDetailsInteractor({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
     expect(result).toMatchObject(expectedPublicDetails);
   });
 });

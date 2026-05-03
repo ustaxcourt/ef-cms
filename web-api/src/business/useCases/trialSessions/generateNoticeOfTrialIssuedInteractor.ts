@@ -10,12 +10,17 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
-  formattedStartTime: string;
-  formattedJudge: string;
+  formattedStartTime?: string;
+  formattedJudge?: string;
+  trialLocationAndProceedingType?: string;
+  priorJudgeTitleWithFullName?: string;
+  updatedJudgeTitleWithFullName?: string;
+  caseProcedureType?: string;
 };
 
 export const generateNoticeOfTrialIssuedInteractor = async (
@@ -25,12 +30,9 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
 ): Promise<Uint8Array> => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -55,7 +57,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const { CLERK_OF_THE_COURT_CONFIGURATION } =

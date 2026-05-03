@@ -154,6 +154,7 @@ export function groupCases(
 }
 
 export type BlockedFormattedCase = {
+  remoteTrialGranted?: any;
   docketNumber: string;
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText?: string;

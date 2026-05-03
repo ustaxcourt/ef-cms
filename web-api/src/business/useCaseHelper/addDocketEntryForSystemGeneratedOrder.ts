@@ -71,6 +71,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
+      addedDocketNumbers: [],
       nameOfClerk,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
@@ -103,7 +104,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: combinedPdf,
-    pdfName: newDocketEntry.docketEntryId,
+    key: newDocketEntry.documentStorageId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();

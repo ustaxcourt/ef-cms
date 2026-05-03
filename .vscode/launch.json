@@ -2,61 +2,89 @@
   "version": "1.0.0",
   "configurations": [
     {
+      "name": "Debug Client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}/dist"
+    },
+    {
+      "name": "Debug Public (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5678",
+      "webRoot": "${workspaceFolder}/dist-public"
+    },
+    {
+      "name": "API",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:api"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Client",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:client"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Public",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:public"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
       "type": "node",
       "request": "launch",
-      "name": "Jest: unit test current file",
+      "name": "Jest: current file",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": [
         "${fileBasenameNoExtension}",
         "--config",
         "jest.config.ts",
-        "--maxWorkers",
-        "1"
+        "--runInBand"
       ],
-      "console": "integratedTerminal",
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-      }
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest: unit test current file (web-api config)",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "${fileBasenameNoExtension}",
-        "--config",
-        "web-api/jest-unit.config.ts",
-        "--maxWorkers",
-        "1"
-      ],
-      "console": "integratedTerminal",
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-      }
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest: integration test current file",
       "env": {
-        "STAGE": "local",
-        "CI": "false",
         "NO_SCANNER": "true",
         "AWS_ACCESS_KEY_ID": "S3RVER",
         "AWS_SECRET_ACCESS_KEY": "S3RVER",
         "FILE_UPLOAD_MODAL_TIMEOUT": "1"
       },
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "${fileBasenameNoExtension}",
-        "--config",
-        "web-client/jest-integration.config.ts"
-      ],
       "console": "integratedTerminal",
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest"
       }
+    },
+    {
+      "name": "API Docker",
+      "type": "node",
+      "request": "attach",
+      "port": 9231,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/home/app",
+      "skipFiles": ["<node_internals>/**"],
+      "restart": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "DAWSON local",
+      "configurations": ["API", "Client", "Public"]
+    },
+    {
+      "name": "DAWSON Docker",
+      "configurations": ["API Docker"],
+      "preLaunchTask": "Start Docker"
     }
   ]
 }

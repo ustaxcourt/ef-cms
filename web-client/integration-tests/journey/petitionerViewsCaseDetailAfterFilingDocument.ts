@@ -9,7 +9,10 @@ const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    documentCount?: number;
+    docketNumberSuffix?: string;
+  } = {},
 ) => {
   return it('petitioner views case detail after filing a document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -72,7 +75,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       entry => entry.documentType === 'Statement',
     );
 
-    expect(statement.showLinkToDocument).toBeTruthy();
+    expect(statement?.showLinkToDocument).toBeTruthy();
 
     expect(formattedDocketEntriesOnDocketRecord[1].eventCode).toEqual('RQT');
   });

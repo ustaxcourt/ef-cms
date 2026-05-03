@@ -165,6 +165,48 @@ describe('trialLocationHelper', () => {
     });
   });
 
+  it('should handle flattening list with consolidated cases', () => {
+    const mockEligibleCases = [
+      {
+        caseCaption:
+          'Test Petitioner v. Commissioner of Internal Revenue, Respondent',
+        docketNumber: '123-45',
+        docketNumberSuffix: 'L',
+        memberCases: [
+          {
+            caseCaption:
+              'Test Petitioner Partner v. Commissioner of Internal Revenue, Respondent',
+            docketNumber: '124-45',
+            docketNumberSuffix: 'P',
+          },
+        ],
+      },
+      {
+        caseCaption: 'Another Petitioner v. Comm.',
+        docketNumber: '678-90',
+        docketNumberSuffix: 'P',
+      },
+    ];
+
+    const result = runCompute(trialLocationHelper, {
+      state: {
+        trialLocationPage: {
+          blockedCasesPage: 0,
+          eligibleCases: mockEligibleCases,
+          eligibleCasesPage: 0,
+          location: '',
+        },
+        blockedCases: [],
+      },
+    });
+
+    expect(result.formattedEligibleCases.map(c => c.docketNumber)).toEqual([
+      '123-45',
+      '124-45',
+      '678-90',
+    ]);
+  });
+
   describe('isExportDisabled logic', () => {
     it('should set isExportDisabled to true if currentTab is "eligibleCases" and there are no eligible cases', () => {
       const { isExportDisabled } = runCompute(trialLocationHelper, {

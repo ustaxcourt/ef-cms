@@ -3,23 +3,33 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
+import { ContactEmailAddress } from '../StartCaseInternal/ContactEmailAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const ContactSecondary = connect(
+type ContactSecondaryProps = {
+  contactsHelper: Record<string, any>;
+  bind: string;
+  onBlur: Function;
+  onChange: string;
+  parentView: string;
+  wrapperClassName?: string;
+  useSameAsPrimary: boolean;
+};
+
+export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,
-    contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    parentView: props.parentView,
+    contactsHelper: props`contactsHelper`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChange: props`onChange`,
+    onChangeSequence: sequences[props`onChange`],
+    parentView: props `parentView`,
     toggleUseContactPrimaryAddressSequence:
       sequences.toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence:
@@ -40,6 +50,20 @@ export const ContactSecondary = connect(
     useSameAsPrimary,
     validationErrors,
     wrapperClassName,
+  }: {
+    bind: string;
+    constants: Record<string, any>;
+    contactsHelper: Record<string, any>;
+    data: Record<string, any>;
+    onBlur: () => void;
+    onChange: string;
+    onChangeSequence: Function | RunnableSequence;
+    parentView: string;
+    toggleUseContactPrimaryAddressSequence: Function | RunnableSequence;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
+    useSameAsPrimary: boolean;
+    validationErrors: Record<string, any>;
+    wrapperClassName?: string;
   }) {
     return (
       <>
@@ -54,7 +78,8 @@ export const ContactSecondary = connect(
           <FormGroup
             errorText={
               validationErrors.contactSecondary &&
-              validationErrors.contactSecondary.name
+              (validationErrors.contactSecondary as Record<string, any>)
+                .name
             }
           >
             <label className="usa-label" htmlFor="secondaryName">
@@ -107,7 +132,8 @@ export const ContactSecondary = connect(
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.inCareOf
+                (validationErrors.contactSecondary as Record<string, any>)
+                  .inCareOf
               }
             >
               <label className="usa-label" htmlFor="secondaryInCareOf">
@@ -168,27 +194,29 @@ export const ContactSecondary = connect(
             />
           )}
 
-          {(contactsHelper.showPaperPetitionEmailFieldAndConsentBox ||
-            contactsHelper.showSecondaryContactEmailFieldAndConsentBox) && (
-            <>
-              <PaperPetitionEmail
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-              <EConsent
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-            </>
+          {(contactsHelper.showContactEmailField ||
+            contactsHelper.showSecondaryContactEmailField) && (
+            <ContactEmailAddress
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
+          )}
+          {(contactsHelper.showEConsentCheckbox ||
+            contactsHelper.showSecondaryEConsentCheckbox) && (
+            <EConsent
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
           )}
 
           {contactsHelper.contactSecondary.displayPhone && (
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.phone
+                (validationErrors.contactSecondary as Record<string, any>)
+                  .phone
               }
             >
               <label className="usa-label" htmlFor="secondaryPhone">
