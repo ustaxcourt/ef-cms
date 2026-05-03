@@ -54,14 +54,56 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 - Two separate React apps share entities/use-cases: do not put browser-only code in `shared/`. Public-facing additions go to `appPublic.tsx` / `applicationContextPublic.ts` and the `public-api/` lambdas.
 - Three `applicationContext` implementations exist (web-api, web-client private, web-client public); when adding a context method, update all three to keep parity.
 - Interactor ordering: validate the entity (Joi via `JoiValidationEntity`) **before** invoking persistence — never persist first and validate after, and never reach a persistence gateway from an unvalidated entity.
-- Query generation: DAWSON uses Kysely for query generation. Database schema is defined in `web-api/src/persistence/postgres/database-schema.ts`.
+- Query generation: DAWSON uses Kysely for query generation.
 - Error handling: ensure that all errors always make their way to an end user if an end user initiated the action in the application.
 - `CHANGES.md`: any change that requires a manual deployment step (env-var, container bump, migration ordering, reindex, schema change) gets a new `<details><summary>…</summary>` block prepended to [`CHANGES.md`](CHANGES.md). Mirror the same notes in the PR description.
 - Postgres zero-downtime migrations: DAWSON utilizes blue/green deployments where the "active" environment remains running while the "passive" environment deploys. Migrations must never destructively modify tables or columns that the active color relies on. For destructive schema changes, use the expand/contract pattern.
 - Postgres schema artifacts: any new Kysely migration under [`web-api/src/persistence/postgres/utils/migrate/`](web-api/src/persistence/postgres/utils/migrate/) must be paired with updates to [`docs/postgres/schema/data-dictionary.csv`](docs/postgres/schema/data-dictionary.csv) (column-level documentation) and [`docs/postgres/schema/erd.mmd`](docs/postgres/schema/erd.mmd) (Mermaid ERD).
 - Local seeded users: the canonical fixture is [`web-api/storage/fixtures/seed/users.json`](web-api/storage/fixtures/seed/users.json), loaded into Cognito-local by [`.cognito/seedCognitoLocal.ts`](.cognito/seedCognitoLocal.ts) and re-exported for unit/integration tests via [`shared/src/test/mockUserTokenMap.ts`](shared/src/test/mockUserTokenMap.ts). Use these emails (paired with the `loginAs*` helpers in Cypress) to reproduce role-specific bugs in the local UI; do not invent test users.
 - Local sample documents/PDFs live under [`shared/test-assets/`](shared/test-assets/) and [`web-api/storage/fixtures/`](web-api/storage/fixtures/). For bugs that require a customer-supplied "afflicted" PDF that is not in-repo, request the asset from the operator before claiming a reproduction.
-- Path aliases come from [`tsconfig.json`](tsconfig.json) and are mapped into Jest via [`utils/load-tsconfig-paths.mjs`](utils/load-tsconfig-paths.mjs).
+
+### Sources of Truth
+
+- Repository
+  - Path aliases: [`tsconfig.json`](tsconfig.json), mapped into Jest via [`utils/load-tsconfig-paths.mjs`](utils/load-tsconfig-paths.mjs).
+- Roles & authorization
+  - Role enum: `ROLES` in [`shared/src/business/entities/EntityConstants.ts`](shared/src/business/entities/EntityConstants.ts).
+  - Role → permission matrix: [`shared/src/authorization/authorizationClientService.ts`](shared/src/authorization/authorizationClientService.ts).
+  - Cypress role login: [`cypress/helpers/authentication/login-as-helpers.ts`](cypress/helpers/authentication/login-as-helpers.ts) (`loginAs*`), backed by the seeded users in [`web-api/storage/fixtures/seed/users.json`](web-api/storage/fixtures/seed/users.json).
+- Routing & views
+  - Private route table: [`web-client/src/router.ts`](web-client/src/router.ts); public: [`web-client/src/routerPublic.ts`](web-client/src/routerPublic.ts).
+  - Sequence registry: [`web-client/src/presenter/presenter.ts`](web-client/src/presenter/presenter.ts) and [`web-client/src/presenter/presenter-public.ts`](web-client/src/presenter/presenter-public.ts).
+  - Cerebral state shape: [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts) — do not introduce top-level state paths without editing this file.
+  - Computeds / derived state: [`web-client/src/presenter/computeds/`](web-client/src/presenter/computeds/).
+- HTTP surface
+  - OpenAPI document (hand-maintained, single file): [`web-api/swagger.json`](web-api/swagger.json); formatting is validated by `npm run lint:swagger`.
+  - Lambda handlers live under [`web-api/src/lambdas/`](web-api/src/lambdas/) (`*Lambda.ts`, wrapped with `genericHandler`). Adding a *new* Lambda requires coordinated Terraform and routing changes — prefer extending an existing handler/interactor over introducing a new Lambda.
+- Data stores
+  - Postgres: schema in [`web-api/src/persistence/postgres/database-schema.ts`](web-api/src/persistence/postgres/database-schema.ts); migrations in [`web-api/src/persistence/postgres/utils/migrate/`](web-api/src/persistence/postgres/utils/migrate/); docs in [`docs/postgres/schema/data-dictionary.csv`](docs/postgres/schema/data-dictionary.csv) and [`docs/postgres/schema/erd.mmd`](docs/postgres/schema/erd.mmd).
+  - OpenSearch indices and analyzers: [`web-api/elasticsearch/`](web-api/elasticsearch/). Reindexes run automatically when mappings change (see [`.circleci/config.yml`](.circleci/config.yml)); no separate `CHANGES.md` callout is needed for the reindex itself.
+- Asynchronous work
+  - Purpose-specific queues: [`web-api/terraform/modules/api/sqs.tf`](web-api/terraform/modules/api/sqs.tf), [`web-api/terraform/modules/api/change-of-address.tf`](web-api/terraform/modules/api/change-of-address.tf), and [`web-api/terraform/modules/opensearch-sync/opensearch-sync.tf`](web-api/terraform/modules/opensearch-sync/opensearch-sync.tf).
+  - Worker queue: a single SQS queue dispatched by [`web-api/src/gateways/worker/workerRouter.ts`](web-api/src/gateways/worker/workerRouter.ts). Route new asynchronous work through this router rather than provisioning a new queue.
+- Configuration
+  - Feature flags: persisted in Postgres ([`web-api/src/persistence/postgres/featureFlag/schema.ts`](web-api/src/persistence/postgres/featureFlag/schema.ts)), cached per-runner on first read by [`web-api/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor.ts`](web-api/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor.ts), and pulled into client state at login by [`web-client/src/presenter/actions/getAllFeatureFlagsAction.ts`](web-client/src/presenter/actions/getAllFeatureFlagsAction.ts).
+- Domain constants
+  - Event (document filing) codes: `ALL_EVENT_CODES` in [`shared/src/business/entities/EntityConstants.ts`](shared/src/business/entities/EntityConstants.ts).
+  - Date/time handling: [`shared/src/business/utilities/DateHandler.ts`](shared/src/business/utilities/DateHandler.ts). An ESLint rule blocks direct imports of luxon/date-fns; use `DateHandler`.
+  - DAWSON has no i18n; user-facing copy is inline in the views.
+- Document generation
+  - Generators: [`shared/src/business/utilities/documentGenerators/`](shared/src/business/utilities/documentGenerators/). Visual-diff helper `generateAndVerifyPdfDiff` lives in the same directory; see neighboring `*.test.ts` files for usage.
+- Front-end primitives
+  - Two component libraries coexist: [`web-client/src/ustc-ui/`](web-client/src/ustc-ui/) (legacy) and [`web-client/src/dawson-ui/`](web-client/src/dawson-ui/) (newer, still maturing). Prefer either over hand-rolled markup; both are acceptable today.
+- Build & CI/CD
+  - Bundle entrypoints: [`esbuild.config.mjs`](esbuild.config.mjs) (private) and [`esbuild.public.config.mjs`](esbuild.public.config.mjs) (public). These enforce the "no browser-only code in `shared/`" rule at bundle time.
+  - CI/CD gates: All tests, except those which can only be performed on deployed environments, are run in GitHub Actions on all PRs to protected branches: [`.github/workflows/`](.github/workflows/).
+  - CI/CD: deployments are performed in CircleCI: [`.circleci/config.yml`](.circleci/config.yml).
+- Observability
+  - Server-side logger: Winston, configured in [`web-api/src/createLogger.ts`](web-api/src/createLogger.ts) and wrapped by [`web-api/src/utilities/logger/getDawsonLogger.ts`](web-api/src/utilities/logger/getDawsonLogger.ts). Use the wrapper; do not call `console.log` from Lambda code.
+  - Client-side error reporting is not yet implemented (planned via AWS RUM).
+  - CloudWatch alarms exist for specific failure modes (e.g. email delivery failure after retries, overall health failure) under [`web-api/terraform/modules/api/alarms.tf`](web-api/terraform/modules/api/alarms.tf) and [`web-api/terraform/modules/health-alarms/`](web-api/terraform/modules/health-alarms/). When adding a long-running or always-on background workflow, consider whether a paired alarm is warranted.
+- Test infrastructure
+  - Mock `applicationContext`: [`shared/src/business/test/createTestApplicationContext.ts`](shared/src/business/test/createTestApplicationContext.ts) (server) and [`web-client/src/test/createClientTestApplicationContext.ts`](web-client/src/test/createClientTestApplicationContext.ts) (client).
 
 ## Agent Expectations
 
@@ -72,7 +114,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 - Cypress coverage: any user-facing change requires Cypress specs under [`cypress/`](cypress/) that exercise every applicable role. Use the canonical role helpers in [`cypress/helpers/authentication/login-as-helpers.ts`](cypress/helpers/authentication/login-as-helpers.ts) (`loginAs*`).
 - Accessibility: all UI must satisfy Section 508 and WCAG 2.1 AA. Verify by adding/extending a Cypress spec that calls the shared [`checkA11y`](cypress/local-only/support/generalCommands/checkA11y.ts) helper (built on `cypress-axe` + `axe-core`); see [`cypress/local-only/tests/accessibility/`](cypress/local-only/tests/accessibility/) for exemplar specs. Prefer existing accessible primitives in [`ustc-ui/`](web-client/src/ustc-ui/) and [`dawson-ui/`](web-client/src/dawson-ui/); preserve semantic HTML, label associations, focus order, and keyboard operability.
 - Visual PDF tests: if a ticket DoD requires "visual tests for newly added PDFs," do not fabricate a snapshot tool or claim one doesn't exist. DAWSON uses a custom image diffing utility (`generateAndVerifyPdfDiff`) in `shared/src/business/utilities/documentGenerators/generateAndVerifyPdfDiff.ts` that relies on `pdf2pic` and `pixelmatch`. Refer to existing `*.test.ts` files in that folder for usage examples.
-- Cerebral state debugging: for "list/data disappears after a sequence runs" bugs, inspect the action chain in the relevant `*Sequence.ts`, the state shape in [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts), and the action that runs on modal close — these bugs are usually a missing re-fetch or a state path being cleared without being re-populated.
+- Cerebral state debugging: for "list/data disappears after a sequence runs" bugs, inspect the action chain in the relevant `*Sequence.ts`, the state shape in [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts), any relevant computed under [`web-client/src/presenter/computeds/`](web-client/src/presenter/computeds/), and the action that runs on modal close — these bugs are usually a missing re-fetch or a state path being cleared without being re-populated.
 - Pre-verification hygiene: before declaring work ready, lint all added and modified files, fixing errors as necessary, and then run `npx prettier --write <files/globs>` to format code based on the project's prettier configuration. Do not bypass these tools or hand-format around them.
 - TypeScript discipline: annotate function parameters and return types; do not rely on inference where an explicit annotation is possible. Prefer type annotations over assertions; do not use `as any` or non-null `!` assertions to silence the type checker — fix the underlying type. Confirm the change type-checks with `npx tsc --noEmit -p tsconfig.json` if Jest/ESLint do not already exercise the file.
 - Styling: prefer Tailwind utility classes with the `tw:` prefix (e.g. `className="tw:flex tw:mt-4"`, see [`web-client/src/views/Login/Login.tsx`](web-client/src/views/Login/Login.tsx)) over USWDS classes when both are viable; reserve USWDS classes for component patterns that depend on USWDS behavior/markup.
@@ -80,6 +122,8 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - Probe ports before starting anything: API `http://localhost:4000/api/swagger`, OpenSearch `http://localhost:9200/`, private UI `http://localhost:1234/`, public UI `http://localhost:5678/`. A 200/401 from any of these means that service is **already running**.
   - To wait for the API + OpenSearch to come up after a fresh start: `./wait-until-services.sh`.
   - One-shot stack for headless test runs: `npm run start:all:ci`.
+- HTTP contract: any addition, removal, or signature change to an HTTP endpoint must be reflected in [`web-api/swagger.json`](web-api/swagger.json); verify with `npm run lint:swagger`.
+- Campsite rule: you may notice that existing code violates some of the guidelines and expectations listed above. Wherever possible (barring large refactors or side quests), always leave the code "better than you found it" by adjusting it to fit established best practices and guidelines, including meeting test coverage objectives.
 - Verify honestly: never report a bug "fixed" or an issue "resolved" without executing the verifying command/test and capturing concrete evidence — the exact command, its exit code, and the relevant stdout lines (or, for UI changes, the URL exercised, the role used, and a screenshot or DOM excerpt).
 - Code Review: before reporting a bug "fixed" or an issue "resolved", you must perform a self code review enforcing the **Code Review Guidelines** below.
 - Source control:
@@ -101,12 +145,29 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 
 When performing code review, flag violations of the following:
 
+1. **Acceptance Criteria**: Examine the original ticket or task in detail, examine all added and modified code, and assert that all acceptance criteria have been met.
+1. **TypeScript Discipline**: Flag the use of `as any`, non-null assertions (`!`), or missing return type annotations.
+1. **Missing Test Coverage**: If a source file is modified but its corresponding `*.test.ts` (or `*.cy.ts` for UI) is absent from the PR, remind the author that 100% line/branch coverage and Cypress role permutations are required by `AGENTS.md`.
 1. **Clean Architecture Violations**: Reject any change that imports `web-api/`, `web-client/`, AWS SDKs, or persistence modules into `shared/src/business/`.
-2. **Missing Migrations Documentation**: If `web-api/src/persistence/postgres/utils/migrate/` has new files, verify `docs/postgres/schema/data-dictionary.csv` and `docs/postgres/schema/erd.mmd` are also updated.
-3. **Interactor Ordering**: Reject if an interactor persists an entity before successfully validating it via `JoiValidationEntity`.
-4. **TypeScript Discipline**: Flag the use of `as any`, non-null assertions (`!`), or missing return type annotations.
-5. **Styling**: Flag new usages of USWDS utility classes if a Tailwind equivalent with the `tw:` prefix could be used.
-6. **Missing Test Coverage**: If a source file is modified but its corresponding `*.test.ts` (or `*.cy.ts` for UI) is absent from the PR, remind the author that 100% line/branch coverage and Cypress role permutations are required by `AGENTS.md`.
-7. **Acceptance Criteria**: Examine the original ticket or task in detail, examine all added and modified code, and assert that all acceptance criteria have been met.
-8. **Linting and Formatting**: Check the diff for ESLint, Stylelint, Shellcheck, and Prettier inconsistencies.
-9. **Safe Migrations**: Flag any Postgres migration under `web-api/src/persistence/postgres/utils/migrate/` that destructively modifies tables or columns currently in use. Because DAWSON uses zero-downtime blue/green deployments, the "active" color is still running while migrations execute on the "passive" color. Suggest the expand/contract pattern for any destructive schema changes.
+1. **Missing Migrations Documentation**: If `web-api/src/persistence/postgres/utils/migrate/` has new files, verify `docs/postgres/schema/data-dictionary.csv` and `docs/postgres/schema/erd.mmd` are also updated.
+1. **Interactor Ordering**: Reject if an interactor persists an entity before successfully validating it via `JoiValidationEntity`.
+1. **Validate Before Persist (entities)**: Beyond interactor ordering, flag any code path that constructs a non-`JoiValidationEntity` ad-hoc object and writes it directly to a persistence gateway, bypassing the validation surface entirely.
+1. **Styling**: Flag new usages of USWDS utility classes if a Tailwind equivalent with the `tw:` prefix could be used.
+1. **Linting and Formatting**: Check the diff for ESLint, Stylelint, Shellcheck, and Prettier inconsistencies.
+1. **Safe Migrations**: Flag any Postgres migration under `web-api/src/persistence/postgres/utils/migrate/` that destructively modifies tables or columns currently in use. Because DAWSON uses zero-downtime blue/green deployments, the "active" color is still running while migrations execute on the "passive" color. Suggest the expand/contract pattern for any destructive schema changes.
+1. **Endpoint Documentation**: If a change adds, removes, or alters the signature of an HTTP endpoint without a corresponding update to `web-api/swagger.json`, flag it.
+1. **Browser-Only Code in `shared/`**: Flag any import of `window`, `document`, DOM APIs, React, Cerebral, or other browser/runtime-specific modules from within `shared/`. Such code belongs in `web-client/` (or, for public-only code, gated to the public app).
+1. **`genericHandler` Usage**: Flag any new or modified `*Lambda.ts` under `web-api/src/lambdas/` that does not wrap its handler with `genericHandler` (the auth/error/CORS contract). New Lambdas should also be questioned on principle — prefer extending an existing handler/interactor.
+1. **Logging Discipline**: Flag `console.log` / `console.error` calls in `web-api/` Lambda or interactor code; require the Winston wrapper (`getDawsonLogger`). Also flag any log statement that appears to emit raw user PII, document contents, or application secrets.
+1. **Date/Time Imports**: Flag direct imports of `luxon`, `date-fns`, `moment`, or hand-rolled `new Date()` arithmetic in business logic; require `DateHandler`.
+1. **Cerebral State Discipline**: Flag any new top-level state path used in actions/computeds/views that is not declared in [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts). Also flag sequences that clear a state path without an action that re-populates it before the user sees an empty list.
+1. **Naming Conventions**: Flag files whose names diverge from the documented patterns (`verbNounInteractor.ts`, `verbNounAction.ts(x)`, `verbNounSequence.ts`, `*Lambda.ts`, PascalCase entity classes) or that are missing their co-located `*.test.ts`.
+1. **Error Surfacing**: Flag swallowed errors (empty `catch`, `catch` that only logs, promise chains without rejection handling) on user-initiated paths. Errors from user actions must reach the end user.
+1. **Accessibility Coverage**: For any user-facing change, flag the absence of (or failure to extend) a Cypress spec that calls `checkA11y` on the affected view, and flag regressions in semantic HTML, label associations, focus order, or keyboard operability.
+1. **Cypress Role Permutations**: For role-gated UI changes, flag the absence of Cypress coverage exercising every applicable role via `loginAs*` helpers.
+1. **Visual PDF Tests**: Flag new or materially altered PDF generators under `shared/src/business/utilities/documentGenerators/` that ship without a `generateAndVerifyPdfDiff`-based snapshot test.
+1. **`CHANGES.md` Callout**: Flag any change requiring a manual step (pre-deployment script, local environment configuration change, etc.) that lacks a new `<details>` block prepended to `CHANGES.md` and mirrored in the PR description.
+1. **Public vs. Private Surface**: Flag additions to `app.tsx` / `applicationContext.ts` / `web-api/src/lambdas/` that should have landed on the public counterparts (`appPublic.tsx` / `applicationContextPublic.ts` / `public-api/`), or vice versa.
+1. **Test Quality, Not Just Coverage**: Beyond coverage, flag tests that achieve coverage without meaningful assertions (snapshot-only on logic, asserting only that a mock was called without verifying arguments, tests that pass against both the buggy and fixed implementation, etc.).
+1. **Secrets and Fixtures**: Flag any committed credentials, API keys, JWTs, or real PII in fixtures, tests, or logs. Use the seeded users and test assets already in the repo.
+1. **Dependency Hygiene**: Flag new runtime dependencies added without justification in the PR description, especially when an existing utility already covers the use case. Dependencies must be pinned to specific versions; flag any dependency not pinned to a specific version.
