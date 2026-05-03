@@ -1,8 +1,9 @@
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
-import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
+import { messageModalHelper as messageModalHelperComputed } from '@web-client/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const JUDGES_CHAMBERS = getTestJudgesChambers();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
@@ -46,7 +47,7 @@ export const petitionsClerkCreatesMessageToChambers = cerebralTest => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    cerebralTest.testMessageSubject = `hi chambers! ${Date.now()}`;
+    cerebralTest.testMessageSubject = `hi chambers! ${getCurrentDateTimeInMillis()}`;
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
