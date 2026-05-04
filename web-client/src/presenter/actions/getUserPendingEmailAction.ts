@@ -28,7 +28,7 @@ export const getUserPendingEmailAction = async ({
       userIds: contactIdArray,
     });
 
-  const allPendingEmails = Object.values(pendingEmails);
+  const allPendingEmails = Object.values(pendingEmails ?? {});
 
   return { userPendingEmail, allPendingEmails };
 };
