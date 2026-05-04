@@ -34,6 +34,7 @@ tfswitch 1.15.0
 
 ```bash
 ./scripts/run-once-scripts/migrate-environments.zsh
+```
 </details>
 <details><summary>Dependency Updates - Week of 2026-04-20</summary>
 
