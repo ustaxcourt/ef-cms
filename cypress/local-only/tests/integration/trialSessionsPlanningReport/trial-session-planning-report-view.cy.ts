@@ -1,6 +1,35 @@
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
+const selectLastOption = (selector: string): void => {
+  cy.get(selector)
+    .find('option')
+    .last()
+    .then(option => {
+      const optionValue = option.val()!;
+      cy.get(selector).select(optionValue);
+    });
+};
+
+const openTrialSessionPlanningReport = (): void => {
+  loginAsDocketClerk1();
+  cy.get('[data-testid="trial-session-link"]').click();
+  cy.get('[data-testid="trial-session-planning-report-button"]').click();
+  selectLastOption(
+    '[data-testid="trial-session-planning-report-term-selector"]',
+  );
+  selectLastOption(
+    '[data-testid="trial-session-planning-report-year-selector"]',
+  );
+  cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.get('[data-testid="cities-not-calendared-in-past-two-terms-table"]');
+};
+
+const openTrialLocationView = (trialLocation: string): void => {
+  openTrialSessionPlanningReport();
+  cy.get(`[data-testid="trial-location-link-${trialLocation}"] > a`).click();
+};
+
 describe('Trial Sessions Planning', () => {
   describe('Trial Sessions Planning Report View', () => {
     it('should not display errors when user has not selected any option in dropdowns', () => {
@@ -8,15 +37,9 @@ describe('Trial Sessions Planning', () => {
       cy.get('[data-testid="trial-session-link"]').click();
       cy.get('[data-testid="trial-session-planning-report-button"]').click();
 
-      cy.get('[data-testid="trial-session-planning-report-term-selector"]')
-        .find('option')
-        .last()
-        .then(option => {
-          const optionValue = option.val()!;
-          cy.get(
-            '[data-testid="trial-session-planning-report-term-selector"]',
-          ).select(optionValue);
-        });
+      selectLastOption(
+        '[data-testid="trial-session-planning-report-term-selector"]',
+      );
 
       cy.get(
         '[data-testid="trial-session-planning-report-modal-term-error"]',
@@ -26,15 +49,9 @@ describe('Trial Sessions Planning', () => {
         '[data-testid="trial-session-planning-report-modal-year-error"]',
       ).should('not.exist');
 
-      cy.get('[data-testid="trial-session-planning-report-year-selector"]')
-        .find('option')
-        .last()
-        .then(option => {
-          const optionValue = option.val()!;
-          cy.get(
-            '[data-testid="trial-session-planning-report-year-selector"]',
-          ).select(optionValue);
-        });
+      selectLastOption(
+        '[data-testid="trial-session-planning-report-year-selector"]',
+      );
 
       cy.get(
         '[data-testid="trial-session-planning-report-modal-term-error"]',
@@ -51,25 +68,13 @@ describe('Trial Sessions Planning', () => {
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="trial-session-planning-btn"').click();
 
-      cy.get('[data-testid="trial-session-planning-report-term-selector"]')
-        .find('option')
-        .last()
-        .then(option => {
-          const optionValue = option.val()!;
-          cy.get(
-            '[data-testid="trial-session-planning-report-term-selector"]',
-          ).select(optionValue);
-        });
+      selectLastOption(
+        '[data-testid="trial-session-planning-report-term-selector"]',
+      );
 
-      cy.get('[data-testid="trial-session-planning-report-year-selector"]')
-        .find('option')
-        .last()
-        .then(option => {
-          const optionValue = option.val()!;
-          cy.get(
-            '[data-testid="trial-session-planning-report-year-selector"]',
-          ).select(optionValue);
-        });
+      selectLastOption(
+        '[data-testid="trial-session-planning-report-year-selector"]',
+      );
 
       cy.get(
         '[data-testid="trial-session-planning-report-modal-term-error"]',
@@ -91,9 +96,7 @@ describe('Trial Sessions Planning', () => {
         const [trialCity, trialState] = trialLocation.split(', ');
         let tableRowCount: number;
 
-        cy.get(
-          `[data-testid="trial-location-link-${trialLocation}"] > a`,
-        ).click();
+        openTrialLocationView(trialLocation);
 
         cy.get('[data-testid="trial-location-eligible-table"]').should(
           'be.visible',
@@ -128,8 +131,10 @@ describe('Trial Sessions Planning', () => {
       });
 
       it('should return to Trial Session Planning Report', () => {
+        openTrialLocationView('Birmingham, Alabama');
         cy.get('[data-testid="back-to-planning-report-button"]').click();
         cy.get('[data-testid="loading-overlay"]').should('not.exist');
+        cy.get('[data-testid="cities-not-calendared-in-past-two-terms-table"]');
       });
 
       it('should render and export blocked cases for location', () => {
@@ -137,9 +142,7 @@ describe('Trial Sessions Planning', () => {
         const [trialCity, trialState] = trialLocation.split(', ');
         let tableRowCount: number;
 
-        cy.get(
-          `[data-testid="trial-location-link-${trialLocation}"] > a`,
-        ).click();
+        openTrialLocationView(trialLocation);
 
         cy.get('[data-testid="blocked-cases-tab"]').click();
 
