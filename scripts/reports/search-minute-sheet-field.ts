@@ -320,27 +320,30 @@ const promptUserSelection = (options: string[]): Promise<string> => {
   });
 };
 
-// Flattens a nested object into a single-level object with dot-notation keys
+// Flattens a nested object into a single-level object with dot-notation keys.
 const flattenObject = (obj: unknown, prefix = ''): Record<string, unknown> => {
   const result: Record<string, unknown> = {};
 
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || obj === undefined) {
     return result;
   }
 
-  const isArray = Array.isArray(obj);
-  const entries = isArray
-    ? (obj as unknown[]).entries()
-    : Object.entries(obj as Record<string, unknown>);
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      Object.assign(result, flattenObject(item, `${prefix}[]`));
+    }
+    return result;
+  }
 
-  for (const [key, value] of entries) {
-    const normalizedKey = String(key);
-    const newKey = prefix ? `${prefix}.${normalizedKey}` : normalizedKey;
+  if (typeof obj !== 'object') {
+    return result;
+  }
 
-    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+  for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+
+    if (value !== null && value !== undefined && typeof value === 'object') {
       Object.assign(result, flattenObject(value, newKey));
-    } else if (Array.isArray(value)) {
-      result[newKey] = `[Array: ${value.length} items]`;
     } else {
       result[newKey] = value;
     }
@@ -415,7 +418,9 @@ const searchMinuteSheetField = async (): Promise<{
       `Field '${field}' not found in the minute sheet schema. Available fields:`,
     );
     const flattened = flattenObject(MINUTE_SHEET_FIELD_SCHEMA);
-    const availableFields = Object.keys(flattened).sort();
+    const availableFields = Object.entries(flattened)
+      .map(([k]) => k)
+      .sort();
     availableFields.forEach(f => console.log(`  ${f}`));
     return { fieldKey: field, results: [], selectedPath: undefined };
   } else if (allPaths.length === 1) {
