@@ -98,17 +98,9 @@ describe('Clerk of Court Dashboard', () => {
       cy.wait('@getTrialSessions');
 
       cy.get(
-        '[data-testid="current-week-trial-sessions-card"], [data-testid="next-week-trial-sessions-card"]',
+        '[data-testid^="current-week-session-"], [data-testid^="next-week-session-"]',
       )
-        .first()
-        .find(
-          '[data-testid^="current-week-session-"], [data-testid^="next-week-session-"]',
-        )
-        .should('have.length.greaterThan', 0);
-
-      cy.get(
-        '[data-testid="current-week-trial-sessions-card"], [data-testid="next-week-trial-sessions-card"]',
-      )
+        .should('have.length.greaterThan', 0)
         .first()
         .within(() => {
           cy.contains('Start Date').should('exist');
