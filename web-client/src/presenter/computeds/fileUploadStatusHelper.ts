@@ -27,7 +27,7 @@ export const createFileUploadStatusHelper = (): ((
     const isHavingSystemIssues = get(
       state.fileUploadProgress.isHavingSystemIssues,
     );
-    const shouldThrottle = !get(state.fileUploadProgress.noThrottle); // results WILL be throttled unless explicitly set to false
+    const shouldThrottle = !get(state.fileUploadProgress.noThrottle);
 
     let statusMessage: string;
 
