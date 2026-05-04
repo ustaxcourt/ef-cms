@@ -6,17 +6,16 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { environment } from '@web-api/environment';
 import { truncateAllCognitoUsers } from './truncate-cognito.helpers';
 import { truncateAllOpenSearchIndices } from './truncate-opensearch.helpers';
 import { truncateAllPostgresTables } from './truncate-postgres.helpers';
-import { truncateS3DocumentsBucket } from './truncate-s3-documents.helpers';
+import { truncateAllEnvironmentS3Buckets } from './truncate-all-s3-buckets.helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
     'truncate-all-persistence - Truncates all DAWSON persistence: postgres ' +
     'tables (except dw_feature_flag and kysely_migration*), ' +
-    'opensearch indices, cognito users, and the documents S3 bucket.',
+    'opensearch indices, cognito users, and S3 buckets.',
   environment: {
     UserPoolId: 'USER_POOL_ID',
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
@@ -47,10 +46,10 @@ const { UserPoolId, elasticsearchEndpoint, environmentName, region } =
   const cognito = new CognitoIdentityProvider({ region });
   await truncateAllCognitoUsers({ cognito, UserPoolId });
 
-  console.log('Truncating S3 documents bucket...');
+  console.log('Truncating all S3 buckets...');
   const s3Client = new S3Client({ region });
-  await truncateS3DocumentsBucket({
-    bucketName: environment.documentsBucketName,
+  await truncateAllEnvironmentS3Buckets({
+    environmentName,
     s3Client,
   });
 
