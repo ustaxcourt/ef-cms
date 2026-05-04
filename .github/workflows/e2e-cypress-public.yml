@@ -22,7 +22,7 @@ jobs:
       CHECK_DEPLOY_DATE_INTERVAL: 5000
     services:
       postgres:
-        image: postgres
+        image: postgres:17.9-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-
