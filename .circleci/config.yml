@@ -1027,6 +1027,7 @@ workflows:
           <<: *only-test
           requires:
             - delete-and-recreate-elasticsearch-cluster
+            - wait-for-s3-sync-workflow
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
@@ -1039,7 +1040,6 @@ workflows:
       - index-docket-entries:
           <<: *only-test
           requires:
-            - wait-for-s3-sync-workflow
             - index-users
       - cleanup-glue-job:
           <<: *only-test
