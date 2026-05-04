@@ -29,7 +29,7 @@ export const getPractitionerDetailAction = async ({
   const practitionerDetail: PractitionerDetail | undefined = Array.isArray(
     practitionerResult,
   )
-    ? undefined
+    ? (practitionerResult[0] as PractitionerDetail | undefined)
     : (practitionerResult as PractitionerDetail);
 
   if (
