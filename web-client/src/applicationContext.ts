@@ -116,9 +116,9 @@ import { fileCorrespondenceDocumentInteractor } from '@web-client/proxies/corres
 import { fileCourtIssuedDocketEntryInteractor } from '@web-client/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '@web-client/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileExternalDocumentInteractor } from '@web-client/proxies/documents/fileExternalDocumentProxy';
-import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { filterEmptyStrings } from '@web-client/business/utilities/filterEmptyStrings';
 import { forgotPasswordInteractor } from '@web-client/proxies/auth/forgotPasswordProxy';
-import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
+import { formatAttachments } from '@web-client/business/utilities/formatAttachments';
 import {
   formatCase,
   formatDocketEntry,
@@ -126,7 +126,7 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
-import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
+import { formatDollars } from '@web-client/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -166,7 +166,7 @@ import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/ge
 import { getCaseWorksheetsByJudgeInteractor } from '@web-client/proxies/reports/getCaseWorksheetsByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '@web-client/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
-import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
+import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '@web-client/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '@web-client/proxies/messages/getCompletedMessagesForUserProxy';
@@ -180,7 +180,7 @@ import { getDocumentContentsForDocketEntryInteractor } from '@web-client/proxies
 import { getDocumentDownloadUrlInteractor } from '@web-client/proxies/getDocumentDownloadUrlProxy';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getEligibleCasesForTrialSessionInteractor } from '@web-client/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
-import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
+import { getFormattedPartiesNameAndTitle } from '@web-client/business/utilities/getFormattedPartiesNameAndTitle';
 import { getHealthCheckInteractor } from '@web-client/proxies/health/getHealthCheckProxy';
 import { getHttpClient } from '@web-client/providers/httpClient';
 import { getInboxMessagesForSectionInteractor } from '@web-client/proxies/messages/getInboxMessagesForSectionProxy';
@@ -210,7 +210,7 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '@web-client/proxie
 import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
 import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
-import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getTrialSessionDetailsInteractor } from '@web-client/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -224,7 +224,7 @@ import { getUserCaseNoteInteractor } from '@web-client/proxies/caseNote/getUserC
 import { getUserInteractor } from '@web-client/proxies/users/getUserProxy';
 import { getUserPendingEmailInteractor } from '@web-client/proxies/users/getUserPendingEmailProxy';
 import { getUserPendingEmailStatusInteractor } from '@web-client/proxies/users/getUserPendingEmailStatusProxy';
-import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '@web-client/proxies/users/getUsersInSectionProxy';
 import { getUsersPendingEmailInteractor } from '@web-client/proxies/users/getUsersPendingEmailProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
@@ -300,7 +300,7 @@ import { updateUserCaseNoteInteractor } from '@web-client/proxies/caseNote/updat
 import { updateUserContactInformationInteractor } from '@web-client/proxies/users/updateUserContactInformationProxy';
 import { updateUserPendingEmailInteractor } from '@web-client/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
-import { uploadDocumentAndMakeSafeInteractor } from '../../shared/src/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
@@ -317,11 +317,11 @@ import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
-import { validateCaseWorksheetInteractor } from '@shared/business/useCases/caseWorksheet/validateCaseWorksheetInteractor';
+import { validateCaseWorksheetInteractor } from '@web-client/business/useCases/caseWorksheet/validateCaseWorksheetInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateCreateMessageInteractor } from '../../shared/src/business/useCases/messages/validateCreateMessageInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
-import { validateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/validateDocketEntryWorksheetInteractor';
+import { validateDocketEntryWorksheetInteractor } from '@web-client/business/useCases/pendingMotion/validateDocketEntryWorksheetInteractor';
 import { validateDocumentInteractor } from '../../shared/src/business/useCases/validateDocumentInteractor';
 import { validateEditPetitionerCounselInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPetitionerCounselInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -334,7 +334,7 @@ import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/us
 import { validatePdfInteractor } from '@web-client/proxies/documents/validatePdfProxy';
 import { validateCaseForNewMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/validateCaseForNewMinuteSheetProxy';
 import { getUnscheduledMinuteSheetsInteractor } from '@web-client/proxies/trialSessionMinutes/getUnscheduledMinuteSheetsProxy';
-import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
+import { validatePenaltiesInteractor } from '@web-client/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';

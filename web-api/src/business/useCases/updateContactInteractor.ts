@@ -27,8 +27,8 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
-} from '@shared/business/utilities/calculateEmail';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+} from '@web-api/business/utilities/calculateEmail';
+import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';

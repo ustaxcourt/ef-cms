@@ -13,7 +13,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-import { getEligibleCasesWithIsAgedCase } from '@shared/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
+import { getEligibleCasesWithIsAgedCase } from '@web-api/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
 
 export const getEligibleCasesForTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,

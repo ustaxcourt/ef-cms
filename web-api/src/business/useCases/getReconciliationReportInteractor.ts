@@ -11,7 +11,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ReconciliationReportEntry } from '@shared/business/entities/ReconciliationReportEntry';
+import { ReconciliationReportEntry } from '@web-api/business/entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';

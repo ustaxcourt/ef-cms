@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { DocumentSearch } from '@web-api/business/entities/documents/DocumentSearch';
 import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import {
   PublicDocumentSearchResult,

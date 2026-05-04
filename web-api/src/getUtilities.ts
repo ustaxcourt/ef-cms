@@ -14,7 +14,7 @@ import {
   isValidPastDate,
 } from '@shared/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
+import { combineAllPdfDocuments } from '@web-api/business/utilities/pdfs/combineAllPdfDocuments';
 import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -41,7 +41,7 @@ import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedC
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { isLeadCase, isSealedCase } from '@shared/business/entities/cases/Case';
-import { scrapePdfContents } from '@shared/business/utilities/scrapePdfContents';
+import { scrapePdfContents } from '@web-api/business/utilities/scrapePdfContents';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';

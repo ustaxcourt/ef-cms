@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { DocumentSearch } from '@web-api/business/entities/documents/DocumentSearch';
 import {
   InternalDocumentSearchResult,
   RawInternalDocumentSearchResult,

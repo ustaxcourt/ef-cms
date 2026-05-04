@@ -40,15 +40,15 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
-import { formatAttachments } from '@shared/business/utilities/formatAttachments';
+import { filterEmptyStrings } from '@web-client/business/utilities/filterEmptyStrings';
+import { formatAttachments } from '@web-client/business/utilities/formatAttachments';
 import {
   formatCase,
   formatDocketEntry,
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '@shared/business/utilities/getFormattedCaseDetail';
-import { formatDollars } from '@shared/business/utilities/formatDollars';
+import { formatDollars } from '@web-client/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -66,10 +66,10 @@ import { getDescriptionDisplay } from '@shared/business/utilities/getDescription
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from '@shared/business/test/getFakeFile';
-import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
+import { getFormattedPartiesNameAndTitle } from '@web-client/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
-import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
@@ -82,8 +82,8 @@ import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@web-client/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-client/proxies/editDocketEntry/unsealDocketEntryProxy';
-import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
-import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
+import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { validatePenaltiesInteractor } from '@web-client/business/useCases/validatePenaltiesInteractor';
 import pug from 'pug';
 import * as sass from 'sass';
 

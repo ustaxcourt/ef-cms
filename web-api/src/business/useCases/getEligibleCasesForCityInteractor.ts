@@ -9,7 +9,7 @@ import {
   EligibleCase,
   RawEligibleCase,
 } from '@shared/business/entities/cases/EligibleCase';
-import { getEligibleCasesWithIsAgedCase } from '@shared/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
+import { getEligibleCasesWithIsAgedCase } from '@web-api/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
 
 export const getEligibleCasesForCityInteractor = async (
   { trialCity }: { trialCity: string },

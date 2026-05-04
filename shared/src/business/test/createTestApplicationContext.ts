@@ -43,15 +43,15 @@ import {
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
-import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
-import { formatAttachments } from '@shared/business/utilities/formatAttachments';
+import { filterEmptyStrings } from '@web-client/business/utilities/filterEmptyStrings';
+import { formatAttachments } from '@web-client/business/utilities/formatAttachments';
 import {
   formatCase,
   formatDocketEntry,
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '@shared/business/utilities/getFormattedCaseDetail';
-import { formatDollars } from '@shared/business/utilities/formatDollars';
+import { formatDollars } from '@web-client/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -75,7 +75,7 @@ import { getDescriptionDisplay } from '@shared/business/utilities/getDescription
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile, testPdfDoc } from './getFakeFile';
-import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
+import { getFormattedPartiesNameAndTitle } from '@web-client/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
@@ -95,9 +95,9 @@ import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
-import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
+import { validatePenaltiesInteractor } from '@web-client/business/useCases/validatePenaltiesInteractor';
 import pug from 'pug';
 import * as sass from 'sass';
 

@@ -9,13 +9,13 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { DocumentSearch } from '@web-api/business/entities/documents/DocumentSearch';
 import {
   InternalDocumentSearchResult,
   RawInternalDocumentSearchResult,
 } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@web-api/business/utilities/caseFilter';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 

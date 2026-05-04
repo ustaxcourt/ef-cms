@@ -19,7 +19,7 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
-import { formatDollars } from '@shared/business/utilities/formatDollars';
+import { formatDollars } from '@web-client/business/utilities/formatDollars';
 
 const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
   return [

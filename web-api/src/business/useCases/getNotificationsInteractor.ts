@@ -9,7 +9,7 @@ import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workite
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
-import { getQCInboxParameters } from '@shared/business/utilities/getQCInboxParameters';
+import { getQCInboxParameters } from '@web-api/business/utilities/getQCInboxParameters';
 
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,

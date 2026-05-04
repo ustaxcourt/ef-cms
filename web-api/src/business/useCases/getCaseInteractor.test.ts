@@ -14,7 +14,7 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCaseInteractor } from './getCaseInteractor';
-import { decorateForCaseStatus } from '@shared/business/entities/cases/CaseFactory';
+import { decorateForCaseStatus } from '@web-api/business/entities/cases/CaseFactory';
 import { getOtherFilers } from '@shared/business/entities/cases/Case';
 import {
   mockDocketClerkUser,

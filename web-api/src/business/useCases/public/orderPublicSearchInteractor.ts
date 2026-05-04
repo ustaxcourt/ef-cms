@@ -3,7 +3,7 @@ import {
   MAX_DOCUMENT_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { DocumentSearch } from '@web-api/business/entities/documents/DocumentSearch';
 import {
   PublicDocumentSearchResult,
   RawPublicDocumentSearchResult,
