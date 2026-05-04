@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   calculateISODate,
-  createISODateString,
+  createISODateAtStartOfDayEST,
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
@@ -17,7 +17,7 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 import { scheduleTrialSession } from 'cypress/helpers/trialSession/schedule-trial-session';
 
 describe('user runs a case deadlines report', () => {
-  const today = createISODateString(); // today
+  const today = createISODateAtStartOfDayEST(); // start of today EST
   const tomorrow = calculateISODate({
     dateString: today,
     howMuch: 1,
