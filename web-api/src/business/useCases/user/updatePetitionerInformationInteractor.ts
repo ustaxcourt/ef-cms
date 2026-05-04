@@ -83,7 +83,7 @@ const assertEmailAvailableForPetitioner = async ({
       authorizedUser,
     );
 
-  const allPendingEmails: string[] = Object.values(allUsers);
+  const allPendingEmails: string[] = Object.values(allUsers || {});
 
   const pendingMatchesUpdated: boolean = allPendingEmails
     .map(email => (email || '').toLowerCase())
@@ -166,7 +166,7 @@ export const updatePetitionerInformation = async (
 ): Promise<{
   updatedCase: CaseDTO;
   paperServiceParties: any[];
-  paperServicePdfUrl: string;
+  paperServicePdfUrl: string | undefined;
 }> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
@@ -278,7 +278,7 @@ export const updatePetitionerInformation = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let serviceUrl: string = '';
+  let serviceUrl: string | undefined;
 
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
