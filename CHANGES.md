@@ -7,6 +7,24 @@
 #### Set the value of the `RDS_ENGINE_VERSION` secret in the [env]_deploy secrets in Secrets Manager to `17.9`
 ```bash
 scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "17.9"
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-04-27</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.77` - choose exp7
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.0`
+
+```bash
+tfswitch 1.15.0
+```
 </details>
 <details><summary>Support `--aws-only` Flag in the Environment Switcher</summary>
 
