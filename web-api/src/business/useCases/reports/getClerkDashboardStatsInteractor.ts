@@ -6,7 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type GetClerkDashboardStatsRequest = {
@@ -19,6 +19,10 @@ export const getClerkDashboardStatsInteractor = async (
 ): Promise<ClerkDashboardStats> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for clerk dashboard stats');
+  }
+
+  if (params.year !== undefined && !Number.isFinite(params.year)) {
+    throw new InvalidRequest('Invalid year parameter');
   }
 
   return await getClerkDashboardStats({ year: params.year });
