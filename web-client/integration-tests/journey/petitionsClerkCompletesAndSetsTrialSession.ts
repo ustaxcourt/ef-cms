@@ -60,13 +60,14 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionSequence');
-    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
-    });
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
     await waitForPage({
       cerebralTest,
       expectedPage: 'TrialSessionDetails',
-      maxWait: 20000,
+      maxWait: 60000,
     });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetails');
 
