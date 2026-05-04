@@ -48,7 +48,7 @@ describe('recentFilingsHelper', () => {
     });
     expect(result.sortedRecentFilings).toHaveLength(2);
     expect(result.sortedRecentFilings[0].filedDate).toBe('2024-01-15');
-    expect(result.sortOptions).toHaveLength(8);
+    expect(result.sortOptions).toHaveLength(10);
 
     // Empty/null handling
     const emptyResult = runCompute(recentFilingsHelper, {
