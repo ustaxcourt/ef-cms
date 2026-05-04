@@ -1,7 +1,13 @@
 export function selectTypeaheadInput(testId: string, value: string) {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(300); // cypress fails to type without a wait
-  cy.get(`[data-testid="${testId}"] .select-react-element__input`).type(
-    `${value}{enter}`,
+  cy.get(`[data-testid="${testId}"] .select-react-element__control`).should(
+    'be.visible',
   );
+
+  cy.get(`[data-testid="${testId}"] .select-react-element__control`).click();
+
+  cy.get(`[data-testid="${testId}"] .select-react-element__input`).type(value, {
+    force: true,
+  });
+
+  cy.get('.select-react-element__option').should('be.visible').first().click();
 }
