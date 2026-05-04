@@ -8,6 +8,7 @@ import { formatDate } from '../helpers/formatters';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from 'web-api/src/persistence/postgres/database';
 import { sql } from 'kysely';
+import { DateTime } from 'luxon';
 import * as readline from 'readline';
 
 const scriptConfig: ScriptConfig = {
@@ -348,6 +349,58 @@ const flattenObject = (obj: unknown, prefix = ''): Record<string, unknown> => {
   return result;
 };
 
+const getDateRangeFilter = (dateRange?: string): ReturnType<typeof sql> => {
+  if (!dateRange) {
+    return sql``;
+  }
+
+  const [startStr, endStr] = dateRange.split(':');
+  const startRaw = startStr?.trim();
+  const endRaw = endStr?.trim();
+
+  let startDate: DateTime | undefined;
+  let endDate: DateTime | undefined;
+
+  if (startRaw) {
+    startDate = DateTime.fromISO(startRaw, { setZone: true });
+    if (!startDate.isValid) {
+      throw new Error(
+        'date-range start date must be a valid ISO-8601 date string',
+      );
+    }
+  }
+
+  if (endRaw) {
+    endDate = DateTime.fromISO(endRaw, { setZone: true });
+    if (!endDate.isValid) {
+      throw new Error(
+        'date-range end date must be a valid ISO-8601 date string',
+      );
+    }
+  }
+
+  if (startDate && endDate && endDate.toMillis() < startDate.toMillis()) {
+    throw new Error('date-range end date must be on or after start date');
+  }
+
+  const conditions: ReturnType<typeof sql>[] = [];
+  if (startDate) {
+    conditions.push(sql`ts."start_date" >= ${startDate.toISODate()}::date`);
+  }
+  if (endDate) {
+    conditions.push(sql`ts."start_date" <= ${endDate.toISODate()}::date`);
+  }
+
+  if (conditions.length === 0) {
+    return sql``;
+  }
+
+  return sql.join(
+    conditions.map(c => sql`AND ${c}`),
+    sql` `,
+  );
+};
+
 const searchMinuteSheetField = async (): Promise<{
   fieldKey: string;
   results: Record<string, unknown>[];
@@ -400,25 +453,7 @@ const searchMinuteSheetField = async (): Promise<{
             sql` `,
           );
 
-  let dateRangeFilter = sql``;
-  if (dateRange) {
-    const [startStr, endStr] = dateRange.split(':');
-    if (startStr || endStr) {
-      const conditions: ReturnType<typeof sql>[] = [];
-      if (startStr?.trim()) {
-        conditions.push(sql`ts."start_date" >= ${startStr.trim()}::date`);
-      }
-      if (endStr?.trim()) {
-        conditions.push(sql`ts."start_date" <= ${endStr.trim()}::date`);
-      }
-      if (conditions.length > 0) {
-        dateRangeFilter = sql.join(
-          conditions.map(c => sql`AND ${c}`),
-          sql` `,
-        );
-      }
-    }
-  }
+  const dateRangeFilter = getDateRangeFilter(dateRange);
 
   const sqlQuery = sql<ResultRow>`
     SELECT 
