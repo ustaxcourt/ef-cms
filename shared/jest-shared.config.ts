@@ -19,6 +19,7 @@ const config: Config = {
     '!src/test/**/*.ts',
     '!src/**/*_.ts',
     '!src/business/utilities/documentGenerators/**/*.ts',
+    '!src/business/utilities/chromium/**',
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',

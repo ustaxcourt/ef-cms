@@ -20,4 +20,13 @@ describe('removeServedParties', () => {
       result[0].secondaryDocument?.previousDocument?.servedParties,
     ).toBeUndefined();
   });
+
+  it('leaves entries unchanged aside from clearing servedParties when no nested previous document', () => {
+    const mockDocketEntries: RawDocketEntry[] = [
+      { docketEntryId: 'abc', servedParties: [{ name: 'Party A' }] },
+    ];
+    const result = removeServedParties(mockDocketEntries);
+    expect(result[0].servedParties).toBeUndefined();
+    expect(result[0].docketEntryId).toBe('abc');
+  });
 });
