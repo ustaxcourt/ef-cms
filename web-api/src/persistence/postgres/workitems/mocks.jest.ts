@@ -28,6 +28,10 @@ jest.mock('@web-api/persistence/postgres/workitems/getWorkItemsByIds', () =>
   mockFactory('getWorkItemsByIds'),
 );
 
+jest.mock('@web-api/persistence/postgres/workitems/getWorkItemById', () =>
+  mockFactory('getWorkItemById'),
+);
+
 jest.mock(
   '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber',
   () => mockFactory('getWorkItemsByDocketNumber', []),

@@ -67,7 +67,7 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '@web-client/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '@web-client/proxies/getPublicCaseExistsProxy';
-import { getPublicCaseDocketEntriesInteractor } from '@shared/proxies/getPublicCaseDocketEntriesProxy';
+import { getPublicCaseDocketEntriesInteractor } from '@web-client/proxies/getPublicCaseDocketEntriesProxy';
 import { getPublicCaseInteractor } from '@web-client/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '@web-client/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@web-client/proxies/public/getPublicPractitionerByBarNumberProxy';
@@ -90,7 +90,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
-import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/public/verifyUserPendingEmailProxy';
+import { verifyUserPendingEmailInteractor } from '@web-client/proxies/users/verifyUserPendingEmailProxy';
 import deepFreeze from 'deep-freeze';
 
 const ADVANCED_SEARCH_TABS = {

@@ -7,8 +7,10 @@ import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO'
 
 export const getPublicCaseInteractor = async ({
   docketNumber,
+  excludeDocketEntries,
 }: {
   docketNumber: string;
+  excludeDocketEntries?: boolean;
 }): Promise<PublicCaseDTO | RestrictedCaseDTO> => {
   const rawCaseRecord = await getCaseByDocketNumber({
     docketNumber: Case.formatDocketNumber(docketNumber),
@@ -20,7 +22,14 @@ export const getPublicCaseInteractor = async ({
     throw error;
   }
 
-  return CaseFactory.getCaseDTO({ rawCase: rawCaseRecord, user: undefined }) as
-    | PublicCaseDTO
-    | RestrictedCaseDTO;
+  const theCase = CaseFactory.getCaseDTO({
+    rawCase: rawCaseRecord,
+    user: undefined,
+  }) as PublicCaseDTO | RestrictedCaseDTO;
+
+  if (excludeDocketEntries) {
+    return { ...theCase, docketEntries: [] };
+  }
+
+  return theCase;
 };
