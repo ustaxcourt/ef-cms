@@ -1,5 +1,5 @@
 import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const getCaseDeadlinesByConsolidatedCaseDeadlineIds = async (
