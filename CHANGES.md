@@ -14,28 +14,6 @@ tfenv install 1.15.1
 tfenv use 1.15.1
 ```
 
-#### Upgrade RDS
-```bash
-scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "17.9"
-```
-run build
-if you get an error related to a pending parameter group change reboot the database by:
-
-1. switch to your environment
-2. run
-```bash
-aws rds describe-db-clusters \
-  --db-cluster-identifier "exp7-dawson" \
-  --region us-east-1 \
-  --query "DBClusters[0].DBClusterMembers[?IsClusterWriter==\`true\`].DBInstanceIdentifier" \
-  --output text
-```
-3. get the output and put inside "<writer-instance-id-from-above>" then run
-```bash
-aws rds reboot-db-instance \
-  --db-instance-identifier "<writer-instance-id-from-above>"
-```
-
 <details><summary>Dependency Updates - Week of 2026-04-27</summary>
 
 ## Manual Deployment Steps
