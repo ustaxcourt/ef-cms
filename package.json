@@ -272,8 +272,7 @@
       "commander": "12.1.0"
     },
     "ws": "$ws",
-    "tar-fs": "$tar-fs",
-    "uuid": "$uuid"
+    "tar-fs": "$tar-fs"
   },
   "devDependencies": {
     "@aws-sdk/client-rds": "3.1042.0",
