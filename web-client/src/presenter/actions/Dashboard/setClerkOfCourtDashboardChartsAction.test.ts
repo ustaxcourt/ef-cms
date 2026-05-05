@@ -51,7 +51,7 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
         getClerkDashboardStatsInteractor: jest
           .fn()
           .mockResolvedValue(mockStats),
-      }) as any;
+      }) as unknown as ReturnType<typeof applicationContext.getUseCases>;
   });
 
   it('should set petitionsByMonth datasets with electronic and paper series', async () => {
