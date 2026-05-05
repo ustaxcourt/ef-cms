@@ -264,7 +264,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
 function sendMessages(userId: string, subject: string, section: string): void {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-new-message"]').click();
-  cy.get('[data-testid="message-to-section"').select(section);
+  cy.get('[data-testid="message-to-section"]').select(section);
   cy.get('[data-testid="message-to-user-id"]').select(userId);
   cy.get('[data-testid="message-subject"]').type(subject);
   cy.get('[data-testid="message-body"]').type('Message');

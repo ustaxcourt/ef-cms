@@ -11,20 +11,22 @@ import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/
 
 type DocketRecordSortTest = {
   columnId: string;
+  defaultSort?: boolean;
   fieldName: string;
   sortButtonId: string;
 };
 
 const docketRecordSortTests: DocketRecordSortTest[] = [
   {
+    columnId: 'docket-entry-filedDate',
+    defaultSort: true,
+    fieldName: 'date',
+    sortButtonId: 'sortingFilingDate-sortable-button',
+  },
+  {
     columnId: 'docket-entry-index',
     fieldName: 'index',
     sortButtonId: 'index-sortable-button',
-  },
-  {
-    columnId: 'docket-entry-filedDate',
-    fieldName: 'date',
-    sortButtonId: 'sortingFilingDate-sortable-button',
   },
   {
     columnId: 'docket-entry-eventCode',
@@ -104,7 +106,9 @@ describe('Docket record sort', () => {
       });
 
       docketRecordSortTests.forEach(testInfo => {
-        cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
+        if (!testInfo.defaultSort) {
+          cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
+        }
         getColumnTextFields(testInfo.columnId).then(columnTextFields => {
           const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
             sortColumnsAsc,

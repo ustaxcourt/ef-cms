@@ -66,7 +66,7 @@ describe('Trial Sessions Planning', () => {
       cy.get('[data-testid="cities-not-calendared-in-past-two-terms-table"]');
 
       cy.get('[data-testid="dropdown-select-report"]').click();
-      cy.get('[data-testid="trial-session-planning-btn"').click();
+      cy.get('[data-testid="trial-session-planning-btn"]').click();
 
       selectLastOption(
         '[data-testid="trial-session-planning-report-term-selector"]',
