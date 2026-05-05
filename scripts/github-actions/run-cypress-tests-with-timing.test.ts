@@ -11,27 +11,18 @@ import os from 'os';
 import path from 'path';
 import {
   type CypressRunFailureResult,
-  type CypressRunOptions,
+  type CypressModule,
   type CypressRunSuccessResult,
   main,
 } from './run-cypress-tests-with-timing';
 
-type CypressModule = {
-  run: jest.MockedFunction<
-    (
-      options: CypressRunOptions,
-    ) => Promise<CypressRunFailureResult | CypressRunSuccessResult>
-  >;
-};
+jest.mock('cypress', () => ({
+  run: jest.fn(),
+}));
 
-const cypress: CypressModule = require('cypress');
-
-jest.mock(
-  'cypress',
-  (): CypressModule => ({
-    run: jest.fn(),
-  }),
-);
+const cypress: {
+  run: jest.MockedFunction<CypressModule['run']>;
+} = require('cypress');
 
 describe('run-cypress-tests-with-timing', () => {
   const mockedCypressRun = jest.mocked(cypress.run);

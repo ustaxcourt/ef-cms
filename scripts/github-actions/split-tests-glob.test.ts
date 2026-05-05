@@ -9,7 +9,9 @@ import {
 import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
 import { main } from './split-tests-glob';
 
-jest.mock('glob');
+jest.mock('glob', () => ({
+  sync: jest.fn(),
+}));
 jest.mock('./helpers/splitTestFiles', () => ({
   getOutputsForCurrentCiNode: jest.fn(),
 }));

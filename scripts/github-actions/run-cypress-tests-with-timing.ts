@@ -24,7 +24,7 @@ export type CypressRunResult =
   | CypressRunFailureResult
   | CypressRunSuccessResult;
 
-type CypressModule = {
+export type CypressModule = {
   run: (options: CypressRunOptions) => Promise<CypressRunResult>;
 };
 
