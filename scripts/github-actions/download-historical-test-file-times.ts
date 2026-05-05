@@ -23,46 +23,50 @@ type WorkflowRunsResponse = {
   workflow_runs: WorkflowRun[];
 };
 
-export const isGitAncestor = ({
-  ancestorSha,
-  descendantSha,
+export const getAncestorCommitShas = ({
+  currentSha,
+  gitCommandRunner = execFileSync,
 }: {
-  ancestorSha: string;
-  descendantSha: string;
-}): boolean => {
-  try {
-    execFileSync(
-      'git',
-      ['merge-base', '--is-ancestor', ancestorSha, descendantSha],
-      {
-        stdio: 'ignore',
-      },
-    );
+  currentSha: string;
+  gitCommandRunner?: typeof execFileSync;
+}): string[] => {
+  const gitOutput = gitCommandRunner('git', ['rev-list', 'HEAD'], {
+    encoding: 'utf8',
+  });
 
-    return true;
-  } catch {
-    return false;
-  }
+  return gitOutput
+    .split('\n')
+    .map(sha => sha.trim())
+    .filter((sha): sha is string => Boolean(sha) && sha !== currentSha);
 };
 
 export const findClosestAncestorWorkflowRun = ({
-  currentSha,
-  isAncestor = isGitAncestor,
+  ancestorCommitShas,
   workflowRuns,
 }: {
-  currentSha: string;
-  isAncestor?: typeof isGitAncestor;
+  ancestorCommitShas: string[];
   workflowRuns: WorkflowRun[];
 }): WorkflowRun | undefined => {
-  return workflowRuns.find(
-    workflowRun =>
+  const successfulWorkflowRunsBySha = new Map<string, WorkflowRun>();
+
+  for (const workflowRun of workflowRuns) {
+    if (
       workflowRun.conclusion === 'success' &&
-      workflowRun.head_sha !== currentSha &&
-      isAncestor({
-        ancestorSha: workflowRun.head_sha,
-        descendantSha: currentSha,
-      }),
-  );
+      !successfulWorkflowRunsBySha.has(workflowRun.head_sha)
+    ) {
+      successfulWorkflowRunsBySha.set(workflowRun.head_sha, workflowRun);
+    }
+  }
+
+  for (const ancestorCommitSha of ancestorCommitShas) {
+    const workflowRun = successfulWorkflowRunsBySha.get(ancestorCommitSha);
+
+    if (workflowRun) {
+      return workflowRun;
+    }
+  }
+
+  return undefined;
 };
 
 const getRequiredEnvironmentVariable = (name: string): string => {
@@ -140,6 +144,34 @@ const downloadArtifact = async ({
   fs.rmSync(tempDir, { force: true, recursive: true });
 };
 
+const findTimingArtifact = ({
+  artifacts,
+  artifactNamePrefix,
+  commitSha,
+}: {
+  artifactNamePrefix: string;
+  artifacts: WorkflowArtifact[];
+  commitSha: string;
+}): WorkflowArtifact | undefined => {
+  const artifactNames = [
+    `${artifactNamePrefix}-${commitSha}`,
+    artifactNamePrefix,
+  ];
+
+  for (const artifactName of artifactNames) {
+    const artifact = artifacts.find(
+      currentArtifact =>
+        currentArtifact.name === artifactName && !currentArtifact.expired,
+    );
+
+    if (artifact) {
+      return artifact;
+    }
+  }
+
+  return undefined;
+};
+
 export const main = async (
   args: string[] = process.argv.slice(2),
 ): Promise<void> => {
@@ -153,45 +185,56 @@ export const main = async (
 
   const repository = getRequiredEnvironmentVariable('GITHUB_REPOSITORY');
   const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
-  const branchName =
-    process.env.GITHUB_HEAD_REF ??
-    getRequiredEnvironmentVariable('GITHUB_REF_NAME');
+  const ancestorCommitShas = getAncestorCommitShas({ currentSha });
 
-  const workflowRuns = await githubGet<WorkflowRunsResponse>(
-    `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?branch=${branchName}&event=pull_request&status=completed&per_page=100`,
-  );
-
-  const closestAncestorWorkflowRun = findClosestAncestorWorkflowRun({
-    currentSha,
-    workflowRuns: workflowRuns.workflow_runs,
-  });
-
-  if (!closestAncestorWorkflowRun) {
-    console.log(
-      'No successful ancestor workflow run with test timing artifact found.',
+  for (let page = 1; ; page += 1) {
+    const workflowRuns = await githubGet<WorkflowRunsResponse>(
+      `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?status=completed&per_page=100&page=${page}`,
     );
-    return;
+
+    if (workflowRuns.workflow_runs.length === 0) {
+      break;
+    }
+
+    let candidateWorkflowRuns = workflowRuns.workflow_runs;
+
+    while (candidateWorkflowRuns.length > 0) {
+      const closestAncestorWorkflowRun = findClosestAncestorWorkflowRun({
+        ancestorCommitShas,
+        workflowRuns: candidateWorkflowRuns,
+      });
+
+      if (!closestAncestorWorkflowRun) {
+        break;
+      }
+
+      const workflowArtifacts = await githubGet<WorkflowArtifactsResponse>(
+        `https://api.github.com/repos/${repository}/actions/runs/${closestAncestorWorkflowRun.id}/artifacts`,
+      );
+
+      const timingArtifact = findTimingArtifact({
+        artifactNamePrefix: artifactName,
+        artifacts: workflowArtifacts.artifacts,
+        commitSha: closestAncestorWorkflowRun.head_sha,
+      });
+
+      if (timingArtifact) {
+        await downloadArtifact({
+          archiveDownloadUrl: timingArtifact.archive_download_url,
+          outputFilePath,
+        });
+        return;
+      }
+
+      candidateWorkflowRuns = candidateWorkflowRuns.filter(
+        workflowRun => workflowRun.id !== closestAncestorWorkflowRun.id,
+      );
+    }
   }
 
-  const workflowArtifacts = await githubGet<WorkflowArtifactsResponse>(
-    `https://api.github.com/repos/${repository}/actions/runs/${closestAncestorWorkflowRun.id}/artifacts`,
+  console.log(
+    'No successful ancestor workflow run with test timing artifact found.',
   );
-
-  const timingArtifact = workflowArtifacts.artifacts.find(
-    artifact => artifact.name === artifactName && !artifact.expired,
-  );
-
-  if (!timingArtifact) {
-    console.log(
-      'Ancestor workflow run did not include the expected timing artifact.',
-    );
-    return;
-  }
-
-  await downloadArtifact({
-    archiveDownloadUrl: timingArtifact.archive_download_url,
-    outputFilePath,
-  });
 };
 
 /* istanbul ignore next */

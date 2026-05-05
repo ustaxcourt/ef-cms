@@ -9,7 +9,7 @@ jest.mock('child_process', () => ({
 import { execFileSync } from 'child_process';
 import {
   findClosestAncestorWorkflowRun,
-  isGitAncestor,
+  getAncestorCommitShas,
   main,
 } from './download-historical-test-file-times';
 
@@ -39,55 +39,60 @@ describe('download-historical-test-file-times', () => {
     fs.rmSync(tempDir, { force: true, recursive: true });
   });
 
-  describe('isGitAncestor', () => {
-    it('returns true when git merge-base succeeds', () => {
-      mockedExecFileSync.mockReturnValue(Buffer.from(''));
+  describe('getAncestorCommitShas', () => {
+    it('returns current branch commits in descending order, excluding the current sha', () => {
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nancestor-b\nancestor-a\n';
+          }
+
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({
+                './fallback.test.ts': 2000,
+              }),
+            );
+
+            return Buffer.from('');
+          }
+
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
 
       expect(
-        isGitAncestor({
-          ancestorSha: 'ancestor',
-          descendantSha: 'descendant',
+        getAncestorCommitShas({
+          currentSha: 'current',
         }),
-      ).toBe(true);
-    });
-
-    it('returns false when git merge-base fails', () => {
-      mockedExecFileSync.mockImplementation(() => {
-        throw new Error('not ancestor');
-      });
-
-      expect(
-        isGitAncestor({
-          ancestorSha: 'ancestor',
-          descendantSha: 'descendant',
-        }),
-      ).toBe(false);
+      ).toEqual(['ancestor-b', 'ancestor-a']);
     });
   });
 
   describe('findClosestAncestorWorkflowRun', () => {
-    it('returns the first successful ancestor run', () => {
+    it('returns the closest successful ancestor run based on local commit order', () => {
       expect(
         findClosestAncestorWorkflowRun({
-          currentSha: 'current',
-          isAncestor: ({ ancestorSha }: { ancestorSha: string }) =>
-            ancestorSha === 'ancestor-a',
+          ancestorCommitShas: ['ancestor-b', 'ancestor-a'],
           workflowRuns: [
             {
-              conclusion: 'failure',
-              head_sha: 'ancestor-b',
+              conclusion: 'success',
+              head_sha: 'ancestor-a',
               id: 2,
             },
             {
               conclusion: 'success',
-              head_sha: 'ancestor-a',
+              head_sha: 'ancestor-b',
               id: 1,
             },
           ],
         }),
       ).toEqual({
         conclusion: 'success',
-        head_sha: 'ancestor-a',
+        head_sha: 'ancestor-b',
         id: 1,
       });
     });
@@ -95,12 +100,11 @@ describe('download-historical-test-file-times', () => {
     it('returns undefined when no successful ancestor exists', () => {
       expect(
         findClosestAncestorWorkflowRun({
-          currentSha: 'current',
-          isAncestor: () => false,
+          ancestorCommitShas: ['ancestor-a'],
           workflowRuns: [
             {
-              conclusion: 'success',
-              head_sha: 'current',
+              conclusion: 'failure',
+              head_sha: 'ancestor-a',
               id: 2,
             },
           ],
@@ -134,7 +138,7 @@ describe('download-historical-test-file-times', () => {
       mockedExecFileSync.mockImplementation(
         (command: string, args: readonly string[] = []) => {
           if (command === 'git') {
-            return Buffer.from('');
+            return 'current\nancestor\n';
           }
 
           if (command === 'unzip') {
@@ -177,7 +181,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times',
+                  name: 'historical-test-file-times-ancestor',
                 },
               ],
             }),
@@ -195,6 +199,73 @@ describe('download-historical-test-file-times', () => {
       });
     });
 
+    it('falls back to the legacy generic artifact name for compatibility', async () => {
+      const outputFilePath = path.join(tempDir, 'legacy-downloaded.json');
+
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nancestor\n';
+          }
+
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({
+                './legacy.test.ts': 1500,
+              }),
+            );
+
+            return Buffer.from('');
+          }
+
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+
+      jest
+        .mocked(global.fetch)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              workflow_runs: [
+                {
+                  conclusion: 'success',
+                  head_sha: 'ancestor',
+                  id: 123,
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url:
+                    'https://example.com/legacy-artifact.zip',
+                  expired: false,
+                  name: 'historical-test-file-times',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await main(['client.yml', 'historical-test-file-times', outputFilePath]);
+
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './legacy.test.ts': 1500,
+      });
+    });
+
     it('throws when the workflow runs request fails', async () => {
       jest.mocked(global.fetch).mockResolvedValueOnce({
         ok: false,
@@ -208,7 +279,7 @@ describe('download-historical-test-file-times', () => {
           path.join(tempDir, 'workflow-error.json'),
         ]),
       ).rejects.toThrow(
-        'GitHub API request failed (500): https://api.github.com/repos/ustaxcourt/ef-cms/actions/workflows/client.yml/runs?branch=feature-branch&event=pull_request&status=completed&per_page=100',
+        'GitHub API request failed (500): https://api.github.com/repos/ustaxcourt/ef-cms/actions/workflows/client.yml/runs?status=completed&per_page=100&page=1',
       );
     });
 
@@ -238,12 +309,100 @@ describe('download-historical-test-file-times', () => {
       consoleSpy.mockRestore();
     });
 
-    it('returns early when ancestor artifact is missing', async () => {
+    it('falls back to an older ancestor when a closer ancestor lacks a timing artifact', async () => {
       const consoleSpy = jest
         .spyOn(console, 'log')
         .mockImplementation(() => {});
 
-      mockedExecFileSync.mockReturnValue(Buffer.from(''));
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nancestor-b\nancestor-a\n';
+          }
+
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({
+                './fallback.test.ts': 2000,
+              }),
+            );
+
+            return Buffer.from('');
+          }
+
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+      jest
+        .mocked(global.fetch)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              workflow_runs: [
+                {
+                  conclusion: 'success',
+                  head_sha: 'ancestor-a',
+                  id: 123,
+                },
+                {
+                  conclusion: 'success',
+                  head_sha: 'ancestor-b',
+                  id: 456,
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/missing.zip',
+                  expired: false,
+                  name: 'something-else',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/found.zip',
+                  expired: false,
+                  name: 'historical-test-file-times-ancestor-a',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await main([
+        'client.yml',
+        'historical-test-file-times',
+        path.join(tempDir, 'fallback-artifact.json'),
+      ]);
+
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('returns early when no ancestor timing artifact is available in any candidate run', async () => {
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
+
+      mockedExecFileSync.mockReturnValue('current\nancestor\n');
       jest
         .mocked(global.fetch)
         .mockResolvedValueOnce({
@@ -265,6 +424,13 @@ describe('download-historical-test-file-times', () => {
               artifacts: [],
             }),
           ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              workflow_runs: [],
+            }),
+          ok: true,
         } as Response);
 
       await main([
@@ -274,14 +440,14 @@ describe('download-historical-test-file-times', () => {
       ]);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Ancestor workflow run did not include the expected timing artifact.',
+        'No successful ancestor workflow run with test timing artifact found.',
       );
 
       consoleSpy.mockRestore();
     });
 
     it('throws when artifact download fails', async () => {
-      mockedExecFileSync.mockReturnValue(Buffer.from(''));
+      mockedExecFileSync.mockReturnValue('current\nancestor\n');
       jest
         .mocked(global.fetch)
         .mockResolvedValueOnce({
@@ -304,7 +470,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times',
+                  name: 'historical-test-file-times-ancestor',
                 },
               ],
             }),
@@ -331,7 +497,7 @@ describe('download-historical-test-file-times', () => {
 
       mockedExecFileSync.mockImplementation((command: string) => {
         if (command === 'git' || command === 'unzip') {
-          return Buffer.from('');
+          return command === 'git' ? 'current\nancestor\n' : Buffer.from('');
         }
 
         throw new Error(`Unexpected command: ${command}`);
@@ -359,7 +525,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times',
+                  name: 'historical-test-file-times-ancestor',
                 },
               ],
             }),
