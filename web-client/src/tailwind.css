@@ -191,7 +191,7 @@ g:focus:not(:focus-visible) {
   .background-blue {
     background-color: var(--blue-darker);
 
-    @media (width >=480px) {
+    @media (width >= 480px) {
       padding-top: 3rem;
     }
 
