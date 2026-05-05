@@ -21,13 +21,31 @@ describe('websocket connections are cleaned up when disconnecting', () => {
     );
     expect(connectionsBeforeSignOut.length).toEqual(1);
     await cerebralTest.runSequence('signOutSequence');
-    await wait(2000);
-    const connectionsAfterSignOut = await getConnectionsByUserId(
+
+    const connection = connectionsBeforeSignOut[0];
+
+    // Poll for the websocket cleanup to complete
+    const maxWaitMs = 30000;
+    const refreshIntervalMs = 250;
+    let waited = 0;
+    let connectionsAfterSignOut = await getConnectionsByUserId(
       petitionsClerk1UserId,
     );
+    let connectionInPostgres = await getConnection(connection.connectionId);
+    while (
+      (connectionsAfterSignOut.length !== 0 ||
+        connectionInPostgres.length !== 0) &&
+      waited < maxWaitMs
+    ) {
+      await wait(refreshIntervalMs);
+      waited += refreshIntervalMs;
+      connectionsAfterSignOut = await getConnectionsByUserId(
+        petitionsClerk1UserId,
+      );
+      connectionInPostgres = await getConnection(connection.connectionId);
+    }
+
     expect(connectionsAfterSignOut).toEqual([]);
-    const connection = connectionsBeforeSignOut[0];
-    const connectionInPostgres = await getConnection(connection.connectionId);
     expect(connectionInPostgres.length).toEqual(0);
   });
 });
