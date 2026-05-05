@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Pie,
   PieChart,
@@ -55,6 +55,18 @@ const CustomTooltip = ({
   title: string;
   onAnnounce: (text: string) => void;
 }) => {
+  useEffect(() => {
+    if (active && payload?.length) {
+      const entry = payload[0].payload;
+      const { value } = payload[0];
+      const total = data.reduce((sum, d) => sum + d.value, 0);
+      const percentage = ((value / total) * 100).toFixed(1);
+
+      const announcement = `${title ? title + ': ' : ''}${entry.name}: ${value} (${percentage}%)`;
+      onAnnounce(announcement);
+    }
+  }, [active, payload, data, title, onAnnounce]);
+
   if (!active || !payload?.length) return null;
 
   const entry = payload[0].payload;
@@ -62,9 +74,6 @@ const CustomTooltip = ({
   const total = data.reduce((sum, d) => sum + d.value, 0);
   const percentage = ((value / total) * 100).toFixed(1);
   const { color } = entry;
-
-  const announcement = `${title ? title + ': ' : ''}${entry.name}: ${value} (${percentage}%)`;
-  onAnnounce(announcement);
 
   return (
     <div
