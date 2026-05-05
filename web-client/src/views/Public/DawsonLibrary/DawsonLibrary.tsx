@@ -94,7 +94,7 @@ export const DawsonLibrary = () => {
             color: '#FFBE2E',
           },
         ]}
-      />{' '}
+      />
       <div className="tw:mt-12" />
       <LineGraph
         width={DEFAULT_CHART_WIDTH}
