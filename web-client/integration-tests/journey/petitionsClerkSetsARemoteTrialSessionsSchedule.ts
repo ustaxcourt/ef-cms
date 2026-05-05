@@ -1,4 +1,9 @@
-import { wait } from '../helpers';
+import {
+  waitForExpectedItem,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+  waitForPage,
+} from '../helpers';
 
 export const petitionsClerkSetsARemoteTrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Remote Trial Sessions Schedule', async () => {
@@ -37,12 +42,27 @@ export const petitionsClerkSetsARemoteTrialSessionsSchedule = cerebralTest => {
 
     await cerebralTest.runSequence('updateTrialSessionSequence');
 
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'TrialSessionDetails',
+      maxWait: 60000,
+    });
+
     await cerebralTest.runSequence('openSetCalendarModalSequence');
 
     expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
-    await wait(1000);
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 120000 });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'TrialSessionDetails',
+    });
   });
 };

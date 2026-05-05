@@ -1,5 +1,5 @@
 import { docketClerkVerifiesQCItemNotInSectionInbox } from './journey/docketClerkVerifiesQCItemNotInSectionInbox';
-import { loginAs, setupTest, uploadPetition, wait } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
@@ -33,10 +33,6 @@ describe('admissions clerk adds an email to a petitioner who already exists in t
   userVerifiesUpdatedEmailAddress(cerebralTest, '');
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('wait for notice to get processed on the async endpoint', async () => {
-    await wait(5000);
-  });
 
   const documentType = 'Notice of Change of Email Address';
 
