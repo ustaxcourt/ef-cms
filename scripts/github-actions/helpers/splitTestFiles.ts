@@ -7,7 +7,7 @@ export type SplittableFile = {
 };
 
 export const countLinesInFile = (filePath: string): number => {
-  const fileContents = fs.readFileSync(filePath, 'utf8');
+  const fileContents: string = fs.readFileSync(filePath, 'utf8');
 
   if (fileContents.length === 0) {
     return 1;
@@ -19,7 +19,7 @@ export const countLinesInFile = (filePath: string): number => {
 export const getHistoricalTestFileTimes = (
   env: NodeJS.ProcessEnv = process.env,
 ): TestFileTimes => {
-  const testFileTimesPath = env.TEST_FILE_TIMINGS_PATH;
+  const testFileTimesPath: string | undefined = env.TEST_FILE_TIMINGS_PATH;
 
   if (!testFileTimesPath) {
     return {};
@@ -55,15 +55,20 @@ export const distributeFilesByWeight = ({
 
   const shards: SplittableFile[][] = Array.from({ length: total }, () => []);
   const shardWeights: number[] = Array.from({ length: total }, () => 0);
-  const weightedFiles = files
-    .map(file => ({
+  const weightedFiles: Array<SplittableFile & { weight: number }> = files
+    .map((file: SplittableFile): SplittableFile & { weight: number } => ({
       ...file,
       weight: getWeightForFile({
         file,
         historicalTestFileTimes,
       }),
     }))
-    .sort((a, b) => b.weight - a.weight || a.output.localeCompare(b.output));
+    .sort(
+      (
+        a: SplittableFile & { weight: number },
+        b: SplittableFile & { weight: number },
+      ): number => b.weight - a.weight || a.output.localeCompare(b.output),
+    );
 
   for (const weightedFile of weightedFiles) {
     const shardIndex = shardWeights.indexOf(Math.min(...shardWeights));
@@ -75,8 +80,10 @@ export const distributeFilesByWeight = ({
     shardWeights[shardIndex] += weightedFile.weight;
   }
 
-  return shards.map(shard =>
-    shard.sort((a, b) => a.output.localeCompare(b.output)),
+  return shards.map((shard: SplittableFile[]): SplittableFile[] =>
+    shard.sort((a: SplittableFile, b: SplittableFile): number =>
+      a.output.localeCompare(b.output),
+    ),
   );
 };
 
@@ -120,5 +127,5 @@ export const getOutputsForCurrentCiNode = ({
     files,
     historicalTestFileTimes: getHistoricalTestFileTimes(env),
     total,
-  })[index].map(file => file.output);
+  })[index].map((file: SplittableFile): string => file.output);
 };

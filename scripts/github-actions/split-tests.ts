@@ -1,17 +1,22 @@
 import fs from 'fs';
-import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
+import {
+  getOutputsForCurrentCiNode,
+  type SplittableFile,
+} from './helpers/splitTestFiles';
 
 export const main = (args: string[] = process.argv.slice(2)): string => {
-  const testType = args[0] || '';
-  const specDir = `./web-client/integration-tests${testType}`;
-  const files = fs
+  const testType: string = args[0] || '';
+  const specDir: string = `./web-client/integration-tests${testType}`;
+  const files: SplittableFile[] = fs
     .readdirSync(specDir)
-    .filter(f => f.endsWith('test.ts'))
-    .map(fileName => ({
-      output: fileName,
-      path: `${specDir}/${fileName}`,
-    }));
-  const output = getOutputsForCurrentCiNode({
+    .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
+    .map(
+      (fileName: string): SplittableFile => ({
+        output: fileName,
+        path: `${specDir}/${fileName}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
     files,
   }).join(' ');
 

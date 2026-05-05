@@ -8,26 +8,28 @@ jest.mock('./helpers/splitTestFiles', () => ({
 }));
 
 describe('split-tests-cypress', () => {
-  const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+  const mockConsoleLog = jest
+    .spyOn(console, 'log')
+    .mockImplementation((): void => undefined);
   const originalArgv = process.argv;
 
-  beforeEach(() => {
+  beforeEach((): void => {
     jest.clearAllMocks();
   });
 
-  afterAll(() => {
+  afterAll((): void => {
     process.argv = originalArgv;
   });
 
-  it('filters requested cypress tests and excludes public tests by default', () => {
-    jest
-      .mocked(fs.readdirSync)
-      .mockReturnValue([
-        'integration/case-detail.cy.ts',
-        'integration/public/ignore.cy.ts',
-        'integration/notes.txt',
-        'accessibility/a11y.cy.ts',
-      ] as string[]);
+  it('filters requested cypress tests and excludes public tests by default', (): void => {
+    const directoryEntries: string[] = [
+      'integration/case-detail.cy.ts',
+      'integration/public/ignore.cy.ts',
+      'integration/notes.txt',
+      'accessibility/a11y.cy.ts',
+    ];
+
+    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue([
@@ -37,6 +39,7 @@ describe('split-tests-cypress', () => {
     const result = main(['integration']);
 
     expect(fs.readdirSync).toHaveBeenCalledWith('./cypress/local-only/tests', {
+      encoding: 'utf8',
       recursive: true,
     });
     expect(getOutputsForCurrentCiNode).toHaveBeenCalledWith({
@@ -55,10 +58,10 @@ describe('split-tests-cypress', () => {
     );
   });
 
-  it('keeps public cypress tests when the requested folder includes public', () => {
-    jest
-      .mocked(fs.readdirSync)
-      .mockReturnValue(['integration/public/public-case.cy.ts'] as string[]);
+  it('keeps public cypress tests when the requested folder includes public', (): void => {
+    const directoryEntries: string[] = ['integration/public/public-case.cy.ts'];
+
+    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue([
@@ -78,14 +81,17 @@ describe('split-tests-cypress', () => {
     });
   });
 
-  it('uses process.argv by default when args are omitted', () => {
+  it('uses process.argv by default when args are omitted', (): void => {
     process.argv = ['node', 'script'];
-    jest.mocked(fs.readdirSync).mockReturnValue([] as string[]);
+    const directoryEntries: string[] = [];
+
+    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest.mocked(getOutputsForCurrentCiNode).mockReturnValue([]);
 
     const result = main();
 
     expect(fs.readdirSync).toHaveBeenCalledWith('./cypress/local-only/tests', {
+      encoding: 'utf8',
       recursive: true,
     });
     expect(result).toBe('');

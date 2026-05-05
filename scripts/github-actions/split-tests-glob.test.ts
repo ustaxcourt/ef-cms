@@ -8,18 +8,20 @@ jest.mock('./helpers/splitTestFiles', () => ({
 }));
 
 describe('split-tests-glob', () => {
-  const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+  const mockConsoleLog = jest
+    .spyOn(console, 'log')
+    .mockImplementation((): void => undefined);
   const originalArgv = process.argv;
 
-  beforeEach(() => {
+  beforeEach((): void => {
     jest.clearAllMocks();
   });
 
-  afterAll(() => {
+  afterAll((): void => {
     process.argv = originalArgv;
   });
 
-  it('loads unit test files and logs the selected shard output', () => {
+  it('loads unit test files and logs the selected shard output', (): void => {
     jest
       .mocked(glob.sync)
       .mockReturnValue([
@@ -51,7 +53,7 @@ describe('split-tests-glob', () => {
     expect(result).toBe('./web-client/src/b.test.tsx');
   });
 
-  it('loads shared test files when requested', () => {
+  it('loads shared test files when requested', (): void => {
     jest.mocked(glob.sync).mockReturnValue(['./shared/src/example.test.ts']);
     jest
       .mocked(getOutputsForCurrentCiNode)
@@ -64,7 +66,7 @@ describe('split-tests-glob', () => {
     );
   });
 
-  it('handles unknown test types without globbing', () => {
+  it('handles unknown test types without globbing', (): void => {
     jest.mocked(getOutputsForCurrentCiNode).mockReturnValue([]);
 
     const result = main(['-other']);
@@ -77,7 +79,7 @@ describe('split-tests-glob', () => {
     expect(result).toBe('');
   });
 
-  it('uses process.argv by default when args are omitted', () => {
+  it('uses process.argv by default when args are omitted', (): void => {
     process.argv = ['node', 'script'];
     jest.mocked(getOutputsForCurrentCiNode).mockReturnValue([]);
 

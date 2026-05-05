@@ -1,8 +1,11 @@
 import glob from 'glob';
-import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
+import {
+  getOutputsForCurrentCiNode,
+  type SplittableFile,
+} from './helpers/splitTestFiles';
 
 export const main = (args: string[] = process.argv.slice(2)): string => {
-  const testType = args[0] || '';
+  const testType: string = args[0] || '';
 
   let testFiles: string[] = [];
   if (testType.includes('unit')) {
@@ -11,11 +14,13 @@ export const main = (args: string[] = process.argv.slice(2)): string => {
     testFiles = glob.sync('./shared/src/**/?(*.)+(spec|test).[jt]s');
   }
 
-  const output = getOutputsForCurrentCiNode({
-    files: testFiles.map(filePath => ({
-      output: filePath,
-      path: filePath,
-    })),
+  const output: string = getOutputsForCurrentCiNode({
+    files: testFiles.map(
+      (filePath: string): SplittableFile => ({
+        output: filePath,
+        path: filePath,
+      }),
+    ),
   }).join('|');
 
   console.log(output);

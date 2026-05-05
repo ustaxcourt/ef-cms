@@ -1,5 +1,8 @@
 import fs from 'fs';
-import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
+import {
+  getOutputsForCurrentCiNode,
+  type SplittableFile,
+} from './helpers/splitTestFiles';
 
 // # Usage
 // #   npx ts-node scripts/github-actions/split-tests-cypress.ts integration
@@ -9,22 +12,28 @@ import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
 // #   - $1 - the folder of tests to include when looking for tests to split across action runners
 
 export const main = (args: string[] = process.argv.slice(2)): string => {
-  const testFolderToInclude = args[0] || '';
-  const shouldExcludePublicTests = !testFolderToInclude.includes('public');
-  const specDir = './cypress/local-only/tests';
-  const files = fs
-    .readdirSync(specDir, { recursive: true })
+  const testFolderToInclude: string = args[0] || '';
+  const shouldExcludePublicTests: boolean =
+    !testFolderToInclude.includes('public');
+  const specDir: string = './cypress/local-only/tests';
+  const directoryEntries: string[] = fs.readdirSync(specDir, {
+    encoding: 'utf8',
+    recursive: true,
+  });
+  const files: SplittableFile[] = directoryEntries
     .filter(
-      f =>
-        (f as string).endsWith('cy.ts') &&
-        (!shouldExcludePublicTests || !f.includes('public/')) &&
-        f.includes(`${testFolderToInclude}/`),
+      (file: string): boolean =>
+        file.endsWith('cy.ts') &&
+        (!shouldExcludePublicTests || !file.includes('public/')) &&
+        file.includes(`${testFolderToInclude}/`),
     )
-    .map(file => ({
-      output: `./cypress/local-only/tests/${file}`,
-      path: `./cypress/local-only/tests/${file}`,
-    }));
-  const output = getOutputsForCurrentCiNode({
+    .map(
+      (file: string): SplittableFile => ({
+        output: `./cypress/local-only/tests/${file}`,
+        path: `./cypress/local-only/tests/${file}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
     files,
   }).join(',');
 

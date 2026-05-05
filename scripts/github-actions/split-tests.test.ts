@@ -8,25 +8,27 @@ jest.mock('./helpers/splitTestFiles', () => ({
 }));
 
 describe('split-tests', () => {
-  const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+  const mockConsoleLog = jest
+    .spyOn(console, 'log')
+    .mockImplementation((): void => undefined);
   const originalArgv = process.argv;
 
-  beforeEach(() => {
+  beforeEach((): void => {
     jest.clearAllMocks();
   });
 
-  afterAll(() => {
+  afterAll((): void => {
     process.argv = originalArgv;
   });
 
-  it('logs integration test files for the requested suffix', () => {
-    jest
-      .mocked(fs.readdirSync)
-      .mockReturnValue([
-        'alpha.test.ts',
-        'notes.md',
-        'beta.test.ts',
-      ] as string[]);
+  it('logs integration test files for the requested suffix', (): void => {
+    const directoryEntries: string[] = [
+      'alpha.test.ts',
+      'notes.md',
+      'beta.test.ts',
+    ];
+
+    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue(['beta.test.ts', 'alpha.test.ts']);
@@ -52,11 +54,11 @@ describe('split-tests', () => {
     expect(result).toBe('beta.test.ts alpha.test.ts');
   });
 
-  it('uses process.argv by default when no args are provided', () => {
+  it('uses process.argv by default when no args are provided', (): void => {
     process.argv = ['node', 'script'];
-    jest
-      .mocked(fs.readdirSync)
-      .mockReturnValue(['default.test.ts'] as string[]);
+    const directoryEntries: string[] = ['default.test.ts'];
+
+    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue(['default.test.ts']);

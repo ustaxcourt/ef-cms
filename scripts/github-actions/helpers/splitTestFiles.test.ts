@@ -7,22 +7,22 @@ import {
   getCiNodeConfig,
   getHistoricalTestFileTimes,
   getOutputsForCurrentCiNode,
+  type SplittableFile,
 } from './splitTestFiles';
 
 describe('splitTestFiles', () => {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'split-test-files-'));
+  const tempDir: string = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'split-test-files-'),
+  );
 
   const createTempFile = (
     fileName: string,
     lineCount: number,
-  ): {
-    output: string;
-    path: string;
-  } => {
-    const filePath = path.join(tempDir, fileName);
-    const fileContents = Array.from(
+  ): SplittableFile => {
+    const filePath: string = path.join(tempDir, fileName);
+    const fileContents: string = Array.from(
       { length: lineCount },
-      (_value, index) => `line ${index + 1}`,
+      (_value: unknown, index: number): string => `line ${index + 1}`,
     ).join('\n');
 
     fs.writeFileSync(filePath, fileContents);
@@ -33,7 +33,7 @@ describe('splitTestFiles', () => {
     };
   };
 
-  afterAll(() => {
+  afterAll((): void => {
     fs.rmSync(tempDir, { force: true, recursive: true });
   });
 
