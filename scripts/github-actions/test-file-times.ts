@@ -19,7 +19,7 @@ export const main = (args: string[] = process.argv.slice(2)): void => {
 
     if (!inputFilePath || !outputFilePath) {
       throw new Error(
-        'Usage: npx ts-node scripts/test-file-times.ts from-jest <input> <output>',
+        'Usage: npx ts-node scripts/github-actions/test-file-times.ts from-jest <input> <output>',
       );
     }
 
@@ -34,7 +34,7 @@ export const main = (args: string[] = process.argv.slice(2)): void => {
 
     if (!outputFilePath || inputFilePaths.length === 0) {
       throw new Error(
-        'Usage: npx ts-node scripts/test-file-times.ts merge <output> <input...>',
+        'Usage: npx ts-node scripts/github-actions/test-file-times.ts merge <output> <input...>',
       );
     }
 
@@ -46,7 +46,7 @@ export const main = (args: string[] = process.argv.slice(2)): void => {
     });
   } else {
     throw new Error(
-      'Usage: npx ts-node scripts/test-file-times.ts <from-jest|merge> ...args',
+      'Usage: npx ts-node scripts/github-actions/test-file-times.ts <from-jest|merge> ...args',
     );
   }
 };

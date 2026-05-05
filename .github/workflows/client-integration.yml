@@ -82,7 +82,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          npx ts-node scripts/download-historical-test-file-times.ts client-integration.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
+          npx ts-node scripts/github-actions/download-historical-test-file-times.ts client-integration.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
       - name: Setup Postgres
         run: |
           npm run migration:postgres
@@ -101,7 +101,7 @@ jobs:
         if: always()
         run: |
           if [[ -f "${JEST_TEST_RESULTS_FILE}" ]]; then
-            npx ts-node scripts/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
+            npx ts-node scripts/github-actions/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
           fi
       - name: Store Artifacts
         uses: actions/upload-artifact@v7

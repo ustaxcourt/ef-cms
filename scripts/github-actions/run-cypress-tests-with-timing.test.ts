@@ -82,7 +82,7 @@ describe('run-cypress-tests-with-timing', () => {
 
   it('throws when required arguments are missing', async () => {
     await expect(main(['cypress.config.ts'])).rejects.toThrow(
-      'Usage: npx ts-node scripts/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
+      'Usage: npx ts-node scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
     );
   });
 

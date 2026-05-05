@@ -11,7 +11,7 @@ export const main = async (
 
   if (!configFile || !specs || !outputFilePath) {
     throw new Error(
-      'Usage: npx ts-node scripts/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
+      'Usage: npx ts-node scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
     );
   }
 

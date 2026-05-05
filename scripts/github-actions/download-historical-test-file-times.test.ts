@@ -112,7 +112,7 @@ describe('download-historical-test-file-times', () => {
   describe('main', () => {
     it('throws when required arguments are missing', async () => {
       await expect(main([])).rejects.toThrow(
-        'Usage: npx ts-node scripts/download-historical-test-file-times.ts <workflow-file-name> <artifact-name> <output-path>',
+        'Usage: npx ts-node scripts/github-actions/download-historical-test-file-times.ts <workflow-file-name> <artifact-name> <output-path>',
       );
     });
 

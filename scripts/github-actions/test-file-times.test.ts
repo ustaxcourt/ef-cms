@@ -54,16 +54,16 @@ describe('test-file-times script', () => {
 
   it('throws for invalid commands', () => {
     expect(() => main(['oops'])).toThrow(
-      'Usage: npx ts-node scripts/test-file-times.ts <from-jest|merge> ...args',
+      'Usage: npx ts-node scripts/github-actions/test-file-times.ts <from-jest|merge> ...args',
     );
   });
 
   it('throws when required arguments are missing', () => {
     expect(() => main(['from-jest'])).toThrow(
-      'Usage: npx ts-node scripts/test-file-times.ts from-jest <input> <output>',
+      'Usage: npx ts-node scripts/github-actions/test-file-times.ts from-jest <input> <output>',
     );
     expect(() => main(['merge', path.join(tempDir, 'merged.json')])).toThrow(
-      'Usage: npx ts-node scripts/test-file-times.ts merge <output> <input...>',
+      'Usage: npx ts-node scripts/github-actions/test-file-times.ts merge <output> <input...>',
     );
   });
 });

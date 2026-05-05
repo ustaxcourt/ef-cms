@@ -1,5 +1,8 @@
 import fs from 'fs';
-import { readTestFileTimes, type TestFileTimes } from './testFileTimes';
+import {
+  readTestFileTimes,
+  type TestFileTimes,
+} from '../github-actions/helpers/testFileTimes';
 
 export type SplittableFile = {
   output: string;
