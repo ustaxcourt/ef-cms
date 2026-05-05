@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { readTestFileTimes, type TestFileTimes } from './testFileTimes';
 
 export type SplittableFile = {
   output: string;
@@ -15,11 +16,35 @@ export const countLinesInFile = (filePath: string): number => {
   return fileContents.split(/\r\n|\n|\r/u).length;
 };
 
-export const distributeFilesByLineCount = ({
+export const getHistoricalTestFileTimes = (
+  env: NodeJS.ProcessEnv = process.env,
+): TestFileTimes => {
+  const testFileTimesPath = env.TEST_FILE_TIMINGS_PATH;
+
+  if (!testFileTimesPath) {
+    return {};
+  }
+
+  return readTestFileTimes(testFileTimesPath);
+};
+
+export const getWeightForFile = ({
+  file,
+  historicalTestFileTimes,
+}: {
+  file: SplittableFile;
+  historicalTestFileTimes: TestFileTimes;
+}): number => {
+  return historicalTestFileTimes[file.path] ?? countLinesInFile(file.path);
+};
+
+export const distributeFilesByWeight = ({
   files,
+  historicalTestFileTimes = {},
   total,
 }: {
   files: SplittableFile[];
+  historicalTestFileTimes?: TestFileTimes;
   total: number;
 }): SplittableFile[][] => {
   if (!Number.isInteger(total) || total < 1) {
@@ -33,7 +58,10 @@ export const distributeFilesByLineCount = ({
   const weightedFiles = files
     .map(file => ({
       ...file,
-      weight: countLinesInFile(file.path),
+      weight: getWeightForFile({
+        file,
+        historicalTestFileTimes,
+      }),
     }))
     .sort((a, b) => b.weight - a.weight || a.output.localeCompare(b.output));
 
@@ -88,8 +116,9 @@ export const getOutputsForCurrentCiNode = ({
 }): string[] => {
   const { index, total } = getCiNodeConfig(env);
 
-  return distributeFilesByLineCount({
+  return distributeFilesByWeight({
     files,
+    historicalTestFileTimes: getHistoricalTestFileTimes(env),
     total,
   })[index].map(file => file.output);
 };

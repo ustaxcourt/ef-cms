@@ -3,8 +3,9 @@ import os from 'os';
 import path from 'path';
 import {
   countLinesInFile,
-  distributeFilesByLineCount,
+  distributeFilesByWeight,
   getCiNodeConfig,
+  getHistoricalTestFileTimes,
   getOutputsForCurrentCiNode,
 } from './splitTestFiles';
 
@@ -57,10 +58,10 @@ describe('splitTestFiles', () => {
     });
   });
 
-  describe('distributeFilesByLineCount', () => {
+  describe('distributeFilesByWeight', () => {
     it('throws when shard total is invalid', () => {
       expect(() =>
-        distributeFilesByLineCount({
+        distributeFilesByWeight({
           files: [],
           total: 0,
         }),
@@ -76,7 +77,7 @@ describe('splitTestFiles', () => {
       ];
 
       expect(
-        distributeFilesByLineCount({
+        distributeFilesByWeight({
           files,
           total: 2,
         }),
@@ -100,7 +101,7 @@ describe('splitTestFiles', () => {
       ];
 
       expect(
-        distributeFilesByLineCount({
+        distributeFilesByWeight({
           files,
           total: 2,
         }),
@@ -111,6 +112,60 @@ describe('splitTestFiles', () => {
         ],
         [{ output: 'beta.test.ts', path: files[2].path }],
       ]);
+    });
+
+    it('prefers historical execution times over line counts when available', () => {
+      const files = [
+        createTempFile('short-but-slow.test.ts', 1),
+        createTempFile('long-but-fast.test.ts', 100),
+        createTempFile('medium.test.ts', 50),
+      ];
+
+      expect(
+        distributeFilesByWeight({
+          files,
+          historicalTestFileTimes: {
+            [files[0].path]: 1000,
+            [files[1].path]: 10,
+            [files[2].path]: 500,
+          },
+          total: 2,
+        }),
+      ).toEqual([
+        [{ output: 'short-but-slow.test.ts', path: files[0].path }],
+        [
+          { output: 'long-but-fast.test.ts', path: files[1].path },
+          { output: 'medium.test.ts', path: files[2].path },
+        ],
+      ]);
+    });
+  });
+
+  describe('getHistoricalTestFileTimes', () => {
+    it('returns an empty object when timing env is unset', () => {
+      expect(getHistoricalTestFileTimes({})).toEqual({});
+    });
+
+    it('reads historical test file timings from disk', () => {
+      const timingFilePath = path.join(
+        tempDir,
+        'historical-test-file-times.json',
+      );
+
+      fs.writeFileSync(
+        timingFilePath,
+        JSON.stringify({
+          './example.test.ts': 1000,
+        }),
+      );
+
+      expect(
+        getHistoricalTestFileTimes({
+          TEST_FILE_TIMINGS_PATH: timingFilePath,
+        }),
+      ).toEqual({
+        './example.test.ts': 1000,
+      });
     });
   });
 

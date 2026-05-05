@@ -25,6 +25,9 @@ jobs:
     env:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+      JEST_TEST_RESULTS_FILE: /tmp/test-file-times/jest-results-${{ matrix.ci_node_index }}.json
+      TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/historical-test-file-times.json
+      TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/test-file-times-${{ matrix.ci_node_index }}.json
     services:
       postgres:
         image: postgres
@@ -39,6 +42,8 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
@@ -69,6 +74,11 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
+      - name: Restore historical test file timings
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npx ts-node scripts/download-historical-test-file-times.ts client-integration-public.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
       - name: Setup Postgres
         run: |
           npm run migration:postgres
@@ -76,16 +86,31 @@ jobs:
           npm run seed:postgres
       - name: Web Client - Integration Tests Public
         run: |
+          mkdir -p /tmp/test-file-times
           mkdir -p /tmp/web-client
           npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
           ./wait-until-services.sh
           export TESTFILES=$(npx ts-node split-tests.ts -public)
+          export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
           npm run test:client:integration:ci
+      - name: Record shard test file timings
+        if: always()
+        run: |
+          if [[ -f "${JEST_TEST_RESULTS_FILE}" ]]; then
+            npx ts-node scripts/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
+          fi
       - name: Store Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: server-log-output-${{ matrix.ci_node_index }}
           path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
+      - name: Store shard test file timings
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          if-no-files-found: ignore
+          name: historical-test-file-times-shard-${{ matrix.ci_node_index }}
+          path: ${{ env.TEST_FILE_TIMINGS_SHARD_FILE }}
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
         uses: actions/cache/save@v5
@@ -95,3 +120,34 @@ jobs:
             .cache/puppeteer
             /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+  persist-test-file-times:
+    runs-on: ubuntu-latest
+    needs: [client_integration_public]
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: historical-test-file-times-shard-*
+          merge-multiple: true
+          path: /tmp/test-file-times/shards
+      - name: Merge test file timings
+        run: |
+          python - <<'PY'
+          import glob
+          import json
+          import os
+
+          output_path = '/tmp/test-file-times/historical-test-file-times.json'
+          merged = {}
+
+          for file_path in sorted(glob.glob('/tmp/test-file-times/shards/*.json')):
+              with open(file_path) as input_file:
+                  merged.update(json.load(input_file))
+
+          os.makedirs(os.path.dirname(output_path), exist_ok=True)
+          with open(output_path, 'w') as output_file:
+              json.dump(merged, output_file, indent=2)
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: historical-test-file-times
+          path: /tmp/test-file-times/historical-test-file-times.json

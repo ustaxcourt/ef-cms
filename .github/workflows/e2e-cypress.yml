@@ -26,6 +26,8 @@ jobs:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+      TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/historical-test-file-times.json
+      TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/test-file-times-${{ matrix.ci_node_index }}.json
     services:
       postgres:
         image: postgres
@@ -40,6 +42,8 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
@@ -65,6 +69,11 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
+      - name: Restore historical test file timings
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          npx ts-node scripts/download-historical-test-file-times.ts e2e-cypress.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
       - name: Setup Postgres
         run: |
           npm run migration:postgres
@@ -72,17 +81,25 @@ jobs:
           npm run seed:postgres
       - name: Run E2E Cypress
         run: |
+          mkdir -p /tmp/test-file-times
           mkdir -p /tmp/cypress/
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
           export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
-          npm run cypress:integration:file $TESTFILES
+          npx ts-node scripts/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
       - name: Store Cypress Videos
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/local-only/videos
+      - name: Store shard test file timings
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          if-no-files-found: ignore
+          name: historical-test-file-times-shard-${{ matrix.ci_node_index }}
+          path: ${{ env.TEST_FILE_TIMINGS_SHARD_FILE }}
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
         uses: actions/cache/save@v5
@@ -92,3 +109,34 @@ jobs:
             .cache/puppeteer
             /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+  persist-test-file-times:
+    runs-on: ubuntu-latest
+    needs: [e2e_cypress]
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: historical-test-file-times-shard-*
+          merge-multiple: true
+          path: /tmp/test-file-times/shards
+      - name: Merge test file timings
+        run: |
+          python - <<'PY'
+          import glob
+          import json
+          import os
+
+          output_path = '/tmp/test-file-times/historical-test-file-times.json'
+          merged = {}
+
+          for file_path in sorted(glob.glob('/tmp/test-file-times/shards/*.json')):
+              with open(file_path) as input_file:
+                  merged.update(json.load(input_file))
+
+          os.makedirs(os.path.dirname(output_path), exist_ok=True)
+          with open(output_path, 'w') as output_file:
+              json.dump(merged, output_file, indent=2)
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: historical-test-file-times
+          path: /tmp/test-file-times/historical-test-file-times.json
