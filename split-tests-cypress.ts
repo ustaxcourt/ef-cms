@@ -1,5 +1,5 @@
 import fs from 'fs';
-import shuffleSeed from 'shuffle-seed';
+import { getOutputsForCurrentCiNode } from './scripts/helpers/splitTestFiles';
 
 // # Usage
 // #   npx ts-node split-tests-cypress.ts integration
@@ -10,6 +10,7 @@ import shuffleSeed from 'shuffle-seed';
 
 const args = process.argv.slice(2);
 const testFolderToInclude = args[0];
+const shouldExcludePublicTests = !testFolderToInclude.includes('public');
 
 const specDir = './cypress/local-only/tests';
 const files = fs
@@ -17,17 +18,16 @@ const files = fs
   .filter(
     f =>
       (f as string).endsWith('cy.ts') &&
-      !f.includes('public/') &&
+      (!shouldExcludePublicTests || !f.includes('public/')) &&
       f.includes(`${testFolderToInclude}/`),
-  );
+  )
+  .map(file => ({
+    output: `./cypress/local-only/tests/${file}`,
+    path: `./cypress/local-only/tests/${file}`,
+  }));
 
-const shuffled = shuffleSeed.shuffle(files, process.env.GITHUB_SHA);
-
-const total = parseInt(process.env.CI_NODE_TOTAL!, 10);
-const index = parseInt(process.env.CI_NODE_INDEX!, 10);
-
-const tests = shuffled
-  .filter((num, i) => i % total === index)
-  .map(file => `./cypress/local-only/tests/${file}`);
+const tests = getOutputsForCurrentCiNode({
+  files,
+});
 
 console.log(tests.join(','));

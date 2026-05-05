@@ -73,8 +73,7 @@ jobs:
         run: |
           mkdir -p /tmp/cypress/
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-          ./wait-until-services.sh
-          sleep 5
+          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
           export TESTFILES=$(npx ts-node split-tests-cypress.ts accessibility)
           npm run cypress:integration:file $TESTFILES
       - name: Save Cache Dependencies
