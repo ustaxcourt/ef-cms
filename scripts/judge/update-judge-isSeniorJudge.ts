@@ -7,7 +7,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 

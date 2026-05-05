@@ -1,6 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';

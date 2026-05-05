@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
 import { promises as fs } from 'fs';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 
 const migrationsDirectory = path.join(__dirname, 'migrations');
 const deprecatedMigrationsDirectory = path.join(

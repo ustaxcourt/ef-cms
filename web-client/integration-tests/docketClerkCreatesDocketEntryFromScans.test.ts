@@ -15,8 +15,8 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 describe('Create Docket Entry From Scans', () => {
   const cerebralTest = setupTest();
 
-  let scannerSourceIndex = 0;
-  let scannerSourceName = 'scanner A';
+  const scannerSourceIndex = 0;
+  const scannerSourceName = 'scanner A';
 
   beforeEach(() => {
     global.window.localStorage.getItem = key => {

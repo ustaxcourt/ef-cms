@@ -2,7 +2,7 @@ import {
   COUNTRY_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
@@ -18,7 +18,8 @@ import {
   uploadExternalDecisionDocument,
   uploadExternalRatificationDocument,
   uploadPetition,
-  wait,
+  waitForExpectedItem,
+  waitForPage,
 } from './helpers';
 
 describe('Create a work item', () => {
@@ -60,20 +61,16 @@ describe('Create a work item', () => {
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  it(
-    'petitioner uploads the external documents',
-    async () => {
-      await cerebralTest.runSequence('gotoFileDocumentSequence', {
-        docketNumber: caseDetail.docketNumber,
-      });
+  it('petitioner uploads the external documents', async () => {
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: caseDetail.docketNumber,
+    });
 
-      await uploadExternalDecisionDocument(cerebralTest);
-      await uploadExternalDecisionDocument(cerebralTest);
-      await uploadExternalRatificationDocument(cerebralTest);
-      await uploadExternalRatificationDocument(cerebralTest);
-    },
-    120000,
-  );
+    await uploadExternalDecisionDocument(cerebralTest);
+    await uploadExternalDecisionDocument(cerebralTest);
+    await uploadExternalRatificationDocument(cerebralTest);
+    await uploadExternalRatificationDocument(cerebralTest);
+  }, 120000);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
@@ -128,7 +125,15 @@ describe('Create a work item', () => {
       docketNumber: caseDetail.docketNumber,
     });
 
-    await wait(1000);
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'DocketEntryQc',
+    });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'docketEntryId',
+      expectedItem: decisionWorkItem.docketEntry.docketEntryId,
+    });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
