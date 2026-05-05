@@ -133,7 +133,7 @@ const downloadArtifact = async ({
 
   const extractedFileName = fs
     .readdirSync(tempDir)
-    .find(fileName => fileName.endsWith('.json'));
+    .find(fileName => fileName !== 'artifact.zip' && fileName.endsWith('.json'));
 
   if (!extractedFileName) {
     throw new Error('Downloaded artifact did not contain a json timing file');
@@ -187,6 +187,7 @@ export const main = async (
   const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
   const ancestorCommitShas = getAncestorCommitShas({ currentSha });
 
+  // Paginate until GitHub returns an empty workflow_runs page.
   for (let page = 1; ; page += 1) {
     const workflowRuns = await githubGet<WorkflowRunsResponse>(
       `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?status=completed&per_page=100&page=${page}`,
