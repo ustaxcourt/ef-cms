@@ -1,7 +1,7 @@
 import { TrialSessionLocationChangePDFInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialLocation';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
-import { noticeOfChangeOfTrialLocation } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
+import { noticeOfChangeOfTrialLocation } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
 
 describe('noticeOfChangeOfTrialLocation', () => {
   const TRIAL_SESSION: TrialSessionLocationChangePDFInfo = {

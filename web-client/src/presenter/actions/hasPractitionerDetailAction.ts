@@ -13,7 +13,7 @@ export const hasPractitionerDetailAction = ({
 
   if (isPublicUser)
     return path.setResultsInState({
-      searchResults: { practitioners: practitionerDetail, total: 1 },
+      searchResults: { practitioners: [practitionerDetail], total: 1 },
     });
 
   return path.navigateToPractitionerDetails();

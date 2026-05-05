@@ -1,4 +1,4 @@
-import { getChromiumBrowser } from '@shared/business/utilities/chromium/getChromiumBrowser';
+import { getChromiumBrowser } from '@web-api/business/utilities/chromium/getChromiumBrowser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { rescheduleLambda } from '@web-api/dispatchers/sqs/rescheduleLambda';
 import { sleep } from '@shared/tools/helpers';

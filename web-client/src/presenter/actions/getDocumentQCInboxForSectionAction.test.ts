@@ -1,10 +1,10 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCInboxForSectionAction } from './getDocumentQCInboxForSectionAction';
-import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForSectionInteractor } from '@web-client/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-jest.mock('@shared/proxies/workitems/getDocumentQCInboxForSectionProxy');
+jest.mock('@web-client/proxies/workitems/getDocumentQCInboxForSectionProxy');
 
 describe('getDocumentQCInboxForSectionAction', () => {
   const mockGetDocumentQCInboxForSectionInteractor =

@@ -6,11 +6,12 @@ import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
 import { validateMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/validateMinuteSheet';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const getMinuteSheetInteractor = async (
   { docketNumber, trialSessionId },
   authorizedUser: UnknownAuthUser,
-): Promise<any> => {
+): Promise<MinuteSheet> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -20,7 +21,7 @@ export const getMinuteSheetInteractor = async (
     trialSessionId,
   });
 
-  if (typeof minuteSheet === 'undefined') return {};
+  if (typeof minuteSheet === 'undefined') return {} as MinuteSheet;
 
   const isValid = validateMinuteSheet(minuteSheet?.content);
 

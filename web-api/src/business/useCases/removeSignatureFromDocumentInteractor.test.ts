@@ -1,0 +1,134 @@
+import { NotFoundError } from '@web-api/errors/errors';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
+describe('removeSignatureFromDocumentInteractor', () => {
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+
+  let mockCase;
+
+  const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockDocumentStorageId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockDocumentIdBeforeSignature = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3858';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
+  beforeAll(() => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: mockDocketEntryId,
+          docketNumber: '101-18',
+          documentIdBeforeSignature: mockDocumentIdBeforeSignature,
+          documentTitle: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          isFileAttached: true,
+          processingStatus: 'pending',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
+  });
+
+  it('should throw an error when user is undefined', async () => {
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: mockCase.docketNumber,
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to remove signature from document is not an auth user',
+    );
+  });
+
+  it('should retrieve the original, unsigned document from S3', async () => {
+    await removeSignatureFromDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toMatchObject({
+      key: mockDocumentIdBeforeSignature,
+      useTempBucket: false,
+    });
+  });
+
+  it('should overwrite the current, signed document in S3 with the original, unsigned document', async () => {
+    await removeSignatureFromDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      key: mockDocumentStorageId,
+    });
+  });
+
+  it('should unsign the document and save the updated document to the case', async () => {
+    await removeSignatureFromDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const updatedCase =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const unsignedDocument = updatedCase.docketEntries.find(
+      doc => doc.docketEntryId === mockDocketEntryId,
+    );
+    expect(unsignedDocument).toMatchObject({
+      signedAt: undefined,
+      signedByUserId: undefined,
+      signedJudgeName: undefined,
+    });
+  });
+
+  it('throws NotFoundError if docket entry is not found', async () => {
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: 'non-existent-id',
+          docketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+});

@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { orderAdvancedSearchInteractor } from '@shared/business/useCases/orderAdvancedSearchInteractor';
+import { orderAdvancedSearchInteractor } from '@web-api/business/useCases/orderAdvancedSearchInteractor';
 
 /**
  * used for fetching orders matching the provided search string
