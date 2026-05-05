@@ -2,9 +2,9 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { certificateOfService } from './certificateOfService';
-import { generateAndVerifyPdfDiff } from '@shared/business/utilities/documentGenerators/generateAndVerifyPdfDiff';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { certificateOfService } from '@web-api/business/utilities/documentGenerators/certificateOfService';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('certificateOfService', () => {
   generateAndVerifyPdfDiff({

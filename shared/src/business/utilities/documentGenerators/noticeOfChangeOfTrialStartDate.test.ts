@@ -1,11 +1,11 @@
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { generateAndVerifyPdfDiff } from '@shared/business/utilities/documentGenerators/generateAndVerifyPdfDiff';
-import { TrialSessionStartDateChangePDFInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialStartDate';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { TrialSessionStartDateChangePDFInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialStartDate';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { noticeOfChangeOfTrialStartDate } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate';
 
 describe('noticeOfChangeOfTrialStartDate', () => {

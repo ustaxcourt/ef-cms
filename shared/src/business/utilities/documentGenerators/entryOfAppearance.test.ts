@@ -1,6 +1,6 @@
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { entryOfAppearance } from './entryOfAppearance';
-import { generateAndVerifyPdfDiff } from '@shared/business/utilities/documentGenerators/generateAndVerifyPdfDiff';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { entryOfAppearance } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
+import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('entryOfAppearance', () => {
   generateAndVerifyPdfDiff({
