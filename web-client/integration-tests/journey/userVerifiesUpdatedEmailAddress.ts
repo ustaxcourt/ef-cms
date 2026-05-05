@@ -1,5 +1,6 @@
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { wait } from '../helpers';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { waitForExpectedItem, waitForPage } from '../helpers';
 
 export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
   it(`${user} verifies updated email address`, async () => {
@@ -14,8 +15,21 @@ export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
       path: `/verify-email?token=${emailVerificationToken}`,
     });
 
-    //we need to wait for the async verify-email endpoint to complete.  It can take longer if there are more cases that the petitioner is associated with.  The endpoint doesn't currently (2022-03-22) emit an event when it is done.
-    await wait(5000);
+    const updatedUser = await getUserByIdOnceAllUpdatesComplete({
+      userId: userFromState.userId,
+    });
+
+    expect(updatedUser.pendingEmailVerificationToken).toBeFalsy();
+
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'Login',
+    });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'alertSuccess.title',
+      expectedItem: 'Email address verified',
+    });
 
     const currentPage = cerebralTest.getState('currentPage');
     const alertSuccess = cerebralTest.getState('alertSuccess');
