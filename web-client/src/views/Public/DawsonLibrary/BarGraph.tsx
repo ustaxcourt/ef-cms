@@ -28,8 +28,6 @@ export interface SingleBarGraphProps {
   showGrid?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
-  /** Optional color for the chart title text */
-  titleColor?: string;
   /** Optional color for the datalabels */
   datalabelColor?: string;
   /** Whether to show value labels on bars (default true) */
