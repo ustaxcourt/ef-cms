@@ -29,7 +29,10 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
+import {
+  withTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -213,46 +216,46 @@ export const addPaperFiling = async (
       });
     }
 
-    let paperServicePdfUrl;
-
-    if (isReadyForService) {
-      await applicationContext.getUseCases().addCoversheetInteractor(
-        applicationContext,
-        {
-          docketEntryId,
-          docketNumber: caseEntities[0].docketNumber,
-        },
-        authorizedUser,
-      );
-
-      const currentDocketEntry = caseEntities[0].getDocketEntryById({
-        docketEntryId,
-      });
-      const electronicParties =
-        currentDocketEntry?.eventCode ===
-          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
-          ? []
-          : undefined;
-
-      const paperServiceResult = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
-          applicationContext,
-          caseEntities,
-          docketEntryId,
-          electronicParties,
-          stampedPdf: undefined,
-        });
-
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-    }
-
-    const successMessage =
-      effectiveConsolidatedGroupDocketNumbers.length > 1
-        ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-        : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
-
     onTransactionCommit(async () => {
+      let paperServicePdfUrl;
+
+      if (isReadyForService) {
+        await applicationContext.getUseCases().addCoversheetInteractor(
+          applicationContext,
+          {
+            docketEntryId,
+            docketNumber: caseEntities[0].docketNumber,
+          },
+          authorizedUser,
+        );
+
+        const currentDocketEntry = caseEntities[0].getDocketEntryById({
+          docketEntryId,
+        });
+        const electronicParties =
+          currentDocketEntry?.eventCode ===
+          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+            ? []
+            : undefined;
+
+        const paperServiceResult = await applicationContext
+          .getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf({
+            applicationContext,
+            caseEntities,
+            docketEntryId,
+            electronicParties,
+            stampedPdf: undefined,
+          });
+
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      }
+
+      const successMessage =
+        consolidatedGroupDocketNumbers.length > 1
+          ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+          : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+
       await applicationContext.getNotificationGateway().sendNotificationToUser({
         applicationContext,
         clientConnectionId,
@@ -268,8 +271,6 @@ export const addPaperFiling = async (
         userId: user.userId,
       });
     });
-
-
   });
 };
 
