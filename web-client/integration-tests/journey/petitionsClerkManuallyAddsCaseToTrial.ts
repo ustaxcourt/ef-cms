@@ -1,7 +1,12 @@
-import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../../src/presenter/computeds/addToTrialSessionModalHelper';
+import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '@web-client/presenter/computeds/addToTrialSessionModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { wait } from '../helpers';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  waitForExpectedItem,
+  waitForExpectedItemToExist,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from '../helpers';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
@@ -54,7 +59,18 @@ export const petitionsClerkManuallyAddsCaseToTrial = cerebralTest => {
     expect(modalHelper.showSessionNotSetAlert).toEqual(true);
 
     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'alertSuccess.message',
+      expectedItem: 'Case scheduled for trial.',
+    });
+    await waitForExpectedItemToExist({
+      cerebralTest,
+      currentItem: 'trialSessionJudge.userId',
+    });
 
     const trialSessionJudge = cerebralTest.getState('trialSessionJudge');
     expect(trialSessionJudge).toMatchObject(
