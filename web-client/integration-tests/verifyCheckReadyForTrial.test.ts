@@ -6,7 +6,6 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
-  wait,
   waitForCondition,
 } from './helpers';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
@@ -111,8 +110,11 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
 
     it('invoke the lambda', async () => {
       await refreshElasticsearchIndex();
-      await axios.get('http://localhost:4000/run-check-ready-for-trial');
-      await wait(4000);
+      const response = await axios.get(
+        'http://localhost:4000/run-check-ready-for-trial',
+      );
+
+      expect(response.status).toEqual(200);
     });
 
     it('docket clerk verifies that case status is `General Docket - At Issue (Ready for Trial)`', async () => {
