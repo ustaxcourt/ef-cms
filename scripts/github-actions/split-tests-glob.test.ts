@@ -1,4 +1,3 @@
-import glob from 'glob';
 import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
 import { main } from './split-tests-glob';
 
@@ -6,6 +5,8 @@ jest.mock('glob');
 jest.mock('./helpers/splitTestFiles', () => ({
   getOutputsForCurrentCiNode: jest.fn(),
 }));
+
+const glob: { sync: jest.Mock<string[], [string]> } = require('glob');
 
 describe('split-tests-glob', () => {
   const mockConsoleLog = jest

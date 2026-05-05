@@ -1,8 +1,9 @@
-import glob from 'glob';
 import {
   getOutputsForCurrentCiNode,
   type SplittableFile,
 } from './helpers/splitTestFiles';
+
+const glob: { sync: (pattern: string) => string[] } = require('glob');
 
 export const main = (args: string[] = process.argv.slice(2)): string => {
   const testType: string = args[0] || '';

@@ -8,7 +8,7 @@ export const main = (args: string[] = process.argv.slice(2)): string => {
   const testType: string = args[0] || '';
   const specDir: string = `./web-client/integration-tests${testType}`;
   const files: SplittableFile[] = fs
-    .readdirSync(specDir)
+    .readdirSync(specDir, 'utf8')
     .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
     .map(
       (fileName: string): SplittableFile => ({

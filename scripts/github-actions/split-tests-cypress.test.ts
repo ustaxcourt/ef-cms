@@ -1,8 +1,9 @@
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
 import { main } from './split-tests-cypress';
 
-jest.mock('fs');
 jest.mock('./helpers/splitTestFiles', () => ({
   getOutputsForCurrentCiNode: jest.fn(),
 }));
@@ -12,24 +13,41 @@ describe('split-tests-cypress', () => {
     .spyOn(console, 'log')
     .mockImplementation((): void => undefined);
   const originalArgv = process.argv;
+  const originalCwd = process.cwd();
+  const tempDir: string = fs.mkdtempSync(
+    path.join(os.tmpdir(), 'split-tests-cypress-script-'),
+  );
+  const specDir: string = path.join(tempDir, 'cypress/local-only/tests');
+
+  const resetDirectory = (directoryPath: string): void => {
+    fs.rmSync(directoryPath, { force: true, recursive: true });
+    fs.mkdirSync(directoryPath, { recursive: true });
+  };
+
+  const writeFile = (fileName: string): void => {
+    const filePath: string = path.join(specDir, fileName);
+
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, '');
+  };
 
   beforeEach((): void => {
     jest.clearAllMocks();
+    process.chdir(tempDir);
+    resetDirectory(specDir);
   });
 
   afterAll((): void => {
+    process.chdir(originalCwd);
     process.argv = originalArgv;
+    fs.rmSync(tempDir, { force: true, recursive: true });
   });
 
   it('filters requested cypress tests and excludes public tests by default', (): void => {
-    const directoryEntries: string[] = [
-      'integration/case-detail.cy.ts',
-      'integration/public/ignore.cy.ts',
-      'integration/notes.txt',
-      'accessibility/a11y.cy.ts',
-    ];
-
-    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
+    writeFile('integration/case-detail.cy.ts');
+    writeFile('integration/public/ignore.cy.ts');
+    writeFile('integration/notes.txt');
+    writeFile('accessibility/a11y.cy.ts');
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue([
@@ -38,10 +56,6 @@ describe('split-tests-cypress', () => {
 
     const result = main(['integration']);
 
-    expect(fs.readdirSync).toHaveBeenCalledWith('./cypress/local-only/tests', {
-      encoding: 'utf8',
-      recursive: true,
-    });
     expect(getOutputsForCurrentCiNode).toHaveBeenCalledWith({
       files: [
         {
@@ -59,9 +73,7 @@ describe('split-tests-cypress', () => {
   });
 
   it('keeps public cypress tests when the requested folder includes public', (): void => {
-    const directoryEntries: string[] = ['integration/public/public-case.cy.ts'];
-
-    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
+    writeFile('integration/public/public-case.cy.ts');
     jest
       .mocked(getOutputsForCurrentCiNode)
       .mockReturnValue([
@@ -83,17 +95,10 @@ describe('split-tests-cypress', () => {
 
   it('uses process.argv by default when args are omitted', (): void => {
     process.argv = ['node', 'script'];
-    const directoryEntries: string[] = [];
-
-    jest.mocked(fs.readdirSync).mockReturnValue(directoryEntries);
     jest.mocked(getOutputsForCurrentCiNode).mockReturnValue([]);
 
     const result = main();
 
-    expect(fs.readdirSync).toHaveBeenCalledWith('./cypress/local-only/tests', {
-      encoding: 'utf8',
-      recursive: true,
-    });
     expect(result).toBe('');
   });
 });
