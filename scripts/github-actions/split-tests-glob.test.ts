@@ -1,3 +1,11 @@
+import {
+  afterAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import { getOutputsForCurrentCiNode } from './helpers/splitTestFiles';
 import { main } from './split-tests-glob';
 
@@ -6,7 +14,9 @@ jest.mock('./helpers/splitTestFiles', () => ({
   getOutputsForCurrentCiNode: jest.fn(),
 }));
 
-const glob: { sync: jest.Mock<string[], [string]> } = require('glob');
+const glob: {
+  sync: jest.MockedFunction<(pattern: string) => string[]>;
+} = require('glob');
 
 describe('split-tests-glob', () => {
   const mockConsoleLog = jest

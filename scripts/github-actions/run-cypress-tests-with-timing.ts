@@ -1,8 +1,34 @@
-import cypress from 'cypress';
 import {
+  type CypressRunTimingResult,
   getCypressTestFileTimes,
   writeTestFileTimes,
 } from './helpers/testFileTimes';
+
+export type CypressRunOptions = {
+  browser: string;
+  configFile: string;
+  spec: string;
+};
+
+export type CypressRunFailureResult = {
+  failures: number;
+  message: string;
+  status: string;
+};
+
+export type CypressRunSuccessResult = CypressRunTimingResult & {
+  totalFailed: number;
+};
+
+export type CypressRunResult =
+  | CypressRunFailureResult
+  | CypressRunSuccessResult;
+
+type CypressModule = {
+  run: (options: CypressRunOptions) => Promise<CypressRunResult>;
+};
+
+const cypress: CypressModule = require('cypress');
 
 export const main = async (
   args: string[] = process.argv.slice(2),

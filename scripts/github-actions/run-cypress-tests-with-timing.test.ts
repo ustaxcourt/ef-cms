@@ -1,15 +1,37 @@
-import cypress from 'cypress';
+import {
+  afterAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { main } from './run-cypress-tests-with-timing';
+import {
+  type CypressRunFailureResult,
+  type CypressRunOptions,
+  type CypressRunSuccessResult,
+  main,
+} from './run-cypress-tests-with-timing';
 
-jest.mock('cypress', () => ({
-  __esModule: true,
-  default: {
+type CypressModule = {
+  run: jest.MockedFunction<
+    (
+      options: CypressRunOptions,
+    ) => Promise<CypressRunFailureResult | CypressRunSuccessResult>
+  >;
+};
+
+const cypress: CypressModule = require('cypress');
+
+jest.mock(
+  'cypress',
+  (): CypressModule => ({
     run: jest.fn(),
-  },
-}));
+  }),
+);
 
 describe('run-cypress-tests-with-timing', () => {
   const mockedCypressRun = jest.mocked(cypress.run);
@@ -20,7 +42,7 @@ describe('run-cypress-tests-with-timing', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.exit = jest.fn() as typeof process.exit;
+    process.exit = jest.fn<typeof process.exit>();
     delete process.env.CYPRESS_AWS_ACCESS_KEY_ID;
     delete process.env.CYPRESS_AWS_SECRET_ACCESS_KEY;
     delete process.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL;
@@ -46,7 +68,7 @@ describe('run-cypress-tests-with-timing', () => {
         },
       ],
       totalFailed: 0,
-    } as Awaited<ReturnType<typeof cypress.run>>);
+    } satisfies CypressRunSuccessResult);
 
     await main([
       'cypress.config.ts',
@@ -73,7 +95,7 @@ describe('run-cypress-tests-with-timing', () => {
       failures: 1,
       message: 'boom',
       status: 'failed',
-    });
+    } satisfies CypressRunFailureResult);
 
     await expect(
       main(['cypress.config.ts', './spec.cy.ts', path.join(tempDir, 'x.json')]),
@@ -105,7 +127,7 @@ describe('run-cypress-tests-with-timing', () => {
         },
       ],
       totalFailed: 2,
-    } as Awaited<ReturnType<typeof cypress.run>>);
+    } satisfies CypressRunSuccessResult);
 
     await main([
       'cypress.config.ts',

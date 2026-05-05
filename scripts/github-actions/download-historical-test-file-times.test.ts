@@ -132,7 +132,7 @@ describe('download-historical-test-file-times', () => {
       const outputFilePath = path.join(tempDir, 'downloaded.json');
 
       mockedExecFileSync.mockImplementation(
-        (command: string, args: string[]) => {
+        (command: string, args: readonly string[] = []) => {
           if (command === 'git') {
             return Buffer.from('');
           }
