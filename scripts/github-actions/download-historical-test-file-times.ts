@@ -23,6 +23,8 @@ type WorkflowRunsResponse = {
   workflow_runs: WorkflowRun[];
 };
 
+const MAX_WORKFLOW_RUN_PAGES = 50;
+
 export const getAncestorCommitShas = ({
   currentSha,
   gitCommandRunner = execFileSync,
@@ -131,16 +133,20 @@ const downloadArtifact = async ({
     stdio: 'ignore',
   });
 
-  const extractedFileName = fs
+  const extractedJsonFiles = fs
     .readdirSync(tempDir)
-    .find(fileName => fileName !== 'artifact.zip' && fileName.endsWith('.json'));
+    .filter(
+      fileName => fileName !== 'artifact.zip' && fileName.endsWith('.json'),
+    );
 
-  if (!extractedFileName) {
-    throw new Error('Downloaded artifact did not contain a json timing file');
+  if (extractedJsonFiles.length !== 1) {
+    throw new Error(
+      `Downloaded artifact must contain exactly one json timing file, found ${extractedJsonFiles.length}`,
+    );
   }
 
   fs.mkdirSync(path.dirname(outputFilePath), { recursive: true });
-  fs.copyFileSync(path.join(tempDir, extractedFileName), outputFilePath);
+  fs.copyFileSync(path.join(tempDir, extractedJsonFiles[0]), outputFilePath);
   fs.rmSync(tempDir, { force: true, recursive: true });
 };
 
@@ -186,14 +192,16 @@ export const main = async (
   const repository = getRequiredEnvironmentVariable('GITHUB_REPOSITORY');
   const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
   const ancestorCommitShas = getAncestorCommitShas({ currentSha });
+  let exceededWorkflowRunPageLimit = true;
 
   // Paginate until GitHub returns an empty workflow_runs page.
-  for (let page = 1; ; page += 1) {
+  for (let page = 1; page <= MAX_WORKFLOW_RUN_PAGES; page += 1) {
     const workflowRuns = await githubGet<WorkflowRunsResponse>(
       `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?status=completed&per_page=100&page=${page}`,
     );
 
     if (workflowRuns.workflow_runs.length === 0) {
+      exceededWorkflowRunPageLimit = false;
       break;
     }
 
@@ -231,6 +239,12 @@ export const main = async (
         workflowRun => workflowRun.id !== closestAncestorWorkflowRun.id,
       );
     }
+  }
+
+  if (exceededWorkflowRunPageLimit) {
+    throw new Error(
+      `Exceeded workflow run pagination limit (${MAX_WORKFLOW_RUN_PAGES} pages) while searching for historical test timings.`,
+    );
   }
 
   console.log(

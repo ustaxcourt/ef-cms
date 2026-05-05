@@ -539,7 +539,103 @@ describe('download-historical-test-file-times', () => {
       await expect(
         main(['client.yml', 'historical-test-file-times', outputFilePath]),
       ).rejects.toThrow(
-        'Downloaded artifact did not contain a json timing file',
+        'Downloaded artifact must contain exactly one json timing file, found 0',
+      );
+    });
+
+    it('throws when the artifact zip contains multiple json files', async () => {
+      const outputFilePath = path.join(tempDir, 'multiple-json.json');
+
+      mockedExecFileSync.mockImplementation((command: string, args = []) => {
+        if (command === 'git') {
+          return 'current\nancestor\n';
+        }
+
+        if (command === 'unzip') {
+          const outputDirectory = args[3];
+
+          fs.writeFileSync(
+            path.join(outputDirectory, 'historical-test-file-times.json'),
+            JSON.stringify({ './example.test.ts': 1000 }),
+          );
+          fs.writeFileSync(
+            path.join(outputDirectory, 'extra.json'),
+            JSON.stringify({ './other.test.ts': 2000 }),
+          );
+
+          return Buffer.from('');
+        }
+
+        throw new Error(`Unexpected command: ${command}`);
+      });
+
+      jest
+        .mocked(global.fetch)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              workflow_runs: [
+                {
+                  conclusion: 'success',
+                  head_sha: 'ancestor',
+                  id: 123,
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/artifact.zip',
+                  expired: false,
+                  name: 'historical-test-file-times-ancestor',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await expect(
+        main(['client.yml', 'historical-test-file-times', outputFilePath]),
+      ).rejects.toThrow(
+        'Downloaded artifact must contain exactly one json timing file, found 2',
+      );
+    });
+
+    it('throws when workflow run pagination exceeds the safety limit', async () => {
+      mockedExecFileSync.mockReturnValue('current\nancestor\n');
+
+      for (let page = 0; page < 50; page += 1) {
+        jest.mocked(global.fetch).mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              workflow_runs: [
+                {
+                  conclusion: 'failure',
+                  head_sha: 'ancestor',
+                  id: 123,
+                },
+              ],
+            }),
+          ok: true,
+        } as Response);
+      }
+
+      await expect(
+        main([
+          'client.yml',
+          'historical-test-file-times',
+          path.join(tempDir, 'page-limit.json'),
+        ]),
+      ).rejects.toThrow(
+        'Exceeded workflow run pagination limit (50 pages) while searching for historical test timings.',
       );
     });
   });
