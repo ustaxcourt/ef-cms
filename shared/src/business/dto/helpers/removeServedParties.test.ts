@@ -23,7 +23,11 @@ describe('removeServedParties', () => {
 
   it('leaves entries unchanged aside from clearing servedParties when no nested previous document', () => {
     const mockDocketEntries: RawDocketEntry[] = [
-      { docketEntryId: 'abc', servedParties: [{ name: 'Party A' }] },
+      {
+        ...MOCK_ANSWER_2,
+        docketEntryId: 'abc',
+        servedParties: [{ email: 'partya@example.com', name: 'Party A' }],
+      },
     ];
     const result = removeServedParties(mockDocketEntries);
     expect(result[0].servedParties).toBeUndefined();
