@@ -207,37 +207,37 @@ export const addPaperFiling = async (
       });
     }
 
-    onTransactionCommit(async () => {
-      let paperServicePdfUrl;
+    let paperServicePdfUrl;
 
-      if (isReadyForService) {
-        const currentDocketEntry = caseEntities[0].getDocketEntryById({
+    if (isReadyForService) {
+      const currentDocketEntry = caseEntities[0].getDocketEntryById({
+        docketEntryId,
+      });
+      const electronicParties =
+        currentDocketEntry?.eventCode ===
+        INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+          ? []
+          : undefined;
+
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities,
           docketEntryId,
+          electronicParties,
+          stampedPdf: undefined,
         });
-        const electronicParties =
-          currentDocketEntry?.eventCode ===
-          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
-            ? []
-            : undefined;
 
-        const paperServiceResult = await applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf({
-            applicationContext,
-            caseEntities,
-            docketEntryId,
-            electronicParties,
-            stampedPdf: undefined,
-          });
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
 
-        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      }
+    const successMessage =
+      consolidatedGroupDocketNumbers.length > 1
+        ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+        : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
-      const successMessage =
-        consolidatedGroupDocketNumbers.length > 1
-          ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-          : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
-
+    onTransactionCommit(async () => {
       await applicationContext.getNotificationGateway().sendNotificationToUser({
         applicationContext,
         clientConnectionId,
