@@ -9,5 +9,8 @@ export function selectTypeaheadInput(testId: string, value: string) {
     force: true,
   });
 
-  cy.get('.select-react-element__option').should('be.visible').first().click();
+  cy.get(`[data-testid="${testId}"] .select-react-element__option`)
+    .should('be.visible')
+    .first()
+    .click();
 }
