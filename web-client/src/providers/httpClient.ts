@@ -1,4 +1,4 @@
-import { X_FORCE_REFRESH } from '@shared/utils/headers';
+import { X_FORCE_REFRESH } from '@web-client/utils/headers';
 import axios, { AxiosInstance } from 'axios';
 
 let axiosClient: AxiosInstance;

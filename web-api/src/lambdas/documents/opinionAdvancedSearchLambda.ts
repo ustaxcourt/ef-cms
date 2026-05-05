@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { opinionAdvancedSearchInteractor } from '@shared/business/useCases/opinionAdvancedSearchInteractor';
+import { opinionAdvancedSearchInteractor } from '@web-api/business/useCases/opinionAdvancedSearchInteractor';
 
 /**
  * used for fetching opinions matching the provided search string

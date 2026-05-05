@@ -1,4 +1,4 @@
-import { getDocumentQCInboxForUserInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForUserProxy';
+import { getDocumentQCInboxForUserInteractor } from '@web-client/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getDocumentQCInboxForUserAction = async ({

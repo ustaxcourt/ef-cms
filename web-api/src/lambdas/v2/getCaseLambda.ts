@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
+import { getCaseInteractor } from '@web-api/business/useCases/getCaseInteractor';
 import { marshallCase } from './marshallers/marshallCase';
 import { v2ApiWrapper } from './v2ApiWrapper';
 

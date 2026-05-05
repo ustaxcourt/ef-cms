@@ -9,7 +9,7 @@ import {
   US_STATES_OTHER,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { User } from './User';
+import { User, UserContact } from './User';
 import joi from 'joi';
 
 export class Practitioner extends User {
@@ -237,3 +237,11 @@ export class Practitioner extends User {
 }
 
 export type RawPractitioner = ExcludeMethods<Practitioner>;
+
+/** Subset returned for unauthenticated practitioner lookup by bar number. */
+export type PublicPractitionerByBarNumberSummary = Omit<
+  Partial<RawPractitioner>,
+  'contact'
+> & {
+  contact: Pick<UserContact, 'state'>;
+};

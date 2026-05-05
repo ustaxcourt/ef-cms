@@ -22,7 +22,7 @@ import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScanner
 import {
   image1,
   image2,
-} from '../../shared/src/business/useCases/scannerMockFiles';
+} from '@web-client/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from '@web-client/presenter/test.cerebral';

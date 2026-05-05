@@ -1,4 +1,4 @@
-import { formatAttachments } from '../../../../shared/src/business/utilities/formatAttachments';
+import { formatAttachments } from '@web-client/business/utilities/formatAttachments';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const setPdfToDisplay = async (

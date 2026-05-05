@@ -1,9 +1,9 @@
-import { saveMinuteSheetToDraftsInteractor } from '@shared/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy';
+import { saveMinuteSheetToDraftsInteractor } from '@web-client/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy';
 import { saveMinuteSheetToDraftsAction } from '@web-client/presenter/actions/TrialSessionMinutes/saveMinuteSheetToDraftsAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { presenter } from '../../presenter-mock';
 
-jest.mock('@shared/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy');
+jest.mock('@web-client/proxies/trialSessionMinutes/saveMinuteSheetToDraftsProxy');
 
 describe('saveMinuteSheetToDraftsAction', () => {
   let mockSaveMinuteSheetToDraftsInteractor: jest.Mock;

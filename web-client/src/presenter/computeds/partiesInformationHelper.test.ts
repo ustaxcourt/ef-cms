@@ -14,7 +14,7 @@ import {
   petitionsClerkUser,
   petitionerUser,
 } from '@shared/test/mockUsers';
-import { getUserPermissions } from '@shared/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';

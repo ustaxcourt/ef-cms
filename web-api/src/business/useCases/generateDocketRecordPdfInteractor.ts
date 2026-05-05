@@ -64,7 +64,10 @@ export const generateDocketRecordPdfInteractor = async (
     isIndirectlyAssociated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   const isDirectlyAssociated = await verifyCaseForUser({
     docketNumber,
     userId: authorizedUser?.userId || '',

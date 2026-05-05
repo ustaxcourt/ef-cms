@@ -1,7 +1,7 @@
-jest.mock('@shared/proxies/reports/getColdCaseReportProxy');
+jest.mock('@web-client/proxies/reports/getColdCaseReportProxy');
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getColdCaseReportAction } from './getColdCaseReportAction';
-import { getColdCaseReportInteractor } from '@shared/proxies/reports/getColdCaseReportProxy';
+import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 

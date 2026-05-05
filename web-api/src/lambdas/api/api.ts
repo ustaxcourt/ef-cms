@@ -1,15 +1,16 @@
+import { APIGatewayProxyHandler } from 'aws-lambda';
 import { app } from '../../app';
 import awsServerlessExpress from '@codegenie/serverless-express';
 
-export const handler = (event, context) => {
+export const handler: APIGatewayProxyHandler = (event, context, callback) => {
   // This hack is added because serverless-express doesn't seem to work with lambda proxy integrations.
   // Without this, the deployed /auth endpoint has to be reached via /auth/auth/*
   // Bug Detail: https://github.com/vendia/serverless-express/issues/400
-  if (event.path && event.path.startsWith('/auth')) {
+  if (event.path && event.path.startsWith('/auth') && event.pathParameters) {
     // awsServerlessExpress will expect this to be set correctly: event.pathParameters.proxy
     event.pathParameters.proxy = `auth/${event.pathParameters.proxy}`;
   }
-  if (event.path && event.path.startsWith('/system')) {
+  if (event.path && event.path.startsWith('/system') && event.pathParameters) {
     // awsServerlessExpress will expect this to be set correctly: event.pathParameters.proxy
     event.pathParameters.proxy = `system/${event.pathParameters.proxy}`;
   }
@@ -21,5 +22,5 @@ export const handler = (event, context) => {
     typeof event.body === 'string' ? event.body : JSON.stringify(event.body);
   return awsServerlessExpress({
     app,
-  })(event, context);
+  })(event, context, callback);
 };

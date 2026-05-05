@@ -11,5 +11,10 @@ if (testType.includes('unit')) {
 
 const total = parseInt(process.env.CI_NODE_TOTAL!, 10);
 const index = parseInt(process.env.CI_NODE_INDEX!, 10);
-const tests = testFiles.filter((_num, i) => i % total === index);
+const tests = testFiles
+  .filter((_num, i) => i % total === index)
+  // Jest 30 testPathPattern is a RegExp over normalized paths; a leading `./`
+  // prevents some paths (e.g. .../dto/cases/*.test.ts) from matching, so those
+  // suites never run in CI despite appearing in the alternation string.
+  .map(p => (p.startsWith('./') ? p.slice(2) : p));
 console.log(tests.join('|'));
