@@ -5,7 +5,7 @@ services:
       dockerfile: ./Dockerfile-local
     image: efcms-local
     container_name: shell
-    user: '${CURRENT_UID:-0}:${CURRENT_GID:-0}'
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "tail -f /dev/null"
     volumes:
       - .:/home/app
@@ -20,7 +20,7 @@ services:
       dockerfile: ./Dockerfile-local
     image: efcms-local
     container_name: client
-    user: '${CURRENT_UID:-0}:${CURRENT_GID:-0}'
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:client"
     volumes:
       - .:/home/app
@@ -37,7 +37,7 @@ services:
       dockerfile: ./Dockerfile-local
     image: efcms-local
     container_name: public
-    user: '${CURRENT_UID:-0}:${CURRENT_GID:-0}'
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:public"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
@@ -54,7 +54,7 @@ services:
       dockerfile: ./Dockerfile-local
     image: efcms-local
     container_name: api
-    user: '${CURRENT_UID:-0}:${CURRENT_GID:-0}'
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:api:docker"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
@@ -83,7 +83,7 @@ services:
         condition: service_healthy
 
   db:
-    image: postgres:17.9-trixie
+    image: postgres:17.5-bookworm
     platform: linux/amd64
     container_name: dawson-db
     restart: always
@@ -95,7 +95,7 @@ services:
     ports:
       - '5432:5432'
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -124,11 +124,7 @@ services:
       - 'DISABLE_SECURITY_PLUGIN=true'
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
     healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'curl -s http://localhost:9200/_cluster/health | grep -qv ''"status":"red"''',
-        ]
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
       interval: 10s
       timeout: 10s
       retries: 10
