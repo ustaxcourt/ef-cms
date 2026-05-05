@@ -125,29 +125,32 @@ const downloadArtifact = async ({
   const tempDir = fs.mkdtempSync(
     path.join(os.tmpdir(), 'historical-test-file-times-'),
   );
-  const archivePath = path.join(tempDir, 'artifact.zip');
-  const buffer = Buffer.from(await response.arrayBuffer());
+  try {
+    const archivePath = path.join(tempDir, 'artifact.zip');
+    const buffer = Buffer.from(await response.arrayBuffer());
 
-  fs.writeFileSync(archivePath, buffer);
-  execFileSync('unzip', ['-o', archivePath, '-d', tempDir], {
-    stdio: 'ignore',
-  });
+    fs.writeFileSync(archivePath, buffer);
+    execFileSync('unzip', ['-o', archivePath, '-d', tempDir], {
+      stdio: 'ignore',
+    });
 
-  const extractedJsonFiles = fs
-    .readdirSync(tempDir)
-    .filter(
-      fileName => fileName !== 'artifact.zip' && fileName.endsWith('.json'),
-    );
+    const extractedJsonFiles = fs
+      .readdirSync(tempDir)
+      .filter(
+        fileName => fileName !== 'artifact.zip' && fileName.endsWith('.json'),
+      );
 
-  if (extractedJsonFiles.length !== 1) {
-    throw new Error(
-      `Downloaded artifact must contain exactly one json timing file, found ${extractedJsonFiles.length}`,
-    );
+    if (extractedJsonFiles.length !== 1) {
+      throw new Error(
+        `Downloaded artifact must contain exactly one json timing file, found ${extractedJsonFiles.length}`,
+      );
+    }
+
+    fs.mkdirSync(path.dirname(outputFilePath), { recursive: true });
+    fs.copyFileSync(path.join(tempDir, extractedJsonFiles[0]), outputFilePath);
+  } finally {
+    fs.rmSync(tempDir, { force: true, recursive: true });
   }
-
-  fs.mkdirSync(path.dirname(outputFilePath), { recursive: true });
-  fs.copyFileSync(path.join(tempDir, extractedJsonFiles[0]), outputFilePath);
-  fs.rmSync(tempDir, { force: true, recursive: true });
 };
 
 const findTimingArtifact = ({
@@ -194,7 +197,7 @@ export const main = async (
   const ancestorCommitShas = getAncestorCommitShas({ currentSha });
   let exceededWorkflowRunPageLimit = true;
 
-  // Paginate until GitHub returns an empty workflow_runs page.
+  // Cap pagination to avoid runaway API requests if GitHub returns unexpected data.
   for (let page = 1; page <= MAX_WORKFLOW_RUN_PAGES; page += 1) {
     const workflowRuns = await githubGet<WorkflowRunsResponse>(
       `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?status=completed&per_page=100&page=${page}`,
