@@ -13,6 +13,12 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       name: 'Cohen',
       userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
     },
+  }: {
+    hasPaper?: boolean;
+    judge?: {
+      name: string;
+      userId: string;
+    };
   } = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {

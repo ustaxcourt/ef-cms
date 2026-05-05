@@ -1,4 +1,4 @@
-export function selectTypeaheadInput(testId: string, value: string) {
+export function selectTypeaheadInput(testId: string, value: string): void {
   cy.get(`[data-testid="${testId}"] .select-react-element__control`).should(
     'be.visible',
   );

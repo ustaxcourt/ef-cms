@@ -198,7 +198,7 @@ const setupUnservedCase = (): Cypress.Chainable<{
   });
 };
 
-function petitionerFilesADocument(docketNumber: string) {
+function petitionerFilesADocument(docketNumber: string): void {
   loginAsPetitioner();
   cy.get('[data-testid="docket-search-field"]').type(docketNumber);
   cy.get('[data-testid="search-by-docket-number"]').click();
@@ -218,7 +218,7 @@ function assertMessageRecordCountForDocketNumberAndSubject(
   subject: string,
   count: number,
   inboxType: string,
-) {
+): void {
   cy.get(`[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`).then(
     $elements => {
       const parentElements = $elements.map((_index, element) =>
@@ -242,7 +242,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
   subject: string,
   count: number,
   inboxType: string,
-) {
+): Cypress.Chainable<boolean> {
   return cy.get('body').then(body => {
     const $elements = body.find(
       `[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`,
@@ -261,7 +261,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
   });
 }
 
-function sendMessages(userId: string, subject: string, section: string) {
+function sendMessages(userId: string, subject: string, section: string): void {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-new-message"]').click();
   cy.get('[data-testid="message-to-section"').select(section);
