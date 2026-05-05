@@ -66,8 +66,12 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
         }).should('contain.text', 'Compressing Files');
 
         cy.get('@ZIP_NAME').then(ZIP_NAME => {
+          // The zip is written to the local downloads folder by the browser
+          // out-of-band, so we must poll the filesystem.
+          const POLL_INTERVAL_MS = 1000;
+          const MAX_ATTEMPTS = 60;
+
           function checkFileExists(attempt: number = 0) {
-            const maxRetries = 5;
             cy.task('fileExists', ZIP_NAME).then(fileExists => {
               if (fileExists) {
                 cy.task<string[]>('unzipFile', {
@@ -76,13 +80,13 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
                   const countOfDownloadedFiles = files.length;
                   expect(countOfDownloadedFiles).to.equal(6);
                 });
-              } else if (attempt < maxRetries) {
-                const ONE_SECOND = 1 * 1000;
-                cy.wait(ONE_SECOND);
+              } else if (attempt < MAX_ATTEMPTS) {
+                // eslint-disable-next-line cypress/no-unnecessary-waiting -- polling the local filesystem for an out-of-band browser download
+                cy.wait(POLL_INTERVAL_MS);
                 checkFileExists(attempt + 1);
               } else {
                 throw new Error(
-                  `File ${ZIP_NAME} not found after ${maxRetries} retries.`,
+                  `File ${ZIP_NAME} not found after ${MAX_ATTEMPTS} retries.`,
                 );
               }
             });

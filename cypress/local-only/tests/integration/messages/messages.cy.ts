@@ -86,335 +86,303 @@ describe('Messages', () => {
   const DOCKET_CLERK_ID = '1805d1ab-18d0-43ec-bafb-654e83405416';
 
   describe('Message sorting', () => {
-    before(() => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.wrap(docketNumber).as('DOCKET_NUMBER');
+    const createMessageSortingFixture = (): Cypress.Chainable<string> => {
+      return createAndServePaperPetition().then(({ docketNumber }) => {
         goToCase(docketNumber);
         sendMessagesToCompletedTab(DOCKET_CLERK_ID);
         loginAsPetitionsClerk();
         goToCase(docketNumber);
         sendMessages(DOCKET_CLERK_ID);
+
+        return cy.wrap(docketNumber);
       });
-    });
+    };
 
-    beforeEach(() => {
-      cy.keepAliases();
-    });
+    const openMessagesInboxAsDocketClerk = (): void => {
+      loginAsDocketClerk();
+      cy.visit('/messages/my/inbox');
+    };
 
-    describe('Individual Message Boxes', () => {
-      before(() => {
-        loginAsDocketClerk();
-      });
+    const openMessagesInboxAsPetitionsClerk = (): void => {
+      loginAsPetitionsClerk();
+      cy.visit('/messages/my/inbox');
+    };
 
-      beforeEach(() => {
-        cy.visit('/');
-      });
+    const openSectionMessages = (): void => {
+      cy.get('[data-testid="switch-to-section-messages-button"]').click();
+    };
 
-      describe('Sorting on the Individual Message Inbox', () => {
-        it('individual inbox subject column', () => {
-          cy.get(
-            '[data-testid="messages-individual-inbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-inbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-            queueType: 'individual',
-          });
+    it('should sort the individual inbox and completed message tables for a fresh case', () => {
+      createMessageSortingFixture().then(docketNumber => {
+        openMessagesInboxAsDocketClerk();
+
+        cy.get(
+          '[data-testid="messages-individual-inbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+          queueType: 'individual',
+        });
+        cy.get(
+          '[data-testid="messages-individual-inbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
+          queueType: 'individual',
         });
 
-        it('individual inbox received at column when defaulted to sort ascending', () => {
-          cy.get(
-            '[data-testid="messages-individual-inbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-inbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-            queueType: 'individual',
-          });
-        });
-      });
+        openMessagesInboxAsDocketClerk();
 
-      describe('Sorting on the Individual Message Completed', () => {
-        it('individual completed subject column', () => {
-          cy.get('[data-testid="messages-completed-tab"]').click();
-          cy.get(
-            '[data-testid="messages-individual-completed-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: true,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-completed-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: false,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
+        cy.get(
+          '[data-testid="messages-individual-inbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
+          queueType: 'individual',
+        });
+        cy.get(
+          '[data-testid="messages-individual-inbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+          queueType: 'individual',
         });
 
-        it('individual completed completedAt column when defaulted to sort ascending', () => {
-          cy.get('[data-testid="messages-completed-tab"]').click();
-          cy.get(
-            '[data-testid="messages-individual-completed-completedAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: true,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-completed-completedAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: false,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
+        cy.get('[data-testid="messages-completed-tab"]').click();
+        cy.get(
+          '[data-testid="messages-individual-completed-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Complete',
+          queueType: 'individual',
         });
-      });
-
-      describe('Sorting on the Individual Message Outbox', () => {
-        before(() => {
-          loginAsPetitionsClerk();
+        cy.get(
+          '[data-testid="messages-individual-completed-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Complete',
+          queueType: 'individual',
         });
 
-        beforeEach(() => {
-          cy.visit('/');
+        cy.get(
+          '[data-testid="messages-individual-completed-completedAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Complete',
+          queueType: 'individual',
         });
-
-        it('individual outbox subject column', () => {
-          cy.get('[data-testid="messages-outbox-tab"]').click();
-          cy.get(
-            '[data-testid="messages-individual-outbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: true,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-outbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: false,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
-        });
-
-        it('individual outbox sent column when defaulted to sort ascending', () => {
-          cy.get('[data-testid="messages-outbox-tab"]').click();
-          cy.get(
-            '[data-testid="messages-individual-outbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: true,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
-          cy.get(
-            '[data-testid="messages-individual-outbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: false,
-            prefix: 'Complete',
-            queueType: 'individual',
-          });
+        cy.get(
+          '[data-testid="messages-individual-completed-completedAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Complete',
+          queueType: 'individual',
         });
       });
     });
 
-    describe('Section Message Boxes', () => {
-      before(() => {
-        loginAsDocketClerk();
-      });
+    it('should sort the individual outbox table for a fresh case', () => {
+      createMessageSortingFixture().then(docketNumber => {
+        openMessagesInboxAsPetitionsClerk();
+        cy.get('[data-testid="messages-outbox-tab"]').click();
 
-      beforeEach(() => {
-        cy.visit('/');
-      });
-
-      describe('Sorting on the Section Message Inbox', () => {
-        it('Section inbox subject column', () => {
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-          });
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-          });
+        cy.get(
+          '[data-testid="messages-individual-outbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+          queueType: 'individual',
+        });
+        cy.get(
+          '[data-testid="messages-individual-outbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
+          queueType: 'individual',
         });
 
-        it('Section inbox received at column when defaulted to sort ascending', () => {
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          );
-          cy.get(
-            '[data-testid="messages-section-inbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-          });
-          cy.get(
-            '[data-testid="messages-section-inbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'inbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-          });
+        cy.get(
+          '[data-testid="messages-individual-outbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+          queueType: 'individual',
+        });
+        cy.get(
+          '[data-testid="messages-individual-outbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
+          queueType: 'individual',
         });
       });
+    });
 
-      describe('Sorting on the Section Message Completed', () => {
-        it('section completed subject column', () => {
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          );
-          cy.get('[data-testid="messages-completed-tab"]').click();
-          cy.get(
-            '[data-testid="messages-section-completed-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: true,
-            prefix: 'Complete',
-          });
-          cy.get(
-            '[data-testid="messages-section-completed-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: false,
-            prefix: 'Complete',
-          });
+    it('should sort the section inbox and completed message tables for a fresh case', () => {
+      createMessageSortingFixture().then(docketNumber => {
+        openMessagesInboxAsDocketClerk();
+        openSectionMessages();
+
+        cy.get(
+          '[data-testid="messages-section-inbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+        });
+        cy.get(
+          '[data-testid="messages-section-inbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
         });
 
-        it('section completed completed at column when defaulted to sort ascending', () => {
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          );
-          cy.get('[data-testid="messages-completed-tab"]').click();
-          cy.get(
-            '[data-testid="messages-section-completed-completedAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: true,
-            prefix: 'Complete',
-          });
-          cy.get(
-            '[data-testid="messages-section-completed-completedAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'completed',
-            isAscending: false,
-            prefix: 'Complete',
-          });
+        openMessagesInboxAsDocketClerk();
+        openSectionMessages();
+
+        cy.get(
+          '[data-testid="messages-section-inbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
+        });
+        cy.get(
+          '[data-testid="messages-section-inbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'inbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+        });
+
+        cy.get('[data-testid="messages-completed-tab"]').click();
+        cy.get(
+          '[data-testid="messages-section-completed-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Complete',
+        });
+        cy.get(
+          '[data-testid="messages-section-completed-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Complete',
+        });
+
+        cy.get(
+          '[data-testid="messages-section-completed-completedAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Complete',
+        });
+        cy.get(
+          '[data-testid="messages-section-completed-completedAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'completed',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Complete',
         });
       });
+    });
 
-      describe('Sorting on the Section Message Outbox', () => {
-        before(() => {
-          loginAsPetitionsClerk();
+    it('should sort the section outbox table for a fresh case', () => {
+      createMessageSortingFixture().then(docketNumber => {
+        openMessagesInboxAsPetitionsClerk();
+        openSectionMessages();
+        cy.get('[data-testid="messages-outbox-tab"]').click();
+
+        cy.get(
+          '[data-testid="messages-section-outbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
+        });
+        cy.get(
+          '[data-testid="messages-section-outbox-subject-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
         });
 
-        beforeEach(() => {
-          cy.visit('/');
+        cy.get(
+          '[data-testid="messages-section-outbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: true,
+          prefix: 'Subject Line',
         });
-
-        it('section outbox subject column', () => {
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          );
-          cy.get('[data-testid="messages-outbox-tab"]').click();
-          cy.get(
-            '[data-testid="messages-section-outbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-          });
-          cy.get(
-            '[data-testid="messages-section-outbox-subject-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-          });
-        });
-
-        it('section outbox sent column when defaulted to sort ascending', () => {
-          loginAsPetitionsClerk();
-          cy.get('[data-testid="switch-to-section-messages-button"]').click();
-          cy.get(
-            '[data-testid="messages-section-inbox-subject-header-button"]',
-          );
-          cy.get('[data-testid="messages-outbox-tab"]').click();
-          cy.get(
-            '[data-testid="messages-section-outbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: true,
-            prefix: 'Subject Line',
-          });
-          cy.get(
-            '[data-testid="messages-section-outbox-createdAt-header-button"]',
-          ).click();
-          verifySubjectTitleOrder({
-            boxType: 'outbox',
-            isAscending: false,
-            prefix: 'Subject Line',
-          });
+        cy.get(
+          '[data-testid="messages-section-outbox-createdAt-header-button"]',
+        ).click();
+        verifySubjectTitleOrder({
+          boxType: 'outbox',
+          docketNumber,
+          isAscending: false,
+          prefix: 'Subject Line',
         });
       });
     });
@@ -431,7 +399,6 @@ describe('Messages', () => {
         loginAsTrialClerk,
         loginAsReportersOffice,
         loginAsPetitionsClerk,
-        loginAsGeneral
       ].forEach(loginFunction => {
         it(`should "${loginFunction.name}" and display the filters for Court User `, () => {
           loginFunction();
@@ -470,36 +437,36 @@ describe('Messages', () => {
 
 function verifySubjectTitleOrder({
   boxType,
+  docketNumber,
   isAscending,
   prefix,
   queueType = 'section',
 }: {
+  docketNumber: string;
   queueType?: 'individual' | 'section';
   boxType: 'inbox' | 'outbox' | 'completed';
   prefix: string;
   isAscending: boolean;
 }) {
-  cy.get('@DOCKET_NUMBER').then(docketNumber => {
-    const rows: string[] = [];
-    cy.get(
-      `[data-testid="messages-${queueType}-${boxType}-docketNumber-cell"]:contains("${docketNumber}")`,
-    ).each(el => {
-      cy.wrap(el.parent())
-        .find('.message-document-title')
-        .invoke('text')
-        .then(text => {
-          if (text.includes(prefix)) {
-            rows.push(text);
-          }
-        });
-    });
-    cy.wrap(rows).each((text, i) => {
-      if (isAscending) {
-        cy.wrap(text).should('equal', `${prefix} ${i + 1}`);
-      } else {
-        cy.wrap(text).should('equal', `${prefix} ${3 - i}`);
-      }
-    });
+  const expectedRows = isAscending
+    ? [`${prefix} 1`, `${prefix} 2`, `${prefix} 3`]
+    : [`${prefix} 3`, `${prefix} 2`, `${prefix} 1`];
+
+  cy.get(
+    `[data-testid="messages-${queueType}-${boxType}-docketNumber-cell"]:contains("${docketNumber}")`,
+  ).should($cells => {
+    const rows = $cells
+      .toArray()
+      .map(cell => {
+        return (
+          cell.parentElement
+            ?.querySelector('.message-document-title')
+            ?.textContent?.trim() || ''
+        );
+      })
+      .filter(text => text.includes(prefix));
+
+    expect(rows).to.deep.equal(expectedRows);
   });
 }
 

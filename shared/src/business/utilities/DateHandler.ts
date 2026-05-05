@@ -133,13 +133,21 @@ export const calculateISODate = ({
 }: {
   dateString?: string;
   howMuch?: number;
-  units?: string;
+  units?: 'days' | 'months' | 'years' | 'hours' | 'minutes';
 }): string => {
-  if (!howMuch) return dateString!;
+  if (!howMuch && dateString) return dateString;
 
-  return prepareDateFromString(dateString)
-    .plus({ [units]: howMuch })
-    .toISO()!;
+  const date = prepareDateFromString(dateString, FORMATS.ISO);
+
+  if (['days', 'months', 'years'].includes(units)) {
+    return date
+      .setZone(USTC_TZ)
+      .plus({ [units]: howMuch })
+      .setZone('utc')
+      .toISO()!;
+  }
+
+  return date.plus({ [units]: howMuch }).toISO()!;
 };
 
 export const calculateDate = ({

@@ -1,23 +1,29 @@
 import {
   DeleteObjectsCommand,
+  ListBucketsCommand,
   ListObjectVersionsCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { mockClient } from 'aws-sdk-client-mock';
-import { truncateS3DocumentsBucket } from './truncate-s3-documents.helpers';
+import { truncateAllEnvironmentS3Buckets } from './truncate-all-s3-buckets.helpers';
 
 const s3Mock = mockClient(S3Client);
 
-describe('truncateS3DocumentsBucket', () => {
-  const bucketName = 'efcms-documents-local';
+describe('truncateAllEnvironmentS3Buckets', () => {
+  const environmentName = 'test-env';
+  const bucketName = `efcms-documents-${environmentName}`;
 
   beforeEach(() => {
     s3Mock.reset();
     jest.spyOn(console, 'log').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    s3Mock.on(ListBucketsCommand).resolves({
+      Buckets: [{ Name: bucketName }, { Name: 'unrelated-bucket' }],
+    });
   });
 
-  it('paginates ListObjectVersions and deletes versions and delete-markers', async () => {
+  it('paginates ListObjectVersions and deletes versions and delete-markers for matched buckets', async () => {
     s3Mock
       .on(ListObjectVersionsCommand)
       .resolvesOnce({
@@ -49,9 +55,12 @@ describe('truncateS3DocumentsBucket', () => {
       });
 
     const s3Client = new S3Client({});
-    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
 
-    expect(total).toBe(4);
+    expect(total).toEqual({ [bucketName]: 4 });
     const listCalls = s3Mock.commandCalls(ListObjectVersionsCommand);
     expect(listCalls).toHaveLength(2);
     expect(listCalls[1].args[0].input).toMatchObject({
@@ -79,10 +88,43 @@ describe('truncateS3DocumentsBucket', () => {
     s3Mock.on(ListObjectVersionsCommand).resolves({ IsTruncated: false });
 
     const s3Client = new S3Client({});
-    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
 
-    expect(total).toBe(0);
+    expect(total).toEqual({ [bucketName]: 0 });
     expect(s3Mock.commandCalls(DeleteObjectsCommand)).toHaveLength(0);
+  });
+
+  it('handles if ListBucketsCommand returns no buckets', async () => {
+    s3Mock.on(ListBucketsCommand).resolves({});
+
+    const s3Client = new S3Client({});
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
+
+    expect(total).toEqual({});
+    expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(0);
+  });
+
+  it('skips buckets without a Name', async () => {
+    s3Mock.on(ListBucketsCommand).resolves({
+      Buckets: [{ Name: bucketName }, {}], // Last bucket has no Name
+    });
+
+    s3Mock.on(ListObjectVersionsCommand).resolves({ IsTruncated: false });
+
+    const s3Client = new S3Client({});
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
+
+    expect(total).toEqual({ [bucketName]: 0 });
+    expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(1);
   });
 
   it('skips entries without a Key', async () => {
@@ -95,9 +137,12 @@ describe('truncateS3DocumentsBucket', () => {
       .resolves({ Deleted: [{ Key: 'real.pdf', VersionId: 'v1' }] });
 
     const s3Client = new S3Client({});
-    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
 
-    expect(total).toBe(1);
+    expect(total).toEqual({ [bucketName]: 1 });
     const deleteCalls = s3Mock.commandCalls(DeleteObjectsCommand);
     expect(deleteCalls[0].args[0].input.Delete?.Objects).toEqual([
       { Key: 'real.pdf', VersionId: 'v1' },
@@ -112,9 +157,12 @@ describe('truncateS3DocumentsBucket', () => {
     s3Mock.on(DeleteObjectsCommand).resolves({});
 
     const s3Client = new S3Client({});
-    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
 
-    expect(total).toBe(0);
+    expect(total).toEqual({ [bucketName]: 0 });
   });
 
   it('throws when DeleteObjects returns errors', async () => {
@@ -138,7 +186,7 @@ describe('truncateS3DocumentsBucket', () => {
     const s3Client = new S3Client({});
 
     await expect(
-      truncateS3DocumentsBucket({ bucketName, s3Client }),
+      truncateAllEnvironmentS3Buckets({ environmentName, s3Client }),
     ).rejects.toThrow(
       `Failed to delete one or more S3 object(s) from bucket ${bucketName}: a.pdf (v1): AccessDenied - nope, unknown-key: UnknownError`,
     );
@@ -164,9 +212,12 @@ describe('truncateS3DocumentsBucket', () => {
       .resolvesOnce({ Deleted: [{ Key: 'b.pdf', VersionId: 'v2' }] });
 
     const s3Client = new S3Client({});
-    const total = await truncateS3DocumentsBucket({ bucketName, s3Client });
+    const total = await truncateAllEnvironmentS3Buckets({
+      environmentName,
+      s3Client,
+    });
 
-    expect(total).toBe(2);
+    expect(total).toEqual({ [bucketName]: 2 });
     expect(s3Mock.commandCalls(ListObjectVersionsCommand)).toHaveLength(2);
   });
 });
