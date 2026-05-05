@@ -98,7 +98,10 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     if (!caseTypeMap.has(caseType)) {
       caseTypeMap.set(caseType, [0, 0, 0, 0]);
     }
-    caseTypeMap.get(caseType)![quarter - 1] = count;
+    const quarterData = caseTypeMap.get(caseType);
+    if (quarterData) {
+      quarterData[quarter - 1] = count;
+    }
   }
 
   store.set(state.clerkOfCourtDashboard.caseTypeBreakdownLabels, quarterLabels);
