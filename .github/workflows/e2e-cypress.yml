@@ -89,7 +89,7 @@ jobs:
           mkdir -p /tmp/cypress/
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
+          export TESTFILES=$(npx ts-node scripts/github-actions/split-tests-cypress.ts integration)
           npx ts-node scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
       - name: Store Cypress Videos
         if: always()

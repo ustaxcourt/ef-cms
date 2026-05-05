@@ -63,7 +63,7 @@ jobs:
       - name: Test Client Unit
         run: |
           mkdir -p /tmp/test-file-times
-          export TESTFILES=$(npx ts-node split-tests-glob.ts -unit)
+          export TESTFILES=$(npx ts-node scripts/github-actions/split-tests-glob.ts -unit)
           export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
           NODE_INDEX=${{ matrix.ci_node_index }} npm run test:client:unit:ci
       - name: Record shard test file timings
