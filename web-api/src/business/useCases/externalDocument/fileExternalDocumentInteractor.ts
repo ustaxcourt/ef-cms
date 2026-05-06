@@ -158,14 +158,10 @@ export const fileExternalDocument = async (
   }
 
   const isConsolidatedMultiDocket =
-    !!consolidatedCasesToFileAcross &&
-    consolidatedCasesToFileAcross.length > 0;
+    !!consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0;
   const multiDocketedOn = isConsolidatedMultiDocket
     ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
     : [];
-  const originallyFiledDocketNumber = isConsolidatedMultiDocket
-    ? docketNumber
-    : undefined;
 
   const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
     let caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -191,12 +187,8 @@ export const fileExternalDocument = async (
             isOnDocketRecord: true,
             relationship,
             numberOfPages,
-            ...(isConsolidatedMultiDocket
-              ? {
-                  multiDocketedOn,
-                  originallyFiledDocketNumber,
-                }
-              : {}),
+            originallyFiledDocketNumber: docketNumber,
+            ...(isConsolidatedMultiDocket ? { multiDocketedOn } : {}),
           },
           {
             authorizedUser,
@@ -245,7 +237,10 @@ export const fileExternalDocument = async (
       includeCorrespondence: false,
     });
 
-    for (const { docketEntryId, servedParties: partiesForEmail } of deferredServedPartyEmails) {
+    for (const {
+      docketEntryId,
+      servedParties: partiesForEmail,
+    } of deferredServedPartyEmails) {
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,

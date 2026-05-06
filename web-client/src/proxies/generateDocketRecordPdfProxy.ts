@@ -1,4 +1,4 @@
-import { post } from './requests';
+import { asyncSyncHandler, post } from './requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const generateDocketRecordPdfInteractor = (
@@ -14,15 +14,23 @@ export const generateDocketRecordPdfInteractor = (
   fileId: string;
   url: string;
 }> => {
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    body: {
-      docketNumber,
-      docketRecordSort,
-      docketRecordTableSort,
-      includePartyDetail,
-      isIndirectlyAssociated,
-    },
-    endpoint: '/async/docket-record-pdf',
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        body: {
+          docketNumber,
+          docketRecordSort,
+          docketRecordTableSort,
+          includePartyDetail,
+          isIndirectlyAssociated,
+        },
+        endpoint: '/async/docket-record-pdf',
+      }),
+  ) as Promise<{
+    fileId: string;
+    url: string;
+  }>;
 };
