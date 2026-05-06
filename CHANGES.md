@@ -1,3 +1,50 @@
+<details><summary>Dependency Updates - Week of 2026-04-27</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.77` - choose exp7
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.0`
+
+```bash
+tfswitch 1.15.0
+```
+
+</details>
+<details><summary>Support `--aws-only` Flag in the Environment Switcher</summary>
+
+## Local
+
+#### Migrate Local Environment Scripts to Support the `--aws-only` Flag
+
+```bash
+./scripts/run-once-scripts/migrate-environments.zsh
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-04-20</summary>
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.76` - choose exp5
+```bash
+npm run ecr:check-version
+```
+
+## Local
+
+#### Upgrade NodeJS to `24.15.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-04-13</summary>
 
 ## Manual Deployment Steps

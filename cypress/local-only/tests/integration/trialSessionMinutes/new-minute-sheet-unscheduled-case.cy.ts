@@ -41,10 +41,7 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
       cy.get('[data-testid="courtReporter"]').type('Test Reporter');
       cy.get('[data-testid="courtReporter"]').blur();
 
-      cy.wait('@autosaveMinutes');
-
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
+      cy.wait('@autosaveMinutes').its('response.statusCode').should('eq', 200);
 
       cy.visit(`/trial-session-detail/${trialSessionId}`);
 

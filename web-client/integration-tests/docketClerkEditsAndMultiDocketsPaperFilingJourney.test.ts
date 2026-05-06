@@ -50,7 +50,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
         trialLocation: 'Little Rock, AR',
       };
 
-      for (let [key, value] of Object.entries(formValues)) {
+      for (const [key, value] of Object.entries(formValues)) {
         await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
           key,
           value,

@@ -1278,7 +1278,7 @@ export type FilingType =
 
 export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 
-export const ANSWER_CUTOFF_UNIT = 'day';
+export const ANSWER_CUTOFF_UNIT = 'days';
 
 export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
@@ -1898,7 +1898,7 @@ export type CreatedCaseType = {
     city: string;
     countryType: string;
     name: string;
-    paperPetitionEmail: string;
+    contactEmailAddress: string;
     phone: string;
     postalCode: string;
     state: string;

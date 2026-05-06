@@ -3,7 +3,7 @@ import { Country } from './Country';
 import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
+import { ContactEmailAddress } from '../StartCaseInternal/ContactEmailAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -194,20 +194,21 @@ export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
             />
           )}
 
-          {(contactsHelper.showPaperPetitionEmailFieldAndConsentBox ||
-            contactsHelper.showSecondaryContactEmailFieldAndConsentBox) && (
-            <>
-              <PaperPetitionEmail
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-              <EConsent
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-            </>
+          {(contactsHelper.showContactEmailField ||
+            contactsHelper.showSecondaryContactEmailField) && (
+            <ContactEmailAddress
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
+          )}
+          {(contactsHelper.showEConsentCheckbox ||
+            contactsHelper.showSecondaryEConsentCheckbox) && (
+            <EConsent
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
           )}
 
           {contactsHelper.contactSecondary.displayPhone && (

@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { Role } from '@shared/business/entities/EntityConstants';
 import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 

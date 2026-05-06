@@ -422,6 +422,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetPersistenceGateway = appContextProxy({
     addCaseToHearing: jest.fn(),
+    countRemainingChangeOfAddressCases: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteDocumentFile: jest.fn(),
@@ -477,6 +478,10 @@ export const createTestApplicationContext = () => {
     send: jest.fn().mockReturnValue({
       promise: () => {},
     }),
+  };
+
+  const mockGetLongTimeoutSQSMessagingClient = {
+    send: jest.fn().mockResolvedValue({}),
   };
 
   const mockCreateDocketNumberGenerator = {
@@ -555,6 +560,9 @@ export const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
+    getLongTimeoutSQSMessagingClient: jest
+      .fn()
+      .mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy({

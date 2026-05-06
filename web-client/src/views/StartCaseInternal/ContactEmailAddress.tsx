@@ -5,13 +5,13 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-type PaperPetitionEmailProps = {
+type ContactEmailAddressProps = {
   bind: any;
   contactType: string;
   onBlur: () => void;
 }
 
-export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
+export const ContactEmailAddress: React.FC<ContactEmailAddressProps> = connect(
   {
     bind: props.bind,
     contactType: props`contactType`,
@@ -21,7 +21,7 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
-  function PaperPetitionEmail({
+  function ContactEmailAddress({
     contactType,
     data,
     onBlur,
@@ -39,21 +39,21 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
         <FormGroup
           errorText={
             validationErrors[contactType] &&
-            validationErrors[contactType].paperPetitionEmail
+            validationErrors[contactType].contactEmailAddress
           }
         >
           <label
             className="usa-label"
             htmlFor={`paper-petition-email-${contactType}`}
           >
-            Petition email address <span className="usa-hint">(optional)</span>
+            Contact email address <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"
             id={`paper-petition-email-${contactType}`}
-            name={`${contactType}.paperPetitionEmail`}
+            name={`${contactType}.contactEmailAddress`}
             type="email"
-            value={(data[contactType]?.paperPetitionEmail as string) || ''}
+            value={(data[contactType]?.contactEmailAddress as string) || ''}
             onBlur={() => {
               onBlur();
             }}
@@ -70,4 +70,4 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
   },
 );
 
-PaperPetitionEmail.displayName = 'PaperPetitionEmail';
+ContactEmailAddress.displayName = 'ContactEmailAddress';

@@ -34,6 +34,7 @@ const config: Config = {
     '!judge/update-judge-isSeniorJudge.ts',
     '!judge/update-judge-titles.ts',
     '!npm/upgrade-npm-packages.ts',
+    '!persistence/truncate-all-persistence.ts',
     '!postgres/**',
     '!reindex/**',
     '!reports/**',
