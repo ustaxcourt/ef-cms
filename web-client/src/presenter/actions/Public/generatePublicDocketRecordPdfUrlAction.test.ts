@@ -13,7 +13,7 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
     const mockPdf = { url: 'www.example.com' };
     applicationContext
       .getUseCases()
-      .generatePublicDocketRecordPdfInteractor.mockReturnValue(mockPdf);
+      .generatePublicDocketRecordPdfInteractor.mockResolvedValue(mockPdf);
 
     const result = await runAction<{ pdfUrl: any }, PublicClientState>(
       generatePublicDocketRecordPdfUrlAction,
