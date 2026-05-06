@@ -23,7 +23,7 @@ export const DashboardClerkOfCourt = connect(
     user: state.user,
   },
   function DashboardClerkOfCourt({ clerkOfCourtDashboard, user }) {
-    const shouldDisplay =
+    const shouldDisplayChartTabs =
       process.env.STAGE !== 'prod' && process.env.STAGE !== 'test';
 
     const {
@@ -57,7 +57,7 @@ export const DashboardClerkOfCourt = connect(
                 <Tab tabName="recentMessages" title="Recent Messages">
                   <RecentMessagesCotC />
                 </Tab>
-                {shouldDisplay && (
+                {shouldDisplayChartTabs && (
                   <Tab tabName="pieChart" title="Pie Chart">
                     <div className="tw:mt-6 tw:mx-4">
                       <h2 className="tw:xs:text-2xl tw:text-lg">
@@ -76,7 +76,7 @@ export const DashboardClerkOfCourt = connect(
                     </div>
                   </Tab>
                 )}
-                {shouldDisplay && (
+                {shouldDisplayChartTabs && (
                   <Tab tabName="barGraph" title="Bar Graph">
                     <div className="tw:mt-6">
                       <SingleBarGraph
@@ -107,7 +107,7 @@ export const DashboardClerkOfCourt = connect(
                     </div>
                   </Tab>
                 )}
-                {shouldDisplay && (
+                {shouldDisplayChartTabs && (
                   <Tab tabName="lineGraph" title="Line Graph">
                     <div className="tw:mt-6">
                       <LineGraph
@@ -144,7 +144,7 @@ export const DashboardClerkOfCourt = connect(
                   onChange={e => setMobileSection(e.target.value)}
                 >
                   <option value="recentMessages">Recent Messages</option>
-                  {shouldDisplay && (
+                  {shouldDisplayChartTabs && (
                     <>
                       <option value="pieChart">Pie Chart</option>
                       <option value="barGraph">Bar Graph</option>
