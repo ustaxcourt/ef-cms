@@ -169,6 +169,34 @@ describe('addCoversheetInteractor', () => {
     expect(upsertDocketEntries).not.toHaveBeenCalled();
   });
 
+  it('still re-prepends when COMPLETE but forceRegenerate=true', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        forceRegenerate: true,
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
   it('still re-prepends when COMPLETE but replaceCoversheet=true', async () => {
     const completedCaseData = {
       ...testingCaseData,

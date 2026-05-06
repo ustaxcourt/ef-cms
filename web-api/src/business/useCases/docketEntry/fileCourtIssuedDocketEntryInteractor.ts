@@ -45,7 +45,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO & { coversheetPendingForDocketEntryId?: string }> => {
+): Promise<CaseDTO & { pendingCoversheetDocketEntryIds?: string[] }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -219,8 +219,8 @@ export const fileCourtIssuedDocketEntry = async (
   // step here prevents the UI from skipping its poll if the predicate ever
   // diverges.
   return Object.assign(new CaseDTO(subjectCase.toRawObject()), {
-    coversheetPendingForDocketEntryId: requiresCoversheet
-      ? docketEntryId
+    pendingCoversheetDocketEntryIds: requiresCoversheet
+      ? [docketEntryId]
       : undefined,
   });
 };

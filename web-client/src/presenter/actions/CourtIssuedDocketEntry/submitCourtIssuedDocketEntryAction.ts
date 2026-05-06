@@ -25,8 +25,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
     });
 
   return {
-    coversheetPendingForDocketEntryId:
-      result?.coversheetPendingForDocketEntryId,
+    pendingCoversheetDocketEntryIds: result?.pendingCoversheetDocketEntryIds,
     docketEntryId,
   };
 };

@@ -46,9 +46,9 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     });
   });
 
-  it('forwards coversheetPendingForDocketEntryId from the interactor response so the sequence polls when the backend enqueued a coversheet job', async () => {
+  it('forwards pendingCoversheetDocketEntryIds from the interactor response so the sequence polls when the backend enqueued coversheet jobs', async () => {
     fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({
-      coversheetPendingForDocketEntryId: 'abc',
+      pendingCoversheetDocketEntryIds: ['abc'],
     });
 
     const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
@@ -60,10 +60,10 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
     });
 
-    expect(output.coversheetPendingForDocketEntryId).toBe('abc');
+    expect(output.pendingCoversheetDocketEntryIds).toEqual(['abc']);
   });
 
-  it('returns no coversheetPendingForDocketEntryId when the backend did not enqueue a coversheet job', async () => {
+  it('returns no pendingCoversheetDocketEntryIds when the backend did not enqueue any coversheet jobs', async () => {
     fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({});
 
     const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
@@ -75,7 +75,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
     });
 
-    expect(output.coversheetPendingForDocketEntryId).toBeUndefined();
+    expect(output.pendingCoversheetDocketEntryIds).toBeUndefined();
   });
 
   it('should return docketEntryId to props', async () => {

@@ -33,8 +33,7 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
     });
 
   return {
-    coversheetPendingForDocketEntryId:
-      result?.coversheetPendingForDocketEntryId,
+    pendingCoversheetDocketEntryIds: result?.pendingCoversheetDocketEntryIds,
     docketEntryId,
   };
 };

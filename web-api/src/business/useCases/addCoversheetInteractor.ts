@@ -19,6 +19,7 @@ export const addCoversheetInteractor = async (
     docketEntryId,
     docketNumber,
     filingDateUpdated = false,
+    forceRegenerate = false,
     replaceCoversheet = false,
     useInitialData = false,
   }: {
@@ -26,6 +27,11 @@ export const addCoversheetInteractor = async (
     docketEntryId: string;
     docketNumber: string;
     filingDateUpdated?: boolean;
+    // Bypass the COMPLETE-status idempotency gate. Sync callers that
+    // unconditionally want a regeneration (e.g. updateDocketEntryMeta on
+    // metadata edits) set this; queued/retry callers leave it false so a
+    // duplicate delivery or post-S3 retry doesn't stack a second coversheet.
+    forceRegenerate?: boolean;
     replaceCoversheet?: boolean;
     useInitialData?: boolean;
   },
@@ -52,11 +58,14 @@ export const addCoversheetInteractor = async (
 
   // Idempotency gate: a COMPLETE entry has already had its coversheet
   // prepended by a prior run of this interactor. Re-running would stack a
-  // second coversheet on the S3 object. Skip unless the caller explicitly
-  // wants to replace or re-render due to a filing-date change.
+  // second coversheet on the S3 object — which matters on the queued path
+  // (duplicate SQS delivery) and on retrySettled callers like serveCaseToIrs
+  // that re-invoke after a partial failure. Sync callers that intend to
+  // regenerate (updateDocketEntryMeta) set forceRegenerate to opt out.
   if (
     docketEntryEntity.processingStatus ===
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
+    !forceRegenerate &&
     !replaceCoversheet &&
     !filingDateUpdated
   ) {

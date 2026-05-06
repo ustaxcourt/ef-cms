@@ -341,7 +341,7 @@ const serveDocketEntry = async ({
       message: {
         action: 'serve_document_complete',
         alertSuccess: { message, overwritable: false },
-        coversheetPendingForDocketEntryId: docketEntryEntity.docketEntryId,
+        pendingCoversheetDocketEntryIds: [docketEntryEntity.docketEntryId],
         docketEntryId: docketEntryEntity.docketEntryId,
         pdfUrl: paperServicePdfUrl,
       },

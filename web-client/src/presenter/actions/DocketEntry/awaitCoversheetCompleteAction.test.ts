@@ -17,22 +17,33 @@ describe('awaitCoversheetCompleteAction', () => {
     mockPollForCoversheetComplete.mockResolvedValue(undefined);
   });
 
-  it('polls for coversheet completion using docketEntryId from props', async () => {
-    const mockDocketEntryId = '456';
+  it('polls for coversheet completion using the docketEntryIds list from props', async () => {
     const mockDocketNumber = '123-45';
 
     await runAction(awaitCoversheetCompleteAction, {
       modules: { presenter },
-      props: { docketEntryId: mockDocketEntryId },
+      props: { docketEntryIds: ['456', '789'] },
       state: { caseDetail: { docketNumber: mockDocketNumber } },
     });
 
     expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
     expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
       expect.objectContaining({
-        docketEntryIds: [mockDocketEntryId],
+        docketEntryIds: ['456', '789'],
         docketNumber: mockDocketNumber,
       }),
+    );
+  });
+
+  it('falls back to a single docketEntryId on props (legacy websocket payload shape)', async () => {
+    await runAction(awaitCoversheetCompleteAction, {
+      modules: { presenter },
+      props: { docketEntryId: 'legacy-id' },
+      state: { caseDetail: { docketNumber: '123-45' } },
+    });
+
+    expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
+      expect.objectContaining({ docketEntryIds: ['legacy-id'] }),
     );
   });
 

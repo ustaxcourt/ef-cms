@@ -110,9 +110,9 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
     });
   });
 
-  it('forwards coversheetPendingForDocketEntryId from the interactor response', async () => {
+  it('forwards pendingCoversheetDocketEntryIds from the interactor response', async () => {
     fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({
-      coversheetPendingForDocketEntryId: mockDocketEntryId,
+      pendingCoversheetDocketEntryIds: [mockDocketEntryId],
     });
 
     const { output } = await runAction(
@@ -128,10 +128,10 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
       },
     );
 
-    expect(output.coversheetPendingForDocketEntryId).toBe(mockDocketEntryId);
+    expect(output.pendingCoversheetDocketEntryIds).toEqual([mockDocketEntryId]);
   });
 
-  it('returns no coversheetPendingForDocketEntryId when the backend did not enqueue a coversheet job', async () => {
+  it('returns no pendingCoversheetDocketEntryIds when the backend did not enqueue any coversheet jobs', async () => {
     fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({});
 
     const { output } = await runAction(
@@ -147,7 +147,7 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
       },
     );
 
-    expect(output.coversheetPendingForDocketEntryId).toBeUndefined();
+    expect(output.pendingCoversheetDocketEntryIds).toBeUndefined();
   });
 
   it('should return the docketEntryId to props', async () => {

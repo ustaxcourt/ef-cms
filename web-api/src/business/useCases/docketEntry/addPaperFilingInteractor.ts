@@ -245,8 +245,8 @@ export const addPaperFiling = async (
         message: successMessage,
         overwritable: false,
       },
-      coversheetPendingForDocketEntryId: isReadyForService
-        ? docketEntryId
+      pendingCoversheetDocketEntryIds: isReadyForService
+        ? [docketEntryId]
         : undefined,
       docketEntryId,
       pdfUrl: paperServicePdfUrl,

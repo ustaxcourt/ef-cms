@@ -10,11 +10,14 @@ export const awaitCoversheetCompleteAction = async ({
   props,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const { docketEntryId } = props;
+  // isCoversheetNeededAction forwards the full pending list; the legacy
+  // single-id prop is kept as a fallback for websocket payloads that
+  // surface only docketEntryId.
+  const docketEntryIds: string[] = props.docketEntryIds ?? [props.docketEntryId];
 
   await pollForCoversheetComplete({
     applicationContext,
-    docketEntryIds: [docketEntryId],
+    docketEntryIds,
     docketNumber,
   });
 };

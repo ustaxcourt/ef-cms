@@ -176,6 +176,12 @@ export const updateDocketEntryMeta = async (
           docketEntryId: originalDocketEntry.docketEntryId,
           docketNumber: caseEntity.docketNumber,
           filingDateUpdated,
+          // Meta edits (serviceDate, documentTitle, eventCode change that
+          // adds a coversheet, etc.) reach this branch with the entry
+          // already COMPLETE. Bypass the idempotency gate so the cover
+          // sheet actually regenerates — the gate is for queue/retry
+          // dedupe, not for intentional re-invocations like this one.
+          forceRegenerate: true,
         },
         authorizedUser,
       );

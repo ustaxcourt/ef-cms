@@ -16,33 +16,62 @@ describe('isCoversheetNeededAction', () => {
     yesStub.mockReset();
   });
 
-  it('routes to yes with the existing docketEntryId when coversheetPendingForDocketEntryId is set alongside it', () => {
+  it('routes to yes with the existing docketEntryId when pendingCoversheetDocketEntryIds includes it', () => {
     runAction(isCoversheetNeededAction, {
       modules: { presenter },
       props: {
-        coversheetPendingForDocketEntryId: 'abc',
+        pendingCoversheetDocketEntryIds: ['abc'],
         docketEntryId: 'abc',
       },
       state: {},
     });
 
-    expect(yesStub).toHaveBeenCalledWith({ docketEntryId: 'abc' });
+    expect(yesStub).toHaveBeenCalledWith({
+      docketEntryId: 'abc',
+      docketEntryIds: ['abc'],
+    });
   });
 
-  it('routes to yes and falls back to coversheetPendingForDocketEntryId for the docketEntryId when props.docketEntryId is missing (websocket payload case)', () => {
+  it('routes to yes and falls back to the first pending id for docketEntryId when props.docketEntryId is missing (websocket payload case)', () => {
     runAction(isCoversheetNeededAction, {
       modules: { presenter },
-      props: { coversheetPendingForDocketEntryId: 'xyz' },
+      props: { pendingCoversheetDocketEntryIds: ['xyz'] },
       state: {},
     });
 
-    expect(yesStub).toHaveBeenCalledWith({ docketEntryId: 'xyz' });
+    expect(yesStub).toHaveBeenCalledWith({
+      docketEntryId: 'xyz',
+      docketEntryIds: ['xyz'],
+    });
   });
 
-  it('routes to no when coversheetPendingForDocketEntryId is not set', () => {
+  it('forwards every pending id to the poll when multiple are enqueued', () => {
+    runAction(isCoversheetNeededAction, {
+      modules: { presenter },
+      props: { pendingCoversheetDocketEntryIds: ['a', 'b', 'c'] },
+      state: {},
+    });
+
+    expect(yesStub).toHaveBeenCalledWith({
+      docketEntryId: 'a',
+      docketEntryIds: ['a', 'b', 'c'],
+    });
+  });
+
+  it('routes to no when pendingCoversheetDocketEntryIds is missing', () => {
     runAction(isCoversheetNeededAction, {
       modules: { presenter },
       props: {},
+      state: {},
+    });
+
+    expect(noStub).toHaveBeenCalled();
+  });
+
+  it('routes to no when pendingCoversheetDocketEntryIds is an empty array', () => {
+    runAction(isCoversheetNeededAction, {
+      modules: { presenter },
+      props: { pendingCoversheetDocketEntryIds: [] },
       state: {},
     });
 
