@@ -339,6 +339,7 @@ export const OrderResponse = connect(
                   Preview PDF
                 </Button>
                 <Button
+                  overrideReadOnly
                   link
                   data-testid="cancel-button"
                   onClick={() => navigateBackSequence()}

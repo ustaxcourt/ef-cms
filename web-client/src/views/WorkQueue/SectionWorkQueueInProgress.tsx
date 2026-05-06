@@ -1,10 +1,10 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { FormattedWorkItemWithCaseInfo } from '../../presenter/computeds/formattedWorkQueue';
+import { FormattedWorkItemWithCaseInfo } from '@web-client/presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 export const SectionWorkQueueInProgress = connect(
@@ -30,7 +30,7 @@ export const SectionWorkQueueInProgress = connect(
   }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments users={users} />
+        <WorkQueueAssignments users={users} count={formattedWorkQueue.length} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
@@ -82,18 +82,20 @@ export const SectionWorkQueueInProgress = connect(
               )}
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <SectionWorkQueueInProgressRow
-                item={item}
-                key={item.workItemId}
-                selectWorkItemSequence={selectWorkItemSequence}
-                showAssignedToColumn={workQueueHelper.showAssignedToColumn}
-                showFiledByColumn={workQueueHelper.showFiledByColumn}
-                showSelectColumn={workQueueHelper.showSelectColumn}
-              />
-            );
-          })}
+          <tbody>
+            {formattedWorkQueue.map(item => {
+              return (
+                <SectionWorkQueueInProgressRow
+                  item={item}
+                  key={item.workItemId}
+                  selectWorkItemSequence={selectWorkItemSequence}
+                  showAssignedToColumn={workQueueHelper.showAssignedToColumn}
+                  showFiledByColumn={workQueueHelper.showFiledByColumn}
+                  showSelectColumn={workQueueHelper.showSelectColumn}
+                />
+              );
+            })}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
@@ -115,73 +117,71 @@ function SectionWorkQueueInProgressRow({
   showSelectColumn: boolean;
 }) {
   return (
-    <tbody>
-      <tr>
-        {showSelectColumn && (
-          <td className="message-select-control">
-            <div className="usa-checkbox">
-              <input
-                aria-label="Select work item"
-                checked={item.selected}
-                className="usa-checkbox__input"
-                id={item.workItemId}
-                type="checkbox"
-                onChange={() => {
-                  selectWorkItemSequence({
-                    workItem: item,
-                  });
-                }}
-              />
-              <label
-                className="padding-top-05 usa-checkbox__label"
-                htmlFor={item.workItemId}
-                id={`label-${item.workItemId}`}
-              >
-                {''}
-              </label>
-            </div>
-          </td>
-        )}
-        <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon
-            consolidatedIconTooltipText={item.consolidatedIconTooltipText}
-            inConsolidatedGroup={item.inConsolidatedGroup}
-            showLeadCaseIcon={item.inLeadCase}
-          />
-        </td>
-        <td className="message-queue-row">
-          <CaseLink formattedCase={item} />
-        </td>
-        <td className="message-queue-row">
-          <span className="no-wrap">{item.received}</span>
-        </td>
-        <td className="message-queue-row message-queue-case-title">
-          {item.caseTitle}
-        </td>
-        <td className="message-queue-row max-width-25">
-          <div className="message-document-title">
-            {item.editLink ? (
-              <a className="case-link" href={item.editLink}>
-                {item.docketEntry.descriptionDisplay ||
-                  item.docketEntry.documentType}
-              </a>
-            ) : (
-              <span>
-                {item.docketEntry.descriptionDisplay ||
-                  item.docketEntry.documentType}
-              </span>
-            )}
+    <tr>
+      {showSelectColumn && (
+        <td className="message-select-control">
+          <div className="usa-checkbox">
+            <input
+              aria-label="Select work item"
+              checked={item.selected}
+              className="usa-checkbox__input"
+              id={item.workItemId}
+              type="checkbox"
+              onChange={() => {
+                selectWorkItemSequence({
+                  workItem: item,
+                });
+              }}
+            />
+            <label
+              className="padding-top-05 usa-checkbox__label"
+              htmlFor={item.workItemId}
+              id={`label-${item.workItemId}`}
+            >
+              {''}
+            </label>
           </div>
         </td>
-        {showFiledByColumn && (
-          <td className="message-queue-row">{item.docketEntry.filedBy}</td>
-        )}
-        <td className="message-queue-row">{item.formattedCaseStatus}</td>
-        {showAssignedToColumn && (
-          <td className="to message-queue-row">{item.assigneeName}</td>
-        )}
-      </tr>
-    </tbody>
+      )}
+      <td className="consolidated-case-column">
+        <ConsolidatedCaseIcon
+          consolidatedIconTooltipText={item.consolidatedIconTooltipText}
+          inConsolidatedGroup={item.inConsolidatedGroup}
+          showLeadCaseIcon={item.inLeadCase}
+        />
+      </td>
+      <td className="message-queue-row">
+        <CaseLink formattedCase={item} />
+      </td>
+      <td className="message-queue-row">
+        <span className="no-wrap">{item.received}</span>
+      </td>
+      <td className="message-queue-row message-queue-case-title">
+        {item.caseTitle}
+      </td>
+      <td className="message-queue-row max-width-25">
+        <div className="message-document-title">
+          {item.editLink ? (
+            <a className="case-link" href={item.editLink}>
+              {item.docketEntry.descriptionDisplay ||
+                item.docketEntry.documentType}
+            </a>
+          ) : (
+            <span>
+              {item.docketEntry.descriptionDisplay ||
+                item.docketEntry.documentType}
+            </span>
+          )}
+        </div>
+      </td>
+      {showFiledByColumn && (
+        <td className="message-queue-row">{item.docketEntry.filedBy}</td>
+      )}
+      <td className="message-queue-row">{item.formattedCaseStatus}</td>
+      {showAssignedToColumn && (
+        <td className="to message-queue-row">{item.assigneeName}</td>
+      )}
+    </tr>
   );
 }
 

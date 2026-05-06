@@ -1,21 +1,18 @@
-import {
-  NewTrialSession,
-  RawNewTrialSession,
-} from '../../entities/trialSessions/NewTrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { NewTrialSession } from '@shared/business/entities/trialSessions/NewTrialSession';
+import { EditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 
-/**
- * validateTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- * @returns {object} errors (null if no errors)
- */
-export const validateTrialSessionInteractor = (
-  { trialSession }: { trialSession: RawNewTrialSession },
-) => {
-  const errors = new NewTrialSession(
-    trialSession,
-  ).getFormattedValidationErrors();
-  return errors || null;
+export const validateTrialSessionInteractor = ({
+  trialSession,
+}: {
+  trialSession: RawTrialSession;
+}): Record<string, any> | null => {
+  let errors: Record<string, any> | null = null;
+  if (trialSession.trialSessionId) {
+    const entity = new EditTrialSession(trialSession);
+    errors = entity.getFormattedValidationErrors();
+  } else {
+    errors = new NewTrialSession(trialSession).getFormattedValidationErrors();
+  }
+  return errors;
 };

@@ -37,7 +37,7 @@ export const TrialLocationBlockedTable = connect(
             </div>
           </div>
         )}
-        <div className="text-right" data-testId="blocked-cases-count">
+        <div className="text-right" data-testid="blocked-cases-count">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedBlockedCases.length}
         </div>

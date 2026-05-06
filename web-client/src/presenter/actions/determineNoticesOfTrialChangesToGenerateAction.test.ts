@@ -122,7 +122,6 @@ describe('determineNoticesOfTrialChangesToGenerateAction', () => {
       .getUseCases()
       .getTrialSessionOpenCasesCountInteractor.mockResolvedValue({
         calendaredCaseEntitiesCount: 1,
-
         casesThatShouldReceiveNoticesCount: 1,
       });
 

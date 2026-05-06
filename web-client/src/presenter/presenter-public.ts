@@ -1,6 +1,7 @@
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
+import { ReadOnlyModeError } from './errors/ReadOnlyModeError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -40,6 +41,7 @@ import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter
 import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionsDataSequence';
+import { readOnlyModeErrorSequence } from './sequences/readOnlyModeErrorSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
@@ -128,6 +130,7 @@ export const presenterSequences = {
   openCleanModalSequence: openCleanModalSequence as unknown as Function,
   persistFormsOnReloadSequence:
     persistFormsOnReloadSequence as unknown as Function,
+  readOnlyModeErrorSequence: readOnlyModeErrorSequence as unknown as Function,
   redirectToCreatePetitionerAccountSequence:
     redirectToCreatePetitionerAccountSequence as unknown as Function,
   redirectToDashboardSequence:
@@ -187,8 +190,9 @@ export const presenter = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 500, 501, etc
     [NotFoundError, notFoundErrorSequence], //404
+    [ReadOnlyModeError, readOnlyModeErrorSequence], //503
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {

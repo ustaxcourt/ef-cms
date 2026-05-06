@@ -1,9 +1,14 @@
 @layer theme, components, utilities;
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-@import "tw-animate-css";
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
+@import 'tw-animate-css';
 
-
+/* Remove focus outline on recharts SVG elements on click, preserve on keyboard nav */
+.recharts-wrapper svg:focus:not(:focus-visible),
+.recharts-wrapper:focus:not(:focus-visible),
+g:focus:not(:focus-visible) {
+  outline: none;
+}
 
 :root {
   --background: rgb(255 255 255 / 100%);
@@ -34,6 +39,8 @@
   --chart-3: rgb(60 76 152 / 100%);
   --chart-4: rgb(151 200 65 / 100%);
   --chart-5: rgb(206 184 57 / 100%);
+
+  /* This scales up border radius to be larger than it should be the multiplier should be .5 */
   --radius: 0.625rem;
   --sidebar: rgb(250 250 250 / 100%);
   --sidebar-foreground: rgb(37 37 37 / 100%);
@@ -167,10 +174,16 @@
   --color-green-primary: var(--green-primary);
   --color-green-success: var(--green-success);
   --color-purple-visited-link: var(--purple-visited-link);
+}
 
-  /* spacing */
+/* stylelint-disable scss/at-rule-no-unknown, order/properties-order, nesting-selector-no-missing-scoping-root, rule-empty-line-before */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-  /* --spacing: 4px; */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* from custom.scss */
@@ -189,7 +202,6 @@
     .usa-alert__body {
       padding-right: 1rem !important;
     }
-
   }
 }
 
@@ -198,7 +210,8 @@
   font-family: 'Noto Serif';
   font-style: normal;
   font-weight: 700;
-  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2') format('woff2');
+  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2')
+    format('woff2');
 }
 
 /* Custom utility */

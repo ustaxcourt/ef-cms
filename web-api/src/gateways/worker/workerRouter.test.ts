@@ -1,3 +1,7 @@
+jest.mock('@web-api/dispatchers/lambda/reinvoke', () => ({
+  reinvoke: jest.fn(),
+}));
+
 import {
   MESSAGE_TYPES,
   WorkerMessage,
@@ -5,6 +9,7 @@ import {
 } from '@web-api/gateways/worker/workerRouter';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { reinvoke } from '@web-api/dispatchers/lambda/reinvoke';
 
 describe('workerRouter', () => {
   it('should make a call to update a user`s associated case when the message type is UPDATE_ASSOCIATED_CASE', async () => {
@@ -90,5 +95,27 @@ describe('workerRouter', () => {
     ).rejects.toThrow(
       `No matching router found for message: ${JSON.stringify(mockMessage)}`,
     );
+  });
+
+  it('should invoke the reinvoke dispatcher with the functionName and originalEvent payload when the message type is RESCHEDULE_LAMBDA', async () => {
+    const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
+      payload: {
+        functionName: 'check_for_ready_for_trial_cases_dev_blue',
+        originalEvent: { Records: [{ data: 'something' }] },
+        shouldBeIgnored: 'yes',
+      },
+      type: MESSAGE_TYPES.RESCHEDULE_LAMBDA,
+    };
+
+    await workerRouter(applicationContext, { message: mockMessage });
+
+    expect(reinvoke).toHaveBeenCalledWith(applicationContext, {
+      functionName: 'check_for_ready_for_trial_cases_dev_blue',
+      originalEvent: { Records: [{ data: 'something' }] },
+    });
+    // Verify unrelated payload keys are not passed through
+    const [, arg] = (reinvoke as jest.Mock).mock.calls[0];
+    expect(arg.shouldBeIgnored).toBeUndefined();
   });
 });

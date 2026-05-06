@@ -9,7 +9,10 @@ describe('getMaintenanceModeAction', () => {
 
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(true);
+      .getMaintenanceModeInteractor.mockReturnValue({
+        maintenanceMode: true,
+        readOnlyMode: false,
+      });
   });
 
   it('should return true when maintenance mode is turned on', async () => {
@@ -23,12 +26,16 @@ describe('getMaintenanceModeAction', () => {
     });
 
     expect(result.output.maintenanceMode).toEqual(true);
+    expect(result.output.readOnlyMode).toEqual(false);
   });
 
   it('should return false when maintenance mode is turned off', async () => {
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(false);
+      .getMaintenanceModeInteractor.mockReturnValue({
+        maintenanceMode: false,
+        readOnlyMode: false,
+      });
 
     const result = await runAction(getMaintenanceModeAction, {
       modules: {
@@ -40,5 +47,27 @@ describe('getMaintenanceModeAction', () => {
     });
 
     expect(result.output.maintenanceMode).toEqual(false);
+    expect(result.output.readOnlyMode).toEqual(false);
+  });
+
+  it('should unpack readOnlyMode when API returns an object', async () => {
+    applicationContext
+      .getUseCases()
+      .getMaintenanceModeInteractor.mockReturnValue({
+        maintenanceMode: false,
+        readOnlyMode: true,
+      });
+
+    const result = await runAction(getMaintenanceModeAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        maintenanceMode: false,
+      },
+    });
+
+    expect(result.output.maintenanceMode).toEqual(false);
+    expect(result.output.readOnlyMode).toEqual(true);
   });
 });

@@ -2,7 +2,7 @@ import {
   MESSAGE_TYPES,
   WorkerMessage,
 } from '@web-api/gateways/worker/workerRouter';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { worker } from '@web-api/gateways/worker/worker';
 
 describe('worker', () => {
@@ -29,9 +29,40 @@ describe('worker', () => {
     expect(applicationContext.getMessagingClient().send).toHaveBeenCalledWith(
       expect.objectContaining({
         input: {
+          DelaySeconds: 0,
           MessageBody: JSON.stringify(mockMessage),
           QueueUrl: mockQueueUrl,
         },
+      }),
+    );
+  });
+
+  it('should propagate the message.delay value to the SQS DelaySeconds', async () => {
+    const mockMessage: WorkerMessage = {
+      authorizedUser: {
+        email: 'person@hello.com',
+        name: 'ignored',
+        role: 'adc',
+        userId: 'ignored',
+      },
+      delay: 180,
+      payload: {
+        abc: 'def',
+      },
+      type: MESSAGE_TYPES.RESCHEDULE_LAMBDA,
+    };
+    const mockQueueUrl = 'www.send_a_message.com';
+    applicationContext.environment.workerQueueUrl = mockQueueUrl;
+
+    await worker(applicationContext, {
+      message: mockMessage,
+    });
+
+    expect(applicationContext.getMessagingClient().send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: expect.objectContaining({
+          DelaySeconds: 180,
+        }),
       }),
     );
   });

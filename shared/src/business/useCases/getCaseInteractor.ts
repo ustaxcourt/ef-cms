@@ -12,7 +12,10 @@ import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO'
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 
 export const getCaseInteractor = async (
-  { docketNumber }: { docketNumber: string },
+  {
+    docketNumber,
+    excludeDocketEntries,
+  }: { docketNumber: string; excludeDocketEntries?: boolean },
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   if (!isAuthUser(authorizedUser)) {
@@ -21,15 +24,12 @@ export const getCaseInteractor = async (
     );
   }
 
-  const [caseRecord, workItems] = await Promise.all([
-    getCaseByDocketNumber({
-      docketNumber: Case.formatDocketNumber(docketNumber),
-      user: authorizedUser,
-    }),
-    getWorkItemsByDocketNumber({
-      docketNumber: Case.formatDocketNumber(docketNumber),
-    }),
-  ]);
+  const formattedDocketNumber = Case.formatDocketNumber(docketNumber);
+
+  const caseRecord = await getCaseByDocketNumber({
+    docketNumber: formattedDocketNumber,
+    user: authorizedUser,
+  });
 
   const isValidCase = Boolean(caseRecord?.docketNumber);
 
@@ -42,6 +42,17 @@ export const getCaseInteractor = async (
   const theCase = CaseFactory.getCaseDTO({
     rawCase: caseRecord,
     user: authorizedUser,
+  });
+
+  if (excludeDocketEntries) {
+    return { ...theCase, docketEntries: [] } as
+      | CaseDTO
+      | RestrictedCaseDTO
+      | PublicCaseDTO;
+  }
+
+  const workItems = await getWorkItemsByDocketNumber({
+    docketNumber: formattedDocketNumber,
   });
 
   // The UI needs some work item info associated with the docket entry, so we attach that here

@@ -124,6 +124,8 @@ export class DocketEntry extends JoiValidationEntity {
   public isStricken?: boolean;
   public lodged?: boolean;
   public mailingDate?: string;
+  public multiDocketedOn: string[];
+  public originallyFiledDocketNumber?: string;
   public numberOfPages?: number;
   public objections?: string;
   public sealedTo?: string;
@@ -259,6 +261,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.isStricken = rawDocketEntry.isStricken || false;
     this.lodged = rawDocketEntry.lodged;
     this.mailingDate = rawDocketEntry.mailingDate;
+    this.multiDocketedOn = rawDocketEntry.multiDocketedOn || [];
+    this.originallyFiledDocketNumber =
+      rawDocketEntry.originallyFiledDocketNumber;
     this.numberOfPages = rawDocketEntry.numberOfPages;
     this.objections = rawDocketEntry.objections;
     this.redactionAcknowledgement = rawDocketEntry.redactionAcknowledgement;
@@ -354,6 +359,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.workItemId = rawDocketEntry.workItemId;
   }
 
+  static VALIDATION_RULES = DOCKET_ENTRY_VALIDATION_RULES;
+
   /**
    * sets the document as archived (used to hide from the ui)
    *
@@ -388,6 +395,14 @@ export class DocketEntry extends JoiValidationEntity {
       this.servedPartiesCode = getServedPartiesCode(servedParties);
     }
     return this;
+  }
+
+  /**
+   * Set originallyFiledDocketNumber for the docket entry
+   * @param {string} docketNumber the docket number used to set originallyFiledDocketNumber
+   */
+  setOriginallyFiledDocketNumber(docketNumber: string) {
+    this.originallyFiledDocketNumber = docketNumber;
   }
 
   /**
@@ -837,7 +852,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return DOCKET_ENTRY_VALIDATION_RULES;
+    return DocketEntry.VALIDATION_RULES;
+  }
+
+  static isMultiDocketed(originalDocketEntry: RawDocketEntry) {
+    return originalDocketEntry.multiDocketedOn?.length > 1;
   }
 
   static isMinuteEntry({

@@ -14,6 +14,7 @@ export const AppUpdatedModal = connect(
         className="app-updated-modal"
         closeLink={false}
         confirmLabel="Close and Refresh"
+        confirmOverrideReadOnly={true}
         confirmSequence={confirmSequence}
         title="DAWSON Update"
       >

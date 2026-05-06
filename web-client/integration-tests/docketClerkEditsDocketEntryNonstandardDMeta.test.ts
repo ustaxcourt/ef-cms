@@ -1,3 +1,4 @@
+import { INITIAL_DOCUMENT_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
 import { docketClerkNavigatesToEditDocketEntryCertificateOfService } from './journey/docketClerkNavigatesToEditDocketEntryCertificateOfService';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
@@ -20,7 +21,10 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
     expect(caseDetail.docketNumber).toBeDefined();
 
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
+    const petitionDocketEntry = caseDetail.docketEntries.find(
+      entry => entry.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+    );
+    cerebralTest.previousDocumentId = petitionDocketEntry.docketEntryId;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

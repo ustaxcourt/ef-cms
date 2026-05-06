@@ -1,3 +1,6 @@
+jest.mock('@thednp/dommatrix', () => ({ default: class DOMMatrix {} }), {
+  virtual: true,
+});
 import { UNSUPPORTED_BROWSER_ERROR_MESSAGE } from '@web-client/views/FileHandlingHelpers/pdfValidation';
 import { clientSupportsES2022, getPdfJs } from './getPdfJs';
 

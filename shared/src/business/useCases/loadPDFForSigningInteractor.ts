@@ -52,6 +52,7 @@ export const loadPDFForSigningInteractor = async (
     return await pdfJs.getDocument({
       data: formattedArrayBuffer,
       isEvalSupported: false,
+      wasmUrl: '/wasm/',
     }).promise;
   } catch (err) {
     throw new Error(`error loading PDF for signing: ${documentStorageId}`);

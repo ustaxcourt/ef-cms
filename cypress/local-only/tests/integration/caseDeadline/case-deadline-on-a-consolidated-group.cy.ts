@@ -38,7 +38,7 @@ describe('Case Deadline - Consolidated Group', () => {
         goToCase(leadDocketNumber);
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="unconsolidate-cases-button"]').click();
-        cy.get('.usa-checkbox__input').first().check({ force: true });
+        cy.get(`#case-${leadDocketNumber}`).check({ force: true });
         cy.get('[data-testid="modal-confirm"]').click();
         cy.get('.modal-screen').should('not.exist');
         cy.get('[data-testid="tab-tracked-items"]').click();
@@ -60,6 +60,7 @@ describe('Case Deadline - Consolidated Group', () => {
           ' Is this just fantasy?',
         );
         cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').should('not.exist');
 
         goToCase(memberDocketNumbers[1]);
         cy.get('[data-testid="tab-tracked-items"]').click();
@@ -134,7 +135,7 @@ describe('Case Deadline - Consolidated Group', () => {
         goToCase(removedDocketNumber);
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="unconsolidate-cases-button"]').click();
-        cy.get('.usa-checkbox__input').last().check({ force: true });
+        cy.get(`#case-${removedDocketNumber}`).check({ force: true });
         cy.get('[data-testid="modal-confirm"]').click();
         cy.get('.modal-screen').should('not.exist');
 
