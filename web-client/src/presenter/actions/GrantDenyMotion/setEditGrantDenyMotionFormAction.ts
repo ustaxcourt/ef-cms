@@ -28,5 +28,12 @@ export const setEditGrantDenyMotionFormAction = ({
     strickenFromTrialSession: draftOrderState.strickenFromTrialSession,
   });
 
+  if (draftOrderState.previousDocument?.docketEntryId) {
+    store.set(
+      state.docketEntryId,
+      draftOrderState.previousDocument.docketEntryId,
+    );
+  }
+
   return { path: pathUrl };
 };

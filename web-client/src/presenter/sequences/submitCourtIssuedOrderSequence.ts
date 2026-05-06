@@ -83,6 +83,7 @@ export const submitCourtIssuedOrder = showProgressSequenceDecorator([
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
   getOrderTypeAction,
   {
+    isGrantDenyMotion: [submitCourtIssuedOrder],
     isMotionOrderResponse: [
       clearAlertsAction,
       startShowValidationAction,

@@ -3,6 +3,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
+  GRANT_DENY_MOTION_OPTIONS,
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
@@ -63,6 +64,10 @@ export const messageDocumentHelper = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(caseDocument?.draftOrderState?.orderType);
 
+  const isGrantDenyMotion =
+    caseDocument?.draftOrderState?.orderType ===
+    GRANT_DENY_MOTION_OPTIONS.orderType;
+
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 
   const isStipulatedDecision =
@@ -83,18 +88,22 @@ export const messageDocumentHelper = (
   const showEditButtonForRole = isInternalUser;
   const showEditButtonForDocument =
     isNonCorrespondenceDraft && !isStipulatedDecision;
-  const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && isSigned
-    : showEditButtonForRole &&
-      showEditButtonForDocument &&
-      isSigned &&
-      !isNotice &&
-      !isDraftStampOrder;
-  const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !isSigned
-    : showEditButtonForRole &&
-      showEditButtonForDocument &&
-      (!isSigned || isNotice);
+  const showEditButtonSigned = isGrantDenyMotion
+    ? permissions.STAMP_MOTION && isSigned
+    : isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && isSigned
+      : showEditButtonForRole &&
+        showEditButtonForDocument &&
+        isSigned &&
+        !isNotice &&
+        !isDraftStampOrder;
+  const showEditButtonNotSigned = isGrantDenyMotion
+    ? permissions.STAMP_MOTION && !isSigned
+    : isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && !isSigned
+      : showEditButtonForRole &&
+        showEditButtonForDocument &&
+        (!isSigned || isNotice);
 
   const showAddDocumentEntryButtonForRole =
     permissions.CREATE_ORDER_DOCKET_ENTRY;

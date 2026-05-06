@@ -18,6 +18,7 @@ export const convertHtml2PdfSequence = showProgressSequenceDecorator([
   setCaseAction,
   getOrderTypeAction,
   {
+    isGrantDenyMotion: [getPdfUrlAction],
     isStandardOrder: [getPdfUrlAction],
     isStatusReportOrder: [getStatusReportOrderPdfUrlAction],
     isMotionOrderResponse: [getPdfUrlAction],
