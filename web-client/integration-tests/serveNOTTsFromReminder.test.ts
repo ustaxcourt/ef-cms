@@ -197,6 +197,10 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         trialSessionId: cerebralTest.trialSessionId,
       });
 
+      const calendaredCasesBefore = cerebralTest.getState(
+        'trialSession.calendaredCases',
+      );
+
       await cerebralTest.runSequence('showThirtyDayNoticeModalSequence');
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
@@ -205,12 +209,16 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
 
       await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
 
-      const calendaredCases = cerebralTest.getState(
+      expect(cerebralTest.getState('trialSession.dismissedAlertForNott')).toBe(
+        true,
+      );
+
+      const calendaredCasesAfter = cerebralTest.getState(
         'trialSession.calendaredCases',
       );
 
-      expect(calendaredCases).toBeDefined();
-      expect(calendaredCases.length).toEqual(2);
+      expect(calendaredCasesAfter).toEqual(calendaredCasesBefore);
+      expect(calendaredCasesAfter.length).toBe(2);
     });
   });
 });
