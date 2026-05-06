@@ -1,33 +1,49 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import fs from 'fs';
-import shuffleSeed from 'shuffle-seed';
+import {
+  getOutputsForCurrentCiNode,
+  type SplittableFile,
+} from './split-tests.helpers';
 
 // # Usage
-// #   npx ts-node split-tests-cypress.ts integration
-// #   npx ts-node split-tests-cypress.ts accessibility
+// #   scripts/github-actions/split-tests-cypress.ts integration
+// #   scripts/github-actions/split-tests-cypress.ts accessibility
 
 // # Arguments
 // #   - $1 - the folder of tests to include when looking for tests to split across action runners
 
-const args = process.argv.slice(2);
-const testFolderToInclude = args[0];
+export const main = (args: string[] = process.argv.slice(2)): string => {
+  const testFolderToInclude: string = args[0] || '';
+  const shouldExcludePublicTests: boolean =
+    !testFolderToInclude.includes('public');
+  const specDir: string = './cypress/local-only/tests';
+  const directoryEntries: string[] = fs.readdirSync(specDir, {
+    encoding: 'utf8',
+    recursive: true,
+  });
+  const files: SplittableFile[] = directoryEntries
+    .filter(
+      (file: string): boolean =>
+        file.endsWith('cy.ts') &&
+        (!shouldExcludePublicTests || !file.includes('public/')) &&
+        file.includes(`${testFolderToInclude}/`),
+    )
+    .map(
+      (file: string): SplittableFile => ({
+        output: `./cypress/local-only/tests/${file}`,
+        path: `./cypress/local-only/tests/${file}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
+    files,
+  }).join(',');
 
-const specDir = './cypress/local-only/tests';
-const files = fs
-  .readdirSync(specDir, { recursive: true })
-  .filter(
-    f =>
-      (f as string).endsWith('cy.ts') &&
-      !f.includes('public/') &&
-      f.includes(`${testFolderToInclude}/`),
-  );
+  console.log(output);
 
-const shuffled = shuffleSeed.shuffle(files, process.env.GITHUB_SHA);
+  return output;
+};
 
-const total = parseInt(process.env.CI_NODE_TOTAL!, 10);
-const index = parseInt(process.env.CI_NODE_INDEX!, 10);
-
-const tests = shuffled
-  .filter((num, i) => i % total === index)
-  .map(file => `./cypress/local-only/tests/${file}`);
-
-console.log(tests.join(','));
+if (require.main === module) {
+  main();
+}

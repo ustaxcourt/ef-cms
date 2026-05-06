@@ -1,16 +1,32 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import fs from 'fs';
-import shuffleSeed from 'shuffle-seed';
+import {
+  getOutputsForCurrentCiNode,
+  type SplittableFile,
+} from './split-tests.helpers';
 
-const testType = process.argv[2] || '';
+export const main = (args: string[] = process.argv.slice(2)): string => {
+  const testType: string = args[0] || '';
+  const specDir: string = `./web-client/integration-tests${testType}`;
+  const files: SplittableFile[] = fs
+    .readdirSync(specDir, 'utf8')
+    .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
+    .map(
+      (fileName: string): SplittableFile => ({
+        output: fileName,
+        path: `${specDir}/${fileName}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
+    files,
+  }).join(' ');
 
-const specDir = `./web-client/integration-tests${testType}`;
-const files = fs.readdirSync(specDir).filter(f => f.endsWith('test.ts'));
+  console.log(output);
 
-const shuffled = shuffleSeed.shuffle(files, process.env.GITHUB_SHA);
+  return output;
+};
 
-const total = parseInt(process.env.CI_NODE_TOTAL!, 10);
-const index = parseInt(process.env.CI_NODE_INDEX!, 10);
-
-const tests = shuffled.filter((num, i) => i % total === index);
-
-console.log(tests.join(' '));
+if (require.main === module) {
+  main();
+}
