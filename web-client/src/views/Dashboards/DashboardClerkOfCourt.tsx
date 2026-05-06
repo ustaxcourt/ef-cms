@@ -24,7 +24,7 @@ export const DashboardClerkOfCourt = connect(
   },
   function DashboardClerkOfCourt({ clerkOfCourtDashboard, user }) {
     const shouldDisplay =
-      process.env.USTC_ENV !== 'prod' && process.env.USTC_ENV !== 'test';
+      process.env.STAGE !== 'prod' && process.env.STAGE !== 'test';
 
     const {
       caseTypeBreakdownDatasets,
