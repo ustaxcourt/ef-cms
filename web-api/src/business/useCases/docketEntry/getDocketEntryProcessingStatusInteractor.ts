@@ -14,33 +14,36 @@ export const getDocketEntryProcessingStatusInteractor = async (
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ processingStatus: string }> => {
+  if (!authorizedUser) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
   const caseRecord = await getCaseByDocketNumber({ docketNumber });
 
   if (!caseRecord?.docketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseRecord, { authorizedUser });
-
-  if (!authorizedUser) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-  if (
-    !User.isInternalUser(authorizedUser.role) &&
-    !caseEntity.userHasAccessToCase(authorizedUser)
-  ) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
   const [docketEntry] = await getDocketEntriesByDocketNumberAndDocketEntryId({
     docketNumbersAndIds: [{ docketEntryId, docketNumber }],
-    selectFields: ['processingStatus'],
+    selectFields: ['processingStatus', 'userId'],
   });
 
   if (!docketEntry) {
     throw new NotFoundError(
       `Docket entry ${docketEntryId} not found on case ${docketNumber}`,
     );
+  }
+
+  const caseEntity = new Case(caseRecord, { authorizedUser });
+  const isFiler = docketEntry.userId === authorizedUser.userId;
+
+  if (
+    !isFiler &&
+    !User.isInternalUser(authorizedUser.role) &&
+    !caseEntity.userHasAccessToCase(authorizedUser)
+  ) {
+    throw new UnauthorizedError('Unauthorized');
   }
 
   return { processingStatus: docketEntry.processingStatus };
