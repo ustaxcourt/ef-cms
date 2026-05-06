@@ -1,5 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
@@ -45,6 +48,21 @@ export const addCoversheetInteractor = async (
     throw new NotFoundError(
       `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
     );
+  }
+
+  // Idempotency gate: a COMPLETE entry has already had its coversheet
+  // prepended by a prior run of this interactor. Re-running would stack a
+  // second coversheet on the S3 object. Skip unless the caller explicitly
+  // wants to replace or re-render due to a filing-date change.
+  if (
+    docketEntryEntity.processingStatus ===
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
+    !replaceCoversheet &&
+    !filingDateUpdated
+  ) {
+    return new DocketEntry(docketEntryEntity, { authorizedUser })
+      .validate()
+      .toRawObject();
   }
 
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({

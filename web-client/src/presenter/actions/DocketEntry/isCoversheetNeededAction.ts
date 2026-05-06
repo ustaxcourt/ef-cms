@@ -1,16 +1,15 @@
-/**
- * Determines if a coversheet needs to be generated
- *
- * @param {object} providers the providers object
- * @param {object} providers.path the next object in the path
- * @param {object} providers.props the cerebral props object
- * @returns {*} returns the next action in the sequence's path
- */
+// Reads two signals so this action covers both entry points without bespoke
+// branching: the post-submit path returns `generateCoversheet` from the
+// submit action; the post-serve socket path emits
+// `coversheetPendingForDocketEntryId`. Either indicates the backend has
+// already enqueued the coversheet and the UI should poll for completion.
 export const isCoversheetNeededAction = ({ path, props }: ActionProps) => {
-  const { generateCoversheet } = props;
+  const { coversheetPendingForDocketEntryId, generateCoversheet } = props;
 
-  if (generateCoversheet) {
-    return path.yes();
+  if (generateCoversheet || coversheetPendingForDocketEntryId) {
+    return path.yes({
+      docketEntryId: props.docketEntryId || coversheetPendingForDocketEntryId,
+    });
   }
 
   return path.no();

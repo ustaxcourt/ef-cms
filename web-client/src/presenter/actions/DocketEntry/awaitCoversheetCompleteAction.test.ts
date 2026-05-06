@@ -1,11 +1,11 @@
 jest.mock('@web-client/presenter/utilities/pollForCoversheetComplete');
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { generateCoversheetAction } from './generateCoversheetAction';
+import { awaitCoversheetCompleteAction } from './awaitCoversheetCompleteAction';
 import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('generateCoversheetAction', () => {
+describe('awaitCoversheetCompleteAction', () => {
   const mockPollForCoversheetComplete = jest.mocked(pollForCoversheetComplete);
 
   beforeAll(() => {
@@ -17,28 +17,14 @@ describe('generateCoversheetAction', () => {
     mockPollForCoversheetComplete.mockResolvedValue(undefined);
   });
 
-  it('enqueues the coversheet job and polls until processing status is complete', async () => {
+  it('polls for coversheet completion using docketEntryId from props', async () => {
     const mockDocketEntryId = '456';
     const mockDocketNumber = '123-45';
-    await runAction(generateCoversheetAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        docketEntryId: mockDocketEntryId,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
-        },
-      },
-    });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockDocketNumber,
+    await runAction(awaitCoversheetCompleteAction, {
+      modules: { presenter },
+      props: { docketEntryId: mockDocketEntryId },
+      state: { caseDetail: { docketNumber: mockDocketNumber } },
     });
 
     expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
@@ -48,5 +34,19 @@ describe('generateCoversheetAction', () => {
         docketNumber: mockDocketNumber,
       }),
     );
+  });
+
+  it('does not call any interactor — only the polling utility', async () => {
+    await runAction(awaitCoversheetCompleteAction, {
+      modules: { presenter },
+      props: { docketEntryId: 'abc' },
+      state: { caseDetail: { docketNumber: '123-45' } },
+    });
+
+    // The frontend must not be the one triggering coversheet generation —
+    // the backend interactor enqueues the worker job before responding.
+    const { addCoversheetInteractor } =
+      applicationContext.getUseCases() as any;
+    expect(addCoversheetInteractor).not.toHaveBeenCalled();
   });
 });

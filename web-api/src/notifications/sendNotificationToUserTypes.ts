@@ -33,7 +33,10 @@ type ServeDocumentCompleteNotification = {
     message: string;
     overwritable: boolean;
   };
-  generateCoversheet?: boolean;
+  // Set when the backend enqueued a coversheet job for this entry. The
+  // frontend polls processing status until COMPLETE so the UI reflects the
+  // updated page count, but it never triggers generation itself.
+  coversheetPendingForDocketEntryId?: string;
   docketEntryId?: string;
   pdfUrl?: string;
 };

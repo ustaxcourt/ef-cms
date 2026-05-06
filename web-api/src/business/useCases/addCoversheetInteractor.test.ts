@@ -139,6 +139,120 @@ describe('addCoversheetInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('skips re-prepending when the docket entry is already COMPLETE (idempotency gate)', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
+  });
+
+  it('still re-prepends when COMPLETE but replaceCoversheet=true', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        replaceCoversheet: true,
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
+  it('still re-prepends when COMPLETE but filingDateUpdated=true', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        filingDateUpdated: true,
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
+  it('retries on ERROR_ADDING_COVERSHEET status (gate does not skip errored entries)', async () => {
+    const erroredCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus:
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.ERROR_ADDING_COVERSHEET,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(erroredCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([erroredCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
   it("updates the docket entry's page numbers", async () => {
     await addCoversheetInteractor(
       applicationContext,

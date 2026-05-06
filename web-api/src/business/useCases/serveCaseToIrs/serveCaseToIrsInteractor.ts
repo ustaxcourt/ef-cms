@@ -36,6 +36,7 @@ import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -470,31 +471,50 @@ const createCoversheetsForServedEntries = async ({
   caseEntity: Case;
   authorizedUser: AuthUser;
 }) => {
-  return await settlePromises(
-    caseEntity.docketEntries.map(async doc => {
-      if (doc.isFileAttached && !doc.isDraft) {
-        // Intentionally synchronous: this server-side flow runs in a long
-        // job and depends on the updated docket entry returned below. The
-        // queued/async path (enqueueAddCoversheet) is reserved for
-        // user-facing interactor flows that need a fast lambda response.
-        const updatedDocketEntry = await applicationContext
-          .getUseCases()
-          .addCoversheetInteractor(
-            applicationContext,
-            {
-              caseEntity,
-              docketEntryId: doc.docketEntryId,
-              docketNumber: caseEntity.docketNumber,
-              replaceCoversheet: !caseEntity.isPaper,
-              useInitialData: !caseEntity.isPaper,
-            },
-            authorizedUser,
-          );
-
-        caseEntity.updateDocketEntry(updatedDocketEntry);
-      }
-    }),
+  // Synchronous on purpose: the NOTR email sent later in this flow includes
+  // an access code that lets petitioners view these documents, so every
+  // entry's coversheet must be in S3 before we proceed. addCoversheetInteractor
+  // is idempotent on processingStatus=COMPLETE, so retrying a successful
+  // entry is a no-op rather than a duplicate prepend.
+  const entriesToCoversheet = caseEntity.docketEntries.filter(
+    doc => doc.isFileAttached && !doc.isDraft,
   );
+
+  const updatedDocketEntries = await retrySettled(
+    entriesToCoversheet,
+    doc =>
+      applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          caseEntity,
+          docketEntryId: doc.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          replaceCoversheet: !caseEntity.isPaper,
+          useInitialData: !caseEntity.isPaper,
+        },
+        authorizedUser,
+      ),
+    {
+      onFailure: ({ attempt, error, item, willRetry }) => {
+        applicationContext.logger.error(
+          'Failed to add coversheet during serveCaseToIrs',
+          {
+            attempt,
+            docketEntryId: item.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            error,
+            willRetry,
+          },
+        );
+      },
+    },
+  );
+
+  // Apply in-memory updates after all S3/DB work settles, so concurrent
+  // fulfillments don't race on the shared caseEntity instance.
+  for (const updatedDocketEntry of updatedDocketEntries) {
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  }
 };
 
 const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {

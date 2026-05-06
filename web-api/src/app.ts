@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
-import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
 import { getDocketEntryProcessingStatusLambda } from './lambdas/documents/getDocketEntryProcessingStatusLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
@@ -425,14 +424,6 @@ app.use(expressLogger);
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
 
-  app.post(
-    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(
-      addCoversheetLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
-  );
   app.get(
     '/case-documents/:docketNumber/:docketEntryId/processing-status',
     lambdaWrapper(getDocketEntryProcessingStatusLambda),
