@@ -105,6 +105,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialClerkOfCourtDashboardState } from './clerkOfCourtDashboardState';
 import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
@@ -176,6 +177,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -284,6 +286,10 @@ export const computeds = {
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<
       typeof completeDocumentTypeSectionHelper
+    >,
+  confirmPaperServiceModalHelper:
+    confirmPaperServiceModalHelper as unknown as ReturnType<
+      typeof confirmPaperServiceModalHelper
     >,
   confirmInitiateServiceModalHelper:
     confirmInitiateServiceModalHelper as unknown as ReturnType<
@@ -650,7 +656,7 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null,
+  assigneeId: null as unknown as string,
   assigneeName: undefined as unknown as string,
   authentication: {
     form: {
@@ -773,6 +779,7 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  clerkOfCourtDashboard: cloneDeep(initialClerkOfCourtDashboardState),
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
@@ -829,6 +836,7 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  readOnlyMode: false,
   messageBoxToDisplay: {
     box: undefined,
     queue: undefined,
@@ -862,6 +870,7 @@ export const baseState = {
     troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
     penalties: undefined as unknown[] | undefined,
   } as Record<string, any>,
+  multiDocketedOriginalCaseDetail: undefined as unknown as RawCase,
   navigation: {
     caseDetailMenu: '',
     openMenu: '',
@@ -882,6 +891,7 @@ export const baseState = {
   openClosedCases: {
     caseType: undefined as string | undefined,
   },
+  paperServiceParties: [] as Array<RawUser & { docketNumber: string }>,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -950,6 +960,7 @@ export const baseState = {
     waitingForResponseRequests: 0,
     waitText: undefined as string | undefined,
   },
+  readOnlyPollingInterval: undefined as unknown as NodeJS.Timeout,
   redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
@@ -982,7 +993,15 @@ export const baseState = {
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [] as { workItemId: string }[],
+  selectedWorkItems: [] as {
+    workItemId: string;
+    groupedMemberCases?: {
+      workItemId: string;
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      inLeadCase: boolean;
+    }[];
+  }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
@@ -1004,7 +1023,7 @@ export const baseState = {
   },
   tableSort: {
     sortField: 'createdAt',
-    sortOrder: ASCENDING,
+    sortOrder: ASCENDING as 'asc' | 'desc',
   },
   tabName: undefined as string | undefined,
   testUsers: [] as RawUser[],
@@ -1060,6 +1079,10 @@ export const baseState = {
   workitemAllCheckbox: false,
   recentFilings: [] as RecentFiling[],
   recentFilingsTableSort: {
+    sortField: 'filedDate',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  },
+  caseListTableSort: {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },

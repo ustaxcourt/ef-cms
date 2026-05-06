@@ -15,5 +15,6 @@ export const getPublicCaseInteractor = (
   return get({
     applicationContext,
     endpoint: `/public-api/cases/${docketNumber}`,
+    params: { excludeDocketEntries: true },
   });
 };

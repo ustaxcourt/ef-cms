@@ -215,6 +215,7 @@ export const PractitionerAddEditDocument = connect(
                     </Button>
                   )}
                   <Button
+                    overrideReadOnly
                     link
                     data-testid="cancel-add-edit-practitioner-document-button"
                     onClick={() => {

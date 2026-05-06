@@ -3,13 +3,26 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const RemoteProceedingForm = connect(
-  {
-    form: state.form,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-  },
-  ({ form, updateTrialSessionFormDataSequence }) => {
+type RemoteProceedingFormProps = { addingTrialSession: boolean };
+
+const remoteProceedingFormDeps = {
+  form: state.form,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+};
+
+export const RemoteProceedingForm = connect<
+  RemoteProceedingFormProps,
+  typeof remoteProceedingFormDeps
+>(
+  remoteProceedingFormDeps,
+  ({
+    addingTrialSession,
+    formattedTrialSessionDetails,
+    form,
+    updateTrialSessionFormDataSequence,
+  }) => {
     return (
       <div>
         <div className="usa-form-group">
@@ -20,6 +33,10 @@ export const RemoteProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-meeting-id"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="meeting-id"
             name="meetingId"
             type="text"
@@ -41,6 +58,10 @@ export const RemoteProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-password"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="password"
             name="password"
             type="text"
@@ -69,6 +90,10 @@ export const RemoteProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-join-phone-number"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="join-phone-number"
             name="joinPhoneNumber"
             type="text"
@@ -90,6 +115,10 @@ export const RemoteProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-chambers-phone-number"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="chambers-phone-number"
             name="chambersPhoneNumber"
             type="text"

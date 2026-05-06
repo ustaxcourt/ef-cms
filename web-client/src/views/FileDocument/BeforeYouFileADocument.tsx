@@ -124,6 +124,7 @@ export const BeforeYouFileADocument = connect(
               OK, Iʼm Ready to File
             </Button>
             <Button
+              overrideReadOnly
               link
               onClick={() => {
                 formCancelToggleCancelSequence();

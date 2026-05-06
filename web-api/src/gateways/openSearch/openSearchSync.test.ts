@@ -2,7 +2,7 @@ import {
   MESSAGE_TYPES,
   WorkerMessage,
 } from '@web-api/gateways/worker/workerRouter';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { worker } from '@web-api/gateways/worker/worker';
 
 describe('worker', () => {
@@ -29,6 +29,7 @@ describe('worker', () => {
     expect(applicationContext.getMessagingClient().send).toHaveBeenCalledWith(
       expect.objectContaining({
         input: {
+          DelaySeconds: 0,
           MessageBody: JSON.stringify(mockMessage),
           QueueUrl: mockQueueUrl,
         },

@@ -1,8 +1,14 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { createApplicationContext } from '../../applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 
 export const handler = async event => {
-  const applicationContext = createApplicationContext({});
+  if (process.env.READ_ONLY_MODE === 'true') {
+    applicationContext.logger.info(
+      'Skipping trial-session handler due to read-only mode.',
+    );
+    throw new Error('System is in read-only mode.');
+  }
+
   try {
     const { Records } = event;
     const { body, receiptHandle } = Records[0];

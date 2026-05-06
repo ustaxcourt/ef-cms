@@ -7,6 +7,7 @@ describe('getDocumentUrlForPreviewAction', () => {
   const mockUrl = 'www.example.com';
   const mockDocketNumber = '123-45';
   const mockDocketEntryId = applicationContext.getUniqueId();
+  const mockDocumentStorageId = applicationContext.getUniqueId();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -18,13 +19,16 @@ describe('getDocumentUrlForPreviewAction', () => {
       });
   });
 
-  it('should retrieve the url for props.documentInS3 from persistence', async () => {
-    await runAction(getDocumentUrlForPreviewAction, {
+  it('should retrieve the document id and url for props.documentInS3 from persistence', async () => {
+    const { output } = await runAction(getDocumentUrlForPreviewAction, {
       modules: {
         presenter,
       },
       props: {
-        documentInS3: { docketEntryId: mockDocketEntryId },
+        documentInS3: {
+          docketEntryId: mockDocketEntryId,
+          documentStorageId: mockDocumentStorageId,
+        },
       },
       state: {
         form: {
@@ -38,25 +42,8 @@ describe('getDocumentUrlForPreviewAction', () => {
         .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
-      key: mockDocketEntryId,
+      key: mockDocumentStorageId,
     });
-  });
-
-  it('should return the document id and pdfUrl for the document specified in props.documentInS3', async () => {
-    const { output } = await runAction(getDocumentUrlForPreviewAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        documentInS3: { docketEntryId: mockDocketEntryId },
-      },
-      state: {
-        form: {
-          docketNumber: mockDocketNumber,
-        },
-      },
-    });
-
     expect(output.docketEntryId).toBe(mockDocketEntryId);
     expect(output.pdfUrl).toBe(mockUrl);
   });

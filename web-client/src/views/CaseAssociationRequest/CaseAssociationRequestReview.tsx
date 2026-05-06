@@ -340,10 +340,15 @@ export const CaseAssociationRequestReview = connect(
                   >
                     Submit Your Filing
                   </Button>
-                  <Button secondary onClick={() => navigateBackSequence()}>
+                  <Button
+                    overrideReadOnly
+                    secondary
+                    onClick={() => navigateBackSequence()}
+                  >
                     Back
                   </Button>
                   <Button
+                    overrideReadOnly
                     link
                     onClick={() => {
                       formCancelToggleCancelSequence();

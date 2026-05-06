@@ -27,6 +27,7 @@ import { generateDocketNumber } from '@web-api/persistence/postgres/cases/genera
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -86,6 +87,7 @@ describe('createCaseInteractor', () => {
     });
 
     (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
+    (upsertWorkItems as jest.Mock).mockResolvedValue(null);
 
     getUserById.mockImplementation(() => user);
 
@@ -152,6 +154,28 @@ describe('createCaseInteractor', () => {
     });
     expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
+    // addCoversheetInteractor should be called for petition + STIN docket
+    // entries (each isFileAttached: true) but NOT for requestForPlaceOfTrial.
+    const { addCoversheetInteractor } = applicationContext.getUseCases();
+    expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
+    const calledDocketEntryIds = addCoversheetInteractor.mock.calls.map(
+      c => c[1].docketEntryId,
+    );
+    expect(calledDocketEntryIds).toEqual(
+      expect.arrayContaining([
+        '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      ]),
+    );
+    const requestForPlaceOfTrialEntry = result.docketEntries.find(
+      d =>
+        d.eventCode ===
+        INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+    );
+    expect(requestForPlaceOfTrialEntry).toBeDefined();
+    expect(calledDocketEntryIds).not.toContain(
+      requestForPlaceOfTrialEntry!.docketEntryId,
+    );
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {
@@ -309,6 +333,10 @@ describe('createCaseInteractor', () => {
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
+    // petition + STIN + corporate disclosure each have a file attached
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(3);
   });
 
   it('should create a case successfully with an "Attachment to Petition" document', async () => {
@@ -357,6 +385,10 @@ describe('createCaseInteractor', () => {
 
     expect(atpDocketEntry).toBeDefined();
     expect(atpDocketEntry!.redactionAcknowledgement).toEqual(true);
+    // petition + STIN + 1 attachmentToPetition each have a file attached
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(3);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
@@ -408,6 +440,10 @@ describe('createCaseInteractor', () => {
     expect(atpDocketEntries).toHaveLength(2);
     expect(atpDocketEntries[0].redactionAcknowledgement).toEqual(true);
     expect(atpDocketEntries[1].redactionAcknowledgement).toEqual(true);
+    // petition + STIN + 2 attachmentToPetition each have a file attached
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
@@ -592,5 +628,52 @@ describe('createCaseInteractor', () => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
       expect(p.email).toBeUndefined();
     });
+  });
+
+  it('should not insert the work item if creating case fails', async () => {
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(upsertWorkItems).not.toHaveBeenCalled();
+  });
+
+  it('should not sync to open search if creating case fails', async () => {
+    const mockOpenSearchQueueSync = jest.fn();
+
+    jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
+      openSearchGateway: () => ({
+        queueSync: mockOpenSearchQueueSync,
+      }),
+    }));
+
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+    expect(mockOpenSearchQueueSync).not.toHaveBeenCalled();
   });
 });

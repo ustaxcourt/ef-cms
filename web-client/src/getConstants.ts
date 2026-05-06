@@ -139,6 +139,7 @@ import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationCl
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
 
 const MINUTES = 60 * 1000;
+const SECONDS = 1000;
 
 const EXTERNAL_USER_DASHBOARD_TABS = {
   CLOSED: 'Closed',
@@ -274,6 +275,7 @@ export const getConstants = () => ({
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+  READ_ONLY_POLLING_INTERVAL: 10 * SECONDS,
   REFRESH_INTERVAL: 20 * MINUTES,
   ROLE_PERMISSIONS,
   SCAN_MODE_LABELS,

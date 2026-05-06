@@ -134,6 +134,7 @@ export const CreateOrder = connect(
                   Save
                 </Button>
                 <Button
+                  overrideReadOnly
                   link
                   id="cancel-order"
                   onClick={() => {

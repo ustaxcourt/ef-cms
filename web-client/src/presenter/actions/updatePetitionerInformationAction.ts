@@ -14,7 +14,7 @@ export const updatePetitionerInformationAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const { contact } = get(state.form);
 
-  const { updatedCase } = await applicationContext
+  await applicationContext
     .getUseCases()
     .updatePetitionerInformationInteractor(applicationContext, {
       docketNumber,
@@ -25,7 +25,6 @@ export const updatePetitionerInformationAction = async ({
     alertSuccess: {
       message: 'Changes saved.',
     },
-    caseDetail: updatedCase,
     docketNumber,
   };
 };

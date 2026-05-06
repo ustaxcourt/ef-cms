@@ -41,8 +41,8 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
+import { getDb } from '@web-api/persistence/postgres/databaseConnection';
 import type { Database } from '@web-api/persistence/postgres/database-schema';
-import { getConnection } from '@web-api/persistence/postgres/getConnection';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 
 // ============================================================================
@@ -126,8 +126,10 @@ async function deleteCognitoUser({
         UserPoolId: userPoolId,
         Username: email.toLowerCase(),
       });
-    } catch (err: any) {
-      const name = err?.name || err?.__type;
+    } catch (err: unknown) {
+      const name =
+        (err as { name?: string; __type?: string })?.name ||
+        (err as { name?: string; __type?: string })?.__type;
       // Swallow user not existing
       if (name === 'UserNotFoundException') {
         return;
@@ -151,8 +153,10 @@ async function deleteCognitoUser({
               Username: email.toLowerCase(),
             });
             return;
-          } catch (e2: any) {
-            const n2 = e2?.name || e2?.__type;
+          } catch (e2: unknown) {
+            const n2 =
+              (e2 as { name?: string; __type?: string })?.name ||
+              (e2 as { name?: string; __type?: string })?.__type;
             if (n2 === 'UserNotFoundException') return;
             if (
               !(
@@ -339,7 +343,7 @@ async function main(): Promise<void> {
   const pools = await buildPools();
 
   // Establish a single DB connection for all deletes
-  const db = await getConnection({ cb: r => r });
+  const db = await getDb();
 
   // Pass 1: DB-first - find users by email prefix in Postgres, delete from Cognito and Postgres
   await runDbFirstCleanup({

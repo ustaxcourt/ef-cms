@@ -229,6 +229,7 @@ export const MessageDocument = connect(
           link
           icon="file-pdf"
           iconColor="white"
+          overrideReadOnly
           onClick={() =>
             openCaseDocumentDownloadUrlSequence({
               docketEntryId: messageViewerDocumentToDisplay.documentId,
@@ -261,6 +262,13 @@ export const MessageDocument = connect(
           messageDocumentHelper.showServiceWarning && (
             <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
               Document cannot be served until the Petition is served.
+            </div>
+          )}
+        {messageViewerDocumentToDisplay &&
+          messageDocumentHelper.showLeadCaseWarning && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              This document can only be served from the lead case in a
+              consolidated group. This is a member case.
             </div>
           )}
 

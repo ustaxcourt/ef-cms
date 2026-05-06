@@ -46,6 +46,7 @@ export const SearchBox = connect(
             }}
           />
           <Button
+            overrideReadOnly
             className="ustc-search-button"
             data-testid="search-docket-number"
             type="submit"

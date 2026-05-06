@@ -1,8 +1,8 @@
 import { blockCaseFromTrialAction } from '../actions/CaseDetail/blockCaseFromTrialAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -18,7 +18,7 @@ export const blockCaseFromTrialSequence = [
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,
-      setCaseAction,
+      refreshCaseMetadataAction,
     ]),
   },
 ];
