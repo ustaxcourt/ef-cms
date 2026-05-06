@@ -323,15 +323,6 @@ const serveDocketEntry = async ({
       }
 
       onTransactionCommit(async () => {
-        await applicationContext.getUseCases().addCoversheetInteractor(
-          applicationContext,
-          {
-            docketEntryId: updatedDocketEntry.docketEntryId,
-            docketNumber: subjectCaseEntity.docketNumber,
-          },
-          authorizedUser,
-        );
-
         const paperServiceResult = await applicationContext
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({
@@ -351,6 +342,7 @@ const serveDocketEntry = async ({
               action: 'serve_document_complete',
               alertSuccess: { message, overwritable: false },
               docketEntryId: docketEntryEntity.docketEntryId,
+              generateCoversheet: true,
               pdfUrl: paperServicePdfUrl,
             },
             userId: user.userId,

@@ -174,52 +174,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    // 'O' is not in COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should call addCoversheetInteractor when the event code is in COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET', async () => {
-    caseRecord.docketEntries.push({
-      docketEntryId: 'b21afa63-931e-4999-99f0-c892c51292d7',
-      documentStorageId: 'b21afa63-931e-4999-99f0-c892c51292d7',
-      docketNumber: caseRecord.docketNumber,
-      documentTitle: 'Hearing Exhibits for X',
-      documentType: 'Hearing Exhibits',
-      eventCode: 'HE',
-      filedByRole: ROLES.docketClerk,
-      userId: mockUserId,
-    });
-    getCaseByDocketNumber.mockResolvedValue(caseRecord);
-    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
-
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          docketEntryId: 'b21afa63-931e-4999-99f0-c892c51292d7',
-          documentTitle: 'Hearing Exhibits for X',
-          documentType: 'Hearing Exhibits',
-          eventCode: 'HE',
-          generatedDocumentTitle: 'Hearing Exhibits for X',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock
-        .calls[0][1],
-    ).toEqual({
-      docketEntryId: 'b21afa63-931e-4999-99f0-c892c51292d7',
-      docketNumber: caseRecord.docketNumber,
-    });
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
