@@ -23,6 +23,6 @@ export const generateDocketRecordPdfInteractor = (
       includePartyDetail,
       isIndirectlyAssociated,
     },
-    endpoint: '/api/docket-record-pdf',
+    endpoint: '/async/docket-record-pdf',
   });
 };

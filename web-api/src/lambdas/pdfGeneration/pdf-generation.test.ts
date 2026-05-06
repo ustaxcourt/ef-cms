@@ -1,7 +1,7 @@
 jest.mock('@web-api/dispatchers/sqs/rescheduleLambda', () => ({
   rescheduleLambda: jest.fn(),
 }));
-jest.mock('@shared/business/utilities/chromium/getChromiumBrowser', () => ({
+jest.mock('@web-api/business/utilities/chromium/getChromiumBrowser', () => ({
   getChromiumBrowser: jest.fn(),
 }));
 jest.mock(

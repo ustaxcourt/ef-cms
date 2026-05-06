@@ -157,10 +157,25 @@ export const fileExternalDocument = async (
     }
   }
 
+  const isConsolidatedMultiDocket =
+    !!consolidatedCasesToFileAcross &&
+    consolidatedCasesToFileAcross.length > 0;
+  const multiDocketedOn = isConsolidatedMultiDocket
+    ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
+    : [];
+  const originallyFiledDocketNumber = isConsolidatedMultiDocket
+    ? docketNumber
+    : undefined;
+
   const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
     let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
     const servedParties = aggregatePartiesForService(caseEntity);
+
+    const deferredServedPartyEmails: {
+      docketEntryId: string;
+      servedParties: ReturnType<typeof aggregatePartiesForService>;
+    }[] = [];
 
     for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
       if (docketEntryId && metadata) {
@@ -172,9 +187,16 @@ export const fileExternalDocument = async (
             docketEntryId,
             documentStorageId: docketEntryId,
             documentType: metadata.documentType,
+            docketNumber: caseToUpdate.docketNumber,
             isOnDocketRecord: true,
             relationship,
             numberOfPages,
+            ...(isConsolidatedMultiDocket
+              ? {
+                  multiDocketedOn,
+                  originallyFiledDocketNumber,
+                }
+              : {}),
           },
           {
             authorizedUser,
@@ -203,9 +225,7 @@ export const fileExternalDocument = async (
         if (isAutoServed) {
           docketEntryEntity.setAsServed(servedParties.all);
 
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
+          deferredServedPartyEmails.push({
             docketEntryId: docketEntryEntity.docketEntryId,
             servedParties,
           });
@@ -224,6 +244,30 @@ export const fileExternalDocument = async (
       caseToUpdate: caseEntity,
       includeCorrespondence: false,
     });
+
+    for (const { docketEntryId, servedParties: partiesForEmail } of deferredServedPartyEmails) {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId,
+        servedParties: partiesForEmail,
+      });
+    }
+
+    for (const [docketEntryIdForCover] of documentsToAdd) {
+      if (!docketEntryIdForCover) {
+        continue;
+      }
+      await applicationContext.getUseCases().addCoversheetInteractor(
+        applicationContext,
+        {
+          caseEntity,
+          docketEntryId: docketEntryIdForCover,
+          docketNumber: caseToUpdate.docketNumber,
+        },
+        authorizedUser,
+      );
+    }
 
     const rawCaseEntity = caseEntity.toRawObject();
     return rawCaseEntity;
