@@ -84,6 +84,23 @@ describe('pollForCoversheetComplete', () => {
     expect(sleep).not.toHaveBeenCalled();
   });
 
+  it('treats a transient status-check rejection as still-pending and continues polling', async () => {
+    getStatus.mockRejectedValueOnce(new Error('5xx'));
+    getStatus.mockResolvedValueOnce({ processingStatus: 'complete' });
+    getStatus.mockResolvedValueOnce({ processingStatus: 'complete' });
+
+    await pollForCoversheetComplete({
+      applicationContext,
+      docketEntryIds: ['a', 'b'],
+      docketNumber: '101-25',
+    });
+
+    // First iteration: 1 reject + 1 fulfilled (complete). Second iteration:
+    // the rejected entry is checked again, completes. The successful one
+    // from iteration 1 is dropped.
+    expect(getStatus).toHaveBeenCalledTimes(3);
+  });
+
   it('throws CoversheetPollTimeoutError with the pending ids when the deadline elapses', async () => {
     getStatus.mockResolvedValue({ processingStatus: 'pending' });
 

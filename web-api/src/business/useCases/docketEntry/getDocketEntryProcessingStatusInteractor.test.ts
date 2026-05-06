@@ -38,16 +38,50 @@ describe('getDocketEntryProcessingStatusInteractor', () => {
     expect(result).toEqual({ processingStatus: 'pending' });
   });
 
-  it('throws NotFoundError when the case does not exist', async () => {
+  it('throws NotFoundError when the case does not exist (external user, case lookup runs)', async () => {
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { processingStatus: 'pending', userId: 'someone-else' } as any,
+    ]);
     getCaseByDocketNumber.mockResolvedValue({} as any);
 
     await expect(
       getDocketEntryProcessingStatusInteractor(
         applicationContext,
         { docketEntryId: 'abc', docketNumber: '999-99' },
-        mockDocketClerkUser,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow(NotFoundError);
+  });
+
+  it('skips the case lookup when the user is internal (hot-path optimization)', async () => {
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { processingStatus: 'pending' } as any,
+    ]);
+
+    await getDocketEntryProcessingStatusInteractor(
+      applicationContext,
+      { docketEntryId: 'abc', docketNumber: MOCK_CASE.docketNumber },
+      mockDocketClerkUser,
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+  });
+
+  it('skips the case lookup when the requesting user is the original filer', async () => {
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      {
+        processingStatus: 'pending',
+        userId: mockPetitionerUser.userId,
+      } as any,
+    ]);
+
+    await getDocketEntryProcessingStatusInteractor(
+      applicationContext,
+      { docketEntryId: 'abc', docketNumber: MOCK_CASE.docketNumber },
+      mockPetitionerUser,
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('throws NotFoundError when the docket entry does not exist', async () => {

@@ -25,11 +25,13 @@ describe('addCoversheetWorkerHandler', () => {
 
   it('calls addCoversheetInteractor when the docket entry is in pending state', async () => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING } as any,
+      {
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+      } as RawDocketEntry,
     ]);
 
     await addCoversheetWorkerHandler(
-      applicationContext as any,
+      applicationContext,
       { docketEntryId: 'a1', docketNumber: '101-25' },
       mockDocketClerkUser,
     );
@@ -43,11 +45,13 @@ describe('addCoversheetWorkerHandler', () => {
 
   it('skips addCoversheetInteractor when the docket entry is already complete (idempotent)', async () => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE } as any,
+      {
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      } as RawDocketEntry,
     ]);
 
     await addCoversheetWorkerHandler(
-      applicationContext as any,
+      applicationContext,
       { docketEntryId: 'a1', docketNumber: '101-25' },
       mockDocketClerkUser,
     );
@@ -59,7 +63,7 @@ describe('addCoversheetWorkerHandler', () => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
 
     await addCoversheetWorkerHandler(
-      applicationContext as any,
+      applicationContext,
       { docketEntryId: 'missing', docketNumber: '101-25' },
       mockDocketClerkUser,
     );
@@ -69,14 +73,16 @@ describe('addCoversheetWorkerHandler', () => {
 
   it('writes ERROR_ADDING_COVERSHEET and rethrows when the interactor throws, so SQS sees the failure and the message lands in the DLQ', async () => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING } as any,
+      {
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+      } as RawDocketEntry,
     ]);
     const cause = new Error('pdf generation blew up');
     addCoversheetInteractor.mockRejectedValue(cause);
 
     await expect(
       addCoversheetWorkerHandler(
-        applicationContext as any,
+        applicationContext,
         { docketEntryId: 'a1', docketNumber: '101-25' },
         mockDocketClerkUser,
       ),

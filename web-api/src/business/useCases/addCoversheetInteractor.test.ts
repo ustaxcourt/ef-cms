@@ -103,7 +103,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -127,7 +127,7 @@ describe('addCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -156,7 +156,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -169,7 +169,7 @@ describe('addCoversheetInteractor', () => {
     expect(upsertDocketEntries).not.toHaveBeenCalled();
   });
 
-  it('still re-prepends when COMPLETE but forceRegenerate=true', async () => {
+  it('still re-prepends when COMPLETE but bypassIdempotencyGate=true', async () => {
     const completedCaseData = {
       ...testingCaseData,
       docketEntries: [
@@ -185,10 +185,10 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: true,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-        forceRegenerate: true,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -197,7 +197,7 @@ describe('addCoversheetInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('still re-prepends when COMPLETE but replaceCoversheet=true', async () => {
+  it('does not re-prepend when COMPLETE and only replaceCoversheet=true (gate is independent of cover-content flags)', async () => {
     const completedCaseData = {
       ...testingCaseData,
       docketEntries: [
@@ -216,16 +216,16 @@ describe('addCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
+    ).not.toHaveBeenCalled();
   });
 
-  it('still re-prepends when COMPLETE but filingDateUpdated=true', async () => {
+  it('does not re-prepend when COMPLETE and only filingDateUpdated=true (gate is independent of cover-content flags)', async () => {
     const completedCaseData = {
       ...testingCaseData,
       docketEntries: [
@@ -244,13 +244,13 @@ describe('addCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         filingDateUpdated: true,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('retries on ERROR_ADDING_COVERSHEET status (gate does not skip errored entries)', async () => {
@@ -272,7 +272,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -287,7 +287,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -302,7 +302,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -317,7 +317,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -333,7 +333,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -351,7 +351,7 @@ describe('addCoversheetInteractor', () => {
         }),
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -423,7 +423,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -485,7 +485,7 @@ describe('addCoversheetInteractor', () => {
         ),
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -540,7 +540,7 @@ describe('addCoversheetInteractor', () => {
         ),
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 

@@ -18,12 +18,6 @@ export const getDocketEntryProcessingStatusInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await getCaseByDocketNumber({ docketNumber });
-
-  if (!caseRecord?.docketNumber) {
-    throw new NotFoundError(`Case ${docketNumber} was not found.`);
-  }
-
   const [docketEntry] = await getDocketEntriesByDocketNumberAndDocketEntryId({
     docketNumbersAndIds: [{ docketEntryId, docketNumber }],
     selectFields: ['processingStatus', 'userId'],
@@ -35,15 +29,18 @@ export const getDocketEntryProcessingStatusInteractor = async (
     );
   }
 
-  const caseEntity = new Case(caseRecord, { authorizedUser });
   const isFiler = docketEntry.userId === authorizedUser.userId;
+  if (!isFiler && !User.isInternalUser(authorizedUser.role)) {
+    const caseRecord = await getCaseByDocketNumber({ docketNumber });
 
-  if (
-    !isFiler &&
-    !User.isInternalUser(authorizedUser.role) &&
-    !caseEntity.userHasAccessToCase(authorizedUser)
-  ) {
-    throw new UnauthorizedError('Unauthorized');
+    if (!caseRecord?.docketNumber) {
+      throw new NotFoundError(`Case ${docketNumber} was not found.`);
+    }
+
+    const caseEntity = new Case(caseRecord, { authorizedUser });
+    if (!caseEntity.userHasAccessToCase(authorizedUser)) {
+      throw new UnauthorizedError('Unauthorized');
+    }
   }
 
   return { processingStatus: docketEntry.processingStatus };

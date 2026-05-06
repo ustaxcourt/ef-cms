@@ -65,17 +65,31 @@ export const pollForCoversheetComplete = async ({
     }
     attempt += 1;
 
-    const checks = [...pending].map(async docketEntryId => {
-      const { processingStatus } = await applicationContext
-        .getUseCases()
-        .getDocketEntryProcessingStatusInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber,
-        });
-      return { docketEntryId, processingStatus };
-    });
+    // Promise.allSettled (vs Promise.all) so a transient error on one
+    // entry's status check (e.g. a 5xx during a fast-phase poll) does not
+    // tear down the whole poll. Treat a rejected check as "still pending"
+    // and let the next iteration retry — the deadline still bounds total
+    // time, and a definitive ERROR_ADDING_COVERSHEET still fails fast.
+    const settled = await Promise.allSettled(
+      [...pending].map(async docketEntryId => {
+        const { processingStatus } = await applicationContext
+          .getUseCases()
+          .getDocketEntryProcessingStatusInteractor(applicationContext, {
+            docketEntryId,
+            docketNumber,
+          });
+        return { docketEntryId, processingStatus };
+      }),
+    );
 
-    const results = await Promise.all(checks);
+    const results = settled
+      .filter(
+        (r): r is PromiseFulfilledResult<{
+          docketEntryId: string;
+          processingStatus: string;
+        }> => r.status === 'fulfilled',
+      )
+      .map(r => r.value);
 
     const failed = results
       .filter(

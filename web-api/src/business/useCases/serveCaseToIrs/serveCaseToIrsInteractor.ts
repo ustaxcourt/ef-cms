@@ -486,6 +486,11 @@ const createCoversheetsForServedEntries = async ({
       applicationContext.getUseCases().addCoversheetInteractor(
         applicationContext,
         {
+          // Electronically-filed cases swap the petitioner-uploaded cover
+          // for a court-generated one with the original case caption /
+          // docket number. The entry may already be COMPLETE from earlier
+          // worker runs, so bypass the idempotency gate too.
+          bypassIdempotencyGate: !caseEntity.isPaper,
           caseEntity,
           docketEntryId: doc.docketEntryId,
           docketNumber: caseEntity.docketNumber,

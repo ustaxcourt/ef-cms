@@ -15,23 +15,29 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 export const addCoversheetInteractor = async (
   applicationContext: ServerApplicationContext,
   {
+    bypassIdempotencyGate = false,
     caseEntity,
     docketEntryId,
     docketNumber,
     filingDateUpdated = false,
-    forceRegenerate = false,
     replaceCoversheet = false,
     useInitialData = false,
   }: {
-    caseEntity?: Case;
-    docketEntryId: string;
-    docketNumber: string;
-    filingDateUpdated?: boolean;
     // Bypass the COMPLETE-status idempotency gate. Sync callers that
     // unconditionally want a regeneration (e.g. updateDocketEntryMeta on
     // metadata edits) set this; queued/retry callers leave it false so a
     // duplicate delivery or post-S3 retry doesn't stack a second coversheet.
-    forceRegenerate?: boolean;
+    bypassIdempotencyGate?: boolean;
+    caseEntity?: Case;
+    docketEntryId: string;
+    docketNumber: string;
+    // Cover-page content selection: if true, the cover page reflects an
+    // updated filing date / received date. Independent of the gate.
+    filingDateUpdated?: boolean;
+    // Cover-page content selection: if true, the existing first page is
+    // dropped and replaced with the regenerated cover. Independent of the
+    // gate — callers that also want to regenerate a COMPLETE entry must
+    // additionally pass bypassIdempotencyGate.
     replaceCoversheet?: boolean;
     useInitialData?: boolean;
   },
@@ -61,13 +67,11 @@ export const addCoversheetInteractor = async (
   // second coversheet on the S3 object — which matters on the queued path
   // (duplicate SQS delivery) and on retrySettled callers like serveCaseToIrs
   // that re-invoke after a partial failure. Sync callers that intend to
-  // regenerate (updateDocketEntryMeta) set forceRegenerate to opt out.
+  // regenerate (updateDocketEntryMeta) set bypassIdempotencyGate to opt out.
   if (
     docketEntryEntity.processingStatus ===
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-    !forceRegenerate &&
-    !replaceCoversheet &&
-    !filingDateUpdated
+    !bypassIdempotencyGate
   ) {
     return new DocketEntry(docketEntryEntity, { authorizedUser })
       .validate()

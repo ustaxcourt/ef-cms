@@ -193,7 +193,6 @@ export const fileCourtIssuedDocketEntry = async (
   }
 
   const requiresCoversheet =
-    !!authorizedUser &&
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       documentMeta.eventCode,
     );
