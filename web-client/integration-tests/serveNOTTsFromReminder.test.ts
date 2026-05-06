@@ -1,17 +1,17 @@
 import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
-import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
+import { formattedTrialSessionDetails } from '@web-client/presenter/computeds/formattedTrialSessionDetails';
 import { loginAs, setupTest, waitForCondition } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
-import { prepareDateFromString } from '../../shared/src/business/utilities/DateHandler';
+import { prepareDateFromString } from '@shared/business/utilities/DateHandler';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { trialSessionDetailsHelper } from '../src/presenter/computeds/trialSessionDetailsHelper';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { trialSessionDetailsHelper } from '@web-client/presenter/computeds/trialSessionDetailsHelper';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Serve NOTTs from reminder on calendared trial session detail page', () => {
   const cerebralTest = setupTest();
@@ -190,6 +190,27 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
       expect(nottDocketEntry.documentTitle).toBe(
         `30 Day Notice of Trial on ${overrides.trialMonth}-${overrides.trialDay}-${overrides.trialYear} at ${trialLocation}`,
       );
+    });
+
+    it('should dismiss the NOTT reminder and verify calendared cases remain visible', async () => {
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
+
+      await cerebralTest.runSequence('showThirtyDayNoticeModalSequence');
+
+      expect(cerebralTest.getState('modal.showModal')).toEqual(
+        'DismissThirtyDayNoticeModal',
+      );
+
+      await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
+
+      const calendaredCases = cerebralTest.getState(
+        'trialSession.calendaredCases',
+      );
+
+      expect(calendaredCases).toBeDefined();
+      expect(calendaredCases.length).toEqual(2);
     });
   });
 });
