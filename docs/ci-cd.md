@@ -109,7 +109,7 @@ jobs:
         run: npm ci
       - name: Test Client Unit
         run: |
-          export TESTFILES=$(npx ts-node split-tests-glob.ts -unit)
+          export TESTFILES=$(npx ts-node scripts/github-actions/split-tests-glob.ts -unit)
           NODE_INDEX=${{ matrix.ci_node_index }} npm run test:client:unit:ci
       - name: Rename coverage to shard coverage
         run: |

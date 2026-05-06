@@ -67,8 +67,7 @@ jobs:
         run: |
           mkdir -p /tmp/cypress/
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-          ./wait-until-services.sh
-          sleep 5
+          WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
           npm run cypress:integration:public
       - name: Store Cypress Failure Videos
         if: always()
