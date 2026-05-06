@@ -111,8 +111,8 @@ export const RecentFilingsMobile = ({
         </div>
         <div id="sort-options-description" className="sr-only">
           Choose how to sort the recent filings table. Options include sorting
-          by Docket Number, Filed Date, Document, or Case Title in ascending or
-          descending order.
+          by Docket Number, Filed Date, Document, Case Title, or Case Status in
+          ascending or descending order.
         </div>
 
         <div className="grid-row margin-bottom-4">
