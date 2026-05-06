@@ -17,16 +17,10 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   };
   const mockDocketEntryId = 'cf5a5a91-0dff-44d3-aad6-bdae49197bef';
 
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  } = applicationContext.getConstants();
-  const COURT_ISSUED_EVENT_CODES_NO_COVERSHEET =
-    COURT_ISSUED_EVENT_CODES.filter(d => !d.requiresCoversheet).map(
-      d => d.eventCode,
-    );
-
   presenter.providers.applicationContext = applicationContext;
+
+  const { fileCourtIssuedDocketEntryInteractor } =
+    applicationContext.getUseCases();
 
   it('should make a call to file the court-issued docket entry specified in state.form', async () => {
     await runAction(submitCourtIssuedDocketEntryAction, {
@@ -52,44 +46,36 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     });
   });
 
-  it('should return generateCoversheet true when the eventCode of the docketEntry requires a coversheet', async () => {
+  it('forwards coversheetPendingForDocketEntryId from the interactor response so the sequence polls when the backend enqueued a coversheet job', async () => {
+    fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({
+      coversheetPendingForDocketEntryId: 'abc',
+    });
+
     const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       state: {
-        caseDetail: {
-          docketNumber: '123-20',
-        },
+        caseDetail: { docketNumber: '123-20' },
         docketEntryId: 'abc',
-        form: {
-          ...mockForm,
-          eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
-        },
+        form: mockForm,
       },
     });
 
-    expect(output.generateCoversheet).toBe(true);
+    expect(output.coversheetPendingForDocketEntryId).toBe('abc');
   });
 
-  it('should return generateCoversheet false when the eventCode of the docketEntry does NOT require a coversheet', async () => {
+  it('returns no coversheetPendingForDocketEntryId when the backend did not enqueue a coversheet job', async () => {
+    fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({});
+
     const { output } = await runAction(submitCourtIssuedDocketEntryAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
-        },
+        caseDetail: { docketNumber: mockDocketNumber },
         docketEntryId: mockDocketEntryId,
-        form: {
-          ...mockForm,
-          eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
-        },
+        form: mockForm,
       },
     });
 
-    expect(output.generateCoversheet).toBe(false);
+    expect(output.coversheetPendingForDocketEntryId).toBeUndefined();
   });
 
   it('should return docketEntryId to props', async () => {

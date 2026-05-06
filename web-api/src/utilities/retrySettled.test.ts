@@ -15,13 +15,17 @@ describe('retrySettled', () => {
   it('retries only the items that failed', async () => {
     const callCounts = new Map<number, number>();
 
-    const results = await retrySettled([1, 2, 3], n => {
-      callCounts.set(n, (callCounts.get(n) ?? 0) + 1);
-      if (n === 2 && callCounts.get(n) === 1) {
-        return Promise.reject(new Error('fail-once'));
-      }
-      return Promise.resolve(n * 10);
-    });
+    const results = await retrySettled(
+      [1, 2, 3],
+      n => {
+        callCounts.set(n, (callCounts.get(n) ?? 0) + 1);
+        if (n === 2 && callCounts.get(n) === 1) {
+          return Promise.reject(new Error('fail-once'));
+        }
+        return Promise.resolve(n * 10);
+      },
+      { retryDelayMs: () => 0 },
+    );
 
     expect(results).toEqual([10, 20, 30]);
     expect(callCounts.get(1)).toBe(1);
@@ -38,7 +42,7 @@ describe('retrySettled', () => {
           attempts[1]++;
           return Promise.reject(new Error(`fail-${attempts[1]}`));
         },
-        { maxAttempts: 3 },
+        { maxAttempts: 3, retryDelayMs: () => 0 },
       ),
     ).rejects.toThrow('fail-3');
     expect(attempts[1]).toBe(3);
@@ -54,7 +58,7 @@ describe('retrySettled', () => {
         if (count < 2) return Promise.reject(new Error('boom'));
         return Promise.resolve('ok');
       },
-      { maxAttempts: 3, onFailure },
+      { maxAttempts: 3, onFailure, retryDelayMs: () => 0 },
     );
 
     expect(onFailure).toHaveBeenCalledTimes(1);
@@ -72,6 +76,7 @@ describe('retrySettled', () => {
       retrySettled(['a'], async () => Promise.reject(new Error('x')), {
         maxAttempts: 2,
         onFailure,
+        retryDelayMs: () => 0,
       }),
     ).rejects.toThrow('x');
 
@@ -83,5 +88,25 @@ describe('retrySettled', () => {
   it('handles an empty input array', async () => {
     const results = await retrySettled([], () => Promise.resolve('never'));
     expect(results).toEqual([]);
+  });
+
+  it('waits the configured retryDelayMs before each retry attempt so transient backend failures are not hammered back-to-back', async () => {
+    const retryDelayMs = jest.fn().mockReturnValue(0);
+    let count = 0;
+
+    await retrySettled(
+      ['a'],
+      () => {
+        count++;
+        return count < 3
+          ? Promise.reject(new Error('again'))
+          : Promise.resolve('ok');
+      },
+      { maxAttempts: 3, retryDelayMs },
+    );
+
+    expect(retryDelayMs).toHaveBeenCalledTimes(2);
+    expect(retryDelayMs).toHaveBeenNthCalledWith(1, 2);
+    expect(retryDelayMs).toHaveBeenNthCalledWith(2, 3);
   });
 });

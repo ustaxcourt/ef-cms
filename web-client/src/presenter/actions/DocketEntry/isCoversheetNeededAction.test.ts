@@ -16,14 +16,12 @@ describe('isCoversheetNeededAction', () => {
     yesStub.mockReset();
   });
 
-  it('should return yes path when props.generateCoversheet is true', () => {
+  it('routes to yes with the existing docketEntryId when coversheetPendingForDocketEntryId is set alongside it', () => {
     runAction(isCoversheetNeededAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       props: {
+        coversheetPendingForDocketEntryId: 'abc',
         docketEntryId: 'abc',
-        generateCoversheet: true,
       },
       state: {},
     });
@@ -31,28 +29,20 @@ describe('isCoversheetNeededAction', () => {
     expect(yesStub).toHaveBeenCalledWith({ docketEntryId: 'abc' });
   });
 
-  it('should return yes path when props.coversheetPendingForDocketEntryId is set', () => {
+  it('routes to yes and falls back to coversheetPendingForDocketEntryId for the docketEntryId when props.docketEntryId is missing (websocket payload case)', () => {
     runAction(isCoversheetNeededAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        coversheetPendingForDocketEntryId: 'xyz',
-      },
+      modules: { presenter },
+      props: { coversheetPendingForDocketEntryId: 'xyz' },
       state: {},
     });
 
     expect(yesStub).toHaveBeenCalledWith({ docketEntryId: 'xyz' });
   });
 
-  it('should return no path when neither flag is set', () => {
+  it('routes to no when coversheetPendingForDocketEntryId is not set', () => {
     runAction(isCoversheetNeededAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        generateCoversheet: false,
-      },
+      modules: { presenter },
+      props: {},
       state: {},
     });
 

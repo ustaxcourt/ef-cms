@@ -1,12 +1,12 @@
-// Reads two signals so this action covers both entry points without bespoke
-// branching: the post-submit path returns `generateCoversheet` from the
-// submit action; the post-serve socket path emits
-// `coversheetPendingForDocketEntryId`. Either indicates the backend has
-// already enqueued the coversheet and the UI should poll for completion.
+// Single source of truth for "should we wait for a coversheet": the
+// backend interactor sets `coversheetPendingForDocketEntryId` on its
+// response (or websocket payload) iff it actually enqueued the worker.
+// The action forwards the docketEntryId so the next step (the poll) can
+// observe completion without re-deriving the gate from event-code rules.
 export const isCoversheetNeededAction = ({ path, props }: ActionProps) => {
-  const { coversheetPendingForDocketEntryId, generateCoversheet } = props;
+  const { coversheetPendingForDocketEntryId } = props;
 
-  if (generateCoversheet || coversheetPendingForDocketEntryId) {
+  if (coversheetPendingForDocketEntryId) {
     return path.yes({
       docketEntryId: props.docketEntryId || coversheetPendingForDocketEntryId,
     });

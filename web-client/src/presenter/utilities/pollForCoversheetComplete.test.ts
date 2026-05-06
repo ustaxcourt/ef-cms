@@ -71,6 +71,19 @@ describe('pollForCoversheetComplete', () => {
     ).rejects.toBeInstanceOf(CoversheetGenerationError);
   });
 
+  it('does not sleep before the first status check, so a worker that already finished is observed without an initial dead-time wait', async () => {
+    getStatus.mockResolvedValueOnce({ processingStatus: 'complete' });
+
+    await pollForCoversheetComplete({
+      applicationContext,
+      docketEntryIds: ['a'],
+      docketNumber: '101-25',
+    });
+
+    expect(getStatus).toHaveBeenCalledTimes(1);
+    expect(sleep).not.toHaveBeenCalled();
+  });
+
   it('throws CoversheetPollTimeoutError with the pending ids when the deadline elapses', async () => {
     getStatus.mockResolvedValue({ processingStatus: 'pending' });
 

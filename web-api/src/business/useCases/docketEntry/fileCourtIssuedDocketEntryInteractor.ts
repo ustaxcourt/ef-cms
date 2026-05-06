@@ -45,7 +45,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<CaseDTO & { coversheetPendingForDocketEntryId?: string }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -192,12 +192,13 @@ export const fileCourtIssuedDocketEntry = async (
     );
   }
 
-  if (
-    authorizedUser &&
+  const requiresCoversheet =
+    !!authorizedUser &&
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       documentMeta.eventCode,
-    )
-  ) {
+    );
+
+  if (requiresCoversheet) {
     await enqueueAddCoversheet(applicationContext, {
       authorizedUser,
       docketEntryId,
@@ -212,7 +213,16 @@ export const fileCourtIssuedDocketEntry = async (
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,
   }).validate();
-  return new CaseDTO(subjectCase.toRawObject());
+  // Attach the coversheet-pending flag so the client doesn't have to
+  // recompute it from the same constant — the backend is the source of
+  // truth for whether enqueueAddCoversheet ran. Keeping the gates in lock-
+  // step here prevents the UI from skipping its poll if the predicate ever
+  // diverges.
+  return Object.assign(new CaseDTO(subjectCase.toRawObject()), {
+    coversheetPendingForDocketEntryId: requiresCoversheet
+      ? docketEntryId
+      : undefined,
+  });
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

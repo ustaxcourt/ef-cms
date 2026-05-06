@@ -54,10 +54,15 @@ export const pollForCoversheetComplete = async ({
       throw new CoversheetPollTimeoutError([...pending]);
     }
 
-    const baseWaitMs =
-      attempt < FAST_ATTEMPT_LIMIT ? FAST_INTERVAL_MS : SLOW_INTERVAL_MS;
-    const waitMs = baseWaitMs + Math.floor(Math.random() * JITTER_MS);
-    await sleep(waitMs);
+    // First iteration fires immediately so a worker that finished before
+    // the page got here doesn't cost the user the full FAST_INTERVAL_MS
+    // of dead time. Subsequent iterations back off normally.
+    if (attempt > 0) {
+      const baseWaitMs =
+        attempt < FAST_ATTEMPT_LIMIT ? FAST_INTERVAL_MS : SLOW_INTERVAL_MS;
+      const waitMs = baseWaitMs + Math.floor(Math.random() * JITTER_MS);
+      await sleep(waitMs);
+    }
     attempt += 1;
 
     const checks = [...pending].map(async docketEntryId => {

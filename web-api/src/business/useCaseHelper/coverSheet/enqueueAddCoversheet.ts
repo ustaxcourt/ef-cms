@@ -29,11 +29,25 @@ export const enqueueAddCoversheet = async (
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
   });
 
-  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
-    message: {
-      authorizedUser,
-      payload: { docketEntryId, docketNumber },
-      type: MESSAGE_TYPES.ADD_COVERSHEET,
-    },
-  });
+  try {
+    await applicationContext.getWorkerGateway().queueWork(applicationContext, {
+      message: {
+        authorizedUser,
+        payload: { docketEntryId, docketNumber },
+        type: MESSAGE_TYPES.ADD_COVERSHEET,
+      },
+    });
+  } catch (err) {
+    // The PENDING write above already landed; if we leave it, the client
+    // poll waits the full timeout for a worker that will never run. Flip
+    // to ERROR_ADDING_COVERSHEET so the poll fails fast with a definitive
+    // terminal state, then rethrow so the caller's response also fails.
+    await updateDocketEntryProcessingStatus({
+      docketEntryId,
+      docketNumber,
+      processingStatus:
+        DOCUMENT_PROCESSING_STATUS_OPTIONS.ERROR_ADDING_COVERSHEET,
+    });
+    throw err;
+  }
 };
