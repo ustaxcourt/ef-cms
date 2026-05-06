@@ -13,9 +13,23 @@ export class CoversheetPollTimeoutError extends Error {
   }
 }
 
-const FAST_INTERVAL_MS = 1500;
+export class CoversheetGenerationError extends Error {
+  public readonly failedDocketEntryIds: string[];
+  constructor(failedDocketEntryIds: string[]) {
+    super(
+      `Coversheet generation failed for: ${failedDocketEntryIds.join(', ')}`,
+    );
+    this.name = 'CoversheetGenerationError';
+    this.failedDocketEntryIds = failedDocketEntryIds;
+  }
+}
+
+// First ~25s polled at 2.5s, then back off to 5s. Jitter of up to 500ms is
+// added to each wait to avoid thundering-herd when many tabs poll in parallel.
+const FAST_INTERVAL_MS = 2500;
 const SLOW_INTERVAL_MS = 5000;
 const FAST_ATTEMPT_LIMIT = 10;
+const JITTER_MS = 500;
 
 export const pollForCoversheetComplete = async ({
   applicationContext,
@@ -40,8 +54,9 @@ export const pollForCoversheetComplete = async ({
       throw new CoversheetPollTimeoutError([...pending]);
     }
 
-    const waitMs =
+    const baseWaitMs =
       attempt < FAST_ATTEMPT_LIMIT ? FAST_INTERVAL_MS : SLOW_INTERVAL_MS;
+    const waitMs = baseWaitMs + Math.floor(Math.random() * JITTER_MS);
     await sleep(waitMs);
     attempt += 1;
 
@@ -56,6 +71,18 @@ export const pollForCoversheetComplete = async ({
     });
 
     const results = await Promise.all(checks);
+
+    const failed = results
+      .filter(
+        r =>
+          r.processingStatus ===
+          DOCUMENT_PROCESSING_STATUS_OPTIONS.ERROR_ADDING_COVERSHEET,
+      )
+      .map(r => r.docketEntryId);
+    if (failed.length > 0) {
+      throw new CoversheetGenerationError(failed);
+    }
+
     for (const { docketEntryId, processingStatus } of results) {
       if (processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE) {
         pending.delete(docketEntryId);

@@ -155,6 +155,10 @@ export const serveExternallyFiledDocument = async (
       );
     }
 
+    // Intentionally synchronous: serving externally-filed documents must
+    // produce a finished, coversheet-attached PDF before the response so
+    // the document is ready for service. Queueing here would require the
+    // service step to wait on a poll, which we haven't built yet.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {

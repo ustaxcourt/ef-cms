@@ -164,6 +164,10 @@ export const updateDocketEntryMeta = async (
   if (shouldGenerateCoversheet) {
     await upsertDocketEntries([docketEntryEntity.validate()]);
 
+    // Intentionally synchronous: this update flow uses the updated docket
+    // entry returned from addCoversheetInteractor below. Switching to the
+    // queued/async path would require also moving the consumer to a poll
+    // similar to pollForCoversheetComplete.
     const updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(

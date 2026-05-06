@@ -473,6 +473,10 @@ const createCoversheetsForServedEntries = async ({
   return await settlePromises(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
+        // Intentionally synchronous: this server-side flow runs in a long
+        // job and depends on the updated docket entry returned below. The
+        // queued/async path (enqueueAddCoversheet) is reserved for
+        // user-facing interactor flows that need a fast lambda response.
         const updatedDocketEntry = await applicationContext
           .getUseCases()
           .addCoversheetInteractor(

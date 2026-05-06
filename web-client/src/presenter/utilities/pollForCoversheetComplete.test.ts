@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  CoversheetGenerationError,
   CoversheetPollTimeoutError,
   pollForCoversheetComplete,
 } from './pollForCoversheetComplete';
@@ -53,6 +54,21 @@ describe('pollForCoversheetComplete', () => {
     const calledIds = getStatus.mock.calls.map(c => c[1].docketEntryId);
     expect(calledIds.filter(id => id === 'a').length).toBe(1);
     expect(calledIds.filter(id => id === 'b').length).toBe(2);
+  });
+
+  it('throws CoversheetGenerationError when any entry reports the error_adding_coversheet status', async () => {
+    getStatus.mockResolvedValueOnce({ processingStatus: 'pending' });
+    getStatus.mockResolvedValueOnce({
+      processingStatus: 'error_adding_coversheet',
+    });
+
+    await expect(
+      pollForCoversheetComplete({
+        applicationContext,
+        docketEntryIds: ['a', 'b'],
+        docketNumber: '101-25',
+      }),
+    ).rejects.toBeInstanceOf(CoversheetGenerationError);
   });
 
   it('throws CoversheetPollTimeoutError with the pending ids when the deadline elapses', async () => {

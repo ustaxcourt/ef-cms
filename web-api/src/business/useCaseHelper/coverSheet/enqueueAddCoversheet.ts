@@ -1,9 +1,12 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateDocketEntryProcessingStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryProcessingStatus';
 
+// Callers must pass an already-authenticated user. The worker forwards this
+// onward to addCoversheetInteractor (which needs it to build Case entities
+// and scope persistence) — the SQS message has no other way to acquire one.
 export const enqueueAddCoversheet = async (
   applicationContext: ServerApplicationContext,
   {
@@ -11,14 +14,15 @@ export const enqueueAddCoversheet = async (
     docketEntryId,
     docketNumber,
   }: {
-    authorizedUser: UnknownAuthUser;
+    authorizedUser: AuthUser;
     docketEntryId: string;
     docketNumber: string;
   },
 ): Promise<void> => {
-  // Mark the entry as pending so pollForCoversheetComplete won't see a stale
-  // COMPLETE status (e.g. carried over from a draft) and exit before the
-  // worker has actually attached the coversheet.
+  // Mark the entry pending synchronously here (rather than in the worker) so
+  // pollForCoversheetComplete on the caller can't observe a stale COMPLETE
+  // status from a prior version of the entry between the lambda response and
+  // the worker picking up the SQS message.
   await updateDocketEntryProcessingStatus({
     docketEntryId,
     docketNumber,
@@ -27,7 +31,7 @@ export const enqueueAddCoversheet = async (
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
     message: {
-      authorizedUser: authorizedUser!,
+      authorizedUser,
       payload: { docketEntryId, docketNumber },
       type: MESSAGE_TYPES.ADD_COVERSHEET,
     },
