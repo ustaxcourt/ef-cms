@@ -294,8 +294,14 @@ describe('trial session working copy computed', () => {
         },
       );
 
-      expect(formattedCases).toMatchObject([{ docketNumber: '101-18' }]);
-      expect(casesShownCount).toEqual(1);
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '500-17' },
+        { docketNumber: '5000-17' },
+        { docketNumber: '101-18' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(casesShownCount).toEqual(5);
     });
   });
 });
