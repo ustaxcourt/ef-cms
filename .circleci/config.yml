@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.76
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.77
 
 parameters:
   run_build_and_deploy:
@@ -1027,6 +1027,7 @@ workflows:
           <<: *only-test
           requires:
             - delete-and-recreate-elasticsearch-cluster
+            - wait-for-s3-sync-workflow
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
@@ -1039,7 +1040,6 @@ workflows:
       - index-docket-entries:
           <<: *only-test
           requires:
-            - wait-for-s3-sync-workflow
             - index-users
       - cleanup-glue-job:
           <<: *only-test

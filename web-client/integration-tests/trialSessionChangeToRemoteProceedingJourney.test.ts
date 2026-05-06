@@ -7,7 +7,7 @@ import {
   SESSION_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
@@ -16,9 +16,10 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
-  wait,
   waitForExpectedItem,
+  waitForExpectedItemToExist,
   waitForLoadingComponentToHide,
+  waitForModalsToHide,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -205,7 +206,18 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(modalHelper.showSessionNotSetAlert).toEqual(true);
 
       await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-      await wait(1000);
+
+      await waitForLoadingComponentToHide({ cerebralTest });
+      await waitForModalsToHide({ cerebralTest });
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'alertSuccess.message',
+        expectedItem: 'Case scheduled for trial.',
+      });
+      await waitForExpectedItemToExist({
+        cerebralTest,
+        currentItem: 'trialSessionJudge.userId',
+      });
 
       const trialSessionJudge = cerebralTest.getState('trialSessionJudge');
       expect(trialSessionJudge).toMatchObject(
