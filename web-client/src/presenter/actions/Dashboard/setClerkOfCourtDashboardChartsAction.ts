@@ -31,6 +31,10 @@ export const setClerkOfCourtDashboardChartsAction = async ({
   applicationContext,
   store,
 }: ActionProps) => {
+  if (process.env.STAGE === 'prod' || process.env.STAGE === 'test') {
+    return;
+  }
+
   let stats;
   try {
     stats = await applicationContext
