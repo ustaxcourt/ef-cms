@@ -1,4 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -336,6 +338,26 @@ export const createCaseInteractor = async (
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],
   });
+
+  const coversheetDocketEntryIds = [
+    petitionFileId,
+    stinFileId,
+    ...(corporateDisclosureFileId ? [corporateDisclosureFileId] : []),
+    ...(attachmentToPetitionFileIds ?? []),
+  ];
+
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(coversheetDocketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: caseToAdd.docketNumber,
+    }),
+  );
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

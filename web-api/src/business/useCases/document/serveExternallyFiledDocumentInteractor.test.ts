@@ -10,7 +10,6 @@ jest.mock(
 );
 jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -346,7 +345,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(true);
   });
 
-  it('should set the number of pages in the docket entry as the length of the document plus the coversheet', async () => {
+  it('should set the number of pages in the docket entry as the length of the document', async () => {
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
@@ -361,40 +360,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .numberOfPages,
-    ).toBe(mockNumberOfPages + 1);
+    ).toBe(mockNumberOfPages);
 
     expect(countPagesInDocument.mock.calls[0][0].documentStorageId).toEqual(
       mockDocumentStorageId,
     );
-  });
-
-  it('should set the docket entry`s processing status as completed', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockCase,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          documentTitle: 'fake title',
-          processingStatus: 'abc',
-        } as RawDocketEntry,
-      ],
-    });
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: mockCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
-        .processingStatus,
-    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {

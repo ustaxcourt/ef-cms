@@ -17,15 +17,14 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
 
-  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
-    applicationContext.getConstants();
-
   const documentMeta = {
     ...get(state.form),
     docketEntryId,
   };
 
-  await applicationContext
+  // Source of truth for the coversheet gate is the backend interactor;
+  // see submitCourtIssuedDocketEntryAction for rationale.
+  const result = await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers,
@@ -34,9 +33,7 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
     });
 
   return {
+    pendingCoversheetDocketEntryIds: result?.pendingCoversheetDocketEntryIds,
     docketEntryId,
-    generateCoversheet: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      documentMeta.eventCode,
-    ),
   };
 };

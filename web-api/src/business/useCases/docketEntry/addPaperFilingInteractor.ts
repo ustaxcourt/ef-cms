@@ -29,6 +29,7 @@ import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getUniqueId } from '@shared/sharedAppContext';
 
 export const addPaperFiling = async (
@@ -222,6 +223,14 @@ export const addPaperFiling = async (
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
   }
 
+  if (isReadyForService) {
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
+    });
+  }
+
   const successMessage =
     consolidatedGroupDocketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
@@ -236,8 +245,10 @@ export const addPaperFiling = async (
         message: successMessage,
         overwritable: false,
       },
+      pendingCoversheetDocketEntryIds: isReadyForService
+        ? [docketEntryId]
+        : undefined,
       docketEntryId,
-      generateCoversheet: isReadyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,

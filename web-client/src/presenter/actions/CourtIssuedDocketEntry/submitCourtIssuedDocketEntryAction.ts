@@ -1,27 +1,22 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * creates a docket entry with the given court-issued document
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get function
- * @returns {Promise} async action
- */
 export const submitCourtIssuedDocketEntryAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
   const { docketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
-    applicationContext.getConstants();
 
   const documentMeta = {
     ...get(state.form),
     docketEntryId,
   };
 
-  await applicationContext
+  // The backend decides whether a coversheet is required (and enqueues it
+  // when it is) from the same COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET
+  // constant. Forward whatever it tells us rather than recomputing client-
+  // side, so the gates can't drift out of sync.
+  const result = await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers: [],
@@ -30,9 +25,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
     });
 
   return {
+    pendingCoversheetDocketEntryIds: result?.pendingCoversheetDocketEntryIds,
     docketEntryId,
-    generateCoversheet: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      documentMeta.eventCode,
-    ),
   };
 };
