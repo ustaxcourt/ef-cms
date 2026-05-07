@@ -424,19 +424,10 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,
-          });
-          expect(
-            applicationContext.getUseCases().addCoversheetInteractor,
-          ).toHaveBeenCalledTimes(1);
-          expect(
-            applicationContext.getUseCases().addCoversheetInteractor.mock
-              .calls[0][1],
-          ).toMatchObject({
-            docketEntryId: mockDocketEntryId,
-            docketNumber: caseRecord.docketNumber,
           });
         });
       });
@@ -652,6 +643,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
               pdfUrl: mockedPaperServicePdfUrl,
             },
             userId: docketClerkUser.userId,
@@ -706,6 +698,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
+              generateCoversheet: true,
               pdfUrl: undefined,
             },
             userId: docketClerkUser.userId,

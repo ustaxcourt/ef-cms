@@ -1,9 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
+import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -41,6 +43,11 @@ export const submitCourtIssuedDocketEntrySequence = [
           {
             no: [
               submitCourtIssuedDocketEntryAction,
+              isCoversheetNeededAction,
+              {
+                no: [],
+                yes: [generateCoversheetAction],
+              },
               getDocketEntryAlertSuccessAction,
             ],
             yes: [
@@ -48,11 +55,21 @@ export const submitCourtIssuedDocketEntrySequence = [
               {
                 no: [
                   submitCourtIssuedDocketEntryAction,
+                  isCoversheetNeededAction,
+                  {
+                    no: [],
+                    yes: [generateCoversheetAction],
+                  },
                   getDocketEntryAlertSuccessAction,
                 ],
                 yes: [
                   getDocketNumbersForConsolidatedServiceAction,
                   submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+                  isCoversheetNeededAction,
+                  {
+                    no: [],
+                    yes: [generateCoversheetAction],
+                  },
                   getDocketEntryAlertSuccessForConsolidatedGroupAction,
                   clearModalAction,
                 ],
