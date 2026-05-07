@@ -24,7 +24,7 @@ jobs:
       matrix:
         ci_node_total: [9]
         ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    uses: ./.github/workflows/templates/app-parallel.yml
+    uses: ./.github/workflows/template_app-parallel.yml
     with:
       ci_environment: 'true'
       ci_node_index: ${{ matrix.ci_node_index }}
@@ -46,6 +46,6 @@ jobs:
       workflow_filename: e2e-cypress.yml
   persist-test-file-times:
     needs: [e2e_cypress]
-    uses: ./.github/workflows/shared/persist-test-file-times.yml
+    uses: ./.github/workflows/job_persist-test-file-times.yml
     with:
       workflow_filename: e2e-cypress.yml

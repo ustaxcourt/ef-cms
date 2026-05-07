@@ -24,7 +24,7 @@ jobs:
       matrix:
         ci_node_total: [4]
         ci_node_index: [0, 1, 2, 3]
-    uses: ./.github/workflows/templates/no-app-parallel.yml
+    uses: ./.github/workflows/template_no-app-parallel.yml
     with:
       ci_node_index: ${{ matrix.ci_node_index }}
       ci_node_total: ${{ matrix.ci_node_total }}
@@ -35,7 +35,7 @@ jobs:
       workflow_filename: client.yml
   check-coverage:
     needs: [Client]
-    uses: ./.github/workflows/shared/check-coverage.yml
+    uses: ./.github/workflows/job_check-coverage.yml
     with:
       branches: 90
       functions: 90
@@ -43,6 +43,6 @@ jobs:
       statements: 90
   persist-test-file-times:
     needs: [Client]
-    uses: ./.github/workflows/shared/persist-test-file-times.yml
+    uses: ./.github/workflows/job_persist-test-file-times.yml
     with:
       workflow_filename: client.yml

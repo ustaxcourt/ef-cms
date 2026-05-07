@@ -24,7 +24,7 @@ jobs:
       matrix:
         ci_node_total: [2]
         ci_node_index: [0, 1]
-    uses: ./.github/workflows/templates/app-parallel.yml
+    uses: ./.github/workflows/template_app-parallel.yml
     with:
       ci_node_index: ${{ matrix.ci_node_index }}
       ci_node_total: ${{ matrix.ci_node_total }}
@@ -47,6 +47,6 @@ jobs:
       workflow_filename: client-integration-public.yml
   persist-test-file-times:
     needs: [client_integration_public]
-    uses: ./.github/workflows/shared/persist-test-file-times.yml
+    uses: ./.github/workflows/job_persist-test-file-times.yml
     with:
       workflow_filename: client-integration-public.yml
