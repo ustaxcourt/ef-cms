@@ -649,6 +649,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 
 export const presenterSequences = {
@@ -1336,6 +1337,7 @@ export const presenterSequences = {
     setViewerDraftDocumentToDisplaySequence as unknown as Function,
   showCalculatePenaltiesModalSequence:
     showCalculatePenaltiesModalSequence as unknown as Function,
+  showCaseStatusInfoSequence: showCaseStatusInfoSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
   showFileUploadErrorModalSequence,
