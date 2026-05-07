@@ -57,7 +57,7 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
     for (let i = 0; i < callbacks.length; i += ON_COMMIT_CHUNK_SIZE) {
       const chunk = callbacks.slice(i, i + ON_COMMIT_CHUNK_SIZE);
       try {
-        await settlePromises(chunk.map(cb => cb()));
+        await settlePromises(chunk.map(cb => Promise.resolve().then(cb)));
       } catch (error: any) {
         getDawsonLogger().error(
           'There was an error running onCommitCallbacks',

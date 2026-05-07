@@ -30,7 +30,10 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
+import {
+  withTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -212,7 +215,7 @@ export const addPaperFiling = async (
       });
       const electronicParties =
         currentDocketEntry?.eventCode ===
-          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+        INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
           ? []
           : undefined;
 
@@ -251,8 +254,6 @@ export const addPaperFiling = async (
         userId: user.userId,
       });
     });
-
-
   });
 };
 
