@@ -18,12 +18,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
           install-dependencies: 'false'
           restore-cache: 'false'

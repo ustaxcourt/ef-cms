@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   e2e_cypress_public:
-    uses: ./.github/workflows/templates/app.yml
+    uses: ./.github/workflows/template_app.yml
     with:
       check_deploy_date_interval: '5000'
       extra_artifact_if_always: true

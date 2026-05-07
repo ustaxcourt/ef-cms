@@ -16,14 +16,12 @@ concurrency:
 jobs:
   CheckAllFilesForTypeErrorCount:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout Current Branch
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           path: currentBranch
-
       - name: Determine Target Branch
         id: target_branch
         run: |
@@ -31,27 +29,25 @@ jobs:
           TARGET_BRANCH=$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)
           echo "TARGET_BRANCH: $TARGET_BRANCH"
           echo "TARGET_BRANCH=$TARGET_BRANCH" >> $GITHUB_ENV
-
       - name: Checkout Target Branch
         uses: actions/checkout@v6
         with:
           repository: ustaxcourt/ef-cms
           ref: ${{ env.TARGET_BRANCH }}
           path: targetBranch
-
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
           node-version-file: currentBranch/.nvmrc
           restore-cache: 'false'
           save-cache: 'false'
           working-directory: ./currentBranch
-
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in Target Branch
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
           restore-cache: 'false'
           save-cache: 'false'
           setup-node: 'false'
           working-directory: ./targetBranch
-
       - name: Check files for increased error count
         run: npx ts-node currentBranch/scripts/checkAllFilesForTypeErrorCount.ts

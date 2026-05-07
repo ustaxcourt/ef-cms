@@ -15,6 +15,6 @@ concurrency:
 
 jobs:
   Scripts:
-    uses: ./.github/workflows/templates/no-app.yml
+    uses: ./.github/workflows/template_no-app.yml
     with:
       run_command: npm run test:scripts

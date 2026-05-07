@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   e2e_cypress_smoketests_local:
-    uses: ./.github/workflows/templates/app.yml
+    uses: ./.github/workflows/template_app.yml
     with:
       configure_sysctl: true
       extra_artifact_if_always: true

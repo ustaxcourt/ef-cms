@@ -16,7 +16,6 @@ concurrency:
 jobs:
   ReduceTypeErrors:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout USTC Staging
         uses: actions/checkout@v6
@@ -24,17 +23,19 @@ jobs:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
-      - name: Checkout current branch
+      - name: Checkout Current Branch
         uses: actions/checkout@v6
         with:
           path: branchToBeCompared
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
           node-version-file: branchToBeCompared/.nvmrc
           restore-cache: 'false'
           save-cache: 'false'
           working-directory: ./branchToBeCompared
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in USTC Staging
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
           restore-cache: 'false'
           save-cache: 'false'
