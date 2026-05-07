@@ -1,4 +1,5 @@
 import fs from 'fs';
+import glob from 'glob';
 import os from 'os';
 import path from 'path';
 import {
@@ -7,6 +8,9 @@ import {
   getCiNodeConfig,
   getHistoricalTestFileTimes,
   getOutputsForCurrentCiNode,
+  splitTests,
+  splitTestsCypress,
+  splitTestsGlob,
   type SplittableFile,
 } from './split-tests.helpers';
 
@@ -31,6 +35,53 @@ describe('split-tests.helpers', () => {
       output: fileName,
       path: filePath,
     };
+  };
+
+  const parseDelimitedOutput = (
+    output: string,
+    delimiter: string,
+  ): string[] => {
+    return output ? output.split(delimiter).sort() : [];
+  };
+
+  const writeHistoricalTimingFile = (
+    fileName: string,
+    testFileTimes: Record<string, number>,
+  ): string => {
+    const filePath = path.join(tempDir, fileName);
+
+    fs.writeFileSync(filePath, JSON.stringify(testFileTimes));
+
+    return filePath;
+  };
+
+  const withEnvironmentVariables = <T>(
+    overrides: Record<string, string | undefined>,
+    callback: () => T,
+  ): T => {
+    const originalValues: Record<string, string | undefined> = {};
+
+    try {
+      for (const [key, value] of Object.entries(overrides)) {
+        originalValues[key] = process.env[key];
+
+        if (typeof value === 'undefined') {
+          delete process.env[key];
+        } else {
+          process.env[key] = value;
+        }
+      }
+
+      return callback();
+    } finally {
+      for (const [key, value] of Object.entries(originalValues)) {
+        if (typeof value === 'undefined') {
+          delete process.env[key];
+        } else {
+          process.env[key] = value;
+        }
+      }
+    }
   };
 
   afterAll((): void => {
@@ -167,6 +218,31 @@ describe('split-tests.helpers', () => {
         './example.test.ts': 1000,
       });
     });
+
+    it('uses process.env by default when env is omitted', () => {
+      const timingFilePath = path.join(
+        tempDir,
+        'historical-test-file-times-from-process-env.json',
+      );
+      const originalTimingsPath = process.env.TEST_FILE_TIMINGS_PATH;
+
+      fs.writeFileSync(
+        timingFilePath,
+        JSON.stringify({
+          './process-env.test.ts': 250,
+        }),
+      );
+
+      try {
+        process.env.TEST_FILE_TIMINGS_PATH = timingFilePath;
+
+        expect(getHistoricalTestFileTimes()).toEqual({
+          './process-env.test.ts': 250,
+        });
+      } finally {
+        process.env.TEST_FILE_TIMINGS_PATH = originalTimingsPath;
+      }
+    });
   });
 
   describe('getCiNodeConfig', () => {
@@ -271,6 +347,254 @@ describe('split-tests.helpers', () => {
       } finally {
         process.env.CI_NODE_TOTAL = originalNodeTotal;
         process.env.CI_NODE_INDEX = originalNodeIndex;
+      }
+    });
+  });
+
+  describe('splitTests', () => {
+    it('filters integration tests and logs only matching spec filenames', () => {
+      const readdirSyncSpy = jest
+        .spyOn(fs, 'readdirSync')
+        .mockReturnValue([
+          'z-last.test.ts',
+          'ignore.md',
+          'a-first.test.ts',
+          'notes.txt',
+        ] as never);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-timings.json',
+        {
+          './web-client/integration-tests-public/a-first.test.ts': 10,
+          './web-client/integration-tests-public/z-last.test.ts': 10,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTests('-public'),
+        );
+
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
+          'a-first.test.ts',
+          'z-last.test.ts',
+        ]);
+        expect(readdirSyncSpy).toHaveBeenCalledWith(
+          './web-client/integration-tests-public',
+          'utf8',
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        readdirSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+  });
+
+  describe('splitTestsCypress', () => {
+    it('excludes public Cypress tests when the requested directory is not public', () => {
+      const readdirSyncSpy = jest
+        .spyOn(fs, 'readdirSync')
+        .mockReturnValue([
+          'integration/private-a.cy.ts',
+          'integration/nested/private-b.cy.ts',
+          'integration/public/public-a.cy.ts',
+          'accessibility/private-other.cy.ts',
+          'integration/readme.md',
+        ] as never);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-cypress-timings.json',
+        {
+          './cypress/local-only/tests/integration/private-a.cy.ts': 5,
+          './cypress/local-only/tests/integration/nested/private-b.cy.ts': 5,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsCypress('integration'),
+        );
+
+        expect(parseDelimitedOutput(output, ',')).toEqual([
+          './cypress/local-only/tests/integration/nested/private-b.cy.ts',
+          './cypress/local-only/tests/integration/private-a.cy.ts',
+        ]);
+        expect(readdirSyncSpy).toHaveBeenCalledWith(
+          './cypress/local-only/tests',
+          {
+            encoding: 'utf8',
+            recursive: true,
+          },
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        readdirSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('includes public Cypress tests when the requested directory is public', () => {
+      const readdirSyncSpy = jest
+        .spyOn(fs, 'readdirSync')
+        .mockReturnValue([
+          'integration/public/public-a.cy.ts',
+          'integration/public/nested/public-b.cy.ts',
+          'integration/private-a.cy.ts',
+          'integration/public/notes.txt',
+        ] as never);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-cypress-public-timings.json',
+        {
+          './cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
+          './cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsCypress('integration/public'),
+        );
+
+        expect(parseDelimitedOutput(output, ',')).toEqual([
+          './cypress/local-only/tests/integration/public/nested/public-b.cy.ts',
+          './cypress/local-only/tests/integration/public/public-a.cy.ts',
+        ]);
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        readdirSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+  });
+
+  describe('splitTestsGlob', () => {
+    it('selects unit test files via glob and logs the delimited output', () => {
+      const globSyncSpy = jest
+        .spyOn(glob, 'sync')
+        .mockReturnValue([
+          './web-client/src/beta.test.ts',
+          './web-client/src/nested/alpha.test.ts',
+        ]);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-glob-unit.json',
+        {
+          './web-client/src/beta.test.ts': 10,
+          './web-client/src/nested/alpha.test.ts': 10,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsGlob('unit'),
+        );
+
+        expect(parseDelimitedOutput(output, '|')).toEqual([
+          './web-client/src/beta.test.ts',
+          './web-client/src/nested/alpha.test.ts',
+        ]);
+        expect(globSyncSpy).toHaveBeenCalledWith(
+          './web-client/src/**/?(*.)+(spec|test).[jt]s?(x)',
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        globSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('selects shared test files via glob', () => {
+      const globSyncSpy = jest
+        .spyOn(glob, 'sync')
+        .mockReturnValue([
+          './shared/src/example.test.ts',
+          './shared/src/nested/another.test.ts',
+        ]);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-glob-shared.json',
+        {
+          './shared/src/example.test.ts': 12,
+          './shared/src/nested/another.test.ts': 12,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsGlob('shared'),
+        );
+
+        expect(parseDelimitedOutput(output, '|')).toEqual([
+          './shared/src/example.test.ts',
+          './shared/src/nested/another.test.ts',
+        ]);
+        expect(globSyncSpy).toHaveBeenCalledWith(
+          './shared/src/**/?(*.)+(spec|test).[jt]s',
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        globSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('returns an empty string when the test type does not match a known glob', () => {
+      const globSyncSpy = jest.spyOn(glob, 'sync');
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const originalNodeTotal = process.env.CI_NODE_TOTAL;
+      const originalNodeIndex = process.env.CI_NODE_INDEX;
+
+      try {
+        process.env.CI_NODE_TOTAL = '1';
+        process.env.CI_NODE_INDEX = '0';
+
+        expect(splitTestsGlob('integration')).toEqual('');
+        expect(globSyncSpy).not.toHaveBeenCalled();
+        expect(consoleSpy).toHaveBeenCalledWith('');
+      } finally {
+        process.env.CI_NODE_TOTAL = originalNodeTotal;
+        process.env.CI_NODE_INDEX = originalNodeIndex;
+        globSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
       }
     });
   });

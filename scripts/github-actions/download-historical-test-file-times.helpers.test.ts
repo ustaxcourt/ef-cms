@@ -119,6 +119,25 @@ describe('download-historical-test-file-times', () => {
       );
     });
 
+    it('throws when called with the default args parameter', async () => {
+      const originalArgv = process.argv;
+
+      try {
+        process.argv = [
+          'node',
+          'download-historical-test-file-times.helpers.ts',
+        ];
+
+        await expect(
+          downloadHistoricalTestFileTimes(undefined),
+        ).rejects.toThrow(
+          'Usage: scripts/github-actions/download-historical-test-file-times.helpers.ts <workflow-file-name> <artifact-name> <output-path>',
+        );
+      } finally {
+        process.argv = originalArgv;
+      }
+    });
+
     it('throws when required environment variables are missing', async () => {
       delete process.env.GITHUB_TOKEN;
 
