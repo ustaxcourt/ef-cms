@@ -17,6 +17,11 @@ jobs:
   CheckAllFilesForTypeErrorCount:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout NodeJS Bootstrap Action
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/actions/dawson-node-bootstrap
+          sparse-checkout-cone-mode: false
       - name: Checkout Current Branch
         uses: actions/checkout@v6
         with:

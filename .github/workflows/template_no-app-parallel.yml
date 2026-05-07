@@ -39,14 +39,16 @@ jobs:
       TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times.json
       TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times-shard-${{ inputs.ci_node_index }}.json
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
       - name: Restore historical test file timings
         continue-on-error: true
         env:
@@ -70,11 +72,13 @@ jobs:
           mkdir -p coverage
           cp "${{ inputs.coverage_source_dir }}/lcov.info" "coverage/lcov-${{ inputs.ci_node_index }}.info"
           cp "${{ inputs.coverage_source_dir }}/coverage-final.json" "coverage/coverage-${{ inputs.ci_node_index }}.json"
-      - uses: actions/upload-artifact@v7
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-artifacts-${{ inputs.ci_node_index }}
           path: coverage
-      - uses: actions/upload-artifact@v7
+      - name: Upload historical test file timings
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           if-no-files-found: ignore

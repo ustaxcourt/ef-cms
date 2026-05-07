@@ -73,7 +73,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
       - name: Configure sysctl limits
@@ -91,7 +92,8 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: NPM Install on Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
       - name: Restore historical test file timings
         continue-on-error: true
         env:
