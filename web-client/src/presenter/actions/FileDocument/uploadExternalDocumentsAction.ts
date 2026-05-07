@@ -1,14 +1,6 @@
 import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
+import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { state } from '@web-client/presenter/app.cerebral';
-
-const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
-  return applicationContext
-    .getUseCases()
-    .addCoversheetInteractor(applicationContext, {
-      docketEntryId,
-      docketNumber,
-    });
-};
 
 export const uploadExternalDocumentsAction = async ({
   applicationContext,
@@ -37,13 +29,11 @@ export const uploadExternalDocumentsAction = async ({
         user,
       );
 
-    for (const docketEntryId of docketEntryIdsAdded) {
-      await addCoversheet({
-        applicationContext,
-        docketEntryId,
-        docketNumber,
-      });
-    }
+    await pollForCoversheetComplete({
+      applicationContext,
+      docketEntryIds: docketEntryIdsAdded,
+      docketNumber,
+    });
 
     return path.success({
       docketNumber,
@@ -51,6 +41,8 @@ export const uploadExternalDocumentsAction = async ({
       fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('uploadExternalDocumentsAction failed', err);
     return path.error();
   }
 };

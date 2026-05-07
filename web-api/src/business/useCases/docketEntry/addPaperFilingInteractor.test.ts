@@ -445,7 +445,7 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+  it('enqueues a coversheet job and signals pendingCoversheetDocketEntryIds when the docket entry has a file attached and the user is NOT saving for later', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -466,13 +466,25 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(coversheetMessages).toHaveLength(1);
+    expect(coversheetMessages[0].payload).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: mockCase.docketNumber,
+    });
+
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(true);
+        .calls[0][0].message.pendingCoversheetDocketEntryIds,
+    ).toEqual(['c54ba5a9-b37b-479d-9201-067ec6e335bb']);
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+  it('does not enqueue a coversheet or signal pending when the docket entry does NOT have a file attached', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -493,10 +505,18 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(coversheetMessages).toHaveLength(0);
+
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(false);
+        .calls[0][0].message.pendingCoversheetDocketEntryIds,
+    ).toBeUndefined();
   });
 
   it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {

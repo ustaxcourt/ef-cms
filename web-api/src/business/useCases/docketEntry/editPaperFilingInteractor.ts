@@ -35,6 +35,7 @@ import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -349,14 +350,20 @@ const serveDocketEntry = async ({
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+    });
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
         action: 'serve_document_complete',
         alertSuccess: { message, overwritable: false },
+        pendingCoversheetDocketEntryIds: [docketEntryEntity.docketEntryId],
         docketEntryId: docketEntryEntity.docketEntryId,
-        generateCoversheet: true,
         pdfUrl: paperServicePdfUrl,
       },
       userId: user.userId,

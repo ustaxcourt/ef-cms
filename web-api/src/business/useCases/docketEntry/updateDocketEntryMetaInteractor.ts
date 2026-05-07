@@ -169,11 +169,21 @@ export const updateDocketEntryMeta = async (
   if (shouldGenerateCoversheet) {
     await upsertDocketEntries([docketEntryEntity.validate()]);
 
-    updatedDocketEntry = await applicationContext
+    // Intentionally synchronous: this update flow uses the updated docket
+    // entry returned from addCoversheetInteractor below. Switching to the
+    // queued/async path would require also moving the consumer to a poll
+    // similar to pollForCoversheetComplete.
+    const updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(
         applicationContext,
         {
+          // Meta edits (serviceDate, documentTitle, eventCode change that
+          // adds a coversheet, etc.) reach this branch with the entry
+          // already COMPLETE. Bypass the idempotency gate so the cover
+          // sheet actually regenerates — the gate is for queue/retry
+          // dedupe, not for intentional re-invocations like this one.
+          bypassIdempotencyGate: true,
           docketEntryId: originalDocketEntry.docketEntryId,
           docketNumber: caseEntity.docketNumber,
           filingDateUpdated,
