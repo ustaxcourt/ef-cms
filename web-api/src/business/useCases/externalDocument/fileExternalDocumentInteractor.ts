@@ -21,16 +21,16 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -130,7 +130,7 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  const pageCountsByDocketEntryId: Map<string, number> = new Map();
+    const pageCountsByDocketEntryId: Map<string, number> = new Map();
   // Process page counts in batches of 3 to balance speed and memory usage
   // This prevents OutOfMemory errors when filing multiple large documents
   // while being faster than sequential processing
@@ -156,134 +156,93 @@ export const fileExternalDocument = async (
       pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
     }
   }
+  await withTransaction(async () => {
+    const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
+      let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const isConsolidatedMultiDocket =
-    !!consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0;
-  const multiDocketedOn = isConsolidatedMultiDocket
-    ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
-    : [];
+      const servedParties = aggregatePartiesForService(caseEntity);
 
-  const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
-    let caseEntity = new Case(caseToUpdate, { authorizedUser });
+      for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
+        if (docketEntryId && metadata) {
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...baseMetadata,
+              ...metadata,
+              docketEntryId,
+              documentStorageId: docketEntryId,
+              multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
+              originallyFiledDocketNumber: docketNumber,
+              documentType: metadata.documentType,
+              isOnDocketRecord: true,
+              relationship,
+              numberOfPages,
+            },
+            {
+              authorizedUser,
+              petitioners: currentCaseEntity.petitioners,
+            },
+          );
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+          docketEntryEntity.setFiledBy(user);
+          docketEntryEntity.validate();
 
-    const deferredServedPartyEmails: {
-      docketEntryId: string;
-      servedParties: ReturnType<typeof aggregatePartiesForService>;
-    }[] = [];
-
-    for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
-      if (docketEntryId && metadata) {
-        const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...baseMetadata,
-            ...metadata,
-            docketEntryId,
-            documentStorageId: docketEntryId,
-            documentType: metadata.documentType,
-            docketNumber: caseToUpdate.docketNumber,
-            isOnDocketRecord: true,
-            relationship,
-            numberOfPages,
-            originallyFiledDocketNumber: docketNumber,
-            ...(isConsolidatedMultiDocket ? { multiDocketedOn } : {}),
-          },
-          {
-            authorizedUser,
-            petitioners: currentCaseEntity.petitioners,
-          },
-        );
-
-        docketEntryEntity.setFiledBy(user);
-        docketEntryEntity.validate();
-
-        const workItem = new WorkItem({
-          assigneeId: null,
-          assigneeName: null,
-          docketEntryId: docketEntryEntity.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-        }).validate();
-
-        workItems.push(workItem);
-        caseEntity.addDocketEntry(docketEntryEntity);
-
-        const isAutoServed = docketEntryEntity.isAutoServed();
-
-        if (isAutoServed) {
-          docketEntryEntity.setAsServed(servedParties.all);
-
-          deferredServedPartyEmails.push({
+          const workItem = new WorkItem({
+            assigneeId: null,
+            assigneeName: null,
             docketEntryId: docketEntryEntity.docketEntryId,
-            servedParties,
-          });
+            docketNumber: caseToUpdate.docketNumber,
+            section: DOCKET_SECTION,
+            sentBy: user.name,
+            sentByUserId: user.userId,
+          }).validate();
+
+          workItems.push(workItem);
+          caseEntity.addDocketEntry(docketEntryEntity);
+
+          const isAutoServed = docketEntryEntity.isAutoServed();
+
+          if (isAutoServed) {
+            docketEntryEntity.setAsServed(servedParties.all);
+
+            onTransactionCommit(async () => {
+              await applicationContext
+                .getUseCaseHelpers()
+                .sendServedPartiesEmails({
+                  applicationContext,
+                  caseEntity,
+                  docketEntryId: docketEntryEntity.docketEntryId,
+                  servedParties,
+                });
+            });
+          }
         }
       }
-    }
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        caseEntity,
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          caseEntity,
+        });
+
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+        includeCorrespondence: false,
       });
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-      includeCorrespondence: false,
+      const rawCaseEntity = caseEntity.toRawObject();
+      return rawCaseEntity;
     });
 
-    for (const {
-      docketEntryId,
-      servedParties: partiesForEmail,
-    } of deferredServedPartyEmails) {
-      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-        applicationContext,
-        caseEntity,
-        docketEntryId,
-        servedParties: partiesForEmail,
-      });
-    }
+    const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
 
-    for (const [docketEntryIdForCover] of documentsToAdd) {
-      if (!docketEntryIdForCover) {
-        continue;
-      }
-      await applicationContext.getUseCases().addCoversheetInteractor(
-        applicationContext,
-        {
-          caseEntity,
-          docketEntryId: docketEntryIdForCover,
-          docketNumber: caseToUpdate.docketNumber,
-        },
-        authorizedUser,
-      );
-    }
+    await upsertWorkItems({
+      workItems,
+    });
 
-    const rawCaseEntity = caseEntity.toRawObject();
-    return rawCaseEntity;
+    return resolvedCaseEntities;
   });
-
-  const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
-
-  await upsertWorkItems({
-    workItems,
-  });
-
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
-
-  const filteredCase = CaseFactory.getCaseDTO({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

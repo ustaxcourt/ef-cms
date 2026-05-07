@@ -25,3 +25,6 @@
     - The big one: a developer can mess this up. What if they forget to call endTransaction? What if they forget to pass in transactionId to a nested transaction? What if we mismanage transaction ids somehow? Etc.
     - Passing around the transaction id coupled application code more closely to database implementation.
 - The first solution was chosen because its "magic" was localized to a few small spots, and because it seemed less likely to lead to developer-caused bugs.
+
+## onTransactionCommit memory concerns
+- Please be cognizant that adding thousands of calls to onTransactionCommit to run when the transaction finishes may lead to running out of memory. This likely would only happen when running one time scripts. 

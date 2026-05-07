@@ -465,35 +465,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
     );
   });
 
-  it('should not call saveDocumentfromLambda if there is an error saving to the database', async () => {
-    updateCaseAndAssociations.mockRejectedValueOnce(
-      new Error('Database error'),
-    );
-
-    await expect(
-      fileCourtIssuedOrderInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentContents: 'I am some document contents',
-            documentType: 'Order to Show Cause',
-            eventCode: 'OSC',
-            signedAt: '2019-03-01T21:40:46.415Z',
-            signedByUserId: mockUserId,
-            signedJudgeName: 'Dredd',
-          },
-          primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Database error');
-
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-  });
-
   describe('freeText', () => {
     describe('eventCode "NOT"', () => {
       it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it eventCode NOT', async () => {

@@ -216,4 +216,46 @@ describe('withTransaction', () => {
       error,
     );
   });
+
+  it('should chunk onCommit callbacks into batches of 25', async () => {
+    const settleSpy = jest
+      .spyOn(settleModule, 'settlePromises')
+      .mockResolvedValue([]);
+
+    fakeDb.transaction.mockReturnValue({
+      execute: async (cb: (trx: any) => Promise<any>) => cb({}),
+    });
+    jest.spyOn(dbModule, 'getDb').mockResolvedValue(fakeDb);
+    jest
+      .spyOn(ConnectionStore, 'run')
+      .mockImplementation(
+        <T>(
+          store: ConnectionInfo,
+          callback: (...args: any[]) => T,
+          ...args: any[]
+        ): T => {
+          jest.spyOn(ConnectionStore, 'getStore').mockReturnValue(store);
+          return callback(...args);
+        },
+      );
+
+    const callbacks = Array.from({ length: 60 }, () =>
+      jest.fn().mockResolvedValue(undefined),
+    );
+
+    const userFn = jest.fn().mockImplementation(() => {
+      callbacks.forEach(cb => onTransactionCommit(cb));
+      return 'RESULT';
+    });
+
+    const result = await withTransaction(userFn);
+
+    expect(result).toBe('RESULT');
+    // 60 callbacks chunked at 25 = 3 calls (25, 25, 10)
+    expect(settleSpy).toHaveBeenCalledTimes(3);
+    expect(settleSpy.mock.calls[0][0]).toHaveLength(25);
+    expect(settleSpy.mock.calls[1][0]).toHaveLength(25);
+    expect(settleSpy.mock.calls[2][0]).toHaveLength(10);
+    callbacks.forEach(cb => expect(cb).toHaveBeenCalledTimes(1));
+  });
 });

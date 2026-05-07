@@ -29,6 +29,13 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 
+const mockOpenSearchQueueSync = jest.fn();
+jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
+  openSearchGateway: () => ({
+    queueSync: mockOpenSearchQueueSync,
+  }),
+}));
+
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
     '@shared/business/utilities/DateHandler',
@@ -154,28 +161,6 @@ describe('createCaseInteractor', () => {
     });
     expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    // addCoversheetInteractor should be called for petition + STIN docket
-    // entries (each isFileAttached: true) but NOT for requestForPlaceOfTrial.
-    const { addCoversheetInteractor } = applicationContext.getUseCases();
-    expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
-    const calledDocketEntryIds = addCoversheetInteractor.mock.calls.map(
-      c => c[1].docketEntryId,
-    );
-    expect(calledDocketEntryIds).toEqual(
-      expect.arrayContaining([
-        '413f62ce-d7c8-446e-aeda-14a2a625a626',
-        '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      ]),
-    );
-    const requestForPlaceOfTrialEntry = result.docketEntries.find(
-      d =>
-        d.eventCode ===
-        INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-    );
-    expect(requestForPlaceOfTrialEntry).toBeDefined();
-    expect(calledDocketEntryIds).not.toContain(
-      requestForPlaceOfTrialEntry!.docketEntryId,
-    );
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {
@@ -333,10 +318,6 @@ describe('createCaseInteractor', () => {
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    // petition + STIN + corporate disclosure each have a file attached
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalledTimes(3);
   });
 
   it('should create a case successfully with an "Attachment to Petition" document', async () => {
@@ -385,10 +366,6 @@ describe('createCaseInteractor', () => {
 
     expect(atpDocketEntry).toBeDefined();
     expect(atpDocketEntry!.redactionAcknowledgement).toEqual(true);
-    // petition + STIN + 1 attachmentToPetition each have a file attached
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalledTimes(3);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
@@ -440,10 +417,6 @@ describe('createCaseInteractor', () => {
     expect(atpDocketEntries).toHaveLength(2);
     expect(atpDocketEntries[0].redactionAcknowledgement).toEqual(true);
     expect(atpDocketEntries[1].redactionAcknowledgement).toEqual(true);
-    // petition + STIN + 2 attachmentToPetition each have a file attached
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalledTimes(4);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
@@ -651,13 +624,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should not sync to open search if creating case fails', async () => {
-    const mockOpenSearchQueueSync = jest.fn();
-
-    jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
-      openSearchGateway: () => ({
-        queueSync: mockOpenSearchQueueSync,
-      }),
-    }));
+    mockOpenSearchQueueSync.mockClear();
 
     (createCase as jest.Mock).mockRejectedValueOnce(
       new Error('Database error'),

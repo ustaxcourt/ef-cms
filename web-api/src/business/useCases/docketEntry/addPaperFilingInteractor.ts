@@ -29,7 +29,9 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import {
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -85,6 +87,17 @@ export const addPaperFiling = async (
 
   let effectiveConsolidatedGroupDocketNumbers: string[] = [];
 
+  let numberOfPages: number;
+  if (isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId,
+        documentBytes: undefined,
+      });
+  }
+
   if (isSavingForLater) {
     effectiveConsolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
@@ -119,6 +132,7 @@ export const addPaperFiling = async (
   await withTransaction(async () => {
     for (const rawCase of consolidatedGroupCases) {
       let caseEntity = new Case(rawCase, { authorizedUser });
+
       const docketEntryEntity = new DocketEntry(
         {
           ...documentMetadata,
@@ -182,13 +196,7 @@ export const addPaperFiling = async (
       });
 
       if (isFileAttached) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            documentStorageId,
-            documentBytes: undefined,
-          });
+        docketEntryEntity.numberOfPages = numberOfPages;
       }
 
       caseEntity.addDocketEntry(docketEntryEntity);
@@ -211,15 +219,6 @@ export const addPaperFiling = async (
   let paperServicePdfUrl;
 
   if (isReadyForService) {
-    await applicationContext.getUseCases().addCoversheetInteractor(
-      applicationContext,
-      {
-        docketEntryId,
-        docketNumber: caseEntities[0].docketNumber,
-      },
-      authorizedUser,
-    );
-
     const currentDocketEntry = caseEntities[0].getDocketEntryById({
       docketEntryId,
     });
@@ -243,7 +242,7 @@ export const addPaperFiling = async (
   }
 
   const successMessage =
-    effectiveConsolidatedGroupDocketNumbers.length > 1
+    consolidatedGroupDocketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
@@ -257,6 +256,7 @@ export const addPaperFiling = async (
         overwritable: false,
       },
       docketEntryId,
+      generateCoversheet: isReadyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
