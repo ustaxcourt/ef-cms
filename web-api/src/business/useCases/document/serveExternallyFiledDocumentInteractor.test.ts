@@ -67,8 +67,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
 
     applicationContext

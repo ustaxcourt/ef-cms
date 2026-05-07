@@ -134,7 +134,6 @@ export const serveExternallyFiledDocument = async (
         return fileAndServeDocumentOnOneCase({
           caseEntity,
           docketEntryEntity,
-          subjectCaseDocketNumber,
           user,
         });
       }),

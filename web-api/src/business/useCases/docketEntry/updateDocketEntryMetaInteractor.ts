@@ -1,7 +1,9 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_ENTRY_DOCUMENT_INFO_FIELDS,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -161,6 +163,8 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
+  let updatedDocketEntry;
+
   if (shouldGenerateCoversheet) {
     await upsertDocketEntries([docketEntryEntity.validate()]);
 
@@ -168,7 +172,7 @@ export const updateDocketEntryMeta = async (
     // entry returned from addCoversheetInteractor below. Switching to the
     // queued/async path would require also moving the consumer to a poll
     // similar to pollForCoversheetComplete.
-    const updatedDocketEntry = await applicationContext
+    updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(
         applicationContext,
@@ -203,6 +207,59 @@ export const updateDocketEntryMeta = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
+
+  if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: originalDocketEntry.multiDocketedOn,
+    });
+
+    const updatedDocketEntries = casesToUpdate
+      .map(caseRecord => {
+        const { docketNumber: consolidatedDocketNumber } = caseRecord;
+        if (consolidatedDocketNumber === caseToUpdate.docketNumber) {
+          return;
+        }
+        const consolidatedCaseEntity = new Case(caseRecord, { authorizedUser });
+
+        const consolidatedCaseDocketEntry =
+          consolidatedCaseEntity.getDocketEntryById({
+            docketEntryId: docketEntryMeta.docketEntryId,
+          });
+
+        if (
+          consolidatedCaseDocketEntry &&
+          DocketEntry.isMultiDocketed(consolidatedCaseDocketEntry)
+        ) {
+          const propagationFields: any = {};
+          DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
+            if (Object.hasOwn(editableFields, field)) {
+              propagationFields[field] = (editableFields as any)[field];
+            }
+          });
+
+          const merged = new DocketEntry(
+            {
+              ...consolidatedCaseDocketEntry,
+              ...propagationFields,
+            },
+            { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
+          );
+
+          if (updatedDocketEntry && updatedDocketEntry.numberOfPages) {
+            merged.setNumberOfPages(updatedDocketEntry.numberOfPages);
+          }
+
+          return merged.validate().toRawObject();
+        }
+
+        return undefined;
+      })
+      .filter(el => el !== undefined);
+
+    if (updatedDocketEntries.length > 0) {
+      await upsertDocketEntries(updatedDocketEntries);
+    }
+  }
 
   return new CaseDTO(
     new Case(result, { authorizedUser }).validate().toRawObject(),

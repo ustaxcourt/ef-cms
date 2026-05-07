@@ -302,6 +302,7 @@ const serveDocketEntry = async ({
       authorizedUser,
       caseEntity: subjectCaseEntity,
       docketEntry: docketEntryEntity,
+      docketNumbers: caseEntitiesToFileOn.map(c => c.docketNumber),
       documentMetadata,
       userId: user.userId,
     });
@@ -313,7 +314,6 @@ const serveDocketEntry = async ({
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
-          subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         }),
       ),
@@ -413,12 +413,14 @@ const updateDocketEntry = async ({
   authorizedUser,
   caseEntity,
   docketEntry,
+  docketNumbers,
   documentMetadata,
   userId,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
+  docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
@@ -454,6 +456,7 @@ const updateDocketEntry = async ({
     {
       ...docketEntry,
       ...editableFields,
+      multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

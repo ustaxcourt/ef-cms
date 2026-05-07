@@ -163,6 +163,7 @@ export const fileExternalDocument = async (
     let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
     const servedParties = aggregatePartiesForService(caseEntity);
+    const autoServedDocketEntryIds: string[] = [];
 
     for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
       if (docketEntryId && metadata) {
@@ -173,6 +174,8 @@ export const fileExternalDocument = async (
             ...metadata,
             docketEntryId,
             documentStorageId: docketEntryId,
+            multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
+            originallyFiledDocketNumber: docketNumber,
             documentType: metadata.documentType,
             isOnDocketRecord: true,
             relationship,
@@ -204,13 +207,7 @@ export const fileExternalDocument = async (
 
         if (isAutoServed) {
           docketEntryEntity.setAsServed(servedParties.all);
-
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
-            docketEntryId: docketEntryEntity.docketEntryId,
-            servedParties,
-          });
+          autoServedDocketEntryIds.push(docketEntryEntity.docketEntryId);
         }
       }
     }
@@ -226,6 +223,15 @@ export const fileExternalDocument = async (
       caseToUpdate: caseEntity,
       includeCorrespondence: false,
     });
+
+    for (const autoServedDocketEntryId of autoServedDocketEntryIds) {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: autoServedDocketEntryId,
+        servedParties,
+      });
+    }
 
     const rawCaseEntity = caseEntity.toRawObject();
     return rawCaseEntity;
