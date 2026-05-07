@@ -14,6 +14,8 @@ tfenv install 1.15.1
 tfenv use 1.15.1
 ```
 
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-04-27</summary>
 
 ## Manual Deployment Steps
