@@ -2,6 +2,7 @@
 
 import { runCypressTestsWithTiming } from './run-cypress-tests-with-timing.helpers';
 
-if (require.main === module) {
-  void runCypressTestsWithTiming();
-}
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await runCypressTestsWithTiming();
+})();

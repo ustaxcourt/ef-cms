@@ -2,6 +2,7 @@
 
 import { downloadHistoricalTestFileTimes } from './download-historical-test-file-times.helpers';
 
-if (require.main === module) {
-  void downloadHistoricalTestFileTimes();
-}
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await downloadHistoricalTestFileTimes();
+})();

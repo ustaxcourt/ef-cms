@@ -2,7 +2,6 @@
 
 import { splitTests } from './split-tests.helpers';
 
-if (require.main === module) {
-  const testType: string = process.argv.slice(2)[0] || '';
-  splitTests(testType);
-}
+const testType: string = process.argv.slice(2)[0] || '';
+
+splitTests(testType);

@@ -9,7 +9,6 @@ import { splitTestsCypress } from './split-tests.helpers';
 // # Arguments
 // #   - $1 - the folder of tests to include when looking for tests to split across action runners
 
-if (require.main === module) {
-  const testDir: string = process.argv.slice(2)[0] || '';
-  splitTestsCypress(testDir);
-}
+const testDir: string = process.argv.slice(2)[0] || '';
+
+splitTestsCypress(testDir);
