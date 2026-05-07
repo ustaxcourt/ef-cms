@@ -25,6 +25,7 @@ import {
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
 import {
   AuthUser,
@@ -57,6 +58,7 @@ import {
   calculateISODate,
   createISODateString,
   dateStringsCompared,
+  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -75,6 +77,7 @@ import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -320,6 +323,34 @@ export class Case extends JoiValidationEntity {
   static formatDocketNumber(docketNumber) {
     const regex = /^0*(\d+-\d{2}).*/;
     return docketNumber.replace(regex, '$1');
+  }
+
+  static formatCaseStatus(workItem: {
+    caseStatus?: string;
+    trialLocation?: string;
+    trialDate?: string;
+  }) {
+    let formattedCaseStatus = workItem.caseStatus || '';
+
+    if (
+      workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
+      workItem.trialLocation &&
+      workItem.trialDate
+    ) {
+      let formattedTrialLocation = '';
+      if (
+        workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      ) {
+        formattedTrialLocation = abbreviateState(workItem.trialLocation);
+      } else {
+        formattedTrialLocation = workItem.trialLocation;
+      }
+
+      const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
+
+      formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+    }
+    return formattedCaseStatus;
   }
 
   /**
