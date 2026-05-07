@@ -15,6 +15,7 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
   SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
@@ -1463,6 +1464,42 @@ describe('Case entity', () => {
       myCase.setRemoteTrialGrantedDate('   ');
       expect(myCase.remoteTrialGranted).toBe(false);
       expect(myCase.remoteTrialGrantedDate).toBeNull();
+    });
+  });
+
+  describe('formattedCaseStatus', () => {
+    it('should return a formatted case status when given a trial session', () => {
+      const expected = `Calendared - 05/18/26 New York, NY`;
+      const result = Case.formatCaseStatus({
+        caseStatus: 'Calendared',
+        trialDate: '2026-05-18T21:00:23.064+00:00',
+        trialLocation: 'New York, New York',
+      });
+      expect(result).toEqual(expected);
+    });
+
+    it('should return the base status if it is not calendared', () => {
+      const expected = `New`;
+      const result = Case.formatCaseStatus({
+        caseStatus: 'New',
+      });
+      expect(result).toEqual(expected);
+    });
+
+    it('should return an empty string on no input', () => {
+      const expected = ``;
+      const result = Case.formatCaseStatus({});
+      expect(result).toEqual(expected);
+    });
+
+    it('shouldnt give special formatting to a standalone remote trial location', () => {
+      const expected = `Calendared - 05/18/26 ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`;
+      const result = Case.formatCaseStatus({
+        caseStatus: 'Calendared',
+        trialDate: '2026-05-18T21:00:23.064+00:00',
+        trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      });
+      expect(result).toEqual(expected);
     });
   });
 });

@@ -9,7 +9,10 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
-  wait,
+  waitForExpectedItem,
+  waitForExpectedItemToExist,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
 } from './helpers';
 import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
@@ -48,7 +51,23 @@ describe('petitioner files document', () => {
     });
 
     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'alertSuccess.message',
+      expectedItem: 'Case set for trial.',
+    });
+    await waitForExpectedItemToExist({
+      cerebralTest,
+      currentItem: 'caseDetail.trialDate',
+    });
+
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
+      'Case set for trial.',
+    );
+    expect(cerebralTest.getState('caseDetail.trialDate')).toBeDefined();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -60,6 +79,8 @@ describe('petitioner files document', () => {
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
+
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 
   docketClerkViewsSectionInboxNotHighPriority(cerebralTest);
