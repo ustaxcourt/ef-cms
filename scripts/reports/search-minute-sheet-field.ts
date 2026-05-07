@@ -407,7 +407,6 @@ const getDateRangeFilter = (dateRange?: string): ReturnType<typeof sql> => {
 const searchMinuteSheetField = async (): Promise<{
   fieldKey: string;
   results: Record<string, unknown>[];
-  selectedPath: string | undefined;
 }> => {
   let selectedPath: string | undefined;
 
@@ -422,7 +421,7 @@ const searchMinuteSheetField = async (): Promise<{
       .map(([k]) => k)
       .sort();
     availableFields.forEach(f => console.log(`  ${f}`));
-    return { fieldKey: field, results: [], selectedPath: undefined };
+    return { fieldKey: field, results: [] };
   } else if (allPaths.length === 1) {
     selectedPath = allPaths[0];
   } else {
@@ -487,7 +486,7 @@ const searchMinuteSheetField = async (): Promise<{
     [fieldKey]: row.value,
   }));
 
-  return { fieldKey, results, selectedPath };
+  return { fieldKey, results };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
