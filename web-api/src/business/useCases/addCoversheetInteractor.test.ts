@@ -5,6 +5,7 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
