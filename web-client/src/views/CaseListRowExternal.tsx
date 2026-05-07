@@ -138,10 +138,11 @@ export const CaseListRowExternal = ({
                   formattedCase.inConsolidatedGroup &&
                   !formattedCase.isLeadCase,
               })}
-              data-label="status"
+              data-label="Case Status"
             >
               <Button
                 link
+                className="tw:text-left"
                 onClick={() =>
                   showCaseStatusInfoSequence({
                     status: formattedCase.status,

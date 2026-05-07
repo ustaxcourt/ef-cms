@@ -32,6 +32,7 @@ import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
+import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
@@ -168,6 +169,7 @@ import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getC
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
+import { getClerkDashboardStatsInteractor } from '../../shared/src/proxies/reports/getClerkDashboardStatsProxy';
 import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
@@ -365,6 +367,7 @@ let forceRefreshCallback: () => {};
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
+  addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
@@ -448,6 +451,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getClerkDashboardStatsInteractor,
   getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,

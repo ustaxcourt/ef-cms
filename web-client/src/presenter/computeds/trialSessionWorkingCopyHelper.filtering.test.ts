@@ -294,6 +294,79 @@ describe('trial session working copy computed', () => {
         },
       );
 
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '500-17' },
+        { docketNumber: '5000-17' },
+        { docketNumber: '101-18' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(casesShownCount).toEqual(5);
+    });
+    it('should include closed cases in the working copy list', () => {
+      const { casesShownCount, formattedCases } = runCompute(
+        trialSessionWorkingCopyHelper,
+        {
+          state: {
+            trialSession: {
+              ...MOCK_TRIAL_SESSION,
+              calendaredCases: [
+                MOCK_CASE,
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '102-19',
+                  status: CASE_STATUS_TYPES.closed,
+                },
+              ],
+              caseOrder: [],
+            },
+            trialSessionWorkingCopy: {
+              caseMetadata: {},
+              filters: { statusUnassigned: true },
+              sort: 'docket',
+              sortOrder: 'asc',
+              userNotes: {},
+            },
+          },
+        },
+      );
+
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '101-18' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(casesShownCount).toEqual(2);
+    });
+
+    it('should not return closed cases that have been removed from trial', () => {
+      const { casesShownCount, formattedCases } = runCompute(
+        trialSessionWorkingCopyHelper,
+        {
+          state: {
+            trialSession: {
+              ...MOCK_TRIAL_SESSION,
+              calendaredCases: [
+                MOCK_CASE,
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '102-19',
+                  status: CASE_STATUS_TYPES.closed,
+                  removedFromTrial: true,
+                },
+              ],
+              caseOrder: [],
+            },
+            trialSessionWorkingCopy: {
+              caseMetadata: {},
+              filters: { statusUnassigned: true },
+              sort: 'docket',
+              sortOrder: 'asc',
+              userNotes: {},
+            },
+          },
+        },
+      );
+
       expect(formattedCases).toMatchObject([{ docketNumber: '101-18' }]);
       expect(casesShownCount).toEqual(1);
     });

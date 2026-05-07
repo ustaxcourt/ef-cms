@@ -69,6 +69,7 @@ const SORT_FIELDS = [
   { field: 'filedDate', label: 'Filed Date' },
   { field: 'document', label: 'Document' },
   { field: 'caseTitle', label: 'Case Title' },
+  { field: 'status', label: 'Case Status' },
 ] as const;
 
 const generateSortOptions = () => {

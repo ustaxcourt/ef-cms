@@ -65,7 +65,7 @@ export const PetitionersAndCounsel = connect(
 
                   {!petitioner.sealedAndUnavailable && (
                     <>
-                      <p className="font-semibold mb-0">
+                      <p className="semi-bold margin-bottom-0">
                         Service email address
                       </p>
                       <span

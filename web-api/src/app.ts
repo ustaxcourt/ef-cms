@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
+import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
@@ -20,6 +21,7 @@ import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabi
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
 import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
+import { getClerkDashboardStatsLambda } from './lambdas/reports/getClerkDashboardStatsLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -456,6 +458,14 @@ app.use(expressLogger);
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
 
+  app.post(
+    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
+    lambdaWrapper(
+      addCoversheetLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
+  );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
     lambdaWrapper(generateDraftStampOrderLambda),
@@ -914,6 +924,10 @@ app.delete(
     lambdaWrapper(exportPendingReportLambda),
   );
   app.get('/reports/cold-case-report', lambdaWrapper(coldCaseReportLambda));
+  app.get(
+    '/reports/clerk-dashboard-stats',
+    lambdaWrapper(getClerkDashboardStatsLambda),
+  );
   app.post(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),
