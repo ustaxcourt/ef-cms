@@ -15,83 +15,20 @@ concurrency:
 
 jobs:
   e2e_cypress_smoketests_local:
-    runs-on: ubuntu-latest
-
-    env:
-      CI: true
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Setup Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-      - name: Run E2E Cypress Smoketests
-        run: |
-          mkdir -p /tmp/cypress/
-          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-          ./wait-until-services.sh
-          sleep 5
-          npm run cypress:smoketests:local
-      - name: Store Cypress Failure Videos
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: cypress-videos
-          path: ${{ github.workspace }}/cypress/deployed-and-local/videos
-      - name: Store Logs
-        uses: actions/upload-artifact@v7
-        with:
-          name: cypress-logs
-          path: /tmp/cypress
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    uses: ./.github/workflows/templates/app.yml
+    with:
+      configure_sysctl: true
+      extra_artifact_if_always: true
+      extra_artifact_name: cypress-videos
+      extra_artifact_path: ${{ github.workspace }}/cypress/deployed-and-local/videos
+      extra_artifact_two_name: cypress-logs
+      extra_artifact_two_path: /tmp/cypress
+      run_command: |
+        npm run migration:postgres
+        npm run migration:postgres:contract
+        npm run seed:postgres
+        mkdir -p /tmp/cypress/
+        npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
+        ./wait-until-services.sh
+        sleep 5
+        npm run cypress:smoketests:local

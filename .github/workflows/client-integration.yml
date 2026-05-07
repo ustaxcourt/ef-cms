@@ -19,125 +19,34 @@ permissions:
 
 jobs:
   client_integration:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         ci_node_total: [12]
         ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    env:
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-      JEST_TEST_RESULTS_FILE: /tmp/test-file-times/jest-results-${{ matrix.ci_node_index }}.json
-      TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/historical-test-file-times.json
-      TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/test-file-times-${{ matrix.ci_node_index }}.json
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Restore historical test file timings
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          scripts/github-actions/download-historical-test-file-times.ts client-integration.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
-      - name: Setup Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-      - name: Web Client - Integration Tests
-        run: |
-          mkdir -p /tmp/test-file-times
-          mkdir -p /tmp/web-client
-          npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
-          ./wait-until-services.sh
-          export TESTFILES=$(scripts/github-actions/split-tests.ts)
-          export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
-          npm run test:client:integration:ci
-      - name: Record shard test file timings
-        if: always()
-        run: |
-          if [[ -f "${JEST_TEST_RESULTS_FILE}" ]]; then
-            scripts/github-actions/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
-          fi
-      - name: Store Artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: server-log-output-${{ matrix.ci_node_index }}
-          path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
-      - name: Store shard test file timings
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          if-no-files-found: ignore
-          name: historical-test-file-times-shard-${{ matrix.ci_node_index }}
-          path: ${{ env.TEST_FILE_TIMINGS_SHARD_FILE }}
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    uses: ./.github/workflows/templates/app-parallel.yml
+    with:
+      ci_node_index: ${{ matrix.ci_node_index }}
+      ci_node_total: ${{ matrix.ci_node_total }}
+      configure_sysctl: true
+      extra_artifact_name: server-log-output-${{ matrix.ci_node_index }}
+      extra_artifact_path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
+      fetch_depth: 0
+      record_jest_test_timings: true
+      run_command: |
+        npm run migration:postgres
+        npm run migration:postgres:contract
+        npm run seed:postgres
+        mkdir -p /tmp/test-file-times
+        mkdir -p /tmp/web-client
+        npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
+        ./wait-until-services.sh
+        export TESTFILES=$(scripts/github-actions/split-tests.ts)
+        export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
+        npm run test:client:integration:ci
+      workflow_filename: client-integration.yml
   persist-test-file-times:
-    runs-on: ubuntu-latest
     needs: [client_integration]
-    steps:
-      - uses: actions/download-artifact@v7
-        with:
-          pattern: historical-test-file-times-shard-*
-          merge-multiple: true
-          path: /tmp/test-file-times/shards
-      - name: Merge test file timings
-        run: |
-          scripts/github-actions/test-file-times.ts merge /tmp/test-file-times/historical-test-file-times.json /tmp/test-file-times/shards/*.json
-      - uses: actions/upload-artifact@v7
-        with:
-          name: historical-test-file-times-${{ github.sha }}
-          path: /tmp/test-file-times/historical-test-file-times.json
+    uses: ./.github/workflows/shared/persist-test-file-times.yml
+    with:
+      workflow_filename: client-integration.yml

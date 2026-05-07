@@ -1,0 +1,48 @@
+name: Check Coverage
+
+on:
+  workflow_call:
+    inputs:
+      branches:
+        required: true
+        type: number
+      functions:
+        required: true
+        type: number
+      lines:
+        required: true
+        type: number
+      statements:
+        required: true
+        type: number
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  check-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: coverage-artifacts-*
+          merge-multiple: true
+          path: coverage
+      - name: Process Coverage
+        run: |
+          npx nyc report \
+            --check-coverage \
+            --branches ${{ inputs.branches }} \
+            --functions ${{ inputs.functions }} \
+            --lines ${{ inputs.lines }} \
+            --statements ${{ inputs.statements }} \
+            --reporter lcov \
+            --reporter text \
+            --reporter clover \
+            -t coverage
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: coverage-artifacts
+          failOnError: false

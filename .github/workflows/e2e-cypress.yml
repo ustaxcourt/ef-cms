@@ -19,114 +19,33 @@ permissions:
 
 jobs:
   e2e_cypress:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         ci_node_total: [9]
         ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    env:
-      CI: true
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-      TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/historical-test-file-times.json
-      TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/test-file-times-${{ matrix.ci_node_index }}.json
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Restore historical test file timings
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          scripts/github-actions/download-historical-test-file-times.ts e2e-cypress.yml historical-test-file-times $TEST_FILE_TIMINGS_PATH
-      - name: Setup Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-      - name: Run E2E Cypress
-        run: |
-          mkdir -p /tmp/test-file-times
-          mkdir -p /tmp/cypress/
-          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
-          export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
-          scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
-      - name: Store Cypress Videos
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: cypress-videos-${{ matrix.ci_node_index }}
-          path: ${{ github.workspace }}/cypress/local-only/videos
-      - name: Store shard test file timings
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          if-no-files-found: ignore
-          name: historical-test-file-times-shard-${{ matrix.ci_node_index }}
-          path: ${{ env.TEST_FILE_TIMINGS_SHARD_FILE }}
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    uses: ./.github/workflows/templates/app-parallel.yml
+    with:
+      ci_environment: 'true'
+      ci_node_index: ${{ matrix.ci_node_index }}
+      ci_node_total: ${{ matrix.ci_node_total }}
+      extra_artifact_if_always: true
+      extra_artifact_name: cypress-videos-${{ matrix.ci_node_index }}
+      extra_artifact_path: ${{ github.workspace }}/cypress/local-only/videos
+      fetch_depth: 0
+      run_command: |
+        npm run migration:postgres
+        npm run migration:postgres:contract
+        npm run seed:postgres
+        mkdir -p /tmp/test-file-times
+        mkdir -p /tmp/cypress/
+        npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
+        WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+        export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
+        scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
+      workflow_filename: e2e-cypress.yml
   persist-test-file-times:
-    runs-on: ubuntu-latest
     needs: [e2e_cypress]
-    steps:
-      - uses: actions/download-artifact@v7
-        with:
-          pattern: historical-test-file-times-shard-*
-          merge-multiple: true
-          path: /tmp/test-file-times/shards
-      - name: Merge test file timings
-        run: |
-          scripts/github-actions/test-file-times.ts merge /tmp/test-file-times/historical-test-file-times.json /tmp/test-file-times/shards/*.json
-      - uses: actions/upload-artifact@v7
-        with:
-          name: historical-test-file-times-${{ github.sha }}
-          path: /tmp/test-file-times/historical-test-file-times.json
+    uses: ./.github/workflows/shared/persist-test-file-times.yml
+    with:
+      workflow_filename: e2e-cypress.yml

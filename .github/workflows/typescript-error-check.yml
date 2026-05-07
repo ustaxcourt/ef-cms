@@ -28,15 +28,18 @@ jobs:
         uses: actions/checkout@v6
         with:
           path: branchToBeCompared
-      - uses: actions/setup-node@v6
+      - uses: ./.github/actions/dawson-node-bootstrap
         with:
-          node-version-file: 'branchToBeCompared/.nvmrc'
-      - name: NPM Install in your branch
-        working-directory: ./branchToBeCompared
-        run: npm ci
-      - name: NPM Install in staging
-        working-directory: ./stagingBranch
-        run: npm ci
+          node-version-file: branchToBeCompared/.nvmrc
+          restore-cache: 'false'
+          save-cache: 'false'
+          working-directory: ./branchToBeCompared
+      - uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          restore-cache: 'false'
+          save-cache: 'false'
+          setup-node: 'false'
+          working-directory: ./stagingBranch
       - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
         run: npx ts-node scripts/compareTypescriptErrors.ts

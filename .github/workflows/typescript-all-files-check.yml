@@ -39,17 +39,19 @@ jobs:
           ref: ${{ env.TARGET_BRANCH }}
           path: targetBranch
 
-      - uses: actions/setup-node@v6
+      - uses: ./.github/actions/dawson-node-bootstrap
         with:
-          node-version-file: 'currentBranch/.nvmrc'
+          node-version-file: currentBranch/.nvmrc
+          restore-cache: 'false'
+          save-cache: 'false'
+          working-directory: ./currentBranch
 
-      - name: NPM Install in your branch
-        working-directory: ./currentBranch
-        run: npm ci
-
-      - name: NPM Install in target branch
-        working-directory: ./targetBranch
-        run: npm ci
+      - uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          restore-cache: 'false'
+          save-cache: 'false'
+          setup-node: 'false'
+          working-directory: ./targetBranch
 
       - name: Check files for increased error count
         run: npx ts-node currentBranch/scripts/checkAllFilesForTypeErrorCount.ts

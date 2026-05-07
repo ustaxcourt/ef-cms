@@ -1,0 +1,105 @@
+name: GitHub Actions Workflow Template - DAWSON running
+
+on:
+  workflow_call:
+    inputs:
+      check_deploy_date_interval:
+        default: ''
+        type: string
+      configure_sysctl:
+        default: false
+        type: boolean
+      extra_artifact_if_always:
+        default: false
+        type: boolean
+      extra_artifact_name:
+        default: ''
+        type: string
+      extra_artifact_path:
+        default: ''
+        type: string
+      extra_artifact_two_if_always:
+        default: false
+        type: boolean
+      extra_artifact_two_name:
+        default: ''
+        type: string
+      extra_artifact_two_path:
+        default: ''
+        type: string
+      fetch_depth:
+        default: 1
+        type: number
+      run_command:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      CHECK_DEPLOY_DATE_INTERVAL: ${{ inputs.check_deploy_date_interval }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Configure sysctl limits
+        if: ${{ inputs.configure_sysctl }}
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+      - name: Setup OpenSearch
+        uses: ankane/setup-opensearch@v1
+        with:
+          opensearch-version: 3.5.0
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: ./.github/actions/dawson-node-bootstrap
+      - name: Run tests
+        run: |
+          ${{ inputs.run_command }}
+      - name: Upload extra artifact
+        if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.extra_artifact_name }}
+          path: ${{ inputs.extra_artifact_path }}
+      - name: Upload extra artifact (always)
+        if: ${{ always() && inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.extra_artifact_name }}
+          path: ${{ inputs.extra_artifact_path }}
+      - name: Upload extra artifact two
+        if: ${{ inputs.extra_artifact_two_name != '' && inputs.extra_artifact_two_path != '' && !inputs.extra_artifact_two_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.extra_artifact_two_name }}
+          path: ${{ inputs.extra_artifact_two_path }}
+      - name: Upload extra artifact two (always)
+        if: ${{ always() && inputs.extra_artifact_two_name != '' && inputs.extra_artifact_two_path != '' && inputs.extra_artifact_two_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.extra_artifact_two_name }}
+          path: ${{ inputs.extra_artifact_two_path }}
