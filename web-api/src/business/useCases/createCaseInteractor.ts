@@ -1,4 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -26,7 +28,6 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
@@ -121,7 +122,6 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
       isOnDocketRecord: true,
-      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
       redactionAcknowledgement: petitionEntity.petitionRedactionAcknowledgement,
     },
@@ -144,7 +144,6 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: false,
       isOnDocketRecord: true,
-      originallyFiledDocketNumber: caseToAdd.docketNumber,
       processingStatus: 'complete',
     },
     {
@@ -169,7 +168,6 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       index: 0,
       isFileAttached: true,
-      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
     },
     { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -192,7 +190,6 @@ const createCaseMetadata = async (
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
         isOnDocketRecord: true,
-        originallyFiledDocketNumber: caseToAdd.docketNumber,
         privatePractitioners,
       },
       { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -225,7 +222,6 @@ const createCaseMetadata = async (
           noticeIssuedDate:
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
-          originallyFiledDocketNumber: caseToAdd.docketNumber,
           privatePractitioners,
           redactionAcknowledgement:
             petitionEntity.irsNoticesRedactionAcknowledgement,
@@ -318,33 +314,50 @@ export const createCaseInteractor = async (
   });
 
   let caseToAdd: Case;
+  let workItem: WorkItem;
 
   try {
-    ({ caseToAdd } = await withTransaction(async () => {
-      const result = await createCaseMetadata(
-        applicationContext,
-        {
-          attachmentToPetitionFileIds,
-          corporateDisclosureFileId,
-          petitionEntity,
-          petitionFileId,
-          petitionMetadata,
-          privatePractitioners,
-          stinFileId,
-          user,
-        },
-        authorizedUser,
-      );
-
-      await upsertWorkItems({
-        workItems: [result.workItem.validate().toRawObject()],
-      });
-
-      return result;
-    }));
+    ({ caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds,
+        corporateDisclosureFileId,
+        petitionEntity,
+        petitionFileId,
+        petitionMetadata,
+        privatePractitioners,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    ));
   } finally {
     await removeLockFunction();
   }
+
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
+
+  const coversheetDocketEntryIds = [
+    petitionFileId,
+    stinFileId,
+    ...(corporateDisclosureFileId ? [corporateDisclosureFileId] : []),
+    ...(attachmentToPetitionFileIds ?? []),
+  ];
+
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(coversheetDocketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: caseToAdd.docketNumber,
+    }),
+  );
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

@@ -481,6 +481,10 @@ const completeDocketEntryQC = async (
   });
 
   if (isNewCoverSheetNeeded) {
+    // Intentionally synchronous: this QC flow depends on the regenerated
+    // coversheet being in place before the response is returned. Move to
+    // the queued/async path (enqueueAddCoversheet) only if we add polling
+    // on the client side of QC as well.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {

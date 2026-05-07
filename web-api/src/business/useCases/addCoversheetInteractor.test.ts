@@ -5,6 +5,7 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -102,7 +103,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -126,7 +127,7 @@ describe('addCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -138,13 +139,155 @@ describe('addCoversheetInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('skips re-prepending when the docket entry is already COMPLETE (idempotency gate)', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
+  });
+
+  it('still re-prepends when COMPLETE but bypassIdempotencyGate=true', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        bypassIdempotencyGate: true,
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
+  it('does not re-prepend when COMPLETE and only replaceCoversheet=true (gate is independent of cover-content flags)', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        replaceCoversheet: true,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('does not re-prepend when COMPLETE and only filingDateUpdated=true (gate is independent of cover-content flags)', async () => {
+    const completedCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(completedCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([completedCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        filingDateUpdated: true,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('retries on ERROR_ADDING_COVERSHEET status (gate does not skip errored entries)', async () => {
+    const erroredCaseData = {
+      ...testingCaseData,
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          processingStatus:
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.ERROR_ADDING_COVERSHEET,
+        },
+      ],
+    };
+    getCaseByDocketNumber.mockResolvedValue(erroredCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([erroredCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
   it("updates the docket entry's page numbers", async () => {
     await addCoversheetInteractor(
       applicationContext,
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -159,7 +302,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -174,7 +317,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -190,7 +333,7 @@ describe('addCoversheetInteractor', () => {
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -208,7 +351,7 @@ describe('addCoversheetInteractor', () => {
         }),
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -268,22 +411,146 @@ describe('addCoversheetInteractor', () => {
     );
   });
 
-  it('should throw an error if the docket entry could not be found on the case', async () => {
-    const missingId = '314fef22-39fa-43de-81ef-2c80ccb3b733';
-    await expect(
-      addCoversheetInteractor(
-        applicationContext,
+  it('works as expected when feature flag is off and consolidated cases returns null', async () => {
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: null,
+      numberOfPages: 5,
+      pdfData: 'gg',
+    });
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
+
+    const calls = upsertDocketEntries.mock.calls.map(call => ({
+      docketNumber: call[0][0].docketNumber,
+      numberOfPages: call[0][0].numberOfPages,
+    }));
+
+    const firstCase = calls.find(
+      call => call.docketNumber === MOCK_CASE.docketNumber,
+    );
+
+    expect(firstCase).toMatchObject({
+      docketNumber: MOCK_CASE.docketNumber,
+      numberOfPages: 5,
+    });
+  });
+
+  it('should not update the processing status of a non-subject case, simultaneous doc type docket entry entity on a consolidated case', async () => {
+    const mockProcessingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+    const mockConsolidatedCaseNonSubjectCase = '102-20';
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
         {
-          caseEntity: new Case(MOCK_CASE, {
-            authorizedUser: mockDocketClerkUser,
-          }),
-          docketEntryId: missingId,
-          docketNumber: MOCK_CASE.docketNumber,
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          documentNumber: 2,
         },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow(
-      `Could not find docket entry with id ${missingId} on case ${MOCK_CASE.docketNumber}`,
+      ],
+    });
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentType: 'Simultaneous Answering Brief',
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+            processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      },
+    ]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: new Case(
+          {
+            ...testingCaseData,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+          { authorizedUser: mockDocketClerkUser },
+        ),
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntries.mock.calls[0][0]).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          processingStatus: mockProcessingStatus,
+        }),
+      ]),
+    );
+  });
+
+  it('should not update the processing status of a non-subject case, simultaneous document title docket entry entity on a consolidated case', async () => {
+    const mockProcessingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+    const mockConsolidatedCaseNonSubjectCase = '102-20';
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          documentNumber: 2,
+        },
+      ],
+    });
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentTitle: 'Super Duper Simultaneous but not really',
+            documentType: 'Answer',
+            processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      },
+    ]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: new Case(
+          {
+            ...testingCaseData,
+            documentTitle: 'Super Duper Simultaneous but not really',
+          },
+          { authorizedUser: mockDocketClerkUser },
+        ),
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntries.mock.calls[0][0]).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          processingStatus: mockProcessingStatus,
+        }),
+      ]),
     );
   });
 });

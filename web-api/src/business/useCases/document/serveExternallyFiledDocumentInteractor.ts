@@ -6,11 +6,10 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
@@ -71,15 +70,6 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  if (
-    DocketEntry.isMultiDocketed(originalSubjectDocketEntry) &&
-    !isLeadCase(subjectCaseEntity)
-  ) {
-    throw new Error(
-      'Multidocketed documents may only be served from the lead case',
-    );
-  }
-
   const numberOfPages = await countPagesInDocument({
     applicationContext,
     documentStorageId: originalSubjectDocketEntry.documentStorageId,
@@ -101,14 +91,17 @@ export const serveExternallyFiledDocument = async (
 
   let paperServiceResult;
   let caseEntities: Case[] = [];
-  const coversheetLength = 1;
 
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
+  if (subjectCaseIsSimultaneousDocType) {
+    docketNumbers = [subjectCaseDocketNumber];
+  } else {
+    docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
+  }
 
   try {
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
@@ -116,17 +109,12 @@ export const serveExternallyFiledDocument = async (
       casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
-        const docketEntry = caseEntity.docketEntries.find(
-          e => e.docketEntryId === docketEntryId,
-        );
-
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
 
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
-            index: docketEntry ? docketEntry.index : undefined,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
             ...(!subjectCaseIsSimultaneousDocType && {
@@ -138,10 +126,7 @@ export const serveExternallyFiledDocument = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
-            multiDocketedOn: docketNumbers,
-            originallyFiledDocketNumber: subjectCaseDocketNumber,
-            numberOfPages: numberOfPages + coversheetLength,
-            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            numberOfPages,
           },
           { authorizedUser },
         );
@@ -149,6 +134,7 @@ export const serveExternallyFiledDocument = async (
         return fileAndServeDocumentOnOneCase({
           caseEntity,
           docketEntryEntity,
+          subjectCaseDocketNumber,
           user,
         });
       }),
@@ -166,6 +152,10 @@ export const serveExternallyFiledDocument = async (
       );
     }
 
+    // Intentionally synchronous: serving externally-filed documents must
+    // produce a finished, coversheet-attached PDF before the response so
+    // the document is ready for service. Queueing here would require the
+    // service step to wait on a poll, which we haven't built yet.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {

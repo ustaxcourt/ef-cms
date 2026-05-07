@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -11,7 +10,6 @@ jest.mock(
 );
 jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -28,14 +26,13 @@ import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServic
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   let mockCase: RawCase;
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
@@ -70,8 +67,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
-    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
-      Promise.resolve(caseEntity),
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
     );
 
     applicationContext
@@ -165,88 +162,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
-  });
-
-  it('should throw an error when the docket entry is multidocketed and the subject case is not the lead case', async () => {
-    const memberCaseDocketNumber = mockCase.docketNumber;
-    const leadCaseDocketNumber = '100-18';
-
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockCase,
-      docketNumber: memberCaseDocketNumber,
-      leadDocketNumber: leadCaseDocketNumber,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          multiDocketedOn: [memberCaseDocketNumber, leadCaseDocketNumber],
-        } as RawDocketEntry,
-      ],
-    });
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: '',
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: memberCaseDocketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow(
-      'Multidocketed documents may only be served from the lead case',
-    );
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should throw NotFoundError when user is not found', async () => {
-    getUserById.mockResolvedValue(undefined);
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('User not found with user id');
-  });
-
-  it('should throw NotFoundError when docket entry is not found after serving', async () => {
-    const { Case } = await import('@shared/business/entities/cases/Case');
-
-    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) => {
-      const caseWithoutDocketEntry = {
-        ...caseEntity,
-        docketEntries: [],
-      };
-      return Promise.resolve(
-        new Case(caseWithoutDocketEntry, {
-          authorizedUser: mockDocketClerkUser,
-        }),
-      );
-    });
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Could not find docket entry with id');
   });
 
   it('should set the docket entry`s draftOrderState to null', async () => {
@@ -430,7 +345,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(true);
   });
 
-  it('should set the number of pages in the docket entry as the length of the document plus the coversheet', async () => {
+  it('should set the number of pages in the docket entry as the length of the document', async () => {
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
@@ -445,21 +360,23 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .numberOfPages,
-    ).toBe(mockNumberOfPages + 1);
+    ).toBe(mockNumberOfPages);
 
     expect(countPagesInDocument.mock.calls[0][0].documentStorageId).toEqual(
       mockDocumentStorageId,
     );
   });
 
-  it('should set the docket entry`s processing status as completed', async () => {
+  it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
       docketEntries: [
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
-          processingStatus: 'abc',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
         } as RawDocketEntry,
       ],
     });
@@ -469,16 +386,46 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
+        docketNumbers: [mockMemberCaseDocketNumber],
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
     );
 
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
     expect(
-      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
-        .processingStatus,
-    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
+  it('should only serve the docket entry on the subjectCase when the subject docket entry has a simultaneous document title', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'Simultaneous doc title',
+        } as RawDocketEntry,
+      ],
+    });
+
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [mockMemberCaseDocketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
+    expect(
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
   });
 
   it('should add a coversheet to the docket entry', async () => {
@@ -729,165 +676,5 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.pdfUrl,
     ).toBeUndefined();
-  });
-
-  it('should serve the document on all provided docket numbers', async () => {
-    const leadDocketNumber = '100-20';
-    const member1DocketNumber = '101-20';
-    const member2DocketNumber = '102-20';
-
-    const leadCase = {
-      ...mockCase,
-      docketNumber: leadDocketNumber,
-      leadDocketNumber,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        } as RawDocketEntry,
-      ],
-    };
-
-    getCaseByDocketNumber.mockResolvedValue(leadCase);
-    getCasesByDocketNumbers.mockResolvedValue([
-      leadCase,
-      { ...mockCase, docketNumber: member1DocketNumber },
-      { ...mockCase, docketNumber: member2DocketNumber },
-    ]);
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [member1DocketNumber, member2DocketNumber],
-        subjectCaseDocketNumber: leadDocketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
-    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
-      docketNumbers: [
-        leadDocketNumber,
-        member1DocketNumber,
-        member2DocketNumber,
-      ],
-    });
-  });
-
-  it('should serve document only on subject case when no additional docket numbers are provided', async () => {
-    const leadDocketNumber = '100-20';
-
-    const leadCase = {
-      ...mockCase,
-      docketNumber: leadDocketNumber,
-      leadDocketNumber,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        } as RawDocketEntry,
-      ],
-    };
-
-    getCaseByDocketNumber.mockResolvedValue(leadCase);
-    getCasesByDocketNumbers.mockResolvedValue([leadCase]);
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: leadDocketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
-    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
-      docketNumbers: [leadDocketNumber],
-    });
-  });
-
-  it('should preserve docket entry index when serving across multiple cases', async () => {
-    const leadDocketNumber = '100-20';
-    const member1DocketNumber = '101-20';
-    const member2DocketNumber = '102-20';
-
-    const baseDocketEntry = {
-      ...MOCK_DOCUMENTS[3],
-      docketEntryId: mockDocketEntryId,
-      eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-      index: 1,
-      servedAt: undefined,
-    };
-
-    const memberDocketEntryOne = {
-      ...baseDocketEntry,
-      index: 999,
-    };
-
-    const memberDocketEntryTwo = {
-      ...baseDocketEntry,
-      index: 0,
-    };
-
-    const leadCase = {
-      ...mockCase,
-      docketNumber: leadDocketNumber,
-      leadDocketNumber,
-      docketEntries: [baseDocketEntry],
-    };
-
-    getCaseByDocketNumber.mockResolvedValue(leadCase);
-    getCasesByDocketNumbers.mockResolvedValue([
-      leadCase,
-      {
-        ...mockCase,
-        docketNumber: member1DocketNumber,
-        docketEntries: [memberDocketEntryOne],
-      },
-      {
-        ...mockCase,
-        docketNumber: member2DocketNumber,
-        docketEntries: [memberDocketEntryTwo],
-      },
-    ]);
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [member1DocketNumber, member2DocketNumber],
-        subjectCaseDocketNumber: leadDocketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketEntryEntity: expect.objectContaining({
-          index: baseDocketEntry.index,
-        }),
-      }),
-    );
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketEntryEntity: expect.objectContaining({
-          index: memberDocketEntryOne.index,
-        }),
-      }),
-    );
-    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketEntryEntity: expect.objectContaining({
-          index: memberDocketEntryTwo.index,
-        }),
-      }),
-    );
   });
 });

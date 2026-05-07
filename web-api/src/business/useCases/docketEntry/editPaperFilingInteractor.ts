@@ -22,6 +22,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -31,13 +32,10 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import {
-  onTransactionCommit,
-  withTransaction,
-} from '@web-api/persistence/postgres/utils/transactions';
-import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -151,26 +149,24 @@ const saveForLaterStrategy = async ({
     );
   }
 
-  await withTransaction(async () => {
-    const updatedDocketEntryEntity = await updateDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity,
-      docketEntry: docketEntryEntity,
-      documentMetadata: request.documentMetadata,
-      userId: user.userId,
-    });
+  const updatedDocketEntryEntity = await updateDocketEntry({
+    applicationContext,
+    authorizedUser,
+    caseEntity,
+    docketEntry: docketEntryEntity,
+    documentMetadata: request.documentMetadata,
+    userId: user.userId,
+  });
 
-    await updateAndSaveWorkItem({
-      applicationContext,
-      docketEntry: updatedDocketEntryEntity,
-      user,
-    });
+  await updateAndSaveWorkItem({
+    applicationContext,
+    docketEntry: updatedDocketEntryEntity,
+    user,
+  });
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
   });
 
   const { clientConnectionId, docketEntryId } = request;
@@ -301,53 +297,55 @@ const serveDocketEntry = async ({
       );
     }
 
-    await withTransaction(async () => {
-      const updatedDocketEntry = await updateDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity: subjectCaseEntity,
-        docketNumbers: caseEntitiesToFileOn.map(e => e.docketNumber),
-        docketEntry: docketEntryEntity,
-        documentMetadata,
-        userId: user.userId,
-      });
+    const updatedDocketEntry = await updateDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity: subjectCaseEntity,
+      docketEntry: docketEntryEntity,
+      documentMetadata,
+      userId: user.userId,
+    });
 
-      for (const aCase of caseEntitiesToFileOn) {
-        await fileAndServeDocumentOnOneCase({
+    caseEntitiesToFileOn = await settlePromises(
+      caseEntitiesToFileOn.map(aCase =>
+        fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
+          subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
-        });
-      }
+        }),
+      ),
+    );
 
-      onTransactionCommit(async () => {
-        const paperServiceResult = await applicationContext
-          .getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf({
-            applicationContext,
-            caseEntities: caseEntitiesToFileOn,
-            docketEntryId: updatedDocketEntry.docketEntryId,
-          });
-
-        const paperServicePdfUrl = paperServiceResult?.pdfUrl;
-
-        await applicationContext
-          .getNotificationGateway()
-          .sendNotificationToUser({
-            applicationContext,
-            clientConnectionId,
-            message: {
-              action: 'serve_document_complete',
-              alertSuccess: { message, overwritable: false },
-              docketEntryId: docketEntryEntity.docketEntryId,
-              generateCoversheet: true,
-              pdfUrl: paperServicePdfUrl,
-            },
-            userId: user.userId,
-          });
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities: caseEntitiesToFileOn,
+        docketEntryId: updatedDocketEntry.docketEntryId,
       });
+
+    const paperServicePdfUrl = paperServiceResult?.pdfUrl;
+
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+    });
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: { message, overwritable: false },
+        pendingCoversheetDocketEntryIds: [docketEntryEntity.docketEntryId],
+        docketEntryId: docketEntryEntity.docketEntryId,
+        pdfUrl: paperServicePdfUrl,
+      },
+      userId: user.userId,
     });
 
     await updateDocketEntryPendingServiceStatus({
@@ -415,14 +413,12 @@ const updateDocketEntry = async ({
   authorizedUser,
   caseEntity,
   docketEntry,
-  docketNumbers,
   documentMetadata,
   userId,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
-  docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
@@ -458,7 +454,6 @@ const updateDocketEntry = async ({
     {
       ...docketEntry,
       ...editableFields,
-      multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
