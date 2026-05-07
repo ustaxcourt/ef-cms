@@ -5,7 +5,7 @@ import { get, post, RequestApplicationContext } from '../requests';
 type PublicDocketRecordStatusResponse =
   | { status: 'pending' }
   | { status: 'ready'; url: string }
-  | { status: 'error'; message?: string };
+  | { status: 'error'; message?: string; statusCode?: number };
 
 const POLL_INTERVAL_MS_BEFORE_ATTEMPT_10 = 1500;
 const POLL_INTERVAL_MS_FROM_ATTEMPT_10 = 5000;
@@ -74,9 +74,13 @@ export const generatePublicDocketRecordPdfInteractor = async (
     }
 
     if (result.status === 'error') {
-      throw new Error(
-        result.message ?? 'Failed to generate public docket record PDF.',
-      );
+      // Preserve status so tryCatchDecorator + ErrorFactory map 403→UnauthorizedRequestError
+      // (plain Error would be treated as no-response → UnidentifiedUserError).
+      const message =
+        result.message ?? 'Failed to generate public docket record PDF.';
+      const err = new Error(message) as Error & { statusCode?: number };
+      err.statusCode = result.statusCode ?? 500;
+      throw err;
     }
 
     const waitMs =

@@ -92,6 +92,27 @@ describe('generatePublicDocketRecordPdfInteractor', () => {
         docketNumber: '101-78',
         docketRecordTableSort: { sortField: 'date', sortOrder: 'asc' },
       }),
-    ).rejects.toThrow('No PDF today');
+    ).rejects.toMatchObject({
+      message: 'No PDF today',
+      statusCode: 500,
+    });
+  });
+
+  it('includes statusCode from polling errors (e.g. sealed case 403)', async () => {
+    mockedGet.mockResolvedValue({
+      status: 'error',
+      message: 'Unauthorized to view sealed case.',
+      statusCode: 403,
+    });
+
+    await expect(
+      generatePublicDocketRecordPdfInteractor(applicationContext, {
+        docketNumber: '101-78',
+        docketRecordTableSort: { sortField: 'date', sortOrder: 'asc' },
+      }),
+    ).rejects.toMatchObject({
+      message: 'Unauthorized to view sealed case.',
+      statusCode: 403,
+    });
   });
 });
