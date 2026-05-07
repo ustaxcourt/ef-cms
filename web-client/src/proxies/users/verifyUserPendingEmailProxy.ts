@@ -1,8 +1,12 @@
-import { put } from '../requests';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { put, RequestApplicationContext } from '../requests';
 
+/**
+ * Uses `/auth/verify-email`, which is exposed on both the private API (`app.ts`)
+ * and the public API (`app-public.ts`). `/users/verify-email` exists only on
+ * the private app, so the public site must hit this route.
+ */
 export const verifyUserPendingEmailInteractor = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: RequestApplicationContext,
   { token }: { token: string },
 ): Promise<void> => {
   return put({
@@ -10,6 +14,6 @@ export const verifyUserPendingEmailInteractor = (
     body: {
       token,
     },
-    endpoint: '/users/verify-email',
+    endpoint: '/auth/verify-email',
   });
 };
