@@ -93,7 +93,7 @@ describe('download-historical-test-file-times artifact access', () => {
               {
                 archive_download_url: 'https://example.com/found.zip',
                 expired: false,
-                name: 'historical-test-file-times-ancestor-a',
+                name: 'client.yml-historical-test-file-times-ancestor-a',
               },
             ],
           }),

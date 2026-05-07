@@ -181,14 +181,15 @@ const findTimingArtifact = ({
   artifacts,
   artifactNamePrefix,
   commitSha,
+  workflowFileName,
 }: {
   artifactNamePrefix: string;
   artifacts: WorkflowArtifact[];
   commitSha: string;
+  workflowFileName: string;
 }): WorkflowArtifact | undefined => {
   const artifactNames = [
-    `${artifactNamePrefix}-${commitSha}`,
-    artifactNamePrefix,
+    `${workflowFileName}-${artifactNamePrefix}-${commitSha}`,
   ];
 
   for (const artifactName of artifactNames) {
@@ -271,6 +272,7 @@ export const downloadHistoricalTestFileTimes = async (
         artifactNamePrefix: artifactName,
         artifacts: workflowArtifacts.artifacts,
         commitSha: closestAncestorWorkflowRun.head_sha,
+        workflowFileName,
       });
 
       if (timingArtifact) {

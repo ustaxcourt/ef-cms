@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import {
+  getTestFileTimesFilePaths,
   getCypressTestFileTimes,
   getJestTestFileTimes,
   testFileTimes,
@@ -77,6 +78,36 @@ describe('test-file-times', () => {
         './a.test.ts': 1000,
         './b.test.ts': 2000,
       });
+    });
+  });
+
+  describe('getTestFileTimesFilePaths', () => {
+    it('returns sorted json timing file paths from a directory', () => {
+      const directoryPath = path.join(tempDir, 'shards');
+
+      fs.mkdirSync(directoryPath, { recursive: true });
+      fs.writeFileSync(path.join(directoryPath, 'b.json'), '{}');
+      fs.writeFileSync(path.join(directoryPath, 'a.json'), '{}');
+      fs.writeFileSync(path.join(directoryPath, 'notes.txt'), 'ignore me');
+
+      expect(getTestFileTimesFilePaths(directoryPath)).toEqual([
+        path.join(directoryPath, 'a.json'),
+        path.join(directoryPath, 'b.json'),
+      ]);
+    });
+
+    it('throws when the directory is missing or contains no json files', () => {
+      const missingDirectoryPath = path.join(tempDir, 'missing-shards');
+      const emptyDirectoryPath = path.join(tempDir, 'empty-shards');
+
+      fs.mkdirSync(emptyDirectoryPath, { recursive: true });
+
+      expect(() => getTestFileTimesFilePaths(missingDirectoryPath)).toThrow(
+        `No timing files found in directory: ${missingDirectoryPath}`,
+      );
+      expect(() => getTestFileTimesFilePaths(emptyDirectoryPath)).toThrow(
+        `No timing files found in directory: ${emptyDirectoryPath}`,
+      );
     });
   });
 
@@ -235,6 +266,7 @@ describe('test-file-times', () => {
       const leftFilePath = path.join(tempDir, 'left.json');
       const rightFilePath = path.join(tempDir, 'right.json');
       const outputFilePath = path.join(tempDir, 'merged.json');
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
       fs.writeFileSync(leftFilePath, JSON.stringify({ './left.test.ts': 10 }));
       fs.writeFileSync(
@@ -248,11 +280,44 @@ describe('test-file-times', () => {
         './left.test.ts': 10,
         './right.test.ts': 20,
       });
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        `Merged 2 shard timing files into ${outputFilePath} (2 test files).`,
+      );
+
+      consoleLogSpy.mockRestore();
+    });
+
+    it('merges timing files from a directory', () => {
+      const directoryPath = path.join(tempDir, 'merge-directory');
+      const outputFilePath = path.join(tempDir, 'merged-from-directory.json');
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+
+      fs.mkdirSync(directoryPath, { recursive: true });
+      fs.writeFileSync(
+        path.join(directoryPath, 'second.json'),
+        JSON.stringify({ './right.test.ts': 20 }),
+      );
+      fs.writeFileSync(
+        path.join(directoryPath, 'first.json'),
+        JSON.stringify({ './left.test.ts': 10 }),
+      );
+
+      testFileTimes(['merge-directory', outputFilePath, directoryPath]);
+
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './left.test.ts': 10,
+        './right.test.ts': 20,
+      });
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        `Merged 2 shard timing files into ${outputFilePath} (2 test files).`,
+      );
+
+      consoleLogSpy.mockRestore();
     });
 
     it('throws for invalid commands', () => {
       expect(() => testFileTimes(['oops'])).toThrow(
-        'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge> ...args',
+        'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge|merge-directory> ...args',
       );
     });
 
@@ -264,6 +329,14 @@ describe('test-file-times', () => {
         testFileTimes(['merge', path.join(tempDir, 'merged.json')]),
       ).toThrow(
         'Usage: scripts/github-actions/test-file-times.ts merge <output> <input...>',
+      );
+      expect(() =>
+        testFileTimes([
+          'merge-directory',
+          path.join(tempDir, 'merged-from-directory.json'),
+        ]),
+      ).toThrow(
+        'Usage: scripts/github-actions/test-file-times.ts merge-directory <output> <directory>',
       );
     });
   });

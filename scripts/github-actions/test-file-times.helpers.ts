@@ -73,6 +73,45 @@ export const mergeTestFileTimes = (
   }, {});
 };
 
+export const getTestFileTimesFilePaths = (directoryPath: string): string[] => {
+  if (!fs.existsSync(directoryPath)) {
+    throw new Error(`No timing files found in directory: ${directoryPath}`);
+  }
+
+  const filePaths = fs
+    .readdirSync(directoryPath)
+    .filter(fileName => fileName.endsWith('.json'))
+    .sort()
+    .map(fileName => path.join(directoryPath, fileName));
+
+  if (filePaths.length === 0) {
+    throw new Error(`No timing files found in directory: ${directoryPath}`);
+  }
+
+  return filePaths;
+};
+
+const writeMergedTestFileTimes = ({
+  inputFilePaths,
+  outputFilePath,
+}: {
+  inputFilePaths: string[];
+  outputFilePath: string;
+}): void => {
+  const mergedTestFileTimes = mergeTestFileTimes(
+    inputFilePaths.map(filePath => readTestFileTimes(filePath)),
+  );
+
+  writeTestFileTimes({
+    filePath: outputFilePath,
+    testFileTimes: mergedTestFileTimes,
+  });
+
+  console.log(
+    `Merged ${inputFilePaths.length} shard timing files into ${outputFilePath} (${Object.keys(mergedTestFileTimes).length} test files).`,
+  );
+};
+
 export const getJestTestFileTimes = ({
   cwd = process.cwd(),
   results,
@@ -82,12 +121,10 @@ export const getJestTestFileTimes = ({
 }): TestFileTimes => {
   return results.testResults.reduce<TestFileTimes>(
     (accumulator, testResult) => {
-      const duration = Math.max(
+      accumulator[normalizeTestFilePath(testResult.name, cwd)] = Math.max(
         1,
         (testResult.endTime ?? 0) - (testResult.startTime ?? 0),
       );
-
-      accumulator[normalizeTestFilePath(testResult.name, cwd)] = duration;
 
       return accumulator;
     },
@@ -149,15 +186,26 @@ export const testFileTimes = (args: string[]): void => {
       );
     }
 
-    writeTestFileTimes({
-      filePath: outputFilePath,
-      testFileTimes: mergeTestFileTimes(
-        inputFilePaths.map(filePath => readTestFileTimes(filePath)),
-      ),
+    writeMergedTestFileTimes({
+      inputFilePaths,
+      outputFilePath,
+    });
+  } else if (command === 'merge-directory') {
+    const [outputFilePath, directoryPath] = remainingArgs;
+
+    if (!outputFilePath || !directoryPath) {
+      throw new Error(
+        'Usage: scripts/github-actions/test-file-times.ts merge-directory <output> <directory>',
+      );
+    }
+
+    writeMergedTestFileTimes({
+      inputFilePaths: getTestFileTimesFilePaths(directoryPath),
+      outputFilePath,
     });
   } else {
     throw new Error(
-      'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge> ...args',
+      'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge|merge-directory> ...args',
     );
   }
 };

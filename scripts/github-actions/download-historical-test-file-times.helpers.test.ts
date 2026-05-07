@@ -206,7 +206,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times-ancestor',
+                  name: 'client.yml-historical-test-file-times-ancestor',
                 },
               ],
             }),
@@ -225,77 +225,6 @@ describe('download-historical-test-file-times', () => {
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './example.test.ts': 1000,
-      });
-    });
-
-    it('falls back to the legacy generic artifact name for compatibility', async () => {
-      const outputFilePath = path.join(tempDir, 'legacy-downloaded.json');
-
-      mockedExecFileSync.mockImplementation(
-        (command: string, args: readonly string[] = []) => {
-          if (command === 'git') {
-            return 'current\nancestor\n';
-          }
-
-          if (command === 'unzip') {
-            const outputDirectory = args[3];
-
-            fs.writeFileSync(
-              path.join(outputDirectory, 'historical-test-file-times.json'),
-              JSON.stringify({
-                './legacy.test.ts': 1500,
-              }),
-            );
-
-            return Buffer.from('');
-          }
-
-          throw new Error(`Unexpected command: ${command}`);
-        },
-      );
-
-      jest
-        .mocked(global.fetch)
-        .mockResolvedValueOnce({
-          json: () =>
-            Promise.resolve({
-              workflow_runs: [
-                {
-                  conclusion: 'success',
-                  head_sha: 'ancestor',
-                  id: 123,
-                },
-              ],
-            }),
-          ok: true,
-        } as Response)
-        .mockResolvedValueOnce({
-          json: () =>
-            Promise.resolve({
-              artifacts: [
-                {
-                  archive_download_url:
-                    'https://example.com/legacy-artifact.zip',
-                  expired: false,
-                  name: 'historical-test-file-times',
-                },
-              ],
-            }),
-          ok: true,
-        } as Response)
-        .mockResolvedValueOnce({
-          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
-          ok: true,
-        } as Response);
-
-      await downloadHistoricalTestFileTimes([
-        'client.yml',
-        'historical-test-file-times',
-        outputFilePath,
-      ]);
-
-      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
-        './legacy.test.ts': 1500,
       });
     });
 
@@ -409,7 +338,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/found.zip',
                   expired: false,
-                  name: 'historical-test-file-times-ancestor-a',
+                  name: 'client.yml-historical-test-file-times-ancestor-a',
                 },
               ],
             }),
@@ -503,7 +432,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times-ancestor',
+                  name: 'client.yml-historical-test-file-times-ancestor',
                 },
               ],
             }),
@@ -558,7 +487,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times-ancestor',
+                  name: 'client.yml-historical-test-file-times-ancestor',
                 },
               ],
             }),
@@ -628,7 +557,7 @@ describe('download-historical-test-file-times', () => {
                 {
                   archive_download_url: 'https://example.com/artifact.zip',
                   expired: false,
-                  name: 'historical-test-file-times-ancestor',
+                  name: 'client.yml-historical-test-file-times-ancestor',
                 },
               ],
             }),
