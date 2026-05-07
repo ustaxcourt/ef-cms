@@ -24,8 +24,10 @@ jobs:
   check-coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/download-artifact@v7
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+      - name: Download Coverage Artifacts
+        uses: actions/download-artifact@v7
         with:
           pattern: coverage-artifacts-*
           merge-multiple: true
@@ -42,7 +44,8 @@ jobs:
             --reporter text \
             --reporter clover \
             -t coverage
-      - uses: geekyeggo/delete-artifact@v5
+      - name: Delete Coverage Artifacts
+        uses: geekyeggo/delete-artifact@v5
         with:
           name: coverage-artifacts
           failOnError: false

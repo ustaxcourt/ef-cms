@@ -15,19 +15,23 @@ jobs:
   persist-test-file-times:
     runs-on: ubuntu-latest
     env:
-      MERGED_TEST_FILE_TIMINGS_PATH: ${{ runner.temp }}/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times.json
-      SHARD_TEST_FILE_TIMINGS_DIR: ${{ runner.temp }}/test-file-times/shards
+      MERGED_TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times.json
+      SHARD_TEST_FILE_TIMINGS_DIR: /tmp/test-file-times/shards
     steps:
-      - uses: actions/checkout@v6
-      - uses: ./.github/actions/dawson-node-bootstrap
-      - uses: actions/download-artifact@v7
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Download historical test file times
+        uses: actions/download-artifact@v7
         with:
           pattern: ${{ inputs.workflow_filename }}-historical-test-file-times-shard-*
           merge-multiple: true
           path: ${{ env.SHARD_TEST_FILE_TIMINGS_DIR }}
       - name: Merge test file timings
         run: scripts/github-actions/test-file-times.ts merge-directory "$MERGED_TEST_FILE_TIMINGS_PATH" "$SHARD_TEST_FILE_TIMINGS_DIR"
-      - uses: actions/upload-artifact@v7
+      - name: Upload new historical test file times
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.workflow_filename }}-historical-test-file-times-${{ github.sha }}
           path: ${{ env.MERGED_TEST_FILE_TIMINGS_PATH }}
