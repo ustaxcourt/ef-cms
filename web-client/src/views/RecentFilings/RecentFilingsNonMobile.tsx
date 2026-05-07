@@ -102,8 +102,8 @@ export const RecentFilingsNonMobile = ({
           </div>
           <div id="recent-filings-description" className="sr-only">
             Table showing recent filings with columns for Docket Number, Filed
-            Date, Document, and Case Title. All columns are sortable. Use the
-            column headers to sort the data.
+            Date, Document, Case Title, and Case Status. All columns are
+            sortable. Use the column headers to sort the data.
           </div>
 
           <div className="margin-top-4">
