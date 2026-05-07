@@ -8,7 +8,7 @@ export const updateDocketEntryProcessingStatus = async ({
   docketEntryId: string;
   docketNumber: string;
   processingStatus: string;
-}) => {
+}): Promise<void> => {
   await pgUpdateTable({
     table: 'dwDocketEntry',
     values: { processingStatus },

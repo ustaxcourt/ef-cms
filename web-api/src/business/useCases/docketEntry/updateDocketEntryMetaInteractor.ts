@@ -29,7 +29,7 @@ export const updateDocketEntryMeta = async (
     docketNumber,
   }: { docketEntryMeta: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }

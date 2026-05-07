@@ -56,8 +56,8 @@ describe('awaitCoversheetCompleteAction', () => {
 
     // The frontend must not be the one triggering coversheet generation —
     // the backend interactor enqueues the worker job before responding.
-    const { addCoversheetInteractor } =
-      applicationContext.getUseCases() as any;
+    const addCoversheetInteractor = applicationContext.getUseCases()
+      .addCoversheetInteractor as jest.Mock;
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
   });
 });

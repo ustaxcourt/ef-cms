@@ -116,15 +116,15 @@ export const addCoversheetInteractor = async (
 
   const updatedDocketEntries = casesToUpdate
     .map(caseRecord => {
-      const consolidatedCaseEntity =
-        caseRecord.docketNumber === docketNumber
+      const consolidatedCaseEntity: Case =
+        caseRecord.docketNumber === docketNumber && caseEntity
           ? caseEntity
           : new Case(caseRecord, {
               authorizedUser,
             });
 
       const consolidatedCaseDocketEntry =
-        consolidatedCaseEntity!.getDocketEntryById({
+        consolidatedCaseEntity.getDocketEntryById({
           docketEntryId,
         });
 
