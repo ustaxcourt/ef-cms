@@ -24,6 +24,9 @@ type WorkflowRunsResponse = {
 };
 
 const MAX_WORKFLOW_RUN_PAGES = 50;
+const WORKFLOW_RUNS_PER_PAGE = 100;
+const MAX_ANCESTOR_COMMITS_TO_SCAN =
+  MAX_WORKFLOW_RUN_PAGES * WORKFLOW_RUNS_PER_PAGE + 1;
 
 export const getAncestorCommitShas = ({
   currentSha,
@@ -32,9 +35,15 @@ export const getAncestorCommitShas = ({
   currentSha: string;
   gitCommandRunner?: typeof execFileSync;
 }): string[] => {
-  const gitOutput = gitCommandRunner('git', ['rev-list', 'HEAD'], {
-    encoding: 'utf8',
-  });
+  // Keep the local git search horizon aligned with the paginated GitHub workflow
+  // search so we do not read more commit SHAs than the API lookup can ever use.
+  const gitOutput = gitCommandRunner(
+    'git',
+    ['rev-list', `--max-count=${MAX_ANCESTOR_COMMITS_TO_SCAN}`, 'HEAD'],
+    {
+      encoding: 'utf8',
+    },
+  );
 
   return gitOutput
     .split('\n')

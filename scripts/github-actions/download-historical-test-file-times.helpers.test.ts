@@ -68,6 +68,13 @@ describe('download-historical-test-file-times', () => {
           currentSha: 'current',
         }),
       ).toEqual(['ancestor-b', 'ancestor-a']);
+      expect(mockedExecFileSync).toHaveBeenCalledWith(
+        'git',
+        ['rev-list', '--max-count=5001', 'HEAD'],
+        {
+          encoding: 'utf8',
+        },
+      );
     });
   });
 
