@@ -41,7 +41,7 @@ const defaultDependencies: RunCypressTestsWithTimingDependencies = {
   writeTestFileTimes,
 };
 
-export const main = async (
+export const runCypressTestsWithTiming = async (
   args: string[] = process.argv.slice(2),
   dependencies: RunCypressTestsWithTimingDependencies = defaultDependencies,
 ): Promise<void> => {

@@ -1,5 +1,6 @@
-import { main } from './test-file-times.helpers';
+import { testFileTimes } from './test-file-times.helpers';
 
 if (require.main === module) {
-  main();
+  const args = process.argv.slice(2);
+  testFileTimes(args);
 }

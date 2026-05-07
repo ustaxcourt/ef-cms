@@ -122,7 +122,7 @@ const readJsonFile = <T>(filePath: string): T => {
   return JSON.parse(fs.readFileSync(filePath, 'utf8')) as T;
 };
 
-export const main = (args: string[] = process.argv.slice(2)): void => {
+export const testFileTimes = (args: string[]): void => {
   const [command, ...remainingArgs] = args;
 
   if (command === 'from-jest') {

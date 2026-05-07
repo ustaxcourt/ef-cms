@@ -181,7 +181,7 @@ const findTimingArtifact = ({
   return undefined;
 };
 
-export const main = async (
+export const downloadHistoricalTestFileTimes = async (
   args: string[] = process.argv.slice(2),
 ): Promise<void> => {
   const [workflowFileName, artifactName, outputFilePath] = args;

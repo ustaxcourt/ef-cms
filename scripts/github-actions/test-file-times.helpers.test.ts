@@ -4,7 +4,7 @@ import path from 'path';
 import {
   getCypressTestFileTimes,
   getJestTestFileTimes,
-  main,
+  testFileTimes,
   mergeTestFileTimes,
   normalizeTestFilePath,
   readTestFileTimes,
@@ -224,7 +224,7 @@ describe('test-file-times', () => {
         }),
       );
 
-      main(['from-jest', inputFilePath, outputFilePath]);
+      testFileTimes(['from-jest', inputFilePath, outputFilePath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './scripts/example.test.ts': 15,
@@ -242,7 +242,7 @@ describe('test-file-times', () => {
         JSON.stringify({ './right.test.ts': 20 }),
       );
 
-      main(['merge', outputFilePath, leftFilePath, rightFilePath]);
+      testFileTimes(['merge', outputFilePath, leftFilePath, rightFilePath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './left.test.ts': 10,
@@ -251,16 +251,18 @@ describe('test-file-times', () => {
     });
 
     it('throws for invalid commands', () => {
-      expect(() => main(['oops'])).toThrow(
+      expect(() => testFileTimes(['oops'])).toThrow(
         'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge> ...args',
       );
     });
 
     it('throws when required arguments are missing', () => {
-      expect(() => main(['from-jest'])).toThrow(
+      expect(() => testFileTimes(['from-jest'])).toThrow(
         'Usage: scripts/github-actions/test-file-times.ts from-jest <input> <output>',
       );
-      expect(() => main(['merge', path.join(tempDir, 'merged.json')])).toThrow(
+      expect(() =>
+        testFileTimes(['merge', path.join(tempDir, 'merged.json')]),
+      ).toThrow(
         'Usage: scripts/github-actions/test-file-times.ts merge <output> <input...>',
       );
     });

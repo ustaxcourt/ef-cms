@@ -2,7 +2,7 @@ jest.mock('cypress', () => ({
   run: jest.fn(),
 }));
 
-import { main } from './run-cypress-tests-with-timing.helpers';
+import { runCypressTestsWithTiming } from './run-cypress-tests-with-timing.helpers';
 
 describe('run-cypress-tests-with-timing', () => {
   const createDependencies = () => {
@@ -20,7 +20,7 @@ describe('run-cypress-tests-with-timing', () => {
   it('throws a usage error when required arguments are missing', async () => {
     const dependencies = createDependencies();
 
-    await expect(main([], dependencies)).rejects.toThrow(
+    await expect(runCypressTestsWithTiming([], dependencies)).rejects.toThrow(
       'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
     );
 
@@ -36,7 +36,9 @@ describe('run-cypress-tests-with-timing', () => {
     try {
       process.argv = ['node', 'run-cypress-tests-with-timing.ts'];
 
-      await expect(main(undefined, dependencies)).rejects.toThrow(
+      await expect(
+        runCypressTestsWithTiming(undefined, dependencies),
+      ).rejects.toThrow(
         'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
       );
     } finally {
@@ -47,7 +49,7 @@ describe('run-cypress-tests-with-timing', () => {
   });
 
   it('throws a usage error when called with the default dependencies parameter', async () => {
-    await expect(main([], undefined)).rejects.toThrow(
+    await expect(runCypressTestsWithTiming([], undefined)).rejects.toThrow(
       'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
     );
   });
@@ -74,7 +76,7 @@ describe('run-cypress-tests-with-timing', () => {
     dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
     dependencies.getCypressTestFileTimes.mockReturnValue(testFileTimes);
 
-    await main(
+    await runCypressTestsWithTiming(
       [
         'cypress.config.ts',
         'cypress/local-only/tests/example.cy.ts',
@@ -114,7 +116,7 @@ describe('run-cypress-tests-with-timing', () => {
     dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
     dependencies.getCypressTestFileTimes.mockReturnValue({});
 
-    await main(
+    await runCypressTestsWithTiming(
       [
         'cypress-public.config.ts',
         'spec-a.cy.ts,spec-b.cy.ts',
@@ -148,7 +150,7 @@ describe('run-cypress-tests-with-timing', () => {
     });
 
     await expect(
-      main(
+      runCypressTestsWithTiming(
         ['cypress.config.ts', 'example.cy.ts', 'timings.json'],
         dependencies,
       ),

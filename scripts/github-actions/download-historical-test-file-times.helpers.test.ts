@@ -9,7 +9,7 @@ import { execFileSync } from 'child_process';
 import {
   findClosestAncestorWorkflowRun,
   getAncestorCommitShas,
-  main,
+  downloadHistoricalTestFileTimes,
 } from './download-historical-test-file-times.helpers';
 
 describe('download-historical-test-file-times', () => {
@@ -114,7 +114,7 @@ describe('download-historical-test-file-times', () => {
 
   describe('main', () => {
     it('throws when required arguments are missing', async () => {
-      await expect(main([])).rejects.toThrow(
+      await expect(downloadHistoricalTestFileTimes([])).rejects.toThrow(
         'Usage: scripts/github-actions/download-historical-test-file-times.helpers.ts <workflow-file-name> <artifact-name> <output-path>',
       );
     });
@@ -123,7 +123,7 @@ describe('download-historical-test-file-times', () => {
       delete process.env.GITHUB_TOKEN;
 
       await expect(
-        main([
+        downloadHistoricalTestFileTimes([
           'client.yml',
           'historical-test-file-times',
           path.join(tempDir, 'missing-env.json'),
@@ -191,7 +191,11 @@ describe('download-historical-test-file-times', () => {
           ok: true,
         } as Response);
 
-      await main(['client.yml', 'historical-test-file-times', outputFilePath]);
+      await downloadHistoricalTestFileTimes([
+        'client.yml',
+        'historical-test-file-times',
+        outputFilePath,
+      ]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './example.test.ts': 1000,
@@ -258,7 +262,11 @@ describe('download-historical-test-file-times', () => {
           ok: true,
         } as Response);
 
-      await main(['client.yml', 'historical-test-file-times', outputFilePath]);
+      await downloadHistoricalTestFileTimes([
+        'client.yml',
+        'historical-test-file-times',
+        outputFilePath,
+      ]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './legacy.test.ts': 1500,
@@ -272,7 +280,7 @@ describe('download-historical-test-file-times', () => {
       } as Response);
 
       await expect(
-        main([
+        downloadHistoricalTestFileTimes([
           'client.yml',
           'historical-test-file-times',
           path.join(tempDir, 'workflow-error.json'),
@@ -295,7 +303,7 @@ describe('download-historical-test-file-times', () => {
         ok: true,
       } as Response);
 
-      await main([
+      await downloadHistoricalTestFileTimes([
         'client.yml',
         'historical-test-file-times',
         path.join(tempDir, 'missing.json'),
@@ -386,7 +394,7 @@ describe('download-historical-test-file-times', () => {
           ok: true,
         } as Response);
 
-      await main([
+      await downloadHistoricalTestFileTimes([
         'client.yml',
         'historical-test-file-times',
         path.join(tempDir, 'fallback-artifact.json'),
@@ -432,7 +440,7 @@ describe('download-historical-test-file-times', () => {
           ok: true,
         } as Response);
 
-      await main([
+      await downloadHistoricalTestFileTimes([
         'client.yml',
         'historical-test-file-times',
         path.join(tempDir, 'missing-artifact.json'),
@@ -481,7 +489,7 @@ describe('download-historical-test-file-times', () => {
         } as Response);
 
       await expect(
-        main([
+        downloadHistoricalTestFileTimes([
           'client.yml',
           'historical-test-file-times',
           path.join(tempDir, 'artifact-download-error.json'),
@@ -536,7 +544,11 @@ describe('download-historical-test-file-times', () => {
         } as Response);
 
       await expect(
-        main(['client.yml', 'historical-test-file-times', outputFilePath]),
+        downloadHistoricalTestFileTimes([
+          'client.yml',
+          'historical-test-file-times',
+          outputFilePath,
+        ]),
       ).rejects.toThrow(
         'Downloaded artifact must contain exactly one json timing file, found 0',
       );
@@ -602,7 +614,11 @@ describe('download-historical-test-file-times', () => {
         } as Response);
 
       await expect(
-        main(['client.yml', 'historical-test-file-times', outputFilePath]),
+        downloadHistoricalTestFileTimes([
+          'client.yml',
+          'historical-test-file-times',
+          outputFilePath,
+        ]),
       ).rejects.toThrow(
         'Downloaded artifact must contain exactly one json timing file, found 2',
       );
@@ -628,7 +644,7 @@ describe('download-historical-test-file-times', () => {
       }
 
       await expect(
-        main([
+        downloadHistoricalTestFileTimes([
           'client.yml',
           'historical-test-file-times',
           path.join(tempDir, 'page-limit.json'),

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import glob from 'glob';
 import {
   readTestFileTimes,
   type TestFileTimes,
@@ -131,4 +132,75 @@ export const getOutputsForCurrentCiNode = ({
     historicalTestFileTimes: getHistoricalTestFileTimes(env),
     total,
   })[index].map((file: SplittableFile): string => file.output);
+};
+
+export const splitTests = (testType: string): string => {
+  const specDir: string = `./web-client/integration-tests${testType}`;
+  const files: SplittableFile[] = fs
+    .readdirSync(specDir, 'utf8')
+    .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
+    .map(
+      (fileName: string): SplittableFile => ({
+        output: fileName,
+        path: `${specDir}/${fileName}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
+    files,
+  }).join(' ');
+
+  console.log(output);
+
+  return output;
+};
+
+export const splitTestsCypress = (testDir: string): string => {
+  const shouldExcludePublicTests: boolean = !testDir.includes('public');
+  const specDir: string = './cypress/local-only/tests';
+  const directoryEntries: string[] = fs.readdirSync(specDir, {
+    encoding: 'utf8',
+    recursive: true,
+  });
+  const files: SplittableFile[] = directoryEntries
+    .filter(
+      (file: string): boolean =>
+        file.endsWith('cy.ts') &&
+        (!shouldExcludePublicTests || !file.includes('public/')) &&
+        file.includes(`${testDir}/`),
+    )
+    .map(
+      (file: string): SplittableFile => ({
+        output: `./cypress/local-only/tests/${file}`,
+        path: `./cypress/local-only/tests/${file}`,
+      }),
+    );
+  const output: string = getOutputsForCurrentCiNode({
+    files,
+  }).join(',');
+
+  console.log(output);
+
+  return output;
+};
+
+export const splitTestsGlob = (testType: string): string => {
+  let testFiles: string[] = [];
+  if (testType.includes('unit')) {
+    testFiles = glob.sync('./web-client/src/**/?(*.)+(spec|test).[jt]s?(x)');
+  } else if (testType.includes('shared')) {
+    testFiles = glob.sync('./shared/src/**/?(*.)+(spec|test).[jt]s');
+  }
+
+  const output: string = getOutputsForCurrentCiNode({
+    files: testFiles.map(
+      (filePath: string): SplittableFile => ({
+        output: filePath,
+        path: filePath,
+      }),
+    ),
+  }).join('|');
+
+  console.log(output);
+
+  return output;
 };
