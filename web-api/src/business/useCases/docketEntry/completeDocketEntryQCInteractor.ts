@@ -212,8 +212,12 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
+  let noticeUpdatedDocketEntry: DocketEntry;
+  let serveDocumentAndGetPaperServicePdfCall:
+    | (() => Promise<{ pdfUrl: string } | undefined>)
+    | undefined;
+  let paperServicePdfUrl: string | undefined = undefined;
+  let paperServiceDocumentTitle: string | undefined = undefined;
   let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
 
@@ -383,7 +387,7 @@ const completeDocketEntryQC = async (
         docketChangeInfo,
       });
 
-      const noticeUpdatedDocketEntry = new DocketEntry(
+      noticeUpdatedDocketEntry = new DocketEntry(
         {
           ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
           docketEntryId: noticeDocumentStorageId,
@@ -461,7 +465,9 @@ const completeDocketEntryQC = async (
   }
 
   if (caseSpecificNotices.length > 0) {
-    const paperServiceResult = await applicationContext
+    // storing this to run in transaction
+    serveDocumentAndGetPaperServicePdfCall = async () => {
+      return applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -469,15 +475,19 @@ const completeDocketEntryQC = async (
         docketEntryId: caseSpecificNotices[0].docketEntryId,
         caseSpecificDocketEntries: caseSpecificNotices,
       });
-
-    if (paperServiceParties.length > 0) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
-    }
+    };
   }
 
   await withTransaction(async () => {
     await settlePromises(updatePersistenceFns.map(fn => fn()));
+
+    if (serveDocumentAndGetPaperServicePdfCall) {
+      const paperServiceResult = await serveDocumentAndGetPaperServicePdfCall();
+      if (paperServiceParties.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
+      }
+    }
   });
 
   if (isNewCoverSheetNeeded) {

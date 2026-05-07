@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CASE_STATUS_TYPES,

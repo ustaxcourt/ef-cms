@@ -179,16 +179,16 @@ export const fileCourtIssuedDocketEntry = async (
         return settlePromises(saveItems);
       }),
     );
-  });
 
-  if (documentMeta.affectedDocketEntries) {
-    await addAssociatedDocketEntries(
-      casesToUpdate,
-      documentMeta,
-      subjectDocketEntry,
-      false,
-    );
-  }
+    if (documentMeta.affectedDocketEntries) {
+      await addAssociatedDocketEntries(
+        casesToUpdate,
+        documentMeta,
+        subjectDocketEntry,
+        false,
+      );
+    }
+  });
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
