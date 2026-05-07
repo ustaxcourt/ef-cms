@@ -23,6 +23,18 @@ type WorkflowRunsResponse = {
   workflow_runs: WorkflowRun[];
 };
 
+class GitHubApiRequestError extends Error {
+  readonly status: number;
+  readonly url: string;
+
+  constructor({ status, url }: { status: number; url: string }) {
+    super(`GitHub API request failed (${status}): ${url}`);
+    this.name = 'GitHubApiRequestError';
+    this.status = status;
+    this.url = url;
+  }
+}
+
 const MAX_WORKFLOW_RUN_PAGES = 50;
 const WORKFLOW_RUNS_PER_PAGE = 100;
 const MAX_ANCESTOR_COMMITS_TO_SCAN =
@@ -102,7 +114,10 @@ const githubGet = async <T>(url: string): Promise<T> => {
   });
 
   if (!response.ok) {
-    throw new Error(`GitHub API request failed (${response.status}): ${url}`);
+    throw new GitHubApiRequestError({
+      status: response.status,
+      url,
+    });
   }
 
   return (await response.json()) as T;
@@ -229,9 +244,28 @@ export const downloadHistoricalTestFileTimes = async (
         break;
       }
 
-      const workflowArtifacts = await githubGet<WorkflowArtifactsResponse>(
-        `https://api.github.com/repos/${repository}/actions/runs/${closestAncestorWorkflowRun.id}/artifacts`,
-      );
+      let workflowArtifacts: WorkflowArtifactsResponse;
+
+      try {
+        workflowArtifacts = await githubGet<WorkflowArtifactsResponse>(
+          `https://api.github.com/repos/${repository}/actions/runs/${closestAncestorWorkflowRun.id}/artifacts`,
+        );
+      } catch (error: unknown) {
+        if (
+          error instanceof GitHubApiRequestError &&
+          (error.status === 403 || error.status === 404)
+        ) {
+          console.warn(
+            `Skipping historical timing artifact lookup for workflow run ${closestAncestorWorkflowRun.id} (${closestAncestorWorkflowRun.head_sha}) because GitHub returned ${error.status}; continuing to older ancestor runs.`,
+          );
+          candidateWorkflowRuns = candidateWorkflowRuns.filter(
+            workflowRun => workflowRun.id !== closestAncestorWorkflowRun.id,
+          );
+          continue;
+        }
+
+        throw error;
+      }
 
       const timingArtifact = findTimingArtifact({
         artifactNamePrefix: artifactName,

@@ -74,6 +74,7 @@ jobs:
         id: npm-clean-install
         run: npm ci
       - name: Restore historical test file timings
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
