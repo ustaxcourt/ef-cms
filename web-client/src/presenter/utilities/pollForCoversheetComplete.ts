@@ -50,20 +50,27 @@ export const pollForCoversheetComplete = async ({
 
   let attempt = 0;
   while (pending.size > 0) {
-    if (getCurrentDateTimeInMillis() > deadline) {
-      throw new CoversheetPollTimeoutError([...pending]);
-    }
-
     // First iteration fires immediately so a worker that finished before
     // the page got here doesn't cost the user the full FAST_INTERVAL_MS
     // of dead time. Subsequent iterations back off normally.
     if (attempt > 0) {
       const baseWaitMs =
         attempt < FAST_ATTEMPT_LIMIT ? FAST_INTERVAL_MS : SLOW_INTERVAL_MS;
-      const waitMs = baseWaitMs + Math.floor(Math.random() * JITTER_MS);
+      const remainingMs = deadline - getCurrentDateTimeInMillis();
+      if (remainingMs <= 0) {
+        throw new CoversheetPollTimeoutError([...pending]);
+      }
+      const waitMs = Math.min(
+        baseWaitMs + Math.floor(Math.random() * JITTER_MS),
+        remainingMs,
+      );
       await sleep(waitMs);
     }
     attempt += 1;
+
+    if (getCurrentDateTimeInMillis() > deadline) {
+      throw new CoversheetPollTimeoutError([...pending]);
+    }
 
     // Promise.allSettled (vs Promise.all) so a transient error on one
     // entry's status check (e.g. a 5xx during a fast-phase poll) does not
