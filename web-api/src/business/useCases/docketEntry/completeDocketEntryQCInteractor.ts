@@ -48,8 +48,8 @@ const completeDocketEntryQC = async (
 ): Promise<{
   caseDetail: CaseDTO;
   paperServiceParties: any[];
-  paperServicePdfUrl: string;
-  paperServiceDocumentTitle: string;
+  paperServicePdfUrl: string | undefined;
+  paperServiceDocumentTitle: string | undefined;
 }> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -231,8 +231,12 @@ const completeDocketEntryQC = async (
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
+  let noticeUpdatedDocketEntry: DocketEntry;
+  let serveDocumentAndGetPaperServicePdfCall:
+    | (() => Promise<{ pdfUrl: string } | undefined>)
+    | undefined;
+  let paperServicePdfUrl: string | undefined = undefined;
+  let paperServiceDocumentTitle: string | undefined = undefined;
 
   if (
     overridePaperServiceAddress ||
@@ -289,7 +293,7 @@ const completeDocketEntryQC = async (
       docketChangeInfo,
     });
 
-    const noticeUpdatedDocketEntry = new DocketEntry(
+    noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocumentStorageId,
@@ -340,18 +344,16 @@ const completeDocketEntryQC = async (
       key: noticeUpdatedDocketEntry.documentStorageId,
     });
 
-    const paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-      });
-
-    if (servedParties.paper.length > 0) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
-    }
+    // storing this to run in transaction
+    serveDocumentAndGetPaperServicePdfCall = async () => {
+      return applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities: [caseEntity],
+          docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+        });
+    };
   }
 
   await withTransaction(async () => {
@@ -363,6 +365,14 @@ const completeDocketEntryQC = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
+
+    if (serveDocumentAndGetPaperServicePdfCall) {
+      const paperServiceResult = await serveDocumentAndGetPaperServicePdfCall();
+      if (servedParties.paper.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+      }
+    }
   });
 
   if (isNewCoverSheetNeeded) {

@@ -30,7 +30,7 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -81,6 +81,17 @@ export const addPaperFiling = async (
 
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
+
+  let numberOfPages: number;
+  if (isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId,
+        documentBytes: undefined,
+      });
+  }
 
   if (isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
@@ -174,13 +185,7 @@ export const addPaperFiling = async (
       });
 
       if (isFileAttached) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            documentStorageId,
-            documentBytes: undefined,
-          });
+        docketEntryEntity.numberOfPages = numberOfPages;
       }
 
       caseEntity.addDocketEntry(docketEntryEntity);
@@ -198,52 +203,56 @@ export const addPaperFiling = async (
         caseToUpdate: caseEntity.validate().toRawObject(),
       });
     }
-  });
 
-  let paperServicePdfUrl;
+    let paperServicePdfUrl;
 
-  if (isReadyForService) {
-    const currentDocketEntry = caseEntities[0].getDocketEntryById({
-      docketEntryId,
-    });
-    const electronicParties =
-      currentDocketEntry?.eventCode ===
-      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
-        ? []
-        : undefined;
-
-    const paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities,
+    if (isReadyForService) {
+      const currentDocketEntry = caseEntities[0].getDocketEntryById({
         docketEntryId,
-        electronicParties,
-        stampedPdf: undefined,
       });
+      const electronicParties =
+        currentDocketEntry?.eventCode ===
+          INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+          ? []
+          : undefined;
 
-    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-  }
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities,
+          docketEntryId,
+          electronicParties,
+          stampedPdf: undefined,
+        });
 
-  const successMessage =
-    consolidatedGroupDocketNumbers.length > 1
-      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_document_complete',
-      alertSuccess: {
-        message: successMessage,
-        overwritable: false,
-      },
-      docketEntryId,
-      generateCoversheet: isReadyForService,
-      pdfUrl: paperServicePdfUrl,
-    },
-    userId: user.userId,
+    const successMessage =
+      consolidatedGroupDocketNumbers.length > 1
+        ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+        : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+
+    onTransactionCommit(async () => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_document_complete',
+          alertSuccess: {
+            message: successMessage,
+            overwritable: false,
+          },
+          docketEntryId,
+          generateCoversheet: isReadyForService,
+          pdfUrl: paperServicePdfUrl,
+        },
+        userId: user.userId,
+      });
+    });
+
+
   });
 };
 

@@ -127,7 +127,9 @@ async function deleteCognitoUser({
         Username: email.toLowerCase(),
       });
     } catch (err: unknown) {
-      const name = (err as { name?: string; __type?: string })?.name || (err as { name?: string; __type?: string })?.__type;
+      const name =
+        (err as { name?: string; __type?: string })?.name ||
+        (err as { name?: string; __type?: string })?.__type;
       // Swallow user not existing
       if (name === 'UserNotFoundException') {
         return;
@@ -152,7 +154,9 @@ async function deleteCognitoUser({
             });
             return;
           } catch (e2: unknown) {
-            const n2 = (e2 as { name?: string; __type?: string })?.name || (e2 as { name?: string; __type?: string })?.__type;
+            const n2 =
+              (e2 as { name?: string; __type?: string })?.name ||
+              (e2 as { name?: string; __type?: string })?.__type;
             if (n2 === 'UserNotFoundException') return;
             if (
               !(
