@@ -149,13 +149,23 @@ const saveForLaterStrategy = async ({
     );
   }
 
-  const updatedDocketEntryEntity = await updateDocketEntry({
-    applicationContext,
+  let numberOfPages: number | undefined;
+  if (request.documentMetadata.isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId: docketEntryEntity.documentStorageId,
+      });
+  }
+
+  const updatedDocketEntryEntity = updateDocketEntry({
     authorizedUser,
     caseEntity,
     docketEntry: docketEntryEntity,
     documentMetadata: request.documentMetadata,
     userId: user.userId,
+    numberOfPages,
   });
 
   await updateAndSaveWorkItem({
@@ -168,7 +178,6 @@ const saveForLaterStrategy = async ({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
   const { clientConnectionId, docketEntryId } = request;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -297,14 +306,24 @@ const serveDocketEntry = async ({
       );
     }
 
-    const updatedDocketEntry = await updateDocketEntry({
-      applicationContext,
+    let numberOfPages: number | undefined;
+    if (documentMetadata.isFileAttached) {
+      numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryEntity.documentStorageId,
+        });
+    }
+
+    const updatedDocketEntry = updateDocketEntry({
       authorizedUser,
       caseEntity: subjectCaseEntity,
-      docketEntry: docketEntryEntity,
       docketNumbers: caseEntitiesToFileOn.map(c => c.docketNumber),
+      docketEntry: docketEntryEntity,
       documentMetadata,
       userId: user.userId,
+      numberOfPages,
     });
 
     caseEntitiesToFileOn = await settlePromises(
@@ -408,23 +427,23 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const updateDocketEntry = async ({
-  applicationContext,
+const updateDocketEntry = ({
   authorizedUser,
   caseEntity,
   docketEntry,
   docketNumbers,
   documentMetadata,
   userId,
+  numberOfPages,
 }: {
-  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
   docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
-}): Promise<DocketEntry> => {
+  numberOfPages?: number;
+}): DocketEntry => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -458,21 +477,13 @@ const updateDocketEntry = async ({
       ...editableFields,
       multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
+      numberOfPages,
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   );
-
-  if (editableFields.isFileAttached) {
-    updatedDocketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentStorageId: docketEntry.documentStorageId,
-      });
-  }
 
   caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 

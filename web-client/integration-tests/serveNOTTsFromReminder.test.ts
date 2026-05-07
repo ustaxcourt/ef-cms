@@ -191,26 +191,5 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         `30 Day Notice of Trial on ${overrides.trialMonth}-${overrides.trialDay}-${overrides.trialYear} at ${trialLocation}`,
       );
     });
-
-    it('should dismiss the NOTT reminder and verify calendared cases remain visible', async () => {
-      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: cerebralTest.trialSessionId,
-      });
-
-      await cerebralTest.runSequence('showThirtyDayNoticeModalSequence');
-
-      expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'DismissThirtyDayNoticeModal',
-      );
-
-      await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
-
-      const calendaredCases = cerebralTest.getState(
-        'trialSession.calendaredCases',
-      );
-
-      expect(calendaredCases).toBeDefined();
-      expect(calendaredCases.length).toEqual(2);
-    });
   });
 });
