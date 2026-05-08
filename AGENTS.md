@@ -52,6 +52,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - Entities: PascalCase classes extending `JoiValidationEntity` (see [`JoiValidationEntity.ts`](shared/src/business/entities/JoiValidationEntity.ts)); validation constants in `EntityValidationConstants.ts` / [`JoiValidationConstants.ts`](shared/src/business/entities/JoiValidationConstants.ts).
   - Lambda handlers: `*Lambda.ts` under [`web-api/src/lambdas/`](web-api/src/lambdas/), wrapped with `genericHandler` for auth/error/CORS.
 - Two separate React apps share entities/use-cases: do not put browser-only code in `shared/`. Public-facing additions go to `appPublic.tsx` / `applicationContextPublic.ts` and the `public-api/` lambdas.
+- Business logic in React: non-rendering logic should be contained in Cerebral Action and Sequence files rather than embedded in React
 - Three `applicationContext` implementations exist (web-api, web-client private, web-client public).
 - Interactor ordering: validate the entity (Joi via `JoiValidationEntity`) **before** invoking persistence — never persist first and validate after, and never reach a persistence gateway from an unvalidated entity.
 - Query generation: DAWSON uses Kysely for query generation.
