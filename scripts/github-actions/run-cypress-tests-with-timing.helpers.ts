@@ -45,7 +45,7 @@ export const runCypressTestsWithTiming = async (
   args: string[] = process.argv.slice(2),
   dependencies: RunCypressTestsWithTimingDependencies = defaultDependencies,
 ): Promise<void> => {
-  const [configFile, specs, outputFilePath, browser = 'edge'] = args;
+  const [configFile, specs, outputFilePath, browserArg] = args;
 
   if (!configFile || !specs || !outputFilePath) {
     throw new Error(
@@ -53,14 +53,28 @@ export const runCypressTestsWithTiming = async (
     );
   }
 
+  const isPublic = configFile.includes('-public');
+  const isSmoketest = configFile.includes('smoketests');
+  const isRealUserTest = configFile.includes('real-user-tests');
+  const browser = browserArg || (isPublic ? 'chrome' : 'edge');
+
   if (dependencies.env.CI) {
     dependencies.env.CYPRESS_NO_COMMAND_LOG ??= '1';
   }
 
   dependencies.env.CYPRESS_TARGET_ENV ??= dependencies.env.ENV ?? 'local';
-  dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID ??= 'S3RVER';
-  dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY ??= 'S3RVER';
-  dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL ??= '5000';
+
+  if (isSmoketest || isRealUserTest) {
+    if (isSmoketest) {
+      dependencies.env.CYPRESS_SMOKETESTS_LOCAL ??= 'true';
+    }
+    const port = isPublic ? '5678' : '1234';
+    dependencies.env.CYPRESS_BASE_URL ??= `http://localhost:${port}`;
+  } else {
+    dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID ??= 'S3RVER';
+    dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY ??= 'S3RVER';
+    dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL ??= '5000';
+  }
 
   const results = await dependencies.cypressRunner.run({
     browser,

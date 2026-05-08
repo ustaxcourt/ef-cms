@@ -89,6 +89,8 @@ describe('run-cypress-tests-with-timing', () => {
     expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL).toBe('5000');
+    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBeUndefined();
+    expect(dependencies.env.CYPRESS_BASE_URL).toBeUndefined();
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'edge',
       configFile: 'cypress.config.ts',
@@ -161,6 +163,105 @@ describe('run-cypress-tests-with-timing', () => {
 
     expect(dependencies.env.CYPRESS_NO_COMMAND_LOG).toBe('1');
     expect(dependencies.env.CYPRESS_TARGET_ENV).toBe('jest');
+  });
+
+  it('sets correct defaults for private smoketests', async () => {
+    const dependencies = createDependencies();
+    dependencies.cypressRunner.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+
+    await runCypressTestsWithTiming(
+      ['cypress-smoketests.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+      browser: 'edge',
+      configFile: 'cypress-smoketests.config.ts',
+      spec: 'example.cy.ts',
+    });
+  });
+
+  it('sets correct defaults for public smoketests', async () => {
+    const dependencies = createDependencies();
+    dependencies.cypressRunner.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+
+    await runCypressTestsWithTiming(
+      ['cypress-smoketests-public.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:5678');
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+      browser: 'chrome',
+      configFile: 'cypress-smoketests-public.config.ts',
+      spec: 'example.cy.ts',
+    });
+  });
+
+  it('defaults to chrome for public integration tests', async () => {
+    const dependencies = createDependencies();
+    dependencies.cypressRunner.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+
+    await runCypressTestsWithTiming(
+      ['cypress-public.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_BASE_URL).toBeUndefined();
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+      browser: 'chrome',
+      configFile: 'cypress-public.config.ts',
+      spec: 'example.cy.ts',
+    });
+  });
+
+  it('preserves existing CYPRESS_BASE_URL', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CYPRESS_BASE_URL = 'http://existing:9999';
+    dependencies.cypressRunner.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+
+    await runCypressTestsWithTiming(
+      ['cypress-smoketests.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://existing:9999');
+  });
+
+  it('sets correct defaults for real user tests', async () => {
+    const dependencies = createDependencies();
+    dependencies.cypressRunner.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+
+    await runCypressTestsWithTiming(
+      ['cypress-real-user-tests.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBeUndefined();
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+      browser: 'edge',
+      configFile: 'cypress-real-user-tests.config.ts',
+      spec: 'example.cy.ts',
+    });
   });
 
   it('throws the Cypress failure message and skips writing timings when the run fails', async () => {
