@@ -41,6 +41,7 @@ jobs:
       functions: 95
       lines: 95
       statements: 95
+      workflow_filename: shared.yml
   persist-test-file-times:
     needs: [Shared]
     uses: ./.github/workflows/job_persist-test-file-times.yml

@@ -15,6 +15,9 @@ on:
       statements:
         required: true
         type: number
+      workflow_filename:
+        required: true
+        type: string
 
 permissions:
   actions: read
@@ -29,7 +32,7 @@ jobs:
       - name: Download Coverage Artifacts
         uses: actions/download-artifact@v7
         with:
-          pattern: coverage-artifacts-*
+          pattern: ${{ inputs.workflow_filename }}-coverage-artifacts-*
           merge-multiple: true
           path: coverage
       - name: Process Coverage

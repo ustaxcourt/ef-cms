@@ -41,6 +41,7 @@ jobs:
       functions: 90
       lines: 90
       statements: 90
+      workflow_filename: client.yml
   persist-test-file-times:
     needs: [Client]
     uses: ./.github/workflows/job_persist-test-file-times.yml

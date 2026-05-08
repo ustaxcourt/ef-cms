@@ -75,7 +75,7 @@ jobs:
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: coverage-artifacts-${{ inputs.ci_node_index }}
+          name: ${{ inputs.workflow_filename }}-coverage-artifacts-${{ inputs.ci_node_index }}
           path: coverage
       - name: Upload historical test file timings
         uses: actions/upload-artifact@v7
