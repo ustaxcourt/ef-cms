@@ -159,6 +159,7 @@ export const serveExternallyFiledDocument = async (
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
         docketNumber: updatedSubjectCaseEntity!.docketNumber,

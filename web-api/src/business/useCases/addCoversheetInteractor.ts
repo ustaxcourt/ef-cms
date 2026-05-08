@@ -1,8 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '@shared/business/entities/EntityConstants';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
@@ -15,7 +12,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 export const addCoversheetInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    bypassIdempotencyGate = false,
+    bypassIdempotencyGate,
     caseEntity,
     docketEntryId,
     docketNumber,
@@ -25,9 +22,10 @@ export const addCoversheetInteractor = async (
   }: {
     // Bypass the COMPLETE-status idempotency gate. Sync callers that
     // unconditionally want a regeneration (e.g. updateDocketEntryMeta on
-    // metadata edits) set this; queued/retry callers leave it false so a
+    // metadata edits) set this true; queued/retry callers pass false so a
     // duplicate delivery or post-S3 retry doesn't stack a second coversheet.
-    bypassIdempotencyGate?: boolean;
+    // Required so callers must explicitly choose the gate behavior.
+    bypassIdempotencyGate: boolean;
     caseEntity?: Case;
     docketEntryId: string;
     docketNumber: string;
@@ -129,25 +127,12 @@ export const addCoversheetInteractor = async (
         });
 
       if (consolidatedCaseDocketEntry) {
-        const isSimultaneousDocType =
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntry.eventCode,
-          ) ||
-          consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
-
         const consolidatedCaseDocketEntryEntity = new DocketEntry(
           consolidatedCaseDocketEntry,
           { authorizedUser },
         );
 
-        if (
-          !isSimultaneousDocType ||
-          (isSimultaneousDocType &&
-            caseEntity &&
-            caseRecord.docketNumber === docketNumber)
-        ) {
-          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
-        }
+        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
 
         consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 

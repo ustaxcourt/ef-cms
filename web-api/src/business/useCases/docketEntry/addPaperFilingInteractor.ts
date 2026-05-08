@@ -221,9 +221,7 @@ export const addPaperFiling = async (
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-  }
 
-  if (isReadyForService) {
     await enqueueAddCoversheet(applicationContext, {
       authorizedUser,
       docketEntryId,

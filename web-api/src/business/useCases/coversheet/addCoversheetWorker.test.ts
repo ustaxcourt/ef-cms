@@ -38,7 +38,7 @@ describe('addCoversheetWorkerHandler', () => {
 
     expect(addCoversheetInteractor).toHaveBeenCalledWith(
       applicationContext,
-      { docketEntryId: 'a1', docketNumber: '101-25' },
+      { bypassIdempotencyGate: false, docketEntryId: 'a1', docketNumber: '101-25' },
       mockDocketClerkUser,
     );
   });

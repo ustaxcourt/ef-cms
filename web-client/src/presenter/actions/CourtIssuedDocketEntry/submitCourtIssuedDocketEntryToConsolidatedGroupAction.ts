@@ -22,8 +22,6 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
     docketEntryId,
   };
 
-  // Source of truth for the coversheet gate is the backend interactor;
-  // see submitCourtIssuedDocketEntryAction for rationale.
   const result = await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {
