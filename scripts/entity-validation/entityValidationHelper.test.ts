@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads';
-import { getDbReader } from 'web-api/src/persistence/postgres/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
@@ -64,7 +64,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => ({
   getCurrentDateTimeInMillis: jest.fn().mockReturnValue(0),
 }));
 jest.mock('worker_threads', () => ({ Worker: jest.fn() }));
-jest.mock('@web-api/database', () => ({ getDbReader: jest.fn() }));
+jest.mock('@web-api/persistence/postgres/database', () => ({
+  getDbReader: jest.fn(),
+}));
 jest.mock(
   '@web-api/persistence/postgres/cases/getCasesByDocketNumbers',
   () => ({ getCasesByDocketNumbers: jest.fn().mockResolvedValue([]) }),
