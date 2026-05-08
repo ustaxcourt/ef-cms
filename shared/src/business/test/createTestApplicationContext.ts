@@ -77,6 +77,7 @@ import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/g
 import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
+import { getRotationAdjustedBoxCoordinates } from '@shared/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
@@ -257,6 +258,9 @@ export const createTestApplicationContext = () => {
     getPractitionersRepresenting: jest
       .fn()
       .mockImplementation(getPractitionersRepresenting),
+    getRotationAdjustedBoxCoordinates: jest
+      .fn()
+      .mockImplementation(getRotationAdjustedBoxCoordinates),
     getSealedDocketEntryTooltip: jest
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),

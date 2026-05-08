@@ -210,6 +210,7 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/p
 import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
 import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
+import { getRotationAdjustedBoxCoordinates } from '../../shared/src/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -726,6 +727,7 @@ const applicationContext = {
       getPractitionersRepresenting,
       getSealedDocketEntryTooltip,
       getSelectedConsolidatedCasesToMultiDocketOn,
+      getRotationAdjustedBoxCoordinates,
       getServedPartiesCode,
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStandaloneRemoteDocumentTitle,

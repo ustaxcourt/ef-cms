@@ -8,9 +8,9 @@ import { toggleUsaBannerDetailsSequence } from '@web-client/presenter/sequences/
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
 presenter.sequences = {
-  toggleBetaBarSequence: toggleBetaBarSequence,
-  gotoStyleGuideSequence: gotoStyleGuideSequence,
-  toggleUsaBannerDetailsSequence: toggleUsaBannerDetailsSequence,
+  toggleBetaBarSequence,
+  gotoStyleGuideSequence,
+  toggleUsaBannerDetailsSequence,
 };
 
 const cerebralTest = CerebralTest(presenter);

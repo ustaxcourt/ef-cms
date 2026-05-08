@@ -38,6 +38,7 @@ import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDe
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { getRotationAdjustedBoxCoordinates } from '../../shared/src/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import {
   isLeadCase,
@@ -79,6 +80,7 @@ const utilities = {
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,
   getFormattedTrialSessionDetails,
+  getRotationAdjustedBoxCoordinates,
   getSealedDocketEntryTooltip,
   isLeadCase,
   isPending: DocketEntry.isPending,
