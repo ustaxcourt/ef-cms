@@ -1,5 +1,13 @@
 import fs from 'fs';
 import glob from 'glob';
+import documentGenerators from '../../shared/src/business/utilities/documentGenerators/jest_document_generator.config';
+import hostedEnvironment from '../../web-api/hostedEnvironmentTests/jest-hosted-environment';
+import infrastructure from '../../aws/jest-infrastructure.config';
+import scripts from '../jest-scripts.config';
+import shared from '../../shared/jest-shared.config';
+import webApi from '../../web-api/jest-unit.config';
+import webClientIntegration from '../../web-client/jest-integration.config';
+import webClientUnit from '../../web-client/jest-unit.config';
 import {
   readTestFileTimes,
   type TestFileTimes,
@@ -11,39 +19,107 @@ export type SplittableFile = {
 };
 
 type CypressSuite = {
+  config: string;
   excludePublicTests: boolean;
-  specDir: string;
+  specDirs: string[];
+};
+
+type JestSuite = {
+  globs?: string[];
+  rootDir: string;
+  testMatch?: string | string[];
 };
 
 const cypressSuites: { [suiteName: string]: CypressSuite } = {
   accessibility: {
+    config: './cypress.config.ts',
     excludePublicTests: true,
-    specDir: './cypress/local-only/tests/accessibility',
-  },
-  'accessibility/public': {
-    excludePublicTests: false,
-    specDir: './cypress/local-only/tests/accessibility/public',
+    specDirs: ['./cypress/local-only/tests/accessibility'],
   },
   integration: {
+    config: './cypress.config.ts',
     excludePublicTests: true,
-    specDir: './cypress/local-only/tests/integration',
+    specDirs: ['./cypress/local-only/tests/integration'],
   },
-  'integration/public': {
-    excludePublicTests: true,
-    specDir: './cypress/local-only/tests/integration/public',
+  public: {
+    config: './cypress-public.config.ts',
+    excludePublicTests: false,
+    specDirs: [
+      './cypress/local-only/tests/accessibility/public',
+      './cypress/local-only/tests/integration/public',
+    ],
+  },
+  realUsers: {
+    config: './cypress-real-user-tests.config.ts',
+    excludePublicTests: false,
+    specDirs: ['./cypress/real-users'],
   },
   smoketests: {
-    excludePublicTests: false,
-    specDir: './cypress/deployed-and-local/integration',
-  },
-  'smoketests-readonly': {
+    config: './cypress-smoketests.config.ts',
     excludePublicTests: true,
-    specDir: './cypress/readonly/integration',
+    specDirs: ['./cypress/deployed-and-local/integration'],
   },
-  'smoketests-readonly/public': {
+  smoketestsReadonly: {
+    config: './cypress-smoketests-readonly.config.ts',
+    excludePublicTests: true,
+    specDirs: ['./cypress/readonly/integration'],
+  },
+  smoketestsReadonlyPublic: {
+    config: './cypress-smoketests-readonly-public.config.ts',
     excludePublicTests: false,
-    specDir: './cypress/readonly/integration/public',
+    specDirs: ['./cypress/readonly/integration/public'],
   },
+};
+
+const jestSuites: { [suiteName: string]: JestSuite } = {
+  documentGenerators: {
+    rootDir: 'shared/src/business/utilities/documentGenerators/',
+    testMatch: documentGenerators.testMatch,
+  },
+  hostedEnvironment: {
+    rootDir: 'web-api/hostedEnvironmentTests',
+    testMatch: hostedEnvironment.testMatch,
+  },
+  infrastructure: {
+    rootDir: 'aws',
+    testMatch: infrastructure.testMatch,
+  },
+  scripts: {
+    rootDir: 'scripts',
+    testMatch: scripts.testMatch,
+  },
+  shared: {
+    rootDir: 'shared',
+    testMatch: shared.testMatch,
+  },
+  webApi: {
+    rootDir: 'web-api',
+    testMatch: webApi.testMatch,
+  },
+  webClientIntegration: {
+    rootDir: 'web-client',
+    testMatch: webClientIntegration.testMatch,
+  },
+  webClientUnit: {
+    rootDir: 'web-client',
+    testMatch: webClientUnit.testMatch,
+  },
+};
+
+const getGlobsFromTestMatch = (jestSuite: JestSuite): string[] => {
+  const testMatches = Array.isArray(jestSuite.testMatch)
+    ? jestSuite.testMatch
+    : [jestSuite.testMatch];
+  const globs: string[] = [];
+  for (const tm of testMatches) {
+    if (!tm) {
+      continue;
+    }
+    globs.push(
+      tm.replace(/^\*\*\//, '').replace('<rootDir>', jestSuite.rootDir),
+    );
+  }
+  return globs;
 };
 
 export const countLinesInFile = (filePath: string): number => {
@@ -171,14 +247,14 @@ export const getOutputsForCurrentCiNode = ({
 };
 
 export const splitTests = (testType: string): string => {
-  const specDir: string = `./web-client/integration-tests${testType}`;
+  const specDir: string = `./web-client/integration-tests${testType}/`;
   const files: SplittableFile[] = fs
     .readdirSync(specDir, 'utf8')
     .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
     .map(
       (fileName: string): SplittableFile => ({
         output: fileName,
-        path: `${specDir}/${fileName}`,
+        path: `${specDir}${fileName}`,
       }),
     );
   const output: string = getOutputsForCurrentCiNode({
@@ -195,22 +271,28 @@ export const splitTestsCypress = (testSuite: string): string => {
     throw new Error(`Invalid Cypress suite: ${testSuite}`);
   }
   const cypressSuite: CypressSuite = cypressSuites[testSuite];
-  const directoryEntries: string[] = fs.readdirSync(cypressSuite.specDir, {
-    encoding: 'utf8',
-    recursive: true,
-  });
-  const files: SplittableFile[] = directoryEntries
-    .filter(
-      (file: string): boolean =>
-        file.endsWith('cy.ts') &&
-        (!cypressSuite.excludePublicTests || !file.includes('public/')),
-    )
-    .map(
-      (file: string): SplittableFile => ({
-        output: `${cypressSuite.specDir}/${file}`,
-        path: `${cypressSuite.specDir}/${file}`,
-      }),
-    );
+  const files: SplittableFile[] = [];
+  for (const specDir of cypressSuite.specDirs) {
+    const directoryEntries: string[] = fs.readdirSync(specDir, {
+      encoding: 'utf8',
+      recursive: true,
+    });
+    const specFiles: SplittableFile[] = directoryEntries
+      .filter(
+        (file: string): boolean =>
+          file.endsWith('cy.ts') &&
+          (!cypressSuite.excludePublicTests || !file.includes('public/')),
+      )
+      .map(
+        (file: string): SplittableFile => ({
+          output: `${specDir}/${file}`,
+          path: `${specDir}/${file}`,
+        }),
+      );
+    for (const file of specFiles) {
+      files.push(file);
+    }
+  }
   const output: string = getOutputsForCurrentCiNode({
     files,
   }).join(',');
@@ -220,12 +302,19 @@ export const splitTestsCypress = (testSuite: string): string => {
   return output;
 };
 
-export const splitTestsGlob = (testType: string): string => {
-  let testFiles: string[] = [];
-  if (testType.includes('unit')) {
-    testFiles = glob.sync('./web-client/src/**/?(*.)+(spec|test).[jt]s?(x)');
-  } else if (testType.includes('shared')) {
-    testFiles = glob.sync('./shared/src/**/?(*.)+(spec|test).[jt]s');
+export const splitTestsGlob = (testSuite: string): string => {
+  if (!(testSuite in jestSuites)) {
+    throw new Error(`Invalid Jest suite: ${testSuite}`);
+  }
+  const testFiles: string[] = [];
+  const testGlobs = getGlobsFromTestMatch(jestSuites[testSuite]);
+  for (const testGlob of testGlobs) {
+    const files: string[] = glob.sync(testGlob);
+    for (const file of files) {
+      if (!testFiles.includes(file)) {
+        testFiles.push(file);
+      }
+    }
   }
 
   const output: string = getOutputsForCurrentCiNode({

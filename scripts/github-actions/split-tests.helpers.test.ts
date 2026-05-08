@@ -1,3 +1,38 @@
+jest.mock(
+  '../../shared/src/business/utilities/documentGenerators/jest_document_generator.config',
+  () => ({
+    testMatch:
+      '**/shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
+  }),
+);
+jest.mock(
+  '../../web-api/hostedEnvironmentTests/jest-hosted-environment',
+  () => ({
+    testMatch: ['**/web-api/hostedEnvironmentTests/**/?(*.)+(spec|test).[jt]s'],
+  }),
+);
+jest.mock('../../aws/jest-infrastructure.config', () => ({
+  testMatch: ['**/aws/**/?(*.)+(spec|test).[jt]s'],
+}));
+jest.mock('../jest-scripts.config', () => ({
+  testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../shared/jest-shared.config', () => ({
+  testMatch: [
+    '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
+}));
+jest.mock('../../web-api/jest-unit.config', () => ({
+  testMatch: ['', '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../web-client/jest-integration.config', () => ({
+  testMatch: ['<rootDir>/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../web-client/jest-unit.config', () => ({
+  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+
 import fs from 'fs';
 import glob from 'glob';
 import os from 'os';
@@ -387,7 +422,7 @@ describe('split-tests.helpers', () => {
           'z-last.test.ts',
         ]);
         expect(readdirSyncSpy).toHaveBeenCalledWith(
-          './web-client/integration-tests-public',
+          './web-client/integration-tests-public/',
           'utf8',
         );
         expect(consoleSpy).toHaveBeenCalledWith(output);
@@ -461,21 +496,25 @@ describe('split-tests.helpers', () => {
     });
 
     it('includes public Cypress tests when the requested directory is public', () => {
-      const readdirSyncSpy = jest
-        .spyOn(fs, 'readdirSync')
-        .mockReturnValue([
-          'public-a.cy.ts',
-          'nested/public-b.cy.ts',
-          'notes.txt',
-        ] as never);
+      const readdirSyncSpy = jest.spyOn(fs, 'readdirSync');
+      readdirSyncSpy.mockReturnValueOnce([
+        'accessibility-public-a.cy.ts',
+      ] as never);
+      readdirSyncSpy.mockReturnValueOnce([
+        'public-a.cy.ts',
+        'nested/public-b.cy.ts',
+        'notes.txt',
+      ] as never);
+
       const consoleSpy = jest
         .spyOn(console, 'log')
         .mockImplementation((): void => undefined);
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-cypress-public-timings.json',
         {
-          './cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
+          './cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts': 5,
           './cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
+          './cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
         },
       );
 
@@ -486,10 +525,11 @@ describe('split-tests.helpers', () => {
             CI_NODE_TOTAL: '1',
             TEST_FILE_TIMINGS_PATH: timingFilePath,
           },
-          (): string => splitTestsCypress('integration/public'),
+          (): string => splitTestsCypress('public'),
         );
 
         expect(parseDelimitedOutput(output, ',')).toEqual([
+          './cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts',
           './cypress/local-only/tests/integration/public/nested/public-b.cy.ts',
           './cypress/local-only/tests/integration/public/public-a.cy.ts',
         ]);
@@ -502,7 +542,7 @@ describe('split-tests.helpers', () => {
   });
 
   describe('splitTestsGlob', () => {
-    it('selects unit test files via glob and logs the delimited output', () => {
+    it('selects web client unit test files via glob and logs the delimited output', () => {
       const globSyncSpy = jest
         .spyOn(glob, 'sync')
         .mockReturnValue([
@@ -513,7 +553,7 @@ describe('split-tests.helpers', () => {
         .spyOn(console, 'log')
         .mockImplementation((): void => undefined);
       const timingFilePath = writeHistoricalTimingFile(
-        'split-tests-glob-unit.json',
+        'split-tests-glob-web-client-unit.json',
         {
           './web-client/src/beta.test.ts': 10,
           './web-client/src/nested/alpha.test.ts': 10,
@@ -527,7 +567,7 @@ describe('split-tests.helpers', () => {
             CI_NODE_TOTAL: '1',
             TEST_FILE_TIMINGS_PATH: timingFilePath,
           },
-          (): string => splitTestsGlob('unit'),
+          (): string => splitTestsGlob('webClientUnit'),
         );
 
         expect(parseDelimitedOutput(output, '|')).toEqual([
@@ -535,7 +575,7 @@ describe('split-tests.helpers', () => {
           './web-client/src/nested/alpha.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
-          './web-client/src/**/?(*.)+(spec|test).[jt]s?(x)',
+          'web-client/src/**/?(*.)+(spec|test).[jt]s?(x)',
         );
         expect(consoleSpy).toHaveBeenCalledWith(output);
       } finally {
@@ -577,7 +617,10 @@ describe('split-tests.helpers', () => {
           './shared/src/nested/another.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
-          './shared/src/**/?(*.)+(spec|test).[jt]s',
+          'shared/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+        );
+        expect(globSyncSpy).toHaveBeenCalledWith(
+          'shared/src/**/?(*.)+(spec|test).[jt]s?(x)',
         );
         expect(consoleSpy).toHaveBeenCalledWith(output);
       } finally {
@@ -586,7 +629,84 @@ describe('split-tests.helpers', () => {
       }
     });
 
-    it('returns an empty string when the test type does not match a known glob', () => {
+    it('selects document generator test files via glob (handling non-array testMatch)', () => {
+      const globSyncSpy = jest
+        .spyOn(glob, 'sync')
+        .mockReturnValue([
+          './shared/src/business/utilities/documentGenerators/example.test.ts',
+        ]);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-glob-doc-gen-timings.json',
+        {
+          './shared/src/business/utilities/documentGenerators/example.test.ts': 5,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsGlob('documentGenerators'),
+        );
+
+        expect(parseDelimitedOutput(output, '|')).toEqual([
+          './shared/src/business/utilities/documentGenerators/example.test.ts',
+        ]);
+        expect(globSyncSpy).toHaveBeenCalledWith(
+          'shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
+        );
+      } finally {
+        globSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('ignores empty testMatch entries', () => {
+      const globSyncSpy = jest
+        .spyOn(glob, 'sync')
+        .mockReturnValue(['./web-api/src/example.test.ts']);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-glob-web-api-timings.json',
+        {
+          './web-api/src/example.test.ts': 5,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTestsGlob('webApi'),
+        );
+
+        expect(parseDelimitedOutput(output, '|')).toEqual([
+          './web-api/src/example.test.ts',
+        ]);
+        // Should only be called once because the first entry is empty
+        expect(globSyncSpy).toHaveBeenCalledTimes(1);
+        expect(globSyncSpy).toHaveBeenCalledWith(
+          'web-api/src/**/?(*.)+(spec|test).[jt]s?(x)',
+        );
+      } finally {
+        globSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('throws an error when the test type does not match a known glob', () => {
       const globSyncSpy = jest.spyOn(glob, 'sync');
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -598,9 +718,10 @@ describe('split-tests.helpers', () => {
         process.env.CI_NODE_TOTAL = '1';
         process.env.CI_NODE_INDEX = '0';
 
-        expect(splitTestsGlob('integration')).toEqual('');
+        expect(() => splitTestsGlob('nonexistent-suite')).toThrow(
+          'Invalid Jest suite: nonexistent-suite',
+        );
         expect(globSyncSpy).not.toHaveBeenCalled();
-        expect(consoleSpy).toHaveBeenCalledWith('');
       } finally {
         process.env.CI_NODE_TOTAL = originalNodeTotal;
         process.env.CI_NODE_INDEX = originalNodeIndex;
