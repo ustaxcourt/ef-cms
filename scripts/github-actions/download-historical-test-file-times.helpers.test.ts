@@ -70,7 +70,7 @@ describe('download-historical-test-file-times', () => {
       ).toEqual(['ancestor-b', 'ancestor-a']);
       expect(mockedExecFileSync).toHaveBeenCalledWith(
         'git',
-        ['rev-list', '--max-count=5001', 'HEAD'],
+        ['rev-list', '--max-count=501', 'HEAD'],
         {
           encoding: 'utf8',
         },
@@ -605,7 +605,7 @@ describe('download-historical-test-file-times', () => {
           path.join(tempDir, 'page-limit.json'),
         ]),
       ).rejects.toThrow(
-        'Exceeded workflow run pagination limit (50 pages) while searching for historical test timings.',
+        'Exceeded workflow run pagination limit (5 pages) while searching for historical test timings.',
       );
     });
   });
