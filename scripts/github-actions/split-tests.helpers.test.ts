@@ -399,15 +399,27 @@ describe('split-tests.helpers', () => {
   });
 
   describe('splitTestsCypress', () => {
+    it('throws when the requested Cypress suite does not exist', () => {
+      expect(() => {
+        withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: '/tmp/jest.json',
+          },
+          (): string => splitTestsCypress('nonexistent-suite'),
+        );
+      }).toThrow('Invalid Cypress suite: nonexistent-suite');
+    });
+
     it('excludes public Cypress tests when the requested directory is not public', () => {
       const readdirSyncSpy = jest
         .spyOn(fs, 'readdirSync')
         .mockReturnValue([
-          'integration/private-a.cy.ts',
-          'integration/nested/private-b.cy.ts',
-          'integration/public/public-a.cy.ts',
-          'accessibility/private-other.cy.ts',
-          'integration/readme.md',
+          'private-a.cy.ts',
+          'nested/private-b.cy.ts',
+          'public/public-a.cy.ts',
+          'readme.md',
         ] as never);
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -435,7 +447,7 @@ describe('split-tests.helpers', () => {
           './cypress/local-only/tests/integration/private-a.cy.ts',
         ]);
         expect(readdirSyncSpy).toHaveBeenCalledWith(
-          './cypress/local-only/tests',
+          './cypress/local-only/tests/integration',
           {
             encoding: 'utf8',
             recursive: true,
@@ -452,10 +464,9 @@ describe('split-tests.helpers', () => {
       const readdirSyncSpy = jest
         .spyOn(fs, 'readdirSync')
         .mockReturnValue([
-          'integration/public/public-a.cy.ts',
-          'integration/public/nested/public-b.cy.ts',
-          'integration/private-a.cy.ts',
-          'integration/public/notes.txt',
+          'public-a.cy.ts',
+          'nested/public-b.cy.ts',
+          'notes.txt',
         ] as never);
       const consoleSpy = jest
         .spyOn(console, 'log')

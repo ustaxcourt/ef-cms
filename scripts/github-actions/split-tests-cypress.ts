@@ -1,14 +1,32 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { splitTestsCypress } from './split-tests.helpers';
 
-// # Usage
-// #   scripts/github-actions/split-tests-cypress.ts integration
-// #   scripts/github-actions/split-tests-cypress.ts accessibility
+// Usage:
+//  CI_NODE_TOTAL=6 CI_NODE_INDEX=0 TEST_FILE_TIMINGS_PATH=accessibility-times.json scripts/github-actions/split-tests-cypress.ts accessibility
 
-// # Arguments
-// #   - $1 - the folder of tests to include when looking for tests to split across action runners
-
-const testDir: string = process.argv.slice(2)[0] || '';
+const scriptConfig: ScriptConfig = {
+  description: 'split-tests-cypress - Balances Cypress tests across CI shards',
+  environment: {
+    // split-tests.helpers accesses these directly, so we require them here
+    ciNodeIndex: 'CI_NODE_INDEX',
+    ciNodeTotal: 'CI_NODE_TOTAL',
+    testFileTimingsPath: 'TEST_FILE_TIMINGS_PATH',
+  },
+  parameters: {
+    testDir: {
+      description: 'A directory under cypress/local-only/tests/',
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: false,
+};
+const { testDir } = parseArgsAndEnvVars(scriptConfig) as { testDir: string };
 
 splitTestsCypress(testDir);

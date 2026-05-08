@@ -10,6 +10,42 @@ export type SplittableFile = {
   path: string;
 };
 
+type CypressSuite = {
+  excludePublicTests: boolean;
+  specDir: string;
+};
+
+const cypressSuites: { [suiteName: string]: CypressSuite } = {
+  accessibility: {
+    excludePublicTests: true,
+    specDir: './cypress/local-only/tests/accessibility',
+  },
+  'accessibility/public': {
+    excludePublicTests: false,
+    specDir: './cypress/local-only/tests/accessibility/public',
+  },
+  integration: {
+    excludePublicTests: true,
+    specDir: './cypress/local-only/tests/integration',
+  },
+  'integration/public': {
+    excludePublicTests: true,
+    specDir: './cypress/local-only/tests/integration/public',
+  },
+  smoketests: {
+    excludePublicTests: false,
+    specDir: './cypress/deployed-and-local/integration',
+  },
+  'smoketests-readonly': {
+    excludePublicTests: true,
+    specDir: './cypress/readonly/integration',
+  },
+  'smoketests-readonly/public': {
+    excludePublicTests: false,
+    specDir: './cypress/readonly/integration/public',
+  },
+};
+
 export const countLinesInFile = (filePath: string): number => {
   const fileContents: string = fs.readFileSync(filePath, 'utf8');
 
@@ -154,10 +190,12 @@ export const splitTests = (testType: string): string => {
   return output;
 };
 
-export const splitTestsCypress = (testDir: string): string => {
-  const shouldExcludePublicTests: boolean = !testDir.includes('public');
-  const specDir: string = './cypress/local-only/tests';
-  const directoryEntries: string[] = fs.readdirSync(specDir, {
+export const splitTestsCypress = (testSuite: string): string => {
+  if (!(testSuite in cypressSuites)) {
+    throw new Error(`Invalid Cypress suite: ${testSuite}`);
+  }
+  const cypressSuite: CypressSuite = cypressSuites[testSuite];
+  const directoryEntries: string[] = fs.readdirSync(cypressSuite.specDir, {
     encoding: 'utf8',
     recursive: true,
   });
@@ -165,13 +203,12 @@ export const splitTestsCypress = (testDir: string): string => {
     .filter(
       (file: string): boolean =>
         file.endsWith('cy.ts') &&
-        (!shouldExcludePublicTests || !file.includes('public/')) &&
-        file.includes(`${testDir}/`),
+        (!cypressSuite.excludePublicTests || !file.includes('public/')),
     )
     .map(
       (file: string): SplittableFile => ({
-        output: `./cypress/local-only/tests/${file}`,
-        path: `./cypress/local-only/tests/${file}`,
+        output: `${cypressSuite.specDir}/${file}`,
+        path: `${cypressSuite.specDir}/${file}`,
       }),
     );
   const output: string = getOutputsForCurrentCiNode({
