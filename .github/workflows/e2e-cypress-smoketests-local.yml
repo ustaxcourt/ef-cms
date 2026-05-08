@@ -13,12 +13,30 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   e2e_cypress_smoketests_local:
-    uses: ./.github/workflows/template_app.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [3]
+        ci_node_index: [0, 1, 2]
+    uses: ./.github/workflows/template_app-parallel.yml
     with:
-      configure_sysctl: true
+      ci_environment: 'true'
+      ci_node_index: ${{ matrix.ci_node_index }}
+      ci_node_total: ${{ matrix.ci_node_total }}
+      fetch_depth: 0
       is_cypress: true
       run_command: |
-        npm run cypress:smoketests:local
-      workflow_filename: e2e-cypress-public.yml
+        export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts smoketests)
+        scripts/github-actions/run-cypress-tests-with-timing.ts cypress-smoketests.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
+      workflow_filename: e2e-cypress-smoketests-local.yml
+  persist-test-file-times:
+    needs: [e2e_cypress_smoketests_local]
+    uses: ./.github/workflows/job_persist-test-file-times.yml
+    with:
+      workflow_filename: e2e-cypress-smoketests-local.yml
