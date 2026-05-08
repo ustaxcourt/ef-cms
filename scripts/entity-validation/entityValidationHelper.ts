@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Worker } from 'worker_threads';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from 'web-api/src/persistence/postgres/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
@@ -14,7 +14,7 @@ import os from 'os';
 import path from 'path';
 
 /* HELPERS */
-const getAllDocketNumbers = async () => {
+const getAllDocketNumbers = () => {
   return getDbReader(async reader => {
     return (
       await reader.selectFrom('dwCase').select('docketNumber').execute()
@@ -58,7 +58,7 @@ const getAllWorkItems = async () => {
   return workItems.map(workItem => fromKyselyWorkItem(workItem));
 };
 
-const getAllTrialSessionWorkingCopies = async () => {
+const getAllTrialSessionWorkingCopies = () => {
   return getDbReader(async reader => {
     return (
       await reader.selectFrom('dwTrialSessionWorkingCopy').selectAll().execute()
