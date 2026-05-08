@@ -29,21 +29,13 @@ jobs:
       ci_node_index: ${{ matrix.ci_node_index }}
       ci_node_total: ${{ matrix.ci_node_total }}
       configure_sysctl: true
-      extra_artifact_name: server-log-output-${{ matrix.ci_node_index }}
-      extra_artifact_path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
       fetch_depth: 0
       record_jest_test_timings: true
       run_command: |
-        npm run migration:postgres
-        npm run migration:postgres:contract
-        npm run seed:postgres
-        mkdir -p /tmp/test-file-times
-        mkdir -p /tmp/web-client
-        npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
-        ./wait-until-services.sh
         export TESTFILES=$(scripts/github-actions/split-tests.ts)
         export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
         npm run test:client:integration:ci
+      upload_logs: true
       workflow_filename: client-integration.yml
   persist-test-file-times:
     needs: [client_integration]

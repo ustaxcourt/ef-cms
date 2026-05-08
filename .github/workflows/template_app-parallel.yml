@@ -24,24 +24,21 @@ on:
       extra_artifact_path:
         default: ''
         type: string
-      extra_artifact_two_if_always:
-        default: false
-        type: boolean
-      extra_artifact_two_name:
-        default: ''
-        type: string
-      extra_artifact_two_path:
-        default: ''
-        type: string
       fetch_depth:
         default: 0
         type: number
+      is_cypress:
+        default: false
+        type: boolean
       record_jest_test_timings:
         default: false
         type: boolean
       run_command:
         required: true
         type: string
+      upload_logs:
+        default: false
+        type: boolean
       workflow_filename:
         required: true
         type: string
@@ -84,6 +81,12 @@ jobs:
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
+      - name: Restore historical test file timings
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          scripts/github-actions/download-historical-test-file-times.ts ${{ inputs.workflow_filename }} historical-test-file-times $TEST_FILE_TIMINGS_PATH
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
@@ -94,12 +97,24 @@ jobs:
           comment_on_pr: false
       - name: NPM Install on Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
-      - name: Restore historical test file timings
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Prepare Postgres
         run: |
-          scripts/github-actions/download-historical-test-file-times.ts ${{ inputs.workflow_filename }} historical-test-file-times $TEST_FILE_TIMINGS_PATH
+          npm run migration:postgres
+          npm run migration:postgres:contract
+          npm run seed:postgres
+      - name: Create Cypress Output Directory
+        if: ${{ inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress/
+      - name: Create Test Execution Times Directory
+        run: |
+          mkdir -p /tmp/test-file-times
+      - name: Start DAWSON
+        run: |
+          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output.txt &
+      - name: Wait for DAWSON to be ready
+        run: |
+          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
       - name: Run tests
         run: |
           ${{ inputs.run_command }}
@@ -109,30 +124,30 @@ jobs:
           if [[ -f "${JEST_TEST_RESULTS_FILE}" ]]; then
             scripts/github-actions/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
           fi
+      - name: Upload DAWSON logs
+        if: ${{ always() && inputs.upload_logs }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: dawson-output
+          path: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
+      - name: Upload Cypress videos
+        if: ${{ always() && inputs.is_cypress }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-cypress-videos
+          path: ${{ github.workspace }}/cypress/deployed-and-local/videos
       - name: Upload extra artifact
         if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.extra_artifact_name }}
           path: ${{ inputs.extra_artifact_path }}
-      - name: Upload extra artifact (always)
+      - name: Upload extra artifact (even in case of failure)
         if: ${{ always() && inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && inputs.extra_artifact_if_always }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.extra_artifact_name }}
           path: ${{ inputs.extra_artifact_path }}
-      - name: Upload extra artifact two
-        if: ${{ inputs.extra_artifact_two_name != '' && inputs.extra_artifact_two_path != '' && !inputs.extra_artifact_two_if_always }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ inputs.extra_artifact_two_name }}
-          path: ${{ inputs.extra_artifact_two_path }}
-      - name: Upload extra artifact two (always)
-        if: ${{ always() && inputs.extra_artifact_two_name != '' && inputs.extra_artifact_two_path != '' && inputs.extra_artifact_two_if_always }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ inputs.extra_artifact_two_name }}
-          path: ${{ inputs.extra_artifact_two_path }}
       - name: Store shard test file timings
         uses: actions/upload-artifact@v7
         if: success()

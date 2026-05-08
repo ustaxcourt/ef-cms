@@ -18,14 +18,7 @@ jobs:
     uses: ./.github/workflows/template_app.yml
     with:
       check_deploy_date_interval: '5000'
-      extra_artifact_if_always: true
-      extra_artifact_name: cypress-videos
-      extra_artifact_path: ${{ github.workspace }}/cypress/local-only/videos
+      is_cypress: true
       run_command: |
-        npm run migration:postgres
-        npm run migration:postgres:contract
-        npm run seed:postgres
-        mkdir -p /tmp/cypress/
-        npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-        WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
         npm run cypress:integration:public
+      workflow_filename: e2e-cypress-public.yml

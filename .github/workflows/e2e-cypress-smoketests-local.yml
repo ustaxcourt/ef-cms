@@ -18,17 +18,7 @@ jobs:
     uses: ./.github/workflows/template_app.yml
     with:
       configure_sysctl: true
-      extra_artifact_if_always: true
-      extra_artifact_name: cypress-videos
-      extra_artifact_path: ${{ github.workspace }}/cypress/deployed-and-local/videos
-      extra_artifact_two_name: cypress-logs
-      extra_artifact_two_path: /tmp/cypress
+      is_cypress: true
       run_command: |
-        npm run migration:postgres
-        npm run migration:postgres:contract
-        npm run seed:postgres
-        mkdir -p /tmp/cypress/
-        npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-        ./wait-until-services.sh
-        sleep 5
         npm run cypress:smoketests:local
+      workflow_filename: e2e-cypress-public.yml

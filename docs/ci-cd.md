@@ -77,65 +77,18 @@ When an admin runs the `npm run deploy:account-specific` command, these permissi
 
 ## Github Actions
 
-All of our actions are defined in [.github/workflows](https://github.com/ustaxcourt/ef-cms/tree/staging/.github/workflows).  There is a separate .yml file for each individual action.  Similar to CircleCi, an action is defined in a yml file and is broken down into various `steps`.  You can specify when the job runs (such as on pull_requests), which version of node to test on, which docker image (ubuntu-latest), and also run community run actions if needed.
+All of our actions are defined in [.github/workflows](https://github.com/ustaxcourt/ef-cms/tree/staging/.github/workflows).  There is a separate .yml file for each individual action, as well as some reusable jobs prefixed with `job_` and reusable workflows prefixed with `template_`.  Similar to CircleCi, an action is defined in a yml file and is broken down into various `steps`.  You can specify when the job runs (such as on pull_requests), which version of node to test on, which docker image (ubuntu-latest), and also run community run actions if needed.
 
-Here is an example of our `test:client:unit` action:
+The four reusable workflow templates are:
 
-```yml
-#  client.yml
-name: Node.js CI
-on: [pull_request]
-jobs:
-  Client:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ci_node_total: [4]
-        ci_node_index: [0, 1, 2, 3]
-    env:
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Install Node Dependencies
-        run: npm ci
-      - name: Test Client Unit
-        run: |
-          export TESTFILES=$(npx ts-node scripts/github-actions/split-tests-glob.ts -unit)
-          NODE_INDEX=${{ matrix.ci_node_index }} npm run test:client:unit:ci
-      - name: Rename coverage to shard coverage
-        run: |
-          mkdir -p coverage
-          cp web-client/coverage/${{ matrix.ci_node_index }}/lcov.info coverage/lcov-${{ matrix.ci_node_index }}.info
-          cp web-client/coverage/${{ matrix.ci_node_index }}/coverage-final.json coverage/coverage-${{ matrix.ci_node_index }}.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: coverage-artifacts
-          path: coverage
-  check-coverage:
-    runs-on: ubuntu-latest
-    needs: [Client]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: coverage-artifacts
-          path: coverage
-      - name: Process Coverage
-        run: npx nyc report --check-coverage --branches 94.56 --functions 97 --lines 97 --statements 97 --reporter lcov --reporter text --reporter clover -t coverage
-      - uses: geekyeggo/delete-artifact@v1
-        with:
-          name: coverage-artifacts
-          failOnError: false
-```
+- `template_app.yml` - DAWSON running
+  - example: [e2e-cypress-public.yml](../.github/workflows/e2e-cypress-public.yml)
+- `template_app-parallel.yml` - DAWSON running (with parallelization)
+  - example: [e2e-cypress.yml](../.github/workflows/e2e-cypress.yml)
+- `template_no-app.yml` - DAWSON not running
+  - example: [api.yml](../.github/workflows/api.yml)
+- `template_no-app-parallel.yml` - DAWSON not running (with parallelization)
+  - example: [client.yml](../.github/workflows/client.yml)
 
 ## Docker
 

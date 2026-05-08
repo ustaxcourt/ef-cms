@@ -29,18 +29,8 @@ jobs:
       ci_environment: 'true'
       ci_node_index: ${{ matrix.ci_node_index }}
       ci_node_total: ${{ matrix.ci_node_total }}
-      extra_artifact_if_always: true
-      extra_artifact_name: cypress-videos-${{ matrix.ci_node_index }}
-      extra_artifact_path: ${{ github.workspace }}/cypress/local-only/videos
       fetch_depth: 0
       run_command: |
-        npm run migration:postgres
-        npm run migration:postgres:contract
-        npm run seed:postgres
-        mkdir -p /tmp/test-file-times
-        mkdir -p /tmp/cypress/
-        npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-        WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
         export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
         scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
       workflow_filename: e2e-cypress.yml
