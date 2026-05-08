@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from 'web-api/src/persistence/postgres/database';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
