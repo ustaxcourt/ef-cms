@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
 import { promises as fs } from 'fs';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 import { environment } from '@web-api/environment';
 

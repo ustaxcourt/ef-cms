@@ -1,5 +1,5 @@
 import { getMonthDayYearInETObj } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
 
 export const createBarNumber = async ({

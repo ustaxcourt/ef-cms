@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.76
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.77
 
 parameters:
   run_build_and_deploy:
@@ -507,26 +507,6 @@ jobs:
           command: |
             npm run cleanup:entity-validation
 
-  wait-for-empty-change-of-address-queue:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          no_output_timeout: 65m
-          name: Wait for Change of Address SQS Queue to Drain
-          command: |
-            ./scripts/circleci/wait-for-empty-sqs-queue.sh
-
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   delete-and-recreate-elasticsearch-cluster:
@@ -992,18 +972,14 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - migrate
-      - wait-for-empty-change-of-address-queue:
+      - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - validate-entities
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-empty-change-of-address-queue
+            - validate-entities
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1078,6 +1054,7 @@ workflows:
           <<: *only-test
           requires:
             - delete-and-recreate-elasticsearch-cluster
+            - wait-for-s3-sync-workflow
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
@@ -1090,7 +1067,6 @@ workflows:
       - index-docket-entries:
           <<: *only-test
           requires:
-            - wait-for-s3-sync-workflow
             - index-users
       - cleanup-glue-job:
           <<: *only-test
