@@ -129,7 +129,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dawson-output
-          path: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
+          path: /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt
       - name: Compile Cypress Videos
         if: ${{ always() && inputs.is_cypress }}
         run: |
@@ -144,19 +144,19 @@ jobs:
         if: ${{ always() && inputs.is_cypress }}
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.workflow_filename }}-cypress-videos
+          name: ${{ inputs.workflow_filename }}-cypress-videos-shard-${{ inputs.ci_node_index }}
           path: /tmp/cypress-videos
       - name: Upload extra artifact
         if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}-shard-${{ inputs.ci_node_index }}
           path: ${{ inputs.extra_artifact_path }}
       - name: Upload extra artifact (even in case of failure)
         if: ${{ always() && inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && inputs.extra_artifact_if_always }}
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}-shard-${{ inputs.ci_node_index }}
           path: ${{ inputs.extra_artifact_path }}
       - name: Store shard test file timings
         uses: actions/upload-artifact@v7
