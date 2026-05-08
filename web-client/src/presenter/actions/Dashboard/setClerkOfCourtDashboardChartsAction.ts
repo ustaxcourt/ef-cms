@@ -124,7 +124,7 @@ export const setClerkOfCourtDashboardChartsAction = async ({
       ? stats.proceedingTypeCounts.map(({ proceedingType, count }) => ({
           color: proceedingType === 'In Person' ? COLOR_BLUE : COLOR_YELLOW,
           name: proceedingType,
-          value: Math.round((count / totalProceedingSessions) * 100),
+          value: count,
         }))
       : [],
   );
@@ -139,7 +139,7 @@ export const setClerkOfCourtDashboardChartsAction = async ({
       ? stats.sessionTypeCounts.map(({ sessionType, count }) => ({
           color: SESSION_TYPE_COLORS[sessionType] ?? '#CCCCCC',
           name: sessionType,
-          value: Math.round((count / totalSessionTypeSessions) * 100),
+          value: count,
         }))
       : [],
   );
