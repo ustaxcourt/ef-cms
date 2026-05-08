@@ -13,7 +13,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 export const addCoversheetInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    bypassIdempotencyGate = false,
+    bypassIdempotencyGate,
     caseEntity,
     docketEntryId,
     docketNumber,
@@ -23,9 +23,10 @@ export const addCoversheetInteractor = async (
   }: {
     // Bypass the COMPLETE-status idempotency gate. Sync callers that
     // unconditionally want a regeneration (e.g. updateDocketEntryMeta on
-    // metadata edits) set this; queued/retry callers leave it false so a
+    // metadata edits) set this true; queued/retry callers pass false so a
     // duplicate delivery or post-S3 retry doesn't stack a second coversheet.
-    bypassIdempotencyGate?: boolean;
+    // Required so callers must explicitly choose the gate behavior.
+    bypassIdempotencyGate: boolean;
     caseEntity?: Case;
     docketEntryId: string;
     docketNumber: string;

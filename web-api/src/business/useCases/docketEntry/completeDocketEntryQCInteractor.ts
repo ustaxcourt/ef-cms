@@ -498,6 +498,7 @@ const completeDocketEntryQC = async (
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId,
         docketNumber,
       },

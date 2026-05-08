@@ -41,8 +41,9 @@ export const uploadExternalDocumentsAction = async ({
       fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('uploadExternalDocumentsAction failed', err);
+    await applicationContext.getUseCases().logErrorInteractor(applicationContext, {
+      error: err,
+    });
     return path.error();
   }
 };

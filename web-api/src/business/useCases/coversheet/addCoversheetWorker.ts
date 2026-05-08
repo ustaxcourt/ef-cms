@@ -40,7 +40,7 @@ export const addCoversheetWorkerHandler = async (
   try {
     await addCoversheetInteractor(
       applicationContext,
-      { docketEntryId, docketNumber },
+      { bypassIdempotencyGate: false, docketEntryId, docketNumber },
       authorizedUser,
     );
   } catch (err) {

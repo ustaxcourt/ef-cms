@@ -12,10 +12,6 @@ export const submitCourtIssuedDocketEntryAction = async ({
     docketEntryId,
   };
 
-  // The backend decides whether a coversheet is required (and enqueues it
-  // when it is) from the same COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET
-  // constant. Forward whatever it tells us rather than recomputing client-
-  // side, so the gates can't drift out of sync.
   const result = await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {

@@ -100,6 +100,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -123,6 +124,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
@@ -153,6 +155,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -212,6 +215,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         replaceCoversheet: true,
@@ -240,6 +244,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         filingDateUpdated: true,
@@ -269,6 +274,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -284,6 +290,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -299,6 +306,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -314,6 +322,7 @@ describe('addCoversheetInteractor', () => {
     const updatedDocketEntryEntity = await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -330,6 +339,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -345,6 +355,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         caseEntity: new Case(testingCaseData, {
           authorizedUser: mockDocketClerkUser,
         }),
@@ -396,6 +407,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -421,6 +433,7 @@ describe('addCoversheetInteractor', () => {
           }),
           docketEntryId: missingId,
           docketNumber: MOCK_CASE.docketNumber,
+          bypassIdempotencyGate: false,
         },
         mockDocketClerkUser,
       ),
@@ -439,6 +452,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -461,5 +475,4 @@ describe('addCoversheetInteractor', () => {
       numberOfPages: 5,
     });
   });
-
 });
