@@ -1,6 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
@@ -52,23 +51,12 @@ export const updateDocketEntriesWithPageCount = async ({
         });
 
       if (consolidatedCaseDocketEntry) {
-        const isSimultaneousDocType =
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntry.eventCode,
-          ) ||
-          consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
-
         const consolidatedCaseDocketEntryEntity = new DocketEntry(
           consolidatedCaseDocketEntry,
           { authorizedUser },
         );
 
-        if (
-          !isSimultaneousDocType ||
-          caseRecord.docketNumber === docketNumber
-        ) {
-          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
-        }
+        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
 
         consolidatedCaseDocketEntryEntity.setNumberOfPages(pageCount);
 
