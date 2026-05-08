@@ -1006,11 +1006,16 @@ workflows:
           <<: *only-prod
           requires:
             - migrate
+      - validate-entities:
+          <<: *only-prod
+          requires:
+            - migrate
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
             - loadtests
             - smoketests-readonly
+            - validate-entities
       - wait-for-switch:
           <<: *only-prod
           type: approval
