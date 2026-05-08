@@ -1,4 +1,14 @@
 import React from 'react';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import {
+  BarYAxisLabel,
+  MultiBarLabel,
+  MultiBarTickX,
+  RotatedTickX,
+  SingleBarTickX,
+  YAxisTick,
+  renderCustomLegend,
+} from './BarGraphHelpers';
 import {
   BarChart,
   Bar,
@@ -67,110 +77,6 @@ const defaultColors = [
   '#FFBE2E', // yellow primary
 ];
 
-// ─── Custom legend renderer ───────────────────────────────────────────────────
-
-const renderCustomLegend = (props: any) => {
-  const { payload } = props;
-  return (
-    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:xs:gap-4 tw:justify-start tw:pb-5 tw:xs:pb-8">
-      {payload.map((entry: any, index: number) => (
-        <div key={index} className="tw:flex tw:items-center tw:gap-2">
-          <div
-            className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
-            style={{ backgroundColor: entry.color }}
-          />
-          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
-            {entry.total != null
-              ? `${entry.value}: ${entry.total.toLocaleString()}`
-              : entry.value}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// ─── Shared Y-axis tick ──────────────────────────────────────────────────────
-
-const YAxisTick = (props: any) => {
-  const { x, y, payload } = props;
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={4}
-        textAnchor="end"
-        fill="#000"
-        className="tw:text-base tw:xs:text-xl"
-        fontWeight="400"
-      >
-        {payload.value}
-      </text>
-    </g>
-  );
-};
-
-// ─── Shared Y-axis label ─────────────────────────────────────────────────────
-
-const BarYAxisLabel = ({ value, viewBox }: any) => {
-  const { x, y, height: h, width: w } = viewBox;
-  const cx = x + (w ?? 60) / 2;
-  const cy = y + h / 2;
-  return (
-    <text
-      x={cx}
-      y={cy}
-      textAnchor="middle"
-      fill="#000"
-      className="tw:text-base tw:xs:text-xl"
-      fontWeight="bold"
-      transform={`rotate(-90, ${cx}, ${cy})`}
-    >
-      {value}
-    </text>
-  );
-};
-
-// ─── SingleBarGraph custom x-axis tick (word-wrapped) ────────────────────────
-
-const SingleBarTickX = (props: any) => {
-  const { x, y, payload } = props;
-  const words = (payload.value as string).split(' ');
-  const lineHeight = 18;
-  // wrap into lines of ~10 chars each
-  const lines: string[] = [];
-  let current = '';
-  words.forEach((word: string) => {
-    if ((current + ' ' + word).trim().length > 10 && current.length > 0) {
-      lines.push(current.trim());
-      current = word;
-    } else {
-      current = (current + ' ' + word).trim();
-    }
-  });
-  if (current) lines.push(current);
-
-  return (
-    <g transform={`translate(${x},${y})`}>
-      {lines.map((line, i) => (
-        <text
-          key={i}
-          x={0}
-          y={0}
-          dy={16 + i * lineHeight}
-          textAnchor="middle"
-          fill="#000"
-          className="tw:text-base tw:xs:text-xl"
-          fontWeight="600"
-        >
-          {line}
-        </text>
-      ))}
-    </g>
-  );
-};
-
 // ─── SingleBarGraph ───────────────────────────────────────────────────────────
 
 export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
@@ -184,6 +90,15 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   datalabelColor = '#fff',
   showLabels = true,
 }) => {
+  const openHtmlTable = () => {
+    const rows = data
+      .map(d => `<tr><td>${d.label}</td><td>${d.value}</td></tr>`)
+      .join('');
+    const heading = title ? `<h2>${title}</h2>` : '';
+    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Label</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+  };
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
@@ -230,9 +145,21 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
-            {title}
-          </h2>
+          <div
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+              {title}
+            </h2>
+            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+              HTML view
+            </Button>
+          </div>
         )}
         <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
           <ResponsiveContainer
@@ -364,151 +291,6 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   );
 };
 
-// ─── MultiBarGraph custom label ───────────────────────────────────────────────
-
-/**
- * Renders a datalabel inside or outside a bar segment depending on its share
- * of the column total. Mirrors the original Chart.js datalabels logic exactly.
- */
-const MultiBarLabel = (props: any) => {
-  const {
-    x,
-    y,
-    width: barWidth,
-    height: barHeight,
-    value,
-    datasetLabel,
-    colTotal,
-    stacked,
-  } = props;
-
-  if (value == null || colTotal == null || colTotal === 0) return null;
-
-  const threshold = stacked ? 0.15 : 0.1;
-  const ratio = value / colTotal;
-  const isSmall = ratio < threshold;
-
-  const textColor = isSmall ? '#000000' : '#ffffff';
-  const fontSize = '1.25rem';
-  const fontWeight = 'bold';
-
-  if (stacked) {
-    if (isSmall) {
-      // Label above the bar segment
-      const cx = x + barWidth / 2;
-      const cy = y - 8;
-      return (
-        <text
-          dominantBaseline="auto"
-          fill={textColor}
-          fontSize={fontSize}
-          fontWeight={fontWeight}
-          textAnchor="middle"
-          x={cx}
-          y={cy}
-        >
-          {value}
-        </text>
-      );
-    } else {
-      // Label centered inside the bar: value only
-      const cx = x + barWidth / 2;
-      const cy = y + barHeight / 2;
-      return (
-        <text
-          dominantBaseline="middle"
-          fill={textColor}
-          fontSize={fontSize}
-          fontWeight={fontWeight}
-          textAnchor="middle"
-          x={cx}
-          y={cy}
-        >
-          {value}
-        </text>
-      );
-    }
-  } else {
-    // Grouped: always vertical (-90°), label centered inside bar
-    const cx = x + barWidth / 2;
-    const cy = y + barHeight / 2;
-    const labelText = `${value} ${datasetLabel}`;
-    return (
-      <text
-        dominantBaseline="middle"
-        fill={textColor}
-        fontSize={fontSize}
-        fontWeight={fontWeight}
-        textAnchor="middle"
-        transform={`rotate(-90, ${cx}, ${cy})`}
-        x={cx}
-        y={cy}
-      >
-        {labelText}
-      </text>
-    );
-  }
-};
-
-// ─── MultiBarGraph ────────────────────────────────────────────────────────────
-
-// ─── MultiBarGraph rotated x-axis tick ───────────────────────────────────────
-
-const RotatedTickX = (props: any) => {
-  const { x, y, payload } = props;
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={8}
-        textAnchor="end"
-        fill="#000"
-        className="tw:text-base tw:xs:text-xl"
-        fontWeight="600"
-        transform="rotate(-45)"
-      >
-        {payload.value}
-      </text>
-    </g>
-  );
-};
-
-// ─── MultiBarGraph two-line x-axis tick ──────────────────────────────────────
-
-const MultiBarTickX = (props: any) => {
-  const { x, y, payload, columnTotals } = props;
-  const { index } = payload;
-  const total = columnTotals?.[index];
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={14}
-        textAnchor="middle"
-        fill="#000"
-        className="tw:text-base tw:xs:text-xl"
-        fontWeight="600"
-      >
-        {payload.value}
-      </text>
-      {total != null && (
-        <text
-          x={0}
-          y={0}
-          dy={34}
-          textAnchor="middle"
-          fill="#000"
-          fontSize="1rem"
-        >
-          {total}
-        </text>
-      )}
-    </g>
-  );
-};
-
 export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   datasets,
   labels,
@@ -524,6 +306,24 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   showLabels = true,
   legendTotals,
 }) => {
+  const openHtmlTable = () => {
+    const headerCells = [
+      '<th>Label</th>',
+      ...datasets.map(ds => `<th>${ds.label}</th>`),
+    ].join('');
+    const rows = labels
+      .map((label, i) => {
+        const cells = datasets
+          .map(ds => `<td>${ds.data[i] ?? ''}</td>`)
+          .join('');
+        return `<tr><td>${label}</td>${cells}</tr>`;
+      })
+      .join('');
+    const heading = title ? `<h2>${title}</h2>` : '';
+    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+  };
   // Build recharts row-oriented data: [{ name: 'Jan', Filed: 42, Closed: 3 }, ...]
   const chartData = labels.map((label, i) => {
     const row: Record<string, any> = { name: label };
@@ -607,9 +407,21 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
-            {title}
-          </h2>
+          <div
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+              {title}
+            </h2>
+            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+              HTML view
+            </Button>
+          </div>
         )}
         {showLegend && (
           <div>{renderCustomLegend({ payload: legendPayload })}</div>

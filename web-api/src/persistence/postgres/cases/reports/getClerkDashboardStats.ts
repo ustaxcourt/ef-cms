@@ -109,8 +109,12 @@ export const getClerkDashboardStats = async ({
         : Number(formatNow(FORMATS.YEAR));
     }
 
-    const yearStart = calculateDate({ dateString: `${resolvedYear}-01-01` });
-    const yearEnd = calculateDate({ dateString: `${resolvedYear + 1}-01-01` });
+    const yearStart = calculateDate({
+      dateString: `${resolvedYear}-01-01T00:00:00.000Z`,
+    });
+    const yearEnd = calculateDate({
+      dateString: `${resolvedYear + 1}-01-01T00:00:00.000Z`,
+    });
     // ── Petitions by month (electronic/paper split) ──────────────────────────
     const petitionRows = await reader
       .selectFrom('dwCase')

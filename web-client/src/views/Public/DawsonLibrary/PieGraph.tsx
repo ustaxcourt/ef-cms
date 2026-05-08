@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Button } from '@web-client/dawson-ui/ui/button';
 import {
   Pie,
   PieChart,
@@ -107,6 +108,19 @@ export const PieGraph = ({
     if (liveRegionRef.current) liveRegionRef.current.textContent = text;
   };
 
+  const openHtmlTable = () => {
+    const total = data.reduce((sum, d) => sum + d.value, 0);
+    const rows = data
+      .map(d => {
+        const pct = total > 0 ? ((d.value / total) * 100).toFixed(1) : '0.0';
+        return `<tr><td>${d.name}</td><td>${d.value}</td><td>${pct}%</td></tr>`;
+      })
+      .join('');
+    const html = `<html><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+  };
+
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
@@ -132,9 +146,21 @@ export const PieGraph = ({
       />
       <div className="tw:xs:w-160 tw:w-120">
         {title && (
-          <h2 className="tw:xs:mb-8 tw:mb-5 tw:text-left tw:xs:text-2xl tw:text-lg">
-            {title}
-          </h2>
+          <div
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+              {title}
+            </h2>
+            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+              HTML view
+            </Button>
+          </div>
         )}
         <PieChart
           style={{ width: '100%', maxWidth: '100%', aspectRatio: 1 }}

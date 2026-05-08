@@ -171,12 +171,12 @@ export const DawsonLibrary = () => {
             data: [85, 92, 78, 101],
           },
           {
-            label: 'Whistleblower',
-            data: [34, 41, 29, 38],
-          },
-          {
             label: 'Passport',
             data: [18, 22, 25, 19],
+          },
+          {
+            label: 'Whistleblower',
+            data: [34, 41, 29, 38],
           },
           {
             label: 'Other',
