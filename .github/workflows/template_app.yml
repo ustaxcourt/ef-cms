@@ -106,8 +106,12 @@ jobs:
         if: ${{ always() && inputs.is_cypress }}
         run: |
           mkdir -p /tmp/cypress-videos
-          mv ${{ github.workspace }}/cypress/deployed-and-local/videos/* /tmp/cypress-videos/
-          mv ${{ github.workspace }}/cypress/local-only/videos/* /tmp/cypress-videos/
+          if [ -d ${{ github.workspace }}/cypress/deployed-and-local/videos ]; then
+            mv ${{ github.workspace }}/cypress/deployed-and-local/videos/* /tmp/cypress-videos/
+          fi
+          if [ -d ${{ github.workspace }}/cypress/local-only/videos ]; then
+            mv ${{ github.workspace }}/cypress/local-only/videos/* /tmp/cypress-videos/
+          fi
       - name: Upload Cypress videos
         if: ${{ always() && inputs.is_cypress }}
         uses: actions/upload-artifact@v7
