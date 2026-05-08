@@ -30,6 +30,7 @@ jobs:
       ci_node_index: ${{ matrix.ci_node_index }}
       ci_node_total: ${{ matrix.ci_node_total }}
       fetch_depth: 0
+      is_cypress: true
       run_command: |
         export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
         scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"

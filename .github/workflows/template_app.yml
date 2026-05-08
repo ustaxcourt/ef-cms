@@ -61,6 +61,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
       - name: Configure sysctl limits
         if: ${{ inputs.configure_sysctl }}
         run: |
@@ -72,12 +78,6 @@ jobs:
         uses: ankane/setup-opensearch@v1
         with:
           opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: NPM Install in Current Branch
-        uses: ./.github/actions/dawson-node-bootstrap
       - name: Prepare Postgres
         run: |
           npm run migration:postgres
@@ -102,12 +102,18 @@ jobs:
         with:
           name: dawson-output
           path: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
+      - name: Compile Cypress Videos
+        if: ${{ always() && inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress-videos
+          mv ${{ github.workspace }}/cypress/deployed-and-local/videos/* /tmp/cypress-videos/
+          mv ${{ github.workspace }}/cypress/local-only/videos/* /tmp/cypress-videos/
       - name: Upload Cypress videos
         if: ${{ always() && inputs.is_cypress }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.workflow_filename }}-cypress-videos
-          path: ${{ github.workspace }}/cypress/deployed-and-local/videos
+          path: /tmp/cypress-videos
       - name: Upload extra artifact
         if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
         uses: actions/upload-artifact@v7
