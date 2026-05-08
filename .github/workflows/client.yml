@@ -22,8 +22,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [3]
-        ci_node_index: [0, 1, 2]
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
     uses: ./.github/workflows/template_no-app-parallel.yml
     with:
       ci_node_index: ${{ matrix.ci_node_index }}
