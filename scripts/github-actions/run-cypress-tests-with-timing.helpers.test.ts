@@ -85,6 +85,7 @@ describe('run-cypress-tests-with-timing', () => {
       dependencies,
     );
 
+    expect(dependencies.env.CYPRESS_TARGET_ENV).toBe('local');
     expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL).toBe('5000');
@@ -139,6 +140,27 @@ describe('run-cypress-tests-with-timing', () => {
       spec: 'spec-a.cy.ts,spec-b.cy.ts',
     });
     expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('disables command logs and forwards ENV', async () => {
+    const dependencies = createDependencies();
+    const cypressResults = {
+      runs: [],
+      totalFailed: 0,
+    };
+
+    dependencies.env.CI = 'true';
+    dependencies.env.ENV = 'jest';
+    dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
+    dependencies.getCypressTestFileTimes.mockReturnValue({});
+
+    await runCypressTestsWithTiming(
+      ['cypress.config.ts', 'example.cy.ts', 'timings.json'],
+      dependencies,
+    );
+
+    expect(dependencies.env.CYPRESS_NO_COMMAND_LOG).toBe('1');
+    expect(dependencies.env.CYPRESS_TARGET_ENV).toBe('jest');
   });
 
   it('throws the Cypress failure message and skips writing timings when the run fails', async () => {
