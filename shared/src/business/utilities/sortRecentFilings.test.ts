@@ -7,6 +7,7 @@ const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   document: 'Petition',
   caseTitle: 'Test Case',
   docketEntryId: '1',
+  status: 'new',
   ...overrides,
 });
 

@@ -90,6 +90,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
+import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/public/verifyUserPendingEmailProxy';
 import deepFreeze from 'deep-freeze';
 
 const ADVANCED_SEARCH_TABS = {
@@ -129,6 +130,7 @@ const allUseCases = {
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
+  verifyUserPendingEmailInteractor,
 };
 tryCatchDecorator(allUseCases);
 

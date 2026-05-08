@@ -38,7 +38,7 @@ import {
   subtractISODates,
   validateDateAndCreateISO,
   isValidPastDate,
-  formatDateFromDatePicker
+  formatDateFromDatePicker,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -223,6 +223,62 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
+    });
+
+    it('returns the same day if how much is 0', () => {
+      const result = calculateISODate({
+        dateString: '2020-03-01T05:00:00.000Z',
+        howMuch: 0,
+        units: 'days',
+      });
+
+      expect(result).toEqual('2020-03-01T05:00:00.000Z');
+    });
+
+    describe('Daylight Saving Time (DST) arithmetic logic', () => {
+      it('calculates boundaries correctly crossing Fall back (Nov)', () => {
+        // Midnight EDT (-04:00) before boundary jump
+        const dateString = '2026-10-31T04:00:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: 5,
+          units: 'days',
+        });
+
+        // 5 days later is Nov 5th. DST ends on Nov 1 in 2026.
+        // It should map to midnight EST (-05:00)
+        expect(result).toEqual('2026-11-05T05:00:00.000Z');
+      });
+
+      it('calculates boundaries correctly crossing Spring forward (March)', () => {
+        // Midnight EST (-05:00) before boundary jump
+        const dateString = '2026-03-06T05:00:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: 5,
+          units: 'days',
+        });
+
+        // 5 days later is March 11. DST starts on March 8 in 2026.
+        // It should map to midnight EDT (-04:00)
+        expect(result).toEqual('2026-03-11T04:00:00.000Z');
+      });
+
+      it('accurately retrieves yesterday during Fall back regardless of 24h/25h elapsed cycle', () => {
+        // 23:30 EDT on Nov 1, 2026.
+        const dateString = '2026-11-01T23:30:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: -1,
+          units: 'days',
+        });
+
+        // Should logically represent exactly Oct 31, 23:30 EDT
+        expect(result).toEqual('2026-10-31T22:30:00.000Z');
+      });
     });
   });
 
