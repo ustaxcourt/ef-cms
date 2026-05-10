@@ -25,6 +25,8 @@ interface UserCaseDTO {
   leadDocketNumber?: string;
   petitionPaymentStatus: PaymentStatusTypes;
   status: string;
+  trialDate?: string;
+  trialLocation?: string;
 }
 
 export type TAssociatedCase = {
@@ -192,6 +194,8 @@ function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
     leadDocketNumber: rawCase.leadDocketNumber,
     petitionPaymentStatus: rawCase.petitionPaymentStatus,
     status: rawCase.status,
+    trialDate: rawCase.trialDate,
+    trialLocation: rawCase.trialLocation,
   };
   return userCaseDTO;
 }

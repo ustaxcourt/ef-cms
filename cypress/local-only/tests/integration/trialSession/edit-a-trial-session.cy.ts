@@ -7,10 +7,11 @@ describe('Edit a trial session', () => {
     loginAsPetitionsClerk();
     cy.visit(`/edit-trial-session/208a959f-9526-4db5-b262-e58c476a4604`);
 
+    cy.get('[data-testid="submit-edit-trial-session"]').should('be.visible');
+    cy.get('[data-testid="trial-session-judge"]').should('be.visible');
+
     getCancelButton().click();
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(3000);
-    getCancelModalTitle().should('exist');
+    getCancelModalTitle().should('contain', 'Are You Sure You Want to Cancel?');
   });
 });
