@@ -1,7 +1,8 @@
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 
-if (!Cypress.env('SMOKETESTS_LOCAL')) {
+if (!getCypressEnv().isLocal) {
   describe('AWS Batch - Docket Entries Download', () => {
     before(() => {
       cy.task('getRawFeatureFlagValue', {

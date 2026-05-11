@@ -5,17 +5,19 @@ import {
   confirmEmailPendingAlert,
   goToMyAccount,
 } from '../../../local-only/support/pages/my-account';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 if (
-  !Cypress.env('SMOKETESTS_LOCAL') &&
+  !getCypressEnv().isLocal &&
   !Cypress.env('MIGRATE') &&
   !Cypress.env('DISABLE_EMAILS')
 ) {
   describe('Verify verification email', () => {
     const bucketName = Cypress.env('SMOKETEST_BUCKET');
     const emailDomain = Cypress.env('EFCMS_DOMAIN');
-    const uniqueTimestamp = Date.now();
+    const uniqueTimestamp = getCurrentDateTimeInMillis();
     const testEmailAddress = `smoketest+${uniqueTimestamp}@${emailDomain}`;
 
     before(() => {

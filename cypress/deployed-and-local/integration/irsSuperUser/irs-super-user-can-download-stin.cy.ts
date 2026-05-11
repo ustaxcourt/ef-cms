@@ -5,7 +5,7 @@ import { loginAsPetitioner } from '../../../helpers/authentication/login-as-help
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { v4 } from 'uuid';
 
-if (!Cypress.env('SMOKETESTS_LOCAL')) {
+if (!getCypressEnv().isLocal) {
   describe('irs superuser integration', () => {
     const password = getCypressEnv().defaultAccountPass;
     const userName = `cypress_test_account_${v4().substring(0, 8)}@example.com`; // we substring because there is a 64 joi character limit on emails

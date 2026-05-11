@@ -1,3 +1,5 @@
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+
 const HEALTH_CHECK_IDS = [
   'cognito',
   'elasticsearch',
@@ -12,10 +14,8 @@ const HEALTH_CHECK_IDS = [
   's3-west-temp-documents',
 ];
 
-describe('Health check', () => {
-  const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
-
-  if (!SMOKETESTS_LOCAL) {
+if (!getCypressEnv().isLocal) {
+  describe('Health check', () => {
     it("should retrieve the status of the application's critical services", () => {
       cy.visit('/health');
       cy.url().should('include', '/health');
@@ -23,5 +23,11 @@ describe('Health check', () => {
         cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
       }
     });
-  }
-});
+  });
+} else {
+  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
+    it('should skip', () => {
+      expect(true).to.equal(true);
+    });
+  });
+}
