@@ -134,7 +134,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
-    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
+    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1 tw:pl-1">
       <div
         style={
           {
@@ -146,17 +146,20 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
       >
         {title && (
           <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '1.25rem',
-            }}
+            className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
+            style={{ marginBottom: '1.25rem' }}
           >
-            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:whitespace-nowrap"
+              style={{ margin: 0 }}
+            >
               {title}
             </h2>
-            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+            <Button
+              className="tw:w-auto"
+              variant="primaryTertiary"
+              onClick={openHtmlTable}
+            >
               HTML view
             </Button>
           </div>
@@ -396,7 +399,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }
 
   return (
-    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
+    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1 tw:pl-1">
       <div
         style={
           {
@@ -408,17 +411,20 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
       >
         {title && (
           <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '1.25rem',
-            }}
+            className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
+            style={{ marginBottom: '1.25rem' }}
           >
-            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:whitespace-nowrap"
+              style={{ margin: 0 }}
+            >
               {title}
             </h2>
-            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+            <Button
+              className="tw:w-auto"
+              variant="primaryTertiary"
+              onClick={openHtmlTable}
+            >
               HTML view
             </Button>
           </div>
