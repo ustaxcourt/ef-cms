@@ -14,7 +14,6 @@ export const scrapePdfContents = async ({
   try {
     const document = await pdfjsLib.getDocument({
       data: pdfBuffer,
-      isEvalSupported: false,
     }).promise;
 
     let scrapedText = '';
