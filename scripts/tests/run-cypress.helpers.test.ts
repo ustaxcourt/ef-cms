@@ -2,10 +2,44 @@ jest.mock('cypress', () => ({
   open: jest.fn(),
   run: jest.fn(),
 }));
+jest.mock(
+  '../../shared/src/business/utilities/documentGenerators/jest_document_generator.config',
+  () => ({
+    testMatch:
+      '**/shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
+  }),
+);
+jest.mock(
+  '../../web-api/hostedEnvironmentTests/jest-hosted-environment',
+  () => ({
+    testMatch: ['**/web-api/hostedEnvironmentTests/**/?(*.)+(spec|test).[jt]s'],
+  }),
+);
+jest.mock('../../aws/jest-infrastructure.config', () => ({
+  testMatch: ['**/aws/**/?(*.)+(spec|test).[jt]s'],
+}));
+jest.mock('../jest-scripts.config', () => ({
+  testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../shared/jest-shared.config', () => ({
+  testMatch: [
+    '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
+}));
+jest.mock('../../web-api/jest-unit.config', () => ({
+  testMatch: ['', '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../web-client/jest-integration.config', () => ({
+  testMatch: ['<rootDir>/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
+jest.mock('../../web-client/jest-unit.config', () => ({
+  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+}));
 
-import { runCypressWithTiming } from './run-cypress-tests-with-timing.helpers';
+import { runCypressWithTiming } from './run-cypress.helpers';
 
-describe('run-cypress-tests-with-timing', () => {
+describe('run-cypress', () => {
   const createDependencies = () => {
     return {
       cypressRunner: {
@@ -53,12 +87,10 @@ describe('run-cypress-tests-with-timing', () => {
     expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).toBe('S3RVER');
     expect(dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL).toBe('5000');
-    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBeUndefined();
-    expect(dependencies.env.CYPRESS_BASE_URL).toBeUndefined();
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'edge',
       configFile: 'cypress.config.ts',
-      spec: 'cypress/local-only/tests/example.cy.ts',
     });
     expect(dependencies.getCypressTestFileTimes).toHaveBeenCalledWith({
       results: cypressResults,
@@ -139,14 +171,13 @@ describe('run-cypress-tests-with-timing', () => {
     });
 
     await runCypressWithTiming({
-      configFile: 'cypress-smoketests-private.config.ts',
+      configFile: 'cypress-smoketests.config.ts',
       current: false,
       dependencies,
       outputFilePath: 'timings.json',
       specs: 'example.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'edge',
@@ -170,7 +201,6 @@ describe('run-cypress-tests-with-timing', () => {
       specs: 'example.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:5678');
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'chrome',
@@ -194,7 +224,7 @@ describe('run-cypress-tests-with-timing', () => {
       specs: 'example.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_BASE_URL).toBeUndefined();
+    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:5678');
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'chrome',
       configFile: 'cypress-public.config.ts',
@@ -236,7 +266,6 @@ describe('run-cypress-tests-with-timing', () => {
       specs: 'example.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBeUndefined();
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'edge',

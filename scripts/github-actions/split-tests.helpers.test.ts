@@ -414,7 +414,7 @@ describe('split-tests.helpers', () => {
             CI_NODE_TOTAL: '1',
             TEST_FILE_TIMINGS_PATH: timingFilePath,
           },
-          (): string => splitTests('-public'),
+          (): string => splitTests(true),
         );
 
         expect(parseDelimitedOutput(output, ' ')).toEqual([

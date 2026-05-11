@@ -4,15 +4,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { cypressSuites } from './split-tests.helpers';
-import {
-  onOpen,
-  onSpecs,
-  onSuite,
-} from './run-cypress-tests-with-timing.helpers';
+import { cypressSuites } from '../github-actions/split-tests.helpers';
+import { onOpen, onSpecs, onSuite } from './run-cypress.helpers';
 
 const scriptConfig: ScriptConfig = {
-  description: 'run-cypress-tests-with-timing - Runs Cypress tests',
+  description: 'run-cypress - Runs Cypress tests',
   parameters: {
     browser: {
       required: false,

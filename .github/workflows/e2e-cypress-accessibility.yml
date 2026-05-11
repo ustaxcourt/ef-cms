@@ -33,7 +33,7 @@ jobs:
       is_cypress: true
       run_command: |
         export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts accessibility)
-        scripts/github-actions/run-cypress-tests-with-timing.ts --file "$TESTFILES" --output-file-path "$TEST_FILE_TIMINGS_SHARD_FILE"
+        scripts/tests/run-cypress.ts --file "$TESTFILES" --output-file-path "$TEST_FILE_TIMINGS_SHARD_FILE"
       workflow_filename: e2e-cypress-accessibility.yml
   persist-test-file-times:
     needs: [e2e_cypress_accessibility]

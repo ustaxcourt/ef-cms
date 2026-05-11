@@ -3,8 +3,11 @@ import {
   type CypressRunTimingResult,
   getCypressTestFileTimes,
   writeTestFileTimes,
-} from './test-file-times.helpers';
-import { cypressSuites, specDirToSuiteMap } from './split-tests.helpers';
+} from '../github-actions/test-file-times.helpers';
+import {
+  cypressSuites,
+  specDirToSuiteMap,
+} from '../github-actions/split-tests.helpers';
 
 type CypressRunOptions = {
   browser: string;
