@@ -226,16 +226,16 @@ export const setEnvironmentVariables = ({
   dependencies.dawson.isPublic = configFile.includes('ublic');
 
   if (dependencies.env.CI) {
-    dependencies.env.CYPRESS_NO_COMMAND_LOG ??= '1';
+    dependencies.env.CYPRESS_NO_COMMAND_LOG = '1';
   }
-  dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL ??= '5000';
-  dependencies.env.CYPRESS_TARGET_ENV ??= dependencies.env.ENV;
+  dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL = '5000';
+  dependencies.env.CYPRESS_TARGET_ENV = dependencies.env.ENV;
 
   if (dependencies.dawson.isLocal) {
     const port = dependencies.dawson.isPublic ? '5678' : '1234';
-    dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID ??= 'S3RVER';
-    dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY ??= 'S3RVER';
-    dependencies.env.CYPRESS_BASE_URL ??= `http://localhost:${port}`;
+    dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID = 'S3RVER';
+    dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY = 'S3RVER';
+    dependencies.env.CYPRESS_BASE_URL = `http://localhost:${port}`;
   } else {
     const env = dependencies.env.ENV;
     const currentColor = dependencies.env.CURRENT_COLOR;
