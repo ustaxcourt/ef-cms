@@ -260,7 +260,7 @@ export const getOutputsForCurrentCiNode = ({
 };
 
 export const splitTests = (publicTests: boolean): string => {
-  const specDir: string = `./web-client/integration-tests${publicTests ? '-public' : ''}/`;
+  const specDir: string = `web-client/integration-tests${publicTests ? '-public' : ''}/`;
   const files: SplittableFile[] = fs
     .readdirSync(specDir, 'utf8')
     .filter((fileName: string): boolean => fileName.endsWith('test.ts'))

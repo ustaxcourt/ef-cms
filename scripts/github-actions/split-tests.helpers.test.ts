@@ -241,7 +241,7 @@ describe('split-tests.helpers', () => {
       fs.writeFileSync(
         timingFilePath,
         JSON.stringify({
-          './example.test.ts': 1000,
+          'example.test.ts': 1000,
         }),
       );
 
@@ -250,7 +250,7 @@ describe('split-tests.helpers', () => {
           TEST_FILE_TIMINGS_PATH: timingFilePath,
         }),
       ).toEqual({
-        './example.test.ts': 1000,
+        'example.test.ts': 1000,
       });
     });
 
@@ -264,7 +264,7 @@ describe('split-tests.helpers', () => {
       fs.writeFileSync(
         timingFilePath,
         JSON.stringify({
-          './process-env.test.ts': 250,
+          'process-env.test.ts': 250,
         }),
       );
 
@@ -272,7 +272,7 @@ describe('split-tests.helpers', () => {
         process.env.TEST_FILE_TIMINGS_PATH = timingFilePath;
 
         expect(getHistoricalTestFileTimes()).toEqual({
-          './process-env.test.ts': 250,
+          'process-env.test.ts': 250,
         });
       } finally {
         process.env.TEST_FILE_TIMINGS_PATH = originalTimingsPath;
@@ -402,8 +402,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-timings.json',
         {
-          './web-client/integration-tests-public/a-first.test.ts': 10,
-          './web-client/integration-tests-public/z-last.test.ts': 10,
+          'web-client/integration-tests-public/a-first.test.ts': 10,
+          'web-client/integration-tests-public/z-last.test.ts': 10,
         },
       );
 
@@ -422,7 +422,47 @@ describe('split-tests.helpers', () => {
           'z-last.test.ts',
         ]);
         expect(readdirSyncSpy).toHaveBeenCalledWith(
-          './web-client/integration-tests-public/',
+          'web-client/integration-tests-public/',
+          'utf8',
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(output);
+      } finally {
+        readdirSyncSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
+
+    it('filters integration tests and logs matching spec filenames for non-public tests', () => {
+      const readdirSyncSpy = jest
+        .spyOn(fs, 'readdirSync')
+        .mockReturnValue(['z-last.test.ts', 'a-first.test.ts'] as never);
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation((): void => undefined);
+      const timingFilePath = writeHistoricalTimingFile(
+        'split-tests-timings-private.json',
+        {
+          'web-client/integration-tests/a-first.test.ts': 10,
+          'web-client/integration-tests/z-last.test.ts': 10,
+        },
+      );
+
+      try {
+        const output = withEnvironmentVariables(
+          {
+            CI_NODE_INDEX: '0',
+            CI_NODE_TOTAL: '1',
+            TEST_FILE_TIMINGS_PATH: timingFilePath,
+          },
+          (): string => splitTests(false),
+        );
+
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
+          'a-first.test.ts',
+          'z-last.test.ts',
+        ]);
+        expect(readdirSyncSpy).toHaveBeenCalledWith(
+          'web-client/integration-tests/',
           'utf8',
         );
         expect(consoleSpy).toHaveBeenCalledWith(output);
@@ -462,8 +502,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-cypress-timings.json',
         {
-          './cypress/local-only/tests/integration/private-a.cy.ts': 5,
-          './cypress/local-only/tests/integration/nested/private-b.cy.ts': 5,
+          'cypress/local-only/tests/integration/private-a.cy.ts': 5,
+          'cypress/local-only/tests/integration/nested/private-b.cy.ts': 5,
         },
       );
 
@@ -478,11 +518,11 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, ',')).toEqual([
-          './cypress/local-only/tests/integration/nested/private-b.cy.ts',
-          './cypress/local-only/tests/integration/private-a.cy.ts',
+          'cypress/local-only/tests/integration/nested/private-b.cy.ts',
+          'cypress/local-only/tests/integration/private-a.cy.ts',
         ]);
         expect(readdirSyncSpy).toHaveBeenCalledWith(
-          './cypress/local-only/tests/integration',
+          'cypress/local-only/tests/integration',
           {
             encoding: 'utf8',
             recursive: true,
@@ -512,9 +552,9 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-cypress-public-timings.json',
         {
-          './cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts': 5,
-          './cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
-          './cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
+          'cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts': 5,
+          'cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
+          'cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
         },
       );
 
@@ -529,9 +569,9 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, ',')).toEqual([
-          './cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts',
-          './cypress/local-only/tests/integration/public/nested/public-b.cy.ts',
-          './cypress/local-only/tests/integration/public/public-a.cy.ts',
+          'cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts',
+          'cypress/local-only/tests/integration/public/nested/public-b.cy.ts',
+          'cypress/local-only/tests/integration/public/public-a.cy.ts',
         ]);
         expect(consoleSpy).toHaveBeenCalledWith(output);
       } finally {
@@ -546,8 +586,8 @@ describe('split-tests.helpers', () => {
       const globSyncSpy = jest
         .spyOn(glob, 'sync')
         .mockReturnValue([
-          './web-client/src/beta.test.ts',
-          './web-client/src/nested/alpha.test.ts',
+          'web-client/src/beta.test.ts',
+          'web-client/src/nested/alpha.test.ts',
         ]);
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -555,8 +595,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-web-client-unit.json',
         {
-          './web-client/src/beta.test.ts': 10,
-          './web-client/src/nested/alpha.test.ts': 10,
+          'web-client/src/beta.test.ts': 10,
+          'web-client/src/nested/alpha.test.ts': 10,
         },
       );
 
@@ -571,8 +611,8 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, '|')).toEqual([
-          './web-client/src/beta.test.ts',
-          './web-client/src/nested/alpha.test.ts',
+          'web-client/src/beta.test.ts',
+          'web-client/src/nested/alpha.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
           'web-client/src/**/?(*.)+(spec|test).[jt]s?(x)',
@@ -588,8 +628,8 @@ describe('split-tests.helpers', () => {
       const globSyncSpy = jest
         .spyOn(glob, 'sync')
         .mockReturnValue([
-          './shared/src/example.test.ts',
-          './shared/src/nested/another.test.ts',
+          'shared/src/example.test.ts',
+          'shared/src/nested/another.test.ts',
         ]);
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -597,8 +637,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-shared.json',
         {
-          './shared/src/example.test.ts': 12,
-          './shared/src/nested/another.test.ts': 12,
+          'shared/src/example.test.ts': 12,
+          'shared/src/nested/another.test.ts': 12,
         },
       );
 
@@ -613,8 +653,8 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, '|')).toEqual([
-          './shared/src/example.test.ts',
-          './shared/src/nested/another.test.ts',
+          'shared/src/example.test.ts',
+          'shared/src/nested/another.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
           'shared/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
@@ -633,7 +673,7 @@ describe('split-tests.helpers', () => {
       const globSyncSpy = jest
         .spyOn(glob, 'sync')
         .mockReturnValue([
-          './shared/src/business/utilities/documentGenerators/example.test.ts',
+          'shared/src/business/utilities/documentGenerators/example.test.ts',
         ]);
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -642,7 +682,7 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-doc-gen-timings.json',
         {
-          './shared/src/business/utilities/documentGenerators/example.test.ts': 5,
+          'shared/src/business/utilities/documentGenerators/example.test.ts': 5,
         },
       );
 
@@ -657,7 +697,7 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, '|')).toEqual([
-          './shared/src/business/utilities/documentGenerators/example.test.ts',
+          'shared/src/business/utilities/documentGenerators/example.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
           'shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
@@ -671,14 +711,14 @@ describe('split-tests.helpers', () => {
     it('ignores empty testMatch entries', () => {
       const globSyncSpy = jest
         .spyOn(glob, 'sync')
-        .mockReturnValue(['./web-api/src/example.test.ts']);
+        .mockReturnValue(['web-api/src/example.test.ts']);
       const consoleSpy = jest
         .spyOn(console, 'log')
         .mockImplementation((): void => undefined);
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-web-api-timings.json',
         {
-          './web-api/src/example.test.ts': 5,
+          'web-api/src/example.test.ts': 5,
         },
       );
 
@@ -693,7 +733,7 @@ describe('split-tests.helpers', () => {
         );
 
         expect(parseDelimitedOutput(output, '|')).toEqual([
-          './web-api/src/example.test.ts',
+          'web-api/src/example.test.ts',
         ]);
         // Should only be called once because the first entry is empty
         expect(globSyncSpy).toHaveBeenCalledTimes(1);
