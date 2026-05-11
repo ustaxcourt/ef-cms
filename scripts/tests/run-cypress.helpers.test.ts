@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 jest.mock('cypress', () => ({
   open: jest.fn(),
   run: jest.fn(),
@@ -359,6 +360,24 @@ describe('run-cypress', () => {
       expect(() => determineSuiteFromSpecs({ extantSpecs })).toThrow(
         'Multiple matching suites found for specs: cypress/local-only/tests/integration/private-a.cy.ts,cypress/local-only/tests/accessibility/private-a.cy.ts. Please specify the suite explicitly.',
       );
+    });
+
+    it('does not add the same suite multiple times when multiple public spec files are provided', () => {
+      const extantSpecs = [
+        'cypress/local-only/tests/integration/public/public-a.cy.ts',
+        'cypress/local-only/tests/integration/public/public-b.cy.ts',
+      ];
+      const suite = determineSuiteFromSpecs({ extantSpecs });
+      expect(suite).toBe('public');
+    });
+
+    it('does not add the same suite multiple times when multiple private spec files are provided', () => {
+      const extantSpecs = [
+        'cypress/local-only/tests/integration/private-a.cy.ts',
+        'cypress/local-only/tests/integration/private-b.cy.ts',
+      ];
+      const suite = determineSuiteFromSpecs({ extantSpecs });
+      expect(suite).toBe('integration');
     });
   });
 

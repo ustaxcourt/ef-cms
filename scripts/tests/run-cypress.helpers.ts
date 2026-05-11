@@ -69,14 +69,20 @@ export const determineSuiteFromSpecs = ({
         },
       );
       for (const specDir of suspectedPublicSuite) {
-        suspectedSuites.push(specDirToSuiteMap[specDir]);
+        if (!suspectedSuites.includes(specDirToSuiteMap[specDir])) {
+          suspectedSuites.push(specDirToSuiteMap[specDir]);
+        }
       }
     } else {
       const suspectedPrivateSuite = Object.keys(specDirToSuiteMap).find(
         specDir => specFile.includes(specDir),
       );
       if (suspectedPrivateSuite) {
-        suspectedSuites.push(specDirToSuiteMap[suspectedPrivateSuite]);
+        if (
+          !suspectedSuites.includes(specDirToSuiteMap[suspectedPrivateSuite])
+        ) {
+          suspectedSuites.push(specDirToSuiteMap[suspectedPrivateSuite]);
+        }
       }
     }
   }
@@ -138,7 +144,7 @@ export const onSpecs = async ({
 }) => {
   let determinedSpecs: string;
   const extantSpecs: string[] = [];
-  for (const specFile of file.split(',')) {
+  for (const specFile of file.replaceAll(' ', ',').split(',')) {
     if (fs.existsSync(specFile)) {
       extantSpecs.push(specFile);
     }
