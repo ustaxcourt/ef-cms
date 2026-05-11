@@ -81,6 +81,13 @@ export class CaseDTO {
   public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[];
+  // Set by interactors that enqueue coversheet jobs, so the client can
+  // gate awaitCoversheetCompleteAction on it. Declared here so the field
+  // survives dataSecurityFilter's reconstruction of the response. Today's
+  // callers enqueue at most one job per request, but typing this as an
+  // array keeps the contract honest if a future caller (e.g. a queued
+  // serveCaseToIrs) fans out across multiple docket entries.
+  public pendingCoversheetDocketEntryIds?: string[];
 
   constructor(
     rawCase: RawCase,
@@ -90,6 +97,12 @@ export class CaseDTO {
       isNewCase?: boolean;
     },
   ) {
+    // Captured before the Case rebuild, since Case.toRawObject() does not
+    // round-trip this transient field — it lives on the response only.
+    const { pendingCoversheetDocketEntryIds } = rawCase as RawCase & {
+      pendingCoversheetDocketEntryIds?: string[];
+    };
+
     if (rebuildCaseOptions) {
       rawCase = new Case(rawCase, rebuildCaseOptions).toRawObject();
     }
@@ -169,5 +182,6 @@ export class CaseDTO {
     this.archivedCorrespondences = rawCase.archivedCorrespondences;
     this.hasPendingItems = rawCase.hasPendingItems;
     this.consolidatedCases = rawCase.consolidatedCases;
+    this.pendingCoversheetDocketEntryIds = pendingCoversheetDocketEntryIds;
   }
 }
