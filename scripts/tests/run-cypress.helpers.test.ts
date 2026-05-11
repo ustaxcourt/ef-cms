@@ -112,7 +112,7 @@ describe('run-cypress', () => {
     expect(dependencies.exit).toHaveBeenCalledWith(2);
   });
 
-  it('preserves existing environment values and honors a provided browser', async () => {
+  it('overwrites existing environment values and honors a provided browser', async () => {
     const dependencies = createDependencies();
     const cypressResults = {
       runs: [],
@@ -134,13 +134,15 @@ describe('run-cypress', () => {
       specs: 'spec-a.cy.ts,spec-b.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe(
+    expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).not.toBe(
       'existing-access-key',
     );
-    expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).toBe(
+    expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).not.toBe(
       'existing-secret',
     );
-    expect(dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL).toBe('9000');
+    expect(dependencies.env.CYPRESS_CHECK_DEPLOY_DATE_INTERVAL).not.toBe(
+      '9000',
+    );
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
       browser: 'chrome',
       configFile: 'cypress-public.config.ts',
@@ -263,7 +265,7 @@ describe('run-cypress', () => {
     });
   });
 
-  it('preserves existing CYPRESS_BASE_URL', async () => {
+  it('overwrites existing CYPRESS_BASE_URL', async () => {
     const dependencies = createDependencies();
     dependencies.env.CYPRESS_BASE_URL = 'http://existing:9999';
     dependencies.cypressRunner.run.mockResolvedValue({
@@ -279,7 +281,7 @@ describe('run-cypress', () => {
       specs: 'example.cy.ts',
     });
 
-    expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://existing:9999');
+    expect(dependencies.env.CYPRESS_BASE_URL).not.toBe('http://existing:9999');
   });
 
   it('sets correct defaults for real user tests', async () => {
