@@ -14,7 +14,7 @@ export const saveCaseNoteAction = async ({
   const caseNote = get(state.modal.notes);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .saveCaseNoteInteractor(applicationContext, {
       caseNote,
@@ -25,6 +25,5 @@ export const saveCaseNoteAction = async ({
     alertSuccess: {
       message: 'Note saved.',
     },
-    caseDetail,
   };
 };

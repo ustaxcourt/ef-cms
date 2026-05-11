@@ -424,10 +424,40 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,
+          });
+        });
+
+        it('should enqueue a coversheet job for the served docket entry', async () => {
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
+            },
+            mockDocketClerkUser,
+          );
+
+          const queueWorkCalls = (
+            applicationContext.getWorkerGateway().queueWork as jest.Mock
+          ).mock.calls;
+          const coversheetMessages = queueWorkCalls
+            .map(args => args[1]?.message)
+            .filter(message => message?.type === 'ADD_COVERSHEET');
+          expect(coversheetMessages).toHaveLength(1);
+          expect(coversheetMessages[0].payload).toMatchObject({
+            docketEntryId: mockDocketEntryId,
+            docketNumber: caseRecord.docketNumber,
           });
         });
       });
@@ -467,6 +497,27 @@ describe('editPaperFilingInteractor', () => {
             docketNumber: caseRecord.docketNumber,
             status: false,
           });
+        });
+        it('should not serve the document if filing a document fails', async () => {
+          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(new Error('Database error'));
+          const docketEntry = caseRecord.docketEntries[1];
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: docketEntry.docketEntryId,
+                documentMetadata: docketEntry,
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow('Database error');
+
+          expect(
+            applicationContext.getUseCaseHelpers()
+              .serveDocumentAndGetPaperServicePdf,
+          ).not.toHaveBeenCalled();
         });
       });
     });
@@ -580,11 +631,6 @@ describe('editPaperFilingInteractor', () => {
           ]);
           applicationContext
             .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
-          applicationContext
-            .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
               pdfUrl: mockedPaperServicePdfUrl,
             });
@@ -627,7 +673,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockedPaperServicePdfUrl,
             },
             userId: docketClerkUser.userId,
@@ -648,11 +694,6 @@ describe('editPaperFilingInteractor', () => {
               ],
             }),
           );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
@@ -687,7 +728,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: undefined,
             },
             userId: docketClerkUser.userId,

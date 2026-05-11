@@ -105,6 +105,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialClerkOfCourtDashboardState } from './clerkOfCourtDashboardState';
 import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
@@ -778,6 +779,7 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  clerkOfCourtDashboard: cloneDeep(initialClerkOfCourtDashboardState),
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
@@ -834,6 +836,7 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  readOnlyMode: false,
   messageBoxToDisplay: {
     box: undefined,
     queue: undefined,
@@ -957,6 +960,7 @@ export const baseState = {
     waitingForResponseRequests: 0,
     waitText: undefined as string | undefined,
   },
+  readOnlyPollingInterval: undefined as unknown as NodeJS.Timeout,
   redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,

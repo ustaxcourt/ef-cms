@@ -88,6 +88,7 @@ export const CaseSearchBox = connect(
                 </div>
 
                 <Button
+                  overrideReadOnly
                   secondary
                   data-testid="search-by-docket-number"
                   type="submit"

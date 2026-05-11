@@ -51,6 +51,7 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },
@@ -60,12 +61,11 @@ describe('completeDocketEntryQCAction', () => {
         .calls.length,
     ).toEqual(1);
 
-    expect(successMock.mock.calls[0][0]).toEqual({
+    expect(successMock.mock.calls[0][0]).toMatchObject({
       alertSuccess: {
         message: "bob's burgers has been completed.",
         title: 'QC Completed',
       },
-      caseDetail,
       docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
       paperServiceDocumentTitle: undefined,
@@ -75,12 +75,6 @@ describe('completeDocketEntryQCAction', () => {
   });
 
   it('should return the full document title with additional info as a part of props.alertSuccess.message without appending additional text when props.qcCompletionAndMessageFlag is falsy', async () => {
-    caseDetail.docketEntries[0] = {
-      ...caseDetail.docketEntries[0],
-      addToCoversheet: true,
-      additionalInfo: 'More title information',
-    };
-
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
@@ -89,6 +83,8 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          additionalInfo: 'More title information',
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },
@@ -100,12 +96,6 @@ describe('completeDocketEntryQCAction', () => {
   });
 
   it('should return the full document title with the addition of "and message sent" as a part of props.alertSuccess.message when props.qcCompletionAndMessageFlag is true', async () => {
-    caseDetail.docketEntries[0] = {
-      ...caseDetail.docketEntries[0],
-      addToCoversheet: true,
-      additionalInfo: 'More title information',
-    };
-
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
@@ -117,6 +107,8 @@ describe('completeDocketEntryQCAction', () => {
         caseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
+          additionalInfo: 'More title information',
+          documentTitle: "bob's burgers",
           primaryDocumentFile: {},
         },
       },

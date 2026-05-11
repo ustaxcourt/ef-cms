@@ -23,6 +23,7 @@ export const SimplePdfPreviewPage = connect(
         >
           <WarningNotification />
           <Button
+            overrideReadOnly
             link
             className="margin-bottom-3"
             onClick={() => {

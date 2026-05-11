@@ -33,7 +33,10 @@ type ServeDocumentCompleteNotification = {
     message: string;
     overwritable: boolean;
   };
-  generateCoversheet?: boolean;
+  // Set when the backend enqueued coversheet jobs for one or more entries.
+  // The frontend polls processing status until COMPLETE so the UI reflects
+  // the updated page count, but it never triggers generation itself.
+  pendingCoversheetDocketEntryIds?: string[];
   docketEntryId?: string;
   pdfUrl?: string;
 };
@@ -224,7 +227,17 @@ type MaintenanceModeDisengaged = {
   action: 'maintenance_mode_disengaged';
 };
 
+type ReadOnlyModeEngaged = {
+  action: 'read_only_mode_engaged';
+};
+
+type ReadOnlyModeDisengaged = {
+  action: 'read_only_mode_disengaged';
+};
+
 export type SocketRouterNotificationMessage =
   | NotificationMessage
   | MaintenanceModeEngaged
-  | MaintenanceModeDisengaged;
+  | MaintenanceModeDisengaged
+  | ReadOnlyModeEngaged
+  | ReadOnlyModeDisengaged;

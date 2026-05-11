@@ -24,6 +24,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
@@ -319,28 +320,33 @@ export const createCaseFromPaperInteractor = async (
   let workItem: WorkItem;
 
   try {
-    ({ caseToAdd, workItem } = await createCaseMetadata(
-      applicationContext,
-      {
-        applicationForWaiverOfFilingFeeFileId,
-        attachmentToPetitionFileId,
-        corporateDisclosureFileId,
-        petitionFileId,
-        petitionMetadata,
-        requestForPlaceOfTrialFileId,
-        stinFileId,
-        user,
-      },
-      authorizedUser,
-    ));
+    ({ caseToAdd, workItem } = await withTransaction(async () => {
+      const result = await createCaseMetadata(
+        applicationContext,
+        {
+          applicationForWaiverOfFilingFeeFileId,
+          attachmentToPetitionFileId,
+          corporateDisclosureFileId,
+          petitionFileId,
+          petitionMetadata,
+          requestForPlaceOfTrialFileId,
+          stinFileId,
+          user,
+        },
+        authorizedUser,
+      );
+
+      setServiceIndicatorsForPetitionersOnCase(result.caseToAdd);
+
+      await upsertWorkItems({
+        workItems: [result.workItem.validate().toRawObject()],
+      });
+
+      return result;
+    }));
   } finally {
     await removeLockFunction();
   }
-  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
-
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
 
   return {
     caseDetail: new CaseDTO(

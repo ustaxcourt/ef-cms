@@ -43,6 +43,7 @@ import {
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
@@ -211,8 +212,12 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
+  let noticeUpdatedDocketEntry: DocketEntry;
+  let serveDocumentAndGetPaperServicePdfCall:
+    | (() => Promise<{ pdfUrl: string } | undefined>)
+    | undefined;
+  let paperServicePdfUrl: string | undefined = undefined;
+  let paperServiceDocumentTitle: string | undefined = undefined;
   let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
 
@@ -221,7 +226,7 @@ const completeDocketEntryQC = async (
     caseEntity: Case;
     docketEntryId: string;
   }> = [];
-  const updatePersistencePromises: Promise<any>[] = [];
+  const updatePersistenceFns: Array<() => Promise<any>> = [];
 
   const cannotUseOriginalFilingCase = !multiDocketedOn.includes(
     originallyFiledDocketNumber!,
@@ -312,7 +317,7 @@ const completeDocketEntryQC = async (
       sentByUserId: user.userId,
     });
 
-    updatePersistencePromises.push(
+    updatePersistenceFns.push(() =>
       upsertWorkItems({
         workItems: [currentWorkItem.validate().toRawObject()],
       }),
@@ -382,7 +387,7 @@ const completeDocketEntryQC = async (
         docketChangeInfo,
       });
 
-      const noticeUpdatedDocketEntry = new DocketEntry(
+      noticeUpdatedDocketEntry = new DocketEntry(
         {
           ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
           docketEntryId: noticeDocumentStorageId,
@@ -451,7 +456,7 @@ const completeDocketEntryQC = async (
       }
     }
 
-    updatePersistencePromises.push(
+    updatePersistenceFns.push(() =>
       updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: currentCase,
@@ -460,7 +465,9 @@ const completeDocketEntryQC = async (
   }
 
   if (caseSpecificNotices.length > 0) {
-    const paperServiceResult = await applicationContext
+    // storing this to run in transaction
+    serveDocumentAndGetPaperServicePdfCall = async () => {
+      return applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -468,19 +475,30 @@ const completeDocketEntryQC = async (
         docketEntryId: caseSpecificNotices[0].docketEntryId,
         caseSpecificDocketEntries: caseSpecificNotices,
       });
-
-    if (paperServiceParties.length > 0) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
-    }
+    };
   }
 
-  await settlePromises(updatePersistencePromises);
+  await withTransaction(async () => {
+    await settlePromises(updatePersistenceFns.map(fn => fn()));
+
+    if (serveDocumentAndGetPaperServicePdfCall) {
+      const paperServiceResult = await serveDocumentAndGetPaperServicePdfCall();
+      if (paperServiceParties.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
+      }
+    }
+  });
 
   if (isNewCoverSheetNeeded) {
+    // Intentionally synchronous: this QC flow depends on the regenerated
+    // coversheet being in place before the response is returned. Move to
+    // the queued/async path (enqueueAddCoversheet) only if we add polling
+    // on the client side of QC as well.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         docketEntryId,
         docketNumber,
       },

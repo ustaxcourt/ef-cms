@@ -9,9 +9,9 @@ import {
 import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
@@ -101,7 +101,6 @@ export const serveExternallyFiledDocument = async (
 
   let paperServiceResult;
   let caseEntities: Case[] = [];
-  const coversheetLength = 1;
 
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
@@ -140,7 +139,7 @@ export const serveExternallyFiledDocument = async (
             isPendingService: isSubjectCase,
             multiDocketedOn: docketNumbers,
             originallyFiledDocketNumber: subjectCaseDocketNumber,
-            numberOfPages: numberOfPages + coversheetLength,
+            numberOfPages,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
           { authorizedUser },
@@ -166,9 +165,14 @@ export const serveExternallyFiledDocument = async (
       );
     }
 
+    // Intentionally synchronous: serving externally-filed documents must
+    // produce a finished, coversheet-attached PDF before the response so
+    // the document is ready for service. Queueing here would require the
+    // service step to wait on a poll, which we haven't built yet.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
+        bypassIdempotencyGate: false,
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
         docketNumber: updatedSubjectCaseEntity!.docketNumber,

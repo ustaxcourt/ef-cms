@@ -66,7 +66,7 @@
         }
       }
     },
-    "/api/docket-record-pdf": {
+    "/async/docket-record-pdf": {
       "post": {
         "summary": "create a pdf of the docket record for a case",
         "description": "create a pdf of the docket record for a case.\n",
@@ -251,6 +251,58 @@
         "tags": [],
         "summary": "get all pending items",
         "description": "get all pending items.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/clerk-dashboard-stats": {
+      "parameters": [
+        {
+          "name": "year",
+          "in": "query",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [],
+        "summary": "get clerk of court dashboard stats",
+        "description": "get aggregated stats for the clerk of court dashboard.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -3292,6 +3344,69 @@
         }
       }
     },
+    "/case-documents/{docketNumber}/{docketEntryId}/processing-status": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["case-documents"],
+        "summary": "returns the coversheet processing status of a docket entry",
+        "description": "returns the coversheet processing status of a docket entry. Used by the client to poll while a coversheet is being generated asynchronously.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "processingStatus": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
@@ -4585,61 +4700,6 @@
             "schema": {
               "$ref": "#/definitions/workItem"
             }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
-      "parameters": [
-        {
-          "name": "docketNumber",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "docketEntryId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["workitems"],
-        "summary": "creates a coversheet and prepends it to the existing s3 document",
-        "description": "creates a coversheet and prepends it to the existing s3 document.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response"
           }
         },
         "security": [

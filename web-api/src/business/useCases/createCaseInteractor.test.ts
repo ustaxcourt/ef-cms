@@ -27,6 +27,14 @@ import { generateDocketNumber } from '@web-api/persistence/postgres/cases/genera
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
+
+const mockOpenSearchQueueSync = jest.fn();
+jest.mock('@web-api/gateways/openSearch/openSearchGateway', () => ({
+  openSearchGateway: () => ({
+    queueSync: mockOpenSearchQueueSync,
+  }),
+}));
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -86,6 +94,7 @@ describe('createCaseInteractor', () => {
     });
 
     (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
+    (upsertWorkItems as jest.Mock).mockResolvedValue(null);
 
     getUserById.mockImplementation(() => user);
 
@@ -152,6 +161,21 @@ describe('createCaseInteractor', () => {
     });
     expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
+
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(
+      coversheetMessages.map(m => m.payload.docketEntryId).sort(),
+    ).toEqual(
+      [
+        '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      ].sort(),
+    );
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {
@@ -592,5 +616,46 @@ describe('createCaseInteractor', () => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
       expect(p.email).toBeUndefined();
     });
+  });
+
+  it('should not insert the work item if creating case fails', async () => {
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(upsertWorkItems).not.toHaveBeenCalled();
+  });
+
+  it('should not sync to open search if creating case fails', async () => {
+    mockOpenSearchQueueSync.mockClear();
+
+    (createCase as jest.Mock).mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      createCaseInteractor(
+        applicationContext,
+        {
+          petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          petitionMetadata: mockPetitionMetadata,
+          stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        } as any,
+        user,
+      ),
+    ).rejects.toThrow('Database error');
+    expect(mockOpenSearchQueueSync).not.toHaveBeenCalled();
   });
 });

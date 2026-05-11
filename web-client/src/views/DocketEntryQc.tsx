@@ -136,6 +136,7 @@ export const DocketEntryQc = connect(
                     Complete &amp; Send Message
                   </Button>
                   <Button
+                    overrideReadOnly
                     link
                     id="cancel-button"
                     onClick={() => {

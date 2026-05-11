@@ -1,6 +1,7 @@
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
+import { addCoversheetWorker } from './business/useCases/coversheet/addCoversheetWorker';
 import { addDeficiencyStatisticInteractor } from './business/useCases/caseStatistics/addDeficiencyStatisticInteractor';
 import { addPaperFilingInteractor } from './business/useCases/docketEntry/addPaperFilingInteractor';
 import { addPetitionerToCaseInteractor } from './business/useCases/addPetitionerToCaseInteractor';
@@ -152,6 +153,7 @@ import { sealCaseContactAddressInteractor } from '../../shared/src/business/useC
 import { sealCaseInteractor } from '../../shared/src/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from './business/useCases/docketEntry/sealDocketEntryInteractor';
 import { sendMaintenanceNotificationsInteractor } from './business/useCases/maintenance/sendMaintenanceNotificationsInteractor';
+import { sendReadOnlyNotificationsInteractor } from './business/useCases/maintenance/sendReadOnlyNotificationsInteractor';
 import { serveCaseToIrsInteractor } from './business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
 import { serveCourtIssuedDocumentInteractor } from './business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
 import { serveExternallyFiledDocumentInteractor } from './business/useCases/document/serveExternallyFiledDocumentInteractor';
@@ -199,6 +201,7 @@ const useCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  addCoversheetWorker,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
@@ -350,6 +353,7 @@ const useCases = {
   sealCaseInteractor,
   sealDocketEntryInteractor,
   sendMaintenanceNotificationsInteractor,
+  sendReadOnlyNotificationsInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,

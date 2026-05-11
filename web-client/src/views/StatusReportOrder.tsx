@@ -440,7 +440,11 @@ export const StatusReportOrder = connect(
                   Preview PDF
                 </Button>
 
-                <Button link onClick={() => navigateBackSequence()}>
+                <Button
+                  overrideReadOnly
+                  link
+                  onClick={() => navigateBackSequence()}
+                >
                   Cancel
                 </Button>
               </div>

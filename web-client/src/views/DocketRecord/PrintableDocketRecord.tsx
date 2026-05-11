@@ -16,6 +16,7 @@ export const PrintableDocketRecord = connect(
         <CaseDetailHeader hideActionButtons />
         <div className="grid-container print-docket-record">
           <Button
+            overrideReadOnly
             link
             className="margin-bottom-3"
             onClick={() => {

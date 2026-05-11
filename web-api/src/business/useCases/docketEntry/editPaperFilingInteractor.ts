@@ -22,7 +22,6 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -31,10 +30,12 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -148,26 +149,37 @@ const saveForLaterStrategy = async ({
     );
   }
 
-  const updatedDocketEntryEntity = await updateDocketEntry({
-    applicationContext,
-    authorizedUser,
-    caseEntity,
-    docketEntry: docketEntryEntity,
-    documentMetadata: request.documentMetadata,
-    userId: user.userId,
-  });
+  let numberOfPages: number | undefined;
+  if (request.documentMetadata.isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId: docketEntryEntity.documentStorageId,
+      });
+  }
 
-  await updateAndSaveWorkItem({
-    applicationContext,
-    docketEntry: updatedDocketEntryEntity,
-    user,
-  });
+  await withTransaction(async () => {
+    const updatedDocketEntryEntity = updateDocketEntry({
+      authorizedUser,
+      caseEntity,
+      docketEntry: docketEntryEntity,
+      documentMetadata: request.documentMetadata,
+      userId: user.userId,
+      numberOfPages,
+    });
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+    await updateAndSaveWorkItem({
+      applicationContext,
+      docketEntry: updatedDocketEntryEntity,
+      user,
+    });
 
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
+  });
   const { clientConnectionId, docketEntryId } = request;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -296,27 +308,37 @@ const serveDocketEntry = async ({
       );
     }
 
-    const updatedDocketEntry = await updateDocketEntry({
-      applicationContext,
+    let numberOfPages: number | undefined;
+    if (documentMetadata.isFileAttached) {
+      numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryEntity.documentStorageId,
+        });
+    }
+
+    const updatedDocketEntry = updateDocketEntry({
       authorizedUser,
       caseEntity: subjectCaseEntity,
       docketNumbers: caseEntitiesToFileOn.map(e => e.docketNumber),
       docketEntry: docketEntryEntity,
       documentMetadata,
       userId: user.userId,
+      numberOfPages,
     });
 
-    caseEntitiesToFileOn = await settlePromises(
-      caseEntitiesToFileOn.map(aCase =>
-        fileAndServeDocumentOnOneCase({
+    await withTransaction(async () => {
+      for (const aCase of caseEntitiesToFileOn) {
+        await fileAndServeDocumentOnOneCase({
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
           user,
-        }),
-      ),
-    );
+        });
+      }
+    });
 
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -328,14 +350,20 @@ const serveDocketEntry = async ({
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+    });
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
         action: 'serve_document_complete',
         alertSuccess: { message, overwritable: false },
+        pendingCoversheetDocketEntryIds: [docketEntryEntity.docketEntryId],
         docketEntryId: docketEntryEntity.docketEntryId,
-        generateCoversheet: true,
         pdfUrl: paperServicePdfUrl,
       },
       userId: user.userId,
@@ -401,23 +429,23 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const updateDocketEntry = async ({
-  applicationContext,
+const updateDocketEntry = ({
   authorizedUser,
   caseEntity,
   docketEntry,
   docketNumbers,
   documentMetadata,
   userId,
+  numberOfPages,
 }: {
-  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
   docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
-}): Promise<DocketEntry> => {
+  numberOfPages?: number;
+}): DocketEntry => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -451,21 +479,13 @@ const updateDocketEntry = async ({
       ...editableFields,
       multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
+      numberOfPages,
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   );
-
-  if (editableFields.isFileAttached) {
-    updatedDocketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentStorageId: docketEntry.documentStorageId,
-      });
-  }
 
   caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
