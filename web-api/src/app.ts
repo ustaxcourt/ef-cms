@@ -445,7 +445,7 @@ app.use(expressLogger);
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
+    '/async/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve',
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(

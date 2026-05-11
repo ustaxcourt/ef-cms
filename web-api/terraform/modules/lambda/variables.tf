@@ -44,3 +44,9 @@ variable "use_source_maps" {
   type = bool
   default = true
 }
+
+variable "ephemeral_storage" {
+  type        = number
+  default     = null
+  description = "Size (MB) of /tmp ephemeral storage. Null leaves AWS default (512). Used by api_async_lambda to hold large PDFs for qpdf."
+}

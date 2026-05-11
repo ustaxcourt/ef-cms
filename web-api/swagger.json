@@ -3355,7 +3355,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{docketEntryId}/serve": {
+    "/async/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
           "name": "docketNumber",

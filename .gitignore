@@ -30,6 +30,7 @@ parcel-debug-*
 proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
 puppeteer_lambda_layer.zip
+qpdf_lambda_layer.zip
 reports/test-reporter.xml
 scripts/env/defaults
 shared/coverage

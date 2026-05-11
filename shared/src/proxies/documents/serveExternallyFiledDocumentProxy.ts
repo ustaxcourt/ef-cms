@@ -17,6 +17,6 @@ export const serveExternallyFiledDocumentInteractor = (
   return post({
     applicationContext,
     body: data,
-    endpoint: `/case-documents/${subjectCaseDocketNumber}/${docketEntryId}/serve`,
+    endpoint: `/async/case-documents/${subjectCaseDocketNumber}/${docketEntryId}/serve`,
   });
 };

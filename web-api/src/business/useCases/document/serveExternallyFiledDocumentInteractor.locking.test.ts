@@ -2,20 +2,35 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
-jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+// The qpdf path is exercised in serveExternallyFiledDocumentInteractor.test.ts
+// and serveDocumentWithQpdf.test.ts; these locking tests focus on the
+// withLocking wrapper so we keep the qpdf side effects fully mocked here.
+jest.mock('@web-api/utilities/qpdf', () => ({
+  qpdfMerge: jest.fn().mockResolvedValue(undefined),
+  qpdfPageCount: jest.fn().mockResolvedValue(1),
+}));
+jest.mock(
+  '@web-api/business/useCaseHelper/document/serveDocumentWithQpdf',
+  () => ({
+    prependCoversheetWithQpdfAndPersist: jest
+      .fn()
+      .mockResolvedValue({ withCoverPath: '/tmp/serve-mock/with-cover.pdf', numberOfPages: 2 }),
+    runPaperServiceWithQpdf: jest
+      .fn()
+      .mockResolvedValue({ pdfUrl: 'ayo.seankingston.com' }),
+  }),
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { addCoverToPdf } from '../addCoverToPdf';
 import {
   determineEntitiesToLock,
   serveExternallyFiledDocumentInteractor,
 } from '@web-api/business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
@@ -62,7 +77,6 @@ describe('determineEntitiesToLock', () => {
 describe('serveExternallyFiledDocumentInteractor', () => {
   const mockClientConnectionId = '987654';
   const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
-  const mockPdfUrl = 'ayo.seankingston.com';
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
@@ -82,22 +96,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     fileAndServeDocumentOnOneCaseMock,
   );
 
-  beforeAll(() => {
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: testPdfDoc,
-    });
-  });
-
   beforeEach(() => {
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,
     );
-
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-        pdfUrl: mockPdfUrl,
-      });
 
     getUserById.mockResolvedValue(mockDocketClerkUser as DbUser);
     getCaseByDocketNumber.mockResolvedValue(mockCase);

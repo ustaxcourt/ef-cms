@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.77
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.78
 
 parameters:
   run_build_and_deploy:
@@ -142,6 +142,10 @@ jobs:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+      - run:
+          name: Build qpdf Lambda Layer
+          command: |
+            cd web-api/runtimes/qpdf && ./build.sh && cd ../../..
       - run:
           name: Perform an Aurora blue/green deployment if the RDS engine version has changed
           command: |

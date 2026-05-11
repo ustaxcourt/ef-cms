@@ -55,9 +55,11 @@ To run a DAWSON development environment, we will need to install the following C
      circleci \
      oath-toolkit \
      libpq \
-     gh
+     gh \
+     qpdf
    ```
 1. Several of the installed packages will output some post-installation steps. Follow those instructions to complete the installation.
+1. `qpdf` is required by the externally-filed document serve flow (`serveExternallyFiledDocumentInteractor`), which shells out to the `qpdf` binary to prepend coversheets and assemble paper-service PDFs without loading the source PDF into JavaScript memory. In deployed environments the binary ships in a dedicated Lambda layer built from `web-api/runtimes/qpdf/`; locally you need it on your `$PATH`. Verify with `qpdf --version`.
 1. ⚠️ Apple Silicon Macs Only ⚠️
    1. Apple Silicon Macs require some additional software to be installed.  Run the following commands to install and configure the necessary dependencies:
       ```sh

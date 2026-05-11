@@ -4,11 +4,29 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
-jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
-jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
+// The qpdf wrapper shells out to a binary; we never exercise that in unit
+// tests. qpdfPageCount returns a fixed page count.
+jest.mock('@web-api/utilities/qpdf', () => ({
+  qpdfMerge: jest.fn().mockResolvedValue(undefined),
+  qpdfPageCount: jest.fn().mockResolvedValue(939),
+}));
+// Mock the qpdf-based serve helpers at the module boundary. The interactor's
+// responsibility is to call them with the right inputs; their internals are
+// covered by serveDocumentWithQpdf.test.ts.
+jest.mock(
+  '@web-api/business/useCaseHelper/document/serveDocumentWithQpdf',
+  () => ({
+    prependCoversheetWithQpdfAndPersist: jest
+      .fn()
+      .mockResolvedValue({ withCoverPath: '/tmp/serve-mock/with-cover.pdf', numberOfPages: 940 }),
+    runPaperServiceWithQpdf: jest
+      .fn()
+      .mockResolvedValue({ pdfUrl: 'ayo.seankingston.com' }),
+  }),
+);
 import {
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -25,12 +43,20 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  prependCoversheetWithQpdfAndPersist as prependCoversheetWithQpdfAndPersistMock,
+  runPaperServiceWithQpdf as runPaperServiceWithQpdfMock,
+} from '@web-api/business/useCaseHelper/document/serveDocumentWithQpdf';
+import { qpdfPageCount as qpdfPageCountMock } from '@web-api/utilities/qpdf';
 
 const getUserById = jest.mocked(getUserByIdMock);
+const prependCoversheetWithQpdfAndPersist = jest.mocked(
+  prependCoversheetWithQpdfAndPersistMock,
+);
+const runPaperServiceWithQpdf = jest.mocked(runPaperServiceWithQpdfMock);
+const qpdfPageCount = jest.mocked(qpdfPageCountMock);
 
 describe('serveExternallyFiledDocumentInteractor', () => {
-  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   let mockCase: RawCase;
@@ -48,7 +74,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const mockPdfUrl = 'ayo.seankingston.com';
 
   beforeAll(() => {
-    countPagesInDocument.mockResolvedValue(mockNumberOfPages);
+    qpdfPageCount.mockResolvedValue(mockNumberOfPages);
   });
 
   beforeEach(() => {
@@ -71,11 +97,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ({ caseEntity }) => caseEntity,
     );
 
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
-        pdfUrl: mockPdfUrl,
-      });
+    prependCoversheetWithQpdfAndPersist.mockResolvedValue({
+      withCoverPath: '/tmp/serve-mock/with-cover.pdf',
+      numberOfPages: mockNumberOfPages + 1,
+    });
+    runPaperServiceWithQpdf.mockResolvedValue({ pdfUrl: mockPdfUrl });
   });
 
   it('should throw an error when the user is not authorized to serve externally filed documents', async () => {
@@ -159,9 +185,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ),
     ).rejects.toThrow('Docket entry is already being served');
 
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
+    expect(runPaperServiceWithQpdf).not.toHaveBeenCalled();
   });
 
   it('should set the docket entry`s draftOrderState to null', async () => {
@@ -345,7 +369,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(true);
   });
 
-  it('should set the number of pages in the docket entry as the length of the document', async () => {
+  it('should set the number of pages in the docket entry from qpdfPageCount of the original PDF on /tmp', async () => {
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
@@ -362,9 +386,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         .numberOfPages,
     ).toBe(mockNumberOfPages);
 
-    expect(countPagesInDocument.mock.calls[0][0].documentStorageId).toEqual(
-      mockDocumentStorageId,
-    );
+    // qpdfPageCount is called with the staged /tmp path to orig.pdf — we
+    // assert that the path ends in /orig.pdf rather than baking in the
+    // exact tmpdir name (which varies per invocation).
+    expect(qpdfPageCount.mock.calls[0][0]).toMatch(/[\\/]orig\.pdf$/);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
@@ -428,7 +453,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(mockCase.docketNumber);
   });
 
-  it('should add a coversheet to the docket entry', async () => {
+  it('should prepend a coversheet to the docket entry via the qpdf-based helper', async () => {
     getCaseByDocketNumber
       .mockResolvedValueOnce(mockCase)
       .mockResolvedValueOnce({
@@ -452,9 +477,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalled();
+    expect(prependCoversheetWithQpdfAndPersist).toHaveBeenCalledTimes(1);
+    expect(prependCoversheetWithQpdfAndPersist.mock.calls[0][0]).toMatchObject({
+      documentStorageId: mockDocumentStorageId,
+    });
   });
 
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {
@@ -518,11 +544,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   it('should reset the docketEntry pending service status to false when an error occurs while serving', async () => {
     const mockErrorText = 'whoops, that is an error!';
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
-        new Error(mockErrorText),
-      );
+    runPaperServiceWithQpdf.mockRejectedValueOnce(new Error(mockErrorText));
 
     await expect(
       serveExternallyFiledDocumentInteractor(
@@ -554,7 +576,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
+  it('should call runPaperServiceWithQpdf to generate a paper service pdf', async () => {
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
@@ -566,10 +588,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(runPaperServiceWithQpdf.mock.calls[0][0]).toMatchObject({
       docketEntryId: mockDocketEntryId,
     });
   });
@@ -655,11 +674,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
-        pdfUrl: undefined,
-      });
+    runPaperServiceWithQpdf.mockResolvedValueOnce({ pdfUrl: undefined });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,

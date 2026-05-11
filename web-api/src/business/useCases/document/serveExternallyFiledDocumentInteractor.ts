@@ -21,7 +21,14 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
-import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  prependCoversheetWithQpdfAndPersist,
+  runPaperServiceWithQpdf,
+} from '@web-api/business/useCaseHelper/document/serveDocumentWithQpdf';
+import { qpdfPageCount } from '@web-api/utilities/qpdf';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -70,133 +77,153 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  const numberOfPages = await countPagesInDocument({
-    applicationContext,
-    documentStorageId: originalSubjectDocketEntry.documentStorageId,
-  });
-
-  await updateDocketEntryPendingServiceStatus({
-    docketEntryId,
-    docketNumber: subjectCaseDocketNumber,
-    status: true,
-  });
-
-  const user = await getUserById({ userId: authorizedUser.userId });
-
-  if (!user) {
-    throw new NotFoundError(
-      `User not found with user id ${authorizedUser.userId}`,
-    );
-  }
-
-  let paperServiceResult;
-  let caseEntities: Case[] = [];
-
-  const subjectCaseIsSimultaneousDocType =
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-      originalSubjectDocketEntry.eventCode,
-    ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
-
-  if (subjectCaseIsSimultaneousDocType) {
-    docketNumbers = [subjectCaseDocketNumber];
-  } else {
-    docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
-  }
+  // qpdf path: stage the source PDF on /tmp once and operate on file paths
+  // from here on. The interactor owns the scratch directory lifecycle so the
+  // two qpdf helpers can share the cover-attached file without re-fetching
+  // it from S3, and so a mid-flight failure can't leak files on a
+  // warm-reused Lambda /tmp.
+  const workDir = await mkdtemp(path.join(os.tmpdir(), 'serve-'));
+  const originalPdfPath = path.join(workDir, 'orig.pdf');
+  const { documentStorageId } = originalSubjectDocketEntry;
 
   try {
-    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
-    caseEntities = await settlePromises(
-      casesToUpdate.map(async rawCaseToUpdate => {
-        const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
-
-        const isSubjectCase =
-          caseEntity.docketNumber === subjectCaseDocketNumber;
-
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...originalSubjectDocketEntry,
-            docketNumber: caseEntity.docketNumber,
-            draftOrderState: null,
-            ...(!subjectCaseIsSimultaneousDocType && {
-              filingDate: applicationContext
-                .getUtilities()
-                .createISODateString(),
-            }),
-            isDraft: false,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            isPendingService: isSubjectCase,
-            numberOfPages,
-          },
-          { authorizedUser },
-        );
-
-        return fileAndServeDocumentOnOneCase({
-          caseEntity,
-          docketEntryEntity,
-          subjectCaseDocketNumber,
-          user,
-        });
-      }),
-    );
-
-    const updatedSubjectCaseEntity = caseEntities.find(
-      c => c.docketNumber === subjectCaseDocketNumber,
-    );
-    const updatedSubjectDocketEntry =
-      updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
-
-    if (!updatedSubjectDocketEntry) {
-      throw new NotFoundError(
-        `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
-      );
-    }
-
-    // Intentionally synchronous: serving externally-filed documents must
-    // produce a finished, coversheet-attached PDF before the response so
-    // the document is ready for service. Queueing here would require the
-    // service step to wait on a poll, which we haven't built yet.
-    await applicationContext.getUseCases().addCoversheetInteractor(
-      applicationContext,
-      {
-        bypassIdempotencyGate: false,
-        caseEntity: updatedSubjectCaseEntity,
-        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-        docketNumber: updatedSubjectCaseEntity!.docketNumber,
-      },
-      authorizedUser,
-    );
-
-    paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
+    const originalBytes = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
         applicationContext,
-        caseEntities,
-        docketEntryId,
+        key: documentStorageId,
       });
-  } finally {
+    await writeFile(originalPdfPath, originalBytes);
+    const numberOfPages = await qpdfPageCount(originalPdfPath);
+
     await updateDocketEntryPendingServiceStatus({
       docketEntryId,
       docketNumber: subjectCaseDocketNumber,
-      status: false,
+      status: true,
     });
+
+    const user = await getUserById({ userId: authorizedUser.userId });
+
+    if (!user) {
+      throw new NotFoundError(
+        `User not found with user id ${authorizedUser.userId}`,
+      );
+    }
+
+    let paperServiceResult: { pdfUrl?: string } = {};
+    let caseEntities: Case[] = [];
+
+    const subjectCaseIsSimultaneousDocType =
+      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+        originalSubjectDocketEntry.eventCode,
+      ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
+
+    if (subjectCaseIsSimultaneousDocType) {
+      docketNumbers = [subjectCaseDocketNumber];
+    } else {
+      docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
+    }
+
+    try {
+      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+      caseEntities = await settlePromises(
+        casesToUpdate.map(async rawCaseToUpdate => {
+          const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+
+          const isSubjectCase =
+            caseEntity.docketNumber === subjectCaseDocketNumber;
+
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...originalSubjectDocketEntry,
+              docketNumber: caseEntity.docketNumber,
+              draftOrderState: null,
+              ...(!subjectCaseIsSimultaneousDocType && {
+                filingDate: applicationContext
+                  .getUtilities()
+                  .createISODateString(),
+              }),
+              isDraft: false,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              isPendingService: isSubjectCase,
+              numberOfPages,
+            },
+            { authorizedUser },
+          );
+
+          return fileAndServeDocumentOnOneCase({
+            caseEntity,
+            docketEntryEntity,
+            subjectCaseDocketNumber,
+            user,
+          });
+        }),
+      );
+
+      const updatedSubjectCaseEntity = caseEntities.find(
+        c => c.docketNumber === subjectCaseDocketNumber,
+      );
+      const updatedSubjectDocketEntry =
+        updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
+
+      if (!updatedSubjectDocketEntry) {
+        throw new NotFoundError(
+          `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
+        );
+      }
+
+      // Prepend the cover sheet via qpdf and replicate the docket-entry
+      // COMPLETE/numberOfPages upserts that addCoversheetInteractor does on
+      // the pdf-lib path. We bypass addCoversheetInteractor entirely here so
+      // its pdf-lib code doesn't run on this hot path; other callers
+      // (paper filing, court-issued, etc.) keep using addCoversheetInteractor
+      // unchanged.
+      const { withCoverPath } = await prependCoversheetWithQpdfAndPersist({
+        applicationContext,
+        authorizedUser,
+        caseEntity: updatedSubjectCaseEntity!,
+        docketEntryEntity: new DocketEntry(updatedSubjectDocketEntry, {
+          authorizedUser,
+        }),
+        documentStorageId,
+        originalPdfPath,
+        workDir,
+      });
+
+      paperServiceResult = await runPaperServiceWithQpdf({
+        applicationContext,
+        caseEntities,
+        docketEntryId,
+        withCoverPath,
+        workDir,
+      });
+    } finally {
+      await updateDocketEntryPendingServiceStatus({
+        docketEntryId,
+        docketNumber: subjectCaseDocketNumber,
+        status: false,
+      });
+    }
+
+    const successMessage =
+      docketNumbers.length > 1
+        ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+        : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: { message: successMessage, overwritable: false },
+        pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
+      },
+      userId: user.userId,
+    });
+  } finally {
+    await rm(workDir, { recursive: true, force: true });
   }
-
-  const successMessage =
-    docketNumbers.length > 1
-      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_document_complete',
-      alertSuccess: { message: successMessage, overwritable: false },
-      pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
-    },
-    userId: user.userId,
-  });
 };
 
 export const determineEntitiesToLock = (

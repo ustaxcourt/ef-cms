@@ -36,6 +36,13 @@ resource "aws_lambda_function" "lambda_function" {
     mode = "Active"
   }
 
+  dynamic "ephemeral_storage" {
+    for_each = var.ephemeral_storage != null ? [1] : []
+    content {
+      size = var.ephemeral_storage
+    }
+  }
+
   environment {
     variables = merge(var.environment, { NODE_OPTIONS = var.use_source_maps ? "--enable-source-maps" : null })
   }

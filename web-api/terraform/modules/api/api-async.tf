@@ -7,6 +7,15 @@ module "api_async_lambda" {
   environment    = var.lambda_environment
   timeout        = "900"
   memory_size    = "7000"
+  # Larger /tmp so the externally-filed serve flow can stage multi-GB PDFs
+  # on disk for qpdf. Other lambdas keep AWS's 512 MB default.
+  ephemeral_storage = 10240
+  # qpdf binary layer — only the async lambda needs it (the serve interactor
+  # is the only caller). The sync api_lambda intentionally stays layer-free
+  # to preserve its cold-start budget.
+  layers = [
+    aws_lambda_layer_version.qpdf_layer.arn,
+  ]
 }
 
 // Do not auto retry requests: https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html
