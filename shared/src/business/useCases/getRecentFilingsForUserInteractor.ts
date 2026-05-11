@@ -5,7 +5,10 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, createEndOfDayISO } from '../utilities/DateHandler';
-import { userIsDirectlyAssociated, isLeadCase } from '@shared/business/entities/cases/Case';
+import {
+  userIsDirectlyAssociated,
+  isLeadCase,
+} from '@shared/business/entities/cases/Case';
 
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
@@ -27,6 +30,9 @@ export interface RecentFiling {
   consolidatedIconTooltipText?: string;
   isDraft?: boolean;
   isRequestingUserAssociated?: boolean;
+  status: string;
+  trialDate?: string;
+  trialLocation?: string;
 }
 
 export const getRecentFilingsForUserInteractor = async (
@@ -73,9 +79,7 @@ export const getRecentFilingsForUserInteractor = async (
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
-    const isLeadCaseResult =
-      !caseItem.leadDocketNumber ||
-      isLeadCase(caseItem);
+    const isLeadCaseResult = !caseItem.leadDocketNumber || isLeadCase(caseItem);
     const inConsolidatedGroup =
       hasConsolidatedCases || caseItem.leadDocketNumber;
 
@@ -90,6 +94,9 @@ export const getRecentFilingsForUserInteractor = async (
       inConsolidatedGroup,
       isLeadCase: isLeadCaseResult,
       consolidatedIconTooltipText,
+      status: caseItem.status,
+      trialLocation: caseItem.trialLocation,
+      trialDate: caseItem.trialDate,
     });
 
     if (caseItem.consolidatedCases) {
@@ -98,6 +105,9 @@ export const getRecentFilingsForUserInteractor = async (
           inConsolidatedGroup: true,
           isLeadCase: false,
           consolidatedIconTooltipText: 'Consolidated case',
+          status: consolidatedCase.status,
+          trialLocation: consolidatedCase.trialLocation,
+          trialDate: consolidatedCase.trialDate,
         });
       });
     }
@@ -140,6 +150,9 @@ export const getRecentFilingsForUserInteractor = async (
       isLeadCase: caseInfo.isLeadCase,
       consolidatedIconTooltipText: caseInfo.consolidatedIconTooltipText,
       isRequestingUserAssociated,
+      status: caseInfo.status,
+      trialDate: caseInfo.trialDate,
+      trialLocation: caseInfo.trialLocation,
     };
   });
 };
