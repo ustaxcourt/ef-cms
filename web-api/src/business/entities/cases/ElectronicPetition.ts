@@ -8,6 +8,7 @@ import {
   PARTY_TYPES,
   PETITION_TYPES,
   PROCEDURE_TYPES,
+  type PartyType,
   ROLES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -32,7 +33,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   public countryType: string;
   public filingType: string;
   public hasIrsNotice: boolean;
-  public irsNoticesRedactionAcknowledgement: string;
+  public irsNoticesRedactionAcknowledgement?: boolean;
   public partyType: string;
   public petitioners: any;
   public petitionFile?: object;
@@ -50,16 +51,16 @@ export class ElectronicPetition extends JoiValidationEntity {
 
     this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
     this.attachmentToPetitionFileSize = rawCase.attachmentToPetitionFileSize;
-    this.businessType = rawCase.businessType;
-    this.caseType = rawCase.caseType;
-    this.countryType = rawCase.countryType;
-    this.filingType = rawCase.filingType;
-    this.hasIrsNotice = rawCase.hasIrsNotice;
+    this.businessType = rawCase.businessType ?? '';
+    this.caseType = rawCase.caseType ?? '';
+    this.countryType = rawCase.countryType ?? '';
+    this.filingType = rawCase.filingType ?? '';
+    this.hasIrsNotice = rawCase.hasIrsNotice ?? false;
     this.irsNoticesRedactionAcknowledgement =
       rawCase.irsNoticesRedactionAcknowledgement;
-    this.partyType = rawCase.partyType;
-    this.preferredTrialCity = rawCase.preferredTrialCity;
-    this.procedureType = rawCase.procedureType;
+    this.partyType = rawCase.partyType ?? PARTY_TYPES.petitioner;
+    this.preferredTrialCity = rawCase.preferredTrialCity ?? '';
+    this.procedureType = rawCase.procedureType ?? '';
 
     this.stinFile = rawCase.stinFile;
     this.stinFileSize = rawCase.stinFileSize;
@@ -79,7 +80,7 @@ export class ElectronicPetition extends JoiValidationEntity {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
-      partyType: rawCase.partyType,
+      partyType: this.partyType as PartyType,
     });
 
     this.petitioners = [contacts.primary];
@@ -244,10 +245,19 @@ export class ElectronicPetition extends JoiValidationEntity {
 }
 
 /** JSON/case-helper payload accepted before ContactFactory materializes petitioners */
-export type RawElectronicPetitionConstructor = Omit<
-  ExcludeMethods<ElectronicPetition>,
-  'petitioners'
-> & {
-  contactPrimary?: RawPetitioner;
-  contactSecondary?: RawPetitioner;
+export type RawElectronicPetitionConstructor = Partial<
+  Omit<ExcludeMethods<ElectronicPetition>, 'petitioners'>
+> &
+  RawElectronicPetitionConstructorExtras & {
+    contactPrimary?: RawPetitioner;
+    contactSecondary?: RawPetitioner;
+  };
+
+type RawElectronicPetitionConstructorExtras = {
+  /** Present on form/test payloads; ignored by entity logic but passed through raw case objects */
+  irsNoticeDate?: string;
+  mailingDate?: string;
+  petitioners?: unknown[];
+  signature?: boolean;
+  status?: string;
 };

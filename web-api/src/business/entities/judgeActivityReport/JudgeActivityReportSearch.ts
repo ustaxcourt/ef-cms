@@ -18,12 +18,13 @@ export type CavAndSubmittedJudgeReportStatus =
 
 export type JudgeActivityReportSearchInitialProps = {
   endDate: string;
+  startDate: string;
+} & Partial<{
   judgeId: string;
   judgeName: string;
   judges: string[];
-  startDate: string;
   statuses: CavAndSubmittedJudgeReportStatus[];
-};
+}>;
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   private VALID_DATE_FORMAT = FORMATS.MMDDYYYY;
@@ -40,10 +41,10 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   constructor(rawProps: JudgeActivityReportSearchInitialProps) {
     super('JudgeActivityReportSearch');
 
-    this.judgeId = rawProps.judgeId;
-    this.judgeName = rawProps.judgeName;
-    this.statuses = rawProps.statuses;
-    this.judges = rawProps.judges;
+    this.judgeId = rawProps.judgeId ?? '';
+    this.judgeName = rawProps.judgeName ?? '';
+    this.statuses = rawProps.statuses ?? [];
+    this.judges = rawProps.judges ?? [];
 
     this.tomorrow = calculateISODate({
       howMuch: +1,

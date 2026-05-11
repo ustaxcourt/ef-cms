@@ -3,6 +3,7 @@ import {
   COUNTRY_TYPES,
   ESTATE_TYPES,
   FILING_TYPES,
+  type FilingType,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   OTHER_TYPES,
@@ -17,7 +18,7 @@ import joi from 'joi';
 export class UploadPetitionStep1 extends JoiValidationEntity {
   public businessType: string;
   public corporateDisclosureFile: File;
-  public corporateDisclosureFileSize: string;
+  public corporateDisclosureFileSize: number;
   public countryType: string;
   public filingType: string;
   public partyType: string;
@@ -32,24 +33,30 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
   constructor(rawProps: RawUploadPetitionStep1 & { petitionType?: string }) {
     super('UploadPetitionStep1');
 
-    this.businessType = rawProps.businessType;
-    this.corporateDisclosureFile = rawProps.corporateDisclosureFile;
-    this.corporateDisclosureFileSize = rawProps.corporateDisclosureFileSize;
-    this.countryType = rawProps.countryType;
-    this.filingType = rawProps.filingType;
-    this.partyType = rawProps.partyType;
-    this.isSpouseDeceased = rawProps.isSpouseDeceased;
-    this.otherType = rawProps.otherType;
-    this.hasSpouseConsent = rawProps.hasSpouseConsent;
-    this.estateType = rawProps.estateType;
-    this.minorIncompetentType = rawProps.minorIncompetentType;
+    this.businessType = rawProps.businessType ?? '';
+    this.corporateDisclosureFile =
+      rawProps.corporateDisclosureFile ?? new File([], 'empty.pdf');
+    this.corporateDisclosureFileSize =
+      rawProps.corporateDisclosureFileSize ?? 0;
+    this.countryType = rawProps.countryType ?? '';
+    const filingType = rawProps.filingType ?? '';
+    const partyType = rawProps.partyType ?? PARTY_TYPES.petitioner;
+    this.filingType = filingType;
+    this.partyType = partyType;
+    this.isSpouseDeceased = rawProps.isSpouseDeceased ?? '';
+    this.otherType = rawProps.otherType ?? '';
+    this.hasSpouseConsent = rawProps.hasSpouseConsent ?? false;
+    this.estateType = rawProps.estateType ?? '';
+    this.minorIncompetentType = rawProps.minorIncompetentType ?? '';
 
     const contactInfo = ContactFactoryUpdated({
-      contactInfoPrimary: rawProps.contactPrimary,
-      contactInfoSecondary: rawProps.contactSecondary,
-      filingType: rawProps.filingType,
-      hasSpouseConsent: rawProps.hasSpouseConsent,
-      partyType: rawProps.partyType,
+      contactInfoPrimary: rawProps.contactPrimary as Record<string, unknown>,
+      contactInfoSecondary: rawProps.contactSecondary as
+        | Record<string, unknown>
+        | undefined,
+      filingType: filingType as FilingType,
+      hasSpouseConsent: rawProps.hasSpouseConsent ?? false,
+      partyType,
       petitionType: rawProps.petitionType,
     });
 
@@ -197,6 +204,6 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
   }
 }
 
-export type RawUploadPetitionStep1 = ExcludeMethods<
-  Omit<UploadPetitionStep1, 'entityName'>
+export type RawUploadPetitionStep1 = Partial<
+  ExcludeMethods<Omit<UploadPetitionStep1, 'entityName'>>
 >;

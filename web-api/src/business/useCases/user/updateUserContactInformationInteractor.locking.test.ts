@@ -103,7 +103,13 @@ describe('updateUserContactInformationInteractor', () => {
   const mockRequest = {
     contactInfo: {
       ...MOCK_PRACTITIONER.contact,
+      address1: MOCK_PRACTITIONER.contact!.address1 ?? '123 Fake St',
       city: 'New York',
+      countryType:
+        MOCK_PRACTITIONER.contact!.countryType ?? COUNTRY_TYPES.DOMESTIC,
+      phone: MOCK_PRACTITIONER.contact!.phone ?? '555-555-5555',
+      postalCode: MOCK_PRACTITIONER.contact!.postalCode ?? '90210',
+      state: MOCK_PRACTITIONER.contact!.state ?? 'CA',
     },
     firmName: 'some firm',
     userId: MOCK_PRACTITIONER.userId,

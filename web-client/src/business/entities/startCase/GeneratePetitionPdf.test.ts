@@ -1,4 +1,8 @@
-import { GeneratePetitionPdf } from '@web-client/business/entities/startCase/GeneratePetitionPdf';
+import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  GeneratePetitionPdf,
+  RawGeneratePetitionPdf,
+} from '@web-client/business/entities/startCase/GeneratePetitionPdf';
 
 describe('GeneratePetitionPdf', () => {
   const VALID_ENTITY = {
@@ -21,12 +25,16 @@ describe('GeneratePetitionPdf', () => {
     originalCaseType: 'Deficiency',
     petitionFacts: ['TEST_petitionFacts'],
     petitionReasons: ['TEST_petitionReasons'],
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'TEST_preferredTrialCity',
     procedureType: 'Regular',
+    irsNotices: [],
   };
 
   it('should create a valid instance of "GeneratePetitionPdf" entity', () => {
-    const entity = new GeneratePetitionPdf(VALID_ENTITY);
+    const entity = new GeneratePetitionPdf(
+      VALID_ENTITY as RawGeneratePetitionPdf,
+    );
 
     expect(entity).toBeDefined();
 
@@ -35,7 +43,9 @@ describe('GeneratePetitionPdf', () => {
   });
 
   it('should throw validation errors when data is not valid', () => {
-    const entity = new GeneratePetitionPdf({});
+    const entity = new GeneratePetitionPdf(
+      {} as unknown as RawGeneratePetitionPdf,
+    );
     const errors = entity.getFormattedValidationErrors();
     expect(errors).toEqual({
       caseCaptionExtension: '"caseCaptionExtension" is required',

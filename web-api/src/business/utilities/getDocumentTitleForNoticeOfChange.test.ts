@@ -40,7 +40,7 @@ describe('getDocumentTitleForNoticeOfChange', () => {
     expect(
       getDocumentTitleForNoticeOfChange({
         applicationContext,
-        docketEntry: docketEntryOriginalTitle,
+        docketEntry: docketEntryOriginalTitle as RawDocketEntry,
       }),
     ).toEqual(docketEntry.documentTitle);
   });

@@ -30,8 +30,8 @@ export const validateOpinionAdvancedSearchAction = ({
     : undefined;
 
   const errors = new OpinionSearchValidation({
-    startDate: formattedStartDate,
-    endDate: formattedEndDate,
+    startDate: formattedStartDate ?? '',
+    endDate: formattedEndDate ?? '',
   }).getFormattedValidationErrors();
 
   if (errors) {

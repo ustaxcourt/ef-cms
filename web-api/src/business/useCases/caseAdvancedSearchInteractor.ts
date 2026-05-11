@@ -103,10 +103,15 @@ export const caseAdvancedSearchInteractor = async (
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state] || p.state,
-      ),
-      receivedAt: filteredCase.receivedAt,
+      petitionerStateNames: filteredCase.petitioners?.map(p => {
+        const stateAbbrev = p.state;
+        if (!stateAbbrev) {
+          return '';
+        }
+        const stateName = US_STATES[stateAbbrev as keyof typeof US_STATES];
+        return stateName || stateAbbrev;
+      }),
+      receivedAt: filteredCase.receivedAt ?? '',
     };
   });
 };

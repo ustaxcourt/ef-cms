@@ -4,6 +4,7 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
+  CaseAccessibilitySearchRow,
   filterCaseSearchResultsNotAccessibleToUser,
   formatSealedAddresses,
 } from './caseFilter';
@@ -37,15 +38,22 @@ describe('caseFilter', () => {
         title: 'Emperor',
         transmission: 'manual',
       });
-      const caseDetail = {} as Partial<RawCase>;
-      caseDetail.petitioners = [
-        { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.secondary },
-      ];
+      const caseDetail = {
+        petitioners: [
+          { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
+          { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
+          { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
+          {
+            ...createContactInfo(),
+            contactType: CONTACT_TYPES.otherPetitioner,
+          },
+          {
+            ...createContactInfo(),
+            contactType: CONTACT_TYPES.otherPetitioner,
+          },
+          { ...createContactInfo(), contactType: CONTACT_TYPES.secondary },
+        ],
+      } as unknown as RawCase;
 
       const result = formatSealedAddresses(caseDetail, {
         role: ROLES.petitioner,
@@ -108,7 +116,7 @@ describe('caseFilter', () => {
         privatePractitioners: [],
         signedJudgeName: 'Maurice B. Foley',
       },
-    ];
+    ] as unknown as CaseAccessibilitySearchRow[];
 
     const caseSearchResults = [
       {
@@ -161,7 +169,7 @@ describe('caseFilter', () => {
         docketNumber: '120-20',
         petitioners: [],
       },
-    ];
+    ] as unknown as CaseAccessibilitySearchRow[];
 
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = filterCaseSearchResultsNotAccessibleToUser(
@@ -238,7 +246,9 @@ describe('caseFilter', () => {
       );
 
       expect(result.length).toEqual(1);
-      expect(result[0].docketEntryId).toEqual(unsealedDocketEntryId);
+      expect((result[0] as CaseAccessibilitySearchRow).docketEntryId).toEqual(
+        unsealedDocketEntryId,
+      );
     });
 
     it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {

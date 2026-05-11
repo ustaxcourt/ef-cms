@@ -8,6 +8,7 @@ import {
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
+import type { ExternalDocumentFactoryInput } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
@@ -191,7 +192,9 @@ export class DocketEntryFactory extends JoiValidationEntity {
       });
     };
 
-    const exDoc = ExternalDocumentFactory(this);
+    const exDoc = ExternalDocumentFactory(
+      this as unknown as ExternalDocumentFactoryInput,
+    );
     const rules = exDoc.getValidationRules();
     const docketEntryExternalDocumentSchema = (
       joi.isSchema(rules) ? rules : joi.object().keys(rules)

@@ -373,8 +373,8 @@ function validateTrialSessionDateRange({
     : undefined;
 
   const errors = new TrialSessionsPageValidation({
-    endDate: formattedEndDate,
-    startDate: formattedStartDate,
+    endDate: formattedEndDate ?? '',
+    startDate: formattedStartDate ?? '',
   }).getFormattedValidationErrors();
 
   return {

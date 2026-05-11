@@ -10,6 +10,7 @@ import { Correspondence } from '@shared/business/entities/Correspondence';
 import { PaperPetition } from './PaperPetition';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { RawStatistic } from '@shared/business/entities/Statistic';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('paperPetition entity', () => {
@@ -64,11 +65,11 @@ describe('paperPetition entity', () => {
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
             {
-              irsDeficiencyAmount: 1,
-              irsTotalPenalties: 1,
+              irsDeficiencyAmount: '1',
+              irsTotalPenalties: '1',
               year: '2001',
               yearOrPeriod: 'Year',
-            },
+            } as RawStatistic,
           ],
         },
         { authorizedUser: mockPetitionsClerkUser },
@@ -89,7 +90,7 @@ describe('paperPetition entity', () => {
               filedBy: 'Test Petitioner',
               filedByRole: ROLES.petitioner,
               userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-            },
+            } as RawDocketEntry,
           ],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
@@ -119,11 +120,11 @@ describe('paperPetition entity', () => {
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
             {
-              irsDeficiencyAmount: 1,
-              irsTotalPenalties: 1,
+              irsDeficiencyAmount: '1',
+              irsTotalPenalties: '1',
               year: '2001',
               yearOrPeriod: 'Year',
-            },
+            } as RawStatistic,
           ],
         },
         { authorizedUser: mockPetitionsClerkUser },
@@ -534,11 +535,11 @@ describe('paperPetition entity', () => {
         requestForPlaceOfTrialFileSize: 1,
         statistics: [
           {
-            irsDeficiencyAmount: 1,
-            irsTotalPenalties: 1,
+            irsDeficiencyAmount: '1',
+            irsTotalPenalties: '1',
             year: '2001',
             yearOrPeriod: 'Year',
-          },
+          } as RawStatistic,
         ],
       },
       { authorizedUser: mockPetitionsClerkUser },

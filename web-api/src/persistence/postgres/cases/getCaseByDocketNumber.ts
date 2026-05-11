@@ -32,7 +32,7 @@ export const getCaseByDocketNumber = async ({
     // It was done here to quickly fix a high-severity bug.
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
-        formatSealedAddresses(c, user),
+        formatSealedAddresses(c as RawCase, user),
       );
     }
   }

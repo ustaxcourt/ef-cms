@@ -18,6 +18,7 @@ import {
   TrialLocationData,
 } from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
 import type { AggregatedPaperServiceParty } from '@shared/business/utilities/aggregatePartiesForService';
+import type { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';

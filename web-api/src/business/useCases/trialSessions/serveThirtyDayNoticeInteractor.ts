@@ -65,8 +65,8 @@ export const serveThirtyDayNotice = async (
   };
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -117,7 +117,7 @@ export const serveThirtyDayNotice = async (
     let clinicLetter;
     const clinicLetterKey = getClinicLetterKey({
       procedureType: caseEntity.procedureType,
-      trialLocation: trialSession.trialLocation,
+      trialLocation: trialSession.trialLocation ?? '',
     });
 
     const doesClinicLetterExist = await applicationContext
@@ -296,8 +296,8 @@ export const determineEntitiesToLock = async (
   },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

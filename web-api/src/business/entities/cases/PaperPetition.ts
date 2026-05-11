@@ -6,6 +6,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
+  type PartyType,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -67,19 +68,21 @@ export class PaperPetition extends JoiValidationEntity {
   public archivedCorrespondences: any;
   public docketEntries: DocketEntry[];
 
+  /* eslint-disable complexity -- default many optional Postgres/form fields from partial payloads */
   constructor(
     rawProps: RawPaperPetitionConstructorProps,
     { authorizedUser }: { authorizedUser: UnknownAuthUser },
   ) {
     super('PaperPetition');
-    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
-    this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
-    this.caseCaption = rawProps.caseCaption;
-    this.caseType = rawProps.caseType;
-    this.filingType = rawProps.filingType;
-    this.irsNoticeDate = rawProps.irsNoticeDate;
-    this.hasVerifiedIrsNotice = rawProps.hasVerifiedIrsNotice || false;
-    this.mailingDate = rawProps.mailingDate;
+    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile ?? {};
+    this.attachmentToPetitionFileSize =
+      rawProps.attachmentToPetitionFileSize ?? 0;
+    this.caseCaption = rawProps.caseCaption ?? '';
+    this.caseType = rawProps.caseType ?? '';
+    this.filingType = rawProps.filingType ?? '';
+    this.irsNoticeDate = rawProps.irsNoticeDate ?? '';
+    this.hasVerifiedIrsNotice = rawProps.hasVerifiedIrsNotice ?? false;
+    this.mailingDate = rawProps.mailingDate ?? '';
     this.noticeOfAttachments = rawProps.noticeOfAttachments;
     this.orderDesignatingPlaceOfTrial = rawProps.orderDesignatingPlaceOfTrial;
     // this is so the validation that is checking for existence of 3 different fields
@@ -94,30 +97,38 @@ export class PaperPetition extends JoiValidationEntity {
     this.orderForFilingFee = rawProps.orderForFilingFee;
     this.orderForRatification = rawProps.orderForRatification;
     this.orderToShowCause = rawProps.orderToShowCause;
-    this.partyType = rawProps.partyType;
-    this.petitionPaymentDate = rawProps.petitionPaymentDate;
-    this.petitionPaymentMethod = rawProps.petitionPaymentMethod;
+    this.partyType = rawProps.partyType ?? PARTY_TYPES.petitioner;
+    this.petitionPaymentDate = rawProps.petitionPaymentDate ?? '';
+    this.petitionPaymentMethod = rawProps.petitionPaymentMethod ?? '';
     this.petitionPaymentStatus = rawProps.petitionPaymentStatus;
     this.petitionPaymentWaivedDate = rawProps.petitionPaymentWaivedDate;
     this.preferredTrialCity = rawProps.preferredTrialCity;
-    this.procedureType = rawProps.procedureType;
-    this.receivedAt = rawProps.receivedAt;
-    this.useSameAsPrimary = rawProps.useSameAsPrimary;
+    this.procedureType = rawProps.procedureType ?? '';
+    this.receivedAt = rawProps.receivedAt ?? '';
+    this.useSameAsPrimary = rawProps.useSameAsPrimary ?? false;
     this.petitioners = rawProps.petitioners || [];
-    this.stinFile = rawProps.stinFile;
-    this.stinFileSize = rawProps.stinFileSize;
-    this.corporateDisclosureFile = rawProps.corporateDisclosureFile;
-    this.corporateDisclosureFileSize = rawProps.corporateDisclosureFileSize;
-    this.petitionFile = rawProps.petitionFile;
-    this.petitionFileSize = rawProps.petitionFileSize;
-    this.requestForPlaceOfTrialFile = rawProps.requestForPlaceOfTrialFile;
+    this.stinFile = rawProps.stinFile ?? {};
+    this.stinFileSize = rawProps.stinFileSize ?? 0;
+    this.corporateDisclosureFile = rawProps.corporateDisclosureFile ?? {};
+    this.corporateDisclosureFileSize =
+      rawProps.corporateDisclosureFileSize ?? 0;
+    this.petitionFile = rawProps.petitionFile ?? {};
+    this.petitionFileSize = rawProps.petitionFileSize ?? 0;
+    this.requestForPlaceOfTrialFile = rawProps.requestForPlaceOfTrialFile ?? {};
     this.requestForPlaceOfTrialFileSize =
-      rawProps.requestForPlaceOfTrialFileSize;
+      rawProps.requestForPlaceOfTrialFileSize ?? 0;
     this.applicationForWaiverOfFilingFeeFile =
-      rawProps.applicationForWaiverOfFilingFeeFile;
+      rawProps.applicationForWaiverOfFilingFeeFile ?? {};
     this.applicationForWaiverOfFilingFeeFileSize =
-      rawProps.applicationForWaiverOfFilingFeeFileSize;
-    this.docketEntries = rawProps.docketEntries || [];
+      rawProps.applicationForWaiverOfFilingFeeFileSize ?? 0;
+    this.docketEntries = Array.isArray(rawProps.docketEntries)
+      ? rawProps.docketEntries.map(
+          doc =>
+            new DocketEntry(doc, {
+              authorizedUser,
+            }),
+        )
+      : [];
 
     this.statistics = Array.isArray(rawProps.statistics)
       ? rawProps.statistics.map(statistic => new Statistic(statistic))
@@ -145,7 +156,7 @@ export class PaperPetition extends JoiValidationEntity {
         primary: getContactPrimary(rawProps) || rawProps.contactPrimary,
         secondary: getContactSecondary(rawProps) || rawProps.contactSecondary,
       },
-      partyType: rawProps.partyType,
+      partyType: this.partyType as PartyType,
     });
     this.petitioners = [contacts.primary];
     if (contacts.secondary) {
@@ -154,6 +165,7 @@ export class PaperPetition extends JoiValidationEntity {
       this.petitioners.push(contacts.secondary);
     }
   }
+  /* eslint-enable complexity */
 
   static VALIDATION_RULES = joi
     .object()
@@ -374,13 +386,15 @@ export class PaperPetition extends JoiValidationEntity {
   }
 }
 
-export type RawPaperPetitionConstructorProps = Omit<
-  ExcludeMethods<PaperPetition>,
-  | 'archivedCorrespondences'
-  | 'archivedDocketEntries'
-  | 'docketEntries'
-  | 'petitioners'
-  | 'statistics'
+export type RawPaperPetitionConstructorProps = Partial<
+  Omit<
+    ExcludeMethods<PaperPetition>,
+    | 'archivedCorrespondences'
+    | 'archivedDocketEntries'
+    | 'docketEntries'
+    | 'petitioners'
+    | 'statistics'
+  >
 > & {
   archivedCorrespondences?: RawCorrespondence[];
   archivedDocketEntries?: RawDocketEntry[];

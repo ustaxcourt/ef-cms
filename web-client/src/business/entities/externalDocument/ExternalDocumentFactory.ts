@@ -52,8 +52,13 @@ export type ExternalDocumentFactoryMetadata =
   | RawExternalDocumentNonStandardH
   | RawExternalDocumentNonStandardI;
 
+/** Routed payloads often include only `{ scenario }` before fields are populated */
+export type ExternalDocumentFactoryInput =
+  | ExternalDocumentFactoryMetadata
+  | { scenario: string };
+
 export function ExternalDocumentFactory(
-  documentMetadata: ExternalDocumentFactoryMetadata,
+  documentMetadata: ExternalDocumentFactoryInput,
 ): ExternalDocumentBase {
   if (
     documentMetadata &&

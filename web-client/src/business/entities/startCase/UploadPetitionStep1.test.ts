@@ -114,7 +114,7 @@ describe('UploadPetitionStep1', () => {
       it('should return an error message for "corporateDisclosureFileSize" if its undefined', () => {
         const entity = new UploadPetitionStep1({
           ...VALID_ENTITY,
-          corporateDisclosureFile: {},
+          corporateDisclosureFile: new File([], 'corp.pdf'),
           corporateDisclosureFileSize: undefined,
           filingType: 'A business',
         });
@@ -131,7 +131,7 @@ describe('UploadPetitionStep1', () => {
       it('should return an error message for "corporateDisclosureFileSize" if its over the limit', () => {
         const entity = new UploadPetitionStep1({
           ...VALID_ENTITY,
-          corporateDisclosureFile: {},
+          corporateDisclosureFile: new File([], 'corp.pdf'),
           corporateDisclosureFileSize: MAX_FILE_SIZE_BYTES + 1,
           filingType: 'A business',
         });
@@ -148,7 +148,7 @@ describe('UploadPetitionStep1', () => {
       it('should return an error message for "corporateDisclosureFileSize" if its under the minimum', () => {
         const entity = new UploadPetitionStep1({
           ...VALID_ENTITY,
-          corporateDisclosureFile: {},
+          corporateDisclosureFile: new File([], 'corp.pdf'),
           corporateDisclosureFileSize: 0,
           filingType: 'A business',
         });

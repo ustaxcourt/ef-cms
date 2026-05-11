@@ -28,7 +28,7 @@ describe('IrsNoticeForm', () => {
         const entity = new IrsNoticeForm({
           ...VALID_ENTITY,
           caseType: undefined,
-        });
+        } as unknown as RawIrsNoticeForm);
 
         expect(entity).toBeDefined();
 
@@ -138,7 +138,7 @@ describe('IrsNoticeForm', () => {
       it('should return an error message for "size" if its undefined and "file" is defined', () => {
         const entity = new IrsNoticeForm({
           ...VALID_ENTITY,
-          file: {},
+          file: new File([], 'notice.pdf'),
           size: undefined,
         });
 
@@ -151,7 +151,7 @@ describe('IrsNoticeForm', () => {
       it('should return an error message for "size" if its over the limit and "file" is defined', () => {
         const entity = new IrsNoticeForm({
           ...VALID_ENTITY,
-          file: {},
+          file: new File([], 'notice.pdf'),
           size: MAX_FILE_SIZE_BYTES + 1,
         });
 
@@ -166,7 +166,7 @@ describe('IrsNoticeForm', () => {
       it('should return an error message for "size" if its under the minimum and "file" is defined', () => {
         const entity = new IrsNoticeForm({
           ...VALID_ENTITY,
-          file: {},
+          file: new File([], 'notice.pdf'),
           size: 0,
         });
 

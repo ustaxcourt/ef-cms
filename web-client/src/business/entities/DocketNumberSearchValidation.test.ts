@@ -1,4 +1,5 @@
 import { DocketNumberSearchValidation } from './DocketNumberSearchValidation';
+import type { RawDocketNumberSearchValidation } from './DocketNumberSearchValidation';
 
 describe('DocketNumberSearchValidation', () => {
   it('should pass validation for a valid docket number', () => {
@@ -11,7 +12,7 @@ describe('DocketNumberSearchValidation', () => {
   it('should fail validation when docket number is missing', () => {
     const entity = new DocketNumberSearchValidation({
       docketNumber: undefined,
-    });
+    } as unknown as RawDocketNumberSearchValidation);
     expect(entity.getFormattedValidationErrors()).toEqual({
       docketNumber: 'Enter a valid docket number',
     });

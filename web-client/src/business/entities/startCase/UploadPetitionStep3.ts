@@ -2,7 +2,7 @@ import {
   CASE_TYPES,
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
-import { CreateCaseIrsForm } from '@web-client/presenter/state';
+import type { CreateCaseIrsForm } from '@web-client/presenter/state';
 import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
@@ -11,7 +11,7 @@ import joi from 'joi';
 
 export class UploadPetitionStep3 extends JoiValidationEntity {
   public hasIrsNotice: boolean;
-  public irsNotices?: CreateCaseIrsForm[];
+  public irsNotices?: IrsNoticeForm[];
   public caseType?: string;
   public irsNoticesRedactionAcknowledgement?: boolean;
   public hasUploadedIrsNotice: boolean;
@@ -30,7 +30,17 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     super('UploadPetitionStep3');
     this.hasIrsNotice = rawProps.hasIrsNotice;
     this.irsNotices = rawProps.hasIrsNotice
-      ? (rawProps.irsNotices || []).map(irsN => new IrsNoticeForm(irsN))
+      ? (rawProps.irsNotices ?? []).map(irsNotice => {
+          const {
+            irsNoticeFileUrl: _omitNoticeUrl,
+            todayDate: _omitTodayDate,
+            ...noticeFields
+          } = irsNotice;
+          return new IrsNoticeForm({
+            ...noticeFields,
+            caseType: noticeFields.caseType ?? '',
+          });
+        })
       : undefined;
     this.caseType = rawProps.caseType;
     this.irsNoticesRedactionAcknowledgement =
@@ -79,6 +89,9 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
   }
 }
 
-export type RawUploadPetitionStep3 = ExcludeMethods<
-  Omit<UploadPetitionStep3, 'entityName'>
->;
+export type RawUploadPetitionStep3 = Omit<
+  ExcludeMethods<Omit<UploadPetitionStep3, 'entityName'>>,
+  'irsNotices'
+> & {
+  irsNotices?: CreateCaseIrsForm[];
+};

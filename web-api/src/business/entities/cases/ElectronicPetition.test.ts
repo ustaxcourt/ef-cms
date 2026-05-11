@@ -6,6 +6,7 @@ import {
   PARTY_TYPES,
   PETITION_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
 import { ElectronicPetition } from './ElectronicPetition';
 
 describe('ElectronicPetition entity', () => {
@@ -376,7 +377,7 @@ describe('ElectronicPetition entity', () => {
         contactSecondary: {
           contactType: CONTACT_TYPES.secondary,
           phone: '123-234-3456',
-        },
+        } as RawPetitioner,
         partyType: PARTY_TYPES.petitionerSpouse,
       });
       const secondaryContact = electronicPetition
@@ -389,7 +390,7 @@ describe('ElectronicPetition entity', () => {
       const electronicPetition = new ElectronicPetition({
         contactSecondary: {
           contactType: CONTACT_TYPES.secondary,
-        },
+        } as RawPetitioner,
         partyType: PARTY_TYPES.petitionerSpouse,
       });
       const secondaryContact = electronicPetition

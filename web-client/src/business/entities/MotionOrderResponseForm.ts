@@ -19,7 +19,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   public additionalOrderText?: string;
   public dueDate?: string;
   public isOnLeadCase: boolean;
-  public issueOrderFor: typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions;
+  public issueOrderFor?: (typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions)[keyof typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions];
 
   constructor(rawProps: RawMotionOrderResponseForm) {
     super('MotionOrderResponseForm');

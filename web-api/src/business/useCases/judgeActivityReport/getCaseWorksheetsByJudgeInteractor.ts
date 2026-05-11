@@ -1,5 +1,4 @@
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '@web-api/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -33,12 +32,16 @@ export const getCaseWorksheetsByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch(params);
-  if (!searchEntity.isValid()) {
+  if (
+    !params.judges?.length ||
+    !params.statuses?.length ||
+    !Array.isArray(params.judges) ||
+    !Array.isArray(params.statuses)
+  ) {
     throw new InvalidRequest('Invalid search terms');
   }
 
-  const caseRecords = await getCases(searchEntity);
+  const caseRecords = await getCases(params);
 
   const allCaseResults = await Promise.all(
     caseRecords.map(async caseRecord => {
@@ -57,12 +60,12 @@ export const getCaseWorksheetsByJudgeInteractor = async (
   };
 };
 
-const getCases = async (searchEntity: JudgeActivityReportSearch) => {
+const getCases = async (searchParams: GetCasesByStatusAndByJudgeRequest) => {
   const allCaseRecords = await getDocketNumbersByStatusAndByJudge({
     params: {
       excludeMemberCases: true,
-      judges: searchEntity.judges,
-      statuses: searchEntity.statuses,
+      judges: searchParams.judges,
+      statuses: searchParams.statuses,
     },
   });
 

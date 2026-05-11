@@ -22,7 +22,7 @@ export const shouldAppendClinicLetter = async ({
     if (!Case.isPetitionerRepresented(caseEntity, petitioner.contactId)) {
       clinicLetterKey = getClinicLetterKey({
         procedureType,
-        trialLocation: trialSession.trialLocation,
+        trialLocation: trialSession.trialLocation ?? '',
       });
       const doesClinicLetterExist = await applicationContext
         .getPersistenceGateway()

@@ -1,11 +1,12 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '@shared/business/entities/EntityConstants';
 import { Stamp } from './Stamp';
+import type { RawStamp } from './Stamp';
 
 describe('Stamp entity', () => {
   describe('Validation', () => {
     it('should be invalid when disposition is undefined', () => {
-      const stamp = new Stamp({});
+      const stamp = new Stamp({} as unknown as RawStamp);
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
         disposition: 'Enter a disposition',

@@ -15,7 +15,7 @@ export class IrsNoticeForm extends JoiValidationEntity {
   public size?: number;
   public caseType: string;
   public noticeIssuedDate?: string;
-  public taxYear?: number;
+  public taxYear?: string;
   public cityAndStateIssuingOffice?: string;
 
   constructor(rawProps: RawIrsNoticeForm) {

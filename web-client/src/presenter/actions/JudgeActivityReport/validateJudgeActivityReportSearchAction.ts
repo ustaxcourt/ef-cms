@@ -5,12 +5,13 @@ export const validateJudgeActivityReportSearchAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { judges } = get(state.judgeActivityReport.filters);
-
+  const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
   const { judgeName } = get(state.judgeActivityReport);
   const errors = new JudgeActivityReportSearch({
-    judgeName,
+    endDate: endDate ?? '',
+    judgeName: judgeName ?? '',
     judges,
+    startDate: startDate ?? '',
   }).getFormattedValidationErrors();
 
   if (errors) {

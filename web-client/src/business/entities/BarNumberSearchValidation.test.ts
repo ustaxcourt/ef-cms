@@ -1,4 +1,5 @@
 import { BarNumberSearchValidation } from './BarNumberSearchValidation';
+import type { RawBarNumberSearchValidation } from './BarNumberSearchValidation';
 
 describe('BarNumberSearchValidation', () => {
   it('should pass validation for a valid bar number', () => {
@@ -7,7 +8,9 @@ describe('BarNumberSearchValidation', () => {
   });
 
   it('should fail validation when bar number is missing', () => {
-    const entity = new BarNumberSearchValidation({ barNumber: undefined });
+    const entity = new BarNumberSearchValidation({
+      barNumber: undefined,
+    } as unknown as RawBarNumberSearchValidation);
     expect(entity.getFormattedValidationErrors()).toEqual({
       barNumber: 'Enter a valid bar number',
     });

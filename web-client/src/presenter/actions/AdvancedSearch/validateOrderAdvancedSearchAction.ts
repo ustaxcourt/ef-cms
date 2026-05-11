@@ -22,8 +22,8 @@ export const validateOrderAdvancedSearchAction = ({
     : undefined;
 
   const errors = new OrderSearchValidation({
-    startDate: formattedStartDate,
-    endDate: formattedEndDate,
+    startDate: formattedStartDate ?? '',
+    endDate: formattedEndDate ?? '',
   }).getFormattedValidationErrors();
 
   if (errors) {

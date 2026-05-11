@@ -1,4 +1,5 @@
 import { UserCase } from './UserCase';
+import type { RawUserCase } from './UserCase';
 
 describe('UserCase', () => {
   const validUserCase = {
@@ -6,7 +7,7 @@ describe('UserCase', () => {
   };
 
   it('fails validation if required fields are non-existent', () => {
-    expect(new UserCase({}).isValid()).toBeFalsy();
+    expect(new UserCase({} as unknown as RawUserCase).isValid()).toBeFalsy();
   });
 
   it('passes validation if required fields exist', () => {

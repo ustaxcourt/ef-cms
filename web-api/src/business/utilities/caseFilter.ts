@@ -9,6 +9,13 @@ import {
   isSealedCase,
 } from '@shared/business/entities/cases/Case';
 
+/** OpenSearch rows may omit full {@link RawCase} shaping; callers coerce as needed. */
+export type CaseAccessibilitySearchRow = RawCase & {
+  isCaseSealed?: boolean;
+  isDocketEntrySealed?: boolean;
+  docketEntryId?: string;
+};
+
 const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
   'contactId',
@@ -25,7 +32,7 @@ const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
 export const formatSealedAddresses = (
   caseRaw: RawCase,
   currentUser: UnknownAuthUser,
-) => {
+): RawCase => {
   const userCanViewSealedAddresses = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
@@ -70,9 +77,9 @@ export const formatSealedAddresses = (
 };
 
 export const filterCaseSearchResultsNotAccessibleToUser = (
-  searchResults: RawCase[],
+  searchResults: CaseAccessibilitySearchRow[],
   currentUser: UnknownAuthUser,
-) => {
+): RawCase[] => {
   return searchResults
     .filter(
       searchResult =>
@@ -84,5 +91,5 @@ export const filterCaseSearchResultsNotAccessibleToUser = (
         isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
         isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
     )
-    .map(c => formatSealedAddresses(c, currentUser));
+    .map(c => formatSealedAddresses(c as RawCase, currentUser));
 };
