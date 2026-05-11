@@ -32,7 +32,7 @@ jobs:
       fetch_depth: 0
       record_jest_test_timings: true
       run_command: |
-        export TESTFILES=$(scripts/github-actions/split-tests.ts -public)
+        export TESTFILES=$(scripts/github-actions/split-tests.ts --public)
         export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
         npm run test:client:integration:ci
       upload_logs: true

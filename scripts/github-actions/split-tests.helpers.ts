@@ -30,48 +30,61 @@ type JestSuite = {
   testMatch?: string | string[];
 };
 
-const cypressSuites: { [suiteName: string]: CypressSuite } = {
+export const cypressSuites: { [suiteName: string]: CypressSuite } = {
   accessibility: {
-    config: './cypress.config.ts',
+    config: 'cypress.config.ts',
     excludePublicTests: true,
-    specDirs: ['./cypress/local-only/tests/accessibility'],
+    specDirs: ['cypress/local-only/tests/accessibility'],
   },
   integration: {
-    config: './cypress.config.ts',
+    config: 'cypress.config.ts',
     excludePublicTests: true,
-    specDirs: ['./cypress/local-only/tests/integration'],
+    specDirs: ['cypress/local-only/tests/integration'],
   },
   public: {
-    config: './cypress-public.config.ts',
+    config: 'cypress-public.config.ts',
     excludePublicTests: false,
     specDirs: [
-      './cypress/local-only/tests/accessibility/public',
-      './cypress/local-only/tests/integration/public',
+      'cypress/local-only/tests/accessibility/public',
+      'cypress/local-only/tests/integration/public',
     ],
   },
   realUsers: {
-    config: './cypress-real-user-tests.config.ts',
+    config: 'cypress-real-user-tests.config.ts',
     excludePublicTests: false,
-    specDirs: ['./cypress/real-users'],
+    specDirs: ['cypress/real-users'],
   },
   smoketests: {
-    config: './cypress-smoketests.config.ts',
+    config: 'cypress-smoketests.config.ts',
     excludePublicTests: true,
-    specDirs: ['./cypress/deployed-and-local/integration'],
+    specDirs: ['cypress/deployed-and-local/integration'],
   },
   smoketestsReadonly: {
-    config: './cypress-smoketests-readonly.config.ts',
+    config: 'cypress-smoketests-readonly.config.ts',
     excludePublicTests: true,
-    specDirs: ['./cypress/readonly/integration'],
+    specDirs: ['cypress/readonly/integration'],
   },
   smoketestsReadonlyPublic: {
-    config: './cypress-smoketests-readonly-public.config.ts',
+    config: 'cypress-smoketests-readonly-public.config.ts',
     excludePublicTests: false,
-    specDirs: ['./cypress/readonly/integration/public'],
+    specDirs: ['cypress/readonly/integration/public'],
   },
 };
 
-const jestSuites: { [suiteName: string]: JestSuite } = {
+// Define the type for the keys of the original object for strict typing
+type kCypressSuite = string;
+export const specDirToSuiteMap = Object.entries(cypressSuites).reduce(
+  (acc, [key, config]) => {
+    const suiteName = key as kCypressSuite;
+    config.specDirs.forEach(specDir => {
+      acc[specDir] = suiteName;
+    });
+    return acc;
+  },
+  {} as Record<string, kCypressSuite>,
+);
+
+export const jestSuites: { [suiteName: string]: JestSuite } = {
   documentGenerators: {
     rootDir: 'shared/src/business/utilities/documentGenerators/',
     testMatch: documentGenerators.testMatch,
@@ -246,8 +259,8 @@ export const getOutputsForCurrentCiNode = ({
   })[index].map((file: SplittableFile): string => file.output);
 };
 
-export const splitTests = (testType: string): string => {
-  const specDir: string = `./web-client/integration-tests${testType}/`;
+export const splitTests = (publicTests: boolean): string => {
+  const specDir: string = `./web-client/integration-tests${publicTests ? '-public' : ''}/`;
   const files: SplittableFile[] = fs
     .readdirSync(specDir, 'utf8')
     .filter((fileName: string): boolean => fileName.endsWith('test.ts'))

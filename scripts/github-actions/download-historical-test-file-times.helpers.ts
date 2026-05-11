@@ -206,17 +206,15 @@ const findTimingArtifact = ({
   return undefined;
 };
 
-export const downloadHistoricalTestFileTimes = async (
-  args: string[] = process.argv.slice(2),
-): Promise<void> => {
-  const [workflowFileName, artifactName, outputFilePath] = args;
-
-  if (!workflowFileName || !artifactName || !outputFilePath) {
-    throw new Error(
-      'Usage: scripts/github-actions/download-historical-test-file-times.helpers.ts <workflow-file-name> <artifact-name> <output-path>',
-    );
-  }
-
+export const downloadHistoricalTestFileTimes = async ({
+  artifactName,
+  outputFilePath,
+  workflowFileName,
+}: {
+  artifactName: string;
+  outputFilePath: string;
+  workflowFileName: string;
+}): Promise<void> => {
   const repository = getRequiredEnvironmentVariable('GITHUB_REPOSITORY');
   const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
   const ancestorCommitShas = getAncestorCommitShas({ currentSha });

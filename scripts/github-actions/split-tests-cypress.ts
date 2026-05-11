@@ -18,8 +18,9 @@ const scriptConfig: ScriptConfig = {
     testFileTimingsPath: 'TEST_FILE_TIMINGS_PATH',
   },
   parameters: {
-    testDir: {
-      description: 'A directory under cypress/local-only/tests/',
+    cypressSuite: {
+      description:
+        'A camelCase Cypress suite. See cypressSuites in split-tests.helpers.ts',
       position: 0,
       required: true,
       type: 'string',
@@ -27,6 +28,8 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: false,
 };
-const { testDir } = parseArgsAndEnvVars(scriptConfig) as { testDir: string };
+const { cypressSuite } = parseArgsAndEnvVars(scriptConfig) as {
+  cypressSuite: string;
+};
 
-splitTestsCypress(testDir);
+splitTestsCypress(cypressSuite);

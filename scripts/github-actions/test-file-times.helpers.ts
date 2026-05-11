@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export type CypressRunTimingResult = {
-  runs: Array<{
+  runs: {
     spec: {
       absolute?: string;
       relative?: string;
@@ -10,15 +10,15 @@ export type CypressRunTimingResult = {
     stats: {
       duration?: number;
     };
-  }>;
+  }[];
 };
 
 export type JestFormattedTestResults = {
-  testResults: Array<{
+  testResults: {
     endTime?: number;
     name: string;
     startTime?: number;
-  }>;
+  }[];
 };
 
 export type TestFileTimes = Record<string, number>;

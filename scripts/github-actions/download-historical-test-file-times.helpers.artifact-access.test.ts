@@ -104,11 +104,11 @@ describe('download-historical-test-file-times artifact access', () => {
         ok: true,
       } as Response);
 
-    await downloadHistoricalTestFileTimes([
-      'client.yml',
-      'historical-test-file-times',
+    await downloadHistoricalTestFileTimes({
+      artifactName: 'historical-test-file-times',
       outputFilePath,
-    ]);
+      workflowFileName: 'client.yml',
+    });
 
     expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
       './fallback.test.ts': 2000,
@@ -154,11 +154,11 @@ describe('download-historical-test-file-times artifact access', () => {
         ok: true,
       } as Response);
 
-    await downloadHistoricalTestFileTimes([
-      'client.yml',
-      'historical-test-file-times',
-      path.join(tempDir, 'artifact-forbidden-no-match.json'),
-    ]);
+    await downloadHistoricalTestFileTimes({
+      artifactName: 'historical-test-file-times',
+      outputFilePath: path.join(tempDir, 'artifact-forbidden-no-match.json'),
+      workflowFileName: 'client.yml',
+    });
 
     expect(consoleSpy).toHaveBeenCalledWith(
       'No successful ancestor workflow run with test timing artifact found.',
@@ -205,11 +205,11 @@ describe('download-historical-test-file-times artifact access', () => {
         ok: true,
       } as Response);
 
-    await downloadHistoricalTestFileTimes([
-      'client.yml',
-      'historical-test-file-times',
-      path.join(tempDir, 'artifact-not-found-no-match.json'),
-    ]);
+    await downloadHistoricalTestFileTimes({
+      artifactName: 'historical-test-file-times',
+      outputFilePath: path.join(tempDir, 'artifact-not-found-no-match.json'),
+      workflowFileName: 'client.yml',
+    });
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       'Skipping historical timing artifact lookup for workflow run 123 (ancestor) because GitHub returned 404; continuing to older ancestor runs.',
@@ -245,11 +245,11 @@ describe('download-historical-test-file-times artifact access', () => {
       } as Response);
 
     await expect(
-      downloadHistoricalTestFileTimes([
-        'client.yml',
-        'historical-test-file-times',
-        path.join(tempDir, 'artifact-lookup-error.json'),
-      ]),
+      downloadHistoricalTestFileTimes({
+        artifactName: 'historical-test-file-times',
+        outputFilePath: path.join(tempDir, 'artifact-lookup-error.json'),
+        workflowFileName: 'client.yml',
+      }),
     ).rejects.toThrow(
       'GitHub API request failed (500): https://api.github.com/repos/ustaxcourt/ef-cms/actions/runs/123/artifacts',
     );
