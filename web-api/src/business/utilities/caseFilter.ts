@@ -4,7 +4,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, pick } from 'lodash';
-import { isAssociatedUser, isSealedCase } from '@shared/business/entities/cases/Case';
+import {
+  isAssociatedUser,
+  isSealedCase,
+} from '@shared/business/entities/cases/Case';
 
 const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
@@ -20,7 +23,7 @@ const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
 ];
 
 export const formatSealedAddresses = (
-  caseRaw: any,
+  caseRaw: RawCase,
   currentUser: UnknownAuthUser,
 ) => {
   const userCanViewSealedAddresses = isAuthorized(
@@ -67,7 +70,7 @@ export const formatSealedAddresses = (
 };
 
 export const filterCaseSearchResultsNotAccessibleToUser = (
-  searchResults: any[],
+  searchResults: RawCase[],
   currentUser: UnknownAuthUser,
 ) => {
   return searchResults

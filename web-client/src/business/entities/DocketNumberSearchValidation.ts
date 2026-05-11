@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 export class DocketNumberSearchValidation extends JoiValidationEntity {
   public docketNumber: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawDocketNumberSearchValidation) {
     super('DocketNumberSearchValidation');
     this.docketNumber = rawProps.docketNumber;
   }
@@ -21,3 +21,6 @@ export class DocketNumberSearchValidation extends JoiValidationEntity {
     };
   }
 }
+
+export type RawDocketNumberSearchValidation =
+  ExcludeMethods<DocketNumberSearchValidation>;

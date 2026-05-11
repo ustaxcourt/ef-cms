@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 export class UserCase extends JoiValidationEntity {
   public docketNumber: string;
 
-  constructor(rawUserCase: any) {
+  constructor(rawUserCase: RawUserCase) {
     super('UserCase');
 
     this.docketNumber = rawUserCase.docketNumber;

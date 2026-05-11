@@ -1,5 +1,6 @@
 import { put } from '../requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 export const updatePractitionerUserInteractor = (
   applicationContext: ClientApplicationContext,
@@ -7,7 +8,7 @@ export const updatePractitionerUserInteractor = (
     barNumber,
     user,
     clientConnectionId,
-  }: { barNumber: string; user: any; clientConnectionId: string },
+  }: { barNumber: string; user: RawPractitioner; clientConnectionId: string },
 ): Promise<void> => {
   return put({
     applicationContext,

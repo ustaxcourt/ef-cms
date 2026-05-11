@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 export class BarNumberSearchValidation extends JoiValidationEntity {
   public barNumber: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawBarNumberSearchValidation) {
     super('BarNumberSearchValidation');
     this.barNumber = rawProps.barNumber;
   }
@@ -21,3 +21,6 @@ export class BarNumberSearchValidation extends JoiValidationEntity {
     };
   }
 }
+
+export type RawBarNumberSearchValidation =
+  ExcludeMethods<BarNumberSearchValidation>;

@@ -6,7 +6,7 @@ export class TrialSessionsPageValidation extends JoiValidationEntity {
   public endDate: string;
   public startDate: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawTrialSessionsPageValidation) {
     super('TrialSessionsPageValidation');
     this.endDate = rawProps.endDate;
     this.startDate = rawProps.startDate;
@@ -37,3 +37,6 @@ export class TrialSessionsPageValidation extends JoiValidationEntity {
     };
   }
 }
+
+export type RawTrialSessionsPageValidation =
+  ExcludeMethods<TrialSessionsPageValidation>;

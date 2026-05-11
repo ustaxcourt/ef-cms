@@ -29,7 +29,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
   public contactPrimary?: {};
   public contactSecondary?: {};
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawUploadPetitionStep1 & { petitionType?: string }) {
     super('UploadPetitionStep1');
 
     this.businessType = rawProps.businessType;

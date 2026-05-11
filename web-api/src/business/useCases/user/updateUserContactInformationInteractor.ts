@@ -18,7 +18,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, UserContact } from '@shared/business/entities/User';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
@@ -39,7 +39,7 @@ const updateUserContactInformationHelper = async (
     userId,
     clientConnectionId,
   }: {
-    contactInfo: any;
+    contactInfo: UserContact;
     firmName: string;
     userId: string;
     clientConnectionId: string;
@@ -149,7 +149,7 @@ export const updateUserContactInformation = async (
     userId,
     clientConnectionId,
   }: {
-    contactInfo: any;
+    contactInfo: UserContact;
     firmName: string;
     userId: string;
     clientConnectionId: string;

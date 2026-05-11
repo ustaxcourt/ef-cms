@@ -9,7 +9,7 @@ export const getDocumentTitleForNoticeOfChange = ({
   docketEntry,
 }: {
   applicationContext: ServerApplicationContext;
-  docketEntry: any;
+  docketEntry: RawDocketEntry;
 }): string => {
   let { documentTitle } = docketEntry;
   const filingsAndProceedings = getFilingsAndProceedings(

@@ -7,7 +7,7 @@ export class OrderSearchValidation extends JoiValidationEntity {
   public startDate: string;
   public endDate: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawOrderSearchValidation) {
     super('OrderSearchValidation');
     this.startDate = rawProps.startDate;
     this.endDate = rawProps.endDate;
@@ -47,3 +47,5 @@ export class OrderSearchValidation extends JoiValidationEntity {
     };
   }
 }
+
+export type RawOrderSearchValidation = ExcludeMethods<OrderSearchValidation>;

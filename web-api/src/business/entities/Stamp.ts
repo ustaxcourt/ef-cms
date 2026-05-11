@@ -25,7 +25,7 @@ export class Stamp extends JoiValidationEntity {
   public jurisdictionalOption?: string;
   public strickenFromTrialSession?: string;
 
-  constructor(rawStamp: any) {
+  constructor(rawStamp: RawStamp) {
     super('Stamp');
     this.date = rawStamp.date;
     this.disposition = rawStamp.disposition;

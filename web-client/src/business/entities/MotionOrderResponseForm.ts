@@ -21,7 +21,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   public isOnLeadCase: boolean;
   public issueOrderFor: typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawMotionOrderResponseForm) {
     super('MotionOrderResponseForm');
 
     this.motionOrderResponse = rawProps.motionOrderResponse;
@@ -106,5 +106,5 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   }
 }
 
-export type RawMotionOrderResponserForm =
+export type RawMotionOrderResponseForm =
   ExcludeMethods<MotionOrderResponseForm>;

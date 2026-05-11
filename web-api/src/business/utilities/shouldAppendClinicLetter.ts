@@ -1,4 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getClinicLetterKey } from './getClinicLetterKey';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -9,9 +10,9 @@ export const shouldAppendClinicLetter = async ({
   trialSession,
 }: {
   applicationContext: ServerApplicationContext;
-  caseEntity: any;
+  caseEntity: RawCase;
   procedureType: string;
-  trialSession: any;
+  trialSession: RawTrialSession;
 }): Promise<{ appendClinicLetter: boolean; clinicLetterKey: string }> => {
   let appendClinicLetter = false;
   let clinicLetterKey: string = '';

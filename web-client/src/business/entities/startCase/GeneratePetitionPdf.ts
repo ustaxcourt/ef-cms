@@ -1,4 +1,8 @@
-import { CASE_TYPES, PARTY_TYPES, PROCEDURE_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES,
+  PARTY_TYPES,
+  PROCEDURE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import {
   Contact,
   ContactCounsel,
@@ -25,7 +29,7 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
   public originalCaseType: string;
   public irsNotices: IrsNotice[];
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawGeneratePetitionPdf) {
     super('GeneratePetitionPdf');
 
     this.caseCaptionExtension = rawProps.caseCaptionExtension;

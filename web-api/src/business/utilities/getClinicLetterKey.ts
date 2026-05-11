@@ -3,7 +3,7 @@ export const getClinicLetterKey = ({
   trialLocation,
 }: {
   procedureType: string;
-  trialLocation: any;
+  trialLocation: string;
 }): string => {
   const formattedPreferredTrialCity = trialLocation
     .replace(',', '')

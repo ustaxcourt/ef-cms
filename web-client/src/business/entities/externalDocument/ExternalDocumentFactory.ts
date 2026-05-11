@@ -1,19 +1,65 @@
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
-import { ExternalDocumentNonStandardA } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardA';
-import { ExternalDocumentNonStandardB } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardB';
-import { ExternalDocumentNonStandardC } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardC';
-import { ExternalDocumentNonStandardD } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardD';
-import { ExternalDocumentNonStandardE } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardE';
-import { ExternalDocumentNonStandardF } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardF';
-import { ExternalDocumentNonStandardG } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardG';
-import { ExternalDocumentNonStandardH } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardH';
-import { ExternalDocumentNonStandardI } from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardI';
-import { ExternalDocumentStandard } from '@shared/business/entities/externalDocument/ExternalDocumentStandard';
+import {
+  ExternalDocumentNonStandardA,
+  type RawExternalDocumentNonStandardA,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardA';
+import {
+  ExternalDocumentNonStandardB,
+  type RawExternalDocumentNonStandardB,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardB';
+import {
+  ExternalDocumentNonStandardC,
+  type RawExternalDocumentNonStandardC,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardC';
+import {
+  ExternalDocumentNonStandardD,
+  type RawExternalDocumentNonStandardD,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardD';
+import {
+  ExternalDocumentNonStandardE,
+  type RawExternalDocumentNonStandardE,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardE';
+import {
+  ExternalDocumentNonStandardF,
+  type RawExternalDocumentNonStandardF,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardF';
+import {
+  ExternalDocumentNonStandardG,
+  type RawExternalDocumentNonStandardG,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardG';
+import {
+  ExternalDocumentNonStandardH,
+  type RawExternalDocumentNonStandardH,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardH';
+import {
+  ExternalDocumentNonStandardI,
+  type RawExternalDocumentNonStandardI,
+} from '@shared/business/entities/externalDocument/ExternalDocumentNonStandardI';
+import {
+  ExternalDocumentStandard,
+  type RawExternalDocumentStandard,
+} from '@shared/business/entities/externalDocument/ExternalDocumentStandard';
+
+export type ExternalDocumentFactoryMetadata =
+  | RawExternalDocumentStandard
+  | RawExternalDocumentNonStandardA
+  | RawExternalDocumentNonStandardB
+  | RawExternalDocumentNonStandardC
+  | RawExternalDocumentNonStandardD
+  | RawExternalDocumentNonStandardE
+  | RawExternalDocumentNonStandardF
+  | RawExternalDocumentNonStandardG
+  | RawExternalDocumentNonStandardH
+  | RawExternalDocumentNonStandardI;
 
 export function ExternalDocumentFactory(
-  documentMetadata: any,
+  documentMetadata: ExternalDocumentFactoryMetadata,
 ): ExternalDocumentBase {
-  if (documentMetadata && documentMetadata.scenario) {
+  if (
+    documentMetadata &&
+    'scenario' in documentMetadata &&
+    typeof documentMetadata.scenario === 'string'
+  ) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
 
     switch (scenario) {

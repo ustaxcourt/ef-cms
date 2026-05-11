@@ -26,7 +26,7 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     })
     .filter(Boolean);
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawUploadPetitionStep3) {
     super('UploadPetitionStep3');
     this.hasIrsNotice = rawProps.hasIrsNotice;
     this.irsNotices = rawProps.hasIrsNotice

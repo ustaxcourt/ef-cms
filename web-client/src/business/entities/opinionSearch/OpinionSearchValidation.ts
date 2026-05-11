@@ -7,7 +7,7 @@ export class OpinionSearchValidation extends JoiValidationEntity {
   public startDate: string;
   public endDate: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawOpinionSearchValidation) {
     super('OpinionSearchValidation');
     this.startDate = rawProps.startDate;
     this.endDate = rawProps.endDate;
@@ -47,3 +47,6 @@ export class OpinionSearchValidation extends JoiValidationEntity {
     };
   }
 }
+
+export type RawOpinionSearchValidation =
+  ExcludeMethods<OpinionSearchValidation>;

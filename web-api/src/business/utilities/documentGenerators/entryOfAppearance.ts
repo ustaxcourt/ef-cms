@@ -3,11 +3,20 @@ import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { generateHTMLTemplateForPDF } from '@shared/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import React from 'react';
+import type { ComponentProps } from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const entryOfAppearance = async ({ applicationContext, data }: {
+export type EntryOfAppearancePdfPayload = Omit<
+  ComponentProps<typeof EntryOfAppearance>,
+  'date'
+>;
+
+export const entryOfAppearance = async ({
+  applicationContext,
+  data,
+}: {
   applicationContext: ServerApplicationContext;
-  data: any;
+  data: EntryOfAppearancePdfPayload;
 }) => {
   const {
     caseCaptionExtension,

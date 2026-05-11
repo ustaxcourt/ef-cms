@@ -1,7 +1,6 @@
-import joiDate from '@joi/date';
-import joiImported, { Root } from 'joi';
-const joi: Root = joiImported.extend(joiDate);
-import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import {
   FORMATS,
   calculateISODate,
@@ -9,8 +8,22 @@ import {
   createStartOfDayISO,
   isValidDateString,
 } from '@shared/business/utilities/DateHandler';
-import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+
+const joi: Root = joiImported.extend(joiDate);
+
+export type CavAndSubmittedJudgeReportStatus =
+  (typeof CAV_AND_SUBMITTED_CASE_STATUS)[number];
+
+export type JudgeActivityReportSearchInitialProps = {
+  endDate: string;
+  judgeId: string;
+  judgeName: string;
+  judges: string[];
+  startDate: string;
+  statuses: CavAndSubmittedJudgeReportStatus[];
+};
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   private VALID_DATE_FORMAT = FORMATS.MMDDYYYY;
@@ -19,12 +32,12 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public startDate: string;
   public judgeName: string;
   public judgeId: string;
-  public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
+  public statuses: CavAndSubmittedJudgeReportStatus[];
   public judges: string[];
 
   protected tomorrow: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: JudgeActivityReportSearchInitialProps) {
     super('JudgeActivityReportSearch');
 
     this.judgeId = rawProps.judgeId;

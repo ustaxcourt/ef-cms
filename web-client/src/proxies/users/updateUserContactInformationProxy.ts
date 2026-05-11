@@ -1,5 +1,6 @@
 import { put } from '../requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { UserContact } from '@shared/business/entities/User';
 
 export const updateUserContactInformationInteractor = (
   applicationContext: ClientApplicationContext,
@@ -9,7 +10,7 @@ export const updateUserContactInformationInteractor = (
     userId,
     clientConnectionId,
   }: {
-    contactInfo: any;
+    contactInfo: UserContact;
     firmName: string;
     userId: string;
     clientConnectionId: string;

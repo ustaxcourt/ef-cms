@@ -17,7 +17,7 @@ import {
   PreviousTerm,
   TrialLocationData,
 } from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
-import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import type { AggregatedPaperServiceParty } from '@shared/business/utilities/aggregatePartiesForService';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -891,7 +891,9 @@ export const baseState = {
   openClosedCases: {
     caseType: undefined as string | undefined,
   },
-  paperServiceParties: [] as Array<RawUser & { docketNumber: string }>,
+  paperServiceParties: [] as Array<
+    AggregatedPaperServiceParty & { docketNumber: string }
+  >,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,

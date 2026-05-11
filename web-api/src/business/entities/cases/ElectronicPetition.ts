@@ -13,9 +13,13 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '@shared/business/entities/EntityConstants';
 import { ContactFactory } from '@shared/business/entities/contacts/ContactFactory';
+import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { getContactPrimary, getContactSecondary } from '@shared/business/entities/cases/Case';
+import {
+  getContactPrimary,
+  getContactSecondary,
+} from '@shared/business/entities/cases/Case';
 import joi from 'joi';
 
 export class ElectronicPetition extends JoiValidationEntity {
@@ -41,7 +45,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   public stinFile?: object;
   public stinFileSize?: number;
 
-  constructor(rawCase: any) {
+  constructor(rawCase: RawElectronicPetitionConstructor) {
     super('ElectronicPetition');
 
     this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
@@ -238,3 +242,12 @@ export class ElectronicPetition extends JoiValidationEntity {
     return getContactSecondary(this);
   }
 }
+
+/** JSON/case-helper payload accepted before ContactFactory materializes petitioners */
+export type RawElectronicPetitionConstructor = Omit<
+  ExcludeMethods<ElectronicPetition>,
+  'petitioners'
+> & {
+  contactPrimary?: RawPetitioner;
+  contactSecondary?: RawPetitioner;
+};

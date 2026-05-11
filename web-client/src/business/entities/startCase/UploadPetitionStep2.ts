@@ -15,7 +15,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
   public petitionFacts?: string[];
   public petitionReasons?: string[];
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawUploadPetitionStep2) {
     super('UploadPetitionStep2');
     this.petitionRedactionAcknowledgement =
       rawProps.petitionRedactionAcknowledgement;

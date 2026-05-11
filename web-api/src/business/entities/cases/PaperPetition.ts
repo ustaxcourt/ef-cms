@@ -8,13 +8,20 @@ import {
   PROCEDURE_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { Case, getContactPrimary, getContactSecondary } from '@shared/business/entities/cases/Case';
+import {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} from '@shared/business/entities/cases/Case';
 import { ContactFactory } from '@shared/business/entities/contacts/ContactFactory';
-import { Correspondence } from '@shared/business/entities/Correspondence';
+import {
+  Correspondence,
+  RawCorrespondence,
+} from '@shared/business/entities/Correspondence';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { Statistic } from '@shared/business/entities/Statistic';
+import { RawStatistic, Statistic } from '@shared/business/entities/Statistic';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import joi from 'joi';
 
@@ -61,7 +68,7 @@ export class PaperPetition extends JoiValidationEntity {
   public docketEntries: DocketEntry[];
 
   constructor(
-    rawProps: any,
+    rawProps: RawPaperPetitionConstructorProps,
     { authorizedUser }: { authorizedUser: UnknownAuthUser },
   ) {
     super('PaperPetition');
@@ -366,6 +373,23 @@ export class PaperPetition extends JoiValidationEntity {
     return PaperPetition.VALIDATION_RULES;
   }
 }
+
+export type RawPaperPetitionConstructorProps = Omit<
+  ExcludeMethods<PaperPetition>,
+  | 'archivedCorrespondences'
+  | 'archivedDocketEntries'
+  | 'docketEntries'
+  | 'petitioners'
+  | 'statistics'
+> & {
+  archivedCorrespondences?: RawCorrespondence[];
+  archivedDocketEntries?: RawDocketEntry[];
+  contactPrimary?: unknown;
+  contactSecondary?: unknown;
+  docketEntries?: RawDocketEntry[];
+  petitioners?: unknown[];
+  statistics?: RawStatistic[];
+};
 
 function createDocketEntriesValidation(eventCode: string) {
   return joi.alternatives().conditional('docketEntries', {

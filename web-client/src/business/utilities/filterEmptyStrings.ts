@@ -1,16 +1,18 @@
-export const filterEmptyStrings = (params: any) => {
-  const removeEmpty = obj => {
+export const filterEmptyStrings = <T>(params: T): T => {
+  const removeEmpty = (obj: Record<string, unknown>): void => {
     Object.keys(obj).forEach(key => {
-      if (obj[key] && typeof obj[key] === 'object') {
-        removeEmpty(obj[key]);
-      } else if (obj[key] === '') {
+      const value = obj[key];
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        removeEmpty(value as Record<string, unknown>);
+      } else if (value === '') {
         delete obj[key];
       }
     });
   };
 
-  if (params) {
-    removeEmpty(params);
+  if (params && typeof params === 'object') {
+    removeEmpty(params as Record<string, unknown>);
   }
+
   return params;
 };

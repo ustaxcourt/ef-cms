@@ -20,7 +20,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   public additionalOrderText?: string;
   public docketEntryDescription: string;
 
-  constructor(rawProps: any) {
+  constructor(rawProps: RawStatusReportOrderForm) {
     super('StatusReportOrderForm');
 
     this.issueOrder = rawProps.issueOrder;

@@ -16,7 +16,7 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
   public servedPartiesCode: string;
   public isSealed: boolean;
 
-  constructor(rawDocketEntry: any) {
+  constructor(rawDocketEntry: RawReconciliationReportEntry) {
     super('ReconciliationReportEntry');
 
     this.caseCaption = rawDocketEntry.caseCaption;

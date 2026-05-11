@@ -14,10 +14,10 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-
 describe('Authorization client service', () => {
   it('should return false when the user is undefined', () => {
-    expect(isAuthorized(undefined, 'unknown action' as any)).toBeFalsy();
+    // @ts-expect-error deliberate invalid RolePermission literal for exhaustive coverage
+    expect(isAuthorized(undefined, 'UNKNOWN_ACTION')).toBeFalsy();
   });
 
   it('should return false when the role provided is not found in the AUTHORIZATION_MAP', () => {
@@ -40,7 +40,8 @@ describe('Authorization client service', () => {
       userId: 'abc-123',
     };
     const result = isAuthorized(
-      userWithoutRole as any,
+      // @ts-expect-error AuthUser requires role — intentionally malformed subject
+      userWithoutRole,
       ROLE_PERMISSIONS.WORKITEM,
     );
     expect(result).toBe(false);
@@ -208,16 +209,15 @@ describe('Authorization client service', () => {
 
   it('returns false when isAuthUser passes but role is missing from AUTHORIZATION_MAP', () => {
     jest.spyOn(AuthUserModule, 'isAuthUser').mockReturnValue(true);
+    const userWithUnhandledRole = {
+      role: 'notInAuthorizationMap',
+      userId: '12345678-1234-4123-8123-123456789012',
+      name: 'Test User',
+      email: 'test@example.com',
+    };
     expect(
-      isAuthorized(
-        {
-          role: 'notInAuthorizationMap' as any,
-          userId: '12345678-1234-4123-8123-123456789012',
-          name: 'Test User',
-          email: 'test@example.com',
-        },
-        ROLE_PERMISSIONS.WORKITEM,
-      ),
+      // @ts-expect-error role not in Role union — isAuthUser is mocked away in this scenario
+      isAuthorized(userWithUnhandledRole, ROLE_PERMISSIONS.WORKITEM),
     ).toBe(false);
     jest.restoreAllMocks();
   });

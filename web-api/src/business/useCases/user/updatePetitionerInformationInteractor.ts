@@ -19,7 +19,10 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import {
+  aggregatePartiesForService,
+  type AggregatedPaperServiceParty,
+} from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -165,7 +168,7 @@ export const updatePetitionerInformation = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   updatedCase: CaseDTO;
-  paperServiceParties: any[];
+  paperServiceParties: AggregatedPaperServiceParty[];
   paperServicePdfUrl: string | undefined;
 }> => {
   if (!isAuthUser(authorizedUser)) {

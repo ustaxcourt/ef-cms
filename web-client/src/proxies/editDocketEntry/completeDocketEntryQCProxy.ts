@@ -1,4 +1,5 @@
 import { asyncSyncHandler, put } from '../requests';
+import type { AggregatedPaperServiceParty } from '@shared/business/utilities/aggregatePartiesForService';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
@@ -7,9 +8,11 @@ export const completeDocketEntryQCInteractor = (
   { entryMetadata },
 ): Promise<{
   caseDetail: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: string;
-  paperServiceDocumentTitle: string;
+  paperServiceParties: Array<
+    AggregatedPaperServiceParty & { docketNumber: string }
+  >;
+  paperServicePdfUrl: string | undefined;
+  paperServiceDocumentTitle: string | undefined;
 }> => {
   const { docketNumber } = entryMetadata;
   return asyncSyncHandler(
@@ -24,9 +27,11 @@ export const completeDocketEntryQCInteractor = (
         endpoint: `/async/case-documents/${docketNumber}/docket-entry-complete`,
       }),
   ) as Promise<{
-  caseDetail: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: string;
-  paperServiceDocumentTitle: string;
-}>;
+    caseDetail: CaseDTO;
+    paperServiceParties: Array<
+      AggregatedPaperServiceParty & { docketNumber: string }
+    >;
+    paperServicePdfUrl: string | undefined;
+    paperServiceDocumentTitle: string | undefined;
+  }>;
 };
