@@ -33,7 +33,7 @@ jobs:
       is_cypress: true
       run_command: |
         export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
-        scripts/github-actions/run-cypress-tests-with-timing.ts cypress.config.ts "$TESTFILES" "$TEST_FILE_TIMINGS_SHARD_FILE"
+        scripts/github-actions/run-cypress-tests-with-timing.ts --file "$TESTFILES" --output-file-path "$TEST_FILE_TIMINGS_SHARD_FILE"
       workflow_filename: e2e-cypress.yml
   persist-test-file-times:
     needs: [e2e_cypress]

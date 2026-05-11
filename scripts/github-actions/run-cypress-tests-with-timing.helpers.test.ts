@@ -1,58 +1,24 @@
 jest.mock('cypress', () => ({
+  open: jest.fn(),
   run: jest.fn(),
 }));
 
-import { runCypressTestsWithTiming } from './run-cypress-tests-with-timing.helpers';
+import { runCypressWithTiming } from './run-cypress-tests-with-timing.helpers';
 
 describe('run-cypress-tests-with-timing', () => {
   const createDependencies = () => {
     return {
       cypressRunner: {
+        open: jest.fn(),
         run: jest.fn(),
       },
+      dawson: { isLocal: true, isPublic: false },
       env: {} as NodeJS.ProcessEnv,
       exit: jest.fn(),
       getCypressTestFileTimes: jest.fn(),
       writeTestFileTimes: jest.fn(),
     };
   };
-
-  it('throws a usage error when required arguments are missing', async () => {
-    const dependencies = createDependencies();
-
-    await expect(runCypressTestsWithTiming([], dependencies)).rejects.toThrow(
-      'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
-    );
-
-    expect(dependencies.cypressRunner.run).not.toHaveBeenCalled();
-    expect(dependencies.writeTestFileTimes).not.toHaveBeenCalled();
-    expect(dependencies.exit).not.toHaveBeenCalled();
-  });
-
-  it('throws a usage error when called with the default args parameter', async () => {
-    const dependencies = createDependencies();
-    const originalArgv = process.argv;
-
-    try {
-      process.argv = ['node', 'run-cypress-tests-with-timing.ts'];
-
-      await expect(
-        runCypressTestsWithTiming(undefined, dependencies),
-      ).rejects.toThrow(
-        'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
-      );
-    } finally {
-      process.argv = originalArgv;
-    }
-
-    expect(dependencies.cypressRunner.run).not.toHaveBeenCalled();
-  });
-
-  it('throws a usage error when called with the default dependencies parameter', async () => {
-    await expect(runCypressTestsWithTiming([], undefined)).rejects.toThrow(
-      'Usage: scripts/github-actions/run-cypress-tests-with-timing.ts <config-file> <specs> <output> [browser]',
-    );
-  });
 
   it('runs Cypress with default environment values and writes timing data', async () => {
     const dependencies = createDependencies();
@@ -76,14 +42,12 @@ describe('run-cypress-tests-with-timing', () => {
     dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
     dependencies.getCypressTestFileTimes.mockReturnValue(testFileTimes);
 
-    await runCypressTestsWithTiming(
-      [
-        'cypress.config.ts',
-        'cypress/local-only/tests/example.cy.ts',
-        'timings.json',
-      ],
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+    });
 
     expect(dependencies.env.CYPRESS_TARGET_ENV).toBe('local');
     expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe('S3RVER');
@@ -119,15 +83,14 @@ describe('run-cypress-tests-with-timing', () => {
     dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
     dependencies.getCypressTestFileTimes.mockReturnValue({});
 
-    await runCypressTestsWithTiming(
-      [
-        'cypress-public.config.ts',
-        'spec-a.cy.ts,spec-b.cy.ts',
-        'timings.json',
-        'chrome',
-      ],
+    await runCypressWithTiming({
+      browserArg: 'chrome',
+      configFile: 'cypress-public.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'spec-a.cy.ts,spec-b.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe(
       'existing-access-key',
@@ -156,10 +119,13 @@ describe('run-cypress-tests-with-timing', () => {
     dependencies.cypressRunner.run.mockResolvedValue(cypressResults);
     dependencies.getCypressTestFileTimes.mockReturnValue({});
 
-    await runCypressTestsWithTiming(
-      ['cypress.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_NO_COMMAND_LOG).toBe('1');
     expect(dependencies.env.CYPRESS_TARGET_ENV).toBe('jest');
@@ -172,10 +138,13 @@ describe('run-cypress-tests-with-timing', () => {
       totalFailed: 0,
     });
 
-    await runCypressTestsWithTiming(
-      ['cypress-smoketests.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress-smoketests-private.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
@@ -193,10 +162,13 @@ describe('run-cypress-tests-with-timing', () => {
       totalFailed: 0,
     });
 
-    await runCypressTestsWithTiming(
-      ['cypress-smoketests-public.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress-smoketests-public.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBe('true');
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:5678');
@@ -214,10 +186,13 @@ describe('run-cypress-tests-with-timing', () => {
       totalFailed: 0,
     });
 
-    await runCypressTestsWithTiming(
-      ['cypress-public.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress-public.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_BASE_URL).toBeUndefined();
     expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
@@ -235,10 +210,13 @@ describe('run-cypress-tests-with-timing', () => {
       totalFailed: 0,
     });
 
-    await runCypressTestsWithTiming(
-      ['cypress-smoketests.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress-smoketests.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://existing:9999');
   });
@@ -250,10 +228,13 @@ describe('run-cypress-tests-with-timing', () => {
       totalFailed: 0,
     });
 
-    await runCypressTestsWithTiming(
-      ['cypress-real-user-tests.config.ts', 'example.cy.ts', 'timings.json'],
+    await runCypressWithTiming({
+      configFile: 'cypress-real-user-tests.config.ts',
+      current: false,
       dependencies,
-    );
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
 
     expect(dependencies.env.CYPRESS_SMOKETESTS_LOCAL).toBeUndefined();
     expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
@@ -273,10 +254,13 @@ describe('run-cypress-tests-with-timing', () => {
     });
 
     await expect(
-      runCypressTestsWithTiming(
-        ['cypress.config.ts', 'example.cy.ts', 'timings.json'],
+      runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
         dependencies,
-      ),
+        outputFilePath: 'timings.json',
+        specs: 'example.cy.ts',
+      }),
     ).rejects.toThrow('Cypress failed to launch');
 
     expect(dependencies.getCypressTestFileTimes).not.toHaveBeenCalled();
