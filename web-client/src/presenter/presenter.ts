@@ -231,7 +231,6 @@ import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
-import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
@@ -874,7 +873,6 @@ export const presenterSequences = {
   goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
-  gotoVerifyEmailSequence,
   gotoAccessibilityStatementSequence:
     gotoAccessibilityStatementSequence as unknown as Function,
   gotoAddCourtIssuedDocketEntrySequence:
