@@ -49,7 +49,7 @@ const defaultDependencies: RunCypressTestsWithTimingDependencies = {
   cypressRunner: require('cypress') as CypressRunner,
   dawson: { isLocal: true, isPublic: false },
   env: process.env,
-  exit: process.exit,
+  exit: (code: number) => process.exit(code),
   getCypressTestFileTimes,
   writeTestFileTimes,
 };
@@ -96,10 +96,12 @@ export const onOpen = async ({
   browser,
   current,
   cypressSuite,
+  dependencies = defaultDependencies,
 }: {
   browser?: string;
   current: boolean;
   cypressSuite?: string;
+  dependencies?: RunCypressTestsWithTimingDependencies;
 }) => {
   if (!cypressSuite) {
     throw new Error('Must specify --suite to open');
@@ -117,17 +119,20 @@ export const onOpen = async ({
     browserArg: determinedBrowser,
     configFile: cypressSuites[cypressSuite].config,
     current,
+    dependencies,
   });
 };
 
 export const onSpecs = async ({
   browser,
   current,
+  dependencies = defaultDependencies,
   file,
   outputFilePath,
 }: {
   browser?: string;
   current: boolean;
+  dependencies?: RunCypressTestsWithTimingDependencies;
   file: string;
   outputFilePath?: string;
 }) => {
@@ -156,6 +161,7 @@ export const onSpecs = async ({
     browserArg: determinedBrowser,
     configFile: cypressSuites[determinedSuite].config,
     current,
+    dependencies,
     outputFilePath: determinedOutputFilePath,
     specs: determinedSpecs,
   });
@@ -165,11 +171,13 @@ export const onSuite = async ({
   browser,
   current,
   cypressSuite,
+  dependencies = defaultDependencies,
   outputFilePath,
 }: {
   browser?: string;
   current: boolean;
   cypressSuite?: string;
+  dependencies?: RunCypressTestsWithTimingDependencies;
   outputFilePath?: string;
 }) => {
   if (!cypressSuite) {
@@ -192,6 +200,7 @@ export const onSuite = async ({
     browserArg: determinedBrowser,
     configFile: cypressSuites[cypressSuite].config,
     current,
+    dependencies,
     outputFilePath: determinedOutputFilePath,
   });
 };

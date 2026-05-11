@@ -36,8 +36,17 @@ jest.mock('../../web-client/jest-integration.config', () => ({
 jest.mock('../../web-client/jest-unit.config', () => ({
   testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
 }));
+jest.mock('../github-actions/test-file-times.helpers');
 
-import { runCypressWithTiming } from './run-cypress.helpers';
+import {
+  determineSuiteFromSpecs,
+  onOpen,
+  onSpecs,
+  onSuite,
+  openCypressSuite,
+  runCypressWithTiming,
+} from './run-cypress.helpers';
+import fs from 'fs';
 
 describe('run-cypress', () => {
   const createDependencies = () => {
@@ -137,6 +146,27 @@ describe('run-cypress', () => {
       spec: 'spec-a.cy.ts,spec-b.cy.ts',
     });
     expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('runCypressWithTiming uses default dependencies if none are provided', async () => {
+    const cypress = require('cypress');
+    cypress.run.mockResolvedValue({
+      runs: [],
+      totalFailed: 0,
+    });
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
+      return undefined as never;
+    });
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      outputFilePath: 'results.json',
+    });
+
+    expect(cypress.run).toHaveBeenCalled();
+    expect(exitSpy).toHaveBeenCalled();
+    exitSpy.mockRestore();
   });
 
   it('disables command logs and forwards ENV', async () => {
@@ -295,5 +325,463 @@ describe('run-cypress', () => {
     expect(dependencies.getCypressTestFileTimes).not.toHaveBeenCalled();
     expect(dependencies.writeTestFileTimes).not.toHaveBeenCalled();
     expect(dependencies.exit).not.toHaveBeenCalled();
+  });
+
+  describe('determineSuiteFromSpecs', () => {
+    it('determines the public suite from public spec files', () => {
+      const extantSpecs = [
+        'cypress/local-only/tests/integration/public/public-a.cy.ts',
+      ];
+      const suite = determineSuiteFromSpecs({ extantSpecs });
+      expect(suite).toBe('public');
+    });
+
+    it('determines the integration suite from private spec files', () => {
+      const extantSpecs = [
+        'cypress/local-only/tests/integration/private-a.cy.ts',
+      ];
+      const suite = determineSuiteFromSpecs({ extantSpecs });
+      expect(suite).toBe('integration');
+    });
+
+    it('throws an error if no matching suite is found', () => {
+      const extantSpecs = ['unknown/file.cy.ts'];
+      expect(() => determineSuiteFromSpecs({ extantSpecs })).toThrow(
+        'No matching suite found for specs: unknown/file.cy.ts',
+      );
+    });
+
+    it('throws an error if multiple matching suites are found', () => {
+      const extantSpecs = [
+        'cypress/local-only/tests/integration/private-a.cy.ts',
+        'cypress/local-only/tests/accessibility/private-a.cy.ts',
+      ];
+      expect(() => determineSuiteFromSpecs({ extantSpecs })).toThrow(
+        'Multiple matching suites found for specs: cypress/local-only/tests/integration/private-a.cy.ts,cypress/local-only/tests/accessibility/private-a.cy.ts. Please specify the suite explicitly.',
+      );
+    });
+  });
+
+  describe('onOpen', () => {
+    it('throws an error if cypressSuite is missing', async () => {
+      await expect(onOpen({ current: false })).rejects.toThrow(
+        'Must specify --suite to open',
+      );
+    });
+
+    it('throws an error if cypressSuite is invalid', async () => {
+      await expect(
+        onOpen({ current: false, cypressSuite: 'invalid' }),
+      ).rejects.toThrow('Invalid Cypress suite: invalid');
+    });
+
+    it('calls openCypressSuite with determined browser for public suite', async () => {
+      const dependencies = createDependencies();
+      await onOpen({ current: false, cypressSuite: 'public', dependencies });
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'chrome',
+        configFile: 'cypress-public.config.ts',
+      });
+    });
+
+    it('calls openCypressSuite with determined browser for private suite', async () => {
+      const dependencies = createDependencies();
+      await onOpen({
+        current: false,
+        cypressSuite: 'integration',
+        dependencies,
+      });
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'edge',
+        configFile: 'cypress.config.ts',
+      });
+    });
+
+    it('calls openCypressSuite with provided browser', async () => {
+      const dependencies = createDependencies();
+      await onOpen({
+        browser: 'firefox',
+        current: false,
+        cypressSuite: 'integration',
+        dependencies,
+      });
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'firefox',
+        configFile: 'cypress.config.ts',
+      });
+    });
+
+    it('uses provided empty browser string (edge branch)', async () => {
+      const dependencies = createDependencies();
+      await onOpen({
+        browser: '',
+        current: false,
+        cypressSuite: 'integration',
+        dependencies,
+      });
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'edge',
+        configFile: 'cypress.config.ts',
+      });
+    });
+  });
+
+  describe('onSpecs', () => {
+    it('throws an error if no matching spec files are found', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+      await expect(
+        onSpecs({ current: false, file: 'nonexistent.cy.ts' }),
+      ).rejects.toThrow('No matching spec files found: nonexistent.cy.ts');
+    });
+
+    it('calls runCypressWithTiming with determined suite and browser', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSpecs({
+        current: false,
+        dependencies,
+        file: 'cypress/local-only/tests/integration/private-a.cy.ts',
+      });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+        browser: 'edge',
+        configFile: 'cypress.config.ts',
+        spec: 'cypress/local-only/tests/integration/private-a.cy.ts',
+      });
+    });
+
+    it('calls runCypressWithTiming with public suite and browser', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSpecs({
+        current: false,
+        dependencies,
+        file: 'cypress/local-only/tests/integration/public/public-a.cy.ts',
+      });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+        browser: 'chrome',
+        configFile: 'cypress-public.config.ts',
+        spec: 'cypress/local-only/tests/integration/public/public-a.cy.ts',
+      });
+    });
+
+    it('honors provided outputFilePath', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSpecs({
+        current: false,
+        dependencies,
+        file: 'cypress/local-only/tests/integration/private-a.cy.ts',
+        outputFilePath: 'custom-results.json',
+      });
+
+      expect(dependencies.writeTestFileTimes).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filePath: 'custom-results.json',
+        }),
+      );
+    });
+
+    it('honors provided browser', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSpecs({
+        browser: 'firefox',
+        current: false,
+        dependencies,
+        file: 'cypress/local-only/tests/integration/private-a.cy.ts',
+      });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith(
+        expect.objectContaining({
+          browser: 'firefox',
+        }),
+      );
+    });
+  });
+
+  describe('onSuite', () => {
+    it('throws an error if cypressSuite is missing', async () => {
+      await expect(onSuite({ current: false })).rejects.toThrow(
+        'Must specify either --suite or --file',
+      );
+    });
+
+    it('throws an error if cypressSuite is invalid', async () => {
+      await expect(
+        onSuite({ current: false, cypressSuite: 'invalid' }),
+      ).rejects.toThrow('Invalid suite: invalid');
+    });
+
+    it('calls runCypressWithTiming for the given suite', async () => {
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSuite({
+        current: false,
+        cypressSuite: 'integration',
+        dependencies,
+      });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+        browser: 'edge',
+        configFile: 'cypress.config.ts',
+      });
+    });
+
+    it('calls runCypressWithTiming for the given public suite', async () => {
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSuite({ current: false, cypressSuite: 'public', dependencies });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith({
+        browser: 'chrome',
+        configFile: 'cypress-public.config.ts',
+      });
+    });
+
+    it('calls runCypressWithTiming with the provided browser', async () => {
+      const dependencies = createDependencies();
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await onSuite({
+        browser: 'firefox',
+        current: false,
+        cypressSuite: 'integration',
+        dependencies,
+      });
+
+      expect(dependencies.cypressRunner.run).toHaveBeenCalledWith(
+        expect.objectContaining({
+          browser: 'firefox',
+        }),
+      );
+    });
+  });
+
+  describe('openCypressSuite', () => {
+    it('calls cypressRunner.open with correct options', async () => {
+      const dependencies = createDependencies();
+      await openCypressSuite({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+      });
+
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'edge',
+        configFile: 'cypress.config.ts',
+      });
+    });
+
+    it('calls cypressRunner.open with correct options for public suite', async () => {
+      const dependencies = createDependencies();
+      await openCypressSuite({
+        configFile: 'cypress-public.config.ts',
+        current: false,
+        dependencies,
+      });
+
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'chrome',
+        configFile: 'cypress-public.config.ts',
+      });
+    });
+
+    it('uses provided browserArg', async () => {
+      const dependencies = createDependencies();
+      await openCypressSuite({
+        browserArg: 'firefox',
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+      });
+
+      expect(dependencies.cypressRunner.open).toHaveBeenCalledWith({
+        browser: 'firefox',
+        configFile: 'cypress.config.ts',
+      });
+    });
+
+    it('uses default dependencies if none are provided', async () => {
+      const cypress = require('cypress');
+      await openCypressSuite({
+        configFile: 'cypress.config.ts',
+        current: false,
+      });
+
+      expect(cypress.open).toHaveBeenCalledWith(
+        expect.objectContaining({
+          configFile: 'cypress.config.ts',
+        }),
+      );
+    });
+  });
+
+  describe('setEnvironmentVariables (deployed)', () => {
+    it('sets correct environment variables for deployed environment', async () => {
+      const dependencies = createDependencies();
+      dependencies.env.ENV = 'stg';
+      dependencies.env.CURRENT_COLOR = 'blue';
+      dependencies.env.EFCMS_DOMAIN = 'example.com';
+      dependencies.env.AWS_ACCESS_KEY_ID = 'aws-key';
+      dependencies.env.AWS_SECRET_ACCESS_KEY = 'aws-secret';
+      dependencies.env.AWS_SESSION_TOKEN = 'aws-token';
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.CYPRESS_BASE_URL).toBe(
+        'https://app-green.example.com',
+      );
+      expect(dependencies.env.CYPRESS_AWS_ACCESS_KEY_ID).toBe('aws-key');
+      expect(dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY).toBe('aws-secret');
+      expect(dependencies.env.CYPRESS_AWS_SESSION_TOKEN).toBe('aws-token');
+      expect(dependencies.env.CYPRESS_DEPLOYING_COLOR).toBe('green');
+    });
+
+    it('sets correct environment variables for deployed environment (blue)', async () => {
+      const dependencies = createDependencies();
+      dependencies.env.ENV = 'stg';
+      dependencies.env.CURRENT_COLOR = 'blue';
+      dependencies.env.EFCMS_DOMAIN = 'example.com';
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: true,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.CYPRESS_BASE_URL).toBe(
+        'https://app-blue.example.com',
+      );
+      expect(dependencies.env.CYPRESS_DEPLOYING_COLOR).toBe('blue');
+    });
+
+    it('sets correct environment variables for deployed public environment', async () => {
+      const dependencies = createDependencies();
+      dependencies.env.ENV = 'stg';
+      dependencies.env.CURRENT_COLOR = 'blue';
+      dependencies.env.EFCMS_DOMAIN = 'example.com';
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress-public.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.CYPRESS_BASE_URL).toBe(
+        'https://green.example.com',
+      );
+    });
+
+    it('sets correct environment variables for deployed environment (green)', async () => {
+      const dependencies = createDependencies();
+      dependencies.env.ENV = 'stg';
+      dependencies.env.CURRENT_COLOR = 'green';
+      dependencies.env.EFCMS_DOMAIN = 'example.com';
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.CYPRESS_BASE_URL).toBe(
+        'https://app-blue.example.com',
+      );
+      expect(dependencies.env.CYPRESS_DEPLOYING_COLOR).toBe('blue');
+    });
+
+    it('defaults ENV to local if missing', async () => {
+      const dependencies = createDependencies();
+      delete dependencies.env.ENV;
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.ENV).toBe('local');
+      expect(dependencies.env.CYPRESS_BASE_URL).toBe('http://localhost:1234');
+    });
+
+    it('honors CI flag for command log', async () => {
+      const dependencies = createDependencies();
+      dependencies.env.CI = 'true';
+      dependencies.cypressRunner.run.mockResolvedValue({
+        runs: [],
+        totalFailed: 0,
+      });
+
+      await runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'results.json',
+      });
+
+      expect(dependencies.env.CYPRESS_NO_COMMAND_LOG).toBe('1');
+    });
   });
 });
