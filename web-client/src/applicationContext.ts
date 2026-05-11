@@ -32,7 +32,7 @@ import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '@web-client/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '@web-client/proxies/addConsolidatedCaseProxy';
-import { addCoversheetInteractor } from '@web-client/proxies/documents/addCoversheetProxy';
+import { getDocketEntryProcessingStatusInteractor } from '@web-client/proxies/documents/getDocketEntryProcessingStatusProxy';
 import { addDeficiencyStatisticInteractor } from '@web-client/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { addPaperFilingInteractor } from '@web-client/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '@web-client/proxies/addPetitionerToCaseProxy';
@@ -366,7 +366,7 @@ let forceRefreshCallback: () => {};
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
-  addCoversheetInteractor,
+  getDocketEntryProcessingStatusInteractor,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,

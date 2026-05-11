@@ -1,5 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -21,6 +24,8 @@ import { withTransaction } from '@web-api/persistence/postgres/utils/transaction
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  *
@@ -40,7 +45,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<CaseDTO & { pendingCoversheetDocketEntryIds?: string[] }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -188,6 +193,33 @@ export const fileCourtIssuedDocketEntry = async (
         false,
       );
     }
+  });
+
+  const requiresCoversheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    );
+
+  if (requiresCoversheet) {
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: subjectDocketNumber,
+    });
+  }
+
+  const rawSubjectCase = await getCaseByDocketNumber({
+    docketNumber: subjectDocketNumber,
+  });
+
+  const subjectCase = new Case(rawSubjectCase, {
+    authorizedUser,
+  }).validate();
+
+  return Object.assign(new CaseDTO(subjectCase.toRawObject()), {
+    pendingCoversheetDocketEntryIds: requiresCoversheet
+      ? [docketEntryId]
+      : undefined,
   });
 };
 

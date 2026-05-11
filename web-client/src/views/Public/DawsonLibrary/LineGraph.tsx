@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@web-client/dawson-ui/ui/button';
 import {
   LineChart,
   Line,
@@ -184,6 +185,25 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   yAxisLabel,
   smooth = false,
 }) => {
+  const openHtmlTable = () => {
+    const headerCells = [
+      '<th>Label</th>',
+      ...datasets.map(ds => `<th>${ds.label}</th>`),
+    ].join('');
+    const rows = labels
+      .map((label, i) => {
+        const cells = datasets
+          .map(ds => `<td>${ds.data[i] ?? 0}</td>`)
+          .join('');
+        return `<tr><td>${label}</td>${cells}</tr>`;
+      })
+      .join('');
+    const heading = title ? `<h2>${title}</h2>` : '';
+    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+  };
+
   if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-gray-400">
@@ -229,9 +249,21 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <h2 className="tw:mb-5 tw:xs:mb-8 tw:text-left tw:xs:text-2xl tw:text-lg">
-            {title}
-          </h2>
+          <div
+            style={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+              {title}
+            </h2>
+            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+              HTML view
+            </Button>
+          </div>
         )}
         {showLegend && (
           <div>

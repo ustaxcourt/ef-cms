@@ -286,7 +286,7 @@ export const CaseListTable = connect(
               <h3 className="grid-col-4 tw:content-center">Sort By</h3>
               <select
                 id="case-list-mobile-sort"
-                aria-label="additional case info"
+                aria-label="Sort cases"
                 className="usa-select margin-bottom-2 grid-col-8"
                 data-testid="case-list-mobile-sort"
                 value={`${caseListTableSort.sortField}-${caseListTableSort.sortOrder}`}

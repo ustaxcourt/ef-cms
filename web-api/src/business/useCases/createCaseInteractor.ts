@@ -1,4 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -242,12 +244,25 @@ const createCaseMetadata = async (
     });
   }
 
+  const coversheetDocketEntryIds: string[] = [
+    petitionDocketEntryEntity.docketEntryId,
+    stinDocketEntryEntity.docketEntryId,
+  ];
+
+  if (corporateDisclosureFileId) {
+    coversheetDocketEntryIds.push(corporateDisclosureFileId);
+  }
+
+  if (attachmentToPetitionFileIds?.length) {
+    coversheetDocketEntryIds.push(...attachmentToPetitionFileIds);
+  }
+
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  return { caseToAdd, workItem: newWorkItem };
+  return { caseToAdd, coversheetDocketEntryIds, workItem: newWorkItem };
 };
 
 export const createCaseInteractor = async (
@@ -318,9 +333,10 @@ export const createCaseInteractor = async (
   });
 
   let caseToAdd: Case;
+  let coversheetDocketEntryIds: string[] = [];
 
   try {
-    ({ caseToAdd } = await withTransaction(async () => {
+    ({ caseToAdd, coversheetDocketEntryIds } = await withTransaction(async () => {
       const result = await createCaseMetadata(
         applicationContext,
         {
@@ -345,6 +361,20 @@ export const createCaseInteractor = async (
   } finally {
     await removeLockFunction();
   }
+
+
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(coversheetDocketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: caseToAdd.docketNumber,
+    }),
+  );
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,
