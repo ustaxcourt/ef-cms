@@ -156,7 +156,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
               {title}
             </h2>
             <Button
-              className="tw:w-auto"
+              className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
             >
@@ -421,7 +421,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               {title}
             </h2>
             <Button
-              className="tw:w-auto"
+              className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
             >

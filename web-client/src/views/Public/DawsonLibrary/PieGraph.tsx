@@ -157,7 +157,7 @@ export const PieGraph = ({
               {title}
             </h2>
             <Button
-              className="tw:w-auto"
+              className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
             >
