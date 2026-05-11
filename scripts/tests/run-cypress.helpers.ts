@@ -162,7 +162,7 @@ export const onSpecs = async ({
         ? 'chrome'
         : 'edge';
   const determinedOutputFilePath =
-    outputFilePath ?? `${determinedSuite}-results.json`;
+    outputFilePath ?? `/tmp/${determinedSuite}-results.json`;
   return await runCypressWithTiming({
     browserArg: determinedBrowser,
     configFile: cypressSuites[determinedSuite].config,
@@ -192,16 +192,14 @@ export const onSuite = async ({
   if (!(cypressSuite in cypressSuites)) {
     throw new Error(`Invalid suite: ${cypressSuite}`);
   }
-  console.log(`Wants browser: ${browser}`);
   const determinedBrowser =
     browser && browser.length > 0
       ? browser
       : cypressSuite.includes('ublic')
         ? 'chrome'
         : 'edge';
-  console.log(`Determined browser: ${determinedBrowser}`);
   const determinedOutputFilePath =
-    outputFilePath ?? `${cypressSuite}-results.json`;
+    outputFilePath ?? `/tmp/${cypressSuite}-results.json`;
   return await runCypressWithTiming({
     browserArg: determinedBrowser,
     configFile: cypressSuites[cypressSuite].config,
