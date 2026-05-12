@@ -13,7 +13,11 @@ export const setEditStatusReportOrderFormAction = ({
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/status-report-order-edit`;
 
   store.set(state.form, {
-    additionalOrderText: documentToEdit.draftOrderState.additionalOrderText,
+    additionalOrderTextArray:
+      documentToEdit.draftOrderState.additionalOrderTextArray ||
+      (documentToEdit.draftOrderState.additionalOrderText
+        ? [documentToEdit.draftOrderState.additionalOrderText]
+        : ['']),
     docketEntryDescription:
       documentToEdit.draftOrderState.docketEntryDescription,
     dueDate: documentToEdit.draftOrderState.dueDate,

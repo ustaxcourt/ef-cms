@@ -13,7 +13,7 @@ export const prepareStatusReportOrderAction = ({
   store,
 }: ActionProps) => {
   const {
-    additionalOrderText,
+    additionalOrderTextArray,
     dueDate,
     issueOrder,
     jurisdiction,
@@ -34,7 +34,9 @@ export const prepareStatusReportOrderAction = ({
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
-  const hasAdditionalOrderText = !!additionalOrderText;
+  const hasAdditionalOrderTextArray = !!additionalOrderTextArray.filter(
+    text => text,
+  ).length;
 
   const dueDateFormatted = applicationContext
     .getUtilities()
@@ -78,9 +80,17 @@ export const prepareStatusReportOrderAction = ({
         ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
         : '';
 
-  const additionalTextLine = hasAdditionalOrderText
-    ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}</p>`
-    : '';
+  let additionalTextLine = '';
+  if (hasAdditionalOrderTextArray) {
+    const additionalOrderTextFiltered = additionalOrderTextArray.filter(
+      text => text,
+    );
+    additionalOrderTextFiltered.forEach((text, index) => {
+      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${text}.${
+        index < additionalOrderTextFiltered.length - 1 ? ' It is further' : ''
+      }</p>`;
+    });
+  }
 
   const linesWithText = [
     orderTypeLine,

@@ -8,6 +8,7 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { Button as DawsonButton } from '@web-client/dawson-ui/ui/button';
 import React from 'react';
 
 export const StatusReportOrder = connect(
@@ -373,37 +374,74 @@ export const StatusReportOrder = connect(
 
                   <FormGroup
                     className="status-report-order-form-group"
-                    errorText={validationErrors.additionalOrderText}
+                    errorText={validationErrors.additionalOrderTextArray}
                   >
-                    <div>
-                      <label
-                        className="usa-label"
-                        htmlFor="additional-order-text"
-                        id="additional-order-text-label"
-                      >
-                        Additional order text
-                      </label>
-                      <textarea
-                        aria-describedby="additional-order-text-label"
-                        aria-label="additional order text"
-                        autoCapitalize="none"
-                        className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
-                        id="additional-order-text"
-                        maxLength={256}
-                        name="additionalOrderText"
-                        value={form.additionalOrderText}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      ></textarea>
-                      <CharactersRemainingHint
-                        maxCharacters={256}
-                        stringToCount={form.additionalOrderText}
-                      />
-                    </div>
+                    {form.additionalOrderTextArray.map((text, index) => (
+                      <div key={index}>
+                        <label
+                          className="usa-label tw:mt-4"
+                          htmlFor={`additional-order-text-array-${index}`}
+                          id={`additional-order-text-array-label-${index}`}
+                        >
+                          Additional order text
+                        </label>
+                        <textarea
+                          aria-describedby={`additional-order-text-array-label-${index}`}
+                          aria-label="additional order text"
+                          autoCapitalize="none"
+                          className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
+                          id={`additional-order-text-array-${index}`}
+                          maxLength={256}
+                          name={`additionalOrderTextArray[${index}]`}
+                          value={text}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              allowEmptyString: true,
+                              key: 'additionalOrderTextArray',
+                              index,
+                              value: e.target.value,
+                            });
+                          }}
+                        ></textarea>
+                        <CharactersRemainingHint
+                          className="tw:mb-0"
+                          maxCharacters={256}
+                          stringToCount={text}
+                        />
+                        {index > 0 && (
+                          <DawsonButton
+                            className="tw:block"
+                            iconPosition="left"
+                            icon="circle-xmark"
+                            onClick={() => {
+                              updateFormValueSequence({
+                                key: 'additionalOrderTextArray',
+                                value: form.additionalOrderTextArray.filter(
+                                  (_, i) => i !== index,
+                                ),
+                              });
+                            }}
+                            variant="destructiveTertiary"
+                          >
+                            Remove
+                          </DawsonButton>
+                        )}
+                      </div>
+                    ))}
+                    <hr />
+                    <DawsonButton
+                      iconPosition="left"
+                      icon="plus"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'additionalOrderTextArray',
+                          value: [...form.additionalOrderTextArray, ''],
+                        });
+                      }}
+                      variant="primaryTertiary"
+                    >
+                      Add additional order text
+                    </DawsonButton>
                   </FormGroup>
                 </div>
               </div>
