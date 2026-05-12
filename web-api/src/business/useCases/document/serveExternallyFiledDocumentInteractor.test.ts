@@ -452,14 +452,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it('should set the docket entry`s processing status as completed', async () => {
+  it('should not prematurely mark the docket entry as COMPLETE before the coversheet step runs, so the addCoversheetInteractor idempotency gate does not short-circuit', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
       docketEntries: [
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
-          processingStatus: 'abc',
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         } as RawDocketEntry,
       ],
     });
@@ -478,7 +478,18 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .processingStatus,
-    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+    ).not.toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+
+    const addCoversheetInteractorMock =
+      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
+    const addCoversheetArgs = addCoversheetInteractorMock.mock.calls[0][1];
+    const docketEntryPassedToCoversheet = addCoversheetArgs.caseEntity
+      .getDocketEntryById({ docketEntryId: mockDocketEntryId });
+
+    expect(docketEntryPassedToCoversheet.processingStatus).not.toBe(
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    );
+    expect(addCoversheetArgs.bypassIdempotencyGate).toBe(false);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
