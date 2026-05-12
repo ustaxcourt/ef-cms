@@ -10,7 +10,7 @@ describe('verifyUserPendingEmailProxy', () => {
     mockedPut.mockResolvedValue(undefined as unknown as void);
   });
 
-  it('sends the token to `/auth/verify-email` (works for both private and public API hosts)', async () => {
+  it('sends the token to `/public-api/verify-email` (works for both private and public API hosts)', async () => {
     await verifyUserPendingEmailInteractor(applicationContext, {
       token: 'test-token',
     });
@@ -18,7 +18,7 @@ describe('verifyUserPendingEmailProxy', () => {
     expect(mockedPut).toHaveBeenCalledWith({
       applicationContext,
       body: { token: 'test-token' },
-      endpoint: '/auth/verify-email',
+      endpoint: '/public-api/verify-email',
     });
   });
 });

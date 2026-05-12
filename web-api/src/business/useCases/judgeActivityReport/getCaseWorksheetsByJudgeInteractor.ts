@@ -13,7 +13,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 
-const ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES = new Set(
+const ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES: ReadonlySet<string> = new Set(
   CAV_AND_SUBMITTED_CASE_STATUS,
 );
 
