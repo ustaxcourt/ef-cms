@@ -1,5 +1,5 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -12,6 +12,10 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
+
+const ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES: ReadonlySet<string> = new Set(
+  CAV_AND_SUBMITTED_CASE_STATUS,
+);
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -33,12 +37,22 @@ export const getCaseWorksheetsByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch(params);
-  if (!searchEntity.isValid()) {
+  if (
+    !params.judges?.length ||
+    !params.statuses?.length ||
+    !Array.isArray(params.judges) ||
+    !Array.isArray(params.statuses) ||
+    !params.judges.every(j => typeof j === 'string' && j.trim().length > 0) ||
+    !params.statuses.every(
+      status =>
+        typeof status === 'string' &&
+        ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES.has(status),
+    )
+  ) {
     throw new InvalidRequest('Invalid search terms');
   }
 
-  const caseRecords = await getCases(searchEntity);
+  const caseRecords = await getCases(params);
 
   const allCaseResults = await Promise.all(
     caseRecords.map(async caseRecord => {
@@ -57,12 +71,12 @@ export const getCaseWorksheetsByJudgeInteractor = async (
   };
 };
 
-const getCases = async (searchEntity: JudgeActivityReportSearch) => {
+const getCases = async (searchParams: GetCasesByStatusAndByJudgeRequest) => {
   const allCaseRecords = await getDocketNumbersByStatusAndByJudge({
     params: {
       excludeMemberCases: true,
-      judges: searchEntity.judges,
-      statuses: searchEntity.statuses,
+      judges: searchParams.judges,
+      statuses: searchParams.statuses,
     },
   });
 

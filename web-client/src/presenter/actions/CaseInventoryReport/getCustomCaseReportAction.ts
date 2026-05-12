@@ -6,7 +6,7 @@ import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
-import { getCustomCaseReportInteractor } from '@shared/proxies/reports/getCustomCaseReportProxy';
+import { getCustomCaseReportInteractor } from '@web-client/proxies/reports/getCustomCaseReportProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getCustomCaseReportAction = async ({

@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import type { EntryOfAppearancePdfPayload } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
@@ -36,9 +37,13 @@ export const generateEntryOfAppearancePdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const practitionerInformation = await getUserById({
+  const practitionerForPdf = await getUserById({
     userId: authorizedUser.userId,
   });
+
+  if (!practitionerForPdf) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const filerNames: string[] =
     authorizedUser.role === ROLES.irsPractitioner
@@ -59,7 +64,9 @@ export const generateEntryOfAppearancePdfInteractor = async (
         caseTitle,
         docketNumberWithSuffix,
         filers: filerNames,
-        practitionerInformation,
+        practitionerInformation: practitionerForPdf as NonNullable<
+          EntryOfAppearancePdfPayload['practitionerInformation']
+        >,
       },
     });
 

@@ -1,10 +1,10 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCServedForUserAction } from './getDocumentQCServedForUserAction';
-import { getDocumentQCServedForUserInteractor } from '@shared/proxies/workitems/getDocumentQCServedForUserProxy';
+import { getDocumentQCServedForUserInteractor } from '@web-client/proxies/workitems/getDocumentQCServedForUserProxy';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-jest.mock('@shared/proxies/workitems/getDocumentQCServedForUserProxy');
+jest.mock('@web-client/proxies/workitems/getDocumentQCServedForUserProxy');
 
 describe('getDocumentQCServedForUserAction', () => {
   const mockGetDocumentQCServedForUserInteractor =

@@ -1,8 +1,8 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -14,10 +14,9 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
  * submitCaseAssociationRequestInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.filers the parties represented by the practitioner
- * @returns {Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO>} the promise of the case association request
+ * @returns {Promise<void>} the promise of the case association request
  */
 const submitCaseAssociationRequest = async (
   applicationContext: ServerApplicationContext,
@@ -55,6 +54,7 @@ const submitCaseAssociationRequest = async (
         representing: filers,
         user: user as RawPractitioner,
       });
+
     return;
   }
 

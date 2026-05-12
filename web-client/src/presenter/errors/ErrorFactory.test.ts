@@ -15,6 +15,15 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('UnauthorizedRequestError');
     expect(result.title).toEqual('We cannot find the page you requested');
   });
+  it('creates UnauthorizedRequestError when error has statusCode 403 without axios response', () => {
+    const error = new Error('Unauthorized to view sealed case.') as Error & {
+      statusCode: number;
+    };
+    error.statusCode = 403;
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('UnauthorizedRequestError');
+    expect(result.message).toEqual('Unauthorized to view sealed case.');
+  });
   it('creates UnauthorizedRequestError errors for status code 404', () => {
     const error = new Error();
     error['response'] = { data: 'foo', status: 404 };

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -21,12 +20,15 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { RawUser, User } from '@shared/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
-import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import {
+  aggregatePartiesForService,
+  type AggregatedPaperServiceParty,
+} from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import { getDocumentTitleForNoticeOfChange } from '@web-api/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
@@ -89,7 +91,9 @@ const completeDocketEntryQC = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   caseDetail: CaseDTO;
-  paperServiceParties: Array<RawUser & { docketNumber: string }>;
+  paperServiceParties: Array<
+    AggregatedPaperServiceParty & { docketNumber: string }
+  >;
   paperServicePdfUrl: string | undefined;
   paperServiceDocumentTitle: string | undefined;
 }> => {
@@ -221,7 +225,9 @@ const completeDocketEntryQC = async (
   let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
 
-  const paperServiceParties: Array<RawUser & { docketNumber: string }> = [];
+  const paperServiceParties: Array<
+    AggregatedPaperServiceParty & { docketNumber: string }
+  > = [];
   const caseSpecificNotices: Array<{
     caseEntity: Case;
     docketEntryId: string;
@@ -468,13 +474,13 @@ const completeDocketEntryQC = async (
     // storing this to run in transaction
     serveDocumentAndGetPaperServicePdfCall = async () => {
       return applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities: caseSpecificNotices.map(n => n.caseEntity),
-        docketEntryId: caseSpecificNotices[0].docketEntryId,
-        caseSpecificDocketEntries: caseSpecificNotices,
-      });
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities: caseSpecificNotices.map(n => n.caseEntity),
+          docketEntryId: caseSpecificNotices[0].docketEntryId,
+          caseSpecificDocketEntries: caseSpecificNotices,
+        });
     };
   }
 

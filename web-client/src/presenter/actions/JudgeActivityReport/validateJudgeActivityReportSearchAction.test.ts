@@ -25,8 +25,10 @@ describe('validateJudgeActivityReportSearchAction', () => {
       state: {
         judgeActivityReport: {
           filters: {
+            endDate: '12/31/2020',
             judgeName: judgeUser.name,
             judges: [judgeUser.name],
+            startDate: '01/01/2020',
           },
         },
       },
@@ -40,8 +42,10 @@ describe('validateJudgeActivityReportSearchAction', () => {
       state: {
         judgeActivityReport: {
           filters: {
+            endDate: '12/31/2020',
             judgeName: judgeUser.name,
             judges: 'string',
+            startDate: '01/01/2020',
           },
         },
       },

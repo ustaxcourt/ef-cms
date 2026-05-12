@@ -11,13 +11,13 @@ export function ContactFactoryUpdated({
   filingType,
   hasSpouseConsent,
   partyType,
-  petitionType,
+  petitionType = '',
 }: {
-  contactInfoPrimary: {};
-  contactInfoSecondary: {};
+  contactInfoPrimary?: Record<string, unknown>;
+  contactInfoSecondary?: Record<string, unknown>;
   filingType: FilingType;
   partyType: string;
-  petitionType: string;
+  petitionType?: string;
   hasSpouseConsent: boolean;
 }) {
   if (!contactInfoPrimary) {

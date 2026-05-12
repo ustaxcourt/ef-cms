@@ -1,5 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
+import { updateMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import hash from 'object-hash';
@@ -19,7 +19,6 @@ export const autosaveTrialSessionMinuteSheetAction = async ({
   const currentMinuteSheetFormStateSnapshot = hash(currentMinuteSheetFormState);
   const hasFormChanged =
     oldMinuteSheetFormStateSnapshot !== currentMinuteSheetFormStateSnapshot;
-  let updateMinuteSheetFormState;
   if (hasFormChanged || forceAutosave) {
     const transformedMinuteSheet = transformFormStateToMinuteSheet(
       currentMinuteSheetFormState,
@@ -27,7 +26,7 @@ export const autosaveTrialSessionMinuteSheetAction = async ({
       caseDetail.docketNumber,
     );
 
-    updateMinuteSheetFormState = await updateMinuteSheetInteractor({
+    const updateMinuteSheetFormState = await updateMinuteSheetInteractor({
       docketNumber: caseDetail.docketNumber,
       minuteSheet: transformedMinuteSheet,
       trialSessionId: trialSession.trialSessionId,

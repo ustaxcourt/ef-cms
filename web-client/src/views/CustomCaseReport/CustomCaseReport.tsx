@@ -15,7 +15,7 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';

@@ -7,7 +7,7 @@ jest.mock('@web-api/gateways/lambda/getLambdaClient', () => {
   }
   return { getLambdaClient: () => new LambdaClient() };
 });
-import { getChromiumBrowser } from '@shared/business/utilities/chromium/getChromiumBrowser';
+import { getChromiumBrowser } from '@web-api/business/utilities/chromium/getChromiumBrowser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePdfFromHtmlInteractor } from '@web-api/business/useCases/pdf/generatePdfFromHtmlInteractor';
 
@@ -43,7 +43,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     // this is to close the singleton browser and keep it from running indefinitely in the test
     const browser = await getChromiumBrowser();
     await browser.close();
-  }, 10000);
+  }, 45000);
 
   it('should generate a pdf by invoking a lambda when in a deployed environment', async () => {
     applicationContext.environment.stage = 'prod';

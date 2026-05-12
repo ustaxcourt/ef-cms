@@ -1,0 +1,429 @@
+import {
+  CASE_TYPES,
+  FILING_TYPES,
+  MAX_FILE_SIZE_MB,
+  NOT_AVAILABLE_OPTION,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
+  type PartyType,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} from '@shared/business/entities/cases/Case';
+import { ContactFactory } from '@shared/business/entities/contacts/ContactFactory';
+import {
+  Correspondence,
+  RawCorrespondence,
+} from '@shared/business/entities/Correspondence';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { RawStatistic, Statistic } from '@shared/business/entities/Statistic';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import joi from 'joi';
+
+export class PaperPetition extends JoiValidationEntity {
+  public applicationForWaiverOfFilingFeeFile?: object;
+  public applicationForWaiverOfFilingFeeFileSize?: number;
+  public attachmentToPetitionFile?: object;
+  public attachmentToPetitionFileSize?: number;
+  public caseCaption: string;
+  public caseType: string;
+  public filingType?: string;
+  public irsNoticeDate?: string;
+  public hasVerifiedIrsNotice: boolean;
+  public mailingDate: string;
+  public noticeOfAttachments: any;
+  public orderDesignatingPlaceOfTrial: any;
+  public orderForCds: any;
+  public orderForAmendedPetition: any;
+  public orderForAmendedPetitionAndFilingFee: any;
+  public orderForFilingFee: any;
+  public orderForRatification: any;
+  public orderToShowCause: any;
+  public corporateDisclosureFile?: object;
+  public corporateDisclosureFileSize?: number;
+  public partyType?: string;
+  public petitionFile?: object;
+  public petitionFileSize?: number;
+  public petitionPaymentDate?: string;
+  public requestForPlaceOfTrialFile?: object;
+  public requestForPlaceOfTrialFileSize?: number;
+  public petitionPaymentMethod?: string;
+  public petitionPaymentStatus: any;
+  public petitionPaymentWaivedDate: any;
+  public preferredTrialCity: any;
+  public procedureType: string;
+  public receivedAt: string;
+  public stinFile?: object;
+  public stinFileSize?: number;
+  public useSameAsPrimary: boolean;
+  public petitioners: any;
+  public statistics: any;
+  public archivedDocketEntries: any;
+  public archivedCorrespondences: any;
+  public docketEntries: DocketEntry[];
+
+  /* eslint-disable complexity -- default many optional Postgres/form fields from partial payloads */
+  constructor(
+    rawProps: RawPaperPetitionConstructorProps,
+    { authorizedUser }: { authorizedUser: UnknownAuthUser },
+  ) {
+    super('PaperPetition');
+    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
+    this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
+    this.caseCaption = rawProps.caseCaption ?? '';
+    this.caseType = rawProps.caseType ?? '';
+    if (rawProps.filingType) {
+      this.filingType = rawProps.filingType;
+    }
+    if (rawProps.irsNoticeDate) {
+      this.irsNoticeDate = rawProps.irsNoticeDate;
+    }
+    this.hasVerifiedIrsNotice = rawProps.hasVerifiedIrsNotice ?? false;
+    this.mailingDate = rawProps.mailingDate ?? '';
+    this.noticeOfAttachments = rawProps.noticeOfAttachments;
+    this.orderDesignatingPlaceOfTrial = rawProps.orderDesignatingPlaceOfTrial;
+    // this is so the validation that is checking for existence of 3 different fields
+    // will work correctly
+    if (this.orderDesignatingPlaceOfTrial === false) {
+      this.orderDesignatingPlaceOfTrial = undefined;
+    }
+    this.orderForCds = rawProps.orderForCds;
+    this.orderForAmendedPetition = rawProps.orderForAmendedPetition;
+    this.orderForAmendedPetitionAndFilingFee =
+      rawProps.orderForAmendedPetitionAndFilingFee;
+    this.orderForFilingFee = rawProps.orderForFilingFee;
+    this.orderForRatification = rawProps.orderForRatification;
+    this.orderToShowCause = rawProps.orderToShowCause;
+    if (rawProps.partyType) {
+      this.partyType = rawProps.partyType;
+    }
+    if (rawProps.petitionPaymentDate) {
+      this.petitionPaymentDate = rawProps.petitionPaymentDate;
+    }
+    if (rawProps.petitionPaymentMethod) {
+      this.petitionPaymentMethod = rawProps.petitionPaymentMethod;
+    }
+    this.petitionPaymentStatus = rawProps.petitionPaymentStatus;
+    this.petitionPaymentWaivedDate = rawProps.petitionPaymentWaivedDate;
+    this.preferredTrialCity = rawProps.preferredTrialCity;
+    this.procedureType = rawProps.procedureType ?? '';
+    this.receivedAt = rawProps.receivedAt ?? '';
+    this.useSameAsPrimary = rawProps.useSameAsPrimary ?? false;
+    this.petitioners = rawProps.petitioners || [];
+    this.stinFile = rawProps.stinFile;
+    this.stinFileSize = rawProps.stinFileSize;
+    this.corporateDisclosureFile = rawProps.corporateDisclosureFile;
+    this.corporateDisclosureFileSize = rawProps.corporateDisclosureFileSize;
+    this.petitionFile = rawProps.petitionFile;
+    this.petitionFileSize = rawProps.petitionFileSize;
+    this.requestForPlaceOfTrialFile = rawProps.requestForPlaceOfTrialFile;
+    this.requestForPlaceOfTrialFileSize =
+      rawProps.requestForPlaceOfTrialFileSize;
+    this.applicationForWaiverOfFilingFeeFile =
+      rawProps.applicationForWaiverOfFilingFeeFile;
+    this.applicationForWaiverOfFilingFeeFileSize =
+      rawProps.applicationForWaiverOfFilingFeeFileSize;
+    this.docketEntries = Array.isArray(rawProps.docketEntries)
+      ? rawProps.docketEntries.map(
+          doc =>
+            new DocketEntry(doc, {
+              authorizedUser,
+            }),
+        )
+      : [];
+
+    this.statistics = Array.isArray(rawProps.statistics)
+      ? rawProps.statistics.map(statistic => new Statistic(statistic))
+      : [];
+
+    this.archivedDocketEntries = Array.isArray(rawProps.archivedDocketEntries)
+      ? rawProps.archivedDocketEntries.map(
+          doc =>
+            new DocketEntry(doc, {
+              authorizedUser,
+            }),
+        )
+      : [];
+
+    this.archivedCorrespondences = Array.isArray(
+      rawProps.archivedCorrespondences,
+    )
+      ? rawProps.archivedCorrespondences.map(
+          correspondence => new Correspondence(correspondence),
+        )
+      : [];
+
+    const contacts = ContactFactory({
+      contactInfo: {
+        primary: getContactPrimary(rawProps) || rawProps.contactPrimary,
+        secondary: getContactSecondary(rawProps) || rawProps.contactSecondary,
+      },
+      partyType: this.partyType as PartyType,
+    });
+    this.petitioners = [contacts.primary];
+    if (contacts.secondary) {
+      contacts.secondary.phone =
+        contacts.secondary.phone || NOT_AVAILABLE_OPTION;
+      this.petitioners.push(contacts.secondary);
+    }
+  }
+  /* eslint-enable complexity */
+
+  static VALIDATION_RULES = joi
+    .object()
+    .keys({
+      applicationForWaiverOfFilingFeeFile: joi
+        .alternatives()
+        .conditional('petitionPaymentStatus', {
+          is: PAYMENT_STATUS.WAIVED,
+          otherwise: joi.optional().allow(null),
+          then: createDocketEntriesValidation('APW'),
+        })
+        .messages({
+          '*': 'Upload or scan an Application for Waiver of Filing Fee (APW)',
+        }),
+      applicationForWaiverOfFilingFeeFileSize:
+        JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+          'applicationForWaiverOfFilingFeeFile',
+          {
+            is: joi.exist().not(null),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ).messages({
+          '*': 'Your Filing Fee Waiver file size is empty',
+          'number.max': `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
+      archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
+      attachmentToPetitionFile: joi.object().optional(),
+      attachmentToPetitionFileSize:
+        JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+          'attachmentToPetitionFile',
+          {
+            is: joi.exist().not(null),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ).messages({
+          '*': 'Your ATP file size is empty',
+          'number.max': `Your ATP file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+
+      caseCaption: JoiValidationConstants.CASE_CAPTION.required().messages({
+        '*': 'Enter a case caption',
+      }),
+
+      caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
+        .required()
+        .messages({ '*': 'Select a case type' }),
+      corporateDisclosureFile: joi
+        .alternatives()
+        .conditional('partyType', {
+          is: joi
+            .exist()
+            .valid(
+              PARTY_TYPES.corporation,
+              PARTY_TYPES.partnershipAsTaxMattersPartner,
+              PARTY_TYPES.partnershipBBA,
+              PARTY_TYPES.partnershipOtherThanTaxMatters,
+            ),
+          otherwise: joi.optional().allow(null),
+          then: joi.alternatives().conditional('orderForCds', {
+            is: joi.not(true),
+            otherwise: joi.optional().allow(null),
+            then: createDocketEntriesValidation('DISC'),
+          }),
+        })
+        .messages({
+          '*': 'Upload or scan Corporate Disclosure Statement(CDS)',
+        }),
+      corporateDisclosureFileSize:
+        JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+          'corporateDisclosureFile',
+          {
+            is: joi.exist().not(null),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ).messages({
+          '*': 'Your Corporate Disclosure Statement file size is empty',
+          'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      docketEntries: joi.array().optional(),
+      filingType: JoiValidationConstants.STRING.valid(
+        ...FILING_TYPES[ROLES.petitioner],
+        ...FILING_TYPES[ROLES.privatePractitioner],
+      )
+        .optional()
+        .messages({ '*': 'Select on whose behalf you are filing' }),
+      hasVerifiedIrsNotice: joi
+        .boolean()
+        .required()
+        .messages({ '*': 'Indicate whether you received an IRS notice' }),
+      irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
+      mailingDate: JoiValidationConstants.STRING.max(25)
+        .required()
+        .messages({ '*': 'Enter a mailing date' }),
+      noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
+      orderDesignatingPlaceOfTrial:
+        Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
+      orderForAmendedPetition: Case.VALIDATION_RULES.orderForAmendedPetition,
+      orderForAmendedPetitionAndFilingFee:
+        Case.VALIDATION_RULES.orderForAmendedPetitionAndFilingFee,
+      orderForCds: Case.VALIDATION_RULES.orderForCds,
+      orderForFilingFee: Case.VALIDATION_RULES.orderForFilingFee,
+      orderForRatification: Case.VALIDATION_RULES.orderForRatification,
+      orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
+      partyType: JoiValidationConstants.STRING.valid(
+        ...Object.values(PARTY_TYPES),
+      )
+        .required()
+        .messages({ '*': 'Select a party type' }),
+      petitionFile: joi
+        .alternatives()
+        .conditional('petitionFile', {
+          is: joi.exist().not(null),
+          otherwise: createDocketEntriesValidation('P'),
+          then: joi.object().required(),
+        })
+        .messages({ '*': 'Upload or scan a Petition' }),
+      petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'petitionFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ).messages({
+        '*': 'Your Petition file size is empty',
+        'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
+      petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now')
+        .when('petitionPaymentStatus', {
+          is: PAYMENT_STATUS.PAID,
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        })
+        .messages({
+          '*': 'Enter a valid payment date',
+          'date.max':
+            'Payment date cannot be in the future. Enter a valid date.',
+        }),
+      petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
+      petitionPaymentStatus:
+        Case.VALIDATION_RULES.petitionPaymentStatus.messages({
+          '*': 'Select a filing fee option',
+        }),
+      petitionPaymentWaivedDate:
+        Case.VALIDATION_RULES.petitionPaymentWaivedDate,
+      petitioners: Case.VALIDATION_RULES.petitioners,
+      preferredTrialCity: joi
+        .alternatives()
+        .conditional('requestForPlaceOfTrialFile', {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: JoiValidationConstants.STRING.required(),
+        })
+        .messages({ '*': 'Select a preferred trial location' }),
+      procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
+        .required()
+        .messages({ '*': 'Select a case procedure' }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          '*': 'Enter a valid date received',
+          'date.max':
+            'Date received cannot be in the future. Enter a valid date.',
+        }),
+      requestForPlaceOfTrialFile: joi
+        .alternatives()
+        .conditional('preferredTrialCity', {
+          is: joi.exist().not(null),
+          otherwise: joi.object().optional(),
+          then: createDocketEntriesValidation('RQT'),
+        })
+        .messages({ '*': 'Upload or scan a Request for Place of Trial (RQT)' }),
+      requestForPlaceOfTrialFileSize:
+        JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+          'requestForPlaceOfTrialFile',
+          {
+            is: joi.exist().not(null),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ).messages({
+          '*': 'Your Request for Place of Trial file size is empty',
+          'number.max': `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      statistics: Case.VALIDATION_RULES.statistics,
+      stinFile: joi.object().optional().messages({
+        '*': 'Upload a Statement of Taxpayer Identification Number (STIN)',
+      }), // object of type File
+      stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'stinFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ).messages({
+        '*': 'Your STIN file size is empty',
+        'number.max': `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
+      useSameAsPrimary: Case.VALIDATION_RULES.useSameAsPrimary,
+    })
+    .or(
+      'preferredTrialCity',
+      'requestForPlaceOfTrialFile',
+      'orderDesignatingPlaceOfTrial',
+    )
+    .messages({
+      'object.missing':
+        'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
+    });
+
+  getValidationRules() {
+    return PaperPetition.VALIDATION_RULES;
+  }
+}
+
+export type RawPaperPetitionConstructorProps = Partial<
+  Omit<
+    ExcludeMethods<PaperPetition>,
+    | 'archivedCorrespondences'
+    | 'archivedDocketEntries'
+    | 'docketEntries'
+    | 'petitioners'
+    | 'statistics'
+  >
+> & {
+  archivedCorrespondences?: RawCorrespondence[];
+  archivedDocketEntries?: RawDocketEntry[];
+  contactPrimary?: unknown;
+  contactSecondary?: unknown;
+  docketEntries?: RawDocketEntry[];
+  petitioners?: unknown[];
+  statistics?: RawStatistic[];
+};
+
+function createDocketEntriesValidation(eventCode: string) {
+  return joi.alternatives().conditional('docketEntries', {
+    is: joi
+      .array()
+      .items(
+        joi.object({
+          eventCode: joi.string(),
+        }),
+      )
+      .has(joi.object({ eventCode: joi.string().valid(eventCode) })),
+    otherwise: joi.object().required(), // object of type File
+    then: joi.object().optional(),
+  });
+}

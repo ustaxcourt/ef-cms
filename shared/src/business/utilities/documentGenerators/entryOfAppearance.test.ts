@@ -1,5 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { entryOfAppearance } from './entryOfAppearance';
+import { entryOfAppearance } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('entryOfAppearance', () => {
@@ -21,16 +21,14 @@ describe('entryOfAppearance', () => {
               address2: 'Apartment 4',
               address3: 'Under the stairs',
               city: 'Chicago',
+              country: '',
               countryType: 'domestic',
               phone: '+1 (555) 555-5555',
               postalCode: '61234',
               state: 'IL',
             },
             email: 'privatepractitioner@example.com',
-            entityName: 'Practitioner',
-            firmName: 'GW Law Offices',
-            originalBarState: 'MD',
-            userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+            name: 'GW Law Offices',
           },
         },
       });

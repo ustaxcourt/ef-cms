@@ -3,20 +3,11 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { RawUser } from '@shared/business/entities/User';
+import { RawUser, UserContact } from '@shared/business/entities/User';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
-export type TUserContact = {
-  address1: string;
-  address2: string;
-  address3: string;
-  city: string;
-  country: string;
-  countryType: string;
-  phone: string;
-  postalCode: string;
-  state: string;
-};
+/** @deprecated Use {@link UserContact} */
+export type TUserContact = UserContact;
 
 /**
  * Update an address on a case. This performs a search to get all of the cases associated with the user,
@@ -111,7 +102,8 @@ export const generateChangeOfAddress = async ({
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
   if (isChangeOfAddressLambdaEnabled) {
-    const sqs: SQSClient = applicationContext.getLongTimeoutSQSMessagingClient();
+    const sqs: SQSClient =
+      applicationContext.getLongTimeoutSQSMessagingClient();
     const cmds = associatedUserCases.map((docketNumber, i) => {
       return new SendMessageCommand({
         MessageBody: JSON.stringify({

@@ -17,7 +17,7 @@ export const deletePractitionerDocumentInteractor = async (
     practitionerDocumentFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {

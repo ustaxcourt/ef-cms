@@ -5,7 +5,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
@@ -17,7 +17,8 @@ import {
   PreviousTerm,
   TrialLocationData,
 } from '@shared/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes';
-import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import type { AggregatedPaperServiceParty } from '@shared/business/utilities/aggregatePartiesForService';
+import type { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -891,7 +892,9 @@ export const baseState = {
   openClosedCases: {
     caseType: undefined as string | undefined,
   },
-  paperServiceParties: [] as Array<RawUser & { docketNumber: string }>,
+  paperServiceParties: [] as Array<
+    AggregatedPaperServiceParty & { docketNumber: string }
+  >,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -1125,13 +1128,13 @@ export type ServiceIndicatorType =
 
 export type PractitionerDetail = {
   admissionsDate: string;
-  admissionStatus: string;
+  admissionsStatus: string;
   barNumber: string;
   name: string;
   practiceType: PracticeType;
   serviceIndicator?: ServiceIndicatorType;
   userId: string;
-  birthYear?: string;
+  birthYear?: number;
   originalBarState?: string;
   practitionerType?: string;
   middleName?: string;

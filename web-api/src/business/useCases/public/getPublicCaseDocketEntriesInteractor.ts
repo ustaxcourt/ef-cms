@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 

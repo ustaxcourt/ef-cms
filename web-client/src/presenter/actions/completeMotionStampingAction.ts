@@ -1,4 +1,4 @@
-import { Stamp } from '../../../../shared/src/business/entities/Stamp';
+import { Stamp } from '@web-api/business/entities/Stamp';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const completeMotionStampingAction = async ({

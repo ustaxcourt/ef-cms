@@ -6,7 +6,7 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ContactFactory } from './ContactFactory';
-import { ElectronicPetition } from '../cases/ElectronicPetition';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 
 describe('ContactFactory', () => {
   const baseElectronicPetition = {
@@ -35,6 +35,7 @@ describe('ContactFactory', () => {
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'someone@example.com',
     inCareOf: 'USTC',
+    isAddressSealed: false,
     name: 'Jimmy Dean',
     phone: '1234567890',
     postalCode: '05198',
@@ -277,22 +278,25 @@ describe('ContactFactory', () => {
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
-it('should return a primary object with default values if no partyType is given', () => {
+  it('should return a primary object with default values if no partyType is given', () => {
     const contacts = ContactFactory({
       // @ts-expect-error
       partyType: undefined,
     });
- 
-    expect(contacts).toEqual({ primary: {
-      address1: '',
-      city: '',
-      contactId: '',
-      contactType: '',
-      countryType: '',
-      isAddressSealed: false,
-      name: '',
-      phone: '',
-      postalCode: ''
-    }, secondary: null });
+
+    expect(contacts).toEqual({
+      primary: {
+        address1: '',
+        city: '',
+        contactId: '',
+        contactType: '',
+        countryType: '',
+        isAddressSealed: false,
+        name: '',
+        phone: '',
+        postalCode: '',
+      },
+      secondary: null,
+    });
   });
 });

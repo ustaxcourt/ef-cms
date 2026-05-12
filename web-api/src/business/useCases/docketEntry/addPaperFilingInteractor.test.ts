@@ -8,7 +8,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@shared/sharedAppContext.ts');
+jest.mock('@shared/sharedAppContext');
 import {
   AUTOMATIC_BLOCKED_REASONS,
   DOCUMENT_SERVED_MESSAGES,

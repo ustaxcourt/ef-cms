@@ -31,7 +31,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';

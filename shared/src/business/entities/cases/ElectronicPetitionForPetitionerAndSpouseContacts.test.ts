@@ -1,5 +1,10 @@
-import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
-import { ElectronicPetition } from './ElectronicPetition';
+import {
+  CASE_TYPES_MAP,
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../EntityConstants';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 
 describe('ElectronicPetition', () => {
   describe('for Petitioner And Spouse Contacts', () => {
@@ -27,9 +32,11 @@ describe('ElectronicPetition', () => {
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
+          isAddressSealed: false,
           name: 'Jimmy Dean',
           phone: '1234567890',
           postalCode: '05198',
@@ -38,8 +45,11 @@ describe('ElectronicPetition', () => {
         contactSecondary: {
           address1: '1599 Pennsylvania Ave',
           city: 'Walla Walla',
+          contactType: CONTACT_TYPES.secondary,
+          country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
+          isAddressSealed: false,
           name: 'Betty Crocker',
           phone: '1234567890',
           postalCode: '78774',

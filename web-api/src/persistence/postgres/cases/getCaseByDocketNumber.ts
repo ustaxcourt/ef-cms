@@ -1,6 +1,6 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
+import { formatSealedAddresses } from '@web-api/business/utilities/caseFilter';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
@@ -32,7 +32,7 @@ export const getCaseByDocketNumber = async ({
     // It was done here to quickly fix a high-severity bug.
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
-        formatSealedAddresses(c, user),
+        formatSealedAddresses(c as RawCase, user),
       );
     }
   }

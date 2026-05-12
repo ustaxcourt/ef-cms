@@ -25,13 +25,18 @@ export const PractitionerSearchByBarNumber = connect(
     validatePractitionerSearchByBarNumberFormSequence,
     validationErrors,
   }) {
+    const submitSearch = (event: React.FormEvent | React.MouseEvent) => {
+      event.preventDefault();
+      submitPractitionerBarNumberSearchSequence();
+    };
+
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Bar Number</h3>
         </div>
         <div className="blue-container">
-          <form>
+          <form onSubmit={submitSearch}>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.barNumber}>
@@ -72,10 +77,7 @@ export const PractitionerSearchByBarNumber = connect(
                   className="margin-bottom-0"
                   data-testid="practitioner-search-by-bar-number-button"
                   id="practitioner-search-by-bar-number-button"
-                  onClick={e => {
-                    e.preventDefault();
-                    submitPractitionerBarNumberSearchSequence();
-                  }}
+                  onClick={submitSearch}
                 >
                   Search
                 </Button>

@@ -5,6 +5,7 @@ import {
   createISODateString,
   formatDateString,
   subtractISODates,
+  tryParseFormDateStringToIso,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
@@ -20,8 +21,8 @@ import {
   TrialSessionsFilters,
   initialTrialSessionPageState,
 } from '@web-client/presenter/state/trialSessionsPageState';
-import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
-import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
+import { TrialSessionsPageValidation } from '@web-client/business/entities/trialSessions/TrialSessionsPageValidation';
+import { getTrialCitiesGroupedByState } from '@web-client/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
@@ -364,17 +365,27 @@ function validateTrialSessionDateRange({
   startDate: string;
   endDate: string;
 }): { startDateErrorMessage?: string; endDateErrorMessage?: string } {
-  const formattedEndDate = endDate
-    ? createISODateString(endDate, FORMATS.MMDDYYYY)
-    : undefined;
+  const startParsed = tryParseFormDateStringToIso(startDate);
+  const endParsed = tryParseFormDateStringToIso(endDate);
 
-  const formattedStartDate = startDate
-    ? createISODateString(startDate, FORMATS.MMDDYYYY)
-    : undefined;
+  if (startParsed.invalid || endParsed.invalid) {
+    return {
+      ...(startParsed.invalid && {
+        startDateErrorMessage: 'Enter date in format MM/DD/YYYY.',
+      }),
+      ...(endParsed.invalid && {
+        endDateErrorMessage: 'Enter date in format MM/DD/YYYY.',
+      }),
+    };
+  }
+
+  if (!startParsed.iso && !endParsed.iso) {
+    return {};
+  }
 
   const errors = new TrialSessionsPageValidation({
-    endDate: formattedEndDate,
-    startDate: formattedStartDate,
+    endDate: endParsed.iso,
+    startDate: startParsed.iso,
   }).getFormattedValidationErrors();
 
   return {

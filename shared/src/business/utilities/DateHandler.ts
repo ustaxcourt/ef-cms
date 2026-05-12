@@ -350,6 +350,20 @@ export function isValidISODate(isodate: string): boolean {
   return DateTime.fromISO(isodate).isValid;
 }
 
+export function tryParseFormDateStringToIso(raw: string | undefined): {
+  invalid: boolean;
+  iso: string;
+} {
+  if (!raw?.trim()) {
+    return { invalid: false, iso: '' };
+  }
+  const iso = createISODateString(raw, FORMATS.MMDDYYYY) ?? '';
+  if (!iso || !isValidISODate(iso)) {
+    return { invalid: true, iso: '' };
+  }
+  return { invalid: false, iso };
+}
+
 /**
  * @param {string} date1 the first date to be compared
  * @param {string} date2 the second date to be compared
