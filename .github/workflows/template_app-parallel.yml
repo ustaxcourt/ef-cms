@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       ci_environment:
-        default: ''
+        default: 'true'
         type: string
       ci_node_index:
         required: true
@@ -112,7 +112,7 @@ jobs:
           mkdir -p /tmp/test-file-times
       - name: Start DAWSON
         run: |
-          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output.txt &
+          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt &
       - name: Wait for DAWSON to be ready
         run: |
           WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
@@ -129,7 +129,7 @@ jobs:
         if: ${{ always() && inputs.upload_logs }}
         uses: actions/upload-artifact@v7
         with:
-          name: dawson-output
+          name: ${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}
           path: /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt
       - name: Compile Cypress Videos
         if: ${{ always() && inputs.is_cypress }}

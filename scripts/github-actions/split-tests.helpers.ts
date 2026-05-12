@@ -9,6 +9,7 @@ import webApi from '../../web-api/jest-unit.config';
 import webClientIntegration from '../../web-client/jest-integration.config';
 import webClientUnit from '../../web-client/jest-unit.config';
 import {
+  normalizeTestFilePath,
   readTestFileTimes,
   type TestFileTimes,
 } from './test-file-times.helpers';
@@ -164,7 +165,8 @@ export const getWeightForFile = ({
   file: SplittableFile;
   historicalTestFileTimes: TestFileTimes;
 }): number => {
-  return historicalTestFileTimes[file.path] ?? countLinesInFile(file.path);
+  const normalizedPath = normalizeTestFilePath(file.path);
+  return historicalTestFileTimes[normalizedPath] ?? countLinesInFile(file.path);
 };
 
 export const distributeFilesByWeight = ({
@@ -337,7 +339,7 @@ export const splitTestsGlob = (testSuite: string): string => {
         path: filePath,
       }),
     ),
-  }).join('|');
+  }).join('\\|');
 
   console.log(output);
 

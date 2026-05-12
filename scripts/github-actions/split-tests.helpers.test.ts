@@ -48,6 +48,7 @@ import {
   splitTestsGlob,
   type SplittableFile,
 } from './split-tests.helpers';
+import { normalizeTestFilePath } from './test-file-times.helpers';
 
 describe('split-tests.helpers', () => {
   const tempDir: string = fs.mkdtempSync(
@@ -211,9 +212,9 @@ describe('split-tests.helpers', () => {
         distributeFilesByWeight({
           files,
           historicalTestFileTimes: {
-            [files[0].path]: 1000,
-            [files[1].path]: 10,
-            [files[2].path]: 500,
+            [normalizeTestFilePath(files[0].path)]: 1000,
+            [normalizeTestFilePath(files[1].path)]: 10,
+            [normalizeTestFilePath(files[2].path)]: 500,
           },
           total: 2,
         }),
@@ -402,8 +403,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-timings.json',
         {
-          'web-client/integration-tests-public/a-first.test.ts': 10,
-          'web-client/integration-tests-public/z-last.test.ts': 10,
+          './web-client/integration-tests-public/a-first.test.ts': 10,
+          './web-client/integration-tests-public/z-last.test.ts': 10,
         },
       );
 
@@ -442,8 +443,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-timings-private.json',
         {
-          'web-client/integration-tests/a-first.test.ts': 10,
-          'web-client/integration-tests/z-last.test.ts': 10,
+          './web-client/integration-tests/a-first.test.ts': 10,
+          './web-client/integration-tests/z-last.test.ts': 10,
         },
       );
 
@@ -502,8 +503,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-cypress-timings.json',
         {
-          'cypress/local-only/tests/integration/private-a.cy.ts': 5,
-          'cypress/local-only/tests/integration/nested/private-b.cy.ts': 5,
+          './cypress/local-only/tests/integration/private-a.cy.ts': 5,
+          './cypress/local-only/tests/integration/nested/private-b.cy.ts': 5,
         },
       );
 
@@ -552,9 +553,9 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-cypress-public-timings.json',
         {
-          'cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts': 5,
-          'cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
-          'cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
+          './cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts': 5,
+          './cypress/local-only/tests/integration/public/nested/public-b.cy.ts': 5,
+          './cypress/local-only/tests/integration/public/public-a.cy.ts': 5,
         },
       );
 
@@ -595,8 +596,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-web-client-unit.json',
         {
-          'web-client/src/beta.test.ts': 10,
-          'web-client/src/nested/alpha.test.ts': 10,
+          './web-client/src/beta.test.ts': 10,
+          './web-client/src/nested/alpha.test.ts': 10,
         },
       );
 
@@ -610,7 +611,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('webClientUnit'),
         );
 
-        expect(parseDelimitedOutput(output, '|')).toEqual([
+        expect(parseDelimitedOutput(output, '\\|')).toEqual([
           'web-client/src/beta.test.ts',
           'web-client/src/nested/alpha.test.ts',
         ]);
@@ -637,8 +638,8 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-shared.json',
         {
-          'shared/src/example.test.ts': 12,
-          'shared/src/nested/another.test.ts': 12,
+          './shared/src/example.test.ts': 12,
+          './shared/src/nested/another.test.ts': 12,
         },
       );
 
@@ -652,7 +653,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('shared'),
         );
 
-        expect(parseDelimitedOutput(output, '|')).toEqual([
+        expect(parseDelimitedOutput(output, '\\|')).toEqual([
           'shared/src/example.test.ts',
           'shared/src/nested/another.test.ts',
         ]);
@@ -682,7 +683,7 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-doc-gen-timings.json',
         {
-          'shared/src/business/utilities/documentGenerators/example.test.ts': 5,
+          './shared/src/business/utilities/documentGenerators/example.test.ts': 5,
         },
       );
 
@@ -696,7 +697,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('documentGenerators'),
         );
 
-        expect(parseDelimitedOutput(output, '|')).toEqual([
+        expect(parseDelimitedOutput(output, '\\|')).toEqual([
           'shared/src/business/utilities/documentGenerators/example.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
@@ -718,7 +719,7 @@ describe('split-tests.helpers', () => {
       const timingFilePath = writeHistoricalTimingFile(
         'split-tests-glob-web-api-timings.json',
         {
-          'web-api/src/example.test.ts': 5,
+          './web-api/src/example.test.ts': 5,
         },
       );
 
@@ -732,7 +733,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('webApi'),
         );
 
-        expect(parseDelimitedOutput(output, '|')).toEqual([
+        expect(parseDelimitedOutput(output, '\\|')).toEqual([
           'web-api/src/example.test.ts',
         ]);
         // Should only be called once because the first entry is empty

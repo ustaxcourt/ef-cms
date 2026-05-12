@@ -50,5 +50,5 @@ jobs:
       - name: Delete Coverage Artifacts
         uses: geekyeggo/delete-artifact@v5
         with:
-          name: coverage-artifacts
+          name: ${{ inputs.workflow_filename }}-coverage-artifacts-*
           failOnError: false
