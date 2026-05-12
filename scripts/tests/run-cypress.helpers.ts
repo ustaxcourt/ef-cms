@@ -246,8 +246,10 @@ export const setEnvironmentVariables = ({
       dependencies.env.AWS_ACCESS_KEY_ID;
     dependencies.env.CYPRESS_AWS_SECRET_ACCESS_KEY =
       dependencies.env.AWS_SECRET_ACCESS_KEY;
-    dependencies.env.CYPRESS_AWS_SESSION_TOKEN =
-      dependencies.env.AWS_SESSION_TOKEN;
+    if (!dependencies.env.CI && dependencies.env.AWS_SESSION_TOKEN) {
+      dependencies.env.CYPRESS_AWS_SESSION_TOKEN =
+        dependencies.env.AWS_SESSION_TOKEN;
+    }
     dependencies.env.CYPRESS_BASE_URL = `https://${nonPublicPrefix}${cypressColor}.${efcmsDomain}`;
     dependencies.env.CYPRESS_DATABASE_NAME = dependencies.env.DATABASE_NAME;
     dependencies.env.CYPRESS_DEFAULT_ACCOUNT_PASS =
