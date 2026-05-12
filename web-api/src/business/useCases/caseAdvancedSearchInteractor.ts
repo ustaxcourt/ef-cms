@@ -32,10 +32,10 @@ export type CaseAdvancedSearchParamsRequestType = {
 
 export type CaseSearchResult = {
   petitionerNames: string[];
-  docketNumberWithSuffix: string;
+  docketNumberWithSuffix?: string;
   docketNumber: string;
   receivedAt: string;
-  caseCaption: string;
+  caseCaption?: string;
   petitionerStateNames?: string[];
 };
 
@@ -97,21 +97,24 @@ export const caseAdvancedSearchInteractor = async (
     authorizedUser,
   ).slice(0, MAX_CASE_SEARCH_RESULTS);
 
-  return filteredCases.map(filteredCase => {
-    return {
-      caseCaption: filteredCase.caseCaption,
-      docketNumber: filteredCase.docketNumber,
-      docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(p => {
-        const stateAbbrev = p.state;
-        if (!stateAbbrev) {
-          return '';
-        }
-        const stateName = US_STATES[stateAbbrev as keyof typeof US_STATES];
-        return stateName || stateAbbrev;
-      }),
-      receivedAt: filteredCase.receivedAt ?? '',
-    };
-  });
+  return filteredCases.map(filteredCase => ({
+    ...(filteredCase.caseCaption != null && filteredCase.caseCaption !== ''
+      ? { caseCaption: filteredCase.caseCaption }
+      : {}),
+    docketNumber: filteredCase.docketNumber,
+    ...(filteredCase.docketNumberWithSuffix != null &&
+    filteredCase.docketNumberWithSuffix !== ''
+      ? { docketNumberWithSuffix: filteredCase.docketNumberWithSuffix }
+      : {}),
+    petitionerNames: filteredCase.petitioners?.map(p => p.name),
+    petitionerStateNames: filteredCase.petitioners?.map(p => {
+      const stateAbbrev = p.state;
+      if (!stateAbbrev) {
+        return '';
+      }
+      const stateName = US_STATES[stateAbbrev as keyof typeof US_STATES];
+      return stateName || stateAbbrev;
+    }),
+    receivedAt: filteredCase.receivedAt ?? '',
+  }));
 };

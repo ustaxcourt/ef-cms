@@ -2,10 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { OpinionSearchValidation } from '@web-client/business/entities/opinionSearch/OpinionSearchValidation';
-import {
-  createISODateString,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { tryParseFormDateStringToIso } from '@shared/business/utilities/DateHandler';
 
 /**
  * validate opinion advanced search form
@@ -22,16 +19,30 @@ export const validateOpinionAdvancedSearchAction = ({
 }: ActionProps) => {
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
 
-  const formattedStartDate = opinionSearch.startDate
-    ? createISODateString(opinionSearch.startDate, FORMATS.MMDDYYYY)
-    : undefined;
-  const formattedEndDate = opinionSearch.endDate
-    ? createISODateString(opinionSearch.endDate, FORMATS.MMDDYYYY)
-    : undefined;
+  const startParsed = tryParseFormDateStringToIso(opinionSearch.startDate);
+  const endParsed = tryParseFormDateStringToIso(opinionSearch.endDate);
+
+  if (startParsed.invalid || endParsed.invalid) {
+    const parseErrors: Record<string, string> = {};
+    if (startParsed.invalid) {
+      parseErrors.startDate = 'Enter date in format MM/DD/YYYY.';
+    }
+    if (endParsed.invalid) {
+      parseErrors.endDate = 'Enter date in format MM/DD/YYYY.';
+    }
+    return path.error({
+      alertError: {
+        messages: Object.values(parseErrors),
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors: parseErrors,
+    });
+  }
 
   const errors = new OpinionSearchValidation({
-    startDate: formattedStartDate ?? '',
-    endDate: formattedEndDate ?? '',
+    startDate: startParsed.iso,
+    endDate: endParsed.iso,
   }).getFormattedValidationErrors();
 
   if (errors) {

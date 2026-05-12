@@ -27,14 +27,14 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import joi from 'joi';
 
 export class PaperPetition extends JoiValidationEntity {
-  public applicationForWaiverOfFilingFeeFile: object;
-  public applicationForWaiverOfFilingFeeFileSize: number;
-  public attachmentToPetitionFile: object;
-  public attachmentToPetitionFileSize: number;
+  public applicationForWaiverOfFilingFeeFile?: object;
+  public applicationForWaiverOfFilingFeeFileSize?: number;
+  public attachmentToPetitionFile?: object;
+  public attachmentToPetitionFileSize?: number;
   public caseCaption: string;
   public caseType: string;
-  public filingType: string;
-  public irsNoticeDate: string;
+  public filingType?: string;
+  public irsNoticeDate?: string;
   public hasVerifiedIrsNotice: boolean;
   public mailingDate: string;
   public noticeOfAttachments: any;
@@ -45,22 +45,22 @@ export class PaperPetition extends JoiValidationEntity {
   public orderForFilingFee: any;
   public orderForRatification: any;
   public orderToShowCause: any;
-  public corporateDisclosureFile: object;
-  public corporateDisclosureFileSize: number;
-  public partyType: string;
-  public petitionFile: object;
-  public petitionFileSize: number;
-  public petitionPaymentDate: string;
-  public requestForPlaceOfTrialFile: object;
-  public requestForPlaceOfTrialFileSize: number;
-  public petitionPaymentMethod: string;
+  public corporateDisclosureFile?: object;
+  public corporateDisclosureFileSize?: number;
+  public partyType?: string;
+  public petitionFile?: object;
+  public petitionFileSize?: number;
+  public petitionPaymentDate?: string;
+  public requestForPlaceOfTrialFile?: object;
+  public requestForPlaceOfTrialFileSize?: number;
+  public petitionPaymentMethod?: string;
   public petitionPaymentStatus: any;
   public petitionPaymentWaivedDate: any;
   public preferredTrialCity: any;
   public procedureType: string;
   public receivedAt: string;
-  public stinFile: object;
-  public stinFileSize: number;
+  public stinFile?: object;
+  public stinFileSize?: number;
   public useSameAsPrimary: boolean;
   public petitioners: any;
   public statistics: any;
@@ -74,13 +74,16 @@ export class PaperPetition extends JoiValidationEntity {
     { authorizedUser }: { authorizedUser: UnknownAuthUser },
   ) {
     super('PaperPetition');
-    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile ?? {};
-    this.attachmentToPetitionFileSize =
-      rawProps.attachmentToPetitionFileSize ?? 0;
+    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
+    this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
     this.caseCaption = rawProps.caseCaption ?? '';
     this.caseType = rawProps.caseType ?? '';
-    this.filingType = rawProps.filingType ?? '';
-    this.irsNoticeDate = rawProps.irsNoticeDate ?? '';
+    if (rawProps.filingType) {
+      this.filingType = rawProps.filingType;
+    }
+    if (rawProps.irsNoticeDate) {
+      this.irsNoticeDate = rawProps.irsNoticeDate;
+    }
     this.hasVerifiedIrsNotice = rawProps.hasVerifiedIrsNotice ?? false;
     this.mailingDate = rawProps.mailingDate ?? '';
     this.noticeOfAttachments = rawProps.noticeOfAttachments;
@@ -97,9 +100,15 @@ export class PaperPetition extends JoiValidationEntity {
     this.orderForFilingFee = rawProps.orderForFilingFee;
     this.orderForRatification = rawProps.orderForRatification;
     this.orderToShowCause = rawProps.orderToShowCause;
-    this.partyType = rawProps.partyType ?? PARTY_TYPES.petitioner;
-    this.petitionPaymentDate = rawProps.petitionPaymentDate ?? '';
-    this.petitionPaymentMethod = rawProps.petitionPaymentMethod ?? '';
+    if (rawProps.partyType) {
+      this.partyType = rawProps.partyType;
+    }
+    if (rawProps.petitionPaymentDate) {
+      this.petitionPaymentDate = rawProps.petitionPaymentDate;
+    }
+    if (rawProps.petitionPaymentMethod) {
+      this.petitionPaymentMethod = rawProps.petitionPaymentMethod;
+    }
     this.petitionPaymentStatus = rawProps.petitionPaymentStatus;
     this.petitionPaymentWaivedDate = rawProps.petitionPaymentWaivedDate;
     this.preferredTrialCity = rawProps.preferredTrialCity;
@@ -107,20 +116,19 @@ export class PaperPetition extends JoiValidationEntity {
     this.receivedAt = rawProps.receivedAt ?? '';
     this.useSameAsPrimary = rawProps.useSameAsPrimary ?? false;
     this.petitioners = rawProps.petitioners || [];
-    this.stinFile = rawProps.stinFile ?? {};
-    this.stinFileSize = rawProps.stinFileSize ?? 0;
-    this.corporateDisclosureFile = rawProps.corporateDisclosureFile ?? {};
-    this.corporateDisclosureFileSize =
-      rawProps.corporateDisclosureFileSize ?? 0;
-    this.petitionFile = rawProps.petitionFile ?? {};
-    this.petitionFileSize = rawProps.petitionFileSize ?? 0;
-    this.requestForPlaceOfTrialFile = rawProps.requestForPlaceOfTrialFile ?? {};
+    this.stinFile = rawProps.stinFile;
+    this.stinFileSize = rawProps.stinFileSize;
+    this.corporateDisclosureFile = rawProps.corporateDisclosureFile;
+    this.corporateDisclosureFileSize = rawProps.corporateDisclosureFileSize;
+    this.petitionFile = rawProps.petitionFile;
+    this.petitionFileSize = rawProps.petitionFileSize;
+    this.requestForPlaceOfTrialFile = rawProps.requestForPlaceOfTrialFile;
     this.requestForPlaceOfTrialFileSize =
-      rawProps.requestForPlaceOfTrialFileSize ?? 0;
+      rawProps.requestForPlaceOfTrialFileSize;
     this.applicationForWaiverOfFilingFeeFile =
-      rawProps.applicationForWaiverOfFilingFeeFile ?? {};
+      rawProps.applicationForWaiverOfFilingFeeFile;
     this.applicationForWaiverOfFilingFeeFileSize =
-      rawProps.applicationForWaiverOfFilingFeeFileSize ?? 0;
+      rawProps.applicationForWaiverOfFilingFeeFileSize;
     this.docketEntries = Array.isArray(rawProps.docketEntries)
       ? rawProps.docketEntries.map(
           doc =>

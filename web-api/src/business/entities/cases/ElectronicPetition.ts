@@ -26,13 +26,13 @@ import joi from 'joi';
 export class ElectronicPetition extends JoiValidationEntity {
   public attachmentToPetitionFile?: File;
   public attachmentToPetitionFileSize?: number;
-  public businessType: string;
+  public businessType?: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
   public corporateDisclosureFileSize?: number;
-  public countryType: string;
+  public countryType?: string;
   public filingType: string;
-  public hasIrsNotice: boolean;
+  public hasIrsNotice?: boolean;
   public irsNoticesRedactionAcknowledgement?: boolean;
   public partyType: string;
   public petitioners: any;
@@ -51,14 +51,18 @@ export class ElectronicPetition extends JoiValidationEntity {
 
     this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
     this.attachmentToPetitionFileSize = rawCase.attachmentToPetitionFileSize;
-    this.businessType = rawCase.businessType ?? '';
+    if (rawCase.businessType) {
+      this.businessType = rawCase.businessType;
+    }
     this.caseType = rawCase.caseType ?? '';
-    this.countryType = rawCase.countryType ?? '';
+    if (rawCase.countryType) {
+      this.countryType = rawCase.countryType;
+    }
     this.filingType = rawCase.filingType ?? '';
-    this.hasIrsNotice = rawCase.hasIrsNotice ?? false;
+    this.hasIrsNotice = rawCase.hasIrsNotice;
     this.irsNoticesRedactionAcknowledgement =
       rawCase.irsNoticesRedactionAcknowledgement;
-    this.partyType = rawCase.partyType ?? PARTY_TYPES.petitioner;
+    this.partyType = rawCase.partyType ?? '';
     this.preferredTrialCity = rawCase.preferredTrialCity ?? '';
     this.procedureType = rawCase.procedureType ?? '';
 
@@ -109,10 +113,10 @@ export class ElectronicPetition extends JoiValidationEntity {
       ...Object.values(BUSINESS_TYPES),
     )
       .optional()
-      .allow(null),
+      .allow(null, ''),
     caseType: JoiValidationConstants.STRING.when('hasIrsNotice', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
+      is: true,
+      otherwise: joi.optional().allow(null, ''),
       then: joi.required(),
     }).messages({ '*': 'Select a case type' }),
     corporateDisclosureFile: joi
@@ -137,7 +141,7 @@ export class ElectronicPetition extends JoiValidationEntity {
         '*': 'Your Corporate Disclosure Statement file size is empty',
         'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
-    countryType: JoiValidationConstants.STRING.optional(),
+    countryType: JoiValidationConstants.STRING.optional().allow(''),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],

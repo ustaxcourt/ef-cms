@@ -2,10 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { OrderSearchValidation } from '@web-client/business/entities/orderSearch/OrderSearchValidation';
-import {
-  createISODateString,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { tryParseFormDateStringToIso } from '@shared/business/utilities/DateHandler';
 
 export const validateOrderAdvancedSearchAction = ({
   applicationContext,
@@ -14,16 +11,30 @@ export const validateOrderAdvancedSearchAction = ({
 }: ActionProps) => {
   const orderSearch = get(state.advancedSearchForm.orderSearch);
 
-  const formattedStartDate = orderSearch.startDate
-    ? createISODateString(orderSearch.startDate, FORMATS.MMDDYYYY)
-    : undefined;
-  const formattedEndDate = orderSearch.endDate
-    ? createISODateString(orderSearch.endDate, FORMATS.MMDDYYYY)
-    : undefined;
+  const startParsed = tryParseFormDateStringToIso(orderSearch.startDate);
+  const endParsed = tryParseFormDateStringToIso(orderSearch.endDate);
+
+  if (startParsed.invalid || endParsed.invalid) {
+    const parseErrors: Record<string, string> = {};
+    if (startParsed.invalid) {
+      parseErrors.startDate = 'Enter date in format MM/DD/YYYY.';
+    }
+    if (endParsed.invalid) {
+      parseErrors.endDate = 'Enter date in format MM/DD/YYYY.';
+    }
+    return path.error({
+      alertError: {
+        messages: Object.values(parseErrors),
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors: parseErrors,
+    });
+  }
 
   const errors = new OrderSearchValidation({
-    startDate: formattedStartDate ?? '',
-    endDate: formattedEndDate ?? '',
+    startDate: startParsed.iso,
+    endDate: endParsed.iso,
   }).getFormattedValidationErrors();
 
   if (errors) {

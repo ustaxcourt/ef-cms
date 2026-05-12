@@ -34,7 +34,7 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  maxWorkers: '50%',
+  maxWorkers: 1,
 
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {

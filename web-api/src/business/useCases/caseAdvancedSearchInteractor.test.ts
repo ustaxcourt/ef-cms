@@ -91,8 +91,18 @@ describe('caseAdvancedSearchInteractor', () => {
     );
 
     expect(results).toEqual([
-      { docketNumber: '101-20', petitionerNames: [], petitionerStateNames: [] },
-      { docketNumber: '201-20', petitionerNames: [], petitionerStateNames: [] },
+      {
+        docketNumber: '101-20',
+        petitionerNames: [],
+        petitionerStateNames: [],
+        receivedAt: '',
+      },
+      {
+        docketNumber: '201-20',
+        petitionerNames: [],
+        petitionerStateNames: [],
+        receivedAt: '',
+      },
     ]);
   });
 
@@ -119,8 +129,18 @@ describe('caseAdvancedSearchInteractor', () => {
     );
 
     expect(results).toEqual([
-      { docketNumber: '101-20', petitionerNames: [], petitionerStateNames: [] },
-      { docketNumber: '201-20', petitionerNames: [], petitionerStateNames: [] },
+      {
+        docketNumber: '101-20',
+        petitionerNames: [],
+        petitionerStateNames: [],
+        receivedAt: '',
+      },
+      {
+        docketNumber: '201-20',
+        petitionerNames: [],
+        petitionerStateNames: [],
+        receivedAt: '',
+      },
     ]);
   });
 
@@ -213,6 +233,7 @@ describe('caseAdvancedSearchInteractor', () => {
         docketNumber: '101-20',
         petitionerNames: [],
         petitionerStateNames: [],
+        receivedAt: '',
       },
     ]);
   });
@@ -239,6 +260,7 @@ describe('caseAdvancedSearchInteractor', () => {
         docketNumber: '101-20',
         petitionerNames: [],
         petitionerStateNames: [],
+        receivedAt: '',
       },
     ]);
   });

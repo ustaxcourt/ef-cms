@@ -10,7 +10,10 @@ import {
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(joiDate);
+/** Use this joi root when composing schemas that include `JoiValidationConstants` date rules. */
+export const extendedJoi: Root = joiImported.extend(joiDate);
+
+const joi: Root = extendedJoi;
 
 // These are specific to joi and cannot be shared with luxon
 const DATE_FORMATS = {
@@ -38,12 +41,9 @@ export const JoiValidationConstants = Object.freeze({
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
   ISO_DATE: joi.date().iso().format([DATE_FORMATS.ISO]),
-  JUDGES_STATUSES: joi.array().items(
-    joi
-      .string()
-      .required()
-      .valid(...CAV_AND_SUBMITTED_CASE_STATUS),
-  ),
+  JUDGES_STATUSES: joi
+    .array()
+    .items(joi.string().valid(...CAV_AND_SUBMITTED_CASE_STATUS)),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
   RELATED_DOCKET_ENTRY: {
     disposition: joi

@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -11,6 +12,10 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
+
+const ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES = new Set(
+  CAV_AND_SUBMITTED_CASE_STATUS,
+);
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -36,7 +41,13 @@ export const getCaseWorksheetsByJudgeInteractor = async (
     !params.judges?.length ||
     !params.statuses?.length ||
     !Array.isArray(params.judges) ||
-    !Array.isArray(params.statuses)
+    !Array.isArray(params.statuses) ||
+    !params.judges.every(j => typeof j === 'string' && j.trim().length > 0) ||
+    !params.statuses.every(
+      status =>
+        typeof status === 'string' &&
+        ALLOWED_JUDGE_ACTIVITY_REPORT_STATUSES.has(status),
+    )
   ) {
     throw new InvalidRequest('Invalid search terms');
   }

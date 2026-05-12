@@ -17,8 +17,8 @@ import joi from 'joi';
 
 export class UploadPetitionStep1 extends JoiValidationEntity {
   public businessType: string;
-  public corporateDisclosureFile: File;
-  public corporateDisclosureFileSize: number;
+  public corporateDisclosureFile?: File;
+  public corporateDisclosureFileSize?: number;
   public countryType: string;
   public filingType: string;
   public partyType: string;
@@ -34,15 +34,14 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     super('UploadPetitionStep1');
 
     this.businessType = rawProps.businessType ?? '';
-    this.corporateDisclosureFile =
-      rawProps.corporateDisclosureFile ?? new File([], 'empty.pdf');
-    this.corporateDisclosureFileSize =
-      rawProps.corporateDisclosureFileSize ?? 0;
+    this.corporateDisclosureFile = rawProps.corporateDisclosureFile;
+    this.corporateDisclosureFileSize = rawProps.corporateDisclosureFileSize;
     this.countryType = rawProps.countryType ?? '';
     const filingType = rawProps.filingType ?? '';
-    const partyType = rawProps.partyType ?? PARTY_TYPES.petitioner;
+    const partyTypeForContactFactory =
+      rawProps.partyType ?? PARTY_TYPES.petitioner;
+    this.partyType = rawProps.partyType ?? '';
     this.filingType = filingType;
-    this.partyType = partyType;
     this.isSpouseDeceased = rawProps.isSpouseDeceased ?? '';
     this.otherType = rawProps.otherType ?? '';
     this.hasSpouseConsent = rawProps.hasSpouseConsent ?? false;
@@ -56,7 +55,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         | undefined,
       filingType: filingType as FilingType,
       hasSpouseConsent: rawProps.hasSpouseConsent ?? false,
-      partyType,
+      partyType: partyTypeForContactFactory,
       petitionType: rawProps.petitionType,
     });
 
@@ -76,7 +75,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     )
       .when('filingType', {
         is: 'A business',
-        otherwise: joi.optional().allow(null),
+        otherwise: joi.optional().allow(null, ''),
         then: joi.required(),
       })
       .messages({ '*': 'Select a business type' }),
@@ -105,13 +104,15 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     countryType: JoiValidationConstants.STRING.valid(
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
-    ).optional(),
+    )
+      .optional()
+      .allow(null, ''),
     estateType: JoiValidationConstants.STRING.valid(
       ...Object.values(ESTATE_TYPES),
     )
       .when('otherType', {
         is: 'An estate or trust',
-        otherwise: joi.optional().allow(null),
+        otherwise: joi.optional().allow(null, ''),
         then: joi.required(),
       })
       .messages({ '*': 'Select a type of estate or trust' }),
@@ -140,7 +141,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       .valid('Yes', 'No')
       .when('filingType', {
         is: joi.valid('Myself and my spouse', 'Petitioner and spouse'),
-        otherwise: joi.optional().allow(null),
+        otherwise: joi.optional().allow(null, ''),
         then: joi.required(),
       })
       .messages({ '*': 'Select an answer to "Is your spouse deceased?"' }),
@@ -149,7 +150,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     )
       .when('otherType', {
         is: 'A minor or legally incompetent person',
-        otherwise: joi.optional().allow(null),
+        otherwise: joi.optional().allow(null, ''),
         then: joi.required(),
       })
       .messages({ '*': 'Select a role' }),
@@ -164,7 +165,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     )
       .when('filingType', {
         is: 'Other',
-        otherwise: joi.optional().allow(null),
+        otherwise: joi.optional().allow(null, ''),
         then: joi.required(),
       })
       .messages({ '*': 'Select an other type of taxpayer' }),

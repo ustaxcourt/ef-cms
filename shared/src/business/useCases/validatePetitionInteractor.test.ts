@@ -47,6 +47,7 @@ describe('validatePetitionInteractor', () => {
       petition: {
         caseType: 'defined',
         hasIrsNotice: true,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.png'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.png'),
@@ -55,9 +56,9 @@ describe('validatePetitionInteractor', () => {
     });
     expect(Object.keys(errors!)).toEqual([
       'filingType',
-      'partyType',
       'preferredTrialCity',
       'procedureType',
+      'petitioners',
     ]);
   });
 
