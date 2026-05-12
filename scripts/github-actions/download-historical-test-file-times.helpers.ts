@@ -160,7 +160,7 @@ export const downloadHistoricalTestFileTimes = async ({
   for (let i = 0; i < ancestorCommitShas.length; i += BATCH_SIZE) {
     const batch = ancestorCommitShas.slice(i, i + BATCH_SIZE);
     const results = await Promise.all(
-      batch.map(async sha => {
+      batch.map(async (sha: string): Promise<WorkflowArtifact | undefined> => {
         const fullArtifactName = `${workflowFileName}-${artifactName}-${sha}`;
         try {
           const response = await githubGet<WorkflowArtifactsResponse>(

@@ -1,4 +1,6 @@
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import {
   type CypressRunTimingResult,
   getCypressTestFileTimes,
@@ -61,11 +63,14 @@ export const determineSuiteFromSpecs = ({
 }): string => {
   const suspectedSuites: string[] = [];
   for (const specFile of extantSpecs) {
-    if (specFile.includes('ublic')) {
+    if (specFile.toLowerCase().includes('public')) {
       const suspectedPublicSuite = Object.keys(specDirToSuiteMap).filter(
         specDir => {
           const suiteName = specDirToSuiteMap[specDir];
-          return specFile.includes(specDir) && suiteName.includes('ublic');
+          return (
+            specFile.includes(specDir) &&
+            suiteName.toLowerCase().includes('public')
+          );
         },
       );
       for (const specDir of suspectedPublicSuite) {
@@ -108,7 +113,7 @@ export const onOpen = async ({
   current: boolean;
   cypressSuite?: string;
   dependencies?: RunCypressTestsWithTimingDependencies;
-}) => {
+}): Promise<void> => {
   if (!cypressSuite) {
     throw new Error('Must specify --suite to open');
   }
@@ -118,7 +123,7 @@ export const onOpen = async ({
   const determinedBrowser =
     browser && browser.length > 0
       ? browser
-      : cypressSuite.includes('ublic')
+      : cypressSuite.toLowerCase().includes('public')
         ? 'chrome'
         : 'edge';
   return await openCypressSuite({
@@ -141,7 +146,7 @@ export const onSpecs = async ({
   dependencies?: RunCypressTestsWithTimingDependencies;
   file: string;
   outputFilePath?: string;
-}) => {
+}): Promise<void> => {
   let determinedSpecs: string;
   const extantSpecs: string[] = [];
   for (const specFile of file.replaceAll(' ', ',').split(',')) {
@@ -158,11 +163,11 @@ export const onSpecs = async ({
   const determinedBrowser =
     browser && browser.length > 0
       ? browser
-      : determinedSuite.includes('ublic')
+      : determinedSuite.toLowerCase().includes('public')
         ? 'chrome'
         : 'edge';
   const determinedOutputFilePath =
-    outputFilePath ?? `/tmp/${determinedSuite}-results.json`;
+    outputFilePath ?? path.join(os.tmpdir(), `${determinedSuite}-results.json`);
   return await runCypressWithTiming({
     browserArg: determinedBrowser,
     configFile: cypressSuites[determinedSuite].config,
@@ -185,7 +190,7 @@ export const onSuite = async ({
   cypressSuite?: string;
   dependencies?: RunCypressTestsWithTimingDependencies;
   outputFilePath?: string;
-}) => {
+}): Promise<void> => {
   if (!cypressSuite) {
     throw new Error('Must specify either --suite or --file');
   }
@@ -195,11 +200,11 @@ export const onSuite = async ({
   const determinedBrowser =
     browser && browser.length > 0
       ? browser
-      : cypressSuite.includes('ublic')
+      : cypressSuite.toLowerCase().includes('public')
         ? 'chrome'
         : 'edge';
   const determinedOutputFilePath =
-    outputFilePath ?? `/tmp/${cypressSuite}-results.json`;
+    outputFilePath ?? path.join(os.tmpdir(), `${cypressSuite}-results.json`);
   return await runCypressWithTiming({
     browserArg: determinedBrowser,
     configFile: cypressSuites[cypressSuite].config,
@@ -221,7 +226,7 @@ export const setEnvironmentVariables = ({
   dependencies.dawson.isLocal =
     !dependencies.env.ENV || dependencies.env.ENV === 'local';
   if (dependencies.dawson.isLocal) dependencies.env.ENV = 'local';
-  dependencies.dawson.isPublic = configFile.includes('ublic');
+  dependencies.dawson.isPublic = configFile.toLowerCase().includes('public');
 
   if (dependencies.env.CI) {
     dependencies.env.CYPRESS_NO_COMMAND_LOG = '1';

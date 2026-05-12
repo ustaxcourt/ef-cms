@@ -177,6 +177,21 @@ export const testFileTimes = (args: string[]): void => {
         results: readJsonFile<JestFormattedTestResults>(inputFilePath),
       }),
     });
+  } else if (command === 'from-cypress') {
+    const [inputFilePath, outputFilePath] = remainingArgs;
+
+    if (!inputFilePath || !outputFilePath) {
+      throw new Error(
+        'Usage: scripts/github-actions/test-file-times.ts from-cypress <input> <output>',
+      );
+    }
+
+    writeTestFileTimes({
+      filePath: outputFilePath,
+      testFileTimes: getCypressTestFileTimes({
+        results: readJsonFile<CypressRunTimingResult>(inputFilePath),
+      }),
+    });
   } else if (command === 'merge') {
     const [outputFilePath, ...inputFilePaths] = remainingArgs;
 
@@ -205,7 +220,7 @@ export const testFileTimes = (args: string[]): void => {
     });
   } else {
     throw new Error(
-      'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge|merge-directory> ...args',
+      'Usage: scripts/github-actions/test-file-times.ts <from-jest|from-cypress|merge|merge-directory> ...args',
     );
   }
 };

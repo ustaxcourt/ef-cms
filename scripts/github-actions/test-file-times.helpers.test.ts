@@ -262,6 +262,33 @@ describe('test-file-times', () => {
       });
     });
 
+    it('writes standardized timings from cypress output', () => {
+      const inputFilePath = path.join(tempDir, 'cypress-results.json');
+      const outputFilePath = path.join(tempDir, 'cypress-timings.json');
+
+      fs.writeFileSync(
+        inputFilePath,
+        JSON.stringify({
+          runs: [
+            {
+              spec: {
+                relative: 'cypress/example.cy.ts',
+              },
+              stats: {
+                duration: 1234,
+              },
+            },
+          ],
+        }),
+      );
+
+      testFileTimes(['from-cypress', inputFilePath, outputFilePath]);
+
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './cypress/example.cy.ts': 1234,
+      });
+    });
+
     it('merges timing files', () => {
       const leftFilePath = path.join(tempDir, 'left.json');
       const rightFilePath = path.join(tempDir, 'right.json');
@@ -317,13 +344,16 @@ describe('test-file-times', () => {
 
     it('throws for invalid commands', () => {
       expect(() => testFileTimes(['oops'])).toThrow(
-        'Usage: scripts/github-actions/test-file-times.ts <from-jest|merge|merge-directory> ...args',
+        'Usage: scripts/github-actions/test-file-times.ts <from-jest|from-cypress|merge|merge-directory> ...args',
       );
     });
 
     it('throws when required arguments are missing', () => {
       expect(() => testFileTimes(['from-jest'])).toThrow(
         'Usage: scripts/github-actions/test-file-times.ts from-jest <input> <output>',
+      );
+      expect(() => testFileTimes(['from-cypress'])).toThrow(
+        'Usage: scripts/github-actions/test-file-times.ts from-cypress <input> <output>',
       );
       expect(() =>
         testFileTimes(['merge', path.join(tempDir, 'merged.json')]),
