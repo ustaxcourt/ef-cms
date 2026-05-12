@@ -67,7 +67,7 @@ export const EditDocketEntryMeta = connect(
                             </li>
                           ))}
                         </ul>
-                        <p className="margin-bottom-0 margin-top-0">
+                        <p className="tw:mb-0 tw:mt-4">
                           Service and Action edits will only apply to this case.
                         </p>
                       </div>

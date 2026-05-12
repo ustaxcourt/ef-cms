@@ -98,7 +98,7 @@ export const DocketEntryQc = connect(
                                 </li>
                               ))}
                             </ul>
-                            <p className="tw:mb-0 tw:mt-0">
+                            <p className="tw:mb-0 tw:mt-4">
                               If a Notice of Docket Change is generated, it will
                               be filed in all of the above cases.
                             </p>
