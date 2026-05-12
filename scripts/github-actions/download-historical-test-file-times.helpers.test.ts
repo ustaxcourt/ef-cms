@@ -37,7 +37,7 @@ describe('download-historical-test-file-times', () => {
   });
 
   describe('getAncestorCommitShas', () => {
-    it('returns current branch commits in descending order, excluding the current sha', () => {
+    it('returns current branch commits in descending order, including the current sha', () => {
       mockedExecFileSync.mockImplementation((command: string) => {
         if (command === 'git') {
           return 'current\nancestor-b\nancestor-a\n';
@@ -46,11 +46,11 @@ describe('download-historical-test-file-times', () => {
         throw new Error(`Unexpected command: ${command}`);
       });
 
-      expect(
-        getAncestorCommitShas({
-          currentSha: 'current',
-        }),
-      ).toEqual(['ancestor-b', 'ancestor-a']);
+      expect(getAncestorCommitShas()).toEqual([
+        'current',
+        'ancestor-b',
+        'ancestor-a',
+      ]);
       expect(mockedExecFileSync).toHaveBeenCalledWith(
         'git',
         ['rev-list', '--max-count=501', 'HEAD'],
@@ -129,6 +129,10 @@ describe('download-historical-test-file-times', () => {
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './example.test.ts': 1000,
       });
+      expect(global.fetch).not.toHaveBeenCalledWith(
+        'https://api.github.com/repos/ustaxcourt/ef-cms/actions/artifacts?name=client.yml-historical-test-file-times-current&per_page=1',
+        expect.anything(),
+      );
       expect(global.fetch).toHaveBeenCalledWith(
         'https://api.github.com/repos/ustaxcourt/ef-cms/actions/artifacts?name=client.yml-historical-test-file-times-ancestor&per_page=1',
         expect.anything(),
@@ -218,6 +222,10 @@ describe('download-historical-test-file-times', () => {
         workflowFileName: 'client.yml',
       });
 
+      expect(global.fetch).not.toHaveBeenCalledWith(
+        'https://api.github.com/repos/ustaxcourt/ef-cms/actions/artifacts?name=client.yml-historical-test-file-times-current&per_page=1',
+        expect.anything(),
+      );
       expect(global.fetch).toHaveBeenCalledWith(
         'https://api.github.com/repos/ustaxcourt/ef-cms/actions/artifacts?name=client.yml-historical-test-file-times-ancestor-b&per_page=1',
         expect.anything(),
@@ -262,7 +270,12 @@ describe('download-historical-test-file-times', () => {
     });
 
     it('throws when artifact lookup fails with non-retryable error', async () => {
-      mockedExecFileSync.mockReturnValue('current\nancestor\n');
+      mockedExecFileSync.mockImplementation((command: string) => {
+        if (command === 'git') {
+          return 'current\nancestor\n';
+        }
+        return Buffer.from('');
+      });
       jest.mocked(global.fetch).mockResolvedValueOnce({
         ok: false,
         status: 500,
@@ -414,6 +427,65 @@ describe('download-historical-test-file-times', () => {
 
       expect(global.fetch).toHaveBeenCalledTimes(3);
       consoleSpy.mockRestore();
+    });
+    it('skips both the current GITHUB_SHA and the merge commit SHA (HEAD)', async () => {
+      const outputFilePath = path.join(tempDir, 'skip-both.json');
+
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'merge-commit\ncurrent\nancestor\n';
+          }
+
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({}),
+            );
+            return Buffer.from('');
+          }
+
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+
+      jest.mocked(global.fetch).mockResolvedValueOnce({
+        json: () =>
+          Promise.resolve({
+            artifacts: [
+              {
+                archive_download_url: 'https://example.com/artifact.zip',
+                expired: false,
+                name: 'client.yml-historical-test-file-times-ancestor',
+              },
+            ],
+          }),
+        ok: true,
+      } as Response);
+      jest.mocked(global.fetch).mockResolvedValueOnce({
+        arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+        ok: true,
+      } as Response);
+
+      await downloadHistoricalTestFileTimes({
+        artifactName: 'historical-test-file-times',
+        outputFilePath,
+        workflowFileName: 'client.yml',
+      });
+
+      expect(global.fetch).not.toHaveBeenCalledWith(
+        expect.stringContaining('merge-commit'),
+        expect.anything(),
+      );
+      expect(global.fetch).not.toHaveBeenCalledWith(
+        expect.stringContaining('current'),
+        expect.anything(),
+      );
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('ancestor'),
+        expect.anything(),
+      );
     });
 
     it('throws when the downloaded artifact contains no json timing files', async () => {

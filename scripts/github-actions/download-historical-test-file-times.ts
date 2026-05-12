@@ -12,7 +12,6 @@ const scriptConfig: ScriptConfig = {
   environment: {
     // download-historical-test-file-times.helpers accesses these directly, so we require them here
     githubRepository: 'GITHUB_REPOSITORY',
-    githubSha: 'GITHUB_SHA',
     githubToken: 'GITHUB_TOKEN',
   },
   parameters: {

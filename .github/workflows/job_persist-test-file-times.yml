@@ -33,5 +33,5 @@ jobs:
       - name: Upload new historical test file times
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.workflow_filename }}-historical-test-file-times-${{ github.sha }}
+          name: ${{ inputs.workflow_filename }}-historical-test-file-times-${{ github.event.pull_request.head.sha || github.sha }}
           path: ${{ env.MERGED_TEST_FILE_TIMINGS_PATH }}

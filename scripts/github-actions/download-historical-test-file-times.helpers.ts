@@ -28,12 +28,10 @@ class GitHubApiRequestError extends Error {
 const MAX_ANCESTOR_COMMITS_TO_SCAN = 501;
 
 export const getAncestorCommitShas = ({
-  currentSha,
   gitCommandRunner = execFileSync,
 }: {
-  currentSha: string;
   gitCommandRunner?: typeof execFileSync;
-}): string[] => {
+} = {}): string[] => {
   const gitOutput = gitCommandRunner(
     'git',
     ['rev-list', `--max-count=${MAX_ANCESTOR_COMMITS_TO_SCAN}`, 'HEAD'],
@@ -45,7 +43,7 @@ export const getAncestorCommitShas = ({
   return gitOutput
     .split('\n')
     .map(sha => sha.trim())
-    .filter((sha): sha is string => Boolean(sha) && sha !== currentSha);
+    .filter((sha): sha is string => Boolean(sha));
 };
 
 const getRequiredEnvironmentVariable = (name: string): string => {
@@ -143,8 +141,15 @@ export const downloadHistoricalTestFileTimes = async ({
   workflowFileName: string;
 }): Promise<void> => {
   const repository = getRequiredEnvironmentVariable('GITHUB_REPOSITORY');
-  const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
-  const ancestorCommitShas = getAncestorCommitShas({ currentSha });
+  const allCommitShas = getAncestorCommitShas();
+
+  // We exclude the current testing SHA and the actual HEAD (which is the SHA
+  // of a potential merge commit that may or may not happen) to ensure we are
+  // searching for strictly historical timing data.
+  const currentSha = process.env.GITHUB_SHA;
+  const ancestorCommitShas = allCommitShas.filter(
+    sha => sha !== currentSha && sha !== allCommitShas[0],
+  );
 
   console.log(
     `Searching for historical test timings for ${workflowFileName} in ancestor commits...`,

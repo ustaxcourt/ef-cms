@@ -52,6 +52,7 @@ jobs:
       - name: Restore historical test file timings
         continue-on-error: true
         env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           scripts/github-actions/download-historical-test-file-times.ts ${{ inputs.workflow_filename }} historical-test-file-times $TEST_FILE_TIMINGS_PATH
