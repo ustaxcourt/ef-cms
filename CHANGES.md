@@ -1,3 +1,21 @@
+<details><summary>Dependency Updates - Week of 2026-05-04</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Upgrade Terraform to `1.15.1`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.1
+```
+```bash
+tfenv install 1.15.1
+tfenv use 1.15.1
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-04-27</summary>
 
 ## Manual Deployment Steps
