@@ -5,6 +5,7 @@ import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserI
 import {
   ROLES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
 
 const recentFilingsHelper = withAppContextDecorator(
@@ -20,6 +21,7 @@ const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   isFileAttached: true,
   eventCode: 'P',
   servedAt: '2024-01-15T10:00:00.000Z',
+  status: CASE_STATUS_TYPES.new,
   ...overrides,
 });
 
@@ -32,6 +34,7 @@ const createTestState = (overrides = {}) => ({
       document: 'Answer',
       caseTitle: 'Test Case 2',
       docketEntryId: '2',
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     }),
   ],
   recentFilingsTableSort: { sortField: 'filedDate', sortOrder: 'desc' },
@@ -47,7 +50,7 @@ describe('recentFilingsHelper', () => {
     });
     expect(result.sortedRecentFilings).toHaveLength(2);
     expect(result.sortedRecentFilings[0].filedDate).toBe('2024-01-15');
-    expect(result.sortOptions).toHaveLength(8);
+    expect(result.sortOptions).toHaveLength(10);
 
     // Empty/null handling
     const emptyResult = runCompute(recentFilingsHelper, {
@@ -67,7 +70,7 @@ describe('recentFilingsHelper', () => {
     expect(invalidResult.sortedRecentFilings).toHaveLength(2);
   });
 
-  it('should handle sorting by different fields', () => {
+  it('should handle sorting by document field', () => {
     const result = runCompute(recentFilingsHelper, {
       state: createTestState({
         recentFilingsTableSort: { sortField: 'document', sortOrder: 'asc' },
@@ -75,6 +78,41 @@ describe('recentFilingsHelper', () => {
     });
     expect(result.sortedRecentFilings[0].document).toBe('Answer');
     expect(result.sortedRecentFilings[1].document).toBe('Petition');
+  });
+
+  it('should handle sorting by Case Status field', () => {
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilingsTableSort: { sortField: 'status', sortOrder: 'asc' },
+      }),
+    });
+    expect(result.sortedRecentFilings[0].status).toBe(
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    );
+    expect(result.sortedRecentFilings[1].status).toBe(CASE_STATUS_TYPES.new);
+  });
+
+  it('should handle sorting by Case Title field', () => {
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilingsTableSort: { sortField: 'caseTitle', sortOrder: 'desc' },
+      }),
+    });
+    expect(result.sortedRecentFilings[0].caseTitle).toBe('Test Case 2');
+    expect(result.sortedRecentFilings[1].caseTitle).toBe('Test Case 1');
+  });
+
+  it('should handle sorting by Docket Number field', () => {
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilingsTableSort: {
+          sortField: 'docketNumber',
+          sortOrder: 'desc',
+        },
+      }),
+    });
+    expect(result.sortedRecentFilings[0].docketNumber).toBe('102-20');
+    expect(result.sortedRecentFilings[1].docketNumber).toBe('101-20');
   });
 
   it('should handle document access control for different scenarios', () => {

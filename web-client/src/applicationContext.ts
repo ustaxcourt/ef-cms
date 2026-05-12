@@ -345,7 +345,7 @@ import { validateTrialSessionInteractor } from '../../shared/src/business/useCas
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '@web-client/proxies/verifyPendingCaseForUserProxy';
-import { verifyUserPendingEmailInteractor } from '@web-client/proxies/users/verifyUserPendingEmailProxy';
+import { verifyUserPendingEmailInteractor } from '@web-client/proxies/public/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
