@@ -12,6 +12,9 @@ export const setEditMotionOrderResponseFormAction = ({
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
   store.set(state.form, documentToEdit.draftOrderState);
+  if (!get(state.form.additionalOrderTextArray)) {
+    store.set(state.form.additionalOrderTextArray, ['']);
+  }
   store.set(
     state.docketEntryId,
     documentToEdit.draftOrderState.previousDocument.docketEntryId,
