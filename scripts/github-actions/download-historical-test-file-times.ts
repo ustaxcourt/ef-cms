@@ -11,7 +11,6 @@ const scriptConfig: ScriptConfig = {
     'download-historical-test-file-times - Downloads historical test file times from a GitHub Actions artifact',
   environment: {
     // download-historical-test-file-times.helpers accesses these directly, so we require them here
-    githubHeadRef: 'GITHUB_HEAD_REF',
     githubRepository: 'GITHUB_REPOSITORY',
     githubSha: 'GITHUB_SHA',
     githubToken: 'GITHUB_TOKEN',

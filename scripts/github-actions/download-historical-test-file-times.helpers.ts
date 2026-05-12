@@ -13,16 +13,6 @@ type WorkflowArtifactsResponse = {
   artifacts: WorkflowArtifact[];
 };
 
-type WorkflowRun = {
-  conclusion: string | null;
-  head_sha: string;
-  id: number;
-};
-
-type WorkflowRunsResponse = {
-  workflow_runs: WorkflowRun[];
-};
-
 class GitHubApiRequestError extends Error {
   readonly status: number;
   readonly url: string;
@@ -35,10 +25,7 @@ class GitHubApiRequestError extends Error {
   }
 }
 
-const MAX_WORKFLOW_RUN_PAGES = 5;
-const WORKFLOW_RUNS_PER_PAGE = 100;
-const MAX_ANCESTOR_COMMITS_TO_SCAN =
-  MAX_WORKFLOW_RUN_PAGES * WORKFLOW_RUNS_PER_PAGE + 1;
+const MAX_ANCESTOR_COMMITS_TO_SCAN = 501;
 
 export const getAncestorCommitShas = ({
   currentSha,
@@ -47,8 +34,6 @@ export const getAncestorCommitShas = ({
   currentSha: string;
   gitCommandRunner?: typeof execFileSync;
 }): string[] => {
-  // Keep the local git search horizon aligned with the paginated GitHub workflow
-  // search so we do not read more commit SHAs than the API lookup can ever use.
   const gitOutput = gitCommandRunner(
     'git',
     ['rev-list', `--max-count=${MAX_ANCESTOR_COMMITS_TO_SCAN}`, 'HEAD'],
@@ -61,35 +46,6 @@ export const getAncestorCommitShas = ({
     .split('\n')
     .map(sha => sha.trim())
     .filter((sha): sha is string => Boolean(sha) && sha !== currentSha);
-};
-
-export const findClosestAncestorWorkflowRun = ({
-  ancestorCommitShas,
-  workflowRuns,
-}: {
-  ancestorCommitShas: string[];
-  workflowRuns: WorkflowRun[];
-}): WorkflowRun | undefined => {
-  const successfulWorkflowRunsBySha = new Map<string, WorkflowRun>();
-
-  for (const workflowRun of workflowRuns) {
-    if (
-      workflowRun.conclusion === 'success' &&
-      !successfulWorkflowRunsBySha.has(workflowRun.head_sha)
-    ) {
-      successfulWorkflowRunsBySha.set(workflowRun.head_sha, workflowRun);
-    }
-  }
-
-  for (const ancestorCommitSha of ancestorCommitShas) {
-    const workflowRun = successfulWorkflowRunsBySha.get(ancestorCommitSha);
-
-    if (workflowRun) {
-      return workflowRun;
-    }
-  }
-
-  return undefined;
 };
 
 const getRequiredEnvironmentVariable = (name: string): string => {
@@ -177,35 +133,6 @@ const downloadArtifact = async ({
   }
 };
 
-const findTimingArtifact = ({
-  artifacts,
-  artifactNamePrefix,
-  commitSha,
-  workflowFileName,
-}: {
-  artifactNamePrefix: string;
-  artifacts: WorkflowArtifact[];
-  commitSha: string;
-  workflowFileName: string;
-}): WorkflowArtifact | undefined => {
-  const artifactNames = [
-    `${workflowFileName}-${artifactNamePrefix}-${commitSha}`,
-  ];
-
-  for (const artifactName of artifactNames) {
-    const artifact = artifacts.find(
-      currentArtifact =>
-        currentArtifact.name === artifactName && !currentArtifact.expired,
-    );
-
-    if (artifact) {
-      return artifact;
-    }
-  }
-
-  return undefined;
-};
-
 export const downloadHistoricalTestFileTimes = async ({
   artifactName,
   outputFilePath,
@@ -218,79 +145,52 @@ export const downloadHistoricalTestFileTimes = async ({
   const repository = getRequiredEnvironmentVariable('GITHUB_REPOSITORY');
   const currentSha = getRequiredEnvironmentVariable('GITHUB_SHA');
   const ancestorCommitShas = getAncestorCommitShas({ currentSha });
-  let exceededWorkflowRunPageLimit = true;
 
-  // Cap pagination to avoid runaway API requests if GitHub returns unexpected data.
-  for (let page = 1; page <= MAX_WORKFLOW_RUN_PAGES; page += 1) {
-    const workflowRuns = await githubGet<WorkflowRunsResponse>(
-      `https://api.github.com/repos/${repository}/actions/workflows/${workflowFileName}/runs?status=completed&per_page=100&page=${page}`,
-    );
+  console.log(
+    `Searching for historical test timings for ${workflowFileName} in ancestor commits...`,
+  );
 
-    if (workflowRuns.workflow_runs.length === 0) {
-      exceededWorkflowRunPageLimit = false;
-      break;
-    }
+  const BATCH_SIZE = 10;
 
-    let candidateWorkflowRuns = workflowRuns.workflow_runs;
-
-    while (candidateWorkflowRuns.length > 0) {
-      const closestAncestorWorkflowRun = findClosestAncestorWorkflowRun({
-        ancestorCommitShas,
-        workflowRuns: candidateWorkflowRuns,
-      });
-
-      if (!closestAncestorWorkflowRun) {
-        break;
-      }
-
-      let workflowArtifacts: WorkflowArtifactsResponse;
-
-      try {
-        workflowArtifacts = await githubGet<WorkflowArtifactsResponse>(
-          `https://api.github.com/repos/${repository}/actions/runs/${closestAncestorWorkflowRun.id}/artifacts`,
-        );
-      } catch (error: unknown) {
-        if (
-          error instanceof GitHubApiRequestError &&
-          (error.status === 403 || error.status === 404)
-        ) {
-          console.warn(
-            `Skipping historical timing artifact lookup for workflow run ${closestAncestorWorkflowRun.id} (${closestAncestorWorkflowRun.head_sha}) because GitHub returned ${error.status}; continuing to older ancestor runs.`,
+  for (let i = 0; i < ancestorCommitShas.length; i += BATCH_SIZE) {
+    const batch = ancestorCommitShas.slice(i, i + BATCH_SIZE);
+    const results = await Promise.all(
+      batch.map(async sha => {
+        const fullArtifactName = `${workflowFileName}-${artifactName}-${sha}`;
+        try {
+          const response = await githubGet<WorkflowArtifactsResponse>(
+            `https://api.github.com/repos/${repository}/actions/artifacts?name=${fullArtifactName}&per_page=1`,
           );
-          candidateWorkflowRuns = candidateWorkflowRuns.filter(
-            workflowRun => workflowRun.id !== closestAncestorWorkflowRun.id,
+
+          return response.artifacts.find(
+            artifact => artifact.name === fullArtifactName && !artifact.expired,
           );
-          continue;
+        } catch (error: unknown) {
+          if (
+            error instanceof GitHubApiRequestError &&
+            (error.status === 403 || error.status === 404)
+          ) {
+            return undefined;
+          }
+          throw error;
         }
-
-        throw error;
-      }
-
-      const timingArtifact = findTimingArtifact({
-        artifactNamePrefix: artifactName,
-        artifacts: workflowArtifacts.artifacts,
-        commitSha: closestAncestorWorkflowRun.head_sha,
-        workflowFileName,
-      });
-
-      if (timingArtifact) {
-        await downloadArtifact({
-          archiveDownloadUrl: timingArtifact.archive_download_url,
-          outputFilePath,
-        });
-        return;
-      }
-
-      candidateWorkflowRuns = candidateWorkflowRuns.filter(
-        workflowRun => workflowRun.id !== closestAncestorWorkflowRun.id,
-      );
-    }
-  }
-
-  if (exceededWorkflowRunPageLimit) {
-    throw new Error(
-      `Exceeded workflow run pagination limit (${MAX_WORKFLOW_RUN_PAGES} pages) while searching for historical test timings.`,
+      }),
     );
+
+    const timingArtifact = results.find(
+      (artifact): artifact is WorkflowArtifact => Boolean(artifact),
+    );
+
+    if (timingArtifact) {
+      console.log(
+        `Found historical test timings artifact: ${timingArtifact.name}`,
+      );
+      await downloadArtifact({
+        archiveDownloadUrl: timingArtifact.archive_download_url,
+        outputFilePath,
+      });
+      return;
+    }
   }
 
   console.log(
