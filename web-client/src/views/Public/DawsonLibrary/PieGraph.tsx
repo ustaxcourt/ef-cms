@@ -137,7 +137,7 @@ export const PieGraph = ({
   return (
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
-    <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto">
+    <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto tw:pt-2">
       <div
         ref={liveRegionRef}
         aria-live="polite"
@@ -147,17 +147,20 @@ export const PieGraph = ({
       <div className="tw:xs:w-160 tw:w-120">
         {title && (
           <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '1.25rem',
-            }}
+            className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
+            style={{ marginBottom: '1.25rem' }}
           >
-            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:whitespace-nowrap"
+              style={{ margin: 0 }}
+            >
               {title}
             </h2>
-            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+            <Button
+              className="tw:w-auto tw:!mr-5"
+              variant="primaryTertiary"
+              onClick={openHtmlTable}
+            >
               HTML view
             </Button>
           </div>

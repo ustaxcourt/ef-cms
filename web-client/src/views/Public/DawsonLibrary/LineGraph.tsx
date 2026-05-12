@@ -237,7 +237,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   const mergedData = chartData.map((row, i) => ({ ...row, ...tooltipData[i] }));
 
   return (
-    <div className="tw:overflow-x-auto tw:pb-1 tw:pl-1">
+    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1 tw:pl-1">
       <div
         // Must use style for width to work with recharts' ResponsiveContainer and maintain aspect ratio
         style={
@@ -250,17 +250,20 @@ export const LineGraph: React.FC<LineGraphProps> = ({
       >
         {title && (
           <div
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '1.25rem',
-            }}
+            className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
+            style={{ marginBottom: '1.25rem' }}
           >
-            <h2 className="tw:xs:text-2xl tw:text-lg" style={{ margin: 0 }}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:whitespace-nowrap"
+              style={{ margin: 0 }}
+            >
               {title}
             </h2>
-            <Button variant="primaryTertiary" onClick={openHtmlTable}>
+            <Button
+              className="tw:w-auto tw:!mr-5"
+              variant="primaryTertiary"
+              onClick={openHtmlTable}
+            >
               HTML view
             </Button>
           </div>
