@@ -47,7 +47,7 @@ const { UserPoolId, elasticsearchEndpoint, environmentName, region } =
   await truncateAllCognitoUsers({ cognito, UserPoolId });
 
   console.log('Truncating all S3 buckets...');
-  const s3Client = new S3Client({ region });
+  const s3Client = new S3Client({ followRegionRedirects: true, region });
   await truncateAllEnvironmentS3Buckets({
     environmentName,
     s3Client,
