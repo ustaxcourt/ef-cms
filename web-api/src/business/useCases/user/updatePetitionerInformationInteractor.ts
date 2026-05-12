@@ -283,103 +283,104 @@ export const updatePetitionerInformation = async (
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
-const updatedCase = await withTransaction(async () => {
-  if (hasPetitionerInfoChanged) {
-    await invalidateUserContactGeocode(
-      docketNumber,
-      updatedPetitionerData.contactId,
-    );
-  }
 
-  const updateAddressOrPhone =
-    hasPetitionerInfoChanged &&
-    !updatedCaseContact.isAddressSealed &&
-    caseEntity.shouldGenerateNoticesForCase();
-
-  if (updateAddressOrPhone) {
-    const privatePractitionersRepresentingContact =
-      Case.isPetitionerRepresented(
-        caseEntity,
-        existingPetitionerInfo.contactId,
+  const updatedCase = await withTransaction(async () => {
+    if (hasPetitionerInfoChanged) {
+      await invalidateUserContactGeocode(
+        docketNumber,
+        updatedPetitionerData.contactId,
       );
+    }
 
-    const { url } = await generateAndServeDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity,
-      docketMeta: undefined,
-      documentType: documentTypeToGenerate,
-      newData: editableFields,
-      oldData: existingPetitionerInfo,
-      privatePractitionersRepresentingContact,
-      servedParties,
-      user: authorizedUser,
-    });
-    serviceUrl = url;
-  }
+    const updateAddressOrPhone =
+      hasPetitionerInfoChanged &&
+      !updatedCaseContact.isAddressSealed &&
+      caseEntity.shouldGenerateNoticesForCase();
 
-  const shouldUpdateEmailAddress =
-    updatedPetitionerData.updatedEmail &&
-    updatedPetitionerData.updatedEmail !== existingPetitionerInfo.email;
-
-  if (shouldUpdateEmailAddress) {
-    const isEmailAvailable = await applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable({
-        applicationContext,
-        email: updatedPetitionerData.updatedEmail,
-      });
-    if (isEmailAvailable) {
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .createUserForContact({
-          authorizedUser,
+    if (updateAddressOrPhone) {
+      const privatePractitionersRepresentingContact =
+        Case.isPetitionerRepresented(
           caseEntity,
-          contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
-          name: existingPetitionerInfo.name,
-        });
-    } else {
-      const contactId = await applicationContext
-        .getUseCaseHelpers()
-        .addExistingUserToCase({
-          applicationContext,
-          authorizedUser,
-          caseEntity,
-          contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
-          name: existingPetitionerInfo.name,
-        });
-
-      updatedCaseContact.oldEmail = existingPetitionerInfo.email;
-      updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
-
-      const userToUpdate = await getUserById({
-        userId: contactId,
-      });
-
-      if (!userToUpdate) {
-        throw new NotFoundError(
-          `User not found with user id ${authorizedUser.userId}`,
+          existingPetitionerInfo.contactId,
         );
-      }
 
-      await updateCaseEntityAndGenerateChange({
+      const { url } = await generateAndServeDocketEntry({
         applicationContext,
         authorizedUser,
         caseEntity,
-        petitionerOnCase: updatedCaseContact,
+        docketMeta: undefined,
+        documentType: documentTypeToGenerate,
+        newData: editableFields,
+        oldData: existingPetitionerInfo,
+        privatePractitionersRepresentingContact,
+        servedParties,
         user: authorizedUser,
-        userHasAnEmail: userToUpdate.email,
       });
+      serviceUrl = url;
     }
-  }
 
-  return updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    const shouldUpdateEmailAddress =
+      updatedPetitionerData.updatedEmail &&
+      updatedPetitionerData.updatedEmail !== existingPetitionerInfo.email;
+
+    if (shouldUpdateEmailAddress) {
+      const isEmailAvailable = await applicationContext
+        .getPersistenceGateway()
+        .isEmailAvailable({
+          applicationContext,
+          email: updatedPetitionerData.updatedEmail,
+        });
+      if (isEmailAvailable) {
+        caseEntity = await applicationContext
+          .getUseCaseHelpers()
+          .createUserForContact({
+            authorizedUser,
+            caseEntity,
+            contactId: updatedPetitionerData.contactId,
+            email: updatedPetitionerData.updatedEmail,
+            name: existingPetitionerInfo.name,
+          });
+      } else {
+        const contactId = await applicationContext
+          .getUseCaseHelpers()
+          .addExistingUserToCase({
+            applicationContext,
+            authorizedUser,
+            caseEntity,
+            contactId: updatedPetitionerData.contactId,
+            email: updatedPetitionerData.updatedEmail,
+            name: existingPetitionerInfo.name,
+          });
+
+        updatedCaseContact.oldEmail = existingPetitionerInfo.email;
+        updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
+
+        const userToUpdate = await getUserById({
+          userId: contactId,
+        });
+
+        if (!userToUpdate) {
+          throw new NotFoundError(
+            `User not found with user id ${authorizedUser.userId}`,
+          );
+        }
+
+        await updateCaseEntityAndGenerateChange({
+          applicationContext,
+          authorizedUser,
+          caseEntity,
+          petitionerOnCase: updatedCaseContact,
+          user: authorizedUser,
+          userHasAnEmail: userToUpdate.email,
+        });
+      }
+    }
+
+    return updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
-});
 
   return {
     paperServiceParties: servedParties.paper,
