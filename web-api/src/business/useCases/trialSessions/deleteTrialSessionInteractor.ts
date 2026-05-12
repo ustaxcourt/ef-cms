@@ -63,33 +63,35 @@ export const deleteTrialSessionInteractor = async (
       identifiers: docketNumbers?.map(item => `case|${item}`),
     });
 
-    await withTransaction(async () => {
-      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+    try {
+      await withTransaction(async () => {
+        const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-      for (const myCase of casesToUpdate) {
-        const caseEntity = new Case(myCase, { authorizedUser });
+        for (const myCase of casesToUpdate) {
+          const caseEntity = new Case(myCase, { authorizedUser });
 
-        caseEntity.removeFromTrial({});
+          caseEntity.removeFromTrial({});
 
-        await updateCaseAndAssociations({
-          authorizedUser,
-          caseToUpdate: caseEntity,
-        });
-      }
+          await updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: caseEntity,
+          });
+        }
 
-      if (trialSessionEntity.judge) {
-        await deleteTrialSessionWorkingCopy({
+        if (trialSessionEntity.judge) {
+          await deleteTrialSessionWorkingCopy({
+            trialSessionId,
+            userId: trialSessionEntity.judge.userId,
+          });
+        }
+
+        await deleteTrialSession({
           trialSessionId,
-          userId: trialSessionEntity.judge.userId,
         });
-      }
-
-      await deleteTrialSession({
-        trialSessionId,
       });
-    });
-
-    await removeLockFunction();
+    } finally {
+      await removeLockFunction();
+    }
   } else {
     // No cases to remove, just delete the trial session
     await withTransaction(async () => {
