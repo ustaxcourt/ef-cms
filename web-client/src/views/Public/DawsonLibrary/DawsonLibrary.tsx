@@ -4,11 +4,216 @@ import { Buttons } from '@web-client/views/Public/DawsonLibrary/Buttons';
 import { Alerts } from '@web-client/views/Public/DawsonLibrary/Alerts';
 import { Tags } from '@web-client/views/Public/DawsonLibrary/Tags';
 import { Inputs } from '@web-client/views/Public/DawsonLibrary/Inputs';
+import { PieGraph } from './PieGraph';
+import { LineGraph } from './LineGraph';
+import { SingleBarGraph, MultiBarGraph } from './BarGraph';
+
+const DEFAULT_CHART_WIDTH = 1344;
 
 export const DawsonLibrary = () => {
   return (
     <>
       <BigHeader text="Dawson Library" />
+      <SingleBarGraph
+        title="Created Special Sessions by Location"
+        width={DEFAULT_CHART_WIDTH}
+        showLabels={false}
+        data={[
+          { label: 'Atlanta, GA', value: 9, color: '#005EA2' },
+          { label: 'Des Moines, IA', value: 9, color: '#005EA2' },
+          { label: 'Indianapolis, IN', value: 9, color: '#005EA2' },
+          { label: 'Birmingham, AL', value: 7, color: '#005EA2' },
+          { label: 'Denver, CO', value: 5, color: '#005EA2' },
+          { label: 'Louisville, KY', value: 5, color: '#005EA2' },
+        ]}
+      />
+      <div className="tw:mt-12" />
+      <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        title="Total Petitions by Month"
+        stacked
+        showLabels={false}
+        xLabelRotation={45}
+        labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ]}
+        datasets={[
+          {
+            label: 'Electronic',
+            data: [1175, 810, 1175, 875, 125, 0, 0, 0, 0, 0, 0, 0],
+            color: '#005EA2',
+          },
+          {
+            label: 'Paper',
+            data: [50, 45, 230, 125, 50, 0, 0, 0, 0, 0, 0, 0],
+            color: '#FFBE2E',
+          },
+        ]}
+      />
+      <div style={{ marginTop: '48px' }} />
+      <MultiBarGraph
+        width={DEFAULT_CHART_WIDTH}
+        title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
+        // yAxisLabel="Total"
+        showLabels={false}
+        xLabelRotation={45}
+        labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ]}
+        datasets={[
+          {
+            label: 'Closed/Closed-Dismissed',
+            data: [130, 113, 130, 113, 13, 0, 0, 0, 0, 0, 0, 0],
+            color: '#005EA2',
+          },
+          {
+            label: 'Changed to On Appeal',
+            data: [8, 8, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+            color: '#FFBE2E',
+          },
+        ]}
+      />
+      <div className="tw:mt-12" />
+      <LineGraph
+        width={DEFAULT_CHART_WIDTH}
+        title="Cases Filed Over Time"
+        xAxisLabel="Month"
+        xLabelRotation={45}
+        yAxisLabel="Number of Cases"
+        labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ]}
+        datasets={[
+          {
+            label: 'Regular Cases',
+            data: [
+              55,
+              38,
+              62,
+              65,
+              75,
+              48,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ] as (number | null)[],
+          },
+          {
+            label: 'Small Tax Cases',
+            data: [
+              40,
+              30,
+              38,
+              78,
+              42,
+              33,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+            ] as (number | null)[],
+          },
+        ]}
+        smooth
+      />
+      <div className="tw:mt-[6.25rem]" />
+      <LineGraph
+        width={DEFAULT_CHART_WIDTH}
+        title="Case Type Breakdown by Quarter"
+        xAxisLabel="Quarter"
+        yAxisLabel="Number of Cases"
+        labels={['Q1', 'Q2', 'Q3', 'Q4']}
+        datasets={[
+          {
+            label: 'Deficiency',
+            data: [120, 145, 132, 160],
+          },
+          {
+            label: 'Lien/Levy',
+            data: [85, 92, 78, 101],
+          },
+          {
+            label: 'Passport',
+            data: [18, 22, 25, 19],
+          },
+          {
+            label: 'Whistleblower',
+            data: [34, 41, 29, 38],
+          },
+          {
+            label: 'Other',
+            data: [55, 48, 63, 57],
+          },
+        ]}
+      />
+      <div className="tw:mt-12 tw:mx-4">
+        <h2 className="tw:xs:text-2xl tw:text-lg tw:xs:mb-8 tw:mb-5">
+          Total sessions scheduled: 300
+        </h2>
+        <div className="tw:flex tw:flex-wrap tw:gap-12">
+          <PieGraph
+            title="Procedure Type"
+            data={[
+              { name: 'In Person', value: 75, color: '#005EA2' },
+              {
+                name: 'Remote',
+                value: 25,
+                color: '#FFBE2E',
+              },
+            ]}
+          />
+
+          <PieGraph
+            title="Session Type"
+            data={[
+              { name: 'Regular', value: 40, color: '#B4D0B9' },
+              { name: 'Hybrid', value: 8, color: '#FEE685' },
+              { name: 'Small', value: 8, color: '#97D4EA' },
+              { name: 'Hybrid-S', value: 2.5, color: '#F2938C' },
+              { name: 'Motion/ Hearing', value: 2.5, color: '#D0C3E9' },
+              { name: 'Special', value: 2.5, color: '#E5A000' },
+            ]}
+          />
+        </div>
+      </div>
       <div className="card margin-2 padding-2">
         <Buttons />
         <Alerts />

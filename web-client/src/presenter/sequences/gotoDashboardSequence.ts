@@ -1,3 +1,4 @@
+import { setClerkOfCourtDashboardChartsAction } from '../actions/Dashboard/setClerkOfCourtDashboardChartsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -62,6 +63,7 @@ export const gotoDashboardSequence = [
         ),
         clerkofcourt: [
           fetchUserNotificationsSequence,
+          setClerkOfCourtDashboardChartsAction,
           parallel([
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
