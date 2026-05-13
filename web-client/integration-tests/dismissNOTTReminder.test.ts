@@ -165,6 +165,10 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
         'ServeThirtyDayNoticeModal',
       );
 
+      const calendaredCasesBefore = cerebralTest.getState(
+        'trialSession.calendaredCases',
+      );
+
       await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
 
       expect(cerebralTest.getState('currentPage')).toEqual(
@@ -179,6 +183,12 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
       );
 
       expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(false);
+
+      const calendaredCasesAfter = cerebralTest.getState(
+        'trialSession.calendaredCases',
+      );
+
+      expect(calendaredCasesAfter).toEqual(calendaredCasesBefore);
     });
   });
 });
