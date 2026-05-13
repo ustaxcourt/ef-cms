@@ -34,12 +34,13 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - `web-client/src/**` unit specs → `test:client:unit`; Cerebral integration specs (any `*.test.ts` under `web-client/integration-tests/` or `web-client/integration-tests-public/`) → `test:client:_integration`.
   - `scripts/**` → `test:scripts`.
   - `aws/**` (infrastructure lambdas) → `test:infrastructure`.
-- Cypress: dispatched via [`scripts/run-cypress.sh`](scripts/run-cypress.sh) against configs `cypress.config.ts`, `cypress-public.config.ts`, `cypress-smoketests*.config.ts`, `cypress-real-user-tests.config.ts`. Specs live under [`cypress/`](cypress/) (`deployed-and-local/`, `local-only/`, `readonly/`, `real-users/`).
-  - Integration: `npm run cypress:integration` (headless) or `npm run cypress:integration:open` (headed). Single file: `npm run cypress:integration:file -- path/to/file.cy.ts`.
-  - Integration (Public): `npm run cypress:integration:public` (headless) or `npm run cypress:integration:public:open` (headed). Single file: `npm run cypress:integration:public:file -- path/to/file.cy.ts`.
-  - Read-only: `npm run cypress:readonly` (headless) or `npm run cypress:readonly:open` (headed). Single file: `npm run cypress:readonly:file -- path/to/file.cy.ts`.
-  - Read-only (Public): `npm run cypress:readonly:public` (headless) or `npm run cypress:readonly:public:open` (headed). Single file: `npm run cypress:readonly:public:file -- path/to/file.cy.ts`.
-  - Smoke tests: `npm run cypress:smoketests` (headless) or `npm run cypress:smoketests:open` (headed). Single file: `npm run cypress:smoketests:file -- path/to/file.cy.ts`.
+- Cypress: dispatched via [`scripts/tests/run-cypress.ts`](scripts/tests/run-cypress.ts) against configs `cypress.config.ts`, `cypress-public.config.ts`, `cypress-smoketests*.config.ts`, `cypress-real-user-tests.config.ts`. Specs live under [`cypress/`](cypress/) (`deployed-and-local/`, `local-only/`, `readonly/`, `real-users/`).
+  - To run a single spec: `npm run cypress:file -- path/to/file.cy.ts`. Multiple specs from the same suite can be comma-separated: `npm run cypress:file -- path/to/file1.cy.ts,path/to/file2.cy.ts`.
+  - Integration: `npm run cypress:integration` (headless) or `npm run cypress:integration:open` (headed).
+  - Integration (Public): `npm run cypress:integration:public` (headless) or `npm run cypress:integration:public:open` (headed).
+  - Read-only: `npm run cypress:readonly` (headless) or `npm run cypress:readonly:open` (headed).
+  - Read-only (Public): `npm run cypress:readonly:public` (headless) or `npm run cypress:readonly:public:open` (headed).
+  - Smoke tests: `npm run cypress:smoketests` (headless) or `npm run cypress:smoketests:open` (headed).
   - Real-user tests: `npm run cypress:real-users` (headless) or `npm run cypress:real-users:open` (headed).
 
 ### Project-specific conventions
