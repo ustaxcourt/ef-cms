@@ -1,4 +1,4 @@
-import { DocumentSearch } from '../entities/documents/DocumentSearch';
+import { DocumentSearch } from '@web-api/business/entities/documents/DocumentSearch';
 
 export const validateOpinionAdvancedSearchInteractor = ({
   opinionSearch,

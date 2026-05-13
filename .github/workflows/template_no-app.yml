@@ -1,0 +1,33 @@
+name: GitHub Actions Workflow Template - DAWSON not running
+
+on:
+  workflow_call:
+    inputs:
+      fetch_depth:
+        default: 1
+        type: number
+      run_command:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Run tests
+        run: |
+          ${{ inputs.run_command }}
