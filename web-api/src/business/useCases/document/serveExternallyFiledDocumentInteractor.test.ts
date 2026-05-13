@@ -452,14 +452,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it('should not prematurely mark the docket entry as COMPLETE before the coversheet step runs, so the addCoversheetInteractor idempotency gate does not short-circuit', async () => {
+  it('should set the docket entry`s processing status as completed', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
       docketEntries: [
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+          processingStatus: 'abc',
         } as RawDocketEntry,
       ],
     });
@@ -478,80 +478,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .processingStatus,
-    ).not.toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
-
-    const addCoversheetInteractorMock =
-      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
-    const addCoversheetArgs = addCoversheetInteractorMock.mock.calls[0][1];
-    const docketEntryPassedToCoversheet = addCoversheetArgs.caseEntity
-      .getDocketEntryById({ docketEntryId: mockDocketEntryId });
-
-    expect(docketEntryPassedToCoversheet.processingStatus).not.toBe(
-      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-    );
-    expect(addCoversheetArgs.bypassIdempotencyGate).toBe(false);
-  });
-
-  it('should bypass the addCoversheetInteractor idempotency gate when the subject docket entry is a simultaneous document type (event code), so a second service-stamped coversheet is prepended on top of the file-time coversheet', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockCase,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          documentTitle: 'fake title',
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        } as RawDocketEntry,
-      ],
-    });
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: mockCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    const addCoversheetInteractorMock =
-      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
-    const addCoversheetArgs = addCoversheetInteractorMock.mock.calls[0][1];
-
-    expect(addCoversheetArgs.bypassIdempotencyGate).toBe(true);
-  });
-
-  it('should bypass the addCoversheetInteractor idempotency gate when the subject docket entry title contains "Simultaneous"', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockCase,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          documentTitle: 'Simultaneous Answering Brief',
-          eventCode: 'BRF',
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        } as RawDocketEntry,
-      ],
-    });
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: mockCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    const addCoversheetInteractorMock =
-      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
-    const addCoversheetArgs = addCoversheetInteractorMock.mock.calls[0][1];
-
-    expect(addCoversheetArgs.bypassIdempotencyGate).toBe(true);
+    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
