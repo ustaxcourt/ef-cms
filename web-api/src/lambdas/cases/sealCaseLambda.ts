@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { sealCaseInteractor } from '@shared/business/useCases/sealCaseInteractor';
+import { sealCaseInteractor } from '@web-api/business/useCases/sealCaseInteractor';
 
 /**
  * used for marking a case as sealed

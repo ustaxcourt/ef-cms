@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { ExternalDocumentFactory } from '@shared/business/entities/externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { cloneDeep } from 'lodash';
 
 /**

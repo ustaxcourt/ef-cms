@@ -1,11 +1,19 @@
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { sanitizeDumpFile } from './emailReplacer';
+import { sanitizeDumpFile, sanitizeEmail } from './emailReplacer';
 import * as readline from 'readline';
 
 jest.mock('fs');
 jest.mock('path');
 jest.mock('readline');
+jest.mock('crypto', () => {
+  const actualCrypto = jest.requireActual('crypto');
+  return {
+    ...actualCrypto,
+    createHash: jest.fn((...args) => actualCrypto.createHash(...args)),
+  };
+});
 
 describe('sanitizeDumpFile', () => {
   const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -131,5 +139,69 @@ describe('sanitizeDumpFile', () => {
 
     expect(mockConsoleError).toHaveBeenCalledWith('Error:', errorMessage);
     expect(mockProcessExit).toHaveBeenCalledWith(1);
+  });
+});
+
+describe('sanitizeEmail', () => {
+  const actualCrypto = jest.requireActual('crypto');
+
+  beforeEach(() => {
+    // Reset createHash back to the real implementation before each test
+    (crypto.createHash as jest.Mock).mockImplementation((...args) =>
+      actualCrypto.createHash(...args),
+    );
+    jest.clearAllMocks();
+  });
+
+  it('should return an empty string when given an empty string', () => {
+    expect(sanitizeEmail('')).toBe('');
+  });
+
+  it('should return a hashed email with the ustc.gov domain', () => {
+    const result = sanitizeEmail('john@real.com');
+    expect(result).toMatch(/^[a-f0-9]+@ustc\.gov$/);
+  });
+
+  it('should return the same hash for the same email when called multiple times', () => {
+    const first = sanitizeEmail('john@real.com');
+    const second = sanitizeEmail('john@real.com');
+    expect(first).toBe(second);
+  });
+
+  it('should return different hashes for different emails', () => {
+    const first = sanitizeEmail('john@real.com');
+    const second = sanitizeEmail('jane@real.com');
+    expect(first).not.toBe(second);
+  });
+
+  it('should produce a hash of the correct length (8 hex chars + @ustc.gov)', () => {
+    const result = sanitizeEmail('test@test.com');
+    const [localPart] = result.split('@');
+    expect(localPart).toHaveLength(8);
+  });
+
+  it('should handle emails with special allowed characters', () => {
+    const result = sanitizeEmail('test.name+tag@sub.domain.com');
+    expect(result).toMatch(/^[a-f0-9]+@ustc\.gov$/);
+  });
+
+  it('should handle hash collisions by generating a new unique hash', () => {
+    const mockDigest = jest
+      .fn()
+      .mockReturnValueOnce('aabbccdd') // hash for email1
+      .mockReturnValueOnce('aabbccdd') // collision for email2
+      .mockReturnValueOnce('11223344'); // resolved hash for email2
+
+    (crypto.createHash as jest.Mock).mockReturnValue({
+      update: jest.fn().mockReturnThis(),
+      digest: mockDigest,
+    });
+
+    const first = sanitizeEmail('email1@test.com');
+    const second = sanitizeEmail('email2@test.com');
+
+    expect(first).toBe('aabbccdd@ustc.gov');
+    expect(second).toBe('11223344@ustc.gov');
+    expect(first).not.toBe(second);
   });
 });

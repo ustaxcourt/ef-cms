@@ -1,6 +1,6 @@
-jest.mock('@shared/business/utilities/createPractitionerUser');
+jest.mock('@web-api/business/utilities/createPractitionerUser');
 jest.mock('@web-api/persistence/postgres/users/upsertPractitioner');
-jest.mock('@shared/business/utilities/userDataCanGenerateValidBarNumber');
+jest.mock('@web-api/business/utilities/userDataCanGenerateValidBarNumber');
 import {
   ACCOUNT_STATUS,
   ROLES,
@@ -13,8 +13,8 @@ import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { createPractitionerUser as createPractitionerUserMock } from '@shared/business/utilities/createPractitionerUser';
-import { userDataCanGenerateValidBarNumber as userDataCanGenerateValidBarNumberMock } from '@shared/business/utilities/userDataCanGenerateValidBarNumber';
+import { createPractitionerUser as createPractitionerUserMock } from '@web-api/business/utilities/createPractitionerUser';
+import { userDataCanGenerateValidBarNumber as userDataCanGenerateValidBarNumberMock } from '@web-api/business/utilities/userDataCanGenerateValidBarNumber';
 
 describe('createPractitionerUserInteractor', () => {
   const mockUser: RawPractitioner = {

@@ -9,6 +9,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/Login/confirmSignUpSequence';
+import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
@@ -25,6 +26,7 @@ import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/seq
 import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
+import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
@@ -83,6 +85,7 @@ export const presenterSequences = {
   closeModalAndNavigateToMaintenanceSequence:
     closeModalAndNavigateToMaintenanceSequence as unknown as Function,
   confirmSignUpSequence,
+  dismissAlertSequence,
   dismissModalSequence: dismissModalSequence as unknown as Function,
   displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
@@ -111,6 +114,7 @@ export const presenterSequences = {
   gotoTodaysOrdersSequence: showMaintenancePageDecorator(
     gotoTodaysOrdersSequence,
   ),
+  gotoVerifyEmailSequence,
   loadMoreTodaysOrdersSequence:
     loadMoreTodaysOrdersSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,

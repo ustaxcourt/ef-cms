@@ -230,7 +230,7 @@ import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
-import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
+import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
@@ -651,6 +651,7 @@ import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/se
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
+import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 
 export const presenterSequences = {
@@ -870,6 +871,7 @@ export const presenterSequences = {
   goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
+  gotoVerifyEmailSequence,
   gotoAccessibilityStatementSequence:
     gotoAccessibilityStatementSequence as unknown as Function,
   gotoAddCourtIssuedDocketEntrySequence:
@@ -1000,7 +1002,6 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
@@ -1339,6 +1340,7 @@ export const presenterSequences = {
     setViewerDraftDocumentToDisplaySequence as unknown as Function,
   showCalculatePenaltiesModalSequence:
     showCalculatePenaltiesModalSequence as unknown as Function,
+  showCaseStatusInfoSequence: showCaseStatusInfoSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
   showFileUploadErrorModalSequence,
