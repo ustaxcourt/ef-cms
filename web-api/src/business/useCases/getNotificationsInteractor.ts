@@ -9,6 +9,7 @@ import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workite
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { getQCInboxParameters } from '@web-api/business/utilities/getQCInboxParameters';
 
 export const getNotificationsInteractor = async (
@@ -128,9 +129,14 @@ export const getNotificationsInteractor = async (
   };
 };
 
-const countUniqueWorkItems = workItems => {
+const countUniqueWorkItems = (
+  workItems: RawWorkItemWithCaseAndDocketEntryInfo[],
+): number => {
   let count = 0;
-  const consolidatedGroups = new Map();
+  const consolidatedGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
 
   for (const workItem of workItems) {
     const multiDocketedOnLength =
@@ -140,12 +146,9 @@ const countUniqueWorkItems = workItems => {
       count += 1;
     } else {
       const key = workItem.docketEntryId;
-
-      if (!consolidatedGroups.has(key)) {
-        consolidatedGroups.set(key, []);
-      }
-
-      consolidatedGroups.get(key)!.push(workItem);
+      const group = consolidatedGroups.get(key) ?? [];
+      group.push(workItem);
+      consolidatedGroups.set(key, group);
     }
   }
 
