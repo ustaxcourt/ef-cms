@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { deactivateUserInteractor } from '@shared/business/useCases/automations/deactivateUserInteractor';
+import { deactivateUserInteractor } from '@web-api/business/useCases/automations/deactivateUserInteractor';
 
 export const deactivateUserLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async () => {

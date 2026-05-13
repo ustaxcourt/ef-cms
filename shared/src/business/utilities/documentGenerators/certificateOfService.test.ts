@@ -3,7 +3,7 @@ import {
   COUNTRY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { certificateOfService } from './certificateOfService';
+import { certificateOfService } from '@web-api/business/utilities/documentGenerators/certificateOfService';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('certificateOfService', () => {

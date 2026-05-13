@@ -8,6 +8,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemsByIds } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const completeWorkItem = async (
   _: ServerApplicationContext,
@@ -19,7 +20,7 @@ export const completeWorkItem = async (
     workItemId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawWorkItem> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }

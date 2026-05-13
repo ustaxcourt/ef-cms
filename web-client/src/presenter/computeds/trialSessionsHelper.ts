@@ -20,8 +20,8 @@ import {
   TrialSessionsFilters,
   initialTrialSessionPageState,
 } from '@web-client/presenter/state/trialSessionsPageState';
-import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
-import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
+import { TrialSessionsPageValidation } from '@web-client/business/entities/trialSessions/TrialSessionsPageValidation';
+import { getTrialCitiesGroupedByState } from '@web-client/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (

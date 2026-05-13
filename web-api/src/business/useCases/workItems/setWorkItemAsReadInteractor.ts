@@ -6,11 +6,12 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemsByIds } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const setWorkItemAsReadInteractor = async (
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawWorkItem[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }

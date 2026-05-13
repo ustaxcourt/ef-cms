@@ -11,7 +11,14 @@ export const upsertMinuteSheet = async ({
     docketNumber: string;
     content: MinuteSheet;
   };
-}) => {
+}): Promise<
+  | {
+      trialSessionId: string;
+      docketNumber: string;
+      content: MinuteSheet;
+    }
+  | undefined
+> => {
   const newOrUpdatedMinuteSheet = await getDbWriter({
     cb: writer =>
       writer
@@ -32,9 +39,5 @@ export const upsertMinuteSheet = async ({
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
-  return transformNullToUndefined(newOrUpdatedMinuteSheet) as {
-    trialSessionId: string;
-    docketNumber: string;
-    content: MinuteSheet;
-  };
+  return transformNullToUndefined(newOrUpdatedMinuteSheet);
 };
