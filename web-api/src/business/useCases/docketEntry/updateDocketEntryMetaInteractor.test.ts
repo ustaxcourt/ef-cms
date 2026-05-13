@@ -140,25 +140,23 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketEntries: mockDocketEntries,
     });
 
-    applicationContext
-      .getUseCases()
-      .addCoversheetInteractor.mockResolvedValue({
-        createdAt: '2011-02-22T00:01:00.000Z',
-        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
-        docketNumber: '101-20',
-        documentTitle: 'Summary Opinion',
-        documentType: 'Summary Opinion',
-        entityName: 'DocketEntry',
-        eventCode: 'SOP',
-        filedByRole: ROLES.judge,
-        filingDate: '2011-02-22T00:01:00.000Z',
-        index: 7,
-        isDraft: false,
-        isOnDocketRecord: false,
-        judge: 'Buch',
-        processingStatus: 'complete',
-        userId: mockUserId,
-      });
+    applicationContext.getUseCases().addCoversheetInteractor.mockResolvedValue({
+      createdAt: '2011-02-22T00:01:00.000Z',
+      docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+      docketNumber: '101-20',
+      documentTitle: 'Summary Opinion',
+      documentType: 'Summary Opinion',
+      entityName: 'DocketEntry',
+      eventCode: 'SOP',
+      filedByRole: ROLES.judge,
+      filingDate: '2011-02-22T00:01:00.000Z',
+      index: 7,
+      isDraft: false,
+      isOnDocketRecord: false,
+      judge: 'Buch',
+      processingStatus: 'complete',
+      userId: mockUserId,
+    });
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -967,13 +965,11 @@ describe('updateDocketEntryMetaInteractor', () => {
       .saveDocumentFromLambda.mockResolvedValue(undefined);
 
     // Ensure addCoversheetInteractor returns a Promise with updated entry
-    applicationContext
-      .getUseCases()
-      .addCoversheetInteractor.mockResolvedValue({
-        ...testDocketEntry,
-        filingDate: '2020-08-01T00:01:00.000Z',
-        numberOfPages: 10,
-      });
+    applicationContext.getUseCases().addCoversheetInteractor.mockResolvedValue({
+      ...testDocketEntry,
+      filingDate: '2020-08-01T00:01:00.000Z',
+      numberOfPages: 10,
+    });
 
     // Make updateCaseAndAssociations fail AFTER addCoversheetInteractor succeeds
     updateCaseAndAssociations.mockRejectedValueOnce(
@@ -1030,7 +1026,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       .getUseCases()
       .addCoversheetInteractor.mockResolvedValue(mockUpdatedDocketEntry);
 
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -1042,9 +1038,10 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedDocketEntry = result.docketEntries.find(
-      entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
-    );
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
+      );
 
     expect(updatedDocketEntry).toBeDefined();
     expect(updatedDocketEntry?.numberOfPages).toBe(5);
