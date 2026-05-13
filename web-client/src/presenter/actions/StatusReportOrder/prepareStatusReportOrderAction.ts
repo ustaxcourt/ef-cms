@@ -14,6 +14,7 @@ export const prepareStatusReportOrderAction = ({
 }: ActionProps) => {
   const {
     additionalOrderTextArray,
+    additionalOrderText,
     dueDate,
     issueOrder,
     jurisdiction,
@@ -34,9 +35,10 @@ export const prepareStatusReportOrderAction = ({
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
-  const hasAdditionalOrderTextArray = !!additionalOrderTextArray.filter(
-    text => text,
-  ).length;
+  const normalizedAdditionalOrderTextArray =
+    additionalOrderTextArray || (additionalOrderText ? [additionalOrderText] : []);
+  const hasAdditionalOrderTextArray =
+    !!normalizedAdditionalOrderTextArray.filter(text => text).length;
 
   const dueDateFormatted = applicationContext
     .getUtilities()
@@ -82,7 +84,7 @@ export const prepareStatusReportOrderAction = ({
 
   let additionalTextLine = '';
   if (hasAdditionalOrderTextArray) {
-    const additionalOrderTextFiltered = additionalOrderTextArray.filter(
+    const additionalOrderTextFiltered = normalizedAdditionalOrderTextArray.filter(
       text => text,
     );
     additionalOrderTextFiltered.forEach((text, index) => {

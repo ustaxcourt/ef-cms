@@ -25,7 +25,7 @@ describe('validateStatusReportOrderFormAction,', () => {
       },
       state: {
         form: {
-          additionalOrderText: 'Test',
+          additionalOrderTextArray: ['Test'],
           docketEntryDescription: 'Order',
           dueDate: today,
           issueOrder:
@@ -48,7 +48,7 @@ describe('validateStatusReportOrderFormAction,', () => {
       },
       state: {
         form: {
-          additionalOrderText: 'Test',
+          additionalOrderTextArray: ['Test'],
           dueDate: 'bb-bb-bbbb',
           issueOrder:
             STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.justThisCase,
@@ -78,7 +78,7 @@ describe('validateStatusReportOrderFormAction,', () => {
       },
       state: {
         form: {
-          additionalOrderText: 'Test',
+          additionalOrderTextArray: ['Test'],
           docketEntryDescription: 'Order',
           dueDate: '2024-07-03',
           issueOrder:
@@ -99,5 +99,30 @@ describe('validateStatusReportOrderFormAction,', () => {
         dueDate: 'Due date cannot be prior to today. Enter a valid date.',
       },
     });
+  });
+
+  it('should validate successfully with multiple additional order text clauses', async () => {
+    const today = formatNow(FORMATS.YYYYMMDD);
+
+    await runAction(validateStatusReportOrderFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          additionalOrderTextArray: ['First clause', 'Second clause'],
+          docketEntryDescription: 'Order',
+          dueDate: today,
+          issueOrder:
+            STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.justThisCase,
+          jurisdiction:
+            STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
+          orderType: STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+          strickenFromTrialSessions: 'true',
+        },
+      },
+    });
+
+    expect(mockSuccessPath).toHaveBeenCalled();
   });
 });

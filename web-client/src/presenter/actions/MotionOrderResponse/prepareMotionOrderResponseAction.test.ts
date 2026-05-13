@@ -23,7 +23,7 @@ describe('prepareMotionOrderResponseAction', () => {
   };
 
   const mockForm = {
-    additionalOrderText: '',
+    additionalOrderTextArray: [''],
     dueDate: '2024-04-22',
     motionOrderResponse: true,
     responseDate: '2024-03-29',
@@ -81,7 +81,7 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          additionalOrderText: additionalText,
+          additionalOrderTextArray: [additionalText],
         },
       },
     });
@@ -334,7 +334,7 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          additionalOrderText: 'The Court expects full compliance.',
+          additionalOrderTextArray: ['The Court expects full compliance.'],
           strickenFromTrialSession: true,
         },
       },
@@ -352,6 +352,23 @@ describe('prepareMotionOrderResponseAction', () => {
     );
     expect(richText).toContain(
       'ORDERED that The Court expects full compliance.',
+    );
+  });
+
+  it('should chain multiple additional order text clauses with It is further', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          additionalOrderTextArray: ['First clause', 'Second clause'],
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      '<p class="indent-paragraph">ORDERED that First clause. It is further</p><p class="indent-paragraph">ORDERED that Second clause.</p>',
     );
   });
 

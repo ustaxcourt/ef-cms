@@ -114,6 +114,10 @@ describe('file motion response order', () => {
     );
   };
 
+  const enterAdditionalOrderText = (index: number, text: string): void => {
+    cy.get(`#additional-order-text-array-${index}`).type(text);
+  };
+
   const openOrderResponseFromInboxMessage = (
     fixture: MotionCaseFixture,
   ): void => {
@@ -205,7 +209,7 @@ describe('file motion response order', () => {
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(
         'randomstring',
       );
-      cy.get('#additional-text').type('Test additional text box');
+      enterAdditionalOrderText(0, 'Test additional text box');
       previewOrderAndAssertContentsAreMissing(unexpectedContents);
 
       openOrderResponseFromDocumentView(fixture.docketNumber);
@@ -213,7 +217,7 @@ describe('file motion response order', () => {
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
-      cy.get('#additional-text').type('Test additional text box');
+      enterAdditionalOrderText(0, 'Test additional text box');
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('[data-testid="cancel-button"]').click();
       cy.url().should('contain', `/case-detail/${fixture.docketNumber}`);
@@ -232,8 +236,23 @@ describe('file motion response order', () => {
       enterResponseDate(today);
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
-      cy.get('#additional-text').type('Test additional text box');
+      enterAdditionalOrderText(0, 'Test additional text box');
       saveDraftAndAssertContents(allOptionsExpectedContents);
+    });
+  });
+
+  it('should save a motion response order with multiple additional order text clauses', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate(today);
+      enterAdditionalOrderText(0, 'First added clause');
+      cy.contains('button', 'Add additional order text').click();
+      enterAdditionalOrderText(1, 'Second added clause');
+
+      saveDraftAndAssertContents([
+        'ORDERED that First added clause. It is further',
+        'ORDERED that Second added clause.',
+      ]);
     });
   });
 
@@ -313,7 +332,7 @@ describe('file motion response order', () => {
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
-      cy.get('#additional-text').type('Test additional text box');
+      enterAdditionalOrderText(0, 'Test additional text box');
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('[data-testid="cancel-button"]').click();
       cy.url().should('match', urlRegExp);
