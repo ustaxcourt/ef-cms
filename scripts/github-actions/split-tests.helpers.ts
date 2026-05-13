@@ -310,7 +310,7 @@ export const splitTestsCypress = (testSuite: string): string => {
   }
   const output: string = getOutputsForCurrentCiNode({
     files,
-  }).join(',');
+  }).join(' ');
 
   console.log(output);
 
@@ -339,7 +339,7 @@ export const splitTestsGlob = (testSuite: string): string => {
         path: filePath,
       }),
     ),
-  }).join(',');
+  }).join(' ');
 
   console.log(output);
 

@@ -518,7 +518,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsCypress('integration'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'cypress/local-only/tests/integration/nested/private-b.cy.ts',
           'cypress/local-only/tests/integration/private-a.cy.ts',
         ]);
@@ -569,7 +569,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsCypress('public'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'cypress/local-only/tests/accessibility/public/accessibility-public-a.cy.ts',
           'cypress/local-only/tests/integration/public/nested/public-b.cy.ts',
           'cypress/local-only/tests/integration/public/public-a.cy.ts',
@@ -611,7 +611,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('webClientUnit'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'web-client/src/beta.test.ts',
           'web-client/src/nested/alpha.test.ts',
         ]);
@@ -653,7 +653,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('shared'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'shared/src/example.test.ts',
           'shared/src/nested/another.test.ts',
         ]);
@@ -697,7 +697,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('documentGenerators'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'shared/src/business/utilities/documentGenerators/example.test.ts',
         ]);
         expect(globSyncSpy).toHaveBeenCalledWith(
@@ -733,7 +733,7 @@ describe('split-tests.helpers', () => {
           (): string => splitTestsGlob('webApi'),
         );
 
-        expect(parseDelimitedOutput(output, ',')).toEqual([
+        expect(parseDelimitedOutput(output, ' ')).toEqual([
           'web-api/src/example.test.ts',
         ]);
         // Should only be called once because the first entry is empty
