@@ -32,7 +32,9 @@ export const selectAllOptionsInForm = () => {
   cy.get('#status-report-due-date-picker').type(formatNow(FORMATS.MMDDYYYY));
   cy.get('#stricken-from-trial-sessions').check({ force: true });
   cy.get('#jurisdiction-retained').check({ force: true });
-  cy.get('#additional-order-text').type('Here is my additional order text.');
+  cy.get('#additional-order-text-array-0').type(
+    'Here is my additional order text.',
+  );
 };
 
 export const getLastDraftOrderElementFromDrafts = () => {

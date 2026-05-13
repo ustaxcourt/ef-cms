@@ -17,7 +17,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   public dueDate?: string;
   public strickenFromTrialSessions?: string;
   public jurisdiction?: string;
-  public additionalOrderText?: string;
+  public additionalOrderTextArray?: string[];
   public docketEntryDescription: string;
 
   constructor(rawProps: RawStatusReportOrderForm) {
@@ -28,7 +28,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
     this.dueDate = rawProps.dueDate;
     this.strickenFromTrialSessions = rawProps.strickenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
-    this.additionalOrderText = rawProps.additionalOrderText;
+    this.additionalOrderTextArray = rawProps.additionalOrderTextArray;
     this.docketEntryDescription = rawProps.docketEntryDescription;
   }
 
@@ -38,9 +38,12 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalOrderText: JoiValidationConstants.STRING.max(256)
+    additionalOrderTextArray: joi
+      .array()
+      .items(JoiValidationConstants.STRING.max(256).allow(''))
+      .min(1)
       .optional()
-      .allow(null, ''),
+      .allow(null),
     docketEntryDescription: JoiValidationConstants.STRING.max(80)
       .required()
       .messages({

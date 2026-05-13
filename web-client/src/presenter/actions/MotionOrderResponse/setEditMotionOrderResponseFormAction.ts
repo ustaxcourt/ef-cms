@@ -11,7 +11,14 @@ export const setEditMotionOrderResponseFormAction = ({
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-order-response-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
-  store.set(state.form, documentToEdit.draftOrderState);
+  store.set(state.form, {
+    ...documentToEdit.draftOrderState,
+    additionalOrderTextArray:
+      documentToEdit.draftOrderState.additionalOrderTextArray ||
+      (documentToEdit.draftOrderState.additionalOrderText
+        ? [documentToEdit.draftOrderState.additionalOrderText]
+        : ['']),
+  });
   store.set(
     state.docketEntryId,
     documentToEdit.draftOrderState.previousDocument.docketEntryId,

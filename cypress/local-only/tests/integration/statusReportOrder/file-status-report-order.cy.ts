@@ -129,6 +129,32 @@ describe('file status report order', () => {
         );
       });
 
+      it('should save draft with multiple additional order text clauses', () => {
+        cy.visit(`/case-detail/${docketNumber}`);
+        cy.get('#tab-document-view').click();
+        cy.contains('Status Report').click();
+        cy.get('[data-testid="status-report-order-button"]').click();
+        cy.get('#order-type-status-report').check({ force: true });
+        cy.get('#status-report-due-date-picker').type(today);
+        cy.get('#additional-order-text-array-0').type('First added clause');
+        cy.contains('button', 'Add additional order text').click();
+        cy.get('#additional-order-text-array-1').type('Second added clause');
+
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+        cy.get('[data-testid="save-draft-button"]').click();
+
+        cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+          expect(req.body.contentHtml).to.include(
+            'ORDERED that First added clause. It is further',
+          );
+          expect(req.body.contentHtml).to.include(
+            'ORDERED that Second added clause.',
+          );
+        });
+      });
+
       it('should save draft when order type is "Status Report or Stipulated Decision"', () => {
         const secondPdfLine = `ORDERED that the parties shall file a status report or proposed stipulated decision by ${formattedToday}`;
 

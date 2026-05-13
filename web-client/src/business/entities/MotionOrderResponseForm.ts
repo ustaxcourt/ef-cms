@@ -10,13 +10,14 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 
 const joi: Root = joiImported.extend(joiDate);
 
 export class MotionOrderResponseForm extends JoiValidationEntity {
   public motionOrderResponse?: boolean;
   public responseDate?: string;
-  public additionalOrderText?: string;
+  public additionalOrderTextArray?: string[];
   public dueDate?: string;
   public isOnLeadCase: boolean;
   public issueOrderFor?: (typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions)[keyof typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions];
@@ -26,7 +27,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
 
     this.motionOrderResponse = rawProps.motionOrderResponse;
     this.responseDate = rawProps.responseDate;
-    this.additionalOrderText = rawProps.additionalOrderText;
+    this.additionalOrderTextArray = rawProps.additionalOrderTextArray;
     this.dueDate = rawProps.dueDate;
     this.isOnLeadCase = rawProps.isOnLeadCase;
     this.issueOrderFor = rawProps.issueOrderFor;
@@ -38,11 +39,16 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalOrderText: joi
-      .string()
+    additionalOrderTextArray: joi
+      .array()
+      .items(
+        JoiValidationConstants.STRING.max(
+          MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
+        ).allow(''),
+      )
+      .min(1)
       .optional()
-      .max(MAX_ORDER_RESPONSE_TEXT_CHARACTERS)
-      .allow(null, '')
+      .allow(null)
       .description('Additional text for the response.')
       .messages({
         'string.max': 'Limit is 240 characters.',
