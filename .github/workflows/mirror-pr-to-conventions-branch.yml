@@ -36,14 +36,9 @@ jobs:
 
           # Save the conventions branch versions of protected files
           PROTECTED_FILES=()
-          for pattern in '**/AGENTS.md' 'AGENTS.md' '.github/copilot-instructions.md'; do
-            while IFS= read -r f; do
-              [ -n "$f" ] && PROTECTED_FILES+=("$f")
-            done < <(git ls-tree -r --name-only HEAD | grep -E "(^|/)AGENTS\.md$|copilot-instructions\.md$" || true)
-          done
-
-          # De-duplicate
-          PROTECTED_FILES=($(printf '%s\n' "${PROTECTED_FILES[@]}" | sort -u))
+          while IFS= read -r f; do
+            [ -n "$f" ] && PROTECTED_FILES+=("$f")
+          done < <(git ls-tree -r --name-only HEAD | grep -E '(^|/)AGENTS\.md$|(^|/)copilot-instructions\.md$' || true)
 
           TMPDIR=$(mktemp -d)
           for file in "${PROTECTED_FILES[@]}"; do
