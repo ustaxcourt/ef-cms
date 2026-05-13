@@ -18,7 +18,7 @@ describe('MotionOrderResponseForm', () => {
           outputFormat: FORMATS.YYYYMMDD,
           startDate: createISODateString(),
         }),
-        additionalOrderText: 'Some additional text',
+        additionalOrderTextArray: ['Some additional text'],
         isOnLeadCase: false,
         issueOrderFor:
           MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
@@ -41,7 +41,7 @@ describe('MotionOrderResponseForm', () => {
         motionOrderResponse: true,
         responseDate,
         dueDate,
-        additionalOrderText: 'Live long and prosper',
+        additionalOrderTextArray: ['Live long and prosper'],
         isOnLeadCase: true,
         issueOrderFor:
           MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
@@ -119,7 +119,7 @@ describe('MotionOrderResponseForm', () => {
           outputFormat: FORMATS.YYYYMMDD,
           startDate: createISODateString(),
         }),
-        additionalOrderText: longText,
+        additionalOrderTextArray: [longText],
         isOnLeadCase: false,
         issueOrderFor:
           MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
@@ -127,7 +127,7 @@ describe('MotionOrderResponseForm', () => {
 
       const errors = form.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        additionalOrderText: 'Limit is 240 characters.',
+        'additionalOrderTextArray-0': 'Limit is 240 characters.',
       });
     });
 
