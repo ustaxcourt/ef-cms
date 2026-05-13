@@ -1,4 +1,4 @@
-import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForSectionInteractor } from '@web-client/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { state } from '@web-client/presenter/app.cerebral';
 

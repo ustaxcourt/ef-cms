@@ -1,10 +1,10 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { fetchCurrentJudgesAsOptionsForMinuteSheetAction } from './fetchCurrentJudgesAsOptionsForMinuteSheetAction';
-import { getUsersInSectionInteractor } from '@shared/proxies/users/getUsersInSectionProxy';
+import { getUsersInSectionInteractor } from '@web-client/proxies/users/getUsersInSectionProxy';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-jest.mock('@shared/proxies/users/getUsersInSectionProxy');
+jest.mock('@web-client/proxies/users/getUsersInSectionProxy');
 
 describe('fetchCurrentJudgesAsOptionsForMinuteSheetAction', () => {
   beforeEach(() => {

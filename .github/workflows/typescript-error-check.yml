@@ -16,27 +16,36 @@ concurrency:
 jobs:
   ReduceTypeErrors:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout NodeJS Bootstrap Action
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/actions/dawson-node-bootstrap
+          sparse-checkout-cone-mode: false
       - name: Checkout USTC Staging
         uses: actions/checkout@v6
         with:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
-      - name: Checkout current branch
+      - name: Checkout Current Branch
         uses: actions/checkout@v6
         with:
           path: branchToBeCompared
-      - uses: actions/setup-node@v6
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
         with:
-          node-version-file: 'branchToBeCompared/.nvmrc'
-      - name: NPM Install in your branch
-        working-directory: ./branchToBeCompared
-        run: npm ci
-      - name: NPM Install in staging
-        working-directory: ./stagingBranch
-        run: npm ci
+          node-version-file: branchToBeCompared/.nvmrc
+          restore-cache: 'false'
+          save-cache: 'false'
+          working-directory: ./branchToBeCompared
+      - name: NPM Install in USTC Staging
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          restore-cache: 'false'
+          save-cache: 'false'
+          setup-node: 'false'
+          working-directory: ./stagingBranch
       - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
         run: npx ts-node scripts/compareTypescriptErrors.ts
