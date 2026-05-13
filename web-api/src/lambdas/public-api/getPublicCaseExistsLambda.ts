@@ -1,5 +1,5 @@
 import { genericHandler } from '../../genericHandler';
-import { getCaseExistsInteractor } from '@shared/business/useCases/getCaseExistsInteractor';
+import { getCaseExistsInteractor } from '@web-api/business/useCases/getCaseExistsInteractor';
 
 /**
  * used for fetching existence of a single case

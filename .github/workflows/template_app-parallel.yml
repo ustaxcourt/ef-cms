@@ -1,0 +1,168 @@
+name: GitHub Actions Workflow Template - DAWSON running, with parallelization
+
+on:
+  workflow_call:
+    inputs:
+      ci_environment:
+        default: 'true'
+        type: string
+      ci_node_index:
+        required: true
+        type: number
+      ci_node_total:
+        required: true
+        type: number
+      configure_sysctl:
+        default: false
+        type: boolean
+      extra_artifact_if_always:
+        default: false
+        type: boolean
+      extra_artifact_name:
+        default: ''
+        type: string
+      extra_artifact_path:
+        default: ''
+        type: string
+      fetch_depth:
+        default: 0
+        type: number
+      is_cypress:
+        default: false
+        type: boolean
+      record_jest_test_timings:
+        default: false
+        type: boolean
+      run_command:
+        required: true
+        type: string
+      upload_logs:
+        default: false
+        type: boolean
+      workflow_filename:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      CI: ${{ inputs.ci_environment }}
+      CI_NODE_TOTAL: ${{ inputs.ci_node_total }}
+      CI_NODE_INDEX: ${{ inputs.ci_node_index }}
+      JEST_TEST_RESULTS_FILE: /tmp/test-file-times/jest-results-${{ inputs.ci_node_index }}.json
+      TEST_FILE_TIMINGS_PATH: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times.json
+      TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times-shard-${{ inputs.ci_node_index }}.json
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - name: NPM Install on Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Configure sysctl limits
+        if: ${{ inputs.configure_sysctl }}
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+      - name: Restore historical test file timings
+        continue-on-error: true
+        env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          scripts/github-actions/download-historical-test-file-times.ts ${{ inputs.workflow_filename }} historical-test-file-times $TEST_FILE_TIMINGS_PATH
+      - name: Setup OpenSearch
+        uses: ankane/setup-opensearch@v1
+        with:
+          opensearch-version: 3.5.0
+      - name: Prepare Postgres
+        run: |
+          npm run migration:postgres
+          npm run migration:postgres:contract
+          npm run seed:postgres
+      - name: Create Cypress Output Directory
+        if: ${{ inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress/
+      - name: Create Test Execution Times Directory
+        run: |
+          mkdir -p /tmp/test-file-times
+      - name: Start DAWSON
+        run: |
+          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt &
+      - name: Wait for DAWSON to be ready
+        run: |
+          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+      - name: Run tests
+        run: |
+          ${{ inputs.run_command }}
+      - name: Record shard test file timings
+        if: ${{ success() && inputs.record_jest_test_timings }}
+        run: |
+          if [[ -f "${JEST_TEST_RESULTS_FILE}" ]]; then
+            scripts/github-actions/test-file-times.ts from-jest "${JEST_TEST_RESULTS_FILE}" "${TEST_FILE_TIMINGS_SHARD_FILE}"
+          fi
+      - name: Upload DAWSON logs
+        if: ${{ always() && inputs.upload_logs }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}
+          path: /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt
+      - name: Compile Cypress Videos
+        if: ${{ always() && inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress-videos
+          if [ -d ${{ github.workspace }}/cypress/deployed-and-local/videos ]; then
+            mv ${{ github.workspace }}/cypress/deployed-and-local/videos/* /tmp/cypress-videos/
+          fi
+          if [ -d ${{ github.workspace }}/cypress/local-only/videos ]; then
+            mv ${{ github.workspace }}/cypress/local-only/videos/* /tmp/cypress-videos/
+          fi
+      - name: Upload Cypress videos
+        if: ${{ always() && inputs.is_cypress }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-cypress-videos-shard-${{ inputs.ci_node_index }}
+          path: /tmp/cypress-videos
+      - name: Upload extra artifact
+        if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}-shard-${{ inputs.ci_node_index }}
+          path: ${{ inputs.extra_artifact_path }}
+      - name: Upload extra artifact (even in case of failure)
+        if: ${{ always() && inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}-shard-${{ inputs.ci_node_index }}
+          path: ${{ inputs.extra_artifact_path }}
+      - name: Store shard test file timings
+        uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          if-no-files-found: ignore
+          name: ${{ inputs.workflow_filename }}-historical-test-file-times-shard-${{ inputs.ci_node_index }}
+          path: ${{ env.TEST_FILE_TIMINGS_SHARD_FILE }}

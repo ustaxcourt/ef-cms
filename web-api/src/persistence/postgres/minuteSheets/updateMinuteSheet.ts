@@ -1,5 +1,5 @@
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
@@ -11,7 +11,14 @@ export const upsertMinuteSheet = async ({
     docketNumber: string;
     content: MinuteSheet;
   };
-}) => {
+}): Promise<
+  | {
+      trialSessionId: string;
+      docketNumber: string;
+      content: MinuteSheet;
+    }
+  | undefined
+> => {
   const newOrUpdatedMinuteSheet = await getDbWriter({
     cb: writer =>
       writer
@@ -32,9 +39,5 @@ export const upsertMinuteSheet = async ({
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
-  return transformNullToUndefined(newOrUpdatedMinuteSheet) as {
-    trialSessionId: string;
-    docketNumber: string;
-    content: MinuteSheet;
-  };
+  return transformNullToUndefined(newOrUpdatedMinuteSheet);
 };

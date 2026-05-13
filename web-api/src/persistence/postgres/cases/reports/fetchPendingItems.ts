@@ -1,6 +1,6 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { Case } from '@shared/business/entities/cases/Case';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 

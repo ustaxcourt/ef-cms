@@ -21,7 +21,7 @@ export const setForHearingInteractor = async (
     trialSessionId,
   }: { calendarNotes: string; docketNumber: string; trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_FOR_HEARING)) {
     throw new UnauthorizedError('Unauthorized');
   }

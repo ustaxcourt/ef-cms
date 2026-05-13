@@ -1,7 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type CaseWorksheetTableRow = {

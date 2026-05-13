@@ -9,6 +9,7 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
+import { PublicLogin } from './Public/PublicLogin';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
 import { PublicTrialSessionDetails } from '@web-client/views/Public/TrialSessions/PublicTrialSessionDetails';
@@ -30,6 +31,7 @@ const pages = {
   HealthCheck,
   DawsonLibrary,
   Interstitial,
+  Login: PublicLogin,
   Privacy,
   PublicCaseDetail,
   PublicPrintableDocketRecord,

@@ -1,7 +1,4 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { getLastDraftOrderElementFromDrafts } from '../../../support/statusReportOrder';
 import {
   loginAsColvin,
@@ -20,38 +17,65 @@ import { createStatusReport } from 'cypress/helpers/caseDetail/docketRecord/cour
 
 describe('should default status report order descriptions', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
+  const setup = {
+    scheduledCaseDocketNumber: '',
+    trialSessionId: '',
+    unscheduledCaseDocketNumber: '',
+  };
 
-  let unscheduledCaseDocketNumber: string;
-  let scheduledCaseDocketNumber: string;
-  before(() => {
-    loginAsPetitionsClerk1();
+  const createUnscheduledCaseWithStatusReport =
+    (): Cypress.Chainable<string> => {
+      return createAndServePaperPetition().then(({ docketNumber }) => {
+        createStatusReport(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
 
-    // create scheduled case
-    createTrialSession().then(({ trialSessionId }) => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        scheduledCaseDocketNumber = docketNumber;
+        return cy.wrap(docketNumber);
+      });
+    };
+
+  const createScheduledCaseWithStatusReport = (): Cypress.Chainable<string> => {
+    return createTrialSession().then(({ trialSessionId }) => {
+      setup.trialSessionId = trialSessionId;
+
+      return createAndServePaperPetition().then(({ docketNumber }) => {
         createStatusReport(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
         calendarTrialSession(trialSessionId);
         scheduleTrialSession(docketNumber, trialSessionId);
+
+        return cy.wrap(docketNumber);
       });
     });
+  };
 
-    // create unscheduled case
-    createAndServePaperPetition().then(({ docketNumber }) => {
-      unscheduledCaseDocketNumber = docketNumber;
-      createStatusReport(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+  const openLatestDraftAsDocketClerk = (docketNumber: string): void => {
+    loginAsDocketClerk();
+    cy.visit(`/case-detail/${docketNumber}`);
+    cy.get('#tab-drafts').click();
+    getLastDraftOrderElementFromDrafts().click();
+    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+  };
+
+  before(() => {
+    loginAsPetitionsClerk1();
+
+    return createScheduledCaseWithStatusReport().then(scheduledDocketNumber => {
+      setup.scheduledCaseDocketNumber = scheduledDocketNumber;
+
+      return createUnscheduledCaseWithStatusReport().then(
+        unscheduledDocketNumber => {
+          setup.unscheduledCaseDocketNumber = unscheduledDocketNumber;
+        },
+      );
     });
   });
 
   it('should display default description when document type is an Order', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, unscheduledCaseDocketNumber);
-    loginAsDocketClerk();
-    cy.visit(`/case-detail/${unscheduledCaseDocketNumber}`);
-    cy.get('#tab-drafts').click();
-    getLastDraftOrderElementFromDrafts().click();
-    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    judgeOrChambersCreatesStatusReportOrder(
+      today,
+      setup.unscheduledCaseDocketNumber,
+    );
+    openLatestDraftAsDocketClerk(setup.unscheduledCaseDocketNumber);
     cy.get('[data-testid="court-issued-document-type-search"]').should(
       'have.text',
       'Order',
@@ -67,15 +91,15 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, {
-      jurisdictionRetained: true,
-      isCalendared: true,
-    });
-    loginAsDocketClerk();
-    cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
-    cy.get('#tab-drafts').click();
-    getLastDraftOrderElementFromDrafts().click();
-    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    judgeOrChambersCreatesStatusReportOrder(
+      today,
+      setup.scheduledCaseDocketNumber,
+      {
+        jurisdictionRetained: true,
+        isCalendared: true,
+      },
+    );
+    openLatestDraftAsDocketClerk(setup.scheduledCaseDocketNumber);
     cy.get('[data-testid="court-issued-document-type-search"]').should(
       'have.text',
       'Order that jurisdiction is retained',
@@ -92,16 +116,16 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should continue to handle OJR and set correct signing judge when status order report is signed by chambers user', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, {
-      jurisdictionRetained: true,
-      chambersUser: true,
-      isCalendared: true,
-    });
-    loginAsDocketClerk();
-    cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
-    cy.get('#tab-drafts').click();
-    getLastDraftOrderElementFromDrafts().click();
-    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    judgeOrChambersCreatesStatusReportOrder(
+      today,
+      setup.scheduledCaseDocketNumber,
+      {
+        jurisdictionRetained: true,
+        chambersUser: true,
+        isCalendared: true,
+      },
+    );
+    openLatestDraftAsDocketClerk(setup.scheduledCaseDocketNumber);
     cy.get('[data-testid="court-issued-document-type-search"]').should(
       'have.text',
       'Order that jurisdiction is retained',

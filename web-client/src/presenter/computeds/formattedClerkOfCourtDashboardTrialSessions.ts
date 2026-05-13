@@ -2,10 +2,12 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  calculateISODate,
   createDateAtStartOfWeekEST,
-  createISODateString,
+  createEndOfDayISO,
+  createISODateAtStartOfDayEST,
+  deconstructDate,
   FORMATS,
-  prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
 import {
   DAYS_IN_WEEK,
@@ -44,14 +46,21 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
 } => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
-  const today = createISODateString();
-  const currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
-  const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
+  const today = createISODateAtStartOfDayEST();
+  let currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
+  currentWeekStart = applicationContext
+    .getUtilities()
+    .createISODateString(currentWeekStart, FORMATS.ISO);
 
-  const currentWeekEndISO = currentWeekStartDateTime
-    .plus({ days: DAYS_TO_WEEK_END })
-    .endOf('day')
-    .toISO();
+  const currentWeekEndDay = calculateISODate({
+    dateString: currentWeekStart,
+    howMuch: DAYS_TO_WEEK_END,
+    units: 'days',
+  });
+
+  const currentWeekEndISO = createEndOfDayISO(
+    deconstructDate(currentWeekEndDay),
+  );
 
   if (!currentWeekEndISO) {
     return {
@@ -62,27 +71,34 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
 
   const currentWeekEnd = currentWeekEndISO;
 
-  const nextWeekStartDateTime = currentWeekStartDateTime.plus({
-    days: DAYS_IN_WEEK,
+  const nextWeekAnyDayDateTimeISO = calculateISODate({
+    dateString: today,
+    howMuch: DAYS_IN_WEEK,
+    units: 'days',
   });
 
-  const nextWeekStartDateTimeISO = nextWeekStartDateTime.toISO();
-  if (!nextWeekStartDateTimeISO) {
+  if (!nextWeekAnyDayDateTimeISO) {
     return {
       formattedCurrentWeekSessions: [],
       formattedNextWeekSessions: [],
     };
   }
 
-  const nextWeekStart = createDateAtStartOfWeekEST(
-    nextWeekStartDateTimeISO,
+  let nextWeekStart = createDateAtStartOfWeekEST(
+    nextWeekAnyDayDateTimeISO,
     FORMATS.ISO,
   );
+  nextWeekStart = applicationContext
+    .getUtilities()
+    .createISODateString(nextWeekStart, FORMATS.ISO);
 
-  const nextWeekEndISO = nextWeekStartDateTime
-    .plus({ days: DAYS_TO_WEEK_END })
-    .endOf('day')
-    .toISO();
+  const nextWeekEndDay = calculateISODate({
+    dateString: nextWeekStart,
+    howMuch: DAYS_TO_WEEK_END,
+    units: 'days',
+  });
+
+  const nextWeekEndISO = createEndOfDayISO(deconstructDate(nextWeekEndDay));
 
   if (!nextWeekEndISO) {
     return {

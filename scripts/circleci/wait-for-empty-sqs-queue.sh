@@ -1,17 +1,32 @@
 #!/bin/bash -e
 
+# This script can be used in CircleCI to wait for an SQS queue to clear before proceeding. For example,
+# insert the following immediately before the call to `npm run switch-colors` in the 'switch-colors' job:
+#       - run:
+#           no_output_timeout: 65m
+#           name: Wait for Change of Address SQS Queue to Drain
+#           command: |
+#             ./scripts/circleci/wait-for-empty-sqs-queue.sh "change_of_address_queue_${ENV}_${CURRENT_COLOR}"
+
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \
   "AWS_ACCOUNT_ID" \
   "AWS_SECRET_ACCESS_KEY" \
-  "CURRENT_COLOR" \
   "ENV" \
   "REGION"
 
-QUEUE_URL="https://sqs.${REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/change_of_address_queue_${ENV}_${CURRENT_COLOR}"
-POLL_INTERVAL="${1:-30}"
-MAX_WAIT="${2:-3600}"
+QUEUE_NAME="${1:-}"
+POLL_INTERVAL="${2:-30}"
+MAX_WAIT="${3:-3600}"
 
+if [[ -z "${QUEUE_NAME}" ]]; then
+  echo "Usage: $0 <queue-name> [poll-interval-seconds] [max-wait-seconds]"
+  exit 1
+fi
+
+QUEUE_URL="https://sqs.${REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/${QUEUE_NAME}"
+
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 echo "Waiting for SQS queue to drain: ${QUEUE_URL}"
 
 elapsed=0

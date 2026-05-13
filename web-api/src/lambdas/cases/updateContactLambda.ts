@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { updateContactInteractor } from '@shared/business/useCases/updateContactInteractor';
+import { updateContactInteractor } from '@web-api/business/useCases/updateContactInteractor';
 
 /**
  * used for updating a contact on a case

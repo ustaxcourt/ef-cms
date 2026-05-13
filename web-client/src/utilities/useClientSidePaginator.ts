@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-type PaginationResult<T> = {
+export type PaginationResult<T> = {
   activePage: number;
   pageRecords: T[];
   setActivePage: React.Dispatch<React.SetStateAction<number>>;
