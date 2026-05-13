@@ -14,7 +14,7 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   testMatch: [
-    '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
+    '**/shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
   ],
   testTimeout: 30000,
   transform: {
