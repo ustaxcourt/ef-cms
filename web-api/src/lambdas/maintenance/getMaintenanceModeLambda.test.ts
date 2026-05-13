@@ -1,9 +1,9 @@
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
-jest.mock('@shared/business/useCases/getMaintenanceModeInteractor', () => ({
+jest.mock('@web-api/business/useCases/getMaintenanceModeInteractor', () => ({
   getMaintenanceModeInteractor: jest.fn(),
 }));
 
-import { getMaintenanceModeInteractor as getMaintenanceModeInteractorMock } from '@shared/business/useCases/getMaintenanceModeInteractor';
+import { getMaintenanceModeInteractor as getMaintenanceModeInteractorMock } from '@web-api/business/useCases/getMaintenanceModeInteractor';
 import { getMaintenanceModeLambda } from './getMaintenanceModeLambda';
 
 const getMaintenanceModeInteractor = jest.mocked(

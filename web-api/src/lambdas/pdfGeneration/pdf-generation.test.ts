@@ -1,4 +1,4 @@
-jest.mock('@shared/business/utilities/chromium/getChromiumBrowser', () => ({
+jest.mock('@web-api/business/utilities/chromium/getChromiumBrowser', () => ({
   getChromiumBrowser: jest.fn(),
 }));
 jest.mock('@web-api/business/useCaseHelper/generatePdfFromHtmlHelper', () => ({
@@ -9,7 +9,7 @@ jest.mock('@web-api/persistence/s3/saveDocumentFromLambda', () => ({
 }));
 
 import { generatePdfFromHtmlHelper as generatePdfFromHtmlHelperMock } from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
-import { getChromiumBrowser as getChromiumBrowserMock } from '@shared/business/utilities/chromium/getChromiumBrowser';
+import { getChromiumBrowser as getChromiumBrowserMock } from '@web-api/business/utilities/chromium/getChromiumBrowser';
 import { handler as pdfGenerationHandler } from './pdf-generation';
 import { saveDocumentFromLambda as saveDocumentFromLambdaMock } from '@web-api/persistence/s3/saveDocumentFromLambda';
 
