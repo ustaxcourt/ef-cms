@@ -44,7 +44,7 @@ export const trialSessionWorkingCopyHelper = (
 
   const formattedCases = (trialSession.calendaredCases || [])
     .slice()
-    .filter(isOpenCaseInATrial)
+    .filter(isCaseInTrial)
     .filter(calendaredCase =>
       isCaseTrialStatusEnabledInFilters(
         calendaredCase,
@@ -106,7 +106,7 @@ export const trialSessionWorkingCopyHelper = (
       label: 'Unassigned',
     });
   const trialStatusCounts = trialSession.calendaredCases
-    .filter(isOpenCaseInATrial)
+    .filter(isCaseInTrial)
     .reduce((counters, c) => {
       if (
         caseMetadata[c.docketNumber] === undefined ||
@@ -163,7 +163,7 @@ function isTopLevelCase(
   );
 }
 
-function isOpenCaseInATrial(aCase: CalendaredCaseItemType): boolean {
+function isCaseInTrial(aCase: CalendaredCaseItemType): boolean {
   return aCase.removedFromTrial !== true;
 }
 

@@ -319,7 +319,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
-      documents: expect.arrayContaining([]),
+      documents: expect.arrayContaining([expect.anything()]),
       onProgress: expect.anything(),
       outputZipName: 'September_26_2019-Birmingham.zip',
     });

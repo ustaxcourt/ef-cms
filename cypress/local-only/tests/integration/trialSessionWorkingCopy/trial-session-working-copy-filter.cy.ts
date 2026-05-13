@@ -96,9 +96,7 @@ describe('trials session working copies filtering', () => {
     ).should('contain', '(3)');
   });
   it('should have all docket numbers set to statusUnassigned on initial load', () => {
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
+    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned"]')
       .find('span')
       .invoke('text')
       .then(text => {
@@ -109,9 +107,7 @@ describe('trials session working copies filtering', () => {
     cy.get(
       '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
     ).click();
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
+    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned"]')
       .find('span')
       .invoke('text')
       .then(text => {
@@ -122,9 +118,7 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'basisReached',
     );
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
+    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned"]')
       .find('span')
       .invoke('text')
       .then(text => {
@@ -144,9 +138,7 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'statusUnassigned',
     );
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
+    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned"]')
       .find('span')
       .invoke('text')
       .then(text => {
@@ -161,7 +153,7 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid="print-public-session-working-copy"]').click();
     cy.get('[data-testid="back-to-session-link"]').as('backToSessionLink');
     cy.get('@backToSessionLink').should('have.text', 'Back to Session Copy');
-     cy.get('.big-blue-header').within(() => {
+    cy.get('.big-blue-header').within(() => {
       cy.get('h1').should('contain.text', 'Richmond, Virginia');
     });
     cy.get('@backToSessionLink').click();
@@ -169,5 +161,39 @@ describe('trials session working copies filtering', () => {
       'have.text',
       'Print Public Copy',
     );
+  });
+
+  it('should include closed dismissed cases in the working copy list', () => {
+    // Get the first docket number from the working copy
+    cy.get('[data-testid^="trialSessionWorkingCopy-"]')
+      .first()
+      .invoke('attr', 'data-testid')
+      .then(testId => {
+        const docketNumber =
+          testId?.replace('trialSessionWorkingCopy-', '') || '';
+
+        // Update the first case to closedDismissed status
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.closedDismissed);
+
+        // Navigate back to the trial session working copy
+        loginAsColvin();
+        cy.get('[data-testid="trial-session-link"]').click();
+        cy.get(
+          `[data-testid="trial-location-link-${newTrialSessionId}"]`,
+        ).click();
+
+        // Verify the closed dismissed case is still displayed in the working copy
+        cy.get(
+          `[data-testid="trialSessionWorkingCopy-${docketNumber}"]`,
+        ).should('exist');
+
+        // Verify all three cases are still visible (closed dismissed should not be filtered out)
+        cy.get('[data-testid^="trialSessionWorkingCopy-"]').should(
+          'have.length',
+          3,
+        );
+      });
   });
 });
