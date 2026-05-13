@@ -79,7 +79,7 @@ const addCaseToTrialSession = async (
   caseEntity.setAsCalendared(trialSessionEntity);
 
   await withTransaction(async () => {
-    const updatedCaseData = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
@@ -94,8 +94,6 @@ const addCaseToTrialSession = async (
         },
       ],
     });
-
-    return updatedCaseData;
   });
 };
 
