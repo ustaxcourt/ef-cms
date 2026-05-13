@@ -1,4 +1,4 @@
-import { getMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/getMinuteSheetProxy';
+import { getMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/getMinuteSheetProxy';
 import { isEmpty } from 'lodash';
 
 export const checkForExistingMinuteSheetAction = async ({ path, props }) => {

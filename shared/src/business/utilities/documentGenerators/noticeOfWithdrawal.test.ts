@@ -1,6 +1,6 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
-import { noticeOfWithdrawal } from './noticeOfWithdrawal';
+import { noticeOfWithdrawal } from '@web-api/business/utilities/documentGenerators/noticeOfWithdrawal';
 
 describe('noticeOfWithdrawal', () => {
   generateAndVerifyPdfDiff({

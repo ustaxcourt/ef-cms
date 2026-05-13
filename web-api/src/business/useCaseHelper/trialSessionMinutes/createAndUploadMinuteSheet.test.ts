@@ -3,7 +3,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { NotFoundError } from '@web-api/errors/errors';
 import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
 import { formatMinuteSheet } from './formatMinuteSheet';
-import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
+import { minuteSheet as minuteSheetDocumentGenerator } from '@web-api/business/utilities/documentGenerators/minuteSheet';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 import { mockFormattedMinuteSheet } from './mockFormattedMinuteSheet';
@@ -12,7 +12,7 @@ jest.mock('@web-api/persistence/postgres/minuteSheets/getMinuteSheet');
 jest.mock(
   '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet',
 );
-jest.mock('@shared/business/utilities/documentGenerators/minuteSheet');
+jest.mock('@web-api/business/utilities/documentGenerators/minuteSheet');
 jest.mock('@web-api/persistence/s3/uploadDocument');
 
 describe('createAndUploadMinuteSheet', () => {

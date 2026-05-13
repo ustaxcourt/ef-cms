@@ -4,11 +4,11 @@ import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
-import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
-jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
+jest.mock('@web-api/business/utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),
 }));
 const mockGetJudgeWithTitle: jest.MockedFunction<typeof getJudgeWithTitle> =

@@ -14,15 +14,15 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   testMatch: [
-    '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
+    '**/shared/src/business/utilities/documentGenerators/**/?(*.)+(spec|test).[jt]s',
   ],
   testTimeout: 30000,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    // '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`, //this is to ignore imported html files
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid|pixelmatch)'],
-  workerIdleMemoryLimit: '5%', // After a jest runner uses X% of total system memory, recreate the runner.
+  // After a jest runner uses X% of total system memory, recreate the runner.
+  workerIdleMemoryLimit: '5%',
 };
 
 export default config;
