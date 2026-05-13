@@ -185,10 +185,10 @@ Many of the Cypress tests may be run against the locally running resources.
 
 ### Manual Runs
 
-Rather than running using the pre-defined NPM scripts, you may want to try a  different combination of options. This can be done by running `./scripts/run-cypress.sh` with options. There is a help function available to describe the options available. It can be run with the following command:
+Rather than running using the pre-defined NPM scripts, you may want to try a different combination of options. This can be done by running `./scripts/tests/run-cypress.ts` with options. There is a help function available to describe the options available. It can be run with the following command:
 
 ```shell
-./scripts/run-cypress.sh -h
+./scripts/tests/run-cypress.ts -h
 ```
 
 ?> NOTE:\
