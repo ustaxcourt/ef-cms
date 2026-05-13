@@ -30,10 +30,7 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
-import {
-  withTransaction,
-  onTransactionCommit,
-} from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -206,54 +203,52 @@ export const addPaperFiling = async (
         caseToUpdate: caseEntity.validate().toRawObject(),
       });
     }
+  });
 
-    let paperServicePdfUrl;
+  let paperServicePdfUrl;
 
-    if (isReadyForService) {
-      const currentDocketEntry = caseEntities[0].getDocketEntryById({
-        docketEntryId,
-      });
-      const electronicParties =
-        currentDocketEntry?.eventCode ===
-        INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
-          ? []
-          : undefined;
-
-      const paperServiceResult = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
-          applicationContext,
-          caseEntities,
-          docketEntryId,
-          electronicParties,
-          stampedPdf: undefined,
-        });
-
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-    }
-
-    const successMessage =
-      consolidatedGroupDocketNumbers.length > 1
-        ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-        : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
-
-    onTransactionCommit(async () => {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'serve_document_complete',
-          alertSuccess: {
-            message: successMessage,
-            overwritable: false,
-          },
-          docketEntryId,
-          generateCoversheet: isReadyForService,
-          pdfUrl: paperServicePdfUrl,
-        },
-        userId: user.userId,
-      });
+  if (isReadyForService) {
+    const currentDocketEntry = caseEntities[0].getDocketEntryById({
+      docketEntryId,
     });
+    const electronicParties =
+      currentDocketEntry?.eventCode ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+        ? []
+        : undefined;
+
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities,
+        docketEntryId,
+        electronicParties,
+        stampedPdf: undefined,
+      });
+
+    paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+  }
+
+  const successMessage =
+    consolidatedGroupDocketNumbers.length > 1
+      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      docketEntryId,
+      generateCoversheet: isReadyForService,
+      pdfUrl: paperServicePdfUrl,
+    },
+    userId: user.userId,
   });
 };
 
