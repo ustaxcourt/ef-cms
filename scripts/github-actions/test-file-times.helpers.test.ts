@@ -26,18 +26,12 @@ describe('test-file-times', () => {
           '/repo/web-client/integration-tests/example.test.ts',
           '/repo',
         ),
-      ).toEqual('./web-client/integration-tests/example.test.ts');
+      ).toEqual('web-client/integration-tests/example.test.ts');
     });
 
-    it('prefixes relative paths with dot slash', () => {
-      expect(
-        normalizeTestFilePath('cypress/local-only/tests/example.cy.ts'),
-      ).toEqual('./cypress/local-only/tests/example.cy.ts');
-    });
-
-    it('preserves existing dot slash prefixes', () => {
+    it('removes existing dot slash prefixes', () => {
       expect(normalizeTestFilePath('./already-normalized.test.ts')).toEqual(
-        './already-normalized.test.ts',
+        'already-normalized.test.ts',
       );
     });
   });
@@ -46,8 +40,8 @@ describe('test-file-times', () => {
     it('writes and reads standardized timing files', () => {
       const filePath = path.join(tempDir, 'nested', 'timings.json');
       const testFileTimes = {
-        './a.test.ts': 1000,
-        './b.test.ts': 2000,
+        'a.test.ts': 1000,
+        'b.test.ts': 2000,
       };
 
       writeTestFileTimes({
@@ -68,15 +62,15 @@ describe('test-file-times', () => {
       expect(
         mergeTestFileTimes([
           {
-            './a.test.ts': 1000,
+            'a.test.ts': 1000,
           },
           {
-            './b.test.ts': 2000,
+            'b.test.ts': 2000,
           },
         ]),
       ).toEqual({
-        './a.test.ts': 1000,
-        './b.test.ts': 2000,
+        'a.test.ts': 1000,
+        'b.test.ts': 2000,
       });
     });
   });
@@ -127,7 +121,7 @@ describe('test-file-times', () => {
           },
         }),
       ).toEqual({
-        './shared/src/example.test.ts': 1500,
+        'shared/src/example.test.ts': 1500,
       });
     });
 
@@ -146,7 +140,7 @@ describe('test-file-times', () => {
           },
         }),
       ).toEqual({
-        './shared/src/example.test.ts': 1,
+        'shared/src/example.test.ts': 1,
       });
     });
 
@@ -163,7 +157,7 @@ describe('test-file-times', () => {
           },
         }),
       ).toEqual({
-        './shared/src/example.test.ts': 1,
+        'shared/src/example.test.ts': 1,
       });
     });
   });
@@ -188,7 +182,7 @@ describe('test-file-times', () => {
           },
         }),
       ).toEqual({
-        './cypress/local-only/tests/integration/example.cy.ts': 4321,
+        'cypress/local-only/tests/integration/example.cy.ts': 4321,
       });
     });
 
@@ -225,7 +219,7 @@ describe('test-file-times', () => {
           },
         }),
       ).toEqual({
-        './cypress/local-only/tests/integration/example.cy.ts': 1,
+        'cypress/local-only/tests/integration/example.cy.ts': 1,
       });
     });
   });
@@ -258,7 +252,7 @@ describe('test-file-times', () => {
       testFileTimes(['from-jest', inputFilePath, outputFilePath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
-        './scripts/example.test.ts': 15,
+        'scripts/example.test.ts': 15,
       });
     });
 
@@ -285,7 +279,7 @@ describe('test-file-times', () => {
       testFileTimes(['from-cypress', inputFilePath, outputFilePath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
-        './cypress/example.cy.ts': 1234,
+        'cypress/example.cy.ts': 1234,
       });
     });
 
@@ -295,17 +289,14 @@ describe('test-file-times', () => {
       const outputFilePath = path.join(tempDir, 'merged.json');
       const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
 
-      fs.writeFileSync(leftFilePath, JSON.stringify({ './left.test.ts': 10 }));
-      fs.writeFileSync(
-        rightFilePath,
-        JSON.stringify({ './right.test.ts': 20 }),
-      );
+      fs.writeFileSync(leftFilePath, JSON.stringify({ 'left.test.ts': 10 }));
+      fs.writeFileSync(rightFilePath, JSON.stringify({ 'right.test.ts': 20 }));
 
       testFileTimes(['merge', outputFilePath, leftFilePath, rightFilePath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
-        './left.test.ts': 10,
-        './right.test.ts': 20,
+        'left.test.ts': 10,
+        'right.test.ts': 20,
       });
       expect(consoleLogSpy).toHaveBeenCalledWith(
         `Merged 2 shard timing files into ${outputFilePath} (2 test files).`,
@@ -322,18 +313,18 @@ describe('test-file-times', () => {
       fs.mkdirSync(directoryPath, { recursive: true });
       fs.writeFileSync(
         path.join(directoryPath, 'second.json'),
-        JSON.stringify({ './right.test.ts': 20 }),
+        JSON.stringify({ 'right.test.ts': 20 }),
       );
       fs.writeFileSync(
         path.join(directoryPath, 'first.json'),
-        JSON.stringify({ './left.test.ts': 10 }),
+        JSON.stringify({ 'left.test.ts': 10 }),
       );
 
       testFileTimes(['merge-directory', outputFilePath, directoryPath]);
 
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
-        './left.test.ts': 10,
-        './right.test.ts': 20,
+        'left.test.ts': 10,
+        'right.test.ts': 20,
       });
       expect(consoleLogSpy).toHaveBeenCalledWith(
         `Merged 2 shard timing files into ${outputFilePath} (2 test files).`,

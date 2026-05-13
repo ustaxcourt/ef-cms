@@ -30,16 +30,14 @@ export const normalizeTestFilePath = (
   const normalizedFilePath = filePath.replace(/\\/gu, '/');
 
   if (path.isAbsolute(filePath)) {
-    const relativePath = path.relative(cwd, filePath).replace(/\\/gu, '/');
-
-    return `./${relativePath}`;
+    return path.relative(cwd, filePath).replace(/\\/gu, '/');
   }
 
   if (normalizedFilePath.startsWith('./')) {
-    return normalizedFilePath;
+    return normalizedFilePath.substring(2);
   }
 
-  return `./${normalizedFilePath}`;
+  return normalizedFilePath;
 };
 
 export const readTestFileTimes = (filePath: string): TestFileTimes => {

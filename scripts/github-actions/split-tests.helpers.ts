@@ -339,7 +339,7 @@ export const splitTestsGlob = (testSuite: string): string => {
         path: filePath,
       }),
     ),
-  }).join('\\|');
+  }).join(',');
 
   console.log(output);
 

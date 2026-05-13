@@ -17,7 +17,11 @@ describe('AWS Batch - Docket Entries Download', () => {
     });
   });
 
-  after(() => {
+  after(function () {
+    if (getCypressEnv().isLocal) {
+      return;
+    }
+
     cy.get('@ORIGINAL_FEATUE_FLAG_VALUE').then(ORIGINAL_FEATUE_FLAG_VALUE => {
       cy.task('toggleFeatureFlag', {
         flag: 'aws-batch-zipper-minimum-count',

@@ -26,7 +26,14 @@ describe('Verify verification email', () => {
     cy.task('deleteAllItemsInEmailBucket', { bucketName });
   });
 
-  after(() => {
+  after(function () {
+    if (
+      getCypressEnv().isLocal ||
+      Cypress.env('MIGRATE') ||
+      Cypress.env('DISABLE_EMAILS')
+    ) {
+      return;
+    }
     cy.task('deleteAllItemsInEmailBucket', {
       bucketName,
       retries: 5,
