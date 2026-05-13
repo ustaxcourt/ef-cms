@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { generateDraftStampOrderInteractor } from '@shared/business/useCases/generateDraftStampOrderInteractor';
+import { generateDraftStampOrderInteractor } from '@web-api/business/useCases/generateDraftStampOrderInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

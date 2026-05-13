@@ -3,7 +3,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { fromPath } from 'pdf2pic';
 import { generatePdfFromHtmlHelper } from '../../../../../web-api/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../../../../web-api/src/business/useCases/pdf/generatePdfFromHtmlInteractor';
-import { getChromiumBrowser } from '../chromium/getChromiumBrowser';
+import { getChromiumBrowser } from '@web-api/business/utilities/chromium/getChromiumBrowser';
 import fs from 'fs';
 import path from 'path';
 import pixelmatch from 'pixelmatch';

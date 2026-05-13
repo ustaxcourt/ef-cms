@@ -1,4 +1,4 @@
-import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { JudgeActivityReportSearch } from '@web-api/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateJudgeActivityReportSearchAction = ({

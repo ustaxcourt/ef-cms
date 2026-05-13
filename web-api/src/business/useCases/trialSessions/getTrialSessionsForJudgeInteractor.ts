@@ -8,16 +8,10 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
-/**
- * getTrialSessionsForJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {Array<TrialSession>} the trial sessions returned from persistence
- */
 export const getTrialSessionsForJudgeInteractor = async (
   judgeId: string,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<TrialSessionInfoDTO[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }

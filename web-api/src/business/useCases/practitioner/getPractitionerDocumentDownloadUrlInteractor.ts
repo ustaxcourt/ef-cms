@@ -1,13 +1,13 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getPractitionerDocumentByFileId } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
 
-type PractitionerDocumentDownloadUrl = { url: string; };
+export type PractitionerDocumentDownloadUrl = { url: string };
 
 export const getPractitionerDocumentDownloadUrlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -31,13 +31,9 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
     fileId: practitionerDocumentFileId,
   });
 
-  const policyUrl = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      filename: practitionerDocument?.fileName,
-      key: practitionerDocumentFileId,
-    });
-
-  return policyUrl;
+  return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    filename: practitionerDocument?.fileName,
+    key: practitionerDocumentFileId,
+  });
 };
