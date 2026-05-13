@@ -28,7 +28,6 @@ export const getNotificationsInteractor = async (
   qcIndividualInboxCount: number;
   qcSectionInProgressCount: number;
   qcSectionInboxCount: number;
-  qcUnreadCount: number;
   unreadMessageCount: number;
   userInboxCount: number;
   userSectionCount: number;
@@ -90,19 +89,21 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
+  const qcIndividualInProgressCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters['my']['inProgress']),
+  );
 
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
-    filters['section']['inbox'],
-  ).length;
+  const qcIndividualInboxCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters['my']['inbox']),
+  );
+
+  const qcSectionInProgressCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters['section']['inProgress']),
+  );
+
+  const qcSectionInboxCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters['section']['inbox']),
+  );
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
@@ -119,12 +120,36 @@ export const getNotificationsInteractor = async (
   return {
     qcIndividualInProgressCount,
     qcIndividualInboxCount,
-    qcSectionInProgressCount: qcSectionInProgressCount || 0,
-    qcSectionInboxCount: qcSectionInboxCount || 0,
-    qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
-      .length,
+    qcSectionInProgressCount,
+    qcSectionInboxCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };
+};
+
+const countUniqueWorkItems = workItems => {
+  let count = 0;
+  const consolidatedGroups = new Map();
+
+  for (const workItem of workItems) {
+    const multiDocketedOnLength =
+      workItem.docketEntry.multiDocketedOn?.length ?? 0;
+
+    if (multiDocketedOnLength < 2) {
+      count += 1;
+    } else {
+      const key = workItem.docketEntryId;
+
+      if (!consolidatedGroups.has(key)) {
+        consolidatedGroups.set(key, []);
+      }
+
+      consolidatedGroups.get(key)!.push(workItem);
+    }
+  }
+
+  count += consolidatedGroups.size;
+
+  return count;
 };
