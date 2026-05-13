@@ -61,7 +61,7 @@ export const completeDocumentSigningAction = async ({
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
-      .saveSignedDocumentInteractor(appContext, {
+      .saveSignedDocumentInteractor(applicationContext, {
         docketNumber,
         nameForSigning,
         originalDocketEntryId,

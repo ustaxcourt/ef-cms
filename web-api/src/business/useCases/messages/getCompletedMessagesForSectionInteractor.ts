@@ -20,7 +20,7 @@ export const getCompletedMessagesForSectionInteractor = async (
   _applicationContext: ServerApplicationContext,
   { section }: { section },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<ExcludeMethods<MessageResult>[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }

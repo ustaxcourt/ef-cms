@@ -1,5 +1,5 @@
 import { genericHandler } from '../../genericHandler';
-import { getMaintenanceModeInteractor } from '@shared/business/useCases/getMaintenanceModeInteractor';
+import { getMaintenanceModeInteractor } from '@web-api/business/useCases/getMaintenanceModeInteractor';
 
 /**
  * used for fetching the value of maintenance mode

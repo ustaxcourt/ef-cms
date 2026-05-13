@@ -20,7 +20,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';

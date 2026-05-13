@@ -12,11 +12,14 @@ import { formattedClerkOfCourtDashboardTrialSessions as formattedClerkOfCourtDas
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 import {
+  calculateISODate,
   createDateAtStartOfWeekEST,
+  createEndOfDayISO,
   createISODateString,
+  deconstructDate,
   FORMATS,
-  prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
+import * as DateHandler from '@shared/business/utilities/DateHandler';
 
 const formattedClerkOfCourtDashboardTrialSessions = withAppContextDecorator(
   formattedClerkOfCourtDashboardTrialSessionsComputed,
@@ -24,33 +27,60 @@ const formattedClerkOfCourtDashboardTrialSessions = withAppContextDecorator(
 );
 
 describe('formattedClerkOfCourtDashboardTrialSessions', () => {
+  let mockToday = DateHandler.createISODateAtStartOfDayEST();
+
+  beforeEach(() => {
+    jest
+      .spyOn(DateHandler, 'createISODateAtStartOfDayEST')
+      .mockImplementation(() => mockToday);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    mockToday = DateHandler.createISODateString();
+  });
+
   const getCurrentWeekStart = () => {
-    const today = createISODateString();
-    return createDateAtStartOfWeekEST(today, FORMATS.ISO);
+    const today = DateHandler.createISODateAtStartOfDayEST();
+    const weekStart = DateHandler.createDateAtStartOfWeekEST(
+      today,
+      FORMATS.ISO,
+    );
+    return DateHandler.createISODateString(weekStart, FORMATS.ISO);
   };
 
   const getCurrentWeekEnd = () => {
     const weekStart = getCurrentWeekStart();
-    const weekStartDateTime = prepareDateFromString(weekStart);
-    return weekStartDateTime
-      .plus({ days: DAYS_TO_WEEK_END })
-      .endOf('day')
-      .toISO()!;
+    const currentWeekEndDay = calculateISODate({
+      dateString: weekStart,
+      howMuch: DAYS_TO_WEEK_END,
+      units: 'days',
+    });
+    return createEndOfDayISO(deconstructDate(currentWeekEndDay));
   };
 
   const getNextWeekStart = () => {
-    const weekStart = getCurrentWeekStart();
-    const weekStartDateTime = prepareDateFromString(weekStart);
-    return weekStartDateTime.plus({ days: DAYS_IN_WEEK }).toISO()!;
+    const today = DateHandler.createISODateAtStartOfDayEST();
+    const nextWeekAnyDayDateTimeISO = calculateISODate({
+      dateString: today,
+      howMuch: DAYS_IN_WEEK,
+      units: 'days',
+    });
+    const nextWeekStart = createDateAtStartOfWeekEST(
+      nextWeekAnyDayDateTimeISO,
+      FORMATS.ISO,
+    );
+    return createISODateString(nextWeekStart, FORMATS.ISO);
   };
 
   const getNextWeekEnd = () => {
     const nextWeekStart = getNextWeekStart();
-    const nextWeekStartDateTime = prepareDateFromString(nextWeekStart);
-    return nextWeekStartDateTime
-      .plus({ days: DAYS_TO_WEEK_END })
-      .endOf('day')
-      .toISO()!;
+    const nextWeekEndDay = calculateISODate({
+      dateString: nextWeekStart,
+      howMuch: DAYS_TO_WEEK_END,
+      units: 'days',
+    });
+    return createEndOfDayISO(deconstructDate(nextWeekEndDay));
   };
 
   const createTrialSession = (
@@ -93,7 +123,7 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
         }),
         createTrialSession({
           trialSessionId: '3',
-          startDate: createISODateString(),
+          startDate: DateHandler.createISODateAtStartOfDayEST(),
           trialLocation: 'Jacksonville, FL',
           judge: { name: 'Judge 3', userId: '3' },
         }),
@@ -108,10 +138,14 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
       expect(result.formattedCurrentWeekSessions.length).toBe(2);
       expect(result.formattedNextWeekSessions.length).toBe(1);
       expect(
-        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '1'),
+        result.formattedCurrentWeekSessions.some(
+          s => s.trialSessionId === '1',
+        ),
       ).toBe(true);
       expect(
-        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '3'),
+        result.formattedCurrentWeekSessions.some(
+          s => s.trialSessionId === '3',
+        ),
       ).toBe(true);
       expect(
         result.formattedNextWeekSessions.some(s => s.trialSessionId === '2'),
@@ -175,10 +209,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
     it('excludes sessions outside current and next week', () => {
       const currentWeekStart = getCurrentWeekStart();
-      const pastDate = prepareDateFromString(currentWeekStart)
+      const pastDate = DateHandler.prepareDateFromString(currentWeekStart)
         .minus({ days: 7 })
         .toISO()!;
-      const futureDate = prepareDateFromString(getNextWeekEnd())
+      const futureDate = DateHandler.prepareDateFromString(getNextWeekEnd())
         .plus({ days: 1 })
         .toISO()!;
 
@@ -253,7 +287,9 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
   describe('field formatting', () => {
     it('formats all required fields correctly', () => {
       const currentWeekStart = getCurrentWeekStart();
-      const estimatedEndDate = prepareDateFromString(currentWeekStart)
+      const estimatedEndDate = DateHandler.prepareDateFromString(
+        currentWeekStart,
+      )
         .plus({ days: 3 })
         .toISO()!;
 
@@ -370,7 +406,8 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
   describe('sorting', () => {
     it('sorts sessions by start date', () => {
       const currentWeekStart = getCurrentWeekStart();
-      const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
+      const currentWeekStartDateTime =
+        DateHandler.prepareDateFromString(currentWeekStart);
 
       const TRIAL_SESSIONS = [
         createTrialSession({
@@ -409,7 +446,7 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
   describe('edge cases', () => {
     it('returns empty arrays when no sessions match', () => {
-      const pastDate = prepareDateFromString(getCurrentWeekStart())
+      const pastDate = DateHandler.prepareDateFromString(getCurrentWeekStart())
         .minus({ days: 14 })
         .toISO()!;
 

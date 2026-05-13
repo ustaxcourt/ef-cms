@@ -1,4 +1,4 @@
-import { getCurrentUserToken } from '@shared/proxies/requests';
+import { getCurrentUserToken } from '@web-client/proxies/requests';
 
 const getUploadPolicy = async ({ applicationContext, key }) => {
   const response = await applicationContext

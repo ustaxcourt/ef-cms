@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@web-api/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
