@@ -10,7 +10,7 @@ export const getDocumentContentsForDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
   { documentContentsId }: { documentContentsId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ documentContents: string; richText: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -28,7 +28,10 @@ export const getDocumentContentsForDocketEntryInteractor = async (
       new TextDecoder('utf-8').decode(documentContentsFile),
     );
 
-    return documentContentsData;
+    return {
+      documentContents: documentContentsData.documentContents,
+      richText: documentContentsData.richText,
+    };
   } catch (e) {
     applicationContext.logger.error(
       `Document contents ${documentContentsId} could not be found in the S3 bucket. ${e}`,

@@ -8,7 +8,7 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { NoticeOfChangeToInPersonTrialInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
 
 export type GenerateNoticeOfChangeToInPersonTrialInfo = Omit<

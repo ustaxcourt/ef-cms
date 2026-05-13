@@ -5,7 +5,10 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -15,18 +18,11 @@ import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
-/**
- * deleteTrialSession
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise} the promise of the deleteTrialSession call
- */
 export const deleteTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawTrialSession> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }

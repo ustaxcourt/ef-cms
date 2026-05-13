@@ -4,7 +4,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { ElectronicPetition } from './ElectronicPetition';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 
 describe('ElectronicPetition', () => {
   describe('for (international) Contacts', () => {

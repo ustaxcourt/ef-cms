@@ -15,10 +15,11 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
-} from '@shared/business/utilities/calculateEmail';
-import { inTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
-
-
+} from '@web-api/business/utilities/calculateEmail';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * This function isolates task of generating the Docket Entry

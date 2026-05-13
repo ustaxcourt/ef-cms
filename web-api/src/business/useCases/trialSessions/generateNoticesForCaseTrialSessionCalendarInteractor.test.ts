@@ -6,7 +6,7 @@ import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
+jest.mock('@web-api/business/utilities/shouldAppendClinicLetter');
 jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 jest.mock('@web-api/persistence/postgres/utils/transactions');
 import {
@@ -24,7 +24,7 @@ import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
-import { shouldAppendClinicLetter as shouldAppendClinicLetterMock } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter as shouldAppendClinicLetterMock } from '@web-api/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';

@@ -1,2 +1,7 @@
+#!/bin/bash
+
+HAS_CIRCLECI=0
+(command -v circleci > /dev/null) && HAS_CIRCLECI=1
+
 npx lint-staged
-circleci config validate
+[[ "$HAS_CIRCLECI" -eq 1 ]] && circleci config validate

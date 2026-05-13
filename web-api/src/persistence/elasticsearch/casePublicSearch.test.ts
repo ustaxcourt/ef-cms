@@ -8,7 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { search as searchMock } from './searchClient';
 
-jest.mock('@shared/business/utilities/aggregateCommonQueryParams', () => {
+jest.mock('@web-api/business/utilities/aggregateCommonQueryParams', () => {
   return {
     aggregateCommonQueryParams: () => ({
       commonQuery: ['commonQueryMock'],
