@@ -9,11 +9,66 @@ import {
 import { logout } from '../../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
+type DocketRecordSortTest = {
+  columnId: string;
+  defaultSort?: boolean;
+  fieldName: string;
+  sortButtonId: string;
+};
+
+const docketRecordSortTests: DocketRecordSortTest[] = [
+  {
+    columnId: 'docket-entry-filedDate',
+    defaultSort: true,
+    fieldName: 'date',
+    sortButtonId: 'sortingFilingDate-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-index',
+    fieldName: 'index',
+    sortButtonId: 'index-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-eventCode',
+    fieldName: 'event code',
+    sortButtonId: 'eventCode-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-filingsAndProceedings',
+    fieldName: 'filings and proceedings',
+    sortButtonId: 'descriptionDisplay-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-numberOfPages',
+    fieldName: 'number of pages',
+    sortButtonId: 'numberOfPages-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-filedBy',
+    fieldName: 'filed by',
+    sortButtonId: 'filedBy-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-action',
+    fieldName: 'action',
+    sortButtonId: 'action-sortable-button',
+  },
+  {
+    columnId: 'docket-record-cell-not-served',
+    fieldName: 'served',
+    sortButtonId: 'servedAt-sortable-button',
+  },
+  {
+    columnId: 'docket-entry-servedPartiesCode',
+    fieldName: 'served parties',
+    sortButtonId: 'servedPartiesCode-sortable-button',
+  },
+];
+
 describe('Docket record sort', () => {
-  before(() => {
+  it('should display the docket record in the correct order and allow mobile sort changes on a fresh case', () => {
     loginAsPetitioner();
     externalUserCreatesElectronicCase().then(docketNumber => {
-      cy.wrap(docketNumber).as('DOCKET_NUMBER');
       petitionsClerkServesPetition(docketNumber);
       logout();
       loginAsDocketClerk();
@@ -28,100 +83,7 @@ describe('Docket record sort', () => {
         documentType: 'Motion for a New Trial',
       });
       goToCase(docketNumber);
-    });
-  });
-
-  beforeEach(() => {
-    cy.reload(true);
-    cy.keepAliases();
-  });
-
-  it('should display docket entries in default sort order', () => {
-    getColumnTextFields('docket-entry-filedDate').then(columnTextFields => {
-      const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
-        sortColumnsAsc,
-      );
-
-      expect(columnTextFields).to.deep.equal(sortedColumnsTextFieldsAsc);
-    });
-  });
-
-  [
-    {
-      columnId: 'docket-entry-index',
-      fieldName: 'index',
-      sortButtonId: 'index-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-filedDate',
-      defaultSort: true,
-      fieldName: 'date',
-      sortButtonId: 'sortingFilingDate-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-eventCode',
-      fieldName: 'event code',
-      sortButtonId: 'eventCode-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-filingsAndProceedings',
-      fieldName: 'filings and proceedings',
-      sortButtonId: 'descriptionDisplay-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-numberOfPages',
-      fieldName: 'number of pages',
-      sortButtonId: 'numberOfPages-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-filedBy',
-      fieldName: 'filed by',
-      sortButtonId: 'filedBy-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-action',
-      fieldName: 'action',
-      sortButtonId: 'action-sortable-button',
-    },
-    {
-      columnId: 'docket-record-cell-not-served',
-      fieldName: 'served',
-      sortButtonId: 'servedAt-sortable-button',
-    },
-    {
-      columnId: 'docket-entry-servedPartiesCode',
-      fieldName: 'served parties',
-      sortButtonId: 'servedPartiesCode-sortable-button',
-    },
-  ].forEach(testInfo => {
-    it(`should display docket entries in correct order when sorting by ${testInfo.fieldName} ascending and descending`, () => {
-      if (!testInfo.defaultSort) {
-        cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
-      }
-      getColumnTextFields(testInfo.columnId).then(columnTextFields => {
-        const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
-          sortColumnsAsc,
-        );
-
-        expect(columnTextFields).to.deep.equal(sortedColumnsTextFieldsAsc);
-      });
-
-      cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
-
-      getColumnTextFields(testInfo.columnId).then(columnTextFields => {
-        const sortedColumnsTextFieldsDesc = [...columnTextFields]
-          .sort(sortColumnsAsc)
-          .reverse();
-        expect(columnTextFields).to.deep.equal(sortedColumnsTextFieldsDesc);
-      });
-    });
-  });
-
-  describe('Mobile View', () => {
-    beforeEach(() => {
       cy.viewport('iphone-5');
-    });
-    it('should update the dropdown value when user selects an option', () => {
       cy.get('[data-testid="docket-record-sort-select"]').should(
         'have.value',
         'byDate',
@@ -131,18 +93,60 @@ describe('Docket record sort', () => {
         'have.value',
         'byIndexDesc',
       );
+
+      cy.viewport(1200, 900);
+      cy.reload(true);
+
+      getColumnTextFields('docket-entry-filedDate').then(columnTextFields => {
+        const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
+          sortColumnsAsc,
+        );
+
+        expect(columnTextFields).to.deep.equal(sortedColumnsTextFieldsAsc);
+      });
+
+      docketRecordSortTests.forEach(testInfo => {
+        if (!testInfo.defaultSort) {
+          cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
+        }
+        getColumnTextFields(testInfo.columnId).then(columnTextFields => {
+          const sortedColumnsTextFieldsAsc = [...columnTextFields].sort(
+            sortColumnsAsc,
+          );
+
+          expect(
+            columnTextFields,
+            `${testInfo.fieldName} should sort ascending`,
+          ).to.deep.equal(sortedColumnsTextFieldsAsc);
+        });
+
+        cy.get(`[data-testid="${testInfo.sortButtonId}"]`).click();
+
+        getColumnTextFields(testInfo.columnId).then(columnTextFields => {
+          const sortedColumnsTextFieldsDesc = [...columnTextFields]
+            .sort(sortColumnsAsc)
+            .reverse();
+
+          expect(
+            columnTextFields,
+            `${testInfo.fieldName} should sort descending`,
+          ).to.deep.equal(sortedColumnsTextFieldsDesc);
+        });
+      });
     });
   });
 });
 
-const getColumnTextFields = (dataTestId: string) => {
+const getColumnTextFields = (
+  dataTestId: string,
+): Cypress.Chainable<string[]> => {
   return cy.get(`[data-testid^="${dataTestId}"]`).then($cells => {
     return $cells.toArray().map(cell => cell.innerText);
   });
 };
 
-function sortColumnsAsc(a: string, b: string) {
-  const getPriority = (value: string) => {
+function sortColumnsAsc(a: string, b: string): number {
+  const getPriority = (value: string): number => {
     if (value === '') return 1;
     if (value?.toLocaleLowerCase() === 'not served') return 2;
     return 0;

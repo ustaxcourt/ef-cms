@@ -100,11 +100,14 @@ describe('Petitioner Updates e-mail', () => {
       changeEmailTo(updatedEmail);
       clickConfirmModal();
       confirmEmailPendingAlert();
+      logout();
 
       cy.task('getEmailVerificationToken', {
         email,
       }).then(verificationToken => {
-        cy.visit(`/verify-email?token=${verificationToken}`);
+        cy.visit(
+          `${getCypressEnv().publicSiteUrl}/verify-email?token=${verificationToken}`,
+        );
       });
 
       cy.get('[data-testid="success-alert"]')
@@ -113,7 +116,6 @@ describe('Petitioner Updates e-mail', () => {
           'contain.text',
           'Your email address is verified. You can now log in to DAWSON.',
         );
-      cy.url().should('contain', '/login');
       loginAsPetitioner(updatedEmail);
 
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -186,7 +188,7 @@ describe('Petitioner Updates e-mail', () => {
     changeEmailTo(updatedEmail);
     clickConfirmModal();
 
-    cy.visit('/verify-email?token=hello_world');
+    cy.visit(`${getCypressEnv().publicSiteUrl}/verify-email?token=hello_world`);
     cy.get('[data-testid^="error-alert"]')
       .should('be.visible')
       .and(

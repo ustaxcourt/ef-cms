@@ -1,25 +1,20 @@
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import {
+  IrsPractitioner,
+  RawIrsPractitioner,
+} from '@shared/business/entities/IrsPractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getPractitionersBySearchKey } from '@web-api/persistence/postgres/users/getPractitionersBySearchKey';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 
-/**
- * getIrsPractitionersBySearchKeyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} params the params object
- * @param {string} params.searchKey the search string entered by the user
- * @returns {*} the result
- */
 export const getIrsPractitionersBySearchKeyInteractor = async (
   { searchKey }: { searchKey: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawIrsPractitioner[]> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {

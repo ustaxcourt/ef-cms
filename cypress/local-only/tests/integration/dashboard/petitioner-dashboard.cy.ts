@@ -5,9 +5,9 @@ describe('Petitioner views dashboard', () => {
   it('should display filing fee column', () => {
     loginAsPetitioner('petitioner@example.com');
     cy.get('[data-testid="case-list-table"]');
-    cy.get('[data-testid="filing-fee"]');
+    cy.get('[data-testid="filingFee-sortable-button"]');
     externalUserCreatesElectronicCase().then(docketNumber => {
-      cy.get('[data-testid="filing-fee"]');
+      cy.get('[data-testid="filingFee-sortable-button"]');
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="petition-payment-status"]')
         .should('have.text', 'Not paid');

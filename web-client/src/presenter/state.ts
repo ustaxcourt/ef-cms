@@ -5,7 +5,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
@@ -1004,7 +1004,7 @@ export const baseState = {
   },
   tableSort: {
     sortField: 'createdAt',
-    sortOrder: ASCENDING,
+    sortOrder: ASCENDING as 'asc' | 'desc',
   },
   tabName: undefined as string | undefined,
   testUsers: [] as RawUser[],
@@ -1063,6 +1063,10 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  caseListTableSort: {
+    sortField: 'filedDate',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  },
 };
 
 export const initialState = {
@@ -1102,13 +1106,13 @@ export type ServiceIndicatorType =
 
 export type PractitionerDetail = {
   admissionsDate: string;
-  admissionStatus: string;
+  admissionsStatus: string;
   barNumber: string;
   name: string;
   practiceType: PracticeType;
   serviceIndicator?: ServiceIndicatorType;
   userId: string;
-  birthYear?: string;
+  birthYear?: number;
   originalBarState?: string;
   practitionerType?: string;
   middleName?: string;
