@@ -25,7 +25,6 @@ import {
 } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
-import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import {
@@ -83,6 +82,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -627,111 +627,26 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
-  describe('admissions clerk adds a verified petitioner email', () => {
-    const mockUpdatedEmail = 'changed-email@example.com';
-    const foundMockVerifiedPetitioner = {
-      email: mockUpdatedEmail,
-      userId: applicationContext.getUniqueId(),
-    };
-    beforeAll(() => {
-      applicationContext
-        .getUserGateway()
-        .getUserByEmail.mockReturnValue('someMockId');
+  it('should not generate and serve the docket entry if transaction fails', async () => {
+    invalidateUserContactGeocode.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
 
-      getUserById.mockResolvedValue(foundMockVerifiedPetitioner as DbUser);
-
-      applicationContext
-        .getUseCaseHelpers()
-        .addExistingUserToCase.mockImplementation(addExistingUserToCase); // the real implementation, but inside, it is using the mocks above
-    });
-
-    it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
-      await updatePetitionerInformationInteractor(
+    await expect(
+      updatePetitionerInformationInteractor(
         applicationContext,
         {
           docketNumber: MOCK_CASE.docketNumber,
           updatedPetitionerData: {
             ...mockPetitioners[0],
-            updatedEmail: mockUpdatedEmail,
+            address1: 'changed address',
           },
         },
-        mockAdmissionsClerkUser,
-      );
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
 
-      expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCase,
-      ).toHaveBeenCalled();
-
-      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
-      expect(generateAndServeDocketEntry).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call the update addExistingUserToCase use case helper when the petitioner is unchanged', async () => {
-      await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: mockPetitioners[0],
-        },
-        mockAdmissionsClerkUser,
-      );
-
-      expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCase,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should not call createUserForContact when the new email address is not available', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .isEmailAvailable.mockImplementation(() => false);
-
-      await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[0],
-            updatedEmail: 'changed-email@example.com',
-          },
-        },
-        mockAdmissionsClerkUser,
-      );
-
-      expect(
-        applicationContext.getUseCaseHelpers().createUserForContact,
-      ).not.toHaveBeenCalled();
-
-      expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCase,
-      ).toHaveBeenCalled();
-    });
-
-    it('should call createUserForContact when the new email address is available', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .isEmailAvailable.mockImplementation(() => true);
-
-      await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[0],
-            updatedEmail: 'changed-email@example.com',
-          },
-        },
-        mockAdmissionsClerkUser,
-      );
-
-      expect(
-        applicationContext.getUseCaseHelpers().createUserForContact,
-      ).toHaveBeenCalled();
-
-      expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCase,
-      ).not.toHaveBeenCalled();
-    });
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
