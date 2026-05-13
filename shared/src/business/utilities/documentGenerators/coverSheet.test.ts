@@ -1,6 +1,6 @@
 import { MOCK_STAMP } from '@shared/test/mockStamp';
 import { PARTY_TYPES } from '../../entities/EntityConstants';
-import { Stamp } from '../../entities/Stamp';
+import { Stamp } from '@web-api/business/entities/Stamp';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { coverSheet } from './coverSheet';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';

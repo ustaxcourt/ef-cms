@@ -2,13 +2,13 @@ import { addressLabelCoverSheet } from '../../shared/src/business/utilities/docu
 import { caseInventoryReport } from '../../shared/src/business/utilities/documentGenerators/caseInventoryReport';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
-import { certificateOfService } from '@shared/business/utilities/documentGenerators/certificateOfService';
+import { certificateOfService } from '@web-api/business/utilities/documentGenerators/certificateOfService';
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
-import { entryOfAppearance } from '@shared/business/utilities/documentGenerators/entryOfAppearance';
-import { minuteSheet } from '@shared/business/utilities/documentGenerators/minuteSheet';
+import { entryOfAppearance } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
+import { minuteSheet } from '@web-api/business/utilities/documentGenerators/minuteSheet';
 import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
-import { noticeOfChangeOfTrialLocation } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
-import { noticeOfChangeOfTrialStartDate } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate';
+import { noticeOfChangeOfTrialLocation } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
+import { noticeOfChangeOfTrialStartDate } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate';
 import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
 import { noticeOfChangeToRemoteProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding';
 import { noticeOfDocketChange } from '../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange';
@@ -17,7 +17,7 @@ import { noticeOfTrialIssued } from '../../shared/src/business/utilities/documen
 import { noticeOfTrialIssuedInPerson } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson';
 import { order } from '../../shared/src/business/utilities/documentGenerators/order';
 import { pendingReport } from '../../shared/src/business/utilities/documentGenerators/pendingReport';
-import { petition } from '@shared/business/utilities/documentGenerators/petition';
+import { petition } from '@web-api/business/utilities/documentGenerators/petition';
 import { practitionerCaseList } from '../../shared/src/business/utilities/documentGenerators/practitionerCaseList';
 import { printableWorkingCopySessionList } from '../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList';
 import { receiptOfFiling } from '../../shared/src/business/utilities/documentGenerators/receiptOfFiling';
@@ -26,7 +26,7 @@ import { standingPretrialOrderForSmallCase } from '../../shared/src/business/uti
 import { thirtyDayNoticeOfTrial } from '../../shared/src/business/utilities/documentGenerators/thirtyDayNoticeOfTrial';
 import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
 import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
-import { noticeOfWithdrawal } from '@shared/business/utilities/documentGenerators/noticeOfWithdrawal';
+import { noticeOfWithdrawal } from '@web-api/business/utilities/documentGenerators/noticeOfWithdrawal';
 
 export const getDocumentGenerators = () => ({
   addressLabelCoverSheet,
