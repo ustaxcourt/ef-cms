@@ -8,6 +8,7 @@ jest.mock(
 );
 jest.mock('@web-api/business/utilities/shouldAppendClinicLetter');
 jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
@@ -31,6 +32,10 @@ import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificat
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  inTransaction as inTransactionMock,
+  onTransactionCommit as onTransactionCommitMock,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
@@ -46,6 +51,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const updateTrialSessionNotificationProcessing = jest.mocked(
     updateTrialSessionNotificationProcessingMock,
   );
+  const inTransaction = jest.mocked(inTransactionMock);
+  const onTransactionCommit = jest.mocked(onTransactionCommitMock);
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -102,6 +109,10 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     });
 
     countPagesInDocument.mockResolvedValue(1);
+  });
+
+  beforeEach(() => {
+    inTransaction.mockReturnValue(false);
   });
 
   it('should return and do nothing if the job is already processed', async () => {
@@ -433,4 +444,18 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       signedJudgeName: undefined,
     });
   });
+
+  it('should send service emails to onTransactionCommit if in a transaction', async () => {
+      inTransaction.mockReturnValueOnce(true);
+  
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+  
+      expect(
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      ).not.toHaveBeenCalled();
+      expect(onTransactionCommit).toHaveBeenCalledTimes(1);
+    });
 });

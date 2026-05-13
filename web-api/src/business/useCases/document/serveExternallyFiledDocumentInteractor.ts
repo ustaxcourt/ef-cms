@@ -22,6 +22,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -98,8 +99,9 @@ export const serveExternallyFiledDocument = async (
     );
   }
 
-  let paperServiceResult;
+  let paperServiceResult: { pdfUrl?: string } | undefined;
   let caseEntities: Case[] = [];
+  const coversheetLength = 1;
 
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
@@ -109,47 +111,49 @@ export const serveExternallyFiledDocument = async (
   docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
 
   try {
-    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
-    caseEntities = await settlePromises(
-      casesToUpdate.map(async rawCaseToUpdate => {
-        const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+    await withTransaction(async () => {
+      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+      caseEntities = await settlePromises(
+        casesToUpdate.map(async rawCaseToUpdate => {
+          const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
-        const docketEntry = caseEntity.docketEntries.find(
-          e => e.docketEntryId === docketEntryId,
-        );
+          const docketEntry = caseEntity.docketEntries.find(
+            e => e.docketEntryId === docketEntryId,
+          );
 
-        const isSubjectCase =
-          caseEntity.docketNumber === subjectCaseDocketNumber;
+          const isSubjectCase =
+            caseEntity.docketNumber === subjectCaseDocketNumber;
 
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...originalSubjectDocketEntry,
-            index: docketEntry ? docketEntry.index : undefined,
-            docketNumber: caseEntity.docketNumber,
-            draftOrderState: null,
-            ...(!subjectCaseIsSimultaneousDocType && {
-              filingDate: applicationContext
-                .getUtilities()
-                .createISODateString(),
-            }),
-            isDraft: false,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            isPendingService: isSubjectCase,
-            multiDocketedOn: docketNumbers,
-            originallyFiledDocketNumber: subjectCaseDocketNumber,
-            numberOfPages,
-          },
-          { authorizedUser },
-        );
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...originalSubjectDocketEntry,
+              index: docketEntry ? docketEntry.index : undefined,
+              docketNumber: caseEntity.docketNumber,
+              draftOrderState: null,
+              ...(!subjectCaseIsSimultaneousDocType && {
+                filingDate: applicationContext
+                  .getUtilities()
+                  .createISODateString(),
+              }),
+              isDraft: false,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              isPendingService: isSubjectCase,
+              multiDocketedOn: docketNumbers,
+              originallyFiledDocketNumber: subjectCaseDocketNumber,
+              numberOfPages: numberOfPages + coversheetLength,
+            },
+            { authorizedUser },
+          );
 
-        return fileAndServeDocumentOnOneCase({
-          caseEntity,
-          docketEntryEntity,
-          user,
-        });
-      }),
-    );
+          return fileAndServeDocumentOnOneCase({
+            caseEntity,
+            docketEntryEntity,
+            user,
+          });
+        }),
+      );
+    });
 
     const updatedSubjectCaseEntity = caseEntities.find(
       c => c.docketNumber === subjectCaseDocketNumber,

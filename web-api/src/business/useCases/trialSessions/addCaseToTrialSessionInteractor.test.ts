@@ -28,8 +28,8 @@ import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock 
 
 describe('addCaseToTrialSessionInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  jest
-    .mocked(updateCaseAndAssociationsMock)
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  updateCaseAndAssociations
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
@@ -207,5 +207,25 @@ describe('addCaseToTrialSessionInteractor', () => {
         identifiers: [`case|${MOCK_CASE.docketNumber}`],
       }),
     );
+  });
+
+  it('should not update trial session if transaction fails', async () => {
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      addCaseToTrialSessionInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: mockTrialSession.trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
   });
 });
