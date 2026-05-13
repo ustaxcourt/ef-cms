@@ -39,7 +39,7 @@ describe('prepareStatusReportOrderAction,', () => {
       state: {
         caseDetail: {},
         form: {
-          additionalOrderText: undefined,
+          additionalOrderTextArray: undefined,
           docketEntryDescription: 'Order',
           dueDate: undefined,
           jurisdiction: undefined,
@@ -62,12 +62,12 @@ describe('prepareStatusReportOrderAction,', () => {
   });
 
   it('prepare status report with all options selected', async () => {
-    const additionalOrderText = 'Test Additional Order Text';
+    const additionalOrderTextArray = ['Test Additional Order Text'];
     const jurisdiction =
       STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained;
     const orderType = STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport;
     const strickenFromTrialSessions = true;
-    const expectedFullText = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Document no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test Additional Order Text</p>`;
+    const expectedFullText = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Document no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test Additional Order Text.</p>`;
 
     const result = await runAction(prepareStatusReportOrderAction, {
       modules: {
@@ -76,7 +76,7 @@ describe('prepareStatusReportOrderAction,', () => {
       state: {
         caseDetail: {},
         form: {
-          additionalOrderText,
+          additionalOrderTextArray,
           dueDate,
           jurisdiction,
           orderType,
@@ -93,6 +93,31 @@ describe('prepareStatusReportOrderAction,', () => {
     });
 
     expect(result.state.form.richText).toEqual(expectedFullText);
+  });
+
+  it('chains multiple additional order text clauses with It is further', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          additionalOrderTextArray: ['First clause', 'Second clause'],
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      '<p class="indent-paragraph">ORDERED that First clause. It is further</p><p class="indent-paragraph">ORDERED that Second clause.</p>',
+    );
   });
 
   it.each([

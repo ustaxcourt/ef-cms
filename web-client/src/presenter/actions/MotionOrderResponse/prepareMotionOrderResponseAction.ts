@@ -29,6 +29,7 @@ export const prepareMotionOrderResponseAction = ({
 }: ActionProps) => {
   const {
     additionalOrderTextArray,
+    additionalOrderText,
     dueDate,
     responseDate,
     strickenFromTrialSession,
@@ -61,9 +62,10 @@ export const prepareMotionOrderResponseAction = ({
 
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
-  const hasAdditionalOrderTextArray = !!additionalOrderTextArray.filter(
-    text => text,
-  ).length;
+  const normalizedAdditionalOrderTextArray =
+    additionalOrderTextArray || (additionalOrderText ? [additionalOrderText] : []);
+  const hasAdditionalOrderTextArray =
+    !!normalizedAdditionalOrderTextArray.filter(text => text).length;
 
   const dueDateFormatted = isValidDateString(dueDate, [
     FORMATS.YYYYMMDD,
@@ -118,7 +120,7 @@ export const prepareMotionOrderResponseAction = ({
 
   let additionalTextLine = '';
   if (hasAdditionalOrderTextArray) {
-    const additionalOrderTextFiltered = additionalOrderTextArray.filter(
+    const additionalOrderTextFiltered = normalizedAdditionalOrderTextArray.filter(
       text => text,
     );
     additionalOrderTextFiltered.forEach((text, index) => {
