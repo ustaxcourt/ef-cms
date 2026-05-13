@@ -1,0 +1,132 @@
+name: GitHub Actions Workflow Template - DAWSON running
+
+on:
+  workflow_call:
+    inputs:
+      check_deploy_date_interval:
+        default: ''
+        type: string
+      configure_sysctl:
+        default: false
+        type: boolean
+      extra_artifact_if_always:
+        default: false
+        type: boolean
+      extra_artifact_name:
+        default: ''
+        type: string
+      extra_artifact_path:
+        default: ''
+        type: string
+      fetch_depth:
+        default: 1
+        type: number
+      is_cypress:
+        default: false
+        type: boolean
+      run_command:
+        required: true
+        type: string
+      upload_logs:
+        default: false
+        type: boolean
+      workflow_filename:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      CHECK_DEPLOY_DATE_INTERVAL: ${{ inputs.check_deploy_date_interval }}
+    services:
+      postgres:
+        image: postgres:17.9-trixie
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Configure sysctl limits
+        if: ${{ inputs.configure_sysctl }}
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+      - name: Setup OpenSearch
+        uses: ankane/setup-opensearch@v1
+        with:
+          opensearch-version: 3.5.0
+      - name: Prepare Postgres
+        run: |
+          npm run migration:postgres
+          npm run migration:postgres:contract
+          npm run seed:postgres
+      - name: Create Cypress Output Directory
+        if: ${{ inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress/
+      - name: Start DAWSON
+        run: |
+          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output.txt &
+      - name: Wait for DAWSON to be ready
+        run: |
+          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+      - name: Run tests
+        run: |
+          ${{ inputs.run_command }}
+      - name: Upload DAWSON logs
+        if: ${{ always() && inputs.upload_logs }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: dawson-output
+          path: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
+      - name: Compile Cypress Videos
+        if: ${{ always() && inputs.is_cypress }}
+        run: |
+          mkdir -p /tmp/cypress-videos
+          if [ -d ${{ github.workspace }}/cypress/deployed-and-local/videos ]; then
+            mv ${{ github.workspace }}/cypress/deployed-and-local/videos/* /tmp/cypress-videos/
+          fi
+          if [ -d ${{ github.workspace }}/cypress/local-only/videos ]; then
+            mv ${{ github.workspace }}/cypress/local-only/videos/* /tmp/cypress-videos/
+          fi
+      - name: Upload Cypress videos
+        if: ${{ always() && inputs.is_cypress }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-cypress-videos
+          path: /tmp/cypress-videos
+      - name: Upload extra artifact
+        if: ${{ inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && !inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}
+          path: ${{ inputs.extra_artifact_path }}
+      - name: Upload extra artifact (even in case of failure)
+        if: ${{ always() && inputs.extra_artifact_name != '' && inputs.extra_artifact_path != '' && inputs.extra_artifact_if_always }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-${{ inputs.extra_artifact_name }}
+          path: ${{ inputs.extra_artifact_path }}

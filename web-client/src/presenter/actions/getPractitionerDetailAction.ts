@@ -20,11 +20,17 @@ export const getPractitionerDetailAction = async ({
   const { barNumber } = props;
   const user = get(state.user);
 
-  const practitionerDetail: PractitionerDetail = await applicationContext
+  const practitionerResult = await applicationContext
     .getUseCases()
     .getPractitionerByBarNumberInteractor(applicationContext, {
       barNumber,
     });
+
+  const practitionerDetail: PractitionerDetail | undefined = Array.isArray(
+    practitionerResult,
+  )
+    ? (practitionerResult[0] as PractitionerDetail | undefined)
+    : (practitionerResult as PractitionerDetail);
 
   if (
     practitionerDetail &&

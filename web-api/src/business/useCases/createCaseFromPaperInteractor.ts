@@ -4,7 +4,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
+import { PaperPetition } from '@web-api/business/entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
