@@ -8,7 +8,7 @@ import { validateTrialSessionInteractor } from '@web-client/business/useCases/tr
 import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 
 describe('validateTrialSessionInteractor', () => {
-  it('returns a list of erros when the edit trial session is invalid', () => {
+  it('returns a list of errors when the edit trial session is invalid', () => {
     const errors = validateTrialSessionInteractor({
       trialSession: { trialSessionId: '123' } as RawEditTrialSession,
     });
