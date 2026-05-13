@@ -103,6 +103,7 @@ describe('updateTrialSessionInteractor', () => {
     it('should update estimated end date if CSS user and start date is in the past', async () => {
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
+        isCalendared: true,
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
       });
@@ -112,6 +113,7 @@ describe('updateTrialSessionInteractor', () => {
         {
           trialSession: {
             ...TEST_TRIAL_SESSION,
+            isCalendared: true,
             trialSessionId: TEST_TRIAL_SESSION_ID,
             startDate: '2000-03-01T21:40:46.415Z',
             estimatedEndDate: '2000-04-01T21:40:46.415Z',
@@ -154,10 +156,39 @@ describe('updateTrialSessionInteractor', () => {
       );
     });
 
+    it('should throw an error if CSS user tries to edit a non-calendared session after start date', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        isCalendared: false,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              ...TEST_TRIAL_SESSION,
+              isCalendared: false,
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2000-03-01T21:40:46.415Z',
+              estimatedEndDate: '2000-04-01T21:40:46.415Z',
+            },
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockCaseServicesSupervisorUser,
+        ),
+      ).rejects.toThrow(
+        'Non-calendared trial sessions cannot be updated after their start date.',
+      );
+    });
+
     it('should throw an error if CSS user tries to edit non allowed field when start date is today or in the past', async () => {
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
         address1: 'old',
+        isCalendared: true,
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
         estimatedEndDate: tomorrow,
