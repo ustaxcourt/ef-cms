@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable import/no-default-export */
-/* eslint-disable promise/no-nesting */
 import { clean } from 'esbuild-plugin-clean';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
@@ -187,6 +185,11 @@ export default async function ({
             from: ['node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'],
             keepStructure: true,
             to: ['.'],
+          },
+          {
+            from: ['node_modules/pdfjs-dist/wasm/**'],
+            keepStructure: true,
+            to: ['./wasm'],
           },
         ],
       }),
