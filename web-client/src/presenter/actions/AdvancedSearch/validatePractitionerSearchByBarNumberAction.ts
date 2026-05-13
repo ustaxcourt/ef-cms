@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { BarNumberSearchValidation } from '@shared/business/entities/BarNumberSearchValidation';
+import { BarNumberSearchValidation } from '@web-client/business/entities/BarNumberSearchValidation';
 
 /**
  * validate practitioner search by bar number form

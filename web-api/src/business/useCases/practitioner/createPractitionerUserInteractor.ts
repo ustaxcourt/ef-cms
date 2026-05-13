@@ -6,8 +6,8 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
-import { createPractitionerUser } from '@shared/business/utilities/createPractitionerUser';
-import { userDataCanGenerateValidBarNumber } from '@shared/business/utilities/userDataCanGenerateValidBarNumber';
+import { createPractitionerUser } from '@web-api/business/utilities/createPractitionerUser';
+import { userDataCanGenerateValidBarNumber } from '@web-api/business/utilities/userDataCanGenerateValidBarNumber';
 
 export const createPractitionerUserInteractor = async (
   { user }: { user: RawPractitioner },

@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Stamp } from '@shared/business/entities/Stamp';
+import { Stamp } from '@web-api/business/entities/Stamp';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -19,7 +19,7 @@ import { orderBy } from 'lodash';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { setDocumentTitle } from '@shared/business/utilities/setDocumentTitle';
+import { setDocumentTitle } from '@web-api/business/utilities/setDocumentTitle';
 import { getUniqueId } from '@shared/sharedAppContext';
 
 /**

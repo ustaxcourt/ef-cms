@@ -5,7 +5,7 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type FormattedPractitionerSearchResultType = {
