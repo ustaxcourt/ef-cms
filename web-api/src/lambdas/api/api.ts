@@ -19,7 +19,6 @@ export const handler = (event, context) => {
   // this will be an object which causes serverless-express to crash.
   event.body =
     typeof event.body === 'string' ? event.body : JSON.stringify(event.body);
-  // @ts-ignore
   return awsServerlessExpress({
     app,
   })(event, context);
