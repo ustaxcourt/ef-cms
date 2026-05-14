@@ -118,8 +118,13 @@ function constructCaseForUser({
     isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)
   ) {
     return useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
-      : new Case(rawCase, { authorizedUser: user });
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
+      : new Case(rawCase, { authorizedUser: user, filtered: true });
   }
 
   // Users who do not have access to all case data should not see docket entries that are not on the record, like drafts,
@@ -151,8 +156,13 @@ function constructCaseForUser({
   // Petitioners and practitioners on a case have full read access to the case
   if (userIsAssociated) {
     const caseResult = useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
-      : new Case(rawCase, { authorizedUser: user });
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
+      : new Case(rawCase, { authorizedUser: user, filtered: true });
 
     for (const petitioner of caseResult.petitioners) {
       delete petitioner.contactEmailAddress;
@@ -169,8 +179,13 @@ function constructCaseForUser({
     })
   ) {
     return useDTO
-      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
-      : new Case(rawCase, { authorizedUser: user });
+      ? new CaseDTO(
+          new Case(rawCase, {
+            authorizedUser: user,
+            filtered: true,
+          }).toRawObject(),
+        )
+      : new Case(rawCase, { authorizedUser: user, filtered: true });
   }
 
   // User is logged in but neither has permissions to view all cases nor is associated with the case,
