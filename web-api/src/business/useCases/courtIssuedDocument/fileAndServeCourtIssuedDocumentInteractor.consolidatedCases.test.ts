@@ -50,6 +50,8 @@ describe('consolidated cases', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const mockDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
+  const clientConnectionId = 'ABC123';
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -60,7 +62,7 @@ describe('consolidated cases', () => {
   };
 
   const mockDocketEntryWithWorkItem = {
-    docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+    docketEntryId: mockDocketEntryId,
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     documentTitle: 'Order',
     documentType: 'Order',
@@ -71,8 +73,6 @@ describe('consolidated cases', () => {
     userId: docketClerkUser.userId,
     workItem: mockWorkItem,
   };
-
-  const clientConnectionId = 'ABC123';
 
   let leadCaseDocketEntries;
   let consolidatedCase1DocketEntries;
@@ -327,6 +327,45 @@ describe('consolidated cases', () => {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       }),
       served: true,
+    });
+  });
+
+  it('should populate multiDocketedOn and originallyFiledDocketNumber on expectedDocketEntry', async () => {
+    const mockForm: CourtIssuedDocumentAnyType = {
+      docketEntryId: mockDocketEntryId,
+      attachments: true,
+      date: '2009-03-01T21:40:46.415Z',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Hurry! This is urgent',
+      generatedDocumentTitle: 'Important Filing',
+      scenario: 'Standard',
+      serviceStamp: 'Blah blah blah',
+      documentTitle: '',
+    };
+    const docketNumbers = [
+      MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      '110-19',
+    ];
+
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers,
+        form: mockForm,
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const expectedDocketEntry =
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry).toMatchObject({
+      multiDocketedOn: docketNumbers,
+      originallyFiledDocketNumber:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
   });
 });

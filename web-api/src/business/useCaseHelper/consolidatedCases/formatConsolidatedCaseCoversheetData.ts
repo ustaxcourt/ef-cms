@@ -2,14 +2,6 @@ import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
-/**
- * Formats consolidated cases coversheet data
- * @param {object} providers.applicationContext the applicationContext
- * @param {object} providers.caseEntity the case entity
- * @param {object} providers.coverSheetData the coversheet data
- * @param {object} providers.docketEntryEntity the docketEntryEntity
- * @returns {object} coversheet data with consolidated cases
- */
 export const formatConsolidatedCaseCoversheetData = async ({
   applicationContext,
   caseEntity,
@@ -27,7 +19,12 @@ export const formatConsolidatedCaseCoversheetData = async ({
   let caseCaptionExtension;
   const consolidatedCasesFiltered = consolidatedCases
     ?.map(consolidatedCase => {
-      if (isLeadCase({docketNumber: consolidatedCase.docketNumber, leadDocketNumber: caseEntity.leadDocketNumber})) {
+      if (
+        isLeadCase({
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseEntity.leadDocketNumber,
+        })
+      ) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
           caseEntity: consolidatedCase,

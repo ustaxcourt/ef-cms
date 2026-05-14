@@ -535,6 +535,33 @@ export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
+export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
+  'addToCoversheet',
+  'additionalInfo',
+  'additionalInfo2',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filers',
+  'filingDate',
+  'freeText',
+  'hasOtherFilingParty',
+  'ordinalValue',
+  'otherFilingParty',
+  'otherIteration',
+  'partyIrsPractitioner',
+  'pending',
+  'previousDocument',
+  'secondaryDocument',
+  'trialLocation',
+  'docketNumbers',
+  'objections',
+] as const;
+
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
