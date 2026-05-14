@@ -359,6 +359,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.workItemId = rawDocketEntry.workItemId;
   }
 
+  static VALIDATION_RULES = DOCKET_ENTRY_VALIDATION_RULES;
+
   /**
    * sets the document as archived (used to hide from the ui)
    *
@@ -850,7 +852,7 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return DOCKET_ENTRY_VALIDATION_RULES;
+    return DocketEntry.VALIDATION_RULES;
   }
 
   static isMultiDocketed(originalDocketEntry: RawDocketEntry) {
