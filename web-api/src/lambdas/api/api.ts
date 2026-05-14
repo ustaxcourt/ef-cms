@@ -1,12 +1,12 @@
+import {
+  type APIGatewayProxyHandler,
+  type APIGatewayProxyEvent,
+  type APIGatewayProxyResult,
+  type Callback,
+  type Context,
+} from 'aws-lambda';
 import { app } from '../../app';
 import awsServerlessExpress from '@codegenie/serverless-express';
-import type {
-  APIGatewayProxyHandler,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-  Callback,
-  Context,
-} from 'aws-lambda';
 
 const serverlessExpressHandler: APIGatewayProxyHandler = awsServerlessExpress<
   APIGatewayProxyEvent,
