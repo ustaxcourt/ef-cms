@@ -66,6 +66,7 @@ import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '@web-client/proxies/maintenance/getMaintenanceModePublicProxy';
+import { getPublicCaseDocketEntriesInteractor } from '@web-client/proxies/getPublicCaseDocketEntriesProxy';
 import { getPublicCaseExistsInteractor } from '@web-client/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseDocketEntriesInteractor } from '@web-client/proxies/getPublicCaseDocketEntriesProxy';
 import { getPublicCaseInteractor } from '@web-client/proxies/getPublicCaseProxy';

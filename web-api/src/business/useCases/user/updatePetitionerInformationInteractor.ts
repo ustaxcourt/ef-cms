@@ -283,6 +283,7 @@ export const updatePetitionerInformation = async (
 
   let serviceUrl: string | undefined;
 
+
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );

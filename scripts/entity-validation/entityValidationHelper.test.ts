@@ -64,7 +64,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => ({
   getCurrentDateTimeInMillis: jest.fn().mockReturnValue(0),
 }));
 jest.mock('worker_threads', () => ({ Worker: jest.fn() }));
-jest.mock('@web-api/persistence/postgres/database', () => ({ getDbReader: jest.fn() }));
+jest.mock('@web-api/persistence/postgres/database', () => ({
+  getDbReader: jest.fn(),
+}));
 jest.mock(
   '@web-api/persistence/postgres/cases/getCasesByDocketNumbers',
   () => ({ getCasesByDocketNumbers: jest.fn().mockResolvedValue([]) }),

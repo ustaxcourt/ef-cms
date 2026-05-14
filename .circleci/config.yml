@@ -975,11 +975,11 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - validate-entities
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+            - validate-entities
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1006,11 +1006,16 @@ workflows:
           <<: *only-prod
           requires:
             - migrate
+      - validate-entities:
+          <<: *only-prod
+          requires:
+            - migrate
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
             - loadtests
             - smoketests-readonly
+            - validate-entities
       - wait-for-switch:
           <<: *only-prod
           type: approval

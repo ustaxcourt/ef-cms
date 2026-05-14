@@ -14,7 +14,7 @@ import os from 'os';
 import path from 'path';
 
 /* HELPERS */
-const getAllDocketNumbers = async () => {
+const getAllDocketNumbers = () => {
   return getDbReader(async reader => {
     return (
       await reader.selectFrom('dwCase').select('docketNumber').execute()
@@ -58,7 +58,7 @@ const getAllWorkItems = async () => {
   return workItems.map(workItem => fromKyselyWorkItem(workItem));
 };
 
-const getAllTrialSessionWorkingCopies = async () => {
+const getAllTrialSessionWorkingCopies = () => {
   return getDbReader(async reader => {
     return (
       await reader.selectFrom('dwTrialSessionWorkingCopy').selectAll().execute()
