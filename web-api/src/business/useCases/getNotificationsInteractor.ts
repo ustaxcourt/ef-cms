@@ -9,6 +9,7 @@ import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workite
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { getQCInboxParameters } from '@web-api/business/utilities/getQCInboxParameters';
 
 export const getNotificationsInteractor = async (
@@ -28,7 +29,6 @@ export const getNotificationsInteractor = async (
   qcIndividualInboxCount: number;
   qcSectionInProgressCount: number;
   qcSectionInboxCount: number;
-  qcUnreadCount: number;
   unreadMessageCount: number;
   userInboxCount: number;
   userSectionCount: number;
@@ -90,19 +90,21 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
+  const qcIndividualInProgressCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters['my']['inProgress']),
+  );
 
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
-    filters['section']['inbox'],
-  ).length;
+  const qcIndividualInboxCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters['my']['inbox']),
+  );
+
+  const qcSectionInProgressCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters['section']['inProgress']),
+  );
+
+  const qcSectionInboxCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters['section']['inbox']),
+  );
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
@@ -119,12 +121,38 @@ export const getNotificationsInteractor = async (
   return {
     qcIndividualInProgressCount,
     qcIndividualInboxCount,
-    qcSectionInProgressCount: qcSectionInProgressCount || 0,
-    qcSectionInboxCount: qcSectionInboxCount || 0,
-    qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
-      .length,
+    qcSectionInProgressCount,
+    qcSectionInboxCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };
+};
+
+const countUniqueWorkItems = (
+  workItems: RawWorkItemWithCaseAndDocketEntryInfo[],
+): number => {
+  let count = 0;
+  const consolidatedGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
+
+  for (const workItem of workItems) {
+    const multiDocketedOnLength =
+      workItem.docketEntry.multiDocketedOn?.length ?? 0;
+
+    if (multiDocketedOnLength < 2) {
+      count += 1;
+    } else {
+      const key = workItem.docketEntryId;
+      const group = consolidatedGroups.get(key) ?? [];
+      group.push(workItem);
+      consolidatedGroups.set(key, group);
+    }
+  }
+
+  count += consolidatedGroups.size;
+
+  return count;
 };
