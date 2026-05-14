@@ -2,6 +2,7 @@ import {
   SSMClient,
   PutParameterCommand,
   GetParameterCommand,
+  DeleteParameterCommand,
 } from '@aws-sdk/client-ssm';
 
 const ssmClient = new SSMClient({ region: 'us-east-1' });
@@ -32,4 +33,17 @@ export async function getSSMItem(name: string): Promise<string | undefined> {
 
   const response = await ssmClient.send(command);
   return response.Parameter?.Value;
+}
+
+export async function deleteSSMItem(name: string): Promise<boolean> {
+  const paramName = `/DAWSON/${STAGE || ENV}/${name}`;
+
+  const command = new DeleteParameterCommand({
+    Name: paramName,
+  });
+
+  return await ssmClient
+    .send(command)
+    .then(() => true)
+    .catch(() => false);
 }
