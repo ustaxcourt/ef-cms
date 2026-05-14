@@ -72,33 +72,3 @@ export function readDocketEntryCount({
     )
     .then(rows => rows.length);
 }
-
-// Negative-assertion poller: confirms the docket-entry count for an event
-// code stays at `expected` across a window of consecutive reads. Used to
-// guard against async writes (NODC, coversheet regen) that could fire after
-// the QC complete response. Fails fast if a wrong write lands mid-window.
-export function assertDocketEntryCountRemainsAt({
-  docketNumber,
-  eventCode,
-  expected,
-  checks = 6,
-  intervalMs = 500,
-}: {
-  docketNumber: string;
-  eventCode: string;
-  expected: number;
-  checks?: number;
-  intervalMs?: number;
-}): Cypress.Chainable<unknown> {
-  const step = (remaining: number): Cypress.Chainable<unknown> =>
-    readDocketEntryCount({ docketNumber, eventCode }).then(count => {
-      if (count !== expected) {
-        throw new Error(
-          `Expected ${eventCode} count to remain ${expected} on ${docketNumber}, but observed ${count}`,
-        );
-      }
-      if (remaining <= 1) return;
-      return cy.wait(intervalMs).then(() => step(remaining - 1));
-    });
-  return step(checks);
-}

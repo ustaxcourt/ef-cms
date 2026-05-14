@@ -1,7 +1,7 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
 import {
-  assertDocketEntryCountRemainsAt,
   assertDocketEntryPageCount,
+  assertNoticeOfDocketChangeDoesNotExist,
 } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
@@ -62,20 +62,13 @@ describe('Docket Clerk QC with no edits leaves the coversheet untouched', () => 
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
       cy.get(`[data-testid=work-item-${docketNumber}]`).should('not.exist');
 
-      // A wrongly-fired NODC would land asynchronously after the QC
-      // response returns. Poll for stability so the assertion fails fast
-      // if one shows up mid-window instead of relying on a fixed wait.
-      assertDocketEntryCountRemainsAt({
-        docketNumber,
-        eventCode: 'NODC',
-        expected: 0,
-      });
-
-      // Page count must still be 2 (the file-time coversheet is intact and
-      // was not replaced — that would still be 2 — and was not stacked,
-      // which would show as 3).
+      // The QC interactor writes NODC and regenerates the coversheet
+      // synchronously inside the request handler, so the rendered docket
+      // record on the case detail page is the deterministic signal for
+      // both assertions — no fixed waits needed.
       goToCase(docketNumber);
       assertDocketEntryPageCount({ eventCode: 'EXH', expected: '2' });
+      assertNoticeOfDocketChangeDoesNotExist();
     });
   });
 });
