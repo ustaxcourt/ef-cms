@@ -367,12 +367,21 @@ const completeDocketEntryQC = async (
     // coversheet being in place before the response is returned. Move to
     // the queued/async path (enqueueAddCoversheet) only if we add polling
     // on the client side of QC as well.
+    //
+    // bypassIdempotencyGate is true because the docket entry is already
+    // COMPLETE from the initial filing — the gate would otherwise short-
+    // circuit and leave the original coversheet in place, so the PDF would
+    // not pick up the new title/received-date even though the docket
+    // record metadata and NODC reflect the change. replaceCoversheet
+    // strips the existing first-page coversheet before inserting the new
+    // one, so this regeneration replaces rather than stacks.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
-        bypassIdempotencyGate: false,
+        bypassIdempotencyGate: true,
         docketEntryId,
         docketNumber: caseEntity.docketNumber,
+        replaceCoversheet: true,
       },
       authorizedUser,
     );

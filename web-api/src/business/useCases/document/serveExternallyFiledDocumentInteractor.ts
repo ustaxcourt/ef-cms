@@ -156,10 +156,16 @@ export const serveExternallyFiledDocument = async (
     // produce a finished, coversheet-attached PDF before the response so
     // the document is ready for service. Queueing here would require the
     // service step to wait on a poll, which we haven't built yet.
+    //
+    // Simultaneous-brief types prepend a NEW coversheet (with the service
+    // stamp) on top of the file-time coversheet, so we must bypass the
+    // idempotency gate — the file step already marked the entry COMPLETE,
+    // and without the bypass the gate would short-circuit and the served
+    // PDF would be missing the service-stamped coversheet.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
-        bypassIdempotencyGate: false,
+        bypassIdempotencyGate: subjectCaseIsSimultaneousDocType,
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
         docketNumber: updatedSubjectCaseEntity!.docketNumber,
