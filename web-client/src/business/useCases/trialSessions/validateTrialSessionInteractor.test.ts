@@ -1,13 +1,22 @@
-import { FORMATS, formatNow } from '../../utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { RawNewTrialSession } from '@shared/business/entities/trialSessions/NewTrialSession';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
-import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
+} from '@shared/business/entities/EntityConstants';
+import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
+import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 
 describe('validateTrialSessionInteractor', () => {
-  it('returns a list of errors when the trial session is invalid', () => {
+  it('returns a list of errors when the edit trial session is invalid', () => {
+    const errors = validateTrialSessionInteractor({
+      trialSession: { trialSessionId: '123' } as RawEditTrialSession,
+    });
+
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
+  });
+
+  it('returns a list of errors when the new trial session is invalid', () => {
     const errors = validateTrialSessionInteractor({
       trialSession: {} as RawNewTrialSession,
     });
@@ -15,7 +24,7 @@ describe('validateTrialSessionInteractor', () => {
     expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
-  it('returns null for a valid trial session', () => {
+  it('returns null for a valid new trial session', () => {
     const nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
     const MOCK_TRIAL = {
       estimatedEndDate: `${nextYear}-12-05T00:00:00.000Z`,
