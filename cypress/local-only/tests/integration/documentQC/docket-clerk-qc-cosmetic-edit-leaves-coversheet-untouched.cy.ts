@@ -1,7 +1,7 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
 import {
+  assertDocketEntryCountRemainsAt,
   assertDocketEntryPageCount,
-  readDocketEntryCount,
 } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
@@ -62,16 +62,14 @@ describe('Docket Clerk QC with no edits leaves the coversheet untouched', () => 
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
       cy.get(`[data-testid=work-item-${docketNumber}]`).should('not.exist');
 
-      // Even on a no-op QC, the server still has time to fan out async
-      // notifications — give it a moment so a wrongly-fired NODC would
-      // be visible by the time we query.
-      cy.wait(3000);
-
-      // No NODC should have been written.
-      readDocketEntryCount({ docketNumber, eventCode: 'NODC' }).should(
-        'eq',
-        0,
-      );
+      // A wrongly-fired NODC would land asynchronously after the QC
+      // response returns. Poll for stability so the assertion fails fast
+      // if one shows up mid-window instead of relying on a fixed wait.
+      assertDocketEntryCountRemainsAt({
+        docketNumber,
+        eventCode: 'NODC',
+        expected: 0,
+      });
 
       // Page count must still be 2 (the file-time coversheet is intact and
       // was not replaced — that would still be 2 — and was not stacked,
