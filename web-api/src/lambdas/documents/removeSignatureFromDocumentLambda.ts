@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { removeSignatureFromDocumentInteractor } from '@shared/business/useCases/removeSignatureFromDocumentInteractor';
+import { removeSignatureFromDocumentInteractor } from '@web-api/business/useCases/removeSignatureFromDocumentInteractor';
 
 /**
  * used for removing signature from a signed document

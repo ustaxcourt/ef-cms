@@ -15,38 +15,6 @@ concurrency:
 
 jobs:
   API:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: API
-        run: npm run test:api
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    uses: ./.github/workflows/template_no-app.yml
+    with:
+      run_command: npm run test:api

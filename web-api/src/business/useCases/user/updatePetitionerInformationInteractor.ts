@@ -73,15 +73,16 @@ const assertEmailAvailableForPetitioner = async ({
   const contactIdArray = petitioners.map(p => p.contactId);
 
   // Returns as object {id#: email}, will put values into an array
-  const allUsers =
-    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+  const allUsers = await applicationContext
+    .getUseCases()
+    .getUsersPendingEmailInteractor(
       {
         userIds: contactIdArray,
       },
       authorizedUser,
-    )) || {};
+    );
 
-  const allPendingEmails: string[] = Object.values(allUsers);
+  const allPendingEmails: string[] = Object.values(allUsers || {});
 
   const pendingMatchesUpdated: boolean = allPendingEmails
     .map(email => (email || '').toLowerCase())

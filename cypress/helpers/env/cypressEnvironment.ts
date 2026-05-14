@@ -8,6 +8,7 @@ const getEnvValue = (key: string, defaultValue?: any) => {
 
 export const getCypressEnv = () => {
   const env = getEnvValue('TARGET_ENV', 'local');
+  const isLocal = env === 'local';
 
   return {
     accessKeyId: getEnvValue('AWS_ACCESS_KEY_ID', 'S3RVER'),
@@ -16,6 +17,7 @@ export const getCypressEnv = () => {
     deployingColor: getEnvValue('DEPLOYING_COLOR'),
     efcmsDomain: getEnvValue('EFCMS_DOMAIN'),
     env,
+    isLocal,
     publicSiteUrl:
       env === 'local'
         ? 'http://localhost:5678'

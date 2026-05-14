@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { updateCaseDetailsInteractor } from '@shared/business/useCases/updateCaseDetailsInteractor';
+import { updateCaseDetailsInteractor } from '@web-api/business/useCases/updateCaseDetailsInteractor';
 
 /**
  * used for updating a case's petition details information (IRS notice date, case type, case procedure,

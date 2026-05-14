@@ -13,85 +13,32 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   client_integration_public:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
         ci_node_total: [2]
         ci_node_index: [0, 1]
-    env:
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Configure sysctl limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Setup Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-      - name: Web Client - Integration Tests Public
-        run: |
-          mkdir -p /tmp/web-client
-          npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
-          ./wait-until-services.sh
-          export TESTFILES=$(npx ts-node split-tests.ts -public)
-          npm run test:client:integration:ci
-      - name: Store Artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: server-log-output-${{ matrix.ci_node_index }}
-          path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    uses: ./.github/workflows/template_app-parallel.yml
+    with:
+      ci_node_index: ${{ matrix.ci_node_index }}
+      ci_node_total: ${{ matrix.ci_node_total }}
+      configure_sysctl: true
+      fetch_depth: 0
+      record_jest_test_timings: true
+      run_command: |
+        export TESTFILES=$(scripts/github-actions/split-tests.ts --public)
+        export JEST_TEST_RESULTS_ARGS="--json --outputFile=${JEST_TEST_RESULTS_FILE}"
+        npm run test:client:integration:ci
+      upload_logs: true
+      workflow_filename: client-integration-public.yml
+  persist-test-file-times:
+    needs: [client_integration_public]
+    uses: ./.github/workflows/job_persist-test-file-times.yml
+    with:
+      workflow_filename: client-integration-public.yml

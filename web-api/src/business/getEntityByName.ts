@@ -9,7 +9,7 @@ import { PrivatePractitioner } from '@shared/business/entities/PrivatePractition
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '@shared/business/entities/User';
-import { UserCase } from '@shared/business/entities/UserCase';
+import { UserCase } from '@web-api/business/entities/UserCase';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
