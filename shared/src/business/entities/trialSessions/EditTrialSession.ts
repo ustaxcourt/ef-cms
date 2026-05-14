@@ -2,8 +2,8 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TrialSession } from './TrialSession';
 import joi from 'joi';
 
-export class NewTrialSession extends TrialSession {
-  constructor(rawSession: RawNewTrialSession) {
+export class EditTrialSession extends TrialSession {
+  constructor(rawSession: RawEditTrialSession) {
     super(rawSession);
   }
 
@@ -13,16 +13,14 @@ export class NewTrialSession extends TrialSession {
       estimatedEndDate: JoiValidationConstants.ISO_DATE.min(
         joi.ref('startDate'),
       )
-        .required()
+        .optional()
+        .allow(null)
         .messages({
           '*': 'Enter a valid estimated end date',
-          'date.min': 'Enter a valid estimated end date',
+          'date.min': 'Estimated end date must be after start date',
         }),
-      startDate: JoiValidationConstants.ISO_DATE.min('now')
-        .required()
-        .messages({ '*': 'Enter a valid start date' }),
     };
   }
 }
 
-export type RawNewTrialSession = ExcludeMethods<NewTrialSession>;
+export type RawEditTrialSession = ExcludeMethods<EditTrialSession>;
