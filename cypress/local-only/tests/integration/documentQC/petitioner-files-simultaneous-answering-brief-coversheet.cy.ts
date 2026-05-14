@@ -22,14 +22,6 @@ import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/s
  */
 describe('Petitioner files a Simultaneous Answering Brief', () => {
   it('adds 1 coversheet on filing and a 2nd coversheet on serve', () => {
-    // The existing FileDocument wizard throws an uncaught
-    // `Cannot convert undefined or null to object` from
-    // setFilersFromFilersMapAction during the petitioner SIAB flow. Cerebral
-    // tolerates this and the upload still completes, but Cypress fails the
-    // run on uncaught exceptions by default. Suppress only inside this spec
-    // until the underlying wizard bug is fixed.
-    Cypress.on('uncaught:exception', () => false);
-
     const primaryFilerName = 'Cody';
 
     loginAsPetitioner();

@@ -33,8 +33,6 @@ import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/s
  */
 describe('Practitioner files a SIAB across consolidated cases and a docket clerk QCs the entry', () => {
   it('keeps every case in the group at numberOfPages = 2 after the QC title change regenerates the coversheet', () => {
-    Cypress.on('uncaught:exception', () => false);
-
     createAndServeConsolidatedGroup({ numberOfMemberCases: 1 }).then(
       ({ leadDocketNumber, memberDocketNumbers }) => {
         const allDocketNumbers = [leadDocketNumber, ...memberDocketNumbers];
