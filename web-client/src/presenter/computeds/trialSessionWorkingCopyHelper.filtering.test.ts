@@ -370,5 +370,40 @@ describe('trial session working copy computed', () => {
       expect(formattedCases).toMatchObject([{ docketNumber: '101-18' }]);
       expect(casesShownCount).toEqual(1);
     });
+
+    it('should include closed dismissed cases in the working copy list', () => {
+      const { casesShownCount, formattedCases } = runCompute(
+        trialSessionWorkingCopyHelper,
+        {
+          state: {
+            trialSession: {
+              ...MOCK_TRIAL_SESSION,
+              calendaredCases: [
+                MOCK_CASE,
+                {
+                  ...MOCK_CASE,
+                  docketNumber: '102-19',
+                  status: CASE_STATUS_TYPES.closedDismissed,
+                },
+              ],
+              caseOrder: [],
+            },
+            trialSessionWorkingCopy: {
+              caseMetadata: {},
+              filters: { statusUnassigned: true },
+              sort: 'docket',
+              sortOrder: 'asc',
+              userNotes: {},
+            },
+          },
+        },
+      );
+
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '101-18' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(casesShownCount).toEqual(2);
+    });
   });
 });
