@@ -181,7 +181,6 @@ describe('trials session working copies filtering', () => {
       'have.text',
       'Back to Session Copy',
     );
-  });
 
     cy.get('.big-blue-header').within(() => {
       cy.get('h1').should('contain.text', 'Richmond, Virginia');
