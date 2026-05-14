@@ -820,32 +820,6 @@ describe('completeDocketEntryQCInteractor', () => {
     );
   });
 
-  it('should add a consolidated cases array to the returned case detail', async () => {
-    const secondMockDocketNumber = '102-20';
-    getCasesByDocketNumbers.mockResolvedValueOnce([
-      caseRecord,
-      { ...caseRecord, docketNumber: secondMockDocketNumber },
-    ]);
-
-    const result = await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          multiDocketedOn: [caseRecord.docketNumber, secondMockDocketNumber],
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(result.caseDetail.consolidatedCases[0].docketNumber).toEqual(
-      caseRecord.docketNumber,
-    );
-    expect(result.caseDetail.consolidatedCases[1].docketNumber).toEqual(
-      secondMockDocketNumber,
-    );
-  });
-
   it('should update work items and case records for each case in a multi-docketed QC', async () => {
     const secondDocketNumber = '102-20';
     getCasesByDocketNumbers.mockResolvedValueOnce([

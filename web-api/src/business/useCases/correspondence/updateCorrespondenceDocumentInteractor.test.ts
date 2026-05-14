@@ -108,26 +108,18 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     ]);
   });
 
-  it('should return an updated raw case object', async () => {
-    const result = await updateCorrespondenceDocumentInteractor(
-      {
-        documentMetadata: {
-          correspondenceId: mockCorrespondence.correspondenceId,
-          docketNumber: mockCase.docketNumber,
-          documentTitle: 'A title that has been updated',
-        } as any,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(result).toMatchObject({
-      ...mockCase,
-      correspondence: [
+  it('should not throw when updating a valid correspondence document', async () => {
+    await expect(
+      updateCorrespondenceDocumentInteractor(
         {
-          ...mockCorrespondence,
-          documentTitle: 'A title that has been updated',
+          documentMetadata: {
+            correspondenceId: mockCorrespondence.correspondenceId,
+            docketNumber: mockCase.docketNumber,
+            documentTitle: 'A title that has been updated',
+          } as any,
         },
-      ],
-    });
+        mockDocketClerkUser,
+      ),
+    ).resolves.toBeUndefined();
   });
 });

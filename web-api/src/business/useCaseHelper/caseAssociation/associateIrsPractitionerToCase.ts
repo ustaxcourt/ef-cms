@@ -16,7 +16,7 @@ export const associateIrsPractitionerToCase = async ({
   docketNumber: string;
   serviceIndicator?: string;
   user: RawUser;
-}): Promise<RawCase> => {
+}): Promise<void> => {
   const [isAssociated, caseToUpdate] = await Promise.all([
     verifyCaseForUser({
       docketNumber,
@@ -32,14 +32,14 @@ export const associateIrsPractitionerToCase = async ({
   });
 
   if (isAssociated) {
-    return caseEntity.toRawObject();
+    return;
   }
 
   caseEntity.attachIrsPractitioner(
     new IrsPractitioner({ ...user, serviceIndicator }),
   );
 
-  return await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
