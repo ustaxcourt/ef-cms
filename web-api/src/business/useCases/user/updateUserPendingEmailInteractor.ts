@@ -1,31 +1,25 @@
-import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { RawUser, User } from '@shared/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
-/**
- * updateUserPendingEmailInteractor
- * Allows a user to request an update their own email address if they have permission.
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.pendingEmail the pending email
- * @returns {Promise} the updated user object
- */
 export const updateUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
   { pendingEmail }: { pendingEmail: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawUser | RawPractitioner> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
@@ -38,7 +32,7 @@ export const updateUserPendingEmailInteractor = async (
 
   await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 
-  let updatedUserRaw;
+  let updatedUserRaw: RawUser | RawPractitioner;
   if (user.role === ROLES.petitioner) {
     updatedUserRaw = new User(user).validate().toRawObject();
   } else {

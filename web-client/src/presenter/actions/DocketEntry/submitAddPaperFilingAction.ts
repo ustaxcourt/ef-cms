@@ -14,16 +14,16 @@ export const submitAddPaperFilingAction = async ({
 
   const { documentStorageId } = props;
 
-  let documentMetadata = omit(
+  const baseDocumentMetadata = omit(
     {
       ...get(state.form),
     },
     ['primaryDocumentFile'],
   );
 
-  documentMetadata = {
-    ...documentMetadata,
-    createdAt: documentMetadata.receivedAt,
+  const documentMetadata: Record<string, unknown> & { docketNumber: string } = {
+    ...baseDocumentMetadata,
+    createdAt: baseDocumentMetadata.receivedAt,
     docketNumber,
     isFileAttached: !!isFileAttached,
     isPaper: true,

@@ -8,7 +8,7 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

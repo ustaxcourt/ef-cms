@@ -1,4 +1,4 @@
-import { getDocumentQCServedForUserInteractor } from '@shared/proxies/workitems/getDocumentQCServedForUserProxy';
+import { getDocumentQCServedForUserInteractor } from '@web-client/proxies/workitems/getDocumentQCServedForUserProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

@@ -1,7 +1,7 @@
 import { AppTimeoutModal } from './AppTimeoutModal';
 import { applicationContext } from '@web-client/applicationContext';
-import { deleteAuthCookieInteractor } from '@shared/proxies/auth/deleteAuthCookieProxy';
-import { getCurrentUserToken } from '@shared/proxies/requests';
+import { deleteAuthCookieInteractor } from '@web-client/proxies/auth/deleteAuthCookieProxy';
+import { getCurrentUserToken } from '@web-client/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
 import React, { useEffect, useState } from 'react';
 

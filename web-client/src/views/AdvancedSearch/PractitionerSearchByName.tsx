@@ -14,7 +14,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
-import { getGroupedStateOptions } from '@shared/business/utilities/groupStatesOptions';
+import { getGroupedStateOptions } from '@web-client/business/utilities/groupStatesOptions';
 
 export const PractitionerSearchByName = connect(
   {
