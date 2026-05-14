@@ -102,7 +102,9 @@ export const TrialSessionInformation = connect(
                     View Session Copy
                   </a>
                 )}
-                {formattedTrialSessionDetails.canEdit && (
+                {(formattedTrialSessionDetails.editPermissions === 'all' ||
+                  formattedTrialSessionDetails.editPermissions ===
+                    'limited') && (
                   <Button
                     link
                     className="margin-left-2 margin-top-2"
@@ -179,6 +181,7 @@ export const TrialSessionInformation = connect(
                               !formattedTrialSessionDetails.showSwingSession &&
                                 'margin-bottom-0',
                             )}
+                            data-testid="trial-session-date"
                           >
                             {formattedTrialSessionDetails.formattedStartDate}{' '}
                             {formattedTrialSessionDetails.formattedStartTime}
