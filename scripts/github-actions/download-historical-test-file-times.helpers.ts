@@ -5,12 +5,17 @@ import path from 'path';
 
 type WorkflowArtifact = {
   archive_download_url: string;
+  created_at: string;
   expired: boolean;
   name: string;
 };
 
 type WorkflowArtifactsResponse = {
   artifacts: WorkflowArtifact[];
+};
+
+type WorkflowRunResponse = {
+  run_started_at: string;
 };
 
 class GitHubApiRequestError extends Error {
@@ -131,6 +136,37 @@ const downloadArtifact = async ({
   }
 };
 
+// Returns the current workflow run's start time as an ISO 8601 string, used
+// to filter out artifacts uploaded after this run began. Without this cutoff,
+// parallel matrix shards can observe different snapshots of artifacts as
+// concurrent runs upload them, producing inconsistent weight maps and
+// overlapping/missing shard splits. ISO 8601 UTC strings sort lexically the
+// same as chronologically, so plain string comparison is sufficient.
+const getCurrentRunStartedAt = async ({
+  repository,
+}: {
+  repository: string;
+}): Promise<string | undefined> => {
+  const runId = process.env.GITHUB_RUN_ID;
+  if (!runId) {
+    return undefined;
+  }
+
+  try {
+    const run = await githubGet<WorkflowRunResponse>(
+      `https://api.github.com/repos/${repository}/actions/runs/${runId}`,
+    );
+    return run.run_started_at;
+  } catch (error: unknown) {
+    console.log(
+      `Could not fetch workflow run start time; proceeding without race-filter. (${
+        error instanceof Error ? error.message : String(error)
+      })`,
+    );
+    return undefined;
+  }
+};
+
 export const downloadHistoricalTestFileTimes = async ({
   artifactName,
   outputFilePath,
@@ -151,6 +187,8 @@ export const downloadHistoricalTestFileTimes = async ({
     sha => sha !== currentSha && sha !== allCommitShas[0],
   );
 
+  const runStartedAt = await getCurrentRunStartedAt({ repository });
+
   console.log(
     `Searching for historical test timings for ${workflowFileName} in ancestor commits...`,
   );
@@ -168,7 +206,10 @@ export const downloadHistoricalTestFileTimes = async ({
           );
 
           return response.artifacts.find(
-            artifact => artifact.name === fullArtifactName && !artifact.expired,
+            artifact =>
+              artifact.name === fullArtifactName &&
+              !artifact.expired &&
+              (!runStartedAt || artifact.created_at < runStartedAt),
           );
         } catch (error: unknown) {
           if (
