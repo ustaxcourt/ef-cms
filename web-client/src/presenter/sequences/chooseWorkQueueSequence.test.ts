@@ -1,11 +1,11 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
-import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForSectionInteractor } from '@web-client/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { docketClerk1User } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
-jest.mock('@shared/proxies/workitems/getDocumentQCInboxForSectionProxy');
+jest.mock('@web-client/proxies/workitems/getDocumentQCInboxForSectionProxy');
 
 describe('chooseWorkQueueSequence', () => {
   const mockGetDocumentQCInboxForSectionInteractor =

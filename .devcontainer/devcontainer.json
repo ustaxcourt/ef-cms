@@ -9,7 +9,8 @@
       "version": "latest",
       "enableNonRootDocker": "true",
       "moby": "true"
-    }
+    },
+    "ghcr.io/codeman99/features/circleci-cli:1": {}
   },
   "customizations": {
     "vscode": {

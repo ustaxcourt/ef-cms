@@ -2,7 +2,7 @@ import {
   JURISDICTIONAL_OPTIONS,
   MOTION_DISPOSITIONS,
 } from '@shared/business/entities/EntityConstants';
-import { RawStamp } from '@shared/business/entities/Stamp';
+import { RawStamp } from '@web-api/business/entities/Stamp';
 
 export const MOCK_STAMP: RawStamp = {
   customText: 'Custom stamp data text',

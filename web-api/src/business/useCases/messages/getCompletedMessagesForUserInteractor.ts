@@ -12,7 +12,7 @@ export const getCompletedMessagesForUserInteractor = async (
   _applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<ExcludeMethods<MessageResult>[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }

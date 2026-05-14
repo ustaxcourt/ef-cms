@@ -53,7 +53,7 @@ These are the main directories and files.  Note that there are probably some mis
 
 Whenever the UI needs to call an interactor which lives on the backend, we invoke something called a proxy. These proxy files live in the shared directory.  What is the shared directory for?  It's a place that we can store all the code which may be used by other parts of the application.  The idea is that we can easily write a different application, such as a CLI, and reuse code in the shared directory as needed to achieve the same functionality.
 
-For example, we have a file called `shared/src/proxies/users/getUserProxy.js`.  Proxies are just making http requests to the backend API which is where there real implementation of the interactor lives.
+For example, we have a file called `web-client/src/proxies/users/getUserProxy.ts`. Proxies are HTTP clients for the backend API, where the real interactor implementation lives.
 
 ## UI Npm Scripts
 

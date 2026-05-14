@@ -2,7 +2,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { docketClerkUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
-import { getUserPermissions } from '@shared/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 import { mockPetitioners } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
