@@ -8,8 +8,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const setFilersFromFilersMapAction = ({ get, store }: ActionProps) => {
   const form = get(state.form);
 
-  const filers = Object.keys(form.filersMap)
-    .map(contactId => (form.filersMap[contactId] ? contactId : null))
+  const filersMap = form.filersMap || {};
+  const filers = Object.keys(filersMap)
+    .map(contactId => (filersMap[contactId] ? contactId : null))
     .filter(Boolean);
 
   store.set(state.form.filers, filers);
