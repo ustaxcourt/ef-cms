@@ -1,4 +1,5 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import type { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import * as AuthUserModule from '@shared/business/entities/authUser/AuthUser';
 import {
   AUTHORIZATION_MAP,
   ROLE_PERMISSIONS,
@@ -203,5 +204,21 @@ describe('Authorization client service', () => {
         isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY),
       ).toBeTruthy();
     });
+  });
+
+  it('returns false when isAuthUser passes but role is missing from AUTHORIZATION_MAP', () => {
+    jest.spyOn(AuthUserModule, 'isAuthUser').mockReturnValue(true);
+    expect(
+      isAuthorized(
+        {
+          role: 'notInAuthorizationMap' as any,
+          userId: '12345678-1234-4123-8123-123456789012',
+          name: 'Test User',
+          email: 'test@example.com',
+        },
+        ROLE_PERMISSIONS.WORKITEM,
+      ),
+    ).toBe(false);
+    jest.restoreAllMocks();
   });
 });

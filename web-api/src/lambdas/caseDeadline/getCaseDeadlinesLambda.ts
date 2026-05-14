@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseDeadlinesInteractor } from '@shared/business/useCases/getCaseDeadlinesInteractor';
+import { getCaseDeadlinesInteractor } from '@web-api/business/useCases/getCaseDeadlinesInteractor';
 
 /**
  * get case deadlines between start and end date

@@ -2,7 +2,7 @@ import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 

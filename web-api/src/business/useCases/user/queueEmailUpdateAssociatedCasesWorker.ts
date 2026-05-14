@@ -2,7 +2,7 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserFactory } from '@shared/business/entities/factories/UserFactory';
+import { UserFactory } from '@web-api/business/entities/factories/UserFactory';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';

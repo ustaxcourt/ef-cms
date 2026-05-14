@@ -241,7 +241,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
 1. Run a deployment to the experimental environment.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
-   scripts/run-cypress.sh -sct cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
+   scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
    ```
 1. After the deployment's `cleanup` job is finished, rerun the OpenSearch indices report and ensure that all indices are present and populated, and that the aliases are configured as expected:
    ```bash

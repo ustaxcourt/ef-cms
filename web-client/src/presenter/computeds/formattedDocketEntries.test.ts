@@ -19,7 +19,7 @@ import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
-import { getUserPermissions } from '@shared/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 import { type FormattedDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';

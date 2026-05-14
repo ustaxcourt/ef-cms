@@ -1,4 +1,4 @@
-import { StatusReportOrderForm as StatusReportOrderForm } from '@shared/business/entities/StatusReportOrderForm';
+import { StatusReportOrderForm as StatusReportOrderForm } from '@web-client/business/entities/StatusReportOrderForm';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateStatusReportOrderFormAction = ({
