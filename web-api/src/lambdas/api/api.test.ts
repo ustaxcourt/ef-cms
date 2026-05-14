@@ -185,6 +185,34 @@ describe('api lambda handler', () => {
     expect(event.body).toEqual('{"action":"file-document"}');
   });
 
+  it('does not rewrite auth proxy path if no proxy path was included in the event', async () => {
+    const { configuredHandler, serverlessHandler } = createConfiguredHandler();
+    const eventWithPathParameters = createMockEvent({
+      path: '/auth/some-route',
+      requestContext: {
+        ...createMockEvent().requestContext,
+        path: '/auth/some-route',
+      },
+    });
+    const event = { ...eventWithPathParameters, pathParameters: null };
+    const context = createMockContext();
+    const callback: Callback<APIGatewayProxyResult> = jest.fn();
+
+    serverlessHandler.mockImplementation(() =>
+      Promise.resolve({
+        body: 'ok',
+        statusCode: 200,
+      }),
+    );
+    mockAwsServerlessExpress.mockReturnValue(configuredHandler);
+
+    const { handler } = require('./api') as { handler: APIGatewayProxyHandler };
+
+    await handler(event, context, callback);
+
+    expect(event.pathParameters).toBeNull();
+  });
+
   it('rewrites system proxy paths and preserves string request bodies', async () => {
     const { configuredHandler, serverlessHandler } = createConfiguredHandler();
     const event = createMockEvent({
@@ -217,5 +245,34 @@ describe('api lambda handler', () => {
       proxy: 'system/health',
     });
     expect(event.body).toEqual('{"already":"a-string"}');
+  });
+
+  it('does not rewrite system proxy path if no proxy path was included in the event', async () => {
+    const { configuredHandler, serverlessHandler } = createConfiguredHandler();
+    const eventWithPathParameters = createMockEvent({
+      body: '{"already":"a-string"}',
+      path: '/system/health',
+      requestContext: {
+        ...createMockEvent().requestContext,
+        path: '/system/health',
+      },
+    });
+    const event = { ...eventWithPathParameters, pathParameters: null };
+    const context = createMockContext();
+    const callback: Callback<APIGatewayProxyResult> = jest.fn();
+
+    serverlessHandler.mockImplementation(() =>
+      Promise.resolve({
+        body: 'ok',
+        statusCode: 200,
+      }),
+    );
+    mockAwsServerlessExpress.mockReturnValue(configuredHandler);
+
+    const { handler } = require('./api') as { handler: APIGatewayProxyHandler };
+
+    await handler(event, context, callback);
+
+    expect(event.pathParameters).toBeNull();
   });
 });
