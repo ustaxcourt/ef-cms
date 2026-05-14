@@ -1,4 +1,9 @@
 import { lambdaWrapper } from './lambdaWrapper';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_TERMINAL_USER,
+} from '@shared/utils/headers';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 jest.mock('@codegenie/serverless-express');
 jest.mock('@web-api/middleware/apiGatewayHelper');
@@ -57,14 +62,14 @@ describe('lambdaWrapper', () => {
     })(req, res);
 
     expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Expose-Headers': 'X-Terminal-User',
+      'Access-Control-Expose-Headers': EXPOSED_RESPONSE_HEADERS.join(', '),
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
-      'X-Terminal-User': false,
+      [X_TERMINAL_USER]: false,
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
@@ -161,17 +166,36 @@ describe('lambdaWrapper', () => {
     })(req, res);
 
     expect(res.set.mock.calls[0][0]).toEqual({
-      'Access-Control-Expose-Headers': 'X-Terminal-User',
+      'Access-Control-Expose-Headers': EXPOSED_RESPONSE_HEADERS.join(', '),
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
-      'X-Terminal-User': true,
+      [X_TERMINAL_USER]: true,
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
+  });
+
+  it('sets the deployment timestamp header when it is configured', async () => {
+    const originalDeploymentTimestamp = process.env.DEPLOYMENT_TIMESTAMP;
+    process.env.DEPLOYMENT_TIMESTAMP = '123456';
+
+    await lambdaWrapper(() => {
+      return {
+        body: '{}',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        statusCode: '200',
+      };
+    })(req, res);
+
+    expect(res.set.mock.calls[0][0][X_DEPLOYMENT_TIMESTAMP]).toEqual('123456');
+
+    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
   });
 
   it('returns 204 when it is simulating an async function', async () => {

@@ -18,6 +18,10 @@ import {
   dataSecurityFilter,
   genericHandler,
 } from './genericHandler';
+import {
+  X_DEPLOYMENT_TIMESTAMP,
+  X_MANUAL_REFRESH_REQUIRED,
+} from '@shared/utils/headers';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
 import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
@@ -50,9 +54,16 @@ class MockEntity {
 describe('genericHandler', () => {
   const getMaintenanceMode = jest.mocked(getMaintenanceModeMock);
   const getEntityByName = jest.mocked(getEntityByNameMock);
+  const originalDeploymentTimestamp = process.env.DEPLOYMENT_TIMESTAMP;
+
   beforeEach(() => {
     getMaintenanceMode.mockResolvedValue({ current: false });
     getEntityByName.mockReturnValue(MockEntity);
+    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+  });
+
+  afterAll(() => {
+    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
   });
 
   it('returns an error if the callback throws', async () => {
@@ -143,6 +154,29 @@ describe('genericHandler', () => {
     const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
+  });
+
+  it('returns a manual refresh response when the client deployment timestamp does not match', async () => {
+    process.env.DEPLOYMENT_TIMESTAMP = '222';
+    const callback = jest.fn();
+
+    const result = await genericHandler(
+      {
+        ...MOCK_EVENT,
+        headers: {
+          ...MOCK_EVENT.headers,
+          [X_DEPLOYMENT_TIMESTAMP]: '111',
+        },
+      },
+      callback,
+    );
+
+    expect(result.statusCode).toEqual('409');
+    expect(result.headers[X_MANUAL_REFRESH_REQUIRED]).toEqual('true');
+    expect(JSON.parse(result.body)).toEqual({
+      message: 'Application version mismatch detected. Please refresh.',
+    });
+    expect(callback).not.toHaveBeenCalled();
   });
 
   describe('dataSecurityFilter', () => {
@@ -267,4 +301,3 @@ describe('genericHandler', () => {
     });
   });
 });
-  
