@@ -1,11 +1,25 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { app } from '../../app';
 import awsServerlessExpress from '@codegenie/serverless-express';
+import type {
+  APIGatewayProxyHandler,
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Callback,
+  Context,
+} from 'aws-lambda';
 
-export const handler = async (
+const serverlessExpressHandler: APIGatewayProxyHandler = awsServerlessExpress<
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult
+>({
+  app,
+});
+
+export const handler: APIGatewayProxyHandler = (
   event: APIGatewayProxyEvent,
-  context: any,
-): Promise<APIGatewayProxyResult> => {
+  context: Context,
+  callback: Callback<APIGatewayProxyResult>,
+): Promise<APIGatewayProxyResult> | void => {
   // This hack is added because serverless-express doesn't seem to work with lambda proxy integrations.
   // Without this, the deployed /auth endpoint has to be reached via /auth/auth/*
   // Bug Detail: https://github.com/vendia/serverless-express/issues/400
@@ -23,12 +37,6 @@ export const handler = async (
   // this will be an object which causes serverless-express to crash.
   event.body =
     typeof event.body === 'string' ? event.body : JSON.stringify(event.body);
-  return (
-    awsServerlessExpress({
-      app,
-    }) as unknown as (
-      event: APIGatewayProxyEvent,
-      context: any,
-    ) => Promise<APIGatewayProxyResult>
-  )(event, context);
+
+  return serverlessExpressHandler(event, context, callback);
 };
