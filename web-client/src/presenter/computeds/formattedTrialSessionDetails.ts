@@ -126,7 +126,7 @@ export const formattedTrialSessionDetails = (
     }
 
     if (user.role === USER_ROLES.caseServicesSupervisor && !trialDateInFuture) {
-      editPermissions = 'limited';
+      editPermissions = formattedTrialSession.isCalendared ? 'limited' : 'none';
     }
 
     const allCases = formattedTrialSession.caseOrder || [];

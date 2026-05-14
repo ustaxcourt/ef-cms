@@ -343,7 +343,7 @@ import { validatePetitionerInteractor } from '../../shared/src/business/useCases
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
-import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
+import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '@web-client/proxies/verifyPendingCaseForUserProxy';

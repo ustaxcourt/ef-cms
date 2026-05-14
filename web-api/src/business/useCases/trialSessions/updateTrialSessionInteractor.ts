@@ -71,6 +71,16 @@ export const updateTrialSession = async (
     );
   }
 
+  if (
+    startDateFormatted <= nowFormatted &&
+    authorizedUser?.role === ROLES.caseServicesSupervisor &&
+    !currentTrialSession.isCalendared
+  ) {
+    throw new Error(
+      'Non-calendared trial sessions cannot be updated after their start date.',
+    );
+  }
+
   const inputStartDateFormatted = formatDateString(
     trialSession.startDate,
     FORMATS.YYYYMMDD,
@@ -131,7 +141,8 @@ export const updateTrialSession = async (
 
   const isCaseServicesSupervisorLimitedEdit =
     startDateFormatted <= nowFormatted &&
-    authorizedUser?.role === ROLES.caseServicesSupervisor;
+    authorizedUser?.role === ROLES.caseServicesSupervisor &&
+    currentTrialSession.isCalendared;
 
   if (isCaseServicesSupervisorLimitedEdit) {
     const limitedEditableFieldSet = new Set<string>(LIMITED_EDITABLE_FIELDS);

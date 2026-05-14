@@ -294,6 +294,11 @@ export const SessionInformationForm = connect<
                         'usa-select',
                         validationErrors.swingSessionId && 'usa-select--error',
                       )}
+                      disabled={
+                        !addingTrialSession &&
+                        formattedTrialSessionDetails.editPermissions ===
+                          'limited'
+                      }
                       id="swing-session-id"
                       name="swingSessionId"
                       value={form.swingSessionId || ''}
