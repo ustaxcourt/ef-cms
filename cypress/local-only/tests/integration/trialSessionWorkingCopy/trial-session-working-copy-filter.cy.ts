@@ -28,8 +28,7 @@ describe('trials session working copies filtering', () => {
 
   const openSessionWorkingCopyAsJudge = (trialSessionId: string): void => {
     loginAsColvin();
-    cy.get('[data-testid="trial-session-link"]').click();
-    cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+    cy.visit(`/trial-session-working-copy/${trialSessionId}`);
   };
 
   const markCaseQcComplete = (
@@ -183,37 +182,57 @@ describe('trials session working copies filtering', () => {
       'Back to Session Copy',
     );
 
-  it('should include closed dismissed cases in the working copy list', () => {
-    // Get the first docket number from the working copy
-    cy.get('[data-testid^="trialSessionWorkingCopy-"]')
-      .first()
-      .invoke('attr', 'data-testid')
-      .then(testId => {
-        const docketNumber =
-          testId?.replace('trialSessionWorkingCopy-', '') || '';
+    cy.get('.big-blue-header').within(() => {
+      cy.get('h1').should('contain.text', 'Richmond, Virginia');
+    });
+    cy.get('[data-testid="back-to-session-link"]').click();
+    cy.get('[data-testid="print-public-session-working-copy"]').should(
+      'have.text',
+      'Print Public Copy',
+    );
+  });
 
-        // Update the first case to closedDismissed status
+  it('should include closed dismissed cases in the working copy list', () => {
+    const closedDismissedTrialLocation = 'Birmingham, Alabama';
+    const closedDismissedStartDate = '02/04/2233';
+    const closedDismissedEndDate = '02/05/2233';
+
+    loginAsPetitionsClerk1();
+
+    createTrialSession({
+      endDate: closedDismissedEndDate,
+      judge,
+      proceedingType,
+      sessionType,
+      startDate: closedDismissedStartDate,
+      trialLocation: closedDismissedTrialLocation,
+    }).then(({ trialSessionId }) => {
+      createAndServePaperPetition({
+        includeApwDocument: false,
+        procedureType: sessionType,
+        trialLocation: closedDismissedTrialLocation,
+      }).then(({ docketNumber }) => {
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        markCaseQcComplete(docketNumber, trialSessionId);
+        scheduleCaseForTrialSession(docketNumber, trialSessionId);
+
         loginAsDocketClerk1();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.closedDismissed);
 
-        // Navigate back to the trial session working copy
-        loginAsColvin();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get(
-          `[data-testid="trial-location-link-${newTrialSessionId}"]`,
-        ).click();
+        loginAsPetitionsClerk1();
+        visitTrialSessionDetail(trialSessionId);
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
 
-        // Verify the closed dismissed case is still displayed in the working copy
+        openSessionWorkingCopyAsJudge(trialSessionId);
         cy.get(
           `[data-testid="trialSessionWorkingCopy-${docketNumber}"]`,
         ).should('exist');
-
-        // Verify all three cases are still visible (closed dismissed should not be filtered out)
-        cy.get('[data-testid^="trialSessionWorkingCopy-"]').should(
-          'have.length',
-          3,
-        );
       });
+    });
   });
 });
