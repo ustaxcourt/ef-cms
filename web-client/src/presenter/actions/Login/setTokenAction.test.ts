@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { getCurrentUserToken } from '@shared/proxies/requests';
+import { getCurrentUserToken } from '@web-client/proxies/requests';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTokenAction } from './setTokenAction';

@@ -1,6 +1,6 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
-import { petition } from './petition';
+import { petition } from '@web-api/business/utilities/documentGenerators/petition';
 
 describe('generated petition', () => {
   generateAndVerifyPdfDiff({
@@ -119,6 +119,7 @@ describe('generated petition', () => {
           procedureType: 'Regular',
         },
       }),
-    testDescription: 'generates a petition with language and communication fields for primary and secondary contacts',
+    testDescription:
+      'generates a petition with language and communication fields for primary and secondary contacts',
   });
 });

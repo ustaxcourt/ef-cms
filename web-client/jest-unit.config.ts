@@ -10,6 +10,7 @@ const config: Config = {
   clearMocks: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
+    '!src/proxies/**/*.ts',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.ts',
@@ -33,6 +34,8 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  maxWorkers: '50%',
+
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsConfigPaths, {
@@ -56,6 +59,7 @@ const config: Config = {
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
+  workerIdleMemoryLimit: '20%',
 };
 
 export default config;

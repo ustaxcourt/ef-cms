@@ -14,67 +14,82 @@ import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/upd
 
 describe('trials session working copies filtering', () => {
   let newTrialSessionId: string;
-  before(() => {
-    const trialLocation = 'Richmond, Virginia';
-    const sessionType = SESSION_TYPES.small;
-    const judge = 'Colvin';
-    const startDate = '02/02/2233';
-    const endDate = '02/03/2233';
-    const proceedingType = 'In Person';
-    loginAsPetitionsClerk1();
-    createTrialSession({
-      endDate,
-      judge,
-      proceedingType,
-      sessionType,
-      startDate,
-      trialLocation,
-    }).then(({ trialSessionId }) => {
-      newTrialSessionId = trialSessionId;
-      // create 3 cases
-      for (let i = 0; i < 3; i++) {
-        createAndServePaperPetition({
-          procedureType: sessionType,
-          trialLocation,
-          includeApwDocument: false,
-        }).then(({ docketNumber }) => {
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
 
-          // go to the trialSession and check the QC Complete checkbox
-          loginAsPetitionsClerk1();
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.get('[data-testid="new-trial-sessions-tab"]').click();
-          cy.get(
-            `[data-testid="trial-location-link-${trialSessionId}"]`,
-          ).click();
-          cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+  const trialLocation = 'Richmond, Virginia';
+  const sessionType = SESSION_TYPES.small;
+  const judge = 'Colvin';
+  const startDate = '02/02/2233';
+  const endDate = '02/03/2233';
+  const proceedingType = 'In Person';
 
-          // schedule the trial
-          goToCase(docketNumber);
-          cy.get('[data-testid="tab-case-information"]').click();
-          cy.get('[data-testid="add-to-trial-session-btn"]').click();
-          cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
-          cy.get('[data-testid="modal-button-confirm"]').click();
-        });
-      }
-      // Calendar the trial session
-      loginAsPetitionsClerk1();
-      cy.get('[data-testid="inbox-tab-content"]').should('exist');
-      cy.get('[data-testid="trial-session-link"]').click();
-      cy.get('[data-testid="new-trial-sessions-tab"]').click();
-      cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-      cy.get('[data-testid="set-calendar-button"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
-    });
-  });
-  beforeEach(() => {
+  const visitTrialSessionDetail = (trialSessionId: string): void => {
+    cy.visit(`/trial-session-detail/${trialSessionId}`);
+  };
+
+  const openSessionWorkingCopyAsJudge = (trialSessionId: string): void => {
     loginAsColvin();
-    cy.get('[data-testid="trial-session-link"]').click();
-    cy.get(`[data-testid="trial-location-link-${newTrialSessionId}"]`).click();
+    cy.visit(`/trial-session-working-copy/${trialSessionId}`);
+  };
 
-    // Reset all filters
+  const markCaseQcComplete = (
+    docketNumber: string,
+    trialSessionId: string,
+  ): void => {
+    loginAsPetitionsClerk1();
+    visitTrialSessionDetail(trialSessionId);
+    cy.get(`[data-testid="qc-complete-${docketNumber}"]`).click({
+      force: true,
+    });
+  };
+
+  const scheduleCaseForTrialSession = (
+    docketNumber: string,
+    trialSessionId: string,
+  ): void => {
+    loginAsPetitionsClerk1();
+    goToCase(docketNumber);
+    cy.get('[data-testid="tab-case-information"]').click();
+    cy.get('[data-testid="add-to-trial-session-btn"]').click();
+    cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+    cy.get('[data-testid="modal-button-confirm"]').click();
+  };
+
+  const createReadyForTrialCalendaredCase = (
+    trialSessionId: string,
+  ): Cypress.Chainable<undefined> => {
+    return createAndServePaperPetition({
+      procedureType: sessionType,
+      trialLocation,
+      includeApwDocument: false,
+    }).then(({ docketNumber }) => {
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+      markCaseQcComplete(docketNumber, trialSessionId);
+      scheduleCaseForTrialSession(docketNumber, trialSessionId);
+
+      return cy.wrap(undefined);
+    });
+  };
+
+  const createReadyForTrialCalendaredCases = (
+    trialSessionId: string,
+    remainingCases: number,
+  ): Cypress.Chainable<undefined> => {
+    if (remainingCases === 0) {
+      return cy.wrap(undefined);
+    }
+
+    return createReadyForTrialCalendaredCase(trialSessionId).then(() => {
+      return createReadyForTrialCalendaredCases(
+        trialSessionId,
+        remainingCases - 1,
+      );
+    });
+  };
+
+  const resetWorkingCopyFiltersAndStatuses = (): void => {
     cy.get('[data-testid^="trial-session-working-copy-filter-"]').each(
       $filterDiv => {
         cy.wrap($filterDiv)
@@ -86,57 +101,67 @@ describe('trials session working copies filtering', () => {
           });
       },
     );
-    // Reset all trial statuses
+
     cy.get('[data-testid^="trialSessionWorkingCopy-"]').each($el => {
       cy.wrap($el).select('statusUnassigned');
     });
+  };
 
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    ).should('contain', '(3)');
-  });
-  it('should have all docket numbers set to statusUnassigned on initial load', () => {
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
+  const assertUnassignedCount = (count: number): void => {
+    cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned"]')
       .find('span')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.equal('(3)');
+      .should('have.text', `(${count})`);
+  };
+
+  before(() => {
+    loginAsPetitionsClerk1();
+
+    return createTrialSession({
+      endDate,
+      judge,
+      proceedingType,
+      sessionType,
+      startDate,
+      trialLocation,
+    }).then(({ trialSessionId }) => {
+      newTrialSessionId = trialSessionId;
+
+      return createReadyForTrialCalendaredCases(trialSessionId, 3).then(() => {
+        loginAsPetitionsClerk1();
+        visitTrialSessionDetail(trialSessionId);
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
       });
+    });
   });
+
+  beforeEach(() => {
+    openSessionWorkingCopyAsJudge(newTrialSessionId);
+    resetWorkingCopyFiltersAndStatuses();
+    assertUnassignedCount(3);
+  });
+
+  it('should have all docket numbers set to statusUnassigned on initial load', () => {
+    assertUnassignedCount(3);
+  });
+
   it('clicking the checkbox on the filter should not change the count', () => {
     cy.get(
       '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
     ).click();
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
-      .find('span')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.equal('(3)');
-      });
+    assertUnassignedCount(3);
   });
+
   it('should change counts if a trial status is changed', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'basisReached',
     );
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
-      .find('span')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.equal('(2)');
-      });
+    assertUnassignedCount(2);
     cy.get('[data-testid="trial-session-working-copy-filter-basisReached"]')
       .find('span')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.equal('(1)');
-      });
+      .should('have.text', '(1)');
   });
+
   it('should add back to statusUnassigned if trial status is changed back to unassigned', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'basisReached',
@@ -144,14 +169,7 @@ describe('trials session working copies filtering', () => {
     cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select(
       'statusUnassigned',
     );
-    cy.get(
-      '[data-testid="trial-session-working-copy-filter-statusUnassigned"]',
-    )
-      .find('span')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.equal('(3)');
-      });
+    assertUnassignedCount(3);
     cy.get('[data-testid="trial-session-working-copy-filter-basisReached"]')
       .find('span')
       .should('not.exist');
@@ -159,15 +177,62 @@ describe('trials session working copies filtering', () => {
 
   it('should navigate to the public copy print page when link is clicked and navigate back to session copy page', () => {
     cy.get('[data-testid="print-public-session-working-copy"]').click();
-    cy.get('[data-testid="back-to-session-link"]').as('backToSessionLink');
-    cy.get('@backToSessionLink').should('have.text', 'Back to Session Copy');
-     cy.get('.big-blue-header').within(() => {
+    cy.get('[data-testid="back-to-session-link"]').should(
+      'have.text',
+      'Back to Session Copy',
+    );
+
+    cy.get('.big-blue-header').within(() => {
       cy.get('h1').should('contain.text', 'Richmond, Virginia');
     });
-    cy.get('@backToSessionLink').click();
+    cy.get('[data-testid="back-to-session-link"]').click();
     cy.get('[data-testid="print-public-session-working-copy"]').should(
       'have.text',
       'Print Public Copy',
     );
+  });
+
+  it('should include closed dismissed cases in the working copy list', () => {
+    const closedDismissedTrialLocation = 'Birmingham, Alabama';
+    const closedDismissedStartDate = '02/04/2233';
+    const closedDismissedEndDate = '02/05/2233';
+
+    loginAsPetitionsClerk1();
+
+    createTrialSession({
+      endDate: closedDismissedEndDate,
+      judge,
+      proceedingType,
+      sessionType,
+      startDate: closedDismissedStartDate,
+      trialLocation: closedDismissedTrialLocation,
+    }).then(({ trialSessionId }) => {
+      createAndServePaperPetition({
+        includeApwDocument: false,
+        procedureType: sessionType,
+        trialLocation: closedDismissedTrialLocation,
+      }).then(({ docketNumber }) => {
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        markCaseQcComplete(docketNumber, trialSessionId);
+        scheduleCaseForTrialSession(docketNumber, trialSessionId);
+
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.closedDismissed);
+
+        loginAsPetitionsClerk1();
+        visitTrialSessionDetail(trialSessionId);
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+
+        openSessionWorkingCopyAsJudge(trialSessionId);
+        cy.get(
+          `[data-testid="trialSessionWorkingCopy-${docketNumber}"]`,
+        ).should('exist');
+      });
+    });
   });
 });

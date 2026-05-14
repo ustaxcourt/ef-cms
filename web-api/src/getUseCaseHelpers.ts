@@ -1,5 +1,5 @@
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { addDraftWatermarkToDocument } from '@shared/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
+import { addDraftWatermarkToDocument } from '@web-api/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from './business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from './business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
