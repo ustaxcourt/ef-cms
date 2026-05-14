@@ -15,7 +15,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
-} from '@shared/business/utilities/calculateEmail';
+} from '@web-api/business/utilities/calculateEmail';
 
 /**
  * This function isolates task of generating the Docket Entry

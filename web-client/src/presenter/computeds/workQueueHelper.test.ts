@@ -8,7 +8,7 @@ import {
   petitionsClerkUser,
 } from '@shared/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from './workQueueHelper';
