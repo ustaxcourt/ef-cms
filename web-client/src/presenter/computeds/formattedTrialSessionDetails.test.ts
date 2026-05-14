@@ -463,9 +463,10 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
 
-    it('should have edit permissions be limited if CSS user and start date is today', () => {
+    it('should have edit permissions be limited if CSS user and start date is today and session is calendared', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
+        isCalendared: true,
         sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: TODAY,
       };
@@ -482,9 +483,10 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.editPermissions).toBe('limited');
     });
 
-    it('should have edit permissions be limited if CSS user and start date is in the past', () => {
+    it('should have edit permissions be limited if CSS user and start date is in the past and session is calendared', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
+        isCalendared: true,
         sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: PAST_DATE,
       };
@@ -499,6 +501,46 @@ describe('formattedTrialSessionDetails', () => {
       });
 
       expect(result.editPermissions).toBe('limited');
+    });
+
+    it('should have edit permissions be none if CSS user and start date is in the past and session is not calendared', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        isCalendared: false,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.editPermissions).toBe('none');
+    });
+
+    it('should have edit permissions be none if CSS user and start date is today and session is not calendared', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        isCalendared: false,
+        sessionStatus: SESSION_STATUS_GROUPS.open,
+        startDate: TODAY,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+          user: caseServicesSupervisorUser,
+        },
+      });
+
+      expect(result.editPermissions).toBe('none');
     });
   });
 
