@@ -182,6 +182,7 @@ describe('trials session working copies filtering', () => {
       'have.text',
       'Back to Session Copy',
     );
+  });
 
   it('should include closed dismissed cases in the working copy list', () => {
     // Get the first docket number from the working copy
