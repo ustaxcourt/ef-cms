@@ -1,4 +1,4 @@
-import { Stamp } from '../../entities/Stamp';
+import { Stamp } from '@web-api/business/entities/Stamp';
 
 /**
  * validateStampInteractor

@@ -1,4 +1,4 @@
-import { getCurrentUserToken } from '@shared/proxies/requests';
+import { getCurrentUserToken } from '@web-client/proxies/requests';
 import { getPdfFromUrl } from './getPdfFromUrl';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 

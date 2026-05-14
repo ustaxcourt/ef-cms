@@ -6,7 +6,7 @@ import {
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
-import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
+import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 

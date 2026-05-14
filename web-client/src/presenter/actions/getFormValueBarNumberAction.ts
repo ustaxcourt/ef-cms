@@ -11,5 +11,5 @@ export const getFormValueBarNumberAction = ({ get }: ActionProps) => {
     state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
   );
 
-  return { barNumber };
+  return { barNumber: barNumber?.trim() };
 };
