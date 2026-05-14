@@ -264,8 +264,8 @@ describe('updateTrialSessionInteractorHelper', () => {
       expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(0);
 
       const setNoticeOfChangeOfTrialStartDateCalls =
-        applicationContext.getUseCaseHelpers()
-          .setNoticeOfChangeOfTrialStartDate.mock.calls;
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialStartDate
+          .mock.calls;
       expect(setNoticeOfChangeOfTrialStartDateCalls.length).toEqual(0);
     });
 
