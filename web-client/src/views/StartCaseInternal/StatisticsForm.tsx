@@ -8,7 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type StatisticsFormType = {
-  validateFormData: Function;
+  validateFormData: () => void;
 };
 
 const statisticsFormDependencies = {
