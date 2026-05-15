@@ -26,6 +26,7 @@ import { CopyObjectCommand } from '@aws-sdk/client-s3';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { environment } from '@web-api/environment';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
@@ -49,8 +50,6 @@ const removeConsolidatedCases = async (
 
   const storageClient = getStorageClient();
 
-  const updateCasePromises: Promise<any>[] = [];
-
   const { leadDocketNumber } = caseToUpdate;
 
   const allConsolidatedCases = await getConsolidatedCases({
@@ -62,24 +61,41 @@ const removeConsolidatedCases = async (
       !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
   );
 
-  if (
-    docketNumbersToRemove.includes(leadDocketNumber) &&
-    newConsolidatedCases.length > 1
-  ) {
-    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
+  await withTransaction(async () => {
+    const updateCasePromises: Promise<any>[] = [];
 
-    updateCasePromises.push(
-      updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
-      ),
-    );
+    if (
+      docketNumbersToRemove.includes(leadDocketNumber) &&
+      newConsolidatedCases.length > 1
+    ) {
+      const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
 
-    for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
-      const caseEntity = new Case(newConsolidatedCaseToUpdate, {
+      updateCasePromises.push(
+        updateConsolidatedCaseDeadlineReferenceId(
+          leadDocketNumber,
+          newLeadCase.docketNumber,
+        ),
+      );
+
+      for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
+        const caseEntity = new Case(newConsolidatedCaseToUpdate, {
+          authorizedUser,
+        });
+        caseEntity.setLeadCase(newLeadCase.docketNumber);
+
+        updateCasePromises.push(
+          updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: caseEntity,
+          }),
+        );
+      }
+    } else if (newConsolidatedCases.length == 1) {
+      // a case cannot be consolidated with itself
+      const caseEntity = new Case(newConsolidatedCases[0], {
         authorizedUser,
       });
-      caseEntity.setLeadCase(newLeadCase.docketNumber);
+      caseEntity.removeConsolidation();
 
       updateCasePromises.push(
         updateCaseAndAssociations({
@@ -88,104 +104,91 @@ const removeConsolidatedCases = async (
         }),
       );
     }
-  } else if (newConsolidatedCases.length == 1) {
-    // a case cannot be consolidated with itself
-    const caseEntity = new Case(newConsolidatedCases[0], {
-      authorizedUser,
+
+    // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+    // We already got the case information above via getCasesByLeadDocketNumber.
+    // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
+    const casesToRemove = await getCasesByDocketNumbers({
+      docketNumbers: docketNumbersToRemove,
     });
-    caseEntity.removeConsolidation();
 
-    updateCasePromises.push(
-      updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      }),
-    );
-  }
+    const docketEnIdsToUpdate: Set<string> = new Set();
+    const docketEntriesToUpdate: RawDocketEntry[] = [];
 
-  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
-  // We already got the case information above via getCasesByLeadDocketNumber.
-  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
-  const casesToRemove = await getCasesByDocketNumbers({
-    docketNumbers: docketNumbersToRemove,
-  });
+    for (const caseToRemove of casesToRemove) {
+      const caseEntity = new Case(caseToRemove, { authorizedUser });
+      caseEntity.removeConsolidation();
 
-  const docketEnIdsToUpdate: Set<string> = new Set();
-  const docketEntriesToUpdate: RawDocketEntry[] = [];
-
-  for (const caseToRemove of casesToRemove) {
-    const caseEntity = new Case(caseToRemove, { authorizedUser });
-    caseEntity.removeConsolidation();
-
-    updateCasePromises.push(
-      updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      }),
-    );
-
-    updateCasePromises.push(
-      removeConsolidatedCaseReferences(caseToRemove.docketNumber),
-    );
-
-    caseToRemove.docketEntries.forEach(docketEntry => {
-      if (DocketEntry.isMultiDocketed(docketEntry))
-        docketEnIdsToUpdate.add(docketEntry.docketEntryId);
-    });
-  }
-
-  for (const id of docketEnIdsToUpdate) {
-    // entries are docketEntries on ALL cases in the consolidated group
-    const entries = await getDocketEntriesById({ docketEntryId: id });
-    entries.forEach(entry => {
-      docketEntriesToUpdate.push(entry);
-    });
-  }
-
-  const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
-  docketEntriesToUpdate.forEach(docketEntry => {
-    // if this docket entry is on the cases still in the group
-    if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
-      // remove the unconsolidated docket numbers from its multiDocketedOn array
-      const filtered = (docketEntry.multiDocketedOn || []).filter(
-        docketNumber => !docketNumbersToRemove.includes(docketNumber),
+      updateCasePromises.push(
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
       );
-      // if filtered only contains the docket number we're on, then we set an empty array for the current
-      docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
-    } else {
-      docketEntry.multiDocketedOn = [];
-      const newStorageId = getUniqueId();
-      const oldStorageId = docketEntry.documentStorageId;
-      const storageCommand = new CopyObjectCommand({
-        Bucket: environment.documentsBucketName,
-        CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
-        Key: newStorageId,
+
+      updateCasePromises.push(
+        removeConsolidatedCaseReferences(caseToRemove.docketNumber),
+      );
+
+      caseToRemove.docketEntries.forEach(docketEntry => {
+        if (DocketEntry.isMultiDocketed(docketEntry))
+          docketEnIdsToUpdate.add(docketEntry.docketEntryId);
       });
-      updateCasePromises.push(storageClient.send(storageCommand));
-      docketEntry.documentStorageId = newStorageId;
-
-      if (docketEntry.documentContentsId) {
-        const newContentsId = getUniqueId();
-        const oldContentsId = docketEntry.documentContentsId;
-        const contentsCommand = new CopyObjectCommand({
-          Bucket: environment.documentsBucketName,
-          CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
-          Key: newContentsId,
-        });
-        updateCasePromises.push(storageClient.send(contentsCommand));
-        docketEntry.documentContentsId = newContentsId;
-      }
     }
-    const validatedDocketEntry = new DocketEntry(docketEntry, {
-      authorizedUser,
-    }).validate();
 
-    UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
+    for (const id of docketEnIdsToUpdate) {
+      // entries are docketEntries on ALL cases in the consolidated group
+      const entries = await getDocketEntriesById({ docketEntryId: id });
+      entries.forEach(entry => {
+        docketEntriesToUpdate.push(entry);
+      });
+    }
+
+    const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
+    docketEntriesToUpdate.forEach(docketEntry => {
+      // if this docket entry is on the cases still in the group
+      if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+        // remove the unconsolidated docket numbers from its multiDocketedOn array
+        const filtered = (docketEntry.multiDocketedOn || []).filter(
+          docketNumber => !docketNumbersToRemove.includes(docketNumber),
+        );
+        // if filtered only contains the docket number we're on, then we set an empty array for the current
+        docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
+      } else {
+        docketEntry.multiDocketedOn = [];
+        const newStorageId = getUniqueId();
+        const oldStorageId = docketEntry.documentStorageId;
+        const storageCommand = new CopyObjectCommand({
+          Bucket: environment.documentsBucketName,
+          CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
+          Key: newStorageId,
+        });
+        updateCasePromises.push(storageClient.send(storageCommand));
+        docketEntry.documentStorageId = newStorageId;
+
+        if (docketEntry.documentContentsId) {
+          const newContentsId = getUniqueId();
+          const oldContentsId = docketEntry.documentContentsId;
+          const contentsCommand = new CopyObjectCommand({
+            Bucket: environment.documentsBucketName,
+            CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
+            Key: newContentsId,
+          });
+          updateCasePromises.push(storageClient.send(contentsCommand));
+          docketEntry.documentContentsId = newContentsId;
+        }
+      }
+      const validatedDocketEntry = new DocketEntry(docketEntry, {
+        authorizedUser,
+      }).validate();
+
+      UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
+    });
+
+    updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
+
+    await settlePromises(updateCasePromises);
   });
-
-  updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
-
-  await settlePromises(updateCasePromises);
 };
 
 async function removeConsolidatedCaseReferences(docketNumber: string) {

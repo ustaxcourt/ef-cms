@@ -468,6 +468,27 @@ describe('editPaperFilingInteractor', () => {
             status: false,
           });
         });
+        it('should not serve the document if filing a document fails', async () => {
+          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(new Error('Database error'));
+          const docketEntry = caseRecord.docketEntries[1];
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: docketEntry.docketEntryId,
+                documentMetadata: docketEntry,
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow('Database error');
+
+          expect(
+            applicationContext.getUseCaseHelpers()
+              .serveDocumentAndGetPaperServicePdf,
+          ).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -580,11 +601,6 @@ describe('editPaperFilingInteractor', () => {
           ]);
           applicationContext
             .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
-          applicationContext
-            .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
               pdfUrl: mockedPaperServicePdfUrl,
             });
@@ -648,11 +664,6 @@ describe('editPaperFilingInteractor', () => {
               ],
             }),
           );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
