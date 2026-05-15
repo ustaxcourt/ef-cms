@@ -10,7 +10,7 @@ import React from 'react';
 
 type IrsNoticeType = {
   shouldStartWithBlankStatistic?: boolean;
-  validateFormData: Function;
+  validateFormData: () => void;
 };
 const irsNoticeDependencies = {
   caseDetailEditHelper: state.caseDetailEditHelper,
