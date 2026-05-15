@@ -51,7 +51,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|kysely)',
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '20%',

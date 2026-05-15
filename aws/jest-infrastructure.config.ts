@@ -23,7 +23,7 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: ['/node_modules/(?!uuid|kysely)'],
 };
 
 export default config;

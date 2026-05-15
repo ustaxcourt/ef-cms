@@ -1,5 +1,6 @@
 import * as path from 'path';
-import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
+import { FileMigrationProvider, Migrator } from 'kysely/migration';
+import { Kysely, sql } from 'kysely';
 import { promises as fs } from 'fs';
 import { getDbWriter } from '@web-api/persistence/postgres/database';
 
