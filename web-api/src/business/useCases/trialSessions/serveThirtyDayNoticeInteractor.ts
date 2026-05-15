@@ -32,6 +32,7 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -65,8 +66,8 @@ export const serveThirtyDayNotice = async (
   };
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -111,179 +112,185 @@ export const serveThirtyDayNotice = async (
     .map(aCase => aCase.docketNumber);
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  const generateNottForCases = casesToUpdate.map(async rawCase => {
-    const caseEntity = new Case(rawCase, { authorizedUser });
+  await withTransaction(async () => {
+    const generateNottForCases = casesToUpdate.map(async rawCase => {
+      const caseEntity = new Case(rawCase, { authorizedUser });
 
-    let clinicLetter;
-    const clinicLetterKey = getClinicLetterKey({
-      procedureType: caseEntity.procedureType,
-      trialLocation: trialSession.trialLocation,
-    });
-
-    const doesClinicLetterExist = await applicationContext
-      .getPersistenceGateway()
-      .isFileExists({
-        applicationContext,
-        key: clinicLetterKey,
+      let clinicLetter;
+      const clinicLetterKey = getClinicLetterKey({
+        procedureType: caseEntity.procedureType,
+        trialLocation: trialSession.trialLocation,
       });
 
-    if (doesClinicLetterExist) {
-      clinicLetter = await applicationContext
+      const doesClinicLetterExist = await applicationContext
         .getPersistenceGateway()
-        .getDocument({
+        .isFileExists({
           applicationContext,
           key: clinicLetterKey,
-          useTempBucket: false,
-        });
-    }
-
-    const hasProSePetitioner = caseEntity.petitioners.some(
-      petitioner =>
-        !Case.isPetitionerRepresented(caseEntity, petitioner.contactId),
-    );
-    if (hasProSePetitioner) {
-      const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
-        caseCaption: caseEntity.caseCaption,
-      });
-
-      const formatCityState = ({
-        city,
-        state,
-      }: {
-        city?: string;
-        state?: string;
-      }) => {
-        const formattedString = [city, state].filter(Boolean).join(', ');
-        return formattedString;
-      };
-
-      let noticePdf = await applicationContext
-        .getDocumentGenerators()
-        .thirtyDayNoticeOfTrial({
-          applicationContext,
-          data: {
-            caseCaptionExtension,
-            caseTitle,
-            dateServed: applicationContext.getUtilities().formatNow('MM/dd/yy'),
-            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-            judgeName: trialSession.judge!.name,
-            nameOfClerk: name,
-            proceedingType: trialSession.proceedingType,
-            scopeType: trialSession.sessionScope,
-            titleOfClerk: title,
-            trialDate: trialSession.startDate,
-            trialLocation: {
-              address1: trialSession.address1,
-              address2: trialSession.address2,
-              cityState: formatCityState({
-                city: trialSession.city,
-                state: trialSession.state,
-              }),
-              courthouseName: trialSession.courthouseName,
-              postalCode: trialSession.postalCode,
-            },
-          },
         });
 
       if (doesClinicLetterExist) {
-        noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
-          firstPdf: noticePdf,
-          secondPdf: clinicLetter,
-        });
+        clinicLetter = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            key: clinicLetterKey,
+            useTempBucket: false,
+          });
       }
 
-      await applicationContext
-        .getUseCaseHelpers()
-        .createAndServeNoticeDocketEntry(
-          applicationContext,
-          {
-            additionalDocketEntryInfo: {
-              date: trialSession.startDate,
-              trialLocation: trialSession.trialLocation,
+      const hasProSePetitioner = caseEntity.petitioners.some(
+        petitioner =>
+          !Case.isPetitionerRepresented(caseEntity, petitioner.contactId),
+      );
+      if (hasProSePetitioner) {
+        const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
+          caseCaption: caseEntity.caseCaption,
+        });
+
+        const formatCityState = ({
+          city,
+          state,
+        }: {
+          city?: string;
+          state?: string;
+        }) => {
+          const formattedString = [city, state].filter(Boolean).join(', ');
+          return formattedString;
+        };
+
+        let noticePdf = await applicationContext
+          .getDocumentGenerators()
+          .thirtyDayNoticeOfTrial({
+            applicationContext,
+            data: {
+              caseCaptionExtension,
+              caseTitle,
+              dateServed: applicationContext
+                .getUtilities()
+                .formatNow('MM/dd/yy'),
+              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+              judgeName: trialSession.judge!.name,
+              nameOfClerk: name,
+              proceedingType: trialSession.proceedingType,
+              scopeType: trialSession.sessionScope,
+              titleOfClerk: title,
+              trialDate: trialSession.startDate,
+              trialLocation: {
+                address1: trialSession.address1,
+                address2: trialSession.address2,
+                cityState: formatCityState({
+                  city: trialSession.city,
+                  state: trialSession.state,
+                }),
+                courthouseName: trialSession.courthouseName,
+                postalCode: trialSession.postalCode,
+              },
             },
-            caseEntity,
-            documentInfo: {
-              documentTitle: replaceBracketed(
-                thirtyDayNoticeDocumentInfo!.documentTitle,
-                formatDateString(
-                  trialSession.startDate,
-                  FORMATS.MMDDYYYY_DASHED,
+          });
+
+        if (doesClinicLetterExist) {
+          noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
+            firstPdf: noticePdf,
+            secondPdf: clinicLetter,
+          });
+        }
+
+        await applicationContext
+          .getUseCaseHelpers()
+          .createAndServeNoticeDocketEntry(
+            applicationContext,
+            {
+              additionalDocketEntryInfo: {
+                date: trialSession.startDate,
+                trialLocation: trialSession.trialLocation,
+              },
+              caseEntity,
+              documentInfo: {
+                documentTitle: replaceBracketed(
+                  thirtyDayNoticeDocumentInfo!.documentTitle,
+                  formatDateString(
+                    trialSession.startDate,
+                    FORMATS.MMDDYYYY_DASHED,
+                  ),
+                  trialSession.trialLocation!,
                 ),
-                trialSession.trialLocation!,
-              ),
-              documentType: thirtyDayNoticeDocumentInfo!.documentType,
-              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+                documentType: thirtyDayNoticeDocumentInfo!.documentType,
+                eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+              },
+              newPdfDoc: paperServicePdf,
+              noticePdf,
+              onlyProSePetitioners: true,
             },
-            newPdfDoc: paperServicePdf,
-            noticePdf,
-            onlyProSePetitioners: true,
-          },
+            authorizedUser,
+          );
+
+        await updateCaseAndAssociations({
           authorizedUser,
-        );
+          caseToUpdate: caseEntity,
+        });
 
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+        pdfsAppended++;
 
-      pdfsAppended++;
+        hasPaperService =
+          hasPaperService ||
+          caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
 
-      hasPaperService =
-        hasPaperService ||
-        caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            clientConnectionId,
+            message: {
+              action: 'paper_service_updated',
+              pdfsAppended,
+            },
+            userId: authorizedUser.userId,
+          });
+      }
+    });
 
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'paper_service_updated',
-          pdfsAppended,
-        },
-        userId: authorizedUser.userId,
-      });
+    await settlePromises(generateNottForCases);
+
+    let pdfUrl: string | undefined = undefined;
+    let fileId: string | undefined = undefined;
+    if (hasPaperService) {
+      const paperServicePdfData = await paperServicePdf.save();
+      ({ fileId, url: pdfUrl } = await applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl({
+          applicationContext,
+          file: paperServicePdfData,
+          fileNamePrefix: 'paper-service-pdf/',
+        }));
+
+      trialSessionEntity.addPaperServicePdf(
+        fileId,
+        replaceBracketed(
+          thirtyDayNoticeDocumentInfo!.documentTitle,
+          formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
+          trialSession.trialLocation!,
+        ),
+      );
     }
-  });
 
-  await settlePromises(generateNottForCases);
+    trialSessionEntity.hasNottBeenServed = true;
 
-  let pdfUrl: string | undefined = undefined;
-  let fileId: string | undefined = undefined;
-  if (hasPaperService) {
-    const paperServicePdfData = await paperServicePdf.save();
-    ({ fileId, url: pdfUrl } = await applicationContext
-      .getUseCaseHelpers()
-      .saveFileAndGenerateUrl({
-        applicationContext,
-        file: paperServicePdfData,
-        fileNamePrefix: 'paper-service-pdf/',
-      }));
+    await updateTrialSession({
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
 
-    trialSessionEntity.addPaperServicePdf(
-      fileId,
-      replaceBracketed(
-        thirtyDayNoticeDocumentInfo!.documentTitle,
-        formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
-        trialSession.trialLocation!,
-      ),
-    );
-  }
-
-  trialSessionEntity.hasNottBeenServed = true;
-
-  await updateTrialSession({
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'thirty_day_notice_paper_service_complete',
-      fileId,
-      hasPaper: hasPaperService,
-      pdfUrl,
-    },
-    userId: authorizedUser.userId,
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'thirty_day_notice_paper_service_complete',
+        fileId,
+        hasPaper: hasPaperService,
+        pdfUrl,
+      },
+      userId: authorizedUser.userId,
+    });
   });
 };
 
@@ -296,8 +303,8 @@ export const determineEntitiesToLock = async (
   },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

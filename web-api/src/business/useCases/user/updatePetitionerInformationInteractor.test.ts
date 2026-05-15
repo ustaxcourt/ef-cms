@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -83,6 +84,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -626,6 +628,28 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(updatePetitionerSpy).toHaveBeenCalled();
     expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
+
+  it('should not generate and serve the docket entry if transaction fails', async () => {
+      invalidateUserContactGeocode.mockRejectedValueOnce(
+        new Error('Database error'),
+      );
+
+      await expect(
+        updatePetitionerInformationInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            updatedPetitionerData: {
+              ...mockPetitioners[0],
+              address1: 'changed address',
+            },
+          },
+          mockDocketClerkUser,
+        ),
+      ).rejects.toThrow('Database error');
+
+      expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
+    });
 
   describe('admissions clerk adds a verified petitioner email', () => {
     const mockUpdatedEmail = 'changed-email@example.com';
