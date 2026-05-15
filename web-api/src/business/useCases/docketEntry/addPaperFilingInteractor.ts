@@ -84,7 +84,7 @@ export const addPaperFiling = async (
   const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
 
   let effectiveConsolidatedGroupDocketNumbers: string[] = [];
-  let numberOfPages: number;
+  let numberOfPages: number | undefined;
   if (isFileAttached) {
     numberOfPages = await applicationContext
       .getUseCaseHelpers()

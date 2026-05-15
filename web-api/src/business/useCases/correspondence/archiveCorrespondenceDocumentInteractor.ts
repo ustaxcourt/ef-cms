@@ -50,7 +50,7 @@ export const archiveCorrespondenceDocument = async (
       (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
     ]);
 
-    const updatedCase = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
@@ -62,8 +62,6 @@ export const archiveCorrespondenceDocument = async (
         key: correspondenceId,
       });
     });
-
-    return updatedCase;
   });
 };
 

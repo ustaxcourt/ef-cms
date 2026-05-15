@@ -210,10 +210,10 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let originalFilingCaseNoticeDocumentTitle;
-  let isNewCoverSheetNeeded = false;
   let paperServicePdfUrl: string | undefined = undefined;
   let paperServiceDocumentTitle: string | undefined = undefined;
+  let originalFilingCaseNoticeDocumentTitle;
+  let isNewCoverSheetNeeded = false;
 
   const paperServiceParties: Array<RawUser & { docketNumber: string }> = [];
   const caseSpecificNotices: Array<{

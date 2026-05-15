@@ -231,9 +231,6 @@ export const fileExternalDocument = async (
         caseToUpdate: caseEntity,
         includeCorrespondence: false,
       });
-
-      const rawCaseEntity = caseEntity.toRawObject();
-      return rawCaseEntity;
     });
 
     await settlePromises(consolidatedCaseEntities);
