@@ -3,8 +3,8 @@ import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
-import type { InsertExpression } from 'node_modules/kysely/dist/cjs/parser/insert-values-parser';
 import { isEmpty } from 'lodash';
+import { InsertExpression } from 'node_modules/kysely/dist/parser/insert-values-parser';
 
 export const pgInsertInto = async <T extends keyof Database>({
   table,
@@ -43,6 +43,6 @@ export const pgInsertInto = async <T extends keyof Database>({
       return await query.returningAll().execute();
     },
     table,
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };
