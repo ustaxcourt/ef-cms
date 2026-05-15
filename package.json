@@ -125,6 +125,7 @@
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
     "clean:public": "rm -rf dist-public/",
     "cleanup:cypress-test-accounts": "./scripts/user/cleanup-cypress-test-accounts.ts",
+    "cleanup:entity-validation": "./scripts/entity-validation/cleanupEntityValidation.ts",
     "cypress:file": "./scripts/tests/run-cypress.ts --file",
     "cypress:integration": "./scripts/tests/run-cypress.ts --suite integration",
     "cypress:integration:open": "./scripts/tests/run-cypress.ts --suite integration --open",
@@ -250,6 +251,7 @@
     "test:shared:ci": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage --coverageProvider=babel --coverageDirectory=./coverage/${NODE_INDEX} ${JEST_TEST_RESULTS_ARGS} ${TESTFILES}",
     "test:shared:file": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage=false",
     "test:watch": "jest --watch .*test\\.js$",
+    "validation:fingerprint": "npx ts-node --transpile-only ./scripts/entity-validation/entityValidation.ts",
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
