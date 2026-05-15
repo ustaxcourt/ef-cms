@@ -1,18 +1,14 @@
 import * as path from 'path';
-import { FileMigrationProvider, Migrator } from 'kysely/migration';
-import { promises as fs } from 'fs';
+import { Migrator } from 'kysely/migration';
 import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { CjsMigrationProvider } from './CjsMigrationProvider';
 
 async function rollbackLastMigration() {
   await getDbWriter({
     cb: async writer => {
       const migrator = new Migrator({
         db: writer,
-        provider: new FileMigrationProvider({
-          fs,
-          migrationFolder: path.join(__dirname, 'migrations'),
-          path,
-        }),
+        provider: new CjsMigrationProvider(path.join(__dirname, 'migrations')),
         allowUnorderedMigrations: true,
       });
 
