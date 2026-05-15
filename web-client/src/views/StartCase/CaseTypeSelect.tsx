@@ -22,7 +22,7 @@ type CaseTypeSelectType = {
   onChangePreValidation?: Function;
   refProp?: (element: any) => void;
   validationError?: { [key: string]: string | undefined };
-  validateFormData?: () => void;
+  validateFormData?: Function;
   value?: string;
 };
 

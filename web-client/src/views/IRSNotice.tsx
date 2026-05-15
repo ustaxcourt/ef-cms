@@ -8,11 +8,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export type ValidateFormData = () => void;
-
 type IrsNoticeType = {
   shouldStartWithBlankStatistic?: boolean;
-  validateFormData: ValidateFormData;
+  validateFormData: Function;
 };
 const irsNoticeDependencies = {
   caseDetailEditHelper: state.caseDetailEditHelper,
