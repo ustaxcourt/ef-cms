@@ -13,6 +13,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const deleteCaseDeadline = async (
   _applicationContext: ServerApplicationContext,
@@ -44,52 +45,54 @@ export const deleteCaseDeadline = async (
   const HANDLED_CASE_DEADLINE = deadlinesBeforeDelete.find(
     cd => cd.caseDeadlineId === caseDeadlineId,
   );
-
-  await deleteDeadline({
-    caseDeadlineId,
-  });
-
-  updatedCase = await updateCaseAutomaticBlock({
-    caseEntity: updatedCase,
-    hasCaseDeadline: deadlinesBeforeDelete.length > 1,
-  });
-
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: updatedCase,
-  });
-
-  const { leadDocketNumber } = caseToUpdate;
-
-  if (!leadDocketNumber) {
-    return;
-  }
-
-  if (
-    !HANDLED_CASE_DEADLINE ||
-    HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
-  ) {
-    return;
-  }
-
-  const CONSOLIDATED_CASE_DEADLINE =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);
-
-  const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
-    CONSOLIDATED_CASE_DEADLINE.filter(
-      ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
-    ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
-      return deleteCaseDeadline(
-        _applicationContext,
-        {
-          caseDeadlineId,
-          docketNumber: ccDocketNumber,
-        },
-        authorizedUser,
-      );
+  
+  await withTransaction(async () => {
+    await deleteDeadline({
+      caseDeadlineId,
     });
 
-  await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
+    updatedCase = await updateCaseAutomaticBlock({
+      caseEntity: updatedCase,
+      hasCaseDeadline: deadlinesBeforeDelete.length > 1,
+    });
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: updatedCase,
+    });
+
+    const { leadDocketNumber } = caseToUpdate;
+
+    if (!leadDocketNumber) {
+      return;
+    }
+
+    if (
+      !HANDLED_CASE_DEADLINE ||
+      HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
+    ) {
+      return;
+    }
+
+    const CONSOLIDATED_CASE_DEADLINE =
+      await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);
+
+    const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
+      CONSOLIDATED_CASE_DEADLINE.filter(
+        ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
+      ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
+        return deleteCaseDeadline(
+          _applicationContext,
+          {
+            caseDeadlineId,
+            docketNumber: ccDocketNumber,
+          },
+          authorizedUser,
+        );
+      });
+
+    await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
+  });
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(

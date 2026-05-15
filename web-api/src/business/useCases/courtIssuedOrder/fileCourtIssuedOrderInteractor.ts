@@ -25,6 +25,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -71,24 +72,22 @@ export const fileCourtIssuedOrder = async (
     }
   }
 
+  let documentContentsId: string | undefined;
+  let contentToStore:
+    | { documentContents: string; richText: string | undefined }
+    | undefined;
+
   if (documentMetadata.documentContents) {
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
-    const documentContentsId = applicationContext.getUniqueId();
+    documentContentsId = applicationContext.getUniqueId();
 
-    const contentToStore = {
+    contentToStore = {
       documentContents: documentMetadata.documentContents,
       richText: documentMetadata.draftOrderState
         ? documentMetadata.draftOrderState.richText
         : undefined,
     };
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      contentType: 'application/json',
-      document: Buffer.from(JSON.stringify(contentToStore)),
-      key: documentContentsId,
-      useTempBucket: false,
-    });
 
     if (documentMetadata.draftOrderState) {
       delete documentMetadata.draftOrderState.documentContents;
@@ -123,34 +122,48 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  if (documentContentsId !== undefined && contentToStore !== undefined) {
+    const capturedId = documentContentsId;
+    const capturedContent = contentToStore;
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      contentType: 'application/json',
+      document: Buffer.from(JSON.stringify(capturedContent)),
+      key: capturedId,
+      useTempBucket: false,
+    });
+  }
 
-  if (documentMetadata.parentMessageId) {
-    const messages = await getMessageThreadByParentId({
-      parentMessageId: documentMetadata.parentMessageId,
+  await withTransaction(async () => {
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
     });
 
-    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
-
-    const messageEntity = new Message(mostRecentMessage).validate();
-
-    const isAttached = some(
-      messageEntity.attachments,
-      attachment => attachment.documentId === docketEntryEntity.docketEntryId,
-    );
-
-    if (!isAttached) {
-      messageEntity.addAttachment({
-        documentId: docketEntryEntity.docketEntryId,
-        documentTitle: docketEntryEntity.documentTitle,
+    if (documentMetadata.parentMessageId) {
+      const messages = await getMessageThreadByParentId({
+        parentMessageId: documentMetadata.parentMessageId,
       });
-    }
 
-    await upsertMessages([messageEntity.validate().toRawObject()]);
-  }
+      const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+      const messageEntity = new Message(mostRecentMessage).validate();
+
+      const isAttached = some(
+        messageEntity.attachments,
+        attachment => attachment.documentId === docketEntryEntity.docketEntryId,
+      );
+
+      if (!isAttached) {
+        messageEntity.addAttachment({
+          documentId: docketEntryEntity.docketEntryId,
+          documentTitle: docketEntryEntity.documentTitle,
+        });
+      }
+
+      await upsertMessages([messageEntity.validate().toRawObject()]);
+    }
+  });
 };
 
 export const fileCourtIssuedOrderInteractor = withLocking(

@@ -11,6 +11,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * addConsolidatedCase
@@ -79,22 +80,24 @@ export const addConsolidatedCase = async (
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
   });
 
-  const updateCasePromises: Promise<RawCase>[] = [];
-  casesToUpdate.forEach(caseInCasesToUpdate => {
-    const caseEntity = new Case(caseInCasesToUpdate, {
-      authorizedUser,
-    });
-    caseEntity.setLeadCase(newLeadCase.docketNumber);
-
-    updateCasePromises.push(
-      updateCaseAndAssociations({
+  await withTransaction(async () => {
+    const updateCasePromises: Promise<RawCase>[] = [];
+    casesToUpdate.forEach(caseInCasesToUpdate => {
+      const caseEntity = new Case(caseInCasesToUpdate, {
         authorizedUser,
-        caseToUpdate: caseEntity,
-      }),
-    );
-  });
+      });
+      caseEntity.setLeadCase(newLeadCase.docketNumber);
 
-  await settlePromises(updateCasePromises);
+      updateCasePromises.push(
+        updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        }),
+      );
+    });
+
+    await settlePromises(updateCasePromises);
+  });
 };
 
 export const determineEntitiesToLock = (

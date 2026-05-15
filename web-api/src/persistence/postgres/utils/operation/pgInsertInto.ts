@@ -49,6 +49,6 @@ export const pgInsertInto = async <T extends keyof Database>({
       return await query.returningAll().execute();
     },
     table,
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };

@@ -21,6 +21,10 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -153,81 +157,90 @@ export const fileExternalDocument = async (
     }
   }
 
-  const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
-    let caseEntity = new Case(caseToUpdate, { authorizedUser });
+  await withTransaction(async () => {
+    const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
+      let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+      const servedParties = aggregatePartiesForService(caseEntity);
 
-    for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
-      if (docketEntryId && metadata) {
-        const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...baseMetadata,
-            ...metadata,
-            docketEntryId,
-            documentStorageId: docketEntryId,
-            multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
-            originallyFiledDocketNumber: docketNumber,
-            documentType: metadata.documentType,
-            isOnDocketRecord: true,
-            relationship,
-            numberOfPages,
-          },
-          {
-            authorizedUser,
-            petitioners: currentCaseEntity.petitioners,
-          },
-        );
+      for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
+        if (docketEntryId && metadata) {
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...baseMetadata,
+              ...metadata,
+              docketEntryId,
+              documentStorageId: docketEntryId,
+              multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
+              originallyFiledDocketNumber: docketNumber,
+              documentType: metadata.documentType,
+              isOnDocketRecord: true,
+              relationship,
+              numberOfPages,
+            },
+            {
+              authorizedUser,
+              petitioners: currentCaseEntity.petitioners,
+            },
+          );
 
-        docketEntryEntity.setFiledBy(user);
-        docketEntryEntity.validate();
+          docketEntryEntity.setFiledBy(user);
+          docketEntryEntity.validate();
 
-        const workItem = new WorkItem({
-          assigneeId: null,
-          assigneeName: null,
-          docketEntryId: docketEntryEntity.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-        }).validate();
-
-        workItems.push(workItem);
-        caseEntity.addDocketEntry(docketEntryEntity);
-
-        const isAutoServed = docketEntryEntity.isAutoServed();
-
-        if (isAutoServed) {
-          docketEntryEntity.setAsServed(servedParties.all);
-
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
+          const workItem = new WorkItem({
+            assigneeId: null,
+            assigneeName: null,
             docketEntryId: docketEntryEntity.docketEntryId,
-            servedParties,
-          });
+            docketNumber: caseToUpdate.docketNumber,
+            section: DOCKET_SECTION,
+            sentBy: user.name,
+            sentByUserId: user.userId,
+          }).validate();
+
+          workItems.push(workItem);
+          caseEntity.addDocketEntry(docketEntryEntity);
+
+          const isAutoServed = docketEntryEntity.isAutoServed();
+
+          if (isAutoServed) {
+            docketEntryEntity.setAsServed(servedParties.all);
+
+            onTransactionCommit(async () => {
+              await applicationContext
+                .getUseCaseHelpers()
+                .sendServedPartiesEmails({
+                  applicationContext,
+                  caseEntity,
+                  docketEntryId: docketEntryEntity.docketEntryId,
+                  servedParties,
+                });
+            });
+          }
         }
       }
-    }
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        caseEntity,
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          caseEntity,
+        });
+
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+        includeCorrespondence: false,
       });
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-      includeCorrespondence: false,
+      const rawCaseEntity = caseEntity.toRawObject();
+      return rawCaseEntity;
     });
-  });
 
-  await settlePromises(consolidatedCaseEntities);
+    await settlePromises(consolidatedCaseEntities);
 
-  await upsertWorkItems({
-    workItems,
+    await upsertWorkItems({
+      workItems,
+    });
   });
 };
 

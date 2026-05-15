@@ -43,6 +43,7 @@ import {
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
   DocketEntry,
@@ -209,10 +210,10 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
   let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
+  let paperServicePdfUrl: string | undefined = undefined;
+  let paperServiceDocumentTitle: string | undefined = undefined;
 
   const paperServiceParties: Array<RawUser & { docketNumber: string }> = [];
   const caseSpecificNotices: Array<{
@@ -473,7 +474,9 @@ const completeDocketEntryQC = async (
     }
   }
 
-  await settlePromises(updatePersistencePromises);
+  await withTransaction(async () => {
+    await settlePromises(updatePersistencePromises);
+  });
 
   if (isNewCoverSheetNeeded) {
     await applicationContext.getUseCases().addCoversheetInteractor(
