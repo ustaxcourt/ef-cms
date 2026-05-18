@@ -105,9 +105,16 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         // needsNoticeOfDocketChange=true (NODC).
         cy.get('[data-testid="document-qc-nav-item"]').click();
         cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+        // Multiple work items per case exist on this case (Answer filed in
+        // step 1 + SIAB filed in step 2). Selecting `.first()` would pick
+        // up the Answer's work item — match by descriptionDisplay text to
+        // route to the SIAB work item explicitly.
         cy.get(`[data-testid=work-item-${leadDocketNumber}]`)
-          .first()
           .find(`[data-testid=work-item-document-link-${leadDocketNumber}]`)
+          .filter((_, el) =>
+            /Simultaneous Answering Brief/.test(el.textContent || ''),
+          )
+          .first()
           .click();
         cy.get('[data-testid="additional-info-primary-document-form"]')
           .should('be.visible')

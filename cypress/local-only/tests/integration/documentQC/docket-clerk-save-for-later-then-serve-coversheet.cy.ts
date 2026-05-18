@@ -1,5 +1,4 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
-import { assertDocketEntryPageCount } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
@@ -66,8 +65,11 @@ describe('Docket Clerk save-for-later then serve paper filing — coversheet onl
 
       // Pre-serve assertion: docket record shows the saved entry without
       // a coversheet — numberOfPages equals the uploaded PDF page count.
+      // Exact eventCode matching (not substring) — the petition-service
+      // step already created a NOTR entry on the case, and cy.contains
+      // substring-matches "NOT" against "NOTR".
       goToCase(docketNumber);
-      assertDocketEntryPageCount({ eventCode: 'NOT', expected: '1' });
+      assertNotEntryPageCount('1');
 
       // Pick the saved entry back up from My Document QC (in-progress)
       // and serve it.
@@ -85,7 +87,19 @@ describe('Docket Clerk save-for-later then serve paper filing — coversheet onl
       // Post-serve assertion: serving enqueues the coversheet, so
       // numberOfPages is now original (1) + coversheet (1) = 2.
       goToCase(docketNumber);
-      assertDocketEntryPageCount({ eventCode: 'NOT', expected: '2' });
+      assertNotEntryPageCount('2');
     });
   });
 });
+
+// Exact-match assertion for the paper-filed Notice entry (eventCode = 'NOT').
+// Avoids substring collisions with NOTR / NODC / etc. that may already be on
+// the case from upstream service flows.
+function assertNotEntryPageCount(expected: string) {
+  cy.get('[data-testid^="docket-entry-eventCode-"]')
+    .filter((_, el) => (el.textContent || '').trim() === 'NOT')
+    .first()
+    .parents('tr')
+    .find('.number-of-pages')
+    .should('have.text', expected);
+}
