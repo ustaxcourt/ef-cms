@@ -10,6 +10,7 @@ import {
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
+import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
 
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
@@ -63,7 +64,8 @@ export const prepareMotionOrderResponseAction = ({
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const normalizedAdditionalOrderTextArray =
-    additionalOrderTextArray || (additionalOrderText ? [additionalOrderText] : []);
+    additionalOrderTextArray ||
+    (additionalOrderText ? [additionalOrderText] : []);
   const hasAdditionalOrderTextArray =
     !!normalizedAdditionalOrderTextArray.filter(text => text).length;
 
@@ -120,11 +122,11 @@ export const prepareMotionOrderResponseAction = ({
 
   let additionalTextLine = '';
   if (hasAdditionalOrderTextArray) {
-    const additionalOrderTextFiltered = normalizedAdditionalOrderTextArray.filter(
-      text => text,
-    );
+    const additionalOrderTextFiltered =
+      normalizedAdditionalOrderTextArray.filter(text => text);
     additionalOrderTextFiltered.forEach((text, index) => {
-      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${text}.${
+      const clause = formatAdditionalOrderClauseForRichText(text);
+      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
         index < additionalOrderTextFiltered.length - 1 ? ' It is further' : ''
       }</p>`;
     });

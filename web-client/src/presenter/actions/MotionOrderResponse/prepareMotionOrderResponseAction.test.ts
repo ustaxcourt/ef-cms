@@ -353,6 +353,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(richText).toContain(
       'ORDERED that The Court expects full compliance.',
     );
+    expect(richText).not.toContain('compliance..');
   });
 
   it('should chain multiple additional order text clauses with It is further', async () => {

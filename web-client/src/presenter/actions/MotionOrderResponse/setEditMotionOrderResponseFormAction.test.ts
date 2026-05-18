@@ -81,8 +81,12 @@ describe('setEditMotionOrderResponseFormAction', () => {
     });
 
     expect(result.state.form).toEqual({
-      ...mockDraftOrderState,
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
       additionalOrderTextArray: ['Some additional text'],
     });
+    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 });
