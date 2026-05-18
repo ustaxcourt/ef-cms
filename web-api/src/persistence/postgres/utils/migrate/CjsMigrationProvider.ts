@@ -27,7 +27,10 @@ export class CjsMigrationProvider implements MigrationProvider {
       if (ext !== '.ts' && ext !== '.js') continue;
       const name = path.basename(file, ext);
       const fullPath = path.join(this.migrationFolder, file);
-      migrations[name] = require(fullPath);
+      const loadedModule = require(fullPath) as Migration & {
+        default?: Migration;
+      };
+      migrations[name] = loadedModule.default ?? loadedModule;
     }
 
     return migrations;
