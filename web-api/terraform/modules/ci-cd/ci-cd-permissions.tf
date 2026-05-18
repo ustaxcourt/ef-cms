@@ -149,6 +149,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cloudfront:UpdateDistribution",
         "cloudfront:CreateCloudFrontOriginAccessIdentity",
         "cloudfront:CreateInvalidation",
+        "cloudfront:GetInvalidation",
         "cloudfront:GetCloudFrontOriginAccessIdentity",
         "cloudfront:DeleteCloudFrontOriginAccessIdentity",
         "cloudfront:ListDistributions",
