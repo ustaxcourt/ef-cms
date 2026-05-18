@@ -6,6 +6,7 @@ export const clearStatusReportOrderFormAction = ({ store }: ActionProps) => {
   store.unset(state.form.dueDate);
   store.unset(state.form.strickenFromTrialSessions);
   store.unset(state.form.jurisdiction);
+  store.unset(state.form.additionalOrderText);
   store.set(state.form.additionalOrderTextArray, ['']);
   store.set(state.form.docketEntryDescription, 'Order');
   store.set(

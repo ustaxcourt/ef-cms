@@ -10,6 +10,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Button as DawsonButton } from '@web-client/dawson-ui/ui/button';
 import React from 'react';
+import { getAdditionalOrderTextArrayFormGroupErrors } from '@web-client/utilities/getAdditionalOrderTextArrayFormGroupErrors';
 
 export const StatusReportOrder = connect(
   {
@@ -42,6 +43,12 @@ export const StatusReportOrder = connect(
     validateStatusReportOrderSequence,
     validationErrors,
   }) {
+    const additionalOrderTextArrayFormErrors =
+      getAdditionalOrderTextArrayFormGroupErrors(
+        validationErrors,
+        form.additionalOrderTextArray.length,
+      );
+
     return (
       <>
         <CaseDetailHeader />
@@ -374,7 +381,7 @@ export const StatusReportOrder = connect(
 
                   <FormGroup
                     className="status-report-order-form-group"
-                    errorText={validationErrors.additionalOrderTextArray}
+                    errorText={additionalOrderTextArrayFormErrors}
                   >
                     {form.additionalOrderTextArray.map((text, index) => (
                       <div key={index}>

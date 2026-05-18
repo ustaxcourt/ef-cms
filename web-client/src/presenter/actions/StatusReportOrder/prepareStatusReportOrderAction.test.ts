@@ -120,6 +120,32 @@ describe('prepareStatusReportOrderAction,', () => {
     );
   });
 
+  it('does not append a second period when a clause already ends with punctuation', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          additionalOrderTextArray: ['Parties shall file by Monday.'],
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that Parties shall file by Monday.',
+    );
+    expect(result.state.form.richText).not.toContain('Monday..');
+  });
+
   it.each([
     [
       STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup,

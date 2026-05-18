@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
 
 export const prepareStatusReportOrderAction = ({
   applicationContext,
@@ -36,7 +37,8 @@ export const prepareStatusReportOrderAction = ({
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
   const normalizedAdditionalOrderTextArray =
-    additionalOrderTextArray || (additionalOrderText ? [additionalOrderText] : []);
+    additionalOrderTextArray ||
+    (additionalOrderText ? [additionalOrderText] : []);
   const hasAdditionalOrderTextArray =
     !!normalizedAdditionalOrderTextArray.filter(text => text).length;
 
@@ -84,11 +86,11 @@ export const prepareStatusReportOrderAction = ({
 
   let additionalTextLine = '';
   if (hasAdditionalOrderTextArray) {
-    const additionalOrderTextFiltered = normalizedAdditionalOrderTextArray.filter(
-      text => text,
-    );
+    const additionalOrderTextFiltered =
+      normalizedAdditionalOrderTextArray.filter(text => text);
     additionalOrderTextFiltered.forEach((text, index) => {
-      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${text}.${
+      const clause = formatAdditionalOrderClauseForRichText(text);
+      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
         index < additionalOrderTextFiltered.length - 1 ? ' It is further' : ''
       }</p>`;
     });

@@ -6,18 +6,20 @@ export const setEditMotionOrderResponseFormAction = ({
   store,
 }: ActionProps) => {
   const documentToEdit = get(state.documentToEdit);
+  const { draftOrderState } = documentToEdit;
   const { caseDetail, docketEntryIdToEdit } = props;
   const pathUrl = props.parentMessageId
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-order-response-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
+  const { additionalOrderText: legacyAdditionalOrderText, ...draftFields } =
+    draftOrderState;
+
   store.set(state.form, {
-    ...documentToEdit.draftOrderState,
+    ...draftFields,
     additionalOrderTextArray:
-      documentToEdit.draftOrderState.additionalOrderTextArray ||
-      (documentToEdit.draftOrderState.additionalOrderText
-        ? [documentToEdit.draftOrderState.additionalOrderText]
-        : ['']),
+      draftOrderState.additionalOrderTextArray ||
+      (legacyAdditionalOrderText ? [legacyAdditionalOrderText] : ['']),
   });
   store.set(
     state.docketEntryId,

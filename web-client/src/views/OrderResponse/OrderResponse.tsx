@@ -10,6 +10,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
+import { getAdditionalOrderTextArrayFormGroupErrors } from '@web-client/utilities/getAdditionalOrderTextArrayFormGroupErrors';
 
 export const OrderResponse = connect(
   {
@@ -51,6 +52,12 @@ export const OrderResponse = connect(
     validationErrors,
     validateMotionOrderResponseSequence,
   }) {
+    const additionalOrderTextArrayFormErrors =
+      getAdditionalOrderTextArrayFormGroupErrors(
+        validationErrors,
+        form.additionalOrderTextArray?.length ?? 0,
+      );
+
     return (
       <>
         <CaseDetailHeader />
@@ -248,7 +255,7 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup
                     className="order-response-form-group"
-                    errorText={validationErrors.additionalOrderTextArray}
+                    errorText={additionalOrderTextArrayFormErrors}
                   >
                     {motionOrderResponseFormHelper.showStrikeCheckBox && (
                       <div className="usa-checkbox">
