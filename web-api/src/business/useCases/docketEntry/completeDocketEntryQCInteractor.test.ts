@@ -206,6 +206,32 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  // Spec: "new coversheet is appended to the front of the document
+  // (original coversheet still exists)". `replaceCoversheet: true` would
+  // drop the original first page before inserting the new cover, which
+  // is not what the spec calls for during QC metadata edits.
+  it('should append (not replace) the coversheet when QC metadata edits trigger regeneration', async () => {
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: '123',
+          additionalInfo2: 'abc',
+          certificateOfService: false,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    const addCoversheetMock =
+      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
+    expect(addCoversheetMock).toHaveBeenCalled();
+    const [, callArgs] = addCoversheetMock.mock.calls[0];
+    expect(callArgs.replaceCoversheet).not.toBe(true);
+  });
+
   it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
     await completeDocketEntryQCInteractor(
       applicationContext,

@@ -372,16 +372,16 @@ const completeDocketEntryQC = async (
     // COMPLETE from the initial filing — the gate would otherwise short-
     // circuit and leave the original coversheet in place, so the PDF would
     // not pick up the new title/received-date even though the docket
-    // record metadata and NODC reflect the change. replaceCoversheet
-    // strips the existing first-page coversheet before inserting the new
-    // one, so this regeneration replaces rather than stacks.
+    // record metadata and NODC reflect the change. The new coversheet is
+    // appended (replaceCoversheet defaults to false): per spec the
+    // original file-time coversheet stays as page 1 and the regenerated
+    // one becomes the new page 0.
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
         bypassIdempotencyGate: true,
         docketEntryId,
         docketNumber: caseEntity.docketNumber,
-        replaceCoversheet: true,
       },
       authorizedUser,
     );

@@ -606,4 +606,60 @@ describe('addPaperFilingInteractor', () => {
         .mock.calls[0][0].electronicParties,
     ).toEqual([]);
   });
+
+  // Spec (coversheet-gaps/SPEC.md): the paper-service print PDF must NOT
+  // include a coversheet, but the docket-record document MUST. The
+  // load-bearing invariant is the call order in addPaperFilingInteractor:
+  // `serveDocumentAndGetPaperServicePdf` (which composes the print PDF
+  // from the doc as it exists right now — no coversheet yet) runs BEFORE
+  // `enqueueAddCoversheet` (which queues the worker that prepends the
+  // coversheet to the stored doc). A refactor that hoists the coversheet
+  // enqueue above the paper-service generator would silently put a
+  // coversheet on every printed mailing — pinning the ordering here so
+  // that regression fails loudly.
+  it('should generate the paper-service PDF BEFORE enqueueing the coversheet add (print has no coversheet; docket doc gains one)', async () => {
+    mockCase.petitioners[0].serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'www.example.com',
+      });
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    const paperServiceMock =
+      applicationContext.getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf as jest.Mock;
+    // enqueueAddCoversheet only goes out through the worker gateway —
+    // queueWork is the observable boundary for the coversheet enqueue.
+    const queueWorkMock = applicationContext.getWorkerGateway()
+      .queueWork as jest.Mock;
+
+    expect(paperServiceMock).toHaveBeenCalled();
+    expect(queueWorkMock).toHaveBeenCalled();
+
+    const paperServiceCallOrder =
+      paperServiceMock.mock.invocationCallOrder[0];
+    const queueWorkCallOrder = queueWorkMock.mock.invocationCallOrder[0];
+
+    expect(paperServiceCallOrder).toBeLessThan(queueWorkCallOrder);
+  });
 });

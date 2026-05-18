@@ -1,7 +1,7 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
 import {
   assertDocketEntryPageCount,
-  waitForDocketEntryByEventCode,
+  assertNoticeOfDocketChangeDoesNotExist,
 } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
@@ -13,24 +13,30 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
- * Single-case e-file: a private practitioner files an Exhibit (sample.pdf, 1
- * page). The petitioner-side upload prepends 1 coversheet, so the docket
- * entry lands at numberOfPages = 2. A docket clerk picks the entry up via
- * Section Document QC and adds additionalInfo with addToCoversheet=true,
- * which changes the title surfaced by getDocumentTitleWithAdditionalInfo
- * and getDocumentTitleForNoticeOfChange. That makes needsNewCoversheet=true
- * (so the interactor synchronously regenerates the coversheet — per spec the
- * new coversheet is APPENDED on top of the original file-time coversheet,
- * so pages go from 2 to 3) AND needsNoticeOfDocketChange=true (a NODC
- * docket entry is written).
+ * Spec (per coversheet-gaps/SPEC.md): "Additional info 1 (without checking
+ * *add to coversheet*)" is one of the explicit no-regen exceptions in
+ * Document QC. The current code achieves this by virtue of
+ * getDocumentTitleWithAdditionalInfo only appending additionalInfo when
+ * addToCoversheet is true — so if the box is left unchecked, the title
+ * does not change and needsNewCoversheet / needsNoticeOfDocketChange
+ * both return false.
  *
- * NODC presence is verified against the database (cy.task) rather than the
- * docket-record UI to avoid racing the post-QC table refresh.
+ * Negative-control test: a practitioner files an Exhibit (sample.pdf, 1
+ * page; petitioner-side upload prepends 1 coversheet → numberOfPages=2),
+ * then a Docket Clerk completes Section Document QC and ONLY types
+ * additionalInfo, intentionally leaving the addToCoversheet checkbox
+ * UNCHECKED. Expected: numberOfPages stays at 2 (no new coversheet) and
+ * no Notice of Docket Change is written.
+ *
+ * Regression signal: a refactor that always concatenates additionalInfo
+ * into the title — or that adds additionalInfo to the regen trigger list
+ * without preserving the addToCoversheet gate — would land at 3 pages
+ * here, and a stray NODC entry would appear.
  */
-describe('Docket Clerk QC title change regenerates the coversheet (single case)', () => {
-  it('appends a new coversheet on top of the original (pages go from 2 to 3) and writes a Notice of Docket Change when QC changes the title via additionalInfo', () => {
+describe('Docket Clerk QC with additionalInfo but addToCoversheet unchecked does not regenerate the coversheet', () => {
+  it('does not regenerate the coversheet and does not post a Notice of Docket Change when additionalInfo is added without the add-to-coversheet checkbox', () => {
     const primaryFilerName = 'Cody';
-    const additionalInfo = 'QC Added Info';
+    const additionalInfo = 'QC Added Info — not on coversheet';
 
     loginAsPrivatePractitioner();
     externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
@@ -62,27 +68,26 @@ describe('Docket Clerk QC title change regenerates the coversheet (single case)'
       cy.get(`[data-testid=work-item-${docketNumber}]`)
         .find(`[data-testid=work-item-document-link-${docketNumber}]`)
         .click();
+      // Type additionalInfo but DELIBERATELY do NOT check the
+      // add-to-coversheet box — the spec exception we are pinning.
       cy.get('[data-testid="additional-info-primary-document-form"]')
         .should('be.visible')
         .type(additionalInfo);
-      cy.get('[data-testid="add-to-coversheet-primary-document-form"]').check({
-        force: true,
-      });
+      cy.get('[data-testid="add-to-coversheet-primary-document-form"]').should(
+        'not.be.checked',
+      );
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
       cy.get(`[data-testid=work-item-${docketNumber}]`).should('not.exist');
 
-      // QC writes NODC asynchronously after the loading overlay clears,
-      // so poll the DB to ride out the write delay.
-      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'NODC' });
-
-      // Regression signal: new coversheet appended on top of the original
-      // (pages go from 2 → 3). A regression that drops the original cover
-      // (replace-not-append) would land at 2; a regression that fails to
-      // regenerate at all would also land at 2; a regression that drops
-      // the doc itself would land at 1.
+      // The QC interactor decides synchronously whether to regenerate the
+      // coversheet and write an NODC; both are gated on the title diff,
+      // which addToCoversheet=false suppresses. So once the loading
+      // overlay clears, the docket-record state is the deterministic
+      // signal for both assertions.
       goToCase(docketNumber);
-      assertDocketEntryPageCount({ eventCode: 'EXH', expected: '3' });
+      assertDocketEntryPageCount({ eventCode: 'EXH', expected: '2' });
+      assertNoticeOfDocketChangeDoesNotExist();
     });
   });
 });

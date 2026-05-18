@@ -23,16 +23,19 @@ import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/s
  * subject case and changes the title via additionalInfo. The QC interactor
  * (completeDocketEntryQCInteractor) loads ONE case, updates its docket
  * entry, posts an NODC for that case, and regenerates the coversheet
- * synchronously. Because all cases share the docketEntryId, the
- * coversheet regen affects the shared PDF — sibling case PDFs should
- * also pick up the new coversheet, leaving numberOfPages = 2 everywhere.
+ * synchronously. Per spec, the new coversheet is APPENDED on top of the
+ * original file-time coversheet (it is not replaced). Because all cases
+ * share the docketEntryId, the coversheet regen affects the shared PDF —
+ * every sibling case PDF should land at numberOfPages = 3 (1 doc + 1
+ * original coversheet + 1 newly-appended QC coversheet).
  *
  * Regression signal: the SIAB entry on EVERY case in the group must
- * report numberOfPages = 2 after QC. A stacked coversheet shows 3; a
- * dropped/missing coversheet shows 1.
+ * report numberOfPages = 3 after QC. A regression that drops the original
+ * cover (replace-not-append) shows 2; a regression that fails to
+ * regenerate at all also shows 2; a missing-doc regression shows 1.
  */
 describe('Practitioner files a SIAB across consolidated cases and a docket clerk QCs the entry', () => {
-  it('keeps every case in the group at numberOfPages = 2 after the QC title change regenerates the coversheet', () => {
+  it('appends a new coversheet on every case in the group (numberOfPages = 3) after the QC title change', () => {
     createAndServeConsolidatedGroup({ numberOfMemberCases: 1 }).then(
       ({ leadDocketNumber, memberDocketNumbers }) => {
         const allDocketNumbers = [leadDocketNumber, ...memberDocketNumbers];
@@ -122,11 +125,13 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         });
 
         // Coversheet regression signal: SIAB entries on EVERY case in
-        // the group must still report numberOfPages = 2.
+        // the group must report numberOfPages = 3 — the new QC coversheet
+        // is appended on top of the original file-time coversheet, so the
+        // shared PDF gains a page on every linked case.
         for (const docketNumber of allDocketNumbers) {
           cy.visit(`/case-detail/${docketNumber}`);
           cy.get('[data-testid="docket-record-table"]').should('exist');
-          assertDocketEntryPageCount({ eventCode: 'SIAB', expected: '2' });
+          assertDocketEntryPageCount({ eventCode: 'SIAB', expected: '3' });
         }
       },
     );
