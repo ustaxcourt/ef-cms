@@ -11,6 +11,7 @@ jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
     getDawsonLogger: () => mockLogger,
   };
 });
+import { Browser } from 'puppeteer-core';
 import { combineTwoPdfs as combineTwoPdfsMock } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { generatePdfFromHtmlHelper } from './generatePdfFromHtmlHelper';
 
@@ -34,7 +35,7 @@ describe('generatePdfFromHtmlHelper', () => {
         pid: '123',
       };
     },
-  } as any;
+  } as unknown as Browser;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
   const setJavaScriptEnabledMock = jest.fn();
   const pdfMock = jest.fn(
@@ -68,9 +69,11 @@ describe('generatePdfFromHtmlHelper', () => {
   });
 
   it('should call the error logger when an error is thrown', async () => {
-    const mockErrorBrowser = jest.fn(() => {
-      throw new Error('something');
-    }) as any;
+    const mockErrorBrowser = {
+      newPage: () => {
+        throw new Error('something');
+      },
+    } as unknown as Browser;
 
     await expect(
       generatePdfFromHtmlHelper(

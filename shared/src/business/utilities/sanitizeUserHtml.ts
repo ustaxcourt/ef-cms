@@ -1,3 +1,4 @@
+import { isTag } from 'domhandler';
 import { parseDocument } from 'htmlparser2';
 import { render as renderHtml } from 'dom-serializer';
 
@@ -30,13 +31,6 @@ const QL_INDENT_CLASS = /^ql-indent-\d+$/;
 const DANGEROUS_STYLE_PATTERN = /expression\s*\(|url\s*\(|javascript\s*:/i;
 
 type DomNode = ReturnType<typeof parseDocument>['children'][number];
-
-const isElement = (
-  node: DomNode,
-): node is Extract<DomNode, { type: 'tag'; name: string }> =>
-  (node as { type?: string }).type === 'tag' ||
-  (node as { type?: string }).type === 'script' ||
-  (node as { type?: string }).type === 'style';
 
 const sanitizeClassAttr = (value: string): string | undefined => {
   const kept = value
@@ -81,7 +75,7 @@ const scrubAttributes = (attribs: Record<string, string>): void => {
 const walk = (nodes: DomNode[]): DomNode[] => {
   const out: DomNode[] = [];
   for (const node of nodes) {
-    if (!isElement(node)) {
+    if (!isTag(node)) {
       out.push(node);
       continue;
     }

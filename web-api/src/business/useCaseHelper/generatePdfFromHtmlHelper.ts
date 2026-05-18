@@ -39,7 +39,7 @@ export const generatePdfFromHtmlHelper = async (
   let page: Page | null = null;
 
   try {
-    page = await browser.newPage()!;
+    page = await browser.newPage();
 
     // Security: disable JavaScript before loading user-supplied HTML.
     // contentHtml originates from user input (e.g. court-issued order body)
