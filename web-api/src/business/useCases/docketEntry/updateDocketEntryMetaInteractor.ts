@@ -252,7 +252,7 @@ export const updateDocketEntryMeta = async (
               const propagationFields: any = {};
               DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
                 if (Object.hasOwn(editableFields, field)) {
-                  propagationFields[field] = (editableFields as any)[field];
+                  propagationFields[field] = (editableFields)[field];
                 }
               });
 

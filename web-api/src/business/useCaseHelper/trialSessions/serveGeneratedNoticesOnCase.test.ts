@@ -26,7 +26,7 @@ describe('serveGeneratedNoticesOnCase', () => {
 
   beforeEach(() => {
     inTransaction.mockReturnValue(false);
-  })
+  });
 
   it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
     const mockServedParties = {

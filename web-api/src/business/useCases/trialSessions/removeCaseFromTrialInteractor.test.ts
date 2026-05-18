@@ -284,7 +284,7 @@ describe('removeCaseFromTrialInteractor', () => {
     );
   });
 
-  it('should not update trial session if updateCaseAndAssociations fails', async () => {
+  it('should not update case trial session if removeCaseFromTrialSession fails', async () => {
     mockTrialSession.isCalendared = true;
     removeCaseFromTrialSession.mockRejectedValueOnce(
       new Error('Database error'),
