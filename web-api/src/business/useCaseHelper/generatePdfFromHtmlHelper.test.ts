@@ -25,6 +25,7 @@ describe('generatePdfFromHtmlHelper', () => {
       return {
         pdf: pdfMock,
         setContent: setContentMock,
+        setJavaScriptEnabled: setJavaScriptEnabledMock,
         close() {},
       };
     },
@@ -35,6 +36,7 @@ describe('generatePdfFromHtmlHelper', () => {
     },
   } as any;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
+  const setJavaScriptEnabledMock = jest.fn();
   const pdfMock = jest.fn(
     ({ displayHeaderFooter, footerTemplate, headerTemplate }) => {
       return `${displayHeaderFooter ? headerTemplate : ''}${pageContent}${
@@ -42,6 +44,28 @@ describe('generatePdfFromHtmlHelper', () => {
       }`;
     },
   );
+
+  beforeEach(() => {
+    setJavaScriptEnabledMock.mockClear();
+    setContentMock.mockClear();
+    pdfMock.mockClear();
+    pageContent = '';
+  });
+
+  it('should disable JavaScript on the page before setting user-supplied content', async () => {
+    await generatePdfFromHtmlHelper(
+      {
+        contentHtml: '<p>Hello World</p>',
+        docketNumber: '123-45',
+      },
+      launchMock,
+    );
+
+    expect(setJavaScriptEnabledMock).toHaveBeenCalledWith(false);
+    expect(setJavaScriptEnabledMock.mock.invocationCallOrder[0]).toBeLessThan(
+      setContentMock.mock.invocationCallOrder[0],
+    );
+  });
 
   it('should call the error logger when an error is thrown', async () => {
     const mockErrorBrowser = jest.fn(() => {
