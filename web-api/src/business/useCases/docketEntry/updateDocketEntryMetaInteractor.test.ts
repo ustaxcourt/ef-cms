@@ -1030,7 +1030,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       .getUseCases()
       .addCoversheetInteractor.mockResolvedValue(mockUpdatedDocketEntry);
 
-    const result = await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         docketEntryMeta: {
@@ -1042,9 +1042,10 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedDocketEntry = result.docketEntries.find(
-      entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
-    );
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
+      );
 
     expect(updatedDocketEntry).toBeDefined();
     expect(updatedDocketEntry?.numberOfPages).toBe(5);
