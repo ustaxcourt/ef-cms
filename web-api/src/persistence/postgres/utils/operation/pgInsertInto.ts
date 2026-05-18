@@ -4,7 +4,7 @@ import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchS
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
 import { isEmpty } from 'lodash';
-import { InsertExpression } from 'node_modules/kysely/dist/parser/insert-values-parser';
+import type { InsertExpression } from 'node_modules/kysely/dist/parser/insert-values-parser';
 
 export const pgInsertInto = async <T extends keyof Database>({
   table,
