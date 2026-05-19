@@ -5,7 +5,10 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -40,7 +43,11 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   static VALIDATION_RULES = {
     additionalOrderTextArray: joi
       .array()
-      .items(JoiValidationConstants.STRING.max(256).allow(''))
+      .items(
+        JoiValidationConstants.STRING.max(
+          MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS,
+        ).allow(''),
+      )
       .min(1)
       .optional()
       .allow(null),
