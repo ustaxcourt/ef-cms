@@ -1,16 +1,26 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_TERMINAL_USER,
+} from '@shared/utils/headers';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
-export const headerOverride = {
-  'Access-Control-Expose-Headers': 'X-Terminal-User',
-  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
-  'Content-Type': 'application/json',
-  Pragma: 'no-cache',
-  Vary: 'Authorization',
-  'X-Content-Type-Options': 'nosniff',
+export const getHeaderOverride = (): Record<string, string> => {
+  return {
+    'Access-Control-Expose-Headers': EXPOSED_RESPONSE_HEADERS.join(', '),
+    'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+    'Content-Type': 'application/json',
+    Pragma: 'no-cache',
+    Vary: 'Authorization',
+    'X-Content-Type-Options': 'nosniff',
+    ...(process.env.DEPLOYMENT_TIMESTAMP
+      ? { [X_DEPLOYMENT_TIMESTAMP]: process.env.DEPLOYMENT_TIMESTAMP }
+      : {}),
+  };
 };
 
 const defaultOptions: {
@@ -74,13 +84,11 @@ export const lambdaWrapper = (
           body: response.body ? JSON.parse(response.body) : response.body,
         };
         const responseString = JSON.stringify(fullResponse);
-        await applicationContext
-            .getNotificationGateway()
-            .saveRequestResponse({
-              responseString,
-              requestId: asyncsyncid,
-              userId: user.userId,
-            });
+        await applicationContext.getNotificationGateway().saveRequestResponse({
+          responseString,
+          requestId: asyncsyncid,
+          userId: user.userId,
+        });
       } catch (errorAsyncSync) {
         console.log('Error: async sync if condition', errorAsyncSync);
       }
@@ -96,8 +104,8 @@ export const lambdaWrapper = (
 
     res.set({
       ...response.headers,
-      'X-Terminal-User': isTerminalUser,
-      ...headerOverride,
+      [X_TERMINAL_USER]: isTerminalUser,
+      ...getHeaderOverride(),
     });
 
     if (
