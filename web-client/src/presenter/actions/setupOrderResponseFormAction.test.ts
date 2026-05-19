@@ -17,6 +17,7 @@ describe('setupOrderResponseFormAction', () => {
       MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
     );
     expect(result.state.form.isOnLeadCase).toBe(true);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('should set issueOrderFor to THIS_CASE_ONLY and isOnLeadCase to false when the case is not the lead case', async () => {
@@ -33,5 +34,6 @@ describe('setupOrderResponseFormAction', () => {
       MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
     );
     expect(result.state.form.isOnLeadCase).toBe(false);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 });

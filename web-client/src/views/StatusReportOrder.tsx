@@ -398,7 +398,9 @@ export const StatusReportOrder = connect(
                           autoCapitalize="none"
                           className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
                           id={`additional-order-text-array-${index}`}
-                          maxLength={256}
+                          maxLength={
+                            constants.MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS
+                          }
                           name={`additionalOrderTextArray[${index}]`}
                           value={text}
                           onChange={e => {
@@ -412,7 +414,9 @@ export const StatusReportOrder = connect(
                         ></textarea>
                         <CharactersRemainingHint
                           className="tw:mb-0"
-                          maxCharacters={256}
+                          maxCharacters={
+                            constants.MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS
+                          }
                           stringToCount={text}
                         />
                         {index > 0 && (
