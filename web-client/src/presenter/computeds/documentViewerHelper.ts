@@ -178,6 +178,7 @@ export const getDocumentDisplayFlags = ({
     isMemberCase(caseDetail) &&
     DocketEntry.isMultiDocketed(document) &&
     isDocumentUnserved &&
+    !DocketEntry.isUnservable(document) &&
     permissions.SERVE_DOCUMENT;
 
   return {

@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@web-client/applicationContext';
 import {
@@ -499,6 +500,36 @@ describe('documentViewerHelper', () => {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
             eventCode: 'SAMB',
+          },
+        },
+      });
+
+      expect(result.showLeadCaseBanner).toBe(false);
+    });
+
+    it('should be false when viewing an unservable multi-docketed document on a member case', () => {
+      const unservableEventCode = UNSERVABLE_EVENT_CODES[0];
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentTitle: 'Unservable Document',
+                eventCode: unservableEventCode,
+                multiDocketedOn: ['101-20', '102-20'],
+                servedAt: undefined,
+              },
+            ],
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId: DOCKET_ENTRY_ID,
+            documentTitle: 'Unservable Document',
+            eventCode: unservableEventCode,
           },
         },
       });
