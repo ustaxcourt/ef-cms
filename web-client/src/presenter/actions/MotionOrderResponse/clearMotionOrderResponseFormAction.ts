@@ -4,6 +4,7 @@ export const clearMotionOrderResponseFormAction = ({ store }: ActionProps) => {
   store.unset(state.form.issueOrderFor);
   store.unset(state.form.motionOrderResponse);
   store.unset(state.form.additionalOrderText);
+  store.set(state.form.additionalOrderTextArray, ['']);
   store.unset(state.form.dueDate);
   store.unset(state.form.responseDate);
   store.unset(state.form.strickenFromTrialSession);

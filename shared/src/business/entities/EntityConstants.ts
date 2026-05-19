@@ -2011,6 +2011,8 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
   },
 };
 
+export const MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS = 256;
+
 export const TROUBLESHOOTING_INFO = {
   APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
   FILE_UPLOAD_TROUBLESHOOTING_LINK:

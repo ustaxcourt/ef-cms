@@ -10,6 +10,7 @@ import {
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
+import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
 
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
@@ -28,6 +29,7 @@ export const prepareMotionOrderResponseAction = ({
   store,
 }: ActionProps) => {
   const {
+    additionalOrderTextArray,
     additionalOrderText,
     dueDate,
     responseDate,
@@ -61,7 +63,11 @@ export const prepareMotionOrderResponseAction = ({
 
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
-  const hasAdditionalOrderText = !!additionalOrderText;
+  const normalizedAdditionalOrderTextArray =
+    additionalOrderTextArray ||
+    (additionalOrderText ? [additionalOrderText] : []);
+  const hasAdditionalOrderTextArray =
+    !!normalizedAdditionalOrderTextArray.filter(text => text).length;
 
   const dueDateFormatted = isValidDateString(dueDate, [
     FORMATS.YYYYMMDD,
@@ -114,9 +120,17 @@ export const prepareMotionOrderResponseAction = ({
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.'
     : '';
 
-  const additionalTextLine = hasAdditionalOrderText
-    ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}`
-    : '';
+  let additionalTextLine = '';
+  if (hasAdditionalOrderTextArray) {
+    const additionalOrderTextFiltered =
+      normalizedAdditionalOrderTextArray.filter(text => text);
+    additionalOrderTextFiltered.forEach((text, index) => {
+      const clause = formatAdditionalOrderClauseForRichText(text);
+      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
+        index < additionalOrderTextFiltered.length - 1 ? ' It is further' : ''
+      }</p>`;
+    });
+  }
 
   let richTextString = preamble + orderVerbiageHtml;
 
@@ -128,7 +142,7 @@ export const prepareMotionOrderResponseAction = ({
     richTextString = richTextString + ' It is further</p>' + strickenLine;
   }
 
-  if (hasAdditionalOrderText) {
+  if (hasAdditionalOrderTextArray) {
     richTextString = richTextString + ' It is further</p>' + additionalTextLine;
   }
 

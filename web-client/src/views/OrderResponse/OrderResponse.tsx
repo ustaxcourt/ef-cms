@@ -4,11 +4,13 @@ import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/C
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Button as DawsonButton } from '@web-client/dawson-ui/ui/button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
+import { getAdditionalOrderTextArrayFormGroupErrors } from '@web-client/utilities/getAdditionalOrderTextArrayFormGroupErrors';
 
 export const OrderResponse = connect(
   {
@@ -50,6 +52,12 @@ export const OrderResponse = connect(
     validationErrors,
     validateMotionOrderResponseSequence,
   }) {
+    const additionalOrderTextArrayFormErrors =
+      getAdditionalOrderTextArrayFormGroupErrors(
+        validationErrors,
+        form.additionalOrderTextArray?.length ?? 0,
+      );
+
     return (
       <>
         <CaseDetailHeader />
@@ -247,7 +255,7 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup
                     className="order-response-form-group"
-                    errorText={validationErrors.additionalOrderText}
+                    errorText={additionalOrderTextArrayFormErrors}
                   >
                     {motionOrderResponseFormHelper.showStrikeCheckBox && (
                       <div className="usa-checkbox">
@@ -272,38 +280,80 @@ export const OrderResponse = connect(
                         </label>
                       </div>
                     )}
-                    <div>
-                      <label
-                        className="usa-label"
-                        htmlFor="custom-text"
-                        id="custom-text-label"
-                      >
-                        Additional order text{' '}
-                      </label>
-                      <textarea
-                        aria-describedby="additional-text-label"
-                        aria-label="additional text"
-                        autoCapitalize="none"
-                        className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
-                        id="additional-text"
-                        maxLength={constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS}
-                        name="additionalOrderText"
-                        value={form.additionalOrderText || ''}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                          validateMotionOrderResponseSequence();
-                        }}
-                      ></textarea>
-                      <CharactersRemainingHint
-                        maxCharacters={
-                          constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS
-                        }
-                        stringToCount={form.additionalOrderText}
-                      />
-                    </div>
+                    {form.additionalOrderTextArray?.map((text, index) => (
+                      <div key={index}>
+                        <label
+                          className="usa-label tw:mt-4"
+                          htmlFor={`additional-order-text-array-${index}`}
+                          id={`additional-order-text-array-label-${index}`}
+                        >
+                          Additional order text
+                        </label>
+                        <textarea
+                          aria-describedby={`additional-order-text-array-label-${index}`}
+                          aria-label="additional order text"
+                          autoCapitalize="none"
+                          className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
+                          id={`additional-order-text-array-${index}`}
+                          maxLength={
+                            constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS
+                          }
+                          name={`additionalOrderTextArray[${index}]`}
+                          value={text}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              allowEmptyString: true,
+                              key: 'additionalOrderTextArray',
+                              index,
+                              value: e.target.value,
+                            });
+                            validateMotionOrderResponseSequence();
+                          }}
+                        ></textarea>
+                        <CharactersRemainingHint
+                          className="tw:mb-0"
+                          maxCharacters={
+                            constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS
+                          }
+                          stringToCount={text}
+                        />
+                        {index > 0 && (
+                          <DawsonButton
+                            className="tw:block"
+                            iconPosition="left"
+                            icon="circle-xmark"
+                            onClick={() => {
+                              updateFormValueSequence({
+                                key: 'additionalOrderTextArray',
+                                value: form.additionalOrderTextArray.filter(
+                                  (_, i) => i !== index,
+                                ),
+                              });
+                            }}
+                            variant="destructiveTertiary"
+                          >
+                            Remove
+                          </DawsonButton>
+                        )}
+                      </div>
+                    ))}
+                    <hr />
+                    <DawsonButton
+                      iconPosition="left"
+                      icon="plus"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'additionalOrderTextArray',
+                          value: [
+                            ...(form.additionalOrderTextArray || ['']),
+                            '',
+                          ],
+                        });
+                      }}
+                      variant="primaryTertiary"
+                    >
+                      Add additional order text
+                    </DawsonButton>
                   </FormGroup>
                 </div>
               </div>

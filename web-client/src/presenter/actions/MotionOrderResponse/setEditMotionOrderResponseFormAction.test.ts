@@ -4,6 +4,7 @@ import { setEditMotionOrderResponseFormAction } from './setEditMotionOrderRespon
 describe('setEditMotionOrderResponseFormAction', () => {
   it('should set form state and return message detail path when parentMessageId exists', async () => {
     const mockDraftOrderState = {
+      additionalOrderTextArray: [''],
       previousDocument: {
         docketEntryId: '123',
       },
@@ -36,6 +37,7 @@ describe('setEditMotionOrderResponseFormAction', () => {
         docketEntryId: '123',
       },
       someFormField: 'value',
+      additionalOrderTextArray: [''],
     };
 
     const result = await runAction(setEditMotionOrderResponseFormAction, {
@@ -55,5 +57,36 @@ describe('setEditMotionOrderResponseFormAction', () => {
     expect(result.output.path).toEqual(
       '/case-detail/123-45/documents/xyz/motion-order-response-edit',
     );
+  });
+
+  it('should set additionalOrderTextArray to an array with additionalOrderText if additionalOrderText exists', async () => {
+    const mockDraftOrderState = {
+      additionalOrderText: 'Some additional text',
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+    };
+
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: mockDraftOrderState,
+        },
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: ['Some additional text'],
+    });
+    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 });

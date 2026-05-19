@@ -28,7 +28,7 @@ describe('setEditStatusReportOrderFormAction,', () => {
     });
 
     expect(result.state.form).toEqual({
-      additionalOrderText: 'Test',
+      additionalOrderTextArray: ['Test'],
       docketEntryDescription: 'Order',
       dueDate: '07/04/2024',
       jurisdiction: STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
@@ -38,5 +38,30 @@ describe('setEditStatusReportOrderFormAction,', () => {
     expect(result.output).toEqual({
       path: '/case-detail/1/documents/107-19/status-report-order-edit',
     });
+  });
+
+  it('prefers additionalOrderTextArray when editing newer drafts', async () => {
+    const result = await runAction(setEditStatusReportOrderFormAction, {
+      props: {
+        caseDetail: {
+          docketNumber: '1',
+        },
+        docketEntryIdToEdit: '107-19',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: {
+            additionalOrderText: 'Legacy text',
+            additionalOrderTextArray: ['First clause', 'Second clause'],
+            docketEntryDescription: 'Order',
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual([
+      'First clause',
+      'Second clause',
+    ]);
   });
 });
