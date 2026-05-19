@@ -59,11 +59,19 @@ describe('genericHandler', () => {
   beforeEach(() => {
     getMaintenanceMode.mockResolvedValue({ current: false });
     getEntityByName.mockReturnValue(MockEntity);
-    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+    if (originalDeploymentTimestamp === undefined) {
+      delete process.env.DEPLOYMENT_TIMESTAMP;
+    } else {
+      process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+    }
   });
 
   afterAll(() => {
-    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+    if (originalDeploymentTimestamp === undefined) {
+      delete process.env.DEPLOYMENT_TIMESTAMP;
+    } else {
+      process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+    }
   });
 
   it('returns an error if the callback throws', async () => {
