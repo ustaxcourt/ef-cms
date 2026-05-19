@@ -14,6 +14,7 @@ let axiosClient: AxiosInstance;
 let areInterceptorsRegistered = false;
 
 const getStoredDeploymentTimestamp = (): string | undefined => {
+  if (typeof window === 'undefined') return undefined;
   return (
     window.localStorage.getItem(DEPLOYMENT_TIMESTAMP_STORAGE_KEY) || undefined
   );
@@ -22,6 +23,7 @@ const getStoredDeploymentTimestamp = (): string | undefined => {
 const setStoredDeploymentTimestamp = (
   headers: Record<string, unknown>,
 ): void => {
+  if (typeof window === 'undefined') return;
   const deploymentTimestamp = getHeaderValue(headers, X_DEPLOYMENT_TIMESTAMP);
 
   if (deploymentTimestamp) {
