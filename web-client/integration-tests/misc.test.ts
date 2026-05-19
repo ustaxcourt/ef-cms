@@ -5,6 +5,10 @@ import { toggleBetaBarSequence } from '@web-client/presenter/sequences/toggleBet
 import { gotoStyleGuideSequence } from '@web-client/presenter/sequences/gotoStyleGuideSequence';
 import { toggleUsaBannerDetailsSequence } from '@web-client/presenter/sequences/toggleUsaBannerDetailsSequence';
 
+jest
+  .spyOn(applicationContext.getUseCases(), 'getAllFeatureFlagsInteractor')
+  .mockResolvedValue({});
+
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
 presenter.sequences = {
