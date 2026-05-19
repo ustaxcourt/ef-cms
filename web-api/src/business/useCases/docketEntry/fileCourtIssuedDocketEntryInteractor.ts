@@ -21,14 +21,8 @@ import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPages
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
- */
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
   {
@@ -89,6 +83,23 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
+  const isUnservable = DocketEntry.isUnservable({
+    eventCode: documentMeta.eventCode,
+  });
+
+  const isNotTaxCourtPamphlet = documentMeta.eventCode !== 'TCRP';
+
+  let multiDocketedOn: string[] = [];
+
+  if (
+    isLeadCase(subjectCaseToUpdateEntity) &&
+    isUnservable &&
+    isNotTaxCourtPamphlet &&
+    docketNumbers.length
+  ) {
+    multiDocketedOn = [subjectDocketNumber, ...docketNumbers];
+  }
+
   await settlePromises(
     casesToUpdate.map(async caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -113,6 +124,7 @@ export const fileCourtIssuedDocketEntry = async (
           isFileAttached: true,
           isOnDocketRecord: true,
           judge: documentMeta.judge,
+          multiDocketedOn,
           originallyFiledDocketNumber: subjectDocketNumber,
           numberOfPages,
           scenario: documentMeta.scenario,
