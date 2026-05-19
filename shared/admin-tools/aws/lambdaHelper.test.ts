@@ -61,9 +61,7 @@ describe('setEnvironmentVariables', () => {
   });
 
   it("updates an extant lambda's environment variables", async () => {
-    mockedLambdaClient
-      .on(UpdateFunctionConfigurationCommand)
-      .resolves({});
+    mockedLambdaClient.on(UpdateFunctionConfigurationCommand).resolves({});
 
     const result = await setEnvironmentVariables({
       Environment: updatedEnvironment,
@@ -104,9 +102,7 @@ describe('setEnvironmentVariables', () => {
     mockedLambdaClient
       .on(GetFunctionConfigurationCommand, { FunctionName: 'extantLambda' })
       .resolves({ Environment: { Variables: {} } });
-    mockedLambdaClient
-      .on(UpdateFunctionConfigurationCommand)
-      .resolves({});
+    mockedLambdaClient.on(UpdateFunctionConfigurationCommand).resolves({});
 
     const result = await setEnvironmentVariables({
       Environment: updatedEnvironment,

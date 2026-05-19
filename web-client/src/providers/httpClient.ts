@@ -12,6 +12,7 @@ import axios, {
 
 let axiosClient: AxiosInstance;
 let areInterceptorsRegistered = false;
+let currentForceRefreshCallback: (() => void) | undefined;
 
 const getStoredDeploymentTimestamp = (): string | undefined => {
   if (typeof window === 'undefined') return undefined;
@@ -44,6 +45,8 @@ export const getHttpClient = (
   const stackError = new Error(); // Look at the stack trace for more information on the error.
   axiosClient = axiosClient || axios.create();
 
+  currentForceRefreshCallback = forceRefreshCallback;
+
   if (!areInterceptorsRegistered) {
     axiosClient.interceptors.request.use(
       (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
@@ -75,7 +78,7 @@ export const getHttpClient = (
           'true';
 
         if (shouldForceManualRefresh) {
-          await forceRefreshCallback();
+          await currentForceRefreshCallback?.();
         }
 
         error.stack = stackError.stack;
