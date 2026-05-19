@@ -183,19 +183,27 @@ describe('lambdaWrapper', () => {
     const originalDeploymentTimestamp = process.env.DEPLOYMENT_TIMESTAMP;
     process.env.DEPLOYMENT_TIMESTAMP = '123456';
 
-    await lambdaWrapper(() => {
-      return {
-        body: '{}',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        statusCode: '200',
-      };
-    })(req, res);
+    try {
+      await lambdaWrapper(() => {
+        return {
+          body: '{}',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          statusCode: '200',
+        };
+      })(req, res);
 
-    expect(res.set.mock.calls[0][0][X_DEPLOYMENT_TIMESTAMP]).toEqual('123456');
-
-    process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+      expect(res.set.mock.calls[0][0][X_DEPLOYMENT_TIMESTAMP]).toEqual(
+        '123456',
+      );
+    } finally {
+      if (originalDeploymentTimestamp === undefined) {
+        delete process.env.DEPLOYMENT_TIMESTAMP;
+      } else {
+        process.env.DEPLOYMENT_TIMESTAMP = originalDeploymentTimestamp;
+      }
+    }
   });
 
   it('returns 204 when it is simulating an async function', async () => {
