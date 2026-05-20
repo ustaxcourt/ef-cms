@@ -11,6 +11,21 @@ import {
 
 describe('MotionOrderResponseForm', () => {
   describe('valid cases', () => {
+    it('should be valid when no substantive additional order text is provided', () => {
+      const form = new MotionOrderResponseForm({
+        responseDate: getBusinessDateInFuture({
+          numberOfDays: 2,
+          outputFormat: FORMATS.YYYYMMDD,
+          startDate: createISODateString(),
+        }),
+        additionalOrderTextArray: [''],
+        isOnLeadCase: false,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+      });
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
+
     it('should be valid when isOnLeadCase is false and no motionOrderResponse is provided', () => {
       const form = new MotionOrderResponseForm({
         responseDate: getBusinessDateInFuture({
