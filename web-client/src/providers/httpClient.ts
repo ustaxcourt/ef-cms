@@ -38,6 +38,7 @@ const setStoredDeploymentTimestamp = (
 
 export const getHttpClient = (
   forceRefreshCallback: () => void,
+  apiUrl: string,
 ): AxiosInstance => {
   axiosClient = axiosClient || axios.create();
 
@@ -49,8 +50,11 @@ export const getHttpClient = (
         (config as any)._stackError = new Error();
 
         const deploymentTimestamp = getStoredDeploymentTimestamp();
+        const isApiRequest =
+          !config.url ||
+          new URL(config.url, apiUrl).origin === new URL(apiUrl).origin;
 
-        if (deploymentTimestamp) {
+        if (deploymentTimestamp && isApiRequest) {
           config.headers.set(X_DEPLOYMENT_TIMESTAMP, deploymentTimestamp);
         }
 
