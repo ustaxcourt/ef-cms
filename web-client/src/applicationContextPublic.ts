@@ -182,7 +182,8 @@ const applicationContextPublic = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    return getHttpClient(forceRefreshCallback);
+    const apiUrl = applicationContextPublic.getBaseUrl();
+    return getHttpClient(forceRefreshCallback, apiUrl);
   },
   getLogger: () => ({
     error: () => {
