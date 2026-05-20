@@ -50,9 +50,11 @@ export const getHttpClient = (
         (config as any)._stackError = new Error();
 
         const deploymentTimestamp = getStoredDeploymentTimestamp();
-        const isExternalRequest = config.url && !config.url.startsWith(apiUrl);
+        const isApiRequest =
+          !config.url ||
+          new URL(config.url, apiUrl).origin === new URL(apiUrl).origin;
 
-        if (deploymentTimestamp && !isExternalRequest) {
+        if (deploymentTimestamp && isApiRequest) {
           config.headers.set(X_DEPLOYMENT_TIMESTAMP, deploymentTimestamp);
         }
 
