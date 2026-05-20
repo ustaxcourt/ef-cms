@@ -3,6 +3,7 @@ jest.mock('axios');
 import {
   DEPLOYMENT_TIMESTAMP_STORAGE_KEY,
   X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
   X_MANUAL_REFRESH_REQUIRED,
 } from '@shared/utils/headers';
 
@@ -75,6 +76,29 @@ describe('httpClient', () => {
     expect(
       window.localStorage.getItem(DEPLOYMENT_TIMESTAMP_STORAGE_KEY),
     ).toEqual('67890');
+  });
+
+  it('forces a refresh when the backend sends X-Force-Refresh: true', async () => {
+    const forceRefreshCallback = jest.fn();
+
+    const { getHttpClient, responseUse } = await setupHttpClient();
+    getHttpClient(forceRefreshCallback);
+
+    const errorInterceptor = responseUse.mock.calls[0][1];
+    const error = {
+      response: {
+        headers: {
+          get: (headerName: string) => {
+            if (headerName === X_FORCE_REFRESH) {
+              return 'true';
+            }
+          },
+        },
+      },
+    };
+
+    await expect(errorInterceptor(error)).rejects.toBe(error);
+    expect(forceRefreshCallback).toHaveBeenCalled();
   });
 
   it('forces a manual refresh when the backend signals it', async () => {

@@ -1,6 +1,7 @@
 import {
   DEPLOYMENT_TIMESTAMP_STORAGE_KEY,
   X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
   X_MANUAL_REFRESH_REQUIRED,
   getHeaderValue,
 } from '@shared/utils/headers';
@@ -75,7 +76,8 @@ export const getHttpClient = (
 
         const shouldForceManualRefresh =
           getHeaderValue(error.response?.headers, X_MANUAL_REFRESH_REQUIRED) ===
-          'true';
+            'true' ||
+          getHeaderValue(error.response?.headers, X_FORCE_REFRESH) === 'true';
 
         if (shouldForceManualRefresh) {
           await currentForceRefreshCallback?.();
