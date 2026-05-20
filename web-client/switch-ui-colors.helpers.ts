@@ -48,17 +48,27 @@ const waitForDistributionDeployed = async (
   distributionId: string,
   retries = 10,
 ) => {
+  let lastStatus = 'Unknown';
+
   for (let attempt = 0; attempt <= retries; attempt++) {
     const result = await cloudfront.send(
       new GetDistributionCommand({ Id: distributionId }),
     );
 
-    if (result.Distribution?.Status === 'Deployed') {
+    lastStatus = result.Distribution?.Status ?? 'Unknown';
+
+    if (lastStatus === 'Deployed') {
       return;
     }
 
-    await sleep(30_000);
+    if (attempt < retries) {
+      await sleep(30_000);
+    }
   }
+
+  throw new Error(
+    `CloudFront distribution ${distributionId} did not reach Deployed status after ${retries + 1} attempts. Last observed status: ${lastStatus}.`,
+  );
 };
 
 export const switchUiColors = async ({
