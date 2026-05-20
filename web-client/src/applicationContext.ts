@@ -645,7 +645,7 @@ const applicationContext = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    return getHttpClient(forceRefreshCallback);
+    return getHttpClient(forceRefreshCallback, applicationContext.getBaseUrl());
   },
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');

@@ -48,6 +48,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.richText).not.toContain('shall file a Reply');
     expect(result.state.form.richText).toContain('shall file a Response');
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('should handle REPLY selection', async () => {
@@ -70,6 +71,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('should handle additional order text', async () => {
@@ -91,6 +93,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
+    expect(result.state.form.additionalOrderTextArray).toEqual([additionalText]);
   });
 
   it('should handle calendared case with trial session', async () => {
@@ -110,6 +113,22 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.richText).toContain(
       'session of the Court commencing on May 1, 2024, in Houston, Texas',
     );
+  });
+
+  it('normalizes additionalOrderTextArray by removing whitespace-only entries and updates form state', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          additionalOrderTextArray: ['', ' \t\n ', 'Keep this.'],
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual(['Keep this.']);
+    expect(result.state.form.richText).toContain('ORDERED that Keep this.');
   });
 
   it('should handle stricken from trial sessions', async () => {
