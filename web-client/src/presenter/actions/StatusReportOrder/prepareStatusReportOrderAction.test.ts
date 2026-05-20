@@ -59,6 +59,7 @@ describe('prepareStatusReportOrderAction,', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.richText).toEqual(expectedFiledLine);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('prepare status report with all options selected', async () => {
@@ -300,5 +301,33 @@ describe('prepareStatusReportOrderAction,', () => {
       },
     });
     expect(result.state.form.richText).toEqual(expectedFiledLine);
+  });
+  it('normalizes additionalOrderTextArray by removing whitespace-only entries', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          additionalOrderTextArray: ['  ', '', 'Parties shall comply.'],
+          docketEntryDescription: 'Order',
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual([
+      'Parties shall comply.',
+    ]);
+    expect(result.state.form.richText).toContain(
+      'ORDERED that Parties shall comply.',
+    );
   });
 });
