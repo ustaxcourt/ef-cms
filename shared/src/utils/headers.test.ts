@@ -48,11 +48,11 @@ describe('headers', () => {
     });
 
     it('returns undefined when headers.get() returns a non-string value', () => {
-      const headers = {
+      const headers: Record<string, unknown> = {
         get: jest.fn().mockReturnValue(null),
         'X-Foo': 123,
       };
-      expect(getHeaderValue(headers as any, 'X-Foo')).toBeUndefined();
+      expect(getHeaderValue(headers, 'X-Foo')).toBeUndefined();
     });
 
     it('returns the value from plain object headers by exact key', () => {
@@ -70,7 +70,8 @@ describe('headers', () => {
     });
 
     it('returns undefined when the header value is not a string', () => {
-      expect(getHeaderValue({ 'X-Foo': 42 } as any, 'X-Foo')).toBeUndefined();
+      const headers: Record<string, unknown> = { 'X-Foo': 42 };
+      expect(getHeaderValue(headers, 'X-Foo')).toBeUndefined();
     });
   });
 });
