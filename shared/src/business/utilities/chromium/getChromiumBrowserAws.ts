@@ -13,7 +13,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
     try {
       // There is a 1/1000 chance that launching a browser will spontaneously fail. In that event we can recover simply by retrying
       const browser = await puppeteerCore.launch({
-        args: puppeteerCore.defaultArgs({
+        args: await puppeteerCore.defaultArgs({
           args: chromium.args,
           headless: 'shell',
         }),
