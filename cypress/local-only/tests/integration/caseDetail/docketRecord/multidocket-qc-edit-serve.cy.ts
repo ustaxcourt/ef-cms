@@ -490,7 +490,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
     });
   });
 
-  describe.only('Edit Document Type and Serve from Lead Case', () => {
+  describe('Edit Document Type and Serve from Lead Case', () => {
     it('should propagate the serve to all member cases when a multidocketed court-issued document is edited from an unservable type to a servable type and served from the lead case', () => {
       loginAsDocketClerk1();
       goToCase(consolidatedGroupInfo.leadDocketNumber);
