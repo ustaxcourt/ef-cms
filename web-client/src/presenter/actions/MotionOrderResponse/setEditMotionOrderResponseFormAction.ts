@@ -1,4 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 import { DocketEntry } from 'shared/src/business/entities/DocketEntry';
 
 export const setEditMotionOrderResponseFormAction = ({
@@ -27,11 +31,15 @@ export const setEditMotionOrderResponseFormAction = ({
   const { additionalOrderText: legacyAdditionalOrderText, ...draftFields } =
     draftOrderState;
 
+  const rawAdditionalOrderTextArray =
+    draftOrderState.additionalOrderTextArray ??
+    (legacyAdditionalOrderText ? [legacyAdditionalOrderText] : []);
+
   store.set(state.form, {
     ...draftFields,
-    additionalOrderTextArray:
-      draftOrderState.additionalOrderTextArray ||
-      (legacyAdditionalOrderText ? [legacyAdditionalOrderText] : ['']),
+    additionalOrderTextArray: additionalOrderTextArrayWithRequiredFirstField(
+      normalizeAdditionalOrderTextArray(rawAdditionalOrderTextArray),
+    ),
   });
   store.set(
     state.docketEntryId,

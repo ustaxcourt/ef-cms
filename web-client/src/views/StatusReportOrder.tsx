@@ -43,10 +43,13 @@ export const StatusReportOrder = connect(
     validateStatusReportOrderSequence,
     validationErrors,
   }) {
+    const additionalOrderTextArray = form.additionalOrderTextArray?.length
+      ? form.additionalOrderTextArray
+      : [''];
     const additionalOrderTextArrayFormErrors =
       getAdditionalOrderTextArrayFormGroupErrors(
         validationErrors,
-        form.additionalOrderTextArray.length,
+        additionalOrderTextArray.length,
       );
 
     return (
@@ -383,7 +386,7 @@ export const StatusReportOrder = connect(
                     className="status-report-order-form-group"
                     errorText={additionalOrderTextArrayFormErrors}
                   >
-                    {form.additionalOrderTextArray.map((text, index) => (
+                    {additionalOrderTextArray.map((text, index) => (
                       <div key={index}>
                         <label
                           className="usa-label tw:mt-4"
@@ -427,7 +430,7 @@ export const StatusReportOrder = connect(
                             onClick={() => {
                               updateFormValueSequence({
                                 key: 'additionalOrderTextArray',
-                                value: form.additionalOrderTextArray.filter(
+                                value: additionalOrderTextArray.filter(
                                   (_, i) => i !== index,
                                 ),
                               });
@@ -446,7 +449,7 @@ export const StatusReportOrder = connect(
                       onClick={() => {
                         updateFormValueSequence({
                           key: 'additionalOrderTextArray',
-                          value: [...form.additionalOrderTextArray, ''],
+                          value: [...additionalOrderTextArray, ''],
                         });
                       }}
                       variant="primaryTertiary"
