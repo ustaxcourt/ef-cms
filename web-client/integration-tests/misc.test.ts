@@ -5,10 +5,6 @@ import { toggleBetaBarSequence } from '@web-client/presenter/sequences/toggleBet
 import { gotoStyleGuideSequence } from '@web-client/presenter/sequences/gotoStyleGuideSequence';
 import { toggleUsaBannerDetailsSequence } from '@web-client/presenter/sequences/toggleUsaBannerDetailsSequence';
 
-jest
-  .spyOn(applicationContext.getUseCases(), 'getAllFeatureFlagsInteractor')
-  .mockResolvedValue({});
-
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
 presenter.sequences = {
@@ -20,6 +16,15 @@ presenter.sequences = {
 const cerebralTest = CerebralTest(presenter);
 
 describe('Miscellaneous', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(applicationContext.getUseCases(), 'getAllFeatureFlagsInteractor')
+      .mockResolvedValue({});
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
   it('Handles routing', async () => {
     await cerebralTest.runSequence('gotoStyleGuideSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('StyleGuide');
