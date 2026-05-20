@@ -39,11 +39,6 @@ const setStoredDeploymentTimestamp = (
 export const getHttpClient = (
   forceRefreshCallback: () => void,
 ): AxiosInstance => {
-  /*
-  We are creating this error and interceptor to get around a known issue with axios stack traces: https://github.com/axios/axios/issues/2387.
-  When axios throws an error, the stack trace does not show who called axios. This helps accurately display a stack trace when axios throws an error.
-  */
-  const stackError = new Error(); // Look at the stack trace for more information on the error.
   axiosClient = axiosClient || axios.create();
 
   currentForceRefreshCallback = forceRefreshCallback;
@@ -51,6 +46,8 @@ export const getHttpClient = (
   if (!areInterceptorsRegistered) {
     axiosClient.interceptors.request.use(
       (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+        (config as any)._stackError = new Error();
+
         const deploymentTimestamp = getStoredDeploymentTimestamp();
 
         if (deploymentTimestamp) {
@@ -83,7 +80,10 @@ export const getHttpClient = (
           await currentForceRefreshCallback?.();
         }
 
-        error.stack = stackError.stack;
+        const stackError = error.config?._stackError;
+        if (stackError) {
+          error.stack = stackError.stack;
+        }
         throw error;
       },
     );

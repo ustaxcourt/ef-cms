@@ -78,6 +78,27 @@ describe('httpClient', () => {
     ).toEqual('67890');
   });
 
+  it('captures a per-request stack trace on the request interceptor and applies it to errors', async () => {
+    const { getHttpClient, requestUse, responseUse } = await setupHttpClient();
+    getHttpClient(jest.fn());
+
+    const requestInterceptor = requestUse.mock.calls[0][0];
+    const errorInterceptor = responseUse.mock.calls[0][1];
+
+    const config = { headers: { set: jest.fn() } };
+    const configWithStack = requestInterceptor(config);
+    expect(configWithStack._stackError).toBeInstanceOf(Error);
+
+    const error = {
+      config: configWithStack,
+      response: { headers: {} },
+      stack: 'original stack',
+    };
+
+    await expect(errorInterceptor(error)).rejects.toBe(error);
+    expect(error.stack).toBe(configWithStack._stackError.stack);
+  });
+
   it('forces a refresh when the backend sends X-Force-Refresh: true', async () => {
     const forceRefreshCallback = jest.fn();
 
