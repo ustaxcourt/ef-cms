@@ -128,6 +128,7 @@ export const serveCourtIssuedDocument = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...omit(docketEntryToServe, ['index']),
+            docketNumber: caseEntity.docketNumber,
             filingDate: createISODateString(),
             isOnDocketRecord: true,
             originallyFiledDocketNumber: subjectCaseDocketNumber,
