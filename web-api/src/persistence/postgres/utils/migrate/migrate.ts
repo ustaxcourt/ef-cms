@@ -1,7 +1,9 @@
 import * as path from 'path';
-import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
+import { Migrator } from 'kysely/migration';
+import { Kysely, sql } from 'kysely';
 import { promises as fs } from 'fs';
 import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { CjsMigrationProvider } from './CjsMigrationProvider';
 import { putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 import { environment } from '@web-api/environment';
 
@@ -48,11 +50,7 @@ async function pruneDeprecatedMigrations(db: Kysely<any>) {
 function createMigrator({ disableTransactions = false, writer }) {
   return new Migrator({
     db: writer,
-    provider: new FileMigrationProvider({
-      fs,
-      migrationFolder: migrationsDirectory,
-      path,
-    }),
+    provider: new CjsMigrationProvider(migrationsDirectory),
     allowUnorderedMigrations: true,
     disableTransactions,
   });
