@@ -118,6 +118,10 @@ describe('file motion response order', () => {
     cy.get(`#additional-order-text-array-${index}`).type(text);
   };
 
+  const assertAdditionalOrderTextAreaCount = (count: number): void => {
+    cy.get('[id^="additional-order-text-array-"]').should('have.length', count);
+  };
+
   const openOrderResponseFromInboxMessage = (
     fixture: MotionCaseFixture,
   ): void => {
@@ -238,6 +242,40 @@ describe('file motion response order', () => {
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
       enterAdditionalOrderText(0, 'Test additional text box');
       saveDraftAndAssertContents(allOptionsExpectedContents);
+    });
+  });
+
+  it('always shows the first additional order text field and drops optional rows that are only whitespace after preview', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate(today);
+      assertAdditionalOrderTextAreaCount(1);
+      cy.contains('button', 'Add additional order text').click();
+      cy.get('#additional-order-text-array-1')
+        .should('be.visible')
+        .type('  \t  ');
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+      cy.get('[data-testid="preview-pdf-button"]').click();
+      cy.wait('@courtIssuedOrder');
+      assertAdditionalOrderTextAreaCount(1);
+      cy.get('#additional-order-text-array-0').should('have.value', '');
+    });
+  });
+
+  it('keeps optional additional order text rows with substantive content after preview', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate(today);
+      cy.contains('button', 'Add additional order text').click();
+      enterAdditionalOrderText(1, 'Second clause for Cypress.');
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+      cy.get('[data-testid="preview-pdf-button"]').click();
+      cy.wait('@courtIssuedOrder');
+      assertAdditionalOrderTextAreaCount(2);
+      cy.get('#additional-order-text-array-1').should(
+        'have.value',
+        'Second clause for Cypress.',
+      );
     });
   });
 

@@ -50,6 +50,61 @@ describe('file status report order', () => {
       });
     });
 
+    describe('additional order text fields', () => {
+      const openStatusReportOrderForm = (): void => {
+        cy.visit(`/case-detail/${docketNumber}`);
+        cy.get('#tab-document-view').click();
+        cy.contains('Status Report').click();
+        cy.get('[data-testid="status-report-order-button"]').click();
+      };
+
+      const assertAdditionalOrderTextAreaCount = (count: number): void => {
+        cy.get('[id^="additional-order-text-array-"]').should(
+          'have.length',
+          count,
+        );
+      };
+
+      it('shows exactly one additional order text area by default', () => {
+        openStatusReportOrderForm();
+        assertAdditionalOrderTextAreaCount(1);
+      });
+
+      it('removes an optional additional order text row that contains only whitespace after preview', () => {
+        openStatusReportOrderForm();
+        assertAdditionalOrderTextAreaCount(1);
+        cy.contains('button', 'Add additional order text').click();
+        cy.get('#additional-order-text-array-1')
+          .should('be.visible')
+          .type('  \t  ');
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+        cy.wait('@courtIssuedOrder');
+        assertAdditionalOrderTextAreaCount(1);
+        cy.get('#additional-order-text-array-0').should('have.value', '');
+      });
+
+      it('keeps optional rows with substantive text after preview', () => {
+        openStatusReportOrderForm();
+        cy.contains('button', 'Add additional order text').click();
+        cy.get('#additional-order-text-array-1').type(
+          'Status report extra clause.',
+        );
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+        cy.wait('@courtIssuedOrder');
+        assertAdditionalOrderTextAreaCount(2);
+        cy.get('#additional-order-text-array-1').should(
+          'have.value',
+          'Status report extra clause.',
+        );
+      });
+    });
+
     describe('filing a status report order from document view', () => {
       it('should save unsigned draft when no options are selected', () => {
         cy.visit(`/case-detail/${docketNumber}`);
@@ -242,7 +297,7 @@ describe('file status report order', () => {
         cy.get('[data-testid="save-draft-button"]').click();
 
         cy.wait('@courtIssuedOrder').then(({ request: req }) => {
-          expect(req.body.addedDocketNumbers).to.be.empty;
+          expect(req.body.addedDocketNumbers ?? []).to.deep.equal([]);
           expect(req.body.contentHtml).to.include(firstPdfLineJustThisCase);
           expect(req.body.contentHtml).not.to.include(
             firstPdfLineForAllCasesInGroup,
