@@ -24,7 +24,13 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual(mockDraftOrderState);
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: [''],
+    });
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
       '/messages/123-45/message-detail/abc/xyz/motion-order-response-edit',
@@ -52,7 +58,13 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual(mockDraftOrderState);
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: [''],
+    });
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
       '/case-detail/123-45/documents/xyz/motion-order-response-edit',
@@ -88,5 +100,29 @@ describe('setEditMotionOrderResponseFormAction', () => {
       additionalOrderTextArray: ['Some additional text'],
     });
     expect(result.state.form).not.toHaveProperty('additionalOrderText');
+  });
+
+  it('should omit legacy additionalOrderText when it contains only whitespace', async () => {
+    const mockDraftOrderState = {
+      additionalOrderText: ' \t  ',
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+    };
+
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: mockDraftOrderState,
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 });

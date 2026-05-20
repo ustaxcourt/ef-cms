@@ -52,10 +52,13 @@ export const OrderResponse = connect(
     validationErrors,
     validateMotionOrderResponseSequence,
   }) {
+    const additionalOrderTextArray = form.additionalOrderTextArray?.length
+      ? form.additionalOrderTextArray
+      : [''];
     const additionalOrderTextArrayFormErrors =
       getAdditionalOrderTextArrayFormGroupErrors(
         validationErrors,
-        form.additionalOrderTextArray?.length ?? 0,
+        additionalOrderTextArray.length,
       );
 
     return (
@@ -280,7 +283,7 @@ export const OrderResponse = connect(
                         </label>
                       </div>
                     )}
-                    {form.additionalOrderTextArray?.map((text, index) => (
+                    {additionalOrderTextArray.map((text, index) => (
                       <div key={index}>
                         <label
                           className="usa-label tw:mt-4"
@@ -325,7 +328,7 @@ export const OrderResponse = connect(
                             onClick={() => {
                               updateFormValueSequence({
                                 key: 'additionalOrderTextArray',
-                                value: form.additionalOrderTextArray.filter(
+                                value: additionalOrderTextArray.filter(
                                   (_, i) => i !== index,
                                 ),
                               });
@@ -344,10 +347,7 @@ export const OrderResponse = connect(
                       onClick={() => {
                         updateFormValueSequence({
                           key: 'additionalOrderTextArray',
-                          value: [
-                            ...(form.additionalOrderTextArray || ['']),
-                            '',
-                          ],
+                          value: [...additionalOrderTextArray, ''],
                         });
                       }}
                       variant="primaryTertiary"

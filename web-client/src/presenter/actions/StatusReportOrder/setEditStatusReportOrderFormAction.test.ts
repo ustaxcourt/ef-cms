@@ -40,6 +40,27 @@ describe('setEditStatusReportOrderFormAction,', () => {
     });
   });
 
+  it('omits legacy additionalOrderText when it contains only whitespace', async () => {
+    const result = await runAction(setEditStatusReportOrderFormAction, {
+      props: {
+        caseDetail: {
+          docketNumber: '1',
+        },
+        docketEntryIdToEdit: '107-19',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: {
+            additionalOrderText: '  \n\t ',
+            docketEntryDescription: 'Order',
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
+  });
+
   it('prefers additionalOrderTextArray when editing newer drafts', async () => {
     const result = await runAction(setEditStatusReportOrderFormAction, {
       props: {
