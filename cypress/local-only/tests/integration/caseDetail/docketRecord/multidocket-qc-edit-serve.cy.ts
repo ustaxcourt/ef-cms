@@ -489,4 +489,92 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
       });
     });
   });
+
+  describe.only('Edit Document Type and Serve from Lead Case', () => {
+    it('should propagate the serve to all member cases when a multidocketed court-issued document is edited from an unservable type to a servable type and served from the lead case', () => {
+      loginAsDocketClerk1();
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+
+      cy.get('[data-testid="case-detail-menu-button"]').click();
+      cy.get('[data-testid="menu-button-upload-pdf"]').click();
+
+      cy.get('[data-testid="upload-description"]').type(
+        'Multidocketed Court Issued Doc',
+      );
+
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
+
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+
+      cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+
+      selectTypeaheadInput(
+        'court-issued-document-type-search',
+        'Returned Mail',
+      );
+
+      cy.get('.usa-date-picker__button').click();
+      cy.get('.usa-date-picker__calendar__date--today').click();
+
+      cy.get('[data-testid="save-docket-entry-button"]').click();
+
+      cy.get('[data-testid="confirm-initiate-save-modal"]').should('exist');
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-RM"]').should('exist');
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-RM"]').should('exist');
+      });
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="edit-RM"]').click();
+
+      selectTypeaheadInput('add-court-issued-document-type-search', 'Notice');
+
+      cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-NOT"]')
+        .closest('tr')
+        .find('[data-testid="docket-record-cell-not-served"]')
+        .should('contain', 'Not served');
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-NOT"]')
+          .closest('tr')
+          .find('[data-testid="docket-record-cell-not-served"]')
+          .should('contain', 'Not served');
+      });
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-NOT"]').click();
+      cy.get('[data-testid="serve-court-issued-document"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="print-paper-service-done-button"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      goToCase(consolidatedGroupInfo.leadDocketNumber);
+      cy.get('[data-testid="document-viewer-link-NOT"]')
+        .closest('tr')
+        .find('[data-testid="docket-record-cell-not-served"]')
+        .should('not.contain', 'Not served');
+
+      consolidatedGroupInfo.memberDocketNumbers.forEach(memberDocketNumber => {
+        goToCase(memberDocketNumber);
+        cy.get('[data-testid="document-viewer-link-NOT"]')
+          .closest('tr')
+          .find('[data-testid="docket-record-cell-not-served"]')
+          .should('not.contain', 'Not served');
+      });
+    });
+  });
 });
