@@ -7,6 +7,10 @@ import {
 import { state } from '@web-client/presenter/app.cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 export const prepareStatusReportOrderAction = ({
   applicationContext,
@@ -36,11 +40,20 @@ export const prepareStatusReportOrderAction = ({
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
-  const normalizedAdditionalOrderTextArray =
-    additionalOrderTextArray ||
+  const rawAdditionalOrderTextArray =
+    additionalOrderTextArray ??
     (additionalOrderText ? [additionalOrderText] : []);
+  const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
+    rawAdditionalOrderTextArray,
+  );
+  store.set(
+    state.form.additionalOrderTextArray,
+    additionalOrderTextArrayWithRequiredFirstField(
+      meaningfulAdditionalOrderTextArray,
+    ),
+  );
   const hasAdditionalOrderTextArray =
-    !!normalizedAdditionalOrderTextArray.filter(text => text).length;
+    meaningfulAdditionalOrderTextArray.length > 0;
 
   const dueDateFormatted = applicationContext
     .getUtilities()
@@ -86,12 +99,12 @@ export const prepareStatusReportOrderAction = ({
 
   let additionalTextLine = '';
   if (hasAdditionalOrderTextArray) {
-    const additionalOrderTextFiltered =
-      normalizedAdditionalOrderTextArray.filter(text => text);
-    additionalOrderTextFiltered.forEach((text, index) => {
+    meaningfulAdditionalOrderTextArray.forEach((text, index) => {
       const clause = formatAdditionalOrderClauseForRichText(text);
       additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
-        index < additionalOrderTextFiltered.length - 1 ? ' It is further' : ''
+        index < meaningfulAdditionalOrderTextArray.length - 1
+          ? ' It is further'
+          : ''
       }</p>`;
     });
   }

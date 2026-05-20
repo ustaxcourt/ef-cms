@@ -1,4 +1,5 @@
 import { CaseWithSelectionInfo } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
+import { normalizeAdditionalOrderTextArray } from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -37,6 +38,14 @@ export const submitCourtIssuedOrderAction = async ({
     'docketEntryIdToEdit',
   ]);
   documentMetadata.docketNumber = docketNumber;
+
+  if (Array.isArray(documentMetadata.additionalOrderTextArray)) {
+    const forPersistence = normalizeAdditionalOrderTextArray(
+      documentMetadata.additionalOrderTextArray,
+    );
+    documentMetadata.additionalOrderTextArray =
+      forPersistence.length > 0 ? forPersistence : [];
+  }
 
   documentMetadata.draftOrderState = {
     ...documentMetadata,

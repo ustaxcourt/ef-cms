@@ -147,4 +147,52 @@ describe('submitCourtIssuedOrderAction', () => {
 
     expect(output.docketEntryId).toBe(mockDocumentStorageId);
   });
+
+  it('persists additionalOrderTextArray with only substantive clauses', async () => {
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocumentStorageId,
+      },
+      state: {
+        caseDetail: { docketNumber: '111-20' },
+        form: {
+          documentType: 'Order',
+          primaryDocumentFile: {},
+          additionalOrderTextArray: ['', ' \t', 'Parties shall comply.'],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
+        .calls[0][1].documentMetadata.additionalOrderTextArray,
+    ).toEqual(['Parties shall comply.']);
+  });
+
+  it('persists additionalOrderTextArray as empty when every slot is blank', async () => {
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocumentStorageId,
+      },
+      state: {
+        caseDetail: { docketNumber: '111-20' },
+        form: {
+          documentType: 'Order',
+          primaryDocumentFile: {},
+          additionalOrderTextArray: ['', ' '],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
+        .calls[0][1].documentMetadata.additionalOrderTextArray,
+    ).toEqual([]);
+  });
 });
