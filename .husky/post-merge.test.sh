@@ -5,8 +5,6 @@
 EFCMS_ROOT=$(realpath "$(dirname "$0")/..")
 ANY_ERROR=0
 
-set -e
-
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
@@ -16,7 +14,7 @@ printf "%bSetting up test environment...%b\n" "$GREEN" "$NC"
 TEST_DIR=$(mktemp -d /tmp/git-merge-test-XXXXXX)
 trap 'rm -rf "$TEST_DIR"' EXIT
 
-cd "$TEST_DIR"
+cd "$TEST_DIR" || exit
 
 git init --initial-branch=main -q
 git config user.email "test@example.com"
