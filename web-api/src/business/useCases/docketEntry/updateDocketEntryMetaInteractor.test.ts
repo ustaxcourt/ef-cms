@@ -772,10 +772,10 @@ describe('updateDocketEntryMetaInteractor', () => {
     const consolidatedCase1 = {
       ...MOCK_CASE,
       docketNumber: '102-20',
-      docketEntries: mockDocketEntries.map(d => {
-        d.docketNumber = '102-20';
-        return d;
-      }),
+      docketEntries: mockDocketEntries.map(d => ({
+        ...d,
+        docketNumber: '102-20',
+      })),
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
@@ -825,7 +825,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(upsertDocketEntries.mock.calls[0][0]).toEqual(
+    expect(upsertDocketEntries).toHaveBeenCalledWith(
       expect.arrayContaining([
         expect.objectContaining({
           addToCoversheet: true,
