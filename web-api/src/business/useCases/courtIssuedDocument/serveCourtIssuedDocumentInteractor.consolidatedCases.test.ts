@@ -311,4 +311,21 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
   });
+
+  it('should set multiDocketedOn to an empty array when serving on a single, non-consolidated case', async () => {
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const expectedDocketEntry =
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry.multiDocketedOn).toEqual([]);
+  });
 });
