@@ -114,8 +114,9 @@ describe('file motion response order', () => {
     );
   };
 
-  const withinMotionOrderResponseForm = (): Cypress.Chainable<JQuery<HTMLElement>> =>
-    cy.get('.motion-order-response-form');
+  const withinMotionOrderResponseForm = (): Cypress.Chainable<
+    JQuery<HTMLElement>
+  > => cy.get('.motion-order-response-form');
 
   const enterAdditionalOrderText = (index: number, text: string): void => {
     withinMotionOrderResponseForm()

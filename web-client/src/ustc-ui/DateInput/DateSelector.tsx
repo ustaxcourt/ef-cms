@@ -139,6 +139,10 @@ export const DateSelector = ({
           (myDatePicker as HTMLInputElement).value = '';
         }
 
+        if (pristine && !defaultValue) {
+          (myDatePicker as HTMLInputElement).value = '';
+        }
+
         if (disabled) {
           datePicker.disable(input);
         }
