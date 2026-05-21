@@ -536,12 +536,14 @@ export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
 export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
-  'addToCoversheet',
   'additionalInfo',
   'additionalInfo2',
+  'addToCoversheet',
   'attachments',
   'certificateOfService',
   'certificateOfServiceDate',
+  'date',
+  'docketNumbers',
   'documentTitle',
   'documentType',
   'eventCode',
@@ -550,6 +552,9 @@ export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
   'filingDate',
   'freeText',
   'hasOtherFilingParty',
+  'judge',
+  'lodged',
+  'objections',
   'ordinalValue',
   'otherFilingParty',
   'otherIteration',
@@ -557,9 +562,8 @@ export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
   'pending',
   'previousDocument',
   'secondaryDocument',
+  'serviceDate',
   'trialLocation',
-  'docketNumbers',
-  'objections',
 ] as const;
 
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(

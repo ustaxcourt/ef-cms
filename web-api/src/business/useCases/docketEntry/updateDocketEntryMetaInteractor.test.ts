@@ -125,6 +125,9 @@ describe('updateDocketEntryMetaInteractor', () => {
         eventCode: 'SOP',
         index: 7,
         judge: 'Buch',
+        servedAt: '2019-01-01T05:00:00.000Z',
+        multiDocketedOn: ['102-20', '103-20'],
+        servedParties: [{ name: 'Some Party' }],
       },
       {
         ...baseDocketEntry,
@@ -777,7 +780,10 @@ describe('updateDocketEntryMetaInteractor', () => {
     const consolidatedCase1 = {
       ...MOCK_CASE,
       docketNumber: '102-20',
-      docketEntries: mockDocketEntries,
+      docketEntries: mockDocketEntries.map(d => {
+        d.docketNumber = '102-20';
+        return d;
+      }),
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
@@ -815,23 +821,26 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       {
         docketEntryMeta: {
-          ...mockDocketEntries[0],
+          ...mockDocketEntries[6],
           addToCoversheet: true,
           additionalInfo: 'new additional info',
           documentTitle: 'Updated Title',
+          judge: 'different judge',
           pending: true,
         },
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: leadCase.docketNumber,
       },
       mockDocketClerkUser,
     );
 
-    expect(upsertDocketEntries).toHaveBeenCalledWith(
+    expect(upsertDocketEntries.mock.calls[0][0]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           addToCoversheet: true,
           additionalInfo: 'new additional info',
+          docketNumber: consolidatedCase1.docketNumber,
           documentTitle: 'Updated Title',
+          judge: 'different judge',
           pending: true,
         }),
       ]),
