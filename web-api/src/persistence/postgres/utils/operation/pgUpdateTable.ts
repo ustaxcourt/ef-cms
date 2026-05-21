@@ -2,7 +2,7 @@ import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { UpdateQueryBuilder, UpdateResult } from 'kysely';
-import type { UpdateObjectExpression } from 'node_modules/kysely/dist/cjs/parser/update-set-parser';
+import type { UpdateObjectExpression } from 'node_modules/kysely/dist/parser/update-set-parser';
 
 type UpdateWhereCallback<T extends keyof Database> = (
   qb: UpdateQueryBuilder<Database, T, T, UpdateResult>,
@@ -23,7 +23,6 @@ export const pgUpdateTable = async <T extends keyof Database>({
     table,
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     cb: async writer => {
-
       // Kysely is not good at dynamically resolving tables, so we cast it here.
       const query = writer.updateTable(table) as UpdateQueryBuilder<
         Database,
