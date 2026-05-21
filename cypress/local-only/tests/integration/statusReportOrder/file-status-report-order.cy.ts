@@ -242,7 +242,7 @@ describe('file status report order', () => {
         cy.get('[data-testid="save-draft-button"]').click();
 
         cy.wait('@courtIssuedOrder').then(({ request: req }) => {
-          expect(req.body.addedDocketNumbers).to.be.empty;
+          expect(req.body.addedDocketNumbers).to.have.length(0);
           expect(req.body.contentHtml).to.include(firstPdfLineJustThisCase);
           expect(req.body.contentHtml).not.to.include(
             firstPdfLineForAllCasesInGroup,
