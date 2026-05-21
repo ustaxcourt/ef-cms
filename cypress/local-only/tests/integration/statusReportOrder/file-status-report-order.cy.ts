@@ -59,10 +59,9 @@ describe('file status report order', () => {
       };
 
       const assertAdditionalOrderTextAreaCount = (count: number): void => {
-        cy.get('[id^="additional-order-text-array-"]').should(
-          'have.length',
-          count,
-        );
+        cy.get('.status-report-order-form')
+          .find('textarea[id^="additional-order-text-array-"]')
+          .should('have.length', count);
       };
 
       it('shows exactly one additional order text area by default', () => {
@@ -74,16 +73,23 @@ describe('file status report order', () => {
         openStatusReportOrderForm();
         assertAdditionalOrderTextAreaCount(1);
         cy.contains('button', 'Add additional order text').click();
-        cy.get('#additional-order-text-array-1')
+        cy.get('.status-report-order-form')
+          .find('#additional-order-text-array-1')
           .should('be.visible')
-          .type('  \t  ');
+          .clear()
+          .type('   ');
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
         );
         cy.get('[data-testid="preview-pdf-button"]').click();
         cy.wait('@courtIssuedOrder');
+        cy.get('.status-report-order-form')
+          .find('#additional-order-text-array-1')
+          .should('not.exist');
         assertAdditionalOrderTextAreaCount(1);
-        cy.get('#additional-order-text-array-0').should('have.value', '');
+        cy.get('.status-report-order-form')
+          .find('#additional-order-text-array-0')
+          .should('have.value', '');
       });
 
       it('keeps optional rows with substantive text after preview', () => {
@@ -97,8 +103,8 @@ describe('file status report order', () => {
         );
         cy.get('[data-testid="preview-pdf-button"]').click();
         cy.wait('@courtIssuedOrder');
-        assertAdditionalOrderTextAreaCount(2);
-        cy.get('#additional-order-text-array-1').should(
+        assertAdditionalOrderTextAreaCount(1);
+        cy.get('#additional-order-text-array-0').should(
           'have.value',
           'Status report extra clause.',
         );

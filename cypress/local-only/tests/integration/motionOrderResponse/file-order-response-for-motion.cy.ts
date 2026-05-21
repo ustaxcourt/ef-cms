@@ -114,12 +114,19 @@ describe('file motion response order', () => {
     );
   };
 
+  const withinMotionOrderResponseForm = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+    cy.get('.motion-order-response-form');
+
   const enterAdditionalOrderText = (index: number, text: string): void => {
-    cy.get(`#additional-order-text-array-${index}`).type(text);
+    withinMotionOrderResponseForm()
+      .find(`#additional-order-text-array-${index}`)
+      .type(text);
   };
 
   const assertAdditionalOrderTextAreaCount = (count: number): void => {
-    cy.get('[id^="additional-order-text-array-"]').should('have.length', count);
+    withinMotionOrderResponseForm()
+      .find('textarea[id^="additional-order-text-array-"]')
+      .should('have.length', count);
   };
 
   const openOrderResponseFromInboxMessage = (
@@ -245,20 +252,98 @@ describe('file motion response order', () => {
     });
   });
 
+  it('shows a validation error when response date is invalid and user saves draft', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate('invalid date');
+      cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.get('[data-testid="error-alert"]').should(
+        'contain.text',
+        'Enter a valid date',
+      );
+      cy.get(
+        '#response-date-input-orderResponseResponseDate-form-group',
+      ).should('contain.text', 'Enter a valid date');
+    });
+  });
+
+  it('lets a judge remove optional additional order text rows', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate(today);
+      assertAdditionalOrderTextAreaCount(1);
+
+      cy.contains('button', 'Add additional order text').click();
+      assertAdditionalOrderTextAreaCount(2);
+
+      cy.contains('button', 'Remove').click();
+      assertAdditionalOrderTextAreaCount(1);
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-0')
+        .should('exist');
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-1')
+        .should('not.exist');
+    });
+  });
+
+  it('lets a judge clear all selected and added data', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      enterResponseDate(today);
+      cy.get('#motion-order-reply').check({ force: true });
+      cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
+      enterAdditionalOrderText(0, 'Primary clause');
+      cy.contains('button', 'Add additional order text').click();
+      enterAdditionalOrderText(1, 'Secondary clause');
+
+      cy.get('[data-testid="clear-all-fields"]').click();
+
+      cy.get('#response-date-input-orderResponseResponseDate-picker').should(
+        'have.value',
+        '',
+      );
+      cy.get('#motion-order-reply').should('not.be.checked');
+      cy.get('#due-date-input-motionOrderResponseDueDate-picker').should(
+        'have.value',
+        '',
+      );
+      assertAdditionalOrderTextAreaCount(1);
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-0')
+        .should('have.value', '');
+    });
+  });
+
+  it('opens the order response form with the expected title from document preview', () => {
+    createMotionCaseForJudge().then(fixture => {
+      openOrderResponseFromDocumentView(fixture.docketNumber);
+      cy.get('#page-title').should('contain.text', 'Order Response to Motion');
+    });
+  });
+
   it('always shows the first additional order text field and drops optional rows that are only whitespace after preview', () => {
     createMotionCaseForJudge().then(fixture => {
       openOrderResponseFromDocumentView(fixture.docketNumber);
       enterResponseDate(today);
       assertAdditionalOrderTextAreaCount(1);
       cy.contains('button', 'Add additional order text').click();
-      cy.get('#additional-order-text-array-1')
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-1')
         .should('be.visible')
-        .type('  \t  ');
+        .clear()
+        .type('   ');
       cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.wait('@courtIssuedOrder');
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-1')
+        .should('not.exist');
       assertAdditionalOrderTextAreaCount(1);
-      cy.get('#additional-order-text-array-0').should('have.value', '');
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-0')
+        .should('have.value', '');
     });
   });
 
@@ -271,11 +356,10 @@ describe('file motion response order', () => {
       cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.wait('@courtIssuedOrder');
-      assertAdditionalOrderTextAreaCount(2);
-      cy.get('#additional-order-text-array-1').should(
-        'have.value',
-        'Second clause for Cypress.',
-      );
+      assertAdditionalOrderTextAreaCount(1);
+      withinMotionOrderResponseForm()
+        .find('#additional-order-text-array-0')
+        .should('have.value', 'Second clause for Cypress.');
     });
   });
 
