@@ -363,7 +363,10 @@ describe('consolidated cases', () => {
     const expectedDocketEntry =
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry).toMatchObject({
-      multiDocketedOn: docketNumbers,
+      multiDocketedOn: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ...docketNumbers,
+      ],
       originallyFiledDocketNumber:
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });

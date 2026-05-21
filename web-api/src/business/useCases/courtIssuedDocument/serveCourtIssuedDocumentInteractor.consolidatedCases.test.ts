@@ -282,4 +282,33 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalledTimes(1);
   });
+
+  it('should populate multiDocketedOn and originallyFiledDocketNumber on expectedDocketEntry', async () => {
+    const docketNumbers = [
+      MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+    ];
+
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers,
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const expectedDocketEntry =
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry).toMatchObject({
+      multiDocketedOn: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ...docketNumbers,
+      ],
+      originallyFiledDocketNumber:
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
+  });
 });
