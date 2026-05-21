@@ -20,7 +20,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|pixelmatch|kysely)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|pixelmatch|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+  ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '5%',
 };
