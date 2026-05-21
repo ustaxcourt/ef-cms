@@ -42,7 +42,7 @@ const config: Config = {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
-    // @smithy/core@3.24.2 stubs node-only exports as Symbol.for("node-only")
+    // @smithy/core@3.24.2 and @aws/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
     // in its browser bundles. Jest's jsdom environment picks up the browser
     // export condition via its `exports` map, breaking any test that
     // transitively instantiates an AWS SDK client. Force the Node.js CJS
@@ -53,6 +53,8 @@ const config: Config = {
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/retry/index.js',
     '^@smithy/core/serde$':
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
+    '^@aws-sdk/core/client$':
+      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(
