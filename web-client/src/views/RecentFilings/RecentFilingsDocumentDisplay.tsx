@@ -28,14 +28,16 @@ const StatusIcons = ({
         iconClass="margin-right-05 text-secondary"
         title="Stricken Document"
         aria-hidden="true"
-        data-testid="stricken-document-icon" />
+        data-testid="stricken-document-icon"
+      />
     )}
     {showProcessing && (
       <WrappedIcon
         icon="spinner"
         iconClass="margin-right-05 text-secondary fa-spin"
         title="Processing Document"
-        aria-hidden="true" />
+        aria-hidden="true"
+      />
     )}
   </>
 );
@@ -70,6 +72,7 @@ const DocumentContent = ({
         aria-label={`View PDF document: ${documentName} for case ${docketNumber}`}
         className={className}
         data-testid="document-link"
+        overrideReadOnly
         onClick={() => onDownloadClick(filing)}
       >
         <StatusIcons isStricken={isStricken} showProcessing={showProcessing} />

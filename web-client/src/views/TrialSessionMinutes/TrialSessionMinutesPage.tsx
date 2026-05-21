@@ -21,8 +21,12 @@ export const TrialSessionMinutesPage = connect(
     saveMinuteSheetToDraftsSequence,
     formattedTrialSessionDetails,
   }: {
-    downloadMinuteSheetFormPdfSequence: (props: { forceAutosave?: boolean }) => void;
-    saveMinuteSheetToDraftsSequence: (props: { forceAutosave?: boolean }) => void;
+    downloadMinuteSheetFormPdfSequence: (props: {
+      forceAutosave?: boolean;
+    }) => void;
+    saveMinuteSheetToDraftsSequence: (props: {
+      forceAutosave?: boolean;
+    }) => void;
     formattedTrialSessionDetails: any;
   }) => {
     return (
@@ -40,9 +44,9 @@ export const TrialSessionMinutesPage = connect(
             <FontAwesomeIcon icon={['fas', 'arrow-alt-circle-left']} />
             Back to Session Information
           </Button>
-          <SuccessNotification 
-          className="usa-alert--success-max-width-none"
-          isDismissible={false}
+          <SuccessNotification
+            className="usa-alert--success-max-width-none"
+            isDismissible={false}
           />
           <ErrorNotification />
           <div className="grid-row">
@@ -60,16 +64,16 @@ export const TrialSessionMinutesPage = connect(
               >
                 Save to Drafts
               </Button>
-              <button
-                className="usa-button usa-button--outline"
+              <Button
+                secondary
                 data-testid="preview-pdf-button-top"
                 onClick={e => {
                   e.preventDefault();
-                  downloadMinuteSheetFormPdfSequence({ forceAutosave: true });;
+                  downloadMinuteSheetFormPdfSequence({ forceAutosave: true });
                 }}
               >
                 Preview PDF
-              </button>
+              </Button>
             </div>
           </div>
           <TrialSessionMinutesForm />
@@ -82,16 +86,16 @@ export const TrialSessionMinutesPage = connect(
           >
             Save to Drafts
           </Button>
-          <button
-            className="usa-button usa-button--outline"
+          <Button
+            secondary
             data-testid="preview-pdf-button-bot"
             onClick={e => {
               e.preventDefault();
-              downloadMinuteSheetFormPdfSequence({ forceAutosave: true });;
+              downloadMinuteSheetFormPdfSequence({ forceAutosave: true });
             }}
           >
             Preview PDF
-          </button>
+          </Button>
         </div>
       </>
     );

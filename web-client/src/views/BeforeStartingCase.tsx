@@ -190,11 +190,13 @@ export const BeforeStartingCase = connect(
             <Button
               className="before-case-button"
               data-testid="go-to-step-1"
+              overrideReadOnly
               href="/file-a-petition/new"
             >
               {"I'm Ready to Start"}
             </Button>
             <Button
+              overrideReadOnly
               className="before-case-button before-case-follow-up-button"
               data-testid="print-this-page"
               secondary={true}
@@ -214,6 +216,7 @@ export const BeforeStartingCase = connect(
               Print This Page
             </Button>
             <Button
+              overrideReadOnly
               link
               className="before-case-button before-case-follow-up-button"
               data-testid="cancel-before-starting-case"

@@ -29,6 +29,7 @@ export const AppMaintenanceModal = connect(
         </p>
         <p className="margin-top-5">
           <Button
+            overrideReadOnly
             data-testid="maintenance-modal-ok-btn"
             onClick={() => cancelSequence({ path: '/maintenance' })}
           >

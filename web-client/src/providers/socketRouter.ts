@@ -121,6 +121,16 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
           path: '/',
         });
         break;
+      case 'read_only_mode_engaged':
+        await app.getSequence('setReadOnlyModeSequence')({
+          readOnlyMode: true,
+        });
+        break;
+      case 'read_only_mode_disengaged':
+        await app.getSequence('setReadOnlyModeSequence')({
+          readOnlyMode: false,
+        });
+        break;
       case 'save_docket_entry_for_later_complete':
         await app.getSequence('saveDocketEntryForLaterCompleteSequence')(
           message,

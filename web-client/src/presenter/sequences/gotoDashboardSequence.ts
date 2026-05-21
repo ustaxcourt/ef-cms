@@ -25,6 +25,7 @@ import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/act
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { startReadOnlyModePollingAction } from '../actions/WebSocketConnection/startReadOnlyModePollingAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -34,16 +35,7 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
-export const gotoDashboardSequence = [
-  setupCurrentPageAction('Interstitial'),
-  closeMobileMenuAction,
-  clearSelectedWorkItemsAction,
-  clearErrorAlertsAction,
-  setUserPermissionsAction,
-  startWebSocketConnectionAction,
-  {
-    error: [setShowModalFactoryAction('WebSocketErrorModal')],
-    success: [
+const successPath = [
       runPathForUserRoleAction,
       {
         ...takePathForRoles(
@@ -126,6 +118,18 @@ export const gotoDashboardSequence = [
           setupCurrentPageAction('DashboardExternalUser'),
         ],
       },
-    ],
+    ];
+
+export const gotoDashboardSequence = [
+  setupCurrentPageAction('Interstitial'),
+  closeMobileMenuAction,
+  clearSelectedWorkItemsAction,
+  clearErrorAlertsAction,
+  setUserPermissionsAction,
+  startWebSocketConnectionAction,
+  {
+    error: [setShowModalFactoryAction('WebSocketErrorModal')],
+    success: successPath,
+    startPolling: [startReadOnlyModePollingAction, ...successPath],
   },
 ];

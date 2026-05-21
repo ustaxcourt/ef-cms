@@ -85,6 +85,21 @@ app.use((req, res, next) => {
     return;
   }
 
+  // The public API does not expose any write endpoints, so during read-only
+  // mode we simply 503 anything that isn't a safe (read) HTTP method. All
+  // public search endpoints are GETs, so allowlisting POSTs is unnecessary.
+  if (
+    process.env.READ_ONLY_MODE === 'true' &&
+    req.method !== 'GET' &&
+    req.method !== 'HEAD' &&
+    req.method !== 'OPTIONS'
+  ) {
+    res
+      .status(503)
+      .send('System is upgrading. Please wait a few minutes and try again.');
+    return;
+  }
+
   next();
 });
 

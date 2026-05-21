@@ -4,6 +4,7 @@ import { ClientApplicationContext } from '../applicationContext';
 import { GatewayTimeoutError } from './errors/GatewayTimeoutError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
+import { ReadOnlyModeError } from './errors/ReadOnlyModeError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
@@ -257,6 +258,7 @@ import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigat
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
 import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { readOnlyModeErrorSequence } from './sequences/readOnlyModeErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
 import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
@@ -272,6 +274,7 @@ import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPract
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { setReadOnlyModeSequence } from './sequences/setReadOnlyModeSequence';
 import { openEditRemoteTrialModalSequence } from './sequences/openEditRemoteTrialModalSequence';
 import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
@@ -442,7 +445,6 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
-
 import { signOutSequence } from './sequences/signOutSequence';
 import { signOutUserInitiatedSequence } from './sequences/signOutUserInitiatedSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -1203,6 +1205,7 @@ export const presenterSequences = {
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
   printPublicSessionCopySequence:
     printPublicSessionCopySequence as unknown as Function,
+  readOnlyModeErrorSequence: readOnlyModeErrorSequence as unknown as Function,
   redirectToDashboardSequence:
     redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
@@ -1291,7 +1294,6 @@ export const presenterSequences = {
   setCurrentTabSequence,
   setCurrentPaginationPageSequence:
     setCurrentPaginationPageSequence as unknown as Function,
-
   setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
@@ -1318,6 +1320,7 @@ export const presenterSequences = {
   setPetitionTypeSequence,
   setPractitionerClosedCasesPageSequence,
   setPractitionerOpenCasesPageSequence,
+  setReadOnlyModeSequence: setReadOnlyModeSequence as unknown as Function,
   setRecentFilingsTableSortSequence:
     setRecentFilingsTableSortSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
@@ -1700,9 +1703,10 @@ export const presenter = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 500, 501, etc
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
+    [ReadOnlyModeError, readOnlyModeErrorSequence], //503
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler

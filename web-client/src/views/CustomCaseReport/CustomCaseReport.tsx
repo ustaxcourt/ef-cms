@@ -439,6 +439,7 @@ export const CustomCaseReport = connect(
             <Button
               data-testid="submit-custom-case-report-button"
               tooltip="Run Report"
+              overrideReadOnly
               onClick={async () => {
                 setHasRunCustomCaseReport(true);
                 await getCustomCaseReportSequence({ selectedPage: 0 });
@@ -472,6 +473,7 @@ export const CustomCaseReport = connect(
           </div>
           <div className="text-right margin-bottom-2">
             <Button
+              overrideReadOnly
               link
               aria-label="export pending report"
               className="margin-top-2"

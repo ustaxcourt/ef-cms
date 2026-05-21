@@ -14,6 +14,11 @@ export type PdfGenerationResult = {
   tempId: string;
 };
 
+// Note: this lambda is intentionally NOT gated by READ_ONLY_MODE. It is invoked
+// synchronously (RequestResponse) by `generatePdfFromHtmlInteractor`, which
+// expects a `{ tempId }` response; rescheduling here would return `undefined`
+// and crash the caller. PDF rendering only reads HTML and writes to S3 (never
+// to Postgres), so it is safe to run during the Aurora Blue/Green switchover.
 export const handler = async (event: GeneratePdfRequest) => {
   for (let index = 0; index < 3; index++) {
     try {

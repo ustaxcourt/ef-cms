@@ -152,6 +152,7 @@ import { sealCaseContactAddressInteractor } from '@web-api/business/useCases/sea
 import { sealCaseInteractor } from '@web-api/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from './business/useCases/docketEntry/sealDocketEntryInteractor';
 import { sendMaintenanceNotificationsInteractor } from './business/useCases/maintenance/sendMaintenanceNotificationsInteractor';
+import { sendReadOnlyNotificationsInteractor } from './business/useCases/maintenance/sendReadOnlyNotificationsInteractor';
 import { serveCaseToIrsInteractor } from './business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
 import { serveCourtIssuedDocumentInteractor } from './business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
 import { serveExternallyFiledDocumentInteractor } from './business/useCases/document/serveExternallyFiledDocumentInteractor';
@@ -350,6 +351,7 @@ const useCases = {
   sealCaseInteractor,
   sealDocketEntryInteractor,
   sendMaintenanceNotificationsInteractor,
+  sendReadOnlyNotificationsInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
