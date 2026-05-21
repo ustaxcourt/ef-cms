@@ -5,12 +5,13 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { attachFile } from '../file/upload-file';
 import { faker } from '@faker-js/faker';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 export function createAndServePaperPetitionMultipleParties(
   options = { yearReceived: '2021' },
 ) {
-  const name = 'Zofia Olszewska ' + Date.now();
-  const spouseName = 'Jaylin Olszewska ' + Date.now();
+  const name = 'Zofia Olszewska ' + getCurrentDateTimeInMillis();
+  const spouseName = 'Jaylin Olszewska ' + getCurrentDateTimeInMillis();
   loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
