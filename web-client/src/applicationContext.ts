@@ -643,8 +643,7 @@ const applicationContext = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    const apiUrl = process.env.API_URL || 'http://localhost:4000';
-    return getHttpClient(forceRefreshCallback, apiUrl);
+    return getHttpClient(forceRefreshCallback);
   },
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');

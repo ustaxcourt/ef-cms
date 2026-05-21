@@ -180,8 +180,7 @@ const applicationContextPublic = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    const apiUrl = process.env.API_URL || 'http://localhost:4000';
-    return getHttpClient(forceRefreshCallback, apiUrl);
+    return getHttpClient(forceRefreshCallback);
   },
   getLogger: () => ({
     error: () => {
