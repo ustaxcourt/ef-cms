@@ -131,6 +131,7 @@ export const serveCourtIssuedDocument = async (
             docketNumber: caseEntity.docketNumber,
             filingDate: createISODateString(),
             isOnDocketRecord: true,
+            multiDocketedOn: [subjectCaseDocketNumber, ...docketNumbers],
             originallyFiledDocketNumber: subjectCaseDocketNumber,
           },
           { authorizedUser },

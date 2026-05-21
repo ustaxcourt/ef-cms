@@ -187,7 +187,7 @@ export const fileAndServeCourtIssuedDocument = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: form.judge,
-            multiDocketedOn: docketNumbers,
+            multiDocketedOn: [subjectCaseDocketNumber, ...docketNumbers],
             originallyFiledDocketNumber: subjectCaseDocketNumber,
             numberOfPages,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
