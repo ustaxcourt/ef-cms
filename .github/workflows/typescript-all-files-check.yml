@@ -2,6 +2,7 @@ name: Typescript File Check
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -15,6 +16,7 @@ concurrency:
 
 jobs:
   CheckAllFilesForTypeErrorCount:
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout NodeJS Bootstrap Action

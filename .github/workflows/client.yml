@@ -2,6 +2,7 @@ name: Node.js CI - Client Unit Tests
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -19,6 +20,7 @@ permissions:
 
 jobs:
   Client:
+    if: ${{ !github.event.pull_request.draft }}
     strategy:
       fail-fast: false
       matrix:
