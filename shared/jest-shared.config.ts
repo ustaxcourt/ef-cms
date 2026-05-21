@@ -40,7 +40,7 @@ const config: Config = {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
-    // @smithy/core@3.24.2 and @aws/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
+    // @smithy/core@3.24.2 and @aws-sdk/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
     // in its browser bundles. Jest's jsdom environment picks up the browser
     // export condition via its `exports` map, breaking any test that
     // transitively instantiates an AWS SDK client. Force the Node.js CJS
