@@ -47,13 +47,12 @@ export const GrantDenyMotion = connect(
     validationErrors,
   }) {
     const additionalOrderText: string[] = form.additionalOrderText || [''];
-    const isDenied =
-      form.disposition === constants.MOTION_DISPOSITIONS.DENIED;
+    const isDenied = form.disposition === constants.MOTION_DISPOSITIONS.DENIED;
     const dueDateMessageSelected = !!form.dueDateMessage;
     const { isCalendared } = grantDenyMotionFormHelper;
     const calendaredDisabledTitle = isCalendared
       ? ''
-      : 'Case is not calendared for trial';
+      : 'Case is not calendared';
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
     const { filingPartyOptions } = grantDenyOptions;
     const docketEntryPreview = form.documentTitle || 'Order';
@@ -99,8 +98,7 @@ export const GrantDenyMotion = connect(
                             aria-label="all cases in group"
                             checked={
                               form.issueOrder ===
-                              grantDenyOptions.issueOrderOptions
-                                .allCasesInGroup
+                              grantDenyOptions.issueOrderOptions.allCasesInGroup
                             }
                             className="usa-radio__input"
                             data-testid="issue-order-all-cases"
@@ -422,10 +420,7 @@ export const GrantDenyMotion = connect(
                         </FormGroup>
 
                         <FormGroup errorText={validationErrors.filingParty}>
-                          <label
-                            className="usa-label"
-                            htmlFor="filing-party"
-                          >
+                          <label className="usa-label" htmlFor="filing-party">
                             Filing party
                           </label>
                           <select
