@@ -70,7 +70,7 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
       MOTION_DISPOSITIONS.DENIED,
     )
       .required()
-      .messages({ '*': 'Enter a disposition' }),
+      .messages({ '*': 'Select Granted or Denied' }),
     dueDate: joi
       .when('dueDateMessage', {
         is: joi.exist().not(null),

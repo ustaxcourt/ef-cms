@@ -50,8 +50,7 @@ describe('GrantDenyMotionForm', () => {
       const form = new GrantDenyMotionForm({
         disposition: MOTION_DISPOSITIONS.GRANTED,
         isOnLeadCase: true,
-        issueOrder:
-          GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        issueOrder: GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
       });
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
@@ -69,7 +68,7 @@ describe('GrantDenyMotionForm', () => {
     it('should be invalid when disposition is missing', () => {
       const form = new GrantDenyMotionForm({});
       expect(form.getFormattedValidationErrors()).toMatchObject({
-        disposition: 'Enter a disposition',
+        disposition: 'Select Granted or Denied',
       });
     });
 

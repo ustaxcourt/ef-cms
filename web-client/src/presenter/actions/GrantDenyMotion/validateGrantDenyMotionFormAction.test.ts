@@ -41,7 +41,7 @@ describe('validateGrantDenyMotionFormAction', () => {
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: { disposition: 'Enter a disposition' },
+      errors: { disposition: 'Select Granted or Denied' },
     });
   });
 
