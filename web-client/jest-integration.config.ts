@@ -29,7 +29,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(export-to-csv|@faker-js/faker|uuid)/)',
+    '/node_modules/(?!(export-to-csv|@faker-js/faker|uuid|kysely)/)',
   ],
   workerIdleMemoryLimit: '10%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
