@@ -123,13 +123,20 @@ export const serveCourtIssuedDocument = async (
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
+    const multiDocketedOn: string[] =
+      docketNumbers.length > 0
+        ? [subjectCaseDocketNumber, ...docketNumbers]
+        : [];
+
     caseEntities = await settlePromises(
       caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
             ...omit(docketEntryToServe, ['index']),
+            docketNumber: caseEntity.docketNumber,
             filingDate: createISODateString(),
             isOnDocketRecord: true,
+            multiDocketedOn,
             originallyFiledDocketNumber: subjectCaseDocketNumber,
           },
           { authorizedUser },

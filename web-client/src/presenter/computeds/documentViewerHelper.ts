@@ -143,7 +143,10 @@ export const getDocumentDisplayFlags = ({
     canAllowDocumentService &&
     showNotServed &&
     isCourtIssuedDocument &&
-    permissions.SERVE_DOCUMENT;
+    permissions.SERVE_DOCUMENT &&
+    (!caseDetail.leadDocketNumber ||
+      isLeadCase(caseDetail) ||
+      (isMemberCase(caseDetail) && !DocketEntry.isMultiDocketed(document)));
 
   const showServePetitionButton =
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
@@ -178,6 +181,7 @@ export const getDocumentDisplayFlags = ({
     isMemberCase(caseDetail) &&
     DocketEntry.isMultiDocketed(document) &&
     isDocumentUnserved &&
+    !DocketEntry.isUnservable(document) &&
     permissions.SERVE_DOCUMENT;
 
   return {

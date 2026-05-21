@@ -160,6 +160,11 @@ export const fileAndServeCourtIssuedDocument = async (
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
+    const multiDocketedOn: string[] =
+      docketNumbers.length > 0
+        ? [subjectCaseDocketNumber, ...docketNumbers]
+        : [];
+
     caseEntities = await settlePromises(
       caseEntities.map(async caseEntity => {
         const docketEntryEntity = new DocketEntry(
@@ -187,7 +192,7 @@ export const fileAndServeCourtIssuedDocument = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: form.judge,
-            multiDocketedOn: docketNumbers,
+            multiDocketedOn,
             originallyFiledDocketNumber: subjectCaseDocketNumber,
             numberOfPages,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
