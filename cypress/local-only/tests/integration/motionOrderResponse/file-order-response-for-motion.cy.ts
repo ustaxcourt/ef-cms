@@ -310,6 +310,7 @@ describe('file motion response order', () => {
     createMotionCase().then(fixture => {
       openOrderResponseFromInboxMessage(fixture);
       enterResponseDate(today);
+
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
