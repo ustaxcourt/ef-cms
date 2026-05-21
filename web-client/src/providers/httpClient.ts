@@ -38,6 +38,7 @@ const setStoredDeploymentTimestamp = (
 
 export const getHttpClient = (
   forceRefreshCallback: () => void,
+  apiUrl: string,
 ): AxiosInstance => {
   axiosClient = axiosClient || axios.create();
 
@@ -50,8 +51,9 @@ export const getHttpClient = (
 
         const deploymentTimestamp = getStoredDeploymentTimestamp();
 
-        // TODO: TEMP - remove this to re-introduce the CORS bug for test validation
-        if (deploymentTimestamp) {
+        const isExternalRequest = config.url && !config.url.startsWith(apiUrl);
+
+        if (deploymentTimestamp && !isExternalRequest) {
           config.headers.set(X_DEPLOYMENT_TIMESTAMP, deploymentTimestamp);
         }
 
