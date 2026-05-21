@@ -5,6 +5,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkAddsRespondentToCase } from '../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 const BAR_NUMBER = 'WN7777';
 const USER = 'irsPractitioner2@example.com';
@@ -45,7 +46,7 @@ function respondentModifiesContactInfo(email: string) {
   loginAsIrsPractitioner(email);
   cy.visit('user/contact/edit');
   cy.get('[data-testid="contact.address1"]').clear();
-  const newAddress = 'NEW ADDRESS ' + Date.now();
+  const newAddress = 'NEW ADDRESS ' + getCurrentDateTimeInMillis();
   cy.get('[data-testid="contact.address1"]').type(newAddress);
   cy.get('[data-testid="save-edit-contact"]').click();
   cy.get('[data-testid="progress-description"]').should('exist');
