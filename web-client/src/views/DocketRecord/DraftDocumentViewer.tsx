@@ -68,7 +68,9 @@ export const DraftDocumentViewer = connect(
                           data-testid={`docket-entry-description-${idx}`}
                           id={`docket-entry-description-${idx}`}
                         >
-                          {draftDocument.descriptionDisplay}
+                          {draftDocument.descriptionDisplay
+                            .replace('denied', 'DENIED')
+                            .replace('granted', 'GRANTED')}
                         </div>
                       </div>
                     </Button>
