@@ -30,8 +30,7 @@ const buildDispositionPhrase = ({
   return parts.join(' ');
 };
 
-const wrap = (inner: string) =>
-  `<p class="indent-paragraph">${inner}</p>`;
+const wrap = (inner: string) => `<p class="indent-paragraph">${inner}</p>`;
 
 const joinWithItIsFurther = (clauses: string[]): string =>
   clauses
@@ -42,10 +41,7 @@ const joinWithItIsFurther = (clauses: string[]): string =>
     )
     .join('');
 
-export const prepareGrantDenyMotionAction = ({
-  get,
-  store,
-}: ActionProps) => {
+export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   const {
     additionalOrderText,
     deniedAsMoot,
@@ -95,8 +91,7 @@ export const prepareGrantDenyMotionAction = ({
 
   if (
     isOnLeadCase &&
-    issueOrder ===
-      GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup
+    issueOrder === GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup
   ) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => ({
       docketNumber: c.docketNumber,
@@ -130,7 +125,7 @@ export const prepareGrantDenyMotionAction = ({
   });
 
   const dispositionClause = wrap(
-    `ORDERED that the ${motionDocumentTitle} is ${dispositionPhrase}.`,
+    `ORDERED that petitioner's ${motionDocumentTitle} is ${dispositionPhrase}.`,
   );
 
   const strickenClause = strickenFromTrialSession
