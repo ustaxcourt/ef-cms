@@ -86,8 +86,7 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
           ),
       })
       .messages({
-        'any.required':
-          'Due date is required for status reports and stipulated decisions',
+        'any.required': 'Date is required',
         'date.format': 'Enter a valid date',
         'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
@@ -105,8 +104,7 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
         then: joi.required().messages({
-          'any.required':
-            'Filing party is required when a status report or stipulated decision is ordered',
+          'any.required': 'Select Filing Party',
         }),
       })
       .optional()

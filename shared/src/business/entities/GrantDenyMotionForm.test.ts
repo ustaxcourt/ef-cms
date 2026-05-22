@@ -80,8 +80,7 @@ describe('GrantDenyMotionForm', () => {
         filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.respondent,
       });
       expect(form.getFormattedValidationErrors()).toMatchObject({
-        dueDate:
-          'Due date is required for status reports and stipulated decisions',
+        dueDate: 'Date is required',
       });
     });
 
@@ -94,8 +93,7 @@ describe('GrantDenyMotionForm', () => {
             .statusReportOrStipulatedDecision,
       });
       expect(form.getFormattedValidationErrors()).toMatchObject({
-        filingParty:
-          'Filing party is required when a status report or stipulated decision is ordered',
+        filingParty: 'Select Filing Party',
       });
     });
 
