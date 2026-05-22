@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # this file will download and install puppeteer into the current directory and zip up
 # all of the node_modules into a `nodejs` directory to be used in a lambda layer.

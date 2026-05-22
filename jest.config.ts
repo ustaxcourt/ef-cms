@@ -33,7 +33,7 @@ const config: Config = {
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'),
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(uuid|sinon|aws-sdk-client-mock)/)',
+    'node_modules/(?!(uuid|sinon|aws-sdk-client-mock|kysely)/)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>/web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

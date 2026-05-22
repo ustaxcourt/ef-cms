@@ -40,6 +40,17 @@ const config: Config = {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
+    // @smithy/core@3.24.2 stubs node-only exports as Symbol.for("node-only")
+    // in its browser bundles. Jest's jsdom environment picks up the browser
+    // export condition via its `exports` map, breaking any test that
+    // transitively instantiates an AWS SDK client. Force the Node.js CJS
+    // bundles for all affected subpaths.
+    '^@smithy/core/config$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/config/index.js',
+    '^@smithy/core/retry$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/retry/index.js',
+    '^@smithy/core/serde$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(
@@ -51,7 +62,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|kysely)',
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '20%',

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # this should only be ran from inside a container built from our `Dockerfile-integration`
 
