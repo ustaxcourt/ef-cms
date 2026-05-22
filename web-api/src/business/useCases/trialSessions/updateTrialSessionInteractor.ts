@@ -36,6 +36,10 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { Case } from '@shared/business/entities/cases/Case';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -178,34 +182,11 @@ export const updateTrialSession = async (
     ...editableFields,
   });
 
-  const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
-    currentTrialSession,
-    updatedTrialSessionEntity,
-  );
-
-  if (createWorkingCopyForNewJudge) {
-    await createWorkingCopyForNewUserOnSession({
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge?.userId,
-    });
-  }
-
-  const createWorkingCopyForNewTrialClerk =
-    shouldCreateWorkingCopyForNewTrialClerk(
-      currentTrialSession,
-      updatedTrialSessionEntity,
-    );
-
-  if (createWorkingCopyForNewTrialClerk) {
-    await createWorkingCopyForNewUserOnSession({
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk?.userId,
-    });
-  }
-
   let hasPaper: boolean | undefined;
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
+  let updatedCasesToSave: Case[] | undefined;
+  let sendEmailCalls: (() => void)[] | undefined;
   if (currentTrialSession.caseOrder?.length) {
     const shouldSetNoticeOfChangeToInPersonProceeding =
       shouldGenerateNoticeOfChangeToInPersonProceeding(
@@ -237,7 +218,7 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
-    const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
+    const {paperServicePdfsCombined, updatedCasesToSave: updatedCasesToSaveReturn, sendEmailCalls: sendEmailCallsReturn } = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
       currentTrialSession,
@@ -248,6 +229,9 @@ export const updateTrialSession = async (
       shouldSetNoticeOfTrialSessionStartDateChange,
       updatedTrialSessionEntity,
     });
+
+    updatedCasesToSave = updatedCasesToSaveReturn;
+    sendEmailCalls = sendEmailCallsReturn;
 
     hasPaper = !!paperServicePdfsCombined.getPageCount();
     const paperServicePdfData = await paperServicePdfsCombined.save();
@@ -271,19 +255,64 @@ export const updateTrialSession = async (
     }
   }
 
-  if (trialSession.swingSession && trialSession.swingSessionId) {
-    await associateSwingTrialSessions(
-      {
-        swingSessionId: trialSession.swingSessionId,
-        trialSessionEntity: updatedTrialSessionEntity,
-      },
-      authorizedUser,
+  await withTransaction(async () => {
+    const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
+      currentTrialSession,
+      updatedTrialSessionEntity,
+    );
+
+    if (createWorkingCopyForNewJudge) {
+      await createWorkingCopyForNewUserOnSession({
+        trialSessionId: updatedTrialSessionEntity.trialSessionId,
+        userId: updatedTrialSessionEntity.judge?.userId,
+      });
+    }
+
+    const createWorkingCopyForNewTrialClerk =
+      shouldCreateWorkingCopyForNewTrialClerk(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
+    if (createWorkingCopyForNewTrialClerk) {
+      await createWorkingCopyForNewUserOnSession({
+        trialSessionId: updatedTrialSessionEntity.trialSessionId,
+        userId: updatedTrialSessionEntity.trialClerk?.userId,
+      });
+    }
+
+    if (trialSession.swingSession && trialSession.swingSessionId) {
+      await associateSwingTrialSessions(
+        {
+          swingSessionId: trialSession.swingSessionId,
+          trialSessionEntity: updatedTrialSessionEntity,
+        },
+        authorizedUser,
+      );
+    }
+
+    if (updatedCasesToSave) {
+      const updateCases = updatedCasesToSave.map(async caseEntity => {
+        await updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        });
+      });
+      await settlePromises(updateCases);
+    }
+
+    await updateTrialSessionPersistence({
+      trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+    });
+  });
+
+  if (sendEmailCalls) {
+    await settlePromises(
+      sendEmailCalls.map(async sendEmailCall => {
+        await sendEmailCall();
+      }),
     );
   }
-
-  await updateTrialSessionPersistence({
-    trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-  });
 
   await sendNotificationToUser({
     applicationContext,

@@ -32,7 +32,7 @@ export const setNoticeOfChangeToRemoteProceeding = async (
     newTrialSessionEntity,
   }: { caseEntity: Case; newPdfDoc: any; newTrialSessionEntity: any },
   authorizedUser: AuthUser,
-): Promise<void> => {
+): Promise<() => void> => {
   const trialSessionInformation: TrialSessionInformationType = {
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
     joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
@@ -51,7 +51,7 @@ export const setNoticeOfChangeToRemoteProceeding = async (
       trialSessionInformation,
     });
 
-  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+  return applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
     applicationContext,
     {
       caseEntity,

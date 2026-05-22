@@ -1,10 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  inTransaction,
-  onTransactionCommit,
-} from '@web-api/persistence/postgres/utils/transactions';
 import { PDFDocument } from 'pdf-lib';
 
 type ServeGeneratedNoticesOnCaseParams = {
@@ -29,7 +25,7 @@ export const serveGeneratedNoticesOnCase = async ({
   noticeDocumentPdfData,
   servedParties,
   skipEmailToIrs = false,
-}: ServeGeneratedNoticesOnCaseParams) => {
+}: ServeGeneratedNoticesOnCaseParams): Promise<() => void> => {
   const sendEmails = async () => {
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -39,12 +35,6 @@ export const serveGeneratedNoticesOnCase = async ({
       skipEmailToIrs,
     });
   };
-
-  if (inTransaction()) {
-    onTransactionCommit(sendEmails);
-  } else {
-    await sendEmails();
-  }
 
   if (servedParties.paper.length > 0) {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -60,4 +50,6 @@ export const serveGeneratedNoticesOnCase = async ({
         servedParties,
       });
   }
+
+  return sendEmails;
 };
