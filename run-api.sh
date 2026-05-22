@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Usage
 #   used for running the API and necessary services (s3, elasticsearch) locally

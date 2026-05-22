@@ -2,6 +2,7 @@ name: E2E Cypress Accessibility
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -19,6 +20,7 @@ permissions:
 
 jobs:
   e2e_cypress_accessibility:
+    if: ${{ !github.event.pull_request.draft }}
     strategy:
       fail-fast: false
       matrix:
