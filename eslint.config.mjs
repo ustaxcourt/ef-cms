@@ -114,6 +114,7 @@ export default tseslint.config(
             '*/*.mjs',
             '*/*/*/*/*.mjs',
             '*/*/*/.*.cjs',
+            'cypress*.config.ts',
           ],
         },
         tsconfigRootDir: import.meta.dirname,
