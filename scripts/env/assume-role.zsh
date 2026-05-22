@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # check if we are logged in already
 aws sts get-caller-identity &> /dev/null

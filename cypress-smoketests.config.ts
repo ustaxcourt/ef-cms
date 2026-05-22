@@ -28,7 +28,7 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 
 export default defineConfig({
-  chromeWebSecurity: false,
+  chromeWebSecurity: true,
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
