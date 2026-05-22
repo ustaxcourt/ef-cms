@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # creates a dynamodb table to manage locks on terraform state
 
 NAME=$1

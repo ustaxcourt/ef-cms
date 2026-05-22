@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 source "./scripts/env/unset-env.zsh"
 source "./scripts/env/defaults"

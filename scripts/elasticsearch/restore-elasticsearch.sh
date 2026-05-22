@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script assumes you have already created the necessary roles and policies to
 # allow ES to backup & restore into an s3 bucket
