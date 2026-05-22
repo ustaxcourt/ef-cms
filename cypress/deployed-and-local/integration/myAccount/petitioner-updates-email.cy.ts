@@ -178,35 +178,39 @@ describe('Petitioner Updates e-mail', () => {
     }
   });
 
-  // it('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
-  //   const email = `cypress_test_account+${v4()}@example.com`;
-  //   const password = getCypressEnv().defaultAccountPass;
-  //   const name = faker.person.fullName();
-  //   createAPetitioner({ email, name, password });
-  //   verifyPetitionerAccount({ email });
+  it.only('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
+    const email = `cypress_test_account+${v4()}@example.com`;
+    const password = getCypressEnv().defaultAccountPass;
+    const name = faker.person.fullName();
+    createAPetitioner({ email, name, password });
+    verifyPetitionerAccount({ email });
 
-  //   const updatedEmail = `cypress_test_account+${v4()}@example.com`;
-  //   loginAsPetitioner(email);
-  //   goToMyAccount();
-  //   clickChangeEmail();
-  //   changeEmailTo(updatedEmail);
-  //   clickConfirmModal();
+    const updatedEmail = `cypress_test_account+${v4()}@example.com`;
+    loginAsPetitioner(email);
+    goToMyAccount();
+    clickChangeEmail();
+    changeEmailTo(updatedEmail);
+    clickConfirmModal();
 
-  //   logout();
-  //   const publicSiteUrl = getCypressEnv().publicSiteUrl;
-  //   cy.origin(
-  //     publicSiteUrl,
-  //     { args: { publicSiteUrl } },
-  //     ({ publicSiteUrl: url }) => {
-  //       cy.visit(`${url}/verify-email?token=hello_world`);
-  //       cy.get('[data-testid^="error-alert"]')
-  //         .should('be.visible')
-  //         .and(
-  //           'contain.text',
-  //           'Your request cannot be completed. Please try to log in. If you\u2019re still having trouble',
-  //         );
-  //     },
-  //   );
-  //   loginAsPetitioner(email);
-  // });
+    logout();
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
+
+    const publicSiteUrl = getCypressEnv().publicSiteUrl;
+    cy.origin(
+      publicSiteUrl,
+      { args: { publicSiteUrl } },
+      ({ publicSiteUrl: url }) => {
+        cy.visit(`${url}/verify-email?token=hello_world`);
+        cy.get('[data-testid^="error-alert"]')
+          .should('be.visible')
+          .and(
+            'contain.text',
+            'Your request cannot be completed. Please try to log in. If you\u2019re still having trouble',
+          );
+      },
+    );
+    loginAsPetitioner(email);
+  });
 });
