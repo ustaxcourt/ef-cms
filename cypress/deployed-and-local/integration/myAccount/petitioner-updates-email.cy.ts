@@ -192,20 +192,13 @@ describe('Petitioner Updates e-mail', () => {
     changeEmailTo(updatedEmail);
     clickConfirmModal();
 
-    const publicSiteUrl = getCypressEnv().publicSiteUrl;
-    cy.origin(
-      publicSiteUrl,
-      { args: { publicSiteUrl } },
-      ({ publicSiteUrl: url }) => {
-        cy.visit(`${url}/verify-email?token=hello_world`);
-        cy.get('[data-testid^="error-alert"]')
-          .should('be.visible')
-          .and(
-            'contain.text',
-            'Your request cannot be completed. Please try to log in. If you\u2019re still having trouble',
-          );
-      },
-    );
+    cy.visit(`${getCypressEnv().publicSiteUrl}/verify-email?token=hello_world`);
+    cy.get('[data-testid^="error-alert"]')
+      .should('be.visible')
+      .and(
+        'contain.text',
+        'Your request cannot be completed. Please try to log in. If you\u2019re still having trouble',
+      );
     loginAsPetitioner(email);
   });
 });
