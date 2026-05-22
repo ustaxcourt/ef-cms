@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ -z "$AWS_SESSION_EXPIRATION" ]] || [[ -z "$ENV" ]]; then
   echo "Error: No AWS session detected. Use the environment switcher to get a fresh AWS token"

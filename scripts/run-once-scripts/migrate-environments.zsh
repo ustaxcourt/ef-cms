@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # This script migrates environment files to support the --aws-only flag
 # and adds IRS_SUPERUSER_PASS scaffolding if missing.
