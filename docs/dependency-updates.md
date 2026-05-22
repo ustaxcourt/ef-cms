@@ -400,6 +400,18 @@ error: too many arguments. Expected 0 arguments but got 2.
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
 
+### uuid
+- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11. 
+
+### image-blob-reduce and pica
+**Installed Versions:**
+**image-blob-reduce: 5.0.0**
+**pica: 10.0.1**
+- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using. 
+- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica. 
+
+`import ImageBlobReduce, { pica } from 'image-blob-reduce';`
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
