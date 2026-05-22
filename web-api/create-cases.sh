@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 #
 # Creates a bunch of ready for trial cases in various trial locations.  This uses the
