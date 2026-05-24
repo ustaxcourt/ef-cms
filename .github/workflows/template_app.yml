@@ -46,7 +46,7 @@ jobs:
       CHECK_DEPLOY_DATE_INTERVAL: ${{ inputs.check_deploy_date_interval }}
     services:
       postgres:
-        image: postgres
+        image: postgres:17.9-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-

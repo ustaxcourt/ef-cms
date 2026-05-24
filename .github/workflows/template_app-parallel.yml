@@ -59,7 +59,7 @@ jobs:
       TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times-shard-${{ inputs.ci_node_index }}.json
     services:
       postgres:
-        image: postgres
+        image: postgres:17.9-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-

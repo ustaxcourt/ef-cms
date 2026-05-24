@@ -1,3 +1,14 @@
+<details><summary>Postgres 17.9 Upgrade</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Set the value of the `RDS_ENGINE_VERSION` secret in the [env]_deploy secrets in Secrets Manager to `17.9`
+```bash
+scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "17.9"
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-05-11</summary>
 
 ## Manual Deployment Steps
@@ -35,9 +46,7 @@ tfswitch 1.15.1
 tfenv install 1.15.1
 tfenv use 1.15.1
 ```
-
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-04-27</summary>
 
 ## Manual Deployment Steps
@@ -54,7 +63,6 @@ npm run ecr:check-version
 ```bash
 tfswitch 1.15.0
 ```
-
 </details>
 <details><summary>Support `--aws-only` Flag in the Environment Switcher</summary>
 
@@ -67,6 +75,7 @@ tfswitch 1.15.0
 ```
 </details>
 <details><summary>Dependency Updates - Week of 2026-04-20</summary>
+
 ## Manual Deployment Steps
 
 ### Before Deployment
