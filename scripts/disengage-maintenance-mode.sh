@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Disengages Maintenance Mode for the currently active color in the specified ENV.
 #
