@@ -70,7 +70,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<{
   paperServicePdfsCombined: PDFDocumentType;
   updatedCasesToSave: Case[];
-  sendEmailCalls: (() => void)[];
+  sendEmailCalls: (() => Promise<void>)[];
 }> => {
   const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
     trialSession: currentTrialSession,
@@ -79,7 +79,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
   });
 
   const updatedCasesToSave: Case[] = [];
-  const sendEmailCalls: (() => void)[] = [];
+  const sendEmailCalls: (() => Promise<void>)[] = [];
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();

@@ -11,7 +11,7 @@ export const setNoticeOfChangeToInPersonProceeding = async (
     newTrialSessionEntity,
   }: { caseEntity: Case; newPdfDoc: any; newTrialSessionEntity: any },
   authorizedUser: AuthUser,
-): Promise<() => void> => {
+): Promise<() => Promise<void>> => {
   const trialSessionInformation = {
     address1: newTrialSessionEntity.address1,
     address2: newTrialSessionEntity.address2,

@@ -22,7 +22,7 @@ export const setNoticeOfChangeOfTrialStartDate = async (
     previousTrialSession: RawTrialSession;
   },
   authorizedUser: AuthUser,
-): Promise<() => void> => {
+): Promise<() => Promise<void>> => {
   const noticePdf = await applicationContext
     .getUseCases()
     .generateNoticeOfChangeOfTrialStartDateInteractor(applicationContext, {

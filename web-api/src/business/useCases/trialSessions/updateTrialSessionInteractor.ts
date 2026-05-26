@@ -186,7 +186,7 @@ export const updateTrialSession = async (
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
   let updatedCasesToSave: Case[] | undefined;
-  let sendEmailCalls: (() => void)[] | undefined;
+  let sendEmailCalls: (() => Promise<void>)[] | undefined;
   if (currentTrialSession.caseOrder?.length) {
     const shouldSetNoticeOfChangeToInPersonProceeding =
       shouldGenerateNoticeOfChangeToInPersonProceeding(
@@ -218,7 +218,11 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
-    const {paperServicePdfsCombined, updatedCasesToSave: updatedCasesToSaveReturn, sendEmailCalls: sendEmailCallsReturn } = await updateCasesAndSetNoticeOfChange({
+    const {
+      paperServicePdfsCombined,
+      updatedCasesToSave: updatedCasesToSaveReturn,
+      sendEmailCalls: sendEmailCallsReturn,
+    } = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
       currentTrialSession,

@@ -41,6 +41,8 @@ describe('updateTrialSessionInteractorHelper', () => {
     const MOCK_PAPER_SERVICE_PDF_COMBINED = 'MOCK_PAPER_SERVICE_PDF_COMBINED';
     const VALIDATED_TRIAL_SESSION_ENTITY = 'VALIDATED_TRIAL_SESSION_ENTITY';
 
+    const mockSendEmailsCall = async () => {};
+
     beforeEach(() => {
       getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
         function getMockedCase(docketNumber: string) {
@@ -66,19 +68,19 @@ describe('updateTrialSessionInteractorHelper', () => {
       });
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialStartDate =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext
         .getUtilities()
@@ -87,7 +89,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         );
     });
 
-    it('should generate all notices for the cases that are callendared and update case hearing', async () => {
+    it('should generate all notices for the cases that are calendared and update case hearing and return cases to update and send email calls', async () => {
       const TEST_PARAMS = {
         applicationContext,
         authorizedUser: mockCaseServicesSupervisorUser,
@@ -115,7 +117,16 @@ describe('updateTrialSessionInteractorHelper', () => {
       };
 
       const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
-      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+      console.log(results.updatedCasesToSave.map(call => call.docketNumber));
+
+      expect(results).toEqual({
+        paperServicePdfsCombined: MOCK_PAPER_SERVICE_PDF_COMBINED,
+        updatedCasesToSave: [
+          expect.objectContaining({ docketNumber: '333-25' }),
+          expect.objectContaining({ docketNumber: '444-25' }),
+        ],
+        sendEmailCalls: Array(10).fill(mockSendEmailsCall),
+      });
 
       const setNoticeOfChangeToRemoteProceedingCalls =
         applicationContext.getUseCaseHelpers()
@@ -241,7 +252,14 @@ describe('updateTrialSessionInteractorHelper', () => {
       };
 
       const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
-      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+      expect(results).toEqual({
+        paperServicePdfsCombined: MOCK_PAPER_SERVICE_PDF_COMBINED,
+        updatedCasesToSave: [
+          expect.objectContaining({ docketNumber: '333-25' }),
+          expect.objectContaining({ docketNumber: '444-25' }),
+        ],
+        sendEmailCalls: [],
+      });
 
       const setNoticeOfChangeToRemoteProceedingCalls =
         applicationContext.getUseCaseHelpers()

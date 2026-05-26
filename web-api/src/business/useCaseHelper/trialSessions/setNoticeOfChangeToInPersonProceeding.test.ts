@@ -8,6 +8,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {
+  const mockSendEmailsCall = async () => {};
   const mockTrialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
 
   const mockInPersonCalendaredTrialSession = {
@@ -29,6 +30,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     applicationContext
       .getUseCaseHelpers()
       .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createAndServeNoticeDocketEntry.mockResolvedValue(mockSendEmailsCall);
   });
 
   it('should make a call to generate the NOIP pdf', async () => {
@@ -65,7 +70,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should make a call to create and serve the NOIP docket entry on the case', async () => {
-    await setNoticeOfChangeToInPersonProceeding(
+    const result = await setNoticeOfChangeToInPersonProceeding(
       applicationContext,
       {
         caseEntity: mockOpenCase,
@@ -90,5 +95,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       newPdfDoc: getFakeFile,
       noticePdf: getFakeFile,
     });
+    expect(result).toEqual(mockSendEmailsCall);
   });
 });

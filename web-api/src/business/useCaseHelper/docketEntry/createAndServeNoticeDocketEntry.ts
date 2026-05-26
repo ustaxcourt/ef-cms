@@ -38,7 +38,7 @@ export const createAndServeNoticeDocketEntry = async (
     onlyProSePetitioners,
   }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
-): Promise<() => void> => {
+): Promise<() => Promise<void>> => {
   const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({

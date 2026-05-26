@@ -25,7 +25,7 @@ export const serveGeneratedNoticesOnCase = async ({
   noticeDocumentPdfData,
   servedParties,
   skipEmailToIrs = false,
-}: ServeGeneratedNoticesOnCaseParams): Promise<() => void> => {
+}: ServeGeneratedNoticesOnCaseParams): Promise<() => Promise<void>> => {
   const sendEmails = async () => {
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,

@@ -112,7 +112,7 @@ export const serveThirtyDayNotice = async (
     .map(aCase => aCase.docketNumber);
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
   const updatedCasesToSave: Case[] = [];
-  const sendEmailCalls: (() => void)[] = [];
+  const sendEmailCalls: (() => Promise<void>)[] = [];
 
   const generateNottForCases = casesToUpdate.map(async rawCase => {
     const caseEntity = new Case(rawCase, { authorizedUser });
