@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 function should_suppress_output() {
   for param in "$@"; do
