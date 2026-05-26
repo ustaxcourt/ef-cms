@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 ./check-env-variables.sh \
   "AWS_SECRET_ACCESS_KEY" \

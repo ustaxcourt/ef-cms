@@ -4,6 +4,17 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'scripts',
   clearMocks: true,
@@ -80,7 +91,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|kysely)'],
+  transformIgnorePatterns: [
+    `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
 };
 
 export default config;

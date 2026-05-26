@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Returns the host endpoint for a given environment's RDS cluster
 

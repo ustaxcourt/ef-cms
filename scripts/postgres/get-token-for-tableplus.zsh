@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 [[ "$#" -gt 2 ]] && echo "Unexpected parameter" && exit 1
 

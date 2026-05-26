@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 function should_suppress_output() {
   for param in "$@"; do
