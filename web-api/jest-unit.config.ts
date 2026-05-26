@@ -74,7 +74,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(uuid|p-queue|p-timeout|kysely)/)',
+    'node_modules/(?!(uuid|p-queue|p-timeout|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)/)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',

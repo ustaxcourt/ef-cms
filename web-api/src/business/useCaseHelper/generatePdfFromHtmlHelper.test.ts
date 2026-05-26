@@ -11,6 +11,7 @@ jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
     getDawsonLogger: () => mockLogger,
   };
 });
+import { Browser } from 'puppeteer-core';
 import { combineTwoPdfs as combineTwoPdfsMock } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { generatePdfFromHtmlHelper } from './generatePdfFromHtmlHelper';
 
@@ -25,6 +26,7 @@ describe('generatePdfFromHtmlHelper', () => {
       return {
         pdf: pdfMock,
         setContent: setContentMock,
+        setJavaScriptEnabled: setJavaScriptEnabledMock,
         close() {},
       };
     },
@@ -33,8 +35,9 @@ describe('generatePdfFromHtmlHelper', () => {
         pid: '123',
       };
     },
-  } as any;
+  } as unknown as Browser;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
+  const setJavaScriptEnabledMock = jest.fn();
   const pdfMock = jest.fn(
     ({ displayHeaderFooter, footerTemplate, headerTemplate }) => {
       return `${displayHeaderFooter ? headerTemplate : ''}${pageContent}${
@@ -43,10 +46,34 @@ describe('generatePdfFromHtmlHelper', () => {
     },
   );
 
+  beforeEach(() => {
+    setJavaScriptEnabledMock.mockClear();
+    setContentMock.mockClear();
+    pdfMock.mockClear();
+    pageContent = '';
+  });
+
+  it('should disable JavaScript on the page before setting user-supplied content', async () => {
+    await generatePdfFromHtmlHelper(
+      {
+        contentHtml: '<p>Hello World</p>',
+        docketNumber: '123-45',
+      },
+      launchMock,
+    );
+
+    expect(setJavaScriptEnabledMock).toHaveBeenCalledWith(false);
+    expect(setJavaScriptEnabledMock.mock.invocationCallOrder[0]).toBeLessThan(
+      setContentMock.mock.invocationCallOrder[0],
+    );
+  });
+
   it('should call the error logger when an error is thrown', async () => {
-    const mockErrorBrowser = jest.fn(() => {
-      throw new Error('something');
-    }) as any;
+    const mockErrorBrowser = {
+      newPage: () => {
+        throw new Error('something');
+      },
+    } as unknown as Browser;
 
     await expect(
       generatePdfFromHtmlHelper(
