@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
