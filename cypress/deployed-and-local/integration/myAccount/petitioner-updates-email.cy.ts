@@ -178,7 +178,7 @@ describe('Petitioner Updates e-mail', () => {
     }
   });
 
-  it.only('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
+  it('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
     const email = `cypress_test_account+${v4()}@example.com`;
     const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
