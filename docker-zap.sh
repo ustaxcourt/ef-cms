@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 CONTAINER_NAME="dockerzap"
 set +e
 docker rm "${CONTAINER_NAME}"

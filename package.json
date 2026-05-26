@@ -179,7 +179,7 @@
     "lint:css:file": "stylelint --",
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:fix": "npm run lint:css:fix & npm run lint:js/ts:fix",
-    "lint:js/ts": "TIMING=1 eslint scripts/ shared/ web-api/ web-client/",
+    "lint:js/ts": "TIMING=1 eslint cypress/ scripts/ shared/ web-api/ web-client/",
     "lint:js/ts:file": "TIMING=1 eslint --",
     "lint:js/ts:fix": "npm run lint:js/ts -- --fix",
     "lint:js/ts:fix:plain": "npm run lint:js/ts:fix -- --rule 'prettier/prettier: 0'",
