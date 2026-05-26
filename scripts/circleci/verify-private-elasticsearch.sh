@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Usage
 #   smoketest to verify the ElasticSearch domains are configured as private
