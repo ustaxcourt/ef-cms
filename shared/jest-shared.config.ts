@@ -5,6 +5,20 @@ import path from 'node:path';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  'aws-sdk-client-mock',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'export-to-csv',
+  'htmlparser2',
+  'kysely',
+  'sinon',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'shared',
   clearMocks: true,
@@ -64,7 +78,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+    `/node_modules/(?!(${transformIgnoreModules.join('|')}))`,
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '20%',
