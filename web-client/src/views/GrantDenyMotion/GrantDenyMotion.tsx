@@ -55,7 +55,7 @@ export const GrantDenyMotion = connect(
       : 'Case is not calendared';
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
     const { filingPartyOptions } = grantDenyOptions;
-    const docketEntryPreview = form.documentTitle || 'Order';
+    const docketEntryPreview = 'Order';
 
     return (
       <>
