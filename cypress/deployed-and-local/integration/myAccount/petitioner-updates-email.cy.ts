@@ -105,7 +105,7 @@ describe('Petitioner Updates e-mail', () => {
       cy.task('getEmailVerificationToken', {
         email,
       }).then(verificationToken => {
-        const publicSiteUrl = getCypressEnv().publicSiteUrl;
+        const { publicSiteUrl } = getCypressEnv();
         cy.origin(
           publicSiteUrl,
           { args: { publicSiteUrl, verificationToken } },
@@ -197,7 +197,7 @@ describe('Petitioner Updates e-mail', () => {
     cy.clearAllLocalStorage();
     cy.clearAllSessionStorage();
 
-    const publicSiteUrl = getCypressEnv().publicSiteUrl;
+    const { publicSiteUrl } = getCypressEnv();
     cy.origin(
       publicSiteUrl,
       { args: { publicSiteUrl } },
