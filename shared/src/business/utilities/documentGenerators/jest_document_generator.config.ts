@@ -4,6 +4,21 @@ import { loadTsConfigPaths } from '../../../../../utils/load-tsconfig-paths.mjs'
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  '@puppeteer',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'pixelmatch',
+  'puppeteer',
+  'puppeteer-core',
+  'uuid',
+];
+
 const config: Config = {
   clearMocks: true,
   maxWorkers: 1, // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
@@ -20,7 +35,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|pixelmatch|kysely|@puppeteer|puppeteer|puppeteer-core)'],
+  transformIgnorePatterns: [
+    `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '5%',
 };

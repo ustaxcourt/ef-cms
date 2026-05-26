@@ -67,7 +67,7 @@ const config: Config = {
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|kysely)',
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

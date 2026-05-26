@@ -20,6 +20,17 @@ tfenv use 1.15.4
 ```
 
 </details>
+<details><summary>PDF Generator IAM Scoping</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-05-11</summary>
 
 ## Manual Deployment Steps

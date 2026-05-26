@@ -76,7 +76,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|kysely)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+  ],
 };
 
 export default config;
