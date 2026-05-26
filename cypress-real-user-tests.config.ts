@@ -6,7 +6,7 @@ import {
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 
 export default defineConfig({
-  chromeWebSecurity: false,
+  chromeWebSecurity: true,
   defaultCommandTimeout: 60000,
   e2e: {
     experimentalStudio: true,
