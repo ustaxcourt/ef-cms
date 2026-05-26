@@ -1,6 +1,6 @@
 services:
   dawson-db:
-    image: postgres:17.5-bookworm
+    image: postgres:17.9-bookworm
     platform: linux/amd64
     restart: always
     container_name: dawson-db
