@@ -5,6 +5,20 @@ import path from 'node:path';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  'aws-sdk-client-mock',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'export-to-csv',
+  'htmlparser2',
+  'kysely',
+  'sinon',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'shared',
   clearMocks: true,
@@ -40,7 +54,7 @@ const config: Config = {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
-    // @smithy/core@3.24.2 stubs node-only exports as Symbol.for("node-only")
+    // @smithy/core@3.24.2 and @aws-sdk/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
     // in its browser bundles. Jest's jsdom environment picks up the browser
     // export condition via its `exports` map, breaking any test that
     // transitively instantiates an AWS SDK client. Force the Node.js CJS
@@ -51,6 +65,8 @@ const config: Config = {
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/retry/index.js',
     '^@smithy/core/serde$':
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
+    '^@aws-sdk/core/client$':
+      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(
@@ -62,7 +78,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+    `/node_modules/(?!(${transformIgnoreModules.join('|')}))`,
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   workerIdleMemoryLimit: '20%',

@@ -1,3 +1,25 @@
+<details><summary>Dependency Updates - Week of 2026-05-18</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.80` - choose exp3
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.4
+```
+```bash
+tfenv install 1.15.4
+tfenv use 1.15.4
+```
+
+</details>
 <details><summary>PDF Generator IAM Scoping</summary>
 
 ## Manual Deployment Steps

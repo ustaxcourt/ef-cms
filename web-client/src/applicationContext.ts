@@ -348,13 +348,14 @@ import { validateUserContactInteractor } from '../../shared/src/business/useCase
 import { verifyPendingCaseForUserInteractor } from '@web-client/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '@web-client/proxies/public/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
+import Pica from 'pica';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
 
 const reduce = ImageBlobReduce({
-  pica: ImageBlobReduce.pica({ features: ['js'] }),
+  pica: Pica({ features: ['js'] }),
 });
 
 let user;
