@@ -355,6 +355,8 @@ The major version of this package should match our major version of Node. At the
 
 - As of May 18, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.4** remains the closest match.
 
+- As of May 26, 2026: Node.js updated to v24.16.0; `npm view @types/node@24.16.0` and any `24.13+` under major 24 are still unpublished, so **24.12.4** remains the closest match.
+
 ### TypeScript
 **Installed Version: 6.0.3**
 
