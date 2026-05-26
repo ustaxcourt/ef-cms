@@ -75,9 +75,9 @@ describe('file status report order', () => {
         cy.contains('button', 'Add additional order text').click();
         cy.get('.status-report-order-form')
           .find('#additional-order-text-array-1')
-          .should('be.visible')
-          .clear()
-          .type('   ');
+          .should('be.visible');
+        cy.get('#additional-order-text-array-1').clear();
+        cy.get('#additional-order-text-array-1').type('   ');
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
         );
