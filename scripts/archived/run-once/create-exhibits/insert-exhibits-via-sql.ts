@@ -5,13 +5,16 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
+} from '../../../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { petitionerUser } from '@shared/test/mockUsers';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import {
+  createISODateString,
+  getJsDateFromIso,
+} from '@shared/business/utilities/DateHandler';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as readline from 'readline';
@@ -177,7 +180,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
 
         // Insert docket entry
         currentIndex++;
-        const now = createISODateString();
+        const now = getJsDateFromIso(createISODateString());
         await pgInsertInto({
           table: 'dwDocketEntry',
           values: {
@@ -220,7 +223,7 @@ const confirmAction = async (message: string): Promise<boolean> => {
                 ? referenceEntry.stampData
                 : JSON.stringify(referenceEntry.stampData || {}),
             userId: referenceEntry.userId,
-          } as any,
+          },
         });
 
         exhibitsCreated++;
