@@ -1,15 +1,15 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # check if we are logged in already
 aws sts get-caller-identity &> /dev/null
 EXIT_CODE="$?"
-if [ "${EXIT_CODE}" != "0" ]; then                   
+if [ "${EXIT_CODE}" != "0" ]; then
   aws sso login
 fi
 
 AWS_ROLE_ARN="arn:aws:iam::${AWS_ACCOUNT_ID}:role/dawson_dev"
 
-AWS_SESSION_INFO=$(aws sts assume-role --role-arn ${AWS_ROLE_ARN} --role-session-name dawson-development)
+AWS_SESSION_INFO=$(aws sts assume-role --role-arn "$AWS_ROLE_ARN" --role-session-name dawson-development)
 EXIT_CODE="$?"
 if [ "${EXIT_CODE}" != "0" ]; then
   echo "Unable to assume the role in $AWS_ACCOUNT_ID"
@@ -18,7 +18,11 @@ fi
 
 unset AWS_PROFILE
 
-export AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId' <<< $AWS_SESSION_INFO)
-export AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' <<< $AWS_SESSION_INFO)
-export AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken' <<< $AWS_SESSION_INFO)
-export AWS_SESSION_EXPIRATION=$(jq -r '.Credentials.Expiration' <<< $AWS_SESSION_INFO)
+AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId' <<< "$AWS_SESSION_INFO")
+AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' <<< "$AWS_SESSION_INFO")
+AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken' <<< "$AWS_SESSION_INFO")
+AWS_SESSION_EXPIRATION=$(jq -r '.Credentials.Expiration' <<< "$AWS_SESSION_INFO")
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
+export AWS_SESSION_TOKEN
+export AWS_SESSION_EXPIRATION
