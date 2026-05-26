@@ -7,7 +7,7 @@ describe('Public Docket Record', () => {
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="logout-button-desktop"]').click();
 
-      const publicSiteUrl = getCypressEnv().publicSiteUrl;
+      const { publicSiteUrl } = getCypressEnv();
       cy.origin(
         publicSiteUrl,
         { args: { docketNumber, publicSiteUrl } },

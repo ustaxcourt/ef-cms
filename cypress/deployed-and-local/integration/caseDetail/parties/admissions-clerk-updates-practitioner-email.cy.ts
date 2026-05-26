@@ -226,7 +226,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
             cy.clearAllLocalStorage();
             cy.clearAllSessionStorage();
 
-            const publicSiteUrl = getCypressEnv().publicSiteUrl;
+            const { publicSiteUrl } = getCypressEnv();
             cy.origin(
               publicSiteUrl,
               { args: { publicSiteUrl, verificationToken } },
