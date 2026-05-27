@@ -18,5 +18,5 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "prettier.requireConfig": true,
-  "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "js/ts.tsdk.path": "./node_modules/typescript/lib"
 }
