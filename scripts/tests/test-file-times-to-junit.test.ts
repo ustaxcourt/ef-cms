@@ -85,7 +85,7 @@ describe('test-file-times-to-junit.helpers', () => {
     });
   });
 
-  describe('runTestFileTimesToJunit', () => {
+  describe('convertTestFileTimesToJunit', () => {
     it('writes JUnit XML and logs a summary', () => {
       const inputFilePath = path.join(tempDir, 'cli-timings.json');
       const outputFilePath = path.join(tempDir, 'cli-results.xml');
