@@ -23,7 +23,7 @@ describe('documentViewerLinksHelper', () => {
     expect(result).toEqual({});
   });
 
-  it('should return applyStampFromCaseDetailsLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+  it('should return grantDenyMotionFromCaseDetailsLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(documentViewerLinksHelper, {
       state: {
         caseDetail: {
@@ -36,8 +36,8 @@ describe('documentViewerLinksHelper', () => {
       },
     });
 
-    expect(result.applyStampFromCaseDetailsLink).toEqual(
-      `/case-detail/${mockDocketNumber}/documents/${mockDocketEntryId}/apply-stamp`,
+    expect(result.grantDenyMotionFromCaseDetailsLink).toEqual(
+      `/case-detail/${mockDocketNumber}/documents/${mockDocketEntryId}/grant-deny-motion-create`,
     );
   });
 

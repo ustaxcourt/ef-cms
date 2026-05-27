@@ -50,7 +50,6 @@ import { fileCourtIssuedOrderInteractor } from './business/useCases/courtIssuedO
 import { fileExternalDocumentInteractor } from '@web-api/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
 import { generateDocketRecordPdfInteractor } from './business/useCases/generateDocketRecordPdfInteractor';
-import { generateDraftStampOrderInteractor } from '@web-api/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
@@ -248,7 +247,6 @@ const useCases = {
   fileExternalDocumentInteractor,
   forgotPasswordInteractor,
   generateDocketRecordPdfInteractor,
-  generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeOfTrialLocationInteractor,
