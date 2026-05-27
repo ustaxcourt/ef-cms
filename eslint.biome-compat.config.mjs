@@ -120,6 +120,7 @@ export default tseslint.config(
   // ─── Type-checked rules with no Biome equivalent ──────────────────────────
   {
     ignores: [...IGNORES, ...CYPRESS_FILES],
+    plugins: { '@typescript-eslint': tseslint.plugin },
     languageOptions: {
       parserOptions: {
         ecmaVersion: 2020,

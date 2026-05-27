@@ -189,7 +189,7 @@
     "lint:biome:fix": "biome check --write cypress/ scripts/ shared/ web-api/ web-client/",
     "lint:biome:eslint": "TIMING=1 eslint --config eslint.biome-compat.config.mjs cypress/ scripts/ shared/ web-api/ web-client/",
     "lint:biome:eslint:file": "TIMING=1 eslint --config eslint.biome-compat.config.mjs --",
-    "lint:js/ts:biome": "npm run lint:biome && npm run lint:biome:eslint",
+    "lint:js/ts:biome": "time (npm run lint:biome && npm run lint:biome:eslint)",
     "lint:swagger": "swagger-cli validate web-api/swagger.json && swagger-cli validate docs/api/v1.yaml && swagger-cli validate docs/api/v2.yaml",
     "lint:swagger:file": "swagger-cli validate",
     "loadtest:pdf-generation": "npx ts-node --transpile-only ./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts",
