@@ -74,7 +74,7 @@ export const verifyUserPendingEmailInteractor = async (
       onLockError: asyncHandleLockError,
     });
 
-    await withTransaction(async () => {
+    const updatedUser = await withTransaction(async () => {
       const { updatedUser } = await updateUserPendingEmailRecord({
         setIsUpdatingInformation: true,
         user,
@@ -85,15 +85,15 @@ export const verifyUserPendingEmailInteractor = async (
         email: user.email!,
       });
 
-      await applicationContext
-        .getWorkerGateway()
-        .queueWork(applicationContext, {
-          message: {
-            authorizedUser: user,
-            payload: { user: updatedUser },
-            type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
-          },
-        });
+      return updatedUser;
+    });
+
+    await applicationContext.getWorkerGateway().queueWork(applicationContext, {
+      message: {
+        authorizedUser: user,
+        payload: { user: updatedUser },
+        type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
+      },
     });
   } catch (e) {
     applicationContext.logger.error('Error verifying user pending email', {
