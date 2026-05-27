@@ -325,7 +325,23 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {}'
+          command: |
+            TIMINGS_JSON="/tmp/cypress/cypress-smoketests-${CIRCLE_NODE_INDEX}.json"
+            TIMINGS_XML="/tmp/cypress/results/cypress-smoketests-${CIRCLE_NODE_INDEX}.xml"
+            mkdir -p /tmp/cypress/results
+
+            set +e
+            find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --timings-type=filename --command "paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {} --output-file-path ${TIMINGS_JSON}"
+            CYPRESS_RESULT=$?
+            set -e
+
+            if [ "${CYPRESS_RESULT}" -eq 0 ] && [ -f "${TIMINGS_JSON}" ]; then
+              npx ts-node --transpile-only ./scripts/tests/test-file-times-to-junit.ts "${TIMINGS_JSON}" "${TIMINGS_XML}" "cypress-smoketests-${CIRCLE_NODE_INDEX}"
+            fi
+
+            exit "${CYPRESS_RESULT}"
+      - store_test_results:
+          path: /tmp/cypress/results
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
