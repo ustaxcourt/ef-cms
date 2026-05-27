@@ -81,7 +81,7 @@ export const GrantDenyMotion = connect(
                 <div className="grid-header grid-row padding-left-205">
                   Action
                 </div>
-                <div className="tw:px-4 tw:pt-3 tw:pb-4">
+                <div className="grant-deny-motion-form tw:px-4 tw:pt-3 tw:pb-4">
                   {grantDenyMotionFormHelper.isLeadCase && (
                     <>
                       <FormGroup errorText={validationErrors.issueOrder}>

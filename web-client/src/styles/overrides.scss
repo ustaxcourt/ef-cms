@@ -433,3 +433,22 @@ td.message-select-control {
     padding-bottom: 0;
   }
 }
+
+// Grant/Deny Motion, Order Response, and Status Order Report only. USWDS sets
+// cursor: not-allowed on disabled radio/checkbox labels; use a 16x16 PNG of
+// fas fa-ban (#b50909) instead. Source: web-client/src/images/cursors/fa-ban-red.svg
+$fa-ban-not-allowed-cursor:
+  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAACCElEQVQ4jYWTvWtUQRTFf3dmSDLZ1wiSIIIKFhFdNUWKNKZwDYFNaqt0EWIQG/HfEAsNBo0KQprU+f4o7CwXXCIphIhdLPM2j2zezLXYt2FZTDzVFOeeew53jtCF1VLpLjE+UdWKiNwAUNUDEdlRaxen0rTeyZf2Yw16o/evBWYB0y1cIAALjSx78RiatIlr0KverwvMAVFFPhl4cOLcZZdlCTAq8AbIgWcl79eXoefMwWpf3ztEnhZb9p21YxNpeviPeMPEuAJcVXg7lWXPpchcAyLwExhCte6cq1wg8g1w1tr7hhhnAKMiX5y1Y6jWESnneb67mSQD3QKTjUZN4QNgQwgzBpFxAKv6eSJND51zlf+JGFiidZ5xo6rXADLnfgBMpOmhOPcQ+I5IOQ/h60Z//5VOAZ9lrVOKXDcCCnDp6OikTaim6R9n7SNU68CtEONWp5NmMdNyI/IbIPX+dueWi+Lk3peLCL8MqtsAFqa7s54rIjJbRNiWlSQpSwg1IMeY0clGo9YttJkkA3me7yJSBvaBm4BICPdM8bcXgF5iXFktlYbPddIaHgIcMF9tNvcEYBl6+r1fE6gATYX3BpZ8ltVTiHhfNiJzqE4DDpGdwePj6gicnpWpEHlV9MF2uygQgPnBLHs5AqfQ0cY2NpLkTghhBtVxLeosqgeIbEkIH6vN5l4n/y8tBfLfVTzTNgAAAABJRU5ErkJggg==')
+    8 8,
+  not-allowed;
+
+.grant-deny-motion-form,
+.motion-order-response-form,
+.status-report-order-form {
+  .usa-radio__input:disabled + [class*='__label'],
+  .usa-radio__input[aria-disabled='true'] + [class*='__label'],
+  .usa-checkbox__input:disabled + [class*='__label'],
+  .usa-checkbox__input[aria-disabled='true'] + [class*='__label'] {
+    cursor: $fa-ban-not-allowed-cursor !important;
+  }
+}
