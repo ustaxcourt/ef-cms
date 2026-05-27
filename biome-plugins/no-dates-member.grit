@@ -1,0 +1,10 @@
+// Disallow `Date.property` member access — use DateHandler instead.
+// Covers: Date.now(), Date.parse(), Date.UTC(), Date.prototype.*, etc.
+// Replaces the custom ESLint rule: custom-rules-plugin/no-dates (MemberExpression case)
+`$obj.$method` where {
+    $obj <: `Date`,
+    register_diagnostic(
+        span = $obj,
+        message = "Using `Date` is disallowed. Use the DateHandler instead."
+    )
+}

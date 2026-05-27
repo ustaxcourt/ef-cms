@@ -1,0 +1,17 @@
+// Disallow warning comments: FIXME and XXX.
+// Replaces ESLint rule: no-warning-comments: ["error", { terms: ["fixme", "xxx"] }]
+//
+// NOTE: GritQL plugin comment matching in Biome is experimental. This plugin
+// targets single-line comment nodes in the JavaScript/TypeScript CST.
+// If Biome does not expose comment nodes to GritQL at this version, this plugin
+// will silently produce no diagnostics. Track support at:
+// https://github.com/biomejs/biome/issues/XXXX
+//
+// Attempts to match single-line comments containing FIXME or XXX (case-insensitive).
+`// $text` where {
+    $text <: r"(?i).*(fixme|xxx).*",
+    register_diagnostic(
+        span = $text,
+        message = "Warning comments (FIXME, XXX) must be resolved before merging."
+    )
+}

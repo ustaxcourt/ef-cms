@@ -1,0 +1,15 @@
+// Disallow variable declarations named exactly `test`.
+// Replaces ESLint rule: id-denylist: ["error", "test"]
+// Note: covers const/let/var declarations and function declarations.
+// Function parameters are not yet covered by this pattern (GritQL limitation for POC).
+or {
+    `const $id = $_` where { $id <: `test` },
+    `let $id = $_` where { $id <: `test` },
+    `var $id = $_` where { $id <: `test` },
+    `function test($_) { $_ }` where { $id = `test` }
+} where {
+    register_diagnostic(
+        span = $id,
+        message = "The identifier 'test' is not allowed as a variable or function name."
+    )
+}

@@ -1,0 +1,9 @@
+// Disallow `new Date(...)` — use DateHandler instead.
+// Replaces the custom ESLint rule: custom-rules-plugin/no-dates (NewExpression case)
+`new $ctor($args)` where {
+    $ctor <: `Date`,
+    register_diagnostic(
+        span = $ctor,
+        message = "Using `Date` is disallowed. Use the DateHandler instead."
+    )
+}
