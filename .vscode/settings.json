@@ -6,7 +6,6 @@
   "editor.detectIndentation": false,
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
-  "editor.rulers": [80],
   "editor.tabSize": 2,
   "eslint.validate": [
     "javascript",
