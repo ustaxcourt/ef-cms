@@ -9,6 +9,13 @@ The formatter is the repo's Prettier configuration in `.prettierrc.js`: VS Code 
 
 ## Quick Setup
 
+First, add the `code` CLI to your PATH so terminal commands can invoke VS Code:
+
+1. Press `Command + Shift + P` to open the Command Palette
+2. Select **Shell Command: Install 'code' command in PATH**
+
+Then run the following in your terminal:
+
 ```bash
 # install expected extensions from the list
 cat .vscode-extensions | xargs -n 1 code --install-extension
