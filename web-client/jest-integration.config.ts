@@ -4,6 +4,19 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  '@faker-js/faker',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'export-to-csv',
+  'htmlparser2',
+  'kysely',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'web-client-integration',
   clearMocks: true,
@@ -29,7 +42,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(export-to-csv|@faker-js/faker|uuid|kysely)/)',
+    `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
   ],
   workerIdleMemoryLimit: '10%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
