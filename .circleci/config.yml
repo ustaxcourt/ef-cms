@@ -336,7 +336,7 @@ jobs:
             set -e
 
             if [ "${CYPRESS_RESULT}" -eq 0 ] && [ -f "${TIMINGS_JSON}" ]; then
-              npx ts-node --transpile-only ./scripts/tests/test-file-times-to-junit.ts "${TIMINGS_JSON}" "${TIMINGS_XML}" "cypress-smoketests-${CIRCLE_NODE_INDEX}"
+              ./scripts/tests/test-file-times-to-junit.ts "${TIMINGS_JSON}" "${TIMINGS_XML}" "cypress-smoketests-${CIRCLE_NODE_INDEX}"
             fi
 
             exit "${CYPRESS_RESULT}"
