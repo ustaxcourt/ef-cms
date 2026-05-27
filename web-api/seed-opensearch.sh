@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ELASTICSEARCH_ENDPOINT="${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}"
 

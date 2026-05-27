@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # set DB_HOST before running on your environment
 # source your ENV before running this script with the correct environment.

@@ -2,6 +2,7 @@ name: Node.js CI - Scripts
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -15,6 +16,7 @@ concurrency:
 
 jobs:
   Scripts:
+    if: ${{ !github.event.pull_request.draft }}
     uses: ./.github/workflows/template_no-app.yml
     with:
       run_command: npm run test:scripts

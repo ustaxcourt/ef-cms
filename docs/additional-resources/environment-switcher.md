@@ -135,7 +135,7 @@ mkdir -p "$HOME/.local/bin"
 ```
 Then create an executable `$HOME/.local/bin/dawson_env` file and populate it with the following:
 ```
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 cd "$HOME/path/to/ef-cms"
 source ./scripts/env/defaults

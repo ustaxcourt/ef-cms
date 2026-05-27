@@ -4,6 +4,7 @@ import {
 } from '../../../../helpers/authentication/generate-password';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 describe('Create Petitioner Page Accessibility', () => {
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('Create Petitioner Page Accessibility', () => {
 
   it('should be free of a11y issues when creating petitioner and showing success message', () => {
     createAPetitioner({
-      email: `example${Date.now()}@pa11y.com`,
+      email: `example${getCurrentDateTimeInMillis()}@pa11y.com`,
       name: 'pa11y',
       password: generatePassword(VALID_PASSWORD_CONFIG),
     });
