@@ -117,7 +117,6 @@ describe('updateTrialSessionInteractorHelper', () => {
       };
 
       const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
-      console.log(results.updatedCasesToSave.map(call => call.docketNumber));
 
       expect(results).toEqual({
         paperServicePdfsCombined: MOCK_PAPER_SERVICE_PDF_COMBINED,

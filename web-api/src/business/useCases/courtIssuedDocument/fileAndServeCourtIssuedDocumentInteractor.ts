@@ -147,7 +147,7 @@ export const fileAndServeCourtIssuedDocument = async (
     const contentToStore = { documentContents: scrapedDocumentContents };
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       contentType: 'application/json',
-      document: Buffer.from(JSON.stringify(contentToStore)) as any,
+      document: Buffer.from(JSON.stringify(contentToStore)),
       key: documentContentsId,
       useTempBucket: false,
     });
