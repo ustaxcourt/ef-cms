@@ -14,6 +14,7 @@ import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getD
 import { getUserByPendingEmailVerificationToken } from '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken';
 import { isAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -73,14 +74,18 @@ export const verifyUserPendingEmailInteractor = async (
       onLockError: asyncHandleLockError,
     });
 
-    const { updatedUser } = await updateUserPendingEmailRecord({
-      setIsUpdatingInformation: true,
-      user,
-    });
+    const updatedUser = await withTransaction(async () => {
+      const { updatedUser } = await updateUserPendingEmailRecord({
+        setIsUpdatingInformation: true,
+        user,
+      });
 
-    await applicationContext.getUserGateway().updateUser(applicationContext, {
-      attributesToUpdate: { email: updatedUser.email },
-      email: user.email!,
+      await applicationContext.getUserGateway().updateUser(applicationContext, {
+        attributesToUpdate: { email: updatedUser.email },
+        email: user.email!,
+      });
+
+      return updatedUser;
     });
 
     await applicationContext.getWorkerGateway().queueWork(applicationContext, {

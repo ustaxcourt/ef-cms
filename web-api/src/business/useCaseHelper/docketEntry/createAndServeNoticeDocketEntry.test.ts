@@ -173,4 +173,25 @@ describe('createAndServeDocketEntry', () => {
       servedPartiesCode: 'P',
     });
   });
+
+  it('should return result of serveGeneratedNoticesOnCase', async () => {
+    const mockSendEmailsCall = async () => {};
+    applicationContext
+      .getUseCaseHelpers()
+      .serveGeneratedNoticesOnCase.mockReturnValue(mockSendEmailsCall);
+
+    const result = await createAndServeNoticeDocketEntry(
+      applicationContext,
+      {
+        caseEntity: mockCaseEntity,
+        documentInfo:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+        newPdfDoc: TEST_PDF_DOCUMENT,
+        noticePdf: mockNotice,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result).toEqual(mockSendEmailsCall);
+  });
 });
