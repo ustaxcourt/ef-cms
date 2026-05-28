@@ -86,7 +86,7 @@ export const serveThirtyDayNotice = async (
     return;
   }
 
-  const trialSessionEntity = new TrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession).validate();
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();
@@ -111,91 +111,91 @@ export const serveThirtyDayNotice = async (
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => aCase.docketNumber);
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+  const updatedCasesToSave: Case[] = [];
+  const sendEmailCalls: (() => Promise<void>)[] = [];
 
-  await withTransaction(async () => {
-    const generateNottForCases = casesToUpdate.map(async rawCase => {
-      const caseEntity = new Case(rawCase, { authorizedUser });
+  const generateNottForCases = casesToUpdate.map(async rawCase => {
+    const caseEntity = new Case(rawCase, { authorizedUser });
 
-      let clinicLetter;
-      const clinicLetterKey = getClinicLetterKey({
-        procedureType: caseEntity.procedureType,
-        trialLocation: trialSession.trialLocation,
+    let clinicLetter;
+    const clinicLetterKey = getClinicLetterKey({
+      procedureType: caseEntity.procedureType,
+      trialLocation: trialSession.trialLocation,
+    });
+
+    const doesClinicLetterExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: clinicLetterKey,
       });
 
-      const doesClinicLetterExist = await applicationContext
+    if (doesClinicLetterExist) {
+      clinicLetter = await applicationContext
         .getPersistenceGateway()
-        .isFileExists({
+        .getDocument({
           applicationContext,
           key: clinicLetterKey,
+          useTempBucket: false,
+        });
+    }
+
+    const hasProSePetitioner = caseEntity.petitioners.some(
+      petitioner =>
+        !Case.isPetitionerRepresented(caseEntity, petitioner.contactId),
+    );
+    if (hasProSePetitioner) {
+      const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
+        caseCaption: caseEntity.caseCaption,
+      });
+
+      const formatCityState = ({
+        city,
+        state,
+      }: {
+        city?: string;
+        state?: string;
+      }) => {
+        const formattedString = [city, state].filter(Boolean).join(', ');
+        return formattedString;
+      };
+
+      let noticePdf = await applicationContext
+        .getDocumentGenerators()
+        .thirtyDayNoticeOfTrial({
+          applicationContext,
+          data: {
+            caseCaptionExtension,
+            caseTitle,
+            dateServed: applicationContext.getUtilities().formatNow('MM/dd/yy'),
+            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+            judgeName: trialSession.judge!.name,
+            nameOfClerk: name,
+            proceedingType: trialSession.proceedingType,
+            scopeType: trialSession.sessionScope,
+            titleOfClerk: title,
+            trialDate: trialSession.startDate,
+            trialLocation: {
+              address1: trialSession.address1,
+              address2: trialSession.address2,
+              cityState: formatCityState({
+                city: trialSession.city,
+                state: trialSession.state,
+              }),
+              courthouseName: trialSession.courthouseName,
+              postalCode: trialSession.postalCode,
+            },
+          },
         });
 
       if (doesClinicLetterExist) {
-        clinicLetter = await applicationContext
-          .getPersistenceGateway()
-          .getDocument({
-            applicationContext,
-            key: clinicLetterKey,
-            useTempBucket: false,
-          });
+        noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
+          firstPdf: noticePdf,
+          secondPdf: clinicLetter,
+        });
       }
 
-      const hasProSePetitioner = caseEntity.petitioners.some(
-        petitioner =>
-          !Case.isPetitionerRepresented(caseEntity, petitioner.contactId),
-      );
-      if (hasProSePetitioner) {
-        const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
-          caseCaption: caseEntity.caseCaption,
-        });
-
-        const formatCityState = ({
-          city,
-          state,
-        }: {
-          city?: string;
-          state?: string;
-        }) => {
-          const formattedString = [city, state].filter(Boolean).join(', ');
-          return formattedString;
-        };
-
-        let noticePdf = await applicationContext
-          .getDocumentGenerators()
-          .thirtyDayNoticeOfTrial({
-            applicationContext,
-            data: {
-              caseCaptionExtension,
-              caseTitle,
-              dateServed: applicationContext
-                .getUtilities()
-                .formatNow('MM/dd/yy'),
-              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-              judgeName: trialSession.judge!.name,
-              nameOfClerk: name,
-              proceedingType: trialSession.proceedingType,
-              scopeType: trialSession.sessionScope,
-              titleOfClerk: title,
-              trialDate: trialSession.startDate,
-              trialLocation: {
-                address1: trialSession.address1,
-                address2: trialSession.address2,
-                cityState: formatCityState({
-                  city: trialSession.city,
-                  state: trialSession.state,
-                }),
-                courthouseName: trialSession.courthouseName,
-                postalCode: trialSession.postalCode,
-              },
-            },
-          });
-
-        if (doesClinicLetterExist) {
-          noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
-            firstPdf: noticePdf,
-            secondPdf: clinicLetter,
-          });
-        }
-
+      sendEmailCalls.push(
         await applicationContext
           .getUseCaseHelpers()
           .createAndServeNoticeDocketEntry(
@@ -223,74 +223,84 @@ export const serveThirtyDayNotice = async (
               onlyProSePetitioners: true,
             },
             authorizedUser,
-          );
-
-        await updateCaseAndAssociations({
-          authorizedUser,
-          caseToUpdate: caseEntity,
-        });
-
-        pdfsAppended++;
-
-        hasPaperService =
-          hasPaperService ||
-          caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
-
-        await applicationContext
-          .getNotificationGateway()
-          .sendNotificationToUser({
-            applicationContext,
-            clientConnectionId,
-            message: {
-              action: 'paper_service_updated',
-              pdfsAppended,
-            },
-            userId: authorizedUser.userId,
-          });
-      }
-    });
-
-    await settlePromises(generateNottForCases);
-
-    let pdfUrl: string | undefined = undefined;
-    let fileId: string | undefined = undefined;
-    if (hasPaperService) {
-      const paperServicePdfData = await paperServicePdf.save();
-      ({ fileId, url: pdfUrl } = await applicationContext
-        .getUseCaseHelpers()
-        .saveFileAndGenerateUrl({
-          applicationContext,
-          file: paperServicePdfData,
-          fileNamePrefix: 'paper-service-pdf/',
-        }));
-
-      trialSessionEntity.addPaperServicePdf(
-        fileId,
-        replaceBracketed(
-          thirtyDayNoticeDocumentInfo!.documentTitle,
-          formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
-          trialSession.trialLocation!,
-        ),
+          ),
       );
+      updatedCasesToSave.push(caseEntity);
+
+      pdfsAppended++;
+
+      hasPaperService =
+        hasPaperService ||
+        caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
+
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'paper_service_updated',
+          pdfsAppended,
+        },
+        userId: authorizedUser.userId,
+      });
     }
+  });
+
+  await settlePromises(generateNottForCases);
+
+  let pdfUrl: string | undefined = undefined;
+  let fileId: string | undefined = undefined;
+  if (hasPaperService) {
+    const paperServicePdfData = await paperServicePdf.save();
+    ({ fileId, url: pdfUrl } = await applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl({
+        applicationContext,
+        file: paperServicePdfData,
+        fileNamePrefix: 'paper-service-pdf/',
+      }));
+
+    trialSessionEntity.addPaperServicePdf(
+      fileId,
+      replaceBracketed(
+        thirtyDayNoticeDocumentInfo!.documentTitle,
+        formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
+        trialSession.trialLocation!,
+      ),
+    );
+  }
+
+  await withTransaction(async () => {
+    const updateCases = updatedCasesToSave.map(async caseEntity => {
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
+    });
+    await settlePromises(updateCases);
 
     trialSessionEntity.hasNottBeenServed = true;
 
     await updateTrialSession({
       trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
     });
+  });
 
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'thirty_day_notice_paper_service_complete',
-        fileId,
-        hasPaper: hasPaperService,
-        pdfUrl,
-      },
-      userId: authorizedUser.userId,
-    });
+  await settlePromises(
+    sendEmailCalls.map(async sendEmailCall => {
+      await sendEmailCall();
+    }),
+  );
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'thirty_day_notice_paper_service_complete',
+      fileId,
+      hasPaper: hasPaperService,
+      pdfUrl,
+    },
+    userId: authorizedUser.userId,
   });
 };
 

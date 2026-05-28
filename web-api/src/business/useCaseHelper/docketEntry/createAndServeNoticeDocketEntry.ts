@@ -38,7 +38,7 @@ export const createAndServeNoticeDocketEntry = async (
     onlyProSePetitioners,
   }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
-) => {
+): Promise<() => Promise<void>> => {
   const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -82,7 +82,7 @@ export const createAndServeNoticeDocketEntry = async (
 
   caseEntity.addDocketEntry(noticeDocketEntry);
 
-  await applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
+  return applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
     applicationContext,
     caseEntity,
     newPdfDoc,

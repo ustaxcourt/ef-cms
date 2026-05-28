@@ -15,6 +15,7 @@ import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemote
 describe('setNoticeOfChangeToRemoteProceeding', () => {
   const mockNoticePdf = 'Blah blah blah';
   const mockNewPdf = 'This is some other newer stuff';
+  const mockSendEmailsCall = async () => {};
 
   const mockOpenCase = new Case(
     {
@@ -31,10 +32,14 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
         mockNoticePdf,
       );
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createAndServeNoticeDocketEntry.mockResolvedValue(mockSendEmailsCall);
   });
 
   it('should generate and serve a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(
+    const result = await setNoticeOfChangeToRemoteProceeding(
       applicationContext,
       {
         caseEntity: mockOpenCase,
@@ -70,5 +75,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       newPdfDoc: mockNewPdf,
       noticePdf: mockNoticePdf,
     });
+    expect(result).toEqual(mockSendEmailsCall);
   });
 });
