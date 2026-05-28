@@ -83,6 +83,47 @@ describe('prepareGrantDenyMotionAction', () => {
     });
   });
 
+  it('uses petitioners possessive when multiple petitioners filed the motion', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          petitioners: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
+        },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      "ORDERED that petitioners' Motion to Compel is granted.",
+    );
+  });
+
+  it('uses respondent possessive when respondent filed the motion', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...motion,
+              filedBy: 'Respt. Commissioner',
+            },
+          ],
+        },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      "ORDERED that respondent's Motion to Compel is granted.",
+    );
+  });
+
   it('builds a denied-as-moot-without-prejudice phrase', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },

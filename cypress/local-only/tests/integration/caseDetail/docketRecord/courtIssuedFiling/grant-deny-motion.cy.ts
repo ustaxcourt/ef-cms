@@ -1,14 +1,11 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   loginAsCaseServicesSupervisor,
   loginAsColvin,
-} from '../../../../../../helpers/authentication/login-as-helpers';
-import { createAndServePaperFiling } from '../../../../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
-import { createAndServePaperPetition } from '../../../../../../helpers/fileAPetition/create-and-serve-paper-petition';
-import { createTrialSession } from '../../../../../../helpers/trialSession/create-trial-session';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 
 describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
@@ -75,7 +72,7 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
               `On ${formattedToday}, petitioner filed a ${motionType}`,
             );
             expect(html).to.include(
-              `ORDERED that the ${motionType} is granted.`,
+              `ORDERED that petitioner's ${motionType} is granted.`,
             );
             expect(html).to.include(
               'ORDERED that this is the additional order text.',
@@ -168,7 +165,7 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
                 'This case is set for trial at the session of the Court commencing on',
               );
               expect(html).to.include(
-                `ORDERED that the ${motionType} is denied as moot.`,
+                `ORDERED that petitioner's ${motionType} is denied as moot.`,
               );
               expect(html).to.include(
                 'ORDERED that this case is stricken from the',

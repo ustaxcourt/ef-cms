@@ -32,6 +32,9 @@ const buildDispositionPhrase = ({
 
 const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
 
+const getMovantPossessive = (movant: string): string =>
+  movant === 'petitioners' ? "petitioners'" : `${movant}'s`;
+
 const joinWithItIsFurther = (clauses: string[]): string =>
   clauses
     .map((clause, idx) =>
@@ -125,7 +128,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   });
 
   const dispositionClause = wrap(
-    `ORDERED that petitioner's ${motionDocumentTitle} is ${dispositionPhrase}.`,
+    `ORDERED that ${getMovantPossessive(movant)} ${motionDocumentTitle} is ${dispositionPhrase}.`,
   );
 
   const strickenClause = strickenFromTrialSession
