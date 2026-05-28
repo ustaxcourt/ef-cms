@@ -446,6 +446,13 @@ $fa-ban-not-allowed-cursor:
 .motion-order-response-form,
 .status-report-order-form {
   .usa-radio__input:disabled + [class*='__label'],
+  .usa-radio__input[aria-disabled='true'] + [class*='__label'] {
+    &::before {
+      box-shadow: 0 0 0 1px color(#{$theme-color-base-lighter});
+    }
+  }
+
+  .usa-radio__input:disabled + [class*='__label'],
   .usa-radio__input[aria-disabled='true'] + [class*='__label'],
   .usa-checkbox__input:disabled + [class*='__label'],
   .usa-checkbox__input[aria-disabled='true'] + [class*='__label'] {
