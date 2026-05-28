@@ -17,7 +17,6 @@ import {
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { pick } from 'lodash';
 
 const todayISO = createISODateString();
 const YEAR_IN_DAYS = 365;
@@ -87,14 +86,16 @@ export const generateStaleCasesReport = async ({
   for (const aCase of casesNotClosedOrOnAppeal) {
     const deFiled = aCase.lastFilingDate?.toISOString();
     const deAge = deFiled ? calculateDifferenceInDays(todayISO, deFiled) : 0;
+    const docketNumberWithSuffix = `${aCase.docketNumber}${aCase.docketNumberSuffix ?? ''}`;
     if (deAge >= YEAR_IN_DAYS) {
       staleCases.push({
-        ...pick(aCase, ['docketNumber', 'status']),
         caption: formatCaseCaption(aCase.caseCaption),
+        docketNumber: docketNumberWithSuffix,
         deAge,
         judge: formatJudgeName(aCase.associatedJudge),
         lastFilingDate: formatDate(deFiled),
         preferredTrialCity: aCase.preferredTrialCity || '',
+        status: aCase.status,
       });
       console.log(
         `Docket number ${aCase.docketNumber} is stale! Most recent document ` +
