@@ -1,6 +1,6 @@
+import { awaitCoversheetCompleteAction } from '../actions/DocketEntry/awaitCoversheetCompleteAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
-import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isCoversheetNeededAction } from '../actions/DocketEntry/isCoversheetNeededAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
@@ -18,7 +18,7 @@ export const serveDocumentCompleteSequence = [
   isCoversheetNeededAction,
   {
     no: [],
-    yes: [generateCoversheetAction],
+    yes: [awaitCoversheetCompleteAction],
   },
   unsetWaitingForResponseAction,
   setAlertSuccessAction,
