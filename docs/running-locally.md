@@ -81,7 +81,7 @@ We will also need to install the following GUI tools:
 
 ### Configure Visual Studio Code
 
-If you use VS Code, complete the repository workspace setup in [VS Code Repository Setup](./vscode-setup.md) before editing code. The checked-in workspace settings configure the expected formatter, two-space indentation, format-on-save behavior, and ESLint fixes. Ensure all recommended extensions from the extension list are installed.
+If you use VS Code, complete the repository workspace setup in [VS Code Repository Setup](./vscode-setup.md) before editing code. The checked-in workspace settings configure the expected formatter, two-space indentation, format-on-save behavior, and ESLint fixes. Ensure all recommended workspace extensions are installed.
 
 ## Getting Running
 
