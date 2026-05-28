@@ -96,6 +96,7 @@ export const baseState = {
   currentPage: 'Interstitial',
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
+  todaysOrdersCurrentPaginationPage: 0,
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
