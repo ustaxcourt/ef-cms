@@ -64,6 +64,7 @@ const config: Config = {
     '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
     '!tests/run-cypress.ts',
+    '!tests/test-file-times-to-junit.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
