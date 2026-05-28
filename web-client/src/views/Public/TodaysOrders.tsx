@@ -5,7 +5,7 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   formatDateString,
   FORMATS,
@@ -15,33 +15,40 @@ import {
   ASCENDING,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
+  TODAYS_ORDERS_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
 import { columnData } from './TodaysOrdersConstants';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 
 export const TodaysOrders = connect(
   {
-    loadMoreTodaysOrdersSequence: sequences.loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    setTodaysOrdersCurrentPaginationPageSequence:
+      sequences.setTodaysOrdersCurrentPaginationPageSequence,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.todaysOrdersTableSort,
+    todaysOrdersCurrentPaginationPage: state.todaysOrdersCurrentPaginationPage,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
-    loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
+    setTodaysOrdersCurrentPaginationPageSequence,
     sortTableSequence,
     tableSort,
+    todaysOrdersCurrentPaginationPage,
     todaysOrdersHelper,
   }: {
-    loadMoreTodaysOrdersSequence: any;
     openCaseDocumentDownloadUrlSequence: any;
+    setTodaysOrdersCurrentPaginationPageSequence: any;
     sortTableSequence: any;
     tableSort: {
       sortField: string;
       sortOrder: 'asc' | 'desc';
       sortKey: string;
     };
+    todaysOrdersCurrentPaginationPage: number;
     todaysOrdersHelper: {
       formattedCurrentDate: string;
       formattedOrders: Array<{
@@ -54,7 +61,6 @@ export const TodaysOrders = connect(
         formattedJudgeName: string;
       }>;
       hasResults: boolean;
-      showLoadMoreButton: boolean;
       totalCount: number;
       sortOptions: Array<{
         label: string;
@@ -63,6 +69,25 @@ export const TodaysOrders = connect(
       }>;
     };
   }) {
+    const paginatorTop = useRef(null);
+    const results = todaysOrdersHelper.formattedOrders;
+    const currentPaginationPage = todaysOrdersCurrentPaginationPage;
+
+    const totalPages = Math.ceil(results.length / TODAYS_ORDERS_PAGE_SIZE);
+
+    useEffect(() => {
+      if (currentPaginationPage >= totalPages && totalPages > 0) {
+        setTodaysOrdersCurrentPaginationPageSequence({
+          currentPaginationPage: 0,
+        });
+      }
+    }, [results.length, currentPaginationPage, totalPages]);
+
+    const pagedResults = results.slice(
+      currentPaginationPage * TODAYS_ORDERS_PAGE_SIZE,
+      (currentPaginationPage + 1) * TODAYS_ORDERS_PAGE_SIZE,
+    );
+
     return (
       <>
         <BigHeader text="Today's Orders" />
@@ -73,160 +98,209 @@ export const TodaysOrders = connect(
           </h1>
 
           <div className="grid-row margin-bottom-105">
-            <div className="tablet:grid-col-10">
+            <div className="tablet:grid-col-12">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>
-            <NonMobile>
-              {todaysOrdersHelper.hasResults && (
-                <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                  {todaysOrdersHelper.totalCount} Order(s)
-                </div>
-              )}
-            </NonMobile>
           </div>
 
           {!todaysOrdersHelper.hasResults && (
             <h3 className="margin-top-1">No orders have been issued today.</h3>
           )}
 
-          {todaysOrdersHelper.hasResults && (
-            <>
-              <NonMobile>
-                <table
-                  aria-label="todays orders"
-                  className="usa-table ustc-table"
-                >
-                  <thead>
-                    <tr>
-                      {columnData.map((col, idx) => {
+          <div ref={paginatorTop} aria-live="polite">
+            {todaysOrdersHelper.hasResults && (
+              <>
+                <NonMobile>
+                  <div className="grid-row results-header-row align-items-center">
+                    <div className="tablet:grid-col-4"></div>
+
+                    <div className="tablet:grid-col-4 margin-bottom-2">
+                      {totalPages > 1 && (
+                        <Paginator
+                          currentPageIndex={currentPaginationPage}
+                          totalPages={totalPages}
+                          onPageChange={currentPage => {
+                            setTodaysOrdersCurrentPaginationPageSequence({
+                              currentPaginationPage: currentPage,
+                            });
+                            focusPaginatorTop(paginatorTop);
+                          }}
+                        />
+                      )}
+                    </div>
+
+                    <div
+                      className={`tablet:grid-col-4 text-right${totalPages < 2 ? ' padding-bottom-1' : ''}`}
+                    >
+                      <span>
+                        {todaysOrdersHelper.totalCount.toLocaleString()}{' '}
+                        Order(s)
+                      </span>
+                    </div>
+                  </div>
+
+                  <table
+                    aria-label="todays orders"
+                    className="usa-table ustc-table"
+                  >
+                    <thead>
+                      <tr>
+                        {columnData.map((col, idx) => {
+                          return (
+                            <TodaysOrdersColumnHeader
+                              columnData={col}
+                              key={idx}
+                              orderListId={idx.toString()}
+                              onSort={sortTableSequence}
+                              tableSort={tableSort}
+                            />
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pagedResults.map((order, idx) => {
                         return (
-                          <TodaysOrdersColumnHeader
-                            columnData={col}
-                            key={idx}
-                            orderListId={idx.toString()}
-                            onSort={sortTableSequence}
-                            tableSort={tableSort}
+                          <TodaysOrdersRow
+                            key={`order${idx}`}
+                            order={order}
+                            openCaseDocumentDownloadUrlSequence={
+                              openCaseDocumentDownloadUrlSequence
+                            }
                           />
                         );
                       })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {todaysOrdersHelper.formattedOrders.map((order, idx) => {
-                      return (
-                        <TodaysOrdersRow
-                          key={`order${idx}`}
-                          order={order}
-                          openCaseDocumentDownloadUrlSequence={
-                            openCaseDocumentDownloadUrlSequence
-                          }
-                        />
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </NonMobile>
+                    </tbody>
+                  </table>
+                </NonMobile>
 
-              <Mobile>
-                <div className="tablet:grid-col-2">
-                  <select
-                    aria-label="Today’s Orders Sort"
-                    className="usa-select margin-top-0 margin-bottom-2 sort"
-                    name="todaysOrdersSort"
-                    value={`${tableSort.sortField}|${tableSort.sortOrder}`}
-                    onChange={e => {
-                      const [sortField, sortOrder] = e.target.value.split('|');
-                      sortTableSequence({
-                        sortField,
-                        sortOrder: sortOrder as 'asc' | 'desc',
-                        stateKey: tableSort.sortKey,
-                      });
-                    }}
-                  >
-                    {todaysOrdersHelper.sortOptions.map(
-                      ({ label, sortField, sortOrder }) => (
-                        <option key={label} value={`${sortField}|${sortOrder}`}>
-                          Sort by {label}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </div>
-
-                {todaysOrdersHelper.hasResults && (
-                  <div className="margin-bottom-2 text-right">
-                    {todaysOrdersHelper.totalCount} Order(s)
-                  </div>
-                )}
-
-                <table
-                  aria-label="todays orders"
-                  className="usa-table gray-header responsive-table row-only todays-orders-mobile"
-                >
-                  <thead>
-                    <tr>
-                      <th aria-label="Docket Number">Docket No.</th>
-                      <th>Case Title</th>
-                      <th>Order Type</th>
-                      <th>Pages</th>
-                      <th>Judge</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {todaysOrdersHelper.formattedOrders.map(order => (
-                      <tr
-                        key={`todays-orders-mobile-${order.docketNumber}-${order.docketEntryId}`}
-                      >
-                        <td className="docket-number-head">
-                          <CaseLink formattedCase={order} />
-                        </td>
-                        <th>Time Filed</th>
-                        <td className="divider">
-                          {formatDateString(order.filingDate, FORMATS.TIME_TZ)}
-                        </td>
-                        <th>Case Title</th>
-                        <td className="divider">{order.caseCaption}</td>
-                        <th>Order</th>
-                        <td className="divider">
-                          <Button
-                            link
-                            aria-label={`View PDF: ${order.documentTitle}`}
-                            className="text-left"
-                            overrideMargin={true}
-                            onClick={() => {
-                              openCaseDocumentDownloadUrlSequence({
-                                docketEntryId: order.docketEntryId,
-                                docketNumber: order.docketNumber,
-                                isPublic: true,
-                                useSameTab: true,
-                              });
-                            }}
+                <Mobile>
+                  <div className="tablet:grid-col-2">
+                    <select
+                      aria-label="Today’s Orders Sort"
+                      className="usa-select margin-top-0 margin-bottom-2 sort"
+                      name="todaysOrdersSort"
+                      value={`${tableSort.sortField}|${tableSort.sortOrder}`}
+                      onChange={e => {
+                        const [sortField, sortOrder] =
+                          e.target.value.split('|');
+                        sortTableSequence({
+                          sortField,
+                          sortOrder: sortOrder as 'asc' | 'desc',
+                          stateKey: tableSort.sortKey,
+                        });
+                      }}
+                    >
+                      {todaysOrdersHelper.sortOptions.map(
+                        ({ label, sortField, sortOrder }) => (
+                          <option
+                            key={label}
+                            value={`${sortField}|${sortOrder}`}
                           >
-                            {order.documentTitle}
-                          </Button>
-                        </td>
+                            Sort by {label}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="margin-bottom-4 tablet:grid-col">
+                      <Paginator
+                        currentPageIndex={currentPaginationPage}
+                        totalPages={totalPages}
+                        onPageChange={currentPage => {
+                          setTodaysOrdersCurrentPaginationPageSequence({
+                            currentPaginationPage: currentPage,
+                          });
+                          focusPaginatorTop(paginatorTop);
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {todaysOrdersHelper.hasResults && (
+                    <div className="margin-bottom-2 text-right">
+                      {todaysOrdersHelper.totalCount} Order(s)
+                    </div>
+                  )}
+
+                  <table
+                    aria-label="todays orders"
+                    className="usa-table gray-header responsive-table row-only todays-orders-mobile"
+                  >
+                    <thead>
+                      <tr>
+                        <th aria-label="Docket Number">Docket No.</th>
+                        <th>Case Title</th>
+                        <th>Order Type</th>
                         <th>Pages</th>
-                        <td className="divider">
-                          {order.numberOfPagesFormatted}
-                        </td>
                         <th>Judge</th>
-                        <td>{order.formattedJudgeName}</td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Mobile>
-            </>
-          )}
-          {todaysOrdersHelper.showLoadMoreButton && (
-            <Button
-              secondary
-              aria-label={'load more results'}
-              onClick={() => loadMoreTodaysOrdersSequence()}
-            >
-              Load More
-            </Button>
-          )}
+                    </thead>
+                    <tbody>
+                      {pagedResults.map(order => (
+                        <tr
+                          key={`todays-orders-mobile-${order.docketNumber}-${order.docketEntryId}`}
+                        >
+                          <td className="docket-number-head">
+                            <CaseLink formattedCase={order} />
+                          </td>
+                          <th>Time Filed</th>
+                          <td className="divider">
+                            {formatDateString(
+                              order.filingDate,
+                              FORMATS.TIME_TZ,
+                            )}
+                          </td>
+                          <th>Case Title</th>
+                          <td className="divider">{order.caseCaption}</td>
+                          <th>Order</th>
+                          <td className="divider">
+                            <Button
+                              link
+                              aria-label={`View PDF: ${order.documentTitle}`}
+                              className="text-left"
+                              overrideMargin={true}
+                              onClick={() => {
+                                openCaseDocumentDownloadUrlSequence({
+                                  docketEntryId: order.docketEntryId,
+                                  docketNumber: order.docketNumber,
+                                  isPublic: true,
+                                  useSameTab: true,
+                                });
+                              }}
+                            >
+                              {order.documentTitle}
+                            </Button>
+                          </td>
+                          <th>Pages</th>
+                          <td className="divider">
+                            {order.numberOfPagesFormatted}
+                          </td>
+                          <th>Judge</th>
+                          <td>{order.formattedJudgeName}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Mobile>
+              </>
+            )}
+
+            {totalPages > 1 && todaysOrdersHelper.hasResults && (
+              <Paginator
+                currentPageIndex={currentPaginationPage}
+                totalPages={totalPages}
+                onPageChange={currentPage => {
+                  setTodaysOrdersCurrentPaginationPageSequence({
+                    currentPaginationPage: currentPage,
+                  });
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+            )}
+          </div>
         </section>
       </>
     );
