@@ -56,6 +56,8 @@ const config: Config = {
     '!postgres/**',
     '!reindex/**',
     '!reports/**',
+    'reports/event-codes-by-year-helpers.ts',
+    'reports/stale-cases.helpers.ts',
     '!run-once-scripts/**',
     '!secrets/**',
     '!seed/add-missing-seed-docket-entries-pdfs.js',
