@@ -30,7 +30,7 @@ const buildDispositionPhrase = ({
   return parts.join(' ');
 };
 
-const wrap = (inner: string) => `<p class="indent-paragraph">${inner}</p>`;
+const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
 
 const joinWithItIsFurther = (clauses: string[]): string =>
   clauses

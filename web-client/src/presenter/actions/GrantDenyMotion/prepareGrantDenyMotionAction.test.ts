@@ -58,8 +58,29 @@ describe('prepareGrantDenyMotionAction', () => {
       'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7).',
     );
     expect(result.state.form.richText).toContain(
-      'ORDERED that the Motion to Compel is granted.',
+      "ORDERED that petitioner's Motion to Compel is granted.",
     );
+  });
+
+  it('indents every generated paragraph', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          additionalOrderText: ['additional directive'],
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
+        },
+      },
+    });
+
+    const paragraphs = result.state.form.richText.match(/<p>.*?<\/p>/g) || [];
+
+    expect(paragraphs).toHaveLength(4);
+    paragraphs.forEach(paragraph => {
+      expect(paragraph.startsWith('<p>&emsp;&emsp;&emsp;')).toBe(true);
+    });
   });
 
   it('builds a denied-as-moot-without-prejudice phrase', async () => {
@@ -79,7 +100,7 @@ describe('prepareGrantDenyMotionAction', () => {
       'Order - Motion to Compel is denied as moot without prejudice',
     );
     expect(result.state.form.richText).toContain(
-      'ORDERED that the Motion to Compel is denied as moot without prejudice.',
+      "ORDERED that petitioner's Motion to Compel is denied as moot without prejudice.",
     );
   });
 
@@ -122,8 +143,7 @@ describe('prepareGrantDenyMotionAction', () => {
         },
         form: {
           disposition: MOTION_DISPOSITIONS.GRANTED,
-          issueOrder:
-            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.justThisCase,
+          issueOrder: GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.justThisCase,
         },
       },
     });
@@ -184,8 +204,7 @@ describe('prepareGrantDenyMotionAction', () => {
         ...baseState,
         form: {
           disposition: MOTION_DISPOSITIONS.GRANTED,
-          jurisdiction:
-            GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored,
+          jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored,
         },
       },
     });
@@ -205,8 +224,7 @@ describe('prepareGrantDenyMotionAction', () => {
         ...baseState,
         form: {
           disposition: MOTION_DISPOSITIONS.GRANTED,
-          jurisdiction:
-            GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
+          jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
         },
       },
     });
@@ -227,8 +245,7 @@ describe('prepareGrantDenyMotionAction', () => {
           dueDate: '2026-12-31',
           dueDateMessage:
             GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
-          filingParty:
-            GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.respondent,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.respondent,
         },
       },
     });
@@ -271,9 +288,9 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    const occurrences = (result.state.form.richText.match(
-      /ORDERED that /g,
-    ) || []).length;
+    const occurrences = (
+      result.state.form.richText.match(/ORDERED that /g) || []
+    ).length;
     expect(occurrences).toBe(3); // 1 disposition + 2 additional
     expect(result.state.form.richText).toContain('ORDERED that first thing.');
     expect(result.state.form.richText).toContain('ORDERED that second thing.');
@@ -287,8 +304,7 @@ describe('prepareGrantDenyMotionAction', () => {
         form: {
           additionalOrderText: ['extra'],
           disposition: MOTION_DISPOSITIONS.GRANTED,
-          jurisdiction:
-            GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
+          jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
         },
       },
     });
@@ -307,8 +323,6 @@ describe('prepareGrantDenyMotionAction', () => {
           form: { disposition: MOTION_DISPOSITIONS.GRANTED },
         },
       }),
-    ).rejects.toThrow(
-      'Could not find docket entry with id nonexistent-id',
-    );
+    ).rejects.toThrow('Could not find docket entry with id nonexistent-id');
   });
 });
