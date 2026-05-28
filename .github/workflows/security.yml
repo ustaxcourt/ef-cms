@@ -1,0 +1,45 @@
+name: Security scan
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: semgrep-oss/scan
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: semgrep/semgrep:latest
+
+    if: github.actor != 'dependabot[bot]'
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: semgrep scan --config p/owasp-top-ten
+
+  trivy:
+    name: Trivy filesystem scan
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      # @v6
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+
+  zap:
+    runs-on: ubuntu-latest
+    name: Application scan
+    continue-on-error: true
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          target: 'https://test.ef-cms.ustaxcourt.gov/'
