@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseDocketEntriesInteractor } from '@shared/business/useCases/getCaseDocketEntriesInteractor';
+import { getCaseDocketEntriesInteractor } from '@web-api/business/useCases/getCaseDocketEntriesInteractor';
 import { marshallDocketEntry } from './marshallers/marshallDocketEntry';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
@@ -17,10 +17,7 @@ export const getCaseDocketEntriesLambda = (
 ) =>
   genericHandler(event, () =>
     v2ApiWrapper(async () => {
-      const parsedPage = parseInt(
-        event.queryStringParameters?.page ?? '0',
-        10,
-      );
+      const parsedPage = parseInt(event.queryStringParameters?.page ?? '0', 10);
 
       const result = await getCaseDocketEntriesInteractor(
         {

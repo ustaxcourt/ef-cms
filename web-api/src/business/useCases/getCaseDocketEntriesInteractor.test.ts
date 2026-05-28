@@ -1,11 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getCaseDocketEntriesInteractor } from './getCaseDocketEntriesInteractor';
-import {
-  mockDocketClerkUser,
-} from '@shared/test/mockAuthUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
@@ -145,9 +143,7 @@ describe('getCaseDocketEntriesInteractor', () => {
         { docketNumber: MOCK_CASE.docketNumber, page: 21 },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow(
-      "Invalid page '21'. Must be a number between 0 and 20",
-    );
+    ).rejects.toThrow("Invalid page '21'. Must be a number between 0 and 20");
   });
 
   it('should throw an error when page is negative', async () => {
@@ -156,9 +152,7 @@ describe('getCaseDocketEntriesInteractor', () => {
         { docketNumber: MOCK_CASE.docketNumber, page: -1 },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow(
-      "Invalid page '-1'. Must be a number between 0 and 20",
-    );
+    ).rejects.toThrow("Invalid page '-1'. Must be a number between 0 and 20");
   });
 
   it('should throw an error when page is NaN', async () => {
@@ -167,9 +161,7 @@ describe('getCaseDocketEntriesInteractor', () => {
         { docketNumber: MOCK_CASE.docketNumber, page: NaN },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow(
-      "Invalid page 'NaN'. Must be a number between 0 and 20",
-    );
+    ).rejects.toThrow("Invalid page 'NaN'. Must be a number between 0 and 20");
   });
 
   it('should filter docket entries for external users', async () => {
