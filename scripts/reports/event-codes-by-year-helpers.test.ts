@@ -350,48 +350,50 @@ describe('event-codes-by-year-helpers', () => {
           args: ['dwCase as c', 'de.docketNumber', 'c.docketNumber'],
           method: 'innerJoin',
         },
-        {
-          args: ['de.docketEntryId'],
-          method: 'distinctOn',
-        },
-        {
-          args: ['de.docketEntryId', 'asc'],
-          method: 'orderBy',
-        },
-        {
-          args: ['de.servedAt', 'asc'],
-          method: 'orderBy',
-        },
-        {
-          args: ['de.docketNumber', 'asc'],
-          method: 'orderBy',
-        },
       ]),
     );
-    expect(cteCalls).toEqual(
-      expect.arrayContaining([
-        {
-          args: ['distinctDocketEntries'],
-          method: 'selectFrom',
-        },
-        {
-          args: [],
-          method: 'selectAll',
-        },
-        {
-          args: ['receivedAt', 'asc'],
-          method: 'orderBy',
-        },
-        {
-          args: ['docketNumber', 'asc'],
-          method: 'orderBy',
-        },
-        {
-          args: [],
-          method: 'execute',
-        },
-      ]),
-    );
+    expect(
+      baseCalls.filter(call => ['distinctOn', 'orderBy'].includes(call.method)),
+    ).toEqual([
+      {
+        args: ['de.docketEntryId'],
+        method: 'distinctOn',
+      },
+      {
+        args: ['de.docketEntryId', 'asc'],
+        method: 'orderBy',
+      },
+      {
+        args: ['de.servedAt', 'asc'],
+        method: 'orderBy',
+      },
+      {
+        args: ['de.docketNumber', 'asc'],
+        method: 'orderBy',
+      },
+    ]);
+    expect(cteCalls).toEqual([
+      {
+        args: ['distinctDocketEntries'],
+        method: 'selectFrom',
+      },
+      {
+        args: [],
+        method: 'selectAll',
+      },
+      {
+        args: ['receivedAt', 'asc'],
+        method: 'orderBy',
+      },
+      {
+        args: ['docketNumber', 'asc'],
+        method: 'orderBy',
+      },
+      {
+        args: [],
+        method: 'execute',
+      },
+    ]);
   });
 
   it('returns non-distinct docket entries without using the distinct CTE path', async () => {
