@@ -9,21 +9,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * removePdfFromDocketEntry
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.docketEntryId the docket entry id for the file to be removed
- * @returns {object} the updated case data
- */
 export const removePdfFromDocketEntry = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | void> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -47,14 +38,10 @@ export const removePdfFromDocketEntry = async (
     docketEntry.isFileAttached = false;
     caseEntity.updateDocketEntry(docketEntry);
 
-    const updatedCase = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
-    const theCase = new Case(updatedCase, { authorizedUser }).toRawObject();
-    const caseDTO = new CaseDTO(theCase);
-    return caseDTO;
   }
 };
 

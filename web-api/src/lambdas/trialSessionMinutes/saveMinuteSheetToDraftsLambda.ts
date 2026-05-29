@@ -11,7 +11,7 @@ export const saveMinuteSheetToDraftsLambda = (
       ...event.pathParameters,
     };
 
-    return await saveMinuteSheetToDraftsInteractor(
+    await saveMinuteSheetToDraftsInteractor(
       applicationContext,
       {
         ...lambdaArguments,

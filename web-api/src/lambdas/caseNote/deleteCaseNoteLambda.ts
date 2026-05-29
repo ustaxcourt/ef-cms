@@ -10,7 +10,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const deleteCaseNoteLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await deleteCaseNoteInteractor(
+    await deleteCaseNoteInteractor(
       applicationContext,
       {
         ...event.pathParameters,
