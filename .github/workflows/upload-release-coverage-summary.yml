@@ -34,6 +34,7 @@ on:
         type: string
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
@@ -45,7 +46,6 @@ jobs:
           BRANCHES: ${{ inputs.branches }}
           FUNCTIONS: ${{ inputs.functions }}
           LINES: ${{ inputs.lines }}
-          PR_NUMBER: ${{ inputs.pr_number }}
           STATEMENTS: ${{ inputs.statements }}
           SUITE: ${{ inputs.suite }}
         run: |
