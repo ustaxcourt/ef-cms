@@ -688,6 +688,30 @@ describe('prod-release-pr-description', () => {
 
       expect(enrichedPullRequest.manualSteps).toEqual([]);
     });
+
+    it('uses the checklist text before a bash block as the manual step description', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: [
+            'Manual release work is required.',
+            '',
+            '- [ ] Deploy account-specific terraform:',
+            '',
+            '```bash',
+            'npm run deploy:account-specific',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run deploy:account-specific',
+          description: 'Deploy account-specific terraform',
+        },
+      ]);
+    });
   });
   describe('cli integration', () => {
     const originalFetch = global.fetch;

@@ -49,6 +49,7 @@ export interface GitHubClient {
   getCoverageSummary(
     pullRequestNumber: number,
     suite: CoverageSuite,
+    headSha?: string,
   ): Promise<CoverageSummary | undefined>;
   getIssue(issueNumber: number): Promise<GitHubIssue>;
   getLatestProdPullRequest(): Promise<LatestProdPullRequest>;
@@ -99,8 +100,10 @@ export class GhCliGitHubClient implements GitHubClient {
   async getCoverageSummary(
     pullRequestNumber: number,
     suite: CoverageSuite,
+    headSha?: string,
   ): Promise<CoverageSummary | undefined> {
     return await getStoredCoverageSummary({
+      headSha,
       pullRequestNumber,
       repository: await this.getRepositoryNameWithOwner(),
       suite,

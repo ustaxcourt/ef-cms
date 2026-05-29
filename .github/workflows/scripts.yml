@@ -17,14 +17,15 @@ concurrency:
 permissions:
   actions: read
   contents: read
-  pull-requests: write
 
 jobs:
   Scripts:
     if: ${{ !github.event.pull_request.draft }}
     uses: ./.github/workflows/template_no-app.yml
     with:
+      coverage_source_dir: scripts/coverage
       run_command: npm run test:scripts
+      workflow_filename: scripts.yml
   check-coverage:
     needs: [Scripts]
     uses: ./.github/workflows/job_check-coverage.yml
@@ -37,24 +38,3 @@ jobs:
       pull_request_number: ${{ github.event.pull_request.number }}
       statements: 99
       workflow_filename: scripts.yml
-  update-coverage-table:
-    if: ${{ github.event.pull_request.base.ref == 'prod' }}
-    needs: [check-coverage]
-    runs-on: ubuntu-latest
-    env:
-      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/scripts-pr-${{ github.event.pull_request.number }}-coverage-summary.json
-    steps:
-      - name: Checkout Current Branch
-        uses: actions/checkout@v6
-      - name: NPM Install in Current Branch
-        uses: ./.github/actions/dawson-node-bootstrap
-      - name: Download composite coverage summary
-        uses: actions/download-artifact@v7
-        with:
-          name: coverage-summary-scripts-pr-${{ github.event.pull_request.number }}
-          path: /tmp
-      - name: Update coverage table
-        run: |
-          scripts/github-actions/update-prod-release-coverage.ts \
-            "${COMPOSITE_COVERAGE_SUMMARY_PATH}" \
-            ${{ github.event.pull_request.number }}

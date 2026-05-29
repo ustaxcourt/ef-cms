@@ -16,6 +16,7 @@ import {
   readCoverageSummary,
   renderCoverageSection,
   replaceCoverageTableRow,
+  replaceCoverageTableRows,
   summarizeCoverageReport,
   updatePullRequestCoverage,
   writeCoverageSummary,
@@ -172,6 +173,37 @@ describe('suite-coverage.helpers', () => {
     );
   });
 
+  it('replaces multiple coverage rows together', () => {
+    const body = [
+      COVERAGE_HEADING,
+      '',
+      '| Suite | Before | After |',
+      '| --- | --- | --- |',
+      '| api | Not available | Pending |',
+      '| client | Not available | Pending |',
+      '| scripts | Not available | Pending |',
+      '| shared | Not available | Pending |',
+    ].join('\n');
+
+    expect(
+      replaceCoverageTableRows({
+        body,
+        summaries: [apiCoverageSummary, clientCoverageSummary],
+      }),
+    ).toBe(
+      [
+        COVERAGE_HEADING,
+        '',
+        '| Suite | Before | After |',
+        '| --- | --- | --- |',
+        `| api | Not available | ${formatCoverageCell(apiCoverageSummary)} |`,
+        `| client | Not available | ${formatCoverageCell(clientCoverageSummary)} |`,
+        '| scripts | Not available | Pending |',
+        '| shared | Not available | Pending |',
+      ].join('\n'),
+    );
+  });
+
   it('leaves the body unchanged when the coverage section or row is absent', () => {
     const bodyWithoutCoverage = '### Includes\n\n### Manual steps\n';
     const bodyWithoutApiRow = [
@@ -242,6 +274,54 @@ describe('suite-coverage.helpers', () => {
     );
   });
 
+  it('updates the pull request body with all provided suite summaries in one patch', async () => {
+    const fetchImplementation = jest
+      .fn()
+      .mockResolvedValueOnce({
+        json: () =>
+          Promise.resolve({
+            body: [
+              COVERAGE_HEADING,
+              '',
+              '| Suite | Before | After |',
+              '| --- | --- | --- |',
+              '| api | Not available | Pending |',
+              '| client | Not available | Pending |',
+            ].join('\n'),
+          }),
+        ok: true,
+      } as Response)
+      .mockResolvedValueOnce({ ok: true } as Response);
+
+    await expect(
+      updatePullRequestCoverage({
+        fetchImplementation,
+        pullRequestNumber: 4321,
+        repository: 'ustaxcourt/ef-cms',
+        summaries: [apiCoverageSummary, clientCoverageSummary],
+        token: 'token',
+      }),
+    ).resolves.toBe(true);
+
+    expect(fetchImplementation).toHaveBeenNthCalledWith(
+      2,
+      'https://api.github.com/repos/ustaxcourt/ef-cms/pulls/4321',
+      expect.objectContaining({
+        body: JSON.stringify({
+          body: [
+            COVERAGE_HEADING,
+            '',
+            '| Suite | Before | After |',
+            '| --- | --- | --- |',
+            `| api | Not available | ${formatCoverageCell(apiCoverageSummary)} |`,
+            `| client | Not available | ${formatCoverageCell(clientCoverageSummary)} |`,
+          ].join('\n'),
+        }),
+        method: 'PATCH',
+      }),
+    );
+  });
+
   it('does not patch the pull request when no applicable coverage row is present', async () => {
     const fetchImplementation = jest.fn().mockResolvedValueOnce({
       json: () => Promise.resolve({ body: '### Includes' }),
@@ -258,6 +338,20 @@ describe('suite-coverage.helpers', () => {
       }),
     ).resolves.toBe(false);
     expect(fetchImplementation).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not fetch or patch the pull request when no coverage summaries are provided', async () => {
+    const fetchImplementation = jest.fn();
+
+    await expect(
+      updatePullRequestCoverage({
+        fetchImplementation,
+        pullRequestNumber: 4321,
+        repository: 'ustaxcourt/ef-cms',
+        token: 'token',
+      }),
+    ).resolves.toBe(false);
+    expect(fetchImplementation).not.toHaveBeenCalled();
   });
 
   it('uses the default fetch implementation and normalizes an undefined PR body before patching', async () => {
@@ -432,6 +526,33 @@ describe('suite-coverage.helpers', () => {
 
     await expect(
       getCoverageSummary({
+        pullRequestNumber: 5678,
+        repository: 'ustaxcourt/ef-cms',
+        suite: 'api',
+        token: 'token',
+      }),
+    ).resolves.toBeUndefined();
+  });
+
+  it('returns undefined when matching artifacts were generated for a different head sha', async () => {
+    jest.mocked(global.fetch).mockResolvedValueOnce({
+      json: () =>
+        Promise.resolve({
+          artifacts: [
+            {
+              archive_download_url: 'https://example.com/coverage.zip',
+              expired: false,
+              name: 'coverage-summary-api-pr-5678',
+              workflow_run: { head_sha: 'previous-head-sha' },
+            },
+          ],
+        }),
+      ok: true,
+    } as Response);
+
+    await expect(
+      getCoverageSummary({
+        headSha: 'current-head-sha',
         pullRequestNumber: 5678,
         repository: 'ustaxcourt/ef-cms',
         suite: 'api',

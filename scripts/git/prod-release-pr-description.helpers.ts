@@ -268,6 +268,7 @@ const extractManualSteps = (body: string): ManualStep[] => {
       continue;
     }
 
+    const openingFenceIndex = index;
     const commandLines: string[] = [];
 
     for (
@@ -289,7 +290,7 @@ const extractManualSteps = (body: string): ManualStep[] => {
       continue;
     }
 
-    const previousNonEmptyLine = [...lines.slice(0, index)]
+    const previousNonEmptyLine = [...lines.slice(0, openingFenceIndex)]
       .reverse()
       .find(line => line.trim().length > 0);
     const descriptionMatch = previousNonEmptyLine?.match(

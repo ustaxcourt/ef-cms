@@ -21,6 +21,9 @@ type WorkflowArtifact = {
   archive_download_url: string;
   expired: boolean;
   name: string;
+  workflow_run?: {
+    head_sha?: string;
+  };
 };
 
 type WorkflowArtifactsResponse = {
@@ -183,19 +186,41 @@ export const replaceCoverageTableRow = ({
   });
 };
 
+export const replaceCoverageTableRows = ({
+  body,
+  summaries,
+}: {
+  body: string;
+  summaries: CoverageSummary[];
+}): string => {
+  return summaries.reduce(
+    (updatedBody: string, summary: CoverageSummary): string =>
+      replaceCoverageTableRow({ body: updatedBody, summary }),
+    body,
+  );
+};
+
 export const updatePullRequestCoverage = async ({
   fetchImplementation = fetch,
   pullRequestNumber,
   repository,
+  summaries,
   summary,
   token,
 }: {
   fetchImplementation?: typeof fetch;
   pullRequestNumber: number;
   repository: string;
-  summary: CoverageSummary;
+  summaries?: CoverageSummary[];
+  summary?: CoverageSummary;
   token: string;
 }): Promise<boolean> => {
+  const coverageSummaries = summaries ?? (summary ? [summary] : []);
+
+  if (coverageSummaries.length === 0) {
+    return false;
+  }
+
   const url = `https://api.github.com/repos/${repository}/pulls/${pullRequestNumber}`;
   const headers = getGitHubHeaders(token);
   const pullRequestResponse = await fetchImplementation(url, {
@@ -211,9 +236,9 @@ export const updatePullRequestCoverage = async ({
 
   const pullRequest =
     (await pullRequestResponse.json()) as GitHubPullRequestResponse;
-  const updatedBody = replaceCoverageTableRow({
+  const updatedBody = replaceCoverageTableRows({
     body: pullRequest.body ?? '',
-    summary,
+    summaries: coverageSummaries,
   });
 
   if (updatedBody === pullRequest.body) {
@@ -289,11 +314,13 @@ export const downloadCoverageSummaryArtifact = async ({
 };
 
 export const getCoverageSummary = async ({
+  headSha,
   pullRequestNumber,
   repository,
   suite,
   token,
 }: {
+  headSha?: string;
   pullRequestNumber: number;
   repository: string;
   suite: CoverageSuite;
@@ -304,7 +331,7 @@ export const getCoverageSummary = async ({
     suite,
   });
   const response = await fetch(
-    `https://api.github.com/repos/${repository}/actions/artifacts?name=${artifactName}&per_page=1`,
+    `https://api.github.com/repos/${repository}/actions/artifacts?name=${artifactName}&per_page=100`,
     {
       headers: getGitHubHeaders(token),
     },
@@ -320,7 +347,9 @@ export const getCoverageSummary = async ({
     (await response.json()) as WorkflowArtifactsResponse;
   const artifact = artifactsResponse.artifacts.find(
     workflowArtifact =>
-      workflowArtifact.name === artifactName && !workflowArtifact.expired,
+      workflowArtifact.name === artifactName &&
+      !workflowArtifact.expired &&
+      (!headSha || workflowArtifact.workflow_run?.head_sha === headSha),
   );
 
   if (!artifact) {

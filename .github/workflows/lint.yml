@@ -22,3 +22,4 @@ jobs:
       run_command: |
         npm run lint
         ./run-shellcheck.sh
+      workflow_filename: lint.yml

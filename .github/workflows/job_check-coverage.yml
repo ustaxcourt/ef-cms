@@ -36,7 +36,7 @@ jobs:
   check-coverage:
     runs-on: ubuntu-latest
     env:
-      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/${{ inputs.workflow_filename }}-${{ inputs.coverage_suite }}-coverage-summary.json
+      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/coverage-summary-${{ inputs.coverage_suite }}-pr-${{ inputs.pull_request_number }}.json
     steps:
       - name: Checkout Current Branch
         uses: actions/checkout@v6
