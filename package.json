@@ -318,7 +318,7 @@
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
     "husky": "9.1.7",
-    "inquirer": "14.0.0",
+    "inquirer": "13.0.1",
     "jest": "30.4.2",
     "jest-environment-jsdom": "30.4.1",
     "lint-staged": "17.0.5",
