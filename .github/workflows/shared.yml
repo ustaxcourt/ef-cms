@@ -17,6 +17,7 @@ concurrency:
 permissions:
   actions: read
   contents: read
+  pull-requests: write
 
 jobs:
   Shared:
@@ -40,8 +41,10 @@ jobs:
     uses: ./.github/workflows/job_check-coverage.yml
     with:
       branches: 95
+      coverage_suite: shared
       functions: 95
       lines: 95
+      pull_request_number: ${{ github.event.pull_request.number }}
       statements: 95
       workflow_filename: shared.yml
   persist-test-file-times:
@@ -49,3 +52,24 @@ jobs:
     uses: ./.github/workflows/job_persist-test-file-times.yml
     with:
       workflow_filename: shared.yml
+  update-coverage-table:
+    if: ${{ github.event.pull_request.base.ref == 'prod' }}
+    needs: [check-coverage]
+    runs-on: ubuntu-latest
+    env:
+      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/shared-pr-${{ github.event.pull_request.number }}-coverage-summary.json
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Download composite coverage summary
+        uses: actions/download-artifact@v7
+        with:
+          name: coverage-summary-shared-pr-${{ github.event.pull_request.number }}
+          path: /tmp
+      - name: Update coverage table
+        run: |
+          scripts/github-actions/update-prod-release-coverage.ts \
+            "${COMPOSITE_COVERAGE_SUMMARY_PATH}" \
+            ${{ github.event.pull_request.number }}

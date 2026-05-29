@@ -12,6 +12,15 @@ on:
       lines:
         required: true
         type: number
+      coverage_suite:
+        required: true
+        type: string
+      coverage_source_dir:
+        default: coverage
+        type: string
+      pull_request_number:
+        default: 0
+        type: number
       statements:
         required: true
         type: number
@@ -26,6 +35,8 @@ permissions:
 jobs:
   check-coverage:
     runs-on: ubuntu-latest
+    env:
+      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/${{ inputs.workflow_filename }}-${{ inputs.coverage_suite }}-coverage-summary.json
     steps:
       - name: Checkout Current Branch
         uses: actions/checkout@v6
@@ -34,7 +45,10 @@ jobs:
         with:
           pattern: ${{ inputs.workflow_filename }}-coverage-artifacts-*
           merge-multiple: true
-          path: coverage
+          path: ${{ inputs.coverage_source_dir }}
+      - name: Merge Coverage
+        run: |
+          npx nyc merge "${{ inputs.coverage_source_dir }}" "${{ inputs.coverage_source_dir }}/coverage-final.json"
       - name: Process Coverage
         run: |
           npx nyc report \
@@ -43,10 +57,23 @@ jobs:
             --functions ${{ inputs.functions }} \
             --lines ${{ inputs.lines }} \
             --statements ${{ inputs.statements }} \
+            --reporter json-summary \
             --reporter lcov \
             --reporter text \
             --reporter clover \
-            -t coverage
+            -t "${{ inputs.coverage_source_dir }}"
+      - name: Emit composite coverage summary
+        run: |
+          scripts/github-actions/emit-coverage-summary.ts \
+            "${{ inputs.coverage_suite }}" \
+            "${{ inputs.coverage_source_dir }}/coverage-summary.json" \
+            "${COMPOSITE_COVERAGE_SUMMARY_PATH}"
+      - name: Upload composite coverage summary
+        uses: actions/upload-artifact@v7
+        if: ${{ inputs.pull_request_number != 0 }}
+        with:
+          name: coverage-summary-${{ inputs.coverage_suite }}-pr-${{ inputs.pull_request_number }}
+          path: ${{ env.COMPOSITE_COVERAGE_SUMMARY_PATH }}
       - name: Delete Coverage Artifacts
         uses: geekyeggo/delete-artifact@v5
         with:
