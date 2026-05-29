@@ -97,7 +97,11 @@ export class PublicCase extends JoiValidationEntity {
         docketEntry => !docketEntry.isDraft && docketEntry.isOnDocketRecord,
       )
       .map(docketEntry => new PublicDocketEntry(docketEntry))
-      .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
+      .sort(
+        (a, b) =>
+          compareStrings(a.receivedAt, b.receivedAt) ||
+          compareStrings(a.docketEntryId, b.docketEntryId),
+      );
   }
 
   static VALIDATION_RULES = {

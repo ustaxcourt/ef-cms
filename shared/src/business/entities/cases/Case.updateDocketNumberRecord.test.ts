@@ -64,17 +64,25 @@ describe('updateDocketNumberRecord records suffix changes', () => {
   });
 
   it('should add notice of docket number change document when the docket number changes from the last updated docket number', () => {
+    // Explicit createdAt + docketEntryId so the (createdAt, docketEntryId)
+    // sort in Case.ts produces a deterministic chronological order — without
+    // them, the constructor assigns "now" + a random UUID and the entries
+    // can swap, making the second amendment look earlier than the first.
     const caseToVerify = new Case(
       {
         caseCaption: 'A Very Berry New Caption',
         docketEntries: [
           {
+            createdAt: '2020-01-01T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000001',
             documentTitle:
               "Docket Number is amended from '123-19A' to '123-19B'",
             index: 1,
             isOnDocketRecord: true,
           },
           {
+            createdAt: '2020-01-02T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000002',
             documentTitle:
               "Docket Number is amended from '123-19B' to '123-19P'",
             index: 2,

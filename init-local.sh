@@ -90,12 +90,16 @@ start_docker_dependencies() {
     return
   fi
 
-  echo "Stopping any existing local docker services..."
-  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
-  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
+  if [ -n "${RESUME}" ]; then
+    echo "Resuming: keeping existing docker volumes"
+  else
+    echo "Stopping any existing local docker services..."
+    $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
+    $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
 
-  # ensure the container names are not in use
-  docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || true
+    # ensure the container names are not in use
+    docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || true
+  fi
 
   echo "Starting postgres"
   $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d || { echo "Failed to start Postgres containers"; exit 1; }
@@ -141,10 +145,16 @@ setup_s3() {
 }
 
 setup_postgres() {
-  echo "Running migrations and seeding Postgres"
-  npm run migration:postgres
-  npm run migration:postgres:contract
-  npm run seed:postgres
+  if [ -n "${RESUME}" ]; then
+    echo "Resuming: running only migrations (skipping seed)"
+    npm run migration:postgres
+    npm run migration:postgres:contract
+  else
+    echo "Running migrations and seeding Postgres"
+    npm run migration:postgres
+    npm run migration:postgres:contract
+    npm run seed:postgres
+  fi
 }
 
 setup_cognito() {

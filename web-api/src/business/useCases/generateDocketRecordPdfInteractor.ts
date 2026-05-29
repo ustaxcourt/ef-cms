@@ -22,6 +22,8 @@ import {
   type FormattedCaseDetail,
   type FormattedCaseDetailDocketEntry,
 } from '@shared/business/utilities/getFormattedCaseDetail';
+import { addPageNumbersToPdf } from '@shared/business/utilities/pdfs/addPageNumbersToPdf';
+import { PDFDocument } from 'pdf-lib';
 
 type DocketRecordPdfCaseDetail = Omit<
   FormattedCaseDetail,
@@ -42,6 +44,9 @@ type DocketRecordPdfCaseDetail = Omit<
     }[];
   })[];
 };
+
+type DocketRecordEntry =
+  DocketRecordPdfCaseDetail['formattedDocketEntries'][number];
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -188,19 +193,21 @@ export const generateDocketRecordPdfInteractor = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const pdf = await applicationContext.getDocumentGenerators().docketRecord({
+  const docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+    docketNumber: caseEntity.docketNumber,
+    docketNumberSuffix: caseEntity.docketNumberSuffix,
+  });
+
+  const entriesToPrint = sortedDocketEntries.filter(d => d.isOnDocketRecord);
+
+  const pdf = await generateDocketRecordPdf({
     applicationContext,
-    data: {
-      caseCaptionExtension,
-      caseDetail,
-      caseTitle,
-      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-        docketNumber: caseEntity.docketNumber,
-        docketNumberSuffix: caseEntity.docketNumberSuffix,
-      }),
-      entries: sortedDocketEntries.filter(d => d.isOnDocketRecord),
-      includePartyDetail,
-    },
+    caseCaptionExtension,
+    caseDetail,
+    caseTitle,
+    docketNumberWithSuffix,
+    entries: entriesToPrint,
+    includePartyDetail,
   });
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
@@ -209,6 +216,108 @@ export const generateDocketRecordPdfInteractor = async (
     useTempBucket: true,
   });
 };
+
+// Maximum entries per chunk. Each chunk is rendered to HTML and converted to
+// PDF in a separate Puppeteer/Lambda invocation to stay within memory limits.
+const DOCKET_RECORD_CHUNK_SIZE = 500;
+
+// Entry count below which we use the original single-pass approach (no
+// chunking overhead for small cases).
+const CHUNKING_THRESHOLD = 1000;
+
+async function generateDocketRecordPdf({
+  applicationContext,
+  caseCaptionExtension,
+  caseDetail,
+  caseTitle,
+  docketNumberWithSuffix,
+  entries,
+  includePartyDetail,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseCaptionExtension: string;
+  caseDetail: DocketRecordPdfCaseDetail;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  entries: DocketRecordEntry[];
+  includePartyDetail: boolean;
+}): Promise<Uint8Array> {
+  // For small cases, use the original single-pass generation to avoid
+  // unnecessary overhead from chunking + merging + overlay.
+  if (entries.length < CHUNKING_THRESHOLD) {
+    return await applicationContext
+      .getDocumentGenerators()
+      .docketRecord({
+        applicationContext,
+        data: {
+          caseCaptionExtension,
+          caseDetail,
+          caseTitle,
+          docketNumberWithSuffix,
+          entries,
+          includePartyDetail,
+        },
+      });
+  }
+
+  // Large case: split entries into chunks and generate a PDF for each chunk,
+  // then merge them incrementally to avoid holding all chunk PDFs in memory.
+  const chunks: DocketRecordEntry[][] = [];
+  for (let i = 0; i < entries.length; i += DOCKET_RECORD_CHUNK_SIZE) {
+    chunks.push(entries.slice(i, i + DOCKET_RECORD_CHUNK_SIZE));
+  }
+
+  const commonData = {
+    caseCaptionExtension,
+    caseDetail,
+    caseTitle,
+    docketNumberWithSuffix,
+    includePartyDetail,
+  };
+
+  // Generate each chunk PDF sequentially and merge immediately to keep
+  // memory usage low. Each call goes through generatePdfFromHtmlInteractor
+  // which, in deployed environments, invokes the pdf_generator Lambda
+  // (separate memory space).
+  const mergedPdf = await PDFDocument.create();
+  for (let i = 0; i < chunks.length; i++) {
+    const isFirstChunk = i === 0;
+
+    const chunkPdfBytes = await applicationContext
+      .getDocumentGenerators()
+      .docketRecord({
+        applicationContext,
+        data: {
+          ...commonData,
+          displayHeaderFooter: false,
+          entries: chunks[i],
+          includePartyInfo: isFirstChunk,
+        },
+      });
+
+    // Immediately merge into the output document so chunk bytes can be GC'd.
+    const chunkDoc = await PDFDocument.load(chunkPdfBytes);
+    const copiedPages = await mergedPdf.copyPages(
+      chunkDoc,
+      chunkDoc.getPageIndices(),
+    );
+    for (const page of copiedPages) {
+      mergedPdf.addPage(page);
+    }
+  }
+
+  const mergedPdfBytes = await mergedPdf.save();
+
+  // Add accurate page numbers and footer across the full merged document.
+  const datePrinted = applicationContext.getUtilities().formatNow('MMDDYY');
+  const finalPdf = await addPageNumbersToPdf({
+    datePrinted,
+    docketNumber: docketNumberWithSuffix,
+    pdfData: mergedPdfBytes,
+  });
+
+  return finalPdf;
+}
 
 const processRelatedDocketEntries = (
   relatedDocketEntries: DocketEntryRelation[],

@@ -31,7 +31,7 @@ describe('unblockCaseFromTrialInteractor', () => {
     });
   });
   it('should set the blocked flag to false and remove the blockedReason', async () => {
-    const result = await unblockCaseFromTrialInteractor(
+    await unblockCaseFromTrialInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -39,10 +39,12 @@ describe('unblockCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result).toMatchObject({
-      blocked: false,
-      blockedReason: undefined,
-    });
+    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.blocked).toBe(false);
+    expect(casePassedToUpdate.blockedReason).toBeUndefined();
   });
 
   it('should throw an unauthorized error if the user has no access to unblock the case', async () => {

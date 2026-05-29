@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the alertSuccess and updated caseDetail object
+ * @returns {object} the alertSuccess object
  */
 export const addCaseToTrialSessionAction = async ({
   applicationContext,
@@ -23,7 +23,7 @@ export const addCaseToTrialSessionAction = async ({
   const sessionIsCalendared =
     selectedTrialSession && selectedTrialSession.isCalendared;
   try {
-    const caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes,
@@ -43,10 +43,6 @@ export const addCaseToTrialSessionAction = async ({
     }
     return path.success({
       alertSuccess,
-      calendarNotes,
-      caseDetail,
-      docketNumber,
-      trialSessionId,
     });
   } catch (e) {
     return path.error({
