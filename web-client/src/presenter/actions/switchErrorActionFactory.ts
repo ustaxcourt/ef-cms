@@ -7,6 +7,7 @@ const getErrorMessage = (error: unknown): string => {
     body?: unknown;
     message?: unknown;
     originalError?: {
+      body?: unknown;
       response?: {
         data?: unknown;
       };
@@ -21,6 +22,10 @@ const getErrorMessage = (error: unknown): string => {
 
   if (typeof err.body === 'string') {
     return err.body;
+  }
+
+  if (typeof err.originalError?.body === 'string') {
+    return err.originalError.body;
   }
 
   if (typeof err.message === 'string') {

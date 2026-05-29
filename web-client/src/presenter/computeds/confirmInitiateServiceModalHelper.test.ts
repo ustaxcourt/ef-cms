@@ -441,6 +441,20 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
+    it('should be false when form is undefined and no docket entry can be resolved', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        {
+          state: {
+            ...baseState,
+            form: undefined,
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
     it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
