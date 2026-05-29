@@ -10,6 +10,7 @@ import {
   isValidDateString,
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
+import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -89,7 +90,10 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
     ? formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR)
     : '';
 
-  let createOrderSelectedCases: any = [];
+  let createOrderSelectedCases: Pick<
+    ConsolidatedCasesWithCheckboxInfoType,
+    'checked' | 'docketNumber' | 'docketNumberWithSuffix'
+  >[] = [];
   let documentNumberText = `(doc. no. ${index})`;
 
   if (
