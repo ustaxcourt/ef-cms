@@ -13,7 +13,7 @@ export const updatePetitionerInformationLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         ...event.pathParameters,

@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral store used for getting state.form
- * @returns {object} alertSuccess, caseDetail, docketNumber, paperServiceParties, pdfUrl, tab
+ * @returns {object} alertSuccess, docketNumber, contactType, tab
  */
 export const addPetitionerToCaseAction = async ({
   applicationContext,
@@ -15,7 +15,7 @@ export const addPetitionerToCaseAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: contact.caseCaption,
@@ -28,7 +28,6 @@ export const addPetitionerToCaseAction = async ({
     alertSuccess: {
       message: `${contactTypeDisplay} ${contact.name} has been added to the case.`,
     },
-    caseDetail: updatedCase,
     contactType: contact.contactType,
     docketNumber,
     tab: 'caseInfo',

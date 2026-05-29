@@ -267,7 +267,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates the service indicator on the contacts when they are being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -282,6 +282,9 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const results =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
@@ -291,7 +294,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('reverts the service indicator on the contacts when they are no longer being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -305,6 +308,9 @@ describe('updateCounselOnCaseInteractor', () => {
       },
       mockDocketClerkUser,
     );
+
+    const results =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -320,7 +326,7 @@ describe('updateCounselOnCaseInteractor', () => {
       privatePractitioners: [mockPrivatePractitioners[1]],
     });
 
-    const results = await updateCounselOnCaseInteractor(
+    await updateCounselOnCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -331,6 +337,9 @@ describe('updateCounselOnCaseInteractor', () => {
       },
       mockDocketClerkUser,
     );
+
+    const results =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       MOCK_CASE.petitioners[0].serviceIndicator,
