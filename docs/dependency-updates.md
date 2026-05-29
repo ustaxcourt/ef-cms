@@ -345,17 +345,17 @@ If an update is available for DWT:
 
 ### @types/node
 **Installed Version: 24.12.4**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.1 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.4, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.4, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
-- [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
+- [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
-- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), Still no @types/node version to match 24.14.1, but did upgrade to latest available under major version 24.
+- [Dependencies 04 06 2026](https://github.com/ustaxcourt/ef-cms/pull/9882/files), There was still no `@types/node` release matching `24.14.1`, so we upgraded to the latest available version under major `24`.
 
-- As of April 20, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.2** remains the closest match.
+- As of April 20, 2026: Node.js updated to `v24.15.0`; `npm view @types/node@24.15.0` and any `24.13+` under major `24` are still unpublished, so **24.12.2** remains the closest match.
 
-- As of May 18, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.4** remains the closest match.
+- As of May 18, 2026: Node.js updated to `v24.15.0`; `npm view @types/node@24.15.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
-- As of May 26, 2026: Node.js updated to v24.16.0; `npm view @types/node@24.16.0` and any `24.13+` under major 24 are still unpublished, so **24.12.4** remains the closest match.
+- As of May 26, 2026: Node.js updated to `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
 ### TypeScript
 **Installed Version: 6.0.3**

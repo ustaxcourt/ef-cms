@@ -1,9 +1,5 @@
 <details><summary>Dependency Updates - Week of 2026-05-25</summary>
 
-## Terraform AWS Provider `6.46.0`
-
-Updated the `hashicorp/aws` Terraform provider from `6.45.0` to `6.46.0` across all Terraform configuration files.
-
 ## Local
 
 #### Upgrade NodeJS to `24.16.0`
