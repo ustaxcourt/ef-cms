@@ -245,25 +245,25 @@ export const GrantDenyMotion = connect(
                       <span className="usa-hint">(optional)</span>
                     </label>
 
-                    <div className="usa-radio">
+                    <div className="usa-checkbox">
                       <input
                         aria-label="this case is stricken from the trial session"
                         checked={!!form.strickenFromTrialSession}
-                        className="usa-radio__input"
+                        className="usa-checkbox__input"
                         data-testid="stricken-from-trial-session"
                         disabled={!isCalendared}
                         id="stricken-from-trial-session"
                         name="strickenFromTrialSession"
-                        type="radio"
-                        onChange={() =>
+                        type="checkbox"
+                        onChange={e =>
                           updateFormValueSequence({
-                            key: 'strickenFromTrialSession',
-                            value: true,
+                            key: e.target.name,
+                            value: e.target.checked,
                           })
                         }
                       />
                       <label
-                        className="usa-radio__label"
+                        className="usa-checkbox__label"
                         htmlFor="stricken-from-trial-session"
                         title={calendaredDisabledTitle}
                       >
@@ -334,36 +334,38 @@ export const GrantDenyMotion = connect(
 
                     <hr className="border-top-2px border-base-lighter tw:my-3" />
 
-                    <div className="usa-radio">
+                    <div className="usa-checkbox">
                       <input
                         aria-label="file status report"
                         checked={
                           form.dueDateMessage ===
                           grantDenyOptions.dueDateMessageOptions.statusReport
                         }
-                        className="usa-radio__input"
+                        className="usa-checkbox__input"
                         data-testid="due-date-message-status-report"
                         id="due-date-message-status-report"
                         name="dueDateMessage"
-                        type="radio"
-                        value={
-                          grantDenyOptions.dueDateMessageOptions.statusReport
-                        }
-                        onChange={e =>
+                        type="checkbox"
+                        onChange={() => {
+                          const optionValue =
+                            grantDenyOptions.dueDateMessageOptions.statusReport;
                           updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          })
-                        }
+                            key: 'dueDateMessage',
+                            value:
+                              form.dueDateMessage === optionValue
+                                ? null
+                                : optionValue,
+                          });
+                        }}
                       />
                       <label
-                        className="usa-radio__label"
+                        className="usa-checkbox__label"
                         htmlFor="due-date-message-status-report"
                       >
                         File Status Report
                       </label>
                     </div>
-                    <div className="usa-radio">
+                    <div className="usa-checkbox">
                       <input
                         aria-label="file status report or proposed stipulated decision"
                         checked={
@@ -371,24 +373,26 @@ export const GrantDenyMotion = connect(
                           grantDenyOptions.dueDateMessageOptions
                             .statusReportOrStipulatedDecision
                         }
-                        className="usa-radio__input"
+                        className="usa-checkbox__input"
                         data-testid="due-date-message-stip"
                         id="due-date-message-stip"
                         name="dueDateMessage"
-                        type="radio"
-                        value={
-                          grantDenyOptions.dueDateMessageOptions
-                            .statusReportOrStipulatedDecision
-                        }
-                        onChange={e =>
+                        type="checkbox"
+                        onChange={() => {
+                          const optionValue =
+                            grantDenyOptions.dueDateMessageOptions
+                              .statusReportOrStipulatedDecision;
                           updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          })
-                        }
+                            key: 'dueDateMessage',
+                            value:
+                              form.dueDateMessage === optionValue
+                                ? null
+                                : optionValue,
+                          });
+                        }}
                       />
                       <label
-                        className="usa-radio__label"
+                        className="usa-checkbox__label"
                         htmlFor="due-date-message-stip"
                       >
                         File Status Report/Proposed Stip Decision
