@@ -9,6 +9,7 @@ import {
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 /**
  * Spec (per COVERSHEETS.md): when a Docket Clerk adds a Court issued
@@ -38,7 +39,7 @@ import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/s
  */
 describe('Docket Clerk edits Court Issued no-coversheet doc to a coversheet doc', () => {
   it('leaves page count unchanged (pages 1 → 1) when editing Miscellaneous to Returned Mail — current behavior, see COVERSHEETS.md for spec target', () => {
-    const description = `misc draft ${Date.now()}`;
+    const description = `misc draft ${createISODateString()}`;
 
     loginAsPetitioner();
     externalUserCreatesElectronicCase().then(docketNumber => {

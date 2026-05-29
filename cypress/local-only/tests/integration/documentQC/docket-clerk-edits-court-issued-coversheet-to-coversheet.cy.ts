@@ -68,19 +68,15 @@ describe('Docket Clerk edits Court Issued coversheet doc to another coversheet d
         { docketNumber, eventCode: 'RM' },
       ).then(rows => {
         expect(rows.length).to.be.greaterThan(0);
-        const docketEntryId = rows[0].docketEntryId;
+        const { docketEntryId } = rows[0];
         cy.visit(
           `/case-detail/${docketNumber}/documents/${docketEntryId}/edit-court-issued`,
         );
 
         // Change the type from Returned Mail to U.S.C.A.
-        selectTypeaheadInput(
-          'court-issued-document-type-search',
-          'U.S.C.A',
-        );
+        selectTypeaheadInput('court-issued-document-type-search', 'U.S.C.A');
         // U.S.C.A title is `U.S.C.A [anything]` — supply the free-text.
-        cy.get('[data-testid="document-description-input"]')
-          .clear();
+        cy.get('[data-testid="document-description-input"]').clear();
         cy.get('[data-testid="document-description-input"]').type(
           'updated citation',
         );

@@ -69,7 +69,7 @@ describe('Docket Clerk edits Court Issued coversheet doc to a no-coversheet doc'
         { docketNumber, eventCode: 'RM' },
       ).then(rows => {
         expect(rows.length).to.be.greaterThan(0);
-        const docketEntryId = rows[0].docketEntryId;
+        const { docketEntryId } = rows[0];
         cy.visit(
           `/case-detail/${docketNumber}/documents/${docketEntryId}/edit-court-issued`,
         );
@@ -81,8 +81,7 @@ describe('Docket Clerk edits Court Issued coversheet doc to a no-coversheet doc'
           'court-issued-document-type-search',
           'Miscellaneous',
         );
-        cy.get('[data-testid="document-description-input"]')
-          .clear();
+        cy.get('[data-testid="document-description-input"]').clear();
         cy.get('[data-testid="document-description-input"]').type(
           'misc replacement',
         );

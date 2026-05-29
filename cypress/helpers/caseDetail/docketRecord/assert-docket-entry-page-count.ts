@@ -1,3 +1,5 @@
+import { calculateDate, createISODateString, getJsDateFromIso } from "@shared/business/utilities/DateHandler";
+
 export function assertDocketEntryPageCount({
   eventCode,
   expected,
@@ -24,36 +26,38 @@ export function assertNoticeOfDocketChangeDoesNotExist() {
 }
 
 // Polls the DB until a docket entry with the given event code exists on the
-// case (or fails after `maxAttempts`). The QC complete flow writes its
+// case (or fails after `timeout` ms). The QC complete flow writes its
 // resulting NODC / coversheet entries asynchronously after the loading
-// overlay clears, so a single cy.task call can race the writes.
+// overlay clears, so a single cy.task call can race the writes. Each cy.task
+// IPC roundtrip provides natural throttling between polls, so no fixed-time
+// cy.wait is needed between attempts.
 export function waitForDocketEntryByEventCode({
   docketNumber,
   eventCode,
-  maxAttempts = 30,
-  intervalMs = 1000,
+  timeout = 30000,
 }: {
   docketNumber: string;
   eventCode: string;
-  maxAttempts?: number;
-  intervalMs?: number;
+  timeout?: number;
 }): Cypress.Chainable<unknown> {
-  const poll = (attempt: number): Cypress.Chainable<unknown> =>
+  const deadline = calculateDate({howMuch: timeout, units: 'milliseconds'});
+  const poll = (): Cypress.Chainable<unknown> =>
     cy
       .task<{ docketEntryId: string }[]>(
         'getDocketEntryIdsByDocketNumberAndEventCode',
         { docketNumber, eventCode },
+        { log: false },
       )
-      .then(rows => {
-        if (rows.length > 0) return;
-        if (attempt >= maxAttempts) {
+      .then<unknown>(rows => {
+        if (rows.length > 0) return undefined;
+        if (getJsDateFromIso(createISODateString()) >= deadline) {
           throw new Error(
-            `No ${eventCode} docket entry appeared on ${docketNumber} after ${attempt} polls`,
+            `No ${eventCode} docket entry appeared on ${docketNumber} within ${timeout}ms`,
           );
         }
-        return cy.wait(intervalMs).then(() => poll(attempt + 1));
+        return poll();
       });
-  return poll(0);
+  return poll();
 }
 
 // Returns the current count of docket entries for an event code on a case
