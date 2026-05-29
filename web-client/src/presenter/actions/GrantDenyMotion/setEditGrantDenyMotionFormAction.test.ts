@@ -60,6 +60,26 @@ describe('setEditGrantDenyMotionFormAction', () => {
     );
   });
 
+  it('restores state.docketEntryId from migrated draftOrderState.previousDocument', async () => {
+    const motionDocketEntryId = 'motion-entry-99';
+
+    const result = await runAction(setEditGrantDenyMotionFormAction, {
+      modules: { presenter },
+      props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
+      state: {
+        caseDetail,
+        documentToEdit: {
+          draftOrderState: {
+            ...draftOrderState,
+            previousDocument: { docketEntryId: motionDocketEntryId },
+          },
+        },
+      },
+    });
+
+    expect(result.state.docketEntryId).toEqual(motionDocketEntryId);
+  });
+
   it('falls back to empty additionalOrderText when draftOrderState lacks it', async () => {
     const result = await runAction(setEditGrantDenyMotionFormAction, {
       modules: { presenter },
