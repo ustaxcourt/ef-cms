@@ -1,0 +1,72 @@
+name: Upload Release Coverage Summary
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number whose release coverage artifact should be created
+        required: true
+        type: string
+      suite:
+        description: Coverage suite name
+        required: true
+        type: choice
+        options:
+          - api
+          - client
+          - scripts
+          - shared
+      branches:
+        description: Branch coverage percentage
+        required: true
+        type: string
+      functions:
+        description: Function coverage percentage
+        required: true
+        type: string
+      lines:
+        description: Line coverage percentage
+        required: true
+        type: string
+      statements:
+        description: Statement coverage percentage
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  upload-release-coverage-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write standardized release coverage summary
+        env:
+          BRANCHES: ${{ inputs.branches }}
+          FUNCTIONS: ${{ inputs.functions }}
+          LINES: ${{ inputs.lines }}
+          STATEMENTS: ${{ inputs.statements }}
+          SUITE: ${{ inputs.suite }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          summary = {
+              'branches': float(os.environ['BRANCHES']),
+              'functions': float(os.environ['FUNCTIONS']),
+              'lines': float(os.environ['LINES']),
+              'statements': float(os.environ['STATEMENTS']),
+              'suite': os.environ['SUITE'],
+          }
+
+          with open('coverage-summary.json', 'w', encoding='utf-8') as summary_file:
+              json.dump(summary, summary_file, indent=2)
+              summary_file.write('\n')
+          PY
+      - name: Upload release coverage summary artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-summary-${{ inputs.suite }}-pr-${{ inputs.pr_number }}
+          path: ./coverage-summary.json
