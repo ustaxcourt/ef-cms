@@ -16,6 +16,37 @@
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
+  "jest.runMode": {
+    "runAllTestsOnStartup": false,
+    "type": "on-demand"
+  },
+  "jest.virtualFolders": [
+    {
+      "name": "Client-Unit-Tests",
+      "jestCommandLine": "node ./node_modules/jest/bin/jest.js --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'",
+      "runMode": "on-demand"
+    },
+    {
+      "name": "Client-Integration-Tests",
+      "jestCommandLine": "NODE_ENV=integration NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER node ./node_modules/jest/bin/jest.js --runInBand --config web-client/jest-integration.config.ts --testMatch '**/web-client/integration*/**/?(*.)+(spec|test).[jt]s?(x)'",
+      "runMode": "on-demand"
+    },
+    {
+      "name": "API-Unit-Tests",
+      "jestCommandLine": "npm run build:assets && node ./node_modules/jest/bin/jest.js --config web-api/jest-unit.config.ts",
+      "runMode": "on-demand"
+    },
+    {
+      "name": "Shared-Unit-Tests",
+      "jestCommandLine": "npm run build:assets && node ./node_modules/jest/bin/jest.js --coverage=false --config shared/jest-shared.config.ts",
+      "runMode": "on-demand"
+    },
+    {
+      "name": "Script-Unit-Tests",
+      "jestCommandLine": "node ./node_modules/jest/bin/jest.js --config scripts/jest-scripts.config.ts",
+      "runMode": "on-demand"
+    }
+  ],
   "prettier.requireConfig": true,
   "js/ts.tsdk.path": "./node_modules/typescript/lib"
 }
