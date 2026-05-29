@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 import { MOCK_COMPLEX_CASE } from '@shared/test/mockComplexCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { getCaseLambda } from './getCaseLambda';
 import {
@@ -175,6 +176,63 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       status: 'Calendared',
       trialDate: '2020-03-01T00:00:00.000Z',
       trialLocation: 'Washington, District of Columbia',
+    });
+  });
+
+  describe('excludeDocketEntries query parameter', () => {
+    it('returns the case with docket entries when excludeDocketEntries is not specified (preserves existing v2 behavior)', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...mockCaseRecord,
+        docketEntries: MOCK_DOCUMENTS,
+      } as any);
+
+      const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
+
+      expect(response.statusCode).toBe('200');
+      const body = JSON.parse(response.body);
+      expect(body.docketEntries.length).toBeGreaterThan(0);
+      expect(body.docketEntries[0]).toHaveProperty('docketEntryId');
+    });
+
+    it('returns the case with an empty docketEntries array when excludeDocketEntries=true', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...mockCaseRecord,
+        docketEntries: MOCK_DOCUMENTS,
+      } as any);
+
+      const response = await getCaseLambda(
+        {
+          ...REQUEST_EVENT,
+          queryStringParameters: { excludeDocketEntries: 'true' },
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(response.statusCode).toBe('200');
+      const body = JSON.parse(response.body);
+      expect(body.docketEntries).toEqual([]);
+      // The rest of the v2 case shape should still be present
+      expect(body).toHaveProperty('caseCaption', expect.any(String));
+      expect(body).toHaveProperty('docketNumber');
+    });
+
+    it('returns docket entries when excludeDocketEntries is set to anything other than the literal string "true"', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...mockCaseRecord,
+        docketEntries: MOCK_DOCUMENTS,
+      } as any);
+
+      const response = await getCaseLambda(
+        {
+          ...REQUEST_EVENT,
+          queryStringParameters: { excludeDocketEntries: 'false' },
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(response.statusCode).toBe('200');
+      const body = JSON.parse(response.body);
+      expect(body.docketEntries.length).toBeGreaterThan(0);
     });
   });
 });

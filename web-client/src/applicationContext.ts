@@ -159,6 +159,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from '@web-client/proxies
 import { getCaseDeadlinesForCaseInteractor } from '@web-client/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
+import { getCaseDocketEntriesInteractor } from '@web-client/proxies/getCaseDocketEntriesProxy';
 import { getCaseExistsInteractor } from '@web-client/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '@web-client/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
@@ -437,6 +438,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getConsolidatedCaseDeadlinesInteractor,
+  getCaseDocketEntriesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,

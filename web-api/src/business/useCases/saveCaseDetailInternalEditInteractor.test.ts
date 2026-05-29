@@ -117,7 +117,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   it('should update contactSecondary', async () => {
     const mockAddress = '1234 Something Lane';
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -133,6 +133,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
+
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
 
     expect(result.petitioners[1].address1).toEqual(mockAddress);
   });
@@ -231,7 +234,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     caseToUpdate.orderForRatification = true;
     caseToUpdate.orderToShowCause = true;
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -243,6 +246,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+
     expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
     expect(result.orderForAmendedPetition).toBeTruthy();
     expect(result.orderForAmendedPetitionAndFilingFee).toBeTruthy();
@@ -253,7 +259,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   });
 
   it('should not change contact primary contactId when saving case', async () => {
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -268,6 +274,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+
     expect(result.petitioners[0].contactId).toEqual(
       mockCase.petitioners[0].contactId,
     );
@@ -276,7 +285,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   it('should remove contactSecondary if changing from a party type with primary and secondary to a party type with only primary', async () => {
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithContactSecondary);
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -288,6 +297,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
+
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
 
     expect(result.petitioners.length).toEqual(1);
   });
@@ -315,7 +327,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockCaseWithContactSecondaryRepresented,
     );
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -327,6 +339,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
+
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
 
     expect(result.privatePractitioners).toBeDefined();
     expect(result.privatePractitioners![0].representing).toEqual([
@@ -345,7 +360,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     };
     getCaseByDocketNumber.mockResolvedValue({ ...currentCaseDetail });
 
-    const result = await saveCaseDetailInternalEditInteractor(
+    await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
@@ -357,6 +372,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
+
+    const result =
+      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
