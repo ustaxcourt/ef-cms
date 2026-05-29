@@ -2,33 +2,36 @@ import { Case } from './Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('toRawObject', () => {
-  let doesHavePendingItemsSpy: jest.SpyInstance;
-
-  beforeEach(() => {
-    doesHavePendingItemsSpy = jest.spyOn(
-      Case.prototype,
-      'doesHavePendingItems',
+  it('passes through the stored hasPendingItems value', () => {
+    const myCase = new Case(
+      { hasPendingItems: true },
+      { authorizedUser: mockDocketClerkUser },
     );
+
+    const result = myCase.toRawObject();
+
+    expect(result.hasPendingItems).toEqual(true);
   });
 
-  afterEach(() => {
-    doesHavePendingItemsSpy.mockRestore();
-  });
-
-  it('calls own function to update values after decorated toRawObject', () => {
+  it('passes through hasPendingItems as false when not set', () => {
     const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
 
     const result = myCase.toRawObject();
 
-    expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
-    expect(result.hasPendingItems).toBeFalsy();
+    expect(result.hasPendingItems).toEqual(false);
   });
 
-  it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
-    const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
-    const result = myCase.toRawObject({ processPendingItems: false });
+  it('does not recompute hasPendingItems from docket entries', () => {
+    const doesHavePendingItemsSpy = jest.spyOn(
+      Case.prototype,
+      'doesHavePendingItems',
+    );
 
-    expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
-    expect(result.hasPendingItems).toBeFalsy();
+    const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
+    myCase.toRawObject();
+
+    expect(doesHavePendingItemsSpy).not.toHaveBeenCalled();
+
+    doesHavePendingItemsSpy.mockRestore();
   });
 });

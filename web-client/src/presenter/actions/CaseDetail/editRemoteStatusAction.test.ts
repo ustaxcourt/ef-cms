@@ -53,7 +53,6 @@ describe('editRemoteStatusAction', () => {
       alertSuccess: {
         message: 'Successfully updated motion to proceed remotely date.',
       },
-      caseDetail: mockUpdatedCase,
     });
   });
 
@@ -101,7 +100,6 @@ describe('editRemoteStatusAction', () => {
       alertSuccess: {
         message: 'Successfully updated motion to proceed remotely date.',
       },
-      caseDetail: mockUpdatedCase,
     });
   });
 
@@ -145,7 +143,11 @@ describe('editRemoteStatusAction', () => {
       docketNumber: mockDocketNumber,
     });
 
-    expect(result.output.caseDetail).toEqual(mockUpdatedCase);
+    expect(result.output).toEqual({
+      alertSuccess: {
+        message: 'Successfully updated motion to proceed remotely date.',
+      },
+    });
   });
 
   it('should only send remoteTrialGranted fields to avoid payload size issues', async () => {

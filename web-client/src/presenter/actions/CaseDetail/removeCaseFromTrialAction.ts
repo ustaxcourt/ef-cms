@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the alertSuccess and updated caseDetail object
+ * @returns {object} the alertSuccess object
  */
 export const removeCaseFromTrialAction = async ({
   applicationContext,
@@ -25,7 +25,7 @@ export const removeCaseFromTrialAction = async ({
 
   const trialSessionId = modalTrialSessionId || stateTrialSessionId;
   try {
-    const caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge,
@@ -39,7 +39,6 @@ export const removeCaseFromTrialAction = async ({
       alertSuccess: {
         message: 'Case removed from trial.',
       },
-      caseDetail,
     });
   } catch (e) {
     return path.error({
