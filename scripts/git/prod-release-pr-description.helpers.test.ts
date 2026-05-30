@@ -193,6 +193,21 @@ describe('prod-release-pr-description', () => {
       ).toBe('bugfix');
     });
 
+    it('classifies issue-backed pull requests as bugfixes when the issue uses the bug template heading', () => {
+      expect(
+        resolveType({
+          issue: {
+            assignees: [],
+            body: '**Describe the Bug**\n\nThe thing broke.',
+            labels: [],
+            number: 1235,
+          },
+          pullRequest: issueLinkedPullRequest,
+          ticketTask: '#1235',
+        }),
+      ).toBe('bugfix');
+    });
+
     it('classifies other issue-backed pull requests as stories', () => {
       expect(
         resolveType({

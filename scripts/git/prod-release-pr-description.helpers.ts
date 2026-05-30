@@ -43,7 +43,7 @@ const DEVEX_PATTERN = /^devex\b/i;
 const ISSUE_NUMBER_PATTERN = /^(\d+)\b/;
 const MERGE_COMMIT_PATTERN = /^Merge\b/;
 const OPEX_PATTERN = /^opex\b/i;
-const BUG_DESCRIPTION_PREFIX = 'describe the bug';
+const BUG_DESCRIPTION_HEADING_PATTERN = /^[\s*_#>~-]*describe the bug\b/i;
 const BUG_LABEL = 'bug';
 const BUGFIX_LABEL = 'bugfix';
 const BASH_CODE_BLOCK_PATTERN = /```bash\s*\n([\s\S]*?)```/gi;
@@ -134,10 +134,9 @@ export const resolveType = ({
   const prHasBugfixLabel = pullRequest.labels.some(
     label => normalizeLabelName(label) === BUGFIX_LABEL,
   );
-  const issueStartsWithBugDescription = issue.body
-    .trimStart()
-    .toLowerCase()
-    .startsWith(BUG_DESCRIPTION_PREFIX);
+  const issueStartsWithBugDescription = BUG_DESCRIPTION_HEADING_PATTERN.test(
+    issue.body.trimStart(),
+  );
 
   if (issueHasBugLabel || issueStartsWithBugDescription || prHasBugfixLabel) {
     return 'bugfix';

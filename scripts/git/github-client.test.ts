@@ -95,7 +95,7 @@ describe('github-client', () => {
         '--state',
         'merged',
         '--limit',
-        '1',
+        '100',
         '--json',
         'mergedAt,number',
       ],
@@ -148,6 +148,23 @@ describe('github-client', () => {
     await expect(client.getLatestProdPullRequest()).rejects.toThrow(
       'Unable to determine the latest merged prod pull request timestamp.',
     );
+  });
+
+  it('selects the latest prod pull request by merge date when gh returns unsorted results', async () => {
+    const client = new GhCliGitHubClient({
+      commandRunner: jest.fn().mockResolvedValue(
+        JSON.stringify([
+          { mergedAt: '2026-05-10T03:35:07Z', number: 5678 },
+          { mergedAt: '2026-05-20T03:35:07Z', number: 6789 },
+          { mergedAt: '2026-05-15T03:35:07Z', number: 6123 },
+        ]),
+      ),
+    });
+
+    await expect(client.getLatestProdPullRequest()).resolves.toEqual({
+      mergedAt: '2026-05-20T03:35:07Z',
+      number: 6789,
+    });
   });
 
   it('uses the default command runner when one is not provided', async () => {

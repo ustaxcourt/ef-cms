@@ -146,16 +146,21 @@ export class GhCliGitHubClient implements GitHubClient {
         '--state',
         'merged',
         '--limit',
-        '1',
+        '100',
         '--json',
         'mergedAt,number',
       ],
       commandRunner: this.commandRunner,
     });
 
-    const latestProdPullRequest = pullRequests[0];
+    const latestProdPullRequest = pullRequests
+      .filter(
+        (pullRequest): pullRequest is LatestProdPullRequest =>
+          Boolean(pullRequest.mergedAt) && Boolean(pullRequest.number),
+      )
+      .sort((a, b) => b.mergedAt.localeCompare(a.mergedAt))[0];
 
-    if (!latestProdPullRequest?.mergedAt || !latestProdPullRequest.number) {
+    if (!latestProdPullRequest) {
       throw new Error(
         'Unable to determine the latest merged prod pull request timestamp.',
       );
