@@ -38,7 +38,7 @@ type GroupedReleaseEntry = {
   type: string;
 };
 
-const DEPENDENCIES_PATTERN = /\b(?:dependencies|deps)\b/i;
+const DEPENDENCIES_PATTERN = /\b(?:dependencies|dependency|deps|dep)\b/i;
 const DEVEX_PATTERN = /^devex\b/i;
 const ISSUE_NUMBER_PATTERN = /^(\d+)\b/;
 const MERGE_COMMIT_PATTERN = /^Merge\b/;
