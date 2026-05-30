@@ -74,6 +74,7 @@ jobs:
             --reporter lcov \
             --reporter text \
             --reporter clover \
+            --report-dir "${{ inputs.coverage_source_dir }}" \
             -t "${{ inputs.coverage_source_dir }}"
       - name: Emit composite coverage summary
         run: |
