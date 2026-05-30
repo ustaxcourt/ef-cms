@@ -7,7 +7,7 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
+} from '../../../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createCaseInteractor } from '@web-api/business/useCases/createCaseInteractor';
 import { serveCaseToIrsInteractor } from '@web-api/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';

@@ -7,7 +7,7 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
+} from '../../../helpers/parseArgsAndEnvVars';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import * as path from 'path';
@@ -89,14 +89,10 @@ async function loginAndGetToken(loginEmail: string = email): Promise<string> {
   return idToken;
 }
 
-async function getCaseDetails(
-  token: string,
-): Promise<{
+async function getCaseDetails(token: string): Promise<{
   petitionerContactId: string;
   petitionerName: string;
-  consolidatedCasesToFileAcross:
-    | { docketNumber: string }[]
-    | undefined;
+  consolidatedCasesToFileAcross: { docketNumber: string }[] | undefined;
 }> {
   const response = await axios.get(`${apiUrl}/cases/${docketNumber}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -143,12 +139,9 @@ async function pollForAsyncResult(
   const maxAttempts = 120; // Timeout is maxAttempts * pollInterval
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     await sleep(pollInterval);
-    const response = await axios.get(
-      `${apiUrl}/results/fetch/${asyncSyncId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    const response = await axios.get(`${apiUrl}/results/fetch/${asyncSyncId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (response.data) {
       const result =
         typeof response.data.response === 'string'
@@ -162,7 +155,9 @@ async function pollForAsyncResult(
       return;
     }
     if (verbose) {
-      console.log(`    Polling for result... (attempt ${attempt}/${maxAttempts})`);
+      console.log(
+        `    Polling for result... (attempt ${attempt}/${maxAttempts})`,
+      );
     }
   }
   throw new Error(
@@ -174,12 +169,9 @@ async function getUploadPolicy(
   token: string,
   key: string,
 ): Promise<{ url: string; fields: Record<string, string> }> {
-  const response = await axios.get(
-    `${apiUrl}/documents/${key}/upload-policy`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
+  const response = await axios.get(`${apiUrl}/documents/${key}/upload-policy`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return response.data;
 }
 
@@ -216,9 +208,7 @@ async function fileExhibitAndWait(
   token: string,
   key: string,
   petitionerContactId: string,
-  consolidatedCasesToFileAcross:
-    | { docketNumber: string }[]
-    | undefined,
+  consolidatedCasesToFileAcross: { docketNumber: string }[] | undefined,
 ): Promise<void> {
   const asyncSyncId = uuidv4();
   const documentMetadata: Record<string, unknown> = {
@@ -234,8 +224,12 @@ async function fileExhibitAndWait(
     scenario: 'Standard',
   };
 
-  if (consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0) {
-    documentMetadata.consolidatedCasesToFileAcross = consolidatedCasesToFileAcross;
+  if (
+    consolidatedCasesToFileAcross &&
+    consolidatedCasesToFileAcross.length > 0
+  ) {
+    documentMetadata.consolidatedCasesToFileAcross =
+      consolidatedCasesToFileAcross;
   }
 
   // Send the async request with an asyncSyncId header so the Lambda
@@ -315,8 +309,11 @@ async function qcCompleteExhibitAndWait(
     // Use the docket clerk token for case details — petitioner-role GETs go
     // through PublicCase and drop consolidatedCases unless the user is an
     // IRS practitioner, which would hide the consolidated group from us.
-    const { petitionerContactId, petitionerName, consolidatedCasesToFileAcross } =
-      await getCaseDetails(qcToken);
+    const {
+      petitionerContactId,
+      petitionerName,
+      consolidatedCasesToFileAcross,
+    } = await getCaseDetails(qcToken);
     const filedBy = `Petr. ${petitionerName}`;
     console.log(`  Petitioner contact ID: ${petitionerContactId}`);
     if (consolidatedCasesToFileAcross) {
@@ -327,7 +324,9 @@ async function qcCompleteExhibitAndWait(
         `  Consolidated group: filing across ${consolidatedCasesToFileAcross.length} cases: [${dns}]`,
       );
     } else {
-      console.log('  No consolidated group detected — filing on this case only.');
+      console.log(
+        '  No consolidated group detected — filing on this case only.',
+      );
     }
 
     // Step 3: Load sample PDF
@@ -387,12 +386,11 @@ async function qcCompleteExhibitAndWait(
         // creates a separate work item per case, all sharing the same
         // docketEntryId).
         const docketNumbersToQc =
-          consolidatedCasesToFileAcross && consolidatedCasesToFileAcross.length > 0
+          consolidatedCasesToFileAcross &&
+          consolidatedCasesToFileAcross.length > 0
             ? consolidatedCasesToFileAcross.map(c => c.docketNumber)
             : [docketNumber];
-        console.log(
-          `    QC completing on: [${docketNumbersToQc.join(', ')}]`,
-        );
+        console.log(`    QC completing on: [${docketNumbersToQc.join(', ')}]`);
         for (const dn of docketNumbersToQc) {
           console.log(`      QC -> ${dn}`);
           await qcCompleteExhibitAndWait(
@@ -434,8 +432,7 @@ async function qcCompleteExhibitAndWait(
       process.exit(1);
     }
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('\nFatal Error:', errorMessage);
     if (verbose && axios.isAxiosError(error)) {
       console.error('Response:', error.response?.data);

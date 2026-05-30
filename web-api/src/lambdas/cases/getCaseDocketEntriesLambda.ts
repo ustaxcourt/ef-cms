@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseDocketEntriesInteractor } from '@shared/business/useCases/getCaseDocketEntriesInteractor';
+import { getCaseDocketEntriesInteractor } from '@web-api/business/useCases/getCaseDocketEntriesInteractor';
 
 /**
  * used for fetching paginated docket entries for a case

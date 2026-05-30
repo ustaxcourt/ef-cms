@@ -14,12 +14,15 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-} from './helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
-import { Pool } from 'pg';
+import { Pool, type QueryResult } from 'pg';
 import * as fs from 'fs';
 import * as path from 'path';
+
+type DbRow = Record<string, unknown>;
+type QueryResultSet = { rows: DbRow[]; columns: string[] };
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -131,17 +134,19 @@ async function queryAll(
   pool: Pool,
   table: string,
   whereClause: string,
-  params: any[],
-): Promise<{ rows: any[]; columns: string[] }> {
+  params: unknown[],
+): Promise<QueryResultSet> {
   const result = await pool.query(
     `SELECT * FROM "${table}" WHERE ${whereClause}`,
     params,
   );
   const columns = result.fields.map(f => f.name);
-  return { rows: result.rows, columns };
+  return { rows: result.rows as DbRow[], columns };
 }
 
-function collectUserIds(...rowSets: { rows: any[]; fields: string[] }[]): string[] {
+function collectUserIds(
+  ...rowSets: { rows: DbRow[]; fields: string[] }[]
+): string[] {
   const userIds = new Set<string>();
   for (const { rows, fields } of rowSets) {
     for (const row of rows) {
@@ -156,10 +161,12 @@ function collectUserIds(...rowSets: { rows: any[]; fields: string[] }[]): string
 }
 
 async function batchInsert(
-  queryable: { query: (sql: string, params: any[]) => Promise<any> },
+  queryable: {
+    query: (sql: string, params: unknown[]) => Promise<QueryResult>;
+  },
   table: string,
   columns: string[],
-  rows: any[],
+  rows: DbRow[],
   onConflict: string = '',
   batchSize: number = 100,
 ): Promise<number> {
@@ -169,14 +176,19 @@ async function batchInsert(
   for (let i = 0; i < rows.length; i += batchSize) {
     const batch = rows.slice(i, i + batchSize);
     const valuePlaceholders: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     for (const row of batch) {
       const rowPlaceholders: string[] = [];
       for (const col of columns) {
         const value = row[col];
-        if (value !== undefined && typeof value === 'object' && value !== null && !(value instanceof Date)) {
+        if (
+          value !== undefined &&
+          typeof value === 'object' &&
+          value !== null &&
+          !(value instanceof Date)
+        ) {
           params.push(JSON.stringify(value));
         } else {
           params.push(value === undefined ? null : value);
@@ -244,7 +256,12 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
 
     // Step 2: Pull case record
     console.log('\nStep 2: Pulling case data...');
-    const caseData = await queryAll(sourcePool, 'dw_case', '"docket_number" = $1', [docketNumber]);
+    const caseData = await queryAll(
+      sourcePool,
+      'dw_case',
+      '"docket_number" = $1',
+      [docketNumber],
+    );
     if (caseData.rows.length === 0) {
       throw new Error(`Case ${docketNumber} not found in source database.`);
     }
@@ -262,56 +279,102 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
       correspondence,
       relatedDocketEntries,
     ] = await Promise.all([
-      queryAll(sourcePool, 'dw_docket_entry', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_user_on_case', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_user_on_case_pending', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_work_item', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_message', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_case_correspondence', '"docket_number" = $1', [docketNumber]),
-      queryAll(sourcePool, 'dw_docket_entry_related_docket_entry', '"docket_number" = $1', [docketNumber]),
+      queryAll(sourcePool, 'dw_docket_entry', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(sourcePool, 'dw_user_on_case', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(sourcePool, 'dw_user_on_case_pending', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(sourcePool, 'dw_work_item', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(sourcePool, 'dw_message', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(sourcePool, 'dw_case_correspondence', '"docket_number" = $1', [
+        docketNumber,
+      ]),
+      queryAll(
+        sourcePool,
+        'dw_docket_entry_related_docket_entry',
+        '"docket_number" = $1',
+        [docketNumber],
+      ),
     ]);
 
     console.log(`  Docket Entries:             ${docketEntries.rows.length}`);
     console.log(`  Users on Case:              ${userOnCase.rows.length}`);
-    console.log(`  Users on Case (Pending):    ${userOnCasePending.rows.length}`);
+    console.log(
+      `  Users on Case (Pending):    ${userOnCasePending.rows.length}`,
+    );
     console.log(`  Work Items:                 ${workItems.rows.length}`);
     console.log(`  Messages:                   ${messages.rows.length}`);
     console.log(`  Correspondence:             ${correspondence.rows.length}`);
-    console.log(`  Related Docket Entries:     ${relatedDocketEntries.rows.length}`);
+    console.log(
+      `  Related Docket Entries:     ${relatedDocketEntries.rows.length}`,
+    );
 
     // Pull trial session if the case references one
-    let trialSession = { rows: [] as any[], columns: [] as string[] };
-    let trialSessionCases = { rows: [] as any[], columns: [] as string[] };
+    let trialSession: QueryResultSet = { rows: [], columns: [] };
+    let trialSessionCases: QueryResultSet = { rows: [], columns: [] };
     const trialSessionId = caseData.rows[0].trial_session_id;
     if (trialSessionId) {
       console.log(`  Pulling trial session:      ${trialSessionId}`);
       [trialSession, trialSessionCases] = await Promise.all([
-        queryAll(sourcePool, 'dw_trial_session', '"trial_session_id" = $1', [trialSessionId]),
-        queryAll(sourcePool, 'dw_trial_session_case', '"trial_session_id" = $1', [trialSessionId]),
+        queryAll(sourcePool, 'dw_trial_session', '"trial_session_id" = $1', [
+          trialSessionId,
+        ]),
+        queryAll(
+          sourcePool,
+          'dw_trial_session_case',
+          '"trial_session_id" = $1',
+          [trialSessionId],
+        ),
       ]);
       console.log(`  Trial Session:              ${trialSession.rows.length}`);
-      console.log(`  Trial Session Cases:        ${trialSessionCases.rows.length}`);
+      console.log(
+        `  Trial Session Cases:        ${trialSessionCases.rows.length}`,
+      );
     }
 
     // Step 4: Collect and pull referenced users
     console.log('\nStep 4: Pulling referenced users...');
     const userIds = collectUserIds(
       { rows: caseData.rows, fields: ['associated_judge_id'] },
-      { rows: docketEntries.rows, fields: ['user_id', 'signed_by_user_id', 'stricken_by_user_id'] },
+      {
+        rows: docketEntries.rows,
+        fields: ['user_id', 'signed_by_user_id', 'stricken_by_user_id'],
+      },
       { rows: userOnCase.rows, fields: ['user_id'] },
       { rows: userOnCasePending.rows, fields: ['user_id'] },
-      { rows: workItems.rows, fields: ['assignee_id', 'sent_by_user_id', 'completed_by_user_id'] },
+      {
+        rows: workItems.rows,
+        fields: ['assignee_id', 'sent_by_user_id', 'completed_by_user_id'],
+      },
       { rows: messages.rows, fields: ['from_user_id', 'to_user_id'] },
       { rows: correspondence.rows, fields: ['user_id'] },
-      { rows: trialSession.rows, fields: ['judge_user_id', 'trial_clerk_user_id'] },
+      {
+        rows: trialSession.rows,
+        fields: ['judge_user_id', 'trial_clerk_user_id'],
+      },
     );
 
-    let users = { rows: [] as any[], columns: [] as string[] };
+    let users: QueryResultSet = { rows: [], columns: [] };
     if (userIds.length > 0) {
       const placeholders = userIds.map((_, i) => `$${i + 1}`).join(', ');
-      users = await queryAll(sourcePool, 'dw_user', `"user_id" IN (${placeholders})`, userIds);
+      users = await queryAll(
+        sourcePool,
+        'dw_user',
+        `"user_id" IN (${placeholders})`,
+        userIds,
+      );
     }
-    console.log(`  Users:                      ${users.rows.length} (from ${userIds.length} unique IDs)`);
+    console.log(
+      `  Users:                      ${users.rows.length} (from ${userIds.length} unique IDs)`,
+    );
 
     // Step 5: Insert into local database
     console.log('\nStep 5: Inserting into local database...');
@@ -337,7 +400,10 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
       ];
 
       for (const table of tablesToDelete) {
-        await client.query(`DELETE FROM "${table}" WHERE "docket_number" = $1`, [docketNumber]);
+        await client.query(
+          `DELETE FROM "${table}" WHERE "docket_number" = $1`,
+          [docketNumber],
+        );
       }
 
       // Insert in dependency order
@@ -350,7 +416,9 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
           users.rows,
           'ON CONFLICT ("user_id") DO NOTHING',
         );
-        console.log(`  Inserted users:                      ${count} (skipped existing)`);
+        console.log(
+          `  Inserted users:                      ${count} (skipped existing)`,
+        );
       }
 
       // Trial session (before case, since case FK references it)
@@ -362,7 +430,9 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
           trialSession.rows,
           'ON CONFLICT ("trial_session_id") DO NOTHING',
         );
-        console.log(`  Inserted trial session:              ${trialSession.rows.length}`);
+        console.log(
+          `  Inserted trial session:              ${trialSession.rows.length}`,
+        );
       }
 
       // Case
@@ -378,7 +448,9 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
           trialSessionCases.rows,
           'ON CONFLICT ("trial_session_id", "docket_number") DO NOTHING',
         );
-        console.log(`  Inserted trial session cases:        ${trialSessionCases.rows.length}`);
+        console.log(
+          `  Inserted trial session cases:        ${trialSessionCases.rows.length}`,
+        );
       }
 
       // Docket entries
@@ -473,7 +545,9 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
       const seedDocId = findSeedDocumentId();
       if (!seedDocId) {
         console.log('  WARNING: No seed S3 fixture found. Skipping S3 setup.');
-        console.log('  Documents will not be viewable. Run with --skip-s3 to suppress this warning.');
+        console.log(
+          '  Documents will not be viewable. Run with --skip-s3 to suppress this warning.',
+        );
       } else {
         const docStorageIds = docketEntries.rows
           .filter(r => r.is_file_attached && r.document_storage_id)
@@ -499,11 +573,12 @@ function copyS3Fixture(seedDocId: string, targetDocId: string): void {
 
     // Summary
     console.log('\n--- COMPLETE ---');
-    console.log(`  Case ${docketNumber} has been pulled from ${env} into your local database.`);
+    console.log(
+      `  Case ${docketNumber} has been pulled from ${env} into your local database.`,
+    );
     console.log('');
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('\nFatal Error:', errorMessage);
     if (verbose) {
       console.error(error);
