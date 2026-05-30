@@ -34,6 +34,7 @@ jobs:
             package.json
             scripts/github-actions/suite-coverage.helpers.ts
             scripts/github-actions/update-prod-release-coverage.ts
+            scripts/github-actions/update-prod-release-coverage.helpers.ts
             scripts/helpers/parseArgsAndEnvVars.ts
             shared/admin-tools/aws/ssmHelper.ts
             shared/admin-tools/util.ts

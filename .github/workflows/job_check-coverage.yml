@@ -40,6 +40,19 @@ jobs:
     steps:
       - name: Checkout Current Branch
         uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Restore Node Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: NPM Install Trusted Dependencies
+        if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
+        run: npm ci --ignore-scripts
       - name: Download Coverage Artifacts
         uses: actions/download-artifact@v7
         with:
