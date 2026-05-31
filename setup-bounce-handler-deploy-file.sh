@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Sets up the s3 deploy bucket with blue and green files for the bounce handler
 

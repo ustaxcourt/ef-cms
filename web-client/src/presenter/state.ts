@@ -5,7 +5,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
@@ -1106,13 +1106,13 @@ export type ServiceIndicatorType =
 
 export type PractitionerDetail = {
   admissionsDate: string;
-  admissionStatus: string;
+  admissionsStatus: string;
   barNumber: string;
   name: string;
   practiceType: PracticeType;
   serviceIndicator?: ServiceIndicatorType;
   userId: string;
-  birthYear?: string;
+  birthYear?: number;
   originalBarState?: string;
   practitionerType?: string;
   middleName?: string;

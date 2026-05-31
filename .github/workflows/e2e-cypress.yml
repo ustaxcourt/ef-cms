@@ -2,6 +2,7 @@ name: E2E Cypress
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -13,83 +14,31 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   e2e_cypress:
-    runs-on: ubuntu-latest
-
+    if: ${{ !github.event.pull_request.draft }}
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [9]
-        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    env:
-      CI: true
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.5.0
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Setup Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-      - name: Run E2E Cypress
-        run: |
-          mkdir -p /tmp/cypress/
-          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
-          ./wait-until-services.sh
-          sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
-          npm run cypress:integration:file $TESTFILES
-      - name: Store Cypress Videos
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: cypress-videos-${{ matrix.ci_node_index }}
-          path: ${{ github.workspace }}/cypress/local-only/videos
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        ci_node_total: [16]
+        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    uses: ./.github/workflows/template_app-parallel.yml
+    with:
+      ci_environment: 'true'
+      ci_node_index: ${{ matrix.ci_node_index }}
+      ci_node_total: ${{ matrix.ci_node_total }}
+      fetch_depth: 0
+      is_cypress: true
+      run_command: |
+        export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
+        scripts/tests/run-cypress.ts --file "$TESTFILES" --output-file-path "$TEST_FILE_TIMINGS_SHARD_FILE"
+      workflow_filename: e2e-cypress.yml
+  persist-test-file-times:
+    needs: [e2e_cypress]
+    uses: ./.github/workflows/job_persist-test-file-times.yml
+    with:
+      workflow_filename: e2e-cypress.yml

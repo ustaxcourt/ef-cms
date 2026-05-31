@@ -5,7 +5,10 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -14,25 +17,18 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
 
-/**
- * deleteTrialSession
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise} the promise of the deleteTrialSession call
- */
 export const deleteTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawTrialSession> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -80,9 +76,9 @@ export const deleteTrialSessionInteractor = async (
 
   if (trialSessionEntity.judge) {
     await deleteTrialSessionWorkingCopy({
-        trialSessionId,
-        userId: trialSessionEntity.judge.userId,
-      });
+      trialSessionId,
+      userId: trialSessionEntity.judge.userId,
+    });
   }
 
   await deleteTrialSession({

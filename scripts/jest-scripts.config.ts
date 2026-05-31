@@ -4,6 +4,17 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'scripts',
   clearMocks: true,
@@ -28,9 +39,19 @@ const config: Config = {
     '!elasticsearch/retry-ocr-failures.ts',
     '!email/**',
     '!generate-uuid.ts',
+    '!git/prod-release-pr-description.ts',
+    '!github-actions/download-historical-test-file-times.ts',
+    '!github-actions/emit-coverage-summary.ts',
+    '!github-actions/split-tests.ts',
+    '!github-actions/split-tests-cypress.ts',
+    '!github-actions/split-tests-glob.ts',
+    '!github-actions/test-file-times.ts',
+    '!github-actions/update-prod-release-coverage.ts',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
+    '!judge/get-judge-name.ts',
+    '!judge/set-judge-title.ts',
     '!judge/update-judge-isSeniorJudge.ts',
     '!judge/update-judge-titles.ts',
     '!npm/upgrade-npm-packages.ts',
@@ -38,13 +59,15 @@ const config: Config = {
     '!postgres/**',
     '!reindex/**',
     '!reports/**',
+    'reports/event-codes-by-year-helpers.ts',
+    'reports/stale-cases.helpers.ts',
     '!run-once-scripts/**',
     '!secrets/**',
     '!seed/add-missing-seed-docket-entries-pdfs.js',
     '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
-    '!judge/get-judge-name.ts',
-    '!judge/set-judge-title.ts',
+    '!tests/run-cypress.ts',
+    '!tests/test-file-times-to-junit.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
   ],
@@ -70,7 +93,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: [
+    `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
 };
 
 export default config;

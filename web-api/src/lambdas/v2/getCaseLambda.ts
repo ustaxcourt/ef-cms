@@ -1,11 +1,11 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
+import { getCaseInteractor } from '@web-api/business/useCases/getCaseInteractor';
 import { marshallCase } from './marshallers/marshallCase';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**
- * used for fetching a single case and returning it in v1 api format
+ * used for fetching a single case and returning it in v2 api format
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -13,9 +13,13 @@ import { v2ApiWrapper } from './v2ApiWrapper';
 export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, () =>
     v2ApiWrapper(async () => {
+      const excludeDocketEntries =
+        event.queryStringParameters?.excludeDocketEntries === 'true';
+
       const caseObject = await getCaseInteractor(
         {
           docketNumber: event.pathParameters.docketNumber,
+          excludeDocketEntries,
         },
         authorizedUser,
       );

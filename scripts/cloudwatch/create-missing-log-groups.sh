@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Log groups subscribed to by Terraform are deployed per environment,
 # and may not exist at the time of running the account-specific Terraform

@@ -549,10 +549,16 @@ export function sortDocketEntryTable<T>(
   ]);
 
   if (docketRecordSortOrder === 'desc') {
-    return sortedDocketEntries.reverse().sort(sortUndefined);
+    if (docketRecordSortField === 'sortingFilingDate') {
+      return sortedDocketEntries.reverse().sort(sortUndefined);
+    }
+    return sortedDocketEntries.reverse();
   }
 
-  return sortedDocketEntries.sort(sortUndefined);
+  if (docketRecordSortField === 'sortingFilingDate') {
+    return sortedDocketEntries.sort(sortUndefined);
+  }
+  return sortedDocketEntries;
 }
 
 function sortUndefined(

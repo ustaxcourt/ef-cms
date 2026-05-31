@@ -2,6 +2,7 @@ name: Verify PDFS
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -15,17 +16,22 @@ concurrency:
 
 jobs:
   test_pdfs:
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          install-dependencies: 'false'
+          restore-cache: 'false'
+          save-cache: 'false'
       - name: Setup
         run: |
           docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .

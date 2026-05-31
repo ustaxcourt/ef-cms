@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { sealCaseContactAddressInteractor } from '@shared/business/useCases/sealCaseContactAddressInteractor';
+import { sealCaseContactAddressInteractor } from '@web-api/business/useCases/sealCaseContactAddressInteractor';
 
 /**
  * used for sealing an address on a case
@@ -13,7 +13,7 @@ export const sealCaseContactAddressLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await sealCaseContactAddressInteractor(
+    await sealCaseContactAddressInteractor(
       applicationContext,
       {
         ...event.pathParameters,

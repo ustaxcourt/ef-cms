@@ -241,7 +241,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
 1. Run a deployment to the experimental environment.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
-   scripts/run-cypress.sh -sct cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
+   scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
    ```
 1. After the deployment's `cleanup` job is finished, rerun the OpenSearch indices report and ensure that all indices are present and populated, and that the aliases are configured as expected:
    ```bash
@@ -319,8 +319,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible. 
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 24.42.0**
-**Current Installed @sparticuz/chromium: 147.0.2**
+**Current Installed Puppeteer/Puppeteer-core: 25.0.4**
+**Current Installed @sparticuz/chromium: 148.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -344,8 +344,8 @@ If an update is available for DWT:
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-**Installed Version: 24.12.2**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.1 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.12.4**
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.14.1 so we should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.4, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js is still at v24.14.0, but we did not successfully update @types/node to 24.14.0 to match Node.js v24.14.0, instead @types/node is pinned at 24.12.0
 
@@ -353,12 +353,14 @@ The major version of this package should match our major version of Node. At the
 
 - As of April 20, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.2** remains the closest match.
 
+- As of May 18, 2026: Node.js updated to v24.15.0; `npm view @types/node@24.15.0` and any `24.13+` under major 24 are still unpublished, so **24.12.4** remains the closest match.
+
 ### TypeScript
 **Installed Version: 6.0.3**
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
 
-- As of the initial upgrade to TypeScript v6 the week of 4/6/2026, Cypress was not yet compatible, and we had to add ```"ignoreDeprecations": "6.0"``` to ```cypress/tsconfig.json```. Check to see if this is still the case, there is a PR in the works that may fix the issue. See [our PR](https://github.com/ustaxcourt/ef-cms/pull/9882) for details on this and the TypeScript upgrade in general.
+- After upgrading cypress past 15.14.0, it is now compatible with TS6. Updated tsconfig for cypress to support version 6 during the week of 5/18/2026
 
 ### Commander override for s3rver
 **Current Installed Version: 12.1.0 (Override Version, see notes below)**
@@ -397,6 +399,18 @@ error: too many arguments. Expected 0 arguments but got 2.
 **@eslint/js: 9.39.4**
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+
+### uuid
+- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11. 
+
+### image-blob-reduce and pica
+**Installed Versions:**
+**image-blob-reduce: 5.0.0**
+**pica: 10.0.1**
+- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using. 
+- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica. 
+
+`import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
 ## Troubleshooting
 
