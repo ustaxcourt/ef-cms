@@ -8,6 +8,9 @@
 .terraform/
 .vscode/*
 !.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
 **/*_.js
 *.iml
 shared/src/business/utilities/htmlGenerator/index.scss
