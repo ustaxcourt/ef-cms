@@ -1,4 +1,8 @@
-import { calculateDate, createISODateString, getJsDateFromIso } from "@shared/business/utilities/DateHandler";
+import {
+  calculateDate,
+  createISODateString,
+  getJsDateFromIso,
+} from '@shared/business/utilities/DateHandler';
 
 export function assertDocketEntryPageCount({
   eventCode,
@@ -40,14 +44,12 @@ export function waitForDocketEntryByEventCode({
   eventCode: string;
   timeout?: number;
 }): Cypress.Chainable<unknown> {
-  const deadline = calculateDate({howMuch: timeout, units: 'milliseconds'});
+  const deadline = calculateDate({ howMuch: timeout, units: 'milliseconds' });
   const poll = (): Cypress.Chainable<unknown> =>
     cy
-      .task<{ docketEntryId: string }[]>(
-        'getDocketEntryIdsByDocketNumberAndEventCode',
-        { docketNumber, eventCode },
-        { log: false },
-      )
+      .task<
+        { docketEntryId: string }[]
+      >('getDocketEntryIdsByDocketNumberAndEventCode', { docketNumber, eventCode }, { log: false })
       .then<unknown>(rows => {
         if (rows.length > 0) return undefined;
         if (getJsDateFromIso(createISODateString()) >= deadline) {
@@ -70,9 +72,8 @@ export function readDocketEntryCount({
   eventCode: string;
 }): Cypress.Chainable<number> {
   return cy
-    .task<{ docketEntryId: string }[]>(
-      'getDocketEntryIdsByDocketNumberAndEventCode',
-      { docketNumber, eventCode },
-    )
+    .task<
+      { docketEntryId: string }[]
+    >('getDocketEntryIdsByDocketNumberAndEventCode', { docketNumber, eventCode })
     .then(rows => rows.length);
 }
