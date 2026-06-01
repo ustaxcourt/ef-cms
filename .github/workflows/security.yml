@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
+permissions:
+  contents: read
+  actions: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
@@ -27,9 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      # @v6
-      - uses: actions/checkout@v4
-      - uses: aquasecurity/trivy-action@master
+      - uses: actions/checkout@v6
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
