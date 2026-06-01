@@ -1333,6 +1333,16 @@
         "summary": "get a case by docket number",
         "description": "Get a case by docket number.\n",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "excludeDocketEntries",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": ["true", "false"],
+            "description": "When set to 'true', returns the case with an empty docketEntries array."
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1415,6 +1425,67 @@
         }
       }
     },
+    "/cases/{docketNumber}/docket-entries": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get paginated docket entries for a case",
+        "description": "Get paginated docket entries for a case, enriched with work item information.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Zero-indexed page number. Page size is 1000 entries."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/cases/{docketNumber}": {
       "parameters": [
         {
@@ -1442,6 +1513,152 @@
             "CognitoUserPool": []
           }
         ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/cases/{docketNumber}/docket-entries": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get paginated public docket entries for a case",
+        "description": "Get paginated docket entries for a case (public, no authentication required).\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Zero-indexed page number. Page size is 1000 entries."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/cases/{docketNumber}/generate-docket-record": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["cases"],
+        "summary": "initiate asynchronous generation of a public docket record PDF",
+        "description": "Initiates asynchronous generation of a docket record PDF for a case (public, no authentication required). Returns a jobId for polling status.\n",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/docket-record-status/{jobId}": {
+      "parameters": [
+        {
+          "name": "jobId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "description": "The UUID job identifier returned from the generate-docket-record endpoint."
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get the status of a public docket record PDF generation job",
+        "description": "Poll for the status of an asynchronous docket record PDF generation job. Returns 'pending', 'ready' (with a presigned URL), or 'error'.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],

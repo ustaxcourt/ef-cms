@@ -10,18 +10,21 @@ interface VirtualizedDocumentListProps {
   setViewerDocumentToDisplaySequence: Function;
 }
 
-export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = ({
-  docketEntries,
-  viewDocumentId,
-  setViewerDocumentToDisplaySequence,
-}) => {
+export const VirtualizedDocumentList: React.FC<
+  VirtualizedDocumentListProps
+> = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
   const listRef = useRef<VariableSizeList>(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
   const rowHeightCacheRef = useRef<Map<number, number>>(new Map());
   const correctionCountRef = useRef(0);
   const measurementFrameRef = useRef<number | null>(null);
-  const lastMeasuredRangeRef = useRef<{start: number, end: number} | null>(null);
-  const [listDimensions, setListDimensions] = useState<{width: number, height: number} | null>(null);
+  const lastMeasuredRangeRef = useRef<{ start: number; end: number } | null>(
+    null,
+  );
+  const [listDimensions, setListDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   // Get row height from cache or provide a generous overestimate.
   // Overestimating is safe (extra whitespace), underestimating causes overlap.
@@ -45,7 +48,10 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     // overestimate, which means extra whitespace (acceptable) but never overlap.
     const charsPerLine = 18;
 
-    const estimatedLines = Math.max(1, Math.ceil(descriptionLength / charsPerLine));
+    const estimatedLines = Math.max(
+      1,
+      Math.ceil(descriptionLength / charsPerLine),
+    );
     // line-height: 1.4 on ~15px font ≈ 21px per line
     estimatedHeight += estimatedLines * 21;
 
@@ -84,7 +90,7 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
         const rect = listContainerRef.current.getBoundingClientRect();
         setListDimensions({
           width: rect.width,
-          height: rect.height
+          height: rect.height,
         });
       }
     };
@@ -128,14 +134,17 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     measurementFrameRef.current = requestAnimationFrame(() => {
       if (!listContainerRef.current || !listRef.current) return;
 
-      const contentElements = listContainerRef.current.querySelectorAll<HTMLElement>(
-        '[data-row-index]'
-      );
+      const contentElements =
+        listContainerRef.current.querySelectorAll<HTMLElement>(
+          '[data-row-index]',
+        );
 
       if (contentElements.length === 0) return;
 
       // Determine the current visible range
-      const indices = Array.from(contentElements).map(el => parseInt(el.dataset.rowIndex!, 10));
+      const indices = Array.from(contentElements).map(el =>
+        parseInt(el.dataset.rowIndex!, 10),
+      );
       const currentStart = Math.min(...indices);
       const currentEnd = Math.max(...indices);
 
@@ -143,7 +152,9 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
       const lastRange = lastMeasuredRangeRef.current;
       if (lastRange) {
         const rangeSize = currentEnd - currentStart;
-        const overlap = Math.min(currentEnd, lastRange.end) - Math.max(currentStart, lastRange.start);
+        const overlap =
+          Math.min(currentEnd, lastRange.end) -
+          Math.max(currentStart, lastRange.start);
         // If less than 50% overlap, we've scrolled to mostly new content
         if (overlap < rangeSize * 0.5) {
           correctionCountRef.current = 0;
@@ -157,7 +168,9 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
 
       contentElements.forEach(el => {
         const index = parseInt(el.dataset.rowIndex!, 10);
-        const buttonEl = el.querySelector<HTMLElement>('.attachment-viewer-button');
+        const buttonEl = el.querySelector<HTMLElement>(
+          '.attachment-viewer-button',
+        );
 
         if (!buttonEl) return;
 
@@ -202,7 +215,13 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
   }, [viewDocumentId, listDimensions, docketEntries]);
 
   // Row renderer for virtualized list
-  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+  const Row = ({
+    index,
+    style,
+  }: {
+    index: number;
+    style: React.CSSProperties;
+  }) => {
     const entry = docketEntries[index];
 
     if (!entry) return null;
@@ -211,7 +230,7 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
     const { height: rowHeight, ...positionStyle } = style;
 
     return (
-      <div style={{...positionStyle, boxShadow: 'inset 0 -1px 0 #dfe1e2'}}>
+      <div style={{ ...positionStyle, boxShadow: 'inset 0 -1px 0 #dfe1e2' }}>
         <div data-row-index={index}>
           <Button
             className={classNames(
@@ -230,7 +249,7 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
             style={{
               height: rowHeight,
               overflow: 'hidden',
-              display: 'block'
+              display: 'block',
             }}
           >
             <div
@@ -238,7 +257,7 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
               title={entry.toolTipText}
               style={{
                 margin: '0 0 0 2.05rem',
-                padding: 0
+                padding: 0,
               }}
             >
               <div className="grid-col-2 text-align-center">{entry.index}</div>
@@ -324,9 +343,15 @@ export const VirtualizedDocumentList: React.FC<VirtualizedDocumentListProps> = (
 
   return (
     <div
-      ref={listContainerRef}
       className="document-viewer--documents-list"
-      style={{ height: '1000px', width: '100%', padding: 0, overflow: 'hidden' }}
+      data-testid="document-viewer-documents-list"
+      ref={listContainerRef}
+      style={{
+        height: '1000px',
+        width: '100%',
+        padding: 0,
+        overflow: 'hidden',
+      }}
     >
       {listDimensions && (
         <VariableSizeList
