@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \

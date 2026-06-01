@@ -80,7 +80,7 @@ describe('updates the contact on a case', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
-    const caseDetail = await updateContactInteractor(
+    await updateContactInteractor(
       applicationContext,
       {
         contactInfo: {
@@ -136,7 +136,7 @@ describe('updates the contact on a case', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    const docketEntry = caseDetail.docketEntries.find(
+    const docketEntry = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
     expect(docketEntry).toBeDefined();
@@ -319,7 +319,7 @@ describe('updates the contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
-    const caseDetail = await updateContactInteractor(
+    await updateContactInteractor(
       applicationContext,
       {
         contactInfo: {
@@ -334,7 +334,8 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    const contactPrimary = getContactPrimary(caseDetail);
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const contactPrimary = getContactPrimary(updatedCase);
 
     expect(contactPrimary.name).not.toBe('Secondary Party Name Changed');
     expect(contactPrimary.name).toBe('Test Petitioner');

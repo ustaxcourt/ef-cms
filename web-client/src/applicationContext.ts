@@ -159,6 +159,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from '@web-client/proxies
 import { getCaseDeadlinesForCaseInteractor } from '@web-client/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
+import { getCaseDocketEntriesInteractor } from '@web-client/proxies/getCaseDocketEntriesProxy';
 import { getCaseExistsInteractor } from '@web-client/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '@web-client/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
@@ -346,6 +347,7 @@ import { validateUserContactInteractor } from '../../shared/src/business/useCase
 import { verifyPendingCaseForUserInteractor } from '@web-client/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '@web-client/proxies/public/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
+import Pica from 'pica';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
@@ -353,7 +355,7 @@ import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetit
 import { getDocketEntryProcessingStatusInteractor } from '@web-client/proxies/documents/getDocketEntryProcessingStatusProxy';
 
 const reduce = ImageBlobReduce({
-  pica: ImageBlobReduce.pica({ features: ['js'] }),
+  pica: Pica({ features: ['js'] }),
 });
 
 let user;
@@ -440,6 +442,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
   getConsolidatedCaseDeadlinesInteractor,
+  getCaseDocketEntriesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,

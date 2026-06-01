@@ -201,7 +201,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    const result = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -216,7 +216,6 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -326,7 +325,7 @@ describe('fileExternalDocumentInteractor', () => {
       consolidatedCase as any,
     ]);
 
-    const result = await fileExternalDocumentInteractor(
+    await fileExternalDocumentInteractor(
       applicationContext,
       {
         documentMetadata: {
@@ -351,7 +350,6 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);

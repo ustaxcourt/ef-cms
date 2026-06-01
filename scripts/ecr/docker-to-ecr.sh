@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 

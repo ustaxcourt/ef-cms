@@ -30,7 +30,6 @@ import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
  */
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,

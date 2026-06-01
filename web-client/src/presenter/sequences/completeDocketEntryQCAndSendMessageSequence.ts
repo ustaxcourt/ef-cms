@@ -8,7 +8,6 @@ import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -47,7 +46,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
           clearUsersAction,
           clearModalAction,
           setSaveAlertsForNavigationAction,
-          setCaseAction,
           setAlertSuccessAction,
           getMessagesForCaseAction,
           setPdfPreviewUrlAction,

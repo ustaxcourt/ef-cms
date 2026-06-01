@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
-function is_ide_running() {
+is_ide_running() {
   pgrep -f -i "$1" >/dev/null 2>&1 || pgrep -i "$1" >/dev/null 2>&1
 }
 
-function open_vscode_diff() {
-  if [[ "$(uname -s)" == "Darwin" ]]; then
+open_vscode_diff() {
+  if [ "$(uname -s)" = "Darwin" ]; then
     VSCODE_APP="/Applications/Visual Studio Code.app"
     if [ ! -d "$VSCODE_APP" ]; then
       VSCODE_APP="$HOME/Applications/Visual Studio Code.app"
@@ -31,21 +31,21 @@ function open_vscode_diff() {
       code --diff "$1" "$2" 2>/dev/null
     else
       ide_bin=$(pgrep -a -f -i "/code/code" 2>/dev/null | head -n 1 | awk '{print $2}')
-      if [[ -n "$ide_bin" && -x "$ide_bin" ]]; then
+      if [ -n "$ide_bin" ] && [ -x "$ide_bin" ]; then
         "$ide_bin" --diff "$1" "$2" 2>/dev/null
       fi
     fi
   fi
 }
 
-function open_jetbrains_diff() {
+open_jetbrains_diff() {
   ide="$1"
   temp_file="$2"
   current_file="$3"
-  if [[ "$(uname -s)" == "Darwin" ]]; then
-    if [[ "$ide" == "idea" ]]; then
+  if [ "$(uname -s)" = "Darwin" ]; then
+    if [ "$ide" = "idea" ]; then
       open -a "IntelliJ IDEA Ultimate.app" --args diff "$temp_file" "$current_file" 2>/dev/null || open -a "IntelliJ IDEA.app" --args diff "$temp_file" "$current_file" 2>/dev/null
-    elif [[ "$ide" == "webstorm" ]]; then
+    elif [ "$ide" = "webstorm" ]; then
       open -a "WebStorm.app" --args diff "$temp_file" "$current_file" 2>/dev/null
     fi
   else
@@ -53,7 +53,7 @@ function open_jetbrains_diff() {
       "$ide" diff "$temp_file" "$current_file" 2>/dev/null
     else
       ide_bin=$(pgrep -a -f -i "/bin/${ide}" 2>/dev/null | head -n 1 | awk '{print $2}')
-      if [[ -n "$ide_bin" && -x "$ide_bin" ]]; then
+      if [ -n "$ide_bin" ] && [ -x "$ide_bin" ]; then
         "$ide_bin" diff "$temp_file" "$current_file" 2>/dev/null
       fi
     fi
@@ -82,7 +82,7 @@ if [ -f "CHANGES.md" ]; then
     } >&2
 
     NO_IDE_POP="${EFCMS_ROOT}/.husky/.post-merge-no-ide-pop"
-    [[ -f "$NO_IDE_POP" ]] && exit 0
+    [ -f "$NO_IDE_POP" ] && exit 0
 
     TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
     CURRENT_FILE="${EFCMS_ROOT}/CHANGES.md"
@@ -102,3 +102,5 @@ if [ -f "CHANGES.md" ]; then
     fi
   fi
 fi
+
+exit 0

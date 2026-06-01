@@ -89,7 +89,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_CASE.docketEntries,
+        MOCK_UNSERVED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+        ),
       );
     });
     it('should get full case data for sealed case', () => {
@@ -99,7 +101,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries,
+        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
+          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+        ),
       );
     });
     it('should not show sealed addresses when user does not have permissions', () => {
@@ -134,11 +138,13 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_SERVED_CASE.docketEntries.filter(
-          d =>
-            d.isOnDocketRecord ||
-            d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        ),
+        MOCK_SERVED_CASE.docketEntries
+          .filter(
+            d =>
+              d.isOnDocketRecord ||
+              d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
+          )
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should not show sealed addresses', () => {
@@ -158,7 +164,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_CASE.docketEntries.filter(d => d.isOnDocketRecord),
+        MOCK_UNSERVED_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should get full case data for sealed case except docket entries not on the record', () => {
@@ -168,9 +176,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries.filter(
-          d => d.isOnDocketRecord,
-        ),
+        MOCK_UNSERVED_AND_SEALED_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should get full data for lead case when associated with a member case', () => {
@@ -180,7 +188,9 @@ describe('CaseFactory', () => {
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
-        MOCK_LEAD_CASE.docketEntries.filter(d => d.isOnDocketRecord),
+        MOCK_LEAD_CASE.docketEntries
+          .filter(d => d.isOnDocketRecord)
+          .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
       );
     });
     it('should not show sealed addresses', () => {
@@ -289,7 +299,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_CASE_DTO.docketEntries,
+          MOCK_UNSERVED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+          ),
         );
       });
       it('should get full case data for sealed case', () => {
@@ -299,7 +311,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries,
+          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
+            d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+          ),
         );
       });
       it('should not show sealed addresses when user does not have permissions', () => {
@@ -334,11 +348,13 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_SERVED_CASE_DTO.docketEntries.filter(
-            d =>
-              d.isOnDocketRecord ||
-              d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
-          ),
+          MOCK_SERVED_CASE_DTO.docketEntries
+            .filter(
+              d =>
+                d.isOnDocketRecord ||
+                d.eventCode == INITIAL_DOCUMENT_TYPES.stin.eventCode,
+            )
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should not show sealed addresses', () => {
@@ -358,7 +374,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_CASE_DTO.docketEntries.filter(d => d.isOnDocketRecord),
+          MOCK_UNSERVED_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should get full case data for sealed case except docket entries not on the record', () => {
@@ -368,9 +386,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries.filter(
-            d => d.isOnDocketRecord,
-          ),
+          MOCK_UNSERVED_AND_SEALED_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should get full data for lead case when associated with a member case', () => {
@@ -380,7 +398,9 @@ describe('CaseFactory', () => {
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
-          MOCK_LEAD_CASE_DTO.docketEntries.filter(d => d.isOnDocketRecord),
+          MOCK_LEAD_CASE_DTO.docketEntries
+            .filter(d => d.isOnDocketRecord)
+            .map(({ draftOrderState, pending, stampData, userId, ...rest }) => rest),
         );
       });
       it('should not show sealed addresses', () => {

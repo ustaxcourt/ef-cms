@@ -23,16 +23,12 @@ import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -226,12 +222,9 @@ export const fileExternalDocument = async (
       caseToUpdate: caseEntity,
       includeCorrespondence: false,
     });
-
-    const rawCaseEntity = caseEntity.toRawObject();
-    return rawCaseEntity;
   });
 
-  const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
+  await settlePromises(consolidatedCaseEntities);
 
   await upsertWorkItems({
     workItems,
@@ -249,17 +242,6 @@ export const fileExternalDocument = async (
       docketNumber,
     }),
   );
-
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
-
-  const filteredCase = CaseFactory.getCaseDTO({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

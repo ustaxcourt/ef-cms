@@ -488,14 +488,18 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const noticeOfDocketChange = result.caseDetail.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'NODC',
-    );
-
     expect(countPagesInDocument).toHaveBeenCalledWith(
       expect.objectContaining({
         documentStorageId: mockDocumentStorageId,
       }),
+    );
+
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const noticeOfDocketChange = caseToUpdate.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'NODC',
     );
 
     expect(noticeOfDocketChange).toMatchObject({
@@ -504,8 +508,6 @@ describe('completeDocketEntryQCInteractor', () => {
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -614,7 +616,7 @@ describe('completeDocketEntryQCInteractor', () => {
   it('updates automaticBlocked on a case if pending is true', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -628,11 +630,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(caseDetail.automaticBlocked).toBeTruthy();
+
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.automaticBlocked).toBeTruthy();
   });
 
   it('normalizes receivedAt dates to ISO string format', async () => {
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -643,7 +647,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(caseDetail.docketEntries[0].receivedAt).toEqual(
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
     );
   });

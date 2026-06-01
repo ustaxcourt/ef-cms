@@ -1,3 +1,70 @@
+<details><summary>Dependency Updates - Week of 2026-05-25</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.16.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-18</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.80` - choose exp3
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.4
+```
+```bash
+tfenv install 1.15.4
+tfenv use 1.15.4
+```
+
+</details>
+<details><summary>PDF Generator IAM Scoping</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-11</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.79` - choose exp3
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.3`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.3
+```
+```bash
+tfenv install 1.15.3
+tfenv use 1.15.3
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-05-04</summary>
 
 ## Manual Deployment Steps

@@ -2,6 +2,7 @@ name: Node.js CI - Shared
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -19,6 +20,7 @@ permissions:
 
 jobs:
   Shared:
+    if: ${{ !github.event.pull_request.draft }}
     strategy:
       fail-fast: false
       matrix:
@@ -38,8 +40,10 @@ jobs:
     uses: ./.github/workflows/job_check-coverage.yml
     with:
       branches: 95
+      coverage_suite: shared
       functions: 95
       lines: 95
+      pull_request_number: ${{ github.event.pull_request.number }}
       statements: 95
       workflow_filename: shared.yml
   persist-test-file-times:

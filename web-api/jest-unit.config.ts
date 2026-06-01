@@ -4,6 +4,22 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  '@puppeteer',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'p-queue',
+  'p-timeout',
+  'puppeteer',
+  'puppeteer-core',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'web-api',
   clearMocks: true,
@@ -73,7 +89,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
+  transformIgnorePatterns: [
+    `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
