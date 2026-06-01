@@ -109,4 +109,17 @@ describe('retrySettled', () => {
     expect(retryDelayMs).toHaveBeenNthCalledWith(1, 2);
     expect(retryDelayMs).toHaveBeenNthCalledWith(2, 3);
   });
+
+  it('should throw an error if method is called with maxAttempts = 0', async () => {
+    const retryDelayMs = jest.fn().mockReturnValue(0);
+
+    await expect(
+      retrySettled(['a'], async () => Promise.reject(new Error('x')), {
+        maxAttempts: 0,
+        retryDelayMs,
+      }),
+    ).rejects.toThrow('retrySettled: maxAttempts must be at least 1');
+
+    expect(retryDelayMs).toHaveBeenCalledTimes(0);
+  });
 });

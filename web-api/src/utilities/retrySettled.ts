@@ -42,6 +42,10 @@ export const retrySettled = async <TItem, TResult>(
   let pendingIndices = items.map((_, i) => i);
   let lastError: unknown;
 
+  if (maxAttempts < 1) {
+    throw new Error('retrySettled: maxAttempts must be at least 1');
+  }
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     if (attempt > 1) {
       await wait(retryDelayMs(attempt));
