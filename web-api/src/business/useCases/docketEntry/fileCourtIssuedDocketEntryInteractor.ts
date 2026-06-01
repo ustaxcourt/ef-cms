@@ -20,13 +20,9 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMeta document details to go on the record
- */
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
   {
@@ -87,104 +83,125 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
-  await settlePromises(
-    casesToUpdate.map(async caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, { authorizedUser });
+  const isUnservable = DocketEntry.isUnservable({
+    eventCode: documentMeta.eventCode,
+  });
 
-      const docketEntryEntity = new DocketEntry(
-        {
-          ...omit(subjectDocketEntry, 'filedBy'),
-          attachments: documentMeta.attachments,
-          date: documentMeta.date,
-          docketNumber: caseEntity.docketNumber,
-          documentTitle: documentMeta.generatedDocumentTitle,
-          documentType: documentMeta.documentType,
-          draftOrderState: null,
-          editState: JSON.stringify({
-            ...documentMeta,
-            docketNumber: caseToUpdate.docketNumber,
-          }),
-          eventCode: documentMeta.eventCode,
-          filingDate: documentMeta.filingDate,
-          freeText: documentMeta.freeText,
-          isDraft: false,
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          judge: documentMeta.judge,
-          numberOfPages,
-          scenario: documentMeta.scenario,
-          serviceStamp: documentMeta.serviceStamp,
-          trialLocation: documentMeta.trialLocation,
-        },
-        { authorizedUser },
-      );
+  const isNotTaxCourtPamphlet = documentMeta.eventCode !== 'TCRP';
 
-      docketEntryEntity.setFiledBy(user);
+  let multiDocketedOn: string[] = [];
 
-      const workItem = new WorkItem({
-        assigneeId: null,
-        assigneeName: null,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        inProgress: true,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      });
-
-      if (DocketEntry.isUnservable(documentMeta)) {
-        workItem.setAsCompleted({ message: 'completed', user });
-      }
-
-      const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
-        docketEntryId,
-      });
-
-      if (!isDocketEntryAlreadyOnCase) {
-        caseEntity.addDocketEntry(docketEntryEntity);
-      } else {
-        caseEntity.updateDocketEntry(docketEntryEntity);
-      }
-
-      workItem.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: WorkItem.getWorkItemSectionFromUserSection({
-          section: user.section,
-          documentTitle: docketEntryEntity.documentTitle,
-        }),
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-
-      const saveItems: Promise<any>[] = [
-        updateCaseAndAssociations({
-          authorizedUser,
-          caseToUpdate: caseEntity,
-        }),
-      ];
-
-      const rawValidWorkItem = workItem.validate().toRawObject();
-
-      saveItems.push(
-        upsertWorkItems({
-          workItems: [rawValidWorkItem],
-        }),
-      );
-
-      return settlePromises(saveItems);
-    }),
-  );
-
-  if (documentMeta.affectedDocketEntries) {
-    await addAssociatedDocketEntries(
-      casesToUpdate,
-      documentMeta,
-      subjectDocketEntry,
-      false,
-    );
+  if (
+    isLeadCase(subjectCaseToUpdateEntity) &&
+    isUnservable &&
+    isNotTaxCourtPamphlet &&
+    docketNumbers.length
+  ) {
+    multiDocketedOn = [subjectDocketNumber, ...docketNumbers];
   }
+
+  await withTransaction(async () => {
+    await settlePromises(
+      casesToUpdate.map(async caseToUpdate => {
+        const caseEntity = new Case(caseToUpdate, { authorizedUser });
+
+        const docketEntryEntity = new DocketEntry(
+          {
+            ...omit(subjectDocketEntry, 'filedBy'),
+            attachments: documentMeta.attachments,
+            date: documentMeta.date,
+            docketNumber: caseEntity.docketNumber,
+            documentTitle: documentMeta.generatedDocumentTitle,
+            documentType: documentMeta.documentType,
+            draftOrderState: null,
+            editState: JSON.stringify({
+              ...documentMeta,
+              docketNumber: caseToUpdate.docketNumber,
+            }),
+            eventCode: documentMeta.eventCode,
+            filingDate: documentMeta.filingDate,
+            freeText: documentMeta.freeText,
+            isDraft: false,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            judge: documentMeta.judge,
+            multiDocketedOn,
+            originallyFiledDocketNumber: subjectDocketNumber,
+            numberOfPages,
+            scenario: documentMeta.scenario,
+            serviceStamp: documentMeta.serviceStamp,
+            trialLocation: documentMeta.trialLocation,
+          },
+          { authorizedUser },
+        );
+
+        docketEntryEntity.setFiledBy(user);
+
+        const workItem = new WorkItem({
+          assigneeId: null,
+          assigneeName: null,
+          docketEntryId: docketEntryEntity.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          inProgress: true,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        });
+
+        if (DocketEntry.isUnservable(documentMeta)) {
+          workItem.setAsCompleted({ message: 'completed', user });
+        }
+
+        const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
+          docketEntryId,
+        });
+
+        if (!isDocketEntryAlreadyOnCase) {
+          caseEntity.addDocketEntry(docketEntryEntity);
+        } else {
+          caseEntity.updateDocketEntry(docketEntryEntity);
+        }
+
+        workItem.assignToUser({
+          assigneeId: user.userId,
+          assigneeName: user.name,
+          section: WorkItem.getWorkItemSectionFromUserSection({
+            section: user.section,
+            documentTitle: docketEntryEntity.documentTitle,
+          }),
+          sentBy: user.name,
+          sentBySection: user.section,
+          sentByUserId: user.userId,
+        });
+
+        const saveItems: Promise<any>[] = [
+          updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: caseEntity,
+          }),
+        ];
+
+        const rawValidWorkItem = workItem.validate().toRawObject();
+
+        saveItems.push(
+          upsertWorkItems({
+            workItems: [rawValidWorkItem],
+          }),
+        );
+
+        return settlePromises(saveItems);
+      }),
+    );
+
+    if (documentMeta.affectedDocketEntries) {
+      await addAssociatedDocketEntries(
+        casesToUpdate,
+        documentMeta,
+        subjectDocketEntry,
+        false,
+      );
+    }
+  });
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

@@ -1,6 +1,5 @@
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { needsNewCoversheet } from './completeDocketEntryQCInteractor';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { needsNewCoversheet } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 
 describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   let currentDocketEntry;
@@ -29,7 +28,6 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   it('should return true when receivedAt is updated', () => {
     updatedDocketEntry.receivedAt = '2020-08-26T05:00:00.000Z';
     const result = needsNewCoversheet({
-      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -40,7 +38,6 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
     currentDocketEntry.receivedAt = '2019-08-25';
     updatedDocketEntry.receivedAt = '2019-08-25T05:00:00.000Z';
     const result = needsNewCoversheet({
-      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -51,7 +48,6 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   it('should return true when certificateOfService is updated', () => {
     updatedDocketEntry.certificateOfService = true;
     const result = needsNewCoversheet({
-      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -61,7 +57,6 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   it('should return false when filedBy is updated', () => {
     updatedDocketEntry.filedBy = 'petitioner.smith';
     const result = needsNewCoversheet({
-      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });
@@ -71,7 +66,6 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   it('should return true when documentTitle is updated', () => {
     updatedDocketEntry.documentTitle = 'fake title 2';
     const result = needsNewCoversheet({
-      applicationContext,
       currentDocketEntry,
       updatedDocketEntry,
     });

@@ -19,6 +19,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * saveCaseDetailInternalEdit
@@ -147,9 +148,12 @@ export const saveCaseDetailInternalEdit = async (
       caseEntity,
       caseToUpdate,
     });
-  } else {
-    const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
+  }
 
+  const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
+  let workItemEntity: WorkItem | undefined;
+
+  if (!caseEntity.isPaper) {
     if (!petitionDocketEntry) {
       throw new NotFoundError(
         `Could not find petition docket entry on case ${petitionDocketEntry}`,
@@ -166,22 +170,26 @@ export const saveCaseDetailInternalEdit = async (
         `Could not find work item associated with petition on case ${petitionDocketEntry}`,
       );
     }
-    const workItemEntity = new WorkItem({
+    workItemEntity = new WorkItem({
       ...petitionWorkItem,
       docketEntryId: petitionDocketEntry.docketEntryId,
       assigneeId: user.userId,
       assigneeName: user.name,
       inProgress: true,
     });
-
-    await upsertWorkItems({
-      workItems: [workItemEntity.validate().toRawObject()],
-    });
   }
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+  await withTransaction(async () => {
+    if (workItemEntity) {
+      await upsertWorkItems({
+        workItems: [workItemEntity.validate().toRawObject()],
+      });
+    }
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
 };
 

@@ -59,6 +59,9 @@ export function toKyselyNewDocketEntry(
     judge: docketEntry.judge ?? null,
     lodged: docketEntry.lodged ?? null,
     mailingDate: docketEntry.mailingDate ?? null,
+    multiDocketedOn: JSON.stringify(docketEntry.multiDocketedOn),
+    originallyFiledDocketNumber:
+      docketEntry.originallyFiledDocketNumber ?? null,
     noticeIssuedDate: docketEntry.noticeIssuedDate
       ? calculateDate({ dateString: docketEntry.noticeIssuedDate })
       : null,

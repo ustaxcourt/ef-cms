@@ -5,6 +5,7 @@ import { setNoticeOfChangeOfTrialLocation } from '@web-api/business/useCaseHelpe
 
 describe('setNoticeOfChangeOfTrialLocation', () => {
   const noticePdfMock = 'TEST_NOTICE_PDF';
+  const mockSendEmailsCall = async () => {};
   const TEST_USER = { email: 'TEST_EMAIL@example.com' } as AuthUser;
   const TEST_CASE_ENTITY = { docketNumber: 'TEST_DOCKET_NUMBER' };
 
@@ -17,11 +18,11 @@ describe('setNoticeOfChangeOfTrialLocation', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .createAndServeNoticeDocketEntry.mockReturnValue('');
+      .createAndServeNoticeDocketEntry.mockResolvedValue(mockSendEmailsCall);
   });
 
   it('should call method with correct params', async () => {
-    await setNoticeOfChangeOfTrialLocation(
+    const result = await setNoticeOfChangeOfTrialLocation(
       applicationContext,
       {
         caseEntity: TEST_CASE_ENTITY as any,
@@ -56,5 +57,6 @@ describe('setNoticeOfChangeOfTrialLocation', () => {
       noticePdf: noticePdfMock,
     });
     expect(createAndServeNoticeDocketEntryCalls[0][2]).toEqual(TEST_USER);
+    expect(result).toEqual(mockSendEmailsCall);
   });
 });

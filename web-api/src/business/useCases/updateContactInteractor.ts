@@ -24,6 +24,7 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
@@ -112,6 +113,10 @@ export const updateContact = async (
       oldData: oldCaseContact,
     });
 
+  let changeOfAddressPdfWithCover;
+  let changeOfAddressDocketEntry;
+  let servedParties;
+
   if (
     !oldCaseContact.isAddressSealed &&
     documentType &&
@@ -148,7 +153,7 @@ export const updateContact = async (
 
     const newDocketEntryId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocketEntry = new DocketEntry(
+    changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${updatedPetitioner.name}`,
@@ -169,43 +174,24 @@ export const updateContact = async (
 
     changeOfAddressDocketEntry.setFiledBy(authorizedUser);
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+    servedParties = aggregatePartiesForService(caseEntity);
+
+    changeOfAddressDocketEntry.setOriginallyFiledDocketNumber(
+      caseEntity.docketNumber,
+    );
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const isContactRepresented = Case.isPetitionerRepresented(
-      caseEntity,
-      contactInfo.contactId,
-    );
-
-    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
-      SERVICE_INDICATOR_TYPES.SI_PAPER,
-    );
-
-    if (!isContactRepresented || partyWithPaperService) {
-      const workItem = new WorkItem({
-        assigneeId: null,
-        assigneeName: null,
-        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        section: DOCKET_SECTION,
-        sentBy: authorizedUser.name,
-        sentByUserId: authorizedUser.userId,
-      });
-
-      await upsertWorkItems({
-        workItems: [workItem.validate().toRawObject()],
-      });
-    }
-
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
-    const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
+    const { pdfData } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
+
+    changeOfAddressPdfWithCover = pdfData;
 
     changeOfAddressDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()
@@ -213,31 +199,68 @@ export const updateContact = async (
         applicationContext,
         documentBytes: changeOfAddressPdfWithCover,
       });
+  }
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-      servedParties,
-    });
-
+  // Upload PDF to S3 BEFORE the transaction. The document must be available before
+  // emails are sent (so parties can access the served document). If the upload
+  // succeeds but the transaction fails, orphaned files in S3 are acceptable.
+  if (changeOfAddressDocketEntry && changeOfAddressPdfWithCover) {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: changeOfAddressPdfWithCover,
       key: changeOfAddressDocketEntry.documentStorageId,
     });
   }
 
-  const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
-    newData: editableFields,
-    oldData: oldCaseContact,
+  await withTransaction(async () => {
+    if (changeOfAddressDocketEntry) {
+      const isContactRepresented = Case.isPetitionerRepresented(
+        caseEntity,
+        contactInfo.contactId,
+      );
+
+      const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
+
+      if (!isContactRepresented || partyWithPaperService) {
+        const workItem = new WorkItem({
+          assigneeId: null,
+          assigneeName: null,
+          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          section: DOCKET_SECTION,
+          sentBy: authorizedUser.name,
+          sentByUserId: authorizedUser.userId,
+        });
+
+        await upsertWorkItems({
+          workItems: [workItem.validate().toRawObject()],
+        });
+      }
+    }
+
+    const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
+      newData: editableFields,
+      oldData: oldCaseContact,
+    });
+
+    const shouldUpdateCase = !isEmpty(contactDiff) || documentType;
+
+    if (shouldUpdateCase) {
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
+    }
+
   });
 
-  const shouldUpdateCase = !isEmpty(contactDiff) || documentType;
-
-  if (shouldUpdateCase) {
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
+  if (changeOfAddressDocketEntry && changeOfAddressPdfWithCover) {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
     });
   }
 

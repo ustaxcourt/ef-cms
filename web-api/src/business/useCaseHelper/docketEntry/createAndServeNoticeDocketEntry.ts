@@ -38,7 +38,7 @@ export const createAndServeNoticeDocketEntry = async (
     onlyProSePetitioners,
   }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
-) => {
+): Promise<() => Promise<void>> => {
   const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -66,6 +66,7 @@ export const createAndServeNoticeDocketEntry = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       servedAt: createISODateString(),
       servedParties: servedParties.all,
@@ -81,7 +82,7 @@ export const createAndServeNoticeDocketEntry = async (
 
   caseEntity.addDocketEntry(noticeDocketEntry);
 
-  await applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
+  return applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
     applicationContext,
     caseEntity,
     newPdfDoc,

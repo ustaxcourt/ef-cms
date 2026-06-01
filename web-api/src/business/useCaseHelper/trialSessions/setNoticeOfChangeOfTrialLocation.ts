@@ -21,7 +21,7 @@ export const setNoticeOfChangeOfTrialLocation = async (
     previousTrialSession: RawTrialSession;
   },
   authorizedUser: AuthUser,
-) => {
+): Promise<() => Promise<void>> => {
   const noticePdf = await applicationContext
     .getUseCases()
     .generateNoticeOfChangeOfTrialLocationInteractor(applicationContext, {
@@ -30,7 +30,7 @@ export const setNoticeOfChangeOfTrialLocation = async (
       updatedTrialSession: newTrialSessionEntity,
     });
 
-  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+  return applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
     applicationContext,
     {
       caseEntity,

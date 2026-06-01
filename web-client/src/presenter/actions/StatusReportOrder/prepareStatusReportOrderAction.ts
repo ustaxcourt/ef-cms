@@ -6,6 +6,11 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 export const prepareStatusReportOrderAction = ({
   applicationContext,
@@ -13,6 +18,7 @@ export const prepareStatusReportOrderAction = ({
   store,
 }: ActionProps) => {
   const {
+    additionalOrderTextArray,
     additionalOrderText,
     dueDate,
     issueOrder,
@@ -34,7 +40,20 @@ export const prepareStatusReportOrderAction = ({
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
-  const hasAdditionalOrderText = !!additionalOrderText;
+  const rawAdditionalOrderTextArray =
+    additionalOrderTextArray ??
+    (additionalOrderText ? [additionalOrderText] : []);
+  const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
+    rawAdditionalOrderTextArray,
+  );
+  store.set(
+    state.form.additionalOrderTextArray,
+    additionalOrderTextArrayWithRequiredFirstField(
+      meaningfulAdditionalOrderTextArray,
+    ),
+  );
+  const hasAdditionalOrderTextArray =
+    meaningfulAdditionalOrderTextArray.length > 0;
 
   const dueDateFormatted = applicationContext
     .getUtilities()
@@ -78,9 +97,17 @@ export const prepareStatusReportOrderAction = ({
         ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
         : '';
 
-  const additionalTextLine = hasAdditionalOrderText
-    ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}</p>`
-    : '';
+  let additionalTextLine = '';
+  if (hasAdditionalOrderTextArray) {
+    meaningfulAdditionalOrderTextArray.forEach((text, index) => {
+      const clause = formatAdditionalOrderClauseForRichText(text);
+      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
+        index < meaningfulAdditionalOrderTextArray.length - 1
+          ? ' It is further'
+          : ''
+      }</p>`;
+    });
+  }
 
   const linesWithText = [
     orderTypeLine,

@@ -23,7 +23,7 @@ describe('prepareMotionOrderResponseAction', () => {
   };
 
   const mockForm = {
-    additionalOrderText: '',
+    additionalOrderTextArray: [''],
     dueDate: '2024-04-22',
     motionOrderResponse: true,
     responseDate: '2024-03-29',
@@ -48,6 +48,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.richText).not.toContain('shall file a Reply');
     expect(result.state.form.richText).toContain('shall file a Response');
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('should handle REPLY selection', async () => {
@@ -70,6 +71,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
   it('should handle additional order text', async () => {
@@ -81,7 +83,7 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          additionalOrderText: additionalText,
+          additionalOrderTextArray: [additionalText],
         },
       },
     });
@@ -91,6 +93,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
+    expect(result.state.form.additionalOrderTextArray).toEqual([additionalText]);
   });
 
   it('should handle calendared case with trial session', async () => {
@@ -110,6 +113,22 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.richText).toContain(
       'session of the Court commencing on May 1, 2024, in Houston, Texas',
     );
+  });
+
+  it('normalizes additionalOrderTextArray by removing whitespace-only entries and updates form state', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          additionalOrderTextArray: ['', ' \t\n ', 'Keep this.'],
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual(['Keep this.']);
+    expect(result.state.form.richText).toContain('ORDERED that Keep this.');
   });
 
   it('should handle stricken from trial sessions', async () => {
@@ -334,7 +353,7 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          additionalOrderText: 'The Court expects full compliance.',
+          additionalOrderTextArray: ['The Court expects full compliance.'],
           strickenFromTrialSession: true,
         },
       },
@@ -352,6 +371,24 @@ describe('prepareMotionOrderResponseAction', () => {
     );
     expect(richText).toContain(
       'ORDERED that The Court expects full compliance.',
+    );
+    expect(richText).not.toContain('compliance..');
+  });
+
+  it('should chain multiple additional order text clauses with It is further', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          additionalOrderTextArray: ['First clause', 'Second clause'],
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      '<p class="indent-paragraph">ORDERED that First clause. It is further</p><p class="indent-paragraph">ORDERED that Second clause.</p>',
     );
   });
 

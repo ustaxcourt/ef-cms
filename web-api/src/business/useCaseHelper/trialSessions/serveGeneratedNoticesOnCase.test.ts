@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -16,14 +17,14 @@ describe('serveGeneratedNoticesOnCase', () => {
     { authorizedUser: undefined },
   );
 
-  it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
+  it('should return function that will send emails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
     const mockServedParties = {
       paper: ['test'],
       all: [],
       electronic: [],
     };
 
-    await serveGeneratedNoticesOnCase({
+    const sendEmailCall = await serveGeneratedNoticesOnCase({
       applicationContext,
       caseEntity: mockOpenCaseEntity,
       newPdfDoc: getFakeFile as unknown as PDFDocument,
@@ -31,6 +32,8 @@ describe('serveGeneratedNoticesOnCase', () => {
       noticeDocumentPdfData: testPdfDoc,
       servedParties: mockServedParties,
     });
+
+    await sendEmailCall();
 
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,

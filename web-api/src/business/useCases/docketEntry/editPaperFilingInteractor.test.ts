@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -109,8 +110,8 @@ describe('editPaperFilingInteractor', () => {
       new WorkItem(workItem),
     );
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
   });
 
@@ -467,6 +468,27 @@ describe('editPaperFilingInteractor', () => {
             status: false,
           });
         });
+        it('should not serve the document if filing a document fails', async () => {
+          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(new Error('Database error'));
+          const docketEntry = caseRecord.docketEntries[1];
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: docketEntry.docketEntryId,
+                documentMetadata: docketEntry,
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow('Database error');
+
+          expect(
+            applicationContext.getUseCaseHelpers()
+              .serveDocumentAndGetPaperServicePdf,
+          ).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -509,12 +531,44 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const expectedCount = [
+          const expectedMultiDocketedOn = [
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
-          ].length;
+          ];
+          const expectedCount = expectedMultiDocketedOn.length;
+
           expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
             expectedCount,
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: caseRecord.docketNumber,
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[0],
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[1],
+              }),
+            }),
           );
         });
 
@@ -545,11 +599,6 @@ describe('editPaperFilingInteractor', () => {
               leadDocketNumber: caseRecord.docketNumber,
             },
           ]);
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
@@ -615,11 +664,6 @@ describe('editPaperFilingInteractor', () => {
               ],
             }),
           );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);

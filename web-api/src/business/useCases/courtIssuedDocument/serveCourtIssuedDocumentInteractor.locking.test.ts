@@ -93,8 +93,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   beforeEach(() => {
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
 
     applicationContext

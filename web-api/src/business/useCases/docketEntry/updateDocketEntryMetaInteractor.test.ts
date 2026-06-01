@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
@@ -15,20 +16,19 @@ import {
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getContactPrimary } from '@shared/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('updateDocketEntryMetaInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -40,6 +40,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,
+    originallyFiledDocketNumber: MOCK_CASE.docketNumber,
     filedBy: 'Test Petitioner',
     filedByRole: ROLES.petitioner,
     filers: [getContactPrimary(MOCK_CASE).contactId],
@@ -123,6 +124,9 @@ describe('updateDocketEntryMetaInteractor', () => {
         eventCode: 'SOP',
         index: 7,
         judge: 'Buch',
+        servedAt: '2019-01-01T05:00:00.000Z',
+        multiDocketedOn: ['102-20', '103-20'],
+        servedParties: [{ name: 'Some Party' }],
       },
       {
         ...baseDocketEntry,
@@ -141,7 +145,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .addCoversheetInteractor.mockImplementation(() => ({
+      .addCoversheetInteractor.mockResolvedValue({
         createdAt: '2011-02-22T00:01:00.000Z',
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
         docketNumber: '101-20',
@@ -157,7 +161,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         judge: 'Buch',
         processingStatus: 'complete',
         userId: mockUserId,
-      }));
+      });
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -489,7 +493,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should make a call to update the docketEntryEntity before adding a coversheet when the filingDate field is changed', async () => {
+  it('should upsert the docket entry before adding a coversheet when the filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -502,14 +506,16 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedEntries = upsertDocketEntries.mock.calls[0][0];
-
-    expect(updatedEntries).toMatchObject([
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
       expect.objectContaining({
         docketNumber: MOCK_CASE.docketNumber,
         filingDate: '2020-08-01T00:01:00.000Z',
       }),
     ]);
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should add a new coversheet when filingDate field is changed', async () => {
@@ -607,7 +613,6 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
     await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -653,6 +658,194 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
     expect(updatedDocketEntry?.previousDocument).toBeDefined();
     expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
+  });
+
+  it('should propagate docket entry updates to all multidocketed cases', async () => {
+    const mockLeadCaseDocketNumber = '101-18';
+    const mockconsolidatedCase1DocketNumber = '102-20';
+    const mockconsolidatedCase2DocketNumber = '103-20';
+    const mockConsolidatedDocketEntry = {
+      ...mockDocketEntries[0],
+      multiDocketedOn: [
+        mockLeadCaseDocketNumber,
+        mockconsolidatedCase1DocketNumber,
+        mockconsolidatedCase2DocketNumber,
+      ],
+      docketEntryId: '6e8100ac-1459-4d72-bffa-b9036618aacb',
+    };
+
+    const consolidatedCase1 = {
+      ...MOCK_CASE,
+      docketNumber: mockconsolidatedCase1DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase1DocketNumber,
+        },
+      ],
+    };
+
+    const consolidatedCase2 = {
+      ...MOCK_CASE,
+      docketNumber: mockconsolidatedCase2DocketNumber,
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockconsolidatedCase2DocketNumber,
+        },
+      ],
+    };
+
+    const leadCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: mockconsolidatedCase1DocketNumber,
+          sortableDocketNumber: 102000020,
+        },
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: mockconsolidatedCase2DocketNumber,
+          sortableDocketNumber: 103000020,
+        },
+      ],
+      docketEntries: [
+        ...mockDocketEntries,
+        {
+          ...mockConsolidatedDocketEntry,
+          docketNumber: mockLeadCaseDocketNumber,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      leadCase,
+      consolidatedCase1,
+      consolidatedCase2,
+    ]);
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockConsolidatedDocketEntry,
+          documentTitle: 'Updated Document Title',
+          freeText: 'Updated free text',
+        },
+        docketNumber: leadCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: expect.arrayContaining([
+        leadCase.docketNumber,
+        consolidatedCase1.docketNumber,
+        consolidatedCase2.docketNumber,
+      ]),
+    });
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: leadCase.docketNumber,
+              documentTitle: 'Updated Document Title',
+              freeText: 'Updated free text',
+            }),
+          ]),
+        }),
+      }),
+    );
+
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
+      expect.objectContaining({
+        docketNumber: consolidatedCase1.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+      expect.objectContaining({
+        docketNumber: consolidatedCase2.docketNumber,
+        documentTitle: 'Updated Document Title',
+        freeText: 'Updated free text',
+      }),
+    ]);
+  });
+
+  it('should only propagate specific editable fields to multidocketed cases', async () => {
+    const consolidatedCase1 = {
+      ...MOCK_CASE,
+      docketNumber: '102-20',
+      docketEntries: mockDocketEntries.map(d => ({
+        ...d,
+        docketNumber: '102-20',
+      })),
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: 'different-contact-id',
+        },
+      ],
+    };
+
+    const leadCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: MOCK_CASE.docketNumber,
+          sortableDocketNumber: Case.getSortableDocketNumber(
+            MOCK_CASE.docketNumber,
+          ),
+        },
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          docketNumber: '102-20',
+          sortableDocketNumber: 102000020,
+        },
+      ],
+      docketEntries: mockDocketEntries,
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      leadCase,
+      consolidatedCase1,
+    ]);
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[6],
+          addToCoversheet: true,
+          additionalInfo: 'new additional info',
+          documentTitle: 'Updated Title',
+          judge: 'different judge',
+          pending: true,
+        },
+        docketNumber: leadCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntries).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          addToCoversheet: true,
+          additionalInfo: 'new additional info',
+          docketNumber: consolidatedCase1.docketNumber,
+          documentTitle: 'Updated Title',
+          judge: 'different judge',
+          pending: true,
+        }),
+      ]),
+    );
   });
 
   it('should add affected docket entries if body has new records', async () => {
@@ -740,5 +933,130 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
 
     expect(upsertDocketEntryRelatedEntries).not.toHaveBeenCalled();
+  });
+
+  it('should not update the case if the transaction failed', async () => {
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: {
+            ...mockDocketEntries[0],
+            documentTitle: 'Updated Description',
+          },
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+  });
+
+  it('should restore S3 file if transaction fails after coversheet is added', async () => {
+    const mockBackupData = new Uint8Array([1, 2, 3]);
+    // Use mockDocketEntries[4] which has an explicit documentStorageId
+    const testDocketEntry = {
+      ...mockDocketEntries[4],
+      servedAt: '2012-02-22T02:22:00.000Z',
+      servedParties: [{ name: 'test party' }],
+    };
+    const mockDocumentStorageId = testDocketEntry.documentStorageId;
+
+    // Mock getDocument to return backup data
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(mockBackupData);
+
+    // Mock saveDocumentFromLambda to succeed
+    applicationContext
+      .getPersistenceGateway()
+      .saveDocumentFromLambda.mockResolvedValue(undefined);
+
+    // Ensure addCoversheetInteractor returns a Promise with updated entry
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockResolvedValue({
+        ...testDocketEntry,
+        filingDate: '2020-08-01T00:01:00.000Z',
+        numberOfPages: 10,
+      });
+
+    // Make updateCaseAndAssociations fail AFTER addCoversheetInteractor succeeds
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Transaction failed'),
+    );
+
+    await expect(
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: {
+            ...testDocketEntry,
+            filingDate: '2020-08-01T00:01:00.000Z',
+          },
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Transaction failed');
+
+    // Verify coversheet was attempted to be added
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+
+    // Verify S3 file was backed up before coversheet was added
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        applicationContext,
+        key: mockDocumentStorageId,
+      }),
+    );
+
+    // Verify S3 file was restored after transaction failed
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        document: mockBackupData,
+        key: mockDocumentStorageId,
+      }),
+    );
+  });
+
+  it('should update page count when coversheet is added', async () => {
+    const mockUpdatedDocketEntry = {
+      ...mockDocketEntries[0],
+      numberOfPages: 5, // Coversheet added, page count increased
+    };
+
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockResolvedValue(mockUpdatedDocketEntry);
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          filingDate: '2020-08-01T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
+      );
+
+    expect(updatedDocketEntry).toBeDefined();
+    expect(updatedDocketEntry?.numberOfPages).toBe(5);
   });
 });

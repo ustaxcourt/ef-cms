@@ -1,4 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 export const setEditStatusReportOrderFormAction = ({
   get,
@@ -12,8 +16,16 @@ export const setEditStatusReportOrderFormAction = ({
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/status-report-order-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/status-report-order-edit`;
 
+  const rawAdditionalOrderTextArray =
+    documentToEdit.draftOrderState.additionalOrderTextArray ??
+    (documentToEdit.draftOrderState.additionalOrderText
+      ? [documentToEdit.draftOrderState.additionalOrderText]
+      : []);
+
   store.set(state.form, {
-    additionalOrderText: documentToEdit.draftOrderState.additionalOrderText,
+    additionalOrderTextArray: additionalOrderTextArrayWithRequiredFirstField(
+      normalizeAdditionalOrderTextArray(rawAdditionalOrderTextArray),
+    ),
     docketEntryDescription:
       documentToEdit.draftOrderState.docketEntryDescription,
     dueDate: documentToEdit.draftOrderState.dueDate,

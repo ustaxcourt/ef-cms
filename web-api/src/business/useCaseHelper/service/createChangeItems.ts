@@ -16,6 +16,10 @@ import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
 } from '@web-api/business/utilities/calculateEmail';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -133,6 +137,11 @@ const createDocketEntryForChange = async ({
       applicationContext,
       documentBytes: changeOfAddressPdfWithCover,
     });
+
+  changeOfAddressDocketEntry.setOriginallyFiledDocketNumber(
+    caseEntity.docketNumber,
+  );
+
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -237,12 +246,21 @@ export const generateAndServeDocketEntry = async ({
       user,
     });
   }
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-    servedParties,
-  });
+
+  async function sendServedPartiesEmails() {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
+    });
+  }
+
+  if (inTransaction()) {
+    onTransactionCommit(sendServedPartiesEmails);
+  } else {
+    await sendServedPartiesEmails();
+  }
 
   return { caseEntity, url };
 };

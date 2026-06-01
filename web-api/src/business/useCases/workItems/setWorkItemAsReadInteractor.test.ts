@@ -10,7 +10,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds as getWorkItemsByIdsMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -20,7 +20,7 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 
 describe('setWorkItemAsReadInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getWorkItemsByIds = getWorkItemsByIdsMock as jest.Mock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -36,7 +36,7 @@ describe('setWorkItemAsReadInteractor', () => {
   };
 
   beforeEach(() => {
-    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
+    getWorkItemsByIds.mockResolvedValue([new WorkItem(mockWorkItem)]);
 
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
@@ -58,7 +58,7 @@ describe('setWorkItemAsReadInteractor', () => {
   });
 
   it('should throw an error when the work item is not found', async () => {
-    getWorkItemById.mockResolvedValue(undefined);
+    getWorkItemsByIds.mockResolvedValue([]);
 
     await expect(
       setWorkItemAsReadInteractor(

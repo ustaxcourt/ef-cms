@@ -1,8 +1,7 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { caseExistsAction } from './caseExistsAction';
-import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { presenter } from '@web-client/presenter/presenter-mock';
+import { caseExistsAction } from '@web-client/presenter/actions/caseExistsAction';
 
 describe('caseExistsAction', () => {
   let successMock;
@@ -17,12 +16,19 @@ describe('caseExistsAction', () => {
       error: errorMock,
       success: successMock,
     };
+
+    applicationContext
+      .getUseCases()
+      .getCaseExistsInteractor.mockResolvedValue();
   });
 
   it('calls the interactor for fetching the case', async () => {
     await runAction(caseExistsAction, {
       modules: {
         presenter,
+      },
+      props: {
+        docketNumber: '101-24',
       },
       state: {},
     });
@@ -34,13 +40,12 @@ describe('caseExistsAction', () => {
   });
 
   it('calls the success path when the interactor runs successfully', async () => {
-    applicationContext
-      .getUseCases()
-      .getCaseExistsInteractor.mockReturnValue(MOCK_CASE);
-
     await runAction(caseExistsAction, {
       modules: {
         presenter,
+      },
+      props: {
+        docketNumber: '101-24',
       },
       state: {},
     });
@@ -51,9 +56,7 @@ describe('caseExistsAction', () => {
   it('calls the error path when an error is encountered', async () => {
     applicationContext
       .getUseCases()
-      .getCaseExistsInteractor.mockImplementation(() => {
-        throw new Error('Nope!');
-      });
+      .getCaseExistsInteractor.mockRejectedValueOnce(new Error('Nope!'));
 
     await runAction(caseExistsAction, {
       modules: {
@@ -63,5 +66,20 @@ describe('caseExistsAction', () => {
     });
 
     expect(errorMock).toHaveBeenCalled();
+  });
+
+  it('calls the error path and skips interactor when docketNumber is missing', async () => {
+    await runAction(caseExistsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {},
+    });
+
+    expect(errorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getCaseExistsInteractor,
+    ).not.toHaveBeenCalled();
   });
 });

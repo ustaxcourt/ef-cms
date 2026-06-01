@@ -200,6 +200,34 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should not send served parties emails if updateCaseAndAssociations fails', async () => {
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
@@ -349,6 +377,26 @@ describe('fileExternalDocumentInteractor', () => {
     );
     expect(entry).toBeDefined();
     expect(entry?.servedAt).toBeDefined();
+    expect(entry).toMatchObject({
+      docketNumber: caseRecord.docketNumber,
+      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
+      originallyFiledDocketNumber: caseRecord.docketNumber,
+      isOnDocketRecord: true,
+      documentStorageId: mockDocketEntryId,
+    });
+    const savedCase2 = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+    const entry2 = savedCase2.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry2).toBeDefined();
+    expect(entry2?.servedAt).toBeDefined();
+    expect(entry2).toMatchObject({
+      docketNumber: consolidatedCase.docketNumber,
+      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
+      originallyFiledDocketNumber: caseRecord.docketNumber,
+      isOnDocketRecord: true,
+      documentStorageId: mockDocketEntryId,
+    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
