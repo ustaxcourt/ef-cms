@@ -73,7 +73,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
           persist-credentials: true
       - name: Setup Node
@@ -124,3 +124,8 @@ jobs:
           coverage-summary-path: coverage/shared/coverage-summary.json
           badges-directory: .badges/shared
           protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+      - name: Commit badges
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Update coverage badges [skip ci]'
+          file_pattern: .badges

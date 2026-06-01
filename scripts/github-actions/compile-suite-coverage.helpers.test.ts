@@ -72,7 +72,7 @@ describe('compile-suite-coverage', () => {
     );
   });
 
-  it('logs an error when download fails for a suite but continues with others', async () => {
+  it('throws an error when some coverage summaries are missing', async () => {
     const dependencies = getBaseDependencies();
     (dependencies.getCoverageSummary as jest.Mock)
       .mockRejectedValueOnce(new Error('Download failed')) // api
@@ -80,28 +80,31 @@ describe('compile-suite-coverage', () => {
       .mockResolvedValueOnce(undefined) // scripts
       .mockResolvedValueOnce(undefined); // shared
 
-    await compileSuiteCoverage(baseConfig, dependencies);
+    await expect(
+      compileSuiteCoverage(baseConfig, dependencies),
+    ).rejects.toThrow(
+      'Coverage summary artifacts are not ready for PR #1234. Missing: api, scripts, shared.',
+    );
 
     expect(dependencies.error).toHaveBeenCalledWith(
       expect.stringContaining(
         'Error downloading coverage summary for api: Error: Download failed',
       ),
     );
-    expect(dependencies.log).toHaveBeenCalledWith(
-      'Successfully compiled 1 suite coverage summaries.',
-    );
   });
 
-  it('throws an error when no coverage summaries were downloaded', async () => {
+  it('throws an error when all coverage summaries are missing', async () => {
     const dependencies = getBaseDependencies();
     (dependencies.getCoverageSummary as jest.Mock).mockResolvedValue(undefined);
 
     await expect(
       compileSuiteCoverage(baseConfig, dependencies),
-    ).rejects.toThrow('No coverage summaries were downloaded.');
+    ).rejects.toThrow(
+      'Coverage summary artifacts are not ready for PR #1234. Missing: api, client, scripts, shared.',
+    );
   });
 
-  it('runPrepareSuiteCoverageScript should call prepareSuiteCoverage with real dependencies', async () => {
+  it('runCompileSuiteCoverageScript should call compileSuiteCoverage with real dependencies', async () => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
     jest.spyOn(fs, 'mkdirSync').mockImplementation(() => '');
     jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});

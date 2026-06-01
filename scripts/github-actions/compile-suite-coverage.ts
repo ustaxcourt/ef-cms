@@ -47,7 +47,7 @@ const {
   pullRequestNumber: string;
 };
 
-const pullRequestNumber = parseInt(pullRequestNumberStr.split(',')[0]);
+const pullRequestNumber = parseInt(pullRequestNumberStr.split(',')[0], 10);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
