@@ -354,7 +354,7 @@ export const cases410_419: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     qcCompleteForTrial: {},
     receivedAt: '2011-10-11T04:00:00.000Z',
-    sortableDocketNumber: 2023000413,
+    sortableDocketNumber: 2022000413,
     status: CASE_STATUS_TYPES.submitted,
     petitioners: [],
     docketEntries: [],
