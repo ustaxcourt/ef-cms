@@ -150,7 +150,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       goToCase(docketNumber);
       addPetitionerAsPartyToCase();
 
-      cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
+      cy.intercept('GET', `/cases/${docketNumber}*`).as('caseDetails');
       goToCase(docketNumber);
       cy.wait('@caseDetails').then(interception => {
         cy.wrap(

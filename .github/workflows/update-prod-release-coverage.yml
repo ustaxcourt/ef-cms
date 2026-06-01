@@ -1,0 +1,66 @@
+name: Update Prod Release Coverage
+
+on:
+  workflow_run:
+    workflows:
+      - Node.js CI - API
+      - Node.js CI - Client Unit Tests
+      - Node.js CI - Scripts
+      - Node.js CI - Shared
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  update-prod-release-coverage:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.pull_requests[0] &&
+      github.event.workflow_run.pull_requests[0].base.ref == 'prod'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout coverage updater dependencies
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            .nvmrc
+            package-lock.json
+            package.json
+            scripts/github-actions/suite-coverage.helpers.ts
+            scripts/github-actions/update-prod-release-coverage.ts
+            scripts/github-actions/update-prod-release-coverage.helpers.ts
+            scripts/helpers/parseArgsAndEnvVars.ts
+            shared/admin-tools/aws/ssmHelper.ts
+            shared/admin-tools/util.ts
+            shared/src/business/utilities/DateHandler.ts
+            tsconfig.json
+          sparse-checkout-cone-mode: false
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Restore Node Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: NPM Install Trusted Dependencies
+        if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
+        run: npm ci --ignore-scripts
+      - name: Update coverage table when all suite summaries are ready
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_PULL_REQUEST_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          scripts/github-actions/update-prod-release-coverage.ts \
+            "${RELEASE_PULL_REQUEST_NUMBER}" \
+            "${RELEASE_HEAD_SHA}"
