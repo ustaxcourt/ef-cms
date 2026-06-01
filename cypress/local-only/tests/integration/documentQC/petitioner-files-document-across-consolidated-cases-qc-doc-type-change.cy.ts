@@ -124,6 +124,7 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         ).check({ force: true });
         cy.get('[data-testid="save-and-finish-document-qc"]').click();
         cy.get('[data-testid="loading-overlay"]').should('not.exist');
+        cy.get('[data-testid="confirm-modal-close-btn"').click();
 
         // NODC should land on the QC'd case.
         waitForDocketEntryByEventCode({
