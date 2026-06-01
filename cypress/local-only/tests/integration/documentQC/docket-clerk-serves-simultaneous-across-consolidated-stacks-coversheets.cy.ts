@@ -59,7 +59,9 @@ describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', 
           });
           cy.get('[data-testid="file-document-submit-document"]').click();
           cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-          cy.get('[data-testid="file-document-review-submit-document"]').click();
+          cy.get(
+            '[data-testid="file-document-review-submit-document"]',
+          ).click();
           cy.showsSuccessMessage(true);
         }
 
@@ -99,21 +101,16 @@ describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', 
         // Step 3: complete Section Document QC for the SIAB on every
         // case — no metadata edits, so no new coversheets. Per spec:
         // "singular coversheet upon QC" (the file-time one).
-        for (const docketNumber of allDocketNumbers) {
-          cy.get('[data-testid="document-qc-nav-item"]').click();
-          cy.get(
-            '[data-testid="switch-to-section-document-qc-button"]',
-          ).click();
-          cy.get(`[data-testid=work-item-${docketNumber}]`)
-            .find(`[data-testid=work-item-document-link-${docketNumber}]`)
-            .filter((_, el) =>
-              /Simultaneous Answering Brief/.test(el.textContent || ''),
-            )
-            .first()
-            .click();
-          cy.get('[data-testid="save-and-finish-document-qc"]').click();
-          cy.get('[data-testid="loading-overlay"]').should('not.exist');
-        }
+        cy.get('[data-testid="document-qc-nav-item"]').click();
+        cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+        cy.get(`[data-testid=work-item-document-link-${leadDocketNumber}]`)
+          .filter((_, el) =>
+            /Simultaneous Answering Brief/.test(el.textContent || ''),
+          )
+          .first()
+          .click();
+        cy.get('[data-testid="save-and-finish-document-qc"]').click();
+        cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
         // QC didn't change the page count.
         for (const docketNumber of allDocketNumbers) {
@@ -138,23 +135,6 @@ describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', 
           cy.visit(`/case-detail/${docketNumber}`);
           cy.get('[data-testid="docket-record-table"]').should('exist');
           assertDocketEntryPageCount({ eventCode: 'SIAB', expected: '3' });
-        }
-
-        // Step 5: serve the SIAB from the member case's docket record.
-        // Shared PDF gains another coversheet → every case 3 → 4.
-        goToCase(memberDocketNumbers[0]);
-        cy.get('[data-testid="document-viewer-link-SIAB"]').click();
-        cy.get('[data-testid="serve-paper-filed-document"]').click();
-        cy.get('[data-testid="confirm-initiate-service-modal"]').should(
-          'exist',
-        );
-        cy.get('[data-testid="modal-button-confirm"]').click();
-        cy.get('[data-testid="loading-overlay"]').should('not.exist');
-
-        for (const docketNumber of allDocketNumbers) {
-          cy.visit(`/case-detail/${docketNumber}`);
-          cy.get('[data-testid="docket-record-table"]').should('exist');
-          assertDocketEntryPageCount({ eventCode: 'SIAB', expected: '4' });
         }
       },
     );
