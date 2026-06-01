@@ -135,7 +135,7 @@ export const DateSelector = ({
         if (!myDatePicker)
           throw new Error('could not find expected date picker');
 
-        if (disabled && !showDisabledDate) {
+        if ((disabled && !showDisabledDate) || pristine) {
           (myDatePicker as HTMLInputElement).value = '';
         }
 
