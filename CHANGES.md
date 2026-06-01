@@ -15,6 +15,21 @@
 4. Press `Command + Shift + P`, search for `Developer: Reload Window`, and select it so the workspace, TypeScript SDK, and extensions reload cleanly.
 
 </details>
+<details><summary>Dependency Updates - Week of 2026-06-01</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.82`
+Publish the CI image from an experimental environment before merging (see [dependency-updates.md](docs/dependency-updates.md#23-publish-new-ecr-docker-image-if-needed)):
+```bash
+. scripts/env/set-env.zsh exp7
+npm run deploy:ci-image
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-05-25</summary>
 
 ## Local
