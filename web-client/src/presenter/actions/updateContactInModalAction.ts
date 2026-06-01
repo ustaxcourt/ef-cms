@@ -8,12 +8,22 @@ export const updateContactInModalAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.modal.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .updateContactInteractor(applicationContext, {
       contactInfo: contact,
       docketNumber,
     });
 
-  store.set(state.caseDetail, updatedCase);
+  const updatedCase = await applicationContext
+    .getUseCases()
+    .getCaseInteractor(applicationContext, { docketNumber });
+
+  const existingCase = get(state.caseDetail);
+
+  store.set(state.caseDetail, {
+    ...updatedCase,
+    docketEntries: existingCase.docketEntries,
+    messages: existingCase.messages,
+  });
 };

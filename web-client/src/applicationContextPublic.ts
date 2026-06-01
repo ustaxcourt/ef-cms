@@ -66,6 +66,7 @@ import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '@web-client/proxies/maintenance/getMaintenanceModePublicProxy';
+import { getPublicCaseDocketEntriesInteractor } from '@web-client/proxies/getPublicCaseDocketEntriesProxy';
 import { getPublicCaseExistsInteractor } from '@web-client/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '@web-client/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '@web-client/proxies/public/getPublicJudgesProxy';
@@ -105,6 +106,7 @@ const allUseCases = {
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
+  getCaseDocketEntriesInteractor: getPublicCaseDocketEntriesInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
