@@ -18,8 +18,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
-import { Case, getContactPrimary } from './Case';
-import { isMemberCase } from '../../utilities/generateSelectedFilterList';
+import { Case, getContactPrimary, isMemberCase } from './Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
 import {
   MOCK_DOCUMENTS,
