@@ -42,7 +42,6 @@ import {
   needsNewCoversheet,
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
@@ -87,7 +86,6 @@ const completeDocketEntryQC = async (
   { entryMetadata }: { entryMetadata: CompleteDocketEntryQCEntryMetadata },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  caseDetail: CaseDTO;
   paperServiceParties: Array<RawUser & { docketNumber: string }>;
   paperServicePdfUrl: string | undefined;
   paperServiceDocumentTitle: string | undefined;
@@ -500,7 +498,6 @@ const completeDocketEntryQC = async (
   );
 
   return {
-    caseDetail: new CaseDTO(filingCase.toRawObject()),
     paperServiceDocumentTitle,
     paperServiceParties,
     paperServicePdfUrl,

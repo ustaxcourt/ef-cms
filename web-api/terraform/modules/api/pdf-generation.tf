@@ -68,7 +68,7 @@ module "pdf_generation_lambda" {
   role           = aws_iam_role.pdf_generator_role.arn
   environment    = var.lambda_environment
   timeout        = "900"
-  memory_size    = "6508"
+  memory_size    = "10240"
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
   ]

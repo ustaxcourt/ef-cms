@@ -1,55 +1,34 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * saveCaseNote
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update case note
- * @param {string} providers.caseNote the note to update
- * @returns {object} the updated case note returned from persistence
- */
-export const saveCaseNote = async (
+const saveCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await getCaseByDocketNumber({
+  const rawCaseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
 
-  const caseToUpdate = new Case(
-    { ...caseRecord, caseNote },
-    {
-      authorizedUser,
-    },
-  )
-    .validate()
-    .toRawObject();
+  const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+  caseEntity.caseNote = caseNote;
 
-  const result = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate,
-  });
+  const validatedCase = caseEntity.validate().toRawObject();
 
-  return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
-  );
+  await upsertCases([validatedCase]);
 };
 
 export const saveCaseNoteInteractor = withLocking(

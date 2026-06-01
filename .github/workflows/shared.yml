@@ -40,8 +40,10 @@ jobs:
     uses: ./.github/workflows/job_check-coverage.yml
     with:
       branches: 95
+      coverage_suite: shared
       functions: 95
       lines: 95
+      pull_request_number: ${{ github.event.pull_request.number }}
       statements: 95
       workflow_filename: shared.yml
   persist-test-file-times:

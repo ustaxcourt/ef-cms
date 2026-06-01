@@ -32,4 +32,16 @@ describe('getDocument', () => {
       applicationContext.getStorageClient().getObject,
     ).toHaveBeenCalledWith({ Bucket: documentsBucketName, Key: key });
   });
+
+  it('should throw an error when the storage client returns a response with no Body', async () => {
+    (applicationContext.getStorageClient().getObject as jest.Mock)
+      .mockResolvedValueOnce({});
+
+    await expect(
+      getDocument({
+        applicationContext,
+        key,
+      }),
+    ).rejects.toThrow(`Unable to get document (${key}) from persistence.`);
+  });
 });

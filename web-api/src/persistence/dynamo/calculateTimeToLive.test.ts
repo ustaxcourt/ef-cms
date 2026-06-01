@@ -56,4 +56,14 @@ describe('calculateTimeToLive', () => {
         Number(formatDateString(threeDaysAgo, FORMATS.UNIX_TIMESTAMP_SECONDS)),
     );
   });
+
+  it('should default numDays to 8 when it is not provided', () => {
+    const eightDaysAgo = subtractISODates(now, { day: 8 });
+    const ttl = calculateTimeToLive({ timestamp: eightDaysAgo } as any);
+    expect(ttl.numSeconds).toBe(0);
+    expect(ttl.expirationTimestamp).toBe(
+      8 * 86400 +
+        Number(formatDateString(eightDaysAgo, FORMATS.UNIX_TIMESTAMP_SECONDS)),
+    );
+  });
 });
