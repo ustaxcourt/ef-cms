@@ -28,6 +28,11 @@ const ALLOWED_STYLE_PROPERTIES: ReadonlySet<string> = new Set([
 
 const QL_INDENT_CLASS = /^ql-indent-\d+$/;
 
+const ALLOWED_CLASSES: ReadonlySet<string> = new Set(['indent-paragraph']);
+
+const isAllowedClass = (token: string): boolean =>
+  QL_INDENT_CLASS.test(token) || ALLOWED_CLASSES.has(token);
+
 const DANGEROUS_STYLE_PATTERN = /expression\s*\(|url\s*\(|javascript\s*:/i;
 
 type DomNode = ReturnType<typeof parseDocument>['children'][number];
@@ -35,7 +40,7 @@ type DomNode = ReturnType<typeof parseDocument>['children'][number];
 const sanitizeClassAttr = (value: string): string | undefined => {
   const kept = value
     .split(/\s+/)
-    .filter(token => token.length > 0 && QL_INDENT_CLASS.test(token));
+    .filter(token => token.length > 0 && isAllowedClass(token));
   return kept.length > 0 ? kept.join(' ') : undefined;
 };
 
