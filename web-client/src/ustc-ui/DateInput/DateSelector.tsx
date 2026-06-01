@@ -57,13 +57,19 @@ export const DateSelector = ({
       ? 'usa-date-picker display-inline-block left-labeled'
       : 'usa-date-picker';
 
+  const getExternalDatePickerInput = (): HTMLInputElement => {
+    const container = formGroupInputRef.current;
+    const externalInput = container?.querySelector(datePickerId);
+
+    if (!externalInput) throw new Error('could not find expected date picker');
+
+    return externalInput as HTMLInputElement;
+  };
+
   useEffect(() => {
     if (formGroupInputRef.current) {
       datePicker.on(formGroupInputRef.current);
-      const myDatePicker =
-        formGroupInputRef.current.querySelector(datePickerId);
-
-      if (!myDatePicker) throw new Error('could not find expected date picker');
+      const myDatePicker = getExternalDatePickerInput();
 
       const transformDomEventIntoReactEvent = (
         e: Event,
@@ -91,62 +97,43 @@ export const DateSelector = ({
         ? (e: Event) => onBlur(transformDomEventIntoReactEvent(e))
         : null;
 
-      (myDatePicker as HTMLInputElement).addEventListener(
-        'change',
-        onChangeHandler,
-      );
-      (myDatePicker as HTMLInputElement).addEventListener(
-        'input',
-        onChangeHandler,
-      );
+      myDatePicker.addEventListener('change', onChangeHandler);
+      myDatePicker.addEventListener('input', onChangeHandler);
+
       if (onBlur && onBlurHandler)
-        (myDatePicker as HTMLInputElement).addEventListener(
-          'blur',
-          onBlurHandler,
-        );
+        myDatePicker.addEventListener('blur', onBlurHandler);
 
       return () => {
-        (myDatePicker as HTMLInputElement).removeEventListener(
-          'change',
-          onChangeHandler,
-        );
-        (myDatePicker as HTMLInputElement).removeEventListener(
-          'input',
-          onChangeHandler,
-        );
+        myDatePicker.removeEventListener('change', onChangeHandler);
+        myDatePicker.removeEventListener('input', onChangeHandler);
 
         if (onBlur && onBlurHandler) {
-          (myDatePicker as HTMLInputElement).removeEventListener(
-            'blur',
-            onBlurHandler,
-          );
+          myDatePicker.removeEventListener('blur', onBlurHandler);
         }
       };
     }
   }, [formGroupInputRef]);
 
   useEffect(() => {
-    if (formGroupInputRef.current) {
-      const input = formGroupInputRef.current.querySelector('.usa-date-picker');
-      if (disabled || pristine) {
-        const myDatePicker =
-          formGroupInputRef.current.querySelector(datePickerId);
+    const container = formGroupInputRef.current;
+    if (!container) return;
 
-        if (!myDatePicker)
-          throw new Error('could not find expected date picker');
+    const picker = container.querySelector('.usa-date-picker');
+    if (!picker) return;
 
-        if ((disabled && !showDisabledDate) || pristine) {
-          (myDatePicker as HTMLInputElement).value = '';
-        }
+    const myDatePicker = getExternalDatePickerInput();
 
-        if (disabled) {
-          datePicker.disable(input);
-        }
-      } else {
-        datePicker.enable(input);
-      }
+    if ((disabled && !showDisabledDate) || pristine) {
+      myDatePicker.value = '';
     }
-  });
+
+    if (disabled) {
+      datePicker.disable(picker);
+      return;
+    }
+
+    datePicker.enable(picker);
+  }, [datePickerId, disabled, pristine, showDisabledDate]);
 
   return (
     <FormGroup
