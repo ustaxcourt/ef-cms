@@ -3,6 +3,14 @@ import {
   updateProdReleaseCoverage,
 } from './update-prod-release-coverage.helpers';
 import type { CoverageSummary } from './suite-coverage.helpers';
+import { runUpdateProdReleaseCoverageScript } from './update-prod-release-coverage.helpers';
+import * as suiteCoverageHelpers from './suite-coverage.helpers';
+
+jest.mock('./suite-coverage.helpers', () => ({
+  ...jest.requireActual('./suite-coverage.helpers'),
+  getCoverageSummary: jest.fn(),
+  updatePullRequestCoverage: jest.fn(),
+}));
 
 describe('update-prod-release-coverage', () => {
   const apiCoverageSummary: CoverageSummary = {
@@ -110,5 +118,36 @@ describe('update-prod-release-coverage', () => {
     expect(dependencies.log).toHaveBeenCalledWith(
       'No coverage update applied on PR #4321.',
     );
+  });
+  describe('runUpdateProdReleaseCoverageScript', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'log').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('runs updateProdReleaseCoverage with DEFAULT_DEPENDENCIES', async () => {
+      jest.mocked(suiteCoverageHelpers.getCoverageSummary).mockResolvedValue({
+        branches: 1,
+        functions: 1,
+        lines: 1,
+        statements: 1,
+        suite: 'api',
+      });
+      jest
+        .mocked(suiteCoverageHelpers.updatePullRequestCoverage)
+        .mockResolvedValue(true);
+
+      await runUpdateProdReleaseCoverageScript({
+        githubRepository: 'ustaxcourt/ef-cms',
+        githubToken: 'gh-token',
+        headSha: 'release-head-sha',
+        pullRequestNumber: 4321,
+      });
+
+      expect(suiteCoverageHelpers.getCoverageSummary).toHaveBeenCalled();
+    });
   });
 });

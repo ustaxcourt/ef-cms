@@ -23,6 +23,24 @@ describe('createSpinner', () => {
     jest.restoreAllMocks();
   });
 
+  it('should render periodically using setInterval', () => {
+    jest.useFakeTimers();
+    jest.spyOn(global, 'setInterval');
+    const spinner = createSpinner('Loading...');
+
+    expect(setInterval).toHaveBeenCalledWith(expect.any(Function), 80);
+
+    const initialWriteCount = (process.stdout.write as jest.Mock).mock.calls
+      .length;
+
+    jest.advanceTimersByTime(80);
+
+    expect(process.stdout.write).toHaveBeenCalledTimes(initialWriteCount + 1);
+
+    spinner.succeed('Done');
+    jest.useRealTimers();
+  });
+
   it('should write the initial spinner frame and text immediately on creation', () => {
     createSpinner('Loading...');
 
