@@ -1,5 +1,4 @@
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { addDraftStampOrderDocketEntryInteractor } from '@web-api/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addDraftWatermarkToDocument } from '@web-api/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from './business/useCases/courtIssuedDocument/addServedStampToDocument';
@@ -20,7 +19,6 @@ import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInv
 import { generateChangeOfAddressHelper } from './business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generatePdfFromHtmlHelper } from './business/useCaseHelper/generatePdfFromHtmlHelper';
-import { generateStampedCoversheetInteractor } from './business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getJudgeForUserHelper } from '@web-api/business/useCaseHelper/getJudgeForUserHelper';
 import { getJudgeInSectionHelper } from './business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from './business/useCaseHelper/getUserIdForNote';
@@ -47,7 +45,6 @@ import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFi
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
-  addDraftStampOrderDocketEntryInteractor,
   addDraftWatermarkToDocument,
   addExistingUserToCase,
   addServedStampToDocument,
@@ -68,7 +65,6 @@ const useCaseHelpers = {
   generateChangeOfAddressHelper,
   generateNoticeOfChangeToInPersonProceeding,
   generatePdfFromHtmlHelper,
-  generateStampedCoversheetInteractor,
   getJudgeForUserHelper,
   getJudgeInSectionHelper,
   getUserIdForNote,

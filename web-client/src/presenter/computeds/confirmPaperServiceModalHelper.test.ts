@@ -35,6 +35,22 @@ describe('confirmPaperServiceModalHelper', () => {
   });
 
   describe('wasMultiDocketed', () => {
+    it('should return defaults when docketEntryId is not set', () => {
+      const result = runCompute(confirmPaperServiceModalHelper, {
+        state: {
+          ...baseState,
+          docketEntryId: undefined,
+        },
+      });
+
+      expect(result).toEqual({
+        wasMultiDocketed: false,
+        multiDocketedOn: [],
+        paperFilingText: 'This case has parties receiving paper service:',
+        contactsNeedingPaperService: [],
+      });
+    });
+
     it('should throw an Error when the docket entry is not found', () => {
       expect(() =>
         runCompute(confirmPaperServiceModalHelper, {
