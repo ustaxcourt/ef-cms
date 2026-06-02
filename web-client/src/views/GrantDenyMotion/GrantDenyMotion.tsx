@@ -265,6 +265,7 @@ export const GrantDenyMotion = connect(
                       <label
                         className="usa-checkbox__label"
                         htmlFor="stricken-from-trial-session"
+                        style={isCalendared ? undefined : { color: '#757575' }}
                         title={calendaredDisabledTitle}
                       >
                         This case is stricken from the trial session
