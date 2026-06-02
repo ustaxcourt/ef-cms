@@ -25,6 +25,7 @@ const config: Config = {
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
+    'circleci/update-aws-credentials-in-context.helpers.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
