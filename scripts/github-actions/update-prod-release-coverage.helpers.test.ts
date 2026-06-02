@@ -1,10 +1,10 @@
 import {
   type UpdateProdReleaseCoverageDependencies,
-  updateProdReleaseCoverage,
   runUpdateProdReleaseCoverageScript,
+  updateProdReleaseCoverage,
 } from './update-prod-release-coverage.helpers';
-import type { CoverageSummary } from './suite-coverage.helpers';
 import * as suiteCoverageHelpers from './suite-coverage.helpers';
+import type { CoverageSummary } from './suite-coverage.helpers';
 
 jest.mock('./suite-coverage.helpers', () => ({
   ...jest.requireActual('./suite-coverage.helpers'),
@@ -120,34 +120,29 @@ describe('update-prod-release-coverage', () => {
     );
   });
   describe('runUpdateProdReleaseCoverageScript', () => {
-    beforeEach(() => {
-      jest.spyOn(console, 'log').mockImplementation(() => {});
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('runs updateProdReleaseCoverage with DEFAULT_DEPENDENCIES', async () => {
-      jest.mocked(suiteCoverageHelpers.getCoverageSummary).mockResolvedValue({
-        branches: 1,
-        functions: 1,
-        lines: 1,
-        statements: 1,
-        suite: 'api',
-      });
-      jest
+    it('should call updateProdReleaseCoverage with the default dependencies', async () => {
+      const getCoverageSummaryMock = jest
+        .mocked(suiteCoverageHelpers.getCoverageSummary)
+        .mockResolvedValue(apiCoverageSummary);
+      const updatePullRequestCoverageMock = jest
         .mocked(suiteCoverageHelpers.updatePullRequestCoverage)
         .mockResolvedValue(true);
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
-      await runUpdateProdReleaseCoverageScript({
-        githubRepository: 'ustaxcourt/ef-cms',
-        githubToken: 'gh-token',
-        headSha: 'release-head-sha',
-        pullRequestNumber: 4321,
-      });
+      await runUpdateProdReleaseCoverageScript(baseConfig);
 
-      expect(suiteCoverageHelpers.getCoverageSummary).toHaveBeenCalled();
+      expect(getCoverageSummaryMock).toHaveBeenCalledTimes(
+        suiteCoverageHelpers.COVERAGE_SUITES.length,
+      );
+      expect(updatePullRequestCoverageMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          pullRequestNumber: baseConfig.pullRequestNumber,
+          repository: baseConfig.githubRepository,
+          token: baseConfig.githubToken,
+        }),
+      );
+
+      logSpy.mockRestore();
     });
   });
 });
