@@ -71,7 +71,6 @@ export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
 export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
-export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
@@ -113,11 +112,6 @@ export const TRIAL_SESSION_SCOPE_TYPES = {
 export type TrialSessionScope =
   (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
-export const JURISDICTIONAL_OPTIONS = {
-  restoredToDocket: 'The case is restored to the general docket',
-  undersigned: 'Jurisdiction is retained by the undersigned',
-};
-
 export type DocketEntryRelation = {
   disposition: string;
   docketEntryId: string;
@@ -153,9 +147,6 @@ export const MOTION_DISPOSITION_VERBIAGE = {
     ORDER: ['GRANTING IN PART', 'DENYING IN PART'],
   },
 };
-
-export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
-  'This case is stricken from the trial session';
 
 export const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
@@ -2214,6 +2205,29 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
 };
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+
+export const GRANT_DENY_MOTION_OPTIONS = {
+  issueOrderOptions: {
+    allCasesInGroup: 'allCasesInGroup',
+    justThisCase: 'justThisCase',
+  },
+  dueDateMessageOptions: {
+    statusReport: 'statusReport',
+    statusReportOrStipulatedDecision: 'statusReportOrStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+  filingPartyOptions: {
+    petitioners: 'Petitioner(s)',
+    respondent: 'Respondent',
+    joint: 'Joint',
+  },
+  orderType: 'grantDenyMotion',
+};
+
+export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;
 
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,

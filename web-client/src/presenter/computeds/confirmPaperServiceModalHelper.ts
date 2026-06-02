@@ -27,6 +27,25 @@ export const confirmPaperServiceModalHelper = (
   );
 
   if (!currentDocketEntry) {
+    if (!docketEntryId) {
+      const contactsNeedingPaperService: ContactsNeedingPaperService = [];
+
+      (paperServiceParties || []).forEach(person => {
+        contactsNeedingPaperService.push({
+          name: person.name,
+          formattedContactType: roleToDisplay(person),
+          docketNumber: person.docketNumber,
+        });
+      });
+
+      return {
+        wasMultiDocketed: false,
+        multiDocketedOn: [],
+        paperFilingText: 'This case has parties receiving paper service:',
+        contactsNeedingPaperService,
+      };
+    }
+
     throw new Error(`Docket entry ${docketEntryId} was not found.`);
   }
 

@@ -17,7 +17,6 @@ export const OrderResponse = connect(
     motionOrderResponseFormHelper: state.motionOrderResponseFormHelper,
     motionOrderResponsePdfPreviewSequence:
       sequences.motionOrderResponsePdfPreviewSequence,
-    clearDueDateSequence: sequences.clearDueDateSequence,
     clearMotionOrderResponseFormSequence:
       sequences.clearMotionOrderResponseFormSequence,
     constants: state.constants,
@@ -29,10 +28,8 @@ export const OrderResponse = connect(
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
-    setPDFStampDataSequence: sequences.setPDFStampDataSequence,
     submitMotionOrderResponseSequence:
       sequences.submitMotionOrderResponseSequence,
-    submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateMotionOrderResponseSequence:
       sequences.validateMotionOrderResponseSequence,

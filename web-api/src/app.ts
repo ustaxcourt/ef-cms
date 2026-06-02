@@ -59,7 +59,6 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
-import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
@@ -449,10 +448,6 @@ app.use(expressLogger);
       { isAsyncSync: true },
       applicationContext,
     ),
-  );
-  app.post(
-    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
-    lambdaWrapper(generateDraftStampOrderLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
