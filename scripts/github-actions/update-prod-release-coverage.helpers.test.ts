@@ -1,9 +1,9 @@
 import {
   type UpdateProdReleaseCoverageDependencies,
   updateProdReleaseCoverage,
+  runUpdateProdReleaseCoverageScript,
 } from './update-prod-release-coverage.helpers';
 import type { CoverageSummary } from './suite-coverage.helpers';
-import { runUpdateProdReleaseCoverageScript } from './update-prod-release-coverage.helpers';
 import * as suiteCoverageHelpers from './suite-coverage.helpers';
 
 jest.mock('./suite-coverage.helpers', () => ({

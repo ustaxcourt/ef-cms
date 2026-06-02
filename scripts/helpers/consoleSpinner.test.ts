@@ -21,6 +21,7 @@ describe('createSpinner', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
   it('should render periodically using setInterval', () => {
@@ -38,7 +39,6 @@ describe('createSpinner', () => {
     expect(process.stdout.write).toHaveBeenCalledTimes(initialWriteCount + 1);
 
     spinner.succeed('Done');
-    jest.useRealTimers();
   });
 
   it('should write the initial spinner frame and text immediately on creation', () => {

@@ -18,7 +18,7 @@ export const updateAwsCredentialsInContext = async ({
   awsSecretAccessKey: string;
   contextName: string;
   projectSlug: string;
-}) => {
+}): Promise<void> => {
   console.log(`Getting organization ID for project ${projectSlug}...`);
   const organizationId = await getOrganizationId({ apiToken, projectSlug });
   console.log(`Organization ID: ${organizationId}`);
