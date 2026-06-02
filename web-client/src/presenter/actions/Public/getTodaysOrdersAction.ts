@@ -12,31 +12,12 @@ export const getTodaysOrdersAction = async ({
   get,
 }: ActionProps<{}, ClientPublicApplicationContext>) => {
   const { TODAYS_ORDERS_SORT_DEFAULT } = applicationContext.getConstants();
+  const page = get(state.todaysOrders.page) || 1;
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
+  const { results, totalCount } = await applicationContext
+    .getUseCases()
+    .getTodaysOrdersInteractor(applicationContext, { page, todaysOrdersSort });
 
-  let allResults: any[] = [];
-  let page = 1;
-  let totalCount = 0;
-
-  // Fetch all pages so the full result set is available for client-side sort & pagination
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const { results, totalCount: fetchedTotalCount } = await applicationContext
-      .getUseCases()
-      .getTodaysOrdersInteractor(applicationContext, {
-        page,
-        todaysOrdersSort,
-      });
-
-    totalCount = fetchedTotalCount;
-    allResults = [...allResults, ...results];
-
-    if (allResults.length >= totalCount || results.length === 0) {
-      break;
-    }
-    page++;
-  }
-
-  return { todaysOrders: allResults, totalCount };
+  return { todaysOrders: results, totalCount };
 };
