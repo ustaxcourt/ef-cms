@@ -4,11 +4,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { runUpdateProdReleaseCoverageScript } from './update-prod-release-coverage.helpers';
+import { runCompileSuiteCoverageScript } from './compile-suite-coverage.helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'update-prod-release-coverage - Updates the Coverage section in a prod release PR description',
+    'prepare-suite-coverage - Downloads all suite coverage summaries and prepares them for badge generation',
   environment: {
     githubRepository: 'GITHUB_REPOSITORY',
     githubToken: 'GITHUB_TOKEN',
@@ -17,6 +17,11 @@ const scriptConfig: ScriptConfig = {
     headSha: {
       position: 1,
       required: false,
+      type: 'string',
+    },
+    outputDirectory: {
+      position: 2,
+      required: true,
       type: 'string',
     },
     pullRequestNumber: {
@@ -32,11 +37,13 @@ const {
   githubRepository,
   githubToken,
   headSha,
+  outputDirectory,
   pullRequestNumber: pullRequestNumberStr,
 } = parseArgsAndEnvVars(scriptConfig) as {
   githubRepository: string;
   githubToken: string;
   headSha?: string;
+  outputDirectory: string;
   pullRequestNumber: string;
 };
 
@@ -44,10 +51,11 @@ const pullRequestNumber = parseInt(pullRequestNumberStr.split(',')[0], 10);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await runUpdateProdReleaseCoverageScript({
+  await runCompileSuiteCoverageScript({
     githubRepository,
     githubToken,
     headSha,
+    outputDirectory,
     pullRequestNumber,
   });
 })();
