@@ -27,7 +27,7 @@ export const TodaysOrders = connect(
       sequences.openCaseDocumentDownloadUrlSequence,
     setTodaysOrdersCurrentPaginationPageSequence:
       sequences.setTodaysOrdersCurrentPaginationPageSequence,
-    sortTableSequence: sequences.sortTableSequence,
+    sortTodaysOrdersSequence: sequences.sortTodaysOrdersSequence,
     tableSort: state.todaysOrdersTableSort,
     todaysOrdersCurrentPaginationPage: state.todaysOrdersCurrentPaginationPage,
     todaysOrdersHelper: state.todaysOrdersHelper,
@@ -35,14 +35,14 @@ export const TodaysOrders = connect(
   function TodaysOrders({
     openCaseDocumentDownloadUrlSequence,
     setTodaysOrdersCurrentPaginationPageSequence,
-    sortTableSequence,
+    sortTodaysOrdersSequence,
     tableSort,
     todaysOrdersCurrentPaginationPage,
     todaysOrdersHelper,
   }: {
     openCaseDocumentDownloadUrlSequence: any;
     setTodaysOrdersCurrentPaginationPageSequence: any;
-    sortTableSequence: any;
+    sortTodaysOrdersSequence: any;
     tableSort: {
       sortField: string;
       sortOrder: 'asc' | 'desc';
@@ -71,9 +71,10 @@ export const TodaysOrders = connect(
   }) {
     const paginatorTop = useRef(null);
     const results = todaysOrdersHelper.formattedOrders;
+    const { totalCount } = todaysOrdersHelper;
     const currentPaginationPage = todaysOrdersCurrentPaginationPage;
 
-    const totalPages = Math.ceil(results.length / TODAYS_ORDERS_PAGE_SIZE);
+    const totalPages = Math.ceil(totalCount / TODAYS_ORDERS_PAGE_SIZE);
 
     useEffect(() => {
       if (currentPaginationPage >= totalPages && totalPages > 0) {
@@ -82,11 +83,6 @@ export const TodaysOrders = connect(
         });
       }
     }, [results.length, currentPaginationPage, totalPages]);
-
-    const pagedResults = results.slice(
-      currentPaginationPage * TODAYS_ORDERS_PAGE_SIZE,
-      (currentPaginationPage + 1) * TODAYS_ORDERS_PAGE_SIZE,
-    );
 
     return (
       <>
@@ -151,7 +147,7 @@ export const TodaysOrders = connect(
                               columnData={col}
                               key={idx}
                               orderListId={idx.toString()}
-                              onSort={sortTableSequence}
+                              onSort={sortTodaysOrdersSequence}
                               tableSort={tableSort}
                             />
                           );
@@ -159,7 +155,7 @@ export const TodaysOrders = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {pagedResults.map((order, idx) => {
+                      {results.map((order, idx) => {
                         return (
                           <TodaysOrdersRow
                             key={`order${idx}`}
@@ -184,7 +180,7 @@ export const TodaysOrders = connect(
                       onChange={e => {
                         const [sortField, sortOrder] =
                           e.target.value.split('|');
-                        sortTableSequence({
+                        sortTodaysOrdersSequence({
                           sortField,
                           sortOrder: sortOrder as 'asc' | 'desc',
                           stateKey: tableSort.sortKey,
@@ -239,7 +235,7 @@ export const TodaysOrders = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {pagedResults.map(order => (
+                      {results.map(order => (
                         <tr
                           key={`todays-orders-mobile-${order.docketNumber}-${order.docketEntryId}`}
                         >
