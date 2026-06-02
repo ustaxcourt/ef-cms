@@ -40,6 +40,7 @@ const config: Config = {
     '!email/**',
     '!generate-uuid.ts',
     '!git/prod-release-pr-description.ts',
+    '!github-actions/compile-suite-coverage.ts',
     '!github-actions/download-historical-test-file-times.ts',
     '!github-actions/emit-coverage-summary.ts',
     '!github-actions/split-tests.ts',
