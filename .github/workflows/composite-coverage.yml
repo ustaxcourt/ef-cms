@@ -101,29 +101,29 @@ jobs:
             "${RELEASE_HEAD_SHA}" \
             "coverage"
       - name: Generate API Coverage Badges
-        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: coverage/api/coverage-summary.json
-          badges-directory: .badges/api
-          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+          no-commit: 'true'
+          output-folder: .badges/api
       - name: Generate Client Coverage Badges
-        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: coverage/client/coverage-summary.json
-          badges-directory: .badges/client
-          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+          no-commit: 'true'
+          output-folder: .badges/client
       - name: Generate Scripts Coverage Badges
-        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: coverage/scripts/coverage-summary.json
-          badges-directory: .badges/scripts
-          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+          no-commit: 'true'
+          output-folder: .badges/scripts
       - name: Generate Shared Coverage Badges
-        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        uses: jpb06/coverage-badges-action@latest
         with:
           coverage-summary-path: coverage/shared/coverage-summary.json
-          badges-directory: .badges/shared
-          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+          no-commit: 'true'
+          output-folder: .badges/shared
       - name: Commit badges
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
