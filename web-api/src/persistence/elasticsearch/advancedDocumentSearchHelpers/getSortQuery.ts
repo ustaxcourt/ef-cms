@@ -1,4 +1,7 @@
-import { DOCUMENT_SEARCH_SORT } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  DOCUMENT_SEARCH_SORT,
+  TODAYS_ORDERS_SORTS,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 
 const DOCKET_NUMBER_SORT_SCRIPT = [
   "if (doc['docketNumber.S'].size() == 0) { return 0L; }",
@@ -14,6 +17,15 @@ const DOCKET_NUMBER_SORT_SCRIPT = [
   'return yearFull * 1000000L + seqNum;',
 ].join(' ');
 
+const JUDGE_NAME_SORT_SCRIPT = [
+  "def eventCode = doc['eventCode.S'].size() > 0 ? doc['eventCode.S'].value : '';",
+  "if (eventCode == 'SPOS' || eventCode == 'SPTO') {",
+  "  return doc['judge.S.keyword'].size() > 0 ? doc['judge.S.keyword'].value.toLowerCase() : '';",
+  '} else {',
+  "  return doc['signedJudgeName.S.keyword'].size() > 0 ? doc['signedJudgeName.S.keyword'].value.toLowerCase() : '';",
+  '}',
+].join(' ');
+
 export const getSortQuery = sortField => {
   let sort;
   let sortOrder = 'desc';
@@ -24,6 +36,8 @@ export const getSortQuery = sortField => {
       DOCUMENT_SEARCH_SORT.DOCUMENT_TITLE_ASC,
       DOCUMENT_SEARCH_SORT.FILING_DATE_ASC,
       DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC,
+      TODAYS_ORDERS_SORTS.CASE_CAPTION_ASC,
+      TODAYS_ORDERS_SORTS.JUDGE_NAME_ASC,
     ].includes(sortField)
   ) {
     sortOrder = 'asc';
@@ -64,6 +78,37 @@ export const getSortQuery = sortField => {
     case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC: // fall through
     case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_DESC:
       sort = [{ 'numberOfPages.N': sortOrder }];
+      break;
+    case TODAYS_ORDERS_SORTS.CASE_CAPTION_ASC: // fall through
+    case TODAYS_ORDERS_SORTS.CASE_CAPTION_DESC:
+      sort = [
+        {
+          _script: {
+            order: sortOrder,
+            script: {
+              lang: 'painless',
+              source:
+                "doc['caseCaption.S.keyword'].size() > 0 ? doc['caseCaption.S.keyword'].value.toLowerCase() : ''",
+            },
+            type: 'string',
+          },
+        },
+      ];
+      break;
+    case TODAYS_ORDERS_SORTS.JUDGE_NAME_ASC: // fall through
+    case TODAYS_ORDERS_SORTS.JUDGE_NAME_DESC:
+      sort = [
+        {
+          _script: {
+            order: sortOrder,
+            script: {
+              lang: 'painless',
+              source: JUDGE_NAME_SORT_SCRIPT,
+            },
+            type: 'string',
+          },
+        },
+      ];
       break;
     case DOCUMENT_SEARCH_SORT.FILING_DATE_ASC: // fall through
     case DOCUMENT_SEARCH_SORT.FILING_DATE_DESC: // fall through

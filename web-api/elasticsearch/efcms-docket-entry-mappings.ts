@@ -17,6 +17,12 @@ export const efcmsDocketEntryMappings: Property = {
     },
     'caseCaption.S': {
       type: 'text',
+      fields: {
+        keyword: {
+          type: 'keyword',
+          ignore_above: 4700,
+        },
+      },
     },
     'createdAt.S': {
       type: 'date',
@@ -74,6 +80,12 @@ export const efcmsDocketEntryMappings: Property = {
     },
     'judge.S': {
       type: 'text',
+      fields: {
+        keyword: {
+          type: 'keyword',
+          ignore_above: 256,
+        },
+      },
     },
     'numberOfPages.N': {
       type: 'integer',
@@ -107,6 +119,12 @@ export const efcmsDocketEntryMappings: Property = {
     },
     'signedJudgeName.S': {
       type: 'text',
+      fields: {
+        keyword: {
+          type: 'keyword',
+          ignore_above: 256,
+        },
+      },
     },
     'sk.S': {
       type: 'keyword',
