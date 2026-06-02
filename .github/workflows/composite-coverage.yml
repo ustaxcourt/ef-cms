@@ -1,0 +1,131 @@
+name: Compile Composite Coverage
+
+on:
+  workflow_run:
+    workflows:
+      - Node.js CI - API
+      - Node.js CI - Client Unit Tests
+      - Node.js CI - Scripts
+      - Node.js CI - Shared
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-prod-release-coverage:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      contains(github.event.workflow_run.pull_requests.*.base.ref, 'prod')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout coverage updater dependencies
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            .nvmrc
+            package-lock.json
+            package.json
+            scripts/github-actions/suite-coverage.helpers.ts
+            scripts/github-actions/update-prod-release-coverage.ts
+            scripts/github-actions/update-prod-release-coverage.helpers.ts
+            scripts/helpers/parseArgsAndEnvVars.ts
+            shared/admin-tools/aws/ssmHelper.ts
+            shared/admin-tools/util.ts
+            shared/src/business/utilities/DateHandler.ts
+            tsconfig.json
+          sparse-checkout-cone-mode: false
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Restore Node Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: NPM Install Trusted Dependencies
+        if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
+        run: npm ci --ignore-scripts
+      - name: Update coverage table when all suite summaries are ready
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_PULL_REQUEST_NUMBER: ${{ join(github.event.workflow_run.pull_requests.*.number, ',') }}
+        run: |
+          scripts/github-actions/update-prod-release-coverage.ts \
+            "${RELEASE_PULL_REQUEST_NUMBER}" \
+            "${RELEASE_HEAD_SHA}"
+  generate-coverage-badges:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      contains(github.event.workflow_run.pull_requests.*.base.ref, 'staging')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          persist-credentials: true
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Restore Node Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: NPM Install Trusted Dependencies
+        if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
+        run: npm ci --ignore-scripts
+      - name: Gather Suite Coverage Summaries
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_PULL_REQUEST_NUMBER: ${{ join(github.event.workflow_run.pull_requests.*.number, ',') }}
+        run: |
+          scripts/github-actions/compile-suite-coverage.ts \
+            "${RELEASE_PULL_REQUEST_NUMBER}" \
+            "${RELEASE_HEAD_SHA}" \
+            "coverage"
+      - name: Generate API Coverage Badges
+        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        with:
+          coverage-summary-path: coverage/api/coverage-summary.json
+          badges-directory: .badges/api
+          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+      - name: Generate Client Coverage Badges
+        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        with:
+          coverage-summary-path: coverage/client/coverage-summary.json
+          badges-directory: .badges/client
+          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+      - name: Generate Scripts Coverage Badges
+        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        with:
+          coverage-summary-path: coverage/scripts/coverage-summary.json
+          badges-directory: .badges/scripts
+          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+      - name: Generate Shared Coverage Badges
+        uses: JPReview/coverage-badges-generation-action@v1.0.1
+        with:
+          coverage-summary-path: coverage/shared/coverage-summary.json
+          badges-directory: .badges/shared
+          protected-branches: '["develop", "irs", "prod", "staging", "test"]'
+      - name: Commit badges
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Update coverage badges [skip ci]'
+          file_pattern: .badges
