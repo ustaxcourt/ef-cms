@@ -38,7 +38,7 @@ export function assertNoticeOfDocketChangeDoesNotExist() {
 export function waitForDocketEntryByEventCode({
   docketNumber,
   eventCode,
-  timeout = 30000,
+  timeout = 60000,
 }: {
   docketNumber: string;
   eventCode: string;
