@@ -1,4 +1,5 @@
 .cache/
+.worktrees/
 .DS_Store
 .elasticsearch/
 .idea/

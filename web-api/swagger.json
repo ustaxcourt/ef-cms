@@ -3509,6 +3509,69 @@
         }
       }
     },
+    "/case-documents/{docketNumber}/{docketEntryId}/processing-status": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["case-documents"],
+        "summary": "returns the coversheet processing status of a docket entry",
+        "description": "returns the coversheet processing status of a docket entry. Used by the client to poll while a coversheet is being generated asynchronously.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "processingStatus": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
@@ -4834,7 +4897,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
+    "/case-documents/{docketNumber}/{motionDocketEntryId}/stamp": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -4843,16 +4906,16 @@
           "type": "string"
         },
         {
-          "name": "docketEntryId",
+          "name": "motionDocketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
         }
       ],
       "post": {
-        "tags": ["workitems"],
-        "summary": "creates a coversheet and prepends it to the existing s3 document",
-        "description": "creates a coversheet and prepends it to the existing s3 document.\n",
+        "tags": ["docketentries"],
+        "summary": "creates a stamped order.",
+        "description": "creates a stamped order.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {

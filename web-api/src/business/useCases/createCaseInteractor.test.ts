@@ -161,6 +161,21 @@ describe('createCaseInteractor', () => {
     });
     expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
+
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(
+      coversheetMessages.map(m => m.payload.docketEntryId).sort(),
+    ).toEqual(
+      [
+        '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      ].sort(),
+    );
   });
 
   it('should create a case (with a case status history) successfully as a private practitioner', async () => {

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -424,10 +425,40 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,
+          });
+        });
+
+        it('should enqueue a coversheet job for the served docket entry', async () => {
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
+            },
+            mockDocketClerkUser,
+          );
+
+          const queueWorkCalls = (
+            applicationContext.getWorkerGateway().queueWork as jest.Mock
+          ).mock.calls;
+          const coversheetMessages = queueWorkCalls
+            .map(args => args[1]?.message)
+            .filter(message => message?.type === 'ADD_COVERSHEET');
+          expect(coversheetMessages).toHaveLength(1);
+          expect(coversheetMessages[0].payload).toMatchObject({
+            docketEntryId: mockDocketEntryId,
+            docketNumber: caseRecord.docketNumber,
           });
         });
       });
@@ -643,7 +674,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockedPaperServicePdfUrl,
             },
             userId: docketClerkUser.userId,
@@ -698,7 +729,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: undefined,
             },
             userId: docketClerkUser.userId,
