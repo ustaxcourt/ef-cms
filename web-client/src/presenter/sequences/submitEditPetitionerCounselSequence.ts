@@ -3,7 +3,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setRepresentingFromRepresentingMapActionFactory } from '../actions/setRepresentingFromRepresentingMapActionFactory';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -34,7 +33,6 @@ export const submitEditPetitionerCounselSequence = [
           setAlertSuccessAction,
           clearModalAction,
           setCasePropFromStateAction,
-          setCaseAction,
           navigateToCaseDetailCaseInformationActionFactory('parties'),
           clearFormAction,
         ],
