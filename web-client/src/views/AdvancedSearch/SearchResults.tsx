@@ -73,6 +73,15 @@ export const SearchResults = connect(
     };
 
     const handleMobileSortChange = e => {
+      if (!e.target.value) {
+        updateDocumentSearchResultsSequence({});
+        setCurrentPaginationPageSequence({
+          advancedSearchTab: 'case',
+          currentPaginationPage: 0,
+        });
+        return;
+      }
+
       const [sortColumn, sortDirection] = e.target.value.split('|');
 
       updateDocumentSearchResultsSequence({
@@ -148,10 +157,11 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn
+                          advancedSearchHelper.caseSearchSortColumn || ''
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection
+                          advancedSearchHelper.caseSearchSortDirection ||
+                          ASCENDING
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -165,10 +175,11 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn
+                          advancedSearchHelper.caseSearchSortColumn || ''
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection
+                          advancedSearchHelper.caseSearchSortDirection ||
+                          ASCENDING
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -182,10 +193,11 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.date}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn
+                          advancedSearchHelper.caseSearchSortColumn || ''
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection
+                          advancedSearchHelper.caseSearchSortDirection ||
+                          ASCENDING
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.date}
@@ -199,10 +211,11 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn
+                          advancedSearchHelper.caseSearchSortColumn || ''
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection
+                          advancedSearchHelper.caseSearchSortDirection ||
+                          ASCENDING
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -216,10 +229,11 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn
+                          advancedSearchHelper.caseSearchSortColumn || ''
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection
+                          advancedSearchHelper.caseSearchSortDirection ||
+                          ASCENDING
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -271,9 +285,14 @@ export const SearchResults = connect(
                     aria-label="Sort case search results"
                     className="usa-select"
                     id="mobile-case-search-sort-dropdown"
-                    value={`${advancedSearchHelper.caseSearchSortColumn}|${advancedSearchHelper.caseSearchSortDirection}`}
+                    value={
+                      advancedSearchHelper.caseSearchSortColumn
+                        ? `${advancedSearchHelper.caseSearchSortColumn}|${advancedSearchHelper.caseSearchSortDirection}`
+                        : ''
+                    }
                     onChange={handleMobileSortChange}
                   >
+                    <option value="">Sort by Relevance</option>
                     {advancedSearchHelper.sortOptions.map(option => (
                       <option key={option.value} value={option.value}>
                         {option.label}

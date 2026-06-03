@@ -98,8 +98,8 @@ export const baseState = {
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   caseSearchSort: {
-    sortColumn: 'petitionerNames',
-    sortDirection: 'asc' as 'asc' | 'desc',
+    sortColumn: undefined as string | undefined,
+    sortDirection: undefined as 'asc' | 'desc' | undefined,
   },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',

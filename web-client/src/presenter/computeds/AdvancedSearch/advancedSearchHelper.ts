@@ -47,10 +47,7 @@ export const advancedSearchHelper = (
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
   const caseCurrentPaginationPage = get(state.caseCurrentPaginationPage) || 0;
-  const caseSearchSort = get(state.caseSearchSort) || {
-    sortColumn: 'petitionerNames',
-    sortDirection: 'asc',
-  };
+  const caseSearchSort = get(state.caseSearchSort) || {};
 
   const result = {
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
@@ -143,36 +140,38 @@ const getFormattedCaseSearchResults = ({
 }: {
   applicationContext: ClientApplicationContext;
   searchResults: any[];
-  sortColumn: string;
-  sortDirection: 'asc' | 'desc';
+  sortColumn?: string;
+  sortDirection?: 'asc' | 'desc';
 }): any[] => {
-  return searchResults
-    .map((searchResult, index) => ({
-      ...formatSearchResultRecord(searchResult, { applicationContext }),
-      resultIndex: index + 1,
-    }))
-    .sort((a, b) => {
-      const direction = sortDirection === 'asc' ? 1 : -1;
+  const formattedResults = searchResults.map((searchResult, index) => ({
+    ...formatSearchResultRecord(searchResult, { applicationContext }),
+    resultIndex: index + 1,
+  }));
 
-      if (sortColumn === 'resultIndex') {
-        return (a.resultIndex - b.resultIndex) * direction;
-      }
+  if (!sortColumn || !sortDirection) {
+    return formattedResults;
+  }
 
-      if (sortColumn === 'docketNumber') {
-        return (
-          Case.docketNumberSort(a.docketNumber, b.docketNumber) * direction
-        );
-      }
+  return formattedResults.sort((a, b) => {
+    const direction = sortDirection === 'asc' ? 1 : -1;
 
-      if (sortColumn === 'receivedAt') {
-        return dateStringsCompared(a.receivedAt, b.receivedAt) * direction;
-      }
+    if (sortColumn === 'resultIndex') {
+      return (a.resultIndex - b.resultIndex) * direction;
+    }
 
-      const aValue = getCaseSearchSortValue(a, sortColumn);
-      const bValue = getCaseSearchSortValue(b, sortColumn);
+    if (sortColumn === 'docketNumber') {
+      return Case.docketNumberSort(a.docketNumber, b.docketNumber) * direction;
+    }
 
-      return aValue.localeCompare(bValue) * direction;
-    });
+    if (sortColumn === 'receivedAt') {
+      return dateStringsCompared(a.receivedAt, b.receivedAt) * direction;
+    }
+
+    const aValue = getCaseSearchSortValue(a, sortColumn);
+    const bValue = getCaseSearchSortValue(b, sortColumn);
+
+    return aValue.localeCompare(bValue) * direction;
+  });
 };
 
 const getCaseSearchSortValue = (result: any, sortColumn: string): string => {

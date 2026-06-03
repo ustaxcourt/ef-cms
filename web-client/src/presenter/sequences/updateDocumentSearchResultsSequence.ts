@@ -3,6 +3,6 @@ import { setDocumentSearchResultsAction } from '../actions/AdvancedSearch/setDoc
 export const updateDocumentSearchResultsSequence = [
   setDocumentSearchResultsAction,
 ] as unknown as (props: {
-  sortColumn: string;
-  sortDirection: 'asc' | 'desc';
+  sortColumn?: string;
+  sortDirection?: 'asc' | 'desc';
 }) => void;

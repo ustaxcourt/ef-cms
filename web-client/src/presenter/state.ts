@@ -781,8 +781,8 @@ export const baseState = {
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
   caseSearchSort: {
-    sortColumn: 'petitionerNames',
-    sortDirection: 'asc' as 'asc' | 'desc',
+    sortColumn: undefined as string | undefined,
+    sortDirection: undefined as 'asc' | 'desc' | undefined,
   },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',

@@ -6,8 +6,8 @@ export const setDocumentSearchResultsAction = ({
   props,
   store,
 }: ActionProps<{
-  sortColumn: string;
-  sortDirection: 'asc' | 'desc';
+  sortColumn?: string;
+  sortDirection?: 'asc' | 'desc';
 }>) => {
   const { sortColumn, sortDirection } = props;
   const advancedSearchTab = get(state.advancedSearchTab) as string;
@@ -21,6 +21,12 @@ export const setDocumentSearchResultsAction = ({
     stateKey = 'opinionDocumentSearchSort';
   } else {
     stateKey = 'caseSearchSort';
+  }
+
+  if (advancedSearchTab === ADVANCED_SEARCH_TABS.CASE && !sortColumn) {
+    store.unset(state[stateKey].sortColumn);
+    store.unset(state[stateKey].sortDirection);
+    return;
   }
 
   store.set(state[stateKey].sortColumn, sortColumn);
