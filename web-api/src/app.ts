@@ -221,7 +221,6 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
 
 export const app = express();
 
@@ -1117,7 +1116,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
@@ -1212,7 +1210,6 @@ app.post(
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
-  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the
