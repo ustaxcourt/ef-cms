@@ -38,12 +38,6 @@ export const efcmsDocketEntryMappings: Property = {
     },
     'documentTitle.S': {
       type: 'text',
-      fields: {
-        keyword: {
-          type: 'keyword',
-          ignore_above: 256,
-        },
-      },
     },
     'documentType.S': {
       type: 'keyword',
