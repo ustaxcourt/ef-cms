@@ -1,16 +1,10 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
+import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
 import { isEmpty } from 'lodash';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 
-/**
- * caseAdvancedSearchInteractor
- *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
 export const caseAdvancedSearch = async ({
   applicationContext,
   searchTerms,
@@ -42,7 +36,7 @@ export const caseAdvancedSearch = async ({
       body: {
         _source: source,
         query: { bool: { must: [...exactMatchesQuery, ...commonQuery] } },
-        size: MAX_SEARCH_CLIENT_RESULTS,
+        size: MAX_CASE_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -55,7 +49,7 @@ export const caseAdvancedSearch = async ({
         body: {
           _source: source,
           query: { bool: { must: [...nonExactMatchesQuery, ...commonQuery] } },
-          size: MAX_SEARCH_CLIENT_RESULTS,
+          size: MAX_CASE_SEARCH_RESULTS,
         },
         index: 'efcms-case',
       },

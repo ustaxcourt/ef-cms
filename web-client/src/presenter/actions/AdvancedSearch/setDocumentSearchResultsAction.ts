@@ -11,11 +11,18 @@ export const setDocumentSearchResultsAction = ({
 }>) => {
   const { sortColumn, sortDirection } = props;
   const advancedSearchTab = get(state.advancedSearchTab) as string;
-  const STATE_KEY =
-    advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION
-      ? 'opinionDocumentSearchSort'
-      : 'orderDocumentSearchSort';
+  let stateKey;
 
-  store.set(state[STATE_KEY].sortColumn, sortColumn);
-  store.set(state[STATE_KEY].sortDirection, sortDirection);
+  if (advancedSearchTab === ADVANCED_SEARCH_TABS.CASE) {
+    stateKey = 'caseSearchSort';
+  } else if (advancedSearchTab === ADVANCED_SEARCH_TABS.ORDER) {
+    stateKey = 'orderDocumentSearchSort';
+  } else if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
+    stateKey = 'opinionDocumentSearchSort';
+  } else {
+    stateKey = 'caseSearchSort';
+  }
+
+  store.set(state[stateKey].sortColumn, sortColumn);
+  store.set(state[stateKey].sortDirection, sortDirection);
 };

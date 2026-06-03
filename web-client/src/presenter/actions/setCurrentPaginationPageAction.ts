@@ -7,7 +7,9 @@ export const setCurrentPaginationPageAction = ({
   props: { currentPaginationPage: number; advancedSearchTab: string };
 }) => {
   const { advancedSearchTab, currentPaginationPage } = props;
-  if (advancedSearchTab === 'opinion') {
+  if (advancedSearchTab === 'case') {
+    store.set(state.caseCurrentPaginationPage, currentPaginationPage);
+  } else if (advancedSearchTab === 'opinion') {
     store.set(state.opinionCurrentPaginationPage, currentPaginationPage);
   } else {
     store.set(state.orderCurrentPaginationPage, currentPaginationPage);

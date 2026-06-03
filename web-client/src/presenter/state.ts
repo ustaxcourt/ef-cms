@@ -714,6 +714,7 @@ export const baseState = {
   createOrderTab: 'generate' as 'generate' | 'edit',
   currentJudges: [],
   currentPage: 'Loading',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   opinionDocumentTypes: [] as string[],
@@ -779,6 +780,10 @@ export const baseState = {
   documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
+  caseSearchSort: {
+    sortColumn: 'petitionerNames',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',

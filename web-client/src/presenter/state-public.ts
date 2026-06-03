@@ -94,8 +94,13 @@ export const baseState = {
   },
   constants: {} as Record<string, any>,
   currentPage: 'Interstitial',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
+  caseSearchSort: {
+    sortColumn: 'petitionerNames',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',

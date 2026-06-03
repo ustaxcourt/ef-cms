@@ -12,7 +12,10 @@ export const clearSearchResultsAction = ({ get, store }: ActionProps) => {
 
   store.set(state.advancedSearchForm.currentPage, 1);
 
-  if (tabName === ADVANCED_SEARCH_TABS.ORDER) {
+  if (tabName === ADVANCED_SEARCH_TABS.CASE) {
+    store.set(state.caseSearchSort.sortColumn, 'petitionerNames');
+    store.set(state.caseSearchSort.sortDirection, 'asc');
+  } else if (tabName === ADVANCED_SEARCH_TABS.ORDER) {
     store.set(state.orderDocumentSearchSort.sortColumn, 'formattedFiledDate');
     store.set(state.orderDocumentSearchSort.sortDirection, 'desc');
   } else if (tabName === ADVANCED_SEARCH_TABS.OPINION) {
