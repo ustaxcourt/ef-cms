@@ -1,7 +1,7 @@
 name: Compile Composite Coverage
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - staging
     types:
@@ -71,7 +71,7 @@ jobs:
             "${RELEASE_HEAD_SHA}"
   generate-coverage-badges:
     if: >-
-      github.event_name == 'pull_request' &&
+      github.event_name == 'pull_request_target' &&
       github.event.pull_request.merged == true &&
       github.event.pull_request.base.ref == 'staging'
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ github.token }}
-          RELEASE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          RELEASE_HEAD_SHA: ${{ github.event.pull_request.merge_commit_sha }}
           RELEASE_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           scripts/github-actions/compile-suite-coverage.ts \
