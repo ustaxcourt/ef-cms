@@ -46,7 +46,6 @@ import { setTodaysOrdersCurrentPaginationPageSequence } from './sequences/Public
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
-import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from '@web-client/presenter/sequences/submitPractitionerNameSearchSequence';
@@ -140,7 +139,6 @@ export const presenterSequences = {
   setTodaysOrdersCurrentPaginationPageSequence,
   showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
   sortTableSequence,
-  sortTodaysOrdersSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence:
     submitPractitionerBarNumberSearchSequence as unknown as Function,
