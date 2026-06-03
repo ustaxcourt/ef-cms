@@ -13,7 +13,7 @@ export const removeSignatureFromDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await removeSignatureFromDocumentInteractor(
+    await removeSignatureFromDocumentInteractor(
       applicationContext,
       event.pathParameters,
       authorizedUser,

@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the alertSuccess and updated caseDetail object
+ * @returns {object} the alertSuccess
  */
 export const unblockCaseFromTrialAction = async ({
   applicationContext,
@@ -13,7 +13,7 @@ export const unblockCaseFromTrialAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber,
@@ -24,6 +24,5 @@ export const unblockCaseFromTrialAction = async ({
       message:
         'Block removed. Case is eligible for next available trial session.',
     },
-    caseDetail,
   };
 };
