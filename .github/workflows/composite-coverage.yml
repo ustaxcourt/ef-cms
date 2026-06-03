@@ -1,6 +1,11 @@
 name: Compile Composite Coverage
 
 on:
+  pull_request_target:
+    branches:
+      - staging
+    types:
+      - closed
   workflow_run:
     workflows:
       - Node.js CI - API
@@ -18,6 +23,7 @@ permissions:
 jobs:
   update-prod-release-coverage:
     if: >-
+      github.event_name == 'workflow_run' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'pull_request' &&
       contains(github.event.workflow_run.pull_requests.*.base.ref, 'prod')
@@ -65,17 +71,25 @@ jobs:
             "${RELEASE_HEAD_SHA}"
   generate-coverage-badges:
     if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'pull_request' &&
-      contains(github.event.workflow_run.pull_requests.*.base.ref, 'staging')
+      github.event_name == 'pull_request_target' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'staging'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Create badge bot token
+        id: badge-bot-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BADGE_BOT_APP_ID }}
+          owner: ${{ github.repository_owner }}
+          private-key: ${{ secrets.BADGE_BOT_RSA_KEY }}
+          repositories: ef-cms
+      - name: Checkout badge generator dependencies
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          ref: ${{ github.event.pull_request.base.ref }}
           persist-credentials: true
+          token: ${{ steps.badge-bot-token.outputs.token }}
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -93,8 +107,8 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ github.token }}
-          RELEASE_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          RELEASE_PULL_REQUEST_NUMBER: ${{ join(github.event.workflow_run.pull_requests.*.number, ',') }}
+          RELEASE_HEAD_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          RELEASE_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           scripts/github-actions/compile-suite-coverage.ts \
             "${RELEASE_PULL_REQUEST_NUMBER}" \
@@ -103,29 +117,35 @@ jobs:
       - name: Generate API Coverage Badges
         uses: jpb06/coverage-badges-action@latest
         with:
+          badges-labels-prefix: API
           coverage-summary-path: coverage/api/coverage-summary.json
           no-commit: 'true'
-          output-folder: .badges/api
+          output-folder: docs/badges/api
       - name: Generate Client Coverage Badges
         uses: jpb06/coverage-badges-action@latest
         with:
+          badges-labels-prefix: Client
           coverage-summary-path: coverage/client/coverage-summary.json
           no-commit: 'true'
-          output-folder: .badges/client
+          output-folder: docs/badges/client
       - name: Generate Scripts Coverage Badges
         uses: jpb06/coverage-badges-action@latest
         with:
+          badges-labels-prefix: Scripts
           coverage-summary-path: coverage/scripts/coverage-summary.json
           no-commit: 'true'
-          output-folder: .badges/scripts
+          output-folder: docs/badges/scripts
       - name: Generate Shared Coverage Badges
         uses: jpb06/coverage-badges-action@latest
         with:
+          badges-labels-prefix: Shared
           coverage-summary-path: coverage/shared/coverage-summary.json
           no-commit: 'true'
-          output-folder: .badges/shared
-      - name: Commit badges
+          output-folder: docs/badges/shared
+      - name: Commit badges to staging
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Update coverage badges [skip ci]'
-          file_pattern: .badges
+          commit_message: 'Update coverage badges using coverage reports from #${{ github.event.pull_request.number }}'
+          commit_user_email: 'efcms-badge-bot[bot]@users.noreply.github.com'
+          commit_user_name: 'efcms-badge-bot[bot]'
+          file_pattern: docs/badges
