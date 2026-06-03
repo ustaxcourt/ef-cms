@@ -49,7 +49,9 @@ const outputCsv = ({
 }: {
   practitionersCases: PractitionersCase[];
 }) => {
-  const judge = formatJudgeName(practitionersCases[0].associatedJudge);
+  const judge = formatJudgeName(
+    practitionersCases[0].associatedJudge,
+  ).toLowerCase();
   const columns = [
     { header: 'Firm', key: 'firmName' },
     { header: 'Practitioner', key: 'name' },
@@ -58,7 +60,7 @@ const outputCsv = ({
     { header: 'Case Status', key: 'status' },
     { header: 'Case Title', key: 'caption' },
   ];
-  const filename = `${OUTPUT_DIR}/firms-representing-petitioners-in-${judge}s-cases.csv`;
+  const filename = `${OUTPUT_DIR}/firms-representing-petitioners-in-${judge}-cases.csv`;
   const rows = practitionersCases.map(pc => ({
     ...pc,
     judge: formatJudgeName(pc.associatedJudge),
@@ -87,10 +89,10 @@ const retrievePractitionersInJudgesCases = async ({
       ])
       .where('c.associatedJudge', '=', judgeName)
       .where('c.status', 'not in', CLOSED_CASE_STATUSES)
+      .where('uc.actingAsRole', '=', ROLES.privatePractitioner)
       .where('u.accountStatus', '=', ACCOUNT_STATUS.active)
       .where('u.firmName', 'is not', null)
       .where('u.firmName', '!=', '')
-      .where('u.role', '=', ROLES.privatePractitioner)
       .orderBy('c.sortableDocketNumber', 'asc')
       .execute(),
   )) as PractitionersCase[];
@@ -101,5 +103,11 @@ const retrievePractitionersInJudgesCases = async ({
   const practitionersCases = await retrievePractitionersInJudgesCases({
     judgeName,
   });
+  if (practitionersCases.length === 0) {
+    console.error(
+      `No practitioners found in cases associated with Judge ${judgeName}`,
+    );
+    process.exit(1);
+  }
   outputCsv({ practitionersCases });
 })();
