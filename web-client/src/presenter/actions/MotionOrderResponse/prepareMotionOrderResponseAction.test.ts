@@ -94,7 +94,9 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
-    expect(result.state.form.additionalOrderTextArray).toEqual([additionalText]);
+    expect(result.state.form.additionalOrderTextArray).toEqual([
+      additionalText,
+    ]);
   });
 
   it('should handle calendared case with trial session', async () => {
@@ -450,4 +452,58 @@ describe('prepareMotionOrderResponseAction', () => {
       'ORDERED that by Invalid DateTime, petitioner may file a Reply',
     );
   });
+
+  it.each([
+    { scenario: 'basic order (response + reply)', formOverrides: {} },
+    {
+      scenario: 'with additional order text',
+      formOverrides: { additionalOrderTextArray: ['Do this thing.'] },
+    },
+    {
+      scenario: 'with multiple additional order text clauses',
+      formOverrides: {
+        additionalOrderTextArray: ['First clause', 'Second clause'],
+      },
+    },
+    {
+      scenario: 'with stricken from trial session',
+      formOverrides: { strickenFromTrialSession: true },
+    },
+    {
+      scenario: 'with stricken, reply, and additional text',
+      formOverrides: {
+        strickenFromTrialSession: true,
+        additionalOrderTextArray: ['Extra instruction.'],
+      },
+    },
+    {
+      scenario: 'without reply (no dueDate)',
+      formOverrides: { dueDate: undefined },
+    },
+    {
+      scenario: 'without reply but with additional text',
+      formOverrides: {
+        dueDate: undefined,
+        additionalOrderTextArray: ['Parties shall comply.'],
+      },
+    },
+  ])(
+    'should produce balanced <p> tags ($scenario)',
+    async ({ formOverrides }) => {
+      const result = await runAction(prepareMotionOrderResponseAction, {
+        state: {
+          caseDetail: mockCaseDetail,
+          docketEntryId: 'mock-motion-id',
+          form: { ...mockForm, ...formOverrides },
+        },
+      });
+
+      const { richText } = result.state.form;
+      const openTags = (richText.match(/<p\b[^>]*>/g) || []).length;
+      const closeTags = (richText.match(/<\/p>/g) || []).length;
+
+      expect(openTags).toBeGreaterThan(0);
+      expect(openTags).toEqual(closeTags);
+    },
+  );
 });
