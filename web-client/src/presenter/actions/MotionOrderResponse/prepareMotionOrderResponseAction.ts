@@ -135,11 +135,10 @@ export const prepareMotionOrderResponseAction = ({
     const additionalTextLine = meaningfulAdditionalOrderTextArray
       .map((text, idx) => {
         const clause = formatAdditionalOrderClauseForRichText(text);
-        const suffix =
-          idx < meaningfulAdditionalOrderTextArray.length - 1
-            ? ' It is further'
-            : '';
-        return `<p class="indent-paragraph">ORDERED that ${clause}${suffix}</p>`;
+        const isLast = idx === meaningfulAdditionalOrderTextArray.length - 1;
+        const suffix = !isLast ? ' It is further' : '';
+        const closing = !isLast ? '</p>' : '';
+        return `<p class="indent-paragraph">ORDERED that ${clause}${suffix}${closing}`;
       })
       .join('');
     orderSections.push(additionalTextLine);
