@@ -107,12 +107,11 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ github.token }}
-          RELEASE_HEAD_SHA: ${{ github.event.pull_request.merge_commit_sha }}
-          RELEASE_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          STAGING_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           scripts/github-actions/compile-suite-coverage.ts \
-            "${RELEASE_PULL_REQUEST_NUMBER}" \
-            "${RELEASE_HEAD_SHA}" \
+            "${STAGING_PULL_REQUEST_NUMBER}" \
+            "" \
             "coverage"
       - name: Generate API Coverage Badges
         uses: jpb06/coverage-badges-action@latest
@@ -145,7 +144,7 @@ jobs:
       - name: Commit badges to staging
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Update coverage badges using coverage reports from #${{ github.event.pull_request.number }}'
+          commit_message: 'Update coverage badges with coverage from PR #${{ github.event.pull_request.number }}'
           commit_user_email: 'efcms-badge-bot[bot]@users.noreply.github.com'
           commit_user_name: 'efcms-badge-bot[bot]'
           file_pattern: docs/badges
