@@ -120,3 +120,67 @@ export const getPipelineStatus = async ({
 
   return pipelineStatus;
 };
+
+export const getOrganizationId = async ({
+  apiToken,
+  projectSlug,
+}: {
+  apiToken: string;
+  projectSlug: string;
+}): Promise<string> => {
+  const getProjectRequest = {
+    headers: { 'Circle-Token': apiToken },
+    method: 'GET',
+    url: `https://circleci.com/api/v2/project/${projectSlug}`,
+  };
+
+  const projectResponse = await axios.get(getProjectRequest.url, {
+    headers: getProjectRequest.headers,
+  });
+
+  return projectResponse.data.organization_id;
+};
+
+export const getContexts = async ({
+  apiToken,
+  ownerId,
+}: {
+  apiToken: string;
+  ownerId: string;
+}): Promise<{ id: string; name: string }[]> => {
+  const getContextsRequest = {
+    headers: { 'Circle-Token': apiToken },
+    method: 'GET',
+    url: `https://circleci.com/api/v2/context?owner-id=${ownerId}&owner-type=organization`,
+  };
+
+  const contextsResponse = await axios.get(getContextsRequest.url, {
+    headers: getContextsRequest.headers,
+  });
+
+  return contextsResponse.data.items;
+};
+
+export const updateContextVariable = async ({
+  apiToken,
+  contextId,
+  variableName,
+  variableValue,
+}: {
+  apiToken: string;
+  contextId: string;
+  variableName: string;
+  variableValue: string;
+}): Promise<void> => {
+  const updateVariableRequest = {
+    headers: { 'Circle-Token': apiToken, 'Content-Type': 'application/json' },
+    method: 'PUT',
+    url: `https://circleci.com/api/v2/context/${contextId}/variable/${variableName}`,
+  };
+
+  await axios.put(
+    updateVariableRequest.url,
+    { value: variableValue },
+    { headers: updateVariableRequest.headers },
+  );
+};
