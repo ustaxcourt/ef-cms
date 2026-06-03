@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addCaseToTrialSessionAction } from './addCaseToTrialSessionAction';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -18,10 +17,10 @@ describe('addCaseToTrialSessionAction', () => {
     };
   });
 
-  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber, state.modal.trialSessionId, and state.modal.calendarNotes and return alertSuccess and the caseDetail returned from the use case', async () => {
+  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber, state.modal.trialSessionId, and state.modal.calendarNotes and return alertSuccess', async () => {
     applicationContext
       .getUseCases()
-      .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+      .addCaseToTrialSessionInteractor.mockResolvedValue();
 
     await runAction(addCaseToTrialSessionAction, {
       modules: {
@@ -53,16 +52,13 @@ describe('addCaseToTrialSessionAction', () => {
 
     expect(successMock.mock.calls[0][0]).toMatchObject({
       alertSuccess: {},
-      caseDetail: MOCK_CASE,
-      docketNumber: '123-45',
-      trialSessionId: '234',
     });
   });
 
   it('should set success message to "Case set for trial."', async () => {
     applicationContext
       .getUseCases()
-      .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+      .addCaseToTrialSessionInteractor.mockResolvedValue();
 
     await runAction(addCaseToTrialSessionAction, {
       modules: {

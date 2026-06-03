@@ -1,3 +1,105 @@
+<details><summary>Install Recommended VS Code Extensions</summary>
+
+## Local
+
+### Install recommended VS Code Extensions
+
+1. In VS Code, press `Command + Shift + P` to open the Command Palette
+2. Search and select **Shell Command: Install 'code' command in PATH**
+3. Run the following in your terminal:
+   ```bash
+   cat .vscode/extensions.json | jq -r '.recommendations[]' | xargs -n 1 code --install-extension
+
+   npm ci
+   ```
+4. Press `Command + Shift + P`, search for `Developer: Reload Window`, and select it so the workspace, TypeScript SDK, and extensions reload cleanly.
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-25</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.16.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-18</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.80` - choose exp3
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.4
+```
+```bash
+tfenv install 1.15.4
+tfenv use 1.15.4
+```
+
+</details>
+<details><summary>PDF Generator IAM Scoping</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-11</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.79` - choose exp3
+```bash
+npm run ecr:check-version
+```
+
+#### Upgrade Terraform to `1.15.3`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.3
+```
+```bash
+tfenv install 1.15.3
+tfenv use 1.15.3
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-04</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Upgrade Terraform to `1.15.1`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.1
+```
+```bash
+tfenv install 1.15.1
+tfenv use 1.15.1
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-04-27</summary>
 
 ## Manual Deployment Steps

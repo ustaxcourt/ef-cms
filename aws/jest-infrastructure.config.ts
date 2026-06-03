@@ -4,6 +4,8 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = ['kysely', 'uuid'];
+
 const config: Config = {
   displayName: 'infrastructure',
   clearMocks: true,
@@ -23,7 +25,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: [
+    `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
 };
 
 export default config;

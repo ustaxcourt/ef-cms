@@ -1,3 +1,5 @@
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+
 const HEALTH_CHECK_IDS = [
   'cognito',
   'elasticsearch',
@@ -13,15 +15,14 @@ const HEALTH_CHECK_IDS = [
 ];
 
 describe('Health check', () => {
-  const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
-
-  if (!SMOKETESTS_LOCAL) {
-    it("should retrieve the status of the application's critical services", () => {
-      cy.visit('/health');
-      cy.url().should('include', '/health');
-      for (const id of HEALTH_CHECK_IDS) {
-        cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
-      }
-    });
-  }
+  it("should retrieve the status of the application's critical services", function () {
+    if (getCypressEnv().isLocal) {
+      this.skip();
+    }
+    cy.visit('/health');
+    cy.url().should('include', '/health');
+    for (const id of HEALTH_CHECK_IDS) {
+      cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
+    }
+  });
 });

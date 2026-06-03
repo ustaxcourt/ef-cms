@@ -5,7 +5,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
-import { getQCInboxParameters } from '@shared/business/utilities/getQCInboxParameters';
+import { getQCInboxParameters } from '@web-api/business/utilities/getQCInboxParameters';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export type GetDocumentQCInboxForSectionRequest = {

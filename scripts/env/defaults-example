@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 export DEFAULT_ENV='local'
 export DEFAULT_ORG='ustc'

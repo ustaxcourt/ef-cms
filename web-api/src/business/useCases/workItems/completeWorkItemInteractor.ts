@@ -8,16 +8,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
-/**
- * completeWorkItemInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.completedMessage the message for completing the work item
- * @param {string} providers.workItemId the id of the work item to complete
- * @returns {object} the completed work item
- */
 export const completeWorkItem = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext: ServerApplicationContext,
@@ -29,7 +21,7 @@ export const completeWorkItem = async (
     workItemId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawWorkItem> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }

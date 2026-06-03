@@ -1,4 +1,4 @@
-import { image1, image2 } from '@shared/business/useCases/scannerMockFiles';
+import { image1, image2 } from '@web-client/business/useCases/scannerMockFiles';
 
 let scanBuffer: Blob[] = [];
 

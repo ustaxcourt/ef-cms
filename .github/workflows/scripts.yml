@@ -2,6 +2,7 @@ name: Node.js CI - Scripts
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -13,40 +14,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   Scripts:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: '.nvmrc'
-      - name: Collect WorkQflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        id: npm-clean-install
-        run: npm ci
-      - name: Scripts
-        run: npm run test:scripts
-      - name: Save Cache Dependencies
-        if: steps.npm-clean-install.outcome == 'success'
-        uses: actions/cache/save@v5
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+    if: ${{ !github.event.pull_request.draft }}
+    uses: ./.github/workflows/template_no-app.yml
+    with:
+      coverage_source_dir: scripts/coverage
+      run_command: npm run test:scripts
+      workflow_filename: scripts.yml
+  check-coverage:
+    needs: [Scripts]
+    uses: ./.github/workflows/job_check-coverage.yml
+    with:
+      branches: 97
+      coverage_source_dir: scripts/coverage
+      coverage_suite: scripts
+      functions: 99
+      lines: 99
+      pull_request_number: ${{ github.event.pull_request.number }}
+      statements: 99
+      workflow_filename: scripts.yml

@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { sanitizeDumpFile, sanitizeEmail } from './emailReplacer';
+import { emailRegex, sanitizeDumpFile, sanitizeEmail } from './emailReplacer';
 import * as readline from 'readline';
 
 jest.mock('fs');
@@ -203,5 +203,236 @@ describe('sanitizeEmail', () => {
     expect(first).toBe('aabbccdd@ustc.gov');
     expect(second).toBe('11223344@ustc.gov');
     expect(first).not.toBe(second);
+  });
+
+  it('should handle multiple consecutive hash collisions for the same email', () => {
+    const mockDigest = jest
+      .fn()
+      .mockReturnValueOnce('11111111') // hash for email1
+      .mockReturnValueOnce('22222222') // hash for email2
+      .mockReturnValueOnce('11111111') // hash for email3 (1st try, collides with email1)
+      .mockReturnValueOnce('22222222') // hash for email3 (2nd try inside loop, collides with email2)
+      .mockReturnValueOnce('33333333'); // hash for email3 (3rd try inside loop, success!)
+
+    (crypto.createHash as jest.Mock).mockReturnValue({
+      update: jest.fn().mockReturnThis(),
+      digest: mockDigest,
+    });
+
+    const first = sanitizeEmail('email1-multi@test.com');
+    const second = sanitizeEmail('email2-multi@test.com');
+    const third = sanitizeEmail('email3-multi@test.com');
+
+    expect(first).toBe('11111111@ustc.gov');
+    expect(second).toBe('22222222@ustc.gov');
+    expect(third).toBe('33333333@ustc.gov');
+  });
+});
+
+// Helper: run the regex against a string and return all matches (handles g-flag state)
+const matchAll = (input: string): string[] => input.match(emailRegex) ?? [];
+
+describe('emailRegex — local-part character classes', () => {
+  it('matches uppercase letters in local part', () => {
+    expect(matchAll('USER@example.com')).toEqual(['USER@example.com']);
+  });
+
+  it('matches lowercase letters in local part', () => {
+    expect(matchAll('user@example.com')).toEqual(['user@example.com']);
+  });
+
+  it('matches digits in local part', () => {
+    expect(matchAll('123@example.com')).toEqual(['123@example.com']);
+  });
+
+  it('matches period (.) in local part', () => {
+    expect(matchAll('first.last@example.com')).toEqual([
+      'first.last@example.com',
+    ]);
+  });
+
+  it('matches exclamation mark (!) in local part', () => {
+    expect(matchAll('use!r@example.com')).toEqual(['use!r@example.com']);
+  });
+
+  it('matches hash (#) in local part', () => {
+    expect(matchAll('use#r@example.com')).toEqual(['use#r@example.com']);
+  });
+
+  it('matches dollar sign ($) in local part', () => {
+    expect(matchAll('use$r@example.com')).toEqual(['use$r@example.com']);
+  });
+
+  it('matches percent (%) in local part', () => {
+    expect(matchAll('use%r@example.com')).toEqual(['use%r@example.com']);
+  });
+
+  it('matches ampersand (&) in local part', () => {
+    expect(matchAll('use&r@example.com')).toEqual(['use&r@example.com']);
+  });
+
+  it(`matches single quote (') in local part`, () => {
+    expect(matchAll("use'r@example.com")).toEqual(["use'r@example.com"]);
+  });
+
+  it('matches asterisk (*) in local part', () => {
+    expect(matchAll('use*r@example.com')).toEqual(['use*r@example.com']);
+  });
+
+  it('matches plus (+) in local part', () => {
+    expect(matchAll('use+r@example.com')).toEqual(['use+r@example.com']);
+  });
+
+  it('matches forward slash (/) in local part', () => {
+    expect(matchAll('use/r@example.com')).toEqual(['use/r@example.com']);
+  });
+
+  it('matches equals sign (=) in local part', () => {
+    expect(matchAll('use=r@example.com')).toEqual(['use=r@example.com']);
+  });
+
+  it('matches question mark (?) in local part', () => {
+    expect(matchAll('use?r@example.com')).toEqual(['use?r@example.com']);
+  });
+
+  it('matches caret (^) in local part', () => {
+    expect(matchAll('use^r@example.com')).toEqual(['use^r@example.com']);
+  });
+
+  it('matches underscore (_) in local part', () => {
+    expect(matchAll('use_r@example.com')).toEqual(['use_r@example.com']);
+  });
+
+  it('matches backtick (`) in local part', () => {
+    expect(matchAll('use`r@example.com')).toEqual(['use`r@example.com']);
+  });
+
+  it('matches opening brace ({) in local part', () => {
+    expect(matchAll('use{r@example.com')).toEqual(['use{r@example.com']);
+  });
+
+  it('matches pipe (|) in local part', () => {
+    expect(matchAll('use|r@example.com')).toEqual(['use|r@example.com']);
+  });
+
+  it('matches closing brace (}) in local part', () => {
+    expect(matchAll('use}r@example.com')).toEqual(['use}r@example.com']);
+  });
+
+  it('matches tilde (~) in local part', () => {
+    expect(matchAll('use~r@example.com')).toEqual(['use~r@example.com']);
+  });
+
+  it('matches hyphen (-) in local part', () => {
+    expect(matchAll('use-r@example.com')).toEqual(['use-r@example.com']);
+  });
+
+  it('matches a local part composed entirely of allowed special characters', () => {
+    expect(matchAll(".!#$%&'*+/=?^_`{|}~-@example.com")).toEqual([
+      ".!#$%&'*+/=?^_`{|}~-@example.com",
+    ]);
+  });
+});
+
+describe('emailRegex — domain structure', () => {
+  it('matches a simple two-label domain', () => {
+    expect(matchAll('user@example.com')).toEqual(['user@example.com']);
+  });
+
+  it('matches a subdomain (three labels)', () => {
+    expect(matchAll('user@sub.example.com')).toEqual(['user@sub.example.com']);
+  });
+
+  it('matches a deeply nested subdomain (four labels)', () => {
+    expect(matchAll('user@a.b.c.com')).toEqual(['user@a.b.c.com']);
+  });
+
+  it('matches a domain with a hyphen', () => {
+    expect(matchAll('user@my-domain.com')).toEqual(['user@my-domain.com']);
+  });
+
+  it('matches digits in the domain label', () => {
+    expect(matchAll('user@domain2.com')).toEqual(['user@domain2.com']);
+  });
+
+  it('matches a long TLD', () => {
+    expect(matchAll('user@example.museum')).toEqual(['user@example.museum']);
+  });
+});
+
+describe('emailRegex — negative lookbehind (backslash-escaped)', () => {
+  it('does NOT match when immediately preceded by a backslash', () => {
+    // Single-char local part ensures the regex has no remaining substring to re-try after the lookbehind blocks the match at position 1
+    expect(matchAll('\\a@example.com')).toHaveLength(0);
+  });
+
+  it('DOES match when the backslash is two characters before (not immediately preceding)', () => {
+    // The backslash precedes 'n', not the email itself
+    expect(matchAll('\\n user@example.com')).toEqual(['user@example.com']);
+  });
+});
+
+describe('emailRegex — non-matching inputs', () => {
+  it('does not match a string with no @ symbol', () => {
+    expect(matchAll('userexample.com')).toHaveLength(0);
+  });
+
+  it('does not match when there is no domain after @', () => {
+    expect(matchAll('user@')).toHaveLength(0);
+  });
+
+  it('does not match when the domain has no dot (no TLD)', () => {
+    expect(matchAll('user@nodot')).toHaveLength(0);
+  });
+
+  it('does not match a bare @ symbol', () => {
+    expect(matchAll('@')).toHaveLength(0);
+  });
+
+  it('does not match an empty string', () => {
+    expect(matchAll('')).toHaveLength(0);
+  });
+
+  it('does not match plain text with no email', () => {
+    expect(matchAll('hello world, no emails here!')).toHaveLength(0);
+  });
+});
+
+describe('emailRegex — multiple matches and positioning', () => {
+  it('matches multiple emails on the same line', () => {
+    expect(matchAll('a@foo.com and b@bar.com')).toEqual([
+      'a@foo.com',
+      'b@bar.com',
+    ]);
+  });
+
+  it('matches an email at the very start of the string', () => {
+    expect(matchAll('user@example.com rest of text')).toEqual([
+      'user@example.com',
+    ]);
+  });
+
+  it('matches an email at the very end of the string', () => {
+    expect(matchAll('contact us at user@example.com')).toEqual([
+      'user@example.com',
+    ]);
+  });
+
+  it('matches three emails with duplicates and returns each occurrence', () => {
+    expect(matchAll('a@b.com a@b.com c@d.com')).toEqual([
+      'a@b.com',
+      'a@b.com',
+      'c@d.com',
+    ]);
+  });
+
+  it('matches emails surrounded by punctuation', () => {
+    expect(matchAll('(user@example.com)')).toEqual(['user@example.com']);
+  });
+
+  it('matches an email with multiple allowed special chars mixed in', () => {
+    expect(matchAll('user.name+tag=inbox@sub.example.co.uk')).toEqual([
+      'user.name+tag=inbox@sub.example.co.uk',
+    ]);
   });
 });

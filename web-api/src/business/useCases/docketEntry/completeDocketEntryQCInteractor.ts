@@ -28,7 +28,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import { getDocumentTitleForNoticeOfChange } from '@web-api/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
@@ -38,14 +38,12 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  caseDetail: CaseDTO;
   paperServiceParties: any[];
   paperServicePdfUrl: string;
   paperServiceDocumentTitle: string;
@@ -374,7 +372,6 @@ const completeDocketEntryQC = async (
   }
 
   return {
-    caseDetail: new CaseDTO(caseEntity.toRawObject()),
     paperServiceDocumentTitle,
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl,

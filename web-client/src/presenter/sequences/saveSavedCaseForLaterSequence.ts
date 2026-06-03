@@ -4,7 +4,7 @@ import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filter
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
@@ -41,7 +41,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setupFilesForCaseCreationAction,
       setProgressForFileUploadAction,
       saveCaseDetailInternalEditAction,
-      setCaseAction,
+      getCaseAction,
       setCaseOnFormAction,
       setContactsOnFormAction,
       getPetitionIdAction,

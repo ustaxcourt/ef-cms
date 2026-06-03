@@ -78,6 +78,7 @@ import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDea
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
@@ -197,6 +198,7 @@ import { updateUserContactInformationLambda } from './lambdas/users/updateUserCo
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
+import { getCaseDocketEntriesLambda as v2GetCaseDocketEntriesLambda } from './lambdas/v2/getCaseDocketEntriesLambda';
 import { getCaseLambda as v2GetCaseLambda } from './lambdas/v2/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from './lambdas/v2/getDocumentDownloadUrlLambda';
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
@@ -335,8 +337,14 @@ app.use(expressLogger);
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
   app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
+    '/async/docket-record-pdf',
+    lambdaWrapper(
+      generateDocketRecordPdfLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
 }
 
@@ -703,6 +711,10 @@ app.use(expressLogger);
     lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
+  );
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',
@@ -1125,6 +1137,10 @@ app.delete(
  */
 {
   app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+  app.get(
+    '/v2/cases/:docketNumber/docket-entries',
+    lambdaWrapper(v2GetCaseDocketEntriesLambda),
+  );
   app.get(
     '/v2/cases/:docketNumber/entries/:key/document-download-url',
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),

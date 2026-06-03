@@ -55,6 +55,7 @@ describe('updateCaseAndAssociations', () => {
     validMockCase = new Case(
       {
         ...MOCK_CASE,
+        hasPendingItems: true,
         archivedCorrespondences: [
           {
             correspondenceId: '95a84f02-23e6-4fff-9770-41f655f972a3',
@@ -256,7 +257,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(2);
     });
 
     it('should not compare work item differences when comparing docket entries', async () => {

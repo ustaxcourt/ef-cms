@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { DocketNumberSearchValidation } from '@shared/business/entities/DocketNumberSearchValidation';
+import { DocketNumberSearchValidation } from '@web-client/business/entities/DocketNumberSearchValidation';
 
 /**
  * validate case advanced search form

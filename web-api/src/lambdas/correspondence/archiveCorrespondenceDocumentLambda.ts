@@ -13,7 +13,7 @@ export const archiveCorrespondenceDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await archiveCorrespondenceDocumentInteractor(
+    await archiveCorrespondenceDocumentInteractor(
       applicationContext,
       {
         ...event.pathParameters,

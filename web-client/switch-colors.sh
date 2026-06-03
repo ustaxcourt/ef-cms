@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1

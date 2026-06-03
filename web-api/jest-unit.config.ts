@@ -4,9 +4,27 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  '@puppeteer',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'p-queue',
+  'p-timeout',
+  'puppeteer',
+  'puppeteer-core',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'web-api',
   clearMocks: true,
+  maxWorkers: '50%',
+  workerIdleMemoryLimit: '20%',
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
     'elasticsearch/*.test.{js,ts}',
@@ -24,6 +42,7 @@ const config: Config = {
     '!src/app-local.{js,ts}',
     '!src/app-public-local.{js,ts}',
     '!src/getDocumentGenerators.ts',
+    '!src/business/utilities/documentGenerators/**/*.ts',
     '!src/persistence/cognito/getCognito.ts',
     '!src/persistence/s3/zipDocuments.ts',
     '!src/persistence/sqs/deleteMessage.ts',
@@ -70,7 +89,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
+  transformIgnorePatterns: [
+    `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
