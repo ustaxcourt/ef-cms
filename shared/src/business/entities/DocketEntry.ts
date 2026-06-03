@@ -154,7 +154,7 @@ export class DocketEntry extends JoiValidationEntity {
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
-    additionalOrderText?: string; // deprecated - use additionalOrderTextArray instead
+    additionalOrderText?: string; // deprecated - use additionalOrderTextArray instead - see PR #10045
     additionalOrderTextArray?: string[];
     docketEntryDescription?: string;
     docketNumber?: string;
