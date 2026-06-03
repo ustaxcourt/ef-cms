@@ -8,6 +8,7 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
+import { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import {
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
@@ -105,7 +106,6 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
-import { initialClerkOfCourtDashboardState } from './clerkOfCourtDashboardState';
 import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
@@ -177,6 +177,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -313,6 +314,10 @@ export const computeds = {
   customCaseReportHelper: customCaseReportHelper as unknown as ReturnType<
     typeof customCaseReportHelper
   >,
+  dashboardClerkOfTheCourtHelper:
+    dashboardClerkOfTheCourtHelper as unknown as ReturnType<
+      typeof dashboardClerkOfTheCourtHelper
+    >,
   dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
     typeof dashboardExternalHelper
   >,
@@ -774,7 +779,7 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
-  clerkOfCourtDashboard: cloneDeep(initialClerkOfCourtDashboardState),
+  clerkOfCourtDashboardStats: {} as ClerkDashboardStats,
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,

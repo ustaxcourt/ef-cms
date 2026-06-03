@@ -19,10 +19,10 @@ const CHART_WIDTH = 1344;
 
 export const DashboardClerkOfCourt = connect(
   {
-    clerkOfCourtDashboard: state.clerkOfCourtDashboard,
+    dashboardClerkOfTheCourtHelper: state.dashboardClerkOfTheCourtHelper,
     user: state.user,
   },
-  function DashboardClerkOfCourt({ clerkOfCourtDashboard, user }) {
+  function DashboardClerkOfCourt({ dashboardClerkOfTheCourtHelper, user }) {
     const shouldDisplayChartTabs =
       process.env.STAGE !== 'prod' && process.env.STAGE !== 'test';
 
@@ -39,7 +39,7 @@ export const DashboardClerkOfCourt = connect(
       sessionTypePieData,
       specialSessionsByLocation,
       totalSessionsScheduled,
-    } = clerkOfCourtDashboard;
+    } = dashboardClerkOfTheCourtHelper;
 
     const [mobileSection, setMobileSection] = useState('recentMessages');
 
@@ -54,84 +54,35 @@ export const DashboardClerkOfCourt = connect(
             <ClerkOfCourtTrialSessionsSummary />
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
+                <Tab tabName="petitions" title="Petitions">
+                  <div className="tw:mt-6 tw:mx-4">
+                    <h2 className="tw:xs:text-2xl tw:text-lg">
+                      Total petitions created in YTD PLHD:{' '}
+                      {totalSessionsScheduled}
+                    </h2>
+                    <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
+                      <PieGraph data={procedureTypePieData} />
+                      <PieGraph data={sessionTypePieData} />
+                    </div>
+
+                    <h2 className="tw:xs:text-2xl tw:text-lg">
+                      Total Petitions by Month
+                    </h2>
+
+                    <div>
+                      <MultiBarGraph
+                        showLabels={false}
+                        width={1300}
+                        datasets={petitionsByMonthDatasets}
+                        labels={petitionsByMonthLabels}
+                        stacked={true}
+                      />
+                    </div>
+                  </div>
+                </Tab>
                 <Tab tabName="recentMessages" title="Recent Messages">
                   <RecentMessagesCotC />
                 </Tab>
-                {shouldDisplayChartTabs && (
-                  <Tab tabName="pieChart" title="Pie Chart">
-                    <div className="tw:mt-6 tw:mx-4">
-                      <h2 className="tw:xs:text-2xl tw:text-lg">
-                        Total sessions scheduled: {totalSessionsScheduled}
-                      </h2>
-                      <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
-                        <PieGraph
-                          title="Procedure Type"
-                          data={procedureTypePieData}
-                        />
-                        <PieGraph
-                          title="Session Type"
-                          data={sessionTypePieData}
-                        />
-                      </div>
-                    </div>
-                  </Tab>
-                )}
-                {shouldDisplayChartTabs && (
-                  <Tab tabName="barGraph" title="Bar Graph">
-                    <div className="tw:mt-6">
-                      <SingleBarGraph
-                        showLabels={false}
-                        title="Created Special Sessions by Location"
-                        width={CHART_WIDTH}
-                        data={specialSessionsByLocation}
-                      />
-                      <div className="tw:mt-12" />
-                      <MultiBarGraph
-                        showLabels={false}
-                        stacked
-                        title="Total Petitions by Month"
-                        width={CHART_WIDTH}
-                        xLabelRotation={45}
-                        datasets={petitionsByMonthDatasets}
-                        labels={petitionsByMonthLabels}
-                      />
-                      <div className="tw:mt-12" />
-                      <MultiBarGraph
-                        showLabels={false}
-                        title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
-                        width={CHART_WIDTH}
-                        xLabelRotation={45}
-                        datasets={closedCasesDatasets}
-                        labels={closedCasesLabels}
-                      />
-                    </div>
-                  </Tab>
-                )}
-                {shouldDisplayChartTabs && (
-                  <Tab tabName="lineGraph" title="Line Graph">
-                    <div className="tw:mt-6">
-                      <LineGraph
-                        smooth
-                        title="Cases Filed Over Time"
-                        width={CHART_WIDTH}
-                        xAxisLabel="Month"
-                        xLabelRotation={45}
-                        yAxisLabel="Number of Cases"
-                        datasets={casesFiledDatasets}
-                        labels={casesFiledLabels}
-                      />
-                      <div className="tw:mt-[6.25rem]" />
-                      <LineGraph
-                        title="Case Type Breakdown by Quarter"
-                        width={CHART_WIDTH}
-                        xAxisLabel="Quarter"
-                        yAxisLabel="Number of Cases"
-                        datasets={caseTypeBreakdownDatasets}
-                        labels={caseTypeBreakdownLabels}
-                      />
-                    </div>
-                  </Tab>
-                )}
               </Tabs>
             </NonMobile>
             <Mobile>

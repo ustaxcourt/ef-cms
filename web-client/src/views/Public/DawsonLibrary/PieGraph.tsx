@@ -53,7 +53,7 @@ const CustomTooltip = ({
   active?: boolean;
   payload?: { value: number; payload: PieGraphData }[];
   data: PieGraphData[];
-  title: string;
+  title?: string;
   onAnnounce: (text: string) => void;
 }) => {
   useEffect(() => {
@@ -99,7 +99,7 @@ export const PieGraph = ({
   data,
   isAnimationActive = true,
 }: {
-  title: string;
+  title?: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
 }) => {
