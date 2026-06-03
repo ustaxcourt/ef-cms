@@ -76,11 +76,20 @@ jobs:
       github.event.pull_request.base.ref == 'staging'
     runs-on: ubuntu-latest
     steps:
+      - name: Create badge bot token
+        id: badge-bot-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BADGE_BOT_APP_ID }}
+          owner: ${{ github.repository_owner }}
+          private-key: ${{ secrets.BADGE_BOT_RSA_KEY }}
+          repositories: ef-cms
       - name: Checkout badge generator dependencies
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           persist-credentials: true
+          token: ${{ steps.badge-bot-token.outputs.token }}
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -94,7 +103,7 @@ jobs:
       - name: NPM Install Trusted Dependencies
         if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
         run: npm ci --ignore-scripts
-      - name: Gather merged PR suite coverage summaries
+      - name: Gather Suite Coverage Summaries
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -137,4 +146,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'Update coverage badges using coverage reports from #${{ github.event.pull_request.number }}'
+          commit_user_email: 'efcms-badge-bot[bot]@users.noreply.github.com'
+          commit_user_name: 'efcms-badge-bot[bot]'
           file_pattern: docs/badges
