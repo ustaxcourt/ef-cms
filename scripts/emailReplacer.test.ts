@@ -204,6 +204,29 @@ describe('sanitizeEmail', () => {
     expect(second).toBe('11223344@ustc.gov');
     expect(first).not.toBe(second);
   });
+
+  it('should handle multiple consecutive hash collisions for the same email', () => {
+    const mockDigest = jest
+      .fn()
+      .mockReturnValueOnce('11111111') // hash for email1
+      .mockReturnValueOnce('22222222') // hash for email2
+      .mockReturnValueOnce('11111111') // hash for email3 (1st try, collides with email1)
+      .mockReturnValueOnce('22222222') // hash for email3 (2nd try inside loop, collides with email2)
+      .mockReturnValueOnce('33333333'); // hash for email3 (3rd try inside loop, success!)
+
+    (crypto.createHash as jest.Mock).mockReturnValue({
+      update: jest.fn().mockReturnThis(),
+      digest: mockDigest,
+    });
+
+    const first = sanitizeEmail('email1-multi@test.com');
+    const second = sanitizeEmail('email2-multi@test.com');
+    const third = sanitizeEmail('email3-multi@test.com');
+
+    expect(first).toBe('11111111@ustc.gov');
+    expect(second).toBe('22222222@ustc.gov');
+    expect(third).toBe('33333333@ustc.gov');
+  });
 });
 
 // Helper: run the regex against a string and return all matches (handles g-flag state)

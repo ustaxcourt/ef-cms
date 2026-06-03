@@ -5,8 +5,17 @@
 ## DAWSON Environments
 
 | prod | staging | test | irs | develop |
-| ------- | ------ | ------- | ---- | ---- |
+| - | - | - | - | - |
 | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/develop) |
+
+## Unit Test Coverage
+
+| Suite | Statements | Branches | Functions | Lines |
+| - | - | - | - | - |
+| API | ![API Statements](./.badges/api/coverage-statements.svg) | ![API Branches](./.badges/api/coverage-branches.svg) | ![API Functions](./.badges/api/coverage-functions.svg) | ![API Lines](./.badges/api/coverage-lines.svg) |
+| Client | ![Client Statements](./.badges/client/coverage-statements.svg) | ![Client Branches](./.badges/client/coverage-branches.svg) | ![Client Functions](./.badges/client/coverage-functions.svg) | ![Client Lines](./.badges/client/coverage-lines.svg) |
+| Scripts | ![Scripts Statements](./.badges/scripts/coverage-statements.svg) | ![Scripts Branches](./.badges/scripts/coverage-branches.svg) | ![Scripts Functions](./.badges/scripts/coverage-functions.svg) | ![Scripts Lines](./.badges/scripts/coverage-lines.svg) |
+| Shared | ![Shared Statements](./.badges/shared/coverage-statements.svg) | ![Shared Branches](./.badges/shared/coverage-branches.svg) | ![Shared Functions](./.badges/shared/coverage-functions.svg) | ![Shared Lines](./.badges/shared/coverage-lines.svg) |
 
 ## Documentation
 
