@@ -3,6 +3,7 @@ import {
   MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { prepareMotionOrderResponseAction } from './prepareMotionOrderResponseAction';
+import { setFormValueAction } from '../setFormValueAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareMotionOrderResponseAction', () => {
@@ -93,7 +94,9 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
-    expect(result.state.form.additionalOrderTextArray).toEqual([additionalText]);
+    expect(result.state.form.additionalOrderTextArray).toEqual([
+      additionalText,
+    ]);
   });
 
   it('should handle calendared case with trial session', async () => {
@@ -129,6 +132,41 @@ describe('prepareMotionOrderResponseAction', () => {
 
     expect(result.state.form.additionalOrderTextArray).toEqual(['Keep this.']);
     expect(result.state.form.richText).toContain('ORDERED that Keep this.');
+  });
+
+  it('normalizes optional whitespace-only row after indexed form updates', async () => {
+    const baseState = {
+      caseDetail: mockCaseDetail,
+      docketEntryId: 'mock-motion-id',
+      form: { ...mockForm },
+    };
+
+    const withSecondRow = await runAction(setFormValueAction, {
+      props: {
+        allowEmptyString: true,
+        key: 'additionalOrderTextArray',
+        value: ['', ''],
+      },
+      state: baseState,
+    });
+
+    const withWhitespaceInOptionalRow = await runAction(setFormValueAction, {
+      props: {
+        allowEmptyString: true,
+        index: 1,
+        key: 'additionalOrderTextArray',
+        value: '  \t  ',
+      },
+      state: withSecondRow.state,
+    });
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: withWhitespaceInOptionalRow.state,
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
+    expect(result.state.form.additionalOrderTextArray.length).toBe(1);
+    expect(result.state.form.additionalOrderTextArray[1]).toBeUndefined();
   });
 
   it('should handle stricken from trial sessions', async () => {

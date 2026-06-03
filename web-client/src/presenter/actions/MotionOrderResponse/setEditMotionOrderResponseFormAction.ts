@@ -3,7 +3,7 @@ import {
   additionalOrderTextArrayWithRequiredFirstField,
   normalizeAdditionalOrderTextArray,
 } from '@web-client/utilities/normalizeAdditionalOrderTextArray';
-import { DocketEntry } from 'shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const setEditMotionOrderResponseFormAction = ({
   get,
