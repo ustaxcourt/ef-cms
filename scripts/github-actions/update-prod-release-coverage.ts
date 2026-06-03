@@ -22,20 +22,25 @@ const scriptConfig: ScriptConfig = {
     pullRequestNumber: {
       position: 0,
       required: true,
-      transform: 'number',
       type: 'string',
     },
   },
   requireActiveAwsSession: false,
 };
 
-const { githubRepository, githubToken, headSha, pullRequestNumber } =
-  parseArgsAndEnvVars(scriptConfig) as {
-    githubRepository: string;
-    githubToken: string;
-    headSha?: string;
-    pullRequestNumber: number;
-  };
+const {
+  githubRepository,
+  githubToken,
+  headSha,
+  pullRequestNumber: pullRequestNumberStr,
+} = parseArgsAndEnvVars(scriptConfig) as {
+  githubRepository: string;
+  githubToken: string;
+  headSha?: string;
+  pullRequestNumber: string;
+};
+
+const pullRequestNumber = parseInt(pullRequestNumberStr.split(',')[0], 10);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
