@@ -40,6 +40,7 @@ export const SearchResults = connect(
   }) {
     const paginatorTop = useRef(null);
     const totalPages = advancedSearchHelper.totalPages || 0;
+    const hasMultiplePages = totalPages > 1;
 
     useEffect(() => {
       if (caseCurrentPaginationPage >= totalPages && totalPages > 0) {
@@ -51,21 +52,11 @@ export const SearchResults = connect(
     }, [caseCurrentPaginationPage, totalPages]);
 
     const handleSort = (columnKey: string) => {
-      if (advancedSearchHelper.caseSearchSortColumn === columnKey) {
-        updateDocumentSearchResultsSequence({
-          sortColumn: columnKey,
-          sortDirection:
-            advancedSearchHelper.caseSearchSortDirection === 'asc'
-              ? 'desc'
-              : 'asc',
-        });
-      } else {
-        updateDocumentSearchResultsSequence({
-          sortColumn: columnKey,
-          sortDirection: 'asc',
-        });
-      }
-
+      updateDocumentSearchResultsSequence({
+        sortColumn: columnKey,
+        sortDirection:
+          advancedSearchHelper.caseSearchSortButtonDirections[columnKey],
+      });
       setCurrentPaginationPageSequence({
         advancedSearchTab: 'case',
         currentPaginationPage: 0,
@@ -115,7 +106,7 @@ export const SearchResults = connect(
                 <div className="tablet:grid-col-4"></div>
 
                 <div className="tablet:grid-col-4 margin-bottom-2">
-                  {totalPages > 1 && (
+                  {hasMultiplePages && (
                     <Paginator
                       currentPageIndex={caseCurrentPaginationPage}
                       totalPages={totalPages}
@@ -126,7 +117,7 @@ export const SearchResults = connect(
 
                 <div
                   className={`tablet:grid-col-4 text-right ${
-                    totalPages < 2 ? ' padding-bottom-1' : ''
+                    hasMultiplePages ? '' : ' padding-bottom-1'
                   }`}
                 >
                   {advancedSearchHelper.showManyResultsMessage && (
@@ -157,11 +148,10 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn || ''
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection ||
-                          ASCENDING
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -175,11 +165,10 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn || ''
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection ||
-                          ASCENDING
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -193,11 +182,10 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.date}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn || ''
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection ||
-                          ASCENDING
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.date}
@@ -211,11 +199,10 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn || ''
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection ||
-                          ASCENDING
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -229,11 +216,10 @@ export const SearchResults = connect(
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
                         currentlySortedField={
-                          advancedSearchHelper.caseSearchSortColumn || ''
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
                         }
                         currentlySortedOrder={
-                          advancedSearchHelper.caseSearchSortDirection ||
-                          ASCENDING
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
                         defaultSortOrder={ASCENDING}
                         descText={SORT_DESCENDING_TEXT.string}
@@ -285,11 +271,7 @@ export const SearchResults = connect(
                     aria-label="Sort case search results"
                     className="usa-select"
                     id="mobile-case-search-sort-dropdown"
-                    value={
-                      advancedSearchHelper.caseSearchSortColumn
-                        ? `${advancedSearchHelper.caseSearchSortColumn}|${advancedSearchHelper.caseSearchSortDirection}`
-                        : ''
-                    }
+                    value={advancedSearchHelper.caseSearchMobileSortValue}
                     onChange={handleMobileSortChange}
                   >
                     <option value="">Sort by Relevance</option>
@@ -301,7 +283,7 @@ export const SearchResults = connect(
                   </select>
                 </div>
 
-                {totalPages > 1 && (
+                {hasMultiplePages && (
                   <div className="margin-bottom-4 tablet:grid-col">
                     <Paginator
                       currentPageIndex={caseCurrentPaginationPage}
@@ -406,7 +388,7 @@ export const SearchResults = connect(
               </table>
             </Mobile>
 
-            {totalPages > 1 && (
+            {hasMultiplePages && (
               <Paginator
                 currentPageIndex={caseCurrentPaginationPage}
                 totalPages={totalPages}

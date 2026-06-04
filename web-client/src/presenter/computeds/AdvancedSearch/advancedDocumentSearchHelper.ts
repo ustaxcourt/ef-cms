@@ -9,7 +9,6 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
-import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const advancedDocumentSearchHelper = (
@@ -178,4 +177,20 @@ export const formatDocumentSearchResultRecord = (
   }
 
   return result;
+};
+
+const paginationHelper = (searchResults, currentPage, pageSize) => {
+  if (!searchResults) {
+    return {};
+  }
+
+  return {
+    formattedSearchResults: [],
+    numberOfResults: searchResults.length,
+    searchResults: searchResults.slice(0, currentPage * pageSize),
+    searchResultsCount: searchResults.length,
+    showLoadMore: searchResults.length > currentPage * pageSize,
+    showNoMatches: searchResults.length === 0,
+    showSearchResults: searchResults.length > 0,
+  };
 };

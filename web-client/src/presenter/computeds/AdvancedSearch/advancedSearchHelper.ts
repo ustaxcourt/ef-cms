@@ -2,6 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  ASCENDING,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   MAX_CASE_SEARCH_RESULTS,
@@ -45,7 +46,6 @@ export const advancedSearchHelper = (
 
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  const currentPage = get(state.advancedSearchForm.currentPage);
   const caseCurrentPaginationPage = get(state.caseCurrentPaginationPage) || 0;
   const caseSearchSort = get(state.caseSearchSort) || {};
 
@@ -60,7 +60,7 @@ export const advancedSearchHelper = (
 
   if (searchResults) {
     if (advancedSearchTab === 'case') {
-      const formattedSearchResults = getFormattedCaseSearchResults({
+      const formattedSearchResults = formattedCaseSearchResults({
         applicationContext,
         searchResults,
         sortColumn: caseSearchSort.sortColumn,
@@ -76,8 +76,16 @@ export const advancedSearchHelper = (
       );
 
       Object.assign(result, {
+        caseSearchMobileSortValue: caseSearchSort.sortColumn
+          ? `${caseSearchSort.sortColumn}|${caseSearchSort.sortDirection}`
+          : '',
+        caseSearchSortButtonDirections:
+          caseSearchSortOptionsWithNextDirections(caseSearchSort),
         caseSearchSortColumn: caseSearchSort.sortColumn,
+        caseSearchSortColumnForDisplay: caseSearchSort.sortColumn || '',
         caseSearchSortDirection: caseSearchSort.sortDirection,
+        caseSearchSortDirectionForDisplay:
+          caseSearchSort.sortDirection || ASCENDING,
         formattedSearchResults: paginatedResults,
         manyResults: MAX_CASE_SEARCH_RESULTS,
         numberOfResults: formattedSearchResults.length,
@@ -88,35 +96,35 @@ export const advancedSearchHelper = (
           formattedSearchResults.length >= MAX_CASE_SEARCH_RESULTS,
         showNoMatches: formattedSearchResults.length === 0,
         showSearchResults: formattedSearchResults.length > 0,
-        sortOptions: getCaseSearchSortOptions(),
+        sortOptions: caseSearchSortOptions(),
         totalPages,
       });
 
       return result;
     }
-
-    const paginatedResults = paginationHelper(
-      searchResults,
-      currentPage,
-      CASE_SEARCH_PAGE_SIZE,
-    );
-
-    paginatedResults.formattedSearchResults = paginatedResults.searchResults;
-
-    const showManyResultsMessage =
-      searchResults.length >= MAX_CASE_SEARCH_RESULTS;
-
-    Object.assign(result, {
-      ...paginatedResults,
-      manyResults: MAX_CASE_SEARCH_RESULTS,
-      showManyResultsMessage,
-    });
   }
 
   return result;
 };
 
-const getCaseSearchSortOptions = (): { label: string; value: string }[] => [
+const caseSearchSortOptionsWithNextDirections = (
+  caseSearchSort,
+): Record<string, 'asc' | 'desc'> => {
+  const sortOptions: Record<string, 'asc' | 'desc'> = {};
+
+  caseSearchSortOptions().forEach(option => {
+    const [sortColumn] = option.value.split('|');
+    sortOptions[sortColumn] =
+      caseSearchSort.sortColumn === sortColumn &&
+      caseSearchSort.sortDirection === ASCENDING
+        ? 'desc'
+        : ASCENDING;
+  });
+
+  return sortOptions;
+};
+
+const caseSearchSortOptions = (): { label: string; value: string }[] => [
   { label: 'Sort by Petitioner(s) (ascending)', value: 'petitionerNames|asc' },
   {
     label: 'Sort by Petitioner(s) (descending)',
@@ -132,7 +140,7 @@ const getCaseSearchSortOptions = (): { label: string; value: string }[] => [
   { label: 'Sort by State (descending)', value: 'petitionerStateNames|desc' },
 ];
 
-const getFormattedCaseSearchResults = ({
+const formattedCaseSearchResults = ({
   applicationContext,
   searchResults,
   sortColumn,
@@ -167,14 +175,14 @@ const getFormattedCaseSearchResults = ({
       return dateStringsCompared(a.receivedAt, b.receivedAt) * direction;
     }
 
-    const aValue = getCaseSearchSortValue(a, sortColumn);
-    const bValue = getCaseSearchSortValue(b, sortColumn);
+    const aValue = caseSearchSortValue(a, sortColumn);
+    const bValue = caseSearchSortValue(b, sortColumn);
 
     return aValue.localeCompare(bValue) * direction;
   });
 };
 
-const getCaseSearchSortValue = (result: any, sortColumn: string): string => {
+const caseSearchSortValue = (result: any, sortColumn: string): string => {
   if (sortColumn === 'petitionerNames') {
     return result.petitionerNames?.join(' ')?.toLowerCase() || '';
   }
@@ -184,20 +192,4 @@ const getCaseSearchSortValue = (result: any, sortColumn: string): string => {
   }
 
   return result[sortColumn]?.toString().toLowerCase() || '';
-};
-
-export const paginationHelper = (searchResults, currentPage, pageSize) => {
-  if (!searchResults) {
-    return {};
-  }
-
-  return {
-    formattedSearchResults: [],
-    numberOfResults: searchResults.length,
-    searchResults: searchResults.slice(0, currentPage * pageSize),
-    searchResultsCount: searchResults.length,
-    showLoadMore: searchResults.length > currentPage * pageSize,
-    showNoMatches: searchResults.length === 0,
-    showSearchResults: searchResults.length > 0,
-  };
 };
