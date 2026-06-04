@@ -9,7 +9,7 @@ describe('AWS Batch - Docket Entries Download', () => {
     }
     cy.task('getRawFeatureFlagValue', {
       flag: 'aws-batch-zipper-minimum-count',
-    }).as('ORIGINAL_FEATUE_FLAG_VALUE');
+    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
 
     cy.task('toggleFeatureFlag', {
       flag: 'aws-batch-zipper-minimum-count',
@@ -22,10 +22,10 @@ describe('AWS Batch - Docket Entries Download', () => {
       return;
     }
 
-    cy.get('@ORIGINAL_FEATUE_FLAG_VALUE').then(ORIGINAL_FEATUE_FLAG_VALUE => {
+    cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
       cy.task('toggleFeatureFlag', {
         flag: 'aws-batch-zipper-minimum-count',
-        flagValue: ORIGINAL_FEATUE_FLAG_VALUE,
+        flagValue: ORIGINAL_FEATURE_FLAG_VALUE,
       });
     });
   });
