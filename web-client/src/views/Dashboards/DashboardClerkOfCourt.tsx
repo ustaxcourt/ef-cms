@@ -1,12 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { ClerkOfCourtTrialSessionsSummary } from '../TrialSessions/ClerkOfCourtTrialSessionsSummary';
 import { ErrorNotification } from '../ErrorNotification';
-import { LineGraph } from '@web-client/views/Public/DawsonLibrary/LineGraph';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import {
-  MultiBarGraph,
-  SingleBarGraph,
-} from '@web-client/views/Public/DawsonLibrary/BarGraph';
+import { MultiBarGraph } from '@web-client/views/Public/DawsonLibrary/BarGraph';
 import { PieGraph } from '@web-client/views/Public/DawsonLibrary/PieGraph';
 import { RecentMessagesCotC } from '../WorkQueue/RecentMessagesCotC';
 import { SuccessNotification } from '../SuccessNotification';
@@ -23,22 +19,12 @@ export const DashboardClerkOfCourt = connect(
     user: state.user,
   },
   function DashboardClerkOfCourt({ dashboardClerkOfTheCourtHelper, user }) {
-    const shouldDisplayChartTabs =
-      process.env.STAGE !== 'prod' && process.env.STAGE !== 'test';
-
     const {
-      caseTypeBreakdownDatasets,
-      caseTypeBreakdownLabels,
-      casesFiledDatasets,
-      casesFiledLabels,
-      closedCasesDatasets,
-      closedCasesLabels,
-      petitionsByMonthDatasets,
-      petitionsByMonthLabels,
-      procedureTypePieData,
-      sessionTypePieData,
-      specialSessionsByLocation,
-      totalSessionsScheduled,
+      petitionsByMonthAndServiceTypeChartData,
+      petitionsByRepresentationPieData,
+      petitionsByServiceTypePieData,
+      totalPetitions,
+      MONTHS,
     } = dashboardClerkOfTheCourtHelper;
 
     const [mobileSection, setMobileSection] = useState('recentMessages');
@@ -57,12 +43,11 @@ export const DashboardClerkOfCourt = connect(
                 <Tab tabName="petitions" title="Petitions">
                   <div className="tw:mt-6 tw:mx-4">
                     <h2 className="tw:xs:text-2xl tw:text-lg">
-                      Total petitions created in YTD PLHD:{' '}
-                      {totalSessionsScheduled}
+                      Total petitions created in YTD PLHD: {totalPetitions}
                     </h2>
                     <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
-                      <PieGraph data={procedureTypePieData} />
-                      <PieGraph data={sessionTypePieData} />
+                      <PieGraph data={petitionsByServiceTypePieData} />
+                      <PieGraph data={petitionsByRepresentationPieData} />
                     </div>
 
                     <h2 className="tw:xs:text-2xl tw:text-lg">
@@ -72,9 +57,9 @@ export const DashboardClerkOfCourt = connect(
                     <div>
                       <MultiBarGraph
                         showLabels={false}
-                        width={1300}
-                        datasets={petitionsByMonthDatasets}
-                        labels={petitionsByMonthLabels}
+                        width={CHART_WIDTH}
+                        datasets={petitionsByMonthAndServiceTypeChartData}
+                        labels={MONTHS}
                         stacked={true}
                       />
                     </div>
@@ -94,14 +79,8 @@ export const DashboardClerkOfCourt = connect(
                   value={mobileSection}
                   onChange={e => setMobileSection(e.target.value)}
                 >
+                  <option value="petitions">Petitions</option>
                   <option value="recentMessages">Recent Messages</option>
-                  {shouldDisplayChartTabs && (
-                    <>
-                      <option value="pieChart">Pie Chart</option>
-                      <option value="barGraph">Bar Graph</option>
-                      <option value="lineGraph">Line Graph</option>
-                    </>
-                  )}
                 </select>
               </div>
               {mobileSection === 'recentMessages' && (
@@ -109,70 +88,12 @@ export const DashboardClerkOfCourt = connect(
                   <RecentMessagesCotC />
                 </div>
               )}
-              {mobileSection === 'pieChart' && (
-                <div className="tw:mt-6 tw:mx-4">
-                  <h2 className="tw:xs:text-2xl tw:text-lg tw:xs:mb-8 tw:mb-5">
-                    Total sessions scheduled: {totalSessionsScheduled}
-                  </h2>
-                  <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
-                    <PieGraph
-                      title="Procedure Type"
-                      data={procedureTypePieData}
-                    />
-                    <PieGraph title="Session Type" data={sessionTypePieData} />
+              {mobileSection === 'petitions' && (
+                <div>
+                  <div>
+                    <PieGraph data={petitionsByServiceTypePieData} />
                   </div>
-                </div>
-              )}
-              {mobileSection === 'barGraph' && (
-                <div className="tw:mt-6">
-                  <SingleBarGraph
-                    showLabels={false}
-                    title="Created Special Sessions by Location"
-                    width={CHART_WIDTH}
-                    data={specialSessionsByLocation}
-                  />
-                  <div className="tw:mt-12" />
-                  <MultiBarGraph
-                    showLabels={false}
-                    stacked
-                    title="Total Petitions by Month"
-                    width={CHART_WIDTH}
-                    xLabelRotation={45}
-                    datasets={petitionsByMonthDatasets}
-                    labels={petitionsByMonthLabels}
-                  />
-                  <div className="tw:mt-12" />
-                  <MultiBarGraph
-                    showLabels={false}
-                    title="Closed/Closed - Dismissed &amp; Changed to On Appeal"
-                    width={CHART_WIDTH}
-                    xLabelRotation={45}
-                    datasets={closedCasesDatasets}
-                    labels={closedCasesLabels}
-                  />
-                </div>
-              )}
-              {mobileSection === 'lineGraph' && (
-                <div className="tw:mt-6">
-                  <LineGraph
-                    smooth
-                    title="Cases Filed Over Time"
-                    width={CHART_WIDTH}
-                    xAxisLabel="Month"
-                    xLabelRotation={45}
-                    yAxisLabel="Number of Cases"
-                    datasets={casesFiledDatasets}
-                    labels={casesFiledLabels}
-                  />
-                  <div className="tw:mt-12" />
-                  <LineGraph
-                    title="Case Type Breakdown by Quarter"
-                    width={CHART_WIDTH}
-                    xAxisLabel="Quarter"
-                    yAxisLabel="Number of Cases"
-                    datasets={caseTypeBreakdownDatasets}
-                    labels={caseTypeBreakdownLabels}
-                  />
+                  <PieGraph data={petitionsByRepresentationPieData} />
                 </div>
               )}
             </Mobile>

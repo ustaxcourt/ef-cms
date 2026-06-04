@@ -23,46 +23,21 @@ export type ClerkOfCourtPieChartData = {
 };
 
 export type ClerkOfCourtDashboardState = {
-  specialSessionsByLocation: ClerkOfCourtBarChartData[];
-  petitionsByMonthLabels: string[];
-  petitionsByMonthDatasets: ClerkOfCourtBarChartDataset[];
-  closedCasesLabels: string[];
-  closedCasesDatasets: ClerkOfCourtBarChartDataset[];
-  casesFiledLabels: string[];
-  casesFiledDatasets: ClerkOfCourtLineChartDataset[];
-  caseTypeBreakdownLabels: string[];
-  caseTypeBreakdownDatasets: ClerkOfCourtLineChartDataset[];
-  procedureTypePieData: ClerkOfCourtPieChartData[];
-  sessionTypePieData: ClerkOfCourtPieChartData[];
-  totalSessionsScheduled: number;
-};
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-export const initialClerkOfCourtDashboardState: ClerkOfCourtDashboardState = {
-  caseTypeBreakdownDatasets: [],
-  caseTypeBreakdownLabels: [],
-  casesFiledDatasets: [],
-  casesFiledLabels: [],
-  closedCasesDatasets: [],
-  closedCasesLabels: [],
-  petitionsByMonthDatasets: [],
-  petitionsByMonthLabels: MONTHS,
-  procedureTypePieData: [],
-  sessionTypePieData: [],
-  specialSessionsByLocation: [],
-  totalSessionsScheduled: 0,
+  petitionsByMonthAndServiceTypeChartData: {
+    color: string;
+    data: number[];
+    label: string;
+  }[];
+  petitionsByServiceTypePieData: {
+    color: string;
+    name: string;
+    value: number;
+  }[];
+  petitionsByRepresentationPieData: {
+    color: string;
+    name: string;
+    value: number;
+  }[];
+  totalPetitions: number;
+  MONTHS: string[];
 };
