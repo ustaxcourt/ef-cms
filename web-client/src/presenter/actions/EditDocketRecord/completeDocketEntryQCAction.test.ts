@@ -42,7 +42,7 @@ describe('completeDocketEntryQCAction', () => {
     };
   });
 
-  it('should call completeDocketEntryQCInteractor and return caseDetail', async () => {
+  it('should call completeDocketEntryQCInteractor and return correct props', async () => {
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
