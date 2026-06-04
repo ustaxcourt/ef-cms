@@ -12,7 +12,7 @@ import { messageDocumentHelper as messageDocumentHelperComputed } from './messag
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('messageDocumentHelper.showApplyStampButton', () => {
+describe('messageDocumentHelper.showGrantDenyMotionButton', () => {
   let globalUser;
 
   const mockDocketEntryId = '7de1dcbf-f6a6-4e5a-a02c-a54b13f61354';
@@ -48,7 +48,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   });
 
   it('should be false when the user does not have the STAMP_MOTION permission', () => {
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
+    const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
@@ -65,13 +65,13 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       },
     });
 
-    expect(showApplyStampButton).toBe(false);
+    expect(showGrantDenyMotionButton).toBe(false);
   });
 
   it('should be true when the user is a clerk of the court', () => {
     const user = clerkOfCourtUser;
 
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
+    const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(user),
         caseDetail: {
@@ -88,7 +88,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       },
     });
 
-    expect(showApplyStampButton).toBe(true);
+    expect(showGrantDenyMotionButton).toBe(true);
   });
 
   it('should be false when the selected message document is NOT a document that can be stamped', () => {
@@ -98,7 +98,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
         eventCode: 'NOT_CORRECT',
       });
 
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
+    const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(judgeUser),
         caseDetail: {
@@ -110,11 +110,11 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       },
     });
 
-    expect(showApplyStampButton).toBe(false);
+    expect(showGrantDenyMotionButton).toBe(false);
   });
 
   it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
+    const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(colvinsChambersUser),
         caseDetail: {
@@ -126,11 +126,11 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       },
     });
 
-    expect(showApplyStampButton).toBe(true);
+    expect(showGrantDenyMotionButton).toBe(true);
   });
 
   it('should be true when the selected message document is a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
-    const { showApplyStampButton } = runCompute(messageDocumentHelper, {
+    const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(adcUser),
         caseDetail: {
@@ -148,6 +148,6 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
       },
     });
 
-    expect(showApplyStampButton).toBe(true);
+    expect(showGrantDenyMotionButton).toBe(true);
   });
 });

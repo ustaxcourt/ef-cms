@@ -136,7 +136,7 @@ export const messageDocumentHelper = (
 
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplayDocumentId}/add-court-issued-docket-entry/${parentMessageId}`;
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplayDocumentId}/sign/${parentMessageId}`;
-  const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
+  const grantDenyMotionFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/grant-deny-motion-create`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
   const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
@@ -145,12 +145,12 @@ export const messageDocumentHelper = (
   return {
     addDocketEntryLink,
     applySignatureLink,
-    applyStampFromMessagesLink,
     archived: isArchived,
     docketEntryId: caseDocument.docketEntryId,
     documentType: caseDocument.documentType,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
+    grantDenyMotionFromMessagesLink,
     index: caseDocument.index,
     messageDetailLink,
     motionOrderResponseFromMessagesLink,
