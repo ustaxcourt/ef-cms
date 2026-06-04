@@ -167,6 +167,7 @@ export const OrderResponse = connect(
                   )}
                   <FormGroup
                     className="order-response-form-group"
+                    id="response-date-input-orderResponseResponseDate-form-group"
                     errorText={validationErrors.responseDate}
                   >
                     <DateSelector

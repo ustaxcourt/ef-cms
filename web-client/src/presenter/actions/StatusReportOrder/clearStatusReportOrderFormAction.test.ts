@@ -7,7 +7,6 @@ describe('clearStatusReportOrderFormAction,', () => {
     const result = await runAction(clearStatusReportOrderFormAction, {
       state: {
         form: {
-          additionalOrderText: 'legacy single field',
           additionalOrderTextArray: ['Test'],
           docketEntryDescription: 'Order Test',
           dueDate: '07/04/2024',
@@ -26,6 +25,5 @@ describe('clearStatusReportOrderFormAction,', () => {
       docketEntryDescription: 'Order',
       issueOrder: STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup,
     });
-    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 });
