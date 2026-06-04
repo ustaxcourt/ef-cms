@@ -111,7 +111,6 @@ jobs:
         run: |
           scripts/github-actions/compile-suite-coverage.ts \
             "${STAGING_PULL_REQUEST_NUMBER}" \
-            "" \
             "coverage"
       - name: Generate API Coverage Badges
         uses: jpb06/coverage-badges-action@latest
