@@ -38,9 +38,9 @@ export const SearchResults = connect(
     showModal,
     updateDocumentSearchResultsSequence,
   }) {
-    const paginatorTop = useRef(null);
-    const totalPages = advancedSearchHelper.totalPages || 0;
+    const { totalPages } = advancedSearchHelper;
     const hasMultiplePages = totalPages > 1;
+    const paginatorTop = useRef(null);
 
     useEffect(() => {
       if (caseCurrentPaginationPage >= totalPages && totalPages > 0) {
@@ -51,11 +51,16 @@ export const SearchResults = connect(
       }
     }, [caseCurrentPaginationPage, totalPages]);
 
-    const handleSort = (columnKey: string) => {
+    const handleSort = ({
+      sortField,
+      sortOrder,
+    }: {
+      sortField: string;
+      sortOrder: 'asc' | 'desc';
+    }) => {
       updateDocumentSearchResultsSequence({
-        sortColumn: columnKey,
-        sortDirection:
-          advancedSearchHelper.caseSearchSortButtonDirections[columnKey],
+        sortColumn: sortField,
+        sortDirection: sortOrder,
       });
       setCurrentPaginationPageSequence({
         advancedSearchTab: 'case',
@@ -158,7 +163,7 @@ export const SearchResults = connect(
                         hasRows={true}
                         sortField="petitionerNames"
                         title="Petitioner(s)"
-                        onClickSequence={() => handleSort('petitionerNames')}
+                        onClickSequence={handleSort}
                       />
                     </th>
                     <th className="text-no-wrap overflow-hidden">
@@ -175,7 +180,7 @@ export const SearchResults = connect(
                         hasRows={true}
                         sortField="docketNumber"
                         title="Docket No."
-                        onClickSequence={() => handleSort('docketNumber')}
+                        onClickSequence={handleSort}
                       />
                     </th>
                     <th className="text-no-wrap overflow-hidden">
@@ -192,7 +197,7 @@ export const SearchResults = connect(
                         hasRows={true}
                         sortField="receivedAt"
                         title="Filed Date"
-                        onClickSequence={() => handleSort('receivedAt')}
+                        onClickSequence={handleSort}
                       />
                     </th>
                     <th className="text-no-wrap overflow-hidden">
@@ -209,7 +214,7 @@ export const SearchResults = connect(
                         hasRows={true}
                         sortField="caseTitle"
                         title="Case Title"
-                        onClickSequence={() => handleSort('caseTitle')}
+                        onClickSequence={handleSort}
                       />
                     </th>
                     <th className="text-no-wrap overflow-hidden">
@@ -226,9 +231,7 @@ export const SearchResults = connect(
                         hasRows={true}
                         sortField="petitionerStateNames"
                         title="State"
-                        onClickSequence={() =>
-                          handleSort('petitionerStateNames')
-                        }
+                        onClickSequence={handleSort}
                       />
                     </th>
                   </tr>

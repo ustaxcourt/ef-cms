@@ -14,12 +14,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+) => {
   const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const caseCurrentPaginationPage = get(state.caseCurrentPaginationPage) || 0;
@@ -28,6 +27,7 @@ export const advancedSearchHelper = (
   const result = {
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
+    totalPages: 0,
   };
 
   if (advancedSearchTab === 'practitioner') {
@@ -55,8 +55,6 @@ export const advancedSearchHelper = (
         caseSearchMobileSortValue: caseSearchSort.sortColumn
           ? `${caseSearchSort.sortColumn}|${caseSearchSort.sortDirection}`
           : '',
-        caseSearchSortButtonDirections:
-          caseSearchSortOptionsWithNextDirections(caseSearchSort),
         caseSearchSortColumn: caseSearchSort.sortColumn,
         caseSearchSortColumnForDisplay: caseSearchSort.sortColumn || '',
         caseSearchSortDirection: caseSearchSort.sortDirection,
@@ -81,23 +79,6 @@ export const advancedSearchHelper = (
   }
 
   return result;
-};
-
-const caseSearchSortOptionsWithNextDirections = (
-  caseSearchSort,
-): Record<string, 'asc' | 'desc'> => {
-  const sortOptions: Record<string, 'asc' | 'desc'> = {};
-
-  caseSearchSortOptions().forEach(option => {
-    const [sortColumn] = option.value.split('|');
-    sortOptions[sortColumn] =
-      caseSearchSort.sortColumn === sortColumn &&
-      caseSearchSort.sortDirection === ASCENDING
-        ? 'desc'
-        : ASCENDING;
-  });
-
-  return sortOptions;
 };
 
 const caseSearchSortOptions = (): { label: string; value: string }[] => [
