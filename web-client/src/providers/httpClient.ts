@@ -1,29 +1,98 @@
-import { X_FORCE_REFRESH } from '@web-client/utils/headers';
-import axios, { AxiosInstance } from 'axios';
+import {
+  DEPLOYMENT_TIMESTAMP_STORAGE_KEY,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
+  X_MANUAL_REFRESH_REQUIRED,
+  getHeaderValue,
+} from '@shared/utils/headers';
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 let axiosClient: AxiosInstance;
+let areInterceptorsRegistered = false;
+let currentForceRefreshCallback: (() => void) | undefined;
+
+const getStoredDeploymentTimestamp = (): string | undefined => {
+  if (typeof window === 'undefined') return undefined;
+  return (
+    window.localStorage.getItem(DEPLOYMENT_TIMESTAMP_STORAGE_KEY) || undefined
+  );
+};
+
+const setStoredDeploymentTimestamp = (
+  headers: Record<string, unknown>,
+): void => {
+  if (typeof window === 'undefined') return;
+  const deploymentTimestamp = getHeaderValue(headers, X_DEPLOYMENT_TIMESTAMP);
+
+  if (deploymentTimestamp) {
+    window.localStorage.setItem(
+      DEPLOYMENT_TIMESTAMP_STORAGE_KEY,
+      deploymentTimestamp,
+    );
+  }
+};
 
 export const getHttpClient = (
   forceRefreshCallback: () => void,
+  apiUrl: string,
 ): AxiosInstance => {
-  /*
-  We are creating this error and interceptor to get around a known issue with axios stack traces: https://github.com/axios/axios/issues/2387.
-  When axios throws an error, the stack trace does not show who called axios. This helps accurately display a stack trace when axios throws an error.
-  */
-  const stackError = new Error(); // Look at the stack trace for more information on the error.
   axiosClient = axiosClient || axios.create();
 
-  axiosClient.interceptors.response.use(undefined, async error => {
-    const shouldForceRefresh =
-      error.response.headers.get(X_FORCE_REFRESH) === 'true';
+  currentForceRefreshCallback = forceRefreshCallback;
 
-    if (shouldForceRefresh) {
-      await forceRefreshCallback();
-    }
+  if (!areInterceptorsRegistered) {
+    axiosClient.interceptors.request.use(
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+        (config as any)._stackError = new Error();
 
-    error.stack = stackError.stack;
-    throw error;
-  });
+        const deploymentTimestamp = getStoredDeploymentTimestamp();
+
+        const isExternalRequest = config.url && !config.url.startsWith(apiUrl);
+
+        if (deploymentTimestamp && !isExternalRequest) {
+          config.headers.set(X_DEPLOYMENT_TIMESTAMP, deploymentTimestamp);
+        }
+
+        return config;
+      },
+    );
+
+    axiosClient.interceptors.response.use(
+      (response: AxiosResponse): AxiosResponse => {
+        setStoredDeploymentTimestamp(
+          response.headers as Record<string, unknown>,
+        );
+
+        return response;
+      },
+      async error => {
+        setStoredDeploymentTimestamp(
+          (error.response?.headers || {}) as Record<string, unknown>,
+        );
+
+        const shouldForceManualRefresh =
+          getHeaderValue(error.response?.headers, X_MANUAL_REFRESH_REQUIRED) ===
+            'true' ||
+          getHeaderValue(error.response?.headers, X_FORCE_REFRESH) === 'true';
+
+        if (shouldForceManualRefresh) {
+          await currentForceRefreshCallback?.();
+        }
+
+        const stackError = error.config?._stackError;
+        if (stackError) {
+          error.stack = stackError.stack;
+        }
+        throw error;
+      },
+    );
+
+    areInterceptorsRegistered = true;
+  }
 
   return axiosClient;
 };

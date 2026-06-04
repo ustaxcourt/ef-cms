@@ -66,6 +66,7 @@ export const createAndServeNoticeDocketEntry = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       servedAt: createISODateString(),
       servedParties: servedParties.all,

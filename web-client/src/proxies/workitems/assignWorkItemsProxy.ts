@@ -1,3 +1,4 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { put } from '../requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 
@@ -7,12 +8,12 @@ export const assignWorkItemsInteractor = (
     assigneeId,
     assigneeName,
     workItem = undefined,
-    workItemId = undefined,
+    workItemIds = undefined,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItem?: object;
-    workItemId?: string;
+    workItem?: RawWorkItem;
+    workItemIds?: string[];
   },
 ): Promise<void> => {
   return put({
@@ -21,7 +22,7 @@ export const assignWorkItemsInteractor = (
       assigneeId,
       assigneeName,
       workItem,
-      workItemId,
+      workItemIds,
     },
     endpoint: '/work-items',
   });

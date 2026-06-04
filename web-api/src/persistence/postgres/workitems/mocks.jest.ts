@@ -24,8 +24,8 @@ jest.mock(
   () => mockFactory('getDocumentQCServedForUser'),
 );
 
-jest.mock('@web-api/persistence/postgres/workitems/getWorkItemById', () =>
-  mockFactory('getWorkItemById'),
+jest.mock('@web-api/persistence/postgres/workitems/getWorkItemsByIds', () =>
+  mockFactory('getWorkItemsByIds'),
 );
 
 jest.mock(
@@ -48,7 +48,6 @@ jest.mock(
     getDocumentQCInboxCountsForUser: jest.fn().mockReturnValue({
       inProgressCount: 0,
       inboxCount: 0,
-      unreadCount: 0,
     }),
     getDocumentQCInboxCountsForSection: jest.fn().mockReturnValue({
       inProgressCount: 0,

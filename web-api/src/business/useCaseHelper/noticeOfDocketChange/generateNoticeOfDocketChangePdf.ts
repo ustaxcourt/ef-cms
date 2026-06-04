@@ -15,7 +15,7 @@ export const generateNoticeOfDocketChangePdf = async ({
   docketChangeInfo: {
     caseCaptionExtension: string;
     caseTitle: string;
-    docketEntryIndex: string;
+    docketEntryIndex: number;
     docketNumber: string;
     titleOfClerk: string;
     nameOfClerk: string;

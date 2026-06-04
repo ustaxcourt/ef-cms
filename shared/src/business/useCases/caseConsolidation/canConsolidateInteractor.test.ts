@@ -43,4 +43,24 @@ describe('canConsolidateInteractor', () => {
 
     expect(result.canConsolidate).toEqual(false);
   });
+
+  it('should return false with a reason when caseToConsolidate is not provided', () => {
+    const result = canConsolidateInteractor(mockDocketClerkUser, {
+      caseToConsolidate: undefined as any,
+      currentCase,
+    });
+
+    expect(result.canConsolidate).toEqual(false);
+    expect(result.reason).toEqual(['Case to consolidate is not found']);
+  });
+
+  it('should return false with a reason when currentCase is not provided', () => {
+    const result = canConsolidateInteractor(mockDocketClerkUser, {
+      caseToConsolidate,
+      currentCase: undefined as any,
+    });
+
+    expect(result.canConsolidate).toEqual(false);
+    expect(result.reason).toEqual(['Current case is not found']);
+  });
 });
