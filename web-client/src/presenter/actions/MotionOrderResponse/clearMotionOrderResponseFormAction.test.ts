@@ -9,7 +9,6 @@ describe('clearMotionOrderResponseFormAction', () => {
         issueOrderFor:
           MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
         motionOrderResponse: 'Reply',
-        additionalOrderText: 'legacy text',
         additionalOrderTextArray: ['Some text'],
         dueDate: '2024-03-22',
         responseDate: '2024-03-21',
@@ -25,7 +24,6 @@ describe('clearMotionOrderResponseFormAction', () => {
       additionalOrderTextArray: [''],
       issueOrderFor: MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
     });
-    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 
   it('should handle clearing empty form fields', async () => {
@@ -38,6 +36,5 @@ describe('clearMotionOrderResponseFormAction', () => {
     expect(result.state.form).toEqual({
       additionalOrderTextArray: [''],
     });
-    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 });
