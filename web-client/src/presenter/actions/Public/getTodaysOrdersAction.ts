@@ -15,13 +15,12 @@ export const getTodaysOrdersAction = async ({
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
-  let allResults: any[] = [];
+  const allResults: any[] = [];
   let page = 1;
   let totalCount = 0;
 
   // Fetch all pages so the full result set is available for client-side sort & pagination
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
+  do {
     const { results, totalCount: fetchedTotalCount } = await applicationContext
       .getUseCases()
       .getTodaysOrdersInteractor(applicationContext, {
@@ -30,13 +29,9 @@ export const getTodaysOrdersAction = async ({
       });
 
     totalCount = fetchedTotalCount;
-    allResults = [...allResults, ...results];
-
-    if (allResults.length >= totalCount || results.length === 0) {
-      break;
-    }
+    allResults.push(...results);
     page++;
-  }
+  } while (allResults.length < totalCount);
 
   return { todaysOrders: allResults, totalCount };
 };
