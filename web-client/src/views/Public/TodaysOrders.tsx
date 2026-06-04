@@ -159,10 +159,10 @@ export const TodaysOrders = connect(
                       </tr>
                     </thead>
                     <tbody>
-                      {pagedResults.map((order, idx) => {
+                      {pagedResults.map(order => {
                         return (
                           <TodaysOrdersRow
-                            key={`order${idx}`}
+                            key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
                             order={order}
                             openCaseDocumentDownloadUrlSequence={
                               openCaseDocumentDownloadUrlSequence
