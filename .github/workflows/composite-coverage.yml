@@ -85,34 +85,44 @@ jobs:
           private-key: ${{ secrets.BADGE_BOT_RSA_KEY }}
           repositories: ef-cms
       - name: Checkout badge generator dependencies
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           persist-credentials: true
           token: ${{ steps.badge-bot-token.outputs.token }}
       - name: Setup Node
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
       - name: Restore Node Dependencies
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         id: cache-dependencies
         uses: actions/cache/restore@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: NPM Install Trusted Dependencies
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
         run: npm ci --ignore-scripts
       - name: Gather Suite Coverage Summaries
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
           STAGING_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           scripts/github-actions/compile-suite-coverage.ts \
             "${STAGING_PULL_REQUEST_NUMBER}" \
             "coverage"
       - name: Generate API Coverage Badges
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: jpb06/coverage-badges-action@latest
         with:
           badges-labels-prefix: API
@@ -120,6 +130,8 @@ jobs:
           no-commit: 'true'
           output-folder: docs/badges/api
       - name: Generate Client Coverage Badges
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: jpb06/coverage-badges-action@latest
         with:
           badges-labels-prefix: Client
@@ -127,6 +139,8 @@ jobs:
           no-commit: 'true'
           output-folder: docs/badges/client
       - name: Generate Scripts Coverage Badges
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: jpb06/coverage-badges-action@latest
         with:
           badges-labels-prefix: Scripts
@@ -134,6 +148,8 @@ jobs:
           no-commit: 'true'
           output-folder: docs/badges/scripts
       - name: Generate Shared Coverage Badges
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: jpb06/coverage-badges-action@latest
         with:
           badges-labels-prefix: Shared
@@ -141,6 +157,8 @@ jobs:
           no-commit: 'true'
           output-folder: docs/badges/shared
       - name: Commit badges to staging
+        env:
+          GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: staging
