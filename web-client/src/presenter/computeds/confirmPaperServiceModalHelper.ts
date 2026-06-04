@@ -22,19 +22,25 @@ export const confirmPaperServiceModalHelper = (
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const paperServiceParties = get(state.paperServiceParties);
 
-  const currentDocketEntry = formattedCaseDetail.docketEntries.find(
-    doc => doc.docketEntryId === docketEntryId,
-  );
+  const currentDocketEntry = docketEntryId
+    ? formattedCaseDetail.docketEntries.find(
+        doc => doc.docketEntryId === docketEntryId,
+      )
+    : undefined;
 
-  if (!currentDocketEntry) {
+  if (docketEntryId && !currentDocketEntry) {
     throw new Error(`Docket entry ${docketEntryId} was not found.`);
   }
 
-  const wasMultiDocketed = DocketEntry.isMultiDocketed(currentDocketEntry);
+  const wasMultiDocketed = currentDocketEntry
+    ? DocketEntry.isMultiDocketed(currentDocketEntry)
+    : false;
 
-  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(c =>
-    currentDocketEntry.multiDocketedOn.includes(c.docketNumber),
-  );
+  const multiDocketedOn = currentDocketEntry
+    ? formattedCaseDetail.consolidatedCases.filter(c =>
+        currentDocketEntry.multiDocketedOn.includes(c.docketNumber),
+      )
+    : [];
 
   const paperFilingText = wasMultiDocketed
     ? 'Paper service is required for these parties:'
