@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
+
 const mockOrders = [
   {
     caseCaption: 'Zeta Corp, Petitioner',
@@ -65,6 +67,10 @@ describe("Today's Orders - Sorting", () => {
       'have.length',
       3,
     );
+  });
+
+  it('should have no accessibility violations', () => {
+    checkA11y();
   });
 
   it('should default to sorting by filing date descending (newest first)', () => {
@@ -167,6 +173,10 @@ describe("Today's Orders - Pagination", () => {
     cy.visit('/todays-orders');
     cy.wait('@getTodaysOrders');
     cy.get('table[aria-label="todays orders"]').should('be.visible');
+  });
+
+  it('should have no accessibility violations', () => {
+    checkA11y();
   });
 
   it('should show the paginator when results span more than one page', () => {
