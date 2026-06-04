@@ -105,9 +105,7 @@ describe('sanitizeUserHtml', () => {
   });
 
   it('keeps indent-paragraph while still dropping disallowed sibling classes', () => {
-    const out = sanitizeUserHtml(
-      '<p class="indent-paragraph evil">x</p>',
-    );
+    const out = sanitizeUserHtml('<p class="indent-paragraph evil">x</p>');
     expect(out).toContain('indent-paragraph');
     expect(out).not.toContain('evil');
   });

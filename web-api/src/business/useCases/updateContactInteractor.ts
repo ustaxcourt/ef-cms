@@ -252,7 +252,6 @@ export const updateContact = async (
         caseToUpdate: caseEntity,
       });
     }
-
   });
 
   if (changeOfAddressDocketEntry && changeOfAddressPdfWithCover) {
@@ -263,7 +262,6 @@ export const updateContact = async (
       servedParties,
     });
   }
-
 };
 
 export const updateContactInteractor = withLocking(

@@ -235,6 +235,64 @@ describe('backfillUserGeocodes', () => {
     ]);
   });
 
+  it('upserts user contacts with null coordinates and geodataMatch false when geocoder yields no match', async () => {
+    const mockUsers = [
+      {
+        docketNumber: '102-20',
+        userId: 'user-2',
+        address1: 'Nowhere St',
+        city: 'Nowhere',
+        state: 'ZZ',
+        zip: '00000',
+      },
+    ];
+
+    let callCount = 0;
+    getDbReader.mockImplementation(cb => {
+      callCount++;
+      const result =
+        callCount === 1 ? { count: 1 } : callCount === 2 ? mockUsers : [];
+      const chain = createChainable(result, result);
+      const mockDb = { selectFrom: () => chain };
+      return Promise.resolve(cb(mockDb as any));
+    });
+    ask.mockResolvedValue('y');
+
+    const mockAdd = jest.fn();
+    const mockGeocode = jest.fn().mockResolvedValue(undefined);
+
+    Geocoder.mockImplementation(
+      () =>
+        ({
+          add: mockAdd,
+          geocode: mockGeocode,
+        }) as any,
+    );
+
+    await backfillUserGeocodes({});
+
+    expect(mockAdd).toHaveBeenCalledWith(
+      'user-2-102-20',
+      {
+        address: 'Nowhere St',
+        city: 'Nowhere',
+        state: 'ZZ',
+        zip: '00000',
+      },
+      expect.any(Function),
+    );
+    expect(mockGeocode).toHaveBeenCalled();
+    expect(upsertUserContacts).toHaveBeenCalledWith([
+      {
+        userId: 'user-2',
+        docketNumber: '102-20',
+        lat: null,
+        lng: null,
+        geodataMatch: false,
+      },
+    ]);
+  });
+
   it('processes multiple batches', async () => {
     const firstBatch = [
       {

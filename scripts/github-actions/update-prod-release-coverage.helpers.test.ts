@@ -119,7 +119,6 @@ describe('update-prod-release-coverage', () => {
       'No coverage update applied on PR #4321.',
     );
   });
-
   describe('runUpdateProdReleaseCoverageScript', () => {
     it('should call updateProdReleaseCoverage with the default dependencies', async () => {
       const getCoverageSummaryMock = jest
