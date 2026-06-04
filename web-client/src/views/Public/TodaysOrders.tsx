@@ -233,7 +233,7 @@ export const TodaysOrders = connect(
                       <tr>
                         <th aria-label="Docket Number">Docket No.</th>
                         <th>Case Title</th>
-                        <th>Order Type</th>
+                        <th>Order</th>
                         <th>Pages</th>
                         <th>Judge</th>
                       </tr>
