@@ -4,13 +4,13 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import {
-  getDocumentQCInboxCountsForSection,
-  getDocumentQCInboxCountsForUser,
-} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxCounts';
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { getQCInboxParameters } from '@web-api/business/utilities/getQCInboxParameters';
+import {
+  getDocumentQCInboxCountsForUser,
+  getDocumentQCInboxCountsForSection,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxCounts';
 
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -29,7 +29,6 @@ export const getNotificationsInteractor = async (
   qcIndividualInboxCount: number;
   qcSectionInProgressCount: number;
   qcSectionInboxCount: number;
-  qcUnreadCount: number;
   unreadMessageCount: number;
   userInboxCount: number;
   userSectionCount: number;
@@ -48,13 +47,6 @@ export const getNotificationsInteractor = async (
     section,
     selectedSection,
   });
-
-  applicationContext.logger.info(
-    'getNotificationsInteractor about to start queries',
-    {
-      sectionToDisplay: qcInboxParameters.section,
-    },
-  );
 
   const [userInbox, sectionInbox, userQCCounts, sectionQCCounts] =
     await Promise.all([
@@ -86,7 +78,6 @@ export const getNotificationsInteractor = async (
     qcIndividualInboxCount: userQCCounts.inboxCount,
     qcSectionInProgressCount: sectionQCCounts.inProgressCount,
     qcSectionInboxCount: sectionQCCounts.inboxCount,
-    qcUnreadCount: userQCCounts.unreadCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,

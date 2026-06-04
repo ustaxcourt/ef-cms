@@ -14,13 +14,8 @@ const scriptConfig: ScriptConfig = {
     githubToken: 'GITHUB_TOKEN',
   },
   parameters: {
-    headSha: {
-      position: 1,
-      required: false,
-      type: 'string',
-    },
     outputDirectory: {
-      position: 2,
+      position: 1,
       required: true,
       type: 'string',
     },
@@ -36,13 +31,11 @@ const scriptConfig: ScriptConfig = {
 const {
   githubRepository,
   githubToken,
-  headSha,
   outputDirectory,
   pullRequestNumber: pullRequestNumberStr,
 } = parseArgsAndEnvVars(scriptConfig) as {
   githubRepository: string;
   githubToken: string;
-  headSha?: string;
   outputDirectory: string;
   pullRequestNumber: string;
 };
@@ -54,7 +47,6 @@ const pullRequestNumber = parseInt(pullRequestNumberStr.split(',')[0], 10);
   await runCompileSuiteCoverageScript({
     githubRepository,
     githubToken,
-    headSha,
     outputDirectory,
     pullRequestNumber,
   });

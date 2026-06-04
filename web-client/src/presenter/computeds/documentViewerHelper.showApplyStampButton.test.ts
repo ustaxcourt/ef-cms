@@ -30,6 +30,7 @@ describe('documentViewerHelper.showApplyStampButton', () => {
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
+      user,
       viewerDocumentToDisplay: {
         docketEntryId: mockDocketEntryId,
       },

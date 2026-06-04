@@ -19,16 +19,14 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
+import { CopyObjectCommand } from '@aws-sdk/client-s3';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+import { environment } from '@web-api/environment';
+import { getUniqueId } from '@shared/sharedAppContext';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
   {
@@ -48,6 +46,8 @@ const removeConsolidatedCases = async (
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+
+  const storageClient = getStorageClient();
 
   const updateCasePromises: Promise<any>[] = [];
 
@@ -110,6 +110,9 @@ const removeConsolidatedCases = async (
     docketNumbers: docketNumbersToRemove,
   });
 
+  const docketEnIdsToUpdate: Set<string> = new Set();
+  const docketEntriesToUpdate: RawDocketEntry[] = [];
+
   for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
@@ -124,7 +127,63 @@ const removeConsolidatedCases = async (
     updateCasePromises.push(
       removeConsolidatedCaseReferences(caseToRemove.docketNumber),
     );
+
+    caseToRemove.docketEntries.forEach(docketEntry => {
+      if (DocketEntry.isMultiDocketed(docketEntry))
+        docketEnIdsToUpdate.add(docketEntry.docketEntryId);
+    });
   }
+
+  for (const id of docketEnIdsToUpdate) {
+    // entries are docketEntries on ALL cases in the consolidated group
+    const entries = await getDocketEntriesById({ docketEntryId: id });
+    entries.forEach(entry => {
+      docketEntriesToUpdate.push(entry);
+    });
+  }
+
+  const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
+  docketEntriesToUpdate.forEach(docketEntry => {
+    // if this docket entry is on the cases still in the group
+    if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+      // remove the unconsolidated docket numbers from its multiDocketedOn array
+      const filtered = (docketEntry.multiDocketedOn || []).filter(
+        docketNumber => !docketNumbersToRemove.includes(docketNumber),
+      );
+      // if filtered only contains the docket number we're on, then we set an empty array for the current
+      docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
+    } else {
+      docketEntry.multiDocketedOn = [];
+      const newStorageId = getUniqueId();
+      const oldStorageId = docketEntry.documentStorageId;
+      const storageCommand = new CopyObjectCommand({
+        Bucket: environment.documentsBucketName,
+        CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
+        Key: newStorageId,
+      });
+      updateCasePromises.push(storageClient.send(storageCommand));
+      docketEntry.documentStorageId = newStorageId;
+
+      if (docketEntry.documentContentsId) {
+        const newContentsId = getUniqueId();
+        const oldContentsId = docketEntry.documentContentsId;
+        const contentsCommand = new CopyObjectCommand({
+          Bucket: environment.documentsBucketName,
+          CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
+          Key: newContentsId,
+        });
+        updateCasePromises.push(storageClient.send(contentsCommand));
+        docketEntry.documentContentsId = newContentsId;
+      }
+    }
+    const validatedDocketEntry = new DocketEntry(docketEntry, {
+      authorizedUser,
+    }).validate();
+
+    UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
+  });
+
+  updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
 
   await settlePromises(updateCasePromises);
 };
