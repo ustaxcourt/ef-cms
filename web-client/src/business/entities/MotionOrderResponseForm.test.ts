@@ -48,6 +48,21 @@ describe('MotionOrderResponseForm', () => {
       });
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
+
+    it('should be valid when isOnLeadCase is true and issueOrderFor is THIS_CASE_ONLY', () => {
+      const form = new MotionOrderResponseForm({
+        responseDate: getBusinessDateInFuture({
+          numberOfDays: 2,
+          outputFormat: FORMATS.YYYYMMDD,
+          startDate: createISODateString(),
+        }),
+        isOnLeadCase: true,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+      });
+
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
   });
 
   describe('validation errors', () => {
@@ -78,6 +93,76 @@ describe('MotionOrderResponseForm', () => {
       const errors = form.getFormattedValidationErrors();
       expect(errors).toMatchObject({
         dueDate: 'Due Date is required when a Reply is ordered',
+      });
+    });
+
+    it('should be invalid when responseDate is before today', () => {
+      const form = new MotionOrderResponseForm({
+        responseDate: '1900-01-01',
+        isOnLeadCase: false,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+      });
+
+      const errors = form.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        responseDate:
+          'Response Date cannot be prior to today. Enter a valid date.',
+      });
+    });
+
+    it('should be invalid when responseDate has an invalid format', () => {
+      const form = new MotionOrderResponseForm({
+        responseDate: '06/01/2026',
+        isOnLeadCase: false,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+      });
+
+      const errors = form.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        responseDate: 'Enter a valid date',
+      });
+    });
+
+    it('should be invalid when dueDate has an invalid format', () => {
+      const responseDate = getBusinessDateInFuture({
+        numberOfDays: 2,
+        outputFormat: FORMATS.YYYYMMDD,
+        startDate: createISODateString(),
+      });
+      const form = new MotionOrderResponseForm({
+        motionOrderResponse: true,
+        responseDate,
+        dueDate: '06/03/2026',
+        isOnLeadCase: true,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+      });
+
+      const errors = form.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        dueDate: 'Enter a valid date',
+      });
+    });
+
+    it('should show Enter a valid Due Date when responseDate cannot be used as a dueDate reference', () => {
+      const form = new MotionOrderResponseForm({
+        motionOrderResponse: true,
+        responseDate: 'not-a-date',
+        dueDate: getBusinessDateInFuture({
+          numberOfDays: 2,
+          outputFormat: FORMATS.YYYYMMDD,
+          startDate: createISODateString(),
+        }),
+        isOnLeadCase: true,
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+      });
+
+      const errors = form.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        dueDate: 'Enter a valid Due Date',
       });
     });
 
@@ -146,6 +231,22 @@ describe('MotionOrderResponseForm', () => {
       const errors = form.getFormattedValidationErrors();
       expect(errors).toEqual({
         issueOrderFor: `"issueOrderFor" must be [${MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY}]`,
+      });
+    });
+
+    it('should be invalid when issueOrderFor is missing for lead cases', () => {
+      const form = new MotionOrderResponseForm({
+        responseDate: getBusinessDateInFuture({
+          numberOfDays: 1,
+          outputFormat: FORMATS.YYYYMMDD,
+          startDate: createISODateString(),
+        }),
+        isOnLeadCase: true,
+      });
+
+      const errors = form.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        issueOrderFor: 'Select on which cases to file this order',
       });
     });
   });

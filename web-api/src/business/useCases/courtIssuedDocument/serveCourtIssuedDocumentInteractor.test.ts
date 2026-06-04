@@ -39,8 +39,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
 
     applicationContext
@@ -293,6 +293,49 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
+  });
+
+  it('should set each docket entry`s docketNumber to its corresponding case`s docketNumber when serving across consolidated cases', async () => {
+    const memberDocketNumber1 = '200-21';
+    const memberDocketNumber2 = '300-33';
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+          filingDate: undefined,
+          servedAt: undefined,
+        },
+      ],
+    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      { ...MOCK_CASE, docketNumber: memberDocketNumber1 },
+      { ...MOCK_CASE, docketNumber: memberDocketNumber2 },
+    ]);
+
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [memberDocketNumber1, memberDocketNumber2],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const { calls } = fileAndServeDocumentOnOneCase.mock;
+    expect(calls[0][0].docketEntryEntity.docketNumber).toBe(
+      MOCK_CASE.docketNumber,
+    );
+    expect(calls[1][0].docketEntryEntity.docketNumber).toBe(
+      memberDocketNumber1,
+    );
+    expect(calls[2][0].docketEntryEntity.docketNumber).toBe(
+      memberDocketNumber2,
+    );
   });
 
   it('should set the docket entry`s filing date as today', async () => {

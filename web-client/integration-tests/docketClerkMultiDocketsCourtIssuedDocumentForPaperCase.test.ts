@@ -106,13 +106,15 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
       },
     );
 
-    expect(modalHelper.showPaperAlert).toEqual(true);
+    expect(modalHelper.contactsNeedingPaperService).toBeDefined();
     expect(modalHelper.contactsNeedingPaperService).toEqual([
-      {
-        name: 'Daenerys Stormborn, Petitioner',
-      },
+      expect.objectContaining({
+        name: 'Daenerys Stormborn',
+        docketNumber: cerebralTest.docketNumber,
+        formattedContactType: 'Petitioner',
+      }),
     ]);
-    expect(modalHelper.showConsolidatedCasesForService).toEqual(true);
+    expect(modalHelper.allowMultiDocketing).toEqual(true);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',

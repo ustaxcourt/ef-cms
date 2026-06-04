@@ -16,6 +16,15 @@ presenter.sequences = {
 const cerebralTest = CerebralTest(presenter);
 
 describe('Miscellaneous', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(applicationContext.getUseCases(), 'getAllFeatureFlagsInteractor')
+      .mockResolvedValue({});
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
   it('Handles routing', async () => {
     await cerebralTest.runSequence('gotoStyleGuideSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('StyleGuide');

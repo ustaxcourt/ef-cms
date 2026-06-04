@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -105,6 +106,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         {
           docketNumbers: [],
           documentMeta: {
+            attachments: false,
             docketEntryId: caseRecord.docketEntries[1].docketEntryId,
             documentType: 'Memorandum in Support',
           },
@@ -120,16 +122,40 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(
         applicationContext,
         {
+          docketNumbers: [],
           documentMeta: {
             docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            docketNumbers: [],
             documentType: 'Order',
-          },
+          } as any,
           subjectDocketNumber: caseRecord.docketNumber,
-        } as any,
+        },
         mockDocketClerkUser,
       ),
     ).rejects.toThrow('Docket entry not found');
+  });
+
+  it('should throw an error if the user is not found', async () => {
+    getUserById.mockResolvedValueOnce(undefined);
+    await expect(
+      fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            generatedDocumentTitle: 'Generated Order Document Title',
+          },
+          subjectDocketNumber: caseRecord.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockDocketClerkUser.userId}`,
+    );
   });
 
   it('should throw an error if the document has already been added to the docket record', async () => {
@@ -157,6 +183,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       {
         docketNumbers: [],
         documentMeta: {
+          attachments: false,
           docketEntryId: caseRecord.docketEntries[0].docketEntryId,
           documentTitle: 'Order',
           documentType: 'Order',
@@ -164,7 +191,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           generatedDocumentTitle: 'Generated Order Document Title',
         },
         subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
     expect(countPagesInDocument).toHaveBeenCalledWith(
@@ -182,6 +209,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       {
         docketNumbers: [],
         documentMeta: {
+          attachments: false,
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
@@ -190,7 +218,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           generatedDocumentTitle: 'Generated Order Document Title',
         },
         subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -247,17 +275,14 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       {
         docketNumbers: [],
         documentMeta: {
+          attachments: false,
           docketEntryId: docketEntryToUpdate.docketEntryId,
           documentTitle: docketEntryToUpdate.documentTitle,
           documentType: docketEntryToUpdate.documentType,
-          draftOrderState: {
-            documentContents: 'Some content',
-            richText: 'some content',
-          },
           eventCode: docketEntryToUpdate.eventCode,
         },
         subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -343,6 +368,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         {
           docketNumbers: [],
           documentMeta: {
+            attachments: false,
             docketEntryId: caseRecord.docketEntries[0].docketEntryId,
             documentTitle: 'Order',
             documentType: 'Order',
@@ -350,7 +376,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
             generatedDocumentTitle: 'Generated Order Document Title',
           },
           subjectDocketNumber: caseRecord.docketNumber,
-        } as any,
+        },
         mockDocketClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
@@ -364,6 +390,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       {
         docketNumbers: [],
         documentMeta: {
+          attachments: false,
           docketEntryId: caseRecord.docketEntries[0].docketEntryId,
           documentTitle: 'Order',
           documentType: 'Order',
@@ -371,7 +398,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           generatedDocumentTitle: 'Generated Order Document Title',
         },
         subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -389,6 +416,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       {
         docketNumbers,
         documentMeta: {
+          attachments: false,
           docketEntryId: caseRecord.docketEntries[0].docketEntryId,
           documentTitle: 'Order',
           documentType: 'Order',
@@ -396,7 +424,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           generatedDocumentTitle: 'Generated Order Document Title',
         },
         subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -412,6 +440,319 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         identifiers: expectedIdentifiers,
       }),
     );
+  });
+
+  describe('originallyFiledDocketNumber', () => {
+    it('should set originallyFiledDocketNumber to subjectDocketNumber on every docket entry created', async () => {
+      const LEAD_CASE = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          {
+            docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: 'CTRA',
+            filedByRole: ROLES.docketClerk,
+            userId: mockUserId,
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        LEAD_CASE as any,
+      ]);
+
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: 'CTRA',
+          },
+          subjectDocketNumber: LEAD_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const allCalls = updateCaseAndAssociations.mock.calls;
+      for (const call of allCalls) {
+        const entry = call[0].caseToUpdate.docketEntries.find(
+          (d: { eventCode: string }) => d.eventCode === 'CTRA',
+        );
+        expect(entry).toMatchObject({
+          originallyFiledDocketNumber: LEAD_CASE.docketNumber,
+        });
+      }
+    });
+
+    it('should set originallyFiledDocketNumber to subjectDocketNumber when filing on a single (non-consolidated) case', async () => {
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            generatedDocumentTitle: 'Generated Order Document Title',
+          },
+          subjectDocketNumber: caseRecord.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const updatedEntry =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          (d: { docketEntryId: string }) =>
+            d.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
+        );
+      expect(updatedEntry).toMatchObject({
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+      });
+    });
+  });
+
+  describe('multiDocketedOn', () => {
+    const unservableNotTCRPEventCode = 'CTRA';
+
+    it('should set multiDocketedOn on all docket entries when subject case is a lead case, document is unservable and not TCRP, and additional docket numbers are provided', async () => {
+      const LEAD_CASE = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          {
+            docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: unservableNotTCRPEventCode,
+            filedByRole: ROLES.docketClerk,
+            userId: mockUserId,
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        LEAD_CASE as any,
+      ]);
+
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: unservableNotTCRPEventCode,
+          },
+          subjectDocketNumber: LEAD_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const expectedMultiDocketedOn = [
+        LEAD_CASE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+      const allCalls = updateCaseAndAssociations.mock.calls;
+      for (const call of allCalls) {
+        const entry = call[0].caseToUpdate.docketEntries.find(
+          (d: { eventCode: string }) =>
+            d.eventCode === unservableNotTCRPEventCode,
+        );
+        expect(entry).toMatchObject({
+          multiDocketedOn: expectedMultiDocketedOn,
+        });
+      }
+    });
+
+    it('should set multiDocketedOn to empty array when the subject case is not a lead case', async () => {
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: ['888-88'],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: unservableNotTCRPEventCode,
+            generatedDocumentTitle:
+              'Corrected Transcript of something on a date',
+          },
+          subjectDocketNumber: caseRecord.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const updatedEntry =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          (d: { docketEntryId: string }) =>
+            d.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
+        );
+      expect(updatedEntry).toMatchObject({ multiDocketedOn: [] });
+    });
+
+    it('should set multiDocketedOn to empty array when the document event code is TCRP', async () => {
+      const LEAD_CASE = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          {
+            docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            documentTitle: 'Tax Court Report Pamphlet',
+            documentType: 'Tax Court Report Pamphlet',
+            eventCode: 'TCRP',
+            filedByRole: ROLES.docketClerk,
+            userId: mockUserId,
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        LEAD_CASE as any,
+      ]);
+
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+            documentTitle: 'Tax Court Report Pamphlet',
+            documentType: 'Tax Court Report Pamphlet',
+            eventCode: 'TCRP',
+          },
+          subjectDocketNumber: LEAD_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const allCalls = updateCaseAndAssociations.mock.calls;
+      for (const call of allCalls) {
+        const entry = call[0].caseToUpdate.docketEntries.find(
+          (d: { eventCode: string }) => d.eventCode === 'TCRP',
+        );
+        expect(entry).toMatchObject({ multiDocketedOn: [] });
+      }
+    });
+
+    it('should set multiDocketedOn to empty array when no additional docket numbers are provided', async () => {
+      const LEAD_CASE = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          {
+            docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: unservableNotTCRPEventCode,
+            filedByRole: ROLES.docketClerk,
+            userId: mockUserId,
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      getCasesByDocketNumbers.mockResolvedValueOnce([LEAD_CASE as any]);
+
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+            documentTitle: 'Corrected Transcript of [anything] on [date]',
+            documentType: 'Corrected Transcript',
+            eventCode: unservableNotTCRPEventCode,
+          },
+          subjectDocketNumber: LEAD_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const updatedEntry =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          (d: { eventCode: string }) =>
+            d.eventCode === unservableNotTCRPEventCode,
+        );
+      expect(updatedEntry).toMatchObject({ multiDocketedOn: [] });
+    });
+
+    it('should set multiDocketedOn to empty array when the document is servable', async () => {
+      const LEAD_CASE = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          {
+            docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            filedByRole: ROLES.docketClerk,
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+            userId: mockUserId,
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        LEAD_CASE as any,
+      ]);
+
+      await fileCourtIssuedDocketEntryInteractor(
+        applicationContext,
+        {
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          documentMeta: {
+            attachments: false,
+            docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            generatedDocumentTitle: 'Generated Order Document Title',
+          },
+          subjectDocketNumber: LEAD_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      const allCalls = updateCaseAndAssociations.mock.calls;
+      for (const call of allCalls) {
+        const entry = call[0].caseToUpdate.docketEntries.find(
+          (d: { eventCode: string }) => d.eventCode === 'O',
+        );
+        expect(entry).toMatchObject({ multiDocketedOn: [] });
+      }
+    });
   });
 
   it('should associate docket entries related to our court issued document', async () => {

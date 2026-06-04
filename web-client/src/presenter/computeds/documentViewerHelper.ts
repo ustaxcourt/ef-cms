@@ -1,27 +1,29 @@
 /* eslint-disable complexity */
-
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
+  canAllowDocumentServiceForCase,
+  isLeadCase,
+  isMemberCase,
+} from '@shared/business/entities/cases/Case';
+import {
   ALLOWLIST_FEATURE_FLAGS,
+  COURT_ISSUED_EVENT_CODES,
+  INITIAL_DOCUMENT_TYPES,
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
+  PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+  STAMPED_DOCUMENTS_ALLOWLIST,
+  STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
+  STIPULATED_DECISION_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
+
 export const documentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-    STAMPED_DOCUMENTS_ALLOWLIST,
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
-    STIPULATED_DECISION_EVENT_CODE,
-  } = applicationContext.getConstants();
-
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
@@ -33,10 +35,10 @@ export const documentViewerHelper = (
       authorizedUser: user,
       caseDetail,
     });
-
-  const canAllowDocumentServiceForCase = !!applicationContext
+  const isInternalUser = applicationContext
     .getUtilities()
-    .canAllowDocumentServiceForCase(caseDetail);
+    .isInternalUser(user.role);
+
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
@@ -53,47 +55,6 @@ export const documentViewerHelper = (
 
   const { servedAtFormatted } = formattedDocumentToDisplay;
   const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
-  const showNotServed = getShowNotServedForDocument({
-    caseDetail,
-    docketEntryId: formattedDocumentToDisplay.docketEntryId,
-    draftDocuments: formattedCaseDetail.draftDocuments,
-  });
-
-  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode }) => eventCode,
-  ).includes(formattedDocumentToDisplay.eventCode);
-
-  const showServeCourtIssuedDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    isCourtIssuedDocument &&
-    permissions.SERVE_DOCUMENT;
-
-  const showUnservedPetitionWarning =
-    !canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServePaperFiledDocumentButton =
-    canAllowDocumentServiceForCase &&
-    showNotServed &&
-    !isCourtIssuedDocument &&
-    !formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_DOCUMENT;
-
-  const showServePetitionButton =
-    showNotServed &&
-    formattedDocumentToDisplay.isPetition &&
-    permissions.SERVE_PETITION;
-
-  const showSignStipulatedDecisionButton =
-    formattedDocumentToDisplay.eventCode ===
-      PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    DocketEntry.isServed(formattedDocumentToDisplay) &&
-    !formattedCaseDetail.docketEntries.find(
-      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
-    );
 
   const restrictedEventCodes = get(
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
@@ -108,21 +69,23 @@ export const documentViewerHelper = (
     formattedDocumentToDisplay.qcNeeded &&
     !isRestricted;
 
-  const showApplyStampButton =
-    permissions.STAMP_MOTION &&
-    STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
-
-  const showOrderResponseButton =
-    permissions.MOTION_ORDER_RESPONSE &&
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
-      formattedDocumentToDisplay.eventCode,
-    );
-
-  const showStatusReportOrderButton =
-    permissions.STATUS_REPORT_ORDER &&
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-      formattedDocumentToDisplay.eventCode,
-    );
+  const {
+    showServePaperFiledDocumentButton,
+    showServeCourtIssuedDocumentButton,
+    showServePetitionButton,
+    showStatusReportOrderButton,
+    showOrderResponseButton,
+    showSignStipulatedDecisionButton,
+    showApplyStampButton,
+    showNotServed,
+    showServiceWarning: showUnservedPetitionWarning,
+    showLeadCaseNotification: showLeadCaseBanner,
+  } = getDocumentDisplayFlags({
+    document: formattedDocumentToDisplay,
+    permissions,
+    caseDetail,
+    isInternalUser,
+  });
 
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
@@ -137,10 +100,100 @@ export const documentViewerHelper = (
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
+    showLeadCaseBanner,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
     showStatusReportOrderButton,
     showStricken: !!formattedDocumentToDisplay.isStricken,
     showUnservedPetitionWarning,
+  };
+};
+
+export const getDocumentDisplayFlags = ({
+  document,
+  permissions,
+  caseDetail,
+  isInternalUser,
+}) => {
+  const showNotServed = getShowNotServedForDocument({
+    caseDetail,
+    docketEntryId: document.docketEntryId,
+  });
+
+  const isDocumentUnserved = showNotServed || !document.servedAt;
+  const isPetitionDocument =
+    document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(document.eventCode);
+
+  const canAllowDocumentService = canAllowDocumentServiceForCase(caseDetail);
+
+  const showServePaperFiledDocumentButton =
+    canAllowDocumentService &&
+    showNotServed &&
+    !isCourtIssuedDocument &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT &&
+    (!caseDetail.leadDocketNumber ||
+      isLeadCase(caseDetail) ||
+      (isMemberCase(caseDetail) && !DocketEntry.isMultiDocketed(document)));
+
+  const showServeCourtIssuedDocumentButton =
+    canAllowDocumentService &&
+    showNotServed &&
+    isCourtIssuedDocument &&
+    permissions.SERVE_DOCUMENT &&
+    (!caseDetail.leadDocketNumber ||
+      isLeadCase(caseDetail) ||
+      (isMemberCase(caseDetail) && !DocketEntry.isMultiDocketed(document)));
+
+  const showServePetitionButton =
+    showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
+
+  const showStatusReportOrderButton =
+    permissions.STATUS_REPORT_ORDER &&
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
+
+  const showOrderResponseButton =
+    permissions.MOTION_ORDER_RESPONSE &&
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
+
+  const showSignStipulatedDecisionButton =
+    isInternalUser &&
+    document.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
+    DocketEntry.isServed(document) &&
+    !caseDetail.docketEntries.find(
+      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
+    );
+
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
+
+  const showServiceWarning =
+    !canAllowDocumentService &&
+    showNotServed &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showLeadCaseNotification =
+    isMemberCase(caseDetail) &&
+    DocketEntry.isMultiDocketed(document) &&
+    isDocumentUnserved &&
+    !DocketEntry.isUnservable(document) &&
+    permissions.SERVE_DOCUMENT;
+
+  return {
+    showServePaperFiledDocumentButton,
+    showServeCourtIssuedDocumentButton,
+    showServePetitionButton,
+    showApplyStampButton,
+    showStatusReportOrderButton,
+    showOrderResponseButton,
+    showSignStipulatedDecisionButton,
+    showServiceWarning,
+    showLeadCaseNotification,
+    showNotServed,
   };
 };
