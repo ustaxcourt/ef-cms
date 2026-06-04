@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
@@ -16,7 +16,7 @@ export const setWorkItemAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const workItem = await getWorkItemById({ workItemId });
+  const [workItem] = await getWorkItemsByIds({ workItemIds: [workItemId] });
 
   if (!workItem) {
     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);

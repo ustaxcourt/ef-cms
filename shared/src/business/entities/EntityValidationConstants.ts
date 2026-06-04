@@ -264,6 +264,23 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     )
     .messages({ '*': 'Enter selection for filing status.' }),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
+  multiDocketedOn: joi
+    .array()
+    .items(JoiValidationConstants.DOCKET_NUMBER)
+    .required()
+    .description(
+      'Docket Numbers of the Cases on which the document was filed in XXXXX-YY format.',
+    ),
+  originallyFiledDocketNumber: JoiValidationConstants.DOCKET_NUMBER.when(
+    'servedAt',
+    {
+      is: joi.exist(),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    },
+  ).description(
+    'Docket Number of the Case originally filed on in XXXXX-YY format.',
+  ),
   numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,

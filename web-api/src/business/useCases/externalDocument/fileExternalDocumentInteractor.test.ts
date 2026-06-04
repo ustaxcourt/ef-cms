@@ -349,6 +349,26 @@ describe('fileExternalDocumentInteractor', () => {
     );
     expect(entry).toBeDefined();
     expect(entry?.servedAt).toBeDefined();
+    expect(entry).toMatchObject({
+      docketNumber: caseRecord.docketNumber,
+      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
+      originallyFiledDocketNumber: caseRecord.docketNumber,
+      isOnDocketRecord: true,
+      documentStorageId: mockDocketEntryId,
+    });
+    const savedCase2 = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+    const entry2 = savedCase2.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry2).toBeDefined();
+    expect(entry2?.servedAt).toBeDefined();
+    expect(entry2).toMatchObject({
+      docketNumber: consolidatedCase.docketNumber,
+      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
+      originallyFiledDocketNumber: caseRecord.docketNumber,
+      isOnDocketRecord: true,
+      documentStorageId: mockDocketEntryId,
+    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {

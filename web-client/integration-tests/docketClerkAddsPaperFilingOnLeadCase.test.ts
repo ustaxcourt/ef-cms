@@ -8,9 +8,6 @@ import {
   waitForCondition,
   waitForLoadingComponentToHide,
 } from './helpers';
-import { formattedWorkQueue as formattedWorkQueueComputed } from '@web-client/presenter/computeds/formattedWorkQueue';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
   const cerebralTest = setupTest();
@@ -18,10 +15,6 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const formattedWorkQueue = withAppContextDecorator(
-    formattedWorkQueueComputed,
-  );
 
   describe('Create a consolidated group', () => {
     createConsolidatedGroup(cerebralTest);
@@ -146,13 +139,11 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
           cerebralTest.getState('currentPage') === 'WorkQueue',
       });
 
-      const formattedOutboxQueue = runCompute(formattedWorkQueue, {
-        state: cerebralTest.getState(),
-      });
+      const outboxQueue = cerebralTest.getState('workQueue');
 
       for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
         const outboxWorkItem = findWorkItemByDocketNumber(
-          formattedOutboxQueue,
+          outboxQueue,
           docketNumber,
         );
 

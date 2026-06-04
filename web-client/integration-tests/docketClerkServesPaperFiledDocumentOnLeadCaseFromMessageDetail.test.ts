@@ -1,6 +1,7 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
   OBJECTIONS_OPTIONS_MAP,
 } from '../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
@@ -228,7 +229,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       },
     );
 
-    expect(modalHelper.showConsolidatedCasesForService).toBe(false);
+    expect(modalHelper.allowMultiDocketing).toBe(true);
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'ConfirmInitiatePaperFilingServiceModal',
     );
@@ -238,7 +239,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
-      message: 'Your entry has been added to the docket record.',
+      message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
       overwritable: false,
     });
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
