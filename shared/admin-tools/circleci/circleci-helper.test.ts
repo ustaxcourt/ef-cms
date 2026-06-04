@@ -65,7 +65,7 @@ describe('circleci-helper', () => {
       });
 
       expect(mockedAxios.put).toHaveBeenCalledWith(
-        `https://circleci.com/api/v2/context/${contextId}/variable/${variableName}`,
+        `https://circleci.com/api/v2/context/${contextId}/environment-variable/${variableName}`,
         { value: variableValue },
         {
           headers: {

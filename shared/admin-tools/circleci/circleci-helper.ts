@@ -175,7 +175,7 @@ export const updateContextVariable = async ({
   const updateVariableRequest = {
     headers: { 'Circle-Token': apiToken, 'Content-Type': 'application/json' },
     method: 'PUT',
-    url: `https://circleci.com/api/v2/context/${contextId}/variable/${variableName}`,
+    url: `https://circleci.com/api/v2/context/${contextId}/environment-variable/${variableName}`,
   };
 
   await axios.put(
