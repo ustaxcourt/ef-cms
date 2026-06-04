@@ -5,6 +5,7 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
+import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
 import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
@@ -149,11 +150,24 @@ const appPublic = {
 
     const cerebralApp = App(presenter as ModuleDefinition, debugTools);
 
-    applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
-    });
+    const bootstrapState = {
+      isReady: false,
+    };
+
+    applicationContext.setForceRefreshCallback(
+      createForceRefreshCallback({
+        bootstrapState,
+        onAppUpdated: async (): Promise<void> => {
+          await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
+        },
+        reloadPage: (): void => {
+          window.location.reload();
+        },
+      }),
+    );
 
     router.initialize(cerebralApp);
+    bootstrapState.isReady = true;
 
     const container = window.document.querySelector('#app-public');
     if (container) {

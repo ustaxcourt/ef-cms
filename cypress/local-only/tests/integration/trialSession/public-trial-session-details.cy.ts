@@ -34,21 +34,30 @@ describe('Public Trial Session Details', () => {
           cy.get('.usa-alert--success').contains('Case sealed');
 
           // Visit the trial session details as a public user and check that expected information is rendered
-          cy.visit(
-            `http://localhost:${publicUrlPort}/trial-session-detail/${trialSessionId}`,
+          const publicSiteUrl = `http://localhost:${publicUrlPort}`;
+          cy.origin(
+            publicSiteUrl,
+            { args: { docketNumber, publicSiteUrl, trialSessionId } },
+            ({
+              docketNumber: dNum,
+              publicSiteUrl: url,
+              trialSessionId: tsId,
+            }) => {
+              cy.visit(`${url}/trial-session-detail/${tsId}`);
+              cy.get('[data-testid="public-trial-session-details-box"]').should(
+                'exist',
+              );
+              cy.contains(
+                /Information on this page is current as of \d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern\./,
+              ).should('exist');
+              cy.contains('Count: 1');
+              cy.get(`[data-testid="trial-session-detail-row-${dNum}"]`).should(
+                'exist',
+              );
+              cy.get('[data-testid="case-sealed-icon"]').should('exist');
+              cy.get('[data-testid="case-link"]').contains(dNum);
+            },
           );
-          cy.get('[data-testid="public-trial-session-details-box"]').should(
-            'exist',
-          );
-          cy.contains(
-            /Information on this page is current as of \d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern\./,
-          ).should('exist');
-          cy.contains('Count: 1');
-          cy.get(
-            `[data-testid="trial-session-detail-row-${docketNumber}"]`,
-          ).should('exist');
-          cy.get('[data-testid="case-sealed-icon"]').should('exist');
-          cy.get('[data-testid="case-link"]').contains(docketNumber);
         },
       );
     });

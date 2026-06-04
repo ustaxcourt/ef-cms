@@ -7,6 +7,7 @@ import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
 import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
@@ -268,9 +269,21 @@ const app = {
       returnSequencePromise: true,
     });
 
-    applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
-    });
+    const bootstrapState = {
+      isReady: false,
+    };
+
+    applicationContext.setForceRefreshCallback(
+      createForceRefreshCallback({
+        bootstrapState,
+        onAppUpdated: async (): Promise<void> => {
+          await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
+        },
+        reloadPage: (): void => {
+          window.location.reload();
+        },
+      }),
+    );
 
     const container = window.document.querySelector('#app');
     if (container) {
@@ -312,6 +325,7 @@ const app = {
       });
     };
     router.initialize(cerebralApp, wrappedRoute);
+    bootstrapState.isReady = true;
   },
 };
 

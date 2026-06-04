@@ -25,6 +25,11 @@ jest.mock(
 );
 
 jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesById',
+  () => mockFactory('getDocketEntriesById'),
+);
+
+jest.mock(
   '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries',
   () => mockFactory('upsertDocketEntryRelatedEntries'),
 );

@@ -23,6 +23,7 @@ describe('clearMotionOrderResponseFormAction', () => {
 
     expect(result.state.form).toEqual({
       additionalOrderTextArray: [''],
+      issueOrderFor: MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
     });
     expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });

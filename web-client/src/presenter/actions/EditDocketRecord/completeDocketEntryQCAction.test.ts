@@ -11,6 +11,8 @@ describe('completeDocketEntryQCAction', () => {
       {
         docketEntryId: mockDocketEntryId,
         documentTitle: "bob's burgers",
+        addToCoversheet: false,
+        additionalInfo: '',
       },
     ] as Array<{
       docketEntryId: string;
@@ -40,7 +42,7 @@ describe('completeDocketEntryQCAction', () => {
     };
   });
 
-  it('should call completeDocketEntryQCInteractor and return caseDetail', async () => {
+  it('should call completeDocketEntryQCInteractor and return correct props', async () => {
     await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
@@ -64,7 +66,11 @@ describe('completeDocketEntryQCAction', () => {
         message: "bob's burgers has been completed.",
         title: 'QC Completed',
       },
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
+      paperServiceDocumentTitle: undefined,
+      paperServiceParties: undefined,
+      pdfUrl: undefined,
     });
   });
 
@@ -111,5 +117,25 @@ describe('completeDocketEntryQCAction', () => {
     expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
       "bob's burgers More title information QC completed and message sent.",
     );
+  });
+
+  it('should return error path when an error is thrown', async () => {
+    const mockError = new Error('An error');
+    applicationContext
+      .getUseCases()
+      .completeDocketEntryQCInteractor.mockRejectedValueOnce(mockError);
+
+    await runAction(completeDocketEntryQCAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: mockDocketEntryId,
+        form: {},
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({ error: mockError });
   });
 });

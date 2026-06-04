@@ -17,7 +17,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
           caseCaptionExtension:
             'Bert & Ernie, Petitioners v. Commissioner of Internal Revenue, Respondent',
           caseTitle: 'Bert & Ernie',
-          docketEntryIndex: '3',
+          docketEntryIndex: 3,
           docketNumber: '123-19X',
           filingParties: { after: 'Cody', before: 'Joe' },
           filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },
@@ -39,7 +39,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
         caseCaptionExtension:
           'Bert & Ernie, Petitioners v. Commissioner of Internal Revenue, Respondent',
         caseTitle: 'Bert & Ernie',
-        docketEntryIndex: '3',
+        docketEntryIndex: 3,
         docketNumber: '123-19X',
         filingParties: { after: 'Cody', before: 'Joe' },
         filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },

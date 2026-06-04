@@ -24,7 +24,7 @@ import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 
 export default defineConfig({
-  chromeWebSecurity: false,
+  chromeWebSecurity: true,
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',

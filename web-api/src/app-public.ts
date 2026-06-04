@@ -3,6 +3,11 @@ import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
+} from '@shared/utils/headers';
 import cors from 'cors';
 import express from 'express';
 import qs from 'qs';
@@ -79,8 +84,14 @@ app.use((req, res, next) => {
     process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.set(X_FORCE_REFRESH, 'true');
+    res.set(
+      'Access-Control-Expose-Headers',
+      EXPOSED_RESPONSE_HEADERS.join(', '),
+    );
+    if (process.env.DEPLOYMENT_TIMESTAMP) {
+      res.set(X_DEPLOYMENT_TIMESTAMP, process.env.DEPLOYMENT_TIMESTAMP);
+    }
     res.status(500).send('this api is disabled due to a deployment');
     return;
   }
@@ -208,6 +219,12 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }
 
+/**
+ * Email verification
+ */
 {
-  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
+  app.put(
+    '/public-api/verify-email',
+    lambdaWrapper(verifyUserPendingEmailLambda),
+  );
 }

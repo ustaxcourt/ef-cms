@@ -19,10 +19,7 @@ import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
-import {
-  image1,
-  image2,
-} from '@web-client/business/useCases/scannerMockFiles';
+import { image1, image2 } from '@web-client/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -796,12 +793,11 @@ export const waitForLoadingComponentToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForModalsToHide = async ({
@@ -810,12 +806,11 @@ export const waitForModalsToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForPage = async ({

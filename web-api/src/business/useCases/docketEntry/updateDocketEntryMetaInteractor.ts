@@ -1,5 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_ENTRY_DOCUMENT_INFO_FIELDS,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -16,6 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
@@ -52,11 +54,13 @@ export const updateDocketEntryMeta = async (
     );
   }
 
-  if (
+  const isUnservedAndNotExempt =
     !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
-  ) {
+    !DocketEntry.isMinuteEntry(originalDocketEntry);
+
+  // this rule contradicts the frontend show/hide edit button on unserved documents
+  if (isUnservedAndNotExempt) {
     throw new Error('Unable to update unserved docket entry.');
   }
 
@@ -159,10 +163,12 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
+  let updatedDocketEntry;
+
   if (shouldGenerateCoversheet) {
     await upsertDocketEntries([docketEntryEntity.validate()]);
 
-    const updatedDocketEntry = await applicationContext
+    updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(
         applicationContext,
@@ -191,6 +197,59 @@ export const updateDocketEntryMeta = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
+
+  if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: originalDocketEntry.multiDocketedOn,
+    });
+
+    const updatedDocketEntries = casesToUpdate
+      .map(caseRecord => {
+        const { docketNumber } = caseRecord;
+        if (docketNumber === caseToUpdate.docketNumber) {
+          return;
+        }
+        const consolidatedCaseEntity = new Case(caseRecord, { authorizedUser });
+
+        const consolidatedCaseDocketEntry =
+          consolidatedCaseEntity.getDocketEntryById({
+            docketEntryId: docketEntryMeta.docketEntryId,
+          });
+
+        if (
+          consolidatedCaseDocketEntry &&
+          DocketEntry.isMultiDocketed(consolidatedCaseDocketEntry)
+        ) {
+          const propagationFields: any = {};
+          DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
+            if (Object.hasOwn(editableFields, field)) {
+              propagationFields[field] = (editableFields as any)[field];
+            }
+          });
+
+          const merged = new DocketEntry(
+            {
+              ...consolidatedCaseDocketEntry,
+              ...propagationFields,
+            },
+            { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
+          );
+
+          if (updatedDocketEntry && updatedDocketEntry.numberOfPages) {
+            merged.setNumberOfPages(updatedDocketEntry.numberOfPages);
+          }
+
+          return merged.validate().toRawObject();
+        }
+
+        return undefined;
+      })
+      .filter(el => el !== undefined);
+
+    if (updatedDocketEntries.length > 0) {
+      await upsertDocketEntries(updatedDocketEntries);
+    }
+  }
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({
@@ -202,14 +261,22 @@ export const shouldGenerateCoversheetForDocketEntry = ({
   servedAtUpdated,
   shouldAddNewCoverSheet,
 }) => {
+  const hasRelevantFieldUpdates =
+    servedAtUpdated ||
+    filingDateUpdated ||
+    certificateOfServiceUpdated ||
+    shouldAddNewCoverSheet ||
+    documentTitleUpdated;
+
+  const isCourtIssuedAndRequiresCoversheet =
+    !originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet;
+
+  const isNotMinuteEntry = !DocketEntry.isMinuteEntry(originalDocketEntry);
+
   return (
-    (servedAtUpdated ||
-      filingDateUpdated ||
-      certificateOfServiceUpdated ||
-      shouldAddNewCoverSheet ||
-      documentTitleUpdated) &&
-    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
+    hasRelevantFieldUpdates &&
+    isCourtIssuedAndRequiresCoversheet &&
+    isNotMinuteEntry
   );
 };
 
