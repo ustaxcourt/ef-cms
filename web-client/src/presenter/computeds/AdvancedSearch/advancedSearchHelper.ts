@@ -11,30 +11,6 @@ import {
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const formatSearchResultRecord = (
-  result,
-  { applicationContext }: { applicationContext: ClientApplicationContext },
-) => {
-  result.petitionerNames = result.petitionerNames || [];
-  result.petitionerStateNames = result.petitionerStateNames || [];
-  result.formattedFiledDate = applicationContext
-    .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYY');
-
-  if (result.petitioners) {
-    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
-      return {
-        contactId: petitioner.contactId,
-        state: US_STATES[petitioner.state] || petitioner.state,
-      };
-    });
-  }
-
-  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-
-  return result;
-};
-
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -180,6 +156,30 @@ const formattedCaseSearchResults = ({
 
     return aValue.localeCompare(bValue) * direction;
   });
+};
+
+const formatSearchResultRecord = (
+  result,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+) => {
+  result.petitionerNames = result.petitionerNames || [];
+  result.petitionerStateNames = result.petitionerStateNames || [];
+  result.formattedFiledDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.receivedAt, 'MMDDYY');
+
+  if (result.petitioners) {
+    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
+      return {
+        contactId: petitioner.contactId,
+        state: US_STATES[petitioner.state] || petitioner.state,
+      };
+    });
+  }
+
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
+  return result;
 };
 
 const caseSearchSortValue = (result: any, sortColumn: string): string => {
