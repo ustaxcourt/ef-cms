@@ -27,27 +27,32 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
     entryRequiresCoverSheet = true;
 
     const result = shouldGenerateCoversheetForDocketEntry({
+      certificateOfServiceUpdated: false,
+      documentTitleUpdated: false,
       entryRequiresCoverSheet,
       filingDateUpdated,
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    } as any);
+    });
 
     expect(result).toBe(true);
   });
 
   it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', () => {
-    shouldAddNewCoverSheet = true;
+    shouldAddNewCoverSheet = false;
     entryRequiresCoverSheet = true;
+    servedAtUpdated = true;
 
     const result = shouldGenerateCoversheetForDocketEntry({
+      certificateOfServiceUpdated: false,
+      documentTitleUpdated: false,
       entryRequiresCoverSheet,
       filingDateUpdated,
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    } as any);
+    });
 
     expect(result).toBe(true);
   });
@@ -58,12 +63,13 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
 
     const result = shouldGenerateCoversheetForDocketEntry({
       certificateOfServiceUpdated: true,
+      documentTitleUpdated: false,
       entryRequiresCoverSheet,
       filingDateUpdated,
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    } as any);
+    });
 
     expect(result).toBe(true);
   });

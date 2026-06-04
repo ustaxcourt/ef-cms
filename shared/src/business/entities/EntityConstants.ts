@@ -71,7 +71,6 @@ export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
 export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
-
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
@@ -525,6 +524,37 @@ export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
 export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
+export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
+  'additionalInfo',
+  'additionalInfo2',
+  'addToCoversheet',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'date',
+  'docketNumbers',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filers',
+  'filingDate',
+  'freeText',
+  'hasOtherFilingParty',
+  'judge',
+  'lodged',
+  'objections',
+  'ordinalValue',
+  'otherFilingParty',
+  'otherIteration',
+  'partyIrsPractitioner',
+  'pending',
+  'previousDocument',
+  'secondaryDocument',
+  'serviceDate',
+  'trialLocation',
+] as const;
 
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,

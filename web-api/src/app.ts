@@ -118,6 +118,11 @@ import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPract
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
+} from '@shared/utils/headers';
 import { getTrialSessionPlanningReportLambda } from '@web-api/lambdas/trialSessions/getTrialSessionPlanningReportLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
@@ -215,7 +220,6 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
 
 export const app = express();
 
@@ -300,8 +304,14 @@ app.use((req, res, next) => {
     process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.set(X_FORCE_REFRESH, 'true');
+    res.set(
+      'Access-Control-Expose-Headers',
+      EXPOSED_RESPONSE_HEADERS.join(', '),
+    );
+    if (process.env.DEPLOYMENT_TIMESTAMP) {
+      res.set(X_DEPLOYMENT_TIMESTAMP, process.env.DEPLOYMENT_TIMESTAMP);
+    }
     res.status(500).send('this api is disabled due to a deployment');
     return;
   }
@@ -1101,7 +1111,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
@@ -1196,7 +1205,6 @@ app.post(
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
-  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the

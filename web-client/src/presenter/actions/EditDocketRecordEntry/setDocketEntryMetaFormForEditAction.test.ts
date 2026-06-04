@@ -55,6 +55,20 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     };
   });
 
+  it('throws an error if no docket entry matches the provided docketRecordIndex', async () => {
+    await expect(
+      runAction(setDocketEntryMetaFormForEditAction, {
+        modules: { presenter },
+        props: {
+          docketRecordIndex: 999,
+        },
+        state: {
+          caseDetail,
+        },
+      }),
+    ).rejects.toThrow('Could not find docket entry with index 999');
+  });
+
   it('populates state.form with the docket record meta based on the provided props.docketRecordIndex', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },

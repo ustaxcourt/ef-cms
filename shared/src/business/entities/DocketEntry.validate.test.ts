@@ -273,6 +273,7 @@ describe('validate', () => {
         filedBy: undefined,
         filers: [MOCK_PETITIONERS[0].contactId, MOCK_PETITIONERS[1].contactId],
         isLegacyServed: undefined,
+        originallyFiledDocketNumber: '101-18',
         servedAt: '2019-08-25T05:00:00.000Z',
         servedParties: [{ name: 'Test Petitioner' }],
       },

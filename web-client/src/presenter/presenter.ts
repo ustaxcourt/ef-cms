@@ -117,6 +117,7 @@ import { disengageAppMaintenanceSequence } from './sequences/disengageAppMainten
 import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { dismissModalAndClearRedirectSequence } from './sequences/dismissModalAndClearRedirectSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { handleEditedTrialSessionSequence } from '@web-client/presenter/sequences/handleEditedTrialSessionSequence';
@@ -233,7 +234,6 @@ import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
-import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
@@ -737,15 +737,23 @@ export const presenterSequences = {
     clearPreferredTrialCitySequence as unknown as Function,
   clearSelectedWorkItemsSequence:
     clearSelectedWorkItemsSequence as unknown as Function,
-  addAdditionalOrderTextSequence: addAdditionalOrderTextSequence as unknown as Function,
-  clearGrantDenyMotionFormSequence: clearGrantDenyMotionFormSequence as unknown as Function,
+  addAdditionalOrderTextSequence:
+    addAdditionalOrderTextSequence as unknown as Function,
+  clearGrantDenyMotionFormSequence:
+    clearGrantDenyMotionFormSequence as unknown as Function,
   clearStatusReportOrderFormSequence,
-  gotoGrantDenyMotionSequence: gotoGrantDenyMotionSequence as unknown as Function,
-  grantDenyMotionPdfPreviewSequence: grantDenyMotionPdfPreviewSequence as unknown as Function,
-  removeAdditionalOrderTextSequence: removeAdditionalOrderTextSequence as unknown as Function,
-  submitGrantDenyMotionSequence: submitGrantDenyMotionSequence as unknown as Function,
-  updateGrantDenyMotionFormValueSequence: updateGrantDenyMotionFormValueSequence as unknown as Function,
-  validateGrantDenyMotionSequence: validateGrantDenyMotionSequence as unknown as Function,
+  gotoGrantDenyMotionSequence:
+    gotoGrantDenyMotionSequence as unknown as Function,
+  grantDenyMotionPdfPreviewSequence:
+    grantDenyMotionPdfPreviewSequence as unknown as Function,
+  removeAdditionalOrderTextSequence:
+    removeAdditionalOrderTextSequence as unknown as Function,
+  submitGrantDenyMotionSequence:
+    submitGrantDenyMotionSequence as unknown as Function,
+  updateGrantDenyMotionFormValueSequence:
+    updateGrantDenyMotionFormValueSequence as unknown as Function,
+  validateGrantDenyMotionSequence:
+    validateGrantDenyMotionSequence as unknown as Function,
   clearViewerDocumentToDisplaySequence:
     clearViewerDocumentToDisplaySequence as unknown as Function,
   closeModalAndNavigateBackSequence:
@@ -821,6 +829,8 @@ export const presenterSequences = {
     dismissAddEditCaseWorksheetModalSequence as unknown as Function,
   dismissAlertSequence: dismissAlertSequence as unknown as Function,
   dismissModalSequence: dismissModalSequence as unknown as Function,
+  dismissModalAndClearRedirectSequence:
+    dismissModalAndClearRedirectSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
   displayProgressSpinnerSequence,
@@ -872,7 +882,6 @@ export const presenterSequences = {
   goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
-  gotoVerifyEmailSequence,
   gotoAccessibilityStatementSequence:
     gotoAccessibilityStatementSequence as unknown as Function,
   gotoAddCourtIssuedDocketEntrySequence:
