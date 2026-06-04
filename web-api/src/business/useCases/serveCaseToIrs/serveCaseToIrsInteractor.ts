@@ -225,7 +225,8 @@ const generateNoticeOfReceipt = async ({
 
   if (shouldGenerateNotrForSecondary) {
     if (
-      contactPrimary.contactEmailAddress !== contactSecondary.contactEmailAddress
+      contactPrimary.contactEmailAddress !==
+      contactSecondary.contactEmailAddress
     ) {
       accessCode = generateAccessCode();
     }

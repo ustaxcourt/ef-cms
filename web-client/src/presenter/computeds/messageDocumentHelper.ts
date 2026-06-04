@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { GRANT_DENY_MOTION_OPTIONS, STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { getDocumentDisplayFlags } from './documentViewerHelper';
 
@@ -12,6 +12,7 @@ export const messageDocumentHelper = (
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
+    GRANT_DENY_MOTION_OPTIONS,
     NOTICE_EVENT_CODES,
     STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
@@ -50,8 +51,8 @@ export const messageDocumentHelper = (
   ).includes(caseDocument?.draftOrderState?.orderType);
 
   const isGrantDenyMotion =
-    caseDocument?.draftOrderState?.orderType ===
-    GRANT_DENY_MOTION_OPTIONS.orderType;
+    caseDocument.draftOrderState?.orderType ===
+      GRANT_DENY_MOTION_OPTIONS.orderType || false;
 
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 

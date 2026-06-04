@@ -445,6 +445,7 @@ app.use(expressLogger);
     '/case-documents/:docketNumber/:docketEntryId/processing-status',
     lambdaWrapper(getDocketEntryProcessingStatusLambda),
   );
+
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),

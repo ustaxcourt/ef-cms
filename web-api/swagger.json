@@ -4897,7 +4897,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{motionDocketEntryId}/stamp": {
+    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -4906,16 +4906,16 @@
           "type": "string"
         },
         {
-          "name": "motionDocketEntryId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
         }
       ],
       "post": {
-        "tags": ["docketentries"],
-        "summary": "creates a stamped order.",
-        "description": "creates a stamped order.\n",
+        "tags": ["workitems"],
+        "summary": "creates a coversheet and prepends it to the existing s3 document",
+        "description": "creates a coversheet and prepends it to the existing s3 document.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
