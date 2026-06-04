@@ -169,9 +169,10 @@ export const updateDocketEntryMeta = async (
 
       caseEntity.updateDocketEntry(docketEntryEntity);
 
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAutomaticBlock({ caseEntity });
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
 
       let updatedDocketEntry;
 
