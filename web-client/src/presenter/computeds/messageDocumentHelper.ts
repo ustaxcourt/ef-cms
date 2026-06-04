@@ -157,12 +157,12 @@ export const messageDocumentHelper = (
   return {
     addDocketEntryLink,
     applySignatureLink,
-    grantDenyMotionFromMessagesLink,
     archived: isArchived,
     docketEntryId: caseDocument.docketEntryId,
     documentType: caseDocument.documentType,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
+    grantDenyMotionFromMessagesLink,
     index: caseDocument.index,
     messageDetailLink,
     motionOrderResponseFromMessagesLink,
