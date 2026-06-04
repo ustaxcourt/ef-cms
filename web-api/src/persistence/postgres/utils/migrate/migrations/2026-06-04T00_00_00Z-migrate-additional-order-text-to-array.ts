@@ -2,24 +2,24 @@ import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await sql`
-    UPDATE "dwDocketEntry"
-    SET "draftOrderState" = ("draftOrderState" - 'additionalOrderText')
+    UPDATE dw_docket_entry
+    SET draft_order_state = (draft_order_state - 'additionalOrderText')
       || jsonb_build_object('additionalOrderTextArray',
-        jsonb_build_array("draftOrderState" ->> 'additionalOrderText'))
-    WHERE "draftOrderState" IS NOT NULL
-      AND "draftOrderState" ? 'additionalOrderText'
-      AND NOT ("draftOrderState" ? 'additionalOrderTextArray')
+        jsonb_build_array(draft_order_state ->> 'additionalOrderText'))
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderText'
+      AND NOT (draft_order_state ? 'additionalOrderTextArray')
   `.execute(db);
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   await sql`
-    UPDATE "dwDocketEntry"
-    SET "draftOrderState" = ("draftOrderState" - 'additionalOrderTextArray')
+    UPDATE dw_docket_entry
+    SET draft_order_state = (draft_order_state - 'additionalOrderTextArray')
       || jsonb_build_object('additionalOrderText',
-        "draftOrderState" -> 'additionalOrderTextArray' ->> 0)
-    WHERE "draftOrderState" IS NOT NULL
-      AND "draftOrderState" ? 'additionalOrderTextArray'
-      AND NOT ("draftOrderState" ? 'additionalOrderText')
+        draft_order_state -> 'additionalOrderTextArray' ->> 0)
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderTextArray'
+      AND NOT (draft_order_state ? 'additionalOrderText')
   `.execute(db);
 }
