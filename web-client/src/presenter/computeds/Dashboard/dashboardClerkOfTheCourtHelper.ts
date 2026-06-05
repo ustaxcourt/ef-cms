@@ -67,5 +67,6 @@ export const dashboardClerkOfTheCourtHelper = (
     petitionsByServiceTypePieData,
     totalPetitions,
     MONTHS,
+    year: stats.year,
   };
 };

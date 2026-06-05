@@ -40,4 +40,5 @@ export type ClerkOfCourtDashboardState = {
   }[];
   totalPetitions: number;
   MONTHS: string[];
+  year: number;
 };

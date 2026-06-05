@@ -25,6 +25,7 @@ export const DashboardClerkOfCourt = connect(
       petitionsByServiceTypePieData,
       totalPetitions,
       MONTHS,
+      year,
     } = dashboardClerkOfTheCourtHelper;
 
     const [mobileSection, setMobileSection] = useState('recentMessages');
@@ -43,7 +44,7 @@ export const DashboardClerkOfCourt = connect(
                 <Tab tabName="petitions" title="Petitions">
                   <div className="tw:mt-6 tw:mx-4">
                     <h2 className="tw:xs:text-2xl tw:text-lg">
-                      Total petitions created in YTD PLHD: {totalPetitions}
+                      Total petitions created in YTD {year}: {totalPetitions}
                     </h2>
                     <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
                       <PieGraph data={petitionsByServiceTypePieData} />
