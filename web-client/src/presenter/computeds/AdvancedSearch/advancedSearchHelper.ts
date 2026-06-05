@@ -55,22 +55,16 @@ export const advancedSearchHelper = (
         caseSearchMobileSortValue: caseSearchSort.sortColumn
           ? `${caseSearchSort.sortColumn}|${caseSearchSort.sortDirection}`
           : '',
-        caseSearchSortColumn: caseSearchSort.sortColumn,
         caseSearchSortColumnForDisplay: caseSearchSort.sortColumn || '',
-        caseSearchSortDirection: caseSearchSort.sortDirection,
         caseSearchSortDirectionForDisplay:
           caseSearchSort.sortDirection || ASCENDING,
         formattedSearchResults: paginatedResults,
-        manyResults: MAX_CASE_SEARCH_RESULTS,
         numberOfResults: formattedSearchResults.length,
-        searchResults: paginatedResults,
-        searchResultsCount: formattedSearchResults.length,
-        showLoadMore: false,
         showManyResultsMessage:
           formattedSearchResults.length >= MAX_CASE_SEARCH_RESULTS,
         showNoMatches: formattedSearchResults.length === 0,
         showSearchResults: formattedSearchResults.length > 0,
-        sortOptions: caseSearchSortOptions(),
+        sortOptions: CASE_SEARCH_SORT_OPTIONS,
         totalPages,
       });
 
@@ -81,7 +75,7 @@ export const advancedSearchHelper = (
   return result;
 };
 
-const caseSearchSortOptions = (): { label: string; value: string }[] => [
+const CASE_SEARCH_SORT_OPTIONS: { label: string; value: string }[] = [
   { label: 'Sort by Petitioner(s) (ascending)', value: 'petitionerNames|asc' },
   {
     label: 'Sort by Petitioner(s) (descending)',
