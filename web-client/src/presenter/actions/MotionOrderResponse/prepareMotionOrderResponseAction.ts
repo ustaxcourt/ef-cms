@@ -23,7 +23,6 @@ export const prepareMotionOrderResponseAction = ({
 }: ActionProps) => {
   const {
     additionalOrderTextArray,
-    additionalOrderText,
     dueDate,
     responseDate,
     strickenFromTrialSession,
@@ -56,9 +55,7 @@ export const prepareMotionOrderResponseAction = ({
 
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
-  const rawAdditionalOrderTextArray =
-    additionalOrderTextArray ??
-    (additionalOrderText ? [additionalOrderText] : []);
+  const rawAdditionalOrderTextArray = additionalOrderTextArray ?? [];
   const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
     rawAdditionalOrderTextArray,
   );
@@ -114,41 +111,38 @@ export const prepareMotionOrderResponseAction = ({
 
   const orderVerbiage = `that by ${responseDateFormatted}, ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
   const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText} For cause, it is </p>`;
-  const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
-  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted}, ${movant} may file a Reply.`;
-
-  const strickenLine = hasStrickenFromTrialSessions
-    ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.'
-    : '';
-
-  let additionalTextLine = '';
-  if (hasAdditionalOrderTextArray) {
-    meaningfulAdditionalOrderTextArray.forEach((text, index) => {
-      const clause = formatAdditionalOrderClauseForRichText(text);
-      additionalTextLine += `<p class="indent-paragraph">ORDERED that ${clause}${
-        index < meaningfulAdditionalOrderTextArray.length - 1
-          ? ' It is further'
-          : ''
-      }</p>`;
-    });
-  }
-
-  let richTextString = preamble + orderVerbiageHtml;
+  const orderSections: string[] = [
+    `<p class="indent-paragraph">ORDERED ${orderVerbiage}`,
+  ];
 
   if (dueDate) {
-    richTextString = richTextString + ' It is further</p>' + opportunityToRebut;
+    orderSections.push(
+      `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted}, ${movant} may file a Reply.`,
+    );
   }
 
   if (hasStrickenFromTrialSessions) {
-    richTextString = richTextString + ' It is further</p>' + strickenLine;
+    orderSections.push(
+      '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.',
+    );
   }
 
   if (hasAdditionalOrderTextArray) {
-    richTextString = richTextString + ' It is further</p>' + additionalTextLine;
+    const additionalTextLine = meaningfulAdditionalOrderTextArray
+      .map((text, idx) => {
+        const clause = formatAdditionalOrderClauseForRichText(text);
+        const isLast = idx === meaningfulAdditionalOrderTextArray.length - 1;
+        const suffix = !isLast ? ' It is further' : '';
+        const closing = !isLast ? '</p>' : '';
+        return `<p class="indent-paragraph">ORDERED that ${clause}${suffix}${closing}`;
+      })
+      .join('');
+    orderSections.push(additionalTextLine);
   }
 
-  richTextString = richTextString + '</p>';
+  const richTextString =
+    preamble + orderSections.join(' It is further</p>') + '</p>';
 
   const initialFreeText = `Ordered ${orderVerbiage}`;
 

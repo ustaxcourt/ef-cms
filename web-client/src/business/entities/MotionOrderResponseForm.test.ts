@@ -209,7 +209,7 @@ describe('MotionOrderResponseForm', () => {
       });
     });
 
-    it('should be invalid when additionalOrderText exceeds maximum length', () => {
+    it('should be invalid when additionalOrderTextArray entry exceeds maximum length', () => {
       const longText = Array(MAX_ORDER_RESPONSE_TEXT_CHARACTERS + 10)
         .fill('a')
         .join('');
