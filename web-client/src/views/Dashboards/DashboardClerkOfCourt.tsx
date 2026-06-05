@@ -8,23 +8,32 @@ import { RecentMessagesCotC } from '../WorkQueue/RecentMessagesCotC';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
-const CHART_WIDTH = 1344;
+const CHART_WIDTH = 1300;
 
 export const DashboardClerkOfCourt = connect(
   {
     dashboardClerkOfTheCourtHelper: state.dashboardClerkOfTheCourtHelper,
     user: state.user,
+    petitionsByYearIsFiscal:
+      state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
+    setClerkOfCourtDashboardOptionsSequence:
+      sequences.setClerkOfCourtDashboardOptionsSequence,
   },
-  function DashboardClerkOfCourt({ dashboardClerkOfTheCourtHelper, user }) {
+  function DashboardClerkOfCourt({
+    dashboardClerkOfTheCourtHelper,
+    user,
+    petitionsByYearIsFiscal,
+    setClerkOfCourtDashboardOptionsSequence,
+  }) {
     const {
       petitionsByMonthAndServiceTypeChartData,
       petitionsByRepresentationPieData,
       petitionsByServiceTypePieData,
       totalPetitions,
-      MONTHS,
+      months,
       year,
     } = dashboardClerkOfTheCourtHelper;
 
@@ -43,8 +52,58 @@ export const DashboardClerkOfCourt = connect(
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="petitions" title="Petitions">
                   <div className="tw:mt-6 tw:mx-4">
+                    <div className="tw:flex tw:justify-end">
+                      <div>
+                        <input
+                          checked={!petitionsByYearIsFiscal}
+                          type="radio"
+                          className="usa-radio__input"
+                          id="calendar-year-to-date"
+                          name="is-fiscal"
+                          value="false"
+                          onChange={() =>
+                            setClerkOfCourtDashboardOptionsSequence({
+                              key: 'petitionsByYearIsFiscal',
+                              value: false,
+                            })
+                          }
+                        ></input>
+                        <label
+                          className="usa-radio__label"
+                          htmlFor="calendar-year-to-date"
+                          id="calendar-year-to-date-label"
+                        >
+                          YTD
+                        </label>
+                      </div>
+                      <div className="tw:pl-4">
+                        <input
+                          checked={petitionsByYearIsFiscal}
+                          type="radio"
+                          className="usa-radio__input"
+                          id="fiscal-year-to-date"
+                          name="is-fiscal"
+                          value="true"
+                          onChange={() =>
+                            setClerkOfCourtDashboardOptionsSequence({
+                              key: 'petitionsByYearIsFiscal',
+                              value: true,
+                            })
+                          }
+                        ></input>
+                        <label
+                          className="usa-radio__label"
+                          htmlFor="fiscal-year-to-date"
+                          id="fiscal-year-to-date-label"
+                        >
+                          FYTD
+                        </label>
+                      </div>
+                    </div>
                     <h2 className="tw:xs:text-2xl tw:text-lg">
-                      Total petitions created in YTD {year}: {totalPetitions}
+                      Total petitions created in{' '}
+                      {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
+                      <span className="tw:font-normal">{totalPetitions}</span>
                     </h2>
                     <div className="tw:flex tw:flex-wrap tw:gap-12 tw:mt-4">
                       <PieGraph data={petitionsByServiceTypePieData} />
@@ -60,7 +119,7 @@ export const DashboardClerkOfCourt = connect(
                         showLabels={false}
                         width={CHART_WIDTH}
                         datasets={petitionsByMonthAndServiceTypeChartData}
-                        labels={MONTHS}
+                        labels={months}
                         stacked={true}
                       />
                     </div>

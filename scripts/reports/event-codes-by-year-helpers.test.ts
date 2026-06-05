@@ -11,7 +11,7 @@ import {
 } from './event-codes-by-year-helpers';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';
-import { getJsTimeframeForYear as getJsTimeframeForYearMock } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear as getJsTimeframeForYearMock } from '@shared/business/utilities/DateHandler';
 
 type QueryCall = {
   args: unknown[];

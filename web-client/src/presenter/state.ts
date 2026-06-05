@@ -780,6 +780,9 @@ export const baseState = {
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   clerkOfCourtDashboardStats: {} as ClerkDashboardStats,
+  clerkOfCourtDashboardOptions: {
+    petitionsByYearIsFiscal: false,
+  },
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,

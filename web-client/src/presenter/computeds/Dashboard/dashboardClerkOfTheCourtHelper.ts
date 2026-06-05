@@ -19,6 +19,21 @@ const MONTHS = [
   'December',
 ];
 
+const FISCAL_MONTHS = [
+  'October',
+  'November',
+  'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+];
+
 const COLOR_BLUE = '#005EA2';
 const COLOR_YELLOW = '#FFBE2E';
 
@@ -28,22 +43,30 @@ export const dashboardClerkOfTheCourtHelper = (
 ): ClerkOfCourtDashboardState => {
   const stats = get(state.clerkOfCourtDashboardStats);
 
+  const petitionsByYearIsFiscal = get(
+    state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
+  );
+
+  const petitionerStats = petitionsByYearIsFiscal
+    ? stats.fiscalYearPetitionStats
+    : stats.calendarYearPetitionStats;
+
   const petitionsByMonthAndServiceTypeChartData = [
     {
       color: COLOR_BLUE,
-      data: stats.petitionFullElectronicMonths.map(p => p.total),
+      data: petitionerStats.petitionFullElectronicMonths.map(p => p.total),
       label: 'Electronic',
     },
     {
       color: COLOR_YELLOW,
-      data: stats.petitionFullPaperMonths.map(p => p.total),
+      data: petitionerStats.petitionFullPaperMonths.map(p => p.total),
       label: 'Paper',
     },
   ];
 
   const petitionsByServiceTypePieData =
-    stats.petitionsByServiceType.length > 0
-      ? stats.petitionsByServiceType.map(({ isPaper, total }) => ({
+    petitionerStats.petitionsByServiceType.length > 0
+      ? petitionerStats.petitionsByServiceType.map(({ isPaper, total }) => ({
           color: isPaper ? COLOR_YELLOW : COLOR_BLUE,
           name: isPaper ? 'Paper' : 'Electronic',
           value: total,
@@ -51,22 +74,26 @@ export const dashboardClerkOfTheCourtHelper = (
       : [];
 
   const petitionsByRepresentationPieData =
-    stats.petitionsByRepresentation.length > 0
-      ? stats.petitionsByRepresentation.map(({ isRepresenting, total }) => ({
-          color: isRepresenting ? COLOR_YELLOW : COLOR_BLUE,
-          name: isRepresenting ? 'Represented' : 'Pro Se',
-          value: total,
-        }))
+    petitionerStats.petitionsByRepresentation.length > 0
+      ? petitionerStats.petitionsByRepresentation.map(
+          ({ isRepresenting, total }) => ({
+            color: isRepresenting ? COLOR_YELLOW : COLOR_BLUE,
+            name: isRepresenting ? 'Represented' : 'Pro Se',
+            value: total,
+          }),
+        )
       : [];
 
-  const totalPetitions = sum(stats.petitionsByServiceType.map(p => p.total));
+  const totalPetitions = sum(
+    petitionerStats.petitionsByServiceType.map(p => p.total),
+  );
 
   return {
     petitionsByMonthAndServiceTypeChartData,
     petitionsByRepresentationPieData,
     petitionsByServiceTypePieData,
     totalPetitions,
-    MONTHS,
+    months: petitionsByYearIsFiscal ? FISCAL_MONTHS : MONTHS,
     year: stats.year,
   };
 };

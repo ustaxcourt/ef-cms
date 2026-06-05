@@ -1,4 +1,8 @@
-import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import {
+  createISODateString,
+  deconstructDate,
+  getJsTimeframeForYear,
+} from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Kysely, sql } from 'kysely';
@@ -65,8 +69,7 @@ export type ClerkDashboardSpecialSessionLocation = {
   count: number;
 };
 
-export type ClerkDashboardStats = {
-  year: number;
+export type ClerkDashboardPetitionsStats = {
   petitionFullPaperMonths: {
     month: Month;
     isPaper: boolean | undefined;
@@ -86,6 +89,14 @@ export type ClerkDashboardStats = {
     isRepresenting: boolean;
   }[];
 };
+
+export type ClerkDashboardStats = {
+  year: string;
+  calendarYearPetitionStats: ClerkDashboardPetitionsStats;
+  fiscalYearPetitionStats: ClerkDashboardPetitionsStats;
+};
+
+const fiscalMonthPriority = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
 
 async function _top10SpecialSessionLocations(
   reader: Kysely<Database>,
@@ -218,111 +229,134 @@ async function _casesByMonthAndProcedureType(
   return casesFiledByMonth;
 }
 
-export const getClerkDashboardStats = async ({
-  year,
-}: {
-  year?: number;
-}): Promise<ClerkDashboardStats> => {
-  return await getDbReader(async reader => {
-    // ── Auto-detect most recent year with data if none provided ───────────────
-    let resolvedYear = year;
-    if (!resolvedYear) {
-      const latestRow = await reader
+async function getPetitionsDataByYear(
+  reader: Kysely<Database>,
+  isFiscal: boolean,
+  yearStart: Date,
+  yearEnd: Date,
+) {
+  // -- Petition Data ---------------------
+  const petitionData = await reader
+    .selectFrom(eb =>
+      eb
         .selectFrom('dwCase')
-        .select(
-          sql<number>`EXTRACT(YEAR FROM ${sql.ref('receivedAt')})`.as('year'),
+        .leftJoin(
+          eb2 =>
+            eb2
+              .selectFrom('dwUserOnCase')
+              .select('docketNumber')
+              .where('representing', 'is not', null)
+              .groupBy('docketNumber')
+              .as('uoc'),
+          join => join.onRef('dwCase.docketNumber', '=', 'uoc.docketNumber'),
         )
-        .orderBy(sql`EXTRACT(YEAR FROM ${sql.ref('receivedAt')})`, 'desc')
-        .limit(1)
-        .executeTakeFirst();
-      resolvedYear = latestRow
-        ? Number(latestRow.year)
-        : Number(formatNow(FORMATS.YEAR));
-    }
-
-    // const yearStart = calculateDate({
-    //   dateString: `${resolvedYear}-01-01T00:00:00.000Z`,
-    // });
-
-    // -- Petition Data ---------------------
-    const petitionData = await reader
-      .selectFrom(eb =>
-        eb
-          .selectFrom('dwCase')
-          .leftJoin(
-            eb2 =>
-              eb2
-                .selectFrom('dwUserOnCase')
-                .select('docketNumber')
-                .where('representing', 'is not', null)
-                .groupBy('docketNumber')
-                .as('uoc'),
-            join => join.onRef('dwCase.docketNumber', '=', 'uoc.docketNumber'),
-          )
-          .select(eb => [
-            'receivedAt',
-            eb.fn.coalesce('isPaper', eb.lit(false)).as('isPaper'),
-            sql<boolean>`CASE
+        .select(eb => [
+          'receivedAt',
+          eb.fn.coalesce('isPaper', eb.lit(false)).as('isPaper'),
+          sql<boolean>`CASE
                           WHEN uoc.docket_number IS NULL THEN FALSE
                           ELSE TRUE
                         END`.as('isRepresenting'),
-          ])
-          // .where() YEAR CONDITION
-          .as('middle'),
-      )
-      .select([
-        'isPaper',
-        'isRepresenting',
-        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`.as('month'),
-        sql<number>`count(1)`.as('total'),
-      ])
-      .groupBy(
-        sql`grouping sets((EXTRACT(MONTH FROM received_At), is_paper), (is_Paper), (is_Representing))`,
-      )
-      .execute();
+        ])
+        .where('receivedAt', '>=', yearStart)
+        .where('receivedAt', '<', yearEnd)
+        .as('middle'),
+    )
+    .select([
+      'isPaper',
+      'isRepresenting',
+      sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`.as('month'),
+      sql<number>`count(1)`.as('total'),
+    ])
+    .groupBy(
+      sql`grouping sets((EXTRACT(MONTH FROM received_At), is_paper), (is_Paper), (is_Representing))`,
+    )
+    .execute();
 
-    const petitonPaperMonths = petitionData.filter(
-      pet => pet.isPaper && pet.month,
-    );
-    const petitonElectronicMonths = petitionData.filter(
-      pet => !pet.isPaper && pet.isPaper != null && pet.month,
-    );
-    const petitionsByServiceType = petitionData
-      .filter(pet => pet.isPaper != null && !pet.month)
-      .map(pet => ({ total: Number(pet.total), isPaper: pet.isPaper }));
-    const petitionsByRepresentation = petitionData
-      .filter(pet => pet.isRepresenting != null)
-      .map(pet => ({
-        total: Number(pet.total),
-        isRepresenting: pet.isRepresenting,
-      }));
+  const petitonPaperMonths = petitionData.filter(
+    pet => pet.isPaper && pet.month,
+  );
+  const petitonElectronicMonths = petitionData.filter(
+    pet => !pet.isPaper && pet.isPaper != null && pet.month,
+  );
+  const petitionsByServiceType = petitionData
+    .filter(pet => pet.isPaper != null && !pet.month)
+    .map(pet => ({ total: Number(pet.total), isPaper: pet.isPaper }));
+  const petitionsByRepresentation = petitionData
+    .filter(pet => pet.isRepresenting != null)
+    .map(pet => ({
+      total: Number(pet.total),
+      isRepresenting: pet.isRepresenting,
+    }));
 
-    const petitionFullPaperMonths = Array.from({ length: 12 }, (_, i) => {
-      const row = petitonPaperMonths.find(r => Number(r.month) === i + 1);
-      return {
-        month: (i + 1) as Month,
-        isPaper: row ? row.isPaper : undefined,
-        total: row ? Number(row.total) : 0,
-      };
-    });
-
-    const petitionFullElectronicMonths = Array.from({ length: 12 }, (_, i) => {
-      const row = petitonElectronicMonths.find(r => Number(r.month) === i + 1);
-      return {
-        month: (i + 1) as Month,
-        isPaper: row ? row.isPaper : undefined,
-        total: row ? Number(row.total) : 0,
-      };
-    });
-
+  const petitionFullPaperMonths = Array.from({ length: 12 }, (_, i) => {
+    const row = petitonPaperMonths.find(r => Number(r.month) === i + 1);
     return {
-      petitionFullPaperMonths: orderBy(petitionFullPaperMonths, ['month']),
-      petitionFullElectronicMonths: orderBy(petitionFullElectronicMonths, [
-        'month',
-      ]),
-      petitionsByServiceType,
-      petitionsByRepresentation,
-      year: resolvedYear,
+      month: (i + 1) as Month,
+      isPaper: row ? row.isPaper : undefined,
+      total: row ? Number(row.total) : 0,
     };
   });
-};
+
+  const petitionFullElectronicMonths = Array.from({ length: 12 }, (_, i) => {
+    const row = petitonElectronicMonths.find(r => Number(r.month) === i + 1);
+    return {
+      month: (i + 1) as Month,
+      isPaper: row ? row.isPaper : undefined,
+      total: row ? Number(row.total) : 0,
+    };
+  });
+
+  const orderCallback = isFiscal
+    ? ({ month }) => fiscalMonthPriority[month - 1]
+    : ({ month }) => month;
+
+  return {
+    petitionFullPaperMonths: orderBy(petitionFullPaperMonths, orderCallback),
+    petitionFullElectronicMonths: orderBy(
+      petitionFullElectronicMonths,
+      orderCallback,
+    ),
+    petitionsByServiceType,
+    petitionsByRepresentation,
+  };
+}
+
+export const getClerkDashboardStats =
+  async (): Promise<ClerkDashboardStats> => {
+    const { year } = deconstructDate(createISODateString());
+
+    return await getDbReader(async reader => {
+      const { begin: calendarYearbegin, end: calendarYearEnd } =
+        getJsTimeframeForYear({
+          fiscal: false,
+          year,
+        });
+
+      const { begin: fiscalYearBegin, end: fiscalYearEnd } =
+        getJsTimeframeForYear({
+          fiscal: true,
+          year,
+        });
+
+      const calendarYearPetitionStats = getPetitionsDataByYear(
+        reader,
+        false,
+        calendarYearbegin,
+        calendarYearEnd,
+      );
+
+      const fiscalYearPetitionStats = getPetitionsDataByYear(
+        reader,
+        true,
+        fiscalYearBegin,
+        fiscalYearEnd,
+      );
+
+      return {
+        year,
+        calendarYearPetitionStats: await calendarYearPetitionStats,
+        fiscalYearPetitionStats: await fiscalYearPetitionStats,
+      };
+    });
+  };

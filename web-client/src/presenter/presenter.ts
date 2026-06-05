@@ -650,6 +650,7 @@ import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentS
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
+import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1284,6 +1285,8 @@ export const presenterSequences = {
     setCaseDetailPrimaryTabSequence as unknown as Function,
   setCaseTypeToDisplaySequence:
     setCaseTypeToDisplaySequence as unknown as Function,
+  setClerkOfCourtDashboardOptionsSequence:
+    setClerkOfCourtDashboardOptionsSequence as unknown as Function,
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
   setCurrentTabSequence,
