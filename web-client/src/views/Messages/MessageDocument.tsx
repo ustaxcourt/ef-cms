@@ -194,18 +194,18 @@ export const MessageDocument = connect(
             Order Response
           </Button>
         )}
-        {messageDocumentHelper.showApplyStampButton && (
+        {messageDocumentHelper.showGrantDenyMotionButton && (
           <Button
             link
-            data-testid="apply-stamp"
-            icon="stamp"
+            data-testid="grant-deny-motion"
+            icon="gavel"
             onClick={() => {
               navigateToPathSequence({
-                path: messageDocumentHelper.applyStampFromMessagesLink,
+                path: messageDocumentHelper.grantDenyMotionFromMessagesLink,
               });
             }}
           >
-            Apply Stamp
+            Grant/Deny
           </Button>
         )}
         {messageDocumentHelper.showStatusReportOrderButton && (

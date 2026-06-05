@@ -35,6 +35,22 @@ describe('confirmPaperServiceModalHelper', () => {
   });
 
   describe('wasMultiDocketed', () => {
+    it('should return defaults when docketEntryId is not set', () => {
+      const result = runCompute(confirmPaperServiceModalHelper, {
+        state: {
+          ...baseState,
+          docketEntryId: undefined,
+        },
+      });
+
+      expect(result).toEqual({
+        wasMultiDocketed: false,
+        multiDocketedOn: [],
+        paperFilingText: 'This case has parties receiving paper service:',
+        contactsNeedingPaperService: [],
+      });
+    });
+
     it('should throw an Error when the docket entry is not found', () => {
       expect(() =>
         runCompute(confirmPaperServiceModalHelper, {
@@ -44,6 +60,17 @@ describe('confirmPaperServiceModalHelper', () => {
           },
         }),
       ).toThrow('Docket entry non-existent-docket-entry-id was not found.');
+    });
+
+    it('should default to false when docketEntryId is not set', () => {
+      const result = runCompute(confirmPaperServiceModalHelper, {
+        state: {
+          ...baseState,
+          docketEntryId: undefined,
+        },
+      });
+
+      expect(result.wasMultiDocketed).toEqual(false);
     });
 
     it('should be false when multiDocketedOn has only one docket number', () => {
@@ -81,6 +108,17 @@ describe('confirmPaperServiceModalHelper', () => {
     it('should return an empty array when no case in consolidated cases match the docket numbers in multiDocketedOn', () => {
       const result = runCompute(confirmPaperServiceModalHelper, {
         state: baseState,
+      });
+
+      expect(result.multiDocketedOn).toEqual([]);
+    });
+
+    it('should return an empty array when docketEntryId is not set', () => {
+      const result = runCompute(confirmPaperServiceModalHelper, {
+        state: {
+          ...baseState,
+          docketEntryId: undefined,
+        },
       });
 
       expect(result.multiDocketedOn).toEqual([]);

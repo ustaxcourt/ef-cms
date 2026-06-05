@@ -400,14 +400,36 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/apply-stamp',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
-        return app.getSequence('goToApplyStampSequence')({
-          docketEntryId,
-          docketNumber,
-        });
-      }),
+      '/case-detail/*/documents/*/grant-deny-motion-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/grant-deny-motion-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        (docketNumber, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
     );
 
     registerRoute(
@@ -1380,15 +1402,38 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/message-detail/*/*/apply-stamp',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
-        return app.getSequence('goToApplyStampSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-        });
-      }),
+      '/messages/*/message-detail/*/*/grant-deny-motion-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/grant-deny-motion-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        (docketNumber, parentMessageId, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+          });
+        },
+      ),
     );
 
     registerRoute(

@@ -248,7 +248,7 @@ export const generateAndServeDocketEntry = async ({
   }
 
   async function sendServedPartiesEmails() {
-    return applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       docketEntryId: changeOfAddressDocketEntry.docketEntryId,

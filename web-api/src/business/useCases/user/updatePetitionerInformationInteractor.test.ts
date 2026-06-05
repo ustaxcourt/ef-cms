@@ -40,6 +40,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
+
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -50,9 +51,6 @@ describe('updatePetitionerInformationInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const generateAndServeDocketEntry = jest.mocked(
     generateAndServeDocketEntryMock,
-  );
-  const invalidateUserContactGeocode = jest.mocked(
-    invalidateUserContactGeocodeMock,
   );
   const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest

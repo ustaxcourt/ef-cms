@@ -19,11 +19,11 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { omit } from 'lodash';
 import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
-import { omit } from 'lodash';
 import { updateDocketEntryRelatedEntryServed } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed';
 
 export const serveCourtIssuedDocument = async (
@@ -229,7 +229,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: { docketNumbers?: string[]; subjectCaseDocketNumber },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber: string },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,

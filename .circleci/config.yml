@@ -542,7 +542,7 @@ jobs:
       - run:
           name: Setup SSM
           command: |
-            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
+            ./scripts/circleci/setup-ssm-for-glue-job.sh
       - run:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |

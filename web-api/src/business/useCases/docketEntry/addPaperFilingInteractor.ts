@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
@@ -29,6 +28,7 @@ import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
@@ -82,7 +82,10 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  let numberOfPages: number;
+  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
+
+  let effectiveConsolidatedGroupDocketNumbers: string[] = [];
+  let numberOfPages: number | undefined;
   if (isFileAttached) {
     numberOfPages = await applicationContext
       .getUseCaseHelpers()
@@ -92,10 +95,6 @@ export const addPaperFiling = async (
         documentBytes: undefined,
       });
   }
-
-  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
-
-  let effectiveConsolidatedGroupDocketNumbers: string[] = [];
 
   if (isSavingForLater) {
     effectiveConsolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
@@ -131,7 +130,6 @@ export const addPaperFiling = async (
   await withTransaction(async () => {
     for (const rawCase of consolidatedGroupCases) {
       let caseEntity = new Case(rawCase, { authorizedUser });
-
       const docketEntryEntity = new DocketEntry(
         {
           ...documentMetadata,
@@ -238,6 +236,12 @@ export const addPaperFiling = async (
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
+    });
   }
 
   const successMessage =
@@ -254,8 +258,10 @@ export const addPaperFiling = async (
         message: successMessage,
         overwritable: false,
       },
+      pendingCoversheetDocketEntryIds: isReadyForService
+        ? [docketEntryId]
+        : undefined,
       docketEntryId,
-      generateCoversheet: isReadyForService,
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,

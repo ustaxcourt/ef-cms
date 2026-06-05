@@ -16,6 +16,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { statusReportOrderPdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrder/statusReportOrderPdfPreviewSequence';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
+import { setEditGrantDenyMotionFormAction } from '@web-client/presenter/actions/GrantDenyMotion/setEditGrantDenyMotionFormAction';
 import { setEditMotionOrderResponseFormAction } from '../actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
 
 export const navigateToEditOrderSequence = [
@@ -37,7 +38,14 @@ export const navigateToEditOrderSequence = [
     documentTypeOrder: [
       getOrderTypeAction,
       {
-        isMotionOrderResponse: [setEditMotionOrderResponseFormAction, navigateToPathAction],
+        isGrantDenyMotion: [
+          setEditGrantDenyMotionFormAction,
+          navigateToPathAction,
+        ],
+        isMotionOrderResponse: [
+          setEditMotionOrderResponseFormAction,
+          navigateToPathAction,
+        ],
         isStandardOrder: [getDocumentEditUrlAsPathAction, navigateToPathAction],
         isStatusReportOrder: [
           setEditStatusReportOrderFormAction,

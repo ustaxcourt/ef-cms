@@ -1,5 +1,8 @@
 import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -17,10 +20,11 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -34,7 +38,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<{ pendingCoversheetDocketEntryIds?: string[] }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -201,6 +205,25 @@ export const fileCourtIssuedDocketEntry = async (
       );
     }
   });
+
+  const requiresCoversheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    );
+
+  if (requiresCoversheet) {
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: subjectDocketNumber,
+    });
+  }
+
+  return {
+    pendingCoversheetDocketEntryIds: requiresCoversheet
+      ? [docketEntryId]
+      : undefined,
+  };
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

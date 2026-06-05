@@ -1,6 +1,7 @@
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
+import { addCoversheetWorker } from './business/useCases/coversheet/addCoversheetWorker';
 import { addDeficiencyStatisticInteractor } from './business/useCases/caseStatistics/addDeficiencyStatisticInteractor';
 import { addPaperFilingInteractor } from './business/useCases/docketEntry/addPaperFilingInteractor';
 import { addPetitionerToCaseInteractor } from './business/useCases/addPetitionerToCaseInteractor';
@@ -50,7 +51,6 @@ import { fileCourtIssuedOrderInteractor } from './business/useCases/courtIssuedO
 import { fileExternalDocumentInteractor } from '@web-api/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
 import { generateDocketRecordPdfInteractor } from './business/useCases/generateDocketRecordPdfInteractor';
-import { generateDraftStampOrderInteractor } from '@web-api/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
@@ -199,6 +199,7 @@ const useCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  addCoversheetWorker,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
@@ -248,7 +249,6 @@ const useCases = {
   fileExternalDocumentInteractor,
   forgotPasswordInteractor,
   generateDocketRecordPdfInteractor,
-  generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeOfTrialLocationInteractor,

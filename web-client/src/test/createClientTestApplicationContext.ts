@@ -70,7 +70,6 @@ import { getFormattedPartiesNameAndTitle } from '@web-client/business/utilities/
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
-import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -254,9 +253,6 @@ const createTestApplicationContext = () => {
     getSortableDocketNumber: jest
       .fn()
       .mockImplementation(Case.getSortableDocketNumber),
-    getStampBoxCoordinates: jest
-      .fn()
-      .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     isDateWithinGivenInterval: jest
       .fn()
@@ -491,7 +487,9 @@ const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    mockGetLongTimeoutSQSMessagingClient: jest.fn().mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
+    mockGetLongTimeoutSQSMessagingClient: jest
+      .fn()
+      .mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,

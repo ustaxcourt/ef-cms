@@ -46,7 +46,7 @@ export const updateDocketEntriesWithPageCount = async ({
             });
 
       const consolidatedCaseDocketEntry =
-        consolidatedCaseEntity!.getDocketEntryById({
+        consolidatedCaseEntity.getDocketEntryById({
           docketEntryId,
         });
 

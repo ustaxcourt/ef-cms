@@ -2,14 +2,19 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { getOrderTypeAction } from './getOrderTypeAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { MOTION_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  GRANT_DENY_MOTION_OPTIONS,
+  MOTION_ORDER_RESPONSE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 
 describe('getOrderTypeAction,', () => {
   const mockIsStatusReportOrderPath = jest.fn();
   const mockIsStandardOrderPath = jest.fn();
   const mockIsMotionOrderResponsePath = jest.fn();
+  const mockIsGrantDenyMotionPath = jest.fn();
 
   presenter.providers.path = {
+    isGrantDenyMotion: mockIsGrantDenyMotionPath,
     isStandardOrder: mockIsStandardOrderPath,
     isStatusReportOrder: mockIsStatusReportOrderPath,
     isMotionOrderResponse: mockIsMotionOrderResponsePath,
@@ -55,6 +60,26 @@ describe('getOrderTypeAction,', () => {
     });
 
     expect(mockIsStandardOrderPath).toHaveBeenCalled();
+  });
+
+  it('should use grant deny motion path when migrated stamp draft has grantDenyMotion orderType', async () => {
+    await runAction(getOrderTypeAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: {
+            orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          },
+        },
+        permissions: {
+          STAMP_MOTION: true,
+        },
+      },
+    });
+
+    expect(mockIsGrantDenyMotionPath).toHaveBeenCalled();
   });
 
   it('should use motion response order path when document is motion response order with correct permissions', async () => {

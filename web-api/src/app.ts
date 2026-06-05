@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
-import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
+import { getDocketEntryProcessingStatusLambda } from './lambdas/documents/getDocketEntryProcessingStatusLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
@@ -59,7 +59,6 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
-import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
@@ -442,17 +441,9 @@ app.use(expressLogger);
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
 
-  app.post(
-    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(
-      addCoversheetLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
-  );
-  app.post(
-    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
-    lambdaWrapper(generateDraftStampOrderLambda),
+  app.get(
+    '/case-documents/:docketNumber/:docketEntryId/processing-status',
+    lambdaWrapper(getDocketEntryProcessingStatusLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',

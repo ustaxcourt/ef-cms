@@ -76,7 +76,7 @@ export const documentViewerHelper = (
     showStatusReportOrderButton,
     showOrderResponseButton,
     showSignStipulatedDecisionButton,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showNotServed,
     showServiceWarning: showUnservedPetitionWarning,
     showLeadCaseNotification: showLeadCaseBanner,
@@ -92,7 +92,7 @@ export const documentViewerHelper = (
     filedLabel,
     servedLabel,
     sealedToTooltip: formattedDocumentToDisplay.sealedToTooltip,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showOrderResponseButton,
     showCompleteQcButton,
     showNotServed,
@@ -167,7 +167,7 @@ export const getDocumentDisplayFlags = ({
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
-  const showApplyStampButton =
+  const showGrantDenyMotionButton =
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
 
@@ -188,7 +188,7 @@ export const getDocumentDisplayFlags = ({
     showServePaperFiledDocumentButton,
     showServeCourtIssuedDocumentButton,
     showServePetitionButton,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showStatusReportOrderButton,
     showOrderResponseButton,
     showSignStipulatedDecisionButton,

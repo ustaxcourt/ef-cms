@@ -177,11 +177,16 @@ export const fileAndServeCourtIssuedDocument = async (
         caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
       }
 
+      const multiDocketedOn: string[] =
+        docketNumbers.length > 0
+          ? [subjectCaseDocketNumber, ...docketNumbers]
+          : [];
+
       caseEntities = await settlePromises(
         caseEntities.map(async caseEntity => {
           const docketEntryEntity = new DocketEntry(
             {
-              ...omit(docketEntryToServe, 'filedBy'),
+              ...omit(docketEntryToServe, ['filedBy', 'index']),
               attachments: form.attachments,
               date: form.date,
               docketNumber: caseEntity.docketNumber,
@@ -204,10 +209,7 @@ export const fileAndServeCourtIssuedDocument = async (
               isFileAttached: true,
               isOnDocketRecord: true,
               judge: form.judge,
-              multiDocketedOn:
-                docketNumbers.length > 0
-                  ? [subjectCaseDocketNumber, ...docketNumbers]
-                  : [],
+              multiDocketedOn,
               numberOfPages,
               originallyFiledDocketNumber: subjectCaseDocketNumber,
               processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,

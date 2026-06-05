@@ -112,6 +112,9 @@ const removeConsolidatedCases = async (
       docketNumbers: docketNumbersToRemove,
     });
 
+    const docketEnIdsToUpdate: Set<string> = new Set();
+    const docketEntriesToUpdate: RawDocketEntry[] = [];
+
     for (const caseToRemove of casesToRemove) {
       const caseEntity = new Case(caseToRemove, { authorizedUser });
       caseEntity.removeConsolidation();
@@ -126,12 +129,7 @@ const removeConsolidatedCases = async (
       updateCasePromises.push(
         removeConsolidatedCaseReferences(caseToRemove.docketNumber),
       );
-    }
 
-    const docketEnIdsToUpdate: Set<string> = new Set();
-    const docketEntriesToUpdate: any[] = [];
-
-    for (const caseToRemove of casesToRemove) {
       caseToRemove.docketEntries.forEach(docketEntry => {
         if (DocketEntry.isMultiDocketed(docketEntry))
           docketEnIdsToUpdate.add(docketEntry.docketEntryId);
@@ -139,20 +137,22 @@ const removeConsolidatedCases = async (
     }
 
     for (const id of docketEnIdsToUpdate) {
+      // entries are docketEntries on ALL cases in the consolidated group
       const entries = await getDocketEntriesById({ docketEntryId: id });
       entries.forEach(entry => {
         docketEntriesToUpdate.push(entry);
       });
     }
 
-    const UPDATED_CASE_DOCKET_ENTRIES: any[] = [];
-    const s3CopyPromises: Promise<any>[] = [];
-
+    const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
     docketEntriesToUpdate.forEach(docketEntry => {
+      // if this docket entry is on the cases still in the group
       if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+        // remove the unconsolidated docket numbers from its multiDocketedOn array
         const filtered = (docketEntry.multiDocketedOn || []).filter(
-          dn => !docketNumbersToRemove.includes(dn),
+          docketNumber => !docketNumbersToRemove.includes(docketNumber),
         );
+        // if filtered only contains the docket number we're on, then we set an empty array for the current
         docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
       } else {
         docketEntry.multiDocketedOn = [];
@@ -163,7 +163,7 @@ const removeConsolidatedCases = async (
           CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
           Key: newStorageId,
         });
-        s3CopyPromises.push(storageClient.send(storageCommand));
+        updateCasePromises.push(storageClient.send(storageCommand));
         docketEntry.documentStorageId = newStorageId;
 
         if (docketEntry.documentContentsId) {
@@ -174,7 +174,7 @@ const removeConsolidatedCases = async (
             CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
             Key: newContentsId,
           });
-          s3CopyPromises.push(storageClient.send(contentsCommand));
+          updateCasePromises.push(storageClient.send(contentsCommand));
           docketEntry.documentContentsId = newContentsId;
         }
       }
@@ -185,8 +185,8 @@ const removeConsolidatedCases = async (
       UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
     });
 
-    await settlePromises(s3CopyPromises);
-    await upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES);
+    updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
+
     await settlePromises(updateCasePromises);
   });
 };

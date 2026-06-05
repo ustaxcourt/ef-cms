@@ -27,6 +27,9 @@ describe('download-historical-test-file-times', () => {
       GITHUB_SHA: 'current',
       GITHUB_TOKEN: 'token',
     };
+    // Ensure no GITHUB_RUN_ID leaks in from the test runner's environment —
+    // tests that exercise the race-filter set it explicitly.
+    delete process.env.GITHUB_RUN_ID;
     global.fetch = jest.fn();
   });
 
@@ -486,6 +489,163 @@ describe('download-historical-test-file-times', () => {
         expect.stringContaining('ancestor'),
         expect.anything(),
       );
+    });
+
+    it('ignores artifacts created after the current workflow run started', async () => {
+      // This guards against the matrix-shard race: parallel shards in the
+      // same run must filter to the same artifact pool, even if one shard
+      // queries the API after a fresh artifact has been uploaded.
+      process.env.GITHUB_RUN_ID = '424242';
+
+      const outputFilePath = path.join(tempDir, 'race-filter.json');
+      const runStartedAt = '2026-05-14T16:00:00Z';
+      const beforeRun = '2026-05-14T15:00:00Z';
+      const afterRun = '2026-05-14T16:05:00Z';
+
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nrecent\nolder\n';
+          }
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({ './stable.test.ts': 1500 }),
+            );
+            return Buffer.from('');
+          }
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+
+      jest
+        .mocked(global.fetch)
+        // workflow run lookup
+        .mockResolvedValueOnce({
+          json: () => Promise.resolve({ run_started_at: runStartedAt }),
+          ok: true,
+        } as Response)
+        // recent ancestor's artifact: created AFTER this run started
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/racy.zip',
+                  created_at: afterRun,
+                  expired: false,
+                  name: 'client.yml-historical-test-file-times-recent',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        // older ancestor's artifact: created BEFORE this run started
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/stable.zip',
+                  created_at: beforeRun,
+                  expired: false,
+                  name: 'client.yml-historical-test-file-times-older',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        // artifact download
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await downloadHistoricalTestFileTimes({
+        artifactName: 'historical-test-file-times',
+        outputFilePath,
+        workflowFileName: 'client.yml',
+      });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://api.github.com/repos/ustaxcourt/ef-cms/actions/runs/424242',
+        expect.anything(),
+      );
+      expect(global.fetch).not.toHaveBeenCalledWith(
+        'https://example.com/racy.zip',
+        expect.anything(),
+      );
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://example.com/stable.zip',
+        expect.anything(),
+      );
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './stable.test.ts': 1500,
+      });
+    });
+
+    it('continues without the race-filter when the run lookup fails', async () => {
+      process.env.GITHUB_RUN_ID = '424242';
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
+      const outputFilePath = path.join(tempDir, 'race-filter-fallback.json');
+
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nancestor\n';
+          }
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({ './any.test.ts': 1 }),
+            );
+            return Buffer.from('');
+          }
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+
+      jest
+        .mocked(global.fetch)
+        // workflow run lookup fails
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 500,
+        } as Response)
+        // artifact lookup succeeds without race filter
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/any.zip',
+                  // created_at omitted; should still be accepted in fallback
+                  expired: false,
+                  name: 'client.yml-historical-test-file-times-ancestor',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await downloadHistoricalTestFileTimes({
+        artifactName: 'historical-test-file-times',
+        outputFilePath,
+        workflowFileName: 'client.yml',
+      });
+
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './any.test.ts': 1,
+      });
+      consoleSpy.mockRestore();
     });
 
     it('throws when the downloaded artifact contains no json timing files', async () => {

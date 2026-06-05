@@ -20,6 +20,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+
 /**
  * saveCaseDetailInternalEdit
  * @param {object} applicationContext the application context

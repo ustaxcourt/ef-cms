@@ -1,6 +1,5 @@
 jest.mock('@web-api/persistence/postgres/utils/transactions');
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
-jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 
 import { petitionerUser } from '@shared/test/mockUsers';
 import { createNewPetitionerUser } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
@@ -27,6 +26,10 @@ describe('createNewPetitionerUser', () => {
     getUserGateway.mockReturnValue({
       createUser: jest.fn().mockResolvedValue(undefined),
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should call createUser and upsertUser when creating a user outside of a transaction', async () => {

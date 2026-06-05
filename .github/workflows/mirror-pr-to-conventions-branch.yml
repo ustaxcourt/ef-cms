@@ -1,0 +1,97 @@
+name: Sync test-agent-project-conventions-update and mirror PRs
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - test
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-conventions-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ github.token }}
+
+      - name: Sync test-agent-project-conventions-update with test
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin test-agent-project-conventions-update
+          git checkout test-agent-project-conventions-update
+
+          # Save the conventions branch versions of protected files
+          PROTECTED_FILES=()
+          while IFS= read -r f; do
+            [ -n "$f" ] && PROTECTED_FILES+=("$f")
+          done < <(git ls-tree -r --name-only HEAD | grep -E '(^|/)AGENTS\.md$|(^|/)copilot-instructions\.md$' || true)
+
+          TMPDIR=$(mktemp -d)
+          for file in "${PROTECTED_FILES[@]}"; do
+            mkdir -p "${TMPDIR}/$(dirname "${file}")"
+            git show "HEAD:${file}" > "${TMPDIR}/${file}"
+          done
+
+          # Reset the branch to match test
+          git reset --hard origin/test
+
+          # Restore the protected files
+          for file in "${PROTECTED_FILES[@]}"; do
+            mkdir -p "$(dirname "${file}")"
+            cp "${TMPDIR}/${file}" "${file}"
+          done
+          rm -rf "${TMPDIR}"
+
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Sync with test, preserving AGENTS.md and copilot-instructions.md"
+          fi
+
+          git push --force-with-lease origin test-agent-project-conventions-update
+
+  mirror-pr:
+    needs: sync-conventions-branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create companion PR targeting test-agent-project-conventions-update
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+
+          # Check if a PR from this branch to test-agent-project-conventions-update already exists
+          EXISTING=$(PAGER=cat gh pr list \
+            --base test-agent-project-conventions-update \
+            --head "${PR_HEAD_REF}" \
+            --json number \
+            --jq 'length')
+
+          if [ "${EXISTING}" -gt 0 ]; then
+            echo "PR from ${PR_HEAD_REF} to test-agent-project-conventions-update already exists — skipping."
+            exit 0
+          fi
+
+          PAGER=cat gh pr create \
+            --base test-agent-project-conventions-update \
+            --head "${PR_HEAD_REF}" \
+            --title "Mirror: ${PR_TITLE}" \
+            --body "Automated companion PR for #${PR_NUMBER}.
+
+          \`test-agent-project-conventions-update\` tracks \`test\` but maintains its own \`AGENTS.md\` and \`copilot-instructions.md\` files.
+          This PR applies the same changes from #${PR_NUMBER} against that branch."
