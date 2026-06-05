@@ -211,7 +211,6 @@ const confirmAction = async (message: string): Promise<boolean> => {
             isDraft: false,
             isFileAttached: true,
             isOnDocketRecord: true,
-            multiDocketedOn: JSON.stringify([]),
             processingStatus: 'pending',
             relationship: 'primaryDocument',
             scenario: 'Standard',
