@@ -23,7 +23,6 @@ export const prepareMotionOrderResponseAction = ({
 }: ActionProps) => {
   const {
     additionalOrderTextArray,
-    additionalOrderText,
     dueDate,
     responseDate,
     strickenFromTrialSession,
@@ -56,9 +55,7 @@ export const prepareMotionOrderResponseAction = ({
 
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
-  const rawAdditionalOrderTextArray =
-    additionalOrderTextArray ??
-    (additionalOrderText ? [additionalOrderText] : []);
+  const rawAdditionalOrderTextArray = additionalOrderTextArray ?? [];
   const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
     rawAdditionalOrderTextArray,
   );
