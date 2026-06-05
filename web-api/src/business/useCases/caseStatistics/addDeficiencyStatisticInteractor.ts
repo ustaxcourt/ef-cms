@@ -10,7 +10,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const addDeficiencyStatistic = async (
   _applicationContext: ServerApplicationContext,
@@ -41,7 +40,7 @@ export const addDeficiencyStatistic = async (
     yearOrPeriod: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
@@ -67,8 +66,6 @@ export const addDeficiencyStatistic = async (
   const validRawCase = newCase.validate().toRawObject();
 
   await upsertCases([validRawCase]);
-
-  return new CaseDTO(validRawCase);
 };
 
 export const addDeficiencyStatisticInteractor = withLocking(

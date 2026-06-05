@@ -13,6 +13,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { sanitizeUserHtml } from '@shared/business/utilities/sanitizeUserHtml';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -63,6 +64,8 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     titleOfClerk = title;
   }
 
+  const sanitizedOrderContent = sanitizeUserHtml(contentHtml);
+
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
@@ -73,7 +76,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       caseTitle,
       docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
       nameOfClerk,
-      orderContent: contentHtml,
+      orderContent: sanitizedOrderContent,
       orderTitle: documentTitle,
       titleOfClerk,
     },

@@ -17,7 +17,6 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { orderBy } from 'lodash';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -69,7 +68,7 @@ export const saveSignedDocumentInteractor = async (
     signedDocumentStorageId,
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ caseEntity: CaseDTO; signedDocketEntryId: string }> => {
+): Promise<{ signedDocketEntryId: string }> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to save signed document is not an auth user',
@@ -173,10 +172,7 @@ export const saveSignedDocumentInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  const caseDTO = new CaseDTO(caseEntity.toRawObject());
-
   return {
-    caseEntity: caseDTO,
     signedDocketEntryId: signedDocketEntryEntity.docketEntryId,
   };
 };

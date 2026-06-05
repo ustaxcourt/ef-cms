@@ -46,7 +46,6 @@ describe('sealAddressAction', () => {
 
     expect(result.output).toEqual({
       alertSuccess: { message: 'Address sealed for Bob Barker.' },
-      caseDetail,
     });
   });
 

@@ -10,7 +10,6 @@ export const submitCourtIssuedOrderAction = async ({
   primaryDocumentFileId: string;
   createOrderSelectedCases?;
 }>) => {
-  let caseDetail;
   const { docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId: documentStorageId } = props;
   const formData = get(state.form);
@@ -50,14 +49,14 @@ export const submitCourtIssuedOrderAction = async ({
     });
 
   if (docketEntryIdToEdit) {
-    caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateCourtIssuedOrderInteractor(applicationContext, {
         docketEntryIdToEdit,
         documentMetadata,
       });
   } else {
-    caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata,
@@ -66,7 +65,6 @@ export const submitCourtIssuedOrderAction = async ({
   }
 
   return {
-    caseDetail,
     docketEntryId: documentStorageId,
     docketNumber,
     eventCode: documentMetadata.eventCode,

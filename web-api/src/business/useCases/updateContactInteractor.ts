@@ -29,10 +29,6 @@ import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
 } from '@web-api/business/utilities/calculateEmail';
-import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * updateContact
@@ -48,7 +44,7 @@ export const updateContact = async (
   applicationContext: ServerApplicationContext,
   { contactInfo, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<void> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnidentifiedUserError(
       'Unable to confirm user is an authenticated user',
@@ -180,6 +176,10 @@ export const updateContact = async (
 
     servedParties = aggregatePartiesForService(caseEntity);
 
+    changeOfAddressDocketEntry.setOriginallyFiledDocketNumber(
+      caseEntity.docketNumber,
+    );
+
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
@@ -252,7 +252,6 @@ export const updateContact = async (
         caseToUpdate: caseEntity,
       });
     }
-
   });
 
   if (changeOfAddressDocketEntry && changeOfAddressPdfWithCover) {
@@ -263,13 +262,6 @@ export const updateContact = async (
       servedParties,
     });
   }
-
-  const filteredCase = CaseFactory.getCaseDTO({
-    rawCase: caseEntity,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
 };
 
 export const updateContactInteractor = withLocking(

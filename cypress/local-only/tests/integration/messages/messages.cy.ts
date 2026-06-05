@@ -22,7 +22,6 @@ import {
   loginAsColvin,
   loginAsColvinChambers,
   loginAsDocketClerk,
-  loginAsGeneral,
   loginAsPetitionsClerk,
   loginAsReportersOffice,
   loginAsTrialClerk,

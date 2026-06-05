@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -177,6 +178,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           filers: ['Manually edited filers for served docket entry'],
+          originallyFiledDocketNumber: '101-18',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
@@ -324,6 +326,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
@@ -351,6 +354,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: {
             email: 'me@example.com',
@@ -737,6 +741,53 @@ describe('DocketEntry entity', () => {
       expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
         documentTitleAndType,
       );
+    });
+  });
+
+  describe('multiDocketedOn', () => {
+    it('should store the provided multiDocketedOn array', () => {
+      const multiDocketedOn = ['101-21', '102-21', '103-21'];
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY, multiDocketedOn },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.multiDocketedOn).toEqual(multiDocketedOn);
+    });
+
+    it('should default to an empty array when not provided', () => {
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.multiDocketedOn).toEqual([]);
+    });
+  });
+
+  describe('originallyFiledDocketNumber', () => {
+    it('should store the provided originallyFiledDocketNumber', () => {
+      const mockOriginallyFiledDocketNumber = '101-21';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          originallyFiledDocketNumber: mockOriginallyFiledDocketNumber,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.originallyFiledDocketNumber).toBe(
+        mockOriginallyFiledDocketNumber,
+      );
+    });
+
+    it('should be undefined when not provided', () => {
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.originallyFiledDocketNumber).toBeUndefined();
     });
   });
 });

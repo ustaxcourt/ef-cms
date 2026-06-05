@@ -24,7 +24,7 @@ export const associatePrivatePractitionerWithCase = async (
     userId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
@@ -37,7 +37,7 @@ export const associatePrivatePractitionerWithCase = async (
     throw new Error(`Could not find a user for ${userId}`);
   }
 
-  return await associatePrivatePractitionerToCase({
+  await associatePrivatePractitionerToCase({
     authorizedUser,
     docketNumber,
     representing,

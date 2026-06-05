@@ -8,17 +8,23 @@ describe('updateContactInModalAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .updateContactInteractor.mockResolvedValue('updated contact');
+      .updateContactInteractor.mockResolvedValue(undefined);
+    applicationContext.getUseCases().getCaseInteractor.mockResolvedValue({
+      docketNumber: '123-45',
+      petitioners: [{ contactId: 'a' }],
+    });
   });
 
-  it('should update the contact in the modal', async () => {
+  it('should update the contact and refresh caseDetail, preserving docketEntries and messages', async () => {
     const result = await runAction(updateContactInModalAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
+          docketEntries: [{ docketEntryId: '1' }],
           docketNumber: '123-45',
+          messages: [{ messageId: 'm1' }],
         },
         modal: {
           form: {
@@ -33,6 +39,14 @@ describe('updateContactInModalAction', () => {
     expect(
       applicationContext.getUseCases().updateContactInteractor,
     ).toHaveBeenCalled();
-    expect(result.state.caseDetail).toEqual('updated contact');
+    expect(
+      applicationContext.getUseCases().getCaseInteractor,
+    ).toHaveBeenCalled();
+    expect(result.state.caseDetail).toEqual({
+      docketEntries: [{ docketEntryId: '1' }],
+      docketNumber: '123-45',
+      messages: [{ messageId: 'm1' }],
+      petitioners: [{ contactId: 'a' }],
+    });
   });
 });

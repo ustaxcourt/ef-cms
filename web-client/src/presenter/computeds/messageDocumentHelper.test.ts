@@ -292,7 +292,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showRemoveSignatureButton).toEqual(false);
     });
 
-    it('return showRemoveSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
+    it('return showRemoveSignatureButton false and showApplySignatureButton false for a signed document that is already on the docket record', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),

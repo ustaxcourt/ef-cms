@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 [[ -z "$1" ]] && echo "Pass the target branch as the first parameter" && exit 1
 SOURCE=$(git branch --show-current)

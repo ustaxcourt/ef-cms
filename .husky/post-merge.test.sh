@@ -1,22 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # test-post-merge.sh: A script to simulate a git merge and test the post-merge hook.
 
 EFCMS_ROOT=$(realpath "$(dirname "$0")/..")
 ANY_ERROR=0
 
-set -e
-
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Setting up test environment...${NC}"
+printf "%bSetting up test environment...%b\n" "$GREEN" "$NC"
 
 TEST_DIR=$(mktemp -d /tmp/git-merge-test-XXXXXX)
 trap 'rm -rf "$TEST_DIR"' EXIT
 
-cd "$TEST_DIR"
+cd "$TEST_DIR" || exit
 
 git init --initial-branch=main -q
 git config user.email "test@example.com"
@@ -41,20 +39,20 @@ mkdir -p .husky
 cp "${EFCMS_ROOT}/.husky/post-merge" .husky/post-merge
 chmod +x .husky/post-merge
 
-echo -e "${GREEN}Simulating merge of 'no-changes' into 'main'...${NC}"
+printf "%bSimulating merge of 'no-changes' into 'main'...%b\n" "$GREEN" "$NC"
 PRE_MERGE_HEAD=$(git rev-parse HEAD)
 git merge no-changes --no-edit -q
 git update-ref ORIG_HEAD "$PRE_MERGE_HEAD"
 
-echo -e "${GREEN}Executing post-merge hook...${NC}"
+printf "%bExecuting post-merge hook...%b\n" "$GREEN" "$NC"
 ./.husky/post-merge
 EXIT_CODE="$?"
 
-if [[ "$EXIT_CODE" -eq 0 ]]; then
-  echo -e "${GREEN}Exited with status ${EXIT_CODE}.${NC}"
+if [ "$EXIT_CODE" -eq 0 ]; then
+  printf "%bExited with status %s.%b\n" "$GREEN" "$EXIT_CODE" "$NC"
 else
   ANY_ERROR=1
-  echo -e "${RED}Exited with status ${EXIT_CODE}.${NC}"
+  printf "%bExited with status %s.%b\n" "$RED" "$EXIT_CODE" "$NC"
 fi
 
 git checkout -b throwaway -q
@@ -71,20 +69,20 @@ mkdir -p .husky
 cp "${EFCMS_ROOT}/.husky/post-merge" .husky/post-merge
 chmod +x .husky/post-merge
 
-echo -e "${GREEN}Simulating merge of 'throwaway' into 'main'...${NC}"
+printf "%bSimulating merge of 'throwaway' into 'main'...%b\n" "$GREEN" "$NC"
 PRE_MERGE_HEAD=$(git rev-parse HEAD)
 git merge throwaway --no-edit -q
 git update-ref ORIG_HEAD "$PRE_MERGE_HEAD"
 
-echo -e "${GREEN}Executing post-merge hook...${NC}"
+printf "%bExecuting post-merge hook...%b\n" "$GREEN" "$NC"
 ./.husky/post-merge
 EXIT_CODE="$?"
 
-if [[ "$EXIT_CODE" -eq 0 ]]; then
-  echo -e "${GREEN}Exited with status ${EXIT_CODE}.${NC}"
+if [ "$EXIT_CODE" -eq 0 ]; then
+  printf "%bExited with status %s.%b\n" "$GREEN" "$EXIT_CODE" "$NC"
 else
   ANY_ERROR=1
-  echo -e "${RED}Exited with status ${EXIT_CODE}.${NC}"
+  printf "%bExited with status %s.%b\n" "$RED" "$EXIT_CODE" "$NC"
 fi
 
-[[ "$ANY_ERROR" -eq 0 ]] && echo -e "${GREEN}Test complete.${NC}" || echo -e "${RED}Test complete with error(s).${NC}"
+[ "$ANY_ERROR" -eq 0 ] && printf "%bTest complete.%b\n" "$GREEN" "$NC" || printf "%bTest complete with error(s).%b\n" "$RED" "$NC"

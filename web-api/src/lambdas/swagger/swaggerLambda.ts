@@ -1,4 +1,4 @@
-import { headerOverride } from '../../lambdaWrapper';
+import { getHeaderOverride } from '../../lambdaWrapper';
 
 /**
  * render the swagger html page
@@ -26,7 +26,7 @@ export const swaggerLambda = () => {
   return {
     body,
     headers: {
-      ...headerOverride,
+      ...getHeaderOverride(),
       'Content-Type': 'text/html',
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',

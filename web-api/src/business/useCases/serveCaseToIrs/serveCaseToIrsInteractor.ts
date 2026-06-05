@@ -224,7 +224,8 @@ const generateNoticeOfReceipt = async ({
 
   if (shouldGenerateNotrForSecondary) {
     if (
-      contactPrimary.contactEmailAddress !== contactSecondary.contactEmailAddress
+      contactPrimary.contactEmailAddress !==
+      contactSecondary.contactEmailAddress
     ) {
       accessCode = generateAccessCode();
     }
@@ -385,6 +386,7 @@ const generateNoticeOfReceipt = async ({
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
     },
     {
       authorizedUser: userServingPetition,

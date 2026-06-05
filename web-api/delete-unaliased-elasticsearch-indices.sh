@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, etc]

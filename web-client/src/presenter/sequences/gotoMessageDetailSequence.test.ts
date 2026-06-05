@@ -61,9 +61,18 @@ describe('gotoMessageDetailSequence', () => {
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
       archivedCorrespondences: [],
-      docketEntries: [mockDocketEntry],
+      docketEntries: [],
       docketNumber: mockDocketNumber,
     });
+
+    applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor.mockReturnValue({
+        docketEntries: [mockDocketEntry],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      });
 
     applicationContext
       .getUseCases()

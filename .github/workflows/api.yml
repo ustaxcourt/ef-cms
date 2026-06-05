@@ -2,6 +2,7 @@ name: Node.js CI - API
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -13,8 +14,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   API:
+    if: ${{ !github.event.pull_request.draft }}
     uses: ./.github/workflows/template_no-app.yml
     with:
+      coverage_source_dir: web-api/coverage
       run_command: npm run test:api
+      workflow_filename: api.yml
+  check-coverage:
+    needs: [API]
+    uses: ./.github/workflows/job_check-coverage.yml
+    with:
+      branches: 90
+      coverage_source_dir: web-api/coverage
+      coverage_suite: api
+      functions: 90
+      lines: 90
+      pull_request_number: ${{ github.event.pull_request.number }}
+      statements: 90
+      workflow_filename: api.yml

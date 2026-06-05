@@ -5,6 +5,7 @@ import {
 } from '@aws-sdk/client-route-53';
 import {
   CloudFrontClient,
+  GetDistributionCommand,
   GetDistributionConfigCommand,
   ListDistributionsCommand,
   UpdateDistributionCommand,
@@ -17,6 +18,58 @@ const cloudfront = new CloudFrontClient({
 const route53 = new Route53Client({
   region: 'us-east-1',
 });
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const sendCloudFrontWithRetry = async <T>(
+  operation: () => Promise<T>,
+  retries = 3,
+): Promise<T> => {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await operation();
+    } catch (err) {
+      lastError = err;
+
+      if (attempt === retries) {
+        throw err;
+      }
+
+      await sleep(60_000);
+    }
+  }
+
+  throw lastError;
+};
+
+const waitForDistributionDeployed = async (
+  distributionId: string,
+  retries = 10,
+) => {
+  let lastStatus = 'Unknown';
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const result = await cloudfront.send(
+      new GetDistributionCommand({ Id: distributionId }),
+    );
+
+    lastStatus = result.Distribution?.Status ?? 'Unknown';
+
+    if (lastStatus === 'Deployed') {
+      return;
+    }
+
+    if (attempt < retries) {
+      await sleep(30_000);
+    }
+  }
+
+  throw new Error(
+    `CloudFront distribution ${distributionId} did not reach Deployed status after ${retries + 1} attempts. Last observed status: ${lastStatus}.`,
+  );
+};
 
 export const switchUiColors = async ({
   currentColor,
@@ -36,7 +89,12 @@ export const switchUiColors = async ({
     DistributionList && 'Items' in DistributionList && DistributionList.Items
       ? DistributionList.Items
       : [];
-  const updateDistributionCommands: UpdateDistributionCommand[] = [];
+
+  const updateDistributionCommands: {
+    distributionId: string;
+    command: UpdateDistributionCommand;
+  }[] = [];
+
   let DNSName = '';
   const generalDomainAlias = publicUi ? efcmsDomain : `app.${efcmsDomain}`;
 
@@ -60,13 +118,14 @@ export const switchUiColors = async ({
       ];
       currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
     }
-    updateDistributionCommands.push(
-      new UpdateDistributionCommand({
+    updateDistributionCommands.push({
+      distributionId: currentColorDistribution.Id,
+      command: new UpdateDistributionCommand({
         DistributionConfig: currentColorConfig.DistributionConfig,
         Id: currentColorDistribution.Id,
         IfMatch: currentColorConfig.ETag,
       }),
-    );
+    });
   }
 
   const deployingColorDomainAlias = publicUi
@@ -93,26 +152,21 @@ export const switchUiColors = async ({
     if (deployingColorDistribution.DomainName) {
       DNSName = deployingColorDistribution.DomainName;
     }
-    updateDistributionCommands.push(
-      new UpdateDistributionCommand({
+
+    updateDistributionCommands.push({
+      distributionId: deployingColorDistribution.Id,
+      command: new UpdateDistributionCommand({
         DistributionConfig: deployingColorConfig.DistributionConfig,
         Id: deployingColorDistribution.Id,
         IfMatch: deployingColorConfig.ETag,
       }),
-    );
+    });
   }
 
-  for (const updateDistributionCommand of updateDistributionCommands) {
-    try {
-      await cloudfront.send(updateDistributionCommand);
-    } catch (e) {
-      // Need to retry after one minute as throttling occurs after the previous update request.
-      setTimeout(async () => {
-        await cloudfront.send(updateDistributionCommand);
-      }, 60000);
-    }
+  for (const { distributionId, command } of updateDistributionCommands) {
+    await sendCloudFrontWithRetry(() => cloudfront.send(command));
+    await waitForDistributionDeployed(distributionId);
   }
-
   const zone = await route53.send(
     new ListHostedZonesByNameCommand({ DNSName: `${efcmsDomain}.` }),
   );

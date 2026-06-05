@@ -10,17 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * used to remove a petitioner from a case
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseCaption the updated caseCaption
- * @param {object} providers.contactId the contactId of the person to remove from the case
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the case data
- */
 export const removePetitionerAndUpdateCaption = async (
   applicationContext: ServerApplicationContext,
   {
@@ -29,7 +19,7 @@ export const removePetitionerAndUpdateCaption = async (
     docketNumber,
   }: { caseCaption: string; contactId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   const petitionerContactId = contactId;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER)) {
@@ -72,14 +62,10 @@ export const removePetitionerAndUpdateCaption = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(

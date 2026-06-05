@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -21,15 +21,7 @@ import { withTransaction } from '@web-api/persistence/postgres/utils/transaction
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
- */
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
   {
@@ -42,7 +34,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -90,6 +82,23 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
+  const isUnservable = DocketEntry.isUnservable({
+    eventCode: documentMeta.eventCode,
+  });
+
+  const isNotTaxCourtPamphlet = documentMeta.eventCode !== 'TCRP';
+
+  let multiDocketedOn: string[] = [];
+
+  if (
+    isLeadCase(subjectCaseToUpdateEntity) &&
+    isUnservable &&
+    isNotTaxCourtPamphlet &&
+    docketNumbers.length
+  ) {
+    multiDocketedOn = [subjectDocketNumber, ...docketNumbers];
+  }
+
   await withTransaction(async () => {
     await settlePromises(
       casesToUpdate.map(async caseToUpdate => {
@@ -115,6 +124,8 @@ export const fileCourtIssuedDocketEntry = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: documentMeta.judge,
+            multiDocketedOn,
+            originallyFiledDocketNumber: subjectDocketNumber,
             numberOfPages,
             scenario: documentMeta.scenario,
             serviceStamp: documentMeta.serviceStamp,
@@ -190,15 +201,6 @@ export const fileCourtIssuedDocketEntry = async (
       );
     }
   });
-
-  const rawSubjectCase = await getCaseByDocketNumber({
-    docketNumber: subjectDocketNumber,
-  });
-
-  const subjectCase = new Case(rawSubjectCase, {
-    authorizedUser,
-  }).validate();
-  return new CaseDTO(subjectCase.toRawObject());
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

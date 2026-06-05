@@ -13,35 +13,20 @@ export const deleteCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
-  store,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const caseDeadlineId = get(state.form.caseDeadlineId);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .deleteCaseDeadlineInteractor(applicationContext, {
       caseDeadlineId,
       docketNumber,
     });
 
-  setAutomaticBlockedFieldsOnState(updatedCase, store);
-
   return path.success({
     alertSuccess: {
       message: 'Deadline removed.',
     },
   });
-};
-
-export const setAutomaticBlockedFieldsOnState = (updatedCase, store) => {
-  store.set(state.caseDetail.automaticBlocked, updatedCase.automaticBlocked);
-  store.set(
-    state.caseDetail.automaticBlockedDate,
-    updatedCase.automaticBlockedDate,
-  );
-  store.set(
-    state.caseDetail.automaticBlockedReason,
-    updatedCase.automaticBlockedReason,
-  );
 };

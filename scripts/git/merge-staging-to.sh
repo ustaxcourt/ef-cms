@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 SOURCE="staging"
 [[ -n "$1" ]] && TARGET="$1" || TARGET=$(git branch --show-current)

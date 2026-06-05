@@ -18,11 +18,48 @@ export const getCaseAction = async ({
     throw new Error('Docket number is required to get case details');
   }
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .getCaseInteractor(applicationContext, {
+  const MAX_PAGE = 20;
+
+  // Fetch the case metadata and the first page of docket entries in parallel
+  const [caseDetail, firstPageResult] = await Promise.all([
+    applicationContext.getUseCases().getCaseInteractor(applicationContext, {
       docketNumber,
-    });
+    }),
+    applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor(applicationContext, {
+        docketNumber,
+        page: 0,
+      }),
+  ]);
+
+  const allDocketEntries: any[] = [...firstPageResult.docketEntries];
+
+  // If there are more pages, fetch them all in parallel
+  const totalPages = Math.ceil(
+    firstPageResult.totalCount / firstPageResult.pageSize,
+  );
+  const remainingPages = Math.min(totalPages, MAX_PAGE + 1);
+
+  if (remainingPages > 1) {
+    const pagePromises: Promise<any>[] = [];
+    for (let page = 1; page < remainingPages; page++) {
+      pagePromises.push(
+        applicationContext
+          .getUseCases()
+          .getCaseDocketEntriesInteractor(applicationContext, {
+            docketNumber,
+            page,
+          }),
+      );
+    }
+    const results = await Promise.all(pagePromises);
+    for (const result of results) {
+      allDocketEntries.push(...result.docketEntries);
+    }
+  }
+
+  caseDetail.docketEntries = allDocketEntries;
 
   return { caseDetail };
 };

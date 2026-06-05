@@ -34,4 +34,18 @@ describe('uploadDocument', () => {
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
+
+  it('should use the temp documents bucket when useTempBucket is true', async () => {
+    mockUploadDone.mockResolvedValue({ $metadata: {} });
+    applicationContext.environment.tempDocumentsBucketName = 'temp-bucket';
+
+    await uploadDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      key: 'pdf name',
+      useTempBucket: true,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
 });

@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Run this script to change an old chief judge to a judge, and promote a new judge to a chief judge
 

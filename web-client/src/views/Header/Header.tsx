@@ -37,7 +37,6 @@ const BetaBar = toggleBetaBarSequence => {
   );
 };
 
-// eslint-disable-next-line complexity
 const NavigationItems = (
   headerHelper,
   {

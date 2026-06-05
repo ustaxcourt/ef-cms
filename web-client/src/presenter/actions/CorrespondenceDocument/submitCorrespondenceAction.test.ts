@@ -9,17 +9,11 @@ describe('submitCorrespondenceAction', () => {
 
     applicationContext
       .getUseCases()
-      .fileCorrespondenceDocumentInteractor.mockResolvedValue({
-        correspondence: [],
-        docketNumber: '101-20',
-      });
+      .fileCorrespondenceDocumentInteractor.mockResolvedValue(undefined);
 
     applicationContext
       .getUseCases()
-      .updateCorrespondenceDocumentInteractor.mockResolvedValue({
-        correspondence: [],
-        docketNumber: '101-20',
-      });
+      .updateCorrespondenceDocumentInteractor.mockResolvedValue(undefined);
   });
 
   it('submits a new document for correspondence', async () => {
@@ -48,10 +42,6 @@ describe('submitCorrespondenceAction', () => {
       applicationContext.getUseCases().fileCorrespondenceDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
-      caseDetail: {
-        correspondence: [],
-        docketNumber: '101-20',
-      },
       correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
     });
@@ -83,10 +73,6 @@ describe('submitCorrespondenceAction', () => {
       applicationContext.getUseCases().updateCorrespondenceDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
-      caseDetail: {
-        correspondence: [],
-        docketNumber: '101-20',
-      },
       correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
     });

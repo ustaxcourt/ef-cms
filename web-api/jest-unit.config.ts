@@ -4,6 +4,22 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  '@puppeteer',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'p-queue',
+  'p-timeout',
+  'puppeteer',
+  'puppeteer-core',
+  'uuid',
+];
+
 const config: Config = {
   displayName: 'web-api',
   clearMocks: true,
@@ -36,6 +52,8 @@ const config: Config = {
     '!src/lambdas/websockets/websockets.ts',
     '!src/lambdas/websockets/switch-colors-cron.ts',
     '!src/lambdas/cognitoAuthorizer/worker-handler.ts',
+    '!src/lambdas/api/api.ts',
+    '!src/lambdas/api-public/api-public.ts',
     '!src/lambdas/migration/utilities/getRecordSize.ts',
     '!src/persistence/elasticsearch/searchClient/getSearchClient.ts',
     '!src/**/mocks.jest.ts',
@@ -43,8 +61,6 @@ const config: Config = {
     '!src/persistence/batch/getBatchClient.ts',
     '!src/notifications/getNotificationService.ts',
     '!src/lambdas/**/*',
-    'src/lambdas/api/api.ts',
-    'src/lambdas/api-public/api-public.ts',
     '!src/gateways/openSearch/openSearchGateway.ts',
     '!src/gateways/message/getMessagingClient.ts',
     '!src/gateways/lambda/getLambdaClient.ts',
@@ -73,7 +89,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
+  transformIgnorePatterns: [
+    `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],

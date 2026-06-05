@@ -17,7 +17,7 @@ export const associateIrsPractitionerWithCaseAction = async ({
   const serviceIndicator = get(state.modal.serviceIndicator);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .associateIrsPractitionerWithCaseInteractor(applicationContext, {
       docketNumber,
@@ -29,6 +29,5 @@ export const associateIrsPractitionerWithCaseAction = async ({
     alertSuccess: {
       message: 'Respondent counsel added to case.',
     },
-    caseDetail,
   });
 };

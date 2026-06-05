@@ -30,9 +30,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import {
-  withTransaction,
-} from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,
@@ -325,6 +323,7 @@ const serveDocketEntry = async ({
       applicationContext,
       authorizedUser,
       caseEntity: subjectCaseEntity,
+      docketNumbers: caseEntitiesToFileOn.map(e => e.docketNumber),
       docketEntry: docketEntryEntity,
       documentMetadata,
       userId: user.userId,
@@ -338,7 +337,6 @@ const serveDocketEntry = async ({
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
             authorizedUser,
           }),
-          subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
         });
       }
@@ -431,6 +429,7 @@ const updateDocketEntry = ({
   authorizedUser,
   caseEntity,
   docketEntry,
+  docketNumbers,
   documentMetadata,
   userId,
   numberOfPages,
@@ -438,6 +437,7 @@ const updateDocketEntry = ({
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
+  docketNumbers?: string[];
   documentMetadata: any;
   userId: string;
   authorizedUser: AuthUser;
@@ -474,6 +474,7 @@ const updateDocketEntry = ({
     {
       ...docketEntry,
       ...editableFields,
+      multiDocketedOn: docketNumbers ?? [],
       editState: JSON.stringify(editableFields),
       numberOfPages,
       isOnDocketRecord: true,

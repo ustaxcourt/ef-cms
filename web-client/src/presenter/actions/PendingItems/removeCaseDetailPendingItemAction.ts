@@ -3,7 +3,7 @@
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the updateCase use case
  * @param {object} providers.props the cerebral props object
- * @returns {object} the new props
+ * @returns {object} the docketEntryId
  */
 export const removeCaseDetailPendingItemAction = async ({
   applicationContext,
@@ -14,11 +14,11 @@ export const removeCaseDetailPendingItemAction = async ({
     docketEntryId,
   } = props;
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .removeCasePendingItemInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });
-  return { caseDetail, docketEntryId };
+  return { docketEntryId };
 };

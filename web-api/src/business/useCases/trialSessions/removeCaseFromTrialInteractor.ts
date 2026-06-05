@@ -16,7 +16,6 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const removeCaseFromTrial = async (
@@ -37,7 +36,7 @@ export const removeCaseFromTrial = async (
     trialSessionId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -58,7 +57,7 @@ export const removeCaseFromTrial = async (
 
   const caseEntity = new Case(myCase, { authorizedUser });
 
-  const updatedCase = await withTransaction(async () => {
+  await withTransaction(async () => {
     if (trialSessionEntity.isCalendared) {
       trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
       await removeCaseFromTrialSession({
@@ -92,17 +91,11 @@ export const removeCaseFromTrial = async (
       caseEntity.removeFromHearing(trialSessionId);
     }
 
-    const updatedCaseData = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
-    return updatedCaseData;
   });
-
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const removeCaseFromTrialInteractor = withLocking(

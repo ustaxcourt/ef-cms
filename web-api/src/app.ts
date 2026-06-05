@@ -78,6 +78,7 @@ import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDea
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
@@ -118,6 +119,11 @@ import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPract
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
+} from '@shared/utils/headers';
 import { getTrialSessionPlanningReportLambda } from '@web-api/lambdas/trialSessions/getTrialSessionPlanningReportLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
@@ -197,6 +203,7 @@ import { updateUserContactInformationLambda } from './lambdas/users/updateUserCo
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
+import { getCaseDocketEntriesLambda as v2GetCaseDocketEntriesLambda } from './lambdas/v2/getCaseDocketEntriesLambda';
 import { getCaseLambda as v2GetCaseLambda } from './lambdas/v2/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from './lambdas/v2/getDocumentDownloadUrlLambda';
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
@@ -214,7 +221,6 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
 
 export const app = express();
 
@@ -299,8 +305,14 @@ app.use((req, res, next) => {
     process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.set(X_FORCE_REFRESH, 'true');
+    res.set(
+      'Access-Control-Expose-Headers',
+      EXPOSED_RESPONSE_HEADERS.join(', '),
+    );
+    if (process.env.DEPLOYMENT_TIMESTAMP) {
+      res.set(X_DEPLOYMENT_TIMESTAMP, process.env.DEPLOYMENT_TIMESTAMP);
+    }
     res.status(500).send('this api is disabled due to a deployment');
     return;
   }
@@ -336,8 +348,14 @@ app.use(expressLogger);
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
   app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
+    '/async/docket-record-pdf',
+    lambdaWrapper(
+      generateDocketRecordPdfLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
 }
 
@@ -704,6 +722,10 @@ app.use(expressLogger);
     lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
+  );
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',
@@ -1094,7 +1116,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
@@ -1127,6 +1148,10 @@ app.delete(
  */
 {
   app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+  app.get(
+    '/v2/cases/:docketNumber/docket-entries',
+    lambdaWrapper(v2GetCaseDocketEntriesLambda),
+  );
   app.get(
     '/v2/cases/:docketNumber/entries/:key/document-download-url',
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),
@@ -1185,7 +1210,6 @@ app.post(
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
-  app.put('/auth/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the

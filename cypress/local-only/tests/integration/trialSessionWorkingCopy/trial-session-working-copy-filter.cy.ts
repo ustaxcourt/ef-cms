@@ -28,8 +28,7 @@ describe('trials session working copies filtering', () => {
 
   const openSessionWorkingCopyAsJudge = (trialSessionId: string): void => {
     loginAsColvin();
-    cy.get('[data-testid="trial-session-link"]').click();
-    cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+    cy.visit(`/trial-session-working-copy/${trialSessionId}`);
   };
 
   const markCaseQcComplete = (
@@ -182,6 +181,7 @@ describe('trials session working copies filtering', () => {
       'have.text',
       'Back to Session Copy',
     );
+
     cy.get('.big-blue-header').within(() => {
       cy.get('h1').should('contain.text', 'Richmond, Virginia');
     });
@@ -190,5 +190,49 @@ describe('trials session working copies filtering', () => {
       'have.text',
       'Print Public Copy',
     );
+  });
+
+  it('should include closed dismissed cases in the working copy list', () => {
+    const closedDismissedTrialLocation = 'Birmingham, Alabama';
+    const closedDismissedStartDate = '02/04/2233';
+    const closedDismissedEndDate = '02/05/2233';
+
+    loginAsPetitionsClerk1();
+
+    createTrialSession({
+      endDate: closedDismissedEndDate,
+      judge,
+      proceedingType,
+      sessionType,
+      startDate: closedDismissedStartDate,
+      trialLocation: closedDismissedTrialLocation,
+    }).then(({ trialSessionId }) => {
+      createAndServePaperPetition({
+        includeApwDocument: false,
+        procedureType: sessionType,
+        trialLocation: closedDismissedTrialLocation,
+      }).then(({ docketNumber }) => {
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        markCaseQcComplete(docketNumber, trialSessionId);
+        scheduleCaseForTrialSession(docketNumber, trialSessionId);
+
+        loginAsDocketClerk1();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.closedDismissed);
+
+        loginAsPetitionsClerk1();
+        visitTrialSessionDetail(trialSessionId);
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+
+        openSessionWorkingCopyAsJudge(trialSessionId);
+        cy.get(
+          `[data-testid="trialSessionWorkingCopy-${docketNumber}"]`,
+        ).should('exist');
+      });
+    });
   });
 });

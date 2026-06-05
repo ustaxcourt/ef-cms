@@ -62,17 +62,25 @@ describe('updateCaseCaptionDocketRecord', () => {
   });
 
   it('should not add a notice of caption changed document when the caption is equivalent to the last updated caption', () => {
+    // Explicit createdAt + docketEntryId so the (createdAt, docketEntryId)
+    // sort in Case.ts produces a deterministic chronological order — without
+    // them, the constructor assigns "now" + a random UUID and the entries
+    // can swap, making the second amendment look earlier than the first.
     const caseToVerify = new Case(
       {
         caseCaption: 'A Very New Caption',
         docketEntries: [
           {
+            createdAt: '2020-01-01T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000001',
             documentTitle:
               "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
             index: 1,
             isOnDocketRecord: true,
           },
           {
+            createdAt: '2020-01-02T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000002',
             documentTitle:
               "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             index: 2,
@@ -96,12 +104,16 @@ describe('updateCaseCaptionDocketRecord', () => {
         caseCaption: 'A Very Berry New Caption',
         docketEntries: [
           {
+            createdAt: '2020-01-01T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000001',
             documentTitle:
               "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
             index: 1,
             isOnDocketRecord: true,
           },
           {
+            createdAt: '2020-01-02T00:00:00.000Z',
+            docketEntryId: '00000000-0000-0000-0000-000000000002',
             documentTitle:
               "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             index: 2,

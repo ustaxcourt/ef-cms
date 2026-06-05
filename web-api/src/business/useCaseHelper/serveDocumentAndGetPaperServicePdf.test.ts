@@ -12,6 +12,11 @@ import {
   inTransaction as inTransactionMock,
   onTransactionCommit as onTransactionCommitMock,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import {
+  ATP_DOCKET_ENTRY,
+  STANDING_PRETRIAL_ORDER_ENTRY,
+} from '@shared/test/mockDocketEntry';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
@@ -30,6 +35,41 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       .getDownloadPolicyUrl.mockReturnValue({ url: mockPdfUrl });
 
     inTransaction.mockReturnValue(false);
+  });
+
+  it('should use case-specific docket entries to load document', async () => {
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [],
+      docketEntryId: mockDocketEntryId,
+      caseSpecificDocketEntries: [
+        {
+          caseEntity,
+          docketEntryId: MOCK_CASE.docketEntries[1].docketEntryId,
+        },
+      ],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        key: MOCK_CASE.docketEntries[1].documentStorageId,
+      }),
+    );
   });
 
   it('should call sendServedPartiesEmails with the case entity, docket entry id, and aggregated served parties from the case', async () => {
@@ -77,18 +117,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
         },
       );
 
-    const mockDocumentStorageId = 'abc';
-
     caseEntity = new Case(
       {
         ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[0],
-            docketEntryId: mockDocketEntryId,
-            documentStorageId: mockDocumentStorageId,
-          },
-        ],
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
@@ -102,14 +133,12 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntities: [caseEntity],
-      docketEntryId: mockDocketEntryId,
+      docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({ key: mockDocumentStorageId }),
-    );
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalled();
@@ -248,7 +277,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     ).toEqual([]);
   });
 
-  it('should send service emails to onTransactionCommit if in a transaction', async () => {
+  it('should send service emails via onTransactionCommit if in a transaction', async () => {
     inTransaction.mockReturnValueOnce(true);
 
     await serveDocumentAndGetPaperServicePdf({
@@ -261,5 +290,88 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
     expect(onTransactionCommit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should use stampedPdf if cachedPdfData does not exist', async () => {
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+      stampedPdf: testPdfDoc,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should query multiple different pdf docs when documentStorageIds differ between docket entries on cases', async () => {
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const mockDifferentStorageId = 'c1017a07-c541-449f-ab24-8be052938ad7';
+    const secondCaseEntity = new Case(
+      {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: [
+          STANDING_PRETRIAL_ORDER_ENTRY,
+          {
+            ...ATP_DOCKET_ENTRY,
+            docketEntryId: caseEntity.docketEntries[1].docketEntryId,
+            documentStorageId: mockDifferentStorageId,
+          },
+        ],
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity, secondCaseEntity],
+      docketEntryId: caseEntity.docketEntries[1].docketEntryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toEqual(
+      expect.objectContaining({
+        key: caseEntity.docketEntries[1].documentStorageId,
+      }),
+    );
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0],
+    ).toEqual(
+      expect.objectContaining({
+        key: mockDifferentStorageId,
+      }),
+    );
   });
 });

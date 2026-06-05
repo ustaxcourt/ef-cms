@@ -1,7 +1,8 @@
 import * as path from 'path';
-import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
-import { promises as fs } from 'fs';
+import { Migrator } from 'kysely/migration';
+import { Kysely, sql } from 'kysely';
 import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { CjsMigrationProvider } from './CjsMigrationProvider';
 
 const deprecatedMigrationsDirectory = path.join(
   __dirname,
@@ -38,11 +39,7 @@ async function migrateToLatest() {
 
       const migrator = new Migrator({
         db: writer,
-        provider: new FileMigrationProvider({
-          fs,
-          migrationFolder: deprecatedMigrationsDirectory,
-          path,
-        }),
+        provider: new CjsMigrationProvider(deprecatedMigrationsDirectory),
         allowUnorderedMigrations: true,
         migrationTableName: 'kysely_migration_deprecated',
         migrationLockTableName: 'kysely_migration_lock_deprecated',

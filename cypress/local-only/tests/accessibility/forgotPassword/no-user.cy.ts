@@ -4,6 +4,7 @@ import {
 } from '../../../../helpers/authentication/generate-password';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 describe('Forgot Password - Accessibility', () => {
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Forgot Password - Accessibility', () => {
   });
 
   it('should be free of a11y issues when resetting password', () => {
-    const email = `example${Date.now()}@pa11y.com`;
+    const email = `example${getCurrentDateTimeInMillis()}@pa11y.com`;
     createAPetitioner({
       email,
       name: 'pa11y',

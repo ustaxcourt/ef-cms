@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # unset everything in .env
 ENV_KEYS=$(awk -F'=' '{print $1}' .env)

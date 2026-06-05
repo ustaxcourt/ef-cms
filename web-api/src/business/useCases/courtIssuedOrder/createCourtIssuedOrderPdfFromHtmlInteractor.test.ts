@@ -156,6 +156,48 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     );
   });
 
+  describe('contentHtml sanitization', () => {
+    it('strips <script> tags from contentHtml before sending to the document generator', async () => {
+      await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          addedDocketNumbers: [],
+          contentHtml:
+            '<p>Order body</p><script>fetch("https://attacker.example")</script>',
+          docketNumber: '123-45',
+          documentTitle: 'Order',
+          eventCode: 'O',
+        },
+        mockDocketClerkUser,
+      );
+
+      const orderCall =
+        applicationContext.getDocumentGenerators().order.mock.calls[0][0];
+      expect(orderCall.data.orderContent).not.toContain('script');
+      expect(orderCall.data.orderContent).not.toContain('attacker.example');
+      expect(orderCall.data.orderContent).toContain('<p>Order body</p>');
+    });
+
+    it('strips on* event handler attributes from contentHtml', async () => {
+      await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          addedDocketNumbers: [],
+          contentHtml: '<p onclick="alert(1)">Order body</p>',
+          docketNumber: '123-45',
+          documentTitle: 'Order',
+          eventCode: 'O',
+        },
+        mockDocketClerkUser,
+      );
+
+      const orderCall =
+        applicationContext.getDocumentGenerators().order.mock.calls[0][0];
+      expect(orderCall.data.orderContent).not.toContain('onclick');
+      expect(orderCall.data.orderContent).not.toContain('alert');
+    });
+  });
+
   describe('BUG: Order the Docket Numbers', () => {
     it('should order the docket numbers correctly by year and index', async () => {
       await createCourtIssuedOrderPdfFromHtmlInteractor(

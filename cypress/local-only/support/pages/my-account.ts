@@ -28,9 +28,8 @@ export const goToEditContactInformation = () => {
 };
 
 export const updateAddress1 = () => {
-  cy.get('input[id=contact\\.address1]')
-    .clear()
-    .type(faker.location.streetAddress());
+  cy.get('input[id=contact\\.address1]').clear();
+  cy.get('input[id=contact\\.address1]').type(faker.location.streetAddress());
 };
 
 export const saveContactInformation = () => {

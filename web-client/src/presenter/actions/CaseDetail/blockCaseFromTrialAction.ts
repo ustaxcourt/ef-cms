@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the alertSuccess and updated caseDetail object
+ * @returns {object} the alertSuccess
  */
 export const blockCaseFromTrialAction = async ({
   applicationContext,
@@ -14,7 +14,7 @@ export const blockCaseFromTrialAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const reason = get(state.modal.reason);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .blockCaseFromTrialInteractor(applicationContext, {
       docketNumber,
@@ -25,6 +25,5 @@ export const blockCaseFromTrialAction = async ({
     alertSuccess: {
       message: 'Case blocked from being set for trial.',
     },
-    caseDetail,
   };
 };

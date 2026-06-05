@@ -13,6 +13,8 @@ export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
     getCaseInteractor(
       {
         docketNumber: event.pathParameters.docketNumber,
+        excludeDocketEntries:
+          event.queryStringParameters?.excludeDocketEntries === 'true',
       },
       authorizedUser,
     ),

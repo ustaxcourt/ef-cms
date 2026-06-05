@@ -9,7 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * removeCasePendingItem
@@ -23,7 +22,7 @@ export const removeCasePendingItem = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -52,8 +51,6 @@ export const removeCasePendingItem = async (
     authorizedUser,
     caseToUpdate: updatedCaseEntity,
   });
-
-  return new CaseDTO(updatedCaseEntity.toRawObject());
 };
 
 export const removeCasePendingItemInteractor = withLocking(

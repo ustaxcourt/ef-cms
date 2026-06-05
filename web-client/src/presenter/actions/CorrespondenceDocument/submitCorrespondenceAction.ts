@@ -14,7 +14,6 @@ export const submitCorrespondenceAction = async ({
   get,
   props,
 }: ActionProps) => {
-  let caseDetail;
   const docketNumber = get(state.caseDetail.docketNumber);
   const { primaryDocumentFileId: correspondenceId } = props;
   const formData = get(state.form);
@@ -38,14 +37,14 @@ export const submitCorrespondenceAction = async ({
     });
 
   if (documentIdToEdit) {
-    caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateCorrespondenceDocumentInteractor(applicationContext, {
         correspondenceId: documentIdToEdit,
         documentMetadata,
       });
   } else {
-    caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata,
@@ -54,7 +53,6 @@ export const submitCorrespondenceAction = async ({
   }
 
   return {
-    caseDetail,
     correspondenceId,
     docketNumber,
   };

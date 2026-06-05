@@ -4,7 +4,6 @@ import { updateCaseCheckboxAction } from './updateCaseCheckboxAction';
 
 describe('updateCaseCheckboxAction', () => {
   it("should flip the correct case's checked state", async () => {
-    const unchangedCheckValue = true;
     const changedCheckValue = false;
     const customizedDocketNumberOne = '1337-42';
     const customizedDocketNumberTwo = '1234-42';
@@ -20,7 +19,7 @@ describe('updateCaseCheckboxAction', () => {
             consolidatedCasesToMultiDocketOn: [
               {
                 ...MOCK_CASE,
-                checked: unchangedCheckValue,
+                checked: true,
                 docketNumber: customizedDocketNumberOne,
                 leadDocketNumber: customizedDocketNumberOne,
               },
@@ -31,7 +30,7 @@ describe('updateCaseCheckboxAction', () => {
               },
               {
                 ...MOCK_CASE,
-                checked: unchangedCheckValue,
+                checked: false,
                 docketNumber: customizedDocketNumberTwo,
                 leadDocketNumber: customizedDocketNumberOne,
               },
@@ -44,7 +43,7 @@ describe('updateCaseCheckboxAction', () => {
     expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
       {
         ...MOCK_CASE,
-        checked: unchangedCheckValue,
+        checked: true,
         docketNumber: customizedDocketNumberOne,
         leadDocketNumber: customizedDocketNumberOne,
       },
@@ -55,7 +54,7 @@ describe('updateCaseCheckboxAction', () => {
       },
       {
         ...MOCK_CASE,
-        checked: unchangedCheckValue,
+        checked: false,
         docketNumber: customizedDocketNumberTwo,
         leadDocketNumber: customizedDocketNumberOne,
       },
@@ -105,5 +104,38 @@ describe('updateCaseCheckboxAction', () => {
         leadDocketNumber: customizedDocketNumberOne,
       },
     ]);
+  });
+
+  it('should set consolidatedCaseAllCheckbox to true when all cases become checked', async () => {
+    const leadDocketNumber = '102-67';
+    const docketNumberToFlip = '103-67';
+
+    const { state } = await runAction(updateCaseCheckboxAction, {
+      props: {
+        docketNumber: docketNumberToFlip,
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        modal: {
+          form: {
+            consolidatedCaseAllCheckbox: false,
+            consolidatedCasesToMultiDocketOn: [
+              {
+                checked: true,
+                docketNumber: leadDocketNumber,
+                leadDocketNumber,
+              },
+              {
+                checked: false,
+                docketNumber: docketNumberToFlip,
+                leadDocketNumber,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(state.modal.form.consolidatedCaseAllCheckbox).toEqual(true);
   });
 });

@@ -23,6 +23,7 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { omit } from 'lodash';
 import { updateDocketEntryRelatedEntryServed } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed';
 
 export const serveCourtIssuedDocument = async (
@@ -130,20 +131,28 @@ export const serveCourtIssuedDocument = async (
 
     docketEntryToServe.numberOfPages = numberOfPages;
 
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+
+    for (const caseToUpdate of casesToUpdate) {
+      caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
+    }
+
+    const multiDocketedOn: string[] =
+      docketNumbers.length > 0
+        ? [subjectCaseDocketNumber, ...docketNumbers]
+        : [];
+
     try {
-      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
-
-      for (const caseToUpdate of casesToUpdate) {
-        caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
-      }
-
       caseEntities = await settlePromises(
         caseEntities.map(caseEntity => {
           const docketEntryEntity = new DocketEntry(
             {
-              ...docketEntryToServe,
+              ...omit(docketEntryToServe, ['index']),
+              docketNumber: caseEntity.docketNumber,
               filingDate: createISODateString(),
               isOnDocketRecord: true,
+              multiDocketedOn,
+              originallyFiledDocketNumber: subjectCaseDocketNumber,
             },
             { authorizedUser },
           );
@@ -151,7 +160,6 @@ export const serveCourtIssuedDocument = async (
           return fileAndServeDocumentOnOneCase({
             caseEntity,
             docketEntryEntity,
-            subjectCaseDocketNumber,
             user,
             caseHasDeadline,
           });

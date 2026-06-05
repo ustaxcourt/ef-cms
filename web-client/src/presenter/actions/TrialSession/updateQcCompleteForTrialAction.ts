@@ -19,14 +19,14 @@ export const updateQcCompleteForTrialAction = async ({
   const trialSessionId = get(state.trialSession.trialSessionId);
 
   try {
-    const result = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateQcCompleteForTrialInteractor(applicationContext, {
         docketNumber,
         qcCompleteForTrial,
         trialSessionId,
       });
-    return path.success({ updatedCase: result });
+    return path.success({ docketNumber, qcCompleteForTrial, trialSessionId });
   } catch (err) {
     return path.error({
       alertError: {

@@ -57,4 +57,49 @@ describe('getPractitionersByName', () => {
 
     expect(lastKey).toBe('SOME_RANDOM_SORT_KEY');
   });
+
+  it('should return an empty lastKey when no results are returned', async () => {
+    (search as jest.Mock).mockImplementation(() =>
+      Promise.resolve({
+        results: [],
+        total: 0,
+      }),
+    );
+
+    const { lastKey } = await getPractitionersByName(applicationContext, {
+      name: 'some practitioner name',
+    });
+
+    expect(lastKey).toEqual([]);
+  });
+
+  it('should add filters when practitionerType, practiceType, admissionStatus, and originalBarState are provided', async () => {
+    (search as jest.Mock).mockImplementation(() =>
+      Promise.resolve({
+        results: [],
+        total: 0,
+      }),
+    );
+
+    await getPractitionersByName(applicationContext, {
+      admissionStatus: ['Active'],
+      name: 'some practitioner name',
+      originalBarState: ['NY'],
+      practiceType: ['Private'],
+      practitionerType: 'Petitioner',
+    });
+
+    const searchCalls = (search as jest.Mock).mock.calls;
+    const mustClauses =
+      searchCalls[searchCalls.length - 1][0].searchParameters.body.query.bool
+        .must;
+    expect(mustClauses).toEqual(
+      expect.arrayContaining([
+        { term: { 'practitionerType.S': 'Petitioner' } },
+        { terms: { 'practiceType.S': ['Private'] } },
+        { terms: { 'admissionsStatus.S': ['Active'] } },
+        { terms: { 'originalBarState.S': ['NY'] } },
+      ]),
+    );
+  });
 });

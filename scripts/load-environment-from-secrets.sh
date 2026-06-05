@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 # shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"
@@ -26,5 +26,6 @@ REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --region "${REGION}" --secret-id "${ENV}_deploy" --query "SecretString" --output text)
 echo "${content}" | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
 set -o allexport
+# shellcheck disable=SC1091
 source .env
 set +o allexport

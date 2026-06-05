@@ -14,7 +14,7 @@ export const updateCaseDetailsLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await updateCaseDetailsInteractor(
+    await updateCaseDetailsInteractor(
       applicationContext,
       {
         ...event.pathParameters,

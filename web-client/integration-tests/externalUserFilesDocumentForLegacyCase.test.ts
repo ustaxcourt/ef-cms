@@ -3,9 +3,10 @@ import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFil
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { userTriesToFileAnUnavailableDocumentType } from './journey/userTriesToFileAnUnavailableDocumentType';
 import { withAppContextDecorator } from '@web-client/withAppContext';
-import { confirmInitiateServiceModalHelper } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+import { confirmPaperServiceModalHelper } from '@web-client/presenter/computeds/confirmPaperServiceModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { getOtherFilers } from '@shared/business/entities/cases/Case';
+import { CONTACT_TYPE_TITLES } from '@shared/business/entities/EntityConstants';
 
 describe('an external user files a document for their legacy case', () => {
   const cerebralTest = setupTest();
@@ -46,7 +47,11 @@ describe('an external user files a document for their legacy case', () => {
 
     const otherFilers = getOtherFilers(cerebralTest.getState('caseDetail'));
 
-    const otherFilerNameAndTitle = `${otherFilers[0].name}, ${otherFilers[0].title}`;
+    const otherFiler = {
+      name: otherFilers[0].name,
+      formattedContactType: CONTACT_TYPE_TITLES[otherFilers[0].contactType],
+      docketNumber: cerebralTest.docketNumber,
+    };
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: lastServedDocument.docketEntryId,
@@ -63,13 +68,13 @@ describe('an external user files a document for their legacy case', () => {
     const showModal = cerebralTest.getState('modal.showModal');
 
     const modalHelper = runCompute(
-      withAppContextDecorator(confirmInitiateServiceModalHelper),
+      withAppContextDecorator(confirmPaperServiceModalHelper),
       {
         state: cerebralTest.getState(),
       },
     );
-    
+
     expect(showModal).toEqual('PaperServiceConfirmModal');
-    expect(modalHelper.contactsNeedingPaperService[0].name).toEqual(otherFilerNameAndTitle);
+    expect(modalHelper.contactsNeedingPaperService![0]).toEqual(otherFiler);
   });
 });

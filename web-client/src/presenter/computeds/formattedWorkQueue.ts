@@ -2,7 +2,7 @@ import {
   applicationContext,
   ClientApplicationContext,
 } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   AuthUser,
@@ -54,13 +54,93 @@ export const formattedWorkQueue = (
     );
   }
 
-  let workQueue: FormattedWorkItemWithCaseInfo[] = filterWorkItems({
+  let filtered = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
-  })
+  });
+
+  if (
+    (workQueueToDisplay.queue === 'section' ||
+      workQueueToDisplay.queue === 'my') &&
+    (workQueueToDisplay.box === 'inbox' || workQueueToDisplay.box === 'outbox')
+  ) {
+    const docketEntryIdGroups = new Map<
+      string,
+      RawWorkItemWithCaseAndDocketEntryInfo[]
+    >();
+    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+    const consolidatedGroups = new Map<
+      string,
+      RawWorkItemWithCaseAndDocketEntryInfo[]
+    >();
+
+    for (const wi of filtered) {
+      const key = wi.docketEntryId;
+      if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
+      docketEntryIdGroups.get(key)!.push(wi);
+    }
+
+    for (const group of docketEntryIdGroups.values()) {
+      if (group.length === 1) {
+        solo.push(group[0]);
+      } else {
+        group.forEach(item => {
+          // docket entries that were filed on a case that was later removed from a consolidated group
+          if (item.docketEntry.multiDocketedOn?.length < 2) {
+            solo.push(item);
+          } else if (item.leadDocketNumber) {
+            const key = item.docketEntryId;
+            if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
+            consolidatedGroups.get(key)!.push(item);
+          } else {
+            solo.push(item);
+          }
+        });
+      }
+    }
+
+    const consolidatedResult: Array<
+      RawWorkItemWithCaseAndDocketEntryInfo & {
+        groupedMemberCases?: {
+          workItemId: string;
+          docketNumber: string;
+          inLeadCase: boolean;
+        }[];
+      }
+    > = [];
+
+    for (const group of consolidatedGroups.values()) {
+      const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
+
+      const groupedMemberCases = Case.sortByDocketNumber(
+        group
+          .filter(item => item.docketNumber !== leadOrLowestNumber)
+          .map(item => {
+            return {
+              workItemId: item.workItemId,
+              docketNumber: item.docketNumber,
+              inLeadCase: isLeadCase(item),
+            };
+          }),
+      );
+
+      const leadOrLowestNumberedItem = group.find(item => {
+        return item.docketNumber === leadOrLowestNumber;
+      })!;
+
+      consolidatedResult.push({
+        ...leadOrLowestNumberedItem,
+        groupedMemberCases,
+      });
+    }
+
+    filtered = [...solo, ...consolidatedResult];
+  }
+
+  let workQueue: FormattedWorkItemWithCaseInfo[] = filtered
     .map(workItem =>
       formatWorkItem({
         isSelected: selectedWorkItemIds.includes(workItem.workItemId),
@@ -500,4 +580,9 @@ export type FormattedWorkItemWithCaseInfo =
     showUnassignedIcon: boolean;
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
+    groupedMemberCases?: {
+      docketNumber: string;
+      inLeadCase: boolean;
+      workItemId: string;
+    }[];
   };

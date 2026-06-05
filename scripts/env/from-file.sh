@@ -1,6 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
-# shellcheck disable=SC1091
 set -o allexport
+# shellcheck disable=SC1091
 source .env
 set +o allexport

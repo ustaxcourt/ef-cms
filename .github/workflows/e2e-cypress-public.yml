@@ -2,6 +2,7 @@ name: E2E Cypress Public
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -15,6 +16,7 @@ concurrency:
 
 jobs:
   e2e_cypress_public:
+    if: ${{ !github.event.pull_request.draft }}
     uses: ./.github/workflows/template_app.yml
     with:
       check_deploy_date_interval: '5000'

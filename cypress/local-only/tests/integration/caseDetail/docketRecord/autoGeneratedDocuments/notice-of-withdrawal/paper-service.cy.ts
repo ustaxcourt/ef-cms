@@ -66,7 +66,7 @@ describe('Notice of Withdrawal - Paper Service', () => {
       loginAsDocketClerk();
       goToCase(docketNumber);
       addPetitionerAsPartyToCase();
-      cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
+      cy.intercept('GET', `/cases/${docketNumber}*`).as('caseDetails');
       goToCase(docketNumber);
       cy.wait('@caseDetails').then(interception => {
         cy.wrap(
@@ -101,33 +101,30 @@ describe('Notice of Withdrawal - Paper Service', () => {
       );
       cy.get('[data-testid="edit-petitioner-button"]').last().click();
       cy.get('[data-testid="service-type-paper-label-form.contact"]').click();
-      cy.intercept('PUT', `/case-parties/${docketNumber}/petitioner-info`).as(
-        'updatePetitionerInfo',
-      );
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
-      cy.wait('@updatePetitionerInfo').then(interception => {
-        cy.wrap(interception.response?.body.paperServiceParties).as(
-          'petitionersWithPaperService',
-        );
-      });
 
+      cy.intercept('GET', `/cases/${docketNumber}*`).as(
+        'caseDetailsAfterUpdate',
+      );
       loginAsPrivatePractitioner();
       selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
 
-      cy.get<RawPetitioner[]>('@petitionersWithPaperService').then(
-        petitioners => {
-          petitioners.forEach(petitioner => {
-            cy.get(
-              `[data-testid="paper-service-acknowledgement-name-${petitioner.contactId}"]`,
-            ).contains(`${petitioner.name}`);
-            cy.get(
-              `[data-testid="paper-service-acknowledgement-address-${petitioner.contactId}"]`,
-            ).contains(petitioner.address1);
-          });
-        },
-      );
+      cy.wait('@caseDetailsAfterUpdate').then(interception => {
+        const petitioners = interception.response?.body.petitioners || [];
+        const paperServicePetitioners = petitioners.filter(
+          (p: RawPetitioner) => p.serviceIndicator === 'Paper',
+        );
+        paperServicePetitioners.forEach((petitioner: RawPetitioner) => {
+          cy.get(
+            `[data-testid="paper-service-acknowledgement-name-${petitioner.contactId}"]`,
+          ).contains(`${petitioner.name}`);
+          cy.get(
+            `[data-testid="paper-service-acknowledgement-address-${petitioner.contactId}"]`,
+          ).contains(petitioner.address1);
+        });
+      });
     });
   });
 });

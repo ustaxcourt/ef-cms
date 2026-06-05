@@ -1,5 +1,5 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { BindedSelect } from '@web-client/ustc-ui/BindedSelect/BindedSelect';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { RawUser } from '@shared/business/entities/User';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -8,12 +8,12 @@ import React from 'react';
 
 type WorkQueueAssignmentsProps = {
   users: RawUser[];
+  count: number;
 };
 
 const workQueueAssignmentsDeps = {
   assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
   clearSelectedWorkItemsSequence: sequences.clearSelectedWorkItemsSequence,
-  formattedWorkQueue: state.formattedWorkQueue,
   selectAssigneeSequence: sequences.selectAssigneeSequence,
   selectedWorkItemsLength: state.selectedWorkItems.length,
   workQueueHelper: state.workQueueHelper,
@@ -27,11 +27,11 @@ export const WorkQueueAssignments = connect<
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
     clearSelectedWorkItemsSequence,
-    formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItemsLength,
     users,
     workQueueHelper,
+    count,
   }) {
     return (
       <React.Fragment>
@@ -104,7 +104,8 @@ export const WorkQueueAssignments = connect<
               )}
             </div>
             <div className="push-right margin-top-4">
-              <b>Count:</b> {formattedWorkQueue.length}
+              <b className="text-semibold">Count:&nbsp;</b>
+              {count}
             </div>
           </>
         ) : (

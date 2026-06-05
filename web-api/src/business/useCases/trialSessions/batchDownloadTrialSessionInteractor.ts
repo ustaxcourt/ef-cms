@@ -1,4 +1,4 @@
-import { Case, isClosed } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
@@ -85,9 +85,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
   });
 
   const batchableSessionCases = allSessionCases
-    .filter(
-      caseToFilter => !isClosed(caseToFilter) && !caseToFilter.removedFromTrial,
-    )
+    .filter(caseToFilter => !caseToFilter.removedFromTrial)
     .map(caseToBatch => {
       const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
       const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;

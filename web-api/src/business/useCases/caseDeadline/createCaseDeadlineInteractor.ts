@@ -12,7 +12,6 @@ import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -24,7 +23,7 @@ export const createCaseDeadline = async (
     handlingConsolidatedCases?: boolean;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
@@ -40,7 +39,7 @@ export const createCaseDeadline = async (
     associatedJudgeId: currentCaseEntity.associatedJudgeId,
   });
 
-  const result = await withTransaction(async () => {
+  await withTransaction(async () => {
     await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
 
     const updatedCaseEntity = await applicationContext
@@ -50,7 +49,7 @@ export const createCaseDeadline = async (
         hasCaseDeadline: true,
       });
 
-    const updatedCase = await updateCaseAndAssociations({
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: updatedCaseEntity,
     });
@@ -81,13 +80,7 @@ export const createCaseDeadline = async (
 
       await Promise.all(ADD_DEADLINE_TO_CONSOLIDATED_CASES);
     }
-
-    return updatedCase;
   });
-
-  const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
-  const caseDTO = new CaseDTO(theCase);
-  return caseDTO;
 };
 
 export async function getcreateCaseDeadlineLockInfo(

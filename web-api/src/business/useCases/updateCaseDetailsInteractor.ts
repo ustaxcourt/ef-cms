@@ -14,22 +14,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * updateCaseDetails
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.caseDetails the case details to update on the case
- * @returns {object} the updated case data
- */
 export const updateCaseDetails = async (
   _applicationContext: ServerApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
@@ -58,6 +48,7 @@ export const updateCaseDetails = async (
   const oldCase = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseClone = structuredClone(oldCase) as RawCase;
 
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
@@ -121,14 +112,11 @@ export const updateCaseDetails = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: newCaseEntity,
+    oldCase: oldCaseClone,
   });
-
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
 };
 
 export const updateCaseDetailsInteractor = withLocking(

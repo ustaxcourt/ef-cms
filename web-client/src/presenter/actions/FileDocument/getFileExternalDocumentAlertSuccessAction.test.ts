@@ -95,7 +95,6 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
   });
 
   it('should return a notice saved success message when props.eventCode belongs to a notice document type', async () => {
-    const mockDocketEntryId = applicationContext.getUniqueId();
     const mockDocumentTitle = 'Notice of Test Passing';
 
     const result = await runAction(getFileExternalDocumentAlertSuccessAction, {
@@ -103,16 +102,12 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
         presenter,
       },
       props: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: mockDocketEntryId,
-              documentTitle: mockDocumentTitle,
-            },
-          ],
-        },
-        docketEntryId: mockDocketEntryId,
         eventCode: 'NOT',
+      },
+      state: {
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
       },
     });
 

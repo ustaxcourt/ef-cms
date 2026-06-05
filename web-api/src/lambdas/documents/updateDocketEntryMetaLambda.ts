@@ -7,7 +7,7 @@ export const updateDocketEntryMetaLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await updateDocketEntryMetaInteractor(
+    await updateDocketEntryMetaInteractor(
       applicationContext,
       {
         ...JSON.parse(event.body),

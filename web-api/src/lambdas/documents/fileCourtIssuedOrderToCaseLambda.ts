@@ -13,7 +13,7 @@ export const fileCourtIssuedOrderToCaseLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await fileCourtIssuedOrderInteractor(
+    await fileCourtIssuedOrderInteractor(
       applicationContext,
       JSON.parse(event.body),
       authorizedUser,

@@ -3,6 +3,7 @@ import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   MOTION_DISPOSITIONS,
   PARTIES_CODES,
@@ -437,6 +438,38 @@ describe('publicCaseDetailHelper', () => {
             caseDetail.docketEntries.length,
           );
         });
+      });
+    });
+
+    describe('hasLargeDocketEntryCount', () => {
+      it('should be true when the number of docket entries is greater than DOCKET_RECORD_PAGINATION_THRESHOLD', () => {
+        state.caseDetail.docketEntries = Array.from(
+          { length: DOCKET_RECORD_PAGINATION_THRESHOLD + 1 },
+          (_, i) => ({
+            ...baseDocketEntry,
+            docketEntryId: `docket-entry-${i}`,
+            index: i + 1,
+          }),
+        );
+
+        const result = runCompute(publicCaseDetailHelper, { state });
+
+        expect(result.hasLargeDocketEntryCount).toBe(true);
+      });
+
+      it('should be false when the number of docket entries is not greater than DOCKET_RECORD_PAGINATION_THRESHOLD', () => {
+        state.caseDetail.docketEntries = Array.from(
+          { length: DOCKET_RECORD_PAGINATION_THRESHOLD },
+          (_, i) => ({
+            ...baseDocketEntry,
+            docketEntryId: `docket-entry-${i}`,
+            index: i + 1,
+          }),
+        );
+
+        const result = runCompute(publicCaseDetailHelper, { state });
+
+        expect(result.hasLargeDocketEntryCount).toBe(false);
       });
     });
 

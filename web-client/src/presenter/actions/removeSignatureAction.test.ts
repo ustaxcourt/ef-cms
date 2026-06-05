@@ -29,7 +29,6 @@ describe('removeSignatureAction', () => {
       applicationContext.getUseCases().removeSignatureFromDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
-      caseDetail: { docketNumber: '123-19' },
       viewerDraftDocumentToDisplay: {
         docketEntryId: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
       },

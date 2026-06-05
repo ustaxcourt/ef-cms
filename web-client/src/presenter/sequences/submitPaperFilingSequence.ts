@@ -22,6 +22,7 @@ import { submitAddPaperFilingAction } from '../actions/DocketEntry/submitAddPape
 import { submitEditPaperFilingAction } from '../actions/DocketEntry/submitEditPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 
 export const submitPaperFilingSequence = [
   clearModalAction,
@@ -84,4 +85,5 @@ export const submitPaperFilingSequence = [
       },
     ],
   },
+  clearModalStateAction,
 ];

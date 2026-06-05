@@ -21,7 +21,7 @@ export const removePetitionerAndUpdateCaptionAction = async ({
     petitioners.find(p => p.contactId === contactId)!;
   const { contactType } = foundPetitioner;
 
-  const updatedCaseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .removePetitionerAndUpdateCaptionInteractor(applicationContext, {
       caseCaption,
@@ -35,7 +35,6 @@ export const removePetitionerAndUpdateCaptionAction = async ({
     alertSuccess: {
       message: `${title} successfully removed.`,
     },
-    caseDetail: updatedCaseDetail,
     contactType,
     docketNumber,
     tab: 'caseInfo',

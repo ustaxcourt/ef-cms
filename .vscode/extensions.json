@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "hashicorp.terraform",
+    "heaths.vscode-guid",
+    "orta.vscode-jest",
+    "streetsidesoftware.code-spell-checker",
+    "tomoki1207.pdf"
+  ]
+}

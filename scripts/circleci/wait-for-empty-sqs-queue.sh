@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # This script can be used in CircleCI to wait for an SQS queue to clear before proceeding. For example,
 # insert the following immediately before the call to `npm run switch-colors` in the 'switch-colors' job:

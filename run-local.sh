@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Used for running the API and necessary services (s3, opensearch) locally
 
 # shellcheck disable=SC1091

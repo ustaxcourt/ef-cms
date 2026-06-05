@@ -293,7 +293,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should filter closed cases from batch', async () => {
+  it('should include closed cases in batch', async () => {
     getCalendaredCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -319,7 +319,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
-      documents: [],
+      documents: expect.arrayContaining([expect.anything()]),
       onProgress: expect.anything(),
       outputZipName: 'September_26_2019-Birmingham.zip',
     });

@@ -154,76 +154,81 @@ export const DocketRecord = ({
   caseDetail,
   countryTypes,
   entries,
+  includePartyInfo = true,
   options,
 }): React.JSX.Element => {
   return (
     <div id="document-docket-record">
-      <PrimaryHeader />
-      <CompressedDocketHeader
-        caseCaptionExtension={options.caseCaptionExtension}
-        caseTitle={options.caseTitle}
-        docketNumberWithSuffix={options.docketNumberWithSuffix}
-        documentTitle="Printable Docket Record"
-      />
+      {includePartyInfo && (
+        <>
+          <PrimaryHeader />
+          <CompressedDocketHeader
+            caseCaptionExtension={options.caseCaptionExtension}
+            caseTitle={options.caseTitle}
+            docketNumberWithSuffix={options.docketNumberWithSuffix}
+            documentTitle="Printable Docket Record"
+          />
 
-      <div className="party-info" id="petitioner-contacts">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              {options.includePartyDetail && <th>Contact</th>}
-              <th>Counsel</th>
-            </tr>
-          </thead>
-          {caseDetail.petitioners.map(p => {
-            return (
-              <RenderContact
-                caseTitle={options.caseTitle}
-                contact={p}
-                countryTypes={countryTypes}
-                key={p.contactId}
-                showContactDetails={options.includePartyDetail}
-              />
-            );
-          })}
-        </table>
-      </div>
-
-      <div className="party-info" id="irs-practitioner-contacts">
-        <table>
-          <thead>
-            <tr>
-              <th>Respondent Counsel</th>
-              <th>Respondent Counsel Contact</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {caseDetail.irsPractitioners.length > 0 ? (
-              caseDetail.irsPractitioners.map(irsPractitioner => {
+          <div className="party-info" id="petitioner-contacts">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  {options.includePartyDetail && <th>Contact</th>}
+                  <th>Counsel</th>
+                </tr>
+              </thead>
+              {caseDetail.petitioners.map(p => {
                 return (
-                  <tr key={irsPractitioner.userId}>
-                    <td>{irsPractitioner.name}</td>
-                    <td>
-                      <div>
-                        {irsPractitioner.email && irsPractitioner.email}
-                      </div>
-                      <div>
-                        {irsPractitioner.contact?.phone &&
-                          irsPractitioner.contact.phone}
-                      </div>
-                    </td>
-                  </tr>
+                  <RenderContact
+                    caseTitle={options.caseTitle}
+                    contact={p}
+                    countryTypes={countryTypes}
+                    key={p.contactId}
+                    showContactDetails={options.includePartyDetail}
+                  />
                 );
-              })
-            ) : (
-              <tr>
-                <td>None</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              })}
+            </table>
+          </div>
+
+          <div className="party-info" id="irs-practitioner-contacts">
+            <table>
+              <thead>
+                <tr>
+                  <th>Respondent Counsel</th>
+                  <th>Respondent Counsel Contact</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {caseDetail.irsPractitioners.length > 0 ? (
+                  caseDetail.irsPractitioners.map(irsPractitioner => {
+                    return (
+                      <tr key={irsPractitioner.userId}>
+                        <td>{irsPractitioner.name}</td>
+                        <td>
+                          <div>
+                            {irsPractitioner.email && irsPractitioner.email}
+                          </div>
+                          <div>
+                            {irsPractitioner.contact?.phone &&
+                              irsPractitioner.contact.phone}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td>None</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
       <table id="documents">
         <thead>
           <tr>

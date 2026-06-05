@@ -3,9 +3,9 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getTrialSessionsOnCaseAction } from '../actions/TrialSession/getTrialSessionsOnCaseAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -14,7 +14,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
 const successPath = [
-  setCaseAction,
+  refreshCaseMetadataAction,
   getTrialSessionsOnCaseAction,
   setTrialSessionsAction,
   clearModalStateAction,

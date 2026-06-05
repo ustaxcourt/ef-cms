@@ -5,6 +5,13 @@ import path from 'node:path';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
+const transformIgnoreModules = [
+  'aws-sdk-client-mock',
+  'kysely',
+  'sinon',
+  'uuid',
+];
+
 const config: Config = {
   projects: [
     '<rootDir>/aws/jest-infrastructure.config.ts',
@@ -33,7 +40,7 @@ const config: Config = {
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'),
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(uuid|sinon|aws-sdk-client-mock)/)',
+    `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
   ],
   setupFilesAfterEnv: [
     '<rootDir>/web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

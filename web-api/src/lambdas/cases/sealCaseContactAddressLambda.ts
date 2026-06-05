@@ -13,7 +13,7 @@ export const sealCaseContactAddressLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await sealCaseContactAddressInteractor(
+    await sealCaseContactAddressInteractor(
       applicationContext,
       {
         ...event.pathParameters,

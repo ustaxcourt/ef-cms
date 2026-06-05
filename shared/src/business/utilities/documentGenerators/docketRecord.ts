@@ -10,9 +10,11 @@ export const docketRecord = async ({ applicationContext, data }) => {
     caseCaptionExtension,
     caseDetail,
     caseTitle,
+    displayHeaderFooter = true,
     docketNumberWithSuffix,
     entries,
     includePartyDetail,
+    includePartyInfo = true,
   } = data;
 
   const docketRecordTemplate = ReactDOM.renderToString(
@@ -20,6 +22,7 @@ export const docketRecord = async ({ applicationContext, data }) => {
       caseDetail,
       countryTypes: COUNTRY_TYPES,
       entries,
+      includePartyInfo,
       options: {
         caseCaptionExtension,
         caseTitle,
@@ -34,11 +37,15 @@ export const docketRecord = async ({ applicationContext, data }) => {
     content: docketRecordTemplate,
   });
 
-  const footerHtml = ReactDOM.renderToString(
-    React.createElement(DatePrintedFooter, {
-      datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    }),
-  );
+  // When displayHeaderFooter is false (chunked mode), suppress the Puppeteer
+  // footer — addPageNumbersToPdf will overlay accurate footers after merging.
+  const footerHtml = displayHeaderFooter
+    ? ReactDOM.renderToString(
+        React.createElement(DatePrintedFooter, {
+          datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
+        }),
+      )
+    : '';
 
   const docketNumber = data.caseDetail.docketNumberWithSuffix;
 
@@ -46,7 +53,7 @@ export const docketRecord = async ({ applicationContext, data }) => {
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: true,
+      displayHeaderFooter,
       docketNumber,
       footerHtml,
     });

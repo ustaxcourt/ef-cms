@@ -8,8 +8,9 @@ describe('gotoReviewSavedPetitionSequence', () => {
 
   const { PARTY_TYPES } = applicationContext.getConstants();
 
+  const mockDocketEntry = { docketEntryId: '123', documentType: 'Petition' };
   const mockCase = {
-    docketEntries: [{ docketEntryId: '123', documentType: 'Petition' }],
+    docketEntries: [],
     docketNumber: '105-15',
     partyType: PARTY_TYPES.petitioner,
   };
@@ -17,6 +18,14 @@ describe('gotoReviewSavedPetitionSequence', () => {
     applicationContext
       .getUseCases()
       .getCaseInteractor.mockReturnValue(mockCase);
+    applicationContext
+      .getUseCases()
+      .getCaseDocketEntriesInteractor.mockReturnValue({
+        docketEntries: [mockDocketEntry],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      });
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoReviewSavedPetitionSequence,
@@ -40,7 +49,13 @@ describe('gotoReviewSavedPetitionSequence', () => {
       applicationContext.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
-    expect(cerebralTest.getState('caseDetail')).toMatchObject(mockCase);
-    expect(cerebralTest.getState('form')).toMatchObject(mockCase);
+    expect(cerebralTest.getState('caseDetail')).toMatchObject({
+      ...mockCase,
+      docketEntries: [mockDocketEntry],
+    });
+    expect(cerebralTest.getState('form')).toMatchObject({
+      ...mockCase,
+      docketEntries: [mockDocketEntry],
+    });
   });
 });

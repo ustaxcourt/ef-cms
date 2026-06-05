@@ -20,16 +20,14 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
+import { CopyObjectCommand } from '@aws-sdk/client-s3';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+import { environment } from '@web-api/environment';
+import { getUniqueId } from '@shared/sharedAppContext';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
   {
@@ -49,6 +47,8 @@ const removeConsolidatedCases = async (
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+
+  const storageClient = getStorageClient();
 
   const { leadDocketNumber } = caseToUpdate;
 
@@ -128,6 +128,65 @@ const removeConsolidatedCases = async (
       );
     }
 
+    const docketEnIdsToUpdate: Set<string> = new Set();
+    const docketEntriesToUpdate: any[] = [];
+
+    for (const caseToRemove of casesToRemove) {
+      caseToRemove.docketEntries.forEach(docketEntry => {
+        if (DocketEntry.isMultiDocketed(docketEntry))
+          docketEnIdsToUpdate.add(docketEntry.docketEntryId);
+      });
+    }
+
+    for (const id of docketEnIdsToUpdate) {
+      const entries = await getDocketEntriesById({ docketEntryId: id });
+      entries.forEach(entry => {
+        docketEntriesToUpdate.push(entry);
+      });
+    }
+
+    const UPDATED_CASE_DOCKET_ENTRIES: any[] = [];
+    const s3CopyPromises: Promise<any>[] = [];
+
+    docketEntriesToUpdate.forEach(docketEntry => {
+      if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+        const filtered = (docketEntry.multiDocketedOn || []).filter(
+          dn => !docketNumbersToRemove.includes(dn),
+        );
+        docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
+      } else {
+        docketEntry.multiDocketedOn = [];
+        const newStorageId = getUniqueId();
+        const oldStorageId = docketEntry.documentStorageId;
+        const storageCommand = new CopyObjectCommand({
+          Bucket: environment.documentsBucketName,
+          CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
+          Key: newStorageId,
+        });
+        s3CopyPromises.push(storageClient.send(storageCommand));
+        docketEntry.documentStorageId = newStorageId;
+
+        if (docketEntry.documentContentsId) {
+          const newContentsId = getUniqueId();
+          const oldContentsId = docketEntry.documentContentsId;
+          const contentsCommand = new CopyObjectCommand({
+            Bucket: environment.documentsBucketName,
+            CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
+            Key: newContentsId,
+          });
+          s3CopyPromises.push(storageClient.send(contentsCommand));
+          docketEntry.documentContentsId = newContentsId;
+        }
+      }
+      const validatedDocketEntry = new DocketEntry(docketEntry, {
+        authorizedUser,
+      }).validate();
+
+      UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
+    });
+
+    await settlePromises(s3CopyPromises);
+    await upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES);
     await settlePromises(updateCasePromises);
   });
 };

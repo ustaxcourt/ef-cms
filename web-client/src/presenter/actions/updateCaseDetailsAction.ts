@@ -7,7 +7,7 @@ export const updateCaseDetailsAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
@@ -23,7 +23,6 @@ export const updateCaseDetailsAction = async ({
     alertSuccess: {
       message: 'Changes saved.',
     },
-    caseDetail: updatedCase,
     docketNumber,
     tab: 'caseInfo',
   };

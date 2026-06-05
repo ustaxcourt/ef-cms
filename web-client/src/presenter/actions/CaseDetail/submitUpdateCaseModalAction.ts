@@ -5,7 +5,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the get function
- * @returns {object} the updated case as caseDetail
  */
 export const submitUpdateCaseModalAction = async ({
   applicationContext,
@@ -25,8 +24,6 @@ export const submitUpdateCaseModalAction = async ({
     selectedAssociatedJudgeId = undefined;
   }
 
-  let updatedCase = caseToUpdate;
-
   if (
     (caseStatus && caseToUpdate.status !== caseStatus) ||
     (selectedAssociatedJudge &&
@@ -42,7 +39,7 @@ export const submitUpdateCaseModalAction = async ({
       associatedJudge: selectedAssociatedJudge,
       associatedJudgeId: selectedAssociatedJudgeId,
     };
-    updatedCase = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateCaseContextInteractor(applicationContext, {
         caseCaption,
@@ -56,6 +53,5 @@ export const submitUpdateCaseModalAction = async ({
     alertSuccess: {
       message: 'Changes saved.',
     },
-    caseDetail: updatedCase,
   };
 };

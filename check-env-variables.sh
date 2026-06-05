@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 # shellcheck disable=SC1091
 source "./scripts/helpers/suppress-output.sh"

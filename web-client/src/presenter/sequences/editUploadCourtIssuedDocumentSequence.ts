@@ -7,7 +7,6 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
@@ -32,7 +31,6 @@ const onSuccess = [
   setupUploadMetadataAction,
   submitCourtIssuedOrderAction,
   setDefaultDraftDocumentIdAction,
-  setCaseAction,
   getUploadCourtIssuedDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,

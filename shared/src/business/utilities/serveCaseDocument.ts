@@ -56,6 +56,7 @@ async function serveDocument({
     !DocketEntry.isUnservable(docketEntry) &&
     docketEntry.isFileAttached
   ) {
+    docketEntry.setOriginallyFiledDocketNumber(caseEntity.docketNumber);
     docketEntry.setAsServed([
       {
         name: 'IRS',

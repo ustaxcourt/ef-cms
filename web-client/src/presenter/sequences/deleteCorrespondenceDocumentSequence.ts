@@ -6,8 +6,8 @@ import { getDeleteCorrespondenceDocumentAlertSuccessAction } from '../actions/Co
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { loadDefaultViewerCorrespondenceSequence } from './loadDefaultViewerCorrespondenceSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const deleteCorrespondenceDocumentSequence =
@@ -21,7 +21,7 @@ export const deleteCorrespondenceDocumentSequence =
       success: [
         getDeleteCorrespondenceDocumentAlertSuccessAction,
         setAlertSuccessAction,
-        setCaseAction,
+        refreshCaseMetadataAction,
         getMessagesForCaseAction,
         ...loadDefaultViewerCorrespondenceSequence,
       ],

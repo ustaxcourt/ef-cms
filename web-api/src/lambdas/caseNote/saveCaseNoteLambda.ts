@@ -15,7 +15,7 @@ export const saveCaseNoteLambda = (event, authorizedUser: UnknownAuthUser) =>
       ...JSON.parse(event.body),
     };
 
-    return await saveCaseNoteInteractor(
+    await saveCaseNoteInteractor(
       applicationContext,
       {
         ...lambdaArguments,

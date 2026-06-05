@@ -1,9 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { saveCaseNoteAction } from '../actions/CaseNotes/saveCaseNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseNoteOnCaseDetailAction } from '../actions/CaseNotes/setCaseNoteOnCaseDetailAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -24,7 +24,7 @@ export const updateCaseNoteSequence = [
           stopShowValidationAction,
           clearAlertsAction,
           saveCaseNoteAction,
-          setCaseNoteOnCaseDetailAction,
+          refreshCaseMetadataAction,
           setAlertSuccessAction,
           clearModalAction,
           clearModalStateAction,

@@ -7,10 +7,12 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDeficiencyStatisticInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const mockStatistic = {
@@ -90,8 +92,8 @@ describe('addDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await addDeficiencyStatisticInteractor(
+  it('should call updateCase with the updated case statistics', async () => {
+    await addDeficiencyStatisticInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -100,8 +102,10 @@ describe('addDeficiencyStatisticInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result).toMatchObject({
-      statistics: [mockStatistic],
-    });
+    expect(upsertCases).toHaveBeenCalled();
+    const callArg = upsertCases.mock.calls[0][0][0];
+    expect(callArg.statistics).toBeDefined();
+    expect(callArg.statistics).toHaveLength(1);
+    expect(callArg.statistics![0]).toMatchObject(mockStatistic);
   });
 });

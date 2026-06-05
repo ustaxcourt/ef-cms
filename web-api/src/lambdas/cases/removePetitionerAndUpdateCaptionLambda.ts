@@ -13,7 +13,7 @@ export const removePetitionerAndUpdateCaptionLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await removePetitionerAndUpdateCaptionInteractor(
+    await removePetitionerAndUpdateCaptionInteractor(
       applicationContext,
       {
         ...event.pathParameters,

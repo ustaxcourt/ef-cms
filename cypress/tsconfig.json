@@ -4,21 +4,15 @@
     "esModuleInterop": true,
     "strict": true,
     "noEmit": true,
-    "target": "es5",
+    "target": "ES2022",
     "lib": ["es5", "dom"],
     "types": ["cypress", "node"],
-    "baseUrl": "../",
-    "ignoreDeprecations": "6.0",
+    "rootDir": "../",
     "paths": {
-      "@web-client/*": [
-        "web-client/src/*"
-      ],
-      "@web-api/*": [
-        "web-api/src/*"
-      ],
-      "@shared/*": [
-        "shared/src/*"
-      ]
+      "@web-client/*": ["../web-client/src/*"],
+      "@web-api/*": ["../web-api/src/*"],
+      "@shared/*": ["../shared/src/*"],
+      "*": ["../*"]
     }
   },
   "include": ["**/*.ts"]

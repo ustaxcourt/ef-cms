@@ -1,5 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
   MOTION_DISPOSITION_VERBIAGE,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -273,6 +274,7 @@ export type PublicFormattedDocketEntryInfo = {
 
 export type PublicCaseDetailHelperResults = {
   formattedDocketEntriesOnDocketRecord: PublicFormattedDocketEntryInfo[];
+  hasLargeDocketEntryCount: boolean;
   isCaseSealed: boolean;
   showPrintableDocketRecord: string | undefined;
 };
@@ -319,9 +321,14 @@ export const publicCaseDetailHelper = (
       sortOrder,
     );
 
+  const hasLargeDocketEntryCount =
+    sortedAndFilteredFormattedDocketEntriesOnDocketRecord.length >
+    DOCKET_RECORD_PAGINATION_THRESHOLD;
+
   return {
     formattedDocketEntriesOnDocketRecord:
       sortedAndFilteredFormattedDocketEntriesOnDocketRecord,
+    hasLargeDocketEntryCount,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
   };
