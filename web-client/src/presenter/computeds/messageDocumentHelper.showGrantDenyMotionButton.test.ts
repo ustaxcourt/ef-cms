@@ -1,11 +1,11 @@
-import { STAMPED_DOCUMENTS_ALLOWLIST } from '../../../../shared/src/business/entities/EntityConstants';
+import { STAMPED_DOCUMENTS_ALLOWLIST } from '@shared/business/entities/EntityConstants';
 import {
   adcUser,
   clerkOfCourtUser,
   colvinsChambersUser,
   docketClerkUser,
   judgeUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHelperComputed } from './messageDocumentHelper';
