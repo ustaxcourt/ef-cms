@@ -6,7 +6,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -71,6 +71,15 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
+  if (
+    DocketEntry.isMultiDocketed(originalSubjectDocketEntry) &&
+    !isLeadCase(subjectCaseEntity)
+  ) {
+    throw new Error(
+      'Multidocketed documents may only be served from the lead case',
+    );
+  }
+
   const numberOfPages = await countPagesInDocument({
     applicationContext,
     documentStorageId: originalSubjectDocketEntry.documentStorageId,
@@ -99,11 +108,7 @@ export const serveExternallyFiledDocument = async (
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (subjectCaseIsSimultaneousDocType) {
-    docketNumbers = [subjectCaseDocketNumber];
-  } else {
-    docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
-  }
+  docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
 
   try {
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
@@ -111,12 +116,17 @@ export const serveExternallyFiledDocument = async (
       casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
+        const docketEntry = caseEntity.docketEntries.find(
+          e => e.docketEntryId === docketEntryId,
+        );
+
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
 
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
+            index: docketEntry ? docketEntry.index : undefined,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
             ...(!subjectCaseIsSimultaneousDocType && {
@@ -128,6 +138,8 @@ export const serveExternallyFiledDocument = async (
             isFileAttached: true,
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
+            multiDocketedOn: docketNumbers,
+            originallyFiledDocketNumber: subjectCaseDocketNumber,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
@@ -137,7 +149,6 @@ export const serveExternallyFiledDocument = async (
         return fileAndServeDocumentOnOneCase({
           caseEntity,
           docketEntryEntity,
-          subjectCaseDocketNumber,
           user,
         });
       }),

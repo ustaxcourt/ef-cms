@@ -796,12 +796,11 @@ export const waitForLoadingComponentToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForModalsToHide = async ({
@@ -810,12 +809,11 @@ export const waitForModalsToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForPage = async ({

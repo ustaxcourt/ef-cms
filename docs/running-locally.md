@@ -75,9 +75,13 @@ We will also need to install the following GUI tools:
 - [Visual Studio Code](https://code.visualstudio.com/) - integrated development environment (IDE)
 - [Table Plus](https://tableplus.com/) - database management GUI tool
 - [Gather](https://gather.town) - virtual office space
+- [Teams](https://teams.live.com/) - team communication tool
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - containerization software
 - [Pop](https://pop.com/) - pair programming tool
-- [Slack](https://slack.com/) - team communication tool
+
+### Configure Visual Studio Code
+
+If you use VS Code, complete the repository workspace setup in [VS Code Repository Setup](./vscode-setup.md) before editing code. The checked-in workspace settings configure the expected formatter, two-space indentation, format-on-save behavior, and ESLint fixes. Ensure all recommended workspace extensions are installed.
 
 ## Getting Running
 
@@ -168,7 +172,7 @@ When you are ready to set breakpoints and debug the application, see [Debugging 
 
 ## Running the USTC pay.gov test server
 
-When testing interactions with pay.gov locally or in a pipeline, the USTC pay.gov test server needs to be started. The test server has been installed as a dev dependency. To run it, use the following command: 
+When testing interactions with pay.gov locally or in a pipeline, the USTC pay.gov test server needs to be started. The test server has been installed as a dev dependency. To run it, use the following command:
 
 ```
 npm run start:pay-gov-test-server
@@ -180,4 +184,4 @@ When initially running the server with this command, you will be prompted to ent
 npm run start:pay-gov-test-server:update-env
 ```
 
-For further information, please see the [readme](https://www.npmjs.com/package/@ustaxcourt/ustc-pay-gov-test-server) for this repo. 
+For further information, please see the [readme](https://www.npmjs.com/package/@ustaxcourt/ustc-pay-gov-test-server) for this repo.

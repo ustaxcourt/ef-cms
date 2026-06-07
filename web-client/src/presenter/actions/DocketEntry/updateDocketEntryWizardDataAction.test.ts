@@ -5,6 +5,7 @@ import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardData
 
 describe('updateDocketEntryWizardDataAction', () => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
+  const mockDocketEntryId = '102-67';
 
   const caseDetail = {
     docketEntries: [
@@ -51,7 +52,7 @@ describe('updateDocketEntryWizardDataAction', () => {
   });
 
   describe('certificateOfService', () => {
-    it('clear Certificate Of Service date items when certificateOfService is updated', async () => {
+    it('should clear Certificate Of Service date items when certificateOfService is updated', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -69,7 +70,7 @@ describe('updateDocketEntryWizardDataAction', () => {
   });
 
   describe('eventCode', () => {
-    it('unsets form state values when props.key=eventCode', async () => {
+    it('should unset form state values when props.key=eventCode', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -94,7 +95,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form).toEqual({});
     });
 
-    it('sets default previousDocument and metadata when props.key=eventCode, state.screenMetadata.supporting is true, and there is only one previous document', async () => {
+    it('should set default previousDocument and metadata when props.key=eventCode, state.screenMetadata.supporting is true, and there is only one previous document', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -140,7 +141,44 @@ describe('updateDocketEntryWizardDataAction', () => {
       });
     });
 
-    it('does not set default previousDocument and metadata when props.key=eventCode, state.screenMetadata.supporting is true, but there is more than one previous document', async () => {
+    it('should use multiDocketedOriginalCaseDetail to find docketEntry when it exists for an eventCode that has supporting document and there is only one previous document', async () => {
+      const multiDocketedOriginalCaseDetail = {
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'Multi Docketed Document',
+            documentType: 'Multi Docketed Document',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+          },
+        ],
+      };
+
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'eventCode',
+        },
+        state: {
+          caseDetail,
+          multiDocketedOriginalCaseDetail,
+          form: {},
+          screenMetadata: {
+            filedDocketEntryIds: [mockDocketEntryId],
+            primary: { something: true },
+            supporting: true,
+          },
+        },
+      });
+
+      expect(result.state.form.previousDocument).toEqual({
+        docketEntryId: mockDocketEntryId,
+        documentTitle: 'Multi Docketed Document',
+        documentType: 'Multi Docketed Document',
+        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+      });
+    });
+
+    it('should not set default previousDocument and metadata when props.key=eventCode, state.screenMetadata.supporting is true, but there is more than one previous document', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -172,10 +210,33 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.previousDocument).toEqual(undefined);
       expect(result.state.form).toEqual({});
     });
+
+    it('should not set default previousDocument when the document is not found in docketEntries', async () => {
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'eventCode',
+        },
+        state: {
+          caseDetail,
+          form: {
+            documentTitle: 'document title',
+          },
+          screenMetadata: {
+            filedDocketEntryIds: ['not-to-be-found-entry-id'],
+            primary: { something: true },
+            supporting: true,
+          },
+        },
+      });
+
+      expect(result.state.form.previousDocument).toEqual(undefined);
+      expect(result.state.form).toEqual({});
+    });
   });
 
   describe('secondaryDocument.eventCode', () => {
-    it('unsets secondaryDocument form state values', async () => {
+    it('should unset secondaryDocument form state values', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -201,10 +262,55 @@ describe('updateDocketEntryWizardDataAction', () => {
         documentTitle: 'document title',
       });
     });
+
+    it('should unset secondaryDocument when props.value is falsy', async () => {
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'secondaryDocument.eventCode',
+          value: '',
+        },
+        state: {
+          form: {
+            documentTitle: 'document title',
+            secondaryDocument: {
+              freeText: 'Some text',
+              ordinalValue: 'asdf',
+            },
+          },
+        },
+      });
+
+      expect(result.state.form.secondaryDocument).toEqual(undefined);
+    });
+
+    it('should keep secondaryDocument when props.value is truthy', async () => {
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'secondaryDocument.eventCode',
+          value: 'A',
+        },
+        state: {
+          form: {
+            documentTitle: 'document title',
+            secondaryDocument: {
+              freeText: 'Some text',
+            },
+          },
+        },
+      });
+
+      expect(result.state.form.secondaryDocument).toEqual(
+        expect.objectContaining({
+          documentType: 'Answer',
+        }),
+      );
+    });
   });
 
   describe('previousDocument', () => {
-    it('does nothing if props.key is previousDocument and screenMetadata.supporting is false', async () => {
+    it('should do nothing if props.key is previousDocument and screenMetadata.supporting is false', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -228,7 +334,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.primarySomething).toBeUndefined();
     });
 
-    it('unsets previous document form fields if screenMetadata.supporting is true and does not set doc information if previous document has no relationship', async () => {
+    it('should unset previous document form fields if screenMetadata.supporting is true and does not set doc information if previous document has no relationship', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -251,7 +357,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form).toEqual({});
     });
 
-    it('unsets previous document form fields if screenMetadata.supporting is true and sets secondary doc information if relationship if secondary', async () => {
+    it('should unset previous document form fields if screenMetadata.supporting is true and sets secondary doc information if relationship if secondary', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -275,7 +381,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.secondarySomething).toEqual('abc');
     });
 
-    it('unsets previous document form fields if screenMetadata.supporting is true and sets primary doc information if relationship if primary', async () => {
+    it('should unset previous document form fields if screenMetadata.supporting is true and sets primary doc information if relationship if primary', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -298,10 +404,82 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.attachments).toEqual(undefined);
       expect(result.state.form.primarySomething).toEqual(true);
     });
+
+    it('should use multiDocketedOriginalCaseDetail to set form when key is previousDocument and screenMetadata.supporting is true', async () => {
+      const secondaryMetadata = 'abc';
+      const multiDocketedCaseDetail = {
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'Multi Docketed Document',
+            documentType: 'Multi Docketed Document',
+            relationship: DOCUMENT_RELATIONSHIPS.SECONDARY,
+          },
+        ],
+      };
+
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'previousDocument',
+          value: 'Multi Docketed Document',
+        },
+        state: {
+          caseDetail,
+          multiDocketedOriginalCaseDetail: multiDocketedCaseDetail,
+          form: {
+            attachments: 'something',
+          },
+          screenMetadata: {
+            filedDocketEntryIds: [mockDocketEntryId],
+            secondary: { something: secondaryMetadata },
+            supporting: true,
+          },
+        },
+      });
+
+      expect(result.state.form.attachments).toEqual(undefined);
+      expect(result.state.form.something).toEqual(secondaryMetadata);
+    });
+
+    it('should find previous document using docketEntry documentType when documentTitle is does not exist', async () => {
+      const primaryMetadata = 'abc';
+      const caseDetailWithNoTitle = {
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentType: 'Document Without Title',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+          },
+        ],
+      };
+
+      const result = await runAction(updateDocketEntryWizardDataAction, {
+        modules: { presenter },
+        props: {
+          key: 'previousDocument',
+          value: 'Document Without Title',
+        },
+        state: {
+          caseDetail: caseDetailWithNoTitle,
+          form: {
+            attachments: 'something',
+          },
+          screenMetadata: {
+            filedDocketEntryIds: [mockDocketEntryId],
+            primary: { something: primaryMetadata },
+            supporting: true,
+          },
+        },
+      });
+
+      expect(result.state.form.attachments).toEqual(undefined);
+      expect(result.state.form.something).toEqual(primaryMetadata);
+    });
   });
 
   describe('additionalInfo', () => {
-    it('unsets additionalInfo if empty', async () => {
+    it('should unset additionalInfo if empty', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -318,7 +496,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.additionalInfo).toEqual(undefined);
     });
 
-    it('does not unset additionalInfo if not empty', async () => {
+    it('should not not unset additionalInfo if not empty', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
         props: {
@@ -338,7 +516,7 @@ describe('updateDocketEntryWizardDataAction', () => {
   });
 
   describe('additionalInfo2', () => {
-    it('does not unset additionalInfo2 if not empty', async () => {
+    it('should not unset additionalInfo2 if not empty', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
 
@@ -357,7 +535,7 @@ describe('updateDocketEntryWizardDataAction', () => {
       expect(result.state.form.additionalInfo2).toEqual('abc');
     });
 
-    it('unsets additionalInfo2 if empty', async () => {
+    it('should additionalInfo2 if empty', async () => {
       const result = await runAction(updateDocketEntryWizardDataAction, {
         modules: { presenter },
 

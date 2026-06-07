@@ -12,6 +12,10 @@ export const caseExistsAction = async ({
   props,
 }: ActionProps) => {
   try {
+    if (!props.docketNumber) {
+      throw new Error('A docket number is required.');
+    }
+
     await applicationContext
       .getUseCases()
       .getCaseExistsInteractor(applicationContext, {

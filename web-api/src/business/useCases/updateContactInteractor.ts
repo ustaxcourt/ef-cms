@@ -171,6 +171,10 @@ export const updateContact = async (
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
+    changeOfAddressDocketEntry.setOriginallyFiledDocketNumber(
+      caseEntity.docketNumber,
+    );
+
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
     const isContactRepresented = Case.isPetitionerRepresented(

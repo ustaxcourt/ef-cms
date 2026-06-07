@@ -120,6 +120,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
       redactionAcknowledgement: petitionEntity.petitionRedactionAcknowledgement,
     },
@@ -142,6 +143,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: false,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       processingStatus: 'complete',
     },
     {
@@ -166,6 +168,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       index: 0,
       isFileAttached: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
     },
     { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -188,6 +191,7 @@ const createCaseMetadata = async (
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
         isOnDocketRecord: true,
+        originallyFiledDocketNumber: caseToAdd.docketNumber,
         privatePractitioners,
       },
       { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -220,6 +224,7 @@ const createCaseMetadata = async (
           noticeIssuedDate:
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
+          originallyFiledDocketNumber: caseToAdd.docketNumber,
           privatePractitioners,
           redactionAcknowledgement:
             petitionEntity.irsNoticesRedactionAcknowledgement,

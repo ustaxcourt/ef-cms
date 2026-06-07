@@ -20,7 +20,9 @@ describe('clearMotionOrderResponseFormAction', () => {
       state: mockStore,
     });
 
-    expect(result.state.form).toEqual({});
+    expect(result.state.form).toEqual({
+      issueOrderFor: MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+    });
   });
 
   it('should handle clearing empty form fields', async () => {

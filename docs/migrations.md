@@ -10,6 +10,8 @@ Because migrations modify the schema, environments must move forward in version 
 
 If the experimental environment contains a migration entry for a feature that has not yet been merged into staging, deploying staging to that environment may fail. The app cannot start because the database has already advanced beyond the schema expected by the staging code.
 
+See [migrations.md](./postgres/migrations.md) on how to create, run, and rollback migrations
+
 **Important Notes for Experimental → Staging Reverts**
 
 * Reverting an environment to staging does not automatically revert database schema.

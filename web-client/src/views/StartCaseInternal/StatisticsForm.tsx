@@ -7,24 +7,31 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const StatisticsForm = connect(
-  {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    addStatisticToFormSequence: sequences.addStatisticToFormSequence,
-    checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
-    confirmationText: state.confirmationText,
-    form: state.form,
-    formatAndUpdateDateFromDatePickerSequence:
-      sequences.formatAndUpdateDateFromDatePickerSequence,
-    showCalculatePenaltiesModalSequence:
-      sequences.showCalculatePenaltiesModalSequence,
-    statisticsFormHelper: state.statisticsFormHelper,
-    updateStatisticsFormValueSequence:
-      sequences.updateStatisticsFormValueSequence,
-    validatePetitionFromPaperSequence:
-      sequences.validatePetitionFromPaperSequence,
-    validationErrors: state.validationErrors,
-  },
+type StatisticsFormType = {
+  validateFormData: Function;
+};
+
+const statisticsFormDependencies = {
+  DATE_FORMATS: state.constants.DATE_FORMATS,
+  addStatisticToFormSequence: sequences.addStatisticToFormSequence,
+  checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
+  confirmationText: state.confirmationText,
+  form: state.form,
+  formatAndUpdateDateFromDatePickerSequence:
+    sequences.formatAndUpdateDateFromDatePickerSequence,
+  showCalculatePenaltiesModalSequence:
+    sequences.showCalculatePenaltiesModalSequence,
+  statisticsFormHelper: state.statisticsFormHelper,
+  updateStatisticsFormValueSequence:
+    sequences.updateStatisticsFormValueSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const StatisticsForm = connect<
+  StatisticsFormType,
+  typeof statisticsFormDependencies
+>(
+  statisticsFormDependencies,
   function StatisticsForm({
     addStatisticToFormSequence,
     checkForNegativeValueSequence,
@@ -35,7 +42,7 @@ export const StatisticsForm = connect(
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
     updateStatisticsFormValueSequence,
-    validatePetitionFromPaperSequence,
+    validateFormData,
     validationErrors,
   }) {
     // Type cast for confirmationText to avoid repeated inline type assertions
@@ -54,7 +61,7 @@ export const StatisticsForm = connect(
           id={`deficiency-amount-${index}`}
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
-          onBlur={() => validatePetitionFromPaperSequence()}
+          onBlur={() => validateFormData()}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
               key: `statistics.${index}.irsDeficiencyAmount`,
@@ -137,7 +144,7 @@ export const StatisticsForm = connect(
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}
-                    onBlur={() => validatePetitionFromPaperSequence()}
+                    onBlur={() => validateFormData()}
                     onChange={e => {
                       updateStatisticsFormValueSequence({
                         key: e.target.name,
@@ -167,7 +174,7 @@ export const StatisticsForm = connect(
                     toFormat: DATE_FORMATS.ISO,
                     value: e.target.value,
                   });
-                  validatePetitionFromPaperSequence();
+                  validateFormData();
                 }}
               />
               <div className="grid-row grid-gap-2">

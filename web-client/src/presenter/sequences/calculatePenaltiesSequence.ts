@@ -5,6 +5,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
 import { setTotalPenaltiesAmountForStatisticAction } from '../actions/setTotalPenaltiesAmountForStatisticAction';
 import { validateAddDeficiencyStatisticsSequence } from './validateAddDeficiencyStatisticsSequence';
+import { validateCaseDetailSequence } from './validateCaseDetailSequence';
 import { validatePenaltiesAction } from '../actions/validatePenaltiesAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
@@ -18,6 +19,7 @@ export const calculatePenaltiesSequence = [
       chooseStatisticValidationStrategyAction,
       {
         addEditStatistic: validateAddDeficiencyStatisticsSequence,
+        caseDetail: validateCaseDetailSequence,
         startCase: validatePetitionFromPaperSequence,
       },
       clearModalStateAction,

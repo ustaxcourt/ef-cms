@@ -11,11 +11,11 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
-import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds as getWorkItemsByIdsMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
-  const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getWorkItemsByIds = getWorkItemsByIdsMock as jest.Mock;
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const mockRequest = {
@@ -39,7 +39,7 @@ describe('completeWorkItemInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
+    getWorkItemsByIds.mockReturnValue([new WorkItem(mockWorkItem)]);
   });
 
   it('throws a ServiceUnavailableError if a Case is currently locked', async () => {

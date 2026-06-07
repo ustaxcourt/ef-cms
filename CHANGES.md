@@ -1,3 +1,32 @@
+<details><summary>Install Recommended VS Code Extensions</summary>
+
+## Local
+
+### Install recommended VS Code Extensions
+
+1. In VS Code, press `Command + Shift + P` to open the Command Palette
+2. Search and select **Shell Command: Install 'code' command in PATH**
+3. Run the following in your terminal:
+   ```bash
+   cat .vscode/extensions.json | jq -r '.recommendations[]' | xargs -n 1 code --install-extension
+
+   npm ci
+   ```
+4. Press `Command + Shift + P`, search for `Developer: Reload Window`, and select it so the workspace, TypeScript SDK, and extensions reload cleanly.
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-05-25</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.16.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-05-18</summary>
 
 ## Manual Deployment Steps

@@ -1,3 +1,32 @@
+jest.mock('@aws-sdk/client-lambda', () => {
+  class LambdaClient {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    constructor(_config: unknown) {}
+    // send must be on the prototype so sinon can stub it via mockClient
+    send(_command: unknown) {
+      return Promise.resolve({});
+    }
+  }
+  // Command classes must store this.input so aws-sdk-client-mock can match on it
+  class GetFunctionConfigurationCommand {
+    input: unknown;
+    constructor(input: unknown) {
+      this.input = input;
+    }
+  }
+  class UpdateFunctionConfigurationCommand {
+    input: unknown;
+    constructor(input: unknown) {
+      this.input = input;
+    }
+  }
+  return {
+    LambdaClient,
+    GetFunctionConfigurationCommand,
+    UpdateFunctionConfigurationCommand,
+  };
+});
+
 import {
   GetFunctionConfigurationCommand,
   LambdaClient,
@@ -32,12 +61,7 @@ describe('setEnvironmentVariables', () => {
   });
 
   it("updates an extant lambda's environment variables", async () => {
-    mockedLambdaClient
-      .on(UpdateFunctionConfigurationCommand, {
-        Environment: updatedEnvironment,
-        FunctionName: 'extantLambda',
-      })
-      .resolves({});
+    mockedLambdaClient.on(UpdateFunctionConfigurationCommand).resolves({});
 
     const result = await setEnvironmentVariables({
       Environment: updatedEnvironment,
@@ -78,6 +102,7 @@ describe('setEnvironmentVariables', () => {
     mockedLambdaClient
       .on(GetFunctionConfigurationCommand, { FunctionName: 'extantLambda' })
       .resolves({ Environment: { Variables: {} } });
+    mockedLambdaClient.on(UpdateFunctionConfigurationCommand).resolves({});
 
     const result = await setEnvironmentVariables({
       Environment: updatedEnvironment,

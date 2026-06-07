@@ -5,7 +5,7 @@ import {
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { headerOverride } from '../lambdaWrapper';
+import { getHeaderOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 type LoggedError = ErrorWithStatusCode & {
@@ -42,7 +42,7 @@ export const handle = async (event, fun) => {
       return {
         body: response.toString('base64'),
         headers: {
-          ...headerOverride,
+          ...getHeaderOverride(),
           'Content-Type': 'application/pdf',
           'accept-ranges': 'bytes',
         },
@@ -124,7 +124,7 @@ export const sendError = (err: LoggedError) => {
 
   return {
     body: JSON.stringify(errorPayload),
-    headers: headerOverride,
+    headers: getHeaderOverride(),
     statusCode: err.statusCode || '400',
   };
 };
@@ -142,7 +142,7 @@ export const sendOk = (response, statusCode = '200', headers = {}) => {
     body: JSON.stringify(response),
     headers: {
       ...headers,
-      ...headerOverride,
+      ...getHeaderOverride(),
     },
     statusCode,
   };

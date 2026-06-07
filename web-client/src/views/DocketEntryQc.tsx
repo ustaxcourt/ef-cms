@@ -10,8 +10,8 @@ import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCo
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
-import { InfoNotificationComponent } from './InfoNotification';
 
 export const DocketEntryQc = connect(
   {
@@ -46,13 +46,14 @@ export const DocketEntryQc = connect(
           data-testid="docket-entry-qc-container"
         >
           {docketEntryQcHelper.showPaperServiceWarning && (
-            <InfoNotificationComponent
+            <AlertInfo
               alertInfo={{
                 message: `This document was automatically generated and requires paper
               service.`,
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
+              dataTestId="docket-entry-paper-service"
             />
           )}
           <h2 className="heading-1">
@@ -83,8 +84,35 @@ export const DocketEntryQc = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
+                <div>
+                  {docketEntryQcHelper.showQCHelpText && (
+                    <AlertInfo
+                      alertInfo={{
+                        message: (
+                          <div>
+                            <b>This document will also be QC&apos;d for:</b>
+                            <ul className="tw:mt-0 tw:mb-0">
+                              {docketEntryQcHelper.multiDocketedOn.map(cc => (
+                                <li key={cc.docketNumber}>
+                                  {cc.docketNumber} - {cc.caseTitle}
+                                </li>
+                              ))}
+                            </ul>
+                            <p className="tw:mb-0 tw:mt-4">
+                              If a Notice of Docket Change is generated, it will
+                              be filed in all of the above cases.
+                            </p>
+                          </div>
+                        ),
+                      }}
+                      isDismissible={false}
+                      scrollToTop={false}
+                      className="tw:mb-6"
+                      dataTestId="document-qc"
+                    />
+                  )}
+                </div>
                 <PrimaryDocumentForm />
-
                 <div className="margin-top-5 button-container">
                   <Button
                     disableOnClick

@@ -385,6 +385,7 @@ const generateNoticeOfReceipt = async ({
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
     },
     {
       authorizedUser: userServingPetition,

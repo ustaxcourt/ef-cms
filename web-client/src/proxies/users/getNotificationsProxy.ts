@@ -10,7 +10,6 @@ export const getNotificationsInteractor = (
   qcIndividualInboxCount: number;
   qcSectionInProgressCount: number;
   qcSectionInboxCount: number;
-  qcUnreadCount: number;
   unreadMessageCount: number;
   userInboxCount: number;
   userSectionCount: number;

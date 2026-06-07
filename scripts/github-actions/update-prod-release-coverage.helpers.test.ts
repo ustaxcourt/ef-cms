@@ -1,8 +1,16 @@
 import {
   type UpdateProdReleaseCoverageDependencies,
+  runUpdateProdReleaseCoverageScript,
   updateProdReleaseCoverage,
 } from './update-prod-release-coverage.helpers';
+import * as suiteCoverageHelpers from './suite-coverage.helpers';
 import type { CoverageSummary } from './suite-coverage.helpers';
+
+jest.mock('./suite-coverage.helpers', () => ({
+  ...jest.requireActual('./suite-coverage.helpers'),
+  getCoverageSummary: jest.fn(),
+  updatePullRequestCoverage: jest.fn(),
+}));
 
 describe('update-prod-release-coverage', () => {
   const apiCoverageSummary: CoverageSummary = {
@@ -110,5 +118,31 @@ describe('update-prod-release-coverage', () => {
     expect(dependencies.log).toHaveBeenCalledWith(
       'No coverage update applied on PR #4321.',
     );
+  });
+  describe('runUpdateProdReleaseCoverageScript', () => {
+    it('should call updateProdReleaseCoverage with the default dependencies', async () => {
+      const getCoverageSummaryMock = jest
+        .mocked(suiteCoverageHelpers.getCoverageSummary)
+        .mockResolvedValue(apiCoverageSummary);
+      const updatePullRequestCoverageMock = jest
+        .mocked(suiteCoverageHelpers.updatePullRequestCoverage)
+        .mockResolvedValue(true);
+      const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      await runUpdateProdReleaseCoverageScript(baseConfig);
+
+      expect(getCoverageSummaryMock).toHaveBeenCalledTimes(
+        suiteCoverageHelpers.COVERAGE_SUITES.length,
+      );
+      expect(updatePullRequestCoverageMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          pullRequestNumber: baseConfig.pullRequestNumber,
+          repository: baseConfig.githubRepository,
+          token: baseConfig.githubToken,
+        }),
+      );
+
+      logSpy.mockRestore();
+    });
   });
 });

@@ -216,7 +216,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       },
     );
 
-    expect(modalHelper.showConsolidatedCasesForService).toBe(false);
+    expect(modalHelper.allowMultiDocketing).toBe(true);
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'ConfirmInitiateCourtIssuedFilingServiceModal',
     );
@@ -226,7 +226,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
-      message: DOCUMENT_SERVED_MESSAGES.GENERIC,
+      message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
       overwritable: false,
     });
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');

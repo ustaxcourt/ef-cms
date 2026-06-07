@@ -74,7 +74,6 @@ const confirmAction = async (message: string): Promise<boolean> => {
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
 (async () => {
   if (env === 'local') {
     process.env.AWS_ACCESS_KEY_ID = 'S3RVER';
@@ -188,6 +187,8 @@ const confirmAction = async (message: string): Promise<boolean> => {
             docketEntryId,
             docketNumber,
             documentStorageId: docketEntryId,
+            multiDocketedOn: JSON.stringify([]),
+            originallyFiledDocketNumber: docketNumber,
             filingDate: now,
             eventCode: 'EXH',
             pending: false,

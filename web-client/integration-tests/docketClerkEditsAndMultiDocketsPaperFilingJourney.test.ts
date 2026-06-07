@@ -128,8 +128,8 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
         },
       );
 
-      expect(modalHelper.showPaperAlert).toBe(true);
-      expect(modalHelper.showConsolidatedCasesForService).toBe(true);
+      expect(modalHelper.contactsNeedingPaperService).toBeDefined();
+      expect(modalHelper.allowMultiDocketing).toBe(true);
       expect(cerebralTest.getState('modal.showModal')).toEqual(
         'ConfirmInitiatePaperFilingServiceModal',
       );
