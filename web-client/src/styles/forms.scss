@@ -651,6 +651,31 @@ label.ustc-upload {
   }
 }
 
+.grant-deny-motion-form {
+  .usa-form-group {
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.grant-deny-motion-form-group {
+      margin: 1rem;
+    }
+
+    &.grant-deny-motion-form-group-error {
+      margin-left: -0.1rem;
+    }
+  }
+
+  .grant-deny-motion-status-report-fields {
+    .grant-deny-motion-form-group {
+      margin: 1rem 1rem 0 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
 .motion-order-response-form {
   .usa-form-group {
     max-width: 100%;

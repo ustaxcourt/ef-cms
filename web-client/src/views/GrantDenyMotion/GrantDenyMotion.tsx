@@ -61,6 +61,7 @@ export const GrantDenyMotion = connect(
       : !isStrickenFromTrialSessionSelected
         ? 'Select "This case is stricken from the trial session" first'
         : '';
+    const deniedOptionsDisabledTitle = isDenied ? '' : 'Select "DENIED" first';
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
     const { filingPartyOptions } = grantDenyOptions;
     const docketEntryPreview = 'Order';
@@ -215,6 +216,8 @@ export const GrantDenyMotion = connect(
                         <label
                           className="usa-checkbox__label"
                           htmlFor="deniedAsMoot"
+                          style={isDenied ? undefined : { color: '#757575' }}
+                          title={deniedOptionsDisabledTitle}
                         >
                           As moot
                         </label>
@@ -238,6 +241,8 @@ export const GrantDenyMotion = connect(
                         <label
                           className="usa-checkbox__label"
                           htmlFor="deniedWithoutPrejudice"
+                          style={isDenied ? undefined : { color: '#757575' }}
+                          title={deniedOptionsDisabledTitle}
                         >
                           Without prejudice
                         </label>
@@ -420,15 +425,15 @@ export const GrantDenyMotion = connect(
 
                     {dueDateMessageSelected && (
                       <div
-                        className="tw:pl-7 tw:mt-3"
+                        className="grant-deny-motion-status-report-fields tw:pl-7 tw:mt-3"
                         data-testid="status-report-due-date-fields"
                       >
                         <FormGroup
-                          className="margin-bottom-0"
+                          className="grant-deny-motion-form-group"
                           errorText={validationErrors.filingParty}
                         >
                           <label className="usa-label" htmlFor="filing-party">
-                            Filing party
+                            Filing Party
                           </label>
                           <select
                             className="usa-select"
@@ -456,23 +461,27 @@ export const GrantDenyMotion = connect(
                           </select>
                         </FormGroup>
 
-                        <DateSelector
-                          defaultValue={form.dueDate}
+                        <FormGroup
+                          className="grant-deny-motion-form-group"
                           errorText={validationErrors.dueDate}
-                          formGroupClassNames="display-inline-block padding-0 margin-top-105"
-                          id="grant-deny-due-date"
-                          label="Due date"
-                          minDate={grantDenyMotionFormHelper.minDate}
-                          placeHolderText="MM/DD/YYYY"
-                          onChange={e => {
-                            formatAndUpdateDateFromDatePickerSequence({
-                              key: 'dueDate',
-                              toFormat: constants.DATE_FORMATS.YYYYMMDD,
-                              value: e.target.value,
-                            });
-                            validateGrantDenyMotionSequence();
-                          }}
-                        />
+                        >
+                          <DateSelector
+                            defaultValue={form.dueDate}
+                            formGroupClassNames="display-inline-block padding-0"
+                            id="grant-deny-due-date"
+                            label="Due Date:"
+                            minDate={grantDenyMotionFormHelper.minDate}
+                            placeHolderText="MM/DD/YYYY"
+                            onChange={e => {
+                              formatAndUpdateDateFromDatePickerSequence({
+                                key: 'dueDate',
+                                toFormat: constants.DATE_FORMATS.YYYYMMDD,
+                                value: e.target.value,
+                              });
+                              validateGrantDenyMotionSequence();
+                            }}
+                          />
+                        </FormGroup>
                       </div>
                     )}
                   </FormGroup>
@@ -480,13 +489,17 @@ export const GrantDenyMotion = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
+                    className="grant-deny-motion-form-group"
                     errorText={
                       grantDenyMotionFormHelper.additionalOrderTextErrorText
                     }
                   >
-                    <span className="usa-label text-bold">
+                    <label
+                      className="usa-label"
+                      htmlFor="additional-order-text-0"
+                    >
                       Additional order text
-                    </span>
+                    </label>
                     {additionalOrderText.map((value, index) => (
                       <div
                         className="tw:mb-3"
