@@ -78,6 +78,7 @@ export default async function ({
       '.woff': 'file',
       '.woff2': 'file',
     },
+    keepNames: true,
     logLevel: 'info',
     metafile: true,
     minify: process.env.USTC_ENV === 'prod',
