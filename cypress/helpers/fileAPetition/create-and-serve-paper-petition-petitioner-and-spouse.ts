@@ -77,7 +77,7 @@ export function createAndServePaperPetitionMultipleParties(
   });
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
-    .get('[data-testid="case-link"]', { timeout: 120000 })
+    .get('[data-testid="case-link"]')
     .invoke('attr', 'href')
     .then(href => {
       const docketNumber = href!.split('/').pop();
