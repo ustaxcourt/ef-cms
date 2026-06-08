@@ -11,7 +11,15 @@ export const initializeRealUserMonitoring = () => {
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
       sessionSampleRate: Number(process.env.RUM_SAMPLE_RATE!),
-      telemetries: ['performance', 'errors'],
+      telemetries: [
+        'performance',
+        'errors',
+        // Record failed HTTP requests (4xx/5xx and network errors). axios runs
+        // on XMLHttpRequest in the browser, which this telemetry instruments.
+        // recordAllRequests stays false so we only capture errors, not every
+        // successful request.
+        ['http', { recordAllRequests: false }],
+      ],
     };
 
     const APPLICATION_ID: string = process.env.RUM_APP_MONITOR_ID!;

@@ -1,11 +1,12 @@
 const mockRecordError = jest.fn();
 const mockEnable = jest.fn();
+const mockAwsRum = jest.fn().mockImplementation(() => ({
+  enable: mockEnable,
+  recordError: mockRecordError,
+}));
 
 jest.mock('aws-rum-web', () => ({
-  AwsRum: jest.fn().mockImplementation(() => ({
-    enable: mockEnable,
-    recordError: mockRecordError,
-  })),
+  AwsRum: mockAwsRum,
 }));
 
 describe('realUserMonitoring', () => {
@@ -40,5 +41,18 @@ describe('realUserMonitoring', () => {
     recordError(error);
 
     expect(mockRecordError).toHaveBeenCalledWith(error);
+  });
+
+  it('configures the http telemetry so failed HTTP requests are recorded', () => {
+    process.env.ENV = 'dev';
+    const { initializeRealUserMonitoring } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+
+    const config = mockAwsRum.mock.calls[0][3];
+    expect(config.telemetries).toContainEqual([
+      'http',
+      { recordAllRequests: false },
+    ]);
   });
 });
