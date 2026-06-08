@@ -172,7 +172,11 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
               value: '',
             }}
             onChange={option =>
-              option && onChange(`${name}.${option.value}`, option.label)
+              option &&
+              onChange(name, {
+                ...selectedValues,
+                [option.value]: option.label,
+              })
             }
           />{' '}
         </NonPhone>
@@ -187,7 +191,7 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
             value={MULTI_SELECT_PLACEHOLDER}
             onChange={value => {
               if (value) {
-                onChange(`${name}.${value}`, value);
+                onChange(name, { ...selectedValues, [value]: value });
               }
             }}
           />
@@ -205,7 +209,9 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
               key={optionLabel}
               text={optionLabel}
               onRemove={() => {
-                onChange(`${name}.${optionKey}`, undefined);
+                const remaining = { ...selectedValues };
+                delete remaining[optionKey];
+                onChange(name, remaining);
               }}
             />
           ))}
