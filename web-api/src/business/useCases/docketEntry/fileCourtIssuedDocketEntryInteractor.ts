@@ -219,6 +219,11 @@ export const fileCourtIssuedDocketEntry = async (
     });
   }
 
+  // Attach the coversheet-pending flag so the client doesn't have to
+  // recompute it from the same constant — the backend is the source of
+  // truth for whether enqueueAddCoversheet ran. Keeping the gates in lock-
+  // step here prevents the UI from skipping its poll if the predicate ever
+  // diverges.
   return {
     pendingCoversheetDocketEntryIds: requiresCoversheet
       ? [docketEntryId]
