@@ -5,6 +5,7 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
+import { ErrorBoundary } from './views/ErrorBoundary';
 import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
 import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
@@ -175,7 +176,9 @@ const appPublic = {
 
       root.render(
         <Container app={cerebralApp}>
-          <AppComponentPublic />
+          <ErrorBoundary>
+            <AppComponentPublic />
+          </ErrorBoundary>
           <GlobalModalWrapper />
           {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
         </Container>,
