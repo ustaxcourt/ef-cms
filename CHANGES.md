@@ -1,3 +1,15 @@
+<details><summary>Dependency Updates - Week of 2026-06-01</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.82` - choose exp7
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>Install Recommended VS Code Extensions</summary>
 
 ## Local
