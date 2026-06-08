@@ -18,6 +18,7 @@ describe('wiki-deployment-summary.helpers', () => {
     getCoverageSummary: jest.fn(),
     getIssue: jest.fn(),
     getLatestProdPullRequest: jest.fn(),
+    getMergeCommitStatusContexts: jest.fn(),
     getPullRequest: jest.fn(),
     listMergedStagingPullRequests: jest.fn(),
   };

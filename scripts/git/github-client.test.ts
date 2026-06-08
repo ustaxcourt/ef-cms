@@ -35,9 +35,12 @@ describe('github-client', () => {
         messageHeadline: '1234: fix the regression',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 5678,
     title: '1234 fix the regression',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/5678',
   };
   const apiCoverageSummary: CoverageSummary = {
     branches: 90.12,
