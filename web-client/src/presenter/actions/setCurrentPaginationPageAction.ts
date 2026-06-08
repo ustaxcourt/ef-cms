@@ -9,9 +9,9 @@ export const setCurrentPaginationPageAction = ({
   const { advancedSearchTab, currentPaginationPage } = props;
   if (advancedSearchTab === 'case') {
     store.set(state.caseCurrentPaginationPage, currentPaginationPage);
-  } else if (advancedSearchTab === 'opinion') {
-    store.set(state.opinionCurrentPaginationPage, currentPaginationPage);
-  } else {
+  } else if (advancedSearchTab === 'order') {
     store.set(state.orderCurrentPaginationPage, currentPaginationPage);
+  } else {
+    store.set(state.opinionCurrentPaginationPage, currentPaginationPage);
   }
 };
