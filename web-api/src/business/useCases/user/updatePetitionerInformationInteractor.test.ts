@@ -43,7 +43,6 @@ import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -59,9 +58,6 @@ describe('updatePetitionerInformationInteractor', () => {
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-  const invalidateUserContactGeocode = jest.mocked(
-    invalidateUserContactGeocodeMock,
-  );
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
   const mockUrl = 'madeUpurl.com';
 

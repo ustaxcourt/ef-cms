@@ -57,6 +57,7 @@ export const archiveCorrespondenceDocument = async (
       caseToUpdate: caseEntity,
     });
 
+    // Delete the document file only after the transaction commits successfully
     onTransactionCommit(async () => {
       await applicationContext.getPersistenceGateway().deleteDocumentFile({
         applicationContext,

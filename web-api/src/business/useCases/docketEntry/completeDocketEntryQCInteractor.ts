@@ -460,23 +460,23 @@ const completeDocketEntryQC = async (
 
   await withTransaction(async () => {
     await settlePromises(updatePersistencePromises);
-
-    if (caseSpecificNotices.length > 0) {
-      const paperServiceResult = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
-          applicationContext,
-          caseEntities: caseSpecificNotices.map(n => n.caseEntity),
-          docketEntryId: caseSpecificNotices[0].docketEntryId,
-          caseSpecificDocketEntries: caseSpecificNotices,
-        });
-
-      if (paperServiceParties.length > 0) {
-        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-        paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
-      }
-    }
   });
+
+  if (caseSpecificNotices.length > 0) {
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities: caseSpecificNotices.map(n => n.caseEntity),
+        docketEntryId: caseSpecificNotices[0].docketEntryId,
+        caseSpecificDocketEntries: caseSpecificNotices,
+      });
+
+    if (paperServiceParties.length > 0) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
+    }
+  }
 
   if (isNewCoverSheetNeeded) {
     await applicationContext.getUseCases().addCoversheetInteractor(
