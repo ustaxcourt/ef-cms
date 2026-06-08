@@ -20,12 +20,6 @@ export const setDocumentSearchResultsAction = ({
   } else if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
     stateKey = 'opinionDocumentSearchSort';
   } else {
-    stateKey = 'caseSearchSort';
-  }
-
-  if (advancedSearchTab === ADVANCED_SEARCH_TABS.CASE && !sortColumn) {
-    store.unset(state[stateKey].sortColumn);
-    store.unset(state[stateKey].sortDirection);
     return;
   }
 
