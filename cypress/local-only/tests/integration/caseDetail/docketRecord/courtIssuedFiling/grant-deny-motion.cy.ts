@@ -166,6 +166,9 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
             cy.get('[data-testid="jurisdiction-retained"]').should(
               'not.be.disabled',
             );
+            cy.get('[data-testid="jurisdiction-retained"]').check({
+              force: true,
+            });
             cy.get('[data-testid="jurisdiction-retained"]').should(
               'be.checked',
             );

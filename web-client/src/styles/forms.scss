@@ -658,10 +658,10 @@ label.ustc-upload {
 
     &.grant-deny-motion-form-group {
       margin: 1rem;
-    }
 
-    &.grant-deny-motion-form-group-error {
-      margin-left: -0.1rem;
+      &.usa-form-group--error {
+        margin-left: -0.1rem;
+      }
     }
   }
 
