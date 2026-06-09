@@ -248,10 +248,13 @@ function MobilePublicTrialSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
+                const remainingValues = { ...sessionTypes };
+                delete remainingValues[sessionTypeKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `sessionTypes.${sessionTypeKey}`,
+                  key: 'sessionTypes',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />
@@ -266,10 +269,13 @@ function MobilePublicTrialSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
+                const remainingValues = { ...locations };
+                delete remainingValues[sessionTypeKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `locations.${sessionTypeKey}`,
+                  key: 'locations',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />
@@ -284,10 +290,13 @@ function MobilePublicTrialSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
+                const remainingValues = { ...judges };
+                delete remainingValues[sessionTypeKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `judges.${sessionTypeKey}`,
+                  key: 'judges',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />

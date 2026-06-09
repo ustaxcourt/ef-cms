@@ -82,4 +82,20 @@ describe('Public Trial Sessions', () => {
       'not.exist',
     );
   });
+
+  it('should apply and remove St. Louis, Missouri location filter on mobile', () => {
+    const LOCATION = 'St. Louis, Missouri';
+
+    cy.viewport('iphone-xr');
+    cy.visit('/trial-sessions');
+
+    cy.contains('button', 'Filters').click();
+    cy.get('select[name="locations"]').select(LOCATION);
+
+    cy.contains('span.blue-pill', LOCATION).should('exist');
+    cy.get(`button[aria-label="remove ${LOCATION} selection"]`).click();
+    cy.contains('span.blue-pill', LOCATION).should('not.exist');
+
+    cy.get('select[name="locations"]').should('exist');
+  });
 });
