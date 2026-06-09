@@ -341,6 +341,29 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     datasets.reduce((sum, ds) => sum + ((ds.data[i] as number) || 0), 0),
   );
 
+  /*
+    Push the colTotals into a new data structure that can be used by <LabelList>. This element only renders when
+    the parent <Bar> element is rendered (i.e. when value > 0). The index in labelProps is counting rendered labels, not
+    entries in the dataset. So the new data structure needs to only have entries for the column total where value > 0.
+    For example:
+    dataset 1 [1, 0, 0, 1]
+    dataset 2 [0, 1, 0, 1]
+    structure for label use: [
+      [1, 1, 2],
+      [1, 1, 2]
+    ]
+  */
+  const colTotalsForLabelList: number[][] = [];
+  datasets.forEach(dataset => {
+    const colTotalsForDataset: number[] = [];
+    labels.forEach((_, i) => {
+      if ((dataset.data[i] as number) > 0) {
+        colTotalsForDataset.push(colTotals[i]);
+      }
+    });
+    colTotalsForLabelList.push(colTotalsForDataset);
+  });
+
   // Y-axis max with 10% breathing room
   let maxValue = 0;
   labels.forEach((_, i) => {
@@ -546,7 +569,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                           return (
                             <MultiBarLabel
                               key={`label-${dsIndex}-${index}`}
-                              colTotal={colTotals[index]}
+                              colTotal={colTotalsForLabelList[dsIndex][index]}
                               datasetLabel={ds.label}
                               fill={color}
                               height={bh}
