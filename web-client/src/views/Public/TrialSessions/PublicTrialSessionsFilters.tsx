@@ -11,9 +11,9 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 type PublicTrialSessionsFiltersProps = {
-  judges: { [key: string]: string };
-  locations: { [key: string]: string };
-  sessionTypes: { [key: string]: string };
+  judges: SelectedFilterValues;
+  locations: SelectedFilterValues;
+  sessionTypes: SelectedFilterValues;
   proceedingType: string;
   displayProgressSpinnerSequence: (props: { timeInSeconds: number }) => void;
   updateFormValueSequence: (props: {
@@ -34,6 +34,14 @@ type PublicTrialSessionsFiltersProps = {
   trialSessionJudgeOptions: Array<{ label: string; value: string }>;
 };
 
+type SelectedFilterValues = Record<string, string>;
+type FilterValue = string | SelectedFilterValues;
+type FlatFilterOption = { label: string; value: string };
+type GroupedFilterOption = {
+  label: string;
+  options: FlatFilterOption[];
+};
+
 export const PublicTrialSessionsFilters = function ({
   displayProgressSpinnerSequence,
   judges,
@@ -50,7 +58,7 @@ export const PublicTrialSessionsFilters = function ({
     ...TRIAL_SESSION_PROCEEDING_TYPES,
   });
 
-  const handleUpdateFormValue = (key: string, value: string | undefined) => {
+  const handleUpdateFormValue = (key: string, value: FilterValue) => {
     displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
     updateFormValueSequence({
       key,
@@ -152,7 +160,21 @@ export const PublicTrialSessionsFilters = function ({
   );
 };
 
-function FilterSelect({ label, name, onChange, options, selectedValues }) {
+type FilterSelectProps = {
+  label: string;
+  name: string;
+  onChange: (key: string, value: FilterValue) => void;
+  options: FlatFilterOption[] | GroupedFilterOption[];
+  selectedValues: SelectedFilterValues;
+};
+
+function FilterSelect({
+  label,
+  name,
+  onChange,
+  options,
+  selectedValues,
+}: FilterSelectProps) {
   return (
     <>
       <div className="margin-bottom-2">
@@ -199,11 +221,7 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
       </div>
       <NonPhone>
         <div className="margin-bottom-1">
-          {Object.entries(
-            selectedValues as {
-              [key: string]: string;
-            },
-          ).map(([optionKey, optionLabel]) => (
+          {Object.entries(selectedValues).map(([optionKey, optionLabel]) => (
             <PillButton
               data-testid={`${name}-${optionLabel}-pill-button`}
               key={optionLabel}
