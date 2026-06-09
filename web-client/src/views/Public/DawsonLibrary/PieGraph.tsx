@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Button } from '@web-client/dawson-ui/ui/button';
 import {
   Pie,
@@ -94,16 +94,34 @@ const CustomTooltip = ({
   );
 };
 
+const XS_BREAKPOINT = 480;
+
 export const PieGraph = ({
   title,
+  tooltipTitle,
   data,
   isAnimationActive = true,
 }: {
   title?: string;
+  tooltipTitle?: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
 }) => {
   const liveRegionRef = useRef<HTMLDivElement>(null);
+  const [outerRadius, setOuterRadius] = useState<string>(() =>
+    typeof window !== 'undefined' && window.innerWidth < XS_BREAKPOINT
+      ? '100%'
+      : '80%',
+  );
+
+  useEffect(() => {
+    const handleResize = (): void => {
+      setOuterRadius(window.innerWidth < XS_BREAKPOINT ? '100%' : '80%');
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const announce = (text: string) => {
     if (liveRegionRef.current) liveRegionRef.current.textContent = text;
   };
@@ -144,7 +162,7 @@ export const PieGraph = ({
         aria-atomic="true"
         className="tw:sr-only"
       />
-      <div className="tw:xs:w-160 tw:w-120">
+      <div className="tw:xs:w-160 tw:w-105">
         {title && (
           <div
             className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
@@ -174,24 +192,39 @@ export const PieGraph = ({
             verticalAlign="top"
             wrapperStyle={{ paddingBottom: 0 }}
             content={() => (
-              <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-x-4 tw:gap-y-3 tw:xs:gap-y-4 tw:grid-rows-2 tw:grid-flow-col">
-                {data.map(entry => (
-                  <li key={entry.name} className="tw:flex tw:items-center">
-                    <span
-                      className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-md tw:shrink-0"
-                      style={{ backgroundColor: entry.color }}
-                    />
-                    <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:leading-[1.1] tw:w-24 tw:xs:w-32">
-                      {entry.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="tw:flex tw:justify-between">
+                <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-x-4 tw:gap-y-3 tw:xs:gap-y-4 tw:grid-rows-2 tw:grid-flow-col">
+                  {data.map(entry => (
+                    <li key={entry.name} className="tw:flex tw:items-center">
+                      <span
+                        className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-md tw:shrink-0"
+                        style={{ backgroundColor: entry.color }}
+                      />
+                      <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:leading-[1.1] tw:w-24 tw:xs:w-32">
+                        {entry.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                {!title && (
+                  <Button
+                    className="tw:w-auto tw:!mr-5 tw:self-start"
+                    variant="primaryTertiary"
+                    onClick={openHtmlTable}
+                  >
+                    HTML view
+                  </Button>
+                )}
+              </div>
             )}
           />
           <Tooltip
             content={
-              <CustomTooltip data={data} title={title} onAnnounce={announce} />
+              <CustomTooltip
+                data={data}
+                title={tooltipTitle}
+                onAnnounce={announce}
+              />
             }
           />
           <Pie
@@ -205,6 +238,7 @@ export const PieGraph = ({
             endAngle={450}
             strokeWidth={2}
             stroke="#000"
+            outerRadius={outerRadius}
           />
           {process.env.NODE_ENV !== 'production' && <RechartsDevtools />}
         </PieChart>

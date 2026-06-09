@@ -422,7 +422,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }
 
   return (
-    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1 tw:pl-1">
+    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1">
       <div
         style={
           {
@@ -433,10 +433,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         className="tw:w-(--chart-width) tw:max-[479px]:!w-(--chart-width-mobile)"
       >
         {title && (
-          <div
-            className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
-            style={{ marginBottom: '1.25rem' }}
-          >
+          <div className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4 tw:xs:mb-8 tw:mb-5">
             <h2
               className="tw:xs:text-2xl tw:text-lg tw:whitespace-nowrap"
               style={{ margin: 0 }}
@@ -453,9 +450,11 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
           </div>
         )}
         {showLegend && (
-          <div>{renderCustomLegend({ payload: legendPayload })}</div>
+          <div className="tw:pl-1">
+            {renderCustomLegend({ payload: legendPayload })}
+          </div>
         )}
-        <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem]">
+        <div className="tw:h-[37.5rem] tw:max-[479px]:!h-[28.125rem] tw:pl-1">
           <ResponsiveContainer
             width="100%"
             height="100%"
