@@ -237,14 +237,6 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    // TEMPORARY: RUM error-boundary verification hook. Visiting any page with
-    // ?rum-crash=1 throws during render to confirm the ErrorBoundary catches it
-    // and the error is reported to CloudWatch RUM with readable (keepNames)
-    // stack frames. REMOVE after verification.
-    if (new URLSearchParams(window.location.search).get('rum-crash') === '1') {
-      throw new Error('RUM-TEST render crash');
-    }
-
     const focusMain = (e?: any) => {
       e?.preventDefault();
       const header = window.document.querySelector(
