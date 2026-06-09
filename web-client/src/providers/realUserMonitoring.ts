@@ -1,8 +1,9 @@
 import { AwsRum, AwsRumConfig } from 'aws-rum-web';
 
+let awsRum: AwsRum | undefined;
+
 export const initializeRealUserMonitoring = () => {
   if (process.env.ENV === 'local') return;
-  let awsRum: AwsRum;
   try {
     const config: AwsRumConfig = {
       allowCookies: true,
@@ -10,7 +11,15 @@ export const initializeRealUserMonitoring = () => {
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
       sessionSampleRate: Number(process.env.RUM_SAMPLE_RATE!),
-      telemetries: ['performance'],
+      telemetries: [
+        'performance',
+        'errors',
+        // Record failed HTTP requests (4xx/5xx and network errors). axios runs
+        // on XMLHttpRequest in the browser, which this telemetry instruments.
+        // recordAllRequests stays false so we only capture errors, not every
+        // successful request.
+        ['http', { recordAllRequests: false }],
+      ],
     };
 
     const APPLICATION_ID: string = process.env.RUM_APP_MONITOR_ID!;
@@ -27,5 +36,18 @@ export const initializeRealUserMonitoring = () => {
   } catch (error) {
     // Ignore errors thrown during CloudWatch RUM web client initialization
     console.log('Error initializing real user monitoring: ', error);
+  }
+};
+
+/**
+ * Records an error to CloudWatch RUM. Safe to call when RUM has not been
+ * initialized (e.g. local env or failed initialization) - it is a no-op.
+ */
+export const recordError = (error: unknown): void => {
+  if (!awsRum) return;
+  try {
+    awsRum.recordError(error);
+  } catch (rumError) {
+    console.log('Error recording error to real user monitoring: ', rumError);
   }
 };
