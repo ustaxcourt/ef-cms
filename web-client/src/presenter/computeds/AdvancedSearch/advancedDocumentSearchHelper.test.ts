@@ -1,4 +1,7 @@
-import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
+import {
+  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
+  paginationHelper,
+} from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -646,5 +649,12 @@ describe('advancedDocumentSearchHelper', () => {
     });
     const expected = ['Cohen', 'Buch', 'Aardvark'];
     expect(result.formattedSearchResults.map(r => r.judge)).toEqual(expected);
+  });
+
+  describe('paginationHelper', () => {
+    it('should return an empty object when searchResults are undefined', () => {
+      const result = paginationHelper(undefined, 1, 25);
+      expect(result).toEqual({});
+    });
   });
 });

@@ -179,7 +179,7 @@ export const formatDocumentSearchResultRecord = (
   return result;
 };
 
-const paginationHelper = (searchResults, currentPage, pageSize) => {
+export const paginationHelper = (searchResults, currentPage, pageSize) => {
   if (!searchResults) {
     return {};
   }
