@@ -9,6 +9,7 @@ import {
   createStartOfDayISO,
   deconstructDate,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 
 export const getTodaysOrdersInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -33,5 +34,10 @@ export const getTodaysOrdersInteractor = async (
       startDate: currentDateStart,
     });
 
-  return { results, totalCount };
+  const formattedResults = results.map(order => {
+    const publicOrder = new PublicDocketEntry(order).toRawObject();
+    return { ...publicOrder, caseCaption: order.caseCaption };
+  });
+
+  return { results: formattedResults, totalCount };
 };

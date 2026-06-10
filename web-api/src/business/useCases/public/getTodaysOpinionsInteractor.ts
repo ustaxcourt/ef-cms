@@ -6,6 +6,7 @@ import {
   createStartOfDayISO,
   deconstructDate,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 
 export const getTodaysOpinionsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -23,5 +24,11 @@ export const getTodaysOpinionsInteractor = async (
       isOpinionSearch: true,
       startDate: currentDateStart,
     });
-  return results;
+
+  const formattedResults = results.map(opinion => {
+    const publicOrder = new PublicDocketEntry(opinion).toRawObject();
+    return { ...publicOrder, caseCaption: opinion.caseCaption };
+  });
+
+  return formattedResults;
 };
