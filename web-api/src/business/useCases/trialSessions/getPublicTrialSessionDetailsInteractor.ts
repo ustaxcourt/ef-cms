@@ -3,8 +3,8 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
