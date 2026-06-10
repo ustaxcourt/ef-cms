@@ -10,15 +10,26 @@ jest.mock('aws-rum-web', () => ({
 }));
 
 describe('realUserMonitoring', () => {
-  const originalEnv = process.env.ENV;
+  const originalEnv = {
+    ENV: process.env.ENV,
+    RUM_APP_MONITOR_ID: process.env.RUM_APP_MONITOR_ID,
+    RUM_IDENTITY_POOL_ID: process.env.RUM_IDENTITY_POOL_ID,
+    RUM_SAMPLE_RATE: process.env.RUM_SAMPLE_RATE,
+  };
 
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
+    process.env.RUM_APP_MONITOR_ID = 'test-app-monitor-id';
+    process.env.RUM_IDENTITY_POOL_ID = 'us-east-1:test-identity-pool-id';
+    process.env.RUM_SAMPLE_RATE = '1';
   });
 
   afterAll(() => {
-    process.env.ENV = originalEnv;
+    process.env.ENV = originalEnv.ENV;
+    process.env.RUM_APP_MONITOR_ID = originalEnv.RUM_APP_MONITOR_ID;
+    process.env.RUM_IDENTITY_POOL_ID = originalEnv.RUM_IDENTITY_POOL_ID;
+    process.env.RUM_SAMPLE_RATE = originalEnv.RUM_SAMPLE_RATE;
   });
 
   it('recordError is a no-op when RUM has not been initialized', () => {
