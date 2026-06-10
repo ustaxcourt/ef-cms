@@ -177,9 +177,11 @@ const appPublic = {
       root.render(
         <Container app={cerebralApp}>
           <ErrorBoundary>
-            <AppComponentPublic />
+            <>
+              <AppComponentPublic />
+              <GlobalModalWrapper />
+            </>
           </ErrorBoundary>
-          <GlobalModalWrapper />
           {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
         </Container>,
       );
