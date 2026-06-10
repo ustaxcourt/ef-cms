@@ -87,4 +87,21 @@ describe('getTodaysOpinionsInteractor', () => {
       isOpinionSearch: true,
     });
   });
+
+  it('should return public opinion results with non-public fields filtered out', async () => {
+    const results = await getTodaysOpinionsInteractor(applicationContext);
+
+    expect(results).toHaveLength(1);
+    expect(results[0].docketEntryId).toEqual(
+      mockOpinionSearchResult[0].docketEntryId,
+    );
+    expect(results[0].entityName).toEqual('PublicDocketEntry');
+    expect(results[0].caseCaption).toEqual(
+      mockOpinionSearchResult[0].caseCaption,
+    );
+    expect(results[0]).not.toHaveProperty('contactPrimary');
+    expect(results[0]).not.toHaveProperty('contactSecondary');
+    expect(results[0]).not.toHaveProperty('privatePractitioners');
+    expect(results[0]).not.toHaveProperty('irsPractitioners');
+  });
 });
