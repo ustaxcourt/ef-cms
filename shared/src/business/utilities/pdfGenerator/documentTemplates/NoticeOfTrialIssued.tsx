@@ -1,7 +1,9 @@
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
+import { DocumentParagraphIndent } from '../components/DocumentParagraphIndent';
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
-import { DocketHeader } from '../components/DocketHeader';
-import { PrimaryHeader } from '../components/PrimaryHeader';
+import { NoticeSettingCaseForTrialDocketHeader } from '../components/NoticeSettingCaseForTrialDocketHeader';
+import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
+import { TrialNoticeJudgeInfoBox } from '../components/TrialNoticeJudgeInfoBox';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
@@ -21,12 +23,11 @@ export const NoticeOfTrialIssued = ({
 }) => {
   return (
     <div id="notice-of-trial-pdf">
-      <PrimaryHeader />
-      <DocketHeader
+      <OrderPrimaryHeader />
+      <NoticeSettingCaseForTrialDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="Notice Setting Case For Trial"
       />
       <div>
         <div className="info-box info-box-trial" id="trial-info">
@@ -37,15 +38,16 @@ export const NoticeOfTrialIssued = ({
           </div>
         </div>
 
-        <div className="info-box info-box-judge" id="judge-info">
-          <div className="info-box-header">Judge</div>
-          <div className="info-box-content">{trialInfo.formattedJudge}</div>
-        </div>
+        <TrialNoticeJudgeInfoBox
+          chambersPhoneNumber={trialInfo.chambersPhoneNumber}
+          judgeLastName={trialInfo.formattedJudge || 'Not assigned'}
+        />
         <div className="clear" />
       </div>
 
       <div id="notice-body">
         <p>
+          <DocumentParagraphIndent />
           The parties are hereby notified that this case is set for trial at the
           Trial Session beginning at {trialInfo.formattedStartTime} on{' '}
           {trialInfo.formattedStartDate}. The calendar for that Session will be
@@ -55,22 +57,32 @@ export const NoticeOfTrialIssued = ({
           dismissal of the case and entry of decision against you.
         </p>
         <p>
+          <DocumentParagraphIndent />
           The Court will set the time for each trial at the end of the calendar
           call. In setting trial times the Court attempts to accommodate the
           parties, but the final determination of trial times rests in the
           Court’s discretion.
         </p>
 
-        <p className="text-underline">ACCESS REMOTE PROCEEDING</p>
-        <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
+        <p>
+          <DocumentParagraphIndent />
+          <span className="text-underline">ACCESS REMOTE PROCEEDING</span>
+        </p>
+        <p>
+          <DocumentParagraphIndent />
+          Your Meeting ID and Passcode for the remote proceeding are:
+        </p>
         <p className="text-center">
+          <DocumentParagraphIndent />
           <b>Meeting ID:</b> {trialInfo.meetingId}
         </p>
         <p className="text-center">
+          <DocumentParagraphIndent />
           <b>Passcode:</b> {trialInfo.password}
         </p>
 
         <p>
+          <DocumentParagraphIndent />
           Join online: Go to{' '}
           <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
             www.zoomgov.com
@@ -80,11 +92,13 @@ export const NoticeOfTrialIssued = ({
         </p>
 
         <p>
+          <DocumentParagraphIndent />
           Join by telephone: Call {trialInfo.joinPhoneNumber}. Enter the Meeting
           ID and Passcode above when prompted.
         </p>
 
         <p>
+          <DocumentParagraphIndent />
           There are specific requirements in the Standing Pretrial Order that is
           served with this Notice. The parties should contact each other
           promptly and cooperate fully so that the necessary steps can be taken
@@ -92,10 +106,12 @@ export const NoticeOfTrialIssued = ({
           result in dismissal of the case and entry of decision against you.
         </p>
 
-        <ClerkOfTheCourtSignature
-          nameOfClerk={nameOfClerk}
-          titleOfClerk={titleOfClerk}
-        />
+        <div id="notice-clerk-signature">
+          <ClerkOfTheCourtSignature
+            nameOfClerk={nameOfClerk}
+            titleOfClerk={titleOfClerk}
+          />
+        </div>
       </div>
     </div>
   );
