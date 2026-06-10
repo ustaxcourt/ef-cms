@@ -27,6 +27,8 @@ export const getPublicCaseInteractor = async ({
     user: undefined,
   }) as PublicCaseDTO | RestrictedCaseDTO;
 
+  console.log('caseDTO****', caseDTO);
+
   if (excludeDocketEntries) {
     return { ...caseDTO, docketEntries: [] };
   }
