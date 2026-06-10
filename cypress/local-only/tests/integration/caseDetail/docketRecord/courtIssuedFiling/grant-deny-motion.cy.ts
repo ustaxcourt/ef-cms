@@ -130,8 +130,25 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
             cy.get('[data-testid="stricken-from-trial-session"]').should(
               'not.be.disabled',
             );
+            cy.get('[data-testid="jurisdiction-restored"]').should(
+              'be.disabled',
+            );
             cy.get('[data-testid="jurisdiction-retained"]').should(
-              'not.be.disabled',
+              'be.disabled',
+            );
+
+            cy.get('[data-testid="motion-disposition-DENIED"]').click({
+              force: true,
+            });
+            cy.get('[data-testid="denied-as-moot"]').click({ force: true });
+            cy.get('[data-testid="denied-as-moot"]').should('be.checked');
+
+            cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+              force: true,
+            });
+            cy.get('[data-testid="denied-as-moot"]').should('not.be.checked');
+            cy.get('[data-testid="denied-without-prejudice"]').should(
+              'not.be.checked',
             );
 
             cy.get('[data-testid="motion-disposition-DENIED"]').click({
@@ -146,8 +163,10 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
             cy.get('[data-testid="stricken-from-trial-session"]').should(
               'be.checked',
             );
-
-            cy.get('[data-testid="jurisdiction-retained"]').click({
+            cy.get('[data-testid="jurisdiction-retained"]').should(
+              'not.be.disabled',
+            );
+            cy.get('[data-testid="jurisdiction-retained"]').check({
               force: true,
             });
             cy.get('[data-testid="jurisdiction-retained"]').should(
