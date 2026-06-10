@@ -5,6 +5,7 @@ describe('RestrictedCaseDTO', () => {
     const raw: RawRestrictedCase = {
       docketNumber: '101-20',
       docketNumberSuffix: 'S',
+      docketNumberWithSuffix: '101-20S',
       isPaper: false,
       isSealed: undefined,
       leadDocketNumber: false,
@@ -16,6 +17,7 @@ describe('RestrictedCaseDTO', () => {
     expect(dto.entityName).toBe('RestrictedCaseDTO');
     expect(dto.docketNumber).toBe('101-20');
     expect(dto.docketNumberSuffix).toBe('S');
+    expect(dto.docketNumberWithSuffix).toBe('101-20S');
     expect(dto.docketEntries).toEqual([]);
   });
 });
