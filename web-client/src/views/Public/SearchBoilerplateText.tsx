@@ -1,3 +1,4 @@
+import { User } from '@shared/business/entities/User';
 import { emptyUserState } from '@web-client/presenter/state/userState';
 import {
   ROLES,
@@ -26,10 +27,13 @@ export function SearchBoilerplateText({
     practitionerRoles.has((user as any)?.role) ||
     practitionerTypes.has((user as any)?.practiceType);
 
+  const isInternalUser = User.isInternalUser((user as any)?.role);
+
   const showBullets =
-    isPractitionerUser ||
-    (formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
-    !user?.userId;
+    !isInternalUser &&
+    (isPractitionerUser ||
+      (formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
+      !user?.userId);
 
   return (
     <>
