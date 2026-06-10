@@ -5,7 +5,6 @@ describe('RestrictedCaseDTO', () => {
     const raw: RawRestrictedCase = {
       docketNumber: '101-20',
       docketNumberSuffix: 'S',
-      docketNumberWithSuffix: '101-20S',
       isPaper: false,
       isSealed: undefined,
       leadDocketNumber: false,
