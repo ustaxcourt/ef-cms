@@ -95,7 +95,7 @@ describe('getTodaysOpinionsInteractor', () => {
     expect(results[0].docketEntryId).toEqual(
       mockOpinionSearchResult[0].docketEntryId,
     );
-    expect(results[0].entityName).toEqual('PublicDocketEntry');
+    expect(results[0].entityName).toEqual('PublicDocumentSearchResult');
     expect(results[0].caseCaption).toEqual(
       mockOpinionSearchResult[0].caseCaption,
     );

@@ -128,7 +128,7 @@ describe('getTodaysOrdersInteractor', () => {
     expect(result.results[0].eventCode).toEqual(
       mockOrderSearchResults.results[0].eventCode,
     );
-    expect(result.results[0].entityName).toEqual('PublicDocketEntry');
+    expect(result.results[0].entityName).toEqual('PublicDocumentSearchResult');
     expect(result.results[0]).not.toHaveProperty('contactPrimary');
     expect(result.results[0]).not.toHaveProperty('privatePractitioners');
     expect(result.results[0]).not.toHaveProperty('irsPractitioners');
