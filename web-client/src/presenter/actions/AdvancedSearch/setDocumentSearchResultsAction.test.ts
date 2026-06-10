@@ -1,4 +1,8 @@
-import { ADVANCED_SEARCH_TABS } from '@shared/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  ASCENDING,
+  DESCENDING,
+} from '@shared/business/entities/EntityConstants';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDocumentSearchResultsAction } from './setDocumentSearchResultsAction';
@@ -11,17 +15,17 @@ describe('setDocumentSearchResultsAction', () => {
       },
       props: {
         sortColumn: 'numberOfPages',
-        sortDirection: 'asc',
+        sortDirection: ASCENDING,
       },
       state: {
         advancedSearchTab: ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
         opinionDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
       },
     });
@@ -29,7 +33,9 @@ describe('setDocumentSearchResultsAction', () => {
     expect(result.state.orderDocumentSearchSort.sortColumn).toEqual(
       'numberOfPages',
     );
-    expect(result.state.orderDocumentSearchSort.sortDirection).toEqual('asc');
+    expect(result.state.orderDocumentSearchSort.sortDirection).toEqual(
+      ASCENDING,
+    );
   });
 
   it('should update opinionDocumentSearchSort when advancedSearchTab is OPINION', async () => {
@@ -39,24 +45,24 @@ describe('setDocumentSearchResultsAction', () => {
       },
       props: {
         sortColumn: 'judge',
-        sortDirection: 'desc',
+        sortDirection: DESCENDING,
       },
       state: {
         advancedSearchTab: ADVANCED_SEARCH_TABS.OPINION,
         orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
         opinionDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
       },
     });
 
     expect(result.state.opinionDocumentSearchSort.sortColumn).toEqual('judge');
     expect(result.state.opinionDocumentSearchSort.sortDirection).toEqual(
-      'desc',
+      DESCENDING,
     );
   });
 
@@ -67,59 +73,62 @@ describe('setDocumentSearchResultsAction', () => {
       },
       props: {
         sortColumn: 'docketNumber',
-        sortDirection: 'asc',
+        sortDirection: ASCENDING,
       },
       state: {
         advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
         caseSearchSort: {
-          sortColumn: undefined,
-          sortDirection: undefined,
+          sortColumn: 'resultIndex',
+          sortDirection: ASCENDING,
         },
       },
     });
 
     expect(result.state.caseSearchSort.sortColumn).toEqual('docketNumber');
-    expect(result.state.caseSearchSort.sortDirection).toEqual('asc');
+    expect(result.state.caseSearchSort.sortDirection).toEqual(ASCENDING);
   });
 
-  it('should reset caseSearchSort to undefined when advancedSearchTab is CASE and sort by relevance is selected', async () => {
+  it('should reset caseSearchSort to No. ascending when advancedSearchTab is CASE and the default sort is provided', async () => {
     const result = await runAction(setDocumentSearchResultsAction, {
       modules: {
         presenter,
       },
-      props: {},
+      props: {
+        sortColumn: 'resultIndex',
+        sortDirection: ASCENDING,
+      },
       state: {
         advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
         caseSearchSort: {
           sortColumn: 'docketNumber',
-          sortDirection: 'asc',
+          sortDirection: ASCENDING,
         },
       },
     });
 
-    expect(result.state.caseSearchSort.sortColumn).toBeUndefined();
-    expect(result.state.caseSearchSort.sortDirection).toBeUndefined();
+    expect(result.state.caseSearchSort.sortColumn).toEqual('resultIndex');
+    expect(result.state.caseSearchSort.sortDirection).toEqual(ASCENDING);
   });
 
-  it('should do nothing when advancedSearchTab is PRACTITIONER', async () => {
+  it('should not modify caseSearchSort when advancedSearchTab is PRACTITIONER', async () => {
     const result = await runAction(setDocumentSearchResultsAction, {
       modules: {
         presenter,
       },
       props: {
         sortColumn: 'caseTitle',
-        sortDirection: 'desc',
+        sortDirection: DESCENDING,
       },
       state: {
         advancedSearchTab: ADVANCED_SEARCH_TABS.PRACTITIONER,
         caseSearchSort: {
-          sortColumn: undefined,
-          sortDirection: undefined,
+          sortColumn: 'resultIndex',
+          sortDirection: ASCENDING,
         },
       },
     });
 
-    expect(result.state.caseSearchSort.sortColumn).toBeUndefined();
-    expect(result.state.caseSearchSort.sortDirection).toBeUndefined();
+    expect(result.state.caseSearchSort.sortColumn).toEqual('resultIndex');
+    expect(result.state.caseSearchSort.sortDirection).toEqual(ASCENDING);
   });
 });

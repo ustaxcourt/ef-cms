@@ -1,4 +1,8 @@
-import { ADVANCED_SEARCH_TABS } from '@shared/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  ASCENDING,
+  DESCENDING,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearSearchResultsAction = ({ get, store }: ActionProps) => {
@@ -13,13 +17,13 @@ export const clearSearchResultsAction = ({ get, store }: ActionProps) => {
   store.set(state.advancedSearchForm.currentPage, 1);
 
   if (tabName === ADVANCED_SEARCH_TABS.CASE) {
-    store.unset(state.caseSearchSort.sortColumn);
-    store.unset(state.caseSearchSort.sortDirection);
+    store.set(state.caseSearchSort.sortColumn, 'resultIndex');
+    store.set(state.caseSearchSort.sortDirection, ASCENDING);
   } else if (tabName === ADVANCED_SEARCH_TABS.ORDER) {
     store.set(state.orderDocumentSearchSort.sortColumn, 'formattedFiledDate');
-    store.set(state.orderDocumentSearchSort.sortDirection, 'desc');
+    store.set(state.orderDocumentSearchSort.sortDirection, DESCENDING);
   } else if (tabName === ADVANCED_SEARCH_TABS.OPINION) {
     store.set(state.opinionDocumentSearchSort.sortColumn, 'formattedFiledDate');
-    store.set(state.opinionDocumentSearchSort.sortDirection, 'desc');
+    store.set(state.opinionDocumentSearchSort.sortDirection, DESCENDING);
   }
 };

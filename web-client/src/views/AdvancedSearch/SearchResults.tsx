@@ -10,6 +10,7 @@ import { BaseModal } from '../../ustc-ui/Modal/BaseModal';
 import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import {
   ASCENDING,
+  DESCENDING,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
@@ -56,7 +57,7 @@ export const SearchResults = connect(
       sortOrder,
     }: {
       sortField: string;
-      sortOrder: 'asc' | 'desc';
+      sortOrder: typeof ASCENDING | typeof DESCENDING;
     }) => {
       updateDocumentSearchResultsSequence({
         sortColumn: sortField,
@@ -70,7 +71,10 @@ export const SearchResults = connect(
 
     const handleMobileSortChange = e => {
       if (!e.target.value) {
-        updateDocumentSearchResultsSequence({});
+        updateDocumentSearchResultsSequence({
+          sortColumn: 'resultIndex',
+          sortDirection: ASCENDING,
+        });
         setCurrentPaginationPageSequence({
           advancedSearchTab: 'case',
           currentPaginationPage: 0,
@@ -149,6 +153,23 @@ export const SearchResults = connect(
               <table className="usa-table search-results ustc-table responsive-table">
                 <thead>
                   <tr>
+                    <th className="text-no-wrap overflow-hidden small">
+                      <SortableColumn
+                        ascText={SORT_ASCENDING_TEXT.number}
+                        currentlySortedField={
+                          advancedSearchHelper.caseSearchSortColumnForDisplay
+                        }
+                        currentlySortedOrder={
+                          advancedSearchHelper.caseSearchSortDirectionForDisplay
+                        }
+                        defaultSortOrder={ASCENDING}
+                        descText={SORT_DESCENDING_TEXT.number}
+                        hasRows={true}
+                        sortField="resultIndex"
+                        title="No."
+                        onClickSequence={handleSort}
+                      />
+                    </th>
                     <th className="text-no-wrap overflow-hidden small">
                       <SortableColumn
                         ascText={SORT_ASCENDING_TEXT.string}
@@ -243,6 +264,13 @@ export const SearchResults = connect(
                       data-testid={`advanced-case-search-result-${result.docketNumber}`}
                       key={result.docketNumber}
                     >
+                      <td
+                        data-testid={`advanced-case-search-result-order-${
+                          result.resultIndex - 1
+                        }`}
+                      >
+                        {result.resultIndex}
+                      </td>
                       <td>
                         {result.petitionerNames.map((name, index) => (
                           <div key={index}>{name}</div>
@@ -277,7 +305,6 @@ export const SearchResults = connect(
                     value={advancedSearchHelper.caseSearchMobileSortValue}
                     onChange={handleMobileSortChange}
                   >
-                    <option value="">Sort by Relevance</option>
                     {advancedSearchHelper.sortOptions.map(option => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -353,6 +380,7 @@ export const SearchResults = connect(
                 <thead>
                   <tr>
                     <th aria-label="Docket Number">Docket No.</th>
+                    <th>No.</th>
                     <th>Petitioner(s)</th>
                     <th>Filed</th>
                     <th>Case Title</th>
@@ -368,6 +396,15 @@ export const SearchResults = connect(
                     >
                       <td className="docket-number-head">
                         <CaseLink formattedCase={result} />
+                      </td>
+                      <th>No.</th>
+                      <td
+                        className="divider"
+                        data-testid={`advanced-case-search-result-order-${
+                          result.resultIndex - 1
+                        }`}
+                      >
+                        {result.resultIndex}
                       </td>
                       <th>Petitioner(s)</th>
                       <td className="divider">

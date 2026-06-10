@@ -9,7 +9,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
-import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
 import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -98,8 +98,8 @@ export const baseState = {
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   caseSearchSort: {
-    sortColumn: undefined as string | undefined,
-    sortDirection: undefined as 'asc' | 'desc' | undefined,
+    sortColumn: 'resultIndex' as string,
+    sortDirection: 'asc' as 'asc' | 'desc',
   },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',

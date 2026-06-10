@@ -1,4 +1,8 @@
-import { ADVANCED_SEARCH_TABS } from '@shared/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  ASCENDING,
+  DESCENDING,
+} from '@shared/business/entities/EntityConstants';
 import { clearSearchResultsAction } from './clearSearchResultsAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -18,7 +22,7 @@ describe('clearSearchResultsAction', () => {
     expect(result.state.searchResults).toBeUndefined();
   });
 
-  it('should clear only the case tab searchResults and reset caseSearchSort when tab is CASE', async () => {
+  it('should clear only the case tab searchResults and reset caseSearchSort to No. ascending when tab is CASE', async () => {
     const result = await runAction(clearSearchResultsAction, {
       state: {
         advancedSearchForm: {
@@ -28,7 +32,7 @@ describe('clearSearchResultsAction', () => {
         advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
         caseSearchSort: {
           sortColumn: 'docketNumber',
-          sortDirection: 'asc',
+          sortDirection: ASCENDING,
         },
         searchResults: {
           case: [{ docketNumber: '101-20' }],
@@ -40,8 +44,8 @@ describe('clearSearchResultsAction', () => {
     expect(result.state.advancedSearchForm.currentPage).toEqual(1);
     expect(result.state.searchResults?.case).toBeUndefined();
     expect(result.state.searchResults?.order).toBeDefined();
-    expect(result.state.caseSearchSort?.sortColumn).toBeUndefined();
-    expect(result.state.caseSearchSort?.sortDirection).toBeUndefined();
+    expect(result.state.caseSearchSort?.sortColumn).toEqual('resultIndex');
+    expect(result.state.caseSearchSort?.sortDirection).toEqual(ASCENDING);
   });
 
   it('should clear only the order tab searchResults and reset orderDocumentSearchSort when tab is ORDER', async () => {
@@ -53,7 +57,7 @@ describe('clearSearchResultsAction', () => {
         advancedSearchTab: ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
           sortColumn: 'someColumn',
-          sortDirection: 'asc',
+          sortDirection: ASCENDING,
         },
         searchResults: {
           case: [{ docketNumber: '101-20' }],
@@ -68,7 +72,9 @@ describe('clearSearchResultsAction', () => {
     expect(result.state.orderDocumentSearchSort?.sortColumn).toEqual(
       'formattedFiledDate',
     );
-    expect(result.state.orderDocumentSearchSort?.sortDirection).toEqual('desc');
+    expect(result.state.orderDocumentSearchSort?.sortDirection).toEqual(
+      DESCENDING,
+    );
   });
 
   it('should clear only the opinion tab searchResults and reset opinionDocumentSearchSort when tab is OPINION', async () => {
@@ -80,7 +86,7 @@ describe('clearSearchResultsAction', () => {
         advancedSearchTab: ADVANCED_SEARCH_TABS.OPINION,
         opinionDocumentSearchSort: {
           sortColumn: 'someColumn',
-          sortDirection: 'asc',
+          sortDirection: ASCENDING,
         },
         searchResults: {
           case: [{ docketNumber: '101-20' }],
@@ -96,7 +102,7 @@ describe('clearSearchResultsAction', () => {
       'formattedFiledDate',
     );
     expect(result.state.opinionDocumentSearchSort?.sortDirection).toEqual(
-      'desc',
+      DESCENDING,
     );
   });
 
@@ -105,21 +111,21 @@ describe('clearSearchResultsAction', () => {
       state: {
         advancedSearchForm: { currentPage: 2 },
         advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
-        caseSearchSort: { sortColumn: 'caseTitle', sortDirection: 'desc' },
+        caseSearchSort: { sortColumn: 'caseTitle', sortDirection: DESCENDING },
         opinionDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
         orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
+          sortDirection: DESCENDING,
         },
         searchResults: { case: [{ docketNumber: '101-20' }] },
       },
     });
 
-    expect(result.state.caseSearchSort?.sortColumn).toBeUndefined();
-    expect(result.state.caseSearchSort?.sortDirection).toBeUndefined();
+    expect(result.state.caseSearchSort?.sortColumn).toEqual('resultIndex');
+    expect(result.state.caseSearchSort?.sortDirection).toEqual(ASCENDING);
     expect(result.state.orderDocumentSearchSort?.sortColumn).toEqual(
       'formattedFiledDate',
     );
