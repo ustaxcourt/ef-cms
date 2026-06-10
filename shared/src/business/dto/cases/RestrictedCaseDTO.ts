@@ -3,8 +3,9 @@ import { removeServedParties } from '../helpers/removeServedParties';
 
 export class RestrictedCaseDTO {
   public entityName: string;
-  public docketNumber?: string;
+  public docketNumber: string;
   public docketNumberSuffix?: string;
+  public docketNumberWithSuffix?: string;
   public isPaper?: boolean;
   public isSealed?: string;
   public leadDocketNumber?: boolean;
@@ -15,6 +16,7 @@ export class RestrictedCaseDTO {
     this.entityName = 'RestrictedCaseDTO';
     this.docketNumber = rawRestrictedCase.docketNumber;
     this.docketNumberSuffix = rawRestrictedCase.docketNumberSuffix;
+    this.docketNumberWithSuffix = rawRestrictedCase.docketNumberWithSuffix;
     this.isPaper = rawRestrictedCase.isPaper;
     this.isSealed = rawRestrictedCase.isSealed;
     this.leadDocketNumber = rawRestrictedCase.leadDocketNumber;
