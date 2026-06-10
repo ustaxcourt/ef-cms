@@ -2,15 +2,25 @@ import { AwsRum, AwsRumConfig } from 'aws-rum-web';
 
 let awsRum: AwsRum | undefined;
 
-export const initializeRealUserMonitoring = () => {
+export const initializeRealUserMonitoring = (): void => {
   if (process.env.ENV === 'local') return;
   try {
+    const identityPoolId = process.env.RUM_IDENTITY_POOL_ID;
+    const sampleRateStr = process.env.RUM_SAMPLE_RATE;
+    const appMonitorId = process.env.RUM_APP_MONITOR_ID;
+
+    if (!identityPoolId || !sampleRateStr || !appMonitorId) {
+      throw new Error(
+        'Missing required RUM environment variables: RUM_IDENTITY_POOL_ID, RUM_SAMPLE_RATE, RUM_APP_MONITOR_ID',
+      );
+    }
+
     const config: AwsRumConfig = {
       allowCookies: true,
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
-      identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
-      sessionSampleRate: Number(process.env.RUM_SAMPLE_RATE!),
+      identityPoolId,
+      sessionSampleRate: Number(sampleRateStr),
       telemetries: [
         'performance',
         'errors',
@@ -22,7 +32,7 @@ export const initializeRealUserMonitoring = () => {
       ],
     };
 
-    const APPLICATION_ID: string = process.env.RUM_APP_MONITOR_ID!;
+    const APPLICATION_ID: string = appMonitorId;
     const APPLICATION_VERSION: string = '0.0.1';
 
     awsRum = new AwsRum(
