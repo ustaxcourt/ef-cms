@@ -15,7 +15,7 @@ type ErrorBoundaryState = {
  * instead of unmounting the entire React tree (which leaves a blank page).
  *
  * Note: error boundaries do NOT catch errors in event handlers, asynchronous
- * code, or the boundary's own render - those still need their own handling.
+ * code, or the boundary's own render
  */
 export class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
