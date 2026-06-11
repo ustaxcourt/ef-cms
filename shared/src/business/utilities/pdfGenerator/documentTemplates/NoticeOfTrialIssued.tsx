@@ -64,8 +64,7 @@ export const NoticeOfTrialIssued = ({
           Court’s discretion.
         </p>
 
-        <p>
-          <DocumentParagraphIndent />
+        <p className="text-center">
           <span className="text-underline">ACCESS REMOTE PROCEEDING</span>
         </p>
         <p>
