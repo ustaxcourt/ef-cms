@@ -137,9 +137,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       trialLocation: 'Houston, Texas',
     };
 
-    expect(result.formattedTrialSession).toMatchObject(
-      expectedFormattedTrialSession,
-    );
+    expect(result.formattedTrialSession).toEqual(expectedFormattedTrialSession);
     expect(result.formattedNow).toMatch(
       /^\d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern$/,
     );
