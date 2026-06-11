@@ -8,7 +8,7 @@ export class RestrictedCaseDTO {
   public docketNumberWithSuffix?: string;
   public isPaper?: boolean;
   public isSealed?: string;
-  public leadDocketNumber?: boolean;
+  public leadDocketNumber?: string;
   public docketEntries: RawDocketEntry[];
 
   constructor(rawRestrictedCase: RawRestrictedCase) {
