@@ -14,8 +14,6 @@ export const clearSearchResultsAction = ({ get, store }: ActionProps) => {
     store.unset(state.searchResults);
   }
 
-  store.set(state.advancedSearchForm.currentPage, 1);
-
   if (tabName === ADVANCED_SEARCH_TABS.CASE) {
     store.set(state.caseSearchSort.sortColumn, 'resultIndex');
     store.set(state.caseSearchSort.sortDirection, ASCENDING);

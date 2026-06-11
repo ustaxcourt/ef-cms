@@ -59,11 +59,7 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    paginatedResults = paginationHelper(
-      searchResults,
-      get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
-    );
+    paginatedResults = getDocumentSearchResults(searchResults);
 
     paginatedResults.formattedSearchResults =
       paginatedResults.searchResults.map(searchResult =>
@@ -179,7 +175,9 @@ export const formatDocumentSearchResultRecord = (
   return result;
 };
 
-export const paginationHelper = (searchResults, currentPage, pageSize) => {
+export const getDocumentSearchResults = (
+  searchResults: any[] | undefined,
+): any => {
   if (!searchResults) {
     return {};
   }
@@ -187,9 +185,8 @@ export const paginationHelper = (searchResults, currentPage, pageSize) => {
   return {
     formattedSearchResults: [],
     numberOfResults: searchResults.length,
-    searchResults: searchResults.slice(0, currentPage * pageSize),
+    searchResults: [...searchResults],
     searchResultsCount: searchResults.length,
-    showLoadMore: searchResults.length > currentPage * pageSize,
     showNoMatches: searchResults.length === 0,
     showSearchResults: searchResults.length > 0,
   };

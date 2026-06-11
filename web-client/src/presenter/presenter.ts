@@ -438,7 +438,6 @@ import { validateFileSequence } from './sequences/validateFileSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
-import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
@@ -1347,7 +1346,6 @@ export const presenterSequences = {
   showMoreClosedCasesSequence:
     showMoreClosedCasesSequence as unknown as Function,
   showMoreOpenCasesSequence: showMoreOpenCasesSequence as unknown as Function,
-  showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
   showRemovePetitionerEmailModalSequence,
   showPaperServiceProgressSequence:
     showPaperServiceProgressSequence as unknown as Function,

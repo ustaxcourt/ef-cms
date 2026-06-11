@@ -1793,7 +1793,7 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
 export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for documents
-export const ADVANCED_CASE_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page in advanced case search
+export const ADVANCED_CASE_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for cases
 export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page

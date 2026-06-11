@@ -1,6 +1,6 @@
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
-  paginationHelper,
+  getDocumentSearchResults,
 } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
@@ -213,7 +213,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: { opinion: [], order: [] },
@@ -221,7 +221,6 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      showLoadMore: false,
       showNoMatches: true,
       showSearchResults: false,
     });
@@ -231,7 +230,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -253,7 +252,6 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toMatchObject({
       manyResults: manyResultsOverride,
       searchResultsCount: 1,
-      showLoadMore: false,
       showManyResultsMessage: false,
       showNoMatches: false,
       showSearchResults: true,
@@ -264,7 +262,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -313,7 +311,6 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toMatchObject({
       manyResults: manyResultsOverride,
       searchResultsCount: 4,
-      showLoadMore: false,
       showManyResultsMessage: true,
       showNoMatches: false,
       showSearchResults: true,
@@ -324,7 +321,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -382,7 +379,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: {
@@ -448,7 +445,7 @@ describe('advancedDocumentSearchHelper', () => {
     const { searchResults } = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: {
@@ -480,7 +477,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -515,7 +512,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -557,7 +554,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -595,7 +592,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         opinionDocumentSearchSort: {
@@ -625,7 +622,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         opinionDocumentSearchSort: {
@@ -651,9 +648,9 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result.formattedSearchResults.map(r => r.judge)).toEqual(expected);
   });
 
-  describe('paginationHelper', () => {
+  describe('getDocumentSearchResults', () => {
     it('should return an empty object when searchResults are undefined', () => {
-      const result = paginationHelper(undefined, 1, 25);
+      const result = getDocumentSearchResults(undefined);
       expect(result).toEqual({});
     });
   });

@@ -31,7 +31,6 @@ export const DocumentSearchResults = connect(
     advancedSearchTab: state.advancedSearchTab,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
-    showMoreResultsSequence: sequences.showMoreResultsSequence,
     updateDocumentSearchResultsSequence:
       sequences.updateDocumentSearchResultsSequence,
     setCurrentPaginationPageSequence:
