@@ -5,7 +5,6 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
-  const pageSizeOverride = 5;
   const manyResultsOverride = 4;
 
   const { DATE_RANGE_SEARCH_OPTIONS, DOCKET_NUMBER_SUFFIXES, USER_ROLES } =
@@ -49,7 +48,6 @@ describe('advancedDocumentSearchHelper', () => {
       getConstants: () => {
         return {
           ...applicationContext.getConstants(),
-          ADVANCED_CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
           MAX_DOCUMENT_SEARCH_RESULTS: manyResultsOverride,
         };
       },
