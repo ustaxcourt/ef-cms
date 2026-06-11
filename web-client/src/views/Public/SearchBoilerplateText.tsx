@@ -1,4 +1,3 @@
-import { User } from '@shared/business/entities/User';
 import { emptyUserState } from '@web-client/presenter/state/userState';
 import {
   ROLES,
@@ -27,13 +26,12 @@ export function SearchBoilerplateText({
     practitionerRoles.has((user as any)?.role) ||
     practitionerTypes.has((user as any)?.practiceType);
 
-  const isInternalUser = User.isInternalUser((user as any)?.role);
-
   const showBullets =
-    !isInternalUser &&
-    (isPractitionerUser ||
-      (formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
-      !user?.userId);
+    isPractitionerUser ||
+    (formTypeText !== 'a case' &&
+      formTypeText !== 'an order' &&
+      formTypeText !== 'an opinion') ||
+    !user?.userId;
 
   return (
     <>
@@ -48,7 +46,7 @@ export function SearchBoilerplateText({
           </>
         )}
       </p>
-      {/* Only render bullets if external user, not an order, not an opinion */}
+      {/* Only render bullets if external user */}
       {showBullets && (
         <ul>
           <li>
