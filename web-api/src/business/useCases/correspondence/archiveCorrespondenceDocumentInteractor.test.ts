@@ -83,20 +83,22 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
 
   it('should not delete the specified correspondence document from s3 if the transaction fails', async () => {
     updateCaseAndAssociations.mockRejectedValueOnce(
-        new Error('Database error'),
-      );
+      new Error('Database error'),
+    );
 
-    await expect(archiveCorrespondenceDocumentInteractor(
-      applicationContext,
-      {
-        correspondenceId: mockCorrespondenceId,
-        docketNumber: MOCK_CASE.docketNumber,
-      },
-      mockDocketClerkUser,
-    )).rejects.toThrow('Database error');
+    await expect(
+      archiveCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          correspondenceId: mockCorrespondenceId,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocumentFile
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
   });
 
