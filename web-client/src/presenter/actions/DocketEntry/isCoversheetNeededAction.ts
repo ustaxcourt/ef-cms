@@ -15,8 +15,7 @@ export const isCoversheetNeededAction = ({ path, props }: ActionProps) => {
     // back to the first pending ID when props.docketEntryId is absent.
     return path.yes({
       docketEntryIds: pendingCoversheetDocketEntryIds,
-      docketEntryId:
-        props.docketEntryId || pendingCoversheetDocketEntryIds[0],
+      docketEntryId: props.docketEntryId || pendingCoversheetDocketEntryIds[0],
     });
   }
 

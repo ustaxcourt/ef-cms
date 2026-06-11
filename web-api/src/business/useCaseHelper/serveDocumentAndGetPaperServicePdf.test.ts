@@ -8,6 +8,10 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
+import {
+  inTransaction as inTransactionMock,
+  onTransactionCommit as onTransactionCommitMock,
+} from '@web-api/persistence/postgres/utils/transactions';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import {
   ATP_DOCKET_ENTRY,
@@ -266,6 +270,21 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0].servedParties.electronic,
     ).toEqual([]);
+  });
+
+  it('should send service emails via onTransactionCommit if in a transaction', async () => {
+    (inTransactionMock as jest.Mock).mockReturnValueOnce(true);
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+    expect(onTransactionCommitMock).toHaveBeenCalledTimes(1);
   });
 
   it('should use stampedPdf if cachedPdfData does not exist', async () => {

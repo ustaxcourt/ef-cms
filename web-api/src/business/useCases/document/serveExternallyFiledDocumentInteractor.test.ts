@@ -701,6 +701,86 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBeUndefined();
   });
 
+  it('should not send notification if transaction fails', async () => {
+    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should clear isPendingService flag even if transaction fails', async () => {
+    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    // Finally block should still run - verify it was called with status: false
+    const lastCall =
+      updateDocketEntryPendingServiceStatus.mock.calls[
+        updateDocketEntryPendingServiceStatus.mock.calls.length - 1
+      ];
+    expect(lastCall[0]).toMatchObject({
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockCase.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should not add coversheet if transaction fails', async () => {
+    // Make serveDocumentAndGetPaperServicePdf fail
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('Service failed'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Service failed');
+
+    // Verify coversheet was NOT added since transaction failed
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should serve the document on all provided docket numbers', async () => {
     const leadDocketNumber = '100-20';
     const member1DocketNumber = '101-20';
@@ -859,85 +939,5 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         }),
       }),
     );
-  });
-
-  it('should not send notification if transaction fails', async () => {
-    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
-      new Error('Database error'),
-    );
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Database error');
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should clear isPendingService flag even if transaction fails', async () => {
-    fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
-      new Error('Database error'),
-    );
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Database error');
-
-    // Finally block should still run - verify it was called with status: false
-    const lastCall =
-      updateDocketEntryPendingServiceStatus.mock.calls[
-        updateDocketEntryPendingServiceStatus.mock.calls.length - 1
-      ];
-    expect(lastCall[0]).toMatchObject({
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCase.docketNumber,
-      status: false,
-    });
-  });
-
-  it('should not add coversheet if transaction fails', async () => {
-    // Make serveDocumentAndGetPaperServicePdf fail
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
-        new Error('Service failed'),
-      );
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId: mockClientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
-          subjectCaseDocketNumber: mockCase.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Service failed');
-
-    // Verify coversheet was NOT added since transaction failed
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
   });
 });

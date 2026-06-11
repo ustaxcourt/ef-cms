@@ -2,10 +2,7 @@ import { GRANT_DENY_MOTION_OPTIONS } from '@shared/business/entities/EntityConst
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupGrantDenyMotionFormAction = ({
-  get,
-  store,
-}: ActionProps) => {
+export const setupGrantDenyMotionFormAction = ({ get, store }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const isOnLeadCase = isLeadCase(caseDetail);
 

@@ -131,18 +131,18 @@ export const serveCourtIssuedDocument = async (
 
     docketEntryToServe.numberOfPages = numberOfPages;
 
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+
+    for (const caseToUpdate of casesToUpdate) {
+      caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
+    }
+
+    const multiDocketedOn: string[] =
+      docketNumbers.length > 0
+        ? [subjectCaseDocketNumber, ...docketNumbers]
+        : [];
+
     try {
-      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
-
-      for (const caseToUpdate of casesToUpdate) {
-        caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
-      }
-
-      const multiDocketedOn: string[] =
-        docketNumbers.length > 0
-          ? [subjectCaseDocketNumber, ...docketNumbers]
-          : [];
-
       caseEntities = await settlePromises(
         caseEntities.map(caseEntity => {
           const docketEntryEntity = new DocketEntry(
@@ -229,7 +229,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: { docketNumbers?: string[]; subjectCaseDocketNumber },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber: string },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,

@@ -27,8 +27,7 @@ describe('clearGrantDenyMotionFormAction', () => {
       dueDateMessage: undefined,
       filingParty: undefined,
       isOnLeadCase: true,
-      issueOrder:
-        GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+      issueOrder: GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
       jurisdiction: undefined,
       strickenFromTrialSession: undefined,
     });

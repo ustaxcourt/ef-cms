@@ -115,7 +115,8 @@ async function getToken(): Promise<string> {
       .then(t => {
         // On success, cache the token and its expiration time
         token = t;
-        tokenExpirationTime = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS)) + 13 * 60 * 1000;
+        tokenExpirationTime =
+          Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS)) + 13 * 60 * 1000;
         return t;
       })
       .finally(() => {

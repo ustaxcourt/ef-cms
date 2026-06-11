@@ -76,7 +76,9 @@ describe('Edit Docket Entry Objections edit leaves the coversheet untouched', ()
         .filter((_, el) => /\bMOTR\b/.test(el.textContent || ''))
         .invoke('attr', 'data-testid')
         .then(cellTestId => {
-          const match = (cellTestId || '').match(/docket-entry-eventCode-(\d+)/);
+          const match = (cellTestId || '').match(
+            /docket-entry-eventCode-(\d+)/,
+          );
           if (!match) {
             throw new Error(
               `Could not resolve MOTR docket entry index from data-testid: ${cellTestId}`,

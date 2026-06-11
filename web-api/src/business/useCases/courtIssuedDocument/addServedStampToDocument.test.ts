@@ -41,10 +41,12 @@ describe('addServedStampToDocument', () => {
 
     applicationContext.getUtilities().getCropBox.mockReturnValue({});
 
-    applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mockReturnValue({
-      x: 0,
-      y: 0,
-    });
+    applicationContext
+      .getUtilities()
+      .getRotationAdjustedBoxCoordinates.mockReturnValue({
+        x: 0,
+        y: 0,
+      });
   });
 
   it('should make a call to load and setup the PDF', async () => {
@@ -190,7 +192,8 @@ describe('computeCoordinates', () => {
     computeCoordinates(args);
 
     expect(
-      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock
+        .calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: mockPageWidth / 2 - mockBoxWidth / 2,
@@ -203,7 +206,8 @@ describe('computeCoordinates', () => {
     computeCoordinates(args);
 
     expect(
-      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock
+        .calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: mockPageWidth / 2 - mockBoxWidth / 2,

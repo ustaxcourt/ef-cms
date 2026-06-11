@@ -143,7 +143,7 @@ describe('documentViewerLinksHelper', () => {
         },
       },
     });
-  
+
     expect(result.orderResponseFromCaseDetailsLink).toEqual(
       `/case-detail/${mockDocketNumber}/documents/${mockDocketEntryId}/motion-order-response`,
     );

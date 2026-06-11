@@ -168,9 +168,7 @@ describe('createCaseInteractor', () => {
     const coversheetMessages = queueWorkCalls
       .map(args => args[1]?.message)
       .filter(message => message?.type === 'ADD_COVERSHEET');
-    expect(
-      coversheetMessages.map(m => m.payload.docketEntryId).sort(),
-    ).toEqual(
+    expect(coversheetMessages.map(m => m.payload.docketEntryId).sort()).toEqual(
       [
         '413f62ce-d7c8-446e-aeda-14a2a625a626',
         '413f62ce-7c8d-446e-aeda-14a2a625a611',

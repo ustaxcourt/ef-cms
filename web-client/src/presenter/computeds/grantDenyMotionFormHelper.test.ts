@@ -74,7 +74,10 @@ describe('grantDenyMotionFormHelper', () => {
         caseDetail: {},
         form: {},
         validationErrors: {
-          additionalOrderText: [undefined, 'Limit is 256 characters per entry.'],
+          additionalOrderText: [
+            undefined,
+            'Limit is 256 characters per entry.',
+          ],
         },
       },
     });

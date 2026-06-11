@@ -134,7 +134,6 @@ export const fileCourtIssuedOrder = async (
   }
 
   await withTransaction(async () => {
-
     await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,

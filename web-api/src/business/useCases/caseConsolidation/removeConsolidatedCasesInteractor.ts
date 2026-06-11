@@ -19,6 +19,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
@@ -26,7 +27,6 @@ import { CopyObjectCommand } from '@aws-sdk/client-s3';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { environment } from '@web-api/environment';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,

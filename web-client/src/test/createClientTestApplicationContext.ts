@@ -487,7 +487,9 @@ const createTestApplicationContext = () => {
       sendSetTrialSessionCalendarEvent: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    mockGetLongTimeoutSQSMessagingClient: jest.fn().mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
+    mockGetLongTimeoutSQSMessagingClient: jest
+      .fn()
+      .mockReturnValue(mockGetLongTimeoutSQSMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,

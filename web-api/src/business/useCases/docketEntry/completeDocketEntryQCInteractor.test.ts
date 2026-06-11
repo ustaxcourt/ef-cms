@@ -318,8 +318,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const addCoversheetMock =
-      applicationContext.getUseCases().addCoversheetInteractor as jest.Mock;
+    const addCoversheetMock = applicationContext.getUseCases()
+      .addCoversheetInteractor as jest.Mock;
     expect(addCoversheetMock).toHaveBeenCalled();
     const [, callArgs] = addCoversheetMock.mock.calls[0];
     expect(callArgs.replaceCoversheet).not.toBe(true);

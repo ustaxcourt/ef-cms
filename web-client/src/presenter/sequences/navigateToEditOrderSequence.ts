@@ -42,7 +42,10 @@ export const navigateToEditOrderSequence = [
           setEditGrantDenyMotionFormAction,
           navigateToPathAction,
         ],
-        isMotionOrderResponse: [setEditMotionOrderResponseFormAction, navigateToPathAction],
+        isMotionOrderResponse: [
+          setEditMotionOrderResponseFormAction,
+          navigateToPathAction,
+        ],
         isStandardOrder: [getDocumentEditUrlAsPathAction, navigateToPathAction],
         isStatusReportOrder: [
           setEditStatusReportOrderFormAction,

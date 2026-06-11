@@ -1,5 +1,8 @@
-import { Case } from '@shared/business/entities/cases/Case';
-import { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET, DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -21,7 +24,6 @@ import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPages
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 export const fileCourtIssuedDocketEntry = async (

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,

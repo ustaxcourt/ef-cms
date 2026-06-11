@@ -29,8 +29,9 @@ import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock 
 describe('addCaseToTrialSessionInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  updateCaseAndAssociations
-    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const createOrUpdateTrialSessionCases = jest.mocked(

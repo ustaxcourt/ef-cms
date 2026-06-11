@@ -47,7 +47,9 @@ export const archiveCorrespondenceDocument = async (
 
   await withTransaction(async () => {
     await upsertCaseCorrespondences([
-      (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
+      (correspondenceToArchiveEntity as Correspondence)
+        .validate()
+        .toRawObject(),
     ]);
 
     await updateCaseAndAssociations({

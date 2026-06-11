@@ -28,7 +28,7 @@ import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import {removeCaseFromTrialSession as removeCaseFromTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
+import { removeCaseFromTrialSession as removeCaseFromTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
@@ -43,7 +43,9 @@ describe('removeCaseFromTrialInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const removeCaseFromTrialSession = jest.mocked(removeCaseFromTrialSessionMock);
+  const removeCaseFromTrialSession = jest.mocked(
+    removeCaseFromTrialSessionMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {

@@ -500,7 +500,9 @@ describe('editPaperFilingInteractor', () => {
           });
         });
         it('should not serve the document if filing a document fails', async () => {
-          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(new Error('Database error'));
+          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+            new Error('Database error'),
+          );
           const docketEntry = caseRecord.docketEntries[1];
           await expect(
             editPaperFilingInteractor(

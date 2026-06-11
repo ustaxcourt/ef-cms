@@ -30,9 +30,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import {
-  withTransaction,
-} from '@web-api/persistence/postgres/utils/transactions';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import {
   AllFeatureFlags,
   getAllFeatureFlagsInteractor,

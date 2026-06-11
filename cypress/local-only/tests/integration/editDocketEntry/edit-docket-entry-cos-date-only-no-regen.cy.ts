@@ -69,7 +69,9 @@ describe('Edit Docket Entry Certificate of Service date edit alone leaves the co
         .filter((_, el) => /\bEXH\b/.test(el.textContent || ''))
         .invoke('attr', 'data-testid')
         .then(cellTestId => {
-          const match = (cellTestId || '').match(/docket-entry-eventCode-(\d+)/);
+          const match = (cellTestId || '').match(
+            /docket-entry-eventCode-(\d+)/,
+          );
           if (!match) {
             throw new Error(
               `Could not resolve EXH docket entry index from data-testid: ${cellTestId}`,

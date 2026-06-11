@@ -242,8 +242,8 @@ export const updateDocketEntryMeta = async (
 
         const updatedDocketEntries = casesToUpdate
           .map(caseRecord => {
-            const { docketNumber } = caseRecord;
-            if (docketNumber === caseToUpdate.docketNumber) {
+            const { docketNumber: caseDocketNumber } = caseRecord;
+            if (caseDocketNumber === caseToUpdate.docketNumber) {
               return;
             }
             const consolidatedCaseEntity = new Case(caseRecord, {
@@ -262,7 +262,7 @@ export const updateDocketEntryMeta = async (
               const propagationFields: any = {};
               DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
                 if (Object.hasOwn(editableFields, field)) {
-                  propagationFields[field] = editableFields[field];
+                  propagationFields[field] = (editableFields as any)[field];
                 }
               });
 
