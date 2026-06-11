@@ -1,8 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  ADVANCED_CASE_SEARCH_PAGE_SIZE,
   ASCENDING,
   DESCENDING,
-  CASE_SEARCH_PAGE_SIZE,
   MAX_CASE_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
@@ -146,12 +146,13 @@ export const advancedCaseSearchHelper = ({
     sortDirection: caseSearchSort.sortDirection,
   });
   const totalPages = Math.ceil(
-    formattedSearchResults.length / CASE_SEARCH_PAGE_SIZE,
+    formattedSearchResults.length / ADVANCED_CASE_SEARCH_PAGE_SIZE,
   );
-  const firstResultIndex = caseCurrentPaginationPage * CASE_SEARCH_PAGE_SIZE;
+  const firstResultIndex =
+    caseCurrentPaginationPage * ADVANCED_CASE_SEARCH_PAGE_SIZE;
   const paginatedResults = formattedSearchResults.slice(
     firstResultIndex,
-    firstResultIndex + CASE_SEARCH_PAGE_SIZE,
+    firstResultIndex + ADVANCED_CASE_SEARCH_PAGE_SIZE,
   );
 
   return {

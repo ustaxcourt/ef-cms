@@ -14,8 +14,8 @@ type TestPetitioner = {
 
 describe('advancedCaseSearchHelper', () => {
   const {
+    ADVANCED_CASE_SEARCH_PAGE_SIZE,
     ASCENDING,
-    CASE_SEARCH_PAGE_SIZE,
     DESCENDING,
     MAX_CASE_SEARCH_RESULTS,
     US_STATES,
@@ -175,7 +175,7 @@ describe('advancedCaseSearchHelper', () => {
 
   it('should paginate formatted search results', () => {
     const searchResults = Array.from(
-      { length: CASE_SEARCH_PAGE_SIZE + 1 },
+      { length: ADVANCED_CASE_SEARCH_PAGE_SIZE + 1 },
       (_, index) =>
         makeSearchResult({
           caseCaption: `Petitioner ${index + 1}, Petitioner`,
@@ -193,8 +193,8 @@ describe('advancedCaseSearchHelper', () => {
     expect(result.totalPages).toBe(2);
     expect(result.formattedSearchResults).toHaveLength(1);
     expect(result.formattedSearchResults[0]).toMatchObject({
-      caseTitle: `Petitioner ${CASE_SEARCH_PAGE_SIZE + 1}`,
-      resultIndex: CASE_SEARCH_PAGE_SIZE + 1,
+      caseTitle: `Petitioner ${ADVANCED_CASE_SEARCH_PAGE_SIZE + 1}`,
+      resultIndex: ADVANCED_CASE_SEARCH_PAGE_SIZE + 1,
     });
   });
 

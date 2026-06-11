@@ -52,7 +52,7 @@ describe('advancedDocumentSearchHelper', () => {
       getConstants: () => {
         return {
           ...applicationContext.getConstants(),
-          CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+          ADVANCED_CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
           MAX_DOCUMENT_SEARCH_RESULTS: manyResultsOverride,
         };
       },
