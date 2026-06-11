@@ -27,7 +27,6 @@ const caveats: string[] = [
   'eslint',
   '@eslint/js',
   'pica',
-  'react-window',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

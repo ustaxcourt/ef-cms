@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { VariableSizeList } from 'react-window';
+import { List, useListRef } from 'react-window';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
@@ -13,14 +13,10 @@ interface VirtualizedDocumentListProps {
 export const VirtualizedDocumentList: React.FC<
   VirtualizedDocumentListProps
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
-  const listRef = useRef<VariableSizeList>(null);
+  const listRef = useListRef(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
   const rowHeightCacheRef = useRef<Map<number, number>>(new Map());
   const correctionCountRef = useRef(0);
-  const measurementFrameRef = useRef<number | null>(null);
-  const lastMeasuredRangeRef = useRef<{ start: number; end: number } | null>(
-    null,
-  );
   const [listDimensions, setListDimensions] = useState<{
     width: number;
     height: number;
@@ -108,99 +104,7 @@ export const VirtualizedDocumentList: React.FC<
   useEffect(() => {
     rowHeightCacheRef.current.clear();
     correctionCountRef.current = 0;
-    if (listRef.current) {
-      listRef.current.resetAfterIndex(0);
-    }
   }, [docketEntries]);
-
-  // Single parent-level measurement pass: after all Row DOMs are committed,
-  // query all visible content wrappers, measure their actual heights,
-  // cache them, and do ONE resetAfterIndex call to reposition everything.
-  // This avoids the per-Row resetAfterIndex batching issue.
-  // Limited to 10 correction cycles to prevent infinite re-render loops
-  // (e.g., when correcting heights changes the visible range, revealing
-  // new unmeasured rows that need their own correction).
-  // Uses requestAnimationFrame to batch measurements and prevent multiple
-  // measurements per frame during scrolling.
-  useLayoutEffect(() => {
-    if (!listContainerRef.current || !listRef.current) return;
-    if (correctionCountRef.current >= 10) return;
-
-    // Cancel any pending measurement to avoid multiple measurements per frame
-    if (measurementFrameRef.current !== null) {
-      cancelAnimationFrame(measurementFrameRef.current);
-    }
-
-    measurementFrameRef.current = requestAnimationFrame(() => {
-      if (!listContainerRef.current || !listRef.current) return;
-
-      const contentElements =
-        listContainerRef.current.querySelectorAll<HTMLElement>(
-          '[data-row-index]',
-        );
-
-      if (contentElements.length === 0) return;
-
-      // Determine the current visible range
-      const indices = Array.from(contentElements).map(el =>
-        parseInt(el.dataset.rowIndex!, 10),
-      );
-      const currentStart = Math.min(...indices);
-      const currentEnd = Math.max(...indices);
-
-      // Reset correction counter if we've scrolled to a significantly different range
-      const lastRange = lastMeasuredRangeRef.current;
-      if (lastRange) {
-        const rangeSize = currentEnd - currentStart;
-        const overlap =
-          Math.min(currentEnd, lastRange.end) -
-          Math.max(currentStart, lastRange.start);
-        // If less than 50% overlap, we've scrolled to mostly new content
-        if (overlap < rangeSize * 0.5) {
-          correctionCountRef.current = 0;
-        }
-      }
-
-      lastMeasuredRangeRef.current = { start: currentStart, end: currentEnd };
-
-      let needsReset = false;
-      let minChangedIndex = Infinity;
-
-      contentElements.forEach(el => {
-        const index = parseInt(el.dataset.rowIndex!, 10);
-        const buttonEl = el.querySelector<HTMLElement>(
-          '.attachment-viewer-button',
-        );
-
-        if (!buttonEl) return;
-
-        const height = buttonEl.offsetHeight;
-        const cached = rowHeightCacheRef.current.get(index);
-
-        if (!cached || Math.abs(cached - height) > 1) {
-          rowHeightCacheRef.current.set(index, height);
-          needsReset = true;
-          minChangedIndex = Math.min(minChangedIndex, index);
-        }
-      });
-
-      if (needsReset) {
-        correctionCountRef.current++;
-        listRef.current!.resetAfterIndex(minChangedIndex, true);
-      } else {
-        // Stable — reset correction counter for future scroll events
-        correctionCountRef.current = 0;
-      }
-
-      measurementFrameRef.current = null;
-    });
-
-    return () => {
-      if (measurementFrameRef.current !== null) {
-        cancelAnimationFrame(measurementFrameRef.current);
-      }
-    };
-  });
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
@@ -209,7 +113,7 @@ export const VirtualizedDocumentList: React.FC<
         entry => entry.docketEntryId === viewDocumentId,
       );
       if (selectedIndex !== -1) {
-        listRef.current.scrollToItem(selectedIndex, 'center');
+        listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
       }
     }
   }, [viewDocumentId, listDimensions, docketEntries]);
@@ -354,16 +258,14 @@ export const VirtualizedDocumentList: React.FC<
       }}
     >
       {listDimensions && (
-        <VariableSizeList
-          height={listDimensions.height}
-          itemCount={docketEntries.length}
-          itemSize={getRowHeight}
+        <List
+          rowHeight={getRowHeight}
           overscanCount={3}
-          width={listDimensions.width}
-          ref={listRef}
-        >
-          {Row}
-        </VariableSizeList>
+          listRef={listRef}
+          rowComponent={Row}
+          rowCount={docketEntries.length}
+          rowProps={{} as any}
+        />
       )}
     </div>
   );
