@@ -215,7 +215,7 @@ export const DocumentViewerDocument = connect(
                 <Button
                   link
                   data-testid="grant-deny-motion"
-                  icon="gavel"
+                  icon="stamp"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({
                       path: documentViewerLinksHelper.grantDenyMotionFromCaseDetailsLink,

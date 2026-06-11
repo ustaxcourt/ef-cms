@@ -198,7 +198,7 @@ export const MessageDocument = connect(
           <Button
             link
             data-testid="grant-deny-motion"
-            icon="gavel"
+            icon="stamp"
             onClick={() => {
               navigateToPathSequence({
                 path: messageDocumentHelper.grantDenyMotionFromMessagesLink,
