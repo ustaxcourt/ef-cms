@@ -237,6 +237,12 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
+    // TEMPORARY: RUM verification hooks. REMOVE after confirming errors appear in CloudWatch RUM.
+    // ?rum-crash=1  → throws during render so ErrorBoundary catches it (tests JS error telemetry)
+    if (new URLSearchParams(window.location.search).get('rum-crash') === '1') {
+      throw new Error('RUM-TEST render crash');
+    }
+
     const focusMain = (e?: any) => {
       e?.preventDefault();
       const header = window.document.querySelector(
@@ -254,6 +260,20 @@ export const AppComponent = connect(
         initialPageLoaded = true;
       }
     }, [currentPage]);
+
+    // TEMPORARY: ?rum-http-error=1 → fires a fetch to a nonexistent endpoint once per page
+    // load so RUM's HTTP telemetry captures the 404 (tests http error telemetry). REMOVE after
+    // confirming the failed request appears in CloudWatch RUM.
+    useEffect(() => {
+      if (
+        new URLSearchParams(window.location.search).get('rum-http-error') ===
+        '1'
+      ) {
+        fetch('/api/rum-test-nonexistent-endpoint-404').catch(() => {
+          // intentional — we only care that RUM records the failed request
+        });
+      }
+    }, []);
 
     const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
