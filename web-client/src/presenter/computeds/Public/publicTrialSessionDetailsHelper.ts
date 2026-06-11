@@ -98,10 +98,10 @@ export const publicTrialSessionDetailsHelper = (
   };
 };
 
-const isPublicCaseDTO = (
+const isRestrictedCaseDTO = (
   calendaredCase: CalendaredPublicCase,
-): calendaredCase is PublicCaseDTO => {
-  return calendaredCase.entityName === 'PublicCaseDTO';
+): calendaredCase is RestrictedCaseDTO => {
+  return calendaredCase.entityName === 'RestrictedCaseDTO';
 };
 
 const formatPublicCase = (
@@ -113,7 +113,7 @@ const formatPublicCase = (
   const caseTitle = isSealed
     ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseDTO'
     : Case.getCaseTitle(
-        isPublicCaseDTO(calendaredCase) ? calendaredCase.caseCaption : '',
+        isRestrictedCaseDTO(calendaredCase) ? '' : calendaredCase.caseCaption,
       );
   let consolidatedIconTooltipText;
 
@@ -131,13 +131,13 @@ const formatPublicCase = (
     docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
-    irsPractitioners: isPublicCaseDTO(calendaredCase)
-      ? calendaredCase.irsPractitioners
-      : undefined,
+    irsPractitioners: isRestrictedCaseDTO(calendaredCase)
+      ? undefined
+      : calendaredCase.irsPractitioners,
     isLeadCase: isTheLeadCase,
     isSealed: !!isSealed,
-    privatePractitioners: isPublicCaseDTO(calendaredCase)
-      ? calendaredCase.privatePractitioners
-      : undefined,
+    privatePractitioners: isRestrictedCaseDTO(calendaredCase)
+      ? undefined
+      : calendaredCase.privatePractitioners,
   };
 };
