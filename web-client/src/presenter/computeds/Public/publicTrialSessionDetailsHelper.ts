@@ -8,8 +8,9 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
-import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-type CalendaredPublicCase = Omit<RawCase | PublicCase, 'consolidatedCases'>;
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+type CalendaredPublicCase = PublicCaseDTO | RestrictedCaseDTO;
 
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
@@ -97,6 +98,12 @@ export const publicTrialSessionDetailsHelper = (
   };
 };
 
+const isPublicCaseDTO = (
+  calendaredCase: CalendaredPublicCase,
+): calendaredCase is PublicCaseDTO => {
+  return calendaredCase.entityName === 'PublicCaseDTO';
+};
+
 const formatPublicCase = (
   calendaredCase: CalendaredPublicCase,
 ): TrialSessionPublicCaseRow => {
@@ -104,8 +111,10 @@ const formatPublicCase = (
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
   const isTheLeadCase = isLeadCase(calendaredCase);
   const caseTitle = isSealed
-    ? 'Sealed'
-    : Case.getCaseTitle(calendaredCase.caseCaption);
+    ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseDTO'
+    : Case.getCaseTitle(
+        isPublicCaseDTO(calendaredCase) ? calendaredCase.caseCaption : '',
+      );
   let consolidatedIconTooltipText;
 
   if (inConsolidatedGroup) {
@@ -122,9 +131,13 @@ const formatPublicCase = (
     docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
-    irsPractitioners: calendaredCase.irsPractitioners,
+    irsPractitioners: isPublicCaseDTO(calendaredCase)
+      ? calendaredCase.irsPractitioners
+      : undefined,
     isLeadCase: isTheLeadCase,
     isSealed: !!isSealed,
-    privatePractitioners: calendaredCase.privatePractitioners,
+    privatePractitioners: isPublicCaseDTO(calendaredCase)
+      ? calendaredCase.privatePractitioners
+      : undefined,
   };
 };
