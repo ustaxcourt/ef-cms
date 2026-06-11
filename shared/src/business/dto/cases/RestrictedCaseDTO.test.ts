@@ -7,7 +7,7 @@ describe('RestrictedCaseDTO', () => {
       docketNumberSuffix: 'S',
       isPaper: false,
       isSealed: undefined,
-      leadDocketNumber: false,
+      leadDocketNumber: '101-20',
       docketEntries: [],
     };
 
