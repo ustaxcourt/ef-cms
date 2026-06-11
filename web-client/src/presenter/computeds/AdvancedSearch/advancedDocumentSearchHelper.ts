@@ -59,7 +59,14 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    paginatedResults = getDocumentSearchResults(searchResults);
+    paginatedResults = {
+      formattedSearchResults: [],
+      numberOfResults: searchResults.length,
+      searchResults: [...searchResults],
+      searchResultsCount: searchResults.length,
+      showNoMatches: searchResults.length === 0,
+      showSearchResults: searchResults.length > 0,
+    };
 
     paginatedResults.formattedSearchResults =
       paginatedResults.searchResults.map(searchResult =>
@@ -173,21 +180,4 @@ export const formatDocumentSearchResultRecord = (
   }
 
   return result;
-};
-
-export const getDocumentSearchResults = (
-  searchResults: any[] | undefined,
-): any => {
-  if (!searchResults) {
-    return {};
-  }
-
-  return {
-    formattedSearchResults: [],
-    numberOfResults: searchResults.length,
-    searchResults: [...searchResults],
-    searchResultsCount: searchResults.length,
-    showNoMatches: searchResults.length === 0,
-    showSearchResults: searchResults.length > 0,
-  };
 };

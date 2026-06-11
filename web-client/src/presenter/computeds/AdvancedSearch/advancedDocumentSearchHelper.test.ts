@@ -1,7 +1,4 @@
-import {
-  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
-  getDocumentSearchResults,
-} from './advancedDocumentSearchHelper';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -646,12 +643,5 @@ describe('advancedDocumentSearchHelper', () => {
     });
     const expected = ['Cohen', 'Buch', 'Aardvark'];
     expect(result.formattedSearchResults.map(r => r.judge)).toEqual(expected);
-  });
-
-  describe('getDocumentSearchResults', () => {
-    it('should return an empty object when searchResults are undefined', () => {
-      const result = getDocumentSearchResults(undefined);
-      expect(result).toEqual({});
-    });
   });
 });
