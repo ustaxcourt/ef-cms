@@ -2,6 +2,9 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
+import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
@@ -15,16 +18,18 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  calendaredCases: Omit<RawCase, 'consolidatedCases'>[];
+  calendaredCases: (PublicCaseDTO | RestrictedCaseDTO)[];
   swingSessionLocation?: string;
 };
 
-export const getPublicTrialSessionDetailsInteractor = async (
-  { trialSessionId }: { trialSessionId: string },
-): Promise<PublicTrialSessionDetails> => {
+export const getPublicTrialSessionDetailsInteractor = async ({
+  trialSessionId,
+}: {
+  trialSessionId: string;
+}): Promise<PublicTrialSessionDetails> => {
   const trialSessionDetails = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSessionDetails) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -37,24 +42,24 @@ export const getPublicTrialSessionDetailsInteractor = async (
   let swingSessionLocation: string | undefined;
   if (fullTrialSessionEntity.swingSessionId) {
     const swingSessionDetails = await getTrialSessionById({
-        trialSessionId: fullTrialSessionEntity.swingSessionId,
-      });
+      trialSessionId: fullTrialSessionEntity.swingSessionId,
+    });
     swingSessionLocation = swingSessionDetails?.trialLocation;
   }
 
   const cases = await getCalendaredCasesForTrialSession({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   const casesWithMinimalRequiredInformation = cases
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => {
       // No need to see docket entries
-      const caseWithEmptyDocketEntries = {
-        ...aCase,
-        docketEntries: [],
-      };
-      return caseWithEmptyDocketEntries;
+
+      return CaseFactory.getCaseDTO({
+        rawCase: { ...aCase, docketEntries: [] },
+        user: undefined,
+      }) as PublicCaseDTO | RestrictedCaseDTO;
     });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {

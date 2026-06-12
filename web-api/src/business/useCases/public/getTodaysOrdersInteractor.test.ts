@@ -50,6 +50,11 @@ describe('getTodaysOrdersInteractor', () => {
     totalCount: 45,
   };
 
+  const getRequest = {
+    page: 1,
+    todaysOrdersSort: 'filingDateDesc',
+  };
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -57,7 +62,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should only search for order document types for today', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {} as any);
+    await getTodaysOrdersInteractor(applicationContext, getRequest);
 
     const { day, month, year } = deconstructDate(createISODateString());
     const currentDateStart = createStartOfDayISO({ day, month, year });
@@ -78,7 +83,8 @@ describe('getTodaysOrdersInteractor', () => {
 
     await getTodaysOrdersInteractor(applicationContext, {
       page: mockCurrentPage,
-    } as any);
+      todaysOrdersSort: 'filingDateDesc',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -87,7 +93,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should filter out order documents belonging to sealed cases', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {} as any);
+    await getTodaysOrdersInteractor(applicationContext, getRequest);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -96,10 +102,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should make a call to advancedDocumentSearch with the result page size overridden and default sort order', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {
-      page: 1,
-      todaysOrdersSort: 'filingDateDesc',
-    });
+    await getTodaysOrdersInteractor(applicationContext, getRequest);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -112,11 +115,25 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should return the results and totalCount of results', async () => {
-    const result = await getTodaysOrdersInteractor(applicationContext, {
-      page: 1,
-    } as any);
+    const result = await getTodaysOrdersInteractor(
+      applicationContext,
+      getRequest,
+    );
 
-    expect(result.results).toBeDefined();
-    expect(result.totalCount).toBeDefined();
+    expect(result.totalCount).toEqual(mockOrderSearchResults.totalCount);
+    expect(result.results).toHaveLength(1);
+    expect(result.results[0].docketEntryId).toEqual(
+      mockOrderSearchResults.results[0].docketEntryId,
+    );
+    expect(result.results[0].eventCode).toEqual(
+      mockOrderSearchResults.results[0].eventCode,
+    );
+    expect(result.results[0].entityName).toEqual('PublicDocumentSearchResult');
+    expect(result.results[0]).not.toHaveProperty('contactPrimary');
+    expect(result.results[0]).not.toHaveProperty('privatePractitioners');
+    expect(result.results[0]).not.toHaveProperty('irsPractitioners');
+    expect(result.results[0].caseCaption).toEqual(
+      mockOrderSearchResults.results[0].caseCaption,
+    );
   });
 });
