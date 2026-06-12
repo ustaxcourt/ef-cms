@@ -1,10 +1,12 @@
 import React from 'react';
 
 export const CharactersRemainingHint = ({
+  className,
   id,
   maxCharacters,
   stringToCount = '',
 }: {
+  className?: string;
   id?: string;
   maxCharacters: number;
   stringToCount: string | null | undefined;
@@ -14,7 +16,7 @@ export const CharactersRemainingHint = ({
   return (
     <span
       aria-live="polite"
-      className="usa-hint usa-character-count__message"
+      className={`usa-hint usa-character-count__message ${className || ''}`}
       id={id || 'with-hint-textarea-info'}
     >
       {charactersRemaining} characters remaining

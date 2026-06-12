@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Button as DawsonButton } from '@web-client/dawson-ui/ui/button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CharactersRemainingHint } from '@web-client/ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
@@ -48,7 +49,6 @@ export const GrantDenyMotion = connect(
   }) {
     const additionalOrderText: string[] = form.additionalOrderText || [''];
     const isDenied = form.disposition === constants.MOTION_DISPOSITIONS.DENIED;
-    const dueDateMessageSelected = !!form.dueDateMessage;
     const { isCalendared } = grantDenyMotionFormHelper;
     const isStrickenFromTrialSessionSelected = !!form.strickenFromTrialSession;
     const jurisdictionOptionsEnabled =
@@ -65,6 +65,62 @@ export const GrantDenyMotion = connect(
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
     const { filingPartyOptions } = grantDenyOptions;
     const docketEntryPreview = 'Order';
+
+    const renderStatusReportDueDateFields = (): React.ReactNode => (
+      <div
+        className="grant-deny-motion-status-report-fields"
+        data-testid="status-report-due-date-fields"
+      >
+        <FormGroup errorText={validationErrors.filingParty}>
+          <label className="usa-label" htmlFor="filing-party">
+            Filing Party
+          </label>
+          <select
+            className="usa-select"
+            data-testid="filing-party"
+            id="filing-party"
+            name="filingParty"
+            value={form.filingParty || ''}
+            onChange={e =>
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              })
+            }
+          >
+            <option value="">- Select -</option>
+            <option value={filingPartyOptions.petitioners}>
+              {filingPartyOptions.petitioners}
+            </option>
+            <option value={filingPartyOptions.respondent}>
+              {filingPartyOptions.respondent}
+            </option>
+            <option value={filingPartyOptions.joint}>
+              {filingPartyOptions.joint}
+            </option>
+          </select>
+        </FormGroup>
+
+        <FormGroup errorText={validationErrors.dueDate}>
+          <DateSelector
+            defaultValue={form.dueDate}
+            formGroupClassNames="display-inline-block padding-0"
+            id="grant-deny-due-date"
+            label="Due Date:"
+            minDate={grantDenyMotionFormHelper.minDate}
+            placeHolderText="MM/DD/YYYY"
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: 'dueDate',
+                toFormat: constants.DATE_FORMATS.YYYYMMDD,
+                value: e.target.value,
+              });
+              validateGrantDenyMotionSequence();
+            }}
+          />
+        </FormGroup>
+      </div>
+    );
 
     return (
       <>
@@ -258,255 +314,211 @@ export const GrantDenyMotion = connect(
                       <span className="usa-hint">(optional)</span>
                     </label>
 
-                    <div className="usa-checkbox">
-                      <input
-                        aria-label="this case is stricken from the trial session"
-                        checked={!!form.strickenFromTrialSession}
-                        className="usa-checkbox__input"
-                        data-testid="stricken-from-trial-session"
-                        disabled={!isCalendared}
-                        id="stricken-from-trial-session"
-                        name="strickenFromTrialSession"
-                        type="checkbox"
-                        onChange={e =>
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.checked,
-                          })
-                        }
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="stricken-from-trial-session"
-                        style={isCalendared ? undefined : { color: '#757575' }}
-                        title={calendaredDisabledTitle}
-                      >
-                        This case is stricken from the trial session
-                      </label>
-                    </div>
-
-                    <hr className="border-top-2px border-base-lighter tw:my-3" />
-
-                    <div className="usa-radio">
-                      <input
-                        aria-label="restore to general docket"
-                        checked={
-                          form.jurisdiction ===
-                          grantDenyOptions.jurisdictionOptions.restored
-                        }
-                        className="usa-radio__input"
-                        data-testid="jurisdiction-restored"
-                        disabled={!jurisdictionOptionsEnabled}
-                        id="jurisdiction-restored"
-                        name="jurisdiction"
-                        type="radio"
-                        value={grantDenyOptions.jurisdictionOptions.restored}
-                        onChange={e =>
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor="jurisdiction-restored"
-                        style={
-                          jurisdictionOptionsEnabled
-                            ? undefined
-                            : { color: '#757575' }
-                        }
-                        title={jurisdictionDisabledTitle}
-                      >
-                        Restore to general docket
-                      </label>
-                    </div>
-                    <div className="usa-radio">
-                      <input
-                        aria-label="jurisdiction retained"
-                        checked={
-                          form.jurisdiction ===
-                          grantDenyOptions.jurisdictionOptions.retained
-                        }
-                        className="usa-radio__input"
-                        data-testid="jurisdiction-retained"
-                        disabled={!jurisdictionOptionsEnabled}
-                        id="jurisdiction-retained"
-                        name="jurisdiction"
-                        type="radio"
-                        value={grantDenyOptions.jurisdictionOptions.retained}
-                        onChange={e =>
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor="jurisdiction-retained"
-                        style={
-                          jurisdictionOptionsEnabled
-                            ? undefined
-                            : { color: '#757575' }
-                        }
-                        title={jurisdictionDisabledTitle}
-                      >
-                        Jurisdiction retained
-                      </label>
-                    </div>
-
-                    <hr className="border-top-2px border-base-lighter tw:my-3" />
-
-                    <div className="usa-checkbox">
-                      <input
-                        aria-label="file status report"
-                        checked={
-                          form.dueDateMessage ===
-                          grantDenyOptions.dueDateMessageOptions.statusReport
-                        }
-                        className="usa-checkbox__input"
-                        data-testid="due-date-message-status-report"
-                        id="due-date-message-status-report"
-                        name="dueDateMessage"
-                        type="checkbox"
-                        onChange={() => {
-                          const optionValue =
-                            grantDenyOptions.dueDateMessageOptions.statusReport;
-                          updateFormValueSequence({
-                            key: 'dueDateMessage',
-                            value:
-                              form.dueDateMessage === optionValue
-                                ? null
-                                : optionValue,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="due-date-message-status-report"
-                      >
-                        File Status Report
-                      </label>
-                    </div>
-                    <div className="usa-checkbox">
-                      <input
-                        aria-label="file status report or proposed stipulated decision"
-                        checked={
-                          form.dueDateMessage ===
-                          grantDenyOptions.dueDateMessageOptions
-                            .statusReportOrStipulatedDecision
-                        }
-                        className="usa-checkbox__input"
-                        data-testid="due-date-message-stip"
-                        id="due-date-message-stip"
-                        name="dueDateMessage"
-                        type="checkbox"
-                        onChange={() => {
-                          const optionValue =
-                            grantDenyOptions.dueDateMessageOptions
-                              .statusReportOrStipulatedDecision;
-                          updateFormValueSequence({
-                            key: 'dueDateMessage',
-                            value:
-                              form.dueDateMessage === optionValue
-                                ? null
-                                : optionValue,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="due-date-message-stip"
-                      >
-                        File Status Report/Proposed Stip Decision
-                      </label>
-                    </div>
-
-                    {dueDateMessageSelected && (
-                      <div
-                        className="grant-deny-motion-status-report-fields tw:pl-7 tw:mt-3"
-                        data-testid="status-report-due-date-fields"
-                      >
-                        <FormGroup
-                          className="grant-deny-motion-form-group"
-                          errorText={validationErrors.filingParty}
+                    <div className="grant-deny-motion-optional-options">
+                      <div className="usa-checkbox">
+                        <input
+                          aria-label="this case is stricken from the trial session"
+                          checked={!!form.strickenFromTrialSession}
+                          className="usa-checkbox__input"
+                          data-testid="stricken-from-trial-session"
+                          disabled={!isCalendared}
+                          id="stricken-from-trial-session"
+                          name="strickenFromTrialSession"
+                          type="checkbox"
+                          onChange={e =>
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            })
+                          }
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="stricken-from-trial-session"
+                          style={
+                            isCalendared ? undefined : { color: '#757575' }
+                          }
+                          title={calendaredDisabledTitle}
                         >
-                          <label className="usa-label" htmlFor="filing-party">
-                            Filing Party
-                          </label>
-                          <select
-                            className="usa-select"
-                            data-testid="filing-party"
-                            id="filing-party"
-                            name="filingParty"
-                            value={form.filingParty || ''}
+                          This case is stricken from the trial session
+                        </label>
+                      </div>
+
+                      <hr className="border-top-2px border-base-lighter tw:my-2" />
+
+                      <div className="grant-deny-motion-jurisdiction-options">
+                        <div className="usa-radio">
+                          <input
+                            aria-label="restore to general docket"
+                            checked={
+                              form.jurisdiction ===
+                              grantDenyOptions.jurisdictionOptions.restored
+                            }
+                            className="usa-radio__input"
+                            data-testid="jurisdiction-restored"
+                            disabled={!jurisdictionOptionsEnabled}
+                            id="jurisdiction-restored"
+                            name="jurisdiction"
+                            type="radio"
+                            value={
+                              grantDenyOptions.jurisdictionOptions.restored
+                            }
                             onChange={e =>
                               updateFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               })
                             }
-                          >
-                            <option value="">- Select -</option>
-                            <option value={filingPartyOptions.petitioners}>
-                              {filingPartyOptions.petitioners}
-                            </option>
-                            <option value={filingPartyOptions.respondent}>
-                              {filingPartyOptions.respondent}
-                            </option>
-                            <option value={filingPartyOptions.joint}>
-                              {filingPartyOptions.joint}
-                            </option>
-                          </select>
-                        </FormGroup>
-
-                        <FormGroup
-                          className="grant-deny-motion-form-group"
-                          errorText={validationErrors.dueDate}
-                        >
-                          <DateSelector
-                            defaultValue={form.dueDate}
-                            formGroupClassNames="display-inline-block padding-0"
-                            id="grant-deny-due-date"
-                            label="Due Date:"
-                            minDate={grantDenyMotionFormHelper.minDate}
-                            placeHolderText="MM/DD/YYYY"
-                            onChange={e => {
-                              formatAndUpdateDateFromDatePickerSequence({
-                                key: 'dueDate',
-                                toFormat: constants.DATE_FORMATS.YYYYMMDD,
-                                value: e.target.value,
-                              });
-                              validateGrantDenyMotionSequence();
-                            }}
                           />
-                        </FormGroup>
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="jurisdiction-restored"
+                            style={
+                              jurisdictionOptionsEnabled
+                                ? undefined
+                                : { color: '#757575' }
+                            }
+                            title={jurisdictionDisabledTitle}
+                          >
+                            Restore to general docket
+                          </label>
+                        </div>
+                        <div className="usa-radio">
+                          <input
+                            aria-label="jurisdiction retained"
+                            checked={
+                              form.jurisdiction ===
+                              grantDenyOptions.jurisdictionOptions.retained
+                            }
+                            className="usa-radio__input"
+                            data-testid="jurisdiction-retained"
+                            disabled={!jurisdictionOptionsEnabled}
+                            id="jurisdiction-retained"
+                            name="jurisdiction"
+                            type="radio"
+                            value={
+                              grantDenyOptions.jurisdictionOptions.retained
+                            }
+                            onChange={e =>
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              })
+                            }
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="jurisdiction-retained"
+                            style={
+                              jurisdictionOptionsEnabled
+                                ? undefined
+                                : { color: '#757575' }
+                            }
+                            title={jurisdictionDisabledTitle}
+                          >
+                            Jurisdiction retained
+                          </label>
+                        </div>
                       </div>
-                    )}
+
+                      <hr className="border-top-2px border-base-lighter tw:my-2" />
+
+                      <div className="usa-checkbox">
+                        <input
+                          aria-label="file status report"
+                          checked={
+                            form.dueDateMessage ===
+                            grantDenyOptions.dueDateMessageOptions.statusReport
+                          }
+                          className="usa-checkbox__input"
+                          data-testid="due-date-message-status-report"
+                          id="due-date-message-status-report"
+                          name="dueDateMessage"
+                          type="checkbox"
+                          onChange={() => {
+                            const optionValue =
+                              grantDenyOptions.dueDateMessageOptions
+                                .statusReport;
+                            updateFormValueSequence({
+                              key: 'dueDateMessage',
+                              value:
+                                form.dueDateMessage === optionValue
+                                  ? null
+                                  : optionValue,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="due-date-message-status-report"
+                        >
+                          File Status Report
+                        </label>
+                      </div>
+                      {form.dueDateMessage ===
+                        grantDenyOptions.dueDateMessageOptions.statusReport &&
+                        renderStatusReportDueDateFields()}
+                      <div className="usa-checkbox">
+                        <input
+                          aria-label="file status report or proposed stipulated decision"
+                          checked={
+                            form.dueDateMessage ===
+                            grantDenyOptions.dueDateMessageOptions
+                              .statusReportOrStipulatedDecision
+                          }
+                          className="usa-checkbox__input"
+                          data-testid="due-date-message-stip"
+                          id="due-date-message-stip"
+                          name="dueDateMessage"
+                          type="checkbox"
+                          onChange={() => {
+                            const optionValue =
+                              grantDenyOptions.dueDateMessageOptions
+                                .statusReportOrStipulatedDecision;
+                            updateFormValueSequence({
+                              key: 'dueDateMessage',
+                              value:
+                                form.dueDateMessage === optionValue
+                                  ? null
+                                  : optionValue,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="due-date-message-stip"
+                        >
+                          File Status Report/Proposed Stip Decision
+                        </label>
+                      </div>
+                      {form.dueDateMessage ===
+                        grantDenyOptions.dueDateMessageOptions
+                          .statusReportOrStipulatedDecision &&
+                        renderStatusReportDueDateFields()}
+                    </div>
                   </FormGroup>
 
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="grant-deny-motion-form-group"
                     errorText={
                       grantDenyMotionFormHelper.additionalOrderTextErrorText
                     }
                   >
-                    <label
-                      className="usa-label"
-                      htmlFor="additional-order-text-0"
-                    >
-                      Additional order text
-                    </label>
                     {additionalOrderText.map((value, index) => (
                       <div
-                        className="tw:mb-3"
                         data-testid={`additional-order-text-row-${index}`}
                         key={index}
                       >
+                        <label
+                          className="usa-label tw:mt-4"
+                          htmlFor={`additional-order-text-${index}`}
+                          id={`additional-order-text-label-${index}`}
+                        >
+                          Additional order text
+                        </label>
                         <textarea
+                          aria-describedby={`additional-order-text-label-${index}`}
                           aria-label={`additional order text ${index + 1}`}
                           autoCapitalize="none"
                           className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
@@ -525,35 +537,40 @@ export const GrantDenyMotion = connect(
                           }
                         />
                         <CharactersRemainingHint
+                          className="tw:mb-0"
                           maxCharacters={MAX_ADDITIONAL_TEXT_CHARS}
                           stringToCount={value}
                         />
-                        {additionalOrderText.length > 1 && (
-                          <Button
-                            link
+                        {index > 0 && (
+                          <DawsonButton
+                            className="tw:block"
                             data-testid={`remove-additional-order-text-${index}`}
-                            icon="times"
+                            icon="circle-xmark"
+                            iconPosition="left"
+                            variant="destructiveTertiary"
                             onClick={e => {
                               e.preventDefault();
                               removeAdditionalOrderTextSequence({ index });
                             }}
                           >
                             Remove
-                          </Button>
+                          </DawsonButton>
                         )}
                       </div>
                     ))}
-                    <Button
-                      link
+                    <hr />
+                    <DawsonButton
                       data-testid="add-additional-order-text"
                       icon="plus"
+                      iconPosition="left"
+                      variant="primaryTertiary"
                       onClick={e => {
                         e.preventDefault();
                         addAdditionalOrderTextSequence();
                       }}
                     >
                       Add additional order text
-                    </Button>
+                    </DawsonButton>
                   </FormGroup>
                 </div>
               </div>
