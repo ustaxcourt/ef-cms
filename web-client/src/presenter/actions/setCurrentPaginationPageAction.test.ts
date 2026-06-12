@@ -57,9 +57,9 @@ describe('setCurrentPaginationPageAction', () => {
     expect(state.opinionCurrentPaginationPage).toEqual(5);
   });
 
-  it('should default to opinionCurrentPaginationPage when advancedSearchTab is unrecognized', async () => {
+  it('should not change the current pagination page when advancedSearchTab is unrecognized', async () => {
     const { state } = await runAction(setCurrentPaginationPageAction, {
-      props: { advancedSearchTab: 'somethingElse', currentPaginationPage: 7 },
+      props: { advancedSearchTab: 'somethingElse', currentPaginationPage: 10 },
       state: {
         caseCurrentPaginationPage: 0,
         orderCurrentPaginationPage: 1,
