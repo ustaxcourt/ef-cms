@@ -5,7 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setDocumentSearchResultsAction = ({
+export const setAdvancedSearchResultsSortAction = ({
   get,
   props,
   store,

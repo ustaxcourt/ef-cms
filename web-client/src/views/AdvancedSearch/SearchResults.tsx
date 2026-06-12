@@ -28,8 +28,8 @@ export const SearchResults = connect(
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
     showModal: state.modal.showModal,
-    updateDocumentSearchResultsSequence:
-      sequences.updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence:
+      sequences.updateAdvancedSearchResultsSortSequence,
   },
   function SearchResults({
     advancedSearchHelper,
@@ -37,7 +37,7 @@ export const SearchResults = connect(
     openCleanModalSequence,
     setCurrentPaginationPageSequence,
     showModal,
-    updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence,
   }) {
     const { totalPages } = advancedSearchHelper;
     const hasMultiplePages = totalPages > 1;
@@ -59,7 +59,7 @@ export const SearchResults = connect(
       sortField: string;
       sortOrder: typeof ASCENDING | typeof DESCENDING;
     }) => {
-      updateDocumentSearchResultsSequence({
+      updateAdvancedSearchResultsSortSequence({
         sortColumn: sortField,
         sortDirection: sortOrder,
       });
@@ -71,7 +71,7 @@ export const SearchResults = connect(
 
     const handleMobileSortChange = e => {
       if (!e.target.value) {
-        updateDocumentSearchResultsSequence({
+        updateAdvancedSearchResultsSortSequence({
           sortColumn: 'resultIndex',
           sortDirection: ASCENDING,
         });
@@ -84,7 +84,7 @@ export const SearchResults = connect(
 
       const [sortColumn, sortDirection] = e.target.value.split('|');
 
-      updateDocumentSearchResultsSequence({
+      updateAdvancedSearchResultsSortSequence({
         sortColumn,
         sortDirection,
       });

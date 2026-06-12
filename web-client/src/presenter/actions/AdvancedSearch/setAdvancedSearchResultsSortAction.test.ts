@@ -5,11 +5,11 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setDocumentSearchResultsAction } from './setDocumentSearchResultsAction';
+import { setAdvancedSearchResultsSortAction } from './setAdvancedSearchResultsSortAction';
 
-describe('setDocumentSearchResultsAction', () => {
+describe('setAdvancedSearchResultsSortAction', () => {
   it('should update orderDocumentSearchSort when advancedSearchTab is ORDER', async () => {
-    const result = await runAction(setDocumentSearchResultsAction, {
+    const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
       },
@@ -39,7 +39,7 @@ describe('setDocumentSearchResultsAction', () => {
   });
 
   it('should update opinionDocumentSearchSort when advancedSearchTab is OPINION', async () => {
-    const result = await runAction(setDocumentSearchResultsAction, {
+    const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
       },
@@ -67,7 +67,7 @@ describe('setDocumentSearchResultsAction', () => {
   });
 
   it('should update caseSearchSort when advancedSearchTab is CASE and sortColumn is provided', async () => {
-    const result = await runAction(setDocumentSearchResultsAction, {
+    const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
       },
@@ -89,7 +89,7 @@ describe('setDocumentSearchResultsAction', () => {
   });
 
   it('should reset caseSearchSort to No. ascending when advancedSearchTab is CASE and the default sort is provided', async () => {
-    const result = await runAction(setDocumentSearchResultsAction, {
+    const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
       },
@@ -111,7 +111,7 @@ describe('setDocumentSearchResultsAction', () => {
   });
 
   it('should not modify caseSearchSort when advancedSearchTab is PRACTITIONER', async () => {
-    const result = await runAction(setDocumentSearchResultsAction, {
+    const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
       },

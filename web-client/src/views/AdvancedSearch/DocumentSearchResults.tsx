@@ -31,8 +31,8 @@ export const DocumentSearchResults = connect(
     advancedSearchTab: state.advancedSearchTab,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
-    updateDocumentSearchResultsSequence:
-      sequences.updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence:
+      sequences.updateAdvancedSearchResultsSortSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -42,7 +42,7 @@ export const DocumentSearchResults = connect(
     advancedDocumentSearchHelper,
     isPublic,
     openCaseDocumentDownloadUrlSequence,
-    updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence,
     setCurrentPaginationPageSequence,
     orderCurrentPaginationPage,
     opinionCurrentPaginationPage,
@@ -87,7 +87,7 @@ export const DocumentSearchResults = connect(
     // Handle sorting column header click
     const handleSort = (columnKey: string) => {
       if (advancedDocumentSearchHelper.sortColumn === columnKey) {
-        updateDocumentSearchResultsSequence({
+        updateAdvancedSearchResultsSortSequence({
           sortColumn: columnKey,
           sortDirection:
             advancedDocumentSearchHelper.sortDirection === 'asc'
@@ -95,7 +95,7 @@ export const DocumentSearchResults = connect(
               : 'asc',
         });
       } else {
-        updateDocumentSearchResultsSequence({
+        updateAdvancedSearchResultsSortSequence({
           sortColumn: columnKey,
           sortDirection: 'asc',
         });
@@ -110,7 +110,7 @@ export const DocumentSearchResults = connect(
     const handleMobileSortChange = e => {
       const { value } = e.target;
       const [column, direction] = value.split('|');
-      updateDocumentSearchResultsSequence({
+      updateAdvancedSearchResultsSortSequence({
         sortColumn: column,
         sortDirection: direction,
       });
