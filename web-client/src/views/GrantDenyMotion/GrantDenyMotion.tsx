@@ -2,10 +2,13 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { Button as DawsonButton } from '@web-client/dawson-ui/ui/button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CharactersRemainingHint } from '@web-client/ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
+import { StatusReportDueDateFields } from './StatusReportDueDateFields';
+import type { StatusReportDueDateFieldsProps } from './StatusReportDueDateFields';
+import { updateGrantDenyMotionFormValueSequence } from '@web-client/presenter/sequences/GrantDenyMotion/updateGrantDenyMotionFormValueSequence';
+import { validateGrantDenyMotionSequence as validateGrantDenyMotionSequenceFn } from '@web-client/presenter/sequences/GrantDenyMotion/validateGrantDenyMotionSequence';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -63,64 +66,22 @@ export const GrantDenyMotion = connect(
         : '';
     const deniedOptionsDisabledTitle = isDenied ? '' : 'Select "DENIED" first';
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
-    const { filingPartyOptions } = grantDenyOptions;
     const docketEntryPreview = 'Order';
 
-    const renderStatusReportDueDateFields = (): React.ReactNode => (
-      <div
-        className="grant-deny-motion-status-report-fields"
-        data-testid="status-report-due-date-fields"
-      >
-        <FormGroup errorText={validationErrors.filingParty}>
-          <label className="usa-label" htmlFor="filing-party">
-            Filing Party
-          </label>
-          <select
-            className="usa-select"
-            data-testid="filing-party"
-            id="filing-party"
-            name="filingParty"
-            value={form.filingParty || ''}
-            onChange={e =>
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              })
-            }
-          >
-            <option value="">- Select -</option>
-            <option value={filingPartyOptions.petitioners}>
-              {filingPartyOptions.petitioners}
-            </option>
-            <option value={filingPartyOptions.respondent}>
-              {filingPartyOptions.respondent}
-            </option>
-            <option value={filingPartyOptions.joint}>
-              {filingPartyOptions.joint}
-            </option>
-          </select>
-        </FormGroup>
-
-        <FormGroup errorText={validationErrors.dueDate}>
-          <DateSelector
-            defaultValue={form.dueDate}
-            formGroupClassNames="display-inline-block padding-0"
-            id="grant-deny-due-date"
-            label="Due Date:"
-            minDate={grantDenyMotionFormHelper.minDate}
-            placeHolderText="MM/DD/YYYY"
-            onChange={e => {
-              formatAndUpdateDateFromDatePickerSequence({
-                key: 'dueDate',
-                toFormat: constants.DATE_FORMATS.YYYYMMDD,
-                value: e.target.value,
-              });
-              validateGrantDenyMotionSequence();
-            }}
-          />
-        </FormGroup>
-      </div>
-    );
+    const statusReportDueDateFieldsProps: StatusReportDueDateFieldsProps = {
+      constants,
+      dueDate: form.dueDate ?? undefined,
+      dueDateErrorText: validationErrors.dueDate,
+      filingParty: form.filingParty,
+      filingPartyErrorText: validationErrors.filingParty,
+      filingPartyOptions: grantDenyOptions.filingPartyOptions,
+      formatAndUpdateDateFromDatePickerSequence,
+      minDate: grantDenyMotionFormHelper.minDate,
+      updateFormValueSequence:
+        updateFormValueSequence as typeof updateGrantDenyMotionFormValueSequence,
+      validateGrantDenyMotionSequence:
+        validateGrantDenyMotionSequence as typeof validateGrantDenyMotionSequenceFn,
+    };
 
     return (
       <>
@@ -456,8 +417,11 @@ export const GrantDenyMotion = connect(
                         </label>
                       </div>
                       {form.dueDateMessage ===
-                        grantDenyOptions.dueDateMessageOptions.statusReport &&
-                        renderStatusReportDueDateFields()}
+                        grantDenyOptions.dueDateMessageOptions.statusReport && (
+                        <StatusReportDueDateFields
+                          {...statusReportDueDateFieldsProps}
+                        />
+                      )}
                       <div className="usa-checkbox">
                         <input
                           aria-label="file status report or proposed stipulated decision"
@@ -493,8 +457,11 @@ export const GrantDenyMotion = connect(
                       </div>
                       {form.dueDateMessage ===
                         grantDenyOptions.dueDateMessageOptions
-                          .statusReportOrStipulatedDecision &&
-                        renderStatusReportDueDateFields()}
+                          .statusReportOrStipulatedDecision && (
+                        <StatusReportDueDateFields
+                          {...statusReportDueDateFieldsProps}
+                        />
+                      )}
                     </div>
                   </FormGroup>
 
