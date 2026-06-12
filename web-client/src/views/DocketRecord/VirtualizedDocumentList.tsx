@@ -15,8 +15,6 @@ export const VirtualizedDocumentList: React.FC<
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
   const listRef = useListRef(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
-  const rowHeightCacheRef = useRef<Map<number, number>>(new Map());
-  const correctionCountRef = useRef(0);
   const [listDimensions, setListDimensions] = useState<{
     width: number;
     height: number;
@@ -26,10 +24,6 @@ export const VirtualizedDocumentList: React.FC<
   // Overestimating is safe (extra whitespace), underestimating causes overlap.
   // The measurement pass in useLayoutEffect corrects these to actual heights.
   const getRowHeight = (index: number) => {
-    if (rowHeightCacheRef.current.has(index)) {
-      return rowHeightCacheRef.current.get(index)!;
-    }
-
     const entry = docketEntries[index];
     if (!entry) return 80;
 
@@ -99,12 +93,6 @@ export const VirtualizedDocumentList: React.FC<
       window.removeEventListener('resize', updateDimensions);
     };
   }, []);
-
-  // Clear cache when docketEntries change
-  useEffect(() => {
-    rowHeightCacheRef.current.clear();
-    correctionCountRef.current = 0;
-  }, [docketEntries]);
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
@@ -264,7 +252,7 @@ export const VirtualizedDocumentList: React.FC<
           listRef={listRef}
           rowComponent={Row}
           rowCount={docketEntries.length}
-          rowProps={{} as any}
+          rowProps={{} as never}
         />
       )}
     </div>
