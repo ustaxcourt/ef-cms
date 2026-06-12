@@ -2,73 +2,80 @@ import { INITIAL_DOCUMENT_TYPES, PARTIES_CODES } from '../EntityConstants';
 import { PublicDocketEntry } from './PublicDocketEntry';
 
 describe('PublicDocketEntry', () => {
-  it('should only have expected fields', () => {
-    const entity = new PublicDocketEntry({
-      action: 'some action',
-      additionalInfo: 'something',
-      additionalInfo2: 'something else',
-      anotherThing: false,
-      attachments: true,
-      certificateOfService: true,
-      certificateOfServiceDate: '2018-06-07',
-      createdAt: 'testing',
-      docketEntryId: 'testing',
-      docketNumber: '123-20',
-      documentType: 'testing',
-      eventCode: 'testing',
-      filedBy: 'testing',
-      isFileAttached: true,
-      isLegacyServed: true,
-      isPaper: true,
-      lodged: true,
-      objections: 'Yes',
-      previousDocument: {
-        docketEntryId: 'something else else',
-        documentTitle: 'blah',
-        documentType: 'fhqwhgads',
-      },
-      processingStatus: 'testing',
-      receivedAt: 'testing',
-      sealedTo: 'Public',
-      servedAt: '2019-03-01T21:40:46.415Z',
-      servedParties: [
-        {
-          email: 'jdirt@example.com',
-          gsi1pk: 'shoot',
-          name: 'Joe Dirt',
-          phone: '555-555-1212',
-          pk: 'oh no',
-          sk: 'secondary',
-        },
-      ],
-      servedPartiesCode: PARTIES_CODES.BOTH,
-    });
+  const mockFullEntry = {
+    action: 'some action',
+    additionalInfo: 'something',
+    additionalInfo2: 'something else',
+    affectedByDocketEntries: ['entry1'],
+    affectedDocketEntries: ['entry2'],
+    attachments: true,
+    certificateOfService: true,
+    certificateOfServiceDate: '2018-06-07',
+    docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+    docketNumber: '123-20',
+    documentTitle: 'Test Document',
+    documentType: 'testing',
+    eventCode: 'O',
+    filedBy: 'testing',
+    filedByRole: 'docketclerk',
+    filingDate: '2020-05-27T09:23:43.007Z',
+    freeText: 'Some free text content',
+    index: 5,
+    isFileAttached: true,
+    isLegacyServed: true,
+    isOnDocketRecord: true,
+    isPaper: true,
+    isSealed: false,
+    isStricken: false,
+    judge: 'Judge Test',
+    lodged: true,
+    numberOfPages: 10,
+    objections: 'Yes' as const,
+    previousDocument: {
+      docketEntryId: 'something else else',
+      documentTitle: 'blah',
+      documentType: 'fhqwhgads',
+    },
+    processingStatus: 'testing',
+    receivedAt: '2020-05-27T09:23:43.007Z',
+    sealedTo: 'Public' as const,
+    servedAt: '2019-03-01T21:40:46.415Z',
+    servedPartiesCode: PARTIES_CODES.BOTH,
+    signedJudgeName: 'Judge Signed Name',
+  };
 
-    expect(entity.toRawObject()).toEqual({
+  it('filters out unsupported fields and returns only expected fields', () => {
+    const docketEntry = new PublicDocketEntry(mockFullEntry);
+
+    expect(docketEntry.toRawObject()).toEqual({
       action: 'some action',
       additionalInfo: 'something',
       additionalInfo2: 'something else',
+      affectedByDocketEntries: ['entry1'],
+      affectedDocketEntries: ['entry2'],
       attachments: true,
       certificateOfService: true,
       certificateOfServiceDate: '2018-06-07',
-      docketEntryId: 'testing',
+      docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
       docketNumber: '123-20',
-      documentTitle: undefined,
+      documentTitle: 'Test Document',
       documentType: 'testing',
       entityName: 'PublicDocketEntry',
-      eventCode: 'testing',
+      eventCode: 'O',
       filedBy: 'testing',
-      filingDate: undefined,
-      freeText: undefined,
-      index: undefined,
+      filedByRole: 'docketclerk',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      freeText: 'Some free text content',
+      index: 5,
       isFileAttached: true,
       isLegacyServed: true,
-      isOnDocketRecord: undefined,
+      isOnDocketRecord: true,
       isPaper: true,
       isSealed: false,
-      isStricken: undefined,
+      isStricken: false,
+      judge: 'Judge Test',
       lodged: true,
-      numberOfPages: undefined,
+      numberOfPages: 10,
       objections: 'Yes',
       previousDocument: {
         docketEntryId: 'something else else',
@@ -76,16 +83,17 @@ describe('PublicDocketEntry', () => {
         documentType: 'fhqwhgads',
       },
       processingStatus: 'testing',
-      receivedAt: 'testing',
+      receivedAt: '2020-05-27T09:23:43.007Z',
       sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
       servedPartiesCode: 'B',
+      signedJudgeName: 'Judge Signed Name',
     });
   });
 
   describe('isOnDocketRecord', () => {
     describe('minute entries', () => {
-      it('creates minute entry', () => {
+      it('creates a valid minute entry', () => {
         const docketEntry = new PublicDocketEntry({
           docketNumber: '101-21',
           documentType:
@@ -101,8 +109,8 @@ describe('PublicDocketEntry', () => {
       });
     });
 
-    it('sets docket record related fields if a document is on the docket record', () => {
-      const entity = new PublicDocketEntry({
+    it('sets docket record related fields when document is on the docket record', () => {
+      const docketEntry = new PublicDocketEntry({
         docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
         docketNumber: '101-21',
         documentType:
@@ -118,7 +126,7 @@ describe('PublicDocketEntry', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       });
 
-      expect(entity.validate().toRawObject()).toMatchObject({
+      expect(docketEntry.validate().toRawObject()).toMatchObject({
         docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
         docketNumber: '101-21',
         documentType:
