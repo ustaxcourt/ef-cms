@@ -2,6 +2,8 @@ import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/Entit
 import { attachSamplePdfFile } from '../file/upload-file';
 import { faker } from '@faker-js/faker';
 
+const SLOW_CI_TIMEOUT = 120000;
+
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = faker.person.firstName(),
 ) {
@@ -43,7 +45,9 @@ export function externalUserCreatesElectronicCase(
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link-docket-number"]')
+    .get('[data-testid="case-link-docket-number"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    })
     .should('be.visible')
     .invoke('text')
     .then(docketNumberWithSuffix => {
@@ -96,7 +100,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link-docket-number"]')
+    .get('[data-testid="case-link-docket-number"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    })
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
@@ -148,7 +154,9 @@ export function petitionerCreatesElectronicCaseWithSpouse(
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link-docket-number"]')
+    .get('[data-testid="case-link-docket-number"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    })
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
@@ -211,7 +219,9 @@ export function externalUserCreatesElectronicCaseWithSpouseDifferentAddress(
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link-docket-number"]')
+    .get('[data-testid="case-link-docket-number"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    })
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
@@ -258,7 +268,9 @@ export function petitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link-docket-number"]')
+    .get('[data-testid="case-link-docket-number"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    })
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();

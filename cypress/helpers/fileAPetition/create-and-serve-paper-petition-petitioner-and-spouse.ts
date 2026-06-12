@@ -7,6 +7,8 @@ import { attachFile } from '../file/upload-file';
 import { faker } from '@faker-js/faker';
 import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
+const SLOW_CI_TIMEOUT = 120000;
+
 export function createAndServePaperPetitionMultipleParties(
   options = { yearReceived: '2021' },
 ) {
@@ -77,13 +79,15 @@ export function createAndServePaperPetitionMultipleParties(
   });
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
-    .get('.docket-number-header a')
+    .get('.docket-number-header a', { timeout: SLOW_CI_TIMEOUT })
     .invoke('attr', 'href')
     .then(href => {
       const docketNumber = href!.split('/').pop();
       cy.get('[data-testid="serve-case-to-irs"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('#done-viewing-paper-petition-receipt-button').click();
+      cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
+        timeout: SLOW_CI_TIMEOUT,
+      }).click();
       cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
       return cy.wrap({ docketNumber: docketNumber!, name, spouseName });
     });

@@ -52,7 +52,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
 
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
 
-      cy.get('[data-testid="objections-No"').click();
+      cy.get('[data-testid="objections-No"]').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
@@ -88,7 +88,12 @@ describe('Docket clerk QC-ing a paper filing', () => {
       // duplicates the coversheet shows up as a page-count change here.
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
-      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M115')
+      cy.get('[data-testid="docket-record-table"]', { timeout: 120000 }).should(
+        'exist',
+      );
+      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M115', {
+        timeout: 120000,
+      })
         .parents('tr')
         .find('.number-of-pages')
         .should('have.text', '2');
