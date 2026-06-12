@@ -56,7 +56,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
-  const judgeWithTitle = await getJudgeWithTitle({
+  await getJudgeWithTitle({
     judgeUserName: trialSession.judge?.name,
   });
 
@@ -72,7 +72,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     title: string;
   };
   const trialInfo: FormattedTrialInfoType = {
-    formattedJudge: judgeWithTitle,
+    formattedJudge: trialSession.judge?.name || 'Not assigned',
     formattedStartDate,
     formattedStartTime,
     ...trialSession,
