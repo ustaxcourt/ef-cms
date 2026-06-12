@@ -7,10 +7,5 @@ export const getClerkDashboardStatsLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async () => {
-    const rawYear = event.queryStringParameters?.year;
-    const parsedYear = rawYear ? parseInt(rawYear, 10) : undefined;
-    return await getClerkDashboardStatsInteractor(
-      { year: parsedYear },
-      authorizedUser,
-    );
+    return await getClerkDashboardStatsInteractor(authorizedUser);
   });

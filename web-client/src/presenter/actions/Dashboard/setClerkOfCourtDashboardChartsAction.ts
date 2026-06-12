@@ -1,4 +1,4 @@
-import { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
+import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setClerkOfCourtDashboardChartsAction = async ({

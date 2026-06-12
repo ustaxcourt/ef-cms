@@ -291,14 +291,6 @@
       }
     },
     "/reports/clerk-dashboard-stats": {
-      "parameters": [
-        {
-          "name": "year",
-          "in": "query",
-          "required": false,
-          "type": "integer"
-        }
-      ],
       "get": {
         "tags": [],
         "summary": "get clerk of court dashboard stats",
