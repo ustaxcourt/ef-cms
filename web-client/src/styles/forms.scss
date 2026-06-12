@@ -658,19 +658,43 @@ label.ustc-upload {
 
     &.grant-deny-motion-form-group {
       margin: 1rem;
-    }
 
-    &.grant-deny-motion-form-group-error {
-      margin-left: -0.1rem;
+      &.usa-form-group--error {
+        margin-left: -0.1rem;
+      }
+    }
+  }
+
+  .grant-deny-motion-jurisdiction-options {
+    .usa-radio {
+      margin-bottom: 0;
+
+      + .usa-radio {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .grant-deny-motion-optional-options {
+    // Match USWDS radio/checkbox label text offset (padding-left: 2rem).
+    .usa-radio__label,
+    .usa-checkbox__label {
+      &::before {
+        position: absolute;
+        display: block;
+      }
     }
   }
 
   .grant-deny-motion-status-report-fields {
-    .grant-deny-motion-form-group {
-      margin: 1rem 1rem 0 0;
+    padding-left: 2rem;
+    margin-top: 0.5rem;
 
-      &:first-child {
-        margin-top: 0;
+    .usa-form-group {
+      margin: 0 0 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }

@@ -52,7 +52,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
 
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
 
-      cy.get('[data-testid="objections-No"').click();
+      cy.get('[data-testid="objections-No"]').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
@@ -80,6 +80,23 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('[data-testid="confirm-initiate-service-modal"]').contains(
         'Motion for Leave to File Answer',
       );
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="loading-overlay"]').should('not.exist');
+
+      // Paper-filed M115 + sample.pdf (1 page) gets exactly 1 coversheet
+      // through the QC-and-serve flow. A regression that drops or
+      // duplicates the coversheet shows up as a page-count change here.
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="search-docket-number"]').click();
+      cy.get('[data-testid="docket-record-table"]', { timeout: 120000 }).should(
+        'exist',
+      );
+      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M115', {
+        timeout: 120000,
+      })
+        .parents('tr')
+        .find('.number-of-pages')
+        .should('have.text', '2');
     });
   });
 });

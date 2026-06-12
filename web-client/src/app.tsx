@@ -51,6 +51,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons/faClipboardList';
 import { faClock as faClockSolid } from '@fortawesome/free-solid-svg-icons/faClock';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons/faCloudDownloadAlt';
@@ -171,6 +172,7 @@ const app = {
       faCheckCircle,
       faCheckCircleRegular,
       faCircle,
+      faCircleXmark,
       faClipboardList,
       faClock,
       faClockSolid,
