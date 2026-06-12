@@ -7,8 +7,6 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { StatusReportDueDateFields } from './StatusReportDueDateFields';
 import type { StatusReportDueDateFieldsProps } from './StatusReportDueDateFields';
-import { updateGrantDenyMotionFormValueSequence } from '@web-client/presenter/sequences/GrantDenyMotion/updateGrantDenyMotionFormValueSequence';
-import { validateGrantDenyMotionSequence as validateGrantDenyMotionSequenceFn } from '@web-client/presenter/sequences/GrantDenyMotion/validateGrantDenyMotionSequence';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -77,10 +75,8 @@ export const GrantDenyMotion = connect(
       filingPartyOptions: grantDenyOptions.filingPartyOptions,
       formatAndUpdateDateFromDatePickerSequence,
       minDate: grantDenyMotionFormHelper.minDate,
-      updateFormValueSequence:
-        updateFormValueSequence as typeof updateGrantDenyMotionFormValueSequence,
-      validateGrantDenyMotionSequence:
-        validateGrantDenyMotionSequence as typeof validateGrantDenyMotionSequenceFn,
+      updateFormValueSequence,
+      validateGrantDenyMotionSequence,
     };
 
     return (
@@ -485,7 +481,6 @@ export const GrantDenyMotion = connect(
                           Additional order text
                         </label>
                         <textarea
-                          aria-describedby={`additional-order-text-label-${index}`}
                           aria-label={`additional order text ${index + 1}`}
                           autoCapitalize="none"
                           className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"

@@ -1,9 +1,7 @@
-import { TimeFormats } from '@shared/business/utilities/DateHandler';
+import type { TimeFormats } from '@shared/business/utilities/DateHandler';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { formatAndUpdateDateFromDatePickerSequence } from '@web-client/presenter/sequences/formatAndUpdateDateFromDatePickerSequence';
-import { updateGrantDenyMotionFormValueSequence } from '@web-client/presenter/sequences/GrantDenyMotion/updateGrantDenyMotionFormValueSequence';
-import { validateGrantDenyMotionSequence } from '@web-client/presenter/sequences/GrantDenyMotion/validateGrantDenyMotionSequence';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 import React from 'react';
 
 export type StatusReportDueDateFieldsProps = {
@@ -21,10 +19,10 @@ export type StatusReportDueDateFieldsProps = {
     petitioners: string;
     respondent: string;
   };
-  formatAndUpdateDateFromDatePickerSequence: typeof formatAndUpdateDateFromDatePickerSequence;
+  formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
   minDate: string;
-  updateFormValueSequence: typeof updateGrantDenyMotionFormValueSequence;
-  validateGrantDenyMotionSequence: typeof validateGrantDenyMotionSequence;
+  updateFormValueSequence: Function | RunnableSequence;
+  validateGrantDenyMotionSequence: Function | RunnableSequence;
 };
 
 export const StatusReportDueDateFields: React.FC<
