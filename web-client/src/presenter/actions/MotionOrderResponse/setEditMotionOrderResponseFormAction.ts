@@ -28,10 +28,12 @@ export const setEditMotionOrderResponseFormAction = ({
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-order-response-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
-  const { ...draftFields } = draftOrderState;
+  const { additionalOrderText: legacyAdditionalOrderText, ...draftFields } =
+    draftOrderState;
 
   const rawAdditionalOrderTextArray =
-    draftOrderState.additionalOrderTextArray ?? [];
+    draftOrderState.additionalOrderTextArray ??
+    (legacyAdditionalOrderText ? [legacyAdditionalOrderText] : []);
 
   store.set(state.form, {
     ...draftFields,

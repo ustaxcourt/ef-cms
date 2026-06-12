@@ -71,9 +71,9 @@ describe('setEditMotionOrderResponseFormAction', () => {
     );
   });
 
-  it('should set additionalOrderTextArray from draftOrderState', async () => {
+  it('should set additionalOrderTextArray to an array with additionalOrderText if additionalOrderText exists', async () => {
     const mockDraftOrderState = {
-      additionalOrderTextArray: ['Some additional text'],
+      additionalOrderText: 'Some additional text',
       previousDocument: {
         docketEntryId: '123',
       },
@@ -99,10 +99,12 @@ describe('setEditMotionOrderResponseFormAction', () => {
       someFormField: 'value',
       additionalOrderTextArray: ['Some additional text'],
     });
+    expect(result.state.form).not.toHaveProperty('additionalOrderText');
   });
 
-  it('should default to empty array when additionalOrderTextArray is not present', async () => {
+  it('should omit legacy additionalOrderText when it contains only whitespace', async () => {
     const mockDraftOrderState = {
+      additionalOrderText: ' \t  ',
       previousDocument: {
         docketEntryId: '123',
       },
