@@ -231,18 +231,13 @@ export const fileExternalDocument = async (
         caseToUpdate: caseEntity,
         includeCorrespondence: false,
       });
-
-      const rawCaseEntity = caseEntity.toRawObject();
-      return rawCaseEntity;
     });
 
-    const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
+    await settlePromises(consolidatedCaseEntities);
 
     await upsertWorkItems({
       workItems,
     });
-
-    return resolvedCaseEntities;
   });
 };
 
