@@ -7,7 +7,7 @@ describe('RestrictedCaseDTO', () => {
       docketNumberSuffix: 'S',
       isPaper: false,
       isSealed: undefined,
-      leadDocketNumber: false,
+      leadDocketNumber: '101-20',
       docketEntries: [],
     };
 
@@ -16,6 +16,7 @@ describe('RestrictedCaseDTO', () => {
     expect(dto.entityName).toBe('RestrictedCaseDTO');
     expect(dto.docketNumber).toBe('101-20');
     expect(dto.docketNumberSuffix).toBe('S');
+    expect(dto.docketNumberWithSuffix).toBe('101-20S');
     expect(dto.docketEntries).toEqual([]);
   });
 });
