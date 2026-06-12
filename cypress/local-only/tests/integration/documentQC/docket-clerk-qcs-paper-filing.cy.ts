@@ -1,5 +1,10 @@
+import {
+  assertDocketEntryPageCount,
+  waitForDocketEntryByEventCode,
+} from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
@@ -52,7 +57,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
 
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
 
-      cy.get('[data-testid="objections-No"').click();
+      cy.get('[data-testid="objections-No"]').click();
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
@@ -83,15 +88,16 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
+      // QC-and-serve writes the served entry (and any coversheet regen)
+      // asynchronously after the loading overlay clears, so poll the DB
+      // before asserting on the docket record UI.
+      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'M115' });
+
       // Paper-filed M115 + sample.pdf (1 page) gets exactly 1 coversheet
       // through the QC-and-serve flow. A regression that drops or
       // duplicates the coversheet shows up as a page-count change here.
-      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
-      cy.get('[data-testid="search-docket-number"]').click();
-      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M115')
-        .parents('tr')
-        .find('.number-of-pages')
-        .should('have.text', '2');
+      goToCase(docketNumber);
+      assertDocketEntryPageCount({ eventCode: 'M115', expected: '2' });
     });
   });
 });

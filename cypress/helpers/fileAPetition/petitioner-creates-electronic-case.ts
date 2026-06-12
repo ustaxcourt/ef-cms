@@ -2,6 +2,26 @@ import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/Entit
 import { attachSamplePdfFile } from '../file/upload-file';
 import { faker } from '@faker-js/faker';
 
+function submitElectronicPetitionAndGetDocketNumber(): Cypress.Chainable<string> {
+  cy.intercept('POST', '**/cases').as('postCase');
+  cy.get('[data-testid="step-6-next-button"]').click();
+
+  return cy.wait('@postCase').then(({ response }) => {
+    if (!response?.body?.docketNumber) {
+      throw new Error('Did not receive docket number from case creation');
+    }
+
+    const docketNumberWithSuffix =
+      response.body.docketNumberWithSuffix || response.body.docketNumber;
+
+    cy.get('[data-testid="case-link-docket-number"]')
+      .should('be.visible')
+      .should('contain.text', docketNumberWithSuffix);
+
+    return cy.wrap<string>(docketNumberWithSuffix);
+  });
+}
+
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = faker.person.firstName(),
 ) {
@@ -40,16 +60,12 @@ export function externalUserCreatesElectronicCase(
   cy.get('[data-testid="atp-preview-button"]').should('exist');
   cy.get('[data-testid="stin-preview-button"]').should('exist');
 
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  return cy
-    .get('[data-testid="case-link-docket-number"]')
-    .should('be.visible')
-    .invoke('text')
-    .then(docketNumberWithSuffix => {
+  return submitElectronicPetitionAndGetDocketNumber().then(
+    docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
-    });
+    },
+  );
 }
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
@@ -93,15 +109,12 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   cy.get('[data-testid="atp-preview-button"]').should('exist');
   cy.get('[data-testid="stin-preview-button"]').should('exist');
 
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  return cy
-    .get('[data-testid="case-link-docket-number"]')
-    .invoke('text')
-    .then(docketNumberWithSuffix => {
+  return submitElectronicPetitionAndGetDocketNumber().then(
+    docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
-    });
+    },
+  );
 }
 
 export function petitionerCreatesElectronicCaseWithSpouse(
@@ -145,15 +158,12 @@ export function petitionerCreatesElectronicCaseWithSpouse(
   cy.get('[data-testid="atp-preview-button"]').should('exist');
   cy.get('[data-testid="stin-preview-button"]').should('exist');
 
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  return cy
-    .get('[data-testid="case-link-docket-number"]')
-    .invoke('text')
-    .then(docketNumberWithSuffix => {
+  return submitElectronicPetitionAndGetDocketNumber().then(
+    docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
-    });
+    },
+  );
 }
 
 export function externalUserCreatesElectronicCaseWithSpouseDifferentAddress(
@@ -208,15 +218,12 @@ export function externalUserCreatesElectronicCaseWithSpouseDifferentAddress(
   cy.get('[data-testid="atp-preview-button"]').should('exist');
   cy.get('[data-testid="stin-preview-button"]').should('exist');
 
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  return cy
-    .get('[data-testid="case-link-docket-number"]')
-    .invoke('text')
-    .then(docketNumberWithSuffix => {
+  return submitElectronicPetitionAndGetDocketNumber().then(
+    docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
-    });
+    },
+  );
 }
 
 export function petitionerCreatesElectronicCaseForBusiness() {
@@ -255,15 +262,12 @@ export function petitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="stin-preview-button"]').should('exist');
   cy.get('[data-testid="petition-preview-button"]').should('exist');
   cy.get('[data-testid="atp-preview-button"]').should('exist');
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  return cy
-    .get('[data-testid="case-link-docket-number"]')
-    .invoke('text')
-    .then(docketNumberWithSuffix => {
+  return submitElectronicPetitionAndGetDocketNumber().then(
+    docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
-    });
+    },
+  );
 }
 
 export function petitionerAttemptsToUploadCorruptPdf() {

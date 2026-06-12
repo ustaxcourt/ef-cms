@@ -75,16 +75,25 @@ export function createAndServePaperPetitionMultipleParties(
     selector: '#requestForPlaceOfTrialFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
+  cy.intercept('POST', '**/paper').as('postPaperCase');
   cy.get('[data-testid="submit-paper-petition"]').click();
-  return cy
-    .get('.docket-number-header a')
-    .invoke('attr', 'href')
-    .then(href => {
-      const docketNumber = href!.split('/').pop();
-      cy.get('[data-testid="serve-case-to-irs"]').click();
-      cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('#done-viewing-paper-petition-receipt-button').click();
-      cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
-      return cy.wrap({ docketNumber: docketNumber!, name, spouseName });
-    });
+  return cy.wait('@postPaperCase').then(({ response }) => {
+    if (!response?.body?.caseDetail?.docketNumber) {
+      throw new Error(
+        'Unable to get docket number from postPaperCase HTTP request',
+      );
+    }
+
+    const { docketNumber } = response.body.caseDetail;
+
+    cy.get('.docket-number-header a')
+      .should('be.visible')
+      .should('have.attr', 'href', `/case-detail/${docketNumber}`);
+
+    cy.get('[data-testid="serve-case-to-irs"]').click();
+    cy.get('[data-testid="modal-confirm"]').click();
+    cy.get('#done-viewing-paper-petition-receipt-button').click();
+    cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
+    return cy.wrap({ docketNumber, name, spouseName });
+  });
 }
