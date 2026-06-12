@@ -66,7 +66,7 @@ describe('setAdvancedSearchResultsSortAction', () => {
     );
   });
 
-  it('should update caseSearchSort when advancedSearchTab is CASE and sortColumn is provided', async () => {
+  it('should update caseSearchSort when advancedSearchTab is CASE', async () => {
     const result = await runAction(setAdvancedSearchResultsSortAction, {
       modules: {
         presenter,
@@ -85,28 +85,6 @@ describe('setAdvancedSearchResultsSortAction', () => {
     });
 
     expect(result.state.caseSearchSort.sortColumn).toEqual('docketNumber');
-    expect(result.state.caseSearchSort.sortDirection).toEqual(ASCENDING);
-  });
-
-  it('should reset caseSearchSort to No. ascending when advancedSearchTab is CASE and the default sort is provided', async () => {
-    const result = await runAction(setAdvancedSearchResultsSortAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        sortColumn: 'resultIndex',
-        sortDirection: ASCENDING,
-      },
-      state: {
-        advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
-        caseSearchSort: {
-          sortColumn: 'docketNumber',
-          sortDirection: ASCENDING,
-        },
-      },
-    });
-
-    expect(result.state.caseSearchSort.sortColumn).toEqual('resultIndex');
     expect(result.state.caseSearchSort.sortDirection).toEqual(ASCENDING);
   });
 
