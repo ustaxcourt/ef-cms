@@ -264,13 +264,13 @@ function MobilePublicTrialSessions({
             locations as {
               [key: string]: string;
             },
-          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+          ).map(([locationKey, locationLabel]) => (
             <PillButton
-              key={sessionTypeLabel}
-              text={sessionTypeLabel}
+              key={locationLabel}
+              text={locationLabel}
               onRemove={() => {
                 const remainingValues = { ...locations };
-                delete remainingValues[sessionTypeKey];
+                delete remainingValues[locationKey];
 
                 publicTrialSessionUpdateFormValueSequence({
                   key: 'locations',
@@ -285,13 +285,13 @@ function MobilePublicTrialSessions({
             judges as {
               [key: string]: string;
             },
-          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+          ).map(([judgeKey, judgeLabel]) => (
             <PillButton
-              key={sessionTypeLabel}
-              text={sessionTypeLabel}
+              key={judgeLabel}
+              text={judgeLabel}
               onRemove={() => {
                 const remainingValues = { ...judges };
-                delete remainingValues[sessionTypeKey];
+                delete remainingValues[judgeKey];
 
                 publicTrialSessionUpdateFormValueSequence({
                   key: 'judges',

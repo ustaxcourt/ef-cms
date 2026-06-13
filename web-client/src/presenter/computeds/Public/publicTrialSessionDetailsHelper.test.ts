@@ -15,20 +15,26 @@ describe('publicTrialSessionDetailsHelper', () => {
     applicationContextPublic,
   );
 
-  const MOCK_SEALED_CASE = cloneDeep(MOCK_CASE);
-  MOCK_SEALED_CASE.isSealed = true;
-  MOCK_SEALED_CASE.docketNumber = '101-23';
-  MOCK_SEALED_CASE.docketNumberWithSuffix = '101-23';
+  const MOCK_CASE_DTO = cloneDeep(MOCK_CASE);
+  MOCK_CASE_DTO.entityName = 'PublicCaseDTO';
 
-  const MOCK_LEAD_CASE = cloneDeep(MOCK_CASE);
-  MOCK_LEAD_CASE.docketNumber = '100-23';
-  MOCK_LEAD_CASE.docketNumberWithSuffix = MOCK_LEAD_CASE.docketNumber;
-  MOCK_LEAD_CASE.leadDocketNumber = MOCK_LEAD_CASE.docketNumber;
+  const MOCK_SEALED_CASE_DTO = cloneDeep(MOCK_CASE);
+  MOCK_SEALED_CASE_DTO.isSealed = true;
+  MOCK_SEALED_CASE_DTO.docketNumber = '101-23';
+  MOCK_SEALED_CASE_DTO.docketNumberWithSuffix = '101-23';
+  MOCK_SEALED_CASE_DTO.entityName = 'RestrictedCaseDTO';
 
-  const MOCK_CONSOLIDATED_CASE = cloneDeep(MOCK_CASE);
-  MOCK_CONSOLIDATED_CASE.docketNumber = '102-23';
-  MOCK_CONSOLIDATED_CASE.docketNumberWithSuffix = '102-23L';
-  MOCK_CONSOLIDATED_CASE.leadDocketNumber = MOCK_LEAD_CASE.docketNumber;
+  const MOCK_LEAD_CASE_DTO = cloneDeep(MOCK_CASE);
+  MOCK_LEAD_CASE_DTO.docketNumber = '100-23';
+  MOCK_LEAD_CASE_DTO.docketNumberWithSuffix = MOCK_LEAD_CASE_DTO.docketNumber;
+  MOCK_LEAD_CASE_DTO.leadDocketNumber = MOCK_LEAD_CASE_DTO.docketNumber;
+  MOCK_LEAD_CASE_DTO.entityName = 'PublicCaseDTO';
+
+  const MOCK_CONSOLIDATED_CASE_DTO = cloneDeep(MOCK_CASE);
+  MOCK_CONSOLIDATED_CASE_DTO.docketNumber = '102-23';
+  MOCK_CONSOLIDATED_CASE_DTO.docketNumberWithSuffix = '102-23L';
+  MOCK_CONSOLIDATED_CASE_DTO.leadDocketNumber = MOCK_LEAD_CASE_DTO.docketNumber;
+  MOCK_CONSOLIDATED_CASE_DTO.entityName = 'PublicCaseDTO';
 
   let state;
 
@@ -38,10 +44,10 @@ describe('publicTrialSessionDetailsHelper', () => {
         trialSession: {
           address1: '123 Main St',
           calendaredCases: [
-            MOCK_CASE,
-            MOCK_SEALED_CASE,
-            MOCK_LEAD_CASE,
-            MOCK_CONSOLIDATED_CASE,
+            MOCK_CASE_DTO,
+            MOCK_SEALED_CASE_DTO,
+            MOCK_LEAD_CASE_DTO,
+            MOCK_CONSOLIDATED_CASE_DTO,
           ],
           city: 'San Francisco',
           estimatedEndDate: '2020-11-29T05:00:00.000Z',
@@ -80,20 +86,18 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedSealedCaseFormatted = {
       caseTitle: 'Sealed',
       consolidatedIconTooltipText: undefined,
-      docketNumber: MOCK_SEALED_CASE.docketNumber,
-      docketNumberWithSuffix: MOCK_SEALED_CASE.docketNumberWithSuffix,
+      docketNumber: MOCK_SEALED_CASE_DTO.docketNumber,
+      docketNumberWithSuffix: MOCK_SEALED_CASE_DTO.docketNumberWithSuffix,
       inConsolidatedGroup: false,
-      irsPractitioners: [],
       isLeadCase: false,
       isSealed: true,
-      privatePractitioners: [],
     };
 
     const expectedLeadCaseFormatted = {
       caseTitle: 'Test Petitioner',
       consolidatedIconTooltipText: 'Lead case in a consolidated group',
-      docketNumber: MOCK_LEAD_CASE.docketNumber,
-      docketNumberWithSuffix: MOCK_LEAD_CASE.docketNumberWithSuffix,
+      docketNumber: MOCK_LEAD_CASE_DTO.docketNumber,
+      docketNumberWithSuffix: MOCK_LEAD_CASE_DTO.docketNumberWithSuffix,
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: true,
@@ -104,8 +108,8 @@ describe('publicTrialSessionDetailsHelper', () => {
     const expectedConsolidatedCaseFormatted = {
       caseTitle: 'Test Petitioner',
       consolidatedIconTooltipText: 'Member case in a consolidated group',
-      docketNumber: MOCK_CONSOLIDATED_CASE.docketNumber,
-      docketNumberWithSuffix: MOCK_CONSOLIDATED_CASE.docketNumberWithSuffix,
+      docketNumber: MOCK_CONSOLIDATED_CASE_DTO.docketNumber,
+      docketNumberWithSuffix: MOCK_CONSOLIDATED_CASE_DTO.docketNumberWithSuffix,
       inConsolidatedGroup: true,
       irsPractitioners: [],
       isLeadCase: false,
@@ -133,9 +137,7 @@ describe('publicTrialSessionDetailsHelper', () => {
       trialLocation: 'Houston, Texas',
     };
 
-    expect(result.formattedTrialSession).toMatchObject(
-      expectedFormattedTrialSession,
-    );
+    expect(result.formattedTrialSession).toEqual(expectedFormattedTrialSession);
     expect(result.formattedNow).toMatch(
       /^\d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern$/,
     );

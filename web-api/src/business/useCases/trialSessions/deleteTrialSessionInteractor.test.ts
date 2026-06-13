@@ -21,14 +21,16 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { deleteTrialSessionWorkingCopy as deleteTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
-import { deleteTrialSession as deleteTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
+import { deleteTrialSession as deleteTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 
 describe('deleteTrialSessionInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
-  const deleteTrialSessionWorkingCopy = jest.mocked(deleteTrialSessionWorkingCopyMock);
+  const deleteTrialSessionWorkingCopy = jest.mocked(
+    deleteTrialSessionWorkingCopyMock,
+  );
   const deleteTrialSession = jest.mocked(deleteTrialSessionMock);
 
   let mockTrialSession;
@@ -122,12 +124,8 @@ describe('deleteTrialSessionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      deleteTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-    expect(
-      deleteTrialSession,
-    ).toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).toHaveBeenCalled();
+    expect(deleteTrialSession).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
@@ -148,9 +146,7 @@ describe('deleteTrialSessionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      deleteTrialSessionWorkingCopy,
-    ).not.toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).not.toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -229,13 +225,15 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     getCasesByDocketNumbers.mockResolvedValue([
-      { ...MOCK_CASE, docketNumber: '101-20' },                                    
-      { ...MOCK_CASE, docketNumber: '102-20' },      
-      { ...MOCK_CASE, docketNumber: '102-20' },                              
-    ]); 
+      { ...MOCK_CASE, docketNumber: '101-20' },
+      { ...MOCK_CASE, docketNumber: '102-20' },
+      { ...MOCK_CASE, docketNumber: '102-20' },
+    ]);
 
     updateCaseAndAssociations.mockResolvedValueOnce(MOCK_CASE);
-    updateCaseAndAssociations.mockRejectedValueOnce(new Error('Transaction failed'));
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Transaction failed'),
+    );
 
     await expect(
       deleteTrialSessionInteractor(
@@ -270,5 +268,4 @@ describe('deleteTrialSessionInteractor', () => {
     expect(deleteTrialSessionWorkingCopy).toHaveBeenCalled();
     expect(deleteTrialSession).toHaveBeenCalled();
   });
-   
 });
