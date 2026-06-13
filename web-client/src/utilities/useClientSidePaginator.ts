@@ -18,7 +18,11 @@ export function getPaginationResult<T>(
   return { pageRecords, totalPages };
 }
 
-function sliceForPage<T>(fullDataSet: T[], pageSize: number, activePage: number) {
+function sliceForPage<T>(
+  fullDataSet: T[],
+  pageSize: number,
+  activePage: number,
+) {
   return fullDataSet.slice(
     activePage * pageSize,
     activePage * pageSize + pageSize,

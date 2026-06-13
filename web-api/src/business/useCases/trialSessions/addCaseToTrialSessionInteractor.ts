@@ -13,6 +13,8 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+
 /**
  * addCaseToTrialSession
  * @param {object} providers the providers object
@@ -76,20 +78,22 @@ const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  await withTransaction(async () => {
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
-  await createOrUpdateTrialSessionCases({
-    trialSessionCases: [
-      {
-        caseOrder,
-        docketNumber,
-        isHearing: false,
-        trialSessionId,
-      },
-    ],
+    await createOrUpdateTrialSessionCases({
+      trialSessionCases: [
+        {
+          caseOrder,
+          docketNumber,
+          isHearing: false,
+          trialSessionId,
+        },
+      ],
+    });
   });
 };
 

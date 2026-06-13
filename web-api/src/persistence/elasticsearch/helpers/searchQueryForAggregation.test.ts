@@ -92,9 +92,7 @@ describe('computeDocumentFilters', () => {
     });
 
     expect(result).toEqual(
-      expect.arrayContaining([
-        { terms: { 'eventCode.S': ['O', 'OAJ'] } },
-      ]),
+      expect.arrayContaining([{ terms: { 'eventCode.S': ['O', 'OAJ'] } }]),
     );
   });
 
