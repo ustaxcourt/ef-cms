@@ -48,7 +48,10 @@ describe('getPublicDocketRecordStatusLambda', () => {
     const body = JSON.parse(response.body);
     expect(body).toEqual({ status: 'ready', url: 'https://s3/presigned' });
     expect(getDownloadPolicyUrl).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'random-interactor-id', useTempBucket: true }),
+      expect.objectContaining({
+        key: 'random-interactor-id',
+        useTempBucket: true,
+      }),
     );
   });
 
@@ -57,9 +60,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
       Promise.resolve(key === errorKeyFor(VALID_JOB_ID)),
     );
     getDocument.mockResolvedValue(
-      Buffer.from(
-        JSON.stringify({ message: 'boom', statusCode: 403 }),
-      ) as any,
+      Buffer.from(JSON.stringify({ message: 'boom', statusCode: 403 })) as any,
     );
 
     const response = await getPublicDocketRecordStatusLambda(buildEvent());

@@ -36,24 +36,28 @@ export const generatePublicDocketRecordPdfWorkerLambda = event =>
           undefined,
         );
 
-        await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-          contentType: 'application/json',
-          document: Buffer.from(JSON.stringify({ fileId })),
-          key: resultKey(jobId),
-          useTempBucket: true,
-        });
+        await applicationContext
+          .getPersistenceGateway()
+          .saveDocumentFromLambda({
+            contentType: 'application/json',
+            document: Buffer.from(JSON.stringify({ fileId })),
+            key: resultKey(jobId),
+            useTempBucket: true,
+          });
       } catch (err: any) {
-        await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-          contentType: 'application/json',
-          document: Buffer.from(
-            JSON.stringify({
-              message: err?.message || 'Failed to generate docket record',
-              statusCode: err?.statusCode || 500,
-            }),
-          ),
-          key: errorKey(jobId),
-          useTempBucket: true,
-        });
+        await applicationContext
+          .getPersistenceGateway()
+          .saveDocumentFromLambda({
+            contentType: 'application/json',
+            document: Buffer.from(
+              JSON.stringify({
+                message: err?.message || 'Failed to generate docket record',
+                statusCode: err?.statusCode || 500,
+              }),
+            ),
+            key: errorKey(jobId),
+            useTempBucket: true,
+          });
         throw err;
       }
     },

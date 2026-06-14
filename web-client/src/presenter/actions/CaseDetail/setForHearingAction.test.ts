@@ -6,9 +6,7 @@ import { setForHearingAction } from './setForHearingAction';
 describe('setForHearingAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  applicationContext
-    .getUseCases()
-    .setForHearingInteractor.mockResolvedValue();
+  applicationContext.getUseCases().setForHearingInteractor.mockResolvedValue();
 
   it('should call the setForHearingInteractor with the state.caseDetail.docketNumber and state.modal.trialSessionId and return alertSuccess', async () => {
     const result = await runAction(setForHearingAction, {

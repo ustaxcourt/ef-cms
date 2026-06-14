@@ -39,7 +39,9 @@ describe('unblockCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+    const updateCaseAndAssociations = jest.mocked(
+      updateCaseAndAssociationsMock,
+    );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     const casePassedToUpdate =
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;

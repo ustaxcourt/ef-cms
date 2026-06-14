@@ -290,7 +290,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.6.205**
+**Current Version Installed: 5.7.284**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -356,6 +356,8 @@ The major version of this package should match our major version of Node. We sho
 - As of May 18, 2026: Node.js updated to `v24.15.0`; `npm view @types/node@24.15.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
 - As of May 26, 2026: Node.js updated to `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
+
+- As of June 1, 2026: Node.js remains at `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
 ### TypeScript
 **Installed Version: 6.0.3**
