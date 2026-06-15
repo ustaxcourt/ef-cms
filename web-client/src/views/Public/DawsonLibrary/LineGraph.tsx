@@ -201,7 +201,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
     const heading = title ? `<h2>${title}</h2>` : '';
     const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
-    window.open(URL.createObjectURL(blob), '_blank');
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
 
   if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {

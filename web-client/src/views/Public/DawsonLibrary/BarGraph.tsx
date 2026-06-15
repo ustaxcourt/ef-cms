@@ -97,7 +97,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
     const heading = title ? `<h2>${title}</h2>` : '';
     const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Label</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
-    window.open(URL.createObjectURL(blob), '_blank');
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
   if (!data || data.length === 0) {
     return (
@@ -325,7 +325,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     const heading = title ? `<h2>${title}</h2>` : '';
     const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
-    window.open(URL.createObjectURL(blob), '_blank');
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
   // Build recharts row-oriented data: [{ name: 'Jan', Filed: 42, Closed: 3 }, ...]
   const chartData = labels.map((label, i) => {
