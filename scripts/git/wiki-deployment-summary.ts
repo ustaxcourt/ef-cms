@@ -14,13 +14,15 @@ const scriptConfig: ScriptConfig = {
     pullRequestNumber: {
       position: 0,
       required: false,
+      transform: 'number',
       type: 'string',
     },
   },
+  requireActiveAwsSession: false,
 };
 
-const args = parseArgsAndEnvVars(scriptConfig) as {
-  pullRequestNumber?: string;
+const { pullRequestNumber } = parseArgsAndEnvVars(scriptConfig) as {
+  pullRequestNumber?: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -28,7 +30,7 @@ const args = parseArgsAndEnvVars(scriptConfig) as {
   const githubClient = new GhCliGitHubClient();
   const summary = await generateWikiSummary(
     githubClient,
-    args.pullRequestNumber ? Number(args.pullRequestNumber) : undefined,
+    pullRequestNumber && pullRequestNumber > 0 ? pullRequestNumber : undefined,
   );
   console.log(summary);
 })();
