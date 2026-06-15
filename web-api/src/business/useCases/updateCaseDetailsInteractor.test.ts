@@ -87,8 +87,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.hasVerifiedIrsNotice).toBe(true);
     expect(updatedCase.irsNoticeDate).toBe('2020-08-28T01:49:58.117Z');
   });
@@ -107,8 +106,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.hasVerifiedIrsNotice).toBe(false);
     expect(updatedCase.irsNoticeDate).toBe(undefined);
   });
@@ -127,8 +125,7 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitionPaymentWaivedDate).toBe(null);
     expect(updatedCase.petitionPaymentMethod).toBe(null);
     expect(updatedCase.petitionPaymentDate).toBe(null);
@@ -151,8 +148,7 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitionPaymentWaivedDate).toBe(null);
     expect(updatedCase.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
     expect(updatedCase.petitionPaymentMethod).toEqual('check');
@@ -174,8 +170,7 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitionPaymentDate).toBe(null);
     expect(updatedCase.petitionPaymentMethod).toBe(null);
     expect(updatedCase.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
@@ -203,8 +198,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const waivedDocument = updatedCase.docketEntries.find(
       entry =>
         entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
@@ -233,8 +227,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const paidDocument = updatedCase.docketEntries.find(
       entry =>
         entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
@@ -261,8 +254,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.docketEntries.length).toEqual(
       MOCK_CASE_DTO.docketEntries.length,
     );

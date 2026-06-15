@@ -134,8 +134,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.petitioners[1].address1).toEqual(mockAddress);
   });
@@ -246,8 +246,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
     expect(result.orderForAmendedPetition).toBeTruthy();
@@ -274,8 +274,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.petitioners[0].contactId).toEqual(
       mockCase.petitioners[0].contactId,
@@ -298,8 +298,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.petitioners.length).toEqual(1);
   });
@@ -340,8 +340,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.privatePractitioners).toBeDefined();
     expect(result.privatePractitioners![0].representing).toEqual([
@@ -373,8 +373,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const result =
-      jest.mocked(updateCaseAndAssociations).mock.calls[0][0].caseToUpdate;
+    const result = jest.mocked(updateCaseAndAssociations).mock.calls[0][0]
+      .caseToUpdate;
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });

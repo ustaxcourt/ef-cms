@@ -1,4 +1,7 @@
-import { errorKey, resultKey } from './generatePublicDocketRecordPdfWorkerLambda';
+import {
+  errorKey,
+  resultKey,
+} from './generatePublicDocketRecordPdfWorkerLambda';
 import { genericHandler } from '../../genericHandler';
 
 const UUID_REGEX =

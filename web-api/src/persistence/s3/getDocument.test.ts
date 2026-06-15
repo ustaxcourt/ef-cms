@@ -34,8 +34,9 @@ describe('getDocument', () => {
   });
 
   it('should throw an error when the storage client returns a response with no Body', async () => {
-    (applicationContext.getStorageClient().getObject as jest.Mock)
-      .mockResolvedValueOnce({});
+    (
+      applicationContext.getStorageClient().getObject as jest.Mock
+    ).mockResolvedValueOnce({});
 
     await expect(
       getDocument({

@@ -8,7 +8,7 @@ export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext: ServerApplicationContext,
   { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity },
   authorizedUser: AuthUser,
-) => {
+): Promise<() => Promise<void>> => {
   const priorJudgeTitleWithFullName = await getJudgeWithTitle({
     judgeUserName: currentTrialSession.judge.name,
     useFullName: true,
@@ -38,7 +38,7 @@ export const setNoticeOfChangeOfTrialJudge = async (
         trialSessionInformation as unknown as RawTrialSession,
     });
 
-  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+  return applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
     applicationContext,
     {
       caseEntity,

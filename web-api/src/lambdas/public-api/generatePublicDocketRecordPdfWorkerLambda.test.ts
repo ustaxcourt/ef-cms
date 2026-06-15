@@ -42,9 +42,9 @@ describe('generatePublicDocketRecordPdfWorkerLambda', () => {
     );
     expect(markerWrite).toBeDefined();
     expect(markerWrite![0].useTempBucket).toBe(true);
-    expect(
-      JSON.parse((markerWrite![0].document as Buffer).toString()),
-    ).toEqual({ fileId: 'random-interactor-id' });
+    expect(JSON.parse((markerWrite![0].document as Buffer).toString())).toEqual(
+      { fileId: 'random-interactor-id' },
+    );
   });
 
   it('writes an error marker to S3 when the interactor fails', async () => {
