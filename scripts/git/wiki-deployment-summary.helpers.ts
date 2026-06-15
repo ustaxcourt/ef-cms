@@ -6,7 +6,7 @@ import {
 import {
   FORMATS,
   formatDateString,
-} from '../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 
 export const extractCircleCiUrl = (pullRequest: GitHubPullRequest): string => {
   const checks = pullRequest.statusCheckRollup ?? [];
@@ -59,10 +59,8 @@ export const getPostgresMigrationTimings = async (
       }
     }
   } catch (err) {
-    /* istanbul ignore next */
     console.warn(`Error fetching migration timings: ${err}`);
   }
-  /* istanbul ignore next */
   return undefined;
 };
 
@@ -109,7 +107,6 @@ const getTimelineEvents = async (
     let deployUrl = mergeStatusChecks.find(
       c => c.context === 'ci/circleci: deploy',
     )?.targetUrl;
-    /* istanbul ignore next */
     if (!deployUrl) deployUrl = extractCircleCiUrl(pr);
 
     events.push({
@@ -123,10 +120,8 @@ const getTimelineEvents = async (
     const migrateCheck = mergeStatusChecks.find(
       c => c.context === 'ci/circleci: migrate',
     );
-    /* istanbul ignore next */
     if (migrateCheck && migrateCheck.targetUrl) {
       const timings = await getPostgresMigrationTimings(migrateCheck.targetUrl);
-      /* istanbul ignore next */
       if (timings) {
         events.push({
           dateStr: formatDateString(timings.startTime, FORMATS.YYYYMMDD),
@@ -180,7 +175,6 @@ const renderTimeline = (events: TimelineEvent[]): string[] => {
   const dates = Object.keys(groupedTimeline).sort();
   for (let i = 0; i < dates.length; i++) {
     lines.push(`(${dates[i]})`);
-    /* istanbul ignore next */
     const dailyEvents = groupedTimeline[dates[i]].sort((a, b) =>
       a.timeStr.localeCompare(b.timeStr),
     );

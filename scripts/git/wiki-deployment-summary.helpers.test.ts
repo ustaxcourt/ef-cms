@@ -419,5 +419,51 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(result).toContain('10:06 - Data migration begins');
       expect(result).toContain('10:07 - Data migration completes');
     });
+
+    it('does not add data migration timeline events when migration timings are unavailable', async () => {
+      mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+        mergedAt: '2025-12-05T12:00:00Z',
+        number: 995,
+      });
+
+      mockGhClient.getPullRequest.mockResolvedValue({
+        author: mockUser,
+        body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+        commits: [],
+        createdAt: '2025-12-05T13:00:00.000Z',
+        labels: [{ name: 'Data Migration' }],
+        mergeCommit: { oid: 'merge-commit-oid' },
+        mergedAt: '2025-12-06T15:00:00.000Z',
+        number: 995,
+        statusCheckRollup: [],
+        title: 'Title',
+        url: 'http://pr',
+      } as GitHubPullRequest);
+
+      global.fetch = jest.fn().mockResolvedValue({
+        json: jest.fn().mockResolvedValue({
+          steps: [
+            {
+              name: 'Some Other Step',
+              actions: [],
+            },
+          ],
+        }),
+        ok: true,
+      });
+
+      mockGhClient.getMergeCommitStatusContexts = jest.fn().mockResolvedValue([
+        {
+          context: 'ci/circleci: migrate',
+          createdAt: '2025-12-06T15:05:00.000Z',
+          targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+        },
+      ]);
+
+      const result = await generateWikiSummary(mockGhClient);
+
+      expect(result).not.toContain('Data migration begins');
+      expect(result).not.toContain('Data migration completes');
+    });
   });
 });
