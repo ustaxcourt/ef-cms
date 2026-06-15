@@ -1,0 +1,111 @@
+name: Security - SAST
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+  push:
+    branches: [staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 15
+    container:
+      image: semgrep/semgrep:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run Semgrep
+        env:
+          SEMGREP_RULES: >-
+            p/typescript
+            p/nodejs
+            p/react
+            p/jwt
+            p/sql-injection
+            p/xss
+            p/command-injection
+            p/ssrf
+        run: |
+          semgrep scan \
+            --config auto \
+            --sarif --output semgrep-results.sarif \
+            --exclude='node_modules' \
+            --exclude='coverage' \
+            --exclude='dist' \
+            --exclude='dist-public' \
+            --exclude='dist-lambdas' \
+            --exclude='*.test.ts' \
+            --exclude='*.test.tsx' \
+            --exclude='cypress' \
+            --exclude='aws/lambdas' \
+            --exclude='.terraform' \
+            --exclude='docs' \
+            --metrics=off \
+            --baseline-commit ${{ github.event.pull_request.base.sha }}
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
+
+  codeql:
+    name: CodeQL Deep Analysis
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-extended,security-and-quality
+          config-file: .github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:${{ matrix.language }}'
+
+  security-gate:
+    name: Security Gate (SAST)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    needs: [semgrep]
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - run: echo "SAST gate passed"

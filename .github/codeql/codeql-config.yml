@@ -1,0 +1,21 @@
+name: "DAWSON CodeQL Config"
+
+paths-ignore:
+  - node_modules
+  - coverage
+  - dist
+  - dist-public
+  - dist-lambdas
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - cypress
+  - aws/lambdas
+  - .terraform
+  - docs
+
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+threat-models:
+  - remote
