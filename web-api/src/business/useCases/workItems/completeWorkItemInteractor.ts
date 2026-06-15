@@ -5,14 +5,13 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { getWorkItemsByIds } from '@web-api/persistence/postgres/workitems/getWorkItemsByIds';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const completeWorkItem = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   {
     completedMessage,
     workItemId,
@@ -26,8 +25,8 @@ export const completeWorkItem = async (
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
 
-  const originalWorkItemEntity = await getWorkItemById({
-    workItemId,
+  const [originalWorkItemEntity] = await getWorkItemsByIds({
+    workItemIds: [workItemId],
   });
 
   if (!originalWorkItemEntity) {
@@ -54,8 +53,8 @@ export const determineEntitiesToLock = async ({
 }: {
   workItemId: string;
 }) => {
-  const originalWorkItem = await getWorkItemById({
-    workItemId,
+  const [originalWorkItem] = await getWorkItemsByIds({
+    workItemIds: [workItemId],
   });
 
   if (!originalWorkItem) {

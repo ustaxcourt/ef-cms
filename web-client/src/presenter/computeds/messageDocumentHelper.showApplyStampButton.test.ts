@@ -130,23 +130,17 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   });
 
   it('should be true when the selected message document is a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
-    applicationContext
-      .getUtilities()
-      .getAttachmentDocumentById.mockReturnValue([]);
-    applicationContext.getUtilities().formatCase.mockReturnValue({
-      draftDocuments: [
-        {
-          docketEntryId: mockDocketEntryId,
-          eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
-        },
-      ],
-    });
-
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(adcUser),
         caseDetail: {
-          docketEntries: [],
+          docketEntries: [
+            {
+              docketEntryId: mockDocketEntryId,
+              eventCode: 'O',
+              isDraft: true,
+            },
+          ],
         },
         messageViewerDocumentToDisplay: {
           documentId: mockDocketEntryId,

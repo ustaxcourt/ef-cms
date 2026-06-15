@@ -1,14 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Takes the selected work items in the store and invoke the assignWorkItems so that the assignee is attached to each
- * of the work items.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
- * @param {object} providers.store the cerebral store containing the selectedWorkItems, workQueue, assigneeId, assigneeName this method uses
- * @param {Function} providers.get the cerebral get helper function
- * @returns {Promise} async action
- */
 export const assignSelectedWorkItemsAction = async ({
   applicationContext,
   get,
@@ -19,27 +10,39 @@ export const assignSelectedWorkItemsAction = async ({
   const assigneeId: string = get(state.assigneeId) || '';
   const assigneeName = get(state.assigneeName);
 
-  await Promise.all(
-    selectedWorkItems.map(workItem =>
-      applicationContext
-        .getUseCases()
-        .assignWorkItemsInteractor(applicationContext, {
-          assigneeId,
-          assigneeName,
-          workItemId: workItem.workItemId,
-        }),
-    ),
-  );
+  const workItemIds: string[] = [];
+
+  selectedWorkItems.forEach(workItem => {
+    workItemIds.push(workItem.workItemId);
+    workItem.groupedMemberCases?.forEach(item => {
+      workItemIds.push(item.workItemId);
+    });
+  });
+
+  await applicationContext
+    .getUseCases()
+    .assignWorkItemsInteractor(applicationContext, {
+      assigneeId,
+      assigneeName,
+      workItemIds,
+    });
 
   // Give elasticsearch a chance to catch up
   // TODO: we need a better solution for this; this is causing flaky functionality and failing cypress tests
   await new Promise(resolve => setTimeout(resolve, 3000));
 
+  const memberWorkItemIds = selectedWorkItems.flatMap(
+    item => item.groupedMemberCases?.map(member => member.workItemId) ?? [],
+  );
+
   store.set(
     state.workQueue,
     sectionWorkQueue.map(workItem => {
       if (
-        selectedWorkItems.find(item => item.workItemId === workItem.workItemId)
+        selectedWorkItems.find(
+          item => item.workItemId === workItem.workItemId,
+        ) ||
+        memberWorkItemIds.includes(workItem.workItemId)
       ) {
         return {
           ...workItem,

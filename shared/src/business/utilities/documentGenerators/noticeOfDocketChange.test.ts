@@ -12,7 +12,7 @@ describe('noticeOfDocketChange', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
-          docketEntryIndex: '1',
+          docketEntryIndex: 1,
           docketNumberWithSuffix: '123-45S',
           filingsAndProceedings: {
             after: 'Filing and Proceedings After',

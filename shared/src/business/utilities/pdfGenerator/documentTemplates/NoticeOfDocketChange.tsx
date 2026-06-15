@@ -11,7 +11,7 @@ export const NoticeOfDocketChange = ({
   options,
   titleOfClerk,
 }: {
-  docketEntryIndex: string;
+  docketEntryIndex: number;
   filingParties: { after: string | undefined; before: string | undefined };
   filingsAndProceedings: { after: string; before: string };
   options: {

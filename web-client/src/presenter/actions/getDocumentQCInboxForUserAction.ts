@@ -6,9 +6,12 @@ export const getDocumentQCInboxForUserAction = async ({
   get,
 }: ActionProps) => {
   const user = get(state.user);
-  const workItems = await getDocumentQCInboxForUserInteractor(applicationContext, {
+  const workItems = await getDocumentQCInboxForUserInteractor(
+    applicationContext,
+    {
       userId: user.userId,
-    });
+    },
+  );
 
   return { workItems };
 };

@@ -3,7 +3,7 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const formatMessage = ({ applicationContext, caseDetail, message }) => {
+export const formatMessage = ({ applicationContext, caseDetail, message }) => {
   const formattedAttachments = applicationContext
     .getUtilities()
     .formatAttachments({
@@ -31,10 +31,6 @@ export const formattedMessageDetail = (
   const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
-  const { draftDocuments } = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail, user);
-
   const formattedMessages = orderBy(
     messageDetail.map(message =>
       formatMessage({ applicationContext, caseDetail, message }),
@@ -58,7 +54,6 @@ export const formattedMessageDetail = (
       attachment.showNotServed = getShowNotServedForDocument({
         caseDetail,
         docketEntryId: attachment.documentId,
-        draftDocuments,
       });
     });
   }

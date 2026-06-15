@@ -12,7 +12,11 @@ jest.mock(
 );
 jest.mock('@web-api/business/useCaseHelper/saveFileAndGenerateUrl');
 jest.mock('@web-api/notifications/sendNotificationToUser');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
@@ -52,15 +56,19 @@ import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/tri
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
   calculateISODate,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { Case } from '@shared/business/entities/cases/Case';
 
 describe('updateTrialSessionInteractor', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const updateTrialSessionMocked = jest.mocked(updateTrialSessionMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   describe('updateTrialSession', () => {
     let TEST_TRIAL_SESSION;
@@ -82,8 +90,12 @@ describe('updateTrialSessionInteractor', () => {
       updateTrialSessionMocked.mockResolvedValue(undefined);
 
       (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
-        getPageCount: () => 1,
-        save: () => MOCK_SAVE_RESULTS,
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [],
+        sendEmailCalls: [],
       });
 
       (saveFileAndGenerateUrl as jest.Mock).mockReturnValue({
@@ -257,6 +269,7 @@ describe('updateTrialSessionInteractor', () => {
         'Cannot change the start date to today or a past date.',
       );
     });
+
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {
       (shouldCreateWorkingCopyForNewJudge as jest.Mock).mockReturnValue(true);
 
@@ -333,7 +346,7 @@ describe('updateTrialSessionInteractor', () => {
       expect(workingCopyCalls.length).toEqual(0);
     });
 
-    it('should generate all the notices for each case and update trial session', async () => {
+    it('should generate all the notices for each case, make send email calls, and update cases and trial session', async () => {
       (
         shouldGenerateNoticeOfChangeToInPersonProceeding as jest.Mock
       ).mockReturnValue(true);
@@ -353,6 +366,22 @@ describe('updateTrialSessionInteractor', () => {
       (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
         true,
       );
+
+      const mockSendEmailCall = jest.fn();
+
+      const mockCase = new Case(
+        { ...MOCK_CASE, docketNumber: '111-25' },
+        { authorizedUser: mockCaseServicesSupervisorUser },
+      );
+
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [mockCase],
+        sendEmailCalls: [mockSendEmailCall],
+      });
 
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
@@ -425,6 +454,13 @@ describe('updateTrialSessionInteractor', () => {
         },
         userId: mockCaseServicesSupervisorUser.userId,
       });
+
+      expect(mockSendEmailCall).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledWith({
+        authorizedUser: mockCaseServicesSupervisorUser,
+        caseToUpdate: mockCase,
+      });
     });
 
     it('should not generate notices if helper methods return false', async () => {
@@ -483,6 +519,51 @@ describe('updateTrialSessionInteractor', () => {
         shouldSetNoticeOfTrialSessionLocationChange: false,
         shouldSetNoticeOfTrialSessionStartDateChange: false,
       });
+    });
+
+    it('should not update cases or send emails if there are no cases to update', async () => {
+      const mockSendEmailCall = jest.fn();
+
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [],
+        sendEmailCalls: [],
+      });
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: [],
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            trialClerk: {
+              userId: TEST_TRIAL_CLERK_ID,
+              name: 'TEST_TRIAL_CLERK_NAME',
+            },
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      const updateCasesAndSetNoticeOfChangeCalls = (
+        updateCasesAndSetNoticeOfChange as jest.Mock
+      ).mock.calls;
+
+      expect(updateCasesAndSetNoticeOfChangeCalls.length).toEqual(0);
+
+      expect(mockSendEmailCall).not.toHaveBeenCalled();
+      expect(updateCaseAndAssociations).not.toHaveBeenCalled();
     });
 
     it('should update associated swing trial session', async () => {

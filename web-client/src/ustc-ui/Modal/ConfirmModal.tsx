@@ -13,6 +13,7 @@ type ConfirmModalProps = {
   className?: string;
   confirmLabel?: string;
   deleteLabel?: string;
+  disableTooltip?: boolean;
   hasErrorState?: boolean;
   headerIcon?: IconProp;
   headerIconClassName?: string;
@@ -25,6 +26,7 @@ type ConfirmModalProps = {
   showDelete?: boolean;
   showModalWhen?: string;
   title: string;
+  useLinkForCancel?: boolean;
 };
 
 const confirmModalDeps = {
@@ -36,10 +38,12 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
   confirmModalDeps,
   function ConfirmModal({
     cancelLabel = 'Cancel',
+    useLinkForCancel = false,
     children,
     className,
     confirmLabel = 'Ok',
     deleteLabel = 'Delete',
+    disableTooltip = false,
     hasErrorState = false,
     headerIcon,
     headerIconClassName = '',
@@ -73,7 +77,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
     return (
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
-        title={title}
+        {...(!disableTooltip && { title })}
       >
         <div className={classNames('modal-header grid-container padding-x-0')}>
           <div className="grid-row">
@@ -136,6 +140,11 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
               <Button
                 data-testid="confirm-modal-cancel-btn"
                 secondary
+                link={useLinkForCancel}
+                className={classNames(
+                  useLinkForCancel ? 'text-no-underline' : '',
+                )}
+                id="cancel"
                 onClick={event => {
                   event.stopPropagation();
                   onCancelSequence();

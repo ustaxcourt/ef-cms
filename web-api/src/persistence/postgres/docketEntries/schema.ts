@@ -51,6 +51,8 @@ export const docketEntryTableDefinition = {
   judge: DEFAULT as string | null,
   lodged: DEFAULT as boolean | null,
   mailingDate: DEFAULT as string | null,
+  multiDocketedOn: DEFAULT as ColumnType<string[], string, string>,
+  originallyFiledDocketNumber: DEFAULT as string | null,
   noticeIssuedDate: DEFAULT as Date | null,
   numberOfPages: DEFAULT as number | null,
   objections: DEFAULT as string | null,

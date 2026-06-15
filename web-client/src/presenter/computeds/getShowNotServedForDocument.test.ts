@@ -22,7 +22,6 @@ describe('getShowNotServedForDocument', () => {
           ],
         },
         docketEntryId,
-        draftDocuments: [],
       });
 
       expect(showNotServed).toEqual(true);
@@ -43,7 +42,6 @@ describe('getShowNotServedForDocument', () => {
           ],
         },
         docketEntryId,
-        draftDocuments: [],
       });
 
       expect(showNotServed).toEqual(false);
@@ -65,7 +63,6 @@ describe('getShowNotServedForDocument', () => {
           ],
         },
         docketEntryId,
-        draftDocuments: [],
       });
 
       expect(showNotServed).toEqual(false);
@@ -82,11 +79,11 @@ describe('getShowNotServedForDocument', () => {
               documentTitle: 'Some Stuff',
               documentType: 'Order',
               eventCode: 'O',
+              isDraft: true,
             },
           ],
         },
         docketEntryId,
-        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -99,7 +96,6 @@ describe('getShowNotServedForDocument', () => {
           docketEntries: [],
         },
         docketEntryId,
-        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -115,7 +111,6 @@ describe('getShowNotServedForDocument', () => {
           docketEntries: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
         },
         docketEntryId: correspondenceDocumentId,
-        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);

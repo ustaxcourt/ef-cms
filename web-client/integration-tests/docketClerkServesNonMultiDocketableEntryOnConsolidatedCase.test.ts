@@ -68,7 +68,7 @@ describe('Docket Clerk serves non multi-docketable entry on consolidated case', 
         },
       );
 
-      expect(modalHelper.showConsolidatedCasesForService).toBe(false);
+      expect(modalHelper.allowMultiDocketing).toBe(false);
     });
   });
 });

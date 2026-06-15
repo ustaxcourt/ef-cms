@@ -1,5 +1,6 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
+import { EXPOSED_RESPONSE_HEADERS } from '@shared/utils/headers';
 import {
   getAuthHeader,
   getConnectionIdFromEvent,
@@ -12,7 +13,7 @@ import jwt from 'jsonwebtoken';
 type CustomError = Error & { skipLogging?: boolean };
 
 const EXPECTED_HEADERS = {
-  'Access-Control-Expose-Headers': 'X-Terminal-User',
+  'Access-Control-Expose-Headers': EXPOSED_RESPONSE_HEADERS.join(', '),
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
@@ -48,7 +49,7 @@ describe('handle', () => {
     expect(response).toEqual({
       body: JSON.stringify('hi'),
       headers: {
-        'Access-Control-Expose-Headers': 'X-Terminal-User',
+        'Access-Control-Expose-Headers': EXPOSED_RESPONSE_HEADERS.join(', '),
         'Cache-Control':
           'max-age=0, private, no-cache, no-store, must-revalidate',
         'Content-Type': 'application/json',

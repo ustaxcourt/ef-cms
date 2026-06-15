@@ -98,6 +98,14 @@ describe('makeNewPassword', () => {
     expect(password.length).toBe(length);
   });
 
+  it('uses the number of character sets if provided length is too small', () => {
+    // 4 character sets by default: numbers, symbols, uppercase, lowercase
+    // If length is < 4, it should fallback to 4.
+    const length = 2;
+    const password = makeNewPassword(undefined, length);
+    expect(password.length).toBe(4);
+  });
+
   it('uses a random length between 12 and 20 if length is not specified', () => {
     for (let i = 0; i < 100; i++) {
       const password = makeNewPassword();
