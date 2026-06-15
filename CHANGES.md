@@ -1,14 +1,6 @@
 <details><summary>Dependency Updates - Week of 2026-06-08</summary>
 
-## Manual Deployment Steps
-
-### Before Deployment
-
-#### Docker container `4.3.83` - choose exp4
-```bash
-. scripts/env/set-env.zsh expN
-npm run ecr:check-version
-```
+## Local
 
 #### Upgrade Terraform to `1.15.5`
 use either tfswitch or tfenv
@@ -18,6 +10,16 @@ tfswitch 1.15.5
 ```bash
 tfenv install 1.15.5
 tfenv use 1.15.5
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.83` - choose exp4
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
 ```
 </details>
 
