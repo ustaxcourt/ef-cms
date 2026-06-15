@@ -26,7 +26,7 @@ export type GitHubPullRequestFile = {
 export type GitHubStatusCheck = {
   context: string;
   createdAt?: string;
-  targetUrl: string;
+  targetUrl?: string;
 };
 
 export type GitHubPullRequest = {
@@ -39,7 +39,7 @@ export type GitHubPullRequest = {
   mergeCommit?: {
     oid: string;
   } | null;
-  mergedAt: string;
+  mergedAt: string | null;
   number: number;
   statusCheckRollup?: GitHubStatusCheck[];
   title: string;
@@ -100,6 +100,26 @@ const runGhJsonCommand = async <T>({
   const output = await commandRunner('gh', args, GH_ENV_VARS);
 
   return parseJsonOutput<T>(output);
+};
+
+type MergeCommitStatusContextNode = {
+  context?: string | null;
+  createdAt?: string | null;
+  targetUrl?: string | null;
+};
+
+type MergeCommitStatusContextsResponse = {
+  data?: {
+    repository?: {
+      object?: {
+        statusCheckRollup?: {
+          contexts?: {
+            nodes?: Array<MergeCommitStatusContextNode | null>;
+          };
+        };
+      } | null;
+    } | null;
+  };
 };
 
 export class GhCliGitHubClient implements GitHubClient {
@@ -211,7 +231,7 @@ export class GhCliGitHubClient implements GitHubClient {
         }
       }`;
 
-    const output = await runGhJsonCommand<any>({
+    const output = await runGhJsonCommand<MergeCommitStatusContextsResponse>({
       args: [
         'api',
         'graphql',
@@ -228,9 +248,28 @@ export class GhCliGitHubClient implements GitHubClient {
     });
 
     const nodes =
-      output?.data?.repository?.object?.statusCheckRollup?.contexts?.nodes ||
-      [];
-    return nodes.filter((node: any) => node && node.context);
+      output.data?.repository?.object?.statusCheckRollup?.contexts?.nodes || [];
+    const statusChecks: GitHubStatusCheck[] = [];
+
+    for (const node of nodes) {
+      if (node?.context) {
+        const statusCheck: GitHubStatusCheck = {
+          context: node.context,
+        };
+
+        if (node.createdAt) {
+          statusCheck.createdAt = node.createdAt;
+        }
+
+        if (node.targetUrl) {
+          statusCheck.targetUrl = node.targetUrl;
+        }
+
+        statusChecks.push(statusCheck);
+      }
+    }
+
+    return statusChecks;
   }
 
   async getPullRequest(pullRequestNumber: number): Promise<GitHubPullRequest> {

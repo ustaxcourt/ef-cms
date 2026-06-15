@@ -32,6 +32,20 @@ export const hasManualSteps = (pullRequest: GitHubPullRequest): boolean => {
   );
 };
 
+type CircleCiMigrationAction = {
+  end_time?: string;
+  start_time?: string;
+};
+
+type CircleCiMigrationStep = {
+  actions?: CircleCiMigrationAction[];
+  name?: string;
+};
+
+type CircleCiMigrationResponse = {
+  steps?: CircleCiMigrationStep[];
+};
+
 export const getPostgresMigrationTimings = async (
   jobUrl: string,
 ): Promise<{ startTime: string; endTime: string } | undefined> => {
@@ -44,9 +58,9 @@ export const getPostgresMigrationTimings = async (
       `https://circleci.com/api/v1.1/project/github/ustaxcourt/ef-cms/${jobNumber}`,
     );
     if (!response.ok) return undefined;
-    const data = (await response.json()) as any;
+    const data: CircleCiMigrationResponse = await response.json();
 
-    const steps = data.steps || /* istanbul ignore next */ [];
+    const steps = data.steps || [];
     for (const step of steps) {
       if (step.name === 'Run Postgres Migration') {
         const action = step.actions?.[0];
@@ -148,8 +162,10 @@ const getTimelineEvents = async (
   };
 
   const relevantChecks = mergeStatusChecks
-    .filter(check => stepMappings[check.context] && check.createdAt)
-    .sort((a, b) => a.createdAt!.localeCompare(b.createdAt!));
+    .filter((check): check is GitHubStatusCheck & { createdAt: string } =>
+      Boolean(stepMappings[check.context] && check.createdAt),
+    )
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 
   for (const check of relevantChecks) {
     events.push({

@@ -164,7 +164,12 @@ describe('github-client', () => {
               statusCheckRollup: {
                 contexts: {
                   nodes: [
-                    { context: 'test-context', targetUrl: 'test-url' },
+                    {
+                      context: 'test-context',
+                      createdAt: '2026-05-10T03:35:07Z',
+                      targetUrl: 'test-url',
+                    },
+                    { context: 'partial-context' },
                     null,
                   ],
                 },
@@ -215,7 +220,12 @@ describe('github-client', () => {
       );
 
       expect(result).toEqual([
-        { context: 'test-context', targetUrl: 'test-url' },
+        {
+          context: 'test-context',
+          createdAt: '2026-05-10T03:35:07Z',
+          targetUrl: 'test-url',
+        },
+        { context: 'partial-context' },
       ]);
     });
 

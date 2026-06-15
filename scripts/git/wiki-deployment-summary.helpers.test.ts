@@ -13,6 +13,7 @@ import type {
 
 describe('wiki-deployment-summary.helpers', () => {
   const mockUser: GitHubUser = { login: 'some-user' };
+  const originalFetch = global.fetch;
 
   const mockGhClient: jest.Mocked<GitHubClient> = {
     getCoverageSummary: jest.fn(),
@@ -22,6 +23,11 @@ describe('wiki-deployment-summary.helpers', () => {
     getPullRequest: jest.fn(),
     listMergedStagingPullRequests: jest.fn(),
   };
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    jest.restoreAllMocks();
+  });
 
   describe('extractCircleCiUrl', () => {
     it('should return targetUrl when ci/circleci: deploy context is present', () => {
@@ -102,10 +108,6 @@ describe('wiki-deployment-summary.helpers', () => {
   });
 
   describe('getPostgresMigrationTimings', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('returns undefined if jobUrl does not match format', async () => {
       expect(await getPostgresMigrationTimings('invalid-url')).toBeUndefined();
     });
@@ -281,7 +283,7 @@ describe('wiki-deployment-summary.helpers', () => {
         commits: [],
         createdAt: '2025-12-05T13:00:00.000Z',
         labels: [],
-        mergedAt: null as unknown as string,
+        mergedAt: null,
         number: 888,
         statusCheckRollup: [],
         title: 'Title',
