@@ -104,11 +104,11 @@ export const CASE_SEARCH_SORT_OPTIONS: CaseSearchSortOption[] = [
     label: 'Sort by Docket No. (descending)',
     value: `docketNumber|${DESCENDING}`,
   },
-  { label: 'Sort by Filed Date (ascending)', value: `receivedAt|${ASCENDING}` },
   {
     label: 'Sort by Filed Date (descending)',
     value: `receivedAt|${DESCENDING}`,
   },
+  { label: 'Sort by Filed Date (ascending)', value: `receivedAt|${ASCENDING}` },
   { label: 'Sort by Case Title (ascending)', value: `caseTitle|${ASCENDING}` },
   {
     label: 'Sort by Case Title (descending)',

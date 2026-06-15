@@ -213,7 +213,7 @@ export const SearchResults = connect(
                         currentlySortedOrder={
                           advancedSearchHelper.caseSearchSortDirectionForDisplay
                         }
-                        defaultSortOrder={ASCENDING}
+                        defaultSortOrder={DESCENDING}
                         descText={SORT_DESCENDING_TEXT.date}
                         hasRows={true}
                         sortField="receivedAt"
