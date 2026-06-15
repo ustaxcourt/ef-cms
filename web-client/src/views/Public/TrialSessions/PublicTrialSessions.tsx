@@ -248,10 +248,13 @@ function MobilePublicTrialSessions({
               key={sessionTypeLabel}
               text={sessionTypeLabel}
               onRemove={() => {
+                const remainingValues = { ...sessionTypes };
+                delete remainingValues[sessionTypeKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `sessionTypes.${sessionTypeKey}`,
+                  key: 'sessionTypes',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />
@@ -261,15 +264,18 @@ function MobilePublicTrialSessions({
             locations as {
               [key: string]: string;
             },
-          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+          ).map(([locationKey, locationLabel]) => (
             <PillButton
-              key={sessionTypeLabel}
-              text={sessionTypeLabel}
+              key={locationLabel}
+              text={locationLabel}
               onRemove={() => {
+                const remainingValues = { ...locations };
+                delete remainingValues[locationKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `locations.${sessionTypeKey}`,
+                  key: 'locations',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />
@@ -279,15 +285,18 @@ function MobilePublicTrialSessions({
             judges as {
               [key: string]: string;
             },
-          ).map(([sessionTypeKey, sessionTypeLabel]) => (
+          ).map(([judgeKey, judgeLabel]) => (
             <PillButton
-              key={sessionTypeLabel}
-              text={sessionTypeLabel}
+              key={judgeLabel}
+              text={judgeLabel}
               onRemove={() => {
+                const remainingValues = { ...judges };
+                delete remainingValues[judgeKey];
+
                 publicTrialSessionUpdateFormValueSequence({
-                  key: `judges.${sessionTypeKey}`,
+                  key: 'judges',
                   root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
-                  value: undefined,
+                  value: remainingValues,
                 });
               }}
             />

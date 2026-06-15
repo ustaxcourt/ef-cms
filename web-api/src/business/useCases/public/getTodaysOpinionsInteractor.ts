@@ -6,6 +6,7 @@ import {
   createStartOfDayISO,
   deconstructDate,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 
 export const getTodaysOpinionsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -23,5 +24,10 @@ export const getTodaysOpinionsInteractor = async (
       isOpinionSearch: true,
       startDate: currentDateStart,
     });
-  return results;
+
+  const formattedResults = results.map(opinion => {
+    return new PublicDocumentSearchResult(opinion).toRawObject();
+  });
+
+  return formattedResults;
 };

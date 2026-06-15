@@ -90,8 +90,7 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[0].isAddressSealed).toBe(true);
   });
 
@@ -108,8 +107,7 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[5].isAddressSealed).toBe(true);
   });
 
@@ -126,8 +124,7 @@ describe('sealCaseContactAddressInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(getOtherFilers(updatedCase)[1].isAddressSealed).toBe(true);
   });
 

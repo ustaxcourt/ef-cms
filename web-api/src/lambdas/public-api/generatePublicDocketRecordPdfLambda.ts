@@ -22,9 +22,8 @@ export const generatePublicDocketRecordPdfLambda = event =>
       if (environment.stage === 'local') {
         // Locally there is no deployed worker lambda; invoke the worker
         // handler in-process so the feature is exercisable end-to-end.
-        const { generatePublicDocketRecordPdfWorkerLambda } = await import(
-          './generatePublicDocketRecordPdfWorkerLambda'
-        );
+        const { generatePublicDocketRecordPdfWorkerLambda } =
+          await import('./generatePublicDocketRecordPdfWorkerLambda');
         // fire-and-forget: do not await so the HTTP response returns quickly
         void generatePublicDocketRecordPdfWorkerLambda({
           body: JSON.stringify({ docketNumber, docketRecordTableSort, jobId }),
