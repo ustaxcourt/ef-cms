@@ -5,6 +5,33 @@ import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandl
 
 const SLOW_CI_TIMEOUT = 120000;
 
+const assertOnCaseDetailPage = (docketNumber: string): void => {
+  cy.get('[data-testid="docket-number-header"] a', {
+    timeout: SLOW_CI_TIMEOUT,
+  }).should('have.attr', 'href', `/case-detail/${docketNumber}`);
+};
+
+const getDocketNumberAfterPaperPetitionSubmit =
+  (): Cypress.Chainable<string> => {
+    cy.url({ timeout: SLOW_CI_TIMEOUT }).should(
+      'match',
+      /\/case-detail\/[^/]+/,
+    );
+
+    return cy
+      .get('[data-testid="docket-number-header"] a', {
+        timeout: SLOW_CI_TIMEOUT,
+      })
+      .invoke('attr', 'href')
+      .then(href => {
+        const match = href?.match(/\/case-detail\/([^/]+)/);
+        if (!match?.[1]) {
+          throw new Error(`Unable to parse docket number from href: ${href}`);
+        }
+        return match[1];
+      });
+  };
+
 export function createAndServePaperPetition(
   {
     name = 'rick james ' + getCurrentDateTimeInMillis(),
@@ -131,89 +158,86 @@ export function createAndServePaperPetition(
   }
 
   cy.get('[data-testid="submit-paper-petition"]').click();
-  return cy
-    .get('.docket-number-header a', { timeout: SLOW_CI_TIMEOUT })
-    .invoke('attr', 'href')
-    .then(href => {
-      const docketNumber = href!.split('/').pop();
-      cy.get('[data-testid="serve-case-to-irs"]').click();
-      cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
-        timeout: SLOW_CI_TIMEOUT,
-      }).click();
-      cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
+  return getDocketNumberAfterPaperPetitionSubmit().then(docketNumber => {
+    cy.get('[data-testid="serve-case-to-irs"]').click();
+    cy.get('[data-testid="modal-confirm"]').click();
+    cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    }).click();
+    cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
 
-      cy.get('[data-testid="docket-number-search-input"]').type(
-        `${docketNumber}`,
-      );
-      cy.get('.usa-search-submit-text').click();
+    cy.get('[data-testid="docket-number-search-input"]').clear();
+    cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+    cy.get('[data-testid="search-docket-number"]').click();
+    assertOnCaseDetailPage(docketNumber);
 
-      cy.get('[data-testid="case-status"]').should(
+    cy.get('[data-testid="case-status"]').should(
+      'have.text',
+      'General Docket - Not at Issue',
+    );
+
+    const expectedDocuments = [
+      { eventCode: 'P', servedTo: 'R', index: 1 },
+      { eventCode: 'ATP', servedTo: 'R', index: 2 },
+      { eventCode: 'DISC', servedTo: 'R', index: includeApwDocument ? 4 : 3 },
+      { eventCode: 'RQT', servedTo: 'R', index: includeApwDocument ? 5 : 4 },
+      { eventCode: 'NOTR', servedTo: 'P', index: includeApwDocument ? 6 : 5 },
+    ];
+    if (includeApwDocument) {
+      expectedDocuments.splice(1, 0, {
+        eventCode: 'APW',
+        servedTo: 'R',
+        index: 3,
+      });
+    }
+
+    expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
+      cy.get(`[data-testid="docket-entry-eventCode-${index}"]`).should(
         'have.text',
-        'General Docket - Not at Issue',
+        eventCode,
       );
+      cy.get(`[data-testid="docket-entry-servedPartiesCode-${index}"]`).should(
+        'have.text',
+        servedTo,
+      );
+    });
 
-      const expectedDocuments = [
-        { eventCode: 'P', servedTo: 'R', index: 1 },
-        { eventCode: 'ATP', servedTo: 'R', index: 2 },
-        { eventCode: 'DISC', servedTo: 'R', index: includeApwDocument ? 4 : 3 },
-        { eventCode: 'RQT', servedTo: 'R', index: includeApwDocument ? 5 : 4 },
-        { eventCode: 'NOTR', servedTo: 'P', index: includeApwDocument ? 6 : 5 },
-      ];
-      if (includeApwDocument) {
-        expectedDocuments.splice(1, 0, {
-          eventCode: 'APW',
-          servedTo: 'R',
-          index: 3,
-        });
-      }
+    cy.get('[data-testid="tab-drafts"] > .button-text').click();
 
-      expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
-        cy.get(`[data-testid="docket-entry-eventCode-${index}"]`).should(
-          'have.text',
-          eventCode,
-        );
-        cy.get(
-          `[data-testid="docket-entry-servedPartiesCode-${index}"]`,
-        ).should('have.text', servedTo);
-      });
+    const expectedDescriptions = [
+      'Notice of Attachments in the Nature of Evidence',
+      'Order',
+      'Order',
+      'Order to Show Cause',
+    ];
 
-      cy.get('[data-testid="tab-drafts"] > .button-text').click();
+    cy.get('[data-testid^="docket-entry-description-"]').should($els => {
+      const actualDescriptions = Array.from($els).map(el => el.textContent);
 
-      const expectedDescriptions = [
-        'Notice of Attachments in the Nature of Evidence',
-        'Order',
-        'Order',
-        'Order to Show Cause',
-      ];
+      expect(actualDescriptions).to.have.length(expectedDescriptions.length);
 
-      cy.get('[data-testid^="docket-entry-description-"]').should($els => {
-        const actualDescriptions = Array.from($els).map(el => el.textContent);
-
-        expect(actualDescriptions).to.have.length(expectedDescriptions.length);
-
-        expectedDescriptions.forEach(expected => {
-          const expectedCount = expectedDescriptions.filter(
-            desc => desc === expected,
-          ).length;
-          const actualCount = actualDescriptions.filter(
-            desc => desc === expected,
-          ).length;
-          expect(
-            actualCount,
-            `Should have ${expectedCount} occurrence(s) of "${expected}"`,
-          ).to.equal(expectedCount);
-        });
-      });
-
-      cy.get('[data-testid="tab-docket-record"]').click();
-
-      return cy.wrap({
-        docketNumber: docketNumber!,
-        documentsCreated: expectedDocuments,
-        name,
+      expectedDescriptions.forEach(expected => {
+        const expectedCount = expectedDescriptions.filter(
+          desc => desc === expected,
+        ).length;
+        const actualCount = actualDescriptions.filter(
+          desc => desc === expected,
+        ).length;
+        expect(
+          actualCount,
+          `Should have ${expectedCount} occurrence(s) of "${expected}"`,
+        ).to.equal(expectedCount);
       });
     });
+
+    cy.get('[data-testid="tab-docket-record"]').click();
+
+    return cy.wrap({
+      docketNumber,
+      documentsCreated: expectedDocuments,
+      name,
+    });
+  });
 }
 
 export function createAndServePaperPetitionMyselfAndSpouse(
@@ -284,27 +308,20 @@ export function createAndServePaperPetitionMyselfAndSpouse(
 
   cy.get('[data-testid="submit-paper-petition"]').click();
 
-  return cy
-    .get('.docket-number-header a', { timeout: SLOW_CI_TIMEOUT })
-    .invoke('attr', 'href')
-    .then(href => {
-      const docketNumber = href!.split('/').pop();
-      cy.get('[data-testid="serve-case-to-irs"]').click();
-      cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
-        timeout: SLOW_CI_TIMEOUT,
-      }).click();
+  return getDocketNumberAfterPaperPetitionSubmit().then(docketNumber => {
+    cy.get('[data-testid="serve-case-to-irs"]').click();
+    cy.get('[data-testid="modal-confirm"]').click();
+    cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
+      timeout: SLOW_CI_TIMEOUT,
+    }).click();
 
-      cy.get('[data-testid="success-alert"]').contains(
-        'Petition served to IRS.',
-      );
+    cy.get('[data-testid="success-alert"]').contains('Petition served to IRS.');
 
-      cy.get('[data-testid="docket-number-search-input"]').type(
-        `${docketNumber}`,
-      );
+    cy.get('[data-testid="docket-number-search-input"]').clear();
+    cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+    cy.get('[data-testid="search-docket-number"]').click();
+    assertOnCaseDetailPage(docketNumber);
 
-      cy.get('[data-testid="search-docket-number"]').click();
-
-      return cy.wrap({ docketNumber: docketNumber! });
-    });
+    return cy.wrap({ docketNumber });
+  });
 }

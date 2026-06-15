@@ -78,17 +78,22 @@ export function createAndServePaperPetitionMultipleParties(
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('[data-testid="submit-paper-petition"]').click();
+  cy.url({ timeout: SLOW_CI_TIMEOUT }).should('match', /\/case-detail\/[^/]+/);
   return cy
-    .get('.docket-number-header a', { timeout: SLOW_CI_TIMEOUT })
+    .get('[data-testid="docket-number-header"] a', { timeout: SLOW_CI_TIMEOUT })
     .invoke('attr', 'href')
     .then(href => {
-      const docketNumber = href!.split('/').pop();
+      const match = href?.match(/\/case-detail\/([^/]+)/);
+      if (!match?.[1]) {
+        throw new Error(`Unable to parse docket number from href: ${href}`);
+      }
+      const docketNumber = match[1];
       cy.get('[data-testid="serve-case-to-irs"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('[data-testid="done-viewing-paper-petition-receipt-button"]', {
         timeout: SLOW_CI_TIMEOUT,
       }).click();
       cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
-      return cy.wrap({ docketNumber: docketNumber!, name, spouseName });
+      return cy.wrap({ docketNumber, name, spouseName });
     });
 }

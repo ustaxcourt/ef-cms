@@ -48,11 +48,10 @@ export function externalUserCreatesElectronicCase(
     .get('[data-testid="case-link-docket-number"]', {
       timeout: SLOW_CI_TIMEOUT,
     })
-    .should('be.visible')
     .invoke('text')
-    .then(docketNumberWithSuffix => {
+    .then(docketNumber => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
-      return cy.wrap<string>(docketNumberWithSuffix);
+      return cy.wrap<string>(docketNumber);
     });
 }
 

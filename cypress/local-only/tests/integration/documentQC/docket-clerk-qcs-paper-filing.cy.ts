@@ -1,13 +1,14 @@
-import { attachFile } from '../../../../helpers/file/upload-file';
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { attachFile } from 'cypress/helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { logout } from '../../../../helpers/authentication/logout';
-import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { logout } from 'cypress/helpers/authentication/logout';
+import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 
+const SLOW_CI_TIMEOUT = 120000;
 /**
  * Given a case
  * When a docket clerk QCs a paper filing, changing the event code
@@ -89,11 +90,11 @@ describe('Docket clerk QC-ing a paper filing', () => {
       // duplicates the coversheet shows up as a page-count change here.
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
-      cy.get('[data-testid="docket-record-table"]', { timeout: 120000 }).should(
-        'exist',
-      );
+      cy.get('[data-testid="docket-record-table"]', {
+        timeout: SLOW_CI_TIMEOUT,
+      }).should('exist');
       cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M115', {
-        timeout: 120000,
+        timeout: SLOW_CI_TIMEOUT,
       })
         .parents('tr')
         .find('.number-of-pages')
