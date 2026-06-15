@@ -15,6 +15,32 @@ describe('wiki-deployment-summary.helpers', () => {
   const mockUser: GitHubUser = { login: 'some-user' };
   const originalFetch = global.fetch;
 
+  const createCircleCiResponse = ({
+    endTime,
+    stepName,
+    startTime,
+  }: {
+    endTime: string;
+    stepName: string;
+    startTime: string;
+  }): Response =>
+    ({
+      json: jest.fn().mockResolvedValue({
+        steps: [
+          {
+            actions: [
+              {
+                end_time: endTime,
+                start_time: startTime,
+              },
+            ],
+            name: stepName,
+          },
+        ],
+      }),
+      ok: true,
+    }) as unknown as Response;
+
   const mockGhClient: jest.Mocked<GitHubClient> = {
     getCoverageSummary: jest.fn(),
     getIssue: jest.fn(),
@@ -29,8 +55,8 @@ describe('wiki-deployment-summary.helpers', () => {
     jest.restoreAllMocks();
   });
 
-  describe('extractCircleCiUrl', () => {
-    it('should return targetUrl when ci/circleci: deploy context is present', () => {
+  describe('Helper: extractCircleCiUrl', () => {
+    it('returns targetUrl when ci/circleci: deploy context is present', () => {
       const pr = {
         author: mockUser,
         body: '',
@@ -50,7 +76,7 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(extractCircleCiUrl(pr)).toEqual('http://deploy');
     });
 
-    it('should return placeholder when no deploy context is present', () => {
+    it('returns placeholder when no deploy context is present', () => {
       const pr = {
         author: mockUser,
         body: '',
@@ -67,7 +93,7 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(extractCircleCiUrl(pr)).toEqual('<INSERT_CIRCLECI_URL>');
     });
 
-    it('should return placeholder when statusCheckRollup is undefined', () => {
+    it('returns placeholder when statusCheckRollup is undefined', () => {
       const pr = {
         statusCheckRollup: undefined,
       } as GitHubPullRequest;
@@ -75,7 +101,7 @@ describe('wiki-deployment-summary.helpers', () => {
     });
   });
 
-  describe('hasDataMigration', () => {
+  describe('Helper: hasDataMigration', () => {
     it('returns true when data migration label is present', () => {
       const pr = {
         labels: [{ name: 'Data Migration ' }],
@@ -91,7 +117,7 @@ describe('wiki-deployment-summary.helpers', () => {
     });
   });
 
-  describe('hasManualSteps', () => {
+  describe('Helper: hasManualSteps', () => {
     it('returns true when manual steps label is present', () => {
       const pr = {
         labels: [{ name: ' manual deploy step(s) required' }],
@@ -107,12 +133,12 @@ describe('wiki-deployment-summary.helpers', () => {
     });
   });
 
-  describe('getPostgresMigrationTimings', () => {
-    it('returns undefined if jobUrl does not match format', async () => {
+  describe('CircleCI step timing helper: getPostgresMigrationTimings', () => {
+    it('returns undefined when the job URL does not match CircleCI format', async () => {
       expect(await getPostgresMigrationTimings('invalid-url')).toBeUndefined();
     });
 
-    it('returns undefined if fetch fails', async () => {
+    it('returns undefined when the CircleCI fetch fails', async () => {
       global.fetch = jest.fn().mockResolvedValue({
         ok: false,
       });
@@ -124,7 +150,7 @@ describe('wiki-deployment-summary.helpers', () => {
       ).toBeUndefined();
     });
 
-    it('returns timings if migration step exists in job response', async () => {
+    it('returns timings when the migration step exists in the job response', async () => {
       global.fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({
           steps: [
@@ -152,7 +178,45 @@ describe('wiki-deployment-summary.helpers', () => {
       });
     });
 
-    it('handles missing steps or missing start_time/end_time', async () => {
+    it('returns undefined when the CircleCI response omits steps', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: jest.fn().mockResolvedValue({}),
+        ok: true,
+      });
+
+      expect(
+        await getPostgresMigrationTimings(
+          'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('returns undefined when the migration step has invalid timestamps', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: jest.fn().mockResolvedValue({
+          steps: [
+            {
+              name: 'Run Postgres Migration',
+              actions: [
+                {
+                  start_time: 'invalid-start-time',
+                  end_time: 'invalid-end-time',
+                },
+              ],
+            },
+          ],
+        }),
+        ok: true,
+      });
+
+      expect(
+        await getPostgresMigrationTimings(
+          'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+        ),
+      ).toBeUndefined();
+    });
+
+    it('returns undefined when the response is missing steps or timestamps', async () => {
       global.fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({
           steps: [
@@ -175,7 +239,7 @@ describe('wiki-deployment-summary.helpers', () => {
       ).toBeUndefined();
     });
 
-    it('handles network errors', async () => {
+    it('returns undefined when the CircleCI request rejects', async () => {
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
       expect(
         await getPostgresMigrationTimings(
@@ -190,7 +254,7 @@ describe('wiki-deployment-summary.helpers', () => {
       jest.clearAllMocks();
     });
 
-    it('generates the summary correctly, falling back to latest prod PR', async () => {
+    it('generates the summary correctly when falling back to the latest prod PR', async () => {
       mockGhClient.getLatestProdPullRequest.mockResolvedValue({
         mergedAt: '2025-12-05T12:00:00Z',
         number: 995,
@@ -218,7 +282,6 @@ describe('wiki-deployment-summary.helpers', () => {
 
       expect(mockGhClient.getLatestProdPullRequest).toHaveBeenCalled();
       expect(result).toContain('## General Notes');
-      // "Data migration" Note should no longer be present
       expect(result).not.toContain(
         '**Note:** This deployment includes a data migration.',
       );
@@ -242,7 +305,7 @@ describe('wiki-deployment-summary.helpers', () => {
       );
     });
 
-    it('uses the provided PR number, handles empty lists, handles same-day merge', async () => {
+    it('uses the provided PR number and handles empty lists and same-day merges', async () => {
       mockGhClient.getPullRequest.mockResolvedValue({
         author: mockUser,
         body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | NO |\n`,
@@ -271,12 +334,11 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(result).toContain('### Feature Stories\nNone');
       expect(result).toContain('### Bug Fixes\nNone');
 
-      // Since it's merged on the same date, shouldn't have duplicate date headers
       const dateMatches = result.match(/\(2025-12-05\)/g);
       expect(dateMatches?.length).toBe(1);
     });
 
-    it('handles unmerged PR', async () => {
+    it('handles an unmerged PR', async () => {
       mockGhClient.getPullRequest.mockResolvedValue({
         author: mockUser,
         body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | NO |\n`,
@@ -294,7 +356,7 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(result).not.toContain('Merged the PR');
     });
 
-    it('generates the summary with mergeCommit and mapped status contexts', async () => {
+    it('generates the summary with merge commit and mapped status contexts', async () => {
       mockGhClient.getLatestProdPullRequest.mockResolvedValue({
         mergedAt: '2025-12-05T12:00:00Z',
         number: 995,
@@ -314,7 +376,6 @@ describe('wiki-deployment-summary.helpers', () => {
         url: 'http://pr',
       } as GitHubPullRequest);
 
-      // We explicitly provide a mock fetch so data migration works
       global.fetch = jest.fn().mockResolvedValue({
         json: jest.fn().mockResolvedValue({
           steps: [
@@ -365,107 +426,260 @@ describe('wiki-deployment-summary.helpers', () => {
       expect(result).toContain('10:10 - Switched colors');
     });
 
-    it('adds data migration timeline events if data migration is labeled and timelines are found', async () => {
-      mockGhClient.getLatestProdPullRequest.mockResolvedValue({
-        mergedAt: '2025-12-05T12:00:00Z',
-        number: 995,
-      });
+    describe('timing-based timeline events', () => {
+      it('adds data migration timeline events when the migration is labeled and timings are found', async () => {
+        mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+          mergedAt: '2025-12-05T12:00:00Z',
+          number: 995,
+        });
 
-      mockGhClient.getPullRequest.mockResolvedValue({
-        author: mockUser,
-        body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
-        commits: [],
-        createdAt: '2025-12-05T13:00:00.000Z',
-        labels: [{ name: 'Data Migration' }],
-        mergeCommit: { oid: 'merge-commit-oid' },
-        mergedAt: '2025-12-06T15:00:00.000Z',
-        number: 995,
-        statusCheckRollup: [],
-        title: 'Title',
-        url: 'http://pr',
-      } as GitHubPullRequest);
+        mockGhClient.getPullRequest.mockResolvedValue({
+          author: mockUser,
+          body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+          commits: [],
+          createdAt: '2025-12-05T13:00:00.000Z',
+          labels: [{ name: 'Data Migration' }],
+          mergeCommit: { oid: 'merge-commit-oid' },
+          mergedAt: '2025-12-06T15:00:00.000Z',
+          number: 995,
+          statusCheckRollup: [],
+          title: 'Title',
+          url: 'http://pr',
+        } as GitHubPullRequest);
 
-      // We explicitly provide a mock fetch so data migration works
-      global.fetch = jest.fn().mockResolvedValue({
-        json: jest.fn().mockResolvedValue({
-          steps: [
+        global.fetch = jest.fn().mockResolvedValue({
+          json: jest.fn().mockResolvedValue({
+            steps: [
+              {
+                name: 'Run Postgres Migration',
+                actions: [
+                  {
+                    start_time: '2025-12-06T15:06:00.000Z',
+                    end_time: '2025-12-06T15:07:00.000Z',
+                  },
+                ],
+              },
+            ],
+          }),
+          ok: true,
+        });
+
+        mockGhClient.getMergeCommitStatusContexts = jest
+          .fn()
+          .mockResolvedValue([
             {
-              name: 'Run Postgres Migration',
-              actions: [
-                {
-                  start_time: '2025-12-06T15:06:00.000Z',
-                  end_time: '2025-12-06T15:07:00.000Z',
-                },
-              ],
+              context: 'ci/circleci: deploy',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'http://deploy',
             },
-          ],
-        }),
-        ok: true,
-      });
-
-      mockGhClient.getMergeCommitStatusContexts = jest.fn().mockResolvedValue([
-        {
-          context: 'ci/circleci: deploy',
-          createdAt: '2025-12-06T15:05:00.000Z',
-          targetUrl: 'http://deploy',
-        },
-        {
-          context: 'ci/circleci: migrate',
-          createdAt: '2025-12-06T15:05:00.000Z',
-          targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
-        },
-      ]);
-
-      const result = await generateWikiSummary(mockGhClient);
-
-      expect(result).toContain('10:06 - Data migration begins');
-      expect(result).toContain('10:07 - Data migration completes');
-    });
-
-    it('does not add data migration timeline events when migration timings are unavailable', async () => {
-      mockGhClient.getLatestProdPullRequest.mockResolvedValue({
-        mergedAt: '2025-12-05T12:00:00Z',
-        number: 995,
-      });
-
-      mockGhClient.getPullRequest.mockResolvedValue({
-        author: mockUser,
-        body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
-        commits: [],
-        createdAt: '2025-12-05T13:00:00.000Z',
-        labels: [{ name: 'Data Migration' }],
-        mergeCommit: { oid: 'merge-commit-oid' },
-        mergedAt: '2025-12-06T15:00:00.000Z',
-        number: 995,
-        statusCheckRollup: [],
-        title: 'Title',
-        url: 'http://pr',
-      } as GitHubPullRequest);
-
-      global.fetch = jest.fn().mockResolvedValue({
-        json: jest.fn().mockResolvedValue({
-          steps: [
             {
-              name: 'Some Other Step',
-              actions: [],
+              context: 'ci/circleci: migrate',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
             },
-          ],
-        }),
-        ok: true,
+          ]);
+
+        const result = await generateWikiSummary(mockGhClient);
+
+        expect(result).toContain('10:06 - Data migration begins');
+        expect(result).toContain('10:07 - Data migration completes');
       });
 
-      mockGhClient.getMergeCommitStatusContexts = jest.fn().mockResolvedValue([
-        {
-          context: 'ci/circleci: migrate',
-          createdAt: '2025-12-06T15:05:00.000Z',
-          targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
-        },
-      ]);
+      it('adds data migration timeline events when the migration step runs long enough without a label', async () => {
+        mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+          mergedAt: '2025-12-05T12:00:00Z',
+          number: 995,
+        });
 
-      const result = await generateWikiSummary(mockGhClient);
+        mockGhClient.getPullRequest.mockResolvedValue({
+          author: mockUser,
+          body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+          commits: [],
+          createdAt: '2025-12-05T13:00:00.000Z',
+          labels: [],
+          mergeCommit: { oid: 'merge-commit-oid' },
+          mergedAt: '2025-12-06T15:00:00.000Z',
+          number: 995,
+          statusCheckRollup: [],
+          title: 'Title',
+          url: 'http://pr',
+        } as GitHubPullRequest);
 
-      expect(result).not.toContain('Data migration begins');
-      expect(result).not.toContain('Data migration completes');
+        global.fetch = jest.fn().mockResolvedValueOnce(
+          createCircleCiResponse({
+            endTime: '2025-12-06T15:07:00.000Z',
+            stepName: 'Run Postgres Migration',
+            startTime: '2025-12-06T15:06:00.000Z',
+          }),
+        );
+
+        mockGhClient.getMergeCommitStatusContexts = jest
+          .fn()
+          .mockResolvedValue([
+            {
+              context: 'ci/circleci: migrate',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+            },
+          ]);
+
+        const result = await generateWikiSummary(mockGhClient);
+
+        expect(result).toContain('10:06 - Data migration begins');
+        expect(result).toContain('10:07 - Data migration completes');
+      });
+
+      it('adds entity validation timeline events when the validation step runs long enough', async () => {
+        mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+          mergedAt: '2025-12-05T12:00:00Z',
+          number: 995,
+        });
+
+        mockGhClient.getPullRequest.mockResolvedValue({
+          author: mockUser,
+          body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+          commits: [],
+          createdAt: '2025-12-05T13:00:00.000Z',
+          labels: [],
+          mergeCommit: { oid: 'merge-commit-oid' },
+          mergedAt: '2025-12-06T15:00:00.000Z',
+          number: 995,
+          statusCheckRollup: [],
+          title: 'Title',
+          url: 'http://pr',
+        } as GitHubPullRequest);
+
+        global.fetch = jest.fn().mockResolvedValueOnce(
+          createCircleCiResponse({
+            endTime: '2025-12-06T15:07:00.000Z',
+            stepName: 'Run Entity Validation',
+            startTime: '2025-12-06T15:06:00.000Z',
+          }),
+        );
+
+        mockGhClient.getMergeCommitStatusContexts = jest
+          .fn()
+          .mockResolvedValue([
+            {
+              context: 'ci/circleci: validate-entities',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/5678',
+            },
+          ]);
+
+        const result = await generateWikiSummary(mockGhClient);
+
+        expect(result).toContain('10:06 - Entity validation begins');
+        expect(result).toContain('10:07 - Entity validation completes');
+      });
+
+      it('does not add timing-based timeline events when both steps run too quickly', async () => {
+        mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+          mergedAt: '2025-12-05T12:00:00Z',
+          number: 995,
+        });
+
+        mockGhClient.getPullRequest.mockResolvedValue({
+          author: mockUser,
+          body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+          commits: [],
+          createdAt: '2025-12-05T13:00:00.000Z',
+          labels: [],
+          mergeCommit: { oid: 'merge-commit-oid' },
+          mergedAt: '2025-12-06T15:00:00.000Z',
+          number: 995,
+          statusCheckRollup: [],
+          title: 'Title',
+          url: 'http://pr',
+        } as GitHubPullRequest);
+
+        global.fetch = jest
+          .fn()
+          .mockResolvedValueOnce(
+            createCircleCiResponse({
+              endTime: '2025-12-06T15:00:20.000Z',
+              stepName: 'Run Postgres Migration',
+              startTime: '2025-12-06T15:00:00.000Z',
+            }),
+          )
+          .mockResolvedValueOnce(
+            createCircleCiResponse({
+              endTime: '2025-12-06T15:00:25.000Z',
+              stepName: 'Run Entity Validation',
+              startTime: '2025-12-06T15:00:05.000Z',
+            }),
+          );
+
+        mockGhClient.getMergeCommitStatusContexts = jest
+          .fn()
+          .mockResolvedValue([
+            {
+              context: 'ci/circleci: migrate',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+            },
+            {
+              context: 'ci/circleci: validate-entities',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/5678',
+            },
+          ]);
+
+        const result = await generateWikiSummary(mockGhClient);
+
+        expect(result).not.toContain('Data migration begins');
+        expect(result).not.toContain('Data migration completes');
+        expect(result).not.toContain('Entity validation begins');
+        expect(result).not.toContain('Entity validation completes');
+      });
+
+      it('does not add data migration timeline events when migration timings are unavailable', async () => {
+        mockGhClient.getLatestProdPullRequest.mockResolvedValue({
+          mergedAt: '2025-12-05T12:00:00Z',
+          number: 995,
+        });
+
+        mockGhClient.getPullRequest.mockResolvedValue({
+          author: mockUser,
+          body: `### Includes\n| Ticket/Task | Type |\n| --- | --- |\n| #1234 | story |\n`,
+          commits: [],
+          createdAt: '2025-12-05T13:00:00.000Z',
+          labels: [{ name: 'Data Migration' }],
+          mergeCommit: { oid: 'merge-commit-oid' },
+          mergedAt: '2025-12-06T15:00:00.000Z',
+          number: 995,
+          statusCheckRollup: [],
+          title: 'Title',
+          url: 'http://pr',
+        } as GitHubPullRequest);
+
+        global.fetch = jest.fn().mockResolvedValue({
+          json: jest.fn().mockResolvedValue({
+            steps: [
+              {
+                name: 'Some Other Step',
+                actions: [],
+              },
+            ],
+          }),
+          ok: true,
+        });
+
+        mockGhClient.getMergeCommitStatusContexts = jest
+          .fn()
+          .mockResolvedValue([
+            {
+              context: 'ci/circleci: migrate',
+              createdAt: '2025-12-06T15:05:00.000Z',
+              targetUrl: 'https://circleci.com/gh/ustaxcourt/ef-cms/1234',
+            },
+          ]);
+
+        const result = await generateWikiSummary(mockGhClient);
+
+        expect(result).not.toContain('Data migration begins');
+        expect(result).not.toContain('Data migration completes');
+      });
     });
   });
 });

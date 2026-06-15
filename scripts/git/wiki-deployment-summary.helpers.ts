@@ -6,6 +6,7 @@ import {
 import {
   FORMATS,
   formatDateString,
+  prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
 
 export const extractCircleCiUrl = (pullRequest: GitHubPullRequest): string => {
@@ -32,6 +33,8 @@ export const hasManualSteps = (pullRequest: GitHubPullRequest): boolean => {
   );
 };
 
+const CIRCLE_CI_STEP_DURATION_THRESHOLD_SECONDS = 30;
+
 type CircleCiMigrationAction = {
   end_time?: string;
   start_time?: string;
@@ -46,9 +49,16 @@ type CircleCiMigrationResponse = {
   steps?: CircleCiMigrationStep[];
 };
 
-export const getPostgresMigrationTimings = async (
+type CircleCiStepTimings = {
+  durationInSeconds: number;
+  endTime: string;
+  startTime: string;
+};
+
+const getCircleCiStepTimings = async (
   jobUrl: string,
-): Promise<{ startTime: string; endTime: string } | undefined> => {
+  stepName: string,
+): Promise<CircleCiStepTimings | undefined> => {
   const match = jobUrl.match(/circleci\.com\/gh\/ustaxcourt\/ef-cms\/(\d+)/);
   if (!match) return undefined;
   const jobNumber = match[1];
@@ -62,48 +72,52 @@ export const getPostgresMigrationTimings = async (
 
     const steps = data.steps || [];
     for (const step of steps) {
-      if (step.name === 'Run Postgres Migration') {
+      if (step.name === stepName) {
         const action = step.actions?.[0];
         if (action?.start_time && action?.end_time) {
-          return {
-            endTime: action.end_time,
-            startTime: action.start_time,
-          };
+          const startTimestamp = prepareDateFromString(
+            action.start_time,
+            FORMATS.ISO,
+          ).toMillis();
+          const endTimestamp = prepareDateFromString(
+            action.end_time,
+            FORMATS.ISO,
+          ).toMillis();
+
+          if (
+            Number.isFinite(startTimestamp) &&
+            Number.isFinite(endTimestamp)
+          ) {
+            return {
+              durationInSeconds: (endTimestamp - startTimestamp) / 1000,
+              endTime: action.end_time,
+              startTime: action.start_time,
+            };
+          }
         }
       }
     }
   } catch (err) {
-    console.warn(`Error fetching migration timings: ${err}`);
+    console.warn(`Error fetching ${stepName.toLowerCase()} timings: ${err}`);
   }
   return undefined;
 };
 
-const parsePullRequestBody = (
-  body: string,
-): { bugFixes: string[]; stories: string[] } => {
-  const stories: string[] = [];
-  const bugFixes: string[] = [];
-  const tableLinePattern = /^\|\s*(#[0-9]+)\s*\|\s*([a-zA-Z0-9_-]+)\s*\|/i;
+export const getPostgresMigrationTimings = async (
+  jobUrl: string,
+): Promise<{ startTime: string; endTime: string } | undefined> => {
+  const timings = await getCircleCiStepTimings(
+    jobUrl,
+    'Run Postgres Migration',
+  );
 
-  for (const line of body.split('\n')) {
-    const match = line.match(tableLinePattern);
-    if (match) {
-      const task = match[1].trim();
-      const type = match[2].trim().toLowerCase();
-      const issueUrl = `https://github.com/ustaxcourt/ef-cms/issues/${task.replace('#', '')}`;
+  if (!timings) return undefined;
 
-      if (type === 'bugfix' && !bugFixes.includes(issueUrl)) {
-        bugFixes.push(issueUrl);
-      } else if (type === 'story' && !stories.includes(issueUrl)) {
-        stories.push(issueUrl);
-      }
-    }
-  }
-
-  return { bugFixes, stories };
+  return {
+    endTime: timings.endTime,
+    startTime: timings.startTime,
+  };
 };
-
-type TimelineEvent = { dateStr: string; timeStr: string; desc: string };
 
 const getTimelineEvents = async (
   pr: GitHubPullRequest,
@@ -130,25 +144,80 @@ const getTimelineEvents = async (
     });
   }
 
-  if (hasDataMigration(pr)) {
-    const migrateCheck = mergeStatusChecks.find(
-      c => c.context === 'ci/circleci: migrate',
-    );
-    if (migrateCheck && migrateCheck.targetUrl) {
-      const timings = await getPostgresMigrationTimings(migrateCheck.targetUrl);
-      if (timings) {
-        events.push({
-          dateStr: formatDateString(timings.startTime, FORMATS.YYYYMMDD),
-          desc: 'Data migration begins',
-          timeStr: formatDateString(timings.startTime, FORMATS.TIME_24_HOUR),
-        });
-        events.push({
-          dateStr: formatDateString(timings.endTime, FORMATS.YYYYMMDD),
-          desc: 'Data migration completes',
-          timeStr: formatDateString(timings.endTime, FORMATS.TIME_24_HOUR),
-        });
-      }
-    }
+  const migrateCheck = mergeStatusChecks.find(
+    c => c.context === 'ci/circleci: migrate',
+  );
+  const migrationStepTimings = migrateCheck?.targetUrl
+    ? await getCircleCiStepTimings(
+        migrateCheck.targetUrl,
+        'Run Postgres Migration',
+      )
+    : undefined;
+
+  if (
+    migrationStepTimings &&
+    (hasDataMigration(pr) ||
+      migrationStepTimings.durationInSeconds >=
+        CIRCLE_CI_STEP_DURATION_THRESHOLD_SECONDS)
+  ) {
+    events.push({
+      dateStr: formatDateString(
+        migrationStepTimings.startTime,
+        FORMATS.YYYYMMDD,
+      ),
+      desc: 'Data migration begins',
+      timeStr: formatDateString(
+        migrationStepTimings.startTime,
+        FORMATS.TIME_24_HOUR,
+      ),
+    });
+    events.push({
+      dateStr: formatDateString(migrationStepTimings.endTime, FORMATS.YYYYMMDD),
+      desc: 'Data migration completes',
+      timeStr: formatDateString(
+        migrationStepTimings.endTime,
+        FORMATS.TIME_24_HOUR,
+      ),
+    });
+  }
+
+  const entityValidationCheck = mergeStatusChecks.find(
+    c => c.context === 'ci/circleci: validate-entities',
+  );
+  const entityValidationStepTimings = entityValidationCheck?.targetUrl
+    ? await getCircleCiStepTimings(
+        entityValidationCheck.targetUrl,
+        'Run Entity Validation',
+      )
+    : undefined;
+
+  if (
+    entityValidationStepTimings &&
+    entityValidationStepTimings.durationInSeconds >=
+      CIRCLE_CI_STEP_DURATION_THRESHOLD_SECONDS
+  ) {
+    events.push({
+      dateStr: formatDateString(
+        entityValidationStepTimings.startTime,
+        FORMATS.YYYYMMDD,
+      ),
+      desc: 'Entity validation begins',
+      timeStr: formatDateString(
+        entityValidationStepTimings.startTime,
+        FORMATS.TIME_24_HOUR,
+      ),
+    });
+    events.push({
+      dateStr: formatDateString(
+        entityValidationStepTimings.endTime,
+        FORMATS.YYYYMMDD,
+      ),
+      desc: 'Entity validation completes',
+      timeStr: formatDateString(
+        entityValidationStepTimings.endTime,
+        FORMATS.TIME_24_HOUR,
+      ),
+    });
   }
 
   const stepMappings: Record<string, string> = {
@@ -177,6 +246,32 @@ const getTimelineEvents = async (
 
   return events;
 };
+const parsePullRequestBody = (
+  body: string,
+): { bugFixes: string[]; stories: string[] } => {
+  const stories: string[] = [];
+  const bugFixes: string[] = [];
+  const tableLinePattern = /^\|\s*(#[0-9]+)\s*\|\s*([a-zA-Z0-9_-]+)\s*\|/i;
+
+  for (const line of body.split('\n')) {
+    const match = line.match(tableLinePattern);
+    if (match) {
+      const task = match[1].trim();
+      const type = match[2].trim().toLowerCase();
+      const issueUrl = `https://github.com/ustaxcourt/ef-cms/issues/${task.replace('#', '')}`;
+
+      if (type === 'bugfix' && !bugFixes.includes(issueUrl)) {
+        bugFixes.push(issueUrl);
+      } else if (type === 'story' && !stories.includes(issueUrl)) {
+        stories.push(issueUrl);
+      }
+    }
+  }
+
+  return { bugFixes, stories };
+};
+
+type TimelineEvent = { dateStr: string; timeStr: string; desc: string };
 
 const renderTimeline = (events: TimelineEvent[]): string[] => {
   const lines: string[] = [];
