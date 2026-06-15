@@ -421,6 +421,57 @@ describe('prod-release-pr-description', () => {
       expect(description).not.toContain('#### #5678 1234 fix the regression');
     });
 
+    it('renders suggested labels based on files and manual steps', () => {
+      const enrichedPullRequests: any[] = [
+        {
+          manualSteps: [
+            {
+              command: 'npm run deploy:account-specific',
+              description: 'Deploy',
+            },
+          ],
+          otherContributors: ['@sam'],
+          pullRequest: {
+            author: { login: 'alice' },
+            body: 'Manual step included.',
+            commits: [],
+            createdAt: '2026-05-10T03:00:00Z',
+            files: [
+              {
+                path: 'web-api/src/persistence/postgres/utils/migrate/migrations/2026-01-01-new-table.js',
+              },
+              {
+                path: 'web-api/src/persistence/postgres/utils/migrate/migrations/deprecated/111-some-migration.js',
+              },
+            ],
+            labels: [],
+            mergedAt: '2026-05-10T03:35:07Z',
+            number: 6791,
+            title: '1234 adding migration and validation updates',
+            url: 'https://github.com/ustaxcourt/ef-cms/pull/6791',
+          },
+          ticketTask: '#1234',
+          type: 'story',
+        },
+      ];
+
+      const description = renderPrDescription({
+        enrichedPullRequests,
+        validationRulesUpdated: true,
+      });
+
+      expect(description).toContain(
+        [
+          '### Suggested labels',
+          '',
+          '- `Manual Deploy Step(s) Required`',
+          '- `Needs Account Specific`',
+          '- `Data Migration`',
+          '- `Validation Rules Updated`',
+        ].join('\n'),
+      );
+    });
+
     it('renders an empty manual-steps section when there are no bash blocks to include', () => {
       const description = renderPrDescription({
         enrichedPullRequests: [
@@ -641,6 +692,10 @@ describe('prod-release-pr-description', () => {
           ]),
       };
 
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(true),
+      }));
+
       const description = await generateProdReleasePrDescription({
         circleConfig,
         githubClient,
@@ -682,6 +737,10 @@ describe('prod-release-pr-description', () => {
           .mockResolvedValue([dockerDependencyPullRequest]),
       };
 
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
+      }));
+
       const description = await generateProdReleasePrDescription({
         circleConfig: 'version: 2.1\n',
         githubClient,
@@ -704,6 +763,10 @@ describe('prod-release-pr-description', () => {
           .fn()
           .mockResolvedValue([dependencyPullRequest]),
       };
+
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
+      }));
 
       const description = await generateProdReleasePrDescription({
         circleConfig,
