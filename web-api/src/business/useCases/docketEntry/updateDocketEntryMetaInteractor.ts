@@ -190,7 +190,7 @@ export const updateDocketEntryMeta = async (
         // entry returned from addCoversheetInteractor below. Switching to the
         // queued/async path would require also moving the consumer to a poll
         // similar to pollForCoversheetComplete.
-        const updatedDocketEntry = await applicationContext
+        updatedDocketEntry = await applicationContext
           .getUseCases()
           .addCoversheetInteractor(
             applicationContext,

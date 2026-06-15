@@ -9,6 +9,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 
@@ -21,12 +22,12 @@ describe('getDocketEntryProcessingStatusInteractor', () => {
   beforeEach(() => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockReset();
     getCaseByDocketNumber.mockReset();
-    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE as any);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('returns the processingStatus of a docket entry for an internal user', async () => {
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { processingStatus: 'pending' } as any,
+      { ...MOCK_DOCUMENTS[0], processingStatus: 'pending' },
     ]);
 
     const result = await getDocketEntryProcessingStatusInteractor(
