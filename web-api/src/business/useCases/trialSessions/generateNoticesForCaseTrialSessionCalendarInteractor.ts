@@ -19,6 +19,10 @@ import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/p
 import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { NotFoundError } from '@web-api/errors/errors';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -47,19 +51,27 @@ const serveNoticesForCase = async ({
   standingPretrialDocketEntryEntity,
   standingPretrialFile,
 }) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+  const sendEmails = async () => {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: noticeDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
+  };
+
+  if (inTransaction()) {
+    onTransactionCommit(sendEmails);
+  } else {
+    await sendEmails();
+  }
 
   const standingPretrialPdf = await PDFDocument.load(standingPretrialFile);
   const combinedDocumentsPdf = await PDFDocument.create();
@@ -209,6 +221,7 @@ const setNoticeForCase = async ({
       eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
@@ -276,6 +289,7 @@ const setNoticeForCase = async ({
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },

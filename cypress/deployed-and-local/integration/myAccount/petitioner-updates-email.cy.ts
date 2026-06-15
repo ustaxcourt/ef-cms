@@ -105,17 +105,21 @@ describe('Petitioner Updates e-mail', () => {
       cy.task('getEmailVerificationToken', {
         email,
       }).then(verificationToken => {
-        cy.visit(
-          `${getCypressEnv().publicSiteUrl}/verify-email?token=${verificationToken}`,
+        const { publicSiteUrl } = getCypressEnv();
+        cy.origin(
+          publicSiteUrl,
+          { args: { publicSiteUrl, verificationToken } },
+          ({ publicSiteUrl: url, verificationToken: token }) => {
+            cy.visit(`${url}/verify-email?token=${token}`);
+            cy.get('[data-testid="success-alert"]')
+              .should('be.visible')
+              .and(
+                'contain.text',
+                'Your email address is verified. You can now log in to DAWSON.',
+              );
+          },
         );
       });
-
-      cy.get('[data-testid="success-alert"]')
-        .should('be.visible')
-        .and(
-          'contain.text',
-          'Your email address is verified. You can now log in to DAWSON.',
-        );
       loginAsPetitioner(updatedEmail);
 
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -188,13 +192,25 @@ describe('Petitioner Updates e-mail', () => {
     changeEmailTo(updatedEmail);
     clickConfirmModal();
 
-    cy.visit(`${getCypressEnv().publicSiteUrl}/verify-email?token=hello_world`);
-    cy.get('[data-testid^="error-alert"]')
-      .should('be.visible')
-      .and(
-        'contain.text',
-        'Your request cannot be completed. Please try to log in. If you’re still having trouble',
-      );
+    logout();
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
+    cy.clearAllSessionStorage();
+
+    const { publicSiteUrl } = getCypressEnv();
+    cy.origin(
+      publicSiteUrl,
+      { args: { publicSiteUrl } },
+      ({ publicSiteUrl: url }) => {
+        cy.visit(`${url}/verify-email?token=hello_world`);
+        cy.get('[data-testid^="error-alert"]')
+          .should('be.visible')
+          .and(
+            'contain.text',
+            'Your request cannot be completed. Please try to log in. If you\u2019re still having trouble',
+          );
+      },
+    );
     loginAsPetitioner(email);
   });
 });

@@ -26,7 +26,7 @@ describe('Practioner with many cases updates phone number and address', () => {
     });
   });
 
-  it.only('should update phone numbers on all open cases or cases closed within past 6 months', () => {
+  it('should update phone numbers on all open cases or cases closed within past 6 months', () => {
     const startTime = formatNow();
     goToMyAccount();
 

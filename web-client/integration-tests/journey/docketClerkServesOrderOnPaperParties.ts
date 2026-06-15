@@ -41,9 +41,9 @@ export const docketClerkServesOrderOnPaperParties = (
       },
     );
 
-    expect(modalHelper.showPaperAlert).toEqual(true);
+    expect(modalHelper.contactsNeedingPaperService).toBeDefined();
 
-    expect(modalHelper.contactsNeedingPaperService.length).toEqual(3);
+    expect(modalHelper.contactsNeedingPaperService?.length).toEqual(3);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',

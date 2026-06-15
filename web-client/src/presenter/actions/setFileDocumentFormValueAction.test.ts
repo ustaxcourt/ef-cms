@@ -2,6 +2,38 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setFileDocumentFormValueAction } from './setFileDocumentFormValueAction';
 
 describe('setFileDocumentFormValueAction', () => {
+  it('uses state.multiDocketedOriginalCaseDetail over state.caseDetail when set', async () => {
+    const { state } = await runAction(setFileDocumentFormValueAction, {
+      props: {
+        key: 'previousDocument',
+        value: '234',
+      },
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '234',
+              documentTitle: 'From caseDetail',
+            },
+          ],
+        },
+        multiDocketedOriginalCaseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: '234',
+              documentTitle: 'From multiDocketedOriginalCaseDetail',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(state.form.previousDocument).toEqual({
+      docketEntryId: '234',
+      documentTitle: 'From multiDocketedOriginalCaseDetail',
+    });
+  });
+
   it('sets state.form[props.key] to props.value', async () => {
     const { state } = await runAction(setFileDocumentFormValueAction, {
       props: {

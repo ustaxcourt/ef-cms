@@ -108,6 +108,7 @@ describe('serveCaseDocument', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0].caseEntity.docketEntries[0],
     ).toMatchObject({
+      originallyFiledDocketNumber: mockCase.docketNumber,
       servedAt: expect.anything(),
       servedParties: [
         {

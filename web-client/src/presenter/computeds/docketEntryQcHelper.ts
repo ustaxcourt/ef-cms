@@ -1,31 +1,28 @@
 import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { CONTACT_CHANGE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+
 export const docketEntryQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const formattedCaseDetail = get(state.formattedCaseDetail);
 
-  const currentDocument = caseDetail.docketEntries.find(
+  const docketEntry = caseDetail.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === docketEntryId,
   );
 
   let showPaperServiceWarning = false;
 
-  if (
-    CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument?.documentType || '')
-  ) {
+  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(docketEntry?.documentType || '')) {
     const hasWorkItemInfo =
-      currentDocument && DocketEntry.hasWorkItemInfo(currentDocument);
+      docketEntry && DocketEntry.hasWorkItemInfo(docketEntry);
     const qcWorkItemsUntouched =
-      hasWorkItemInfo &&
-      !currentDocument.qcViewed &&
-      !currentDocument.qcComplete;
+      hasWorkItemInfo && !docketEntry.qcViewed && !docketEntry.qcComplete;
 
     if (qcWorkItemsUntouched) {
       showPaperServiceWarning = true;
@@ -34,7 +31,22 @@ export const docketEntryQcHelper = (
 
   const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocketEntry(applicationContext, currentDocument as RawDocketEntry);
+    .formatDocketEntry(applicationContext, docketEntry as RawDocketEntry);
 
-  return { formattedDocketEntry, showPaperServiceWarning };
+  const multiDocketedOn = formattedCaseDetail.consolidatedCases.filter(
+    consolidatedCase =>
+      consolidatedCase.docketNumber !== caseDetail.docketNumber &&
+      formattedDocketEntry.multiDocketedOn.includes(
+        consolidatedCase.docketNumber,
+      ),
+  );
+
+  const showQCHelpText = DocketEntry.isMultiDocketed(formattedDocketEntry);
+
+  return {
+    formattedDocketEntry,
+    showPaperServiceWarning,
+    multiDocketedOn,
+    showQCHelpText,
+  };
 };

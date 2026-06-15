@@ -1,5 +1,5 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -18,7 +18,7 @@ export const SectionWorkQueueOutbox = connect(
   }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments users={users} />
+        <WorkQueueAssignments users={users} count={formattedWorkQueue.length} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
@@ -40,68 +40,102 @@ export const SectionWorkQueueOutbox = connect(
               <th>{workQueueHelper.sentTitle} Date</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <tbody key={item.workItemId}>
-                <tr>
-                  <td className="consolidated-case-column">
-                    {item.inConsolidatedGroup && (
-                      <span
-                        className="fa-layers fa-fw"
-                        title={item.consolidatedIconTooltipText}
-                      >
-                        <Icon
-                          aria-label={item.consolidatedIconTooltipText}
-                          className="fa-icon-blue"
-                          icon="copy"
+          <tbody>
+            {formattedWorkQueue.map(item => (
+              <tr
+                key={item.workItemId}
+                data-testid={`work-item-section-outbox-${item.docketNumber}`}
+              >
+                <td className="consolidated-case-column">
+                  {item.groupedMemberCases ? (
+                    <div
+                      className="consolidated-icons-stack"
+                      aria-hidden="true"
+                    >
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          item.consolidatedIconTooltipText
+                        }
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.inLeadCase}
+                      />
+                      {item.groupedMemberCases.map(c => (
+                        <ConsolidatedCaseIcon
+                          key={`icon-${c.docketNumber}`}
+                          consolidatedIconTooltipText={
+                            c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                          }
+                          inConsolidatedGroup={true}
+                          showLeadCaseIcon={c.inLeadCase}
                         />
-                        {item.inLeadCase && (
-                          <span className="fa-inverse lead-case-icon-text">
-                            L
-                          </span>
-                        )}
+                      ))}
+                    </div>
+                  ) : (
+                    <ConsolidatedCaseIcon
+                      consolidatedIconTooltipText={
+                        item.consolidatedIconTooltipText
+                      }
+                      inConsolidatedGroup={item.inConsolidatedGroup}
+                      showLeadCaseIcon={item.inLeadCase}
+                    />
+                  )}
+                </td>
+                <td className="message-queue-row">
+                  {item.groupedMemberCases ? (
+                    <div className="grouped-cases-row">
+                      <CaseLink formattedCase={item} />
+                      <div className="member-case-links">
+                        {item.groupedMemberCases.map(c => (
+                          <div
+                            key={c.docketNumber}
+                            className="member-case-line"
+                          >
+                            <CaseLink formattedCase={c} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <CaseLink formattedCase={item} />
+                  )}
+                </td>
+                <td className="message-queue-row message-queue-case-title">
+                  {item.caseTitle}
+                </td>
+                <td className="message-queue-row">
+                  <div className="message-document-title">
+                    {item.editLink ? (
+                      <a className="case-link" href={item.editLink}>
+                        {(item.docketEntry &&
+                          item.docketEntry.descriptionDisplay) ||
+                          (item.docketEntry && item.docketEntry.documentType)}
+                      </a>
+                    ) : (
+                      <span>
+                        {(item.docketEntry &&
+                          item.docketEntry.descriptionDisplay) ||
+                          (item.docketEntry && item.docketEntry.documentType)}
                       </span>
                     )}
-                  </td>
+                  </div>
+                </td>
+                {workQueueHelper.showFiledByColumn && (
                   <td className="message-queue-row">
-                    <CaseLink formattedCase={item} />
+                    {item.docketEntry.filedBy}
                   </td>
-                  <td className="message-queue-row message-queue-case-title">
-                    {item.caseTitle}
-                  </td>
+                )}
+                {!workQueueHelper.hideCaseStatusColumn && (
                   <td className="message-queue-row">
-                    <div className="message-document-title">
-                      {item.editLink ? (
-                        <a className="case-link" href={item.editLink}>
-                          {item.docketEntry.descriptionDisplay ||
-                            item.docketEntry.documentType}
-                        </a>
-                      ) : (
-                        <span>
-                          {item.docketEntry.descriptionDisplay ||
-                            item.docketEntry.documentType}
-                        </span>
-                      )}
-                    </div>
+                    {item.formattedCaseStatus}
                   </td>
-                  {workQueueHelper.showFiledByColumn && (
-                    <td className="message-queue-row">
-                      {item.docketEntry.filedBy}
-                    </td>
-                  )}
-                  {!workQueueHelper.hideCaseStatusColumn && (
-                    <td className="message-queue-row">
-                      {item.formattedCaseStatus}
-                    </td>
-                  )}
-                  <td className="message-queue-row">{item.completedBy}</td>
-                  <td className="message-queue-row">
-                    {item.completedAtFormatted}
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })}
+                )}
+                <td className="message-queue-row">{item.completedBy}</td>
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>

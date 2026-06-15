@@ -20,9 +20,7 @@ describe('switchErrorActionFactory', () => {
         props: {
           error: {
             originalError: {
-              response: {
-                data: 'some error',
-              },
+              body: 'some error',
             },
           },
         },
@@ -44,9 +42,29 @@ describe('switchErrorActionFactory', () => {
         props: {
           error: {
             originalError: {
-              response: {
-                data: 'unknown error',
-              },
+              body: 'unknown error',
+            },
+          },
+        },
+      },
+    );
+
+    expect(presenter.providers.path.default).toHaveBeenCalled();
+  });
+
+  it('should catch an error when formatting error', async () => {
+    await runAction(
+      switchErrorActionFactory({
+        'some error': 'test',
+      }),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          error: {
+            originalError: {
+              body: undefined,
             },
           },
         },

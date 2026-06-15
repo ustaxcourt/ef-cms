@@ -8,7 +8,6 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import { IrsNoticeForm } from '@web-client/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
-import { ClerkDashboardStats } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import {
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
@@ -178,6 +177,8 @@ import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/get
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
+import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -286,6 +287,10 @@ export const computeds = {
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<
       typeof completeDocumentTypeSectionHelper
+    >,
+  confirmPaperServiceModalHelper:
+    confirmPaperServiceModalHelper as unknown as ReturnType<
+      typeof confirmPaperServiceModalHelper
     >,
   confirmInitiateServiceModalHelper:
     confirmInitiateServiceModalHelper as unknown as ReturnType<
@@ -656,7 +661,7 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null,
+  assigneeId: null as unknown as string,
   assigneeName: undefined as unknown as string,
   authentication: {
     form: {
@@ -872,6 +877,7 @@ export const baseState = {
     troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
     penalties: undefined as unknown[] | undefined,
   } as Record<string, any>,
+  multiDocketedOriginalCaseDetail: undefined as unknown as RawCase,
   navigation: {
     caseDetailMenu: '',
     openMenu: '',
@@ -892,6 +898,7 @@ export const baseState = {
   openClosedCases: {
     caseType: undefined as string | undefined,
   },
+  paperServiceParties: [] as Array<RawUser & { docketNumber: string }>,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -992,7 +999,15 @@ export const baseState = {
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [] as { workItemId: string }[],
+  selectedWorkItems: [] as {
+    workItemId: string;
+    groupedMemberCases?: {
+      workItemId: string;
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      inLeadCase: boolean;
+    }[];
+  }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],

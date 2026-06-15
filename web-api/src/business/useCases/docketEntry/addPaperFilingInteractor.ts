@@ -30,6 +30,7 @@ import {
   getAllFeatureFlagsInteractor,
 } from '../featureFlag/getAllFeatureFlagsInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -81,12 +82,27 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
+  let numberOfPages: number;
+  if (isFileAttached) {
+    numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentStorageId,
+        documentBytes: undefined,
+      });
+  }
+
+  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
+
+  let effectiveConsolidatedGroupDocketNumbers: string[] = [];
+
   if (isSavingForLater) {
-    consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
+    effectiveConsolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
-    consolidatedGroupDocketNumbers = [
+    effectiveConsolidatedGroupDocketNumbers = [
       subjectCaseDocketNumber,
-      ...consolidatedGroupDocketNumbers,
+      ...incomingGroupDocketNumbers,
     ];
   }
 
@@ -105,97 +121,99 @@ export const addPaperFiling = async (
   }
 
   const caseEntities: Case[] = [];
+
   let filedByFromLeadCase;
 
   const consolidatedGroupCases = await getCasesByDocketNumbers({
-    docketNumbers: consolidatedGroupDocketNumbers,
+    docketNumbers: effectiveConsolidatedGroupDocketNumbers,
   });
 
-  for (const rawCase of consolidatedGroupCases) {
-    let caseEntity = new Case(rawCase, { authorizedUser });
+  await withTransaction(async () => {
+    for (const rawCase of consolidatedGroupCases) {
+      let caseEntity = new Case(rawCase, { authorizedUser });
 
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...documentMetadata,
-        docketEntryId,
-        documentStorageId,
-        documentTitle: documentMetadata.documentTitle,
-        documentType: documentMetadata.documentType,
-        editState: JSON.stringify(docketRecordEditState),
-        filingDate: documentMetadata.receivedAt,
-        isOnDocketRecord: true,
-        mailingDate: documentMetadata.mailingDate,
-        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      },
-      { authorizedUser, petitioners: caseEntity.petitioners },
-    );
-
-    docketEntryEntity.setFiledBy(user);
-
-    const servedParties: any = aggregatePartiesForService(caseEntity);
-
-    if (isLeadCase(caseEntity)) {
-      filedByFromLeadCase = docketEntryEntity.filedBy;
-    }
-
-    if (filedByFromLeadCase) {
-      docketEntryEntity.filedBy = filedByFromLeadCase;
-    }
-
-    const workItem = new WorkItem({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      docketNumber: caseEntity.docketNumber,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      inProgress: isSavingForLater,
-      isRead: user.role !== ROLES.privatePractitioner,
-      section: WorkItem.getWorkItemSectionFromUserSection({
-        section: user.section,
-        documentTitle: docketEntryEntity.documentTitle,
-      }),
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
-
-    if (isReadyForService) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-
-      docketEntryEntity.setAsServed(servedParties.all);
-    }
-
-    await saveWorkItemInternal({
-      workItem,
-    });
-
-    if (isFileAttached) {
-      docketEntryEntity.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
+      const docketEntryEntity = new DocketEntry(
+        {
+          ...documentMetadata,
+          docketEntryId,
           documentStorageId,
-          documentBytes: undefined,
-        });
-    }
+          documentTitle: documentMetadata.documentTitle,
+          documentType: documentMetadata.documentType,
+          editState: JSON.stringify(docketRecordEditState),
+          filingDate: documentMetadata.receivedAt,
+          isOnDocketRecord: true,
+          mailingDate: documentMetadata.mailingDate,
+          multiDocketedOn:
+            effectiveConsolidatedGroupDocketNumbers.length > 1
+              ? effectiveConsolidatedGroupDocketNumbers
+              : [],
+          originallyFiledDocketNumber: subjectCaseDocketNumber,
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+        },
+        { authorizedUser, petitioners: caseEntity.petitioners },
+      );
 
-    caseEntity.addDocketEntry(docketEntryEntity);
+      docketEntryEntity.setFiledBy(user);
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        caseEntity,
+      const servedParties: any = aggregatePartiesForService(caseEntity);
+
+      if (isLeadCase(caseEntity)) {
+        filedByFromLeadCase = docketEntryEntity.filedBy;
+      }
+
+      if (filedByFromLeadCase) {
+        docketEntryEntity.filedBy = filedByFromLeadCase;
+      }
+
+      const workItem = new WorkItem({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        docketNumber: caseEntity.docketNumber,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        inProgress: isSavingForLater,
+        isRead: user.role !== ROLES.privatePractitioner,
+        section: WorkItem.getWorkItemSectionFromUserSection({
+          section: user.section,
+          documentTitle: docketEntryEntity.documentTitle,
+        }),
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
       });
 
-    caseEntities.push(caseEntity);
+      if (isReadyForService) {
+        workItem.setAsCompleted({
+          message: 'completed',
+          user,
+        });
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-  }
+        docketEntryEntity.setAsServed(servedParties.all);
+      }
+
+      await saveWorkItemInternal({
+        workItem,
+      });
+
+      if (isFileAttached) {
+        docketEntryEntity.numberOfPages = numberOfPages;
+      }
+
+      caseEntity.addDocketEntry(docketEntryEntity);
+
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          caseEntity,
+        });
+
+      caseEntities.push(caseEntity);
+
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      });
+    }
+  });
 
   let paperServicePdfUrl;
 
@@ -223,7 +241,7 @@ export const addPaperFiling = async (
   }
 
   const successMessage =
-    consolidatedGroupDocketNumbers.length > 1
+    effectiveConsolidatedGroupDocketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
@@ -259,7 +277,7 @@ const saveWorkItemInternal = async ({ workItem }) => {
   });
 };
 
-type DocumentMetadata = {
+export type DocumentMetadata = {
   docketNumber: string;
   isFileAttached: boolean;
   documentTitle: string;

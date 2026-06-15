@@ -16,6 +16,7 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -56,42 +57,44 @@ export const removeCaseFromTrial = async (
 
   const caseEntity = new Case(myCase, { authorizedUser });
 
-  if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
-    await removeCaseFromTrialSession({
-      disposition,
-      docketNumber,
-      trialSessionId,
-    });
-    await updateTrialSession({
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-  } else {
-    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
-    await deleteCasesFromTrialSession({
-      docketNumbers: [docketNumber],
-      trialSessionId,
-    });
-  }
+  await withTransaction(async () => {
+    if (trialSessionEntity.isCalendared) {
+      trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
+      await removeCaseFromTrialSession({
+        disposition,
+        docketNumber,
+        trialSessionId,
+      });
+      await updateTrialSession({
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
+      await deleteCasesFromTrialSession({
+        docketNumbers: [docketNumber],
+        trialSessionId,
+      });
+    }
 
-  if (!caseEntity.isHearing(trialSessionId)) {
-    caseEntity.removeFromTrial({
-      associatedJudge,
-      associatedJudgeId,
-      changedBy: authorizedUser?.name,
-      updatedCaseStatus: caseStatus,
+    if (!caseEntity.isHearing(trialSessionId)) {
+      caseEntity.removeFromTrial({
+        associatedJudge,
+        associatedJudgeId,
+        changedBy: authorizedUser?.name,
+        updatedCaseStatus: caseStatus,
+      });
+
+      await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({ caseEntity });
+    } else {
+      caseEntity.removeFromHearing(trialSessionId);
+    }
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
     });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ caseEntity });
-  } else {
-    caseEntity.removeFromHearing(trialSessionId);
-  }
-
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
   });
 };
 

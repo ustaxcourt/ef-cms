@@ -8,7 +8,6 @@ import {
 export type CompileSuiteCoverageConfig = {
   githubRepository: string;
   githubToken: string;
-  headSha?: string;
   outputDirectory: string;
   pullRequestNumber: number;
 };
@@ -25,7 +24,6 @@ export const compileSuiteCoverage = async (
   {
     githubRepository,
     githubToken,
-    headSha,
     outputDirectory,
     pullRequestNumber,
   }: CompileSuiteCoverageConfig,
@@ -42,7 +40,6 @@ export const compileSuiteCoverage = async (
       log(`Downloading coverage summary for ${suite}...`);
       try {
         const summary = await getCoverageSummary({
-          headSha,
           pullRequestNumber,
           repository: githubRepository,
           suite,
@@ -50,7 +47,7 @@ export const compileSuiteCoverage = async (
         });
 
         if (summary) {
-          const istanbulSummary = {
+          return {
             total: {
               branches: {
                 covered: summary.branches,
@@ -78,8 +75,6 @@ export const compileSuiteCoverage = async (
               },
             },
           };
-
-          return istanbulSummary;
         } else {
           log(`No coverage summary found for suite: ${suite}`);
           return undefined;

@@ -8,6 +8,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -65,7 +66,9 @@ export const checkForReadyForTrialCasesInteractor = async (
     docketNumbers: caseCatalogDocketNumbers,
   });
 
-  await settlePromises(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
+  await withTransaction(async () => {
+    await settlePromises(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
+  });
 
   applicationContext.logger.debug('Time', createISODateString());
 };

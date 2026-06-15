@@ -2,7 +2,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setPaperServicePartiesAction } from './setPaperServicePartiesAction';
 
 describe('setPaperServicePartiesAction', () => {
-  it('should not set showModal if paperServiceParties is an empty array and pdfUrl is defined', async () => {
+  it('should not set showModal if paperServiceParties is an empty array and pdfUrl is defined in props', async () => {
     const result = await runAction(setPaperServicePartiesAction, {
       props: {
         paperServiceParties: [],
@@ -16,7 +16,7 @@ describe('setPaperServicePartiesAction', () => {
     expect(result.state.modal.showModal).toBeUndefined();
   });
 
-  it('should not set showModal if paperServiceParties is not defined', async () => {
+  it('should not set showModal or paperServiceParties in state if paperServiceParties is not defined in props', async () => {
     const result = await runAction(setPaperServicePartiesAction, {
       props: { pdfUrl: 'www.example.com' },
       state: {
@@ -25,6 +25,7 @@ describe('setPaperServicePartiesAction', () => {
     });
 
     expect(result.state.modal.showModal).toBeUndefined();
+    expect(result.state.paperServiceParties).toBeUndefined();
   });
 
   it('should not set showModal if pdfUrl is not defined', async () => {
@@ -38,7 +39,7 @@ describe('setPaperServicePartiesAction', () => {
     expect(result.state.modal.showModal).toBeUndefined();
   });
 
-  it('should set showModal if paperServiceParties is a non-empty array', async () => {
+  it('should not set showModal if paperServiceParties is a non-empty array in props', async () => {
     const result = await runAction(setPaperServicePartiesAction, {
       props: {
         paperServiceParties: [{ yes: 'no' }],

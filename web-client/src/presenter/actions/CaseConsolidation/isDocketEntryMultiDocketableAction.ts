@@ -1,42 +1,31 @@
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
+import { shouldAllowMultiDocketing } from '@shared/business/utilities/shouldAllowMultiDocketing';
 
-/**
- * Determines if the docket entry event code is one that can be multi-docketed
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext object
- * @param {object} providers.get the cerebral get object
- * @param {object} providers.path the cerebral path object
- * @returns {object} the next path based on if docket entry is multi-docketable
- */
 export const isDocketEntryMultiDocketableAction = ({
-  applicationContext,
   get,
   path,
 }: ActionProps) => {
-  const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
-    applicationContext.getConstants();
-
-  const currentPage = get(state.currentPage);
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
+  let docketEntry = get(state.form);
 
-  let { eventCode } = get(state.form);
-
-  if (!eventCode) {
-    const docketEntry = caseDetail.docketEntries.find(
+  if (!docketEntry.eventCode) {
+    docketEntry = caseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     );
-    if (docketEntry) {
-      ({ eventCode } = docketEntry);
-    }
   }
+
+  const isLead = isLeadCase(caseDetail);
 
   if (
-    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) ||
-    currentPage === 'MessageDetail'
+    shouldAllowMultiDocketing({
+      docketEntry,
+      isLead,
+    })
   ) {
-    return path.no();
+    return path.yes();
   }
 
-  return path.yes();
+  return path.no();
 };

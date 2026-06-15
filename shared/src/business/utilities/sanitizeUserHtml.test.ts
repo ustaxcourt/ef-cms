@@ -97,6 +97,19 @@ describe('sanitizeUserHtml', () => {
     expect(out).not.toContain('evil');
   });
 
+  it('preserves the indent-paragraph class used for generated order indents', () => {
+    const out = sanitizeUserHtml(
+      '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>',
+    );
+    expect(out).toContain('class="indent-paragraph"');
+  });
+
+  it('keeps indent-paragraph while still dropping disallowed sibling classes', () => {
+    const out = sanitizeUserHtml('<p class="indent-paragraph evil">x</p>');
+    expect(out).toContain('indent-paragraph');
+    expect(out).not.toContain('evil');
+  });
+
   it('drops disallowed elements with their entire subtree (not just the tag)', () => {
     const out = sanitizeUserHtml(
       '<div><p>kept</p><script>var x = "leaked text"</script></div>',

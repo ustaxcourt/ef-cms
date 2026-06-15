@@ -1030,7 +1030,7 @@ export class Case extends JoiValidationEntity {
       secondaryContact,
     });
   }
-  
+
   //@ts-ignore
   toRawObject(): RawCase {
     const result = this.toRawObjectFromJoi();
@@ -2165,6 +2165,15 @@ export const isLeadCase = (rawCase: {
   docketNumber: string;
   leadDocketNumber?: string;
 }): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
+
+export const isMemberCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean =>
+  Boolean(
+    rawCase.leadDocketNumber &&
+    rawCase.leadDocketNumber !== rawCase.docketNumber,
+  );
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>

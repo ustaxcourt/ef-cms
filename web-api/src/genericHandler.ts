@@ -2,6 +2,11 @@ import {
   ServerApplicationContext,
   applicationContext,
 } from './applicationContext';
+import {
+  X_DEPLOYMENT_TIMESTAMP,
+  X_MANUAL_REFRESH_REQUIRED,
+  getHeaderValue,
+} from '@shared/utils/headers';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   getConnectionIdFromEvent,
@@ -89,6 +94,28 @@ export const genericHandler = (
         request: awsEvent,
         user,
       });
+
+      const clientDeploymentTimestamp = getHeaderValue(
+        awsEvent.headers,
+        X_DEPLOYMENT_TIMESTAMP,
+      );
+      const currentDeploymentTimestamp = process.env.DEPLOYMENT_TIMESTAMP;
+      const shouldRequireManualRefresh =
+        !!clientDeploymentTimestamp &&
+        !!currentDeploymentTimestamp &&
+        clientDeploymentTimestamp !== currentDeploymentTimestamp;
+
+      if (shouldRequireManualRefresh) {
+        return {
+          body: {
+            message: 'Application version mismatch detected. Please refresh.',
+          },
+          headers: {
+            [X_MANUAL_REFRESH_REQUIRED]: 'true',
+          },
+          statusCode: '409',
+        };
+      }
 
       const { bypassMaintenanceCheck } = options;
 
