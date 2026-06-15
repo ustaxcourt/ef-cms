@@ -25,14 +25,16 @@ export const serveGeneratedNoticesOnCase = async ({
   noticeDocumentPdfData,
   servedParties,
   skipEmailToIrs = false,
-}: ServeGeneratedNoticesOnCaseParams) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-    skipEmailToIrs,
-  });
+}: ServeGeneratedNoticesOnCaseParams): Promise<() => Promise<void>> => {
+  const sendEmails = async () => {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: noticeDocketEntryEntity.docketEntryId,
+      servedParties,
+      skipEmailToIrs,
+    });
+  };
 
   if (servedParties.paper.length > 0) {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -48,4 +50,6 @@ export const serveGeneratedNoticesOnCase = async ({
         servedParties,
       });
   }
+
+  return sendEmails;
 };

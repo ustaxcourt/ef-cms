@@ -245,19 +245,17 @@ async function generateDocketRecordPdf({
   // For small cases, use the original single-pass generation to avoid
   // unnecessary overhead from chunking + merging + overlay.
   if (entries.length < CHUNKING_THRESHOLD) {
-    return await applicationContext
-      .getDocumentGenerators()
-      .docketRecord({
-        applicationContext,
-        data: {
-          caseCaptionExtension,
-          caseDetail,
-          caseTitle,
-          docketNumberWithSuffix,
-          entries,
-          includePartyDetail,
-        },
-      });
+    return await applicationContext.getDocumentGenerators().docketRecord({
+      applicationContext,
+      data: {
+        caseCaptionExtension,
+        caseDetail,
+        caseTitle,
+        docketNumberWithSuffix,
+        entries,
+        includePartyDetail,
+      },
+    });
   }
 
   // Large case: split entries into chunks and generate a PDF for each chunk,

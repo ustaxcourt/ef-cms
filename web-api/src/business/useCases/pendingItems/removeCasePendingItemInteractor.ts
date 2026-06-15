@@ -10,7 +10,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-
 /**
  * removeCasePendingItem
  * @param {object} applicationContext the application context
