@@ -1,7 +1,8 @@
 jest.mock('@web-api/persistence/postgres/database', () => ({
   getDbReader: jest.fn(),
 }));
-jest.mock('../helpers/parseArgsAndEnvVars', () => ({
+jest.mock('@shared/business/utilities/DateHandler', () => ({
+  ...jest.requireActual('@shared/business/utilities/DateHandler'),
   getJsTimeframeForYear: jest.fn(),
 }));
 
