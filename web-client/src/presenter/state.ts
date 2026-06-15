@@ -176,7 +176,9 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -314,6 +316,10 @@ export const computeds = {
   customCaseReportHelper: customCaseReportHelper as unknown as ReturnType<
     typeof customCaseReportHelper
   >,
+  dashboardClerkOfTheCourtHelper:
+    dashboardClerkOfTheCourtHelper as unknown as ReturnType<
+      typeof dashboardClerkOfTheCourtHelper
+    >,
   dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
     typeof dashboardExternalHelper
   >,
@@ -778,6 +784,10 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  clerkOfCourtDashboardStats: {} as ClerkDashboardStats,
+  clerkOfCourtDashboardOptions: {
+    petitionsByYearIsFiscal: false,
+  },
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,

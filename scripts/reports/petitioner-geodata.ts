@@ -2,9 +2,9 @@
 
 import {
   type ScriptConfig,
-  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { generateCsv } from '../helpers/generate-csv';
 import {
