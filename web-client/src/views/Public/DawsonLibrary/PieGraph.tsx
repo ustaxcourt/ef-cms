@@ -8,8 +8,6 @@ import {
   Legend,
   Tooltip,
 } from 'recharts';
-import { RechartsDevtools } from '@recharts/devtools';
-
 export interface PieGraphData {
   name: string;
   value: number;
@@ -136,7 +134,7 @@ export const PieGraph = ({
       .join('');
     const html = `<html><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
-    window.open(URL.createObjectURL(blob), '_blank');
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
 
   if (!data || data.length === 0) {
@@ -240,7 +238,6 @@ export const PieGraph = ({
             stroke="#000"
             outerRadius={outerRadius}
           />
-          {process.env.NODE_ENV !== 'production' && <RechartsDevtools />}
         </PieChart>
       </div>
     </div>

@@ -19,7 +19,6 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
-import { getClerkDashboardStats } from './persistence/postgres/cases/reports/getClerkDashboardStats';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
@@ -109,7 +108,6 @@ const gatewayMethods = {
   getRequestResults,
   getSesStatus,
   getColdCases,
-  getClerkDashboardStats,
   getUploadPolicy,
   getUserByIdOnceAllUpdatesComplete,
   getWebSocketConnectionsByUserId,

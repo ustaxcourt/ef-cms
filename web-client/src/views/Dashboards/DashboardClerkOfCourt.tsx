@@ -10,7 +10,7 @@ import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
-import classNames from 'node_modules/classnames';
+import classNames from 'classnames';
 
 const CHART_WIDTH = 1300;
 
