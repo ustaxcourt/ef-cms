@@ -550,6 +550,7 @@ describe('addPaperFilingInteractor', () => {
         .mock.calls[0][0].electronicParties,
     ).toEqual([]);
   });
+
   // Spec (coversheet-gaps/SPEC.md): the paper-service print PDF must NOT
   // include a coversheet, but the docket-record document MUST. The
   // load-bearing invariant is the call order in addPaperFilingInteractor:
