@@ -154,62 +154,59 @@ export const PublicDocketRecord = connect(
                   ? pageRecords
                   : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
                 ).map(entry => {
-                    return (
-                      <tr
-                        data-testid={`public-docket-record-no-${entry.index}`}
-                        key={entry.docketEntryId}
-                      >
-                        <td className="center-column hide-on-mobile">
-                          {entry.index}
-                        </td>
-                        <td data-label="Filed Date">
-                          <span
-                            className={classNames(
-                              entry.isStricken && 'stricken-docket-record',
-                              'no-wrap',
-                            )}
-                          >
-                            {entry.createdAtFormatted}
+                  return (
+                    <tr
+                      data-testid={`public-docket-record-no-${entry.index}`}
+                      key={entry.docketEntryId}
+                    >
+                      <td className="center-column hide-on-mobile">
+                        {entry.index}
+                      </td>
+                      <td data-label="Filed Date">
+                        <span
+                          className={classNames(
+                            entry.isStricken && 'stricken-docket-record',
+                            'no-wrap',
+                          )}
+                        >
+                          {entry.createdAtFormatted}
+                        </span>
+                      </td>
+                      <td className="center-column hide-on-mobile">
+                        {entry.eventCode}
+                      </td>
+                      <td aria-hidden="true" className="filing-type-icon">
+                        {entry.isSealed && (
+                          <WrappedIcon
+                            iconClass="sealed-in-blackstone icon-sealed"
+                            icon="lock"
+                            size="1x"
+                            title={entry.sealedToTooltip}
+                          />
+                        )}
+                      </td>
+                      <td data-label="Filings and Proceedings">
+                        <PublicFilingsAndProceedings entry={entry} />
+                      </td>
+                      <td className="hide-on-mobile">{entry.numberOfPages}</td>
+                      <td className="hide-on-mobile">{entry.filedBy}</td>
+                      <td className="hide-on-mobile">{entry.action}</td>
+                      <td data-label="Served">
+                        {entry.showNotServed && (
+                          <span className="text-secondary text-semibold">
+                            Not served
                           </span>
-                        </td>
-                        <td className="center-column hide-on-mobile">
-                          {entry.eventCode}
-                        </td>
-                        <td aria-hidden="true" className="filing-type-icon">
-                          {entry.isSealed && (
-                            <WrappedIcon
-                              iconClass="sealed-in-blackstone icon-sealed"
-                              icon="lock"
-                              size="1x"
-                              title={entry.sealedToTooltip}
-                            />
-                          )}
-                        </td>
-                        <td data-label="Filings and Proceedings">
-                          <PublicFilingsAndProceedings entry={entry} />
-                        </td>
-                        <td className="hide-on-mobile">
-                          {entry.numberOfPages}
-                        </td>
-                        <td className="hide-on-mobile">{entry.filedBy}</td>
-                        <td className="hide-on-mobile">{entry.action}</td>
-                        <td data-label="Served">
-                          {entry.showNotServed && (
-                            <span className="text-secondary text-semibold">
-                              Not served
-                            </span>
-                          )}
-                          {entry.showServed && (
-                            <span>{entry.servedAtFormatted}</span>
-                          )}
-                        </td>
-                        <td className="center-column hide-on-mobile">
-                          {entry.servedPartiesCode}
-                        </td>
-                      </tr>
-                    );
-                  },
-                )}
+                        )}
+                        {entry.showServed && (
+                          <span>{entry.servedAtFormatted}</span>
+                        )}
+                      </td>
+                      <td className="center-column hide-on-mobile">
+                        {entry.servedPartiesCode}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
@@ -243,29 +240,26 @@ export const PublicDocketRecord = connect(
                 ? pageRecords
                 : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
               ).map(entry => {
-                  return (
-                    <tr key={entry.docketEntryId}>
-                      <td data-label="No.">{entry.index}</td>
-                      <td data-label="Filed Date">
-                        {entry.createdAtFormatted}
-                      </td>
-                      <td data-label="Filings and Proceedings">
-                        <PublicFilingsAndProceedings entry={entry} />
-                      </td>
-                      <td data-label="Served">
-                        {entry.showNotServed && (
-                          <span className="text-secondary text-semibold">
-                            Not served
-                          </span>
-                        )}
-                        {entry.showServed && (
-                          <span>{entry.servedAtFormatted}</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+                return (
+                  <tr key={entry.docketEntryId}>
+                    <td data-label="No.">{entry.index}</td>
+                    <td data-label="Filed Date">{entry.createdAtFormatted}</td>
+                    <td data-label="Filings and Proceedings">
+                      <PublicFilingsAndProceedings entry={entry} />
+                    </td>
+                    <td data-label="Served">
+                      {entry.showNotServed && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
+                      {entry.showServed && (
+                        <span>{entry.servedAtFormatted}</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord

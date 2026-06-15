@@ -65,4 +65,37 @@ describe('Public Trial Sessions', () => {
       .click();
     cy.get(`[data-testid="judges-${JUDGE}-pill-button"]`).should('not.exist');
   });
+
+  it('should render the location pill for cities containing a period without crashing the page', () => {
+    const LOCATION = 'St. Louis, Missouri';
+    selectTypeaheadInput('locations-filter-select', LOCATION);
+
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`).should('exist');
+    // The page should still be rendered (not a blank white screen) after selecting
+    // a city whose name contains a "." (e.g. St. Louis, St. Paul).
+    cy.get('[data-testid="location-filter"]').should('be.visible');
+
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`)
+      .find('button')
+      .click();
+    cy.get(`[data-testid="locations-${LOCATION}-pill-button"]`).should(
+      'not.exist',
+    );
+  });
+
+  it('should apply and remove St. Louis, Missouri location filter on mobile', () => {
+    const LOCATION = 'St. Louis, Missouri';
+
+    cy.viewport('iphone-xr');
+    cy.visit('/trial-sessions');
+
+    cy.contains('button', 'Filters').click();
+    cy.get('select[name="locations"]').select(LOCATION);
+
+    cy.contains('span.blue-pill', LOCATION).should('exist');
+    cy.get(`button[aria-label="remove ${LOCATION} selection"]`).click();
+    cy.contains('span.blue-pill', LOCATION).should('not.exist');
+
+    cy.get('select[name="locations"]').should('exist');
+  });
 });

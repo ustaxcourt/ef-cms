@@ -11,6 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 describe('setNoticeOfChangeOfTrialStartDate', () => {
   let newPdfDoc: PDFDocument;
   const noticePdfMock = 'notice of change of trial date';
+  const mockSendEmailsCall = async () => {};
   const mockUser = mockCaseServicesSupervisorUser;
   const mockCase = new Case(MOCK_CASE, { authorizedUser: mockUser });
   const mockPreviousTrialSession = MOCK_TRIAL_INPERSON;
@@ -26,11 +27,11 @@ describe('setNoticeOfChangeOfTrialStartDate', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .createAndServeNoticeDocketEntry.mockReturnValue('');
+      .createAndServeNoticeDocketEntry.mockResolvedValue(mockSendEmailsCall);
   });
 
   it('should call methods with correct params', async () => {
-    await setNoticeOfChangeOfTrialStartDate(
+    const result = await setNoticeOfChangeOfTrialStartDate(
       applicationContext,
       {
         caseEntity: mockCase,
@@ -69,5 +70,6 @@ describe('setNoticeOfChangeOfTrialStartDate', () => {
       noticePdf: noticePdfMock,
     });
     expect(createAndServeNoticeDocketEntryCalls[0][2]).toEqual(mockUser);
+    expect(result).toEqual(mockSendEmailsCall);
   });
 });
