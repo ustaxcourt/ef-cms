@@ -298,7 +298,9 @@ describe('wiki-deployment-summary.helpers', () => {
       );
       expect(result).toContain('### Timeline');
       expect(result).toContain('(2025-12-05)');
-      expect(result).toContain('08:00 - Created the Pull Request');
+      expect(result).toContain(
+        '08:00 - Created the [Pull Request](https://github.com/ustaxcourt/ef-cms/pull/995)',
+      );
       expect(result).toContain('(2025-12-06)');
       expect(result).toContain(
         '10:00 - Merged the PR [CircleCI Build](http://deploy)',

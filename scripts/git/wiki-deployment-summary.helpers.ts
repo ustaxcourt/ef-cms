@@ -124,10 +124,11 @@ const getTimelineEvents = async (
   mergeStatusChecks: GitHubStatusCheck[],
 ): Promise<TimelineEvent[]> => {
   const events: TimelineEvent[] = [];
+  const prUrl = `https://github.com/ustaxcourt/ef-cms/pull/${pr.number}`;
 
   events.push({
     dateStr: formatDateString(pr.createdAt, FORMATS.YYYYMMDD),
-    desc: 'Created the Pull Request',
+    desc: `Created the [Pull Request](${prUrl})`,
     timeStr: formatDateString(pr.createdAt, FORMATS.TIME_24_HOUR),
   });
 
