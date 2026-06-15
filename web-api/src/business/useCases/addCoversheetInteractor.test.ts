@@ -422,6 +422,26 @@ describe('addCoversheetInteractor', () => {
     );
   });
 
+  it('should throw an error if the docket entry could not be found on the case', async () => {
+    const missingId = '314fef22-39fa-43de-81ef-2c80ccb3b733';
+    await expect(
+      addCoversheetInteractor(
+        applicationContext,
+        {
+          bypassIdempotencyGate: false,
+          caseEntity: new Case(MOCK_CASE, {
+            authorizedUser: mockDocketClerkUser,
+          }),
+          docketEntryId: missingId,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find docket entry with id ${missingId} on case ${MOCK_CASE.docketNumber}`,
+    );
+  });
+
   it('works as expected when feature flag is off and consolidated cases returns null', async () => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({
       consolidatedCases: null,
