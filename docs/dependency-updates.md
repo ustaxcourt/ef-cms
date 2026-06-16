@@ -407,6 +407,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
 
+### js-yaml
+- On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)). Keep the override in place unless all transitive consumers are confirmed to resolve to a patched version.
+
 ### image-blob-reduce and pica
 **Installed Versions:**
 **image-blob-reduce: 5.0.0**
