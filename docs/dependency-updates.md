@@ -69,7 +69,7 @@ When updating Node.js, keep in mind:
 - Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
  To update Node.js:
- 
+
  1. Update the version in `.nvmrc`.
  1. Manually update the `"engines"` property in:
    - `./package.json`
@@ -316,7 +316,7 @@ If an update is available for DWT:
    1. With the new client version installed, navigate to the `test` environment and attempt to scan a document. Ensure the "client upgrade" modal is not shown.
 - Only update DWT when:
    1. The Windows clients have **all** been confirmed to have received the client update, OR
-   1. The old Windows client and new server version are backwards-compatible. 
+   1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
 **Current Installed Puppeteer/Puppeteer-core: 25.0.4**
@@ -325,7 +325,7 @@ If an update is available for DWT:
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends on vulnerable version of puppeteer-core)
-- March 20 2026: added an override for tar-fs so we stop getting a vulnerability reported for it. 
+- March 20 2026: added an override for tar-fs so we stop getting a vulnerability reported for it.
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
@@ -383,12 +383,12 @@ error: too many arguments. Expected 0 arguments but got 2.
 **@fortawesome/free-solid-svg-icons: 7.1.0**
 **@fortawesome/react-fontawesome: 3.1.1**
 
-- Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
+- Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated.
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
 
 ### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
-- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number of vulnerabilities counted when running npm i  
+- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number of vulnerabilities counted when running npm i
 - minimatch is a dependency for glob which is a dependency of a handful of packages in our code base. The full list can be found by running:
 ```bash
    npm list minimatch
@@ -402,17 +402,17 @@ error: too many arguments. Expected 0 arguments but got 2.
 **eslint: 9.39.4**
 **@eslint/js: 9.39.4**
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
-- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
 
 ### uuid
-- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11. 
+- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
 **image-blob-reduce: 5.0.0**
 **pica: 10.0.1**
-- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using. 
-- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica. 
+- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
+- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
