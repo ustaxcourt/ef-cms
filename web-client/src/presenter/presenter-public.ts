@@ -42,6 +42,7 @@ import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/
 import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionsDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
+import { setTodaysOrdersCurrentPaginationPageSequence } from './sequences/Public/setTodaysOrdersCurrentPaginationPageSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
@@ -135,6 +136,7 @@ export const presenterSequences = {
   redirectToLoginSequence,
   resetPublicTrialSessionsDataSequence,
   setCurrentPaginationPageSequence,
+  setTodaysOrdersCurrentPaginationPageSequence,
   showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
   sortTableSequence,
   submitLoginSequence,

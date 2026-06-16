@@ -39,6 +39,78 @@ describe('getTodaysOrdersAction', () => {
     expect(result.output.totalCount).toBe(mockTotalCount);
   });
 
+  it('should call the interactor repeatedly until all pages are fetched', async () => {
+    const page1Results = [
+      { docketEntryId: 'aaa', documentTitle: 'Order A' },
+      { docketEntryId: 'bbb', documentTitle: 'Order B' },
+    ];
+    const page2Results = [{ docketEntryId: 'ccc', documentTitle: 'Order C' }];
+    const mockTotalCount = 3;
+
+    applicationContext
+      .getUseCases()
+      .getTodaysOrdersInteractor.mockResolvedValueOnce({
+        results: page1Results,
+        totalCount: mockTotalCount,
+      })
+      .mockResolvedValueOnce({
+        results: page2Results,
+        totalCount: mockTotalCount,
+      });
+
+    const result = await runAction<
+      { todaysOrders: any; totalCount: any },
+      PublicClientState
+    >(getTodaysOrdersAction, {
+      modules: { presenter },
+    });
+
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor.mock
+        .calls[0][1].page,
+    ).toBe(1);
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor.mock
+        .calls[1][1].page,
+    ).toBe(2);
+    expect(result.output.todaysOrders).toEqual([
+      ...page1Results,
+      ...page2Results,
+    ]);
+    expect(result.output.totalCount).toBe(mockTotalCount);
+  });
+
+  it('should stop fetching and return partial results if a page returns an empty results array', async () => {
+    const page1Results = [{ docketEntryId: 'aaa', documentTitle: 'Order A' }];
+
+    applicationContext
+      .getUseCases()
+      .getTodaysOrdersInteractor.mockResolvedValueOnce({
+        results: page1Results,
+        totalCount: 5, // server claims 5 but next page is empty
+      })
+      .mockResolvedValueOnce({
+        results: [],
+        totalCount: 5,
+      });
+
+    const result = await runAction<
+      { todaysOrders: any; totalCount: any },
+      PublicClientState
+    >(getTodaysOrdersAction, {
+      modules: { presenter },
+    });
+
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor,
+    ).toHaveBeenCalledTimes(2);
+    expect(result.output.todaysOrders).toEqual(page1Results);
+    expect(result.output.totalCount).toBe(5);
+  });
+
   it('should use default values for page and sortOrder if not provided', async () => {
     await runAction<{ todaysOrders: any; totalCount: any }, PublicClientState>(
       getTodaysOrdersAction,
