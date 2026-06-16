@@ -35,9 +35,12 @@ describe('github-client', () => {
         messageHeadline: '1234: fix the regression',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 5678,
     title: '1234 fix the regression',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/5678',
   };
   const apiCoverageSummary: CoverageSummary = {
     branches: 90.12,
@@ -128,7 +131,7 @@ describe('github-client', () => {
         'view',
         '5678',
         '--json',
-        'author,body,commits,files,labels,number,title',
+        'author,body,commits,createdAt,files,labels,mergeCommit,mergedAt,number,statusCheckRollup,title,url',
       ],
       { GH_PAGER: 'cat', PAGER: 'cat' },
     );
@@ -148,6 +151,101 @@ describe('github-client', () => {
     await expect(client.getLatestProdPullRequest()).rejects.toThrow(
       'Unable to determine the latest merged prod pull request timestamp.',
     );
+  });
+
+  describe('getMergeCommitStatusContexts', () => {
+    it('calls gh api graphql with the expected query and parses the response', async () => {
+      const mockCommandRunner = jest.fn();
+      const mockMergeCommitOid = 'test-oid';
+      const mockResult = {
+        data: {
+          repository: {
+            object: {
+              statusCheckRollup: {
+                contexts: {
+                  nodes: [
+                    {
+                      context: 'test-context',
+                      createdAt: '2026-05-10T03:35:07Z',
+                      targetUrl: 'test-url',
+                    },
+                    { context: 'partial-context' },
+                    null,
+                  ],
+                },
+              },
+            },
+          },
+        },
+      };
+
+      // Mock repository response
+      mockCommandRunner.mockResolvedValueOnce(
+        JSON.stringify({ nameWithOwner: 'owner/repo' }),
+      );
+      // Mock graphql response
+      mockCommandRunner.mockResolvedValueOnce(JSON.stringify(mockResult));
+
+      const client = new GhCliGitHubClient({
+        commandRunner: mockCommandRunner,
+      });
+      const result =
+        await client.getMergeCommitStatusContexts(mockMergeCommitOid);
+
+      expect(mockCommandRunner).toHaveBeenNthCalledWith(
+        1,
+        'gh',
+        ['repo', 'view', '--json', 'nameWithOwner'],
+        { GH_PAGER: 'cat', PAGER: 'cat' },
+      );
+
+      expect(mockCommandRunner).toHaveBeenNthCalledWith(
+        2,
+        'gh',
+        [
+          'api',
+          'graphql',
+          '-F',
+          'oid=test-oid',
+          '-F',
+          'owner=owner',
+          '-F',
+          'name=repo',
+          '-f',
+          expect.stringContaining(
+            'query($oid: GitObjectID!, $owner: String!, $name: String!)',
+          ),
+        ],
+        { GH_PAGER: 'cat', PAGER: 'cat' },
+      );
+
+      expect(result).toEqual([
+        {
+          context: 'test-context',
+          createdAt: '2026-05-10T03:35:07Z',
+          targetUrl: 'test-url',
+        },
+        { context: 'partial-context' },
+      ]);
+    });
+
+    it('returns an empty array if statusCheckRollup or nodes are undefined', async () => {
+      const mockMergeCommitOid = 'test-oid';
+
+      const client = new GhCliGitHubClient({
+        commandRunner: (_cmd, args) => {
+          if (args?.includes('nameWithOwner')) {
+            return Promise.resolve(
+              JSON.stringify({ nameWithOwner: 'owner/repo' }),
+            );
+          }
+          return Promise.resolve(JSON.stringify({}));
+        },
+      });
+      const result =
+        await client.getMergeCommitStatusContexts(mockMergeCommitOid);
+      expect(result).toEqual([]);
+    });
   });
 
   it('selects the latest prod pull request by merge date when gh returns unsorted results', async () => {

@@ -7,7 +7,10 @@ import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,

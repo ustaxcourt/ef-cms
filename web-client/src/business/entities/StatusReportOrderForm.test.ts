@@ -108,10 +108,8 @@ describe('StatusReportOrderForm', () => {
     });
 
     it('should be invalid when orderType is set but dueDate is missing', () => {
-      const form = new StatusReportOrderForm({
-        docketEntryDescription: 'Status Report Order',
-        orderType: STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
-      });
+      const { dueDate: _dueDate, ...base } = getValidBase();
+      const form = new StatusReportOrderForm(base);
       expect(form.getFormattedValidationErrors()).toMatchObject({
         dueDate:
           'Due date is required for status reports and stipulated decisions',
@@ -144,7 +142,9 @@ describe('StatusReportOrderForm', () => {
         strickenFromTrialSessions: 'true',
         jurisdiction: 'invalidValue',
       });
-      expect(form.getFormattedValidationErrors()).not.toBeNull();
+      expect(form.getFormattedValidationErrors()).toMatchObject({
+        jurisdiction: `"jurisdiction" must be one of [${STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained}, ${STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored}, null]`,
+      });
     });
 
     it('should be invalid when an additionalOrderTextArray entry exceeds maximum length', () => {
@@ -153,9 +153,9 @@ describe('StatusReportOrderForm', () => {
         ...getValidBase(),
         additionalOrderTextArray: [longText],
       });
-      expect(
-        form.getFormattedValidationErrors()?.['additionalOrderTextArray-0'],
-      ).toBeDefined();
+      expect(form.getFormattedValidationErrors()).toMatchObject({
+        'additionalOrderTextArray-0': `"additionalOrderTextArray[0]" length must be less than or equal to ${MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS} characters long`,
+      });
     });
   });
 });
