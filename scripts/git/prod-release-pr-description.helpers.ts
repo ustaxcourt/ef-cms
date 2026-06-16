@@ -16,6 +16,7 @@ import {
   type GitHubPullRequestFile,
   type GitHubUser,
 } from './github-client';
+import { haveValidationRulesChanged } from '../entity-validation/entityValidation';
 
 export type ManualStep = {
   command: string;
@@ -407,12 +408,64 @@ const renderManualStep = (manualStep: ManualStep): string[] => {
   ];
 };
 
+const hasDataMigrationChange = (pullRequest: GitHubPullRequest): boolean => {
+  return (
+    pullRequest.files?.some(
+      (file: GitHubPullRequestFile): boolean =>
+        file.path.startsWith(
+          'web-api/src/persistence/postgres/utils/migrate/migrations/',
+        ) &&
+        !file.path.startsWith(
+          'web-api/src/persistence/postgres/utils/migrate/migrations/deprecated/',
+        ),
+    ) ?? false
+  );
+};
+
+const resolveSuggestedLabels = ({
+  enrichedPullRequests,
+  manualSteps,
+  validationRulesUpdated,
+}: {
+  enrichedPullRequests: EnrichedPullRequest[];
+  manualSteps: ManualStep[];
+  validationRulesUpdated: boolean;
+}): string[] => {
+  const suggestedLabels: string[] = [];
+
+  if (manualSteps.length > 0) {
+    suggestedLabels.push('Manual Deploy Step(s) Required');
+
+    if (
+      manualSteps.some(step =>
+        step.command.includes('npm run deploy:account-specific'),
+      )
+    ) {
+      suggestedLabels.push('Needs Account Specific');
+    }
+  }
+
+  for (const enriched of enrichedPullRequests) {
+    if (hasDataMigrationChange(enriched.pullRequest)) {
+      suggestedLabels.push('Data Migration');
+    }
+  }
+
+  if (validationRulesUpdated) {
+    suggestedLabels.push('Validation Rules Updated');
+  }
+
+  return suggestedLabels;
+};
+
 export const renderPrDescription = ({
   beforeCoverageBySuite = {},
   enrichedPullRequests,
+  validationRulesUpdated = false,
 }: {
   beforeCoverageBySuite?: Partial<Record<CoverageSuite, CoverageSummary>>;
   enrichedPullRequests: EnrichedPullRequest[];
+  validationRulesUpdated?: boolean;
 }): string => {
   const lines: string[] = ['### Includes', '', TABLE_HEADER, TABLE_DIVIDER];
   const groupedReleaseEntries = groupEnrichedPullRequests(enrichedPullRequests);
@@ -426,7 +479,6 @@ export const renderPrDescription = ({
     '',
     ...renderCoverageSection({ beforeBySuite: beforeCoverageBySuite }),
   );
-  lines.push('', '', '### Manual steps');
 
   const manualSteps = dedupeManualSteps(
     enrichedPullRequests.flatMap(
@@ -434,20 +486,33 @@ export const renderPrDescription = ({
     ),
   );
 
+  const suggestedLabels = resolveSuggestedLabels({
+    enrichedPullRequests,
+    manualSteps,
+    validationRulesUpdated,
+  });
+
+  lines.push('', '', '### Manual steps');
+
   if (manualSteps.length === 0) {
     lines.push('');
-    return lines.join('\n');
+  } else {
+    lines.push('');
+    manualSteps.forEach((manualStep: ManualStep, index: number) => {
+      lines.push(...renderManualStep(manualStep));
+
+      if (index < manualSteps.length - 1) {
+        lines.push('');
+      }
+    });
   }
 
-  lines.push('');
-
-  manualSteps.forEach((manualStep: ManualStep, index: number) => {
-    lines.push(...renderManualStep(manualStep));
-
-    if (index < manualSteps.length - 1) {
-      lines.push('');
+  if (suggestedLabels.length > 0) {
+    lines.push('', '### Suggested labels', '');
+    for (const label of suggestedLabels) {
+      lines.push(`- \`${label}\``);
     }
-  });
+  }
 
   return lines.join('\n');
 };
@@ -518,6 +583,8 @@ export const generateProdReleasePrDescription = async ({
     }),
   );
 
+  const validationRulesUpdated = await haveValidationRulesChanged();
+
   const enrichedPullRequests = pullRequests.map(pullRequest => {
     const issueNumber = extractIssueNumberFromTitle(pullRequest.title);
 
@@ -531,6 +598,7 @@ export const generateProdReleasePrDescription = async ({
   return renderPrDescription({
     beforeCoverageBySuite,
     enrichedPullRequests,
+    validationRulesUpdated,
   });
 };
 
