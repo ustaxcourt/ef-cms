@@ -73,6 +73,17 @@ export const TodaysOrders = connect(
     const results = todaysOrdersHelper.formattedOrders;
     const currentPaginationPage = todaysOrdersCurrentPaginationPage;
 
+    const handleSort = (args: {
+      sortField: string;
+      sortOrder: 'asc' | 'desc';
+      stateKey: string;
+    }) => {
+      setTodaysOrdersCurrentPaginationPageSequence({
+        currentPaginationPage: 0,
+      });
+      sortTableSequence(args);
+    };
+
     const totalPages = Math.ceil(results.length / TODAYS_ORDERS_PAGE_SIZE);
 
     useEffect(() => {
@@ -151,7 +162,7 @@ export const TodaysOrders = connect(
                               columnData={col}
                               key={idx}
                               orderListId={idx.toString()}
-                              onSort={sortTableSequence}
+                              onSort={handleSort}
                               tableSort={tableSort}
                             />
                           );
@@ -184,7 +195,7 @@ export const TodaysOrders = connect(
                       onChange={e => {
                         const [sortField, sortOrder] =
                           e.target.value.split('|');
-                        sortTableSequence({
+                        handleSort({
                           sortField,
                           sortOrder: sortOrder as 'asc' | 'desc',
                           stateKey: tableSort.sortKey,

@@ -19,7 +19,6 @@ export const prepareStatusReportOrderAction = ({
 }: ActionProps) => {
   const {
     additionalOrderTextArray,
-    additionalOrderText,
     dueDate,
     issueOrder,
     jurisdiction,
@@ -40,9 +39,7 @@ export const prepareStatusReportOrderAction = ({
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
-  const rawAdditionalOrderTextArray =
-    additionalOrderTextArray ??
-    (additionalOrderText ? [additionalOrderText] : []);
+  const rawAdditionalOrderTextArray = additionalOrderTextArray ?? [];
   const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
     rawAdditionalOrderTextArray,
   );

@@ -14,7 +14,7 @@ describe('setEditStatusReportOrderFormAction,', () => {
       state: {
         documentToEdit: {
           draftOrderState: {
-            additionalOrderText: 'Test',
+            additionalOrderTextArray: ['Test'],
             docketEntryDescription: 'Order',
             dueDate: '07/04/2024',
             jurisdiction:
@@ -40,7 +40,7 @@ describe('setEditStatusReportOrderFormAction,', () => {
     });
   });
 
-  it('omits legacy additionalOrderText when it contains only whitespace', async () => {
+  it('defaults to empty array when additionalOrderTextArray is not present', async () => {
     const result = await runAction(setEditStatusReportOrderFormAction, {
       props: {
         caseDetail: {
@@ -51,7 +51,6 @@ describe('setEditStatusReportOrderFormAction,', () => {
       state: {
         documentToEdit: {
           draftOrderState: {
-            additionalOrderText: '  \n\t ',
             docketEntryDescription: 'Order',
           },
         },
@@ -61,7 +60,7 @@ describe('setEditStatusReportOrderFormAction,', () => {
     expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
-  it('prefers additionalOrderTextArray when editing newer drafts', async () => {
+  it('uses additionalOrderTextArray when present', async () => {
     const result = await runAction(setEditStatusReportOrderFormAction, {
       props: {
         caseDetail: {
@@ -72,7 +71,6 @@ describe('setEditStatusReportOrderFormAction,', () => {
       state: {
         documentToEdit: {
           draftOrderState: {
-            additionalOrderText: 'Legacy text',
             additionalOrderTextArray: ['First clause', 'Second clause'],
             docketEntryDescription: 'Order',
           },
