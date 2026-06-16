@@ -1,0 +1,54 @@
+rules:
+  # No registry pack covers SSRF for this stack (verified: axios/http/fetch sinks
+  # matched zero rules across p/nodejs, p/typescript, p/expressjs, p/owasp-top-ten,
+  # p/default). This taint rule flags user-controlled request data flowing into an
+  # outbound HTTP call.
+  # ponytail: sources assume the Express `req` shape (req.query/params/body). DAWSON
+  # Lambda handlers may receive the request as `event` -- add those sources here if
+  # taint coverage misses handler code.
+  - id: dawson-ssrf-user-input-to-request
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+    pattern-sinks:
+      - pattern: axios.$M(...)
+      - pattern: axios(...)
+      - pattern: $HTTP.get(...)
+      - pattern: $HTTP.request(...)
+      - pattern: fetch(...)
+      - pattern: got(...)
+      - pattern: got.$M(...)
+    message: >
+      Potential SSRF: user-controlled request data flows into an outbound HTTP
+      request. Validate/allowlist the destination host before making the call.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-918
+
+  # p/command-injection fires 0 on a real cp.exec('...' + userInput) (verified);
+  # only p/default catches child-process misuse. This taint rule flags user input
+  # reaching a shell-executing child_process sink.
+  - id: dawson-command-injection-user-input
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+    pattern-sinks:
+      - pattern: $CP.exec(...)
+      - pattern: $CP.execSync(...)
+      - pattern: $CP.spawn(...)
+      - pattern: $CP.spawnSync(...)
+    message: >
+      Potential command injection: user-controlled request data flows into a
+      child_process call. Avoid passing untrusted input to a shell; use an
+      argument array and validate input.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-78

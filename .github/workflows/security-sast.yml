@@ -30,7 +30,7 @@ jobs:
       security-events: write
     timeout-minutes: 15
     container:
-      image: semgrep/semgrep:latest
+      image: semgrep/semgrep:1.165.0
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -39,19 +39,20 @@ jobs:
 
       - name: Run Semgrep
         env:
-          SEMGREP_RULES: >-
-            p/typescript
-            p/nodejs
-            p/react
-            p/jwt
-            p/sql-injection
-            p/xss
-            p/command-injection
-            p/ssrf
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           semgrep scan \
-            --config auto \
+            --config p/typescript \
+            --config p/nodejs \
+            --config p/react \
+            --config p/jwt \
+            --config p/sql-injection \
+            --config p/xss \
+            --config p/command-injection \
+            --config p/expressjs \
+            --config .semgrep/ \
             --sarif --output semgrep-results.sarif \
+            --error \
             --exclude='node_modules' \
             --exclude='coverage' \
             --exclude='dist' \
@@ -64,10 +65,16 @@ jobs:
             --exclude='.terraform' \
             --exclude='docs' \
             --metrics=off \
-            --baseline-commit ${{ github.event.pull_request.base.sha }}
+            --baseline-commit "$BASE_SHA"
 
       - name: Upload SARIF
-        if: always()
+        # Fork PRs get a read-only token, so the code-scanning upload (needs
+        # security-events: write) 403s and would block an otherwise-clean PR.
+        # Restrict the upload to same-repo PRs; fork PRs still scan + gate via
+        # the Semgrep exit code, with findings visible in the Actions log.
+        if: >-
+          always() &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep-results.sarif
