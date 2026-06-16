@@ -50,7 +50,6 @@ describe('prompts', () => {
           choices,
           message: 'Select an option',
           name: 'choice',
-          type: 'list',
         },
       ]);
       expect(result).toBe('Option 2');

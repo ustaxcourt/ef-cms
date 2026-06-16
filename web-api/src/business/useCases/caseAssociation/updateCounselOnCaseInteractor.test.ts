@@ -282,8 +282,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const results =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const results = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -309,8 +308,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const results =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const results = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -338,8 +336,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const results =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const results = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       MOCK_CASE.petitioners[0].serviceIndicator,

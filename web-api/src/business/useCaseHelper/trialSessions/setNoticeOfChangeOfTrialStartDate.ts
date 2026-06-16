@@ -22,7 +22,7 @@ export const setNoticeOfChangeOfTrialStartDate = async (
     previousTrialSession: RawTrialSession;
   },
   authorizedUser: AuthUser,
-) => {
+): Promise<() => Promise<void>> => {
   const noticePdf = await applicationContext
     .getUseCases()
     .generateNoticeOfChangeOfTrialStartDateInteractor(applicationContext, {
@@ -31,7 +31,7 @@ export const setNoticeOfChangeOfTrialStartDate = async (
       updatedTrialSession: newTrialSessionEntity,
     });
 
-  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+  return applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
     applicationContext,
     {
       caseEntity,

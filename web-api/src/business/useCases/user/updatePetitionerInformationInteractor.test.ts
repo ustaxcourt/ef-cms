@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -38,10 +39,10 @@ import { updatePetitionerInformationInteractor } from './updatePetitionerInforma
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -49,14 +50,14 @@ describe('updatePetitionerInformationInteractor', () => {
   const generateAndServeDocketEntry = jest.mocked(
     generateAndServeDocketEntryMock,
   );
+  const invalidateUserContactGeocode = jest.mocked(
+    invalidateUserContactGeocodeMock,
+  );
   const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-  const invalidateUserContactGeocode = jest.mocked(
-    invalidateUserContactGeocodeMock,
-  );
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
   const mockUrl = 'madeUpurl.com';
 
@@ -83,6 +84,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -625,6 +627,28 @@ describe('updatePetitionerInformationInteractor', () => {
 
     expect(updatePetitionerSpy).toHaveBeenCalled();
     expect(generateAndServeDocketEntry).toHaveBeenCalled();
+  });
+
+  it('should not generate and serve the docket entry if transaction fails', async () => {
+    invalidateUserContactGeocode.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      updatePetitionerInformationInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
+            ...mockPetitioners[0],
+            address1: 'changed address',
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   describe('admissions clerk adds a verified petitioner email', () => {
