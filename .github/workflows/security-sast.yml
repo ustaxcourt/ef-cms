@@ -9,7 +9,9 @@ on:
       - '.nvmrc'
       - 'docs/**'
   push:
-    branches: [staging]
+    # TEMP(10094): added feature branch to validate the CodeQL job on push.
+    # REVERT to `branches: [staging]` once CodeQL is confirmed working.
+    branches: [staging, 10094-devex-vuln-scanning]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
