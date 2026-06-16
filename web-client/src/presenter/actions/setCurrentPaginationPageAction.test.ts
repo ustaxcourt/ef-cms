@@ -69,6 +69,6 @@ describe('setCurrentPaginationPageAction', () => {
 
     expect(state.caseCurrentPaginationPage).toEqual(0);
     expect(state.orderCurrentPaginationPage).toEqual(1);
-    expect(state.opinionCurrentPaginationPage).toEqual(7);
+    expect(state.opinionCurrentPaginationPage).toEqual(4);
   });
 });
