@@ -10,7 +10,6 @@ export const unauthedUserSearchesByMeta = (cerebralTest, overrides = {}) => {
   return it('Search for cases by meta data', async () => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
-      currentPage: 1,
       petitionerName: 'Aliens, Dude',
       ...overrides,
     };
@@ -38,7 +37,6 @@ export const unauthedUserSearchesByMeta = (cerebralTest, overrides = {}) => {
         countryType: ALL_SELECTION,
         procedureType: ALL_SELECTION,
       },
-      currentPage: 1,
     });
   });
 };
