@@ -58,7 +58,7 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
       const chunk = callbacks.slice(i, i + ON_COMMIT_CHUNK_SIZE);
       try {
         await settlePromises(chunk.map(cb => Promise.resolve().then(cb)));
-      } catch (error: any) {
+      } catch (error: unknown) {
         getDawsonLogger().error(
           'There was an error running onCommitCallbacks',
           error,
@@ -71,13 +71,13 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 // Whether or not the caller is currently part of a transaction
-export function inTransaction() {
+export function inTransaction(): boolean {
   const store = ConnectionStore.getStore();
   return !!store && !!store.currentTransaction;
 }
 
 // Callbacks to run once the commit is successful
-export function onTransactionCommit(cb: () => Promise<void>) {
+export function onTransactionCommit(cb: () => Promise<void>): void {
   const store = ConnectionStore.getStore();
   if (store && store.onCommitCallbacks) {
     store.onCommitCallbacks.push(cb);

@@ -11,7 +11,7 @@ export class RestrictedCase extends JoiValidationEntity {
   public docketNumberWithSuffix?: string;
   public isPaper?: boolean;
   public isSealed?: string;
-  public leadDocketNumber?: boolean;
+  public leadDocketNumber?: string;
   public docketEntries: DocketEntry[];
 
   constructor(rawCase: any) {

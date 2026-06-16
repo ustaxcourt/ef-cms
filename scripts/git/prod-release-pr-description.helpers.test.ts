@@ -56,9 +56,12 @@ describe('prod-release-pr-description', () => {
         messageHeadline: '1234: polish copy',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 5678,
     title: '1234 fix the regression',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/5678',
   };
   const dependencyPullRequest: GitHubPullRequest = {
     author: { login: 'maintainer' },
@@ -69,9 +72,12 @@ describe('prod-release-pr-description', () => {
         messageHeadline: 'chore: update dependencies',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 6789,
     title: 'deps: weekly dependency updates',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/6789',
   };
   const dockerDependencyPullRequest: GitHubPullRequest = {
     author: { login: 'maintainer' },
@@ -82,10 +88,13 @@ describe('prod-release-pr-description', () => {
         messageHeadline: 'chore: update dependencies',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     files: [{ path: 'Dockerfile' }],
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 6792,
     title: 'dependencies 05-01-2026',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/6792',
   };
   const blankPullRequest: GitHubPullRequest = {
     author: { login: 'solo' },
@@ -96,9 +105,12 @@ describe('prod-release-pr-description', () => {
         messageHeadline: 'misc cleanup',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 6790,
     title: 'misc cleanup',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/6790',
   };
   const namedContributorPullRequest: GitHubPullRequest = {
     author: null,
@@ -115,9 +127,12 @@ describe('prod-release-pr-description', () => {
         messageHeadline: 'ops: deploy blue',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [{ name: 'bugfix' }],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 6791,
     title: '5555 follow-up cleanup',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/6791',
   };
   const secondIssueLinkedPullRequest: GitHubPullRequest = {
     author: { login: 'zoe' },
@@ -128,9 +143,12 @@ describe('prod-release-pr-description', () => {
         messageHeadline: '1234: follow-up fix',
       },
     ],
+    createdAt: '2026-05-10T03:00:00Z',
     labels: [],
+    mergedAt: '2026-05-10T03:35:07Z',
     number: 5680,
     title: '1234 fix the regression more',
+    url: 'https://github.com/ustaxcourt/ef-cms/pull/5680',
   };
   const circleConfig =
     'efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.80\n';
@@ -403,6 +421,57 @@ describe('prod-release-pr-description', () => {
       expect(description).not.toContain('#### #5678 1234 fix the regression');
     });
 
+    it('renders suggested labels based on files and manual steps', () => {
+      const enrichedPullRequests: any[] = [
+        {
+          manualSteps: [
+            {
+              command: 'npm run deploy:account-specific',
+              description: 'Deploy',
+            },
+          ],
+          otherContributors: ['@sam'],
+          pullRequest: {
+            author: { login: 'alice' },
+            body: 'Manual step included.',
+            commits: [],
+            createdAt: '2026-05-10T03:00:00Z',
+            files: [
+              {
+                path: 'web-api/src/persistence/postgres/utils/migrate/migrations/2026-01-01-new-table.js',
+              },
+              {
+                path: 'web-api/src/persistence/postgres/utils/migrate/migrations/deprecated/111-some-migration.js',
+              },
+            ],
+            labels: [],
+            mergedAt: '2026-05-10T03:35:07Z',
+            number: 6791,
+            title: '1234 adding migration and validation updates',
+            url: 'https://github.com/ustaxcourt/ef-cms/pull/6791',
+          },
+          ticketTask: '#1234',
+          type: 'story',
+        },
+      ];
+
+      const description = renderPrDescription({
+        enrichedPullRequests,
+        validationRulesUpdated: true,
+      });
+
+      expect(description).toContain(
+        [
+          '### Suggested labels',
+          '',
+          '- `Manual Deploy Step(s) Required`',
+          '- `Needs Account Specific`',
+          '- `Data Migration`',
+          '- `Validation Rules Updated`',
+        ].join('\n'),
+      );
+    });
+
     it('renders an empty manual-steps section when there are no bash blocks to include', () => {
       const description = renderPrDescription({
         enrichedPullRequests: [
@@ -607,6 +676,7 @@ describe('prod-release-pr-description', () => {
             return undefined;
           }),
         getIssue: jest.fn().mockResolvedValue(issue),
+        getMergeCommitStatusContexts: jest.fn(),
         getLatestProdPullRequest: jest.fn().mockResolvedValue({
           mergedAt: '2026-05-10T03:35:07Z',
           number: 4321,
@@ -621,6 +691,10 @@ describe('prod-release-pr-description', () => {
             blankPullRequest,
           ]),
       };
+
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(true),
+      }));
 
       const description = await generateProdReleasePrDescription({
         circleConfig,
@@ -652,6 +726,7 @@ describe('prod-release-pr-description', () => {
       const githubClient: GitHubClient = {
         getCoverageSummary: jest.fn().mockResolvedValue(undefined),
         getIssue: jest.fn(),
+        getMergeCommitStatusContexts: jest.fn(),
         getLatestProdPullRequest: jest.fn().mockResolvedValue({
           mergedAt: '2026-05-10T03:35:07Z',
           number: 4321,
@@ -661,6 +736,10 @@ describe('prod-release-pr-description', () => {
           .fn()
           .mockResolvedValue([dockerDependencyPullRequest]),
       };
+
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
+      }));
 
       const description = await generateProdReleasePrDescription({
         circleConfig: 'version: 2.1\n',
@@ -674,6 +753,7 @@ describe('prod-release-pr-description', () => {
       const githubClient: GitHubClient = {
         getCoverageSummary: jest.fn().mockResolvedValue(undefined),
         getIssue: jest.fn(),
+        getMergeCommitStatusContexts: jest.fn(),
         getLatestProdPullRequest: jest.fn().mockResolvedValue({
           mergedAt: '2026-05-10T03:35:07Z',
           number: 4321,
@@ -683,6 +763,10 @@ describe('prod-release-pr-description', () => {
           .fn()
           .mockResolvedValue([dependencyPullRequest]),
       };
+
+      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
+        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
+      }));
 
       const description = await generateProdReleasePrDescription({
         circleConfig,
@@ -744,7 +828,8 @@ describe('prod-release-pr-description', () => {
         const write = jest.fn().mockReturnValue(true);
         const githubClient: GitHubClient = {
           getCoverageSummary: jest.fn().mockResolvedValue(undefined),
-          getIssue: jest.fn().mockResolvedValue(issue),
+          getIssue: jest.fn(),
+          getMergeCommitStatusContexts: jest.fn(),
           getLatestProdPullRequest: jest.fn().mockResolvedValue({
             mergedAt: '2026-05-10T03:35:07Z',
             number: 5678,
