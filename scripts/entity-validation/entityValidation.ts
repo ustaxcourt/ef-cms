@@ -131,7 +131,10 @@ export function resolveChangedEntities(
   );
 }
 
-export async function runEntityValidation(): Promise<number> {
+export async function getChangedEntities(): Promise<{
+  changedEntities: string[];
+  newFingerprint: string;
+}> {
   const currFingerprint = await getCurrentFingerprintFromSSM();
   const newFingerprint = await getEntityIdentifiers();
   let entityValidationRequired: string | undefined;
@@ -146,6 +149,17 @@ export async function runEntityValidation(): Promise<number> {
     newFingerprint,
     entityValidationRequired,
   );
+
+  return { changedEntities, newFingerprint };
+}
+
+export async function haveValidationRulesChanged(): Promise<boolean> {
+  const { changedEntities } = await getChangedEntities();
+  return changedEntities.length > 0;
+}
+
+export async function runEntityValidation(): Promise<number> {
+  const { changedEntities, newFingerprint } = await getChangedEntities();
 
   if (changedEntities.length === 0) {
     console.log('Entity validation fingerprints have not changed.');
