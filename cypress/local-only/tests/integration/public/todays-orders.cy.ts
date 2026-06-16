@@ -248,4 +248,23 @@ describe("Today's Orders - Pagination", () => {
       'exist',
     );
   });
+
+  it('should reset to page 1 when the sort column changes', () => {
+    // Navigate to page 2 first
+    cy.get('[data-testid="paginator-page-2"]').first().click();
+    cy.get('[data-testid="paginator-page-2"]')
+      .first()
+      .should('have.class', 'paginator-current');
+
+    // Change the sort column — should jump back to page 1
+    cy.get('[data-testid="3-documentTitle-header-button"]').click();
+
+    cy.get('[data-testid="paginator-page-1"]')
+      .first()
+      .should('have.class', 'paginator-current');
+    cy.get('table[aria-label="todays orders"] tbody tr').should(
+      'have.length',
+      100,
+    );
+  });
 });
