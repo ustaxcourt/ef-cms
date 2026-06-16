@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { List, useListRef } from 'react-window';
+import { VariableSizeList } from 'react-window';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
@@ -13,7 +13,7 @@ interface VirtualizedDocumentListProps {
 export const VirtualizedDocumentList: React.FC<
   VirtualizedDocumentListProps
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
-  const listRef = useListRef(null);
+  const listRef = useRef<VariableSizeList>(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [listDimensions, setListDimensions] = useState<{
     width: number;
@@ -101,7 +101,7 @@ export const VirtualizedDocumentList: React.FC<
         entry => entry.docketEntryId === viewDocumentId,
       );
       if (selectedIndex !== -1) {
-        listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
+        listRef.current.scrollToItem(selectedIndex, 'center');
       }
     }
   }, [viewDocumentId, listDimensions, docketEntries]);
@@ -246,14 +246,16 @@ export const VirtualizedDocumentList: React.FC<
       }}
     >
       {listDimensions && (
-        <List
-          rowHeight={getRowHeight}
+        <VariableSizeList
+          height={listDimensions.height}
+          itemCount={docketEntries.length}
+          itemSize={getRowHeight}
           overscanCount={3}
-          listRef={listRef}
-          rowComponent={Row}
-          rowCount={docketEntries.length}
-          rowProps={{} as never}
-        />
+          ref={listRef}
+          width={listDimensions.width}
+        >
+          {Row}
+        </VariableSizeList>
       )}
     </div>
   );
