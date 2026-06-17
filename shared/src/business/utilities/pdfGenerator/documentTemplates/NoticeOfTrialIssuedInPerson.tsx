@@ -1,7 +1,9 @@
-import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
-import { DocketHeader } from '../components/DocketHeader';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { PrimaryHeader } from '../components/PrimaryHeader';
+import { DocumentParagraphIndent } from '../components/DocumentParagraphIndent';
+import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
+import { NoticeSettingCaseForTrialDocketHeader } from '../components/NoticeSettingCaseForTrialDocketHeader';
+import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
+import { TrialNoticeJudgeInfoBox } from '../components/TrialNoticeJudgeInfoBox';
 import React from 'react';
 
 export const NoticeOfTrialIssuedInPerson = ({
@@ -21,12 +23,11 @@ export const NoticeOfTrialIssuedInPerson = ({
 }) => {
   return (
     <div id="notice-of-trial-pdf">
-      <PrimaryHeader />
-      <DocketHeader
+      <OrderPrimaryHeader />
+      <NoticeSettingCaseForTrialDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle={'Notice Setting Case For Trial'}
       />
       <div>
         <div className="info-box info-box-trial" id="trial-info">
@@ -41,15 +42,16 @@ export const NoticeOfTrialIssuedInPerson = ({
           </div>
         </div>
 
-        <div className="info-box info-box-judge" id="judge-info">
-          <div className="info-box-header">Judge</div>
-          <div className="info-box-content">{trialInfo.formattedJudge}</div>
-        </div>
+        <TrialNoticeJudgeInfoBox
+          chambersPhoneNumber={trialInfo.chambersPhoneNumber}
+          judgeLastName={trialInfo.formattedJudge || 'Not assigned'}
+        />
         <div className="clear" />
       </div>
 
       <div id="notice-body">
-        <p className="indent-paragraph">
+        <p>
+          <DocumentParagraphIndent />
           The parties are hereby notified that this case is set for trial at the
           Trial Session beginning at{' '}
           <b>
@@ -63,28 +65,33 @@ export const NoticeOfTrialIssuedInPerson = ({
             of decision against you.
           </b>
         </p>
-        <p className="indent-paragraph">
+        <p>
+          <DocumentParagraphIndent />
           The Court will set the time for each trial at the end of the calendar
           call (unless the parties request in advance a specific date and time
           for trial and the Court grants the request). In setting trial times
           the Court attempts to accommodate the parties, but the final
           determination of trial times rests in the Court’s discretion.
         </p>
-        <p className="indent-paragraph">
+        <p>
+          <DocumentParagraphIndent />
           Your attention is called to the requirements set out in the Standing
           Pretrial Order that is served with this notice.
         </p>
         <p>
+          <DocumentParagraphIndent />
           <b>IMPORTANT:</b> Your case is currently set for an in-person
           proceeding. In the event that the Court is unable to hold an in-person
           proceeding and needs to proceed remotely, you will be notified and be
           given detailed instructions for accessing your remote proceeding.
         </p>
 
-        <ClerkOfTheCourtSignature
-          nameOfClerk={nameOfClerk}
-          titleOfClerk={titleOfClerk}
-        />
+        <div id="notice-clerk-signature">
+          <ClerkOfTheCourtSignature
+            nameOfClerk={nameOfClerk}
+            titleOfClerk={titleOfClerk}
+          />
+        </div>
       </div>
     </div>
   );
