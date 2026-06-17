@@ -237,6 +237,10 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
+    // TEMPORARY: RUM error-boundary verification hook. Visiting any page with
+    if (new URLSearchParams(window.location.search).get('rum-crash') === '1') {
+      throw new Error('RUM-TEST render crash');
+    }
     const focusMain = (e?: any) => {
       e?.preventDefault();
       const header = window.document.querySelector(
@@ -254,11 +258,6 @@ export const AppComponent = connect(
         initialPageLoaded = true;
       }
     }, [currentPage]);
-
-    // TODO: REMOVE — temporary RUM error logging test
-    useEffect(() => {
-      void Promise.reject(new Error('RUM test: unhandled rejection'));
-    }, []);
 
     const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
