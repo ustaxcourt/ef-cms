@@ -65,3 +65,10 @@ resource "aws_rum_app_monitor" "app_monitor" {
     status = "DISABLED"
   }
 }
+
+# Bucket retained here with force_destroy so Terraform can empty and delete it
+# cleanly. Remove this resource once the bucket has been destroyed in all envs.
+resource "aws_s3_bucket" "rum_sourcemaps" {
+  bucket        = "rum-sourcemaps.${var.domain}"
+  force_destroy = true
+}
