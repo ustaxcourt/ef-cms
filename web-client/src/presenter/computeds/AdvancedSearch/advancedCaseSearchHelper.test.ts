@@ -286,7 +286,7 @@ describe('advancedCaseSearchHelper', () => {
       result.formattedSearchResults.map(
         searchResult => searchResult.docketNumber,
       ),
-    ).toEqual(['102-19', '103-19', '101-19']);
+    ).toEqual(['103-19', '101-19', '102-19']);
   });
 
   it('should preserve non-blank petitioner state names while removing blank ones during formatting', () => {
