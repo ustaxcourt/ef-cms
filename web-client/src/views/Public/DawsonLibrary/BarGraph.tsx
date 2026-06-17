@@ -398,6 +398,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
     color: ds.color || defaultColors[i % defaultColors.length],
     value: ds.label,
     total: legendTotals?.[i],
+    title,
   }));
 
   if (!datasets || datasets.length === 0 || !labels || labels.length === 0) {
@@ -422,7 +423,10 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   }
 
   return (
-    <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1">
+    <div
+      className="tw:overflow-x-auto tw:pt-2 tw:pb-1"
+      data-testid={`${title || 'noTitle'}-bar-graph-div`}
+    >
       <div
         style={
           {
@@ -444,6 +448,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
+              data-testid={`${title || 'noTitle'}-bar-graph-html-button`}
             >
               HTML view
             </Button>

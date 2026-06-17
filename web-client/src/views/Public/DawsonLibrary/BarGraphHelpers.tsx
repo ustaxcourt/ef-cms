@@ -5,7 +5,10 @@ import React from 'react';
 export const renderCustomLegend = (props: any) => {
   const { payload } = props;
   return (
-    <div className="tw:flex tw:flex-wrap tw:gap-3 tw:xs:gap-4 tw:justify-start tw:pb-1 tw:xs:pb-4">
+    <div
+      className="tw:flex tw:flex-wrap tw:gap-3 tw:xs:gap-4 tw:justify-start tw:pb-1 tw:xs:pb-4"
+      data-testid={`${payload[0].title || 'noTitle'}-bar-graph-legend`}
+    >
       {payload.map((entry: any, index: number) => (
         <div key={index} className="tw:flex tw:items-center tw:gap-2">
           <div

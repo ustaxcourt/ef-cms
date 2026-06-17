@@ -50,6 +50,7 @@ const calendarAndFiscalYearSelectors = ({
           className="usa-radio__label tw:mt-0 tw:xs:text-lg/6 tw:text-base"
           htmlFor="calendar-year-to-date"
           id="calendar-year-to-date-label"
+          data-testid="calendar-year-to-date"
         >
           YTD
         </label>
@@ -73,6 +74,7 @@ const calendarAndFiscalYearSelectors = ({
           className="usa-radio__label tw:mt-0 tw:xs:text-lg/6 tw:text-base"
           htmlFor="fiscal-year-to-date"
           id="fiscal-year-to-date-label"
+          data-testid="fiscal-year-to-date"
         >
           FYTD
         </label>
@@ -105,7 +107,7 @@ export const DashboardClerkOfCourt = connect(
       year,
     } = dashboardClerkOfTheCourtHelper;
 
-    const [mobileSection, setMobileSection] = useState('recentMessages');
+    const [mobileSection, setMobileSection] = useState('petitions');
 
     return (
       <>
@@ -119,12 +121,15 @@ export const DashboardClerkOfCourt = connect(
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="petitions" title="Petitions">
-                  <div className="tw:mt-4">
+                  <div className="tw:mt-4" data-testid="petitions-data-div">
                     {calendarAndFiscalYearSelectors({
                       petitionsByYearIsFiscal,
                       setClerkOfCourtDashboardOptionsSequence,
                     })}
-                    <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-5">
+                    <h2
+                      className="tw:xs:text-2xl tw:text-lg tw:mb-5"
+                      data-testid="petitions-data-header"
+                    >
                       Total petitions created in{' '}
                       {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
                       <span className="tw:font-normal">{totalPetitions}</span>
@@ -182,7 +187,10 @@ export const DashboardClerkOfCourt = connect(
                     setClerkOfCourtDashboardOptionsSequence,
                     isMobile: true,
                   })}
-                  <h2 className="tw:xs:text-2xl tw:text-lg tw:mb-2">
+                  <h2
+                    className="tw:xs:text-2xl tw:text-lg tw:mb-2"
+                    data-testid="petitions-data-header"
+                  >
                     Total petitions created in{' '}
                     {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
                     <span className="tw:font-normal">{totalPetitions}</span>

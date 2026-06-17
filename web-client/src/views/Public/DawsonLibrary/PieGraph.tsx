@@ -19,7 +19,6 @@ const PieSector = (props: PieSectorShapeProps) => {
   const fill = (props as unknown as PieGraphData).color;
   return (
     <g
-      tabIndex={props.index}
       onMouseDown={e => e.preventDefault()}
       onFocus={e => {
         e.currentTarget
@@ -139,7 +138,7 @@ export const PieGraph = ({
 
   if (!data || data.length === 0) {
     return (
-      <div className="tw:py-8 tw:text-center tw:text-gray-400">
+      <div className="tw:py-8 tw:text-center tw:text-black-400">
         {title && (
           <h2 className="tw:xs:mb-8 tw:mb-5 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
@@ -153,7 +152,10 @@ export const PieGraph = ({
   return (
     // inline-block so multiple graphs sit side-by-side on wide screens;
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
-    <div className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto tw:pt-2">
+    <div
+      className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto tw:pt-2"
+      data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-div`}
+    >
       <div
         ref={liveRegionRef}
         aria-live="polite"
@@ -176,6 +178,7 @@ export const PieGraph = ({
               className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
+              data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-html-button`}
             >
               HTML view
             </Button>
@@ -190,7 +193,10 @@ export const PieGraph = ({
             verticalAlign="top"
             wrapperStyle={{ paddingBottom: 0 }}
             content={() => (
-              <div className="tw:flex tw:justify-between">
+              <div
+                className="tw:flex tw:justify-between"
+                data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-legend`}
+              >
                 <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-x-4 tw:gap-y-3 tw:xs:gap-y-4 tw:grid-rows-2 tw:grid-flow-col">
                   {data.map(entry => (
                     <li key={entry.name} className="tw:flex tw:items-center">
@@ -209,6 +215,7 @@ export const PieGraph = ({
                     className="tw:w-auto tw:!mr-5 tw:self-start"
                     variant="primaryTertiary"
                     onClick={openHtmlTable}
+                    data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-html-button`}
                   >
                     HTML view
                   </Button>
