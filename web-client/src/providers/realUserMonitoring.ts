@@ -8,6 +8,10 @@ export const initializeRealUserMonitoring = (): void => {
     const identityPoolId = process.env.RUM_IDENTITY_POOL_ID;
     const sampleRateStr = process.env.RUM_SAMPLE_RATE;
     const appMonitorId = process.env.RUM_APP_MONITOR_ID;
+    // The releaseId tells CloudWatch RUM which source-map folder to use when
+    // unminifying a stack trace. It must match the S3 folder the build's
+    // `.map` files are uploaded to (see deploy-ui.sh).
+    const releaseId = process.env.RUM_RELEASE_ID;
 
     if (!identityPoolId || !sampleRateStr || !appMonitorId) {
       throw new Error(
@@ -21,6 +25,7 @@ export const initializeRealUserMonitoring = (): void => {
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId,
       sessionSampleRate: Number(sampleRateStr),
+      ...(releaseId ? { releaseId } : {}),
       telemetries: [
         'performance',
         'errors',
