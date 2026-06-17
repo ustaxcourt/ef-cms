@@ -255,6 +255,11 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
+    // TODO: REMOVE — temporary RUM error logging test
+    useEffect(() => {
+      void Promise.reject(new Error('RUM test: unhandled rejection'));
+    }, []);
+
     const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
