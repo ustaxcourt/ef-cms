@@ -34,8 +34,8 @@ export const getTodaysOrdersInteractor = async (
       startDate: currentDateStart,
     });
 
-  const formattedResults = results.map(opinion => {
-    return new PublicDocumentSearchResult(opinion).toRawObject();
+  const formattedResults = results.map(order => {
+    return new PublicDocumentSearchResult(order).toRawObject();
   });
 
   return { results: formattedResults, totalCount };

@@ -446,16 +446,16 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should send service emails to onTransactionCommit if in a transaction', async () => {
-      inTransaction.mockReturnValueOnce(true);
-  
-      await generateNoticesForCaseTrialSessionCalendarInteractor(
+    inTransaction.mockReturnValueOnce(true);
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
     );
-  
-      expect(
-        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-      ).not.toHaveBeenCalled();
-      expect(onTransactionCommit).toHaveBeenCalledTimes(1);
-    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+    expect(onTransactionCommit).toHaveBeenCalledTimes(1);
+  });
 });

@@ -29,6 +29,7 @@ export const getTodaysOrdersAction = async ({
       });
 
     totalCount = fetchedTotalCount;
+    if (results.length === 0) break;
     allResults.push(...results);
     page++;
   } while (allResults.length < totalCount);
