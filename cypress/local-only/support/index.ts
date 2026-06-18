@@ -10,4 +10,19 @@ before(() => {
 
 beforeEach(() => {
   mockDynamsoftLibrary();
+
+
+  const specIsPublicPageSpec = Cypress.spec.relative.includes("/public/");
+
+  if (specIsPublicPageSpec) { cy.capturePublicPageNetworkTraffic(); };
+});
+
+afterEach(function () {
+
+  const testAlreadyFailed = this.currentTest?.state === "failed";
+  const specIsPublicPageSpec = Cypress.spec.relative.includes("/public/");
+
+  if (!specIsPublicPageSpec || testAlreadyFailed) return;
+
+  cy.assertCorrectNetworkData();
 });
