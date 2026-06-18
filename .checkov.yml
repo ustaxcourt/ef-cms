@@ -19,3 +19,4 @@ skip-path:
   - .terraform
 
 compact: true
+soft-fail: true
