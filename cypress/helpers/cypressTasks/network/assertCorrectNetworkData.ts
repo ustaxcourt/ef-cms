@@ -1,4 +1,4 @@
-import { CapturedNetworkPayload } from "../../../local-only/support/commands";
+import { CapturedNetworkPayload } from '../../../local-only/support/commands';
 
 export type SensitiveFinding = {
   url: string;
@@ -17,41 +17,40 @@ const SENSITIVE_PATTERNS: Array<{
   name: string;
   regex: RegExp;
 }> = [
-    {
-      name: "SSN-like value",
-      regex: /\b\d{3}-\d{2}-\d{4}\b/g,
-    },
-    {
-      name: "Email address",
-      regex: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-    },
-    {
-      name: "access key",
-      regex: /\bAKIA[0-9A-Z]{16}\b/g,
-    },
-    {
-      name: "Secret-like key",
-      regex:
-        /["']?(apiKey|api_key|accessToken|access_token|refreshToken|refresh_token|secret|password|token)["']?\s*[:=]\s*["'][^"']{8,}["']/gi,
-    },
-  ];
+  {
+    name: 'SSN-like value',
+    regex: /\b\d{3}-\d{2}-\d{4}\b/g,
+  },
+  {
+    name: 'Email address',
+    regex: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+  },
+  {
+    name: 'access key',
+    regex: /\bAKIA[0-9A-Z]{16}\b/g,
+  },
+  {
+    name: 'Secret-like key',
+    regex:
+      /["']?(apiKey|api_key|accessToken|access_token|refreshToken|refresh_token|secret|password|token)["']?\s*[:=]\s*["'][^"']{8,}["']/gi,
+  },
+];
 
 const ALLOWLIST: Array<{
   url?: RegExp;
   patternName?: string;
   location?: string;
 }> = [
-    // Example:
-    // {
-    //   url: /\/analytics\/collect/,
-    //   patternName: "UUID",
-    // },
-  ];
+  // {
+  //   url:
+  //   patternName: "Email address",
+  // },
+];
 
 function safeStringify(value: unknown): string {
-  if (value == null) return "";
+  if (value == null) return '';
 
-  if (typeof value === "string") return value;
+  if (typeof value === 'string') return value;
 
   try {
     return JSON.stringify(value);
@@ -61,12 +60,12 @@ function safeStringify(value: unknown): string {
 }
 
 function redactPreview(match: string): string {
-  if (match.length <= 8) return "[redacted]";
+  if (match.length <= 8) return '[redacted]';
   return `${match.slice(0, 4)}...[redacted]...${match.slice(-4)}`;
 }
 
 function isAllowed(finding: SensitiveFinding): boolean {
-  return ALLOWLIST.some((rule) => {
+  return ALLOWLIST.some(rule => {
     const urlMatches = rule.url ? rule.url.test(finding.url) : true;
     const patternMatches = rule.patternName
       ? rule.patternName === finding.patternName
@@ -108,32 +107,34 @@ function scanText(args: {
   return findings;
 }
 
-export function assertCorrectNetworkData(payloads: CapturedNetworkPayload[]): SensitiveNetworkScanResult {
-  const findings = payloads.flatMap((payload) => {
+export function assertCorrectNetworkData(
+  payloads: CapturedNetworkPayload[],
+): SensitiveNetworkScanResult {
+  const findings = payloads.flatMap(payload => {
     const scanTargets = [
       {
-        location: "url",
+        location: 'url',
         text: payload.url,
       },
       {
-        location: "requestBody",
+        location: 'requestBody',
         text: safeStringify(payload.requestBody),
       },
       {
-        location: "responseBody",
+        location: 'responseBody',
         text: safeStringify(payload.responseBody),
       },
       {
-        location: "requestHeaders",
+        location: 'requestHeaders',
         text: safeStringify(payload.requestHeaders),
       },
       {
-        location: "responseHeaders",
+        location: 'responseHeaders',
         text: safeStringify(payload.responseHeaders),
       },
     ];
 
-    return scanTargets.flatMap((target) =>
+    return scanTargets.flatMap(target =>
       scanText({
         text: target.text,
         url: payload.url,

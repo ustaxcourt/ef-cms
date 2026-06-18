@@ -1,4 +1,7 @@
-import { SensitiveFinding, SensitiveNetworkScanResult } from '../../helpers/cypressTasks/network/assertCorrectNetworkData';
+import {
+  SensitiveFinding,
+  SensitiveNetworkScanResult,
+} from '../../helpers/cypressTasks/network/assertCorrectNetworkData';
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
 
@@ -13,16 +16,16 @@ export type CapturedNetworkPayload = {
 
 const capturedNetworkPayloads: CapturedNetworkPayload[] = [];
 
-Cypress.Commands.add("capturePublicPageNetworkTraffic", () => {
+Cypress.Commands.add('capturePublicPageNetworkTraffic', () => {
   capturedNetworkPayloads.length = 0;
 
   cy.intercept(
     {
-      url: "**",
+      url: '**',
       middleware: true,
     },
-    (req) => {
-      req.on("response", (res) => {
+    req => {
+      req.on('response', res => {
         capturedNetworkPayloads.push({
           url: req.url,
           method: req.method,
@@ -40,20 +43,20 @@ Cypress.Commands.add("capturePublicPageNetworkTraffic", () => {
   return cy.wrap(capturedNetworkPayloads, { log: false });
 });
 
-Cypress.Commands.add("assertCorrectNetworkData", () => {
+Cypress.Commands.add('assertCorrectNetworkData', () => {
   return cy
     .task<SensitiveNetworkScanResult>(
-      "assertCorrectNetworkData",
+      'assertCorrectNetworkData',
       capturedNetworkPayloads,
       {
         log: false,
       },
     )
-    .then((result) => {
+    .then(result => {
       if (result.passed) {
         Cypress.log({
-          name: "network scan",
-          message: "passed",
+          name: 'network scan',
+          message: 'passed',
         });
 
         return;
@@ -62,7 +65,7 @@ Cypress.Commands.add("assertCorrectNetworkData", () => {
       const message = formatSensitiveNetworkFailure(result.findings);
 
       Cypress.log({
-        name: "network scan",
+        name: 'network scan',
         message: `${result.findings.length} finding(s)`,
         consoleProps: () => ({
           findings: result.findings,
@@ -152,7 +155,7 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   waitAndSee(0);
 });
 
-export { };
+export {};
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -184,22 +187,22 @@ function formatSensitiveNetworkFailure(findings: SensitiveFinding[]): string {
     .map(([request, requestFindings]) => {
       const findingLines = requestFindings
         .map(
-          (finding) =>
+          finding =>
             `    - ${finding.patternName} in ${finding.location}: ${finding.matchPreview}`,
         )
-        .join("\n");
+        .join('\n');
 
       return `  ${request}\n${findingLines}`;
     })
-    .join("\n\n");
+    .join('\n\n');
 
   return [
-    "Expected public page network traffic to contain only public data",
-    "",
+    'Expected public page network traffic to contain only public data',
+    '',
     `Found ${findings.length} issue(s):`,
-    "",
+    '',
     details,
-    "",
-    "To fix this, remove the non-public value from the public-page request/response or add a narrowly scoped allowlist entry if this is expected.",
-  ].join("\n");
+    '',
+    'To fix this, remove the non-public value from the public-page request/response or add a narrowly scoped allowlist entry if this is expected.',
+  ].join('\n');
 }
