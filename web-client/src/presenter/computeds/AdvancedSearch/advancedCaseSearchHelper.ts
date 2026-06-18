@@ -212,14 +212,9 @@ const formatCaseSearchResultRecords = ({
     }
 
     if (sortColumn === 'receivedAt') {
-      const aDate = a.receivedAt;
-      const bDate = b.receivedAt;
-
-      if (!aDate && !bDate) return 0;
-      if (!aDate) return 1;
-      if (!bDate) return -1;
-
-      return dateStringsCompared(aDate, bDate) * direction;
+      if (!a.receivedAt || !b.receivedAt)
+        return Number(!a.receivedAt) - Number(!b.receivedAt);
+      return dateStringsCompared(a.receivedAt, b.receivedAt) * direction;
     }
 
     const aValue = getSortValue(a, sortColumn);
