@@ -98,6 +98,7 @@ SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh $ENV)
 
 {
   echo "export AWS_REGION=${REGION}"
+  echo "export CIRCLE_SHA1=${CIRCLE_SHA1}"
   echo "export COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}"
   echo "export CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh $ENV)"
   echo "export DEPLOYING_COLOR=$(./scripts/ssm/get-deploying-color.sh $ENV)"
