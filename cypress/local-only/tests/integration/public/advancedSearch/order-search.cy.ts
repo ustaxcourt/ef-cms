@@ -38,6 +38,12 @@ describe('Order Search', () => {
     searchForDocuments();
 
     cy.get('table.search-results');
+    cy.get('[data-testid="sort-button-filed-date"] [title]').should(
+      'have.attr',
+      'title',
+      'Newest to oldest',
+    );
+
     getColumnTextFields('search-result-filed-date-column').then(
       columnTextFields => {
         const sortedColumnsTextFieldsDesc = [...columnTextFields]
@@ -48,6 +54,12 @@ describe('Order Search', () => {
     );
 
     cy.get('[data-testid="sort-button-filed-date"]').click();
+    cy.get('[data-testid="sort-button-filed-date"] [title]').should(
+      'have.attr',
+      'title',
+      'Oldest to newest',
+    );
+
     getColumnTextFields('search-result-filed-date-column').then(
       columnTextFields => {
         const sortedColumnsTextFieldsDesc = [...columnTextFields].sort(

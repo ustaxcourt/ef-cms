@@ -209,7 +209,7 @@ export const DocumentSearchResults = connect(
                     <tr>
                       <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
-                          ascText={SORT_ASCENDING_TEXT.string}
+                          ascText={SORT_ASCENDING_TEXT.date}
                           currentlySortedField={
                             advancedDocumentSearchHelper.sortColumn
                           }
@@ -217,7 +217,7 @@ export const DocumentSearchResults = connect(
                             advancedDocumentSearchHelper.sortDirection
                           }
                           defaultSortOrder={ASCENDING}
-                          descText={SORT_DESCENDING_TEXT.string}
+                          descText={SORT_DESCENDING_TEXT.date}
                           hasRows={true}
                           sortField="formattedFiledDate"
                           title="Filed Date"
