@@ -13,7 +13,8 @@ export const awaitCoversheetCompleteAction = async ({
   // isCoversheetNeededAction forwards the full pending list; the legacy
   // single-id prop is kept as a fallback for websocket payloads that
   // surface only docketEntryId.
-  const docketEntryIds: string[] = props.docketEntryIds ?? [props.docketEntryId];
+  const docketEntryIds: string[] =
+    props.docketEntryIds ?? (props.docketEntryId ? [props.docketEntryId] : []);
 
   await pollForCoversheetComplete({
     applicationContext,

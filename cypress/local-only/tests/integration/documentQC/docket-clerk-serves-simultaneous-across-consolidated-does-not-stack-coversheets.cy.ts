@@ -70,9 +70,9 @@ describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', 
         });
         cy.get('#consolidated-group-all').check({ force: true });
         cy.contains('label', 'Respondent').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
         cy.showsSuccessMessage(true);
 
         // Pre-QC sanity check: file-time coversheet on every case.

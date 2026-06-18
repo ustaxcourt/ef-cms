@@ -44,13 +44,15 @@ describe('Docket Clerk paper-files and serves immediately — coversheet on dock
         .contains(/^Notice$/)
         .click();
 
-      cy.get('input#date-received-picker').type('11/01/2023');
+      cy.get(
+        '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
+      ).type('11/01/2023');
       cy.get('input#free-text').type(title);
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
-        selector: 'input#primaryDocumentFile-file',
+        selector: '[data-testid="primaryDocumentFile-file-input"',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
 

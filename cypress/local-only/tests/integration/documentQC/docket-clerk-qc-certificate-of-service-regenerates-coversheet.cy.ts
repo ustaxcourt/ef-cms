@@ -57,8 +57,10 @@ describe('Docket Clerk QC Certificate of Service edit regenerates the coversheet
         .click();
 
       // Toggle Certificate of Service on, supply a date, and save.
-      cy.get('#certificate-of-service').check({ force: true });
-      cy.get('input#service-date-picker').type('01/01/2023');
+      cy.get('[data-testid="certificate-of-service-label"]').click();
+      cy.get(
+        '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+      ).type('01/01/2023');
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
       cy.get(`[data-testid=work-item-${docketNumber}]`).should('not.exist');

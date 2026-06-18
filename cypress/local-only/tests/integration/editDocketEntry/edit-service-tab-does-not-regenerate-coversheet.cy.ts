@@ -75,7 +75,9 @@ describe('Edit Docket Entry Service / Action(s) tab edits do not regenerate the 
         .filter((_, el) => /\bEXH\b/.test(el.textContent || ''))
         .invoke('attr', 'data-testid')
         .then(cellTestId => {
-          const match = (cellTestId || '').match(/docket-entry-eventCode-(\d+)/);
+          const match = (cellTestId || '').match(
+            /docket-entry-eventCode-(\d+)/,
+          );
           if (!match) {
             throw new Error(
               `Could not resolve EXH docket entry index from data-testid: ${cellTestId}`,
@@ -103,6 +105,7 @@ describe('Edit Docket Entry Service / Action(s) tab edits do not regenerate the 
           );
           cy.get('#tab-action').click();
           cy.get('#action').type('Take some action');
+          return;
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
 

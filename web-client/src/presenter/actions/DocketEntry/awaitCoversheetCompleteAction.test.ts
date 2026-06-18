@@ -47,6 +47,18 @@ describe('awaitCoversheetCompleteAction', () => {
     );
   });
 
+  it('falls back to an empty array if no docketEntryIds or legacy docketEntryId are provided', async () => {
+    await runAction(awaitCoversheetCompleteAction, {
+      modules: { presenter },
+      props: {},
+      state: { caseDetail: { docketNumber: '123-45' } },
+    });
+
+    expect(
+      mockPollForCoversheetComplete.mock.calls[0][0].docketEntryIds,
+    ).toStrictEqual([]);
+  });
+
   it('does not call any interactor — only the polling utility', async () => {
     await runAction(awaitCoversheetCompleteAction, {
       modules: { presenter },

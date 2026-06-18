@@ -41,13 +41,15 @@ describe('Docket clerk paper-files across consolidated cases', () => {
         selectTypeaheadInput('primary-document-type-search', 'M115');
         selectTypeaheadInput('secondary-document-type-search', 'NCON');
 
-        cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
+        cy.get('[data-testid="filed-by-option"]')
+          .contains('Petitioner')
+          .click();
         cy.get('[data-testid="objections-No"]').click();
 
         cy.get('[data-testid="upload-pdf-button"]').click();
         attachFile({
           filePath: '../../helpers/file/sample.pdf',
-          selector: 'input#primaryDocumentFile-file',
+          selector: '[data-testid="primaryDocumentFile-file-input"',
           selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
         });
 

@@ -43,9 +43,9 @@ describe('Petitioner files a Simultaneous Answering Brief', () => {
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
-      cy.get('#submit-document').click();
+      cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      cy.get('#submit-document').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
       // Petitioners cannot view their own SIAB on the docket record until it
       // is served, so verify the success alert and case detail page instead.
       cy.showsSuccessMessage(true);
@@ -55,10 +55,7 @@ describe('Petitioner files a Simultaneous Answering Brief', () => {
       // the document already has 1 coversheet (sample.pdf 1 page + 1 = 2).
       loginAsDocketClerk();
       goToCase(docketNumber);
-      cy.contains(
-        '[data-testid^="docket-entry-eventCode-"]',
-        'SIAB',
-      )
+      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'SIAB')
         .parents('tr')
         .find('.number-of-pages')
         .should('have.text', '2');
@@ -86,17 +83,11 @@ describe('Petitioner files a Simultaneous Answering Brief', () => {
       // prepends a 2nd service-stamped coversheet on top of the file-time
       // coversheet, so numberOfPages = 3 (sample 1 page + 2 coversheets).
       goToCase(docketNumber);
-      cy.contains(
-        '[data-testid^="docket-entry-eventCode-"]',
-        'SIAB',
-      )
+      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'SIAB')
         .parents('tr')
         .find('.number-of-pages')
         .should('have.text', '3');
-      cy.contains(
-        '[data-testid^="docket-entry-eventCode-"]',
-        'SIAB',
-      )
+      cy.contains('[data-testid^="docket-entry-eventCode-"]', 'SIAB')
         .parents('tr')
         .find('[data-testid^="docket-entry-servedPartiesCode-"]')
         .should('not.be.empty');

@@ -69,7 +69,9 @@ describe('Edit Docket Entry Certificate of Service date edit alone leaves the co
         .filter((_, el) => /\bEXH\b/.test(el.textContent || ''))
         .invoke('attr', 'data-testid')
         .then(cellTestId => {
-          const match = (cellTestId || '').match(/docket-entry-eventCode-(\d+)/);
+          const match = (cellTestId || '').match(
+            /docket-entry-eventCode-(\d+)/,
+          );
           if (!match) {
             throw new Error(
               `Could not resolve EXH docket entry index from data-testid: ${cellTestId}`,
@@ -80,8 +82,10 @@ describe('Edit Docket Entry Certificate of Service date edit alone leaves the co
 
           // Step 1: toggle CoS on with an initial date — positive regen.
           cy.visit(editMetaUrl);
-          cy.get('#certificate-of-service').check({ force: true });
-          cy.get('input#service-date-picker').type('01/01/2024');
+          cy.get('[data-testid="certificate-of-service-label"]').click();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+          ).type('01/01/2024');
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
           goToCase(docketNumber);
@@ -90,8 +94,12 @@ describe('Edit Docket Entry Certificate of Service date edit alone leaves the co
           // Step 2: change ONLY the CoS date (CoS stays on) — no regen.
           cy.visit(editMetaUrl);
           cy.get('#certificate-of-service').should('be.checked');
-          cy.get('input#service-date-picker').clear();
-          cy.get('input#service-date-picker').type('02/15/2024');
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+          ).clear();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+          ).type('02/15/2024');
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
           goToCase(docketNumber);
