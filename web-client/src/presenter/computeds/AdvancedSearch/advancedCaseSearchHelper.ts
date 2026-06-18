@@ -225,8 +225,10 @@ const formatCaseSearchResultRecords = ({
     const aValue = getSortValue(a, sortColumn);
     const bValue = getSortValue(b, sortColumn);
 
-    if (sortColumn === 'petitionerStateNames' && (!aValue || !bValue)) {
-      return Number(!aValue) - Number(!bValue);
+    if (sortColumn === 'petitionerStateNames') {
+      if (!aValue && !bValue) return 0;
+      if (!aValue) return 1;
+      if (!bValue) return -1;
     }
 
     return aValue.localeCompare(bValue) * direction;
