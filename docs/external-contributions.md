@@ -4,7 +4,13 @@ For an overview of the project, refer to [What is DAWSON](/what-is-dawson.md).
 
 # Running Locally
 
-Refer to [Running Locally](/running-locally) to get started.
+Refer to [Running Locally](/running-locally) to get started. If you are using VS Code, also follow the [VS Code Setup](/vscode-setup.md) instructions to get the recommended extensions and workspace settings.
+
+# Development Lifecycle
+
+Refer to [PR Workflow](/pr-workflow.md) for an overview of the development lifecycle.  The following diagram is a visual representation of the workflow.
+
+![Development Lifecycle Flowchart](./USTC-development-process.drawio.png)
 
 # Making Changes
 
@@ -12,69 +18,141 @@ Refer to [Running Locally](/running-locally) to get started.
 
 Take note of the following branches.
 
-- `court/test` (kept up to date with `court/staging`, but a staging environment for tests to run and the PO to verify work)
-- `court/staging` (kept up to date with `court/prod`, but also a staging environment for the upcoming deploy; any new work branches off this branch)
-- `court/prod` (the current version which is running on production)
+- `upstream/test` (kept up to date with `upstream/staging`, this branch corresponds to the primary testing environment for testing and PO verification)
+- `upstream/staging` (the repository's main branch; corresponds to a staging environment for the upcoming deploy; any new work branches off this branch)
+- `upstream/prod` (the current version which is running on production)
 
-?> Changes are committed to the `court/staging` branch which requires us to back merge changes into our in-progress branches so we are up-to-date.
+?> Changes are committed to the `upstream/staging` branch which requires us to back merge changes into our in-progress branches so we are up-to-date.
 
-?> Note that this document assumes you have chosen `court` as the name of your upstream for the US Tax Court fork. If you have chosen something else, say `ustaxcourt`, any reference to `court/{branch_name}` refers to `{upstream}/{branch_name}`.
+?> Note that this document assumes you have chosen `upstream` as the name of your upstream for the US Tax Court fork. If you have chosen something else, say `ustaxcourt`, any reference to `upstream/{branch_name}` refers to `{upstream}/{branch_name}`.
 
-### External Contributor
+## External Contributor
 
 Below is a general overview of the workflow that would best prepare your contribution for inclusion in the project.
 
-1. Branch from `court/staging` into a branch in a separate fork.
-    1. How you work in your own fork is up to you, but keep in mind the public nature of the main fork.
-        1. Your branch name should be professional.
-        1. Your commit messages should be professional.
+1. Branch from `upstream/staging` into a branch in your fork.
+   1. How you work in your own fork is up to you, but keep in mind the public nature of the main fork.
+      1. Your branch name should be professional.
+      1. Your commit messages should be professional.
 1. Work on the issue.
-    1. If your work is of a nature such that testing in a deployed environment is needed, contact [Dawson support](dawson.support@ustaxcourt.gov).
-    1. While work is ongoing, other work may be merged into `court/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest.
+   1. If your work is of a nature such that testing in a deployed environment is needed, contact [DAWSON support](dawson.support@ustaxcourt.gov).
+   1. While work is ongoing, other work may be merged into `upstream/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest:
+      ```bash
+      npm run git:backmerge-staging
+      ```
 1. Prior to submitting any pull requests, please perform [Pre-PR Validation](#pre-pr-validation)
-1. At some point, you presume the work is done.  The work needs to be reviewed by the Court and PRs created and merged.
-    - This can be accomplished in two ways.
-        - Verification occurs in the `test` environment.
-            1. Create the PR from your branch to `court/test`.
-               1. If there are merge conflicts refer to [Handling Merge Conflicts](#handling-merge-conflicts)
-            1. Court engineering staff will respond to your PR.
-            1. If the Court engineers merge your PR, do not delete your feature branch, make a PR to `court/staging` from your branch.
-        - Verification in a deployed environment is not needed.
-            1. Create the PR from your branch to `court/staging`.
-            1. Court engineering staff will respond to your PR.
-            1. If your branch is approved and merged, you have our thanks for your contribution.
+1. At some point, you presume the work is done.  The work needs to be reviewed by the Court and PRs created and merged.  This can be accomplished in two ways.
+   - Verification occurs in the `test` environment.
+      1. Create the PR from your branch to `upstream/test`:
+         ```bash
+         npm run git:pr-to test
+         ```
+         1. If there are merge conflicts refer to [Handling Merge Conflicts](#handling-merge-conflicts)
+      1. Court engineering staff will respond to your PR.
+      1. If the Court engineers merge your PR, do not delete your feature branch, make a PR to `upstream/staging` from your branch.
+   - Verification in a deployed environment is not needed.
+      1. Create the PR from your branch to `upstream/staging`.
+      1. Court engineering staff will respond to your PR.
+      1. If your branch is approved and merged, you have our thanks for your contribution.
 1. If there is PO feedback, address the feedback on the original feature branch.  Go back to step 3.
-1. If your work passes PO review, congratulations!  Create a PR from your original feature branch to `court/staging`.  You will need to wait for a court engineer to approve your PR and merge it.  Your code is now in `court/staging` and ready to fly to production on the next deployment!
+1. If your work passes PO review, congratulations!  Create a PR from your original feature branch to `upstream/staging`.  You will need to wait for a court engineer to approve your PR and merge it.  Your code is now in `upstream/staging` and ready to fly to production on the next deployment!
 
-?> We will be civil, but we are opinionated about the architecture and our coding standards. Refer to [Pull Request (PR) Review Process](code-review.md) for more about coding standards. We may use [emoji's](https://github.com/erikthedeveloper/code-review-emoji-guide) in our comments.
+?> We will be civil, but we are opinionated about the architecture and our coding standards. Refer to [Pull Request (PR) Review Process](code-review.md) for more about coding standards. We may use [emojis](https://github.com/erikthedeveloper/code-review-emoji-guide) in our comments.
 
 ?> We will expect civil behavior from contributors as well, and reserve the right to close PR's for unacceptable behavior. For more on what is considered unacceptable behavior, refer to [18F Open Source Policy GitHub repository](https://github.com/18f/open-source-policy).
 
-#### Pre-PR Validation
+## Pre-PR Validation
 
 Please follow these steps to validate your changes before submitting a pull request:
 
-1. Fork the repository and create a branch from `staging`.
-1. Run `npm install` in the repository root.
-    1. Do not delete `package-lock.json`.
-1. If reasonable for the changes being made, write tests.
-1. Run `npm run lint:fix` in the repository root.
-1. Run the following scripts, ensuring no failures:
-    1. Run first in separate terminals:
-       1. `npm run start:api:ci`
-       1. `npm run start:client:ci`
-       1. `npm run start:public:ci`
-    1. `npm run test:api`
-    1. `npm run test:client:unit`
-    1. `npm run cypress:integration`
-    1. `npm run test:scripts`
-    1. `npm run test:shared`
-       
+1. Ensure you have achieved full test coverage for the code you have changed or added.
+   1. Unit tests: coverage requirements are in the owning suite's `jest*.config.ts` file.
+   1. Integration tests: all functionality should be covered for every applicable user role.
+   2. Accessibility tests: all user-facing functionality should be covered by an accessibility test that calls `checkA11y()`.
+1. Start the application locally by invoking the `DAWSON local` run configuration in your IDE as described in [Debugging Locally](./debugging-locally.md), or by running the following scripts in separate terminal sessions:
+    1. API:
+       ```bash
+       npm run start:api
+       ```
+    1. Private Client:
+       ```bash
+       npm run start:client
+       ```
+    1. Public Client:
+       ```bash
+       npm run start:public
+       ```
+1. With the application running, run the following scripts, ensuring no failures:
+   1. API Unit Tests:
+      ```bash
+      npm run test:api
+      ```
+   1. Client Integration Tests:
+      ```bash
+      npm run test:client:integration:ci
+      ```
+   1. Client Unit Tests:
+      ```bash
+      npm run test:client:unit
+      ```
+   1. Cypress Integration Tests:
+      ```bash
+      npm run cypress:integration
+      ```
+   1. Cypress Public Integration Tests:
+      ```bash
+      npm run cypress:integration:public
+      ```
+   1. Cypress Smoke Tests:
+      ```bash
+      npm run cypress:smoketests
+      ```
+   1. Cypress Read-Only Tests:
+      ```bash
+      npm run cypress:readonly
+      ```
+   1. Cypress Public Read-Only Tests:
+      ```bash
+      npm run cypress:readonly:public
+      ```
+   1. Shared Unit Tests:
+      ```bash
+      npm run test:shared
+      ```
+   1. Scripts Unit Tests:
+      ```bash
+      npm run test:scripts
+      ```
 
-#### Handling Merge Conflicts
+## Handling Merge Conflicts
 
-In an effort to keep untested `court/test` changes out of your feature branch, make an intermediate duplicate branch that will contain the resolved merge conflicts. If your feature branch is titled `feature-123` follow these steps:
-1. Create an intermediate duplicate branch while on your feature branch: `git checkout -b intermediate-feature-123`.
-1. Resolve merge conflicts: `git merge court/test`.  You will need to replace `court` with the name of the court's upstream.
-1. Then create the PR between `court/test` and your intermediate feature branch (e.g. `intermediate-feature-123`).
-1. A subsequent PR into `court/staging` would need to be created from your original branch (e.g. `feature-123`).
+In order to keep untested `upstream/test` changes out of your feature branch, PRs to test should be made from an intermediary branch that will contain the resolved merge conflicts. We provide a [convenience script](../scripts/git/pr-to.sh) for creating PRs to `upstream/test` that will automatically create the intermediary branch.
+
+This is the "happy path" for PRs created with the convenience script:
+
+1. Checks out the latest `upstream/test`
+1. Creates a new intermediary branch, based on the checkout of `upstream/test`, called `{feature-branch}-to-test-{timestamp}`
+1. Merges the feature branch into the new intermediary branch
+1. Pushes the intermediary branch to the fork
+1. Opens the browser at the GitHub branch comparison page, comparing the intermediary branch to `upstream/test`
+
+If merge conflicts are encountered, however, the script will stop between steps 3 and 4. At this point you will need to resolve the merge conflicts locally. After resolving the merge conflicts, you will need to perform the rest manually:
+
+1. Determine your org name and the intermediary branch name
+   ```bash
+   export MY_ORG="$(git config --get remote.origin.url | sed -E 's/.*github\.com[:\/]([^\/]+).*/\1/')"
+   export INTERMEDIARY="$(git branch --show-current)"
+   ```
+1. Stage and commit the merge conflict resolution(s) to the intermediary branch
+   ```bash
+   git add .
+   git commit -m "Concise message describing the merge conflict resolution"
+   ```
+1. Push the intermediary branch to your fork
+   ```bash
+   git push --set-upstream origin "$INTERMEDIARY"
+   ```
+1. Open the browser at the GitHub branch comparison page, comparing the intermediary branch to `upstream/test`
+   ```bash
+   open "https://github.com/ustaxcourt/ef-cms/compare/test...${MY_ORG}:${INTERMEDIARY}"
+   ```
