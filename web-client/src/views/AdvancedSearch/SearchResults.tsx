@@ -138,17 +138,9 @@ export const SearchResults = connect(
                     />
                   )}
                   <span
-                    aria-label={
-                      advancedSearchHelper.showManyResultsMessage
-                        ? `Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`
-                        : undefined
-                    }
+                    aria-label={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
                     className="cursor-default"
-                    title={
-                      advancedSearchHelper.showManyResultsMessage
-                        ? `Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`
-                        : undefined
-                    }
+                    title={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
                   >
                     <b className="text-semibold">Count:</b>{' '}
                     <span>
