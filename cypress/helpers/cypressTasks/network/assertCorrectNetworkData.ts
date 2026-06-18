@@ -36,6 +36,18 @@ const SENSITIVE_PATTERNS: Array<{
     },
   ];
 
+const ALLOWLIST: Array<{
+  url?: RegExp;
+  patternName?: string;
+  location?: string;
+}> = [
+    // Example:
+    // {
+    //   url: /\/analytics\/collect/,
+    //   patternName: "UUID",
+    // },
+  ];
+
 function safeStringify(value: unknown): string {
   if (value == null) return "";
 
@@ -51,6 +63,20 @@ function safeStringify(value: unknown): string {
 function redactPreview(match: string): string {
   if (match.length <= 8) return "[redacted]";
   return `${match.slice(0, 4)}...[redacted]...${match.slice(-4)}`;
+}
+
+function isAllowed(finding: SensitiveFinding): boolean {
+  return ALLOWLIST.some((rule) => {
+    const urlMatches = rule.url ? rule.url.test(finding.url) : true;
+    const patternMatches = rule.patternName
+      ? rule.patternName === finding.patternName
+      : true;
+    const locationMatches = rule.location
+      ? rule.location === finding.location
+      : true;
+
+    return urlMatches && patternMatches && locationMatches;
+  });
 }
 
 function scanText(args: {
@@ -73,7 +99,9 @@ function scanText(args: {
         matchPreview: redactPreview(match[0]),
       };
 
-      findings.push(finding);
+      if (!isAllowed(finding)) {
+        findings.push(finding);
+      }
     }
   }
 
