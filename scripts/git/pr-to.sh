@@ -20,7 +20,7 @@ else
   git fetch upstream
   [[ -z $(git ls-remote --heads upstream "$TARGET") ]] && echo "Target branch does not exist" && exit 1
 fi
-[[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
+[[ -n $(git status --porcelain) ]] && echo "Stash or commit and push local changes first" && exit 1
 
 TARGET_TS="${TARGET}-$(date +%s)"
 INTERMEDIARY="${SOURCE}-to-${TARGET_TS}"

@@ -17,11 +17,10 @@ else
   [[ -n "$UPSTREAM_URL" ]] && [[ "$UPSTREAM_URL" != "$COURT_REPO" ]] && git remote set-url upstream "$COURT_REPO"
   git fetch upstream
 fi
-[[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
+[[ -n $(git status --porcelain) ]] && echo "Stash or commit and push local changes first" && exit 1
 
 on_branch=$(git branch --show-current)
-[[ "$TARGET" != "$on_branch" ]] && git checkout "$TARGET" && git pull
-
+[[ "$TARGET" != "$on_branch" ]] && git checkout "$TARGET" && git pull --ff-only origin "$TARGET"
 if [[ "$MY_ORG" == "$COURT_ORG" ]]; then
   git merge "origin/${SOURCE}" --no-commit
 else
