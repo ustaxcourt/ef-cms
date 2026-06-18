@@ -144,7 +144,8 @@ data "aws_caller_identity" "current" {}
 # s3://<bucket>/<releaseId>/index.[hash].js.map by deploy-ui.sh. The bucket must
 # be in the same region as the app monitor (us-east-1).
 resource "aws_s3_bucket" "rum_sourcemaps" {
-  bucket = "rum-sourcemaps.${var.domain}"
+  bucket        = "rum-sourcemaps.${var.domain}"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_public_access_block" "rum_sourcemaps" {
