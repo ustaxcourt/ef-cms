@@ -9,9 +9,7 @@ on:
       - '.nvmrc'
       - 'docs/**'
   push:
-    # TEMP(10094): added feature branch to validate the CodeQL job on push.
-    # REVERT to `branches: [staging]` once CodeQL is confirmed working.
-    branches: [staging, 10094-devex-vuln-scanning]
+    branches: [staging]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -82,6 +80,45 @@ jobs:
           sarif_file: semgrep-results.sarif
           category: semgrep
 
+  checkov:
+    name: Checkov IaC Scan
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install Checkov
+        run: pip install checkov==3.2.346
+
+      - name: Run Checkov
+        run: |
+          checkov \
+            --config-file .checkov.yml \
+            --output cli \
+            --output sarif \
+            --output-file-path console,checkov-results.sarif \
+            --hard-fail-on CKV_AWS_57,CKV_AWS_20,CKV_AWS_23,CKV_AWS_40,CKV_AWS_7
+
+      - name: Upload SARIF
+        if: >-
+          always() &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: checkov-results.sarif
+          category: checkov
+
   codeql:
     name: CodeQL Deep Analysis
     if: github.event_name == 'push'
@@ -112,9 +149,22 @@ jobs:
 
   security-gate:
     name: Security Gate (SAST)
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
-    needs: [semgrep]
+    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    needs: [semgrep, checkov]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
-      - run: echo "SAST gate passed"
+      - name: Check scan outcomes
+        env:
+          SEMGREP_RESULT: ${{ needs.semgrep.result }}
+          CHECKOV_RESULT: ${{ needs.checkov.result }}
+        run: |
+          if [[ "$SEMGREP_RESULT" == "failure" ]]; then
+            echo "Semgrep scan failed"
+            exit 1
+          fi
+          if [[ "$CHECKOV_RESULT" == "failure" ]]; then
+            echo "Checkov scan failed"
+            exit 1
+          fi
+          echo "SAST gate passed"

@@ -1,0 +1,21 @@
+framework:
+  - terraform
+  - dockerfile
+  - github_actions
+
+directory:
+  - web-api/terraform/applyables/account-specific
+  - web-api/terraform/applyables/allColors
+  - web-api/terraform/applyables/blue
+  - web-api/terraform/applyables/green
+  - web-api/terraform/applyables/reindex-cron
+  - web-api/terraform/applyables/stale-cases-email-cron
+  - web-api/terraform/applyables/switch-colors-cron
+  - web-api/terraform/applyables/terraform-state-backend
+  - web-api/terraform/applyables/wait-for-workflow
+
+skip-path:
+  - node_modules
+  - .terraform
+
+compact: true
