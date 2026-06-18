@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+# Capture the commit SHA before secrets are loaded — load-environment-from-secrets.sh
+# sources the deploy secret which can overwrite CIRCLE_SHA1 if that key exists in the
+# secret, making RUM_RELEASE_ID empty and breaking source-map deobfuscation.
+RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
+echo "Dummy $CIRCLE_SHA1"
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
