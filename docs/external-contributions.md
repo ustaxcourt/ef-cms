@@ -1,14 +1,14 @@
 # What is DAWSON
 
-For an overview of the project, refer to [What is DAWSON](/what-is-dawson.md).
+For an overview of the project, refer to [What is DAWSON](./what-is-dawson.md).
 
 # Running Locally
 
-Refer to [Running Locally](/running-locally) to get started. If you are using VS Code, also follow the [VS Code Setup](/vscode-setup.md) instructions to get the recommended extensions and workspace settings.
+Refer to [Running Locally](./running-locally.md) to get started. If you are using VS Code, also follow the [VS Code Setup](./vscode-setup.md) instructions to get the recommended extensions and workspace settings.
 
 # Development Lifecycle
 
-Refer to [PR Workflow](/pr-workflow.md) for an overview of the development lifecycle.  The following diagram is a visual representation of the workflow.
+Refer to [PR Workflow](./pr-workflow.md) for an overview of the development lifecycle.  The following diagram is a visual representation of the workflow.
 
 ![Development Lifecycle Flowchart](./USTC-development-process.drawio.png)
 
