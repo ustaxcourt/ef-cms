@@ -10,12 +10,15 @@ set -e
 
 ./web-client/build-dist.sh "${ENV}" "${DEPLOYING_COLOR}"
 
-# private app
-aws s3 sync dist "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete
+# upload sourcemaps to private RUM bucket before deploying the app bundle
+aws s3 sync dist "s3://rum-sourcemaps.${EFCMS_DOMAIN}" --exclude "*" --include "*.map"
+
+# private app (exclude sourcemaps — they are in the private RUM bucket only)
+aws s3 sync dist "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --exclude "*.map"
 aws s3 cp "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" --metadata-directive REPLACE --content-type text/html --cache-control "no-cache, no-store, must-revalidate"
 
 # failover
-aws s3 sync dist "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --cache-control no-cache
+aws s3 sync dist "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --exclude "*.map" --cache-control no-cache
 aws s3 cp "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
 
 # invalidate cloudfront cache for this color
