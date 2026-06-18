@@ -14,11 +14,10 @@ if [[ "$MY_ORG" == "$COURT_ORG" ]]; then
   [[ "$TARGET" == "$SOURCE" ]] && echo "Source and target branches are the same" && exit 1
   [[ -z $(git ls-remote --heads origin "$TARGET") ]] && echo "Target branch does not exist" && exit 1
 else
-  REMOTES=$(git remote)
-  if ! echo "$REMOTES" | grep -q "upstream"; then
-    git remote add upstream "$COURT_REPO"
-    git fetch upstream
-  fi
+  UPSTREAM_URL="$(git remote get-url upstream 2>/dev/null || true)"
+  [[ -z "$UPSTREAM_URL" ]] && git remote add upstream "$COURT_REPO"
+  [[ -n "$UPSTREAM_URL" ]] && [[ "$UPSTREAM_URL" != "$COURT_REPO" ]] && git remote set-url upstream "$COURT_REPO"
+  git fetch upstream
   [[ -z $(git ls-remote --heads upstream "$TARGET") ]] && echo "Target branch does not exist" && exit 1
 fi
 [[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
@@ -27,10 +26,11 @@ TARGET_TS="${TARGET}-$(date +%s)"
 INTERMEDIARY="${SOURCE}-to-${TARGET_TS}"
 if [[ "$MY_ORG" == "$COURT_ORG" ]]; then
   git checkout "$TARGET"
+  git pull --ff-only origin "$TARGET"
 else
   git checkout -b "$TARGET_TS" "upstream/${TARGET}"
+  git pull --ff-only upstream "$TARGET"
 fi
-git pull
 git checkout -b "$INTERMEDIARY"
 git merge "origin/${SOURCE}" --no-commit
 
