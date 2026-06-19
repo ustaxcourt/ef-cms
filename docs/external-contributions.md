@@ -78,19 +78,25 @@ Please follow these steps to validate your changes before submitting a pull requ
    1. Unit tests: coverage requirements are in the owning suite's `jest*.config.ts` file.
    1. Integration tests: all functionality should be covered for every applicable user role.
    1. Accessibility tests: all user-facing functionality should be covered by an accessibility test that calls `checkA11y()`.
-1. Start the application locally by invoking the ▶️ `DAWSON local` run configuration in your IDE as described in [Debugging Locally](./debugging-locally.md), or by running the following scripts in separate terminal sessions:
-    1. API:
-       ```bash
-       npm run start:api
-       ```
-    1. Private Client:
-       ```bash
-       npm run start:client
-       ```
-    1. Public Client:
-       ```bash
-       npm run start:public
-       ```
+1. Start the application locally, utilizing one of the following methods:
+   - invoking the ▶️ `DAWSON local` run configuration in your IDE as described in [Debugging Locally](./debugging-locally.md)
+   - running the following commands in three separate terminal sessions:
+      1. API:
+         ```bash
+         npm run start:api
+         ```
+      1. Private Client:
+         ```bash
+         npm run start:client
+         ```
+      1. Public Client:
+         ```bash
+         npm run start:public
+         ```
+   - prompting an AI agent:
+      ```markdown
+      Please start all three DAWSON processes locally in the `.devcontainer` as described in `AGENTS.md`.
+      ```
 1. With the application running, run the following scripts, ensuring no failures:
    1. API Unit Tests:
       ```bash
@@ -139,7 +145,7 @@ Please follow these steps to validate your changes before submitting a pull requ
    The acceptance criteria are:
      - {list the acceptance criteria}
 
-   Please review all code in the local branch against `upstream/staging` utilizing the code review guidelines in `AGENTS.md`, ensuring that all acceptance criteria are met, and that no regressions are introduced.
+   Please review all changes in the local branch against `upstream/staging` utilizing the code review guidelines in `AGENTS.md`, ensuring that all acceptance criteria are met and that no regressions are introduced.
 
    Run all relevant tests, utilizing the test suite identification instructions in `AGENTS.md`, and ensure sufficient coverage for all added and modified code.
    ```
