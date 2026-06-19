@@ -1,0 +1,74 @@
+name: Security - Supply Chain
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # THE ticket's core ask: "block merge on critical/high vulns unless risk-accepted."
+  # Scans the PR diff (deps this PR adds/changes). fail-on-severity gates on
+  # high+critical; allow-ghsas is the "unless risk-accepted" allowlist (adding a
+  # GHSA here, via a reviewed PR, IS the acceptance record). Free on public repos.
+  dependency-review:
+    name: Dependency Review (PR gate)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: high
+          allow-ghsas: ''
+          # ROLLOUT GUARD: warn-only logs findings without failing. Remove this
+          # (and require the check in branch protection) to make it blocking.
+          # >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          # To enable the merge gate: (1) set warn-only to false (or delete this
+          # line), AND (2) an admin must add this check to branch protection
+          # ("require status checks to pass"). Both are required — neither alone
+          # blocks a merge. Do not flip without Jim's sign-off.
+          warn-only: true
+
+  # Malicious-package signals (NOT covered by vuln-DB scanners or npm ci): flags
+  # non-https resolved URLs, host substitution (dependency-confusion / typosquat
+  # redirection), and integrity-hash problems in the lockfile.
+  lockfile-lint:
+    name: Lockfile integrity
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: lockfile-lint
+        continue-on-error: true
+        run: |
+          npx lockfile-lint@5.0.0 \
+            --path package-lock.json \
+            --type npm \
+            --allowed-hosts npm \
+            --validate-https \
+            --validate-integrity
