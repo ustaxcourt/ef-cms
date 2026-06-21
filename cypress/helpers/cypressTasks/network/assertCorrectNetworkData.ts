@@ -1,106 +1,272 @@
 import { CapturedNetworkPayload } from '../../../local-only/support/commands';
+import { PublicCase } from '../../../../shared/src/business/entities/cases/PublicCase';
+import { PublicDocketEntry } from '../../../../shared/src/business/entities/cases/PublicDocketEntry';
+import { PublicContact } from '../../../../shared/src/business/entities/cases/PublicContact';
+import { RestrictedCase } from '../../../../shared/src/business/entities/cases/RestrictedCase';
+import { PublicUser } from '../../../../shared/src/business/entities/PublicUser';
+import { PublicDocumentSearchResult } from '../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { PublicCaseDTO } from '../../../../shared/src/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '../../../../shared/src/business/dto/cases/RestrictedCaseDTO';
 
-export type SensitiveFinding = {
+export type UnauthorizedFieldFinding = {
   url: string;
   method: string;
   location: string;
-  patternName: string;
+  entityName?: string;
+  fieldName: string;
   matchPreview: string;
 };
 
-export type SensitiveNetworkScanResult = {
+type InternalUnauthorizedFieldFinding = Omit<
+  UnauthorizedFieldFinding,
+  'url' | 'method' | 'location'
+>;
+
+export type PublicDataValidationResult = {
   passed: boolean;
-  findings: SensitiveFinding[];
+  findings: UnauthorizedFieldFinding[];
 };
 
-const SENSITIVE_PATTERNS: Array<{
-  name: string;
-  regex: RegExp;
-}> = [
-  {
-    name: 'SSN-like value',
-    regex: /\b\d{3}-\d{2}-\d{4}\b/g,
-  },
-  {
-    name: 'Email address',
-    regex: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-  },
-  {
-    name: 'access key',
-    regex: /\bAKIA[0-9A-Z]{16}\b/g,
-  },
-  {
-    name: 'Secret-like key',
-    regex:
-      /["']?(apiKey|api_key|accessToken|access_token|refreshToken|refresh_token|secret|password|token)["']?\s*[:=]\s*["'][^"']{8,}["']/gi,
-  },
-];
+const NON_API_ASSET_PATH_REGEX =
+  /\.(?:avif|bmp|css|eot|gif|ico|jpe?g|js|map|otf|png|svg|ttf|webp|woff2?)$/i;
 
-const ALLOWLIST: Array<{
-  url?: RegExp;
-  patternName?: string;
-  location?: string;
-}> = [
-  // {
-  //   url:
-  //   patternName: "Email address",
-  // },
-];
+const PUBLIC_ENTITY_FACTORIES = {
+  PublicCase: (): PublicCase =>
+    new PublicCase(
+      {},
+      {
+        authorizedUser: undefined,
+      },
+    ),
+  PublicContact: (): PublicContact => new PublicContact({}),
+  PublicDocketEntry: (): PublicDocketEntry => new PublicDocketEntry({}),
+  PublicDocumentSearchResult: (): PublicDocumentSearchResult =>
+    new PublicDocumentSearchResult({}),
+  RestrictedCase: (): RestrictedCase =>
+    new RestrictedCase({ docketNumber: '' }),
+  PublicUser: (): PublicUser => new PublicUser({}),
+} as const;
 
-function safeStringify(value: unknown): string {
-  if (value == null) return '';
+const DTO_ENTITY_FACTORIES = {
+  PublicCaseDTO: (): PublicCaseDTO =>
+    new PublicCaseDTO(PUBLIC_ENTITY_FACTORIES.PublicCase().toRawObject()),
+  RestrictedCaseDTO: (): RestrictedCaseDTO =>
+    new RestrictedCaseDTO(
+      PUBLIC_ENTITY_FACTORIES.RestrictedCase().toRawObject(),
+    ),
+} as const;
 
-  if (typeof value === 'string') return value;
+const ALLOWED_ENTITY_FACTORIES = {
+  ...PUBLIC_ENTITY_FACTORIES,
+  ...DTO_ENTITY_FACTORIES,
+} as const;
 
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return String(value);
+function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
+  const allowedFieldsByEntityName = new Map<string, Set<string>>();
+
+  for (const [entityName, createEntity] of Object.entries(
+    ALLOWED_ENTITY_FACTORIES,
+  )) {
+    const instance = createEntity();
+    const allowedFields = new Set<string>(Object.keys(instance));
+    allowedFields.add('entityName');
+    allowedFieldsByEntityName.set(entityName, allowedFields);
   }
+
+  return allowedFieldsByEntityName;
 }
 
-function redactPreview(match: string): string {
-  if (match.length <= 8) return '[redacted]';
-  return `${match.slice(0, 4)}...[redacted]...${match.slice(-4)}`;
+const ALLOWED_FIELDS_BY_ENTITY_NAME = extractAllowedFieldsByEntityName();
+
+function getHeaderValue(
+  headers: Record<string, unknown> | undefined,
+  headerName: string,
+): string | undefined {
+  if (!headers) {
+    return undefined;
+  }
+
+  const directValue = headers[headerName];
+  if (typeof directValue === 'string') {
+    return directValue;
+  }
+
+  const normalizedHeaderName = headerName.toLowerCase();
+  const matchingKey = Object.keys(headers).find(
+    key => key.toLowerCase() === normalizedHeaderName,
+  );
+
+  if (!matchingKey) {
+    return undefined;
+  }
+
+  const matchingValue = headers[matchingKey];
+  return typeof matchingValue === 'string' ? matchingValue : undefined;
 }
 
-function isAllowed(finding: SensitiveFinding): boolean {
-  return ALLOWLIST.some(rule => {
-    const urlMatches = rule.url ? rule.url.test(finding.url) : true;
-    const patternMatches = rule.patternName
-      ? rule.patternName === finding.patternName
-      : true;
-    const locationMatches = rule.location
-      ? rule.location === finding.location
-      : true;
+function shouldValidateResponseBody(payload: CapturedNetworkPayload): boolean {
+  if (!payload.responseBody) {
+    return false;
+  }
 
-    return urlMatches && patternMatches && locationMatches;
+  if (NON_API_ASSET_PATH_REGEX.test(payload.url)) {
+    return false;
+  }
+
+  const contentType = getHeaderValue(payload.responseHeaders, 'content-type');
+  if (contentType && !contentType.toLowerCase().includes('application/json')) {
+    return false;
+  }
+
+  return isRecord(payload.responseBody) || Array.isArray(payload.responseBody);
+}
+
+function shouldValidateRequestBody(payload: CapturedNetworkPayload): boolean {
+  if (!payload.requestBody) {
+    return false;
+  }
+
+  const contentType = getHeaderValue(payload.requestHeaders, 'content-type');
+  if (contentType && !contentType.toLowerCase().includes('application/json')) {
+    return false;
+  }
+
+  return isRecord(payload.requestBody) || Array.isArray(payload.requestBody);
+}
+
+function redactPreview(value: string): string {
+  if (value.length <= 8) return '[redacted]';
+  return `${value.slice(0, 4)}...[redacted]...${value.slice(-4)}`;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getEntityName(value: Record<string, unknown>): string | undefined {
+  const candidateEntityName = value.entityName;
+  return typeof candidateEntityName === 'string'
+    ? candidateEntityName
+    : undefined;
+}
+
+function isNumericValue(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function validateEntityMetadata(args: {
+  path: string;
+  candidateEntityName?: string;
+}): {
+  findings: InternalUnauthorizedFieldFinding[];
+  allowedFields?: Set<string>;
+} {
+  const findings: InternalUnauthorizedFieldFinding[] = [];
+
+  if (!args.candidateEntityName) {
+    return {
+      findings,
+    };
+  }
+
+  const allowedFields = ALLOWED_FIELDS_BY_ENTITY_NAME.get(
+    args.candidateEntityName,
+  );
+
+  if (!allowedFields) {
+    findings.push({
+      entityName: args.candidateEntityName,
+      fieldName: args.path || 'entityName',
+      matchPreview: redactPreview(args.candidateEntityName),
+    });
+  }
+
+  return {
+    allowedFields,
+    findings,
+  };
+}
+
+function validateNumericObject(args: {
+  obj: Record<string, unknown>;
+  path: string;
+}): InternalUnauthorizedFieldFinding[] {
+  const findings: InternalUnauthorizedFieldFinding[] = [];
+
+  for (const [key, value] of Object.entries(args.obj)) {
+    const fieldPath = args.path ? `${args.path}.${key}` : key;
+
+    if (isNumericValue(value)) {
+      continue;
+    }
+
+    if (Array.isArray(value) || isRecord(value)) {
+      findings.push(...findUnauthorizedFields(value, fieldPath));
+      continue;
+    }
+
+    findings.push({
+      fieldName: fieldPath,
+      matchPreview: redactPreview(String(value)),
+    });
+  }
+
+  return findings;
+}
+
+function findUnauthorizedFields(
+  obj: unknown,
+  path: string = '',
+): InternalUnauthorizedFieldFinding[] {
+  const findings: InternalUnauthorizedFieldFinding[] = [];
+
+  if (!isRecord(obj) && !Array.isArray(obj)) {
+    return findings;
+  }
+
+  if (Array.isArray(obj)) {
+    obj.forEach((item, index) => {
+      findings.push(...findUnauthorizedFields(item, `${path}[${index}]`));
+    });
+    return findings;
+  }
+
+  const candidateEntityName = getEntityName(obj);
+
+  if (!candidateEntityName) {
+    return validateNumericObject({
+      obj,
+      path,
+    });
+  }
+
+  const entityMetadata = validateEntityMetadata({
+    candidateEntityName,
+    path,
   });
-}
 
-function scanText(args: {
-  text: string;
-  url: string;
-  method: string;
-  location: string;
-}): SensitiveFinding[] {
-  const findings: SensitiveFinding[] = [];
+  findings.push(...entityMetadata.findings);
 
-  for (const pattern of SENSITIVE_PATTERNS) {
-    const matches = args.text.matchAll(pattern.regex);
+  if (entityMetadata.findings.length > 0 && !entityMetadata.allowedFields) {
+    return findings;
+  }
 
-    for (const match of matches) {
-      const finding: SensitiveFinding = {
-        url: args.url,
-        method: args.method,
-        location: args.location,
-        patternName: pattern.name,
-        matchPreview: redactPreview(match[0]),
-      };
+  for (const [key, value] of Object.entries(obj)) {
+    const fieldPath = path ? `${path}.${key}` : key;
 
-      if (!isAllowed(finding)) {
-        findings.push(finding);
-      }
+    if (
+      entityMetadata.allowedFields &&
+      !entityMetadata.allowedFields.has(key)
+    ) {
+      findings.push({
+        entityName: candidateEntityName,
+        fieldName: fieldPath,
+        matchPreview: redactPreview(String(value).slice(0, 50)),
+      });
+    }
+
+    if (typeof value === 'object' && value !== null) {
+      findings.push(...findUnauthorizedFields(value, fieldPath));
     }
   }
 
@@ -109,40 +275,34 @@ function scanText(args: {
 
 export function assertCorrectNetworkData(
   payloads: CapturedNetworkPayload[],
-): SensitiveNetworkScanResult {
-  const findings = payloads.flatMap(payload => {
-    const scanTargets = [
-      {
-        location: 'url',
-        text: payload.url,
-      },
-      {
-        location: 'requestBody',
-        text: safeStringify(payload.requestBody),
-      },
-      {
-        location: 'responseBody',
-        text: safeStringify(payload.responseBody),
-      },
-      {
-        location: 'requestHeaders',
-        text: safeStringify(payload.requestHeaders),
-      },
-      {
-        location: 'responseHeaders',
-        text: safeStringify(payload.responseHeaders),
-      },
-    ];
+): PublicDataValidationResult {
+  const findings: UnauthorizedFieldFinding[] = [];
 
-    return scanTargets.flatMap(target =>
-      scanText({
-        text: target.text,
-        url: payload.url,
-        method: payload.method,
-        location: target.location,
-      }),
-    );
-  });
+  for (const payload of payloads) {
+    if (shouldValidateResponseBody(payload)) {
+      const bodyFindings = findUnauthorizedFields(payload.responseBody);
+      findings.push(
+        ...bodyFindings.map(finding => ({
+          ...finding,
+          url: payload.url,
+          method: payload.method,
+          location: 'responseBody',
+        })),
+      );
+    }
+
+    if (shouldValidateRequestBody(payload)) {
+      const bodyFindings = findUnauthorizedFields(payload.requestBody);
+      findings.push(
+        ...bodyFindings.map(finding => ({
+          ...finding,
+          url: payload.url,
+          method: payload.method,
+          location: 'requestBody',
+        })),
+      );
+    }
+  }
 
   return {
     passed: findings.length === 0,

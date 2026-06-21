@@ -1,6 +1,6 @@
 import {
-  SensitiveFinding,
-  SensitiveNetworkScanResult,
+  PublicDataValidationResult,
+  UnauthorizedFieldFinding,
 } from '../../helpers/cypressTasks/network/assertCorrectNetworkData';
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
@@ -45,7 +45,7 @@ Cypress.Commands.add('capturePublicPageNetworkTraffic', () => {
 
 Cypress.Commands.add('assertCorrectNetworkData', () => {
   return cy
-    .task<SensitiveNetworkScanResult>(
+    .task<PublicDataValidationResult>(
       'assertCorrectNetworkData',
       capturedNetworkPayloads,
       {
@@ -159,7 +159,7 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
-      assertCorrectNetworkData(): Chainable<SensitiveNetworkScanResult>;
+      assertCorrectNetworkData(): Chainable<PublicDataValidationResult>;
       capturePublicPageNetworkTraffic(): Chainable<CapturedNetworkPayload[]>;
       goToRoute: (args: any) => void;
       keepAliases: (args?: string[]) => void;
@@ -172,23 +172,24 @@ declare global {
   }
 }
 
-function formatSensitiveNetworkFailure(findings: SensitiveFinding[]): string {
-  const groupedByUrl = findings.reduce<Record<string, SensitiveFinding[]>>(
-    (acc, finding) => {
-      const key = `${finding.method} ${finding.url}`;
-      acc[key] ??= [];
-      acc[key].push(finding);
-      return acc;
-    },
-    {},
-  );
+function formatSensitiveNetworkFailure(
+  findings: UnauthorizedFieldFinding[],
+): string {
+  const groupedByUrl = findings.reduce<
+    Record<string, UnauthorizedFieldFinding[]>
+  >((acc, finding) => {
+    const key = `${finding.method} ${finding.url}`;
+    acc[key] ??= [];
+    acc[key].push(finding);
+    return acc;
+  }, {});
 
   const details = Object.entries(groupedByUrl)
     .map(([request, requestFindings]) => {
       const findingLines = requestFindings
         .map(
           finding =>
-            `    - ${finding.patternName} in ${finding.location}: ${finding.matchPreview}`,
+            `    - ${finding.fieldName} in ${finding.location}: ${finding.matchPreview}`,
         )
         .join('\n');
 
