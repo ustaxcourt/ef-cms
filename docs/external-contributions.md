@@ -30,10 +30,19 @@ Take note of the following branches.
 
 Below is a general overview of the workflow that would best prepare your contribution for inclusion in the project.
 
+⚠️ _If you have discovered a vulnerability in DAWSON, please report it to [DAWSON support](dawson.support@ustaxcourt.gov) before creating an issue or submitting a PR. We will work with you to ensure the vulnerability is remediated before it is publicly disclosed._ ⚠️
+
+1. Choose an issue to work on.
+    - If you are interested in working on an existing issue, we ask that you only work on issues labeled:
+        - `bug` - if the issue has story points
+        - `design debt` - if there is no reliance on Figma (paywall)
+        - `Devex` - if the issue does not also have the `feeback needed` label
+    - Any issues with a reliance on TestRail or Figma are not open to external contributors, as access to those tools is limited to internal contributors. This precludes all user story (TestRail and Figma) and some design debt (Figma) issues.
+    - If you are interested in working on new functionality not on the backlog, please submit a feature request to [DAWSON support](dawson.support@ustaxcourt.gov) first.
 1. Branch from `upstream/staging` into a branch in your fork.
    1. How you work in your own fork is up to you, but keep in mind the public nature of the main fork.
-      1. Your branch name should be professional.
-      1. Your commit messages should be professional.
+      1. Your branch name should be professional. If working on an existing issue, the branch name must begin with the issue number.
+      1. Your commit messages should be professional. If working on an existing issue, please prefix your commit messages with the issue number. For example, if you are working on issue #12345, your commit message should be prefixed with `12345 - `.
 1. Work on the issue.
    1. If your work is of a nature such that testing in a deployed environment is needed, contact [DAWSON support](dawson.support@ustaxcourt.gov).
    1. While work is ongoing, other work may be merged into `upstream/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest:
@@ -47,7 +56,7 @@ Below is a general overview of the workflow that would best prepare your contrib
          ```bash
          npm run git:pr-to test
          ```
-         1. If there are merge conflicts refer to [Handling Merge Conflicts](#handling-merge-conflicts)
+         - If there are merge conflicts refer to [Handling Merge Conflicts](#handling-merge-conflicts)
       1. Court engineering staff will respond to your PR.
       1. If the Court engineers merge your PR, do not delete your feature branch, make a PR to `upstream/staging` from your branch.
    - Verification in a deployed environment is not needed.
@@ -68,20 +77,26 @@ Please follow these steps to validate your changes before submitting a pull requ
 1. Ensure you have achieved full test coverage for the code you have changed or added.
    1. Unit tests: coverage requirements are in the owning suite's `jest*.config.ts` file.
    1. Integration tests: all functionality should be covered for every applicable user role.
-   2. Accessibility tests: all user-facing functionality should be covered by an accessibility test that calls `checkA11y()`.
-1. Start the application locally by invoking the `DAWSON local` run configuration in your IDE as described in [Debugging Locally](./debugging-locally.md), or by running the following scripts in separate terminal sessions:
-    1. API:
-       ```bash
-       npm run start:api
-       ```
-    1. Private Client:
-       ```bash
-       npm run start:client
-       ```
-    1. Public Client:
-       ```bash
-       npm run start:public
-       ```
+   1. Accessibility tests: all user-facing functionality should be covered by an accessibility test that calls `checkA11y()`.
+1. Start the application locally, utilizing one of the following methods:
+   - invoking the ▶️ `DAWSON local` run configuration in your IDE as described in [Debugging Locally](./debugging-locally.md)
+   - running the following commands in three separate terminal sessions:
+      1. API:
+         ```bash
+         npm run start:api
+         ```
+      1. Private Client:
+         ```bash
+         npm run start:client
+         ```
+      1. Public Client:
+         ```bash
+         npm run start:public
+         ```
+   - prompting an AI agent:
+      ```markdown
+      Please start all three DAWSON processes locally in the `.devcontainer` as described in `AGENTS.md`.
+      ```
 1. With the application running, run the following scripts, ensuring no failures:
    1. API Unit Tests:
       ```bash
@@ -123,6 +138,17 @@ Please follow these steps to validate your changes before submitting a pull requ
       ```bash
       npm run test:scripts
       ```
+1. If you use an AI Agent, prompt the agent to conduct a code review of all changes utilizing the "Code Review Guidelines" in [AGENTS.md](../AGENTS.md):
+   ```markdown
+   The objective of the work in the local branch is {summarize the changes}.
+
+   The acceptance criteria are:
+     - {list the acceptance criteria}
+
+   Please review all changes in the local branch against `upstream/staging` utilizing the code review guidelines in `AGENTS.md`, ensuring that all acceptance criteria are met and that no regressions are introduced.
+
+   Run all relevant tests, utilizing the test suite identification instructions in `AGENTS.md`, and ensure sufficient coverage for all added and modified code.
+   ```
 
 ## Handling Merge Conflicts
 
