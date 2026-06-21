@@ -30,6 +30,9 @@ export type PublicDataValidationResult = {
 const NON_API_ASSET_PATH_REGEX =
   /\.(?:avif|bmp|css|eot|gif|ico|jpe?g|js|map|otf|png|svg|ttf|webp|woff2?)$/i;
 
+const FEATURE_FLAG_PATH_REGEX = /\/system\/feature-flag\/?$/i;
+const DOWNLOAD_URL_PATH_REGEX = /\/public-document-download-url\/?$/i;
+
 const PUBLIC_ENTITY_FACTORIES = {
   PublicCase: (): PublicCase =>
     new PublicCase(
@@ -154,6 +157,43 @@ function isNumericValue(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value);
 }
 
+function isAllowedFeatureFlagValue(value: unknown): boolean {
+  return (
+    value === null ||
+    typeof value === 'string' ||
+    typeof value === 'boolean' ||
+    isNumericValue(value)
+  );
+}
+
+function validateUrlOnlyObject(args: {
+  obj: Record<string, unknown>;
+  path: string;
+  url: string;
+}): InternalUnauthorizedFieldFinding[] {
+  const findings: InternalUnauthorizedFieldFinding[] = [];
+
+  for (const [key, value] of Object.entries(args.obj)) {
+    const fieldPath = args.path ? `${args.path}.${key}` : key;
+
+    if (key === 'url' && typeof value === 'string') {
+      continue;
+    }
+
+    if (Array.isArray(value) || isRecord(value)) {
+      findings.push(...findUnauthorizedFields(value, fieldPath, args.url));
+      continue;
+    }
+
+    findings.push({
+      fieldName: fieldPath,
+      matchPreview: redactPreview(String(value)),
+    });
+  }
+
+  return findings;
+}
+
 function validateEntityMetadata(args: {
   path: string;
   candidateEntityName?: string;
@@ -190,6 +230,7 @@ function validateEntityMetadata(args: {
 function validateNumericObject(args: {
   obj: Record<string, unknown>;
   path: string;
+  url: string;
 }): InternalUnauthorizedFieldFinding[] {
   const findings: InternalUnauthorizedFieldFinding[] = [];
 
@@ -201,7 +242,35 @@ function validateNumericObject(args: {
     }
 
     if (Array.isArray(value) || isRecord(value)) {
-      findings.push(...findUnauthorizedFields(value, fieldPath));
+      findings.push(...findUnauthorizedFields(value, fieldPath, args.url));
+      continue;
+    }
+
+    findings.push({
+      fieldName: fieldPath,
+      matchPreview: redactPreview(String(value)),
+    });
+  }
+
+  return findings;
+}
+
+function validateFeatureFlagObject(args: {
+  obj: Record<string, unknown>;
+  path: string;
+  url: string;
+}): InternalUnauthorizedFieldFinding[] {
+  const findings: InternalUnauthorizedFieldFinding[] = [];
+
+  for (const [key, value] of Object.entries(args.obj)) {
+    const fieldPath = args.path ? `${args.path}.${key}` : key;
+
+    if (isAllowedFeatureFlagValue(value)) {
+      continue;
+    }
+
+    if (Array.isArray(value) || isRecord(value)) {
+      findings.push(...findUnauthorizedFields(value, fieldPath, args.url));
       continue;
     }
 
@@ -217,18 +286,34 @@ function validateNumericObject(args: {
 function findUnauthorizedFields(
   obj: unknown,
   path: string = '',
+  url: string = '',
 ): InternalUnauthorizedFieldFinding[] {
   const findings: InternalUnauthorizedFieldFinding[] = [];
-
   if (!isRecord(obj) && !Array.isArray(obj)) {
     return findings;
   }
 
   if (Array.isArray(obj)) {
     obj.forEach((item, index) => {
-      findings.push(...findUnauthorizedFields(item, `${path}[${index}]`));
+      findings.push(...findUnauthorizedFields(item, `${path}[${index}]`, url));
     });
     return findings;
+  }
+
+  if (path === '' && FEATURE_FLAG_PATH_REGEX.test(url)) {
+    return validateFeatureFlagObject({
+      obj,
+      path,
+      url,
+    });
+  }
+
+  if (path === '' && DOWNLOAD_URL_PATH_REGEX.test(url)) {
+    return validateUrlOnlyObject({
+      obj,
+      path,
+      url,
+    });
   }
 
   const candidateEntityName = getEntityName(obj);
@@ -237,6 +322,7 @@ function findUnauthorizedFields(
     return validateNumericObject({
       obj,
       path,
+      url,
     });
   }
 
@@ -266,7 +352,7 @@ function findUnauthorizedFields(
     }
 
     if (typeof value === 'object' && value !== null) {
-      findings.push(...findUnauthorizedFields(value, fieldPath));
+      findings.push(...findUnauthorizedFields(value, fieldPath, url));
     }
   }
 
@@ -280,7 +366,11 @@ export function assertCorrectNetworkData(
 
   for (const payload of payloads) {
     if (shouldValidateResponseBody(payload)) {
-      const bodyFindings = findUnauthorizedFields(payload.responseBody);
+      const bodyFindings = findUnauthorizedFields(
+        payload.responseBody,
+        '',
+        payload.url,
+      );
       findings.push(
         ...bodyFindings.map(finding => ({
           ...finding,
@@ -292,7 +382,11 @@ export function assertCorrectNetworkData(
     }
 
     if (shouldValidateRequestBody(payload)) {
-      const bodyFindings = findUnauthorizedFields(payload.requestBody);
+      const bodyFindings = findUnauthorizedFields(
+        payload.requestBody,
+        '',
+        payload.url,
+      );
       findings.push(
         ...bodyFindings.map(finding => ({
           ...finding,
