@@ -1,6 +1,7 @@
 import { addCaseToTrialSessionInteractor } from './business/useCases/trialSessions/addCaseToTrialSessionInteractor';
 import { addConsolidatedCaseInteractor } from './business/useCases/caseConsolidation/addConsolidatedCaseInteractor';
 import { addCoversheetInteractor } from './business/useCases/addCoversheetInteractor';
+import { addCoversheetWorker } from './business/useCases/coversheet/addCoversheetWorker';
 import { addDeficiencyStatisticInteractor } from './business/useCases/caseStatistics/addDeficiencyStatisticInteractor';
 import { addPaperFilingInteractor } from './business/useCases/docketEntry/addPaperFilingInteractor';
 import { addPetitionerToCaseInteractor } from './business/useCases/addPetitionerToCaseInteractor';
@@ -199,6 +200,7 @@ const useCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  addCoversheetWorker,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,

@@ -30,7 +30,7 @@ Take note of the following branches.
 
 Below is a general overview of the workflow that would best prepare your contribution for inclusion in the project.
 
-⚠️ _If you have discovered a vulnerability in DAWSON, please report it to [DAWSON support](dawson.support@ustaxcourt.gov) before creating an issue or submitting a PR. We will work with you to ensure the vulnerability is remediated before it is publicly disclosed._ ⚠️
+!> If you have discovered a vulnerability in DAWSON, please report it to [DAWSON support](dawson.support@ustaxcourt.gov) before creating an issue or submitting a PR. We will work with you to ensure the vulnerability is remediated before it is publicly disclosed.
 
 1. Choose an issue to work on.
     - If you are interested in working on an existing issue, we ask that you only work on issues labeled:
