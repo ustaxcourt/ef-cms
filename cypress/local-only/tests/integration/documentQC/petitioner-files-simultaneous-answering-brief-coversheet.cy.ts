@@ -43,9 +43,9 @@ describe('Petitioner files a Simultaneous Answering Brief', () => {
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
-      cy.get('#submit-document').click();
+      cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      cy.get('#submit-document').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
       // Petitioners cannot view their own SIAB on the docket record until it
       // is served, so verify the success alert and case detail page instead.
       cy.showsSuccessMessage(true);

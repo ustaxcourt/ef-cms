@@ -86,9 +86,9 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         // before submitting, otherwise the form blocks with
         // "Select a filing party".
         cy.contains('label', 'Respondent').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
         cy.showsSuccessMessage(true);
 
         // Pre-QC: each case should show the SIAB entry with the file-time
@@ -126,7 +126,7 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         );
         cy.get('[data-testid="save-and-finish-document-qc"]').click();
         cy.get('[data-testid="loading-overlay"]').should('not.exist');
-        cy.get('[data-testid="confirm-modal-close-btn"').click();
+        cy.get('[data-testid="confirm-modal-close-btn"]').click();
 
         // NODC should land on the QC'd case.
         waitForDocketEntryByEventCode({

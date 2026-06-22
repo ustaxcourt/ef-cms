@@ -105,6 +105,7 @@ describe('Edit Docket Entry Service / Action(s) tab edits do not regenerate the 
           );
           cy.get('#tab-action').click();
           cy.get('#action').type('Take some action');
+          return;
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
 

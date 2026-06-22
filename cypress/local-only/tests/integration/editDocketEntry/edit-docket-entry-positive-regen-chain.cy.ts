@@ -90,8 +90,12 @@ describe('Edit Docket Entry positive regen chain', () => {
 
           // Step 1: edit Filed Date → pages 2 → 3.
           cy.visit(editMetaUrl);
-          cy.get('input#filing-date-picker').clear();
-          cy.get('input#filing-date-picker').type('01/15/2024');
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="filing-date-picker"]',
+          ).clear();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="filing-date-picker"]',
+          ).type('01/15/2024');
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
           goToCase(docketNumber);
@@ -120,8 +124,10 @@ describe('Edit Docket Entry positive regen chain', () => {
 
           // Step 4: toggle Certificate of Service on → pages 5 → 6.
           cy.visit(editMetaUrl);
-          cy.get('#certificate-of-service').check({ force: true });
-          cy.get('input#service-date-picker').type('01/01/2024');
+          cy.get('[data-testid="certificate-of-service-label"]').click();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+          ).type('01/01/2024');
           cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
           cy.get('[data-testid="loading-overlay"]').should('not.exist');
           goToCase(docketNumber);
