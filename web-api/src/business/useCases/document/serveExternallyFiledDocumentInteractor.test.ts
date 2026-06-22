@@ -429,7 +429,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(true);
   });
 
-  it('should set the number of pages in the docket entry as the length of the document plus the coversheet', async () => {
+  it('should set the number of pages in the docket entry as the length of the document', async () => {
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
@@ -444,7 +444,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .numberOfPages,
-    ).toBe(mockNumberOfPages + 1);
+    ).toBe(mockNumberOfPages);
 
     expect(countPagesInDocument.mock.calls[0][0].documentStorageId).toEqual(
       mockDocumentStorageId,

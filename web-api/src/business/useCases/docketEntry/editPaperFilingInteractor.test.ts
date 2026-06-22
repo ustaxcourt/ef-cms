@@ -424,7 +424,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,
