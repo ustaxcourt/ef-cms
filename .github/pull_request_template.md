@@ -1,0 +1,30 @@
+# {Issue Number}: {Concise Summary}
+
+#{Issue Number}
+
+## Overview
+
+{Descriptive summary of the objective and how it was achieved.}
+
+## Changes
+
+{List of changes made, organized semantically for an audience of DAWSON developers.}
+
+## Verification
+
+{List of steps taken to verify the changes, including any testing performed.}
+
+## Manual Deployment Steps
+
+{Instructions for manually deploying the changes, if applicable. Delete this section if not.}
+
+## External Contributor Checklist
+
+PRs that do not meet these criteria may be closed without review.
+
+- [ ] I have read the [External Contributions](../docs/external-contributions.md) documentation and assert that this pull request adheres to the guidelines outlined therein.
+    - [ ] The issue I chose to work on is appropriate for an external contributor.
+    - [ ] This PR is targeting the correct branch for the appropriate stage of the development cycle.
+    - [ ] I have performed all [Pre-PR Validation](../docs/external-contributions.md#pre-pr-validation) locally.
+
+_Internal contributors (DAWSON team members) may delete this section._
