@@ -56,8 +56,16 @@ export async function up(db: Kysely<any>): Promise<void> {
             NEW.draft_order_state := NEW.draft_order_state
               || jsonb_build_object('additionalOrderTextArray', jsonb_build_array(new_text));
           END IF;
+        ELSIF text_changed THEN
+          -- Text changed: additionalOrderText is source of truth, sync array[0] from it
+          IF new_text IS NOT NULL THEN
+            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderTextArray')
+              || jsonb_build_object('additionalOrderTextArray', jsonb_build_array(new_text));
+          ELSE
+            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderTextArray';
+          END IF;
         ELSIF array_changed THEN
-          -- New code path: array key present and changed; sync text from array
+          -- Array changed but text didn't: sync text from array[0]
           IF new_array IS NOT NULL
             AND jsonb_typeof(new_array) = 'array'
             AND jsonb_array_length(new_array) > 0
@@ -66,14 +74,6 @@ export async function up(db: Kysely<any>): Promise<void> {
               || jsonb_build_object('additionalOrderText', new_array ->> 0);
           ELSE
             NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderText';
-          END IF;
-        ELSIF text_changed THEN
-          -- Array present and unchanged, but text changed; sync array from text
-          IF new_text IS NOT NULL THEN
-            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderTextArray')
-              || jsonb_build_object('additionalOrderTextArray', jsonb_build_array(new_text));
-          ELSE
-            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderTextArray';
           END IF;
         END IF;
       END IF;

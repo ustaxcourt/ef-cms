@@ -1,6 +1,20 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
+  // Final backfill: ensure every row has additionalOrderTextArray before the old field is removed,
+  // in case any rows were missed while the expand trigger was active.
+  await sql`
+    UPDATE dw_docket_entry
+    SET draft_order_state = draft_order_state
+      || jsonb_build_object(
+        'additionalOrderTextArray',
+        jsonb_build_array(draft_order_state ->> 'additionalOrderText')
+      )
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderText'
+      AND NOT (draft_order_state ? 'additionalOrderTextArray')
+  `.execute(db);
+
   await sql`DROP TRIGGER IF EXISTS trg_sync_additional_order_text_fields ON dw_docket_entry;`.execute(
     db,
   );
