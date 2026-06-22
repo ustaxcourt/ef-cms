@@ -23,14 +23,27 @@ export type GitHubPullRequestFile = {
   path: string;
 };
 
+export type GitHubStatusCheck = {
+  context: string;
+  createdAt?: string;
+  targetUrl?: string;
+};
+
 export type GitHubPullRequest = {
   author: GitHubUser | null;
   body: string;
   commits: GitHubCommit[];
+  createdAt: string;
   files?: GitHubPullRequestFile[];
   labels: GitHubLabel[];
+  mergeCommit?: {
+    oid: string;
+  } | null;
+  mergedAt: string | null;
   number: number;
+  statusCheckRollup?: GitHubStatusCheck[];
   title: string;
+  url: string;
 };
 
 export type GitHubIssue = {
@@ -53,6 +66,9 @@ export interface GitHubClient {
   ): Promise<CoverageSummary | undefined>;
   getIssue(issueNumber: number): Promise<GitHubIssue>;
   getLatestProdPullRequest(): Promise<LatestProdPullRequest>;
+  getMergeCommitStatusContexts(
+    mergeCommitOid: string,
+  ): Promise<GitHubStatusCheck[]>;
   getPullRequest(pullRequestNumber: number): Promise<GitHubPullRequest>;
   listMergedStagingPullRequests(
     mergedAfter: string,
@@ -84,6 +100,26 @@ const runGhJsonCommand = async <T>({
   const output = await commandRunner('gh', args, GH_ENV_VARS);
 
   return parseJsonOutput<T>(output);
+};
+
+type MergeCommitStatusContextNode = {
+  context?: string | null;
+  createdAt?: string | null;
+  targetUrl?: string | null;
+};
+
+type MergeCommitStatusContextsResponse = {
+  data?: {
+    repository?: {
+      object?: {
+        statusCheckRollup?: {
+          contexts?: {
+            nodes?: Array<MergeCommitStatusContextNode | null>;
+          };
+        };
+      } | null;
+    } | null;
+  };
 };
 
 export class GhCliGitHubClient implements GitHubClient {
@@ -169,6 +205,73 @@ export class GhCliGitHubClient implements GitHubClient {
     return latestProdPullRequest;
   }
 
+  async getMergeCommitStatusContexts(
+    mergeCommitOid: string,
+  ): Promise<GitHubStatusCheck[]> {
+    const repository = await this.getRepositoryNameWithOwner();
+    const [owner, name] = repository.split('/');
+    const query = `
+      query($oid: GitObjectID!, $owner: String!, $name: String!) {
+        repository(owner: $owner, name: $name) {
+          object(oid: $oid) {
+            ... on Commit {
+              statusCheckRollup {
+                contexts(first: 100) {
+                  nodes {
+                    ... on StatusContext {
+                      context
+                      targetUrl
+                      createdAt
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`;
+
+    const output = await runGhJsonCommand<MergeCommitStatusContextsResponse>({
+      args: [
+        'api',
+        'graphql',
+        '-F',
+        `oid=${mergeCommitOid}`,
+        '-F',
+        `owner=${owner}`,
+        '-F',
+        `name=${name}`,
+        '-f',
+        `query=${query}`,
+      ],
+      commandRunner: this.commandRunner,
+    });
+
+    const nodes =
+      output.data?.repository?.object?.statusCheckRollup?.contexts?.nodes || [];
+    const statusChecks: GitHubStatusCheck[] = [];
+
+    for (const node of nodes) {
+      if (node?.context) {
+        const statusCheck: GitHubStatusCheck = {
+          context: node.context,
+        };
+
+        if (node.createdAt) {
+          statusCheck.createdAt = node.createdAt;
+        }
+
+        if (node.targetUrl) {
+          statusCheck.targetUrl = node.targetUrl;
+        }
+
+        statusChecks.push(statusCheck);
+      }
+    }
+
+    return statusChecks;
+  }
+
   async getPullRequest(pullRequestNumber: number): Promise<GitHubPullRequest> {
     return await runGhJsonCommand<GitHubPullRequest>({
       args: [
@@ -176,7 +279,7 @@ export class GhCliGitHubClient implements GitHubClient {
         'view',
         pullRequestNumber.toString(),
         '--json',
-        'author,body,commits,files,labels,number,title',
+        'author,body,commits,createdAt,files,labels,mergeCommit,mergedAt,number,statusCheckRollup,title,url',
       ],
       commandRunner: this.commandRunner,
     });

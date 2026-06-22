@@ -5,10 +5,11 @@ import {
   detectEntityValidationChange,
   getCurrentFingerprintFromSSM,
   getEntityIdentifiers,
-  resolveChangedEntities,
-  validateEntitiesWithNewRules,
-  runEntityValidation,
+  haveValidationRulesChanged,
   main,
+  resolveChangedEntities,
+  runEntityValidation,
+  validateEntitiesWithNewRules,
 } from './entityValidation';
 
 jest.mock('fs/promises', () => ({
@@ -335,6 +336,28 @@ describe('entityValidation', () => {
 
       const result = await runEntityValidation();
       expect(result).toBe(0);
+    });
+  });
+
+  describe('haveValidationRulesChanged', () => {
+    it('returns true when changedEntities has length greater than 0', async () => {
+      (getSSMItem as jest.Mock).mockResolvedValueOnce(
+        JSON.stringify({ 'Case.VALIDATION_RULES': 'old-hash' }),
+      );
+      (fs.readdir as jest.Mock).mockResolvedValueOnce(['cases/Case.ts']);
+      (getSSMItem as jest.Mock).mockResolvedValueOnce(undefined);
+
+      const result = await haveValidationRulesChanged();
+      expect(result).toBe(true);
+    });
+
+    it('returns false when changedEntities is empty', async () => {
+      (getSSMItem as jest.Mock).mockRejectedValueOnce(new Error('not found'));
+      (fs.readdir as jest.Mock).mockResolvedValueOnce([]);
+      (getSSMItem as jest.Mock).mockResolvedValueOnce(undefined);
+
+      const result = await haveValidationRulesChanged();
+      expect(result).toBe(false);
     });
   });
 

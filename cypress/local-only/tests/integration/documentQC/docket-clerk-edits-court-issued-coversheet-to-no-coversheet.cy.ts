@@ -42,21 +42,23 @@ describe('Docket Clerk edits Court Issued coversheet doc to a no-coversheet doc'
 
       loginAsDocketClerk();
       cy.visit(`/case-detail/${docketNumber}/upload-court-issued`);
-      cy.get('#upload-description').type('to petitioner');
+      cy.get('[data-testid="upload-description"]').type('to petitioner');
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
-        selector: 'input#primary-document-file',
+        selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
-      cy.get('#save-uploaded-pdf-button').click();
-      cy.get('#add-court-issued-docket-entry-button').click();
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+      cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
 
       selectTypeaheadInput(
         'court-issued-document-type-search',
         'Returned Mail',
       );
       // Returned Mail is unservable, so the form requires a Filed date.
-      cy.get('input#date-received-picker').type('11/01/2023');
+      cy.get(
+        '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
+      ).type('11/01/2023');
       cy.get('[data-testid="save-docket-entry-button"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
       cy.url().should('not.contain', '/add-court-issued-docket-entry');

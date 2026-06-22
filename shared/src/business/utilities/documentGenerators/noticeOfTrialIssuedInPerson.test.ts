@@ -26,7 +26,8 @@ describe('noticeOfTrialIssuedInPerson', () => {
             address1: '123 Candy Cane Lane',
             address2: '22222',
             city: 'troutville',
-            formattedJudge: 'Chief Special Trial Judge Carluzzo',
+            formattedJudge: 'Carluzzo',
+            chambersPhoneNumber: '1-721-740-9885 x4239',
             formattedStartDate: '01/01/2001',
             formattedStartTime: '12:00 am',
             postalCode: 'Boise, Idaho',
@@ -43,7 +44,7 @@ describe('noticeOfTrialIssuedInPerson', () => {
             termYear: '2001',
             trialSessionId: '111-111-112',
             paperServicePdfs: [],
-            hasNottBeenServed: false
+            hasNottBeenServed: false,
           },
         },
       }),

@@ -10,29 +10,15 @@ import {
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
- * Spec (per coversheet-gaps/SPEC.md): Pre-8477 simultaneous filing —
- * when a party eFiles a simultaneous doc across a consolidated group,
- * the docket clerk must SERVE it in each individual case. Upon service
- * in each case, a new coversheet is APPENDED to the (shared) underlying
- * doc. For each case the document is served in, a new coversheet
- * appears — so the page count on every case's SIAB row climbs by one
- * per per-case service.
  *
  * Group setup: lead + 1 member (2 cases total).
  *
  * Page count progression (cases share the same underlying PDF, so any
  * coversheet append affects every case's row):
  *   - After eFile across group:           every case → 2 pages
- *   - After serve in lead case:           every case → 3 pages
- *   - After serve in member case:         every case → 4 pages
+ *   - After serve across all cases:           every case → 3 pages
  *
- * Note: per the spec, "this will be resolved with 8477; the document
- * will only have two coversheets, the original and the new appended one
- * with the service stamp." This test pins the pre-8477 stacking
- * behavior — when 8477 lands, this test will need to be updated to
- * reflect the new bounded count.
- *
- * Regression signal: any per-case serve that does not increment the
+ * Regression signal: any serve across consolidated cases that does not increment the
  * shared PDF's page count by exactly 1 fails this test.
  */
 describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', () => {
@@ -84,9 +70,9 @@ describe('Pre-8477 — per-case serve of consolidated SIAB stacks coversheets', 
         });
         cy.get('#consolidated-group-all').check({ force: true });
         cy.contains('label', 'Respondent').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
         cy.showsSuccessMessage(true);
 
         // Pre-QC sanity check: file-time coversheet on every case.

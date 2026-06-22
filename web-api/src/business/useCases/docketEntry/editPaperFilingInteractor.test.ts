@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -425,7 +424,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
+              generateCoversheet: true,
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,

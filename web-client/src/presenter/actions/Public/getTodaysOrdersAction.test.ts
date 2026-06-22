@@ -83,6 +83,34 @@ describe('getTodaysOrdersAction', () => {
     expect(result.output.totalCount).toBe(mockTotalCount);
   });
 
+  it('should stop fetching and return partial results if a page returns an empty results array', async () => {
+    const page1Results = [{ docketEntryId: 'aaa', documentTitle: 'Order A' }];
+
+    applicationContext
+      .getUseCases()
+      .getTodaysOrdersInteractor.mockResolvedValueOnce({
+        results: page1Results,
+        totalCount: 5, // server claims 5 but next page is empty
+      })
+      .mockResolvedValueOnce({
+        results: [],
+        totalCount: 5,
+      });
+
+    const result = await runAction<
+      { todaysOrders: any; totalCount: any },
+      PublicClientState
+    >(getTodaysOrdersAction, {
+      modules: { presenter },
+    });
+
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor,
+    ).toHaveBeenCalledTimes(2);
+    expect(result.output.todaysOrders).toEqual(page1Results);
+    expect(result.output.totalCount).toBe(5);
+  });
+
   it('should use default values for page and sortOrder if not provided', async () => {
     await runAction<{ todaysOrders: any; totalCount: any }, PublicClientState>(
       getTodaysOrdersAction,

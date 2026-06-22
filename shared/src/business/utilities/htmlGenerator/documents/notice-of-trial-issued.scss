@@ -1,4 +1,7 @@
 #notice-of-trial-pdf {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14px;
+
   .notice-of-trial-title {
     margin-bottom: 0;
   }
@@ -12,11 +15,19 @@
     line-height: 15px;
   }
 
-  #notice-body > p {
-    margin-top: 0;
+  #notice-body {
+    > p {
+      margin-top: 0;
+    }
+
+    #notice-clerk-signature p {
+      width: auto;
+      margin-top: 0;
+      margin-right: 10px;
+    }
   }
 
-  #docket-header {
+  .order-docket-header {
     .document-title {
       margin-bottom: 0;
     }
