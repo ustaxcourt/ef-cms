@@ -50,19 +50,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         array_changed := (new_array IS DISTINCT FROM old_array);
         text_changed  := (new_text  IS DISTINCT FROM old_text);
 
-        IF array_changed AND NOT text_changed THEN
-          -- array was updated: sync text from array
-          IF new_array IS NOT NULL
-            AND jsonb_typeof(new_array) = 'array'
-            AND jsonb_array_length(new_array) > 0
-          THEN
-            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderText')
-              || jsonb_build_object('additionalOrderText', new_array ->> 0);
-          ELSE
-            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderText';
-          END IF;
-        ELSIF text_changed THEN
-          -- text was updated (or both changed): sync array from text
+        IF text_changed AND NOT array_changed THEN
+          -- text was updated: sync array from text
           IF new_text IS NOT NULL THEN
             NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderTextArray')
               || jsonb_build_object(
@@ -71,6 +60,17 @@ export async function up(db: Kysely<any>): Promise<void> {
               );
           ELSE
             NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderTextArray';
+          END IF;
+        ELSIF array_changed THEN
+          -- array was updated (or both changed): sync text from array
+          IF new_array IS NOT NULL
+            AND jsonb_typeof(new_array) = 'array'
+            AND jsonb_array_length(new_array) > 0
+          THEN
+            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderText')
+              || jsonb_build_object('additionalOrderText', new_array ->> 0);
+          ELSE
+            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderText';
           END IF;
         END IF;
       END IF;
