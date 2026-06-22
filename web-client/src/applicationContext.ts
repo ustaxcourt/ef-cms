@@ -32,7 +32,6 @@ import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '@web-client/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '@web-client/proxies/addConsolidatedCaseProxy';
-import { addCoversheetInteractor } from '@web-client/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '@web-client/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { addPaperFilingInteractor } from '@web-client/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '@web-client/proxies/addPetitionerToCaseProxy';
@@ -353,6 +352,7 @@ import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
+import { getDocketEntryProcessingStatusInteractor } from '@web-client/proxies/documents/getDocketEntryProcessingStatusProxy';
 
 const reduce = ImageBlobReduce({
   pica: Pica({ features: ['js'] }),
@@ -366,7 +366,7 @@ let forceRefreshCallback: () => {};
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
-  addCoversheetInteractor,
+  getDocketEntryProcessingStatusInteractor,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,

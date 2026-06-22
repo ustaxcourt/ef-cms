@@ -9,15 +9,8 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  } = applicationContext.getConstants();
-
-  const COURT_ISSUED_EVENT_CODES_NO_COVERSHEET =
-    COURT_ISSUED_EVENT_CODES.filter(d => !d.requiresCoversheet).map(
-      d => d.eventCode,
-    );
+  const { fileCourtIssuedDocketEntryInteractor } =
+    applicationContext.getUseCases();
 
   it('should make a call to file the court issued docket entry', async () => {
     await runAction(submitCourtIssuedDocketEntryToConsolidatedGroupAction, {
@@ -117,68 +110,56 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
     });
   });
 
-  it('should return generateCoversheet true when the eventCode being filed requires a coversheet', async () => {
+  it('forwards pendingCoversheetDocketEntryIds from the interactor response', async () => {
+    fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({
+      pendingCoversheetDocketEntryIds: [mockDocketEntryId],
+    });
+
     const { output } = await runAction(
       submitCourtIssuedDocketEntryToConsolidatedGroupAction,
       {
-        modules: {
-          presenter,
-        },
+        modules: { presenter },
         props: {},
         state: {
-          caseDetail: {
-            docketNumber: mockDocketNumber,
-          },
+          caseDetail: { docketNumber: mockDocketNumber },
           docketEntryId: mockDocketEntryId,
-          form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
-          },
+          form: {},
         },
       },
     );
 
-    expect(output.generateCoversheet).toBe(true);
+    expect(output.pendingCoversheetDocketEntryIds).toEqual([mockDocketEntryId]);
   });
 
-  it('should return generateCoversheet false when the eventCode being filed does NOT require a coversheet', async () => {
+  it('returns no pendingCoversheetDocketEntryIds when the backend did not enqueue any coversheet jobs', async () => {
+    fileCourtIssuedDocketEntryInteractor.mockResolvedValueOnce({});
+
     const { output } = await runAction(
       submitCourtIssuedDocketEntryToConsolidatedGroupAction,
       {
-        modules: {
-          presenter,
-        },
+        modules: { presenter },
         props: {},
         state: {
-          caseDetail: {
-            docketNumber: mockDocketNumber,
-          },
+          caseDetail: { docketNumber: mockDocketNumber },
           docketEntryId: mockDocketEntryId,
-          form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
-          },
+          form: {},
         },
       },
     );
 
-    expect(output.generateCoversheet).toBe(false);
+    expect(output.pendingCoversheetDocketEntryIds).toBeUndefined();
   });
 
   it('should return the docketEntryId to props', async () => {
     const { output } = await runAction(
       submitCourtIssuedDocketEntryToConsolidatedGroupAction,
       {
-        modules: {
-          presenter,
-        },
+        modules: { presenter },
         props: {},
         state: {
-          caseDetail: {
-            docketNumber: mockDocketNumber,
-          },
+          caseDetail: { docketNumber: mockDocketNumber },
           docketEntryId: mockDocketEntryId,
-          form: {
-            eventCode: COURT_ISSUED_EVENT_CODES_NO_COVERSHEET[0],
-          },
+          form: {},
         },
       },
     );

@@ -37,3 +37,4 @@ _PRs that do not meet these criteria may be closed without review._
 - [ ] If this PR is for a user story, or tech debt (devex, opex, design debt, etc.) that is user-facing, I have created test case(s) in TestRail and executed them.
 - [ ] I assert that all DoD criteria for this issue have been met.
 - [ ] If this PR includes a data migration with timing-specific manual test steps, I will coordinate the deployment with a manual tester to verify the timing-specific manual tests in real time.
+- [ ] All user-facing changes have been verified to be free of accessibility issues via manual testing and automated accessibility tests.
