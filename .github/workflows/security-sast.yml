@@ -131,16 +131,32 @@ jobs:
               --output-file-path "console,checkov-results-$(basename $DIR).sarif" \
               --hard-fail-on CKV_AWS_57,CKV_AWS_20,CKV_AWS_23,CKV_AWS_7 || EXIT_CODE=$?
           done
-          # Merge per-dir SARIFs into one for upload
+          # Merge per-dir SARIFs into a single run (GitHub rejects multi-run SARIFs per category)
           python3 - << 'PYEOF'
-          import json, glob, sys
-          merged = {"version": "2.1.0", "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json", "runs": []}
+          import json, glob
+          results, rules, seen_rule_ids = [], [], set()
+          tool_driver = None
           for f in sorted(glob.glob("checkov-results-*.sarif")):
               try:
                   data = json.load(open(f))
-                  merged["runs"].extend(data.get("runs", []))
+                  for run in data.get("runs", []):
+                      results.extend(run.get("results", []))
+                      driver = run.get("tool", {}).get("driver", {})
+                      if tool_driver is None:
+                          tool_driver = driver
+                      for rule in driver.get("rules", []):
+                          if rule["id"] not in seen_rule_ids:
+                              seen_rule_ids.add(rule["id"])
+                              rules.append(rule)
               except Exception:
                   pass
+          if tool_driver is not None:
+              tool_driver["rules"] = rules
+          merged = {
+              "version": "2.1.0",
+              "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+              "runs": [{"tool": {"driver": tool_driver or {"name": "Checkov"}}, "results": results}]
+          }
           json.dump(merged, open("checkov-results.sarif", "w"), indent=2)
           PYEOF
           exit $EXIT_CODE
