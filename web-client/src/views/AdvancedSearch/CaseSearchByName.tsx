@@ -251,7 +251,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                         <div className="usa-radio margin-bottom-1">
                           <input
                             aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
+                            aria-labelledby="united-states-country-selection-label"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'domestic'
@@ -260,7 +260,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                             id="united-states-country-selection"
                             name="country"
                             type="radio"
-                            value="United States"
+                            value="domestic"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
@@ -279,7 +279,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                         <div className="usa-radio margin-bottom-1">
                           <input
                             aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
+                            aria-labelledby="international-country-selection-label"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'international'
