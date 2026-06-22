@@ -11,6 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       )
     WHERE draft_order_state IS NOT NULL
       AND draft_order_state ? 'additionalOrderText'
+      AND jsonb_typeof(draft_order_state -> 'additionalOrderText') = 'string'
       AND NOT (draft_order_state ? 'additionalOrderTextArray')
   `.execute(db);
 
@@ -42,6 +43,15 @@ export async function up(db: Kysely<any>): Promise<void> {
       text_changed boolean;
     BEGIN
       IF NEW.draft_order_state IS NOT NULL THEN
+        -- Skip sync when additionalOrderText exists but is not a plain string
+        -- (e.g., it is a JSON array as used by Grant/Deny motion orders) to
+        -- avoid stringifying an array into additionalOrderTextArray.
+        IF (NEW.draft_order_state ? 'additionalOrderText')
+          AND jsonb_typeof(NEW.draft_order_state -> 'additionalOrderText') != 'string'
+        THEN
+          RETURN NEW;
+        END IF;
+
         old_text := OLD.draft_order_state ->> 'additionalOrderText';
         new_text := NEW.draft_order_state ->> 'additionalOrderText';
         old_array := OLD.draft_order_state -> 'additionalOrderTextArray';
