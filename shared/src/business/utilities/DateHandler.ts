@@ -809,3 +809,41 @@ export const formatDateFromDatePicker = (
     return dateString;
   }
 };
+
+export const getTimeframeForYear = ({
+  fiscal,
+  year,
+}: {
+  fiscal?: boolean;
+  year: string;
+}): {
+  begin: string; // ISO date string
+  end: string; // ISO date string
+} => {
+  return {
+    begin: validateDateAndCreateISO({
+      day: '1',
+      month: fiscal ? '10' : '1',
+      year: fiscal ? `${Number(year) - 1}` : year,
+    })!,
+    end: validateDateAndCreateISO({
+      day: '1',
+      month: fiscal ? '10' : '1',
+      year: fiscal ? year : `${Number(year) + 1}`,
+    })!,
+  };
+};
+
+export const getJsTimeframeForYear = ({
+  fiscal,
+  year,
+}: {
+  fiscal?: boolean;
+  year: string;
+}): { begin: Date; end: Date } => {
+  const { begin, end } = getTimeframeForYear({ fiscal, year });
+  return {
+    begin: getJsDateFromIso(begin),
+    end: getJsDateFromIso(end),
+  };
+};
