@@ -205,6 +205,7 @@ export const SERVICE_INDICATOR_TYPES = {
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
+  ERROR_ADDING_COVERSHEET: 'error_adding_coversheet',
   PENDING: 'pending',
 };
 
