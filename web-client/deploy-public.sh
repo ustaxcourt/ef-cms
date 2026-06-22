@@ -4,7 +4,14 @@ set -e
 # Capture the commit SHA before secrets are loaded — load-environment-from-secrets.sh
 # sources the deploy secret which can overwrite CIRCLE_SHA1 if that key exists in the
 # secret, making RUM_RELEASE_ID empty and breaking source-map deobfuscation.
-RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
+#
+# Must be exported: build-dist-public.sh runs as a child process and bakes
+# RUM_RELEASE_ID into the JS bundle as the releaseId reported to RUM. Without the
+# export the child cannot see this captured value, re-derives it from the (now
+# secrets-clobbered) CIRCLE_SHA1, and the baked releaseId no longer matches the
+# S3 folder the .map files are uploaded to below — so RUM can't find the source
+# map and stack traces stay minified.
+export RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
 echo "Dummy $CIRCLE_SHA1"
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
