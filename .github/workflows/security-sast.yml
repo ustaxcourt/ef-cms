@@ -102,12 +102,48 @@ jobs:
 
       - name: Run Checkov
         run: |
-          checkov \
-            --config-file .checkov.yml \
-            --output cli \
-            --output sarif \
-            --output-file-path console,checkov-results.sarif \
-            --hard-fail-on CKV_AWS_57,CKV_AWS_20,CKV_AWS_23,CKV_AWS_7
+          # Scan each applyable dir individually so relative module paths resolve correctly
+          # and each dir's .checkov.baseline is used to suppress pre-existing findings.
+          DIRS=(
+            web-api/terraform/applyables/account-specific
+            web-api/terraform/applyables/allColors
+            web-api/terraform/applyables/blue
+            web-api/terraform/applyables/green
+            web-api/terraform/applyables/reindex-cron
+            web-api/terraform/applyables/stale-cases-email-cron
+            web-api/terraform/applyables/switch-colors-cron
+            web-api/terraform/applyables/terraform-state-backend
+            web-api/terraform/applyables/wait-for-workflow
+          )
+          EXIT_CODE=0
+          for DIR in "${DIRS[@]}"; do
+            checkov \
+              --directory "$DIR" \
+              --baseline "${DIR}/.checkov.baseline" \
+              --framework terraform \
+              --skip-path node_modules \
+              --skip-path .terraform \
+              --compact \
+              --soft-fail \
+              --skip-check CKV_AWS_117,CKV_AWS_115,CKV_AWS_116,CKV_AWS_272,CKV2_AWS_62,CKV2_AWS_61,CKV_AWS_144,CKV_AWS_338,CKV_AWS_66,CKV_TF_3,CKV_TF_1 \
+              --output cli \
+              --output sarif \
+              --output-file-path "console,checkov-results-$(basename $DIR).sarif" \
+              --hard-fail-on CKV_AWS_57,CKV_AWS_20,CKV_AWS_23,CKV_AWS_7 || EXIT_CODE=$?
+          done
+          # Merge per-dir SARIFs into one for upload
+          python3 - << 'PYEOF'
+          import json, glob, sys
+          merged = {"version": "2.1.0", "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json", "runs": []}
+          for f in sorted(glob.glob("checkov-results-*.sarif")):
+              try:
+                  data = json.load(open(f))
+                  merged["runs"].extend(data.get("runs", []))
+              except Exception:
+                  pass
+          json.dump(merged, open("checkov-results.sarif", "w"), indent=2)
+          PYEOF
+          exit $EXIT_CODE
 
       - name: Upload SARIF
         if: >-

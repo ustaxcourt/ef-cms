@@ -1,0 +1,27 @@
+{
+    "failed_checks": [
+        {
+            "file": "/../../modules/lambda/lambda.tf",
+            "findings": [
+                {
+                    "resource": "module.stale-cases-email-cron.module.stale_cases_email_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/stale-cases-email-cron/stale-cases-email-cron.tf",
+            "findings": [
+                {
+                    "resource": "module.stale-cases-email-cron.aws_iam_role_policy.stale_cases_email_lambda_policy",
+                    "check_ids": [
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                }
+            ]
+        }
+    ]
+}

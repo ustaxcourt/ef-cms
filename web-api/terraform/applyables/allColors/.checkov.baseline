@@ -1,0 +1,359 @@
+{
+    "failed_checks": [
+        {
+            "file": "/../../modules/certificates/certificates.tf",
+            "findings": [
+                {
+                    "resource": "module.ui-public-certificate.aws_acm_certificate.this",
+                    "check_ids": [
+                        "CKV_AWS_233"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/elasticsearch/elasticsearch.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_alpha.aws_cloudwatch_log_group.elasticsearch_application_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_alpha.aws_cloudwatch_log_group.elasticsearch_index_slow_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_alpha.aws_cloudwatch_log_group.elasticsearch_search_slow_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_alpha.aws_opensearch_domain.efcms-search",
+                    "check_ids": [
+                        "CKV2_AWS_52",
+                        "CKV2_AWS_59",
+                        "CKV_AWS_137",
+                        "CKV_AWS_228",
+                        "CKV_AWS_247",
+                        "CKV_AWS_248",
+                        "CKV_AWS_317",
+                        "CKV_AWS_318",
+                        "CKV_AWS_5"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_beta.aws_cloudwatch_log_group.elasticsearch_application_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_beta.aws_cloudwatch_log_group.elasticsearch_index_slow_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_beta.aws_cloudwatch_log_group.elasticsearch_search_slow_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.module.elasticsearch_beta.aws_opensearch_domain.efcms-search",
+                    "check_ids": [
+                        "CKV2_AWS_52",
+                        "CKV2_AWS_59",
+                        "CKV_AWS_137",
+                        "CKV_AWS_228",
+                        "CKV_AWS_247",
+                        "CKV_AWS_248",
+                        "CKV_AWS_317",
+                        "CKV_AWS_318",
+                        "CKV_AWS_5"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/documents-bucket.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_iam_role_policy.s3_replication_policy",
+                    "check_ids": [
+                        "CKV_AWS_288",
+                        "CKV_AWS_289",
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.documents_us_east_1",
+                    "check_ids": [
+                        "CKV_AWS_145",
+                        "CKV_AWS_18"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.documents_us_west_1",
+                    "check_ids": [
+                        "CKV_AWS_145",
+                        "CKV_AWS_18"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket_lifecycle_configuration.documents_s3_lc_us_east_1",
+                    "check_ids": [
+                        "CKV_AWS_300"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket_lifecycle_configuration.documents_s3_lc_us_west_1",
+                    "check_ids": [
+                        "CKV_AWS_300"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/main-east.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_acm_certificate.api_gateway_cert_east",
+                    "check_ids": [
+                        "CKV_AWS_233"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.api_lambdas_bucket_east",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/main.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_ssm_parameter.elasticsearch_alpha_endpoint_ssm",
+                    "check_ids": [
+                        "CKV2_AWS_34"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_ssm_parameter.elasticsearch_beta_endpoint_ssm",
+                    "check_ids": [
+                        "CKV2_AWS_34"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/ses.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_sns_topic.bounced_service_emails",
+                    "check_ids": [
+                        "CKV_AWS_26"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/smoketest-email-bucket.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.smoketest_email_inbox[0]",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/everything-else-deprecated/temp-documents-bucket.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.temp_documents_us_east_1",
+                    "check_ids": [
+                        "CKV_AWS_145",
+                        "CKV_AWS_18"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket.temp_documents_us_west_1",
+                    "check_ids": [
+                        "CKV_AWS_145",
+                        "CKV_AWS_18"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket_lifecycle_configuration.temp_documents_s3_lc_us_east_1",
+                    "check_ids": [
+                        "CKV_AWS_300"
+                    ]
+                },
+                {
+                    "resource": "module.ef-cms_apis.aws_s3_bucket_lifecycle_configuration.temp_documents_s3_lc_us_west_1",
+                    "check_ids": [
+                        "CKV_AWS_300"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/kms/kms.tf",
+            "findings": [
+                {
+                    "resource": "module.kms.aws_kms_key.primary",
+                    "check_ids": [
+                        "CKV2_AWS_64"
+                    ]
+                },
+                {
+                    "resource": "module.kms.aws_kms_key.replica",
+                    "check_ids": [
+                        "CKV2_AWS_64"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/rds/rds-users.tf",
+            "findings": [
+                {
+                    "resource": "module.rds.aws_iam_user.rds_user_dawson",
+                    "check_ids": [
+                        "CKV_AWS_273"
+                    ]
+                },
+                {
+                    "resource": "module.rds.aws_iam_user.rds_user_developers",
+                    "check_ids": [
+                        "CKV_AWS_273"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/rds/rds.tf",
+            "findings": [
+                {
+                    "resource": "module.rds.aws_rds_cluster.postgres",
+                    "check_ids": [
+                        "CKV2_AWS_27",
+                        "CKV2_AWS_8",
+                        "CKV_AWS_313",
+                        "CKV_AWS_324"
+                    ]
+                },
+                {
+                    "resource": "module.rds.aws_rds_cluster.west_replica",
+                    "check_ids": [
+                        "CKV2_AWS_27",
+                        "CKV2_AWS_8",
+                        "CKV_AWS_313",
+                        "CKV_AWS_324"
+                    ]
+                },
+                {
+                    "resource": "module.rds.aws_rds_cluster_instance.cluster_instance",
+                    "check_ids": [
+                        "CKV_AWS_118",
+                        "CKV_AWS_17",
+                        "CKV_AWS_226",
+                        "CKV_AWS_353",
+                        "CKV_AWS_354"
+                    ]
+                },
+                {
+                    "resource": "module.rds.aws_rds_cluster_instance.west_replica_instance",
+                    "check_ids": [
+                        "CKV_AWS_118",
+                        "CKV_AWS_17",
+                        "CKV_AWS_226",
+                        "CKV_AWS_353",
+                        "CKV_AWS_354"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/rum/rum.tf",
+            "findings": [
+                {
+                    "resource": "module.rum.aws_cognito_identity_pool.rum_identity_pool",
+                    "check_ids": [
+                        "CKV_AWS_366"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/ui-public-www-redirect/ui-public-www-redirect.tf",
+            "findings": [
+                {
+                    "resource": "module.ui-public-www-redirect.aws_cloudfront_distribution.public_distribution_www",
+                    "check_ids": [
+                        "CKV2_AWS_32",
+                        "CKV2_AWS_47",
+                        "CKV_AWS_174",
+                        "CKV_AWS_305",
+                        "CKV_AWS_310",
+                        "CKV_AWS_374",
+                        "CKV_AWS_68",
+                        "CKV_AWS_86"
+                    ]
+                },
+                {
+                    "resource": "module.ui-public-www-redirect.aws_iam_policy_document.www_redirect_policy_bucket",
+                    "check_ids": [
+                        "CKV_AWS_283"
+                    ]
+                },
+                {
+                    "resource": "module.ui-public-www-redirect.aws_s3_bucket.public_redirect",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                },
+                {
+                    "resource": "module.ui-public-www-redirect.aws_s3_bucket_public_access_block.unblock_public_www_redirect",
+                    "check_ids": [
+                        "CKV_AWS_53",
+                        "CKV_AWS_54",
+                        "CKV_AWS_55",
+                        "CKV_AWS_56"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/waf/main.tf",
+            "findings": [
+                {
+                    "resource": "module.ef-cms_apis.module.api-east-waf.aws_wafv2_web_acl.apis",
+                    "check_ids": [
+                        "CKV2_AWS_31",
+                        "CKV_AWS_192"
+                    ]
+                }
+            ]
+        }
+    ]
+}

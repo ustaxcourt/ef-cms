@@ -1,0 +1,15 @@
+{
+    "failed_checks": [
+        {
+            "file": "/../../modules/lambda/lambda.tf",
+            "findings": [
+                {
+                    "resource": "module.wait-for-workflow-cron.module.wait_for_workflow_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "failed_checks": [
+        {
+            "file": "/../../modules/lambda/lambda.tf",
+            "findings": [
+                {
+                    "resource": "module.reindex-cron.module.reindex_status_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/reindex-cron/reindex-status.tf",
+            "findings": [
+                {
+                    "resource": "module.reindex-cron.aws_iam_role_policy.reindex_status_policy",
+                    "check_ids": [
+                        "CKV_AWS_289",
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                }
+            ]
+        }
+    ]
+}

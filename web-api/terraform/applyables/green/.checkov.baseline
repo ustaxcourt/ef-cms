@@ -1,0 +1,641 @@
+{
+    "failed_checks": [
+        {
+            "file": "/../../modules/api/api-async.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_async_method_delete",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_async_method_get",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_async_method_options",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_async_method_post",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_async_method_put",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/api-auth.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_auth_method_delete",
+                    "check_ids": [
+                        "CKV2_AWS_53",
+                        "CKV_AWS_59"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_auth_method_get",
+                    "check_ids": [
+                        "CKV2_AWS_53",
+                        "CKV_AWS_59"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_auth_method_options",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_auth_method_post",
+                    "check_ids": [
+                        "CKV2_AWS_53",
+                        "CKV_AWS_59"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_auth_method_put",
+                    "check_ids": [
+                        "CKV2_AWS_53",
+                        "CKV_AWS_59"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/api-public.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_acm_certificate.api_gateway_cert_public",
+                    "check_ids": [
+                        "CKV_AWS_233"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_public_method",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method_settings.api_public_default",
+                    "check_ids": [
+                        "CKV_AWS_225"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_rest_api.gateway_for_api_public",
+                    "check_ids": [
+                        "CKV_AWS_237"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_stage.api_public_stage",
+                    "check_ids": [
+                        "CKV2_AWS_4",
+                        "CKV2_AWS_51",
+                        "CKV_AWS_120",
+                        "CKV_AWS_73"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_cloudwatch_log_group.api_public_stage_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/api.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_acm_certificate.api_gateway_cert",
+                    "check_ids": [
+                        "CKV_AWS_233"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_delete",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_get",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_head",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_options",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_post",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_method_put",
+                    "check_ids": [
+                        "CKV2_AWS_53"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method.api_system_method_get",
+                    "check_ids": [
+                        "CKV2_AWS_53",
+                        "CKV_AWS_59"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_method_settings.api_default",
+                    "check_ids": [
+                        "CKV_AWS_225"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_rest_api.gateway_for_api",
+                    "check_ids": [
+                        "CKV_AWS_237"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_api_gateway_stage.api_stage",
+                    "check_ids": [
+                        "CKV2_AWS_4",
+                        "CKV2_AWS_51",
+                        "CKV_AWS_120",
+                        "CKV_AWS_73"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_cloudwatch_log_group.api_stage_logs",
+                    "check_ids": [
+                        "CKV_AWS_158"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/change-of-address.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.change_of_address_dl_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.change_of_address_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/iam.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_iam_role_policy.api_gateway_invocation_policy",
+                    "check_ids": [
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_iam_role_policy.authorizer_invocation_policy",
+                    "check_ids": [
+                        "CKV_AWS_287",
+                        "CKV_AWS_289",
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/sqs.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.calendar_trial_session_dl_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.calendar_trial_session_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.send_emails_dl_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_sqs_queue.send_emails_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/api/websockets.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.aws_acm_certificate.websockets",
+                    "check_ids": [
+                        "CKV_AWS_233"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_apigatewayv2_route.default",
+                    "check_ids": [
+                        "CKV_AWS_309"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_apigatewayv2_route.disconnect",
+                    "check_ids": [
+                        "CKV_AWS_309"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.aws_apigatewayv2_stage.stage",
+                    "check_ids": [
+                        "CKV2_AWS_51",
+                        "CKV_AWS_76"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/batch/batch.tf",
+            "findings": [
+                {
+                    "resource": "module.zip_batch_east.aws_iam_role_policy_attachment.batch_service_role_admin_policy",
+                    "check_ids": [
+                        "CKV_AWS_274"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/elastic-container-registry/batch-elastic-container-registry.tf",
+            "findings": [
+                {
+                    "resource": "module.ecr-green-east.aws_ecr_repository.docket_entry_zipper_repo",
+                    "check_ids": [
+                        "CKV_AWS_136",
+                        "CKV_AWS_163",
+                        "CKV_AWS_51"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/lambda-role/lambda-role.tf",
+            "findings": [
+                {
+                    "resource": "module.lambda_role_green.aws_iam_role_policy.lambda_policy",
+                    "check_ids": [
+                        "CKV_AWS_290",
+                        "CKV_AWS_355"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/lambda/lambda.tf",
+            "findings": [
+                {
+                    "resource": "module.api-east-green.module.api_async_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.api_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.api_public_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.change_of_address_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.check_case_cron_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.cognito_authorizer_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.maintenance_notify_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.pdf_generation_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.public_api_authorizer_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.public_async_docket_record_pdf_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.send_emails_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.set_trial_session_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.websocket_authorizer_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.websockets_connect_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.websockets_default_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.websockets_disconnect_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.zip_handle_bounce.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.api-east-green.module.zip_seal.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.opensearch-sync-east-green.module.opensearch_sync_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.rds-expired-records-cleanup.module.rds_expired_records_cleanup_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.module.header_security_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.module.strip_basepath_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                },
+                {
+                    "resource": "module.worker-east-green.module.worker_lambda.aws_lambda_function.lambda_function",
+                    "check_ids": [
+                        "CKV_AWS_173"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/opensearch-sync/opensearch-sync.tf",
+            "findings": [
+                {
+                    "resource": "module.opensearch-sync-east-green.aws_sqs_queue.opensearch_sync_dl_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.opensearch-sync-east-green.aws_sqs_queue.opensearch_sync_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/ui/frontend-public.tf",
+            "findings": [
+                {
+                    "resource": "module.ui-green.aws_cloudfront_distribution.public_distribution",
+                    "check_ids": [
+                        "CKV2_AWS_32",
+                        "CKV2_AWS_47",
+                        "CKV_AWS_174",
+                        "CKV_AWS_374",
+                        "CKV_AWS_68",
+                        "CKV_AWS_86"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket",
+                    "check_ids": [
+                        "CKV_AWS_283"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket_failover",
+                    "check_ids": [
+                        "CKV_AWS_283"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket.failover_public",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket.frontend_public",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_failover_public",
+                    "check_ids": [
+                        "CKV_AWS_53",
+                        "CKV_AWS_54",
+                        "CKV_AWS_55",
+                        "CKV_AWS_56"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_frontend_public",
+                    "check_ids": [
+                        "CKV_AWS_53",
+                        "CKV_AWS_54",
+                        "CKV_AWS_55",
+                        "CKV_AWS_56"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/ui/frontend.tf",
+            "findings": [
+                {
+                    "resource": "module.ui-green.aws_cloudfront_distribution.distribution",
+                    "check_ids": [
+                        "CKV2_AWS_32",
+                        "CKV2_AWS_47",
+                        "CKV_AWS_174",
+                        "CKV_AWS_374",
+                        "CKV_AWS_68",
+                        "CKV_AWS_86"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_iam_policy_document.allow_public",
+                    "check_ids": [
+                        "CKV_AWS_283"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_iam_policy_document.allow_public_failover",
+                    "check_ids": [
+                        "CKV_AWS_283"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket.failover",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket.frontend",
+                    "check_ids": [
+                        "CKV2_AWS_6",
+                        "CKV_AWS_145",
+                        "CKV_AWS_18",
+                        "CKV_AWS_21"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_failover",
+                    "check_ids": [
+                        "CKV_AWS_53",
+                        "CKV_AWS_54",
+                        "CKV_AWS_55",
+                        "CKV_AWS_56"
+                    ]
+                },
+                {
+                    "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_frontend",
+                    "check_ids": [
+                        "CKV_AWS_53",
+                        "CKV_AWS_54",
+                        "CKV_AWS_55",
+                        "CKV_AWS_56"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/../../modules/worker/worker.tf",
+            "findings": [
+                {
+                    "resource": "module.worker-east-green.aws_sqs_queue.worker_dl_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                },
+                {
+                    "resource": "module.worker-east-green.aws_sqs_queue.worker_queue",
+                    "check_ids": [
+                        "CKV_AWS_27"
+                    ]
+                }
+            ]
+        }
+    ]
+}
