@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 jest.mock('child_process', () => ({
   execFileSync: jest.fn(),
 }));
@@ -642,6 +643,68 @@ describe('download-historical-test-file-times', () => {
         workflowFileName: 'client.yml',
       });
 
+      expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
+        './any.test.ts': 1,
+      });
+      consoleSpy.mockRestore();
+    });
+
+    it('logs a non-Error workflow run lookup failure and continues without the race-filter', async () => {
+      process.env.GITHUB_RUN_ID = '424242';
+      const consoleSpy = jest
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
+      const outputFilePath = path.join(tempDir, 'race-filter-non-error.json');
+
+      mockedExecFileSync.mockImplementation(
+        (command: string, args: readonly string[] = []) => {
+          if (command === 'git') {
+            return 'current\nancestor\n';
+          }
+          if (command === 'unzip') {
+            const outputDirectory = args[3];
+            fs.writeFileSync(
+              path.join(outputDirectory, 'historical-test-file-times.json'),
+              JSON.stringify({ './any.test.ts': 1 }),
+            );
+            return Buffer.from('');
+          }
+          throw new Error(`Unexpected command: ${command}`);
+        },
+      );
+
+      jest
+        .mocked(global.fetch)
+        // workflow run lookup rejects with a non-Error value
+        .mockRejectedValueOnce('network down')
+        // artifact lookup succeeds without race filter
+        .mockResolvedValueOnce({
+          json: () =>
+            Promise.resolve({
+              artifacts: [
+                {
+                  archive_download_url: 'https://example.com/any.zip',
+                  expired: false,
+                  name: 'client.yml-historical-test-file-times-ancestor',
+                },
+              ],
+            }),
+          ok: true,
+        } as Response)
+        .mockResolvedValueOnce({
+          arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+          ok: true,
+        } as Response);
+
+      await downloadHistoricalTestFileTimes({
+        artifactName: 'historical-test-file-times',
+        outputFilePath,
+        workflowFileName: 'client.yml',
+      });
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Could not fetch workflow run start time; proceeding without race-filter. (network down)',
+      );
       expect(JSON.parse(fs.readFileSync(outputFilePath, 'utf8'))).toEqual({
         './any.test.ts': 1,
       });
