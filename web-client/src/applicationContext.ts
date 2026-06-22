@@ -243,7 +243,6 @@ import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { removePdfFromDocketEntryInteractor } from '@web-client/proxies/documents/removePdfFromDocketEntryProxy';
 import { removePetitionerAndUpdateCaptionInteractor } from '@web-client/proxies/removePetitionerAndUpdateCaptionProxy';
-import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
 import { removeSignatureFromDocumentInteractor } from '@web-client/proxies/documents/removeSignatureFromDocumentProxy';
 import { renewIdTokenInteractor } from '@web-client/proxies/auth/renewIdTokenProxy';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
