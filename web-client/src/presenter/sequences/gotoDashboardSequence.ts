@@ -13,6 +13,7 @@ import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrial
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
+import { createTestApiErrorAction } from '@web-client/presenter/actions/createTestApiErrorAction';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
@@ -35,6 +36,18 @@ const proceedToMessages = [navigateToMessagesAction];
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
 export const gotoDashboardSequence = [
+  () => {
+    // TEMPORARY: ?rum-http-error=1 → fires an XHR to a nonexistent API endpoint so RUM's
+    // http telemetry captures the 404. Uses XMLHttpRequest (not fetch) because that is what
+    // the RUM http plugin instruments. Targets API_URL so CloudFront doesn't catch-all to
+    // index.html. REMOVE after confirming the failed request appears in CloudWatch RUM.
+    if (
+      new URLSearchParams(window.location.search).get('rum-http-error') === '1'
+    ) {
+      return [createTestApiErrorAction];
+    }
+    return [];
+  },
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,

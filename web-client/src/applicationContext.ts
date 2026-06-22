@@ -94,6 +94,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@web-client/proxies
 import { createMessageInteractor } from '@web-client/proxies/messages/createMessageProxy';
 import { createPractitionerDocumentInteractor } from '@web-client/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '@web-client/proxies/practitioners/createPractitionerUserProxy';
+import { createTestApiErrorInteractor } from '../../shared/src/business/useCases/createTestApiErrorInteractor';
 import { createTrialSessionInteractor } from '@web-client/proxies/trialSessions/createTrialSessionProxy';
 import { deleteAuthCookieInteractor } from '@web-client/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '@web-client/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -242,6 +243,7 @@ import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { removePdfFromDocketEntryInteractor } from '@web-client/proxies/documents/removePdfFromDocketEntryProxy';
 import { removePetitionerAndUpdateCaptionInteractor } from '@web-client/proxies/removePetitionerAndUpdateCaptionProxy';
+import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
 import { removeSignatureFromDocumentInteractor } from '@web-client/proxies/documents/removeSignatureFromDocumentProxy';
 import { renewIdTokenInteractor } from '@web-client/proxies/auth/renewIdTokenProxy';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
@@ -302,7 +304,6 @@ import { updateUserContactInformationInteractor } from '@web-client/proxies/user
 import { updateUserPendingEmailInteractor } from '@web-client/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
-import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
@@ -396,6 +397,7 @@ const allUseCases = {
   createMessageInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
+  createTestApiErrorInteractor,
   createTrialSessionInteractor,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
@@ -602,6 +604,7 @@ const allUseCases = {
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
 };
+
 tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({
@@ -772,6 +775,12 @@ const applicationContext = {
     forceRefreshCallback = callback;
   },
   setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
+  getDocumentGenerators: () => {
+    // TODO: fill this out
+  },
+  getStorageClient: () => {
+    // TODO: fill this out
+  },
 };
 
 export { applicationContext };
