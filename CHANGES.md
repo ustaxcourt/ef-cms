@@ -1,3 +1,25 @@
+<details><summary>Dependency Updates - Week of 2026-06-22</summary>
+
+## Local
+
+#### Upgrade Node.js to `24.17.0`
+```bash
+nvm install 24.17.0
+nvm use 24.17.0
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.85` - choose exp8
+```bash
+. scripts/env/set-env.zsh exp8
+npm run deploy:ci-image
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-06-15</summary>
 
 ## Local
