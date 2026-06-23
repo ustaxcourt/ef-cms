@@ -19,6 +19,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import { RawCaseSearchResult } from '@shared/business/entities/cases/CaseSearchResult';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -30,14 +31,7 @@ export type CaseAdvancedSearchParamsRequestType = {
   procedureType?: ProcedureType;
 };
 
-export type CaseSearchResult = {
-  petitionerNames: string[];
-  docketNumberWithSuffix: string;
-  docketNumber: string;
-  receivedAt: string;
-  caseCaption: string;
-  petitionerStateNames?: string[];
-};
+export type CaseSearchResult = RawCaseSearchResult;
 
 export const caseAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
