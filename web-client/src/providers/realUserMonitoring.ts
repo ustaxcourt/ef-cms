@@ -21,7 +21,7 @@ export const initializeRealUserMonitoring = (): void => {
 
     const config: AwsRumConfig = {
       allowCookies: true,
-      enableXRay: true,
+      enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId,
       sessionSampleRate: Number(sampleRateStr),

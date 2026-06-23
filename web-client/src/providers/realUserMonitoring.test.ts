@@ -73,14 +73,14 @@ describe('realUserMonitoring', () => {
     expect(mockRecordError).toHaveBeenCalledWith(error);
   });
 
-  it('configures AwsRum with X-Ray enabled', () => {
+  it('configures AwsRum with X-Ray disabled', () => {
     process.env.ENV = 'dev';
     const { initializeRealUserMonitoring } = require('./realUserMonitoring');
 
     initializeRealUserMonitoring();
 
     const config = mockAwsRum.mock.calls[0][3];
-    expect(config.enableXRay).toBe(true);
+    expect(config.enableXRay).toBe(false);
   });
 
   it('configures the http telemetry so failed HTTP requests are recorded', () => {
