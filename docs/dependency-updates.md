@@ -350,8 +350,8 @@ If an update is available for DWT:
 - As of June 23, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` which is the only published version of that package, which declares a peer dependency of `@babel/core@^7.0.0`. Attempting to install `@babel/core@8.x` causes peer-dependency conflicts that break `@babel/preset-react` and the rest of the babel preset chain. All four `@babel/*` packages have been added to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent the upgrade script from touching them. Revisit once `esbuild-plugin-babel-cached` publishes a version compatible with `@babel/core@^8`.
 
 ### @types/node
-**Installed Version: 24.12.4**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.4, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.2**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -364,6 +364,8 @@ The major version of this package should match our major version of Node. We sho
 - As of May 26, 2026: Node.js updated to `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
 - As of June 1, 2026: Node.js remains at `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
+
+- As of June 23, 2026: Node.js updated to `v24.17.0`; `@types/node@24.13.x` is now available for the first time (previously stuck at `24.12.4`). Updated to **24.13.2**, the latest published version under major `24`. No `24.14+` published yet.
 
 ### TypeScript
 **Installed Version: 6.0.3**
