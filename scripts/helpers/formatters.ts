@@ -50,3 +50,11 @@ export const formatCurrency = (amount: number | string | undefined): string => {
     typeof amount === 'string' ? parseFloat(amount) : amount;
   return numericAmount.toFixed(2);
 };
+
+export const formatDocketNumber = (
+  docketNumber: string,
+  docketNumberSuffix?: string,
+): string => {
+  if (!docketNumberSuffix) return docketNumber;
+  return `${docketNumber}${docketNumberSuffix}`;
+};
