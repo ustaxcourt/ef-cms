@@ -1,6 +1,8 @@
+const mockAddSessionAttributes = jest.fn();
 const mockRecordError = jest.fn();
 const mockEnable = jest.fn();
 const mockAwsRum = jest.fn().mockImplementation(() => ({
+  addSessionAttributes: mockAddSessionAttributes,
   enable: mockEnable,
   recordError: mockRecordError,
 }));
@@ -43,6 +45,20 @@ describe('realUserMonitoring', () => {
     expect(mockRecordError).not.toHaveBeenCalled();
   });
 
+  it('setRumUserContext is a no-op when RUM has not been initialized', () => {
+    process.env.ENV = 'local';
+    const { setRumUserContext } = require('./realUserMonitoring');
+
+    expect(() =>
+      setRumUserContext({
+        role: 'petitioner',
+        section: 'petitioner',
+        userId: 'user-id',
+      }),
+    ).not.toThrow();
+    expect(mockAddSessionAttributes).not.toHaveBeenCalled();
+  });
+
   it('forwards the error to AwsRum once initialized', () => {
     process.env.ENV = 'dev';
     const {
@@ -55,6 +71,16 @@ describe('realUserMonitoring', () => {
     recordError(error);
 
     expect(mockRecordError).toHaveBeenCalledWith(error);
+  });
+
+  it('configures AwsRum with X-Ray enabled', () => {
+    process.env.ENV = 'dev';
+    const { initializeRealUserMonitoring } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+
+    const config = mockAwsRum.mock.calls[0][3];
+    expect(config.enableXRay).toBe(true);
   });
 
   it('configures the http telemetry so failed HTTP requests are recorded', () => {
@@ -89,5 +115,45 @@ describe('realUserMonitoring', () => {
 
     const config = mockAwsRum.mock.calls[0][3];
     expect(config.releaseId).toBeUndefined();
+  });
+
+  it('forwards session attributes to AwsRum once initialized', () => {
+    process.env.ENV = 'dev';
+    const {
+      initializeRealUserMonitoring,
+      setRumUserContext,
+    } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+    setRumUserContext({
+      role: 'docketClerk',
+      section: 'docket',
+      userId: 'user-id',
+    });
+
+    expect(mockAddSessionAttributes).toHaveBeenCalledWith({
+      role: 'docketClerk',
+      section: 'docket',
+      userId: 'user-id',
+    });
+  });
+
+  it('omits section when session attributes do not include one', () => {
+    process.env.ENV = 'dev';
+    const {
+      initializeRealUserMonitoring,
+      setRumUserContext,
+    } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+    setRumUserContext({
+      role: 'judge',
+      userId: 'user-id',
+    });
+
+    expect(mockAddSessionAttributes).toHaveBeenCalledWith({
+      role: 'judge',
+      userId: 'user-id',
+    });
   });
 });

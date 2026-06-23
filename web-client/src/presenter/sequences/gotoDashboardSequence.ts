@@ -14,6 +14,7 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
+import { setRumUserContextAction } from '@web-client/presenter/actions/setRumUserContextAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -55,6 +56,7 @@ export const gotoDashboardSequence = [
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   setUserPermissionsAction,
+  setRumUserContextAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],
