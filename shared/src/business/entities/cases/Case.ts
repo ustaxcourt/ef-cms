@@ -118,6 +118,7 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentDate?: string;
   public petitionPaymentMethod?: string;
   public petitionPaymentStatus: string;
+  public petitionPaymentTransactionReferenceId?: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
@@ -808,6 +809,8 @@ export class Case extends JoiValidationEntity {
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
+    this.petitionPaymentTransactionReferenceId =
+      rawCase.petitionPaymentTransactionReferenceId;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;

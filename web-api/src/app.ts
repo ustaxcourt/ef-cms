@@ -221,6 +221,9 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
+import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
+import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
 
 export const app = express();
 
@@ -818,6 +821,18 @@ app.delete(
     lambdaWrapper(getCompletedMessagesForUserLambda),
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
+}
+
+/**
+ * petition-fee
+ */
+{
+  app.put('/petition-fee/init-payment', lambdaWrapper(initPaymentLambda));
+  app.put('/petition-fee/process-payment', lambdaWrapper(processPaymentLambda));
+  app.get(
+    '/petition-fee/get-transaction-details/:docketNumber',
+    lambdaWrapper(getTransactionDetailsLambda),
+  );
 }
 
 /**

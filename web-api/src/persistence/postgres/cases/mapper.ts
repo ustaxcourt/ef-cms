@@ -73,6 +73,8 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
       : null,
     petitionPaymentMethod: rawCase.petitionPaymentMethod,
     petitionPaymentStatus: rawCase.petitionPaymentStatus,
+    petitionPaymentTransactionReferenceId:
+      rawCase.petitionPaymentTransactionReferenceId,
     petitionPaymentWaivedDate: rawCase.petitionPaymentWaivedDate
       ? calculateDate({ dateString: rawCase.petitionPaymentWaivedDate })
       : null,
