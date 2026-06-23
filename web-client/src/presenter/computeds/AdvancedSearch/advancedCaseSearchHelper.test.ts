@@ -260,7 +260,7 @@ describe('advancedCaseSearchHelper', () => {
     ).toEqual(['101-19', '102-19']);
   });
 
-  it('should sort by filed date', () => {
+  it('should sort by newest/oldest (receivedAt)', () => {
     const result = runHelper({
       caseSearchSort: {
         sortColumn: 'receivedAt',
