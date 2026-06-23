@@ -16,6 +16,45 @@ export type CapturedNetworkPayload = {
 
 const capturedNetworkPayloads: CapturedNetworkPayload[] = [];
 
+const PUBLIC_APP_HOST = 'localhost:5678';
+
+function getHeaderValue(
+  headers: Record<string, unknown> | undefined,
+  headerName: string,
+): string | undefined {
+  if (!headers) {
+    return undefined;
+  }
+
+  const matchingKey = Object.keys(headers).find(
+    key => key.toLowerCase() === headerName,
+  );
+
+  if (!matchingKey) {
+    return undefined;
+  }
+
+  const value = headers[matchingKey];
+  return typeof value === 'string' ? value : undefined;
+}
+
+function isPublicOriginRequest(req: {
+  url: string;
+  headers: Record<string, unknown>;
+}): boolean {
+  if (req.url.includes(PUBLIC_APP_HOST)) {
+    return true;
+  }
+
+  const referer = getHeaderValue(req.headers, 'referer');
+  if (referer?.includes(PUBLIC_APP_HOST)) {
+    return true;
+  }
+
+  const origin = getHeaderValue(req.headers, 'origin');
+  return origin?.includes(PUBLIC_APP_HOST) ?? false;
+}
+
 Cypress.Commands.add('capturePublicPageNetworkTraffic', () => {
   capturedNetworkPayloads.length = 0;
 
@@ -26,14 +65,17 @@ Cypress.Commands.add('capturePublicPageNetworkTraffic', () => {
     },
     req => {
       req.on('response', res => {
-        capturedNetworkPayloads.push({
-          url: req.url,
-          method: req.method,
-          requestBody: req.body,
-          responseBody: res.body,
-          requestHeaders: req.headers,
-          responseHeaders: res.headers,
-        });
+        // Include only requests that originated from the public site
+        if (isPublicOriginRequest(req)) {
+          capturedNetworkPayloads.push({
+            url: req.url,
+            method: req.method,
+            requestBody: req.body,
+            responseBody: res.body,
+            requestHeaders: req.headers,
+            responseHeaders: res.headers,
+          });
+        }
       });
 
       // Intentionally do not call req.continue(); calling it in middleware short-circuits later intercept handlers
