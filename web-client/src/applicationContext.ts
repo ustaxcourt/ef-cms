@@ -306,6 +306,7 @@ import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCas
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
+import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadPdfFromClient } from '@web-client/persistence/s3/uploadPdfFromClient';
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
