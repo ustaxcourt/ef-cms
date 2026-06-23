@@ -786,7 +786,7 @@ export const baseState = {
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
   caseSearchSort: {
-    sortColumn: 'resultIndex' as string,
+    sortColumn: 'resultIndex',
     sortDirection: 'asc' as 'asc' | 'desc',
   },
   orderDocumentSearchSort: {

@@ -99,7 +99,7 @@ export const baseState = {
   opinionCurrentPaginationPage: 0,
   todaysOrdersCurrentPaginationPage: 0,
   caseSearchSort: {
-    sortColumn: 'resultIndex' as string,
+    sortColumn: 'resultIndex',
     sortDirection: 'asc' as 'asc' | 'desc',
   },
   orderDocumentSearchSort: {

@@ -7,7 +7,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { type ClientApplicationContext } from '@web-client/applicationContext';
-import { getFullStateName } from '../getFullStateName';
+import { getFullStateName } from './getFullStateName';
 
 export const DEFAULT_CASE_SEARCH_SORT: CaseSearchSort = {
   sortColumn: 'resultIndex',

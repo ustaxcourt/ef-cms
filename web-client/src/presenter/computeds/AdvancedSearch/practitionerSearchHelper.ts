@@ -2,7 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
-import { getFullStateName } from '../getFullStateName';
+import { getFullStateName } from './getFullStateName';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type FormattedPractitionerSearchResultType = {
