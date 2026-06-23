@@ -41,8 +41,44 @@ describe('validateGrantDenyMotionFormAction', () => {
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder: [
+        'issueOrder',
+        'disposition',
+        'jurisdiction',
+        'filingParty',
+        'dueDate',
+        'additionalOrderText',
+      ],
       errors: { disposition: 'Select Granted or Denied' },
     });
+  });
+
+  it('orders filingParty before dueDate so the bullet list matches the field order', async () => {
+    await runAction(validateGrantDenyMotionFormAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: { docketNumber: '101-26' },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDateMessage: 'statusReport',
+        },
+      },
+    });
+
+    expect(mockErrorPath).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errorDisplayOrder: expect.arrayContaining(['filingParty', 'dueDate']),
+        errors: expect.objectContaining({
+          dueDate: 'Date is required',
+          filingParty: 'Select Filing Party',
+        }),
+      }),
+    );
+
+    const { errorDisplayOrder } = mockErrorPath.mock.calls[0][0];
+    expect(errorDisplayOrder.indexOf('filingParty')).toBeLessThan(
+      errorDisplayOrder.indexOf('dueDate'),
+    );
   });
 
   it('flags issueOrder as required on a lead case', async () => {
