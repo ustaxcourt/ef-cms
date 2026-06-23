@@ -63,7 +63,7 @@ describe('Grant/Deny Motion orders', () => {
         docketNumberWithSuffix: '124-26',
         orderContent: `<p>${INDENT}On March 15, 2026, petitioners filed a Motion for Continuance (doc. no. 11). For cause, it is</p>
 
-        <p>${INDENT}ORDERED that petitioners' Motion for Continuance is granted. It is further</p>
+        <p>${INDENT}ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
 
         <p>${INDENT}ORDERED that this case is restored to the general docket. It is further</p>
 

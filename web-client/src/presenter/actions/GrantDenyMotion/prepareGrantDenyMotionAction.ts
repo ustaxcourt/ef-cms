@@ -34,7 +34,7 @@ const buildDispositionPhrase = ({
 const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
 
 const getMovantPossessive = (movant: string): string =>
-  movant === 'petitioners' ? "petitioners'" : `${movant}'s`;
+  movant === 'respondent' ? "respondent's" : "petitioner's";
 
 const joinWithItIsFurther = (clauses: string[]): string =>
   clauses

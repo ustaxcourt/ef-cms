@@ -83,7 +83,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
   });
 
-  it('uses petitioners possessive when multiple petitioners filed the motion', async () => {
+  it('uses petitioner possessive when multiple petitioners filed the motion', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
@@ -97,8 +97,44 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      "ORDERED that petitioners' Motion to Compel is granted.",
+      "ORDERED that petitioner's Motion to Compel is granted.",
     );
+  });
+
+  it('uses petitioner possessive for a motion to consolidate on a consolidated lead case', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          consolidatedCases: [
+            { docketNumber: '123-26', docketNumberWithSuffix: '123-26' },
+            { docketNumber: '124-26', docketNumberWithSuffix: '124-26' },
+          ],
+          docketEntries: [
+            {
+              ...motion,
+              documentTitle:
+                'Motion to Consolidate Docket Numbers 124-26, 125-26',
+              documentType: 'Motion to Consolidate',
+            },
+          ],
+          leadDocketNumber: '123-26',
+          petitioners: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
+        },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          issueOrder:
+            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      "ORDERED that petitioner's Motion to Consolidate Docket Numbers 124-26, 125-26 is granted.",
+    );
+    expect(result.state.form.richText).not.toContain("petitioners'");
   });
 
   it('uses respondent possessive when respondent filed the motion', async () => {
