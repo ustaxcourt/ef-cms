@@ -19,7 +19,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { RawCaseSearchResult } from '@shared/business/entities/cases/CaseSearchResult';
+import { RawPublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -30,8 +30,6 @@ export type CaseAdvancedSearchParamsRequestType = {
   caseTypes?: CaseType[];
   procedureType?: ProcedureType;
 };
-
-export type CaseSearchResult = RawCaseSearchResult;
 
 export const caseAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -45,7 +43,7 @@ export const caseAdvancedSearchInteractor = async (
     procedureType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
-): Promise<CaseSearchResult[]> => {
+): Promise<RawPublicCaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 

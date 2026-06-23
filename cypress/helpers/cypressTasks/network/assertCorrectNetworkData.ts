@@ -7,7 +7,7 @@ import { PublicUser } from '../../../../shared/src/business/entities/PublicUser'
 import { PublicDocumentSearchResult } from '../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
 import { PublicCaseDTO } from '../../../../shared/src/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '../../../../shared/src/business/dto/cases/RestrictedCaseDTO';
-import { CaseSearchResult } from '@shared/business/entities/cases/CaseSearchResult';
+import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 
 export type UnauthorizedFieldFinding = {
   url: string;
@@ -46,8 +46,8 @@ const PUBLIC_ENTITY_FACTORIES = {
   PublicDocketEntry: (): PublicDocketEntry => new PublicDocketEntry({}),
   PublicDocumentSearchResult: (): PublicDocumentSearchResult =>
     new PublicDocumentSearchResult({}),
-  CaseSearchResult: (): CaseSearchResult => new CaseSearchResult({}),
-
+  PublicCaseSearchResult: (): PublicCaseSearchResult =>
+    new PublicCaseSearchResult({}),
   RestrictedCase: (): RestrictedCase =>
     new RestrictedCase({ docketNumber: '' }),
   PublicUser: (): PublicUser => new PublicUser({}),

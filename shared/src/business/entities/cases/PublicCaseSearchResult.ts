@@ -2,7 +2,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class CaseSearchResult extends JoiValidationEntity {
+export class PublicCaseSearchResult extends JoiValidationEntity {
   public caseCaption: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;
@@ -10,8 +10,8 @@ export class CaseSearchResult extends JoiValidationEntity {
   public petitionerStateNames: string[];
   public receivedAt: string;
 
-  constructor(rawProps: RawCaseSearchResult) {
-    super('CaseSearchResult');
+  constructor(rawProps: RawPublicCaseSearchResult) {
+    super('PublicCaseSearchResult');
 
     this.caseCaption = rawProps.caseCaption;
     this.docketNumber = rawProps.docketNumber;
@@ -37,8 +37,8 @@ export class CaseSearchResult extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return CaseSearchResult.VALIDATION_RULES;
+    return PublicCaseSearchResult.VALIDATION_RULES;
   }
 }
 
-export type RawCaseSearchResult = ExcludeMethods<CaseSearchResult>;
+export type RawPublicCaseSearchResult = ExcludeMethods<PublicCaseSearchResult>;

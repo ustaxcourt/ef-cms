@@ -7,9 +7,9 @@ import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregat
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
-  CaseSearchResult,
-  RawCaseSearchResult,
-} from '@shared/business/entities/cases/CaseSearchResult';
+  PublicCaseSearchResult,
+  RawPublicCaseSearchResult,
+} from '@shared/business/entities/cases/PublicCaseSearchResult';
 
 export const casePublicSearch = async ({
   applicationContext,
@@ -17,7 +17,7 @@ export const casePublicSearch = async ({
 }: {
   applicationContext: ServerApplicationContext;
   searchTerms: CaseAdvancedSearchParamsRequestType;
-}): Promise<{ results: RawCaseSearchResult[] }> => {
+}): Promise<{ results: RawPublicCaseSearchResult[] }> => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -61,7 +61,7 @@ export const casePublicSearch = async ({
   return {
     results: cases.results.map(c => {
       const petitioners = c.petitioners || [];
-      const result = new CaseSearchResult({
+      const result = new PublicCaseSearchResult({
         caseCaption: c.caseCaption,
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
