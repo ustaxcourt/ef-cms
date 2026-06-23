@@ -10,7 +10,6 @@ import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
@@ -23,6 +22,10 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -99,9 +102,8 @@ export const serveExternallyFiledDocument = async (
     );
   }
 
-  let paperServiceResult;
+  let paperServiceResult: { pdfUrl?: string } | undefined;
   let caseEntities: Case[] = [];
-  const coversheetLength = 1;
 
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
@@ -111,78 +113,112 @@ export const serveExternallyFiledDocument = async (
   docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
 
   try {
-    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
-    caseEntities = await settlePromises(
-      casesToUpdate.map(async rawCaseToUpdate => {
-        const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
+    await withTransaction(async () => {
+      const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+      caseEntities = await settlePromises(
+        casesToUpdate.map(async rawCaseToUpdate => {
+          const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
-        const docketEntry = caseEntity.docketEntries.find(
-          e => e.docketEntryId === docketEntryId,
-        );
+          const docketEntry = caseEntity.docketEntries.find(
+            e => e.docketEntryId === docketEntryId,
+          );
 
-        const isSubjectCase =
-          caseEntity.docketNumber === subjectCaseDocketNumber;
+          const isSubjectCase =
+            caseEntity.docketNumber === subjectCaseDocketNumber;
 
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...originalSubjectDocketEntry,
-            index: docketEntry ? docketEntry.index : undefined,
-            docketNumber: caseEntity.docketNumber,
-            draftOrderState: null,
-            ...(!subjectCaseIsSimultaneousDocType && {
-              filingDate: applicationContext
-                .getUtilities()
-                .createISODateString(),
-            }),
-            isDraft: false,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            isPendingService: isSubjectCase,
-            multiDocketedOn: docketNumbers,
-            originallyFiledDocketNumber: subjectCaseDocketNumber,
-            numberOfPages: numberOfPages + coversheetLength,
-            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-          },
-          { authorizedUser },
-        );
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...originalSubjectDocketEntry,
+              index: docketEntry ? docketEntry.index : undefined,
+              docketNumber: caseEntity.docketNumber,
+              draftOrderState: null,
+              ...(!subjectCaseIsSimultaneousDocType && {
+                filingDate: applicationContext
+                  .getUtilities()
+                  .createISODateString(),
+              }),
+              isDraft: false,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              isPendingService: isSubjectCase,
+              multiDocketedOn: docketNumbers,
+              originallyFiledDocketNumber: subjectCaseDocketNumber,
+              numberOfPages,
+            },
+            { authorizedUser },
+          );
 
-        return fileAndServeDocumentOnOneCase({
-          caseEntity,
-          docketEntryEntity,
-          user,
-        });
-      }),
-    );
-
-    const updatedSubjectCaseEntity = caseEntities.find(
-      c => c.docketNumber === subjectCaseDocketNumber,
-    );
-    const updatedSubjectDocketEntry =
-      updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
-
-    if (!updatedSubjectDocketEntry) {
-      throw new NotFoundError(
-        `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
+          return fileAndServeDocumentOnOneCase({
+            caseEntity,
+            docketEntryEntity,
+            user,
+          });
+        }),
       );
-    }
 
-    await applicationContext.getUseCases().addCoversheetInteractor(
-      applicationContext,
-      {
-        caseEntity: updatedSubjectCaseEntity,
-        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-        docketNumber: updatedSubjectCaseEntity!.docketNumber,
-      },
-      authorizedUser,
-    );
+      const updatedSubjectCaseEntity = caseEntities.find(
+        c => c.docketNumber === subjectCaseDocketNumber,
+      );
+      const updatedSubjectDocketEntry =
+        updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities,
-        docketEntryId,
+      if (!updatedSubjectDocketEntry) {
+        throw new NotFoundError(
+          `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
+        );
+      }
+
+      paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities,
+          docketEntryId,
+        });
+
+      const successMessage =
+        docketNumbers.length > 1
+          ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+          : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
+
+      onTransactionCommit(async () => {
+        // Add coversheet after transaction commits successfully
+        //
+        // Intentionally synchronous: serving externally-filed documents must
+        // produce a finished, coversheet-attached PDF before the response so
+        // the document is ready for service. Queueing here would require the
+        // service step to wait on a poll, which we haven't built yet.
+        //
+        // Simultaneous-brief types prepend a NEW coversheet (with the service
+        // stamp) on top of the file-time coversheet, so we must bypass the
+        // idempotency gate — the file step already marked the entry COMPLETE,
+        // and without the bypass the gate would short-circuit and the served
+        // PDF would be missing the service-stamped coversheet.
+        await applicationContext.getUseCases().addCoversheetInteractor(
+          applicationContext,
+          {
+            bypassIdempotencyGate: subjectCaseIsSimultaneousDocType,
+            caseEntity: updatedSubjectCaseEntity,
+            docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+            docketNumber: updatedSubjectCaseEntity!.docketNumber,
+          },
+          authorizedUser,
+        );
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            clientConnectionId,
+            message: {
+              action: 'serve_document_complete',
+              alertSuccess: { message: successMessage, overwritable: false },
+              pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
+            },
+            userId: user.userId,
+          });
       });
+    });
   } finally {
     await updateDocketEntryPendingServiceStatus({
       docketEntryId,
@@ -190,22 +226,6 @@ export const serveExternallyFiledDocument = async (
       status: false,
     });
   }
-
-  const successMessage =
-    docketNumbers.length > 1
-      ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
-      : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_document_complete',
-      alertSuccess: { message: successMessage, overwritable: false },
-      pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
-    },
-    userId: user.userId,
-  });
 };
 
 export const determineEntitiesToLock = (

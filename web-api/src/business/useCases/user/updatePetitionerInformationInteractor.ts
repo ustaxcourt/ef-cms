@@ -27,6 +27,7 @@ import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/ser
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -277,99 +278,101 @@ export const updatePetitionerInformation = async (
     updatedPetitionerData.contactId,
   );
 
-  if (hasPetitionerInfoChanged) {
-    await invalidateUserContactGeocode(
-      docketNumber,
-      updatedPetitionerData.contactId,
-    );
-  }
-
-  const updateAddressOrPhone =
-    hasPetitionerInfoChanged &&
-    !updatedCaseContact.isAddressSealed &&
-    caseEntity.shouldGenerateNoticesForCase();
-
-  if (updateAddressOrPhone) {
-    const privatePractitionersRepresentingContact =
-      Case.isPetitionerRepresented(
-        caseEntity,
-        existingPetitionerInfo.contactId,
+  await withTransaction(async () => {
+    if (hasPetitionerInfoChanged) {
+      await invalidateUserContactGeocode(
+        docketNumber,
+        updatedPetitionerData.contactId,
       );
+    }
 
-    await generateAndServeDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity,
-      docketMeta: undefined,
-      documentType: documentTypeToGenerate,
-      newData: editableFields,
-      oldData: existingPetitionerInfo,
-      privatePractitionersRepresentingContact,
-      servedParties,
-      user: authorizedUser,
-    });
-  }
+    const updateAddressOrPhone =
+      hasPetitionerInfoChanged &&
+      !updatedCaseContact.isAddressSealed &&
+      caseEntity.shouldGenerateNoticesForCase();
 
-  const shouldUpdateEmailAddress =
-    updatedPetitionerData.updatedEmail &&
-    updatedPetitionerData.updatedEmail !== existingPetitionerInfo.email;
-
-  if (shouldUpdateEmailAddress) {
-    const isEmailAvailable = await applicationContext
-      .getPersistenceGateway()
-      .isEmailAvailable({
-        applicationContext,
-        email: updatedPetitionerData.updatedEmail,
-      });
-    if (isEmailAvailable) {
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .createUserForContact({
-          authorizedUser,
+    if (updateAddressOrPhone) {
+      const privatePractitionersRepresentingContact =
+        Case.isPetitionerRepresented(
           caseEntity,
-          contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
-          name: existingPetitionerInfo.name,
-        });
-    } else {
-      const contactId = await applicationContext
-        .getUseCaseHelpers()
-        .addExistingUserToCase({
-          applicationContext,
-          authorizedUser,
-          caseEntity,
-          contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
-          name: existingPetitionerInfo.name,
-        });
-
-      updatedCaseContact.oldEmail = existingPetitionerInfo.email;
-      updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
-
-      const userToUpdate = await getUserById({
-        userId: contactId,
-      });
-
-      if (!userToUpdate) {
-        throw new NotFoundError(
-          `User not found with user id ${authorizedUser.userId}`,
+          existingPetitionerInfo.contactId,
         );
-      }
 
-      await updateCaseEntityAndGenerateChange({
+      await generateAndServeDocketEntry({
         applicationContext,
         authorizedUser,
         caseEntity,
-        petitionerOnCase: updatedCaseContact,
+        docketMeta: undefined,
+        documentType: documentTypeToGenerate,
+        newData: editableFields,
+        oldData: existingPetitionerInfo,
+        privatePractitionersRepresentingContact,
+        servedParties,
         user: authorizedUser,
-        userHasAnEmail: userToUpdate.email,
       });
     }
-  }
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+    const shouldUpdateEmailAddress =
+      updatedPetitionerData.updatedEmail &&
+      updatedPetitionerData.updatedEmail !== existingPetitionerInfo.email;
+
+    if (shouldUpdateEmailAddress) {
+      const isEmailAvailable = await applicationContext
+        .getPersistenceGateway()
+        .isEmailAvailable({
+          applicationContext,
+          email: updatedPetitionerData.updatedEmail,
+        });
+      if (isEmailAvailable) {
+        caseEntity = await applicationContext
+          .getUseCaseHelpers()
+          .createUserForContact({
+            authorizedUser,
+            caseEntity,
+            contactId: updatedPetitionerData.contactId,
+            email: updatedPetitionerData.updatedEmail,
+            name: existingPetitionerInfo.name,
+          });
+      } else {
+        const contactId = await applicationContext
+          .getUseCaseHelpers()
+          .addExistingUserToCase({
+            applicationContext,
+            authorizedUser,
+            caseEntity,
+            contactId: updatedPetitionerData.contactId,
+            email: updatedPetitionerData.updatedEmail,
+            name: existingPetitionerInfo.name,
+          });
+
+        updatedCaseContact.oldEmail = existingPetitionerInfo.email;
+        updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
+
+        const userToUpdate = await getUserById({
+          userId: contactId,
+        });
+
+        if (!userToUpdate) {
+          throw new NotFoundError(
+            `User not found with user id ${authorizedUser.userId}`,
+          );
+        }
+
+        await updateCaseEntityAndGenerateChange({
+          applicationContext,
+          authorizedUser,
+          caseEntity,
+          petitionerOnCase: updatedCaseContact,
+          user: authorizedUser,
+          userHasAnEmail: userToUpdate.email,
+        });
+      }
+    }
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
 };
 

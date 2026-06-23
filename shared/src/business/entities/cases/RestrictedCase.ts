@@ -6,17 +6,22 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 
 // An entity for case details for a case a user does not have access to
 export class RestrictedCase extends JoiValidationEntity {
-  public docketNumber?: string;
+  public docketNumber: string;
   public docketNumberSuffix?: string;
+  public docketNumberWithSuffix?: string;
   public isPaper?: boolean;
   public isSealed?: string;
-  public leadDocketNumber?: boolean;
+  public leadDocketNumber?: string;
   public docketEntries: DocketEntry[];
 
   constructor(rawCase: any) {
     super('RestrictedCase');
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberSuffix = rawCase.docketNumberSuffix;
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
     this.isPaper = rawCase.isPaper;
     this.isSealed = rawCase.isSealed;
     this.leadDocketNumber = rawCase.leadDocketNumber;
@@ -28,7 +33,7 @@ export class RestrictedCase extends JoiValidationEntity {
       .array()
       .max(0)
       .description('Restricted case cannot have docket entries.'),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
   };

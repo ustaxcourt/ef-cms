@@ -44,8 +44,7 @@ describe('getPublicCaseAction', () => {
       applicationContextForClient.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContextForClient.getUseCases()
-        .getCaseDocketEntriesInteractor,
+      applicationContextForClient.getUseCases().getCaseDocketEntriesInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
       docketNumber: '123-20',
       page: 0,
