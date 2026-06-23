@@ -329,6 +329,7 @@ If an update is available for DWT:
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
+- As of June 23, 2026: Puppeteer 25.2.0 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.0 update until `@sparticuz/chromium@150.x` is available.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -342,6 +343,11 @@ If an update is available for DWT:
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
+
+### @babel/*
+**Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
+
+- As of June 23, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` which is the only published version of that package, which declares a peer dependency of `@babel/core@^7.0.0`. Attempting to install `@babel/core@8.x` causes peer-dependency conflicts that break `@babel/preset-react` and the rest of the babel preset chain. All four `@babel/*` packages have been added to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent the upgrade script from touching them. Revisit once `esbuild-plugin-babel-cached` publishes a version compatible with `@babel/core@^8`.
 
 ### @types/node
 **Installed Version: 24.12.4**
