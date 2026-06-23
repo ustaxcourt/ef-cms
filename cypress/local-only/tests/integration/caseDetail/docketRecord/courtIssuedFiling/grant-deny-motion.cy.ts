@@ -225,6 +225,57 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
   });
 
   describe('case IS part of a trial session', () => {
+    it('should require jurisdiction when case is stricken from the trial session', () => {
+      loginAsCaseServicesSupervisor();
+      createTrialSession().then(({ trialSessionId }) => {
+        cy.get('[data-testid="new-trial-sessions-tab"]').click();
+        cy.contains('Anchorage, Alaska').last().click();
+        cy.get('[data-testid="set-calendar-button"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+
+        createAndServePaperPetition({ yearReceived: '2025' }).then(
+          ({ docketNumber }) => {
+            loginAsCaseServicesSupervisor();
+            cy.visit(`/case-detail/${docketNumber}`);
+            createAndServePaperFiling({
+              dateReceived: today,
+              documentType: motionType,
+            });
+
+            cy.get('[data-testid="tab-case-information"]').click();
+            cy.get('[data-testid="add-to-trial-session-btn"]').click();
+            cy.get('#show-all-locations-true').click({ force: true });
+            cy.get('[data-testid="trial-session-select"]').select(
+              trialSessionId,
+            );
+            cy.contains('Add Case').click();
+            cy.get('[data-testid="success-alert"]').should('exist');
+
+            loginAsColvin();
+            cy.visit(`/case-detail/${docketNumber}`);
+            openGrantDenyMotionFromDocumentView();
+
+            cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+              force: true,
+            });
+            cy.get('[data-testid="stricken-from-trial-session"]').click({
+              force: true,
+            });
+            cy.get('[data-testid="save-draft-button"]').click();
+
+            cy.get('[data-testid="error-alert"]').should(
+              'contain.text',
+              'Jurisdiction is required since case is stricken from the trial session',
+            );
+            cy.get('#jurisdiction-form-group').should(
+              'contain.text',
+              'Select jurisdiction',
+            );
+          },
+        );
+      });
+    });
+
     it('should let a judge deny the motion and strike the case from the trial session', () => {
       loginAsCaseServicesSupervisor();
       createTrialSession().then(({ trialSessionId }) => {

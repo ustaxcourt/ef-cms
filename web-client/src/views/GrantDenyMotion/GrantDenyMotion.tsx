@@ -303,80 +303,92 @@ export const GrantDenyMotion = connect(
 
                       <hr className="border-top-2px border-base-lighter tw:my-2" />
 
-                      <div className="grant-deny-motion-jurisdiction-options">
-                        <div className="usa-radio">
-                          <input
-                            aria-label="restore to general docket"
-                            checked={
-                              form.jurisdiction ===
-                              grantDenyOptions.jurisdictionOptions.restored
-                            }
-                            className="usa-radio__input"
-                            data-testid="jurisdiction-restored"
-                            disabled={!jurisdictionOptionsEnabled}
-                            id="jurisdiction-restored"
-                            name="jurisdiction"
-                            type="radio"
-                            value={
-                              grantDenyOptions.jurisdictionOptions.restored
-                            }
-                            onChange={e =>
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              })
-                            }
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor="jurisdiction-restored"
-                            style={
-                              jurisdictionOptionsEnabled
-                                ? undefined
-                                : { color: '#757575' }
-                            }
-                            title={jurisdictionDisabledTitle}
-                          >
-                            Restore to general docket
-                          </label>
+                      <FormGroup
+                        className={
+                          grantDenyMotionFormHelper.jurisdictionErrorClass
+                        }
+                        errorText={
+                          grantDenyMotionFormHelper.jurisdictionErrorText
+                        }
+                        id="jurisdiction-form-group"
+                      >
+                        <div className="grant-deny-motion-jurisdiction-options">
+                          <div className="usa-radio">
+                            <input
+                              aria-label="restore to general docket"
+                              checked={
+                                form.jurisdiction ===
+                                grantDenyOptions.jurisdictionOptions.restored
+                              }
+                              className="usa-radio__input"
+                              data-testid="jurisdiction-restored"
+                              disabled={!jurisdictionOptionsEnabled}
+                              id="jurisdiction-restored"
+                              name="jurisdiction"
+                              type="radio"
+                              value={
+                                grantDenyOptions.jurisdictionOptions.restored
+                              }
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                                validateGrantDenyMotionSequence();
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor="jurisdiction-restored"
+                              style={
+                                jurisdictionOptionsEnabled
+                                  ? undefined
+                                  : { color: '#757575' }
+                              }
+                              title={jurisdictionDisabledTitle}
+                            >
+                              Restore to general docket
+                            </label>
+                          </div>
+                          <div className="usa-radio">
+                            <input
+                              aria-label="jurisdiction retained"
+                              checked={
+                                form.jurisdiction ===
+                                grantDenyOptions.jurisdictionOptions.retained
+                              }
+                              className="usa-radio__input"
+                              data-testid="jurisdiction-retained"
+                              disabled={!jurisdictionOptionsEnabled}
+                              id="jurisdiction-retained"
+                              name="jurisdiction"
+                              type="radio"
+                              value={
+                                grantDenyOptions.jurisdictionOptions.retained
+                              }
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                                validateGrantDenyMotionSequence();
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor="jurisdiction-retained"
+                              style={
+                                jurisdictionOptionsEnabled
+                                  ? undefined
+                                  : { color: '#757575' }
+                              }
+                              title={jurisdictionDisabledTitle}
+                            >
+                              Jurisdiction retained
+                            </label>
+                          </div>
                         </div>
-                        <div className="usa-radio">
-                          <input
-                            aria-label="jurisdiction retained"
-                            checked={
-                              form.jurisdiction ===
-                              grantDenyOptions.jurisdictionOptions.retained
-                            }
-                            className="usa-radio__input"
-                            data-testid="jurisdiction-retained"
-                            disabled={!jurisdictionOptionsEnabled}
-                            id="jurisdiction-retained"
-                            name="jurisdiction"
-                            type="radio"
-                            value={
-                              grantDenyOptions.jurisdictionOptions.retained
-                            }
-                            onChange={e =>
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              })
-                            }
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor="jurisdiction-retained"
-                            style={
-                              jurisdictionOptionsEnabled
-                                ? undefined
-                                : { color: '#757575' }
-                            }
-                            title={jurisdictionDisabledTitle}
-                          >
-                            Jurisdiction retained
-                          </label>
-                        </div>
-                      </div>
+                      </FormGroup>
 
                       <hr className="border-top-2px border-base-lighter tw:my-2" />
 

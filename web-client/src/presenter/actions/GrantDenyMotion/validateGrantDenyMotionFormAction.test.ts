@@ -62,4 +62,26 @@ describe('validateGrantDenyMotionFormAction', () => {
       }),
     );
   });
+
+  it('flags jurisdiction as required when case is stricken from trial session', async () => {
+    await runAction(validateGrantDenyMotionFormAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: { docketNumber: '101-26' },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          strickenFromTrialSession: true,
+        },
+      },
+    });
+
+    expect(mockErrorPath).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: expect.objectContaining({
+          jurisdiction:
+            'Jurisdiction is required since case is stricken from the trial session',
+        }),
+      }),
+    );
+  });
 });

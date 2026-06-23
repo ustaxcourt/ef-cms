@@ -55,6 +55,15 @@ describe('GrantDenyMotionForm', () => {
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
 
+    it('should be valid when stricken from trial session with jurisdiction selected', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
+        strickenFromTrialSession: true,
+      });
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
+
     it('should be valid with multiple non-empty additional order text entries', () => {
       const form = new GrantDenyMotionForm({
         additionalOrderText: ['first clause', '', 'second clause'],
@@ -117,6 +126,17 @@ describe('GrantDenyMotionForm', () => {
       });
       expect(form.getFormattedValidationErrors()).toMatchObject({
         dueDate: 'Due date cannot be prior to today. Enter a valid date.',
+      });
+    });
+
+    it('should be invalid when stricken from trial session without jurisdiction', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        strickenFromTrialSession: true,
+      });
+      expect(form.getFormattedValidationErrors()).toMatchObject({
+        jurisdiction:
+          'Jurisdiction is required since case is stricken from the trial session',
       });
     });
 
