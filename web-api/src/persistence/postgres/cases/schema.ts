@@ -51,6 +51,7 @@ export const caseTableDefinition = {
   petitionPaymentDate: DEFAULT as Date | null,
   petitionPaymentMethod: DEFAULT as string | null,
   petitionPaymentStatus: DEFAULT as string,
+  petitionPaymentToken: DEFAULT as string | null,
   petitionPaymentTransactionReferenceId: DEFAULT as string | null,
   petitionPaymentWaivedDate: DEFAULT as Date | null,
   preferredTrialCity: DEFAULT as string | null,

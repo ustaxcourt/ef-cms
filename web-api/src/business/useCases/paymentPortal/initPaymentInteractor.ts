@@ -4,10 +4,7 @@ import {
   PAYMENT_PORTAL_FEE_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  InitPaymentRequest,
-  InitPaymentResponse,
-} from '@ustaxcourt/payment-portal';
+import { InitPaymentRequest } from '@ustaxcourt/payment-portal';
 import {
   InvalidRequest,
   NotFoundError,
@@ -25,7 +22,7 @@ export const initPaymentInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<InitPaymentResponse> => {
+): Promise<{ paymentRedirect: string }> => {
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -76,12 +73,14 @@ export const initPaymentInteractor = async (
   if (!currentCaseEntity.petitionPaymentTransactionReferenceId) {
     currentCaseEntity.petitionPaymentTransactionReferenceId =
       transactionReferenceId;
-
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: currentCaseEntity,
-    });
   }
 
-  return initResponse;
+  currentCaseEntity.petitionPaymentToken = initResponse.token;
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: currentCaseEntity,
+  });
+
+  return { paymentRedirect: initResponse.paymentRedirect };
 };

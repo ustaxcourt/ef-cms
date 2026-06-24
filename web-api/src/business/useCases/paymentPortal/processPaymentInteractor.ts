@@ -8,7 +8,11 @@ import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstan
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   ProcessPaymentRequest,
@@ -17,7 +21,7 @@ import {
 
 export const processPaymentInteractor = async (
   applicationContext: ServerApplicationContext,
-  { docketNumber, token }: { docketNumber: string; token: string },
+  { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<ProcessPaymentResponse> => {
   const featureFlags = await applicationContext
@@ -43,8 +47,14 @@ export const processPaymentInteractor = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
+  if (!currentCaseEntity.petitionPaymentToken) {
+    throw new InvalidRequest(
+      `${docketNumber} has no active payment portal transaction`,
+    );
+  }
+
   const data: ProcessPaymentRequest = {
-    token,
+    token: currentCaseEntity.petitionPaymentToken,
   };
 
   const processResponse = await applicationContext
@@ -55,6 +65,7 @@ export const processPaymentInteractor = async (
     currentCaseEntity.petitionPaymentStatus = 'Paid'; // should be a proper enum somewhere?
     currentCaseEntity.petitionPaymentDate = createISODateString();
     currentCaseEntity.petitionPaymentMethod = 'pay.gov'; // tbd, could put payment portal method here
+    delete currentCaseEntity.petitionPaymentToken;
 
     await updateCaseAndAssociations({
       authorizedUser,
