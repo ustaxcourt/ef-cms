@@ -23,9 +23,6 @@ export const STATE_KEYS = {
   CASE_LIST_TABLE_SORT: 'CASE_LIST_TABLE_SORT',
 } as const;
 
-// Three em spaces — equivalent to '&emsp;&emsp;&emsp;' and works in both JSX and HTML strings.
-export const INDENT = '\u2003\u2003\u2003';
-
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
