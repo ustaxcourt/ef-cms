@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
-import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
+import { awaitCoversheetCompleteAction } from '../actions/DocketEntry/awaitCoversheetCompleteAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
@@ -46,7 +46,7 @@ export const submitCourtIssuedDocketEntrySequence = [
               isCoversheetNeededAction,
               {
                 no: [],
-                yes: [generateCoversheetAction],
+                yes: [awaitCoversheetCompleteAction],
               },
               getDocketEntryAlertSuccessAction,
             ],
@@ -58,7 +58,7 @@ export const submitCourtIssuedDocketEntrySequence = [
                   isCoversheetNeededAction,
                   {
                     no: [],
-                    yes: [generateCoversheetAction],
+                    yes: [awaitCoversheetCompleteAction],
                   },
                   getDocketEntryAlertSuccessAction,
                 ],
@@ -68,7 +68,7 @@ export const submitCourtIssuedDocketEntrySequence = [
                   isCoversheetNeededAction,
                   {
                     no: [],
-                    yes: [generateCoversheetAction],
+                    yes: [awaitCoversheetCompleteAction],
                   },
                   getDocketEntryAlertSuccessForConsolidatedGroupAction,
                   clearModalAction,

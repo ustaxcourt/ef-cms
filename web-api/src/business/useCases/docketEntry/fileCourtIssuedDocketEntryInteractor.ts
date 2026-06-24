@@ -1,5 +1,8 @@
 import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -21,6 +24,7 @@ import { withTransaction } from '@web-api/persistence/postgres/utils/transaction
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 
 export const fileCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -34,7 +38,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<{ pendingCoversheetDocketEntryIds?: string[] }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -201,6 +205,30 @@ export const fileCourtIssuedDocketEntry = async (
       );
     }
   });
+
+  const requiresCoversheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    );
+
+  if (requiresCoversheet) {
+    await enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: subjectDocketNumber,
+    });
+  }
+
+  // Attach the coversheet-pending flag so the client doesn't have to
+  // recompute it from the same constant — the backend is the source of
+  // truth for whether enqueueAddCoversheet ran. Keeping the gates in lock-
+  // step here prevents the UI from skipping its poll if the predicate ever
+  // diverges.
+  return {
+    pendingCoversheetDocketEntryIds: requiresCoversheet
+      ? [docketEntryId]
+      : undefined,
+  };
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(

@@ -445,7 +445,7 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
+  it('enqueues a coversheet job and signals pendingCoversheetDocketEntryIds when the docket entry has a file attached and the user is NOT saving for later', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -466,13 +466,25 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(coversheetMessages).toHaveLength(1);
+    expect(coversheetMessages[0].payload).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: mockCase.docketNumber,
+    });
+
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(true);
+        .calls[0][0].message.pendingCoversheetDocketEntryIds,
+    ).toEqual(['c54ba5a9-b37b-479d-9201-067ec6e335bb']);
   });
 
-  it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
+  it('does not enqueue a coversheet or signal pending when the docket entry does NOT have a file attached', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -493,10 +505,18 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
+    const queueWorkCalls = (
+      applicationContext.getWorkerGateway().queueWork as jest.Mock
+    ).mock.calls;
+    const coversheetMessages = queueWorkCalls
+      .map(args => args[1]?.message)
+      .filter(message => message?.type === 'ADD_COVERSHEET');
+    expect(coversheetMessages).toHaveLength(0);
+
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.generateCoversheet,
-    ).toBe(false);
+        .calls[0][0].message.pendingCoversheetDocketEntryIds,
+    ).toBeUndefined();
   });
 
   it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {
@@ -529,6 +549,60 @@ describe('addPaperFilingInteractor', () => {
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
         .mock.calls[0][0].electronicParties,
     ).toEqual([]);
+  });
+
+  // Spec (coversheet-gaps/SPEC.md): the paper-service print PDF must NOT
+  // include a coversheet, but the docket-record document MUST. The
+  // load-bearing invariant is the call order in addPaperFilingInteractor:
+  // `serveDocumentAndGetPaperServicePdf` (which composes the print PDF
+  // from the doc as it exists right now — no coversheet yet) runs BEFORE
+  // `enqueueAddCoversheet` (which queues the worker that prepends the
+  // coversheet to the stored doc). A refactor that hoists the coversheet
+  // enqueue above the paper-service generator would silently put a
+  // coversheet on every printed mailing — pinning the ordering here so
+  // that regression fails loudly.
+  it('should generate the paper-service PDF BEFORE enqueueing the coversheet add (print has no coversheet; docket doc gains one)', async () => {
+    mockCase.petitioners[0].serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'www.example.com',
+      });
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    const paperServiceMock = applicationContext.getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf as jest.Mock;
+    // enqueueAddCoversheet only goes out through the worker gateway —
+    // queueWork is the observable boundary for the coversheet enqueue.
+    const queueWorkMock = applicationContext.getWorkerGateway()
+      .queueWork as jest.Mock;
+
+    expect(paperServiceMock).toHaveBeenCalled();
+    expect(queueWorkMock).toHaveBeenCalled();
+
+    const paperServiceCallOrder = paperServiceMock.mock.invocationCallOrder[0];
+    const queueWorkCallOrder = queueWorkMock.mock.invocationCallOrder[0];
+
+    expect(paperServiceCallOrder).toBeLessThan(queueWorkCallOrder);
   });
 
   describe('consolidated groups', () => {
