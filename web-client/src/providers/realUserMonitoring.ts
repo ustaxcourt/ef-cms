@@ -21,6 +21,7 @@ export const initializeRealUserMonitoring = (): void => {
 
     const config: AwsRumConfig = {
       allowCookies: true,
+      disableAutoPageView: true,
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId,
@@ -67,11 +68,28 @@ export const recordError = (error: unknown): void => {
   }
 };
 
-/**
- * Attaches user context to the active RUM session so every subsequent event
- * (errors, HTTP failures, performance) is tagged with the user's role.
- * Safe to call before RUM is initialized - it is a no-op.
- */
+export const recordRumPageView = (pageId: string): void => {
+  if (!awsRum) return;
+  try {
+    awsRum.recordPageView(pageId);
+  } catch (rumError) {
+    console.log(
+      'Error recording page view to real user monitoring: ',
+      rumError,
+    );
+  }
+};
+
+export const getRumPageIdFromRoutePattern = (routePattern: string): string => {
+  const pathOnly = routePattern.split('?')[0];
+  if (pathOnly === '' || pathOnly === '..') return '/not-found';
+  const normalized = pathOnly
+    .replace(/\.\.$/, '') // strip the optional trailing-segment marker
+    .replace(/\*/g, '{id}') // collapse dynamic segments so ids group together
+    .replace(/\/+$/, ''); // trim any trailing slash
+  return normalized || '/';
+};
+
 export const setRumUserContext = ({
   role,
   section,

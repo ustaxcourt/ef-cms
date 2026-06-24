@@ -1,3 +1,7 @@
+import {
+  getRumPageIdFromRoutePattern,
+  recordRumPageView,
+} from '@web-client/providers/realUserMonitoring';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
@@ -27,77 +31,88 @@ const router = {
     (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
       path => route(path || '/');
 
-    route('/case-detail/*', docketNumber => {
+    const trackedRoute = (
+      pattern: string,
+      handler: (...args: any[]) => any,
+    ): void => {
+      route(pattern, function () {
+        recordRumPageView(getRumPageIdFromRoutePattern(pattern));
+        // eslint-disable-next-line prefer-rest-params
+        return handler(...arguments);
+      });
+    };
+
+    trackedRoute('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
     });
 
-    route('/case-detail/*/printable-docket-record', docketNumber => {
+    trackedRoute('/case-detail/*/printable-docket-record', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({
         docketNumber,
       });
     });
 
-    route('/todays-opinions', () => {
+    trackedRoute('/todays-opinions', () => {
       setPageTitle('Today’s Opinions');
       app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
-    route('/todays-orders', () => {
+    trackedRoute('/todays-orders', () => {
       setPageTitle('Today’s Orders');
       app.getSequence('gotoTodaysOrdersSequence')();
     });
 
-    route('/health', () => {
+    trackedRoute('/health', () => {
       setPageTitle('Health Check');
       return app.getSequence('gotoHealthCheckSequence')();
     });
 
-    route('/', () => {
+    trackedRoute('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();
     });
 
-    route('/privacy', () => {
+    trackedRoute('/privacy', () => {
       setPageTitle('Privacy');
       return app.getSequence('gotoPrivacySequence')();
     });
 
-    route('/contact', () => {
+    trackedRoute('/contact', () => {
       setPageTitle('Contact');
       return app.getSequence('gotoContactSequence')();
     });
 
-    route('/email-verification-instructions', () => {
+    trackedRoute('/email-verification-instructions', () => {
       setPageTitle('Email Verification Instructions');
       return app.getSequence(
         'gotoPublicEmailVerificationInstructionsSequence',
       )();
     });
 
-    route('/maintenance', () => {
+    trackedRoute('/maintenance', () => {
       setPageTitle('Maintenance');
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    route('/login', () => {
+    trackedRoute('/login', () => {
       return app.getSequence('redirectToLoginSequence')();
     });
 
-    route('/trial-sessions', () => {
+    trackedRoute('/trial-sessions', () => {
       setPageTitle('Trial sessions');
       return app.getSequence('gotoPublicTrialSessionsSequence')();
     });
 
-    route('/trial-session-detail/*', trialSessionId => {
+    trackedRoute('/trial-session-detail/*', trialSessionId => {
       setPageTitle('Trial session information');
       return app.getSequence('gotoPublicTrialSessionDetailsSequence')({
         trialSessionId,
       });
     });
 
-    route('/verify-email..', () => {
+    trackedRoute('/verify-email..', () => {
       setPageTitle('Verify Email');
       const { token } = route.query();
 
@@ -107,7 +122,7 @@ const router = {
     });
 
     // only visible on lower envs
-    route('/dawson-library', () => {
+    trackedRoute('/dawson-library', () => {
       if (process.env.ENV === 'prod') {
         return app.getSequence('notFoundErrorSequence')({
           error: {},
@@ -117,7 +132,7 @@ const router = {
       return app.getSequence('gotoDawsonLibrarySequence')();
     });
 
-    route('..', () => {
+    trackedRoute('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({
         error: {},

@@ -1,10 +1,12 @@
 const mockAddSessionAttributes = jest.fn();
 const mockRecordError = jest.fn();
+const mockRecordPageView = jest.fn();
 const mockEnable = jest.fn();
 const mockAwsRum = jest.fn().mockImplementation(() => ({
   addSessionAttributes: mockAddSessionAttributes,
   enable: mockEnable,
   recordError: mockRecordError,
+  recordPageView: mockRecordPageView,
 }));
 
 jest.mock('aws-rum-web', () => ({
@@ -83,6 +85,16 @@ describe('realUserMonitoring', () => {
     expect(config.enableXRay).toBe(false);
   });
 
+  it('disables automatic page views so errors group by normalized route', () => {
+    process.env.ENV = 'dev';
+    const { initializeRealUserMonitoring } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+
+    const config = mockAwsRum.mock.calls[0][3];
+    expect(config.disableAutoPageView).toBe(true);
+  });
+
   it('configures the http telemetry so failed HTTP requests are recorded', () => {
     process.env.ENV = 'dev';
     const { initializeRealUserMonitoring } = require('./realUserMonitoring');
@@ -154,6 +166,65 @@ describe('realUserMonitoring', () => {
     expect(mockAddSessionAttributes).toHaveBeenCalledWith({
       role: 'judge',
       userId: 'user-id',
+    });
+  });
+
+  it('recordRumPageView is a no-op when RUM has not been initialized', () => {
+    process.env.ENV = 'local';
+    const { recordRumPageView } = require('./realUserMonitoring');
+
+    expect(() => recordRumPageView('/case-detail/{id}')).not.toThrow();
+    expect(mockRecordPageView).not.toHaveBeenCalled();
+  });
+
+  it('forwards the page view to AwsRum once initialized', () => {
+    process.env.ENV = 'dev';
+    const {
+      initializeRealUserMonitoring,
+      recordRumPageView,
+    } = require('./realUserMonitoring');
+
+    initializeRealUserMonitoring();
+    recordRumPageView('/case-detail/{id}');
+
+    expect(mockRecordPageView).toHaveBeenCalledWith('/case-detail/{id}');
+  });
+
+  describe('getRumPageIdFromRoutePattern', () => {
+    const { getRumPageIdFromRoutePattern } = require('./realUserMonitoring');
+
+    it('collapses wildcard segments so dynamic ids group together', () => {
+      expect(getRumPageIdFromRoutePattern('/case-detail/*')).toBe(
+        '/case-detail/{id}',
+      );
+      expect(
+        getRumPageIdFromRoutePattern(
+          '/case-detail/*/edit-deficiency-statistic/*',
+        ),
+      ).toBe('/case-detail/{id}/edit-deficiency-statistic/{id}');
+    });
+
+    it('drops the query portion of the pattern', () => {
+      expect(getRumPageIdFromRoutePattern('/case-detail/*?openModal=*')).toBe(
+        '/case-detail/{id}',
+      );
+      expect(
+        getRumPageIdFromRoutePattern('/case-detail/*/case-information?..'),
+      ).toBe('/case-detail/{id}/case-information');
+    });
+
+    it('strips the optional trailing-segment marker', () => {
+      expect(getRumPageIdFromRoutePattern('/verify-email..')).toBe(
+        '/verify-email',
+      );
+    });
+
+    it('keeps the root path as "/"', () => {
+      expect(getRumPageIdFromRoutePattern('/')).toBe('/');
+    });
+
+    it('maps the catch-all pattern to a dedicated not-found group', () => {
+      expect(getRumPageIdFromRoutePattern('..')).toBe('/not-found');
     });
   });
 });
