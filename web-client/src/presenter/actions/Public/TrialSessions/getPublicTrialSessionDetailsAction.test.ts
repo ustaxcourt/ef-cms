@@ -1,7 +1,7 @@
 import { PublicClientState } from '@web-client/presenter/state-public';
-import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/getPublicTrialSessionDetailsAction';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { presenter } from '@web-client/presenter/presenter-public';
 import { runAction } from 'cerebral/test';
 
@@ -10,7 +10,7 @@ describe('getPublicTrialSessionDetailsAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
   it('should get the correct trial session details', async () => {
-    const mockTrialSession: PublicTrialSessionDetails = {
+    const mockTrialSession: RawPublicTrialSessionDetails = {
       address1: '123 Main St',
       calendaredCases: [],
       city: 'San Francisco',
@@ -27,7 +27,7 @@ describe('getPublicTrialSessionDetailsAction', () => {
       .getPublicTrialSessionDetailsInteractor.mockReturnValue(mockTrialSession);
 
     const { output } = await runAction<
-      { trialSession: PublicTrialSessionDetails },
+      { trialSession: RawPublicTrialSessionDetails },
       PublicClientState
       // @ts-ignore
     >(getPublicTrialSessionDetailsAction, {
