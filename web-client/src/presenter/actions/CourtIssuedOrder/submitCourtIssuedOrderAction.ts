@@ -1,6 +1,5 @@
 import { CaseWithSelectionInfo } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { normalizeAdditionalOrderTextArray } from '@web-client/utilities/normalizeAdditionalOrderTextArray';
-import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const submitCourtIssuedOrderAction = async ({
@@ -32,11 +31,51 @@ export const submitCourtIssuedOrderAction = async ({
       consolidatedCasesToMultiDocketOnMetaData,
     );
 
-  const documentMetadata = omit(formData, [
-    'primaryDocumentFile',
-    'docketEntryIdToEdit',
-  ]);
-  documentMetadata.docketNumber = docketNumber;
+  const documentMetadata = Object.fromEntries(
+    Object.entries({
+      additionalOrderTextArray: formData.additionalOrderTextArray,
+      affectedDocketEntries: formData.affectedDocketEntries,
+      attachments: formData.attachments,
+      date: formData.date,
+      docketEntryDescription: formData.docketEntryDescription,
+      docketEntryId: formData.docketEntryId,
+      docketNumber,
+      docketNumbers: formData.docketNumbers,
+      documentContents: formData.documentContents,
+      documentTitle: formData.documentTitle,
+      documentType: formData.documentType,
+      dueDate: formData.dueDate,
+      dueDateFormatted: formData.dueDateFormatted,
+      editorDelta: formData.editorDelta,
+      eventCode: formData.eventCode,
+      filingDate: formData.filingDate,
+      freeText: formData.freeText,
+      initialFreeText: formData.initialFreeText,
+      isLegacy: formData.isLegacy,
+      isOnLeadCase: formData.isOnLeadCase,
+      issueOrder: formData.issueOrder,
+      issueOrderFor: formData.issueOrderFor,
+      judge: formData.judge,
+      judgeWithTitle: formData.judgeWithTitle,
+      jurisdiction: formData.jurisdiction,
+      motionOrderResponseFilingDate: formData.motionOrderResponseFilingDate,
+      orderType: formData.orderType,
+      parentMessageId: formData.parentMessageId,
+      previousDocument: formData.previousDocument,
+      responseDate: formData.responseDate,
+      richText: formData.richText,
+      scenario: formData.scenario,
+      serviceStamp: formData.serviceStamp,
+      showStrickenFromTrialSession: formData.showStrickenFromTrialSession,
+      signedAt: formData.signedAt,
+      signedByUserId: formData.signedByUserId,
+      signedJudgeName: formData.signedJudgeName,
+      statusReportFilingDate: formData.statusReportFilingDate,
+      statusReportIndex: formData.statusReportIndex,
+      strickenFromTrialSessions: formData.strickenFromTrialSessions,
+      trialLocation: formData.trialLocation,
+    }).filter(([, value]) => value !== undefined),
+  );
 
   if (Array.isArray(documentMetadata.additionalOrderTextArray)) {
     const forPersistence = normalizeAdditionalOrderTextArray(
