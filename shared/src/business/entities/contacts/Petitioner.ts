@@ -76,32 +76,32 @@ export class Petitioner extends JoiValidationEntity {
     ...User.USER_CONTACT_VALIDATION_RULES,
     address1: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.address1,
     }),
     city: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.city,
     }),
     countryType: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.countryType,
     }),
     phone: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.phone,
     }),
     postalCode: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.postalCode,
     }),
     state: joi.when('sealedAndUnavailable', {
       is: true,
-      then: joi.optional(),
+      then: joi.forbidden(),
       otherwise: User.USER_CONTACT_VALIDATION_RULES.state,
     }),
     additionalName: JoiValidationConstants.STRING.max(200).optional().messages({
