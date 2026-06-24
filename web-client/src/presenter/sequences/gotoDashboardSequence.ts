@@ -13,8 +13,8 @@ import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrial
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
-import { createTestApiErrorAction } from '@web-client/presenter/actions/createTestApiErrorAction';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
+import { setRumUserContextAction } from '@web-client/presenter/actions/setRumUserContextAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -35,24 +35,28 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
+// TEMPORARY: fire-and-forget action that triggers a 404 so CloudWatch RUM's
+// http telemetry can be verified end-to-end. Activate with ?rum-http-error=1.
+// Remove once confirmed working in RUM.
+const triggerRumHttpTestAction = ({
+  applicationContext,
+}: ActionProps): void => {
+  if (new URLSearchParams(window.location.search).get('rum-http-error') !== '1')
+    return;
+  applicationContext
+    .getHttpClient()
+    .get(`${process.env.API_URL}/rum-test-nonexistent-404`)
+    .catch(() => {});
+};
+
 export const gotoDashboardSequence = [
-  () => {
-    // TEMPORARY: ?rum-http-error=1 → fires an XHR to a nonexistent API endpoint so RUM's
-    // http telemetry captures the 404. Uses XMLHttpRequest (not fetch) because that is what
-    // the RUM http plugin instruments. Targets API_URL so CloudFront doesn't catch-all to
-    // index.html. REMOVE after confirming the failed request appears in CloudWatch RUM.
-    if (
-      new URLSearchParams(window.location.search).get('rum-http-error') === '1'
-    ) {
-      return [createTestApiErrorAction];
-    }
-    return [];
-  },
+  triggerRumHttpTestAction,
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   setUserPermissionsAction,
+  setRumUserContextAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],

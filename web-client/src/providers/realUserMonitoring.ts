@@ -66,3 +66,29 @@ export const recordError = (error: unknown): void => {
     console.log('Error recording error to real user monitoring: ', rumError);
   }
 };
+
+/**
+ * Attaches user context to the active RUM session so every subsequent event
+ * (errors, HTTP failures, performance) is tagged with the user's role.
+ * Safe to call before RUM is initialized - it is a no-op.
+ */
+export const setRumUserContext = ({
+  role,
+  section,
+  userId,
+}: {
+  role: string;
+  section?: string;
+  userId: string;
+}): void => {
+  if (!awsRum) return;
+  try {
+    awsRum.addSessionAttributes({
+      role,
+      userId,
+      ...(section ? { section } : {}),
+    });
+  } catch (rumError) {
+    console.log('Error setting RUM user context: ', rumError);
+  }
+};
