@@ -775,6 +775,18 @@ app.delete(
 }
 
 /**
+ * filing-fee
+ */
+{
+  app.put('/filing-fee/init-payment', lambdaWrapper(initPaymentLambda));
+  app.put('/filing-fee/process-payment', lambdaWrapper(processPaymentLambda));
+  app.get(
+    '/filing-fee/get-transaction-details/:docketNumber',
+    lambdaWrapper(getTransactionDetailsLambda),
+  );
+}
+
+/**
  * messages
  */
 {
@@ -821,18 +833,6 @@ app.delete(
     lambdaWrapper(getCompletedMessagesForUserLambda),
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
-}
-
-/**
- * petition-fee
- */
-{
-  app.put('/petition-fee/init-payment', lambdaWrapper(initPaymentLambda));
-  app.put('/petition-fee/process-payment', lambdaWrapper(processPaymentLambda));
-  app.get(
-    '/petition-fee/get-transaction-details/:docketNumber',
-    lambdaWrapper(getTransactionDetailsLambda),
-  );
 }
 
 /**

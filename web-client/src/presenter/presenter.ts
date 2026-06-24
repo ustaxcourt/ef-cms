@@ -651,6 +651,7 @@ import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentS
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
+import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1005,6 +1006,8 @@ export const presenterSequences = {
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
   initAppSequence,
+  initFilingFeePaymentSequence:
+    initFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
