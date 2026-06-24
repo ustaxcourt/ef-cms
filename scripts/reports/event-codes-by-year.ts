@@ -14,6 +14,7 @@ import { pick } from 'lodash';
 import {
   formatCaseCaption,
   formatDate,
+  formatDocketNumber,
   formatJudgeName,
 } from '../helpers/formatters';
 
@@ -93,8 +94,9 @@ const outputCsv = ({
     `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
-    ...pick(de, ['docketNumber', 'documentType', 'status']),
+    ...pick(de, ['documentType', 'status']),
     caption: formatCaseCaption(de.caption),
+    docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
     filed: formatDate(de.receivedAt),
     judge: formatJudgeName(de.associatedJudge),
   }));
