@@ -12,11 +12,19 @@
     line-height: 15px;
   }
 
-  #notice-body > p {
-    margin-top: 0;
+  #notice-body {
+    > p {
+      margin-top: 0;
+    }
+
+    #notice-clerk-signature p {
+      width: auto;
+      margin-top: 0;
+      margin-right: 10px;
+    }
   }
 
-  #docket-header {
+  .order-docket-header {
     .document-title {
       margin-bottom: 0;
     }
