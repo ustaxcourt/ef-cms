@@ -53,7 +53,7 @@ export const formatCurrency = (amount: number | string | undefined): string => {
 
 export const formatDocketNumber = (
   docketNumber: string,
-  docketNumberSuffix?: string,
+  docketNumberSuffix?: string | null,
 ): string => {
   if (!docketNumberSuffix) return docketNumber;
   return `${docketNumber}${docketNumberSuffix}`;

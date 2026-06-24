@@ -6,7 +6,7 @@ export type EventCodeReportDocketEntry = {
   associatedJudge: string;
   caption: string;
   docketNumber: string;
-  docketNumberSuffix?: string;
+  docketNumberSuffix?: string | null;
   documentType: string;
   receivedAt: Date;
   status: string;
