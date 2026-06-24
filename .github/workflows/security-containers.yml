@@ -1,0 +1,331 @@
+name: Security - Containers
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+  push:
+    branches: [staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Pin Trivy's vuln + misconfig DBs to the GHCR/ECR mirrors. The default registry is
+  # aggressively rate-limited on shared CI runners; these mirrors are the documented
+  # workaround and keep scans deterministic.
+  TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
+  TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 1: Dockerfile misconfiguration scan (no image build).
+  # Fast, build-free pass over every Dockerfile in the repo for hardening issues
+  # (running as root, missing USER, unpinned base tags, secrets in ENV, etc.).
+  # Terraform is intentionally skipped here — Checkov (security-sast.yml) owns IaC.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-config:
+    name: Trivy Dockerfile Config
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Trivy config scan (Dockerfiles)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: 'MEDIUM,HIGH,CRITICAL'
+          format: sarif
+          output: trivy-config.sarif
+          skip-dirs: 'node_modules,.terraform,web-api/terraform,coverage,dist,dist-public,dist-lambdas,cypress'
+          # ROLLOUT GUARD: warn-only. Findings report to the Security tab but do NOT
+          # fail the job (exit-code 0). To make blocking, set exit-code to 1 AND have
+          # an admin require this check in branch protection.
+          # >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          exit-code: '0'
+
+      - name: Upload SARIF
+        # Fork PRs get a read-only token, so the code-scanning upload 403s. Restrict
+        # upload to same-repo PRs; fork PRs still scan, with findings in the Actions log.
+        if: >-
+          always() &&
+          hashFiles('trivy-config.sarif') != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-config.sarif
+          category: trivy-config
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 2: Built-image vulnerability scan for the core CI/deploy images.
+  # Builds the exact pair from pdfs.yml — ef-cms-us-east-1 (the ECR base image:
+  # cypress/browsers + openjdk-21 + graphicsmagick + ghostscript + a hand-pinned
+  # AWS CLI 2.34.64 and Terraform 1.15.5) and efcms-local (FROM it + npm ci).
+  # An image scan is the ONLY thing here that catches the curl/wget-pinned
+  # toolchains — neither npm audit nor the OS package DB sees them.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-image:
+    name: Trivy Image Scan (core)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          install-dependencies: 'false'
+          restore-cache: 'false'
+          save-cache: 'false'
+
+      - name: Build images
+        run: |
+          # Mirror pdfs.yml: the base image must build before efcms-local (FROM it).
+          docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
+          docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
+
+      - name: Trivy scan — ef-cms-us-east-1 (base)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: ef-cms-us-east-1:latest
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          # No ignore-unfixed yet: surface EVERYTHING until we establish a baseline of
+          # known CVEs and record accepted ones in .trivyignore.
+          format: sarif
+          output: trivy-base.sarif
+          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          exit-code: '0'
+
+      - name: Upload SARIF — base
+        if: >-
+          always() &&
+          hashFiles('trivy-base.sarif') != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-base.sarif
+          category: trivy-image-base
+
+      - name: Trivy scan — efcms-local
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: efcms-local:latest
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-local.sarif
+          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          exit-code: '0'
+
+      - name: Upload SARIF — local
+        if: >-
+          always() &&
+          hashFiles('trivy-local.sarif') != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-local.sarif
+          category: trivy-image-local
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 3: Base-image scan for the runtime images (puppeteer layer builder on
+  # node:24.16.0-slim; batch docketEntryBatchDownloader on node:24). These have
+  # CI build contexts/args this workflow can't reproduce standalone, so we scan
+  # their declared base images directly — this still catches base + OS package CVEs.
+  # FOLLOW-UP: once their build is wired into CI, switch to a full built-image scan.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-runtime-base:
+    name: Trivy Base Scan (${{ matrix.name }})
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: puppeteer
+            image: node:24.16.0-slim
+          - name: batch
+            image: node:24
+    steps:
+      - name: Trivy scan — ${{ matrix.image }}
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: ${{ matrix.image }}
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-${{ matrix.name }}.sarif
+          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          exit-code: '0'
+
+      - name: Upload SARIF — ${{ matrix.name }}
+        if: >-
+          always() &&
+          hashFiles(format('trivy-{0}.sarif', matrix.name)) != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-${{ matrix.name }}.sarif
+          category: trivy-image-${{ matrix.name }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 4: staging baseline (non-blocking). Runs only on merge to staging and scans
+  # ALL FOUR images, so the Security tab holds a complete picture of what's actually
+  # live. This is where we discover the full CVE set to triage into .trivyignore.
+  # Mirrors the gitleaks-baseline pattern in the sibling workflows.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-baseline:
+    name: Trivy Baseline (staging)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          install-dependencies: 'false'
+          restore-cache: 'false'
+          save-cache: 'false'
+
+      - name: Build images
+        run: |
+          docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
+          docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
+
+      - name: Trivy scan — ef-cms-us-east-1 (baseline)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: ef-cms-us-east-1:latest
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-baseline-base.sarif
+          exit-code: '0'
+
+      - name: Upload SARIF — base (baseline)
+        if: always() && hashFiles('trivy-baseline-base.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-baseline-base.sarif
+          category: trivy-baseline-base
+
+      - name: Trivy scan — efcms-local (baseline)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: efcms-local:latest
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-baseline-local.sarif
+          exit-code: '0'
+
+      - name: Upload SARIF — local (baseline)
+        if: always() && hashFiles('trivy-baseline-local.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-baseline-local.sarif
+          category: trivy-baseline-local
+
+      - name: Trivy scan — node:24.16.0-slim (baseline)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: node:24.16.0-slim
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-baseline-puppeteer.sarif
+          exit-code: '0'
+
+      - name: Upload SARIF — puppeteer (baseline)
+        if: always() && hashFiles('trivy-baseline-puppeteer.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-baseline-puppeteer.sarif
+          category: trivy-baseline-puppeteer
+
+      - name: Trivy scan — node:24 (baseline)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: node:24
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
+          format: sarif
+          output: trivy-baseline-batch.sarif
+          exit-code: '0'
+
+      - name: Upload SARIF — batch (baseline)
+        if: always() && hashFiles('trivy-baseline-batch.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-baseline-batch.sarif
+          category: trivy-baseline-batch
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Aggregate gate. Today every scan is warn-only (exit-code 0), so this only trips
+  # on infrastructure failures (build error, action crash). When a scan is flipped
+  # to blocking, this is the single check to require in branch protection.
+  # ─────────────────────────────────────────────────────────────────────────────
+  containers-gate:
+    name: Security Gate (Containers)
+    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    needs: [trivy-config, trivy-image, trivy-runtime-base]
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Check scan outcomes
+        env:
+          CONFIG_RESULT: ${{ needs.trivy-config.result }}
+          IMAGE_RESULT: ${{ needs.trivy-image.result }}
+          RUNTIME_RESULT: ${{ needs.trivy-runtime-base.result }}
+        run: |
+          if [[ "$CONFIG_RESULT" == "failure" ]]; then
+            echo "Trivy Dockerfile config scan failed — see the Security tab for details"
+            exit 1
+          fi
+          if [[ "$IMAGE_RESULT" == "failure" ]]; then
+            echo "Trivy core image scan failed — see the Security tab for details"
+            exit 1
+          fi
+          if [[ "$RUNTIME_RESULT" == "failure" ]]; then
+            echo "Trivy runtime base scan failed — see the Security tab for details"
+            exit 1
+          fi
+          echo "Containers gate passed"
