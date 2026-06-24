@@ -1,4 +1,4 @@
-import { ORDER_TYPES, US_STATES } from './EntityConstants';
+import { ORDER_TYPES, US_STATES, US_STATES_SORTED } from './EntityConstants';
 import { OrderWithoutBody } from './orders/OrderWithoutBody';
 
 describe('EntityConstants', () => {
@@ -13,14 +13,15 @@ describe('EntityConstants', () => {
     });
   });
 
-  describe('US_STATES', () => {
-    it('should be sorted alphabetically by full state name', () => {
-      const stateNames = Object.values(US_STATES);
+  describe('US_STATES_SORTED', () => {
+    it('lists every US_STATES abbreviation ordered by full state name', () => {
+      const fullNames = US_STATES_SORTED.map(abbrev => US_STATES[abbrev]);
 
-      expect(stateNames).toEqual(
-        [...stateNames].sort((firstState, secondState) => {
-          return firstState.localeCompare(secondState);
-        }),
+      expect([...US_STATES_SORTED].sort()).toEqual(Object.keys(US_STATES).sort());
+      expect(fullNames).toEqual(
+        [...fullNames].sort((firstName, secondName) =>
+          firstName.localeCompare(secondName),
+        ),
       );
     });
   });
