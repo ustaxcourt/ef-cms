@@ -7,7 +7,10 @@ import { PublicUser } from '../../../../shared/src/business/entities/PublicUser'
 import { PublicDocumentSearchResult } from '../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
 import { PublicCaseDTO } from '../../../../shared/src/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '../../../../shared/src/business/dto/cases/RestrictedCaseDTO';
+import { PublicTrialSessionInfoDTO } from '../../../../shared/src/business/dto/trialSessions/PublicTrialSessionInfoDTO';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
+import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 export type UnauthorizedFieldFinding = {
   url: string;
@@ -42,36 +45,37 @@ const PUBLIC_ENTITY_FACTORIES = {
         authorizedUser: undefined,
       },
     ),
+  PublicCaseDTO: (): PublicCaseDTO =>
+    new PublicCaseDTO(
+      new PublicCase(
+        {},
+        {
+          authorizedUser: undefined,
+        },
+      ),
+    ),
+  PublicCaseSearchResult: (): PublicCaseSearchResult =>
+    new PublicCaseSearchResult({}),
   PublicContact: (): PublicContact => new PublicContact({}),
   PublicDocketEntry: (): PublicDocketEntry => new PublicDocketEntry({}),
   PublicDocumentSearchResult: (): PublicDocumentSearchResult =>
     new PublicDocumentSearchResult({}),
-  PublicCaseSearchResult: (): PublicCaseSearchResult =>
-    new PublicCaseSearchResult({}),
+  PublicTrialSessionDetails: (): PublicTrialSessionDetails =>
+    new PublicTrialSessionDetails({}),
+  PublicTrialSessionInfoDTO: (): PublicTrialSessionInfoDTO =>
+    new PublicTrialSessionInfoDTO(new TrialSession({})),
+  PublicUser: (): PublicUser => new PublicUser({}),
   RestrictedCase: (): RestrictedCase =>
     new RestrictedCase({ docketNumber: '' }),
-  PublicUser: (): PublicUser => new PublicUser({}),
-} as const;
-
-const DTO_ENTITY_FACTORIES = {
-  PublicCaseDTO: (): PublicCaseDTO =>
-    new PublicCaseDTO(PUBLIC_ENTITY_FACTORIES.PublicCase().toRawObject()),
   RestrictedCaseDTO: (): RestrictedCaseDTO =>
-    new RestrictedCaseDTO(
-      PUBLIC_ENTITY_FACTORIES.RestrictedCase().toRawObject(),
-    ),
-} as const;
-
-const ALLOWED_ENTITY_FACTORIES = {
-  ...PUBLIC_ENTITY_FACTORIES,
-  ...DTO_ENTITY_FACTORIES,
+    new RestrictedCaseDTO(new RestrictedCase({ docketNumber: '' })),
 } as const;
 
 function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
   const allowedFieldsByEntityName = new Map<string, Set<string>>();
 
   for (const [entityName, createEntity] of Object.entries(
-    ALLOWED_ENTITY_FACTORIES,
+    PUBLIC_ENTITY_FACTORIES,
   )) {
     const instance = createEntity();
     const allowedFields = new Set<string>(Object.keys(instance));
@@ -143,6 +147,10 @@ function shouldValidateRequestBody(payload: CapturedNetworkPayload): boolean {
 function redactPreview(value: string): string {
   if (value.length <= 8) return '[redacted]';
   return `${value.slice(0, 4)}...[redacted]...${value.slice(-4)}`;
+}
+
+function isTopLevelArrayItemPath(path: string): boolean {
+  return /^\[\d+\]$/.test(path);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -286,6 +294,34 @@ function validateFeatureFlagObject(args: {
   return findings;
 }
 
+function validateObjectWithoutEntityName(args: {
+  obj: Record<string, unknown>;
+  path: string;
+  url: string;
+}): InternalUnauthorizedFieldFinding[] {
+  if (isTopLevelArrayItemPath(args.path)) {
+    return validateUrlOnlyObject(args);
+  }
+
+  if (args.path !== '') {
+    const nestedFindings: InternalUnauthorizedFieldFinding[] = [];
+
+    for (const [key, value] of Object.entries(args.obj)) {
+      const fieldPath = args.path ? `${args.path}.${key}` : key;
+
+      if (Array.isArray(value) || isRecord(value)) {
+        nestedFindings.push(
+          ...findUnauthorizedFields(value, fieldPath, args.url),
+        );
+      }
+    }
+
+    return nestedFindings;
+  }
+
+  return validateNumericObject(args);
+}
+
 function findUnauthorizedFields(
   obj: unknown,
   path: string = '',
@@ -322,21 +358,7 @@ function findUnauthorizedFields(
   const candidateEntityName = getEntityName(obj);
 
   if (!candidateEntityName) {
-    if (path !== '') {
-      const nestedFindings: InternalUnauthorizedFieldFinding[] = [];
-
-      for (const [key, value] of Object.entries(obj)) {
-        const fieldPath = path ? `${path}.${key}` : key;
-
-        if (Array.isArray(value) || isRecord(value)) {
-          nestedFindings.push(...findUnauthorizedFields(value, fieldPath, url));
-        }
-      }
-
-      return nestedFindings;
-    }
-
-    return validateNumericObject({
+    return validateObjectWithoutEntityName({
       obj,
       path,
       url,
