@@ -1,4 +1,8 @@
 /* eslint-disable max-lines */
+jest.mock('../entity-validation/entityValidation', () => ({
+  haveValidationRulesChanged: jest.fn(),
+}));
+
 import {
   extractBashCodeBlocks,
   extractDockerImageTag,
@@ -11,6 +15,7 @@ import {
   resolveTicketTask,
   resolveType,
 } from './prod-release-pr-description.helpers';
+import { haveValidationRulesChanged } from '../entity-validation/entityValidation';
 import type { CoverageSummary } from '../github-actions/suite-coverage.helpers';
 import type {
   GitHubClient,
@@ -692,9 +697,7 @@ describe('prod-release-pr-description', () => {
           ]),
       };
 
-      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
-        haveValidationRulesChanged: jest.fn().mockResolvedValue(true),
-      }));
+      jest.mocked(haveValidationRulesChanged).mockResolvedValue(true);
 
       const description = await generateProdReleasePrDescription({
         circleConfig,
@@ -737,9 +740,7 @@ describe('prod-release-pr-description', () => {
           .mockResolvedValue([dockerDependencyPullRequest]),
       };
 
-      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
-        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
-      }));
+      jest.mocked(haveValidationRulesChanged).mockResolvedValue(false);
 
       const description = await generateProdReleasePrDescription({
         circleConfig: 'version: 2.1\n',
@@ -764,9 +765,7 @@ describe('prod-release-pr-description', () => {
           .mockResolvedValue([dependencyPullRequest]),
       };
 
-      jest.mock('../../scripts/entity-validation/entityValidation', () => ({
-        haveValidationRulesChanged: jest.fn().mockResolvedValue(false),
-      }));
+      jest.mocked(haveValidationRulesChanged).mockResolvedValue(false);
 
       const description = await generateProdReleasePrDescription({
         circleConfig,
