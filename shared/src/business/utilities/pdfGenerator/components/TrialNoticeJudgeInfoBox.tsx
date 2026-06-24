@@ -15,7 +15,9 @@ export const TrialNoticeJudgeInfoBox = ({
         <div>400 Second St., NW</div>
         <div>Washington, DC 20217</div>
         {chambersPhoneNumber && (
-          <div>Chambers Phone: {chambersPhoneNumber}</div>
+          <div className="info-box-chambers-phone">
+            Chambers Phone: {chambersPhoneNumber}
+          </div>
         )}
       </div>
     </div>

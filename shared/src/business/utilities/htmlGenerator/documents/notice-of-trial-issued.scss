@@ -1,23 +1,93 @@
 #notice-of-trial-pdf {
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 14px;
+  .order-court-header {
+    margin-bottom: 28pt;
 
-  .notice-of-trial-title {
-    margin-bottom: 0;
+    .us-tax-court-seal {
+      width: 37pt;
+      height: 37pt;
+      margin-right: -37pt;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: 20pt;
+      font-weight: normal;
+    }
+
+    .court-address {
+      font-size: 13pt;
+      line-height: 14pt;
+    }
+  }
+
+  .order-docket-header {
+    #caption {
+      line-height: 14pt;
+
+      #caption-title {
+        margin-top: 0;
+      }
+
+      #caption-extension,
+      #caption-v,
+      #caption-respondent {
+        margin-top: 2pt;
+      }
+
+      #caption-commissioner {
+        margin-top: 2pt;
+      }
+    }
+
+    #docket-number {
+      margin-top: 28pt;
+    }
+
+    .document-title {
+      margin-top: 10pt;
+      margin-bottom: 6pt;
+      font-size: 14pt;
+    }
+  }
+
+  .info-box {
+    margin: 10px 0 15px 0;
+  }
+
+  .info-box-header {
+    font-size: 12pt;
   }
 
   .info-box-content {
     padding: 10px;
+    font-size: 12pt;
+    line-height: 14pt;
   }
 
-  p {
-    font-size: 14px;
-    line-height: 15px;
+  .info-box-chambers-phone {
+    white-space: nowrap;
   }
 
   #notice-body {
-    > p {
+    p {
       margin-top: 0;
+      font-size: 14pt;
+      line-height: 15pt;
+    }
+
+    .notice-body-indent {
+      margin-bottom: 17pt;
+      text-indent: 56pt;
+    }
+
+    .notice-access-instructions {
+      margin-bottom: 0;
+      text-indent: 0;
+    }
+
+    p.text-center {
+      margin-bottom: 4pt;
+      text-indent: 0;
     }
 
     #notice-clerk-signature p {
@@ -27,9 +97,73 @@
     }
   }
 
-  .order-docket-header {
-    .document-title {
-      margin-bottom: 0;
+  &.notice-of-trial-remote {
+    .order-docket-header .document-title {
+      margin-top: 4pt;
+      margin-bottom: 2pt;
+    }
+
+    .info-box {
+      margin: 0 0 2pt 0;
+    }
+
+    #notice-body {
+      p {
+        line-height: 13pt;
+      }
+
+      .notice-body-indent {
+        margin-bottom: 8pt;
+      }
+
+      > .notice-body-indent:first-of-type {
+        margin-bottom: 4pt;
+      }
+
+      > .notice-body-indent:nth-of-type(2) {
+        margin-bottom: 8pt;
+      }
+
+      .notice-access-remote-section {
+        margin-bottom: 0;
+
+        > p.text-center {
+          margin-bottom: 6pt;
+        }
+
+        .notice-access-meeting-info {
+          margin-bottom: 6pt;
+
+          p.text-center {
+            padding: 0;
+            margin: 0;
+            line-height: 13pt;
+          }
+
+          p.text-center:first-child {
+            margin-bottom: 6pt;
+          }
+        }
+
+        .notice-access-instructions {
+          margin-bottom: 6pt;
+          text-indent: 0;
+
+          &:last-of-type {
+            margin-bottom: 10pt;
+          }
+        }
+      }
+
+      .notice-remote-closing {
+        .notice-body-indent {
+          margin-bottom: 0;
+        }
+
+        #notice-clerk-signature {
+          margin-top: 6pt;
+        }
+      }
     }
   }
 }

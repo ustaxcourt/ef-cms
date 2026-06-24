@@ -17,17 +17,16 @@ describe('noticeOfTrialIssuedInPerson', () => {
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
-          caseTitle:
-            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
+          caseTitle: 'John Smith and Jane Smith',
           docketNumberWithSuffix: '123-45S',
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             address1: '123 Candy Cane Lane',
             address2: '22222',
-            city: 'troutville',
+            city: 'Troutville',
             formattedJudge: 'Carluzzo',
-            chambersPhoneNumber: '1-721-740-9885 x4239',
+            chambersPhoneNumber: '(202) 521-3339',
             formattedStartDate: '01/01/2001',
             formattedStartTime: '12:00 am',
             postalCode: 'Boise, Idaho',

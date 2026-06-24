@@ -12,8 +12,7 @@ describe('documentGenerators', () => {
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
-          caseTitle:
-            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
+          caseTitle: 'John Smith and Jane Smith',
           docketNumberWithSuffix: '123-45S',
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
@@ -28,7 +27,7 @@ describe('documentGenerators', () => {
             startDate: '2001-01-01T05:00:00.000Z',
             startTime: '2001-01-01T05:00:00.000Z',
             judge: { name: 'Carluzzo', userId: '123' },
-            chambersPhoneNumber: '1-721-740-9885 x4239',
+            chambersPhoneNumber: '(202) 521-3339',
             caseOrder: [],
             hasNottBeenServed: false,
             isCalendared: true,
