@@ -6,6 +6,7 @@ export type EventCodeReportDocketEntry = {
   associatedJudge: string;
   caption: string;
   docketNumber: string;
+  docketNumberSuffix?: string | null;
   documentType: string;
   receivedAt: Date;
   status: string;
@@ -82,6 +83,7 @@ export const getDocketEntriesByEventCodesAndYears = async ({
           'de.receivedAt',
           'c.associatedJudge',
           'c.caption',
+          'c.docketNumberSuffix',
           'c.status',
         ]);
 
