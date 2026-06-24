@@ -36,6 +36,7 @@ const NON_API_ASSET_PATH_REGEX =
 
 const FEATURE_FLAG_PATH_REGEX = /\/system\/feature-flag\/?$/i;
 const DOWNLOAD_URL_PATH_REGEX = /\/public-document-download-url\/?$/i;
+const HEALTH_CHECK_PATH_REGEX = /\/health\/?$/i;
 
 const PUBLIC_ENTITY_FACTORIES = {
   PublicCase: (): PublicCase =>
@@ -339,7 +340,10 @@ function findUnauthorizedFields(
     return findings;
   }
 
-  if (path === '' && FEATURE_FLAG_PATH_REGEX.test(url)) {
+  if (
+    path === '' &&
+    (FEATURE_FLAG_PATH_REGEX.test(url) || HEALTH_CHECK_PATH_REGEX.test(url))
+  ) {
     return validateFeatureFlagObject({
       obj,
       path,
