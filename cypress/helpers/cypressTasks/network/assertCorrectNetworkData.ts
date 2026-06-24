@@ -322,6 +322,20 @@ function findUnauthorizedFields(
   const candidateEntityName = getEntityName(obj);
 
   if (!candidateEntityName) {
+    if (path !== '') {
+      const nestedFindings: InternalUnauthorizedFieldFinding[] = [];
+
+      for (const [key, value] of Object.entries(obj)) {
+        const fieldPath = path ? `${path}.${key}` : key;
+
+        if (Array.isArray(value) || isRecord(value)) {
+          nestedFindings.push(...findUnauthorizedFields(value, fieldPath, url));
+        }
+      }
+
+      return nestedFindings;
+    }
+
     return validateNumericObject({
       obj,
       path,
