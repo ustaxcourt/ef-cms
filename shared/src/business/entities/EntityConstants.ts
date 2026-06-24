@@ -1338,41 +1338,41 @@ export const COUNTRY_TYPES = {
 export type CountryTypes = (typeof COUNTRY_TYPES)[keyof typeof COUNTRY_TYPES];
 
 export const US_STATES = {
-  AL: 'Alabama',
   AK: 'Alaska',
-  AZ: 'Arizona',
+  AL: 'Alabama',
   AR: 'Arkansas',
+  AZ: 'Arizona',
   CA: 'California',
   CO: 'Colorado',
   CT: 'Connecticut',
-  DE: 'Delaware',
   DC: 'District of Columbia',
+  DE: 'Delaware',
   FL: 'Florida',
   GA: 'Georgia',
   HI: 'Hawaii',
+  IA: 'Iowa',
   ID: 'Idaho',
   IL: 'Illinois',
   IN: 'Indiana',
-  IA: 'Iowa',
   KS: 'Kansas',
   KY: 'Kentucky',
   LA: 'Louisiana',
-  ME: 'Maine',
-  MD: 'Maryland',
   MA: 'Massachusetts',
+  MD: 'Maryland',
+  ME: 'Maine',
   MI: 'Michigan',
   MN: 'Minnesota',
-  MS: 'Mississippi',
   MO: 'Missouri',
+  MS: 'Mississippi',
   MT: 'Montana',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
   NE: 'Nebraska',
-  NV: 'Nevada',
   NH: 'New Hampshire',
   NJ: 'New Jersey',
   NM: 'New Mexico',
+  NV: 'Nevada',
   NY: 'New York',
-  NC: 'North Carolina',
-  ND: 'North Dakota',
   OH: 'Ohio',
   OK: 'Oklahoma',
   OR: 'Oregon',
@@ -1383,13 +1383,22 @@ export const US_STATES = {
   TN: 'Tennessee',
   TX: 'Texas',
   UT: 'Utah',
-  VT: 'Vermont',
   VA: 'Virginia',
+  VT: 'Vermont',
   WA: 'Washington',
-  WV: 'West Virginia',
   WI: 'Wisconsin',
+  WV: 'West Virginia',
   WY: 'Wyoming',
 } as const;
+
+// State abbreviations ordered by full state name, for dropdowns that present a
+// sorted list. US_STATES itself stays keyed by abbreviation so lookups and the
+// validation lists built from its keys are unaffected.
+export const US_STATES_SORTED = (
+  Object.keys(US_STATES) as (keyof typeof US_STATES)[]
+).sort((firstState, secondState) =>
+  US_STATES[firstState].localeCompare(US_STATES[secondState]),
+);
 
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
