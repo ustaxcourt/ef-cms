@@ -14,6 +14,7 @@ import {
   ProcedureType,
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import {
   isAuthorized,
@@ -104,7 +105,7 @@ export const caseAdvancedSearchInteractor = async (
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state] || p.state,
+        p => US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state,
       ),
       receivedAt: filteredCase.receivedAt,
     };

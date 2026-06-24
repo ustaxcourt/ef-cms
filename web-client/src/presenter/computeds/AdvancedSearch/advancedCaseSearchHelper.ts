@@ -26,19 +26,7 @@ export type CaseSearchSortOption = {
   value: string;
 };
 
-type CaseSearchPetitioner = {
-  contactId: string;
-  state?: string;
-};
-
-type FormattedCaseSearchPetitionerState = {
-  contactId: string;
-  state: string | undefined;
-};
-
 type CaseSearchResultValue =
-  | CaseSearchPetitioner[]
-  | FormattedCaseSearchPetitionerState[]
   | number
   | string
   | (string | undefined)[]
@@ -51,7 +39,6 @@ export type CaseSearchResult = {
   docketNumberWithSuffix?: string;
   petitionerNames?: string[];
   petitionerStateNames?: (string | undefined)[];
-  petitioners?: CaseSearchPetitioner[];
   receivedAt?: string;
 };
 
@@ -59,7 +46,6 @@ type FormattedCaseSearchResultWithoutIndex = CaseSearchResult & {
   caseTitle: string;
   docketNumber: string;
   formattedFiledDate: string;
-  petitionerFullStateNames?: FormattedCaseSearchPetitionerState[];
   petitionerNames: string[];
   petitionerStateNames: string[];
 };
@@ -246,16 +232,8 @@ const formatCaseSearchResultRecord = (
     formattedFiledDate: applicationContext
       .getUtilities()
       .formatDateString(result.receivedAt, 'MMDDYY'),
-    petitionerFullStateNames: result.petitioners?.map(
-      (petitioner): FormattedCaseSearchPetitionerState => {
-        return {
-          contactId: petitioner.contactId,
-          state: getFullStateName(petitioner.state),
-        };
-      },
-    ),
     petitionerNames: result.petitionerNames || [],
-    petitionerStateNames: removeBlankStateNames(result.petitionerStateNames),
+    petitionerStateNames: formatStateNames(result.petitionerStateNames),
   };
 };
 
@@ -274,13 +252,12 @@ const getSortValue = (
   return result[sortColumn]?.toString().toLowerCase() || '';
 };
 
-const removeBlankStateNames = (
+const formatStateNames = (
   petitionerStateNames: (string | undefined)[] | undefined,
 ): string[] => {
   return (
-    petitionerStateNames?.filter(
-      (petitionerStateName): petitionerStateName is string =>
-        !!petitionerStateName,
-    ) || []
+    petitionerStateNames
+      ?.map(getFullStateName)
+      .filter((stateName): stateName is string => !!stateName) || []
   );
 };

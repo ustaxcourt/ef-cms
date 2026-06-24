@@ -268,4 +268,31 @@ describe('caseAdvancedSearchInteractor', () => {
       },
     ]);
   });
+
+  it('converts state and territory abbreviations and preserves unmapped state values', async () => {
+    caseAdvancedSearch.mockResolvedValue([
+      {
+        docketNumber: '101-20',
+        petitioners: [
+          { name: 'State Petitioner', state: 'TN' },
+          { name: 'Territory Petitioner', state: 'GU' },
+          { name: 'International Petitioner', state: 'Ontario' },
+        ],
+      },
+    ]);
+
+    const results = await caseAdvancedSearchInteractor(
+      applicationContext,
+      {
+        petitionerName: 'test person',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(results[0].petitionerStateNames).toEqual([
+      'Tennessee',
+      'Guam',
+      'Ontario',
+    ]);
+  });
 });

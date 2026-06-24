@@ -2,9 +2,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { caseAdvancedSearch } from './caseAdvancedSearch';
 jest.mock('./searchClient');
 import { search } from './searchClient';
+import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 
 describe('caseAdvancedSearch', () => {
-  it('returns results from an exact-matches query', async () => {
+  it('uses MAX_CASE_SEARCH_RESULTS for the exact-match query and returns results', async () => {
     (search as jest.Mock).mockReturnValue({
       results: ['some', 'matches'],
       total: 0,
@@ -30,10 +31,13 @@ describe('caseAdvancedSearch', () => {
       'receivedAt',
       'sealedDate',
     ]);
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.size,
+    ).toEqual(MAX_CASE_SEARCH_RESULTS);
     expect(results).toMatchObject(['some', 'matches']);
   });
 
-  it('returns results from an non-exact-matches query when an exact query returns no results', async () => {
+  it('returns results from a non-exact-matches query when an exact query returns no results', async () => {
     (search as jest.Mock)
       .mockImplementation(() => {
         // default behavior

@@ -7,29 +7,13 @@ import {
 } from './advancedCaseSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
-type TestPetitioner = {
-  contactId: string;
-  state?: string;
-};
-
 describe('advancedCaseSearchHelper', () => {
   const {
     ADVANCED_CASE_SEARCH_PAGE_SIZE,
     ASCENDING,
     DESCENDING,
     MAX_CASE_SEARCH_RESULTS,
-    US_STATES,
   } = applicationContext.getConstants();
-
-  const mockPetitionerOne: TestPetitioner = {
-    contactId: '4572d453-fae3-44c8-a298-254cc0eb43cd',
-    state: 'TN',
-  };
-
-  const mockPetitionerTwo: TestPetitioner = {
-    contactId: '52f678c6-ba27-4c64-9479-10604684dc7a',
-    state: 'TX',
-  };
 
   const makeSearchResult = (
     overrides: CaseSearchResult = {},
@@ -39,7 +23,6 @@ describe('advancedCaseSearchHelper', () => {
     docketNumberWithSuffix: '101-19',
     petitionerNames: ['Default Petitioner'],
     petitionerStateNames: ['Tennessee'],
-    petitioners: [mockPetitionerOne],
     receivedAt: '2019-03-01T05:00:00.000Z',
     ...overrides,
   });
@@ -84,8 +67,7 @@ describe('advancedCaseSearchHelper', () => {
           docketNumber: '102-18',
           docketNumberWithSuffix: '102-18W',
           petitionerNames: ['Test Petitioner', 'Another Petitioner'],
-          petitionerStateNames: ['Tennessee', 'Texas'],
-          petitioners: [mockPetitionerOne, mockPetitionerTwo],
+          petitionerStateNames: ['TN', 'GU'],
           receivedAt: '2019-05-01T05:00:00.000Z',
         }),
       ],
@@ -97,34 +79,18 @@ describe('advancedCaseSearchHelper', () => {
         docketNumber: '102-18',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
-          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TX },
-        ],
         petitionerNames: ['Test Petitioner', 'Another Petitioner'],
-        petitionerStateNames: ['Tennessee', 'Texas'],
+        petitionerStateNames: ['Tennessee', 'Guam'],
         resultIndex: 1,
       },
     ]);
   });
 
-  it('should format missing case search values with defaults and remove blank state names', () => {
+  it('should default missing values, format territory names, preserve unknown states, and remove blank states', () => {
     const result = runHelper({
       searchResults: [
         {
-          petitioners: [
-            {
-              contactId: 'no-state-petitioner',
-            },
-            {
-              contactId: 'unknown-state-petitioner',
-              state: 'ZZ',
-            },
-            {
-              contactId: 'territory-petitioner',
-              state: 'GU',
-            },
-          ],
+          petitionerStateNames: [undefined, 'ZZ', 'PR'],
         },
       ],
     });
@@ -133,13 +99,8 @@ describe('advancedCaseSearchHelper', () => {
       caseTitle: '',
       docketNumber: '',
       formattedFiledDate: '',
-      petitionerFullStateNames: [
-        { contactId: 'no-state-petitioner', state: undefined },
-        { contactId: 'unknown-state-petitioner', state: 'ZZ' },
-        { contactId: 'territory-petitioner', state: 'Guam' },
-      ],
       petitionerNames: [],
-      petitionerStateNames: [],
+      petitionerStateNames: ['ZZ', 'Puerto Rico'],
     });
   });
 
@@ -287,6 +248,31 @@ describe('advancedCaseSearchHelper', () => {
         searchResult => searchResult.docketNumber,
       ),
     ).toEqual(['103-19', '101-19', '102-19']);
+  });
+
+  it('should preserve backend order when both filed dates are blank', () => {
+    const result = runHelper({
+      caseSearchSort: {
+        sortColumn: 'receivedAt',
+        sortDirection: DESCENDING,
+      },
+      searchResults: [
+        makeSearchResult({
+          docketNumber: '101-19',
+          receivedAt: undefined,
+        }),
+        makeSearchResult({
+          docketNumber: '102-19',
+          receivedAt: undefined,
+        }),
+      ],
+    });
+
+    expect(
+      result.formattedSearchResults.map(
+        searchResult => searchResult.docketNumber,
+      ),
+    ).toEqual(['101-19', '102-19']);
   });
 
   it('should preserve non-blank petitioner state names while removing blank ones during formatting', () => {
