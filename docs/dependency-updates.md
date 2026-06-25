@@ -427,8 +427,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.0.4**
-**Current Installed @sparticuz/chromium: 148.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.1.0**
+**Current Installed @sparticuz/chromium: 149.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -514,6 +514,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
+
+### js-yaml
+- On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
 
 ### image-blob-reduce and pica
 **Installed Versions:**
