@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { CapturedNetworkPayload } from '../../../local-only/support/commands';
 import { PublicCase } from '../../../../shared/src/business/entities/cases/PublicCase';
 import { PublicDocketEntry } from '../../../../shared/src/business/entities/cases/PublicDocketEntry';
@@ -125,18 +126,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function getEntityName(value: Record<string, unknown>): string | undefined {
-  const candidateEntityName = value.entityName;
-  return typeof candidateEntityName === 'string'
-    ? candidateEntityName
-    : undefined;
-}
-
 function isNumericValue(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value);
 }
 
-function isAllowedFeatureFlagValue(value: unknown): boolean {
+function isAllowedSystemStatusValue(value: unknown): boolean {
   return (
     value === null ||
     typeof value === 'string' ||
@@ -204,13 +198,13 @@ function validateNumericObject(args: {
   });
 }
 
-function validateFeatureFlagObject(args: {
+function validateSystemStatusObject(args: {
   obj: Record<string, unknown>;
   path: string;
   url: string;
 }): InternalUnauthorizedFieldFinding[] {
   return validateObjectByFieldRule({
-    isAllowed: (_key, value) => isAllowedFeatureFlagValue(value),
+    isAllowed: (_key, value) => isAllowedSystemStatusValue(value),
     obj: args.obj,
     path: args.path,
     url: args.url,
@@ -295,7 +289,7 @@ function findUnauthorizedFields(
     path === '' &&
     (FEATURE_FLAG_PATH_REGEX.test(url) || HEALTH_CHECK_PATH_REGEX.test(url))
   ) {
-    return validateFeatureFlagObject({
+    return validateSystemStatusObject({
       obj,
       path,
       url,
@@ -310,7 +304,8 @@ function findUnauthorizedFields(
     });
   }
 
-  const candidateEntityName = getEntityName(obj);
+  const candidateEntityName =
+    typeof obj.entityName === 'string' ? obj.entityName : undefined;
 
   if (!candidateEntityName) {
     return validateObjectWithoutEntityName({
