@@ -9,7 +9,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
@@ -56,12 +55,6 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     'HH:mm',
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
-
-  if (trialSession.judge?.name) {
-    await getJudgeWithTitle({
-      judgeUserName: trialSession.judge.name,
-    });
-  }
 
   const { CLERK_OF_THE_COURT_CONFIGURATION } =
     applicationContext.getConstants();

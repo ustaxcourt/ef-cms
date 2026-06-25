@@ -1,6 +1,5 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -11,8 +10,6 @@ import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persi
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
-import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
@@ -28,13 +25,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     },
   ]);
 
-  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-
-  const TEST_JUDGE = {
-    judgeTitle: 'Judge',
-    name: 'Test Judge',
-  };
 
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
@@ -74,8 +65,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       .generatePdfFromHtmlInteractor.mockImplementation(
         ({ contentHtml }) => contentHtml,
       );
-
-    getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
 
   it('should format chambers and join phone numbers for the notice', async () => {
@@ -200,7 +189,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
-    expect(getUsersInSections).not.toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
         .calls[0][0],
@@ -211,25 +199,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         },
       },
     });
-  });
-
-  it('should throw an error when the judge for the trial session is not found in persistence', async () => {
-    getTrialSessionById.mockResolvedValue({
-      joinPhoneNumber: '3333',
-      judge: { name: 'Bob Judge' },
-      meetingId: '1111',
-      password: '2222',
-      startDate: '2019-08-25T05:00:00.000Z',
-      startTime: '10:00',
-      trialLocation: 'Boise, Idaho',
-    } as RawTrialSession);
-
-    await expect(
-      generateNoticeOfTrialIssuedInteractor(applicationContext, {
-        docketNumber: '123-45',
-        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      }),
-    ).rejects.toThrow('Judge Bob Judge was not found');
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
