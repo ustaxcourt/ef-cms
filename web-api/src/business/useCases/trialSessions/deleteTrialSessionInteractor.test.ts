@@ -21,14 +21,16 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { deleteTrialSessionWorkingCopy as deleteTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
-import { deleteTrialSession as deleteTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
+import { deleteTrialSession as deleteTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 
 describe('deleteTrialSessionInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
-  const deleteTrialSessionWorkingCopy = jest.mocked(deleteTrialSessionWorkingCopyMock);
+  const deleteTrialSessionWorkingCopy = jest.mocked(
+    deleteTrialSessionWorkingCopyMock,
+  );
   const deleteTrialSession = jest.mocked(deleteTrialSessionMock);
 
   let mockTrialSession;
@@ -38,6 +40,7 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
@@ -121,12 +124,8 @@ describe('deleteTrialSessionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      deleteTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-    expect(
-      deleteTrialSession,
-    ).toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).toHaveBeenCalled();
+    expect(deleteTrialSession).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
@@ -147,9 +146,7 @@ describe('deleteTrialSessionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      deleteTrialSessionWorkingCopy,
-    ).not.toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).not.toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -196,5 +193,79 @@ describe('deleteTrialSessionInteractor', () => {
         identifiers: [`case|${MOCK_CASE.docketNumber}`],
       }),
     );
+  });
+
+  it('should not delete the trial session if the transaction fails', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    updateCaseAndAssociations.mockImplementationOnce(() => {
+      throw new Error('Transaction failed');
+    });
+
+    await expect(
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Transaction failed');
+
+    expect(deleteTrialSession).not.toHaveBeenCalled();
+  });
+
+  it('should not update the case if one of the cases fail to update', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    getCasesByDocketNumbers.mockResolvedValue([
+      { ...MOCK_CASE, docketNumber: '101-20' },
+      { ...MOCK_CASE, docketNumber: '102-20' },
+      { ...MOCK_CASE, docketNumber: '102-20' },
+    ]);
+
+    updateCaseAndAssociations.mockResolvedValueOnce(MOCK_CASE);
+    updateCaseAndAssociations.mockRejectedValueOnce(
+      new Error('Transaction failed'),
+    );
+
+    await expect(
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Transaction failed');
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+    expect(deleteTrialSession).not.toHaveBeenCalled();
+    expect(deleteTrialSessionWorkingCopy).not.toHaveBeenCalled();
+  });
+
+  it('should delete the trial session and working copy when there are no cases', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [],
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(deleteTrialSessionWorkingCopy).toHaveBeenCalled();
+    expect(deleteTrialSession).toHaveBeenCalled();
   });
 });

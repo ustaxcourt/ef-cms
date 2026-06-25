@@ -12,18 +12,14 @@ describe('refreshCaseMetadataAction', () => {
       { docketEntryId: '2', description: 'Order' },
     ];
 
-    const existingMessages = [
-      { messageId: 'm1', subject: 'Test message' },
-    ];
+    const existingMessages = [{ messageId: 'm1', subject: 'Test message' }];
 
-    applicationContext
-      .getUseCases()
-      .getCaseInteractor.mockResolvedValue({
-        caseCaption: 'Updated Caption',
-        docketEntries: [],
-        docketNumber: '101-20',
-        status: 'General Docket - Not at Issue',
-      });
+    applicationContext.getUseCases().getCaseInteractor.mockResolvedValue({
+      caseCaption: 'Updated Caption',
+      docketEntries: [],
+      docketNumber: '101-20',
+      status: 'General Docket - Not at Issue',
+    });
 
     const result = await runAction(refreshCaseMetadataAction, {
       modules: { presenter },
@@ -52,15 +48,13 @@ describe('refreshCaseMetadataAction', () => {
   });
 
   it('should clear stale fields that are absent from the refreshed case', async () => {
-    applicationContext
-      .getUseCases()
-      .getCaseInteractor.mockResolvedValue({
-        caseCaption: 'Test Caption',
-        docketEntries: [],
-        docketNumber: '101-20',
-        isSealed: false,
-        status: 'General Docket - Not at Issue',
-      });
+    applicationContext.getUseCases().getCaseInteractor.mockResolvedValue({
+      caseCaption: 'Test Caption',
+      docketEntries: [],
+      docketNumber: '101-20',
+      isSealed: false,
+      status: 'General Docket - Not at Issue',
+    });
 
     const result = await runAction(refreshCaseMetadataAction, {
       modules: { presenter },

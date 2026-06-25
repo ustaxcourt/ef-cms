@@ -15,7 +15,6 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 describe('removeSignatureFromDocumentInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
-
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -108,8 +107,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const unsignedDocument = updatedCase.docketEntries.find(
       doc => doc.docketEntryId === mockDocketEntryId,
     );

@@ -7,9 +7,9 @@ describe('updateContactAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    applicationContext.getUseCases().updateContactInteractor.mockReturnValue(
-      undefined,
-    );
+    applicationContext
+      .getUseCases()
+      .updateContactInteractor.mockReturnValue(undefined);
   });
 
   it('updates primary contact for the current case', async () => {

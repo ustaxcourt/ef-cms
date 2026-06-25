@@ -13,6 +13,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
@@ -20,7 +21,6 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
@@ -60,100 +60,102 @@ const updateCaseContext = async (
     newCase.setAssociatedJudgeId(associatedJudgeId);
   }
 
-  // if this case status is changing FROM calendared
-  // we need to remove it from the trial session
-  if (caseStatus && caseStatus !== oldCase.status) {
-    newCase.setCaseStatus({
-      changedBy: authorizedUser.name,
-      updatedCaseStatus: caseStatus,
-    });
-
-    if (oldCase.status === CASE_STATUS_TYPES.calendared) {
-      const disposition = `Status was changed to ${caseStatus}`;
-
-      if (!oldCase.trialSessionId) {
-        throw new NotFoundError(
-          `Cannot find trialSessionId for case ${docketNumber}`,
-        );
-      }
-
-      const trialSession = await getTrialSessionById({
-        trialSessionId: oldCase.trialSessionId,
+  await withTransaction(async () => {
+    // if this case status is changing FROM calendared
+    // we need to remove it from the trial session
+    if (caseStatus && caseStatus !== oldCase.status) {
+      newCase.setCaseStatus({
+        changedBy: authorizedUser.name,
+        updatedCaseStatus: caseStatus,
       });
 
-      if (!trialSession) {
-        throw new NotFoundError(
-          `Trial session ${oldCase.trialSessionId} was not found.`,
-        );
-      }
+      if (oldCase.status === CASE_STATUS_TYPES.calendared) {
+        const disposition = `Status was changed to ${caseStatus}`;
 
-      const trialSessionEntity = new TrialSession(trialSession);
-
-      trialSessionEntity.removeCaseFromCalendar({
-        disposition,
-        docketNumber: oldCase.docketNumber,
-      });
-
-      await removeCaseFromTrialSession({
-        disposition,
-        docketNumber: oldCase.docketNumber,
-        trialSessionId: trialSessionEntity.trialSessionId,
-      });
-
-      await updateTrialSession({
-        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-      });
-
-      newCase.removeFromTrialWithAssociatedJudge(judgeData);
-    }
-
-    if (
-      caseStatus === CASE_STATUS_TYPES.closed ||
-      caseStatus === CASE_STATUS_TYPES.closedDismissed
-    ) {
-      const caseDeadlines = await getCaseDeadlinesByDocketNumber({
-        docketNumber,
-      });
-
-      const DEADLINE_TASKS: Promise<any>[] = caseDeadlines.map(
-        async deadline => {
-          return deleteCaseDeadline({
-            caseDeadlineId: deadline.caseDeadlineId,
-          });
-        },
-      );
-
-      const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
-      if (
-        isLeadCase(oldCase) &&
-        caseDeadlines.length &&
-        LEAD_CASE_DEADLINES.length
-      ) {
-        const CHILDREN_DEADLINES =
-          await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
-            LEAD_CASE_DEADLINES,
+        if (!oldCase.trialSessionId) {
+          throw new NotFoundError(
+            `Cannot find trialSessionId for case ${docketNumber}`,
           );
+        }
 
-        DEADLINE_TASKS.push(
-          ...CHILDREN_DEADLINES.map(async childCaseDeadline => {
-            return upsertCaseDeadlines([
-              {
-                ...childCaseDeadline,
-                consolidatedCaseDeadlineId: undefined,
-              },
-            ]);
-          }),
-        );
+        const trialSession = await getTrialSessionById({
+          trialSessionId: oldCase.trialSessionId,
+        });
+
+        if (!trialSession) {
+          throw new NotFoundError(
+            `Trial session ${oldCase.trialSessionId} was not found.`,
+          );
+        }
+
+        const trialSessionEntity = new TrialSession(trialSession);
+
+        trialSessionEntity.removeCaseFromCalendar({
+          disposition,
+          docketNumber: oldCase.docketNumber,
+        });
+
+        await removeCaseFromTrialSession({
+          disposition,
+          docketNumber: oldCase.docketNumber,
+          trialSessionId: trialSessionEntity.trialSessionId,
+        });
+
+        await updateTrialSession({
+          trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+        });
+
+        newCase.removeFromTrialWithAssociatedJudge(judgeData);
       }
 
-      await settlePromises(DEADLINE_TASKS);
-      newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
-    }
-  }
+      if (
+        caseStatus === CASE_STATUS_TYPES.closed ||
+        caseStatus === CASE_STATUS_TYPES.closedDismissed
+      ) {
+        const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+          docketNumber,
+        });
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: newCase,
+        const DEADLINE_TASKS: Promise<any>[] = caseDeadlines.map(
+          async deadline => {
+            return deleteCaseDeadline({
+              caseDeadlineId: deadline.caseDeadlineId,
+            });
+          },
+        );
+
+        const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+        if (
+          isLeadCase(oldCase) &&
+          caseDeadlines.length &&
+          LEAD_CASE_DEADLINES.length
+        ) {
+          const CHILDREN_DEADLINES =
+            await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
+              LEAD_CASE_DEADLINES,
+            );
+
+          DEADLINE_TASKS.push(
+            ...CHILDREN_DEADLINES.map(async childCaseDeadline => {
+              return upsertCaseDeadlines([
+                {
+                  ...childCaseDeadline,
+                  consolidatedCaseDeadlineId: undefined,
+                },
+              ]);
+            }),
+          );
+        }
+
+        await settlePromises(DEADLINE_TASKS);
+        newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
+      }
+    }
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: newCase,
+    });
   });
 };
 
