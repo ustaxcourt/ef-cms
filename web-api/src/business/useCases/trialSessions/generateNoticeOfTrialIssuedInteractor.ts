@@ -57,9 +57,11 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
-  await getJudgeWithTitle({
-    judgeUserName: trialSession.judge?.name,
-  });
+  if (trialSession.judge?.name) {
+    await getJudgeWithTitle({
+      judgeUserName: trialSession.judge.name,
+    });
+  }
 
   const { CLERK_OF_THE_COURT_CONFIGURATION } =
     applicationContext.getConstants();

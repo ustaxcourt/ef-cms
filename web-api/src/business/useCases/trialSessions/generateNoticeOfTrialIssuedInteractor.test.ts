@@ -184,7 +184,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     });
   });
 
-  it('should use "Not assigned" when the trial session has no judge', async () => {
+  it('should generate a notice with "Not assigned" when the trial session has no judge', async () => {
     getTrialSessionById.mockResolvedValue({
       joinPhoneNumber: '3333',
       meetingId: '1111',
@@ -200,6 +200,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
+    expect(getUsersInSections).not.toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
         .calls[0][0],
@@ -210,6 +211,25 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         },
       },
     });
+  });
+
+  it('should throw an error when the judge for the trial session is not found in persistence', async () => {
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      judge: { name: 'Bob Judge' },
+      meetingId: '1111',
+      password: '2222',
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
+
+    await expect(
+      generateNoticeOfTrialIssuedInteractor(applicationContext, {
+        docketNumber: '123-45',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      }),
+    ).rejects.toThrow('Judge Bob Judge was not found');
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
