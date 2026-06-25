@@ -118,8 +118,17 @@ function redactPreview(value: string): string {
   return `${value.slice(0, 4)}...[redacted]...${value.slice(-4)}`;
 }
 
-function isTopLevelArrayItemPath(path: string): boolean {
-  return /^\[\d+\]$/.test(path);
+function isArrayItemPath(path: string): boolean {
+  return /\[\d+\]$/.test(path);
+}
+
+function createMissingEntityNameFinding(
+  path: string,
+): InternalUnauthorizedFieldFinding {
+  return {
+    fieldName: path ? `${path}.entityName` : 'entityName',
+    matchPreview: '[missing]',
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -245,8 +254,14 @@ function validateObjectWithoutEntityName(args: {
   path: string;
   url: string;
 }): InternalUnauthorizedFieldFinding[] {
-  if (isTopLevelArrayItemPath(args.path)) {
-    return validateUrlOnlyObject(args);
+  if (isArrayItemPath(args.path)) {
+    const urlOnlyFindings = validateUrlOnlyObject(args);
+
+    if (urlOnlyFindings.length === 0) {
+      return [];
+    }
+
+    return [createMissingEntityNameFinding(args.path)];
   }
 
   if (args.path !== '') {
