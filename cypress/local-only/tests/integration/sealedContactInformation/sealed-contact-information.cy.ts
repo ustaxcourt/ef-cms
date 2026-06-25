@@ -1,4 +1,5 @@
 import {
+  loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
@@ -74,6 +75,44 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="petitioner-paper-petition-email"]').contains(
         'petitioner1@example.com',
       );
+    });
+  });
+
+  it('should allow users to edit case', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      // Login as docket clerk and seal a petitioners contact info
+      loginAsDocketClerk();
+      goToCase(docketNumber);
+      updateCaseStatus('General Docket - At Issue (Ready for Trial)');
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+
+      // Add a note as a docket clerk
+      cy.get('[data-testid="tab-notes"]').click();
+      cy.get('[data-testid="add-case-note"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').type(
+        'Docket Clerk able to edit',
+      );
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      // Add a note as an ADC
+      loginAsAdc();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-notes"]').click();
+      cy.get('[data-testid="edit-case-note"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').type(
+        '\nADC able to edit',
+      );
+      cy.intercept('PUT', '**/case-notes/**').as('putCaseNote');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.wait('@putCaseNote');
     });
   });
 });
