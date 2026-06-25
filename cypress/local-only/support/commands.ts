@@ -246,6 +246,6 @@ function formatSensitiveNetworkFailure(
     '',
     details,
     '',
-    'To fix this, remove the non-public value from the public-page request/response or add a narrowly scoped allowlist entry if this is expected.',
+    'To fix this, remove the non-public value from the public-page request/response or the expected public entity to the validator function.',
   ].join('\n');
 }
