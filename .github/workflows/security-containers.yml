@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Trivy config scan (Dockerfiles)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: .
@@ -85,7 +85,7 @@ jobs:
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
 
       - name: Trivy scan — ef-cms-us-east-1 (base)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ef-cms-us-east-1:latest
@@ -109,7 +109,7 @@ jobs:
           category: trivy-image-base
 
       - name: Trivy scan — efcms-local
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: efcms-local:latest
@@ -148,7 +148,7 @@ jobs:
             image: node:24
     steps:
       - name: Trivy scan — ${{ matrix.image }}
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ${{ matrix.image }}
@@ -200,7 +200,7 @@ jobs:
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
 
       - name: Trivy scan — ef-cms-us-east-1 (baseline)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ef-cms-us-east-1:latest
@@ -218,7 +218,7 @@ jobs:
           category: trivy-baseline-base
 
       - name: Trivy scan — efcms-local (baseline)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: efcms-local:latest
@@ -236,7 +236,7 @@ jobs:
           category: trivy-baseline-local
 
       - name: Trivy scan — node:24.16.0-slim (baseline)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: node:24.16.0-slim
@@ -254,7 +254,7 @@ jobs:
           category: trivy-baseline-puppeteer
 
       - name: Trivy scan — node:24 (baseline)
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: node:24
