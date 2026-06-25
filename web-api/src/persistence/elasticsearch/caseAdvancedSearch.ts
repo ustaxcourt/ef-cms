@@ -51,6 +51,9 @@ export const caseAdvancedSearch = async ({
   const matchQuery = useNonExactQuery
     ? nonExactMatchesQuery
     : exactMatchesQuery;
+
+  // The docket-number tie-breaker gives equal-scoring cases a stable order
+  // across search_after requests, preventing skipped or duplicate results
   const body: NonNullable<Search_Request['body']> = {
     _source: source,
     query: { bool: { must: [...matchQuery, ...commonQuery] } },
