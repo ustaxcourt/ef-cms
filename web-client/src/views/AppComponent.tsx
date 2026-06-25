@@ -261,24 +261,6 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    // TEMPORARY: ?rum-http-error=1 → fires an XHR to a nonexistent API endpoint so RUM's
-    // http telemetry captures the 404. Uses XMLHttpRequest (not fetch) because that is what
-    // the RUM http plugin instruments. Targets API_URL so CloudFront doesn't catch-all to
-    // index.html. REMOVE after confirming the failed request appears in CloudWatch RUM.
-    useEffect(() => {
-      if (
-        new URLSearchParams(window.location.search).get('rum-http-error') ===
-        '1'
-      ) {
-        const xhr = new XMLHttpRequest();
-        xhr.open(
-          'GET',
-          `${process.env.API_URL}/rum-test-nonexistent-endpoint-404`,
-        );
-        xhr.send();
-      }
-    }, []);
-
     const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];

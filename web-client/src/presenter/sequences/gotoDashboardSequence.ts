@@ -35,22 +35,7 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
-// TEMPORARY: fire-and-forget action that triggers a 404 so CloudWatch RUM's
-// http telemetry can be verified end-to-end. Activate with ?rum-http-error=1.
-// Remove once confirmed working in RUM.
-const triggerRumHttpTestAction = ({
-  applicationContext,
-}: ActionProps): void => {
-  if (new URLSearchParams(window.location.search).get('rum-http-error') !== '1')
-    return;
-  applicationContext
-    .getHttpClient()
-    .get(`${process.env.API_URL}/rum-test-nonexistent-404`)
-    .catch(() => {});
-};
-
 export const gotoDashboardSequence = [
-  triggerRumHttpTestAction,
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
