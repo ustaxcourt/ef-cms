@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { CapturedNetworkPayload } from '../../../local-only/support/commands';
+import type { CapturedNetworkPayload } from '../../../local-only/support/commands';
 import { PublicCase } from '../../../../shared/src/business/entities/cases/PublicCase';
 import { PublicDocketEntry } from '../../../../shared/src/business/entities/cases/PublicDocketEntry';
 import { PublicContact } from '../../../../shared/src/business/entities/cases/PublicContact';
