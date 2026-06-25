@@ -71,7 +71,7 @@ describe('validateMotionOrderResponseFormAction', () => {
       },
       state: {
         form: {
-          additionalOrderText: 'Test',
+          additionalOrderTextArray: ['Test'],
           dueDate: 'invalid-date',
           issueOrderFor:
             MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
@@ -90,5 +90,27 @@ describe('validateMotionOrderResponseFormAction', () => {
       }),
     );
     expect(mockSuccessPath).not.toHaveBeenCalled();
+  });
+
+  it('should validate successfully with multiple optional additional clauses', async () => {
+    const today = formatNow(FORMATS.YYYYMMDD);
+
+    await runAction(validateMotionOrderResponseFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          additionalOrderTextArray: ['First clause', 'Second clause'],
+          isOnLeadCase: false,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
+          responseDate: today,
+        },
+      },
+    });
+
+    expect(mockSuccessPath).toHaveBeenCalled();
+    expect(mockErrorPath).not.toHaveBeenCalled();
   });
 });
