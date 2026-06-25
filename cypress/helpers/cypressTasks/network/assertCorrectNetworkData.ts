@@ -1,18 +1,18 @@
 /* eslint-disable complexity */
 import type { CapturedNetworkPayload } from '../../../local-only/support/commands';
-import { PublicCase } from '../../../../shared/src/business/entities/cases/PublicCase';
-import { PublicDocketEntry } from '../../../../shared/src/business/entities/cases/PublicDocketEntry';
-import { PublicContact } from '../../../../shared/src/business/entities/cases/PublicContact';
-import { RestrictedCase } from '../../../../shared/src/business/entities/cases/RestrictedCase';
-import { PublicUser } from '../../../../shared/src/business/entities/PublicUser';
-import { PublicDocumentSearchResult } from '../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
-import { PublicCaseDTO } from '../../../../shared/src/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '../../../../shared/src/business/dto/cases/RestrictedCaseDTO';
-import { PublicTrialSessionInfoDTO } from '../../../../shared/src/business/dto/trialSessions/PublicTrialSessionInfoDTO';
-import { getHeaderValue } from '../../../../shared/src/utils/headers';
+import { getHeaderValue } from '@shared/utils/headers';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
+import { PublicContact } from '@shared/business/entities/cases/PublicContact';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
+import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
+import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { PublicTrialSessionInfoDTO } from '@shared/business/dto/trialSessions/PublicTrialSessionInfoDTO';
 
 export type UnauthorizedFieldFinding = {
   url: string;
