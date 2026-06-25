@@ -8,6 +8,7 @@ import { PublicDocumentSearchResult } from '../../../../shared/src/business/enti
 import { PublicCaseDTO } from '../../../../shared/src/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '../../../../shared/src/business/dto/cases/RestrictedCaseDTO';
 import { PublicTrialSessionInfoDTO } from '../../../../shared/src/business/dto/trialSessions/PublicTrialSessionInfoDTO';
+import { getHeaderValue } from '../../../../shared/src/utils/headers';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -89,60 +90,26 @@ function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
 
 const ALLOWED_FIELDS_BY_ENTITY_NAME = extractAllowedFieldsByEntityName();
 
-function getHeaderValue(
-  headers: Record<string, unknown> | undefined,
-  headerName: string,
-): string | undefined {
-  if (!headers) {
-    return undefined;
-  }
-
-  const directValue = headers[headerName];
-  if (typeof directValue === 'string') {
-    return directValue;
-  }
-
-  const normalizedHeaderName = headerName.toLowerCase();
-  const matchingKey = Object.keys(headers).find(
-    key => key.toLowerCase() === normalizedHeaderName,
-  );
-
-  if (!matchingKey) {
-    return undefined;
-  }
-
-  const matchingValue = headers[matchingKey];
-  return typeof matchingValue === 'string' ? matchingValue : undefined;
-}
-
-function shouldValidateResponseBody(payload: CapturedNetworkPayload): boolean {
-  if (!payload.responseBody) {
+function shouldValidateJsonBody(args: {
+  body: unknown;
+  headers: Record<string, unknown> | undefined;
+  shouldRejectAssetUrls: boolean;
+  url: string;
+}): boolean {
+  if (!args.body) {
     return false;
   }
 
-  if (NON_API_ASSET_PATH_REGEX.test(payload.url)) {
+  if (args.shouldRejectAssetUrls && NON_API_ASSET_PATH_REGEX.test(args.url)) {
     return false;
   }
 
-  const contentType = getHeaderValue(payload.responseHeaders, 'content-type');
+  const contentType = getHeaderValue(args.headers, 'content-type');
   if (contentType && !contentType.toLowerCase().includes('application/json')) {
     return false;
   }
 
-  return isRecord(payload.responseBody) || Array.isArray(payload.responseBody);
-}
-
-function shouldValidateRequestBody(payload: CapturedNetworkPayload): boolean {
-  if (!payload.requestBody) {
-    return false;
-  }
-
-  const contentType = getHeaderValue(payload.requestHeaders, 'content-type');
-  if (contentType && !contentType.toLowerCase().includes('application/json')) {
-    return false;
-  }
-
-  return isRecord(payload.requestBody) || Array.isArray(payload.requestBody);
+  return isRecord(args.body) || Array.isArray(args.body);
 }
 
 function redactPreview(value: string): string {
@@ -183,27 +150,12 @@ function validateUrlOnlyObject(args: {
   path: string;
   url: string;
 }): InternalUnauthorizedFieldFinding[] {
-  const findings: InternalUnauthorizedFieldFinding[] = [];
-
-  for (const [key, value] of Object.entries(args.obj)) {
-    const fieldPath = args.path ? `${args.path}.${key}` : key;
-
-    if (key === 'url' && typeof value === 'string') {
-      continue;
-    }
-
-    if (Array.isArray(value) || isRecord(value)) {
-      findings.push(...findUnauthorizedFields(value, fieldPath, args.url));
-      continue;
-    }
-
-    findings.push({
-      fieldName: fieldPath,
-      matchPreview: redactPreview(String(value)),
-    });
-  }
-
-  return findings;
+  return validateObjectByFieldRule({
+    isAllowed: (key, value) => key === 'url' && typeof value === 'string',
+    obj: args.obj,
+    path: args.path,
+    url: args.url,
+  });
 }
 
 function validateEntityMetadata(args: {
@@ -244,30 +196,29 @@ function validateNumericObject(args: {
   path: string;
   url: string;
 }): InternalUnauthorizedFieldFinding[] {
-  const findings: InternalUnauthorizedFieldFinding[] = [];
-
-  for (const [key, value] of Object.entries(args.obj)) {
-    const fieldPath = args.path ? `${args.path}.${key}` : key;
-
-    if (isNumericValue(value)) {
-      continue;
-    }
-
-    if (Array.isArray(value) || isRecord(value)) {
-      findings.push(...findUnauthorizedFields(value, fieldPath, args.url));
-      continue;
-    }
-
-    findings.push({
-      fieldName: fieldPath,
-      matchPreview: redactPreview(String(value)),
-    });
-  }
-
-  return findings;
+  return validateObjectByFieldRule({
+    isAllowed: (_key, value) => isNumericValue(value),
+    obj: args.obj,
+    path: args.path,
+    url: args.url,
+  });
 }
 
 function validateFeatureFlagObject(args: {
+  obj: Record<string, unknown>;
+  path: string;
+  url: string;
+}): InternalUnauthorizedFieldFinding[] {
+  return validateObjectByFieldRule({
+    isAllowed: (_key, value) => isAllowedFeatureFlagValue(value),
+    obj: args.obj,
+    path: args.path,
+    url: args.url,
+  });
+}
+
+function validateObjectByFieldRule(args: {
+  isAllowed: (key: string, value: unknown) => boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
@@ -277,7 +228,7 @@ function validateFeatureFlagObject(args: {
   for (const [key, value] of Object.entries(args.obj)) {
     const fieldPath = args.path ? `${args.path}.${key}` : key;
 
-    if (isAllowedFeatureFlagValue(value)) {
+    if (args.isAllowed(key, value)) {
       continue;
     }
 
@@ -408,36 +359,38 @@ export function assertCorrectNetworkData(
   const findings: UnauthorizedFieldFinding[] = [];
 
   for (const payload of payloads) {
-    if (shouldValidateResponseBody(payload)) {
-      const bodyFindings = findUnauthorizedFields(
-        payload.responseBody,
-        '',
-        payload.url,
-      );
-      findings.push(
-        ...bodyFindings.map(finding => ({
-          ...finding,
-          url: payload.url,
-          method: payload.method,
-          location: 'responseBody',
-        })),
-      );
+    if (
+      shouldValidateJsonBody({
+        body: payload.responseBody,
+        headers: payload.responseHeaders,
+        shouldRejectAssetUrls: true,
+        url: payload.url,
+      })
+    ) {
+      appendFindingsForBody({
+        body: payload.responseBody,
+        findings,
+        location: 'responseBody',
+        method: payload.method,
+        url: payload.url,
+      });
     }
 
-    if (shouldValidateRequestBody(payload)) {
-      const bodyFindings = findUnauthorizedFields(
-        payload.requestBody,
-        '',
-        payload.url,
-      );
-      findings.push(
-        ...bodyFindings.map(finding => ({
-          ...finding,
-          url: payload.url,
-          method: payload.method,
-          location: 'requestBody',
-        })),
-      );
+    if (
+      shouldValidateJsonBody({
+        body: payload.requestBody,
+        headers: payload.requestHeaders,
+        shouldRejectAssetUrls: false,
+        url: payload.url,
+      })
+    ) {
+      appendFindingsForBody({
+        body: payload.requestBody,
+        findings,
+        location: 'requestBody',
+        method: payload.method,
+        url: payload.url,
+      });
     }
   }
 
@@ -445,4 +398,22 @@ export function assertCorrectNetworkData(
     passed: findings.length === 0,
     findings,
   };
+}
+
+function appendFindingsForBody(args: {
+  body: unknown;
+  findings: UnauthorizedFieldFinding[];
+  location: 'requestBody' | 'responseBody';
+  method: string;
+  url: string;
+}): void {
+  const bodyFindings = findUnauthorizedFields(args.body, '', args.url);
+  args.findings.push(
+    ...bodyFindings.map(finding => ({
+      ...finding,
+      url: args.url,
+      method: args.method,
+      location: args.location,
+    })),
+  );
 }
