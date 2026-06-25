@@ -296,7 +296,7 @@ Below is a list of dependencies that are locked down due to known issues with se
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-**Current Installed DWT: 19.3.3**
+**Current Installed DWT: 19.4.1**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
 
