@@ -102,12 +102,13 @@ describe('casePublicSearch', () => {
       applicationContext,
       searchTerms,
     });
-    expect(Object.keys(results[0])).toHaveLength(6);
+    expect(Object.keys(results[0])).toHaveLength(7);
     expect(results).toMatchObject([
       {
         caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
         docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
         docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+        entityName: 'PublicCaseSearchResult',
         petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
         petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
           p => p.state,

@@ -1,4 +1,4 @@
-import {
+import type {
   PublicDataValidationResult,
   UnauthorizedFieldFinding,
 } from '../../helpers/cypressTasks/network/assertCorrectNetworkData';
