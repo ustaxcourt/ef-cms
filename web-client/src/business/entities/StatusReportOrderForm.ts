@@ -5,7 +5,10 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -17,7 +20,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   public dueDate?: string;
   public strickenFromTrialSessions?: string;
   public jurisdiction?: string;
-  public additionalOrderText?: string;
+  public additionalOrderTextArray?: string[];
   public docketEntryDescription: string;
 
   constructor(rawProps: any) {
@@ -28,7 +31,7 @@ export class StatusReportOrderForm extends JoiValidationEntity {
     this.dueDate = rawProps.dueDate;
     this.strickenFromTrialSessions = rawProps.strickenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
-    this.additionalOrderText = rawProps.additionalOrderText;
+    this.additionalOrderTextArray = rawProps.additionalOrderTextArray;
     this.docketEntryDescription = rawProps.docketEntryDescription;
   }
 
@@ -38,9 +41,16 @@ export class StatusReportOrderForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalOrderText: JoiValidationConstants.STRING.max(256)
+    additionalOrderTextArray: joi
+      .array()
+      .items(
+        JoiValidationConstants.STRING.max(
+          MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS,
+        ).allow(''),
+      )
+      .min(1)
       .optional()
-      .allow(null, ''),
+      .allow(null),
     docketEntryDescription: JoiValidationConstants.STRING.max(80)
       .required()
       .messages({
