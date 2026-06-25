@@ -55,7 +55,7 @@ describe('caseAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('returns empty array if no search params are passed in', async () => {
+  it('returns an empty array when exact and non-exact searches have no matches', async () => {
     caseAdvancedSearch.mockResolvedValue([]);
 
     const results = await caseAdvancedSearchInteractor(
@@ -68,6 +68,43 @@ describe('caseAdvancedSearchInteractor', () => {
     );
 
     expect(results).toEqual([]);
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ useNonExactQuery: false }),
+    );
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ useNonExactQuery: true }),
+    );
+  });
+
+  it('returns non-exact matches when the exact search has no matches', async () => {
+    caseAdvancedSearch.mockResolvedValueOnce([]).mockResolvedValueOnce([
+      {
+        docketNumber: '101-20',
+        petitioners: [],
+      },
+    ]);
+
+    const results = await caseAdvancedSearchInteractor(
+      applicationContext,
+      {
+        petitionerName: 'test person',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(results).toEqual([
+      {
+        docketNumber: '101-20',
+        petitionerNames: [],
+        petitionerStateNames: [],
+      },
+    ]);
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ useNonExactQuery: true }),
+    );
   });
 
   it('calls search function with correct params and returns records for an exact match result', async () => {
@@ -186,6 +223,51 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(results.length).toBe(MAX_CASE_SEARCH_RESULTS);
   });
 
+  it('continues searching until it collects MAX_CASE_SEARCH_RESULTS accessible cases', async () => {
+    const inaccessibleCase = {
+      docketNumber: '100-20',
+      isSealed: true,
+      petitioners: [],
+      sort: [10, '100-20'],
+    };
+    const firstBatchAccessibleCases = Array.from(
+      { length: MAX_CASE_SEARCH_RESULTS - 1 },
+      (_, index) => ({
+        docketNumber: `${index + 101}-20`,
+        petitioners: [],
+        sort: [10, `${index + 101}-20`],
+      }),
+    );
+    const finalAccessibleCase = {
+      docketNumber: '99999-20',
+      petitioners: [],
+      sort: [9, '99999-20'],
+    };
+
+    caseAdvancedSearch
+      .mockResolvedValueOnce([inaccessibleCase, ...firstBatchAccessibleCases])
+      .mockResolvedValueOnce([finalAccessibleCase]);
+
+    const results = await caseAdvancedSearchInteractor(
+      applicationContext,
+      {
+        petitionerName: 'test person',
+      },
+      mockIrsPractitionerUser,
+    );
+
+    expect(results).toHaveLength(MAX_CASE_SEARCH_RESULTS);
+    expect(results.at(-1)?.docketNumber).toBe(finalAccessibleCase.docketNumber);
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        resultSize: 1,
+        searchAfter: firstBatchAccessibleCases.at(-1)?.sort,
+        useNonExactQuery: false,
+      }),
+    );
+  });
+
   it('returns results if practitioner is associated', async () => {
     caseAdvancedSearch.mockResolvedValue([
       {
@@ -277,6 +359,7 @@ describe('caseAdvancedSearchInteractor', () => {
           { name: 'State Petitioner', state: 'TN' },
           { name: 'Territory Petitioner', state: 'GU' },
           { name: 'International Petitioner', state: 'Ontario' },
+          { name: 'Petitioner Without State' },
         ],
       },
     ]);
@@ -293,6 +376,7 @@ describe('caseAdvancedSearchInteractor', () => {
       'Tennessee',
       'Guam',
       'Ontario',
+      undefined,
     ]);
   });
 });
