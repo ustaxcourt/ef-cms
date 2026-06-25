@@ -63,12 +63,11 @@ export const getPractitionersByNameInteractor = async (
       practitionerType,
     });
 
-  const practitioners = results.map(
-    foundUser =>
-      new PublicContact({
-        ...foundUser,
-        state: isLoggedInUser ? foundUser.contact?.state : undefined,
-      }),
+  const practitioners = results.map(foundUser =>
+    new PublicContact({
+      ...foundUser,
+      state: isLoggedInUser ? foundUser.contact?.state : undefined,
+    }).toRawObject(),
   );
 
   return {
