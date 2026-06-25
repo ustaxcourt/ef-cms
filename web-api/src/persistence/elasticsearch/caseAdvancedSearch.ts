@@ -1,23 +1,37 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
+import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
-import { isEmpty } from 'lodash';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import type { Common } from 'node_modules/@opensearch-project/opensearch/api/_types';
+import type { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
 
-/**
- * caseAdvancedSearchInteractor
- *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
+type CaseAdvancedSearchResult = {
+  caseCaption: string;
+  docketNumber: string;
+  docketNumberWithSuffix: string;
+  irsPractitioners?: { userId?: string }[];
+  isSealed?: boolean;
+  petitioners: { name: string; state?: string }[];
+  privatePractitioners?: { userId?: string }[];
+  receivedAt: string;
+  sealedDate?: string;
+  sort?: Common.SortResults;
+};
+
 export const caseAdvancedSearch = async ({
   applicationContext,
+  resultSize = MAX_CASE_SEARCH_RESULTS,
+  searchAfter,
   searchTerms,
+  useNonExactQuery = false,
 }: {
   applicationContext: ServerApplicationContext;
+  resultSize?: number;
+  searchAfter?: Common.SortResults;
   searchTerms: CaseAdvancedSearchParamsRequestType;
-}) => {
+  useNonExactQuery?: boolean;
+}): Promise<CaseAdvancedSearchResult[]> => {
   const { commonQuery, exactMatchesQuery, nonExactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -34,33 +48,33 @@ export const caseAdvancedSearch = async ({
     'sealedDate',
   ];
 
-  let results;
+  const matchQuery = useNonExactQuery
+    ? nonExactMatchesQuery
+    : exactMatchesQuery;
 
-  ({ results } = await search({
+  // The docket-number tie-breaker gives equal-scoring cases a stable order
+  // across search_after requests, preventing skipped or duplicate results
+  const body: NonNullable<Search_Request['body']> = {
+    _source: source,
+    query: { bool: { must: [...matchQuery, ...commonQuery] } },
+    size: resultSize,
+    sort: [
+      { _score: { order: 'desc' } },
+      { 'docketNumber.S': { order: 'asc' } },
+    ],
+  };
+
+  if (searchAfter) {
+    body.search_after = searchAfter;
+  }
+
+  const { results } = await search<CaseAdvancedSearchResult>({
     applicationContext,
     searchParameters: {
-      body: {
-        _source: source,
-        query: { bool: { must: [...exactMatchesQuery, ...commonQuery] } },
-        size: MAX_SEARCH_CLIENT_RESULTS,
-      },
+      body,
       index: 'efcms-case',
     },
-  }));
-
-  if (isEmpty(results)) {
-    ({ results } = await search({
-      applicationContext,
-      searchParameters: {
-        body: {
-          _source: source,
-          query: { bool: { must: [...nonExactMatchesQuery, ...commonQuery] } },
-          size: MAX_SEARCH_CLIENT_RESULTS,
-        },
-        index: 'efcms-case',
-      },
-    }));
-  }
+  });
 
   return results;
 };

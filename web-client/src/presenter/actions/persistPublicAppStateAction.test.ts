@@ -7,7 +7,6 @@ describe('persistPublicAppStateAction', () => {
   const advancedSearchFormValue = {
     caseSearchByDocketNumber: {},
     caseSearchByName: { countryType: 'domestic' },
-    currentPage: 1,
     opinionSearch: {
       opinionTypes: { MOP: true, OST: true, SOP: true, TCOP: true },
     },

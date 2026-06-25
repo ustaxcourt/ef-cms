@@ -5,6 +5,7 @@ import {
 import {
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
@@ -65,7 +66,7 @@ export const casePublicSearch = async ({
         docketNumberWithSuffix: c.docketNumberWithSuffix,
         petitionerNames: c.petitioners?.map(p => p.name),
         petitionerStateNames: c.petitioners?.map(
-          p => US_STATES[p.state] || p.state,
+          p => US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state,
         ),
         receivedAt: c.receivedAt,
       };
