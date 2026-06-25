@@ -19,19 +19,10 @@ permissions:
   contents: read
 
 env:
-  # Pin Trivy's vuln + misconfig DBs to the GHCR/ECR mirrors. The default registry is
-  # aggressively rate-limited on shared CI runners; these mirrors are the documented
-  # workaround and keep scans deterministic.
   TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
   TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
 
 jobs:
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Job 1: Dockerfile misconfiguration scan (no image build).
-  # Fast, build-free pass over every Dockerfile in the repo for hardening issues
-  # (running as root, missing USER, unpinned base tags, secrets in ENV, etc.).
-  # Terraform is intentionally skipped here — Checkov (security-sast.yml) owns IaC.
-  # ─────────────────────────────────────────────────────────────────────────────
   trivy-config:
     name: Trivy Dockerfile Config
     if: github.event_name == 'pull_request' && !github.event.pull_request.draft
@@ -45,7 +36,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Trivy config scan (Dockerfiles)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: config
           scan-ref: .
@@ -53,9 +44,6 @@ jobs:
           format: sarif
           output: trivy-config.sarif
           skip-dirs: 'node_modules,.terraform,web-api/terraform,coverage,dist,dist-public,dist-lambdas,cypress'
-          # ROLLOUT GUARD: warn-only. Findings report to the Security tab but do NOT
-          # fail the job (exit-code 0). To make blocking, set exit-code to 1 AND have
-          # an admin require this check in branch protection.
           # >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
           exit-code: '0'
 
@@ -66,19 +54,11 @@ jobs:
           always() &&
           hashFiles('trivy-config.sarif') != '' &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-config.sarif
           category: trivy-config
 
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Job 2: Built-image vulnerability scan for the core CI/deploy images.
-  # Builds the exact pair from pdfs.yml — ef-cms-us-east-1 (the ECR base image:
-  # cypress/browsers + openjdk-21 + graphicsmagick + ghostscript + a hand-pinned
-  # AWS CLI 2.34.64 and Terraform 1.15.5) and efcms-local (FROM it + npm ci).
-  # An image scan is the ONLY thing here that catches the curl/wget-pinned
-  # toolchains — neither npm audit nor the OS package DB sees them.
-  # ─────────────────────────────────────────────────────────────────────────────
   trivy-image:
     name: Trivy Image Scan (core)
     if: github.event_name == 'pull_request' && !github.event.pull_request.draft
@@ -105,7 +85,7 @@ jobs:
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
 
       - name: Trivy scan — ef-cms-us-east-1 (base)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: ef-cms-us-east-1:latest
@@ -123,13 +103,13 @@ jobs:
           always() &&
           hashFiles('trivy-base.sarif') != '' &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-base.sarif
           category: trivy-image-base
 
       - name: Trivy scan — efcms-local
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: efcms-local:latest
@@ -145,18 +125,11 @@ jobs:
           always() &&
           hashFiles('trivy-local.sarif') != '' &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-local.sarif
           category: trivy-image-local
 
-  # ─────────────────────────────────────────────────────────────────────────────
-  # Job 3: Base-image scan for the runtime images (puppeteer layer builder on
-  # node:24.16.0-slim; batch docketEntryBatchDownloader on node:24). These have
-  # CI build contexts/args this workflow can't reproduce standalone, so we scan
-  # their declared base images directly — this still catches base + OS package CVEs.
-  # FOLLOW-UP: once their build is wired into CI, switch to a full built-image scan.
-  # ─────────────────────────────────────────────────────────────────────────────
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
     if: github.event_name == 'pull_request' && !github.event.pull_request.draft
@@ -175,7 +148,7 @@ jobs:
             image: node:24
     steps:
       - name: Trivy scan — ${{ matrix.image }}
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: ${{ matrix.image }}
@@ -191,7 +164,7 @@ jobs:
           always() &&
           hashFiles(format('trivy-{0}.sarif', matrix.name)) != '' &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-${{ matrix.name }}.sarif
           category: trivy-image-${{ matrix.name }}
@@ -227,7 +200,7 @@ jobs:
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
 
       - name: Trivy scan — ef-cms-us-east-1 (baseline)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: ef-cms-us-east-1:latest
@@ -239,13 +212,13 @@ jobs:
 
       - name: Upload SARIF — base (baseline)
         if: always() && hashFiles('trivy-baseline-base.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-baseline-base.sarif
           category: trivy-baseline-base
 
       - name: Trivy scan — efcms-local (baseline)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: efcms-local:latest
@@ -257,13 +230,13 @@ jobs:
 
       - name: Upload SARIF — local (baseline)
         if: always() && hashFiles('trivy-baseline-local.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-baseline-local.sarif
           category: trivy-baseline-local
 
       - name: Trivy scan — node:24.16.0-slim (baseline)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: node:24.16.0-slim
@@ -275,13 +248,13 @@ jobs:
 
       - name: Upload SARIF — puppeteer (baseline)
         if: always() && hashFiles('trivy-baseline-puppeteer.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 
       - name: Trivy scan — node:24 (baseline)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.31.0
         with:
           scan-type: image
           image-ref: node:24
@@ -293,7 +266,7 @@ jobs:
 
       - name: Upload SARIF — batch (baseline)
         if: always() && hashFiles('trivy-baseline-batch.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-baseline-batch.sarif
           category: trivy-baseline-batch

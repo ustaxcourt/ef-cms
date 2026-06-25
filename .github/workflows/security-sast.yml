@@ -30,7 +30,7 @@ jobs:
       security-events: write
     timeout-minutes: 15
     container:
-      image: semgrep/semgrep:1.165.0
+      image: semgrep/semgrep:1.167.0
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -68,14 +68,10 @@ jobs:
             --baseline-commit "$BASE_SHA"
 
       - name: Upload SARIF
-        # Fork PRs get a read-only token, so the code-scanning upload (needs
-        # security-events: write) 403s and would block an otherwise-clean PR.
-        # Restrict the upload to same-repo PRs; fork PRs still scan + gate via
-        # the Semgrep exit code, with findings visible in the Actions log.
         if: >-
           always() &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep-results.sarif
           category: semgrep
@@ -98,7 +94,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Checkov
-        run: pip install checkov==3.2.346
+        run: pip install checkov==3.3.2
 
       - name: Run Checkov
         run: |
@@ -166,7 +162,7 @@ jobs:
           always() &&
           hashFiles('checkov-results.sarif') != '' &&
           github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: checkov-results.sarif
           category: checkov
@@ -188,21 +184,43 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           queries: +security-extended,security-and-quality
           config-file: .github/codeql/codeql-config.yml
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: '/language:${{ matrix.language }}'
+
+  shellcheck:
+    name: Shellcheck (Shell Script SAST)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install shellcheck
+        run: |
+          SHELLCHECK_VERSION=0.10.0
+          curl -sSL "https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
+            | tar -xJf - -C /tmp
+          sudo mv "/tmp/shellcheck-v${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
+          shellcheck --version
+
+      - name: Run shellcheck
+        run: ./run-shellcheck.sh
 
   security-gate:
     name: Security Gate (SAST)
     if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
-    needs: [semgrep, checkov]
+    needs: [semgrep, checkov, shellcheck]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
@@ -210,6 +228,7 @@ jobs:
         env:
           SEMGREP_RESULT: ${{ needs.semgrep.result }}
           CHECKOV_RESULT: ${{ needs.checkov.result }}
+          SHELLCHECK_RESULT: ${{ needs.shellcheck.result }}
         run: |
           if [[ "$SEMGREP_RESULT" == "failure" ]]; then
             echo "Semgrep scan failed"
@@ -217,6 +236,10 @@ jobs:
           fi
           if [[ "$CHECKOV_RESULT" == "failure" ]]; then
             echo "Checkov scan failed"
+            exit 1
+          fi
+          if [[ "$SHELLCHECK_RESULT" == "failure" ]]; then
+            echo "Shellcheck scan failed"
             exit 1
           fi
           echo "SAST gate passed"

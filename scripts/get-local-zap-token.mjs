@@ -1,18 +1,5 @@
 #!/usr/bin/env node
-/**
- * Acquires a real Cognito JWT from cognito-local and writes options.prop
- * for ZAP's Replacer add-on so authenticated API endpoints are actually tested.
- *
- * Requires: local stack running (npm run start:all:ci) with cognito-local on port 9229.
- * Writes:   options-<role>.prop in the repo root (gitignored at runtime; static placeholder kept).
- * Usage:    node scripts/get-local-zap-token.mjs [username]
- *           Defaults to petitionsclerk@example.com if no username provided.
- *           USERNAME env var is also accepted.
- *
- * Examples:
- *   node scripts/get-local-zap-token.mjs petitioner@example.com
- *   USERNAME=docketclerk@example.com node scripts/get-local-zap-token.mjs
- */
+
 import { CognitoIdentityProviderClient, InitiateAuthCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { writeFileSync } from 'fs';
 
