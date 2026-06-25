@@ -184,6 +184,35 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     });
   });
 
+  it('should generate a notice with "Not assigned" when the trial session has no judge', async () => {
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      meetingId: '1111',
+      password: '2222',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
+
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(getUsersInSections).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        trialInfo: {
+          formattedJudge: 'Not assigned',
+        },
+      },
+    });
+  });
+
   it('should throw an error when the judge for the trial session is not found in persistence', async () => {
     getTrialSessionById.mockResolvedValue({
       joinPhoneNumber: '3333',
