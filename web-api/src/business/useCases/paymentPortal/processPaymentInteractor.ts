@@ -5,7 +5,6 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
@@ -61,17 +60,14 @@ export const processPaymentInteractor = async (
     .getPaymentPortalClient()
     .processPayment(applicationContext, data);
 
-  if (processResponse.paymentStatus === 'success') {
-    currentCaseEntity.petitionPaymentStatus = 'Paid'; // should be a proper enum somewhere?
-    currentCaseEntity.petitionPaymentDate = createISODateString();
-    currentCaseEntity.petitionPaymentMethod = 'pay.gov'; // tbd, could put payment portal method here
-    delete currentCaseEntity.petitionPaymentToken;
+  // TODO: set other petition payment fields to mark case's filing fee as paid if payment was successful
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: currentCaseEntity,
-    });
-  }
+  delete currentCaseEntity.petitionPaymentToken;
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: currentCaseEntity,
+  });
 
   return processResponse;
 };

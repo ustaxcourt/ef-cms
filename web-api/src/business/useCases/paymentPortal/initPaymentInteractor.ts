@@ -5,11 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { InitPaymentRequest } from '@ustaxcourt/payment-portal';
-import {
-  InvalidRequest,
-  NotFoundError,
-  UnauthorizedError,
-} from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -46,11 +42,7 @@ export const initPaymentInteractor = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
-  if (currentCaseEntity.petitionPaymentStatus === 'Paid') {
-    throw new InvalidRequest(
-      `The filing fee for ${docketNumber} has already been paid.`,
-    );
-  }
+  // TODO: check petitionPaymentStatus before letting user initiate a filing fee payment
 
   const transactionReferenceId =
     currentCaseEntity.petitionPaymentTransactionReferenceId ||
