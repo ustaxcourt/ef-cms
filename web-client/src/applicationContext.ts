@@ -93,7 +93,6 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@web-client/proxies
 import { createMessageInteractor } from '@web-client/proxies/messages/createMessageProxy';
 import { createPractitionerDocumentInteractor } from '@web-client/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '@web-client/proxies/practitioners/createPractitionerUserProxy';
-import { createTestApiErrorInteractor } from '../../shared/src/business/useCases/createTestApiErrorInteractor';
 import { createTrialSessionInteractor } from '@web-client/proxies/trialSessions/createTrialSessionProxy';
 import { deleteAuthCookieInteractor } from '@web-client/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '@web-client/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -397,7 +396,6 @@ const allUseCases = {
   createMessageInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
-  createTestApiErrorInteractor,
   createTrialSessionInteractor,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,

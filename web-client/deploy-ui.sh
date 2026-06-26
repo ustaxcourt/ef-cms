@@ -12,7 +12,6 @@ set -e
 # S3 folder the .map files are uploaded to below — so RUM can't find the source
 # map and stack traces stay minified.
 export RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
-echo "Dummy $CIRCLE_SHA1"
 
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
