@@ -773,12 +773,6 @@ const applicationContext = {
     forceRefreshCallback = callback;
   },
   setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
-  getDocumentGenerators: () => {
-    // TODO: fill this out
-  },
-  getStorageClient: () => {
-    // TODO: fill this out
-  },
 };
 
 export { applicationContext };
