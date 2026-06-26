@@ -156,7 +156,7 @@ export const PieGraph = ({
     // max-w-full constrains to viewport width so overflow-x-auto scrolls when needed.
     <div
       className="tw:inline-block tw:max-w-full tw:align-top tw:overflow-x-auto tw:pt-2"
-      data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-div`}
+      data-testid={`${title || 'noTitle'}-pie-graph-div`}
     >
       <div
         ref={liveRegionRef}
@@ -180,7 +180,7 @@ export const PieGraph = ({
               className="tw:w-auto tw:!mr-5"
               variant="primaryTertiary"
               onClick={openHtmlTable}
-              data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-html-button`}
+              data-testid={`${title || 'noTitle'}-pie-graph-html-button`}
             >
               HTML view
             </Button>
@@ -197,7 +197,7 @@ export const PieGraph = ({
             content={() => (
               <div
                 className="tw:flex tw:justify-between"
-                data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-legend`}
+                data-testid={`${title || 'noTitle'}-pie-graph-legend`}
               >
                 <ul className="tw:grid tw:list-none tw:p-0 tw:m-0 tw:gap-x-4 tw:gap-y-3 tw:xs:gap-y-4 tw:grid-rows-2 tw:grid-flow-col">
                   {data.map(entry => (
@@ -217,7 +217,7 @@ export const PieGraph = ({
                     className="tw:w-auto tw:!mr-5 tw:self-start"
                     variant="primaryTertiary"
                     onClick={openHtmlTable}
-                    data-testid={`${title || tooltipTitle || 'noTitle'}-pie-graph-html-button`}
+                    data-testid={`${title || 'noTitle'}-pie-graph-html-button`}
                   >
                     HTML view
                   </Button>

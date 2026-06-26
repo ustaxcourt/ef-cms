@@ -149,23 +149,31 @@ describe('Clerk of Court Dashboard', () => {
             `Total petitions created in YTD ${year}: ${calendarYearTotal}`,
           );
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]',
+          )
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+          )
             .eq(0)
             .should('exist');
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]',
+          )
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+          )
             .eq(1)
             .should('exist');
 
@@ -185,23 +193,31 @@ describe('Clerk of Court Dashboard', () => {
             `Total petitions created in FYTD ${year}: ${fiscalYearTotal}`,
           );
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in FYTD 2026-pie-graph-div"]')
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in FYTD 2026-pie-graph-legend"]',
+          )
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in FYTD 2026-pie-graph-html-button"]',
+          )
             .eq(0)
             .should('exist');
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in FYTD 2026-pie-graph-div"]')
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in FYTD 2026-pie-graph-legend"]',
+          )
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in FYTD 2026-pie-graph-html-button"]',
+          )
             .eq(1)
             .should('exist');
 
@@ -221,23 +237,31 @@ describe('Clerk of Court Dashboard', () => {
             `Total petitions created in YTD ${year}: ${calendarYearTotal}`,
           );
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]',
+          )
             .eq(0)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+          )
             .eq(0)
             .should('exist');
 
-          cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+          cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]',
+          )
             .eq(1)
             .should('exist');
-          cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+          cy.get(
+            '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+          )
             .eq(1)
             .should('exist');
 
@@ -311,23 +335,27 @@ describe('Clerk of Court Dashboard', () => {
       'Total petitions created in YTD',
     );
 
-    cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+    cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
       .eq(0)
       .should('exist');
-    cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+    cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]')
       .eq(0)
       .should('exist');
-    cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+    cy.get(
+      '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+    )
       .eq(0)
       .should('exist');
 
-    cy.get('[data-testid="Petitions Created-pie-graph-div"]')
+    cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-div"]')
       .eq(1)
       .should('exist');
-    cy.get('[data-testid="Petitions Created-pie-graph-legend"]')
+    cy.get('[data-testid="Petitions Created in YTD 2026-pie-graph-legend"]')
       .eq(1)
       .should('exist');
-    cy.get('[data-testid="Petitions Created-pie-graph-html-button"]')
+    cy.get(
+      '[data-testid="Petitions Created in YTD 2026-pie-graph-html-button"]',
+    )
       .eq(1)
       .should('exist');
 
