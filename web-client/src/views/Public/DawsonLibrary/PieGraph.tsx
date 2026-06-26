@@ -95,11 +95,13 @@ const XS_BREAKPOINT = 480;
 
 export const PieGraph = ({
   title,
+  showTitle = true,
   tooltipTitle,
   data,
   isAnimationActive = true,
 }: {
   title?: string;
+  showTitle?: boolean;
   tooltipTitle?: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
@@ -139,7 +141,7 @@ export const PieGraph = ({
   if (!data || data.length === 0) {
     return (
       <div className="tw:py-8 tw:text-center tw:text-black-400">
-        {title && (
+        {title && showTitle && (
           <h2 className="tw:xs:mb-8 tw:mb-5 tw:text-left tw:xs:text-2xl tw:text-lg">
             {title}
           </h2>
@@ -163,7 +165,7 @@ export const PieGraph = ({
         className="tw:sr-only"
       />
       <div className="tw:xs:w-160 tw:w-105">
-        {title && (
+        {title && showTitle && (
           <div
             className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
             style={{ marginBottom: '1.25rem' }}
@@ -210,7 +212,7 @@ export const PieGraph = ({
                     </li>
                   ))}
                 </ul>
-                {!title && (
+                {(!title || !showTitle) && (
                   <Button
                     className="tw:w-auto tw:!mr-5 tw:self-start"
                     variant="primaryTertiary"
