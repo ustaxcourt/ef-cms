@@ -28,6 +28,7 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+import { resetClerkOfCourtDashboardOptionsAction } from '@web-client/presenter/actions/Dashboard/resetClerkOfCourtDashboardOptionsAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -63,8 +64,9 @@ export const gotoDashboardSequence = [
         ),
         clerkofcourt: [
           fetchUserNotificationsSequence,
-          setClerkOfCourtDashboardChartsAction,
+          resetClerkOfCourtDashboardOptionsAction,
           parallel([
+            setClerkOfCourtDashboardChartsAction,
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
           ]),
