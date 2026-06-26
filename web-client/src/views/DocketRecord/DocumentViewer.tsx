@@ -24,8 +24,7 @@ export const DocumentViewer = connect(
     viewDocumentId,
   }) {
     const hasLargeDocketEntryCount =
-      formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length >
-      1000;
+      formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length > 1000;
 
     useEffect(() => {
       loadDefaultDocketViewerDocumentToDisplaySequence();
@@ -55,120 +54,126 @@ export const DocumentViewer = connect(
               </div>
               {hasLargeDocketEntryCount ? (
                 <VirtualizedDocumentList
-                  docketEntries={formattedDocketEntries.formattedDocketEntriesOnDocketRecord}
+                  docketEntries={
+                    formattedDocketEntries.formattedDocketEntriesOnDocketRecord
+                  }
                   viewDocumentId={viewDocumentId}
-                  setViewerDocumentToDisplaySequence={setViewerDocumentToDisplaySequence}
+                  setViewerDocumentToDisplaySequence={
+                    setViewerDocumentToDisplaySequence
+                  }
                 />
               ) : (
                 <div className="document-viewer--documents-list">
                   {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
                     entry => {
-                    return (
-                      <Button
-                        className={classNames(
-                          'usa-button--unstyled attachment-viewer-button',
-                          viewDocumentId === entry.docketEntryId && 'active',
-                        )}
-                        data-entry-id={entry.docketEntryId}
-                        disabled={!entry.isFileAttached}
-                        isActive={viewDocumentId === entry.docketEntryId}
-                        key={entry.docketEntryId}
-                        onClick={() => {
-                          setViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: entry,
-                          });
-                        }}
-                      >
-                        <div
-                          className="grid-row margin-left-205"
-                          title={entry.toolTipText}
+                      return (
+                        <Button
+                          className={classNames(
+                            'usa-button--unstyled attachment-viewer-button',
+                            viewDocumentId === entry.docketEntryId && 'active',
+                          )}
+                          data-entry-id={entry.docketEntryId}
+                          disabled={!entry.isFileAttached}
+                          isActive={viewDocumentId === entry.docketEntryId}
+                          key={entry.docketEntryId}
+                          onClick={() => {
+                            setViewerDocumentToDisplaySequence({
+                              viewerDocumentToDisplay: entry,
+                            });
+                          }}
                         >
-                          <div className="grid-col-2 text-align-center">
-                            {entry.index}
-                          </div>
                           <div
-                            className={classNames(
-                              'grid-col-3',
-                              entry.isStricken && 'stricken-docket-record',
-                            )}
+                            className="grid-row margin-left-205"
+                            title={entry.toolTipText}
                           >
-                            {entry.createdAtFormatted}
-                            <div className="float-right text-align-center">
-                              {entry.iconsToDisplay.map(
-                                ({ icon, className, title }, index) => (
-                                  <div
-                                    key={index}
-                                    className={classNames('display-block', {
-                                      'margin-bottom-1':
-                                        index < entry.iconsToDisplay.length - 1,
-                                    })}
-                                  >
-                                    <WrappedIcon
-                                      iconClass={className}
-                                      icon={icon}
-                                      title={title}
-                                    />
-                                  </div>
-                                ),
-                              )}
+                            <div className="grid-col-2 text-align-center">
+                              {entry.index}
                             </div>
-                          </div>
-                          <div className="grid-col-5">
-                            <span
+                            <div
                               className={classNames(
-                                'mobile-text-wrap',
-                                'word-wrap-break-word',
+                                'grid-col-3',
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
-                              {entry.descriptionDisplay}
-                              {entry.relatedDocketEntries?.map(
-                                affectedEntry => {
-                                  return (
-                                    <div key={affectedEntry.docketEntryId}>
-                                      <br />
-                                      {affectedEntry.dispositionLinkText.map(
-                                        (linkText, index) => {
-                                          return (
-                                            <div
-                                              className="display-inline-block"
-                                              key={`${linkText}-${index}`}
-                                            >
-                                              --- <span>{linkText}</span>
-                                              {index <
-                                                affectedEntry
-                                                  .dispositionLinkText.length -
-                                                  1 && <br />}
-                                            </div>
-                                          );
-                                        },
-                                      )}
+                              {entry.createdAtFormatted}
+                              <div className="float-right text-align-center">
+                                {entry.iconsToDisplay.map(
+                                  ({ icon, className, title }, index) => (
+                                    <div
+                                      key={index}
+                                      className={classNames('display-block', {
+                                        'margin-bottom-1':
+                                          index <
+                                          entry.iconsToDisplay.length - 1,
+                                      })}
+                                    >
+                                      <WrappedIcon
+                                        iconClass={className}
+                                        icon={icon}
+                                        title={title}
+                                      />
                                     </div>
-                                  );
-                                },
-                              )}
-                            </span>
-                            <span
-                              className={classNames(
-                                'word-wrap-break-word',
-                                'display-block',
-                              )}
-                            >
-                              {entry.isStricken && ' (STRICKEN)'}
-                            </span>
-                          </div>
-                          <div className="grid-col-2 padding-left-105">
-                            {entry.showNotServed && (
-                              <span className="text-semibold not-served">
-                                Not served
+                                  ),
+                                )}
+                              </div>
+                            </div>
+                            <div className="grid-col-5">
+                              <span
+                                className={classNames(
+                                  'mobile-text-wrap',
+                                  'word-wrap-break-word',
+                                  entry.isStricken && 'stricken-docket-record',
+                                )}
+                              >
+                                {entry.descriptionDisplay}
+                                {entry.relatedDocketEntries?.map(
+                                  affectedEntry => {
+                                    return (
+                                      <div key={affectedEntry.docketEntryId}>
+                                        <br />
+                                        {affectedEntry.dispositionLinkText.map(
+                                          (linkText, index) => {
+                                            return (
+                                              <div
+                                                className="display-inline-block"
+                                                key={`${linkText}-${index}`}
+                                              >
+                                                --- <span>{linkText}</span>
+                                                {index <
+                                                  affectedEntry
+                                                    .dispositionLinkText
+                                                    .length -
+                                                    1 && <br />}
+                                              </div>
+                                            );
+                                          },
+                                        )}
+                                      </div>
+                                    );
+                                  },
+                                )}
                               </span>
-                            )}
+                              <span
+                                className={classNames(
+                                  'word-wrap-break-word',
+                                  'display-block',
+                                )}
+                              >
+                                {entry.isStricken && ' (STRICKEN)'}
+                              </span>
+                            </div>
+                            <div className="grid-col-2 padding-left-105">
+                              {entry.showNotServed && (
+                                <span className="text-semibold not-served">
+                                  Not served
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </Button>
-                    );
-                  },
-                )}
+                        </Button>
+                      );
+                    },
+                  )}
                 </div>
               )}
             </div>

@@ -37,7 +37,6 @@ const BetaBar = toggleBetaBarSequence => {
   );
 };
 
- 
 const NavigationItems = (
   headerHelper,
   {

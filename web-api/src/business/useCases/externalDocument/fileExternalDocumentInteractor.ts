@@ -13,14 +13,20 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -153,82 +159,101 @@ export const fileExternalDocument = async (
     }
   }
 
-  const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
-    let caseEntity = new Case(caseToUpdate, { authorizedUser });
+  await withTransaction(async () => {
+    const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
+      let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+      const servedParties = aggregatePartiesForService(caseEntity);
 
-    for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
-      if (docketEntryId && metadata) {
-        const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-        const docketEntryEntity = new DocketEntry(
-          {
-            ...baseMetadata,
-            ...metadata,
-            docketEntryId,
-            documentStorageId: docketEntryId,
-            multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
-            originallyFiledDocketNumber: docketNumber,
-            documentType: metadata.documentType,
-            isOnDocketRecord: true,
-            relationship,
-            numberOfPages,
-          },
-          {
-            authorizedUser,
-            petitioners: currentCaseEntity.petitioners,
-          },
-        );
+      for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
+        if (docketEntryId && metadata) {
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
+          const docketEntryEntity = new DocketEntry(
+            {
+              ...baseMetadata,
+              ...metadata,
+              docketEntryId,
+              documentStorageId: docketEntryId,
+              multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
+              originallyFiledDocketNumber: docketNumber,
+              documentType: metadata.documentType,
+              isOnDocketRecord: true,
+              relationship,
+              numberOfPages,
+            },
+            {
+              authorizedUser,
+              petitioners: currentCaseEntity.petitioners,
+            },
+          );
 
-        docketEntryEntity.setFiledBy(user);
-        docketEntryEntity.validate();
+          docketEntryEntity.setFiledBy(user);
+          docketEntryEntity.validate();
 
-        const workItem = new WorkItem({
-          assigneeId: null,
-          assigneeName: null,
-          docketEntryId: docketEntryEntity.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-        }).validate();
-
-        workItems.push(workItem);
-        caseEntity.addDocketEntry(docketEntryEntity);
-
-        const isAutoServed = docketEntryEntity.isAutoServed();
-
-        if (isAutoServed) {
-          docketEntryEntity.setAsServed(servedParties.all);
-
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
+          const workItem = new WorkItem({
+            assigneeId: null,
+            assigneeName: null,
             docketEntryId: docketEntryEntity.docketEntryId,
-            servedParties,
-          });
+            docketNumber: caseToUpdate.docketNumber,
+            section: DOCKET_SECTION,
+            sentBy: user.name,
+            sentByUserId: user.userId,
+          }).validate();
+
+          workItems.push(workItem);
+          caseEntity.addDocketEntry(docketEntryEntity);
+
+          const isAutoServed = docketEntryEntity.isAutoServed();
+
+          if (isAutoServed) {
+            docketEntryEntity.setAsServed(servedParties.all);
+
+            onTransactionCommit(async () => {
+              await applicationContext
+                .getUseCaseHelpers()
+                .sendServedPartiesEmails({
+                  applicationContext,
+                  caseEntity,
+                  docketEntryId: docketEntryEntity.docketEntryId,
+                  servedParties,
+                });
+            });
+          }
         }
       }
-    }
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        caseEntity,
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          caseEntity,
+        });
+
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+        includeCorrespondence: false,
       });
+    });
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-      includeCorrespondence: false,
+    await settlePromises(consolidatedCaseEntities);
+
+    await upsertWorkItems({
+      workItems,
     });
   });
 
-  await settlePromises(consolidatedCaseEntities);
-
-  await upsertWorkItems({
-    workItems,
-  });
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(docketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber,
+    }),
+  );
 };
 
 export const fileExternalDocumentInteractor = withLocking(
