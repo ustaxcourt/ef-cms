@@ -11,4 +11,5 @@ export const setupOrderResponseFormAction = ({ store, get }: ActionProps) => {
 
   store.set(state.form.issueOrderFor, consolidatedFiling);
   store.set(state.form.isOnLeadCase, isOnLeadCase);
+  store.set(state.form.additionalOrderTextArray, ['']);
 };

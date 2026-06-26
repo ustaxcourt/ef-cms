@@ -10,6 +10,11 @@ import {
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
+import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
@@ -28,7 +33,7 @@ export const prepareMotionOrderResponseAction = ({
   store,
 }: ActionProps) => {
   const {
-    additionalOrderText,
+    additionalOrderTextArray,
     dueDate,
     responseDate,
     strickenFromTrialSession,
@@ -61,7 +66,18 @@ export const prepareMotionOrderResponseAction = ({
 
   const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
-  const hasAdditionalOrderText = !!additionalOrderText;
+  const rawAdditionalOrderTextArray = additionalOrderTextArray ?? [];
+  const meaningfulAdditionalOrderTextArray = normalizeAdditionalOrderTextArray(
+    rawAdditionalOrderTextArray,
+  );
+  store.set(
+    state.form.additionalOrderTextArray,
+    additionalOrderTextArrayWithRequiredFirstField(
+      meaningfulAdditionalOrderTextArray,
+    ),
+  );
+  const hasAdditionalOrderTextArray =
+    meaningfulAdditionalOrderTextArray.length > 0;
 
   const dueDateFormatted = isValidDateString(dueDate, [
     FORMATS.YYYYMMDD,
@@ -106,33 +122,38 @@ export const prepareMotionOrderResponseAction = ({
 
   const orderVerbiage = `that by ${responseDateFormatted}, ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
   const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText} For cause, it is </p>`;
-  const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
-  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted}, ${movant} may file a Reply.`;
-
-  const strickenLine = hasStrickenFromTrialSessions
-    ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.'
-    : '';
-
-  const additionalTextLine = hasAdditionalOrderText
-    ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}`
-    : '';
-
-  let richTextString = preamble + orderVerbiageHtml;
+  const orderSections: string[] = [
+    `<p class="indent-paragraph">ORDERED ${orderVerbiage}`,
+  ];
 
   if (dueDate) {
-    richTextString = richTextString + ' It is further</p>' + opportunityToRebut;
+    orderSections.push(
+      `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted}, ${movant} may file a Reply.`,
+    );
   }
 
   if (hasStrickenFromTrialSessions) {
-    richTextString = richTextString + ' It is further</p>' + strickenLine;
+    orderSections.push(
+      '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.',
+    );
   }
 
-  if (hasAdditionalOrderText) {
-    richTextString = richTextString + ' It is further</p>' + additionalTextLine;
+  if (hasAdditionalOrderTextArray) {
+    const additionalTextLine = meaningfulAdditionalOrderTextArray
+      .map((text, idx) => {
+        const clause = formatAdditionalOrderClauseForRichText(text);
+        const isLast = idx === meaningfulAdditionalOrderTextArray.length - 1;
+        const suffix = !isLast ? ' It is further' : '';
+        const closing = !isLast ? '</p>' : '';
+        return `<p class="indent-paragraph">ORDERED that ${clause}${suffix}${closing}`;
+      })
+      .join('');
+    orderSections.push(additionalTextLine);
   }
 
-  richTextString = richTextString + '</p>';
+  const richTextString =
+    preamble + orderSections.join(' It is further</p>') + '</p>';
 
   const initialFreeText = `Ordered ${orderVerbiage}`;
 
