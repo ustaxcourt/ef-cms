@@ -3,7 +3,13 @@ import { resetClerkOfCourtDashboardOptionsAction } from './resetClerkOfCourtDash
 
 describe('resetClerkOfCourtDashboardOptionsAction', () => {
   it('resets dashboard options to default values', async () => {
-    const result = await runAction(resetClerkOfCourtDashboardOptionsAction, {});
+    const result = await runAction(resetClerkOfCourtDashboardOptionsAction, {
+      state: {
+        clerkOfCourtDashboardOptions: {
+          petitionsByYearIsFiscal: true,
+        },
+      },
+    });
 
     expect(result.state).toMatchObject({
       clerkOfCourtDashboardOptions: {
