@@ -8,6 +8,8 @@ rules:
       - pattern: $EVENT.pathParameters
       - pattern: $EVENT.queryStringParameters
       - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
     pattern-sinks:
       - pattern: axios.$M(...)
       - pattern: axios(...)
@@ -34,6 +36,8 @@ rules:
       - pattern: $EVENT.pathParameters
       - pattern: $EVENT.queryStringParameters
       - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
     pattern-sinks:
       - pattern: $CP.exec(...)
       - pattern: $CP.execSync(...)
@@ -58,6 +62,8 @@ rules:
       - pattern: $EVENT.pathParameters
       - pattern: $EVENT.queryStringParameters
       - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
     pattern-sinks:
       - pattern: fs.readFile($PATH, ...)
       - pattern: fs.readFileSync($PATH, ...)
@@ -85,6 +91,8 @@ rules:
       - pattern: $EVENT.pathParameters
       - pattern: $EVENT.queryStringParameters
       - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
     pattern-sinks:
       - pattern: JSON.parse($INPUT)
     message: >
