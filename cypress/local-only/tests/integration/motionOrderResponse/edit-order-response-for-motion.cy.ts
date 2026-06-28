@@ -61,12 +61,15 @@ describe('edit motion response order', () => {
         'have.value',
         today,
       );
-      cy.get('#additional-text').type(contentsAfterEdit);
+      cy.get('#additional-order-text-array-0').type(contentsAfterEdit);
       cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
       cy.get('[data-testid="save-draft-button"]').click();
       cy.get('[data-testid="skip-signature-button"]').click();
       cy.get('[data-testid="draft-edit-button-not-signed"]').click();
-      cy.get('#additional-text').should('contain', contentsAfterEdit);
+      cy.get('#additional-order-text-array-0').should(
+        'have.value',
+        contentsAfterEdit,
+      );
     });
   });
 });
