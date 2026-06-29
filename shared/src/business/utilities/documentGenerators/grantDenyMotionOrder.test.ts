@@ -67,7 +67,7 @@ describe('Grant/Deny Motion orders', () => {
 
         <p>${INDENT}ORDERED that this case is restored to the general docket. It is further</p>
 
-        <p>${INDENT}ORDERED that Joint shall file a status report or proposed stipulated decision by December 31, 2026. It is further</p>
+        <p>${INDENT}ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026. It is further</p>
 
         <p>${INDENT}ORDERED that the parties shall confer and file a proposed pretrial schedule.</p>`,
       }),

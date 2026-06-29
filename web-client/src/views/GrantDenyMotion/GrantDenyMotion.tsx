@@ -51,17 +51,9 @@ export const GrantDenyMotion = connect(
     const additionalOrderText: string[] = form.additionalOrderText || [''];
     const isDenied = form.disposition === constants.MOTION_DISPOSITIONS.DENIED;
     const { isCalendared } = grantDenyMotionFormHelper;
-    const isStrickenFromTrialSessionSelected = !!form.strickenFromTrialSession;
-    const jurisdictionOptionsEnabled =
-      isCalendared && isStrickenFromTrialSessionSelected;
     const calendaredDisabledTitle = isCalendared
       ? ''
       : 'Case is not calendared';
-    const jurisdictionDisabledTitle = !isCalendared
-      ? calendaredDisabledTitle
-      : !isStrickenFromTrialSessionSelected
-        ? 'Select "This case is stricken from the trial session" first'
-        : '';
     const deniedOptionsDisabledTitle = isDenied ? '' : 'Select "DENIED" first';
     const grantDenyOptions = constants.GRANT_DENY_MOTION_OPTIONS;
     const docketEntryPreview = 'Order';
@@ -90,7 +82,7 @@ export const GrantDenyMotion = connect(
             </h1>
           </div>
           <div className="grid-row grid-gap">
-            <div className="tw:basis-5/12">
+            <div className="grid-col-5">
               <Button
                 link
                 icon={['fa', 'arrow-alt-circle-left']}
@@ -100,10 +92,10 @@ export const GrantDenyMotion = connect(
               </Button>
 
               <div className="border border-base-lighter">
-                <div className="grid-header grid-row padding-left-205">
+                <div className="grid-header grid-row padding-left-205 tw:text-lg">
                   Action
                 </div>
-                <div className="grant-deny-motion-form tw:px-4 tw:pt-3 tw:pb-4">
+                <div className="grant-deny-motion-form margin-top-2">
                   {grantDenyMotionFormHelper.isLeadCase && (
                     <>
                       <FormGroup errorText={validationErrors.issueOrder}>
@@ -265,6 +257,125 @@ export const GrantDenyMotion = connect(
 
                   <hr className="border-top-2px border-base-lighter" />
 
+                  <FormGroup
+                    className="grid-container padding-left-2"
+                    id="stricken-from-trial-session-form-group"
+                    data-testid="stricken-from-test-header"
+                  >
+                    <div>
+                      <input
+                        aria-label="case is stricken from the trial session"
+                        checked={!!form.strickenFromTrialSession}
+                        className="usa-checkbox__input"
+                        data-testid="stricken-from-trial-session"
+                        disabled={!isCalendared}
+                        id="stricken-from-trial-session"
+                        name="strickenFromTrialSession"
+                        type="checkbox"
+                        onChange={e =>
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          })
+                        }
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor="stricken-from-trial-session"
+                        style={isCalendared ? undefined : { color: '#757575' }}
+                        title={calendaredDisabledTitle}
+                      >
+                        Case is stricken from the trial session
+                      </label>
+                    </div>
+                  </FormGroup>
+
+                  <hr className="border-top-2px border-base-lighter" />
+
+                  <FormGroup
+                    className={grantDenyMotionFormHelper.jurisdictionErrorClass}
+                    errorText={grantDenyMotionFormHelper.jurisdictionErrorText}
+                    id="jurisdiction-form-group"
+                  >
+                    <label className="usa-label" htmlFor="jurisdiction-radios">
+                      Jurisdiction
+                    </label>
+                    <div className="grant-deny-motion-jurisdiction-options">
+                      <div className="usa-radio">
+                        <input
+                          aria-describedby="jurisdiction-radios"
+                          aria-label="retained"
+                          checked={
+                            form.jurisdiction ===
+                            grantDenyOptions.jurisdictionOptions.retained
+                          }
+                          className="usa-radio__input"
+                          data-testid="jurisdiction-retained"
+                          disabled={!form.strickenFromTrialSession}
+                          id="jurisdiction-retained"
+                          name="jurisdiction"
+                          type="radio"
+                          value={grantDenyOptions.jurisdictionOptions.retained}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateGrantDenyMotionSequence();
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          data-testid="jurisdiction-retained-label"
+                          htmlFor="jurisdiction-retained"
+                          style={
+                            isCalendared ? undefined : { color: '#757575' }
+                          }
+                          title={calendaredDisabledTitle}
+                        >
+                          Retained
+                        </label>
+                      </div>
+                      <div className="usa-radio">
+                        <input
+                          aria-describedby="jurisdiction-radios"
+                          aria-label="restored to general docket"
+                          checked={
+                            form.jurisdiction ===
+                            grantDenyOptions.jurisdictionOptions.restored
+                          }
+                          className="usa-radio__input"
+                          data-testid="jurisdiction-restored"
+                          disabled={!form.strickenFromTrialSession}
+                          id="jurisdiction-restored-to-general-docket"
+                          name="jurisdiction"
+                          type="radio"
+                          value={grantDenyOptions.jurisdictionOptions.restored}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateGrantDenyMotionSequence();
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          data-testid="jurisdiction-restored-label"
+                          htmlFor="jurisdiction-restored-to-general-docket"
+                          style={
+                            isCalendared ? undefined : { color: '#757575' }
+                          }
+                          title={calendaredDisabledTitle}
+                        >
+                          Restored to the general docket
+                        </label>
+                      </div>
+                    </div>
+                  </FormGroup>
+
+                  <hr className="border-top-2px border-base-lighter" />
+
                   <FormGroup>
                     <label className="usa-label">
                       <span className="text-bold">Select any that apply</span>{' '}
@@ -272,126 +383,6 @@ export const GrantDenyMotion = connect(
                     </label>
 
                     <div className="grant-deny-motion-optional-options">
-                      <div className="usa-checkbox">
-                        <input
-                          aria-label="this case is stricken from the trial session"
-                          checked={!!form.strickenFromTrialSession}
-                          className="usa-checkbox__input"
-                          data-testid="stricken-from-trial-session"
-                          disabled={!isCalendared}
-                          id="stricken-from-trial-session"
-                          name="strickenFromTrialSession"
-                          type="checkbox"
-                          onChange={e =>
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            })
-                          }
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="stricken-from-trial-session"
-                          style={
-                            isCalendared ? undefined : { color: '#757575' }
-                          }
-                          title={calendaredDisabledTitle}
-                        >
-                          This case is stricken from the trial session
-                        </label>
-                      </div>
-
-                      <hr className="border-top-2px border-base-lighter tw:my-2" />
-
-                      <FormGroup
-                        className={
-                          grantDenyMotionFormHelper.jurisdictionErrorClass
-                        }
-                        errorText={
-                          grantDenyMotionFormHelper.jurisdictionErrorText
-                        }
-                        id="jurisdiction-form-group"
-                      >
-                        <div className="grant-deny-motion-jurisdiction-options">
-                          <div className="usa-radio">
-                            <input
-                              aria-label="restore to general docket"
-                              checked={
-                                form.jurisdiction ===
-                                grantDenyOptions.jurisdictionOptions.restored
-                              }
-                              className="usa-radio__input"
-                              data-testid="jurisdiction-restored"
-                              disabled={!jurisdictionOptionsEnabled}
-                              id="jurisdiction-restored"
-                              name="jurisdiction"
-                              type="radio"
-                              value={
-                                grantDenyOptions.jurisdictionOptions.restored
-                              }
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                                validateGrantDenyMotionSequence();
-                              }}
-                            />
-                            <label
-                              className="usa-radio__label"
-                              htmlFor="jurisdiction-restored"
-                              style={
-                                jurisdictionOptionsEnabled
-                                  ? undefined
-                                  : { color: '#757575' }
-                              }
-                              title={jurisdictionDisabledTitle}
-                            >
-                              Restore to general docket
-                            </label>
-                          </div>
-                          <div className="usa-radio">
-                            <input
-                              aria-label="jurisdiction retained"
-                              checked={
-                                form.jurisdiction ===
-                                grantDenyOptions.jurisdictionOptions.retained
-                              }
-                              className="usa-radio__input"
-                              data-testid="jurisdiction-retained"
-                              disabled={!jurisdictionOptionsEnabled}
-                              id="jurisdiction-retained"
-                              name="jurisdiction"
-                              type="radio"
-                              value={
-                                grantDenyOptions.jurisdictionOptions.retained
-                              }
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                                validateGrantDenyMotionSequence();
-                              }}
-                            />
-                            <label
-                              className="usa-radio__label"
-                              htmlFor="jurisdiction-retained"
-                              style={
-                                jurisdictionOptionsEnabled
-                                  ? undefined
-                                  : { color: '#757575' }
-                              }
-                              title={jurisdictionDisabledTitle}
-                            >
-                              Jurisdiction retained
-                            </label>
-                          </div>
-                        </div>
-                      </FormGroup>
-
-                      <hr className="border-top-2px border-base-lighter tw:my-2" />
-
                       <div className="usa-checkbox">
                         <input
                           aria-label="file status report"
@@ -476,6 +467,7 @@ export const GrantDenyMotion = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
+                    className="grant-deny-motion-additional-order-text"
                     errorText={
                       grantDenyMotionFormHelper.additionalOrderTextErrorText
                     }
@@ -486,7 +478,7 @@ export const GrantDenyMotion = connect(
                         key={index}
                       >
                         <label
-                          className="usa-label tw:mt-4"
+                          className="usa-label"
                           htmlFor={`additional-order-text-${index}`}
                           id={`additional-order-text-label-${index}`}
                         >
@@ -584,7 +576,7 @@ export const GrantDenyMotion = connect(
               </div>
             </div>
 
-            <div className="tw:basis-7/12">
+            <div className="grid-col-7">
               <div className="tw:mb-2">
                 <span className="text-bold">Docket entry preview:</span>{' '}
                 <span data-testid="docket-entry-preview">

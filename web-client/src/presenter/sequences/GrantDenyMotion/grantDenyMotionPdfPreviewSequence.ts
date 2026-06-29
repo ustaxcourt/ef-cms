@@ -4,6 +4,7 @@ import { createOrderAction } from '@web-client/presenter/actions/CourtIssuedOrde
 import { getPdfFromUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/getPdfFromUrlAction';
 import { getPdfUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/getPdfUrlAction';
 import { prepareGrantDenyMotionAction } from '@web-client/presenter/actions/GrantDenyMotion/prepareGrantDenyMotionAction';
+import { setupGrantDenyMotionRedirectUrlAction } from '@web-client/presenter/actions/GrantDenyMotion/setupGrantDenyMotionRedirectUrlAction';
 import { setMetadataAsPristineAction } from '@web-client/presenter/actions/setMetadataAsPristineAction';
 import { setPdfFileAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfFileAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -19,4 +20,5 @@ export const grantDenyMotionPdfPreviewSequence = showProgressSequenceDecorator([
   setPdfFileAction,
   setPdfPreviewUrlAction,
   setMetadataAsPristineAction,
+  setupGrantDenyMotionRedirectUrlAction,
 ]) as unknown as () => void;

@@ -1,3 +1,27 @@
+<details><summary>9607 Grant/Deny Motion — Apply Stamp migration deploy sequence</summary>
+
+## Manual Deployment Steps
+
+This release replaces the Apply Stamp workflow with Grant/Deny Motion and includes an expand/contract Postgres migration pair that backfills `draft_order_state` from legacy `stamp_data` on existing draft orders.
+
+### During blue/green deployment (passive color)
+
+The **expand** migration runs automatically with deploy:
+
+- `web-api/src/persistence/postgres/utils/migrate/migrations/2026-05-01T17_00_00Z-backfill-draftOrderState-from-stampData.expand.ts`
+
+This backfills `draft_order_state` for existing draft stamp orders and installs a sync trigger so any rows written by a stale (cached) frontend bundle during the deploy window continue to mirror into `draft_order_state`.
+
+### After full frontend rollout (contract)
+
+Once the new Grant/Deny Motion bundle is fully deployed and no stale Apply Stamp bundles remain in use, run the **contract** migration manually (or include in a subsequent deploy after verification):
+
+- `web-api/src/persistence/postgres/utils/migrate/migrations/2026-05-01T17_00_30Z-backfill-draftOrderState-from-stampData.contract.ts`
+
+This drops the sync trigger and function added by the expand migration.
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-06-15</summary>
 
 ## Local

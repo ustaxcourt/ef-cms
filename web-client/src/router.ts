@@ -1413,6 +1413,7 @@ const router = {
             docketEntryId,
             docketNumber,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
           });
         },
       ),
@@ -1431,6 +1432,7 @@ const router = {
             docketNumber,
             isEditing: true,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
           });
         },
       ),

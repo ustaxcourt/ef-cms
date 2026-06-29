@@ -669,6 +669,25 @@ label.ustc-upload {
     }
   }
 
+  .grant-deny-motion-additional-order-text {
+    .usa-label {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    [data-testid^='additional-order-text-row-']
+      + [data-testid^='additional-order-text-row-'] {
+      .usa-label {
+        margin-top: 1rem;
+      }
+    }
+
+    hr {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
   .grant-deny-motion-jurisdiction-options {
     .usa-radio {
       margin-bottom: 0;
