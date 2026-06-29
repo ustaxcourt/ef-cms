@@ -9,6 +9,7 @@ import {
   ProcessPaymentRequest,
   ProcessPaymentResponse,
 } from 'node_modules/@ustaxcourt/payment-portal/dist';
+import { signRequest } from 'aws-sigv4-sign';
 
 async function makePaymentPortalRequest(
   applicationContext: ServerApplicationContext,
@@ -31,8 +32,15 @@ async function makePaymentPortalRequest(
       if (method === 'POST') {
         response = await applicationContext.getHttpClient().post(url, data);
       }
+    } else {
+      const paymentPortalHost = 'https://dev-payments.ustaxcourt.gov';
+      const url = `${paymentPortalHost}/${endpoint}`;
+      const signedRequest = await signRequest(url, { service: 'lambda' });
+      const headers = Object.fromEntries(signedRequest.headers.entries());
+      response = await applicationContext.getHttpClient()(signedRequest.url, {
+        headers,
+      });
     }
-    // TODO set up sigv4 signing for hosted payment portal, probably using aws-sigv4-sign
   } catch (e: unknown) {
     getDawsonLogger().error('Error calling payment portal', e);
     throw new Error(`There was an error calling ${endpoint}`);
