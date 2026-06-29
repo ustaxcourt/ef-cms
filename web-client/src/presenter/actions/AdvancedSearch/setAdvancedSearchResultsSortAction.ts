@@ -5,6 +5,11 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
+type AdvancedSearchResultsSortStateKey =
+  | 'caseSearchSort'
+  | 'opinionDocumentSearchSort'
+  | 'orderDocumentSearchSort';
+
 export const setAdvancedSearchResultsSortAction = ({
   get,
   props,
@@ -15,12 +20,10 @@ export const setAdvancedSearchResultsSortAction = ({
 }>) => {
   const { sortColumn, sortDirection } = props;
   const advancedSearchTab = get(state.advancedSearchTab) as string;
-  let stateKey;
+  let stateKey: AdvancedSearchResultsSortStateKey;
 
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.CASE) {
-    store.set(state.caseSearchSort.sortColumn, sortColumn);
-    store.set(state.caseSearchSort.sortDirection, sortDirection);
-    return;
+    stateKey = 'caseSearchSort';
   } else if (advancedSearchTab === ADVANCED_SEARCH_TABS.ORDER) {
     stateKey = 'orderDocumentSearchSort';
   } else if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {

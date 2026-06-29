@@ -6,6 +6,8 @@ import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/
 import type { Common } from 'node_modules/@opensearch-project/opensearch/api/_types';
 import type { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
 
+export type SearchAfter = Common.SortResults;
+
 type CaseAdvancedSearchResult = {
   caseCaption: string;
   docketNumber: string;
@@ -16,7 +18,7 @@ type CaseAdvancedSearchResult = {
   privatePractitioners?: { userId?: string }[];
   receivedAt: string;
   sealedDate?: string;
-  sort?: Common.SortResults;
+  sort?: SearchAfter;
 };
 
 export const caseAdvancedSearch = async ({
@@ -28,7 +30,7 @@ export const caseAdvancedSearch = async ({
 }: {
   applicationContext: ServerApplicationContext;
   resultSize?: number;
-  searchAfter?: Common.SortResults;
+  searchAfter?: SearchAfter;
   searchTerms: CaseAdvancedSearchParamsRequestType;
   useNonExactQuery?: boolean;
 }): Promise<CaseAdvancedSearchResult[]> => {

@@ -42,6 +42,7 @@ export const SearchResults = connect(
     const { totalPages } = advancedSearchHelper;
     const hasMultiplePages = totalPages > 1;
     const paginatorTop = useRef(null);
+    const countLimitMessage = `Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`;
 
     useEffect(() => {
       if (caseCurrentPaginationPage >= totalPages && totalPages > 0) {
@@ -69,7 +70,9 @@ export const SearchResults = connect(
       });
     };
 
-    const handleMobileSortChange = e => {
+    const handleMobileSortChange = (
+      e: React.ChangeEvent<HTMLSelectElement>,
+    ) => {
       if (!e.target.value) {
         updateAdvancedSearchResultsSortSequence({
           sortColumn: 'resultIndex',
@@ -83,10 +86,12 @@ export const SearchResults = connect(
       }
 
       const [sortColumn, sortDirection] = e.target.value.split('|');
+      const selectedSortDirection =
+        sortDirection === DESCENDING ? DESCENDING : ASCENDING;
 
       updateAdvancedSearchResultsSortSequence({
         sortColumn,
-        sortDirection,
+        sortDirection: selectedSortDirection,
       });
       setCurrentPaginationPageSequence({
         advancedSearchTab: 'case',
@@ -132,15 +137,15 @@ export const SearchResults = connect(
                   {advancedSearchHelper.showManyResultsMessage && (
                     <WrappedIcon
                       icon="info-circle"
-                      iconAriaLabel={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
+                      iconAriaLabel={countLimitMessage}
                       iconClass="fa-icon-blue icon-spacing-4"
-                      title={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
+                      title={countLimitMessage}
                     />
                   )}
                   <span
-                    aria-label={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
+                    aria-label={countLimitMessage}
                     className="cursor-default"
-                    title={`Search is limited to ${MAX_CASE_SEARCH_RESULTS.toLocaleString()} results.`}
+                    title={countLimitMessage}
                   >
                     <b className="text-semibold">Count:</b>{' '}
                     <span>
@@ -361,6 +366,9 @@ export const SearchResults = connect(
                       }}
                       onKeyDown={event => {
                         if (event.key === 'Enter' || event.key === ' ') {
+                          if (event.key === ' ') {
+                            event.preventDefault();
+                          }
                           openCleanModalSequence({
                             showModal: 'showCountModalMobile',
                           });

@@ -20,7 +20,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import type { Common } from 'node_modules/@opensearch-project/opensearch/api/_types';
+import type { SearchAfter } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 type CaseAdvancedSearchResult = Awaited<
   ReturnType<typeof caseAdvancedSearch>
@@ -95,7 +95,7 @@ export const caseAdvancedSearchInteractor = async (
     procedureType,
   };
   const accessibleCases: CaseAdvancedSearchResult[] = [];
-  let searchAfter: Common.SortResults | undefined;
+  let searchAfter: SearchAfter | undefined;
   let useNonExactQuery = false;
 
   while (accessibleCases.length < MAX_CASE_SEARCH_RESULTS) {
@@ -110,26 +110,26 @@ export const caseAdvancedSearchInteractor = async (
     if (foundCases.length === 0) {
       if (!searchAfter && !useNonExactQuery) {
         useNonExactQuery = true;
-        continue;
+      } else {
+        break;
       }
-      break;
+    } else {
+      const filteredCases: CaseAdvancedSearchResult[] =
+        filterCaseSearchResultsNotAccessibleToUser(foundCases, authorizedUser);
+      accessibleCases.push(
+        ...filteredCases.slice(
+          0,
+          MAX_CASE_SEARCH_RESULTS - accessibleCases.length,
+        ),
+      );
+
+      if (accessibleCases.length >= MAX_CASE_SEARCH_RESULTS) break;
+
+      const lastFoundCase = foundCases[foundCases.length - 1];
+      if (!lastFoundCase.sort) break;
+
+      searchAfter = lastFoundCase.sort;
     }
-
-    const filteredCases: CaseAdvancedSearchResult[] =
-      filterCaseSearchResultsNotAccessibleToUser(foundCases, authorizedUser);
-    accessibleCases.push(
-      ...filteredCases.slice(
-        0,
-        MAX_CASE_SEARCH_RESULTS - accessibleCases.length,
-      ),
-    );
-
-    if (accessibleCases.length >= MAX_CASE_SEARCH_RESULTS) break;
-
-    const lastFoundCase = foundCases[foundCases.length - 1];
-    if (!lastFoundCase.sort) break;
-
-    searchAfter = lastFoundCase.sort;
   }
 
   return accessibleCases.map(filteredCase => {
