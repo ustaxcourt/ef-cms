@@ -4,6 +4,7 @@ import {
   formatCaseCaption,
   formatCurrency,
   formatDate,
+  formatDocketNumber,
   formatJudgeName,
 } from './formatters';
 
@@ -108,5 +109,16 @@ describe('formatCurrency', () => {
 
   it('should handle undefined', () => {
     expect(formatCurrency(undefined)).toBe('0');
+  });
+});
+
+describe('formatDocketNumber', () => {
+  it('returns the docket number when no suffix is provided', () => {
+    expect(formatDocketNumber('101-21')).toBe('101-21');
+    expect(formatDocketNumber('102-21', '')).toBe('102-21');
+  });
+
+  it('returns the docket number with suffix when a suffix is provided', () => {
+    expect(formatDocketNumber('101-21', 'S')).toBe('101-21S');
   });
 });
