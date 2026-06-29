@@ -2,6 +2,18 @@
 
 ## Local
 
+#### Upgrade NodeJS to `24.18.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-06-22</summary>
+
+## Local
+
 #### Upgrade NodeJS to `24.17.0`
 ```bash
 nvm install
