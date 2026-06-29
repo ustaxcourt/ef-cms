@@ -11,11 +11,13 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 
 export const DashboardExternalUser = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
     user: state.user,
+    processPaymentStatus: state.processPaymentStatus,
   },
   function DashboardExternalUser({ dashboardExternalHelper, user }) {
     const renderRecentFilingsButton = () => (
@@ -48,6 +50,7 @@ export const DashboardExternalUser = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <WarningNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
               {dashboardExternalHelper.showPetitionWelcomePage ? (
