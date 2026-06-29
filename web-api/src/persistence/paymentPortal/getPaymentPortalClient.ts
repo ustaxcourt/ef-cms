@@ -34,7 +34,7 @@ async function makePaymentPortalRequest(
       }
     } else {
       const paymentPortalHost = 'https://dev-payments.ustaxcourt.gov';
-      const url = `${paymentPortalHost}/${endpoint}`;
+      const url = `${paymentPortalHost}/${endpoint}/${(data as GetDetailsPathParams).transactionReferenceId}`;
       const signedRequest = await signRequest(url, { service: 'lambda' });
       const headers = Object.fromEntries(signedRequest.headers.entries());
       response = await applicationContext.getHttpClient()(signedRequest.url, {
