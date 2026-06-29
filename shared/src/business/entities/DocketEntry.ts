@@ -156,7 +156,7 @@ export class DocketEntry extends JoiValidationEntity {
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
-    additionalOrderText?: string;
+    additionalOrderTextArray?: string[];
     docketEntryDescription?: string;
     docketNumber?: string;
     documentContents?: any;
