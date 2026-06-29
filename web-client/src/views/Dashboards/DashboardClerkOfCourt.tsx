@@ -137,10 +137,14 @@ export const DashboardClerkOfCourt = connect(
                     <div className="tw:flex tw:flex-wrap tw:gap-12">
                       <PieGraph
                         data={petitionsByServiceTypePieData}
+                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                        showTitle={false}
                         tooltipTitle="Petitions Created"
                       />
                       <PieGraph
                         data={petitionsByRepresentationPieData}
+                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                        showTitle={false}
                         tooltipTitle="Petitions Created"
                       />
                     </div>
@@ -198,12 +202,16 @@ export const DashboardClerkOfCourt = connect(
                   <div className="tw:mb-8">
                     <PieGraph
                       data={petitionsByServiceTypePieData}
+                      title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                      showTitle={false}
                       tooltipTitle="Petitions Created"
                     />
                   </div>
                   <div className="tw:mb-6">
                     <PieGraph
                       data={petitionsByRepresentationPieData}
+                      title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                      showTitle={false}
                       tooltipTitle="Petitions Created"
                     />
                   </div>

@@ -110,5 +110,58 @@ describe('router', () => {
         redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`,
       });
     });
+
+    it('/case-detail/*/documents/*/status-report-order-create..', () => {
+      getPermissionsMock.mockReturnValue({
+        [ROLE_PERMISSIONS.STATUS_REPORT_ORDER]: true,
+      });
+
+      const docketNumber = '111-44';
+      const docketEntryId = '000-001';
+
+      route(
+        `/case-detail/${docketNumber}/documents/${docketEntryId}/status-report-order-create?statusReportFilingDate=2026-06-18&statusReportIndex=7`,
+      );
+
+      expect(window.document.title).toEqual(
+        expect.stringMatching('Status Report Order'),
+      );
+      expect(getSequenceMock).toHaveBeenCalledWith(
+        'gotoStatusReportOrderSequence',
+      );
+      expect(sequenceMock).toHaveBeenCalledWith({
+        docketEntryId,
+        docketNumber,
+        redirectUrl: `/case-detail/${docketNumber}`,
+        statusReportFilingDate: '2026-06-18',
+        statusReportIndex: '7',
+      });
+    });
+
+    it('/case-detail/*/documents/*/status-report-order-edit', () => {
+      getPermissionsMock.mockReturnValue({
+        [ROLE_PERMISSIONS.STATUS_REPORT_ORDER]: true,
+      });
+
+      const docketNumber = '111-44';
+      const docketEntryId = '000-001';
+
+      route(
+        `/case-detail/${docketNumber}/documents/${docketEntryId}/status-report-order-edit`,
+      );
+
+      expect(window.document.title).toEqual(
+        expect.stringMatching('Status Report Order'),
+      );
+      expect(getSequenceMock).toHaveBeenCalledWith(
+        'gotoStatusReportOrderSequence',
+      );
+      expect(sequenceMock).toHaveBeenCalledWith({
+        docketEntryId,
+        docketNumber,
+        isEditing: true,
+        redirectUrl: `/case-detail/${docketNumber}`,
+      });
+    });
   });
 });
