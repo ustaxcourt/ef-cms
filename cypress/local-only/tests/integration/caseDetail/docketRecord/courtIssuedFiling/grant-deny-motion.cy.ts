@@ -186,11 +186,12 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
           'be.visible',
         );
         cy.get('[data-testid="filing-party"]').select('Petitioner(s)');
-        cy.get('[data-testid="grant-deny-due-date-picker"]').type(today);
-        cy.get('[data-testid="grant-deny-due-date-picker"]').should(
-          'have.value',
-          today,
-        );
+        cy.get(
+          '.usa-date-picker__external-input[data-testid="grant-deny-due-date-picker"]',
+        ).type(today);
+        cy.get(
+          '.usa-date-picker__external-input[data-testid="grant-deny-due-date-picker"]',
+        ).should('have.value', today);
 
         cy.get('[data-testid="clear-grant-deny-form"]').click();
         cy.get('[data-testid="due-date-message-status-report"]').should(
@@ -223,14 +224,12 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
 
         loginAsColvin();
         cy.visit('/messages/my/inbox');
-        cy.get('tbody')
-          .contains('td.message-queue-row', fixture.docketNumber)
-          .parents('tbody')
-          .within(() => {
-            cy.get(
-              'div.message-document-title a[data-testid="message-header-link"]',
-            ).click();
-          });
+        cy.get(
+          `.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell-${fixture.docketNumber}"]`,
+        )
+          .first()
+          .click();
+        cy.get('[data-testid="message-detail-container"]').should('exist');
         cy.get('[data-testid="grant-deny-motion"]')
           .should('be.visible')
           .click();

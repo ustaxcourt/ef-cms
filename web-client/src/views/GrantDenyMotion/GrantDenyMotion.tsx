@@ -85,6 +85,7 @@ export const GrantDenyMotion = connect(
             <div className="grid-col-5">
               <Button
                 link
+                className="margin-bottom-205"
                 icon={['fa', 'arrow-alt-circle-left']}
                 onClick={() => navigateBackSequence()}
               >
@@ -98,7 +99,10 @@ export const GrantDenyMotion = connect(
                 <div className="grant-deny-motion-form margin-top-2">
                   {grantDenyMotionFormHelper.isLeadCase && (
                     <>
-                      <FormGroup errorText={validationErrors.issueOrder}>
+                      <FormGroup
+                        className="grant-deny-motion-form-group"
+                        errorText={validationErrors.issueOrder}
+                      >
                         <label
                           className="usa-label"
                           htmlFor="issue-order-radios"
@@ -171,7 +175,10 @@ export const GrantDenyMotion = connect(
                     </>
                   )}
 
-                  <FormGroup errorText={validationErrors.disposition}>
+                  <FormGroup
+                    className="grant-deny-motion-form-group"
+                    errorText={validationErrors.disposition}
+                  >
                     {[
                       constants.MOTION_DISPOSITIONS.GRANTED,
                       constants.MOTION_DISPOSITIONS.DENIED,
@@ -258,11 +265,11 @@ export const GrantDenyMotion = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="grid-container padding-left-2"
+                    className="grant-deny-motion-form-group"
                     id="stricken-from-trial-session-form-group"
                     data-testid="stricken-from-test-header"
                   >
-                    <div>
+                    <div className="usa-checkbox">
                       <input
                         aria-label="case is stricken from the trial session"
                         checked={!!form.strickenFromTrialSession}
@@ -376,7 +383,7 @@ export const GrantDenyMotion = connect(
 
                   <hr className="border-top-2px border-base-lighter" />
 
-                  <FormGroup>
+                  <FormGroup className="grant-deny-motion-form-group">
                     <label className="usa-label">
                       <span className="text-bold">Select any that apply</span>{' '}
                       <span className="usa-hint">(optional)</span>
@@ -467,7 +474,7 @@ export const GrantDenyMotion = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="grant-deny-motion-additional-order-text"
+                    className="grant-deny-motion-form-group grant-deny-motion-additional-order-text"
                     errorText={
                       grantDenyMotionFormHelper.additionalOrderTextErrorText
                     }
@@ -509,7 +516,7 @@ export const GrantDenyMotion = connect(
                         />
                         {index > 0 && (
                           <DawsonButton
-                            className="tw:block"
+                            className="tw:mt-2 tw:block"
                             data-testid={`remove-additional-order-text-${index}`}
                             icon="circle-xmark"
                             iconPosition="left"
@@ -524,8 +531,9 @@ export const GrantDenyMotion = connect(
                         )}
                       </div>
                     ))}
-                    <hr />
+                    <hr className="grant-deny-motion-additional-order-text-divider" />
                     <DawsonButton
+                      className="tw:mt-1"
                       data-testid="add-additional-order-text"
                       icon="plus"
                       iconPosition="left"
@@ -543,6 +551,7 @@ export const GrantDenyMotion = connect(
 
               <Button
                 link
+                className="margin-top-205"
                 data-testid="clear-grant-deny-form"
                 onClick={e => {
                   e.preventDefault();
@@ -552,7 +561,7 @@ export const GrantDenyMotion = connect(
                 Clear All
               </Button>
 
-              <div className="tw:my-4 button-container">
+              <div className="margin-bottom-2 margin-top-2 button-container">
                 <Button
                   className="margin-right-1"
                   data-testid="save-draft-button"
