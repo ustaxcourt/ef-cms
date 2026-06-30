@@ -20,8 +20,7 @@ async function makePaymentPortalRequest(
   let response;
   try {
     if (environment.stage === 'local') {
-      const paymentPortalHost = 'http://localhost:8080';
-      const url = `${paymentPortalHost}/${endpoint}`;
+      const url = `${environment.paymentPortalHost}/${endpoint}`;
       if (method === 'GET') {
         response = await applicationContext
           .getHttpClient()
@@ -33,8 +32,7 @@ async function makePaymentPortalRequest(
         response = await applicationContext.getHttpClient().post(url, data);
       }
     } else {
-      const paymentPortalHost = 'https://dev-payments.ustaxcourt.gov';
-      const url = `${paymentPortalHost}/${endpoint}/${(data as GetDetailsPathParams).transactionReferenceId}`;
+      const url = `${environment.paymentPortalHost}/${endpoint}/${(data as GetDetailsPathParams).transactionReferenceId}`;
       const signedRequest = await signRequest(url, { service: 'execute-api' });
       const headers = Object.fromEntries(signedRequest.headers.entries());
       response = await applicationContext.getHttpClient()(signedRequest.url, {
