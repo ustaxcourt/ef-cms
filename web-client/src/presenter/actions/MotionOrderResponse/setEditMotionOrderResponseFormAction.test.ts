@@ -4,6 +4,7 @@ import { setEditMotionOrderResponseFormAction } from './setEditMotionOrderRespon
 describe('setEditMotionOrderResponseFormAction', () => {
   it('should set form state and return message detail path when parentMessageId exists', async () => {
     const mockDraftOrderState = {
+      additionalOrderTextArray: [''],
       previousDocument: {
         docketEntryId: '123',
       },
@@ -23,7 +24,13 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual(mockDraftOrderState);
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: [''],
+    });
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
       '/messages/123-45/message-detail/abc/xyz/motion-order-response-edit',
@@ -31,6 +38,70 @@ describe('setEditMotionOrderResponseFormAction', () => {
   });
 
   it('should set form state and return case detail path when no parentMessageId', async () => {
+    const mockDraftOrderState = {
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: [''],
+    };
+
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: mockDraftOrderState,
+        },
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: [''],
+    });
+    expect(result.state.docketEntryId).toEqual('123');
+    expect(result.output.path).toEqual(
+      '/case-detail/123-45/documents/xyz/motion-order-response-edit',
+    );
+  });
+
+  it('should set additionalOrderTextArray from draftOrderState', async () => {
+    const mockDraftOrderState = {
+      additionalOrderTextArray: ['Some additional text'],
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+    };
+
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: mockDraftOrderState,
+        },
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      previousDocument: {
+        docketEntryId: '123',
+      },
+      someFormField: 'value',
+      additionalOrderTextArray: ['Some additional text'],
+    });
+  });
+
+  it('should default to empty array when additionalOrderTextArray is not present', async () => {
     const mockDraftOrderState = {
       previousDocument: {
         docketEntryId: '123',
@@ -50,10 +121,6 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual(mockDraftOrderState);
-    expect(result.state.docketEntryId).toEqual('123');
-    expect(result.output.path).toEqual(
-      '/case-detail/123-45/documents/xyz/motion-order-response-edit',
-    );
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 });
