@@ -35,14 +35,15 @@ async function makePaymentPortalRequest(
     } else {
       const paymentPortalHost = 'https://dev-payments.ustaxcourt.gov';
       const url = `${paymentPortalHost}/${endpoint}/${(data as GetDetailsPathParams).transactionReferenceId}`;
-      const signedRequest = await signRequest(url, { service: 'lambda' });
+      const signedRequest = await signRequest(url, { service: 'execute-api' });
       const headers = Object.fromEntries(signedRequest.headers.entries());
       response = await applicationContext.getHttpClient()(signedRequest.url, {
         headers,
       });
     }
   } catch (e: unknown) {
-    getDawsonLogger().error('Error calling payment portal', e);
+    console.log(e);
+    getDawsonLogger().error(`Error calling payment portal: ${e}`, e);
     throw new Error(`There was an error calling ${endpoint}`);
   }
 

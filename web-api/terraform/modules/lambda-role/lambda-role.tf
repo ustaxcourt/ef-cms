@@ -176,7 +176,9 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:execute-api:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-                "arn:aws:execute-api:us-west-1:${data.aws_caller_identity.current.account_id}:*"
+                "arn:aws:execute-api:us-west-1:${data.aws_caller_identity.current.account_id}:*",
+                "arn:aws:execute-api:us-east-1:723609007960:94rg87qnfl/dev/*/*"
+
             ],
             "Effect": "Allow"
         },
