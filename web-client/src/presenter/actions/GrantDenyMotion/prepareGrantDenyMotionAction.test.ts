@@ -83,7 +83,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
   });
 
-  it('uses petitioners possessive when multiple petitioners filed the motion', async () => {
+  it('uses petitioner possessive when multiple petitioners filed the motion', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
@@ -97,8 +97,44 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      "ORDERED that petitioners' Motion to Compel is granted.",
+      "ORDERED that petitioner's Motion to Compel is granted.",
     );
+  });
+
+  it('uses petitioner possessive for a motion to consolidate on a consolidated lead case', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          consolidatedCases: [
+            { docketNumber: '123-26', docketNumberWithSuffix: '123-26' },
+            { docketNumber: '124-26', docketNumberWithSuffix: '124-26' },
+          ],
+          docketEntries: [
+            {
+              ...motion,
+              documentTitle:
+                'Motion to Consolidate Docket Numbers 124-26, 125-26',
+              documentType: 'Motion to Consolidate',
+            },
+          ],
+          leadDocketNumber: '123-26',
+          petitioners: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
+        },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          issueOrder:
+            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      "ORDERED that petitioner's Motion to Consolidate Docket Numbers 124-26, 125-26 is granted.",
+    );
+    expect(result.state.form.richText).not.toContain("petitioners'");
   });
 
   it('uses respondent possessive when respondent filed the motion', async () => {
@@ -313,7 +349,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that Joint shall file a status report or proposed stipulated decision by December 31, 2026.',
+      'ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026.',
     );
   });
 
@@ -352,6 +388,63 @@ describe('prepareGrantDenyMotionAction', () => {
 
     const matches = result.state.form.richText.match(/It is further/g) || [];
     expect(matches.length).toBe(2); // disposition→jurisdiction, jurisdiction→additional
+  });
+
+  it('builds preamble only when disposition is not selected', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {},
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is',
+    );
+    expect(result.state.form.richText).not.toContain('ORDERED that');
+    expect(result.state.form.documentTitle).toEqual('Order - Motion to Compel');
+  });
+
+  it('builds a joint status report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.joint,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a joint status report by December 31, 2026.',
+    );
+  });
+
+  it('builds a joint status report or proposed stipulated decision clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
+              .statusReportOrStipulatedDecision,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.joint,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026.',
+    );
   });
 
   it('throws when motion docket entry not found', async () => {

@@ -15,7 +15,6 @@ export const MessageDocument = connect(
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToStatusReportOrderSequence:
       sequences.navigateToStatusReportOrderSequence,
     navigateToPathAndSetRedirectUrlSequence:
@@ -41,7 +40,6 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
-    navigateToPathSequence,
     navigateToStatusReportOrderSequence,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -200,8 +198,9 @@ export const MessageDocument = connect(
             data-testid="grant-deny-motion"
             icon="stamp"
             onClick={() => {
-              navigateToPathSequence({
+              navigateToPathAndSetRedirectUrlSequence({
                 path: messageDocumentHelper.grantDenyMotionFromMessagesLink,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >

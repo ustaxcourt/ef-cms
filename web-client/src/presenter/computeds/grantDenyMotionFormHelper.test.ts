@@ -85,4 +85,35 @@ describe('grantDenyMotionFormHelper', () => {
       'Limit is 256 characters per entry.',
     );
   });
+
+  it('shows jurisdiction error text when validation fails', () => {
+    const result = runCompute(grantDenyMotionFormHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        validationErrors: {
+          jurisdiction:
+            'Jurisdiction is required since case is stricken from the trial session',
+        },
+      },
+    });
+    expect(result.jurisdictionErrorText).toEqual('Select jurisdiction');
+    expect(result.jurisdictionErrorClass).toEqual(
+      'grant-deny-motion-form-group-error',
+    );
+  });
+
+  it('uses default jurisdiction error class when there is no error', () => {
+    const result = runCompute(grantDenyMotionFormHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        validationErrors: {},
+      },
+    });
+    expect(result.jurisdictionErrorText).toBeFalsy();
+    expect(result.jurisdictionErrorClass).toEqual(
+      'grant-deny-motion-form-group',
+    );
+  });
 });
