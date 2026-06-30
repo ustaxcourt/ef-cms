@@ -12,6 +12,12 @@ paths-ignore:
   - aws/lambdas
   - .terraform
   - docs
+  - scripts/archived/**
+  - scripts/github-actions/**
+  - scripts/user/**
+  - scripts/helpers/**
+  - scripts/git/**
+  - shared/admin-tools/**
 
 queries:
   - uses: security-extended
