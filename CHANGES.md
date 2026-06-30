@@ -1,3 +1,27 @@
+<details><summary>Dependency Updates - Week of 2026-06-22</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.17.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.85`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-06-15</summary>
 
 ## Local
@@ -16,14 +40,15 @@ tfenv use 1.15.6
 
 ### Before Deployment
 
-#### Docker container `4.3.84` - choose exp5
+#### Deploy Docker container `4.3.84`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
 ```bash
-. scripts/env/set-env.zsh expN
 npm run ecr:check-version
 ```
 
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-06-08</summary>
 
 ## Local
@@ -42,22 +67,25 @@ tfenv use 1.15.5
 
 ### Before Deployment
 
-#### Docker container `4.3.83` - choose exp4
+#### Deploy Docker container `4.3.83`
+
+This script will prompt for an environment to pull the image from; choose `exp4`.
+
 ```bash
-. scripts/env/set-env.zsh expN
 npm run ecr:check-version
 ```
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-06-01</summary>
 
 ## Manual Deployment Steps
 
 ### Before Deployment
 
-#### Docker container `4.3.82` - choose exp7
+#### Deploy Docker container `4.3.82`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
 ```bash
-. scripts/env/set-env.zsh expN
 npm run ecr:check-version
 ```
 </details>
