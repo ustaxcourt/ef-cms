@@ -12,6 +12,16 @@ This script will prompt for an environment to pull the image from; choose `exp3`
 npm run ecr:check-version
 ```
 
+#### Upgrade Terraform to `1.15.7`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.7
+```
+```bash
+tfenv install 1.15.7
+tfenv use 1.15.7
+```
+
 </details>
 
 <details><summary>Dependency Updates - Week of 2026-06-22</summary>
