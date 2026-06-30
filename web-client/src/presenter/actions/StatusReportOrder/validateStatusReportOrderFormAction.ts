@@ -6,7 +6,7 @@ export const validateStatusReportOrderFormAction = ({
   path,
 }: ActionProps) => {
   const {
-    additionalOrderText,
+    additionalOrderTextArray,
     docketEntryDescription,
     dueDate,
     issueOrder,
@@ -16,7 +16,7 @@ export const validateStatusReportOrderFormAction = ({
   } = get(state.form);
 
   const errors = new StatusReportOrderForm({
-    additionalOrderText,
+    additionalOrderTextArray,
     docketEntryDescription,
     dueDate,
     issueOrder,
