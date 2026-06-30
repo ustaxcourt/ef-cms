@@ -167,7 +167,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "rum_sourcemaps" {
     filter {}
 
     expiration {
-      days = 90 # jake - make expire whenever we put new ones in
+      # Safety net for abandoned environments only. The deploy scripts are the
+      # primary cleanup mechanism: on each deploy they prune releases that are
+      # both older than 7 days and outside the 2 most recent, so the bucket
+      # stays bounded on active environments regardless of release frequency.
+      # This rule is intentionally long so it never fires on a quiet-but-active
+      # environment (e.g. no deploy for several weeks); it only reclaims space
+      # if an environment is truly decommissioned.
+      days = 30
     }
   }
 }
