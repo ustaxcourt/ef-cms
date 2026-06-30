@@ -177,6 +177,7 @@ import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/get
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ProcessPaymentResponse } from 'node_modules/@ustaxcourt/payment-portal/dist';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -1082,6 +1083,7 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  processPaymentStatus: undefined as undefined | ProcessPaymentResponse,
 };
 
 export const initialState = {
