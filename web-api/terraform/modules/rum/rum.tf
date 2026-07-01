@@ -167,13 +167,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "rum_sourcemaps" {
     filter {}
 
     expiration {
-      # Safety net for abandoned environments only. The deploy scripts are the
-      # primary cleanup mechanism: on each deploy they prune releases that are
-      # both older than 7 days and outside the 2 most recent, so the bucket
-      # stays bounded on active environments regardless of release frequency.
-      # This rule is intentionally long so it never fires on a quiet-but-active
-      # environment (e.g. no deploy for several weeks); it only reclaims space
-      # if an environment is truly decommissioned.
+      # CloudWatch RUM retains event data for 30 days. Sourcemaps older than
+      # that can never be used for deobfuscation (RUM deobfuscates on-demand at
+      # view time by fetching the map from S3 — if the event is gone, the map
+      # is worthless). Aligning S3 expiry with RUM retention means maps are
+      # always available for any event visible in the console, and no storage
+      # is wasted beyond that window.
       days = 30
     }
   }

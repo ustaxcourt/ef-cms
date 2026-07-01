@@ -43,36 +43,6 @@ if [ -n "${RUM_RELEASE_ID}" ]; then
   # blue/green deployment where the old color may still be serving requests.
   # The S3 lifecycle rule in Terraform is a safety net for any objects that
   # escape this cleanup (e.g. from a failed deploy).
-  # Prune source-map releases that are BOTH older than 7 days AND outside the
-  # 2 most recent releases. The "last 2" guarantee covers blue/green switchover;
-  # the 7-day window retains maps for rollback and incident investigation on
-  # low-release-frequency environments without letting the bucket grow unbounded
-  # when several deploys happen in a day.
-  SOURCEMAP_OBJECTS=$(aws s3api list-objects-v2 \
-    --bucket "${RUM_SOURCEMAP_BUCKET}" \
-    --query "Contents[].[LastModified,Key]" \
-    --output text 2>/dev/null || true)
-  # Build a list of "TIMESTAMP PREFIX" sorted oldest-first.
-  SORTED_RELEASES_WITH_TS=$(echo "${SOURCEMAP_OBJECTS}" | awk -F'\t' '
-    NF==2 {
-      prefix = $2; sub("/.*", "", prefix)
-      ts = $1
-      if (!(prefix in min_ts) || ts < min_ts[prefix]) min_ts[prefix] = ts
-    }
-    END { for (p in min_ts) print min_ts[p], p }
-  ' | sort)
-  SOURCEMAP_RELEASE_COUNT=$(echo "${SORTED_RELEASES_WITH_TS}" | grep -c . 2>/dev/null || true)
-  if [ "${SOURCEMAP_RELEASE_COUNT}" -gt 2 ]; then
-    # ISO 8601 timestamps sort lexicographically, so string comparison works.
-    CUTOFF_DATE=$(date -u -d '7 days ago' '+%Y-%m-%dT%H:%M:%S' 2>/dev/null || date -u -v-7d '+%Y-%m-%dT%H:%M:%S')
-    PRUNE_COUNT=$((SOURCEMAP_RELEASE_COUNT - 2))
-    echo "${SORTED_RELEASES_WITH_TS}" | head -n "${PRUNE_COUNT}" | while IFS=' ' read -r ts old_release; do
-      if [ -n "${old_release}" ] && [[ "${ts}" < "${CUTOFF_DATE}" ]]; then
-        aws s3 rm "s3://${RUM_SOURCEMAP_BUCKET}/${old_release}/" --recursive
-      fi
-    done
-  fi
-
   # Terraform is the source of truth for the monitor (it also creates the
   # Cognito identity pool). Only enable unminification if the monitor already
   # exists; otherwise warn and skip so an unapplied environment does not fail
