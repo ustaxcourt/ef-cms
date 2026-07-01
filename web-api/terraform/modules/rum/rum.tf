@@ -161,9 +161,9 @@ resource "aws_s3_bucket_public_access_block" "rum_sourcemaps" {
 #   prod / staging : 60 days — full RUM retention window (30 days of possible
 #                    event creation + 30 days of RUM event retention). These are
 #                    the environments where historical error investigation matters.
-#   test           : 14 days — moderate churn; enough to cover a sprint's worth
+#   test           : 30 days — moderate churn; enough to cover a sprint's worth
 #                    of deploys without accumulating months of maps.
-#   exp*           : 7 days  — high churn (multiple deploys/day); old maps have
+#   exp*           : 15 days  — high churn (multiple deploys/day); old maps have
 #                    very little investigation value on experimental branches.
 #
 # CloudWatch RUM deobfuscates on-demand at view time by fetching the map from
