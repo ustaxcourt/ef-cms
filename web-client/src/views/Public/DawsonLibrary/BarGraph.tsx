@@ -21,6 +21,7 @@ import {
   Cell,
   Tooltip,
 } from 'recharts';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
 // ─── Single-dataset bar graph ─────────────────────────────────────────────────
 
@@ -194,7 +195,12 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                           className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
                           style={{ backgroundColor: color }}
                         />
-                        <span>value : {payload[0]?.value}</span>
+                        <span>
+                          value :{' '}
+                          {payload[0]
+                            ? formatPositiveNumber(payload[0].value as number)
+                            : undefined}
+                        </span>
                       </div>
                     </div>
                   );
@@ -495,13 +501,13 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                             style={{ backgroundColor: p.fill || p.color }}
                           />
                           <span>
-                            {p.dataKey} : {p.value}
+                            {p.dataKey} : {formatPositiveNumber(p.value)}
                           </span>
                         </div>
                       ))}
                       {colTotal != null && (
                         <div className="tw:border-t tw:border-gray-300 tw:pt-1 tw:mt-0.5">
-                          Total : {colTotal}
+                          Total : {formatPositiveNumber(colTotal)}
                         </div>
                       )}
                     </div>
