@@ -35,10 +35,9 @@ const router = {
       pattern: string,
       handler: (...args: any[]) => any,
     ): void => {
-      route(pattern, function () {
+      route(pattern, (...args) => {
         recordRumPageView(getRumPageIdFromRoutePattern(pattern));
-        // eslint-disable-next-line prefer-rest-params
-        return handler(...arguments);
+        return handler(...args);
       });
     };
 

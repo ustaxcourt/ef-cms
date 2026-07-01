@@ -37,6 +37,12 @@ RUM_APP_MONITOR_NAME="${ENV}_dawson_rum_app_monitor"
 if [ -n "${RUM_RELEASE_ID}" ]; then
   aws s3 cp dist "s3://${RUM_SOURCEMAP_BUCKET}/${RUM_RELEASE_ID}/" --recursive --exclude "*" --include "*.map"
 
+  # Prune old source-map releases, keeping only the 2 most recent so the
+  # bucket does not grow unbounded during frequent releases. We always retain
+  # the previous release alongside the current one to cover the window of a
+  # blue/green deployment where the old color may still be serving requests.
+  # The S3 lifecycle rule in Terraform is a safety net for any objects that
+  # escape this cleanup (e.g. from a failed deploy).
   # Terraform is the source of truth for the monitor (it also creates the
   # Cognito identity pool). Only enable unminification if the monitor already
   # exists; otherwise warn and skip so an unapplied environment does not fail
