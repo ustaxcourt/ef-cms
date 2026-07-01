@@ -48,9 +48,16 @@ async function makePaymentPortalRequest(
           });
       }
       if (method === 'POST') {
-        const signedRequest = await signRequest(url, {
-          service: 'execute-api',
-        });
+        const signedRequest = await signRequest(
+          url,
+          {
+            method,
+            body: JSON.stringify(data),
+          },
+          {
+            service: 'execute-api',
+          },
+        );
         const headers = Object.fromEntries(signedRequest.headers.entries());
         response = await applicationContext
           .getHttpClient()
