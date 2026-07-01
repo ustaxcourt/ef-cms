@@ -20,7 +20,7 @@ export const confirmPaperServiceModalHelper = (
 } => {
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
-  const paperServiceParties = get(state.paperServiceParties);
+  const paperServiceParties = get(state.paperServiceParties) || [];
 
   const currentDocketEntry = docketEntryId
     ? formattedCaseDetail.docketEntries.find(
