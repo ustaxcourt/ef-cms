@@ -35,9 +35,19 @@ async function makePaymentPortalRequest(
       const url = `${environment.paymentPortalHost}/${endpoint}/${(data as GetDetailsPathParams).transactionReferenceId}`;
       const signedRequest = await signRequest(url, { service: 'execute-api' });
       const headers = Object.fromEntries(signedRequest.headers.entries());
-      response = await applicationContext.getHttpClient()(signedRequest.url, {
-        headers,
-      });
+      if (method === 'GET') {
+        response = await applicationContext
+          .getHttpClient()
+          .get(
+            `${url}/${(data as GetDetailsPathParams).transactionReferenceId}`,
+            { headers },
+          );
+      }
+      if (method === 'POST') {
+        response = await applicationContext
+          .getHttpClient()
+          .post(url, data, { headers });
+      }
     }
   } catch (e: unknown) {
     console.log(e);
