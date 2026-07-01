@@ -172,8 +172,8 @@ resource "aws_s3_bucket_public_access_block" "rum_sourcemaps" {
 locals {
   sourcemap_retention_days = (
     contains(["prod", "staging"], var.environment) ? 60 :
-    var.environment == "test" ? 14 :
-    7
+    var.environment == "test" ? 30 :
+    15
   )
 }
 
