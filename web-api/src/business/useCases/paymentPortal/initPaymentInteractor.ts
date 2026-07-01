@@ -50,7 +50,7 @@ export const initPaymentInteractor = async (
 
   let domain;
   if (applicationContext.environment.stage !== 'local')
-    domain = `https://${process.env.EFCMS_DOMAIN}`;
+    domain = `https://app.${process.env.EFCMS_DOMAIN}`;
   else domain = 'http://localhost:1234';
 
   const data: InitPaymentRequest = {
