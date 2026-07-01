@@ -99,7 +99,7 @@ describe('grantDenyMotionFormHelper', () => {
     });
     expect(result.jurisdictionErrorText).toEqual('Select jurisdiction');
     expect(result.jurisdictionErrorClass).toEqual(
-      'grant-deny-motion-form-group-error',
+      'grant-deny-motion-form-group grant-deny-motion-form-group-error',
     );
   });
 

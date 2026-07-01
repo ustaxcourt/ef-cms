@@ -190,6 +190,18 @@ describe('confirmPaperServiceModalHelper', () => {
       expect(result.contactsNeedingPaperService).toEqual([]);
     });
 
+    it('should return an empty array when paperServiceParties is undefined', () => {
+      const result = runCompute(confirmPaperServiceModalHelper, {
+        state: {
+          ...baseState,
+          docketEntryId: undefined,
+          paperServiceParties: undefined,
+        },
+      });
+
+      expect(result.contactsNeedingPaperService).toEqual([]);
+    });
+
     it('should format paper service parties with petitioner counsel role', () => {
       const mockName = 'Attorney Goodman';
 

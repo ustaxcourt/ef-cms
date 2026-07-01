@@ -304,13 +304,17 @@ export const GrantDenyMotion = connect(
                     errorText={grantDenyMotionFormHelper.jurisdictionErrorText}
                     id="jurisdiction-form-group"
                   >
-                    <label className="usa-label" htmlFor="jurisdiction-radios">
+                    <span className="usa-label" id="jurisdiction-label">
                       Jurisdiction
-                    </label>
-                    <div className="grant-deny-motion-jurisdiction-options">
+                    </span>
+                    <div
+                      aria-labelledby="jurisdiction-label"
+                      className="grant-deny-motion-jurisdiction-options"
+                      id="jurisdiction-radios"
+                      role="radiogroup"
+                    >
                       <div className="usa-radio">
                         <input
-                          aria-describedby="jurisdiction-radios"
                           aria-label="retained"
                           checked={
                             form.jurisdiction ===
@@ -345,7 +349,6 @@ export const GrantDenyMotion = connect(
                       </div>
                       <div className="usa-radio">
                         <input
-                          aria-describedby="jurisdiction-radios"
                           aria-label="restored to general docket"
                           checked={
                             form.jurisdiction ===

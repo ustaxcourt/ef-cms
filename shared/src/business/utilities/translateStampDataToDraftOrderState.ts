@@ -110,7 +110,7 @@ const translateDueDate = (date: unknown): string | null => {
   }
 
   const [month, day, year] = date.split('/');
-  const fullYear = Number(year) < 50 ? `20${year}` : `19${year}`;
+  const fullYear = Number(year) < 70 ? `20${year}` : `19${year}`;
 
   return `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 };

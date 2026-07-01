@@ -41,7 +41,7 @@ export const grantDenyMotionFormHelper = (
 
   const jurisdictionErrorClass = !validationErrors.jurisdiction
     ? 'grant-deny-motion-form-group'
-    : 'grant-deny-motion-form-group-error';
+    : 'grant-deny-motion-form-group grant-deny-motion-form-group-error';
 
   return {
     additionalOrderTextErrorText: additionalOrderTextErrors,

@@ -99,6 +99,7 @@ export const StatusReportDueDateFields: React.FC<
         <div
           className={classNames(
             'grant-deny-motion-status-report-field-inputs',
+            'usa-form-group',
             dueDateErrorText && 'usa-form-group--error',
           )}
         >
