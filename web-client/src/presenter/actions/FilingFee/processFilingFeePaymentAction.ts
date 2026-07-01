@@ -15,7 +15,7 @@ export const processFilingFeePaymentAction = async ({
 
   store.set(state.processPaymentStatus, result);
 
-  switch (result.processPaymentRepsone.paymentStatus) {
+  switch (result.paymentStatus) {
     case 'success':
       store.set(state.alertSuccess, {
         message: `An email was sent confirming the filing fee was paid for docket number(s): ${props.docketNumber}`,
@@ -24,7 +24,6 @@ export const processFilingFeePaymentAction = async ({
       });
       break;
     case 'failed':
-      console.log('asdf');
       alerts.alertError = {
         message: `Something went wrong when paying the filing fee. Please try again.`,
         title: 'Filing fee payment failed',

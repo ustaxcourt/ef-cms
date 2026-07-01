@@ -5,7 +5,7 @@ import { ProcessPaymentResponse } from 'node_modules/@ustaxcourt/payment-portal/
 export const processPaymentInteractor = (
   applicationContext: ClientApplicationContext,
   { docketNumber },
-): Promise<{ processPaymentRepsone: ProcessPaymentResponse }> => {
+): Promise<ProcessPaymentResponse> => {
   return put({
     applicationContext,
     body: { docketNumber },
