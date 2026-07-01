@@ -39,6 +39,9 @@ on:
       upload_logs:
         default: false
         type: boolean
+      save-cache:
+        default: true
+        type: boolean
       workflow_filename:
         required: true
         type: string
@@ -80,6 +83,8 @@ jobs:
           comment_on_pr: false
       - name: NPM Install on Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          save-cache: ${{ inputs.save-cache && 'true' || 'false' }}
       - name: Configure sysctl limits
         if: ${{ inputs.configure_sysctl }}
         run: |

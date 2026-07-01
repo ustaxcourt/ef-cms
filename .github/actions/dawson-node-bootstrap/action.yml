@@ -42,11 +42,28 @@ runs:
         path: ${{ inputs.cache-paths }}
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
+    - if: ${{ inputs.restore-cache == 'true' }}
+      name: Cache diagnostic
+      shell: bash
+      run: |
+        echo "::notice::Cache hit: ${{ steps.cache-dependencies.outputs.cache-hit }}"
+        echo "Cache key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}"
+        if [ -d node_modules ]; then
+          echo "node_modules size: $(du -sh node_modules | cut -f1)"
+        else
+          echo "node_modules: NOT FOUND"
+        fi
+
     - if: ${{ inputs.install-dependencies == 'true' && (inputs.restore-cache != 'true' || steps.cache-dependencies.outputs.cache-hit != 'true') }}
       id: npm-clean-install
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: npm ci
+
+    - if: ${{ steps.npm-clean-install.outcome == 'success' }}
+      name: Cache miss warning
+      shell: bash
+      run: echo "::warning::CACHE MISS — npm ci ran on this job"
 
     - if: ${{ inputs.save-cache == 'true' && inputs.install-dependencies == 'true' && steps.npm-clean-install.outcome == 'success' }}
       uses: actions/cache/save@v5

@@ -19,7 +19,11 @@ permissions:
   contents: read
 
 jobs:
+  warm-cache:
+    if: ${{ !github.event.pull_request.draft }}
+    uses: ./.github/workflows/job_warm-cache.yml
   e2e_cypress:
+    needs: [warm-cache]
     if: ${{ !github.event.pull_request.draft }}
     strategy:
       fail-fast: false
@@ -36,6 +40,7 @@ jobs:
       run_command: |
         export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts integration)
         scripts/tests/run-cypress.ts --file "$TESTFILES" --output-file-path "$TEST_FILE_TIMINGS_SHARD_FILE"
+      save-cache: false
       workflow_filename: e2e-cypress.yml
   persist-test-file-times:
     needs: [e2e_cypress]

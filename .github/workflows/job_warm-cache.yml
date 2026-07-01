@@ -1,0 +1,19 @@
+name: Warm Dependency Cache
+
+on:
+  workflow_call:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  warm-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+      - name: Warm dependency cache
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          save-cache: 'true'
