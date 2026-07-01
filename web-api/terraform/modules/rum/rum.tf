@@ -157,6 +157,26 @@ resource "aws_s3_bucket_public_access_block" "rum_sourcemaps" {
 }
 
 # Expire old releases' source maps so the bucket does not grow unbounded.
+# Retention is tiered by environment because deployment frequency varies widely:
+#   prod / staging : 60 days — full RUM retention window (30 days of possible
+#                    event creation + 30 days of RUM event retention). These are
+#                    the environments where historical error investigation matters.
+#   test           : 14 days — moderate churn; enough to cover a sprint's worth
+#                    of deploys without accumulating months of maps.
+#   exp*           : 7 days  — high churn (multiple deploys/day); old maps have
+#                    very little investigation value on experimental branches.
+#
+# CloudWatch RUM deobfuscates on-demand at view time by fetching the map from
+# S3, so a map must remain available for as long as any event referencing it
+# could still be visible in the console.
+locals {
+  sourcemap_retention_days = (
+    contains(["prod", "staging"], var.environment) ? 60 :
+    var.environment == "test" ? 14 :
+    7
+  )
+}
+
 resource "aws_s3_bucket_lifecycle_configuration" "rum_sourcemaps" {
   bucket = aws_s3_bucket.rum_sourcemaps.id
 
@@ -167,19 +187,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "rum_sourcemaps" {
     filter {}
 
     expiration {
-      # CloudWatch RUM deobfuscates on-demand at view time by fetching the map
-      # from S3, so sourcemaps must remain available for as long as any event
-      # referencing them could still be visible in the console.
-      #
-      # Worst-case timeline for a single release:
-      #   Day  0: deploy → sourcemaps uploaded, release goes live
-      #   Day 29: a user hits an error (release still live, no new deploy yet)
-      #   Day 30: RUM retains that event for 30 days → visible until day 59
-      #
-      # Therefore the map must outlive day 59. 60 days is the safe upper bound:
-      # 30 days of possible event creation after the deploy + 30 days of RUM
-      # retention for the last event created.
-      days = 60
+      days = local.sourcemap_retention_days
     }
   }
 }
