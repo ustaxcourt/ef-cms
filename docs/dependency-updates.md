@@ -69,7 +69,7 @@ When updating Node.js, keep in mind:
 - Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
  To update Node.js:
- 
+
  1. Update the version in `.nvmrc`.
  1. Manually update the `"engines"` property in:
    - `./package.json`
@@ -296,7 +296,7 @@ Below is a list of dependencies that are locked down due to known issues with se
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-**Current Installed DWT: 19.3.3**
+**Current Installed DWT: 19.4.1**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
 
@@ -316,19 +316,21 @@ If an update is available for DWT:
    1. With the new client version installed, navigate to the `test` environment and attempt to scan a document. Ensure the "client upgrade" modal is not shown.
 - Only update DWT when:
    1. The Windows clients have **all** been confirmed to have received the client update, OR
-   1. The old Windows client and new server version are backwards-compatible. 
+   1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.0.4**
-**Current Installed @sparticuz/chromium: 148.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.1.0**
+**Current Installed @sparticuz/chromium: 149.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends on vulnerable version of puppeteer-core)
-- March 20 2026: added an override for tar-fs so we stop getting a vulnerability reported for it. 
+- March 20 2026: added an override for tar-fs so we stop getting a vulnerability reported for it.
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
+- As of June 23, 2026: Puppeteer 25.2.0 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.0 update until `@sparticuz/chromium@150.x` is available.
+- As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -343,9 +345,14 @@ If an update is available for DWT:
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
+### @babel/*
+**Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
+
+- As of June 23, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` which is the only published version of that package, which declares a peer dependency of `@babel/core@^7.0.0`. Attempting to install `@babel/core@8.x` causes peer-dependency conflicts that break `@babel/preset-react` and the rest of the babel preset chain. All four `@babel/*` packages have been added to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent the upgrade script from touching them. Revisit once `esbuild-plugin-babel-cached` publishes a version compatible with `@babel/core@^8`. Note: a nested override (e.g. `"esbuild-plugin-babel-cached": { "@babel/core": "^8" }`) could potentially bypass the peer-dependency conflict, but this may break at runtime if the plugin relies on `@babel/core` v7-specific APIs. Needs investigation before attempting ([PR #10187](https://github.com/ustaxcourt/ef-cms/pull/10187)).
+
 ### @types/node
-**Installed Version: 24.12.4**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.12.4, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.2**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -358,6 +365,8 @@ The major version of this package should match our major version of Node. We sho
 - As of May 26, 2026: Node.js updated to `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
 
 - As of June 1, 2026: Node.js remains at `v24.16.0`; `npm view @types/node@24.16.0` and any `24.13+` under major `24` are still unpublished, so **24.12.4** remains the closest match.
+
+- As of June 23, 2026: Node.js updated to `v24.17.0`; `@types/node@24.13.x` is now available for the first time (previously stuck at `24.12.4`). Updated to **24.13.2**, the latest published version under major `24`. No `24.14+` published yet.
 
 ### TypeScript
 **Installed Version: 6.0.3**
@@ -383,12 +392,12 @@ error: too many arguments. Expected 0 arguments but got 2.
 **@fortawesome/free-solid-svg-icons: 7.1.0**
 **@fortawesome/react-fontawesome: 3.1.1**
 
-- Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
+- Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated.
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
 
 ### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
-- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number of vulnerabilities counted when running npm i  
+- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number of vulnerabilities counted when running npm i
 - minimatch is a dependency for glob which is a dependency of a handful of packages in our code base. The full list can be found by running:
 ```bash
    npm list minimatch
@@ -396,23 +405,28 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for their respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
+- As of June 25, 2026: minimatch 10.2.5 is the latest. Still blocked since upstream packages have not yet migrated to minimatch 10.x.
 
 ### eslint and @eslint/js
 **Installed Versions:**
 **eslint: 9.39.4**
 **@eslint/js: 9.39.4**
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
-- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so. 
+- There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
+- As of June 25, 2026: eslint 10.5.0 is the latest, but still blocked since `eslint-plugin-jsx-a11y` and `eslint-plugin-react` still declare `eslint ^9` as their peer dependency. `9.39.4` is the latest 9.x patch; nothing new to install.
 
 ### uuid
-- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11. 
+- On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
+
+### js-yaml
+- On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
 
 ### image-blob-reduce and pica
 **Installed Versions:**
 **image-blob-reduce: 5.0.0**
 **pica: 10.0.1**
-- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using. 
-- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica. 
+- image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
+- If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 

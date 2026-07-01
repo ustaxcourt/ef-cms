@@ -31,4 +31,16 @@ describe('setFilersFromFilersMapAction', () => {
 
     expect(result.state.form.filers).toEqual([]);
   });
+
+  it('sets state.form.filers to an empty array when state.form.filersMap is undefined', async () => {
+    const result = await runAction(setFilersFromFilersMapAction, {
+      state: {
+        form: {
+          filedBy: 'A legacy user',
+        },
+      },
+    });
+
+    expect(result.state.form.filers).toEqual([]);
+  });
 });

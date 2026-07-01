@@ -205,6 +205,7 @@ export const SERVICE_INDICATOR_TYPES = {
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
+  ERROR_ADDING_COVERSHEET: 'error_adding_coversheet',
   PENDING: 'pending',
 };
 
@@ -2014,6 +2015,8 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
     restored: 'restoredToGeneralDocket',
   },
 };
+
+export const MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS = 256;
 
 export const TROUBLESHOOTING_INFO = {
   APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
