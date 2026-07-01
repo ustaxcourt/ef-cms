@@ -48,11 +48,16 @@ export const initPaymentInteractor = async (
     currentCaseEntity.petitionPaymentTransactionReferenceId ||
     applicationContext.getUniqueId();
 
+  let domain;
+  if (applicationContext.environment.stage !== 'local')
+    domain = `https://${process.env.EFCMS_DOMAIN}`;
+  else domain = 'http://localhost:1234';
+
   const data: InitPaymentRequest = {
     transactionReferenceId,
     fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-    urlSuccess: 'https://client.app/success',
-    urlCancel: 'https://client.app/cancel',
+    urlSuccess: `${domain}/payment-success/${docketNumber}`,
+    urlCancel: `${domain}/payment-cancel/${docketNumber}`,
     metadata: {
       docketNumber,
     },
