@@ -167,13 +167,19 @@ resource "aws_s3_bucket_lifecycle_configuration" "rum_sourcemaps" {
     filter {}
 
     expiration {
-      # CloudWatch RUM retains event data for 30 days. Sourcemaps older than
-      # that can never be used for deobfuscation (RUM deobfuscates on-demand at
-      # view time by fetching the map from S3 — if the event is gone, the map
-      # is worthless). Aligning S3 expiry with RUM retention means maps are
-      # always available for any event visible in the console, and no storage
-      # is wasted beyond that window.
-      days = 30
+      # CloudWatch RUM deobfuscates on-demand at view time by fetching the map
+      # from S3, so sourcemaps must remain available for as long as any event
+      # referencing them could still be visible in the console.
+      #
+      # Worst-case timeline for a single release:
+      #   Day  0: deploy → sourcemaps uploaded, release goes live
+      #   Day 29: a user hits an error (release still live, no new deploy yet)
+      #   Day 30: RUM retains that event for 30 days → visible until day 59
+      #
+      # Therefore the map must outlive day 59. 60 days is the safe upper bound:
+      # 30 days of possible event creation after the deploy + 30 days of RUM
+      # retention for the last event created.
+      days = 60
     }
   }
 }
