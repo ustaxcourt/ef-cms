@@ -447,6 +447,26 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
+  it('normalizes additionalOrderText by removing whitespace-only entries', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          additionalOrderText: ['  ', '', 'Parties shall comply.'],
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderText).toEqual([
+      'Parties shall comply.',
+    ]);
+    expect(result.state.form.richText).toContain(
+      'ORDERED that Parties shall comply.',
+    );
+  });
+
   it('throws when motion docket entry not found', async () => {
     await expect(
       runAction(prepareGrantDenyMotionAction, {

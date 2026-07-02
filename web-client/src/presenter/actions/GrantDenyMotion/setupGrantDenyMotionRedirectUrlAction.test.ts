@@ -3,6 +3,22 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setupGrantDenyMotionRedirectUrlAction } from './setupGrantDenyMotionRedirectUrlAction';
 
 describe('setupGrantDenyMotionRedirectUrlAction', () => {
+  it('sets redirectUrl from props when provided', async () => {
+    const result = await runAction(setupGrantDenyMotionRedirectUrlAction, {
+      modules: { presenter },
+      props: {
+        redirectUrl: '/messages/101-26/message-detail/abc-message-id',
+      },
+      state: {
+        caseDetail: { docketNumber: '101-26' },
+      },
+    });
+
+    expect(result.state.redirectUrl).toEqual(
+      '/messages/101-26/message-detail/abc-message-id',
+    );
+  });
+
   it('sets redirectUrl to the message detail when parentMessageId is present', async () => {
     const result = await runAction(setupGrantDenyMotionRedirectUrlAction, {
       modules: { presenter },

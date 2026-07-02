@@ -16,6 +16,7 @@ const MAX_ADDITIONAL_TEXT_CHARS = 256;
 export const GrantDenyMotion = connect(
   {
     addAdditionalOrderTextSequence: sequences.addAdditionalOrderTextSequence,
+    cancelGrantDenyMotionSequence: sequences.cancelGrantDenyMotionSequence,
     clearGrantDenyMotionFormSequence:
       sequences.clearGrantDenyMotionFormSequence,
     constants: state.constants,
@@ -25,7 +26,6 @@ export const GrantDenyMotion = connect(
     grantDenyMotionFormHelper: state.grantDenyMotionFormHelper,
     grantDenyMotionPdfPreviewSequence:
       sequences.grantDenyMotionPdfPreviewSequence,
-    navigateBackSequence: sequences.navigateBackSequence,
     removeAdditionalOrderTextSequence:
       sequences.removeAdditionalOrderTextSequence,
     submitGrantDenyMotionSequence: sequences.submitGrantDenyMotionSequence,
@@ -35,13 +35,13 @@ export const GrantDenyMotion = connect(
   },
   function GrantDenyMotion({
     addAdditionalOrderTextSequence,
+    cancelGrantDenyMotionSequence,
     clearGrantDenyMotionFormSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     grantDenyMotionFormHelper,
     grantDenyMotionPdfPreviewSequence,
-    navigateBackSequence,
     removeAdditionalOrderTextSequence,
     submitGrantDenyMotionSequence,
     updateFormValueSequence,
@@ -87,7 +87,7 @@ export const GrantDenyMotion = connect(
                 link
                 className="margin-bottom-205"
                 icon={['fa', 'arrow-alt-circle-left']}
-                onClick={() => navigateBackSequence()}
+                onClick={() => cancelGrantDenyMotionSequence()}
               >
                 Back
               </Button>
@@ -582,7 +582,7 @@ export const GrantDenyMotion = connect(
                 >
                   Preview PDF
                 </Button>
-                <Button link onClick={() => navigateBackSequence()}>
+                <Button link onClick={() => cancelGrantDenyMotionSequence()}>
                   Cancel
                 </Button>
               </div>
