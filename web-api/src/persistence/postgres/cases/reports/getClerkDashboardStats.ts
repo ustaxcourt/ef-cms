@@ -42,11 +42,13 @@ export const petitionsDataByYear = async (
       .select([
         'isPaper',
         'isRepresenting',
-        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')})`.as('month'),
+        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')} AT TIME ZONE 'America/New_York')`.as(
+          'month',
+        ),
         sql<number>`count(1)`.as('total'),
       ])
       .groupBy(
-        sql`grouping sets((EXTRACT(MONTH FROM received_At), is_paper), (is_Paper), (is_Representing))`,
+        sql`grouping sets((EXTRACT(MONTH FROM received_at AT TIME ZONE 'America/New_York'), is_paper), (is_Paper), (is_Representing))`,
       )
       .execute();
   });

@@ -96,7 +96,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
       .map(d => `<tr><td>${d.label}</td><td>${d.value}</td></tr>`)
       .join('');
     const heading = title ? `<h2>${title}</h2>` : '';
-    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Label</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>${xAxisLabel ?? 'Label'}</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
     window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
@@ -132,7 +132,8 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
   // Extra bottom margin to accommodate multi-line wrapped x-axis labels
   const maxLabelWords = Math.max(...data.map(d => d.label.split(' ').length));
   const estimatedLabelLines = Math.ceil(maxLabelWords / 2);
-  const bottomMargin = (xAxisLabel ? 60 : 20) + estimatedLabelLines * 18;
+  const bottomMargin =
+    (xAxisLabel && showLabels ? 60 : 20) + estimatedLabelLines * 18;
 
   return (
     <div className="tw:overflow-x-auto tw:pt-2 tw:pb-1 tw:pl-1">
@@ -211,7 +212,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 tick={<SingleBarTickX />}
                 interval={0}
                 label={
-                  xAxisLabel
+                  xAxisLabel && showLabels
                     ? {
                         fill: '#000',
                         fontSize: '1.25rem',
@@ -229,7 +230,9 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 axisLine={true}
                 tickLine={true}
                 label={
-                  yAxisLabel ? <BarYAxisLabel value={yAxisLabel} /> : undefined
+                  yAxisLabel && showLabels ? (
+                    <BarYAxisLabel value={yAxisLabel} />
+                  ) : undefined
                 }
               />
               {showLegend && <Legend content={renderCustomLegend} />}
@@ -317,7 +320,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
 }) => {
   const openHtmlTable = () => {
     const headerCells = [
-      '<th>Label</th>',
+      `<th>${xAxisLabel ?? 'Label'}</th>`,
       ...datasets.map(ds => `<th>${ds.label}</th>`),
     ].join('');
     const rows = labels
@@ -391,13 +394,14 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   const hasTwoLineTicks = stacked && columnTotals && columnTotals.length > 0;
   // Give rotated 45° labels enough vertical room (longest month name ~110px at 45°)
   const xAxisHeight = hasTwoLineTicks ? 60 : xAngle !== 0 ? 80 : undefined;
-  const bottomMargin = xAxisLabel
-    ? 60
-    : xAngle !== 0
-      ? 20
-      : hasTwoLineTicks
+  const bottomMargin =
+    xAxisLabel && showLabels
+      ? 60
+      : xAngle !== 0
         ? 20
-        : 20;
+        : hasTwoLineTicks
+          ? 20
+          : 20;
 
   // Legend payload for custom renderer
   const legendPayload = datasets.map((ds, i) => ({
@@ -532,7 +536,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 }
                 height={xAxisHeight}
                 label={
-                  xAxisLabel
+                  xAxisLabel && showLabels
                     ? {
                         fill: '#000',
                         fontSize: '1.25rem',
@@ -548,7 +552,9 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                 domain={[0, yMax]}
                 tick={<YAxisTick />}
                 label={
-                  yAxisLabel ? <BarYAxisLabel value={yAxisLabel} /> : undefined
+                  yAxisLabel && showLabels ? (
+                    <BarYAxisLabel value={yAxisLabel} />
+                  ) : undefined
                 }
               />
               {datasets.map((ds, dsIndex) => {
