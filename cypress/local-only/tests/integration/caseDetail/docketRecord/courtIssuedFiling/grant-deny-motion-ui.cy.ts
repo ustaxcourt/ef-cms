@@ -22,6 +22,10 @@ import {
 } from 'cypress/local-only/support/pages/document-qc';
 
 describe('Grant/Deny Motion UI shell (T13532, T13544)', () => {
+  const clickCancelFromGrantDenyForm = (): void => {
+    cy.contains('button', 'Cancel').click();
+  };
+
   const clickBackFromGrantDenyForm = (): void => {
     cy.contains('button', 'Back').click();
   };
@@ -173,7 +177,7 @@ describe('Grant/Deny Motion UI shell (T13532, T13544)', () => {
         cy.get('[data-testid="preview-pdf-button"]').click();
         cy.wait('@courtIssuedOrder');
 
-        clickBackFromGrantDenyForm();
+        clickCancelFromGrantDenyForm();
         cy.url().should(
           'match',
           new RegExp(

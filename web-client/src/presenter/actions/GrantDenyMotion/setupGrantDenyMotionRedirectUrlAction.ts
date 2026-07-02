@@ -5,6 +5,11 @@ export const setupGrantDenyMotionRedirectUrlAction = ({
   props,
   store,
 }: ActionProps): void => {
+  if (props.redirectUrl) {
+    store.set(state.redirectUrl, props.redirectUrl);
+    return;
+  }
+
   if (get(state.redirectUrl)) {
     return;
   }

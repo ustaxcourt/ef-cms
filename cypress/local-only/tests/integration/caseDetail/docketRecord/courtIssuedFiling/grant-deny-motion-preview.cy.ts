@@ -78,6 +78,8 @@ describe('Grant/Deny Motion preview (T13534, T13535)', () => {
         expect(html).to.include('ORDERED that first clause.');
         expect(html).not.to.include('ORDERED that .');
       });
+      cy.get('[data-testid="additional-order-text-row-0"]').should('exist');
+      cy.get('[data-testid="additional-order-text-row-1"]').should('not.exist');
     });
   });
 });

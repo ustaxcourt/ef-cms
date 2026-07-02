@@ -13,6 +13,10 @@ import {
 import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 const buildDispositionPhrase = ({
   deniedAsMoot,
@@ -206,10 +210,19 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
     filingParty,
   });
 
-  const additionalClauses: string[] = (additionalOrderText || [])
-    .map(text => (text || '').trim())
-    .filter(text => text.length > 0)
-    .map(text => wrap(`ORDERED that ${text}.`));
+  const meaningfulAdditionalOrderText = normalizeAdditionalOrderTextArray(
+    additionalOrderText ?? [],
+  );
+  store.set(
+    state.form.additionalOrderText,
+    additionalOrderTextArrayWithRequiredFirstField(
+      meaningfulAdditionalOrderText,
+    ),
+  );
+
+  const additionalClauses: string[] = meaningfulAdditionalOrderText.map(text =>
+    wrap(`ORDERED that ${text}.`),
+  );
 
   const orderedClauses = [
     dispositionClause,

@@ -62,6 +62,7 @@ import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOp
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
+import { cancelGrantDenyMotionSequence } from './sequences/GrantDenyMotion/cancelGrantDenyMotionSequence';
 import { clearGrantDenyMotionFormSequence } from './sequences/GrantDenyMotion/clearGrantDenyMotionFormSequence';
 import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { addAdditionalOrderTextSequence } from './sequences/GrantDenyMotion/addAdditionalOrderTextSequence';
@@ -739,6 +740,8 @@ export const presenterSequences = {
     clearSelectedWorkItemsSequence as unknown as Function,
   addAdditionalOrderTextSequence:
     addAdditionalOrderTextSequence as unknown as Function,
+  cancelGrantDenyMotionSequence:
+    cancelGrantDenyMotionSequence as unknown as Function,
   clearGrantDenyMotionFormSequence:
     clearGrantDenyMotionFormSequence as unknown as Function,
   clearStatusReportOrderFormSequence,
