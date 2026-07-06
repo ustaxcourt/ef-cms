@@ -207,7 +207,7 @@ export const PieGraph = ({
                         style={{ backgroundColor: entry.color }}
                       />
                       <span className="tw:text-black tw:xs:text-xl tw:text-base tw:leading-[1.1]">
-                        <span className="tw:font-semibold">{entry.name}: </span>
+                        <span className="tw:font-bold">{entry.name}: </span>
                         {formatPositiveNumber(entry.value)}
                       </span>
                     </li>

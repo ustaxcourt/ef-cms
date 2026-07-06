@@ -49,7 +49,7 @@ const renderCustomLegend = (props: any) => {
             className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
+          <span className="tw:text-black tw:font-bold tw:text-base tw:xs:text-xl">
             {entry.value}
           </span>
         </div>
