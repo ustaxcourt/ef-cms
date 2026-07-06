@@ -13,8 +13,9 @@ import {
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-export const initPaymentInteractor = async (
+export const initPayment = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -81,3 +82,10 @@ export const initPaymentInteractor = async (
 
   return { paymentRedirect: initResponse.paymentRedirect };
 };
+
+export const initPaymentInteractor = withLocking(
+  initPayment,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

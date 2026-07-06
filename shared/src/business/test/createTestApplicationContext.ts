@@ -571,6 +571,36 @@ export const createTestApplicationContext = () => {
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
+    getPaymentPortalClient: jest.fn().mockReturnValue({
+      initPayment: jest.fn().mockResolvedValue({
+        token: 'mockPaymentToken',
+        paymentRedirect: 'mockPaymentRedirect',
+      }),
+      processPayment: jest.fn().mockResolvedValue({
+        paymentStatus: 'success',
+        transactions: [
+          {
+            payGovTrackingId: 'payGovTrackingId',
+            transactionStatus: 'processed',
+            paymentMethod: 'PayPal',
+            createdTimestamp: '2026-07-01T00:00:00.000Z',
+            updatedTimestamp: '2026-07-01T00:00:00.000Z',
+          },
+        ],
+      }),
+      getTransactionDetails: jest.fn().mockResolvedValue({
+        paymentStatus: 'success',
+        transactions: [
+          {
+            payGovTrackingId: 'payGovTrackingId',
+            transactionStatus: 'processed',
+            paymentMethod: 'PayPal',
+            createdTimestamp: '2026-07-01T00:00:00.000Z',
+            updatedTimestamp: '2026-07-01T00:00:00.000Z',
+          },
+        ],
+      }),
+    }),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,

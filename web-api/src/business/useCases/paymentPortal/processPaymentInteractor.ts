@@ -13,12 +13,13 @@ import {
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import {
   ProcessPaymentRequest,
   ProcessPaymentResponse,
 } from 'node_modules/@ustaxcourt/payment-portal/dist';
 
-export const processPaymentInteractor = async (
+export const processPayment = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -71,3 +72,10 @@ export const processPaymentInteractor = async (
 
   return processResponse;
 };
+
+export const processPaymentInteractor = withLocking(
+  processPayment,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
