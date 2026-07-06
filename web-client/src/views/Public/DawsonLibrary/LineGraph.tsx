@@ -10,6 +10,7 @@ import {
   Dot,
   Tooltip,
 } from 'recharts';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
 export interface LineGraphDataset {
   label: string;
@@ -109,7 +110,7 @@ const LineYAxisTick = (props: any) => {
         className="tw:text-base tw:xs:text-xl"
         fontWeight="400"
       >
-        {payload.value}
+        {formatPositiveNumber(payload.value)}
       </text>
     </g>
   );
@@ -164,7 +165,7 @@ const TooltipContent = ({
               style={{ backgroundColor: color }}
             />
             <span className="tw:text-base tw:xs:text-xl">
-              {ds.label} : {row[`${ds.label}_tip`]}
+              {ds.label} : {formatPositiveNumber(row[`${ds.label}_tip`])}
             </span>
           </div>
         );
