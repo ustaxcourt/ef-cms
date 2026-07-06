@@ -35,7 +35,7 @@ export const DocketClerkReport = connect(
 
           <div className="grid-row grid-gap flex-align-end">
             <div className="grid-col-auto">
-              <div className="usa-form-group margin-bottom-0">
+              <div className="usa-form-group margin-bottom-0 tw:relative">
                 <label className="usa-label" htmlFor="docket-clerk">
                   Docket Clerk
                 </label>
@@ -61,7 +61,7 @@ export const DocketClerkReport = connect(
                 </BindedSelect>
                 {errors?.docketClerkUserId && (
                   <span
-                    className="usa-error-message"
+                    className="usa-error-message tw:absolute! tw:top-full! tw:left-0! tw:whitespace-nowrap!"
                     data-testid="docket-clerk-report-clerk-error"
                   >
                     <FontAwesomeIcon
@@ -75,7 +75,7 @@ export const DocketClerkReport = connect(
             </div>
 
             <div className="grid-col-auto">
-              <div className="usa-form-group margin-bottom-0">
+              <div className="usa-form-group margin-bottom-0 tw:relative">
                 <label className="usa-label" htmlFor="page-type">
                   Page Type
                 </label>
@@ -101,7 +101,7 @@ export const DocketClerkReport = connect(
                 </BindedSelect>
                 {errors?.pageType && (
                   <span
-                    className="usa-error-message"
+                    className="usa-error-message tw:absolute! tw:top-full! tw:left-0! tw:whitespace-nowrap!"
                     data-testid="docket-clerk-report-page-type-error"
                   >
                     <FontAwesomeIcon
