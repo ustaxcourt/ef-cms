@@ -42,7 +42,7 @@ export const petitionsDataByYear = async (
       .select([
         'isPaper',
         'isRepresenting',
-        sql<number>`EXTRACT(MONTH FROM ${sql.ref('receivedAt')} AT TIME ZONE 'America/New_York')`.as(
+        sql<number>`EXTRACT(MONTH FROM received_at AT TIME ZONE 'America/New_York')`.as(
           'month',
         ),
         sql<number>`count(1)`.as('total'),

@@ -85,7 +85,7 @@ const CustomTooltip = ({
           className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
           style={{ backgroundColor: color }}
         />
-        {entry.name}: {formatPositiveNumber(10000)} ({percentage}%)
+        {entry.name}: {formatPositiveNumber(value)} ({percentage}%)
       </div>
     </div>
   );
