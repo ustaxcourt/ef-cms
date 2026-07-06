@@ -6,6 +6,7 @@ const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
   '@puppeteer',
+  'cookie',
   'dom-serializer',
   'domelementtype',
   'domhandler',
