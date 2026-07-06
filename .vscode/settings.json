@@ -48,8 +48,5 @@
     }
   ],
   "prettier.requireConfig": true,
-  "js/ts.tsdk.path": "./node_modules/typescript/lib",
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
+  "js/ts.tsdk.path": "./node_modules/typescript/lib"
 }
