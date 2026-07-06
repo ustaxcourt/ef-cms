@@ -35,12 +35,7 @@ export const DocketClerkReport = connect(
 
           <div className="grid-row grid-gap flex-align-end">
             <div className="grid-col-auto">
-              <div
-                className={classNames(
-                  'usa-form-group margin-bottom-0',
-                  errors?.docketClerkUserId && 'usa-form-group--error',
-                )}
-              >
+              <div className="usa-form-group margin-bottom-0">
                 <label className="usa-label" htmlFor="docket-clerk">
                   Docket Clerk
                 </label>
@@ -49,7 +44,9 @@ export const DocketClerkReport = connect(
                   bind="docketClerkReport.form.docketClerkUserId"
                   className={classNames(
                     'width-15rem',
-                    errors?.docketClerkUserId && 'usa-input--error',
+                    'tw:rounded-md!',
+                    errors?.docketClerkUserId &&
+                      'tw:border-2! tw:border-solid! tw:border-[#b50909]!',
                   )}
                   data-testid="docket-clerk-report-clerk-select"
                   id="docket-clerk"
@@ -78,12 +75,7 @@ export const DocketClerkReport = connect(
             </div>
 
             <div className="grid-col-auto">
-              <div
-                className={classNames(
-                  'usa-form-group margin-bottom-0',
-                  errors?.pageType && 'usa-form-group--error',
-                )}
-              >
+              <div className="usa-form-group margin-bottom-0">
                 <label className="usa-label" htmlFor="page-type">
                   Page Type
                 </label>
@@ -92,7 +84,9 @@ export const DocketClerkReport = connect(
                   bind="docketClerkReport.form.pageType"
                   className={classNames(
                     'width-15rem',
-                    errors?.pageType && 'usa-input--error',
+                    'tw:rounded-md!',
+                    errors?.pageType &&
+                      'tw:border-2! tw:border-solid! tw:border-[#b50909]!',
                   )}
                   data-testid="docket-clerk-report-page-type-select"
                   id="page-type"
