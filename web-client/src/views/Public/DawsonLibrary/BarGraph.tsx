@@ -197,7 +197,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                           style={{ backgroundColor: color }}
                         />
                         <span>
-                          value :{' '}
+                          value :
                           {payload[0]
                             ? formatPositiveNumber(payload[0].value as number)
                             : undefined}
