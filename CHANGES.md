@@ -1,13 +1,37 @@
-<details><summary>Dependency Updates - Week of 2026-06-22</summary>
+<details><summary>Dependency Updates - Week of 2026-06-29</summary>
 
 ## Local
 
-#### Upgrade NodeJS to `24.17.0`
+#### Upgrade NodeJS to `24.18.0`
 ```bash
 nvm install
 nvm use
 nvm alias default "$(cat .nvmrc)"
 ```
+
+#### Upgrade Terraform to `1.15.7`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.7
+```
+```bash
+tfenv install 1.15.7
+tfenv use 1.15.7
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.86`
+
+This script will prompt for an environment to pull the image from; choose `exp3`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-06-22</summary>
 
 ## Manual Deployment Steps
 
@@ -47,7 +71,6 @@ This script will prompt for an environment to pull the image from; choose `exp5`
 ```bash
 npm run ecr:check-version
 ```
-
 </details>
 <details><summary>Dependency Updates - Week of 2026-06-08</summary>
 
