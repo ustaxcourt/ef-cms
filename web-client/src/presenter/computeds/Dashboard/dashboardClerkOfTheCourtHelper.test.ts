@@ -127,7 +127,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
           value: 6600,
         },
       ],
-      totalPetitions: 13800,
+      totalPetitions: '13,800',
       months: [
         'January',
         'February',
@@ -189,7 +189,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
           value: 9300,
         },
       ],
-      totalPetitions: 19200,
+      totalPetitions: '19,200',
       months: [
         'October',
         'November',
@@ -234,7 +234,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       ],
       petitionsByRepresentationPieData: [],
       petitionsByServiceTypePieData: [],
-      totalPetitions: 0,
+      totalPetitions: '0',
       months: [
         'January',
         'February',

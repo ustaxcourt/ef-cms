@@ -157,6 +157,7 @@ export const DashboardClerkOfCourt = connect(
                         stacked={true}
                         title="Petitions: Total Petitions by Month"
                         xLabelRotation={45}
+                        xAxisLabel="Months"
                       />
                     </div>
                   </div>

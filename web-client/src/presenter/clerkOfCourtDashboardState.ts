@@ -22,7 +22,7 @@ export type ClerkOfCourtPieChartData = {
   color?: string;
 };
 
-export type ClerkOfCourtDashboardState = {
+export type DashboardClerkOfTheCourtHelper = {
   petitionsByMonthAndServiceTypeChartData: {
     color: string;
     data: number[];
@@ -38,7 +38,7 @@ export type ClerkOfCourtDashboardState = {
     name: string;
     value: number;
   }[];
-  totalPetitions: number;
+  totalPetitions: string;
   months: string[];
   year: string;
 };
