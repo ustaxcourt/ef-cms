@@ -22,6 +22,7 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-no
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 
 export default defineConfig({
   chromeWebSecurity: true,
@@ -31,6 +32,9 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
+        assertCorrectNetworkData(payloads) {
+          return assertCorrectNetworkData(payloads);
+        },
         confirmUser({ email }) {
           return confirmUser({ email });
         },
