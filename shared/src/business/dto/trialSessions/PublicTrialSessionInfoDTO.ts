@@ -1,13 +1,12 @@
-import {
-  RawTrialSession,
-  TJudge,
-} from '../../entities/trialSessions/TrialSession';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 
 export class PublicTrialSessionInfoDTO {
   public entityName: string;
   public isCalendared: boolean;
-  public judge?: TJudge;
+  public judge?: {
+    name: string;
+  };
   public proceedingType: TrialSessionProceedingType;
   public sessionScope: string;
   public sessionStatus: string;
@@ -22,7 +21,9 @@ export class PublicTrialSessionInfoDTO {
   constructor(rawTrialSession: RawTrialSession) {
     this.entityName = 'PublicTrialSessionInfoDTO';
     this.isCalendared = rawTrialSession.isCalendared;
-    this.judge = rawTrialSession.judge;
+    this.judge = rawTrialSession.judge
+      ? { name: rawTrialSession.judge.name }
+      : undefined;
     this.proceedingType = rawTrialSession.proceedingType;
     this.sessionScope = rawTrialSession.sessionScope;
     this.sessionStatus = rawTrialSession.sessionStatus;
