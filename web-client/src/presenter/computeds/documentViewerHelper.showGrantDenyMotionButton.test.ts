@@ -29,8 +29,8 @@ describe('documentViewerHelper.showGrantDenyMotionButton', () => {
 
   const getBaseState = user => {
     return {
-      user,
       permissions: getUserPermissions(user),
+      user,
       viewerDocumentToDisplay: {
         docketEntryId: mockDocketEntryId,
       },

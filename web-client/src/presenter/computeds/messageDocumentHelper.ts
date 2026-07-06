@@ -14,7 +14,6 @@ export const messageDocumentHelper = (
     GENERIC_ORDER_EVENT_CODE,
     GRANT_DENY_MOTION_OPTIONS,
     NOTICE_EVENT_CODES,
-    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
   const user = get(state.user);
@@ -120,6 +119,7 @@ export const messageDocumentHelper = (
     showStatusReportOrderButton,
     showOrderResponseButton,
     showSignStipulatedDecisionButton,
+    showGrantDenyMotionButton,
     showServiceWarning,
     showLeadCaseNotification: showLeadCaseWarning,
   } = getDocumentDisplayFlags({
@@ -128,18 +128,6 @@ export const messageDocumentHelper = (
     caseDetail,
     isInternalUser,
   });
-
-  const { draftDocuments } = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail, user);
-  const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
-  );
-
-  const showGrantDenyMotionButton =
-    permissions.STAMP_MOTION &&
-    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode ?? ''));
 
   const showEditButtonForCorrespondenceDocument =
     isCorrespondence && permissions.CASE_CORRESPONDENCE;
