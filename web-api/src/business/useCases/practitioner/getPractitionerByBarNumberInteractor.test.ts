@@ -207,6 +207,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
           originalBarState: 'IL',
           practiceType: 'Private',
           practitionerType: 'Attorney',
+          serviceIndicator: 'Paper',
           state: 'IL',
         },
       ]);
