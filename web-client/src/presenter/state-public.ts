@@ -9,7 +9,7 @@ import type { RawPublicTrialSessionDetails } from '@shared/business/entities/tri
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
-import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
 import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -94,9 +94,14 @@ export const baseState = {
   },
   constants: {} as Record<string, any>,
   currentPage: 'Interstitial',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   todaysOrdersCurrentPaginationPage: 0,
+  caseSearchSort: {
+    sortColumn: 'resultIndex',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',

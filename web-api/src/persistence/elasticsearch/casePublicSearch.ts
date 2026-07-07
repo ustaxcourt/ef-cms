@@ -2,6 +2,7 @@ import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/
 import {
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
@@ -66,9 +67,13 @@ export const casePublicSearch = async ({
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
         petitionerNames: petitioners.map(p => p.name),
-        petitionerStateNames: petitioners.map(
-          p => US_STATES[p.state] || p.state,
-        ),
+        petitionerStateNames: petitioners
+          .map(p =>
+            p.state
+              ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+              : undefined,
+          )
+          .filter((stateName): stateName is string => !!stateName),
         receivedAt: c.receivedAt,
       }).toRawObject();
 

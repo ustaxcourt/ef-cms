@@ -49,9 +49,11 @@ describe('casePublicSearch', () => {
     caseTypes: [CASE_TYPES_MAP.cdp],
   };
 
-  search.mockResolvedValue({
-    results: [MOCK_CASE_SEARCH_RESULT],
-    total: 0,
+  beforeEach(() => {
+    search.mockResolvedValue({
+      results: [MOCK_CASE_SEARCH_RESULT],
+      total: 0,
+    });
   });
 
   const mustNotClause = [
@@ -115,6 +117,30 @@ describe('casePublicSearch', () => {
         ),
         receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
       },
+    ]);
+  });
+
+  it('converts state and territory abbreviations to full names', async () => {
+    search.mockResolvedValue({
+      results: [
+        {
+          petitioners: [
+            { name: 'State Petitioner', state: 'TN' },
+            { name: 'Territory Petitioner', state: 'PR' },
+          ],
+        },
+      ],
+      total: 1,
+    });
+
+    const { results } = await casePublicSearch({
+      applicationContext,
+      searchTerms,
+    });
+
+    expect(results[0].petitionerStateNames).toEqual([
+      'Tennessee',
+      'Puerto Rico',
     ]);
   });
 });
