@@ -75,11 +75,16 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    const paragraphs = result.state.form.richText.match(/<p>.*?<\/p>/g) || [];
+    const paragraphs =
+      result.state.form.richText.match(
+        /<p class="grant-deny-indent-paragraph">[\s\S]*?<\/p>/g,
+      ) || [];
 
     expect(paragraphs).toHaveLength(4);
     paragraphs.forEach(paragraph => {
-      expect(paragraph.startsWith('<p>&emsp;&emsp;&emsp;')).toBe(true);
+      expect(
+        paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
+      ).toBe(true);
     });
   });
 

@@ -2225,6 +2225,9 @@ export const GRANT_DENY_MOTION_OPTIONS = {
     joint: 'Joint',
   },
   orderType: 'grantDenyMotion',
+  pdfParagraphClass: 'grant-deny-indent-paragraph',
+  pdfOrderModifierClass: 'grant-deny-motion-order',
+  pdfParagraphIndentPx: 56,
 };
 
 export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;

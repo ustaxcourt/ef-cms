@@ -35,7 +35,8 @@ const buildDispositionPhrase = ({
   return parts.join(' ');
 };
 
-const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
+const wrap = (inner: string) =>
+  `<p class="${GRANT_DENY_MOTION_OPTIONS.pdfParagraphClass}">${inner}</p>`;
 
 const getMovantPossessive = (movant: string): string =>
   movant === 'respondent' ? "respondent's" : "petitioner's";
