@@ -122,14 +122,12 @@ describe('PublicCase', () => {
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
-          contactId: mockContactId,
           contactType: CONTACT_TYPES.primary,
           entityName: 'PublicContact',
           name: undefined,
           state: undefined,
         },
         {
-          contactId: mockContactIdSecond,
           contactType: CONTACT_TYPES.secondary,
           entityName: 'PublicContact',
           name: undefined,
@@ -180,7 +178,6 @@ describe('PublicCase', () => {
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
-          contactId: mockContactId,
           contactType: CONTACT_TYPES.primary,
           entityName: 'PublicContact',
           name: undefined,

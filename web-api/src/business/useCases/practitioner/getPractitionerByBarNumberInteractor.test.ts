@@ -201,6 +201,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
           admissionsDate: '2019-03-01',
           admissionsStatus: 'Active',
           barNumber: 'PP1234',
+          contactId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           entityName: 'PublicContact',
           name: 'Private Practitioner',
           originalBarState: 'IL',

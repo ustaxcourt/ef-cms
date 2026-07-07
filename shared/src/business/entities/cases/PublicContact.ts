@@ -11,6 +11,7 @@ export class PublicContact extends JoiValidationEntity {
   public admissionsDate?: string;
   public admissionsStatus?: string;
   public barNumber?: string;
+  public contactId: string;
   public contactType?: string;
   public name?: string;
   public originalBarState?: string;
@@ -24,6 +25,7 @@ export class PublicContact extends JoiValidationEntity {
     this.admissionsDate = rawProps.admissionsDate;
     this.admissionsStatus = rawProps.admissionsStatus;
     this.barNumber = rawProps.barNumber;
+    this.contactId = rawProps.contactId || rawProps.userId;
     this.contactType = rawProps.contactType;
     this.name = rawProps.name;
     this.originalBarState = rawProps.originalBarState;
@@ -38,6 +40,7 @@ export class PublicContact extends JoiValidationEntity {
       ...ADMISSIONS_STATUS_OPTIONS,
     ).optional(),
     barNumber: JoiValidationConstants.STRING.max(100).optional(),
+    contactId: JoiValidationConstants.UUID.required(),
     contactType: JoiValidationConstants.STRING.valid(
       ...Object.values(CONTACT_TYPES),
     ).optional(),
