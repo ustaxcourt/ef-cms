@@ -1083,7 +1083,9 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
-  processPaymentStatus: undefined as undefined | ProcessPaymentResponse,
+  processPaymentStatus: undefined as
+    | undefined
+    | (ProcessPaymentResponse & { docketNumber?: string }),
 };
 
 export const initialState = {

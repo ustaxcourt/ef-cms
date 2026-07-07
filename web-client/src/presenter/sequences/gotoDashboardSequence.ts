@@ -27,6 +27,7 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFileingFeeAlertsAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -114,6 +115,7 @@ export const gotoDashboardSequence = [
           setupCurrentPageAction('DashboardJudge'),
         ],
         petitioner: [
+          setFilingFeeAlertsAction,
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
