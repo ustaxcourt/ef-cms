@@ -8,6 +8,10 @@ export const initializeRealUserMonitoring = (): void => {
     const identityPoolId = process.env.RUM_IDENTITY_POOL_ID;
     const sampleRateStr = process.env.RUM_SAMPLE_RATE;
     const appMonitorId = process.env.RUM_APP_MONITOR_ID;
+    // The releaseId tells CloudWatch RUM which source-map folder to use when
+    // unminifying a stack trace. It must match the S3 folder the build's
+    // `.map` files are uploaded to (see deploy-ui.sh).
+    const releaseId = process.env.RUM_RELEASE_ID;
 
     if (!identityPoolId || !sampleRateStr || !appMonitorId) {
       throw new Error(
@@ -17,10 +21,12 @@ export const initializeRealUserMonitoring = (): void => {
 
     const config: AwsRumConfig = {
       allowCookies: true,
+      disableAutoPageView: true,
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId,
       sessionSampleRate: Number(sampleRateStr),
+      ...(releaseId ? { releaseId } : {}),
       telemetries: [
         'performance',
         'errors',
@@ -59,5 +65,48 @@ export const recordError = (error: unknown): void => {
     awsRum.recordError(error);
   } catch (rumError) {
     console.log('Error recording error to real user monitoring: ', rumError);
+  }
+};
+
+export const recordRumPageView = (pageId: string): void => {
+  if (!awsRum) return;
+  try {
+    awsRum.recordPageView(pageId);
+  } catch (rumError) {
+    console.log(
+      'Error recording page view to real user monitoring: ',
+      rumError,
+    );
+  }
+};
+
+export const getRumPageIdFromRoutePattern = (routePattern: string): string => {
+  const pathOnly = routePattern.split('?')[0];
+  if (pathOnly === '' || pathOnly === '..') return '/not-found';
+  const normalized = pathOnly
+    .replace(/\.\.$/, '') // strip the optional trailing-segment marker
+    .replace(/\*/g, '{id}') // collapse dynamic segments so ids group together
+    .replace(/\/+$/, ''); // trim any trailing slash
+  return normalized || '/';
+};
+
+export const setRumUserContext = ({
+  role,
+  section,
+  userId,
+}: {
+  role: string;
+  section?: string;
+  userId: string;
+}): void => {
+  if (!awsRum) return;
+  try {
+    awsRum.addSessionAttributes({
+      role,
+      userId,
+      ...(section ? { section } : {}),
+    });
+  } catch (rumError) {
+    console.log('Error setting RUM user context: ', rumError);
   }
 };

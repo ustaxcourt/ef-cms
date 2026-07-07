@@ -9,7 +9,11 @@ import { ErrorBoundary } from './views/ErrorBoundary';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
-import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
+import {
+  getRumPageIdFromRoutePattern,
+  initializeRealUserMonitoring,
+  recordRumPageView,
+} from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -323,6 +327,7 @@ const app = {
     let processQueue = Promise.resolve();
     const wrappedRoute = (path, cb) => {
       route(path, function () {
+        recordRumPageView(getRumPageIdFromRoutePattern(path));
         return (processQueue = processQueue.then(() => {
           // eslint-disable-next-line prefer-rest-params
           return cb(...arguments);
