@@ -3,6 +3,7 @@ import {
   CONTACT_TYPES,
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
 } from '../EntityConstants';
 import { PublicContact } from './PublicContact';
 
@@ -29,6 +30,7 @@ describe('PublicContact', () => {
         originalBarState: 'CA',
         practiceType: PRACTICE_TYPE_OPTIONS[0],
         practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'California',
       });
 
@@ -39,6 +41,7 @@ describe('PublicContact', () => {
       const contact = new PublicContact({
         contactId: validUUID,
         name: 'Price Cole',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'Assam',
       });
 
@@ -56,6 +59,7 @@ describe('PublicContact', () => {
         originalBarState: 'TX',
         practiceType: PRACTICE_TYPE_OPTIONS[0],
         practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'Texas',
       };
 
@@ -70,6 +74,7 @@ describe('PublicContact', () => {
       expect(contact.originalBarState).toBe(rawProps.originalBarState);
       expect(contact.practiceType).toBe(rawProps.practiceType);
       expect(contact.practitionerType).toBe(rawProps.practitionerType);
+      expect(contact.serviceIndicator).toBe(rawProps.serviceIndicator);
       expect(contact.state).toBe(rawProps.state);
     });
 

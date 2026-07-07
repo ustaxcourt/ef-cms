@@ -3,6 +3,7 @@ import {
   CONTACT_TYPES,
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
 } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -17,6 +18,7 @@ export class PublicContact extends JoiValidationEntity {
   public originalBarState?: string;
   public practiceType?: string;
   public practitionerType?: string;
+  public serviceIndicator: string;
   public state?: string;
 
   constructor(rawProps) {
@@ -31,6 +33,7 @@ export class PublicContact extends JoiValidationEntity {
     this.originalBarState = rawProps.originalBarState;
     this.practiceType = rawProps.practiceType;
     this.practitionerType = rawProps.practitionerType;
+    this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
   }
 
@@ -51,6 +54,9 @@ export class PublicContact extends JoiValidationEntity {
     ).optional(),
     practitionerType: JoiValidationConstants.STRING.valid(
       ...PRACTITIONER_TYPE_OPTIONS,
+    ).optional(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     state: JoiValidationConstants.STRING.optional(),
   };
