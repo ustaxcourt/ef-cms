@@ -40,6 +40,9 @@ const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
 const getMovantPossessive = (movant: string): string =>
   movant === 'respondent' ? "respondent's" : "petitioner's";
 
+const formatFilingPartyForDocument = (filingParty: string): string =>
+  filingParty.toLowerCase();
+
 const buildStatusReportClause = ({
   dueDateFormatted,
   dueDateMessage,
@@ -65,7 +68,7 @@ const buildStatusReportClause = ({
           `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
         )
       : wrap(
-          `ORDERED that ${filingParty} shall file a status report by ${dueDateFormatted}.`,
+          `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report by ${dueDateFormatted}.`,
         );
   }
 
@@ -79,7 +82,7 @@ const buildStatusReportClause = ({
           `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
         )
       : wrap(
-          `ORDERED that ${filingParty} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
+          `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
         );
   }
 

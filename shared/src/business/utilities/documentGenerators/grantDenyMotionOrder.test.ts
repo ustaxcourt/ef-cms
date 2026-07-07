@@ -48,7 +48,7 @@ describe('Grant/Deny Motion orders', () => {
 
         <p>${INDENT}ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session. It is further</p>
 
-        <p>${INDENT}ORDERED that Petitioner(s) shall file a status report by December 31, 2026.</p>`,
+        <p>${INDENT}ORDERED that petitioner(s) shall file a status report by December 31, 2026.</p>`,
       }),
     testDescription:
       'generates a Grant/Deny Motion order granting a single petitioner motion',

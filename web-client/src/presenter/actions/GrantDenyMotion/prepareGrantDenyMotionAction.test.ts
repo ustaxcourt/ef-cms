@@ -328,7 +328,30 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that Respondent shall file a status report by December 31, 2026.',
+      'ORDERED that respondent shall file a status report by December 31, 2026.',
+    );
+  });
+
+  it('lowercases petitioner(s) in the status-report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.petitioners,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that petitioner(s) shall file a status report by December 31, 2026.',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'Petitioner(s) shall file',
     );
   });
 
