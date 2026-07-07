@@ -490,6 +490,21 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
+  it('sets docketEntryIdToEdit when editing an existing draft order', async () => {
+    const draftOrderId = 'draft-order-entry-id';
+
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        documentToEdit: { docketEntryId: draftOrderId },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.docketEntryIdToEdit).toEqual(draftOrderId);
+  });
+
   it('throws when motion docket entry not found', async () => {
     await expect(
       runAction(prepareGrantDenyMotionAction, {

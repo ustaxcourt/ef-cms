@@ -251,4 +251,9 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   store.set(state.form.richText, richText);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
   store.set(state.form.previousDocument, motion);
+
+  const documentToEdit = get(state.documentToEdit);
+  if (documentToEdit?.docketEntryId) {
+    store.set(state.form.docketEntryIdToEdit, documentToEdit.docketEntryId);
+  }
 };
