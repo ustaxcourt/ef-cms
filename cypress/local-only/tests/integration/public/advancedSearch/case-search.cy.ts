@@ -18,6 +18,7 @@ const paginationMockCases = Array.from(
     caseCaption: `Pagination Case ${index + 1}, Petitioner`,
     docketNumber: `${20000 + index + 1}-26`,
     docketNumberWithSuffix: `${20000 + index + 1}-26`,
+    entityName: 'PublicCaseSearchResult',
     petitionerNames: [`Pagination Petitioner ${index + 1}`],
     petitionerStateNames: ['California'],
     receivedAt: `2026-06-${String((index % 28) + 1).padStart(2, '0')}T12:00:00.000Z`,
