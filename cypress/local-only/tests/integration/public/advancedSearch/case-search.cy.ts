@@ -8,6 +8,7 @@ import {
 import { assertExists, retry } from 'cypress/helpers/retry';
 import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenance';
 import { searchForCaseByDocketNumber } from 'cypress/local-only/support/pages/public/advanced-search';
+import { logout } from '../../../../../helpers/authentication/logout';
 
 describe('Case Search', () => {
   describe('Case Search By Name', () => {
@@ -67,6 +68,7 @@ describe('Case Search', () => {
         secondaryContactName: secondaryName,
         primaryContactName: primaryName,
       }).then(({ docketNumber }) => {
+        logout();
         cy.visit('/');
         retry(() => {
           cy.get('[data-testid=petitioner-name]').clear();
