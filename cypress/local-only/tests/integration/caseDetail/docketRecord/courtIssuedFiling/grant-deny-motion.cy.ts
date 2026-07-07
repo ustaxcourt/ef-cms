@@ -173,6 +173,64 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
       });
     });
 
+    it('should show filing party and due date directly under the stip decision checkbox', () => {
+      createMotionCase().then(({ docketNumber }) => {
+        loginAsColvin();
+        cy.visit(`/case-detail/${docketNumber}`);
+        openGrantDenyMotionFromDocumentView();
+
+        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
+        cy.get('[data-testid="due-date-message-stip"]').should('be.checked');
+        cy.get('[data-testid="status-report-due-date-fields"]').should(
+          'be.visible',
+        );
+
+        cy.get('[data-testid="due-date-message-stip"]').then($stipCheckbox => {
+          cy.get('[data-testid="status-report-due-date-fields"]').then(
+            $fields => {
+              expect(
+                $fields[0].compareDocumentPosition($stipCheckbox[0]) &
+                  Node.DOCUMENT_POSITION_FOLLOWING,
+              ).to.equal(Node.DOCUMENT_POSITION_FOLLOWING);
+            },
+          );
+        });
+      });
+    });
+
+    it('should use joint parties language for stip decision status report clause', () => {
+      createMotionCase().then(({ docketNumber }) => {
+        loginAsColvin();
+        cy.visit(`/case-detail/${docketNumber}`);
+        openGrantDenyMotionFromDocumentView();
+
+        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
+        cy.get('[data-testid="filing-party"]').select('Joint');
+        cy.get(
+          '.usa-date-picker__external-input[data-testid="grant-deny-due-date-picker"]',
+        ).type(today);
+
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.wait('@courtIssuedOrder').then(({ request }) => {
+          const html: string = request.body.contentHtml;
+          expect(html).to.include(
+            'ORDERED that the parties shall file a joint status report or proposed stipulated decision',
+          );
+          expect(html).not.to.include('Joint shall file');
+        });
+      });
+    });
+
     it('should clear status report due date fields when Clear All is clicked', () => {
       createMotionCase().then(({ docketNumber }) => {
         loginAsColvin();

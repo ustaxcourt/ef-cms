@@ -1,5 +1,23 @@
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
+
+const resolveAdditionalOrderTextFromDraft = (
+  draftOrderState: Record<string, unknown>,
+): string[] => {
+  if (Array.isArray(draftOrderState.additionalOrderText)) {
+    return draftOrderState.additionalOrderText;
+  }
+
+  if (Array.isArray(draftOrderState.additionalOrderTextArray)) {
+    return draftOrderState.additionalOrderTextArray;
+  }
+
+  return [];
+};
 
 export const setEditGrantDenyMotionFormAction = ({
   get,
@@ -15,10 +33,15 @@ export const setEditGrantDenyMotionFormAction = ({
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/grant-deny-motion-edit`;
 
   store.set(state.form, {
-    additionalOrderText: draftOrderState.additionalOrderText || [],
+    additionalOrderText: additionalOrderTextArrayWithRequiredFirstField(
+      normalizeAdditionalOrderTextArray(
+        resolveAdditionalOrderTextFromDraft(draftOrderState),
+      ),
+    ),
     deniedAsMoot: draftOrderState.deniedAsMoot,
     deniedWithoutPrejudice: draftOrderState.deniedWithoutPrejudice,
     disposition: draftOrderState.disposition,
+    docketEntryIdToEdit,
     dueDate: draftOrderState.dueDate,
     dueDateMessage: draftOrderState.dueDateMessage,
     filingParty: draftOrderState.filingParty,

@@ -75,11 +75,16 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    const paragraphs = result.state.form.richText.match(/<p>.*?<\/p>/g) || [];
+    const paragraphs =
+      result.state.form.richText.match(
+        /<p class="grant-deny-indent-paragraph">[\s\S]*?<\/p>/g,
+      ) || [];
 
     expect(paragraphs).toHaveLength(4);
     paragraphs.forEach(paragraph => {
-      expect(paragraph.startsWith('<p>&emsp;&emsp;&emsp;')).toBe(true);
+      expect(
+        paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
+      ).toBe(true);
     });
   });
 
@@ -328,7 +333,30 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that Respondent shall file a status report by December 31, 2026.',
+      'ORDERED that respondent shall file a status report by December 31, 2026.',
+    );
+  });
+
+  it('lowercases petitioner(s) in the status-report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.petitioners,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that petitioner(s) shall file a status report by December 31, 2026.',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'Petitioner(s) shall file',
     );
   });
 
@@ -465,6 +493,21 @@ describe('prepareGrantDenyMotionAction', () => {
     expect(result.state.form.richText).toContain(
       'ORDERED that Parties shall comply.',
     );
+  });
+
+  it('sets docketEntryIdToEdit when editing an existing draft order', async () => {
+    const draftOrderId = 'draft-order-entry-id';
+
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        documentToEdit: { docketEntryId: draftOrderId },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.docketEntryIdToEdit).toEqual(draftOrderId);
   });
 
   it('throws when motion docket entry not found', async () => {

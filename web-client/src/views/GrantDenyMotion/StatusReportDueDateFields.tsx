@@ -86,7 +86,7 @@ export const StatusReportDueDateFields: React.FC<
         </div>
         {filingPartyErrorText && (
           <span
-            className="usa-error-message grant-deny-motion-status-report-field-error"
+            className="usa-error-message"
             data-testid="filing-party-error"
             id="filing-party-error"
           >
@@ -122,7 +122,7 @@ export const StatusReportDueDateFields: React.FC<
         </div>
         {dueDateErrorText && (
           <span
-            className="usa-error-message grant-deny-motion-status-report-field-error"
+            className="usa-error-message"
             data-testid="grant-deny-due-date-error"
             id="grant-deny-due-date-error"
           >

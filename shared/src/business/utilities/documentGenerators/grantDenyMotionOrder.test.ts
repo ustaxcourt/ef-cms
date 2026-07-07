@@ -2,7 +2,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { order } from './order';
 
-const INDENT = '&emsp;&emsp;&emsp;';
+const INDENT_CLASS = 'class="grant-deny-indent-paragraph"';
 
 type OrderData = Parameters<typeof order>[0]['data'];
 
@@ -42,13 +42,13 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '123-26',
-        orderContent: `<p>${INDENT}On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
+        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
 
-        <p>${INDENT}ORDERED that petitioner's Motion to Compel is granted. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that petitioner's Motion to Compel is granted. It is further</p>
 
-        <p>${INDENT}ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session. It is further</p>
 
-        <p>${INDENT}ORDERED that Petitioner(s) shall file a status report by December 31, 2026.</p>`,
+        <p ${INDENT_CLASS}>ORDERED that petitioner(s) shall file a status report by December 31, 2026.</p>`,
       }),
     testDescription:
       'generates a Grant/Deny Motion order granting a single petitioner motion',
@@ -61,15 +61,15 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe & John Doe',
         docketNumberWithSuffix: '124-26',
-        orderContent: `<p>${INDENT}On March 15, 2026, petitioners filed a Motion for Continuance (doc. no. 11). For cause, it is</p>
+        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioners filed a Motion for Continuance (doc. no. 11). For cause, it is</p>
 
-        <p>${INDENT}ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
 
-        <p>${INDENT}ORDERED that this case is restored to the general docket. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that this case is restored to the general docket. It is further</p>
 
-        <p>${INDENT}ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026. It is further</p>
 
-        <p>${INDENT}ORDERED that the parties shall confer and file a proposed pretrial schedule.</p>`,
+        <p ${INDENT_CLASS}>ORDERED that the parties shall confer and file a proposed pretrial schedule.</p>`,
       }),
     testDescription:
       'generates a Grant/Deny Motion order granting a motion filed by one of multiple petitioners',
@@ -82,11 +82,11 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '125-26',
-        orderContent: `<p>${INDENT}On March 15, 2026, respondent filed a Motion to Dismiss (doc. no. 14). For cause, it is</p>
+        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, respondent filed a Motion to Dismiss (doc. no. 14). For cause, it is</p>
 
-        <p>${INDENT}ORDERED that respondent's Motion to Dismiss is granted. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that respondent's Motion to Dismiss is granted. It is further</p>
 
-        <p>${INDENT}ORDERED that jurisdiction is retained by the undersigned.</p>`,
+        <p ${INDENT_CLASS}>ORDERED that jurisdiction is retained by the undersigned.</p>`,
       }),
     testDescription:
       'generates a Grant/Deny Motion order granting a motion filed by respondent',
@@ -99,11 +99,11 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '126-26',
-        orderContent: `<p>${INDENT}On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
+        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
 
-        <p>${INDENT}ORDERED that petitioner's Motion to Compel is denied as moot without prejudice. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that petitioner's Motion to Compel is denied as moot without prejudice. It is further</p>
 
-        <p>${INDENT}ORDERED that petitioner may renew the motion after the parties complete informal discovery.</p>`,
+        <p ${INDENT_CLASS}>ORDERED that petitioner may renew the motion after the parties complete informal discovery.</p>`,
       }),
     testDescription:
       'generates a Grant/Deny Motion order denying a single petitioner motion as moot without prejudice',
