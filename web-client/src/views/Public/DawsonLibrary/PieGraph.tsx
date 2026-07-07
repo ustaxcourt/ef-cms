@@ -8,6 +8,7 @@ import {
   Legend,
   Tooltip,
 } from 'recharts';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 export interface PieGraphData {
   name: string;
   value: number;
@@ -81,11 +82,10 @@ const CustomTooltip = ({
       {title && <div className="tw:font-bold">{title}</div>}
       <div className="tw:flex tw:items-center tw:gap-2">
         <span
-          // className="tw:inline-block tw:w-3.5 tw:h-3.5 tw:rounded-sm tw:shrink-0"
           className="tw:inline-block tw:xs:w-5 tw:xs:h-5 tw:w-4 tw:h-4 tw:shrink-0 tw:border tw:xs:rounded-sm tw:rounded-xs"
           style={{ backgroundColor: color }}
         />
-        {entry.name}: {value} ({percentage}%)
+        {entry.name}: {formatPositiveNumber(value)} ({percentage}%)
       </div>
     </div>
   );
@@ -164,7 +164,7 @@ export const PieGraph = ({
         aria-atomic="true"
         className="tw:sr-only"
       />
-      <div className="tw:xs:w-160 tw:w-105">
+      <div className="tw:xs:w-160 tw:w-105 tw:overflow-clip">
         {title && showTitle && (
           <div
             className="tw:flex tw:flex-nowrap tw:items-center tw:justify-between tw:gap-4"
@@ -206,8 +206,9 @@ export const PieGraph = ({
                         className="tw:inline-block tw:xs:w-12 tw:xs:h-12 tw:w-10 tw:h-10 tw:mr-1.5 tw:border-2 tw:border-black tw:rounded-md tw:shrink-0"
                         style={{ backgroundColor: entry.color }}
                       />
-                      <span className="tw:text-black tw:font-semibold tw:xs:text-xl tw:text-base tw:leading-[1.1] tw:w-24 tw:xs:w-32">
-                        {entry.name}
+                      <span className="tw:text-black tw:xs:text-xl tw:text-base tw:leading-[1.1]">
+                        <span className="tw:font-bold">{entry.name}: </span>
+                        {formatPositiveNumber(entry.value)}
                       </span>
                     </li>
                   ))}

@@ -1,3 +1,4 @@
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import React from 'react';
 
 // ─── Custom legend renderer ───────────────────────────────────────────────────
@@ -15,7 +16,7 @@ export const renderCustomLegend = (props: any) => {
             className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
+          <span className="tw:text-black tw:font-bold tw:text-base tw:xs:text-xl">
             {entry.total != null
               ? `${entry.value}: ${entry.total.toLocaleString()}`
               : entry.value}
@@ -41,7 +42,7 @@ export const YAxisTick = (props: any) => {
         className="tw:text-base tw:xs:text-xl"
         fontWeight="400"
       >
-        {payload.value}
+        {formatPositiveNumber(payload.value)}
       </text>
     </g>
   );

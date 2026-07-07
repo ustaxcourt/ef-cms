@@ -11,6 +11,8 @@ export const grantDenyMotionFormHelper = (
   additionalOrderTextErrorText?: string;
   isCalendared: boolean;
   isLeadCase: boolean;
+  jurisdictionErrorClass: string;
+  jurisdictionErrorText: string;
   minDate: string;
   showStatusReportFields: boolean;
 } => {
@@ -34,10 +36,19 @@ export const grantDenyMotionFormHelper = (
     ? validationErrors.additionalOrderText.find(Boolean)
     : validationErrors.additionalOrderText;
 
+  const jurisdictionErrorText =
+    validationErrors.jurisdiction && 'Select jurisdiction';
+
+  const jurisdictionErrorClass = !validationErrors.jurisdiction
+    ? 'grant-deny-motion-form-group'
+    : 'grant-deny-motion-form-group grant-deny-motion-form-group-error';
+
   return {
     additionalOrderTextErrorText: additionalOrderTextErrors,
     isCalendared,
     isLeadCase: isOnLeadCase,
+    jurisdictionErrorClass,
+    jurisdictionErrorText,
     minDate,
     showStatusReportFields,
   };

@@ -1,8 +1,9 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClerkOfCourtDashboardState } from '@web-client/presenter/clerkOfCourtDashboardState';
+import { DashboardClerkOfTheCourtHelper } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { sum } from 'lodash';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
 const MONTHS = [
   'January',
@@ -40,7 +41,7 @@ const COLOR_YELLOW = '#FFBE2E';
 export const dashboardClerkOfTheCourtHelper = (
   get: Get,
   _applicationContext: ClientApplicationContext,
-): ClerkOfCourtDashboardState => {
+): DashboardClerkOfTheCourtHelper => {
   const stats = get(state.clerkOfCourtDashboardStats);
 
   const petitionsByYearIsFiscal = get(
@@ -92,7 +93,7 @@ export const dashboardClerkOfTheCourtHelper = (
     petitionsByMonthAndServiceTypeChartData,
     petitionsByRepresentationPieData,
     petitionsByServiceTypePieData,
-    totalPetitions,
+    totalPetitions: formatPositiveNumber(totalPetitions),
     months: petitionsByYearIsFiscal ? FISCAL_MONTHS : MONTHS,
     year: stats.year,
   };

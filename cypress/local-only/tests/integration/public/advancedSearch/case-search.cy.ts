@@ -8,6 +8,7 @@ import {
 import { assertExists, retry } from 'cypress/helpers/retry';
 import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenance';
 import { searchForCaseByDocketNumber } from 'cypress/local-only/support/pages/public/advanced-search';
+import { logout } from '../../../../../helpers/authentication/logout';
 
 // 103 cases -> 2 pages (100 on page 1, 3 on page 2).
 const TOTAL_PAGINATION_CASES = 103;
@@ -93,6 +94,7 @@ describe('Case Search', () => {
         secondaryContactName: secondaryName,
         primaryContactName: primaryName,
       }).then(({ docketNumber }) => {
+        logout();
         cy.visit('/');
         retry(() => {
           cy.get('[data-testid=petitioner-name]').clear();

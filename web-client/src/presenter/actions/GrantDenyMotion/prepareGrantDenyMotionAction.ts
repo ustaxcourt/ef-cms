@@ -13,6 +13,10 @@ import {
 import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
 
 const buildDispositionPhrase = ({
   deniedAsMoot,
@@ -34,7 +38,53 @@ const buildDispositionPhrase = ({
 const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
 
 const getMovantPossessive = (movant: string): string =>
-  movant === 'petitioners' ? "petitioners'" : `${movant}'s`;
+  movant === 'respondent' ? "respondent's" : "petitioner's";
+
+const buildStatusReportClause = ({
+  dueDateFormatted,
+  dueDateMessage,
+  filingParty,
+}: {
+  dueDateFormatted: string;
+  dueDateMessage?: string | null;
+  filingParty?: string | null;
+}): string => {
+  if (!filingParty || !dueDateFormatted || !dueDateMessage) {
+    return '';
+  }
+
+  const isJoint =
+    filingParty === GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.joint;
+
+  if (
+    dueDateMessage ===
+    GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport
+  ) {
+    return isJoint
+      ? wrap(
+          `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
+        )
+      : wrap(
+          `ORDERED that ${filingParty} shall file a status report by ${dueDateFormatted}.`,
+        );
+  }
+
+  if (
+    dueDateMessage ===
+    GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
+      .statusReportOrStipulatedDecision
+  ) {
+    return isJoint
+      ? wrap(
+          `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
+        )
+      : wrap(
+          `ORDERED that ${filingParty} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
+        );
+  }
+
+  return '';
+};
 
 const joinWithItIsFurther = (clauses: string[]): string =>
   clauses
@@ -131,9 +181,12 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
     disposition,
   });
 
-  const dispositionClause = wrap(
-    `ORDERED that ${getMovantPossessive(movant)} ${motionDocumentTitle} is ${dispositionPhrase}.`,
-  );
+  const dispositionClause =
+    dispositionPhrase.length > 0
+      ? wrap(
+          `ORDERED that ${getMovantPossessive(movant)} ${motionDocumentTitle} is ${dispositionPhrase}.`,
+        )
+      : '';
 
   const strickenClause = strickenFromTrialSession
     ? wrap(
@@ -151,32 +204,25 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
       ? wrap('ORDERED that jurisdiction is retained by the undersigned.')
       : '';
 
-  let statusReportClause = '';
-  if (
-    dueDateMessage ===
-      GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport &&
-    filingParty &&
-    dueDateFormatted
-  ) {
-    statusReportClause = wrap(
-      `ORDERED that ${filingParty} shall file a status report by ${dueDateFormatted}.`,
-    );
-  } else if (
-    dueDateMessage ===
-      GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
-        .statusReportOrStipulatedDecision &&
-    filingParty &&
-    dueDateFormatted
-  ) {
-    statusReportClause = wrap(
-      `ORDERED that ${filingParty} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
-    );
-  }
+  const statusReportClause = buildStatusReportClause({
+    dueDateFormatted,
+    dueDateMessage,
+    filingParty,
+  });
 
-  const additionalClauses: string[] = (additionalOrderText || [])
-    .map(text => (text || '').trim())
-    .filter(text => text.length > 0)
-    .map(text => wrap(`ORDERED that ${text}.`));
+  const meaningfulAdditionalOrderText = normalizeAdditionalOrderTextArray(
+    additionalOrderText ?? [],
+  );
+  store.set(
+    state.form.additionalOrderText,
+    additionalOrderTextArrayWithRequiredFirstField(
+      meaningfulAdditionalOrderText,
+    ),
+  );
+
+  const additionalClauses: string[] = meaningfulAdditionalOrderText.map(text =>
+    wrap(`ORDERED that ${text}.`),
+  );
 
   const orderedClauses = [
     dispositionClause,
@@ -189,7 +235,10 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
 
   const richText = preamble + joinWithItIsFurther(orderedClauses);
 
-  const docketEntryDescription = `Order - ${motionDocumentTitle} is ${dispositionPhrase}`;
+  const docketEntryDescription =
+    dispositionPhrase.length > 0
+      ? `Order - ${motionDocumentTitle} is ${dispositionPhrase}`
+      : `Order - ${motionDocumentTitle}`;
 
   store.set(state.createOrderSelectedCases, createOrderSelectedCases);
   store.set(state.form.documentTitle, docketEntryDescription);

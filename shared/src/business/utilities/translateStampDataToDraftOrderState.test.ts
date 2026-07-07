@@ -100,16 +100,25 @@ describe('translateStampDataToDraftOrderState', () => {
     });
   });
 
-  it('translates legacy dates before 1950 and prefers docketEntryId on stamp data', () => {
-    const result = translateStampDataToDraftOrderState({
+  it('translates legacy dates using the same 2-digit-year pivot as Postgres to_date', () => {
+    const result1999 = translateStampDataToDraftOrderState({
       ...legacyStampData,
       date: '01/02/99',
       docketEntryId: 'motion-from-docket-entry-id',
     });
 
-    expect(result).toMatchObject({
+    expect(result1999).toMatchObject({
       dueDate: '1999-01-02',
       previousDocument: { docketEntryId: 'motion-from-docket-entry-id' },
+    });
+
+    const result2050 = translateStampDataToDraftOrderState({
+      ...legacyStampData,
+      date: '01/02/50',
+    });
+
+    expect(result2050).toMatchObject({
+      dueDate: '2050-01-02',
     });
   });
 

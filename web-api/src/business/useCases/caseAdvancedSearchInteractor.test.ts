@@ -376,7 +376,6 @@ describe('caseAdvancedSearchInteractor', () => {
       'Tennessee',
       'Guam',
       'Ontario',
-      undefined,
     ]);
   });
 });

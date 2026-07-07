@@ -20,11 +20,11 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import type { SearchAfter } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
-
-type CaseAdvancedSearchResult = Awaited<
-  ReturnType<typeof caseAdvancedSearch>
->[number];
+import { RawPublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
+import type {
+  CaseAdvancedSearchResult,
+  SearchAfter,
+} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -34,15 +34,6 @@ export type CaseAdvancedSearchParamsRequestType = {
   startDate?: string;
   caseTypes?: CaseType[];
   procedureType?: ProcedureType;
-};
-
-export type CaseSearchResult = {
-  petitionerNames: string[];
-  docketNumberWithSuffix: string;
-  docketNumber: string;
-  receivedAt: string;
-  caseCaption: string;
-  petitionerStateNames?: (string | undefined)[];
 };
 
 export const caseAdvancedSearchInteractor = async (
@@ -57,7 +48,7 @@ export const caseAdvancedSearchInteractor = async (
     procedureType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
-): Promise<CaseSearchResult[]> => {
+): Promise<RawPublicCaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -137,12 +128,14 @@ export const caseAdvancedSearchInteractor = async (
       caseCaption: filteredCase.caseCaption,
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(p =>
-        p.state
-          ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
-          : undefined,
-      ),
+      petitionerNames: filteredCase.petitioners.map(p => p.name),
+      petitionerStateNames: filteredCase.petitioners
+        .map(p =>
+          p.state
+            ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+            : undefined,
+        )
+        .filter((stateName): stateName is string => !!stateName),
       receivedAt: filteredCase.receivedAt,
     };
   });
