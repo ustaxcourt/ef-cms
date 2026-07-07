@@ -58,6 +58,7 @@ export const FilePetitionStep7 = connect(
         {enablePaymentPortalIntegration && (
           <Button
             className="margin-top-205"
+            data-testid="pay-filing-fee-button"
             onClick={() => {
               initFilingFeePaymentSequence();
             }}
