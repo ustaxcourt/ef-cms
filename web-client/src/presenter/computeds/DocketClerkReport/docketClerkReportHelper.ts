@@ -23,7 +23,9 @@ export const docketClerkReportHelper = (
   const docketClerks: RawUser[] = get(state.docketClerkReport.docketClerks);
   const selectedClerk = get(state.docketClerkReport.selectedClerk);
   const pageType = get(state.docketClerkReport.pageType);
-  const errors = get(state.docketClerkReport.errors);
+  const validationErrors = get(state.validationErrors) || {};
+  const errors =
+    Object.keys(validationErrors).length > 0 ? validationErrors : null;
 
   const docketClerkOptions = docketClerks.map(clerk => ({
     name: clerk.name,

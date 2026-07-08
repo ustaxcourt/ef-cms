@@ -645,8 +645,7 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    | RawGenerateSuggestedTermForm
-    | undefined,
+    RawGenerateSuggestedTermForm | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -721,7 +720,6 @@ export const baseState = {
     box: 'inbox' as 'inbox' | 'inProgress' | 'processed' | 'sent' | 'completed',
     completedMessages: [] as RawMessage[],
     docketClerks: [] as RawUser[],
-    errors: null as { docketClerkUserId?: string; pageType?: string } | null,
     form: {} as { docketClerkUserId?: string; pageType?: string },
     inboxMessages: [] as RawMessage[],
     inboxWorkItems: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
@@ -751,11 +749,9 @@ export const baseState = {
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
     updatedTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -955,8 +951,7 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
-      | undefined,
+      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],

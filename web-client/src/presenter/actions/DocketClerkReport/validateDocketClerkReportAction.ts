@@ -27,10 +27,10 @@ export const validateDocketClerkReportAction = ({
   }
 
   if (errors.docketClerkUserId || errors.pageType) {
-    store.set(state.docketClerkReport.errors, errors);
+    store.set(state.validationErrors, errors);
     return path.error();
   }
 
-  store.set(state.docketClerkReport.errors, null);
+  store.set(state.validationErrors, {});
   return path.success();
 };

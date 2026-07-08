@@ -21,11 +21,11 @@ describe('docketClerkReportHelper', () => {
   const baseState = {
     docketClerkReport: {
       docketClerks: mockClerks,
-      errors: null,
       form: {},
       pageType: null,
       selectedClerk: null,
     },
+    validationErrors: {},
   };
 
   describe('docketClerkOptions', () => {
@@ -84,7 +84,7 @@ describe('docketClerkReportHelper', () => {
       const result = runCompute(docketClerkReportHelper, {
         state: {
           ...baseState,
-          docketClerkReport: { ...baseState.docketClerkReport, errors },
+          validationErrors: errors,
         },
       });
 
