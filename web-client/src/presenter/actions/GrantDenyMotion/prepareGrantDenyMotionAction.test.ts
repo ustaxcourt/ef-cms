@@ -9,6 +9,18 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareGrantDenyMotionAction', () => {
+  const wrap = (inner: string) =>
+    `<p class="grant-deny-indent-paragraph">${inner}</p>`;
+
+  const expectedPreamble = ({
+    date = 'March 15, 2026',
+    documentNumberText = '(doc. no. 7)',
+    motionTitle = 'Motion to Compel',
+    movant = 'petitioner',
+    preamblePrepend = '',
+  } = {}) =>
+    `${wrap(`${preamblePrepend}On ${date}, ${movant} filed a`)}${wrap(`${motionTitle} ${documentNumberText}. For cause, it is`)}`;
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -54,9 +66,7 @@ describe('prepareGrantDenyMotionAction', () => {
     expect(result.state.form.orderType).toEqual(
       GRANT_DENY_MOTION_OPTIONS.orderType,
     );
-    expect(result.state.form.richText).toContain(
-      'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7).',
-    );
+    expect(result.state.form.richText).toContain(expectedPreamble());
     expect(result.state.form.richText).toContain(
       "ORDERED that petitioner's Motion to Compel is granted.",
     );
@@ -80,7 +90,7 @@ describe('prepareGrantDenyMotionAction', () => {
         /<p class="grant-deny-indent-paragraph">[\s\S]*?<\/p>/g,
       ) || [];
 
-    expect(paragraphs).toHaveLength(4);
+    expect(paragraphs).toHaveLength(5);
     paragraphs.forEach(paragraph => {
       expect(
         paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
@@ -427,9 +437,7 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    expect(result.state.form.richText).toContain(
-      'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is',
-    );
+    expect(result.state.form.richText).toContain(expectedPreamble());
     expect(result.state.form.richText).not.toContain('ORDERED that');
     expect(result.state.form.documentTitle).toEqual('Order - Motion to Compel');
   });

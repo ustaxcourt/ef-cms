@@ -38,6 +38,22 @@ const buildDispositionPhrase = ({
 const wrap = (inner: string) =>
   `<p class="${GRANT_DENY_MOTION_OPTIONS.pdfParagraphClass}">${inner}</p>`;
 
+const buildPreamble = ({
+  documentNumberText,
+  motionDocumentTitle,
+  motionFilingDateFormatted,
+  movant,
+  preamblePrepend,
+}: {
+  documentNumberText: string;
+  motionDocumentTitle: string;
+  motionFilingDateFormatted: string;
+  movant: string;
+  preamblePrepend: string;
+}): string =>
+  wrap(`${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a`) +
+  wrap(`${motionDocumentTitle} ${documentNumberText}. For cause, it is`);
+
 const getMovantPossessive = (movant: string): string =>
   movant === 'respondent' ? "respondent's" : "petitioner's";
 
@@ -175,9 +191,13 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
     preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${trialLocationText}. `;
   }
 
-  const preamble = wrap(
-    `${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText}. For cause, it is`,
-  );
+  const preamble = buildPreamble({
+    documentNumberText,
+    motionDocumentTitle,
+    motionFilingDateFormatted,
+    movant,
+    preamblePrepend,
+  });
 
   const dispositionPhrase = buildDispositionPhrase({
     deniedAsMoot,

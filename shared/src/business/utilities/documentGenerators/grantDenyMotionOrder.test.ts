@@ -4,6 +4,19 @@ import { order } from './order';
 
 const INDENT_CLASS = 'class="grant-deny-indent-paragraph"';
 
+const buildPreamble = ({
+  date,
+  documentNumberText,
+  motionTitle,
+  movant,
+}: {
+  date: string;
+  documentNumberText: string;
+  motionTitle: string;
+  movant: string;
+}): string =>
+  `<p ${INDENT_CLASS}>On ${date}, ${movant} filed a</p><p ${INDENT_CLASS}>${motionTitle} ${documentNumberText}. For cause, it is</p>`;
+
 type OrderData = Parameters<typeof order>[0]['data'];
 
 const generateGrantDenyMotionOrder = ({
@@ -42,7 +55,12 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '123-26',
-        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 7)',
+          motionTitle: 'Motion to Compel',
+          movant: 'petitioner',
+        })}
 
         <p ${INDENT_CLASS}>ORDERED that petitioner's Motion to Compel is granted. It is further</p>
 
@@ -61,7 +79,12 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe & John Doe',
         docketNumberWithSuffix: '124-26',
-        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioners filed a Motion for Continuance (doc. no. 11). For cause, it is</p>
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 11)',
+          motionTitle: 'Motion for Continuance',
+          movant: 'petitioners',
+        })}
 
         <p ${INDENT_CLASS}>ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
 
@@ -82,7 +105,12 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '125-26',
-        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, respondent filed a Motion to Dismiss (doc. no. 14). For cause, it is</p>
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 14)',
+          motionTitle: 'Motion to Dismiss',
+          movant: 'respondent',
+        })}
 
         <p ${INDENT_CLASS}>ORDERED that respondent's Motion to Dismiss is granted. It is further</p>
 
@@ -99,7 +127,12 @@ describe('Grant/Deny Motion orders', () => {
       generateGrantDenyMotionOrder({
         caseTitle: 'Jane Doe',
         docketNumberWithSuffix: '126-26',
-        orderContent: `<p ${INDENT_CLASS}>On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is</p>
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 7)',
+          motionTitle: 'Motion to Compel',
+          movant: 'petitioner',
+        })}
 
         <p ${INDENT_CLASS}>ORDERED that petitioner's Motion to Compel is denied as moot without prejudice. It is further</p>
 
