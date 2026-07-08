@@ -224,8 +224,6 @@
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
     "start:madge": "node ./graph-generators/index.js",
     "start:migration": "npx ts-node --transpile-only web-api/send-migration-segment-messages.ts",
-    "start:pay-gov-test-server": "npx @ustaxcourt/ustc-pay-gov-test-server",
-    "start:pay-gov-test-server:update-env": "npx @ustaxcourt/ustc-pay-gov-test-server update-env",
     "start:public": "CHECK_DEPLOY_DATE_INTERVAL=5000 WATCH=true USTC_ENV=dev ENV=local run-p start:public-host start:public:esbuild",
     "start:public-host": "servor dist-public index.html 5678",
     "start:public:esbuild": "node esbuild.public.config.mjs",

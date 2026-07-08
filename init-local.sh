@@ -176,11 +176,21 @@ setup_cognito() {
   URL=http://localhost:9229/ CHECK_CODE="404" ./wait-until.sh
 }
 
+start_payment_portal() {
+  if [ "$SKIP_DOCKER" = "true" ]; then
+    return
+  fi
+  echo "Starting payment portal"
+  npm run payment-portal &
+  URL=http://localhost:8080/ ./wait-until.sh
+}
+
 if [ "$SKIP_ASSETS" = "false" ]; then
   npm run build:assets
 fi
 
 start_docker_dependencies
+start_payment_portal
 wait_for_opensearch
 wait_for_postgres
 setup_opensearch
