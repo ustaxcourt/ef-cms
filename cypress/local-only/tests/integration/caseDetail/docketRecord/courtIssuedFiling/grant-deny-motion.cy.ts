@@ -186,16 +186,10 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
           'be.visible',
         );
 
-        cy.get('[data-testid="due-date-message-stip"]').then($stipCheckbox => {
-          cy.get('[data-testid="status-report-due-date-fields"]').then(
-            $fields => {
-              expect(
-                $fields[0].compareDocumentPosition($stipCheckbox[0]) &
-                  Node.DOCUMENT_POSITION_FOLLOWING,
-              ).to.equal(Node.DOCUMENT_POSITION_FOLLOWING);
-            },
-          );
-        });
+        cy.get('[data-testid="due-date-message-stip"]')
+          .parent('.usa-checkbox')
+          .next('[data-testid="status-report-due-date-fields"]')
+          .should('exist');
       });
     });
 
