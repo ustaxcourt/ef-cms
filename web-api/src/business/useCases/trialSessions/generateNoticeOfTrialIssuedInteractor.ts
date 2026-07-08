@@ -12,7 +12,7 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { formatTrialNoticePhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -76,11 +76,13 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   };
   const trialInfo: FormattedTrialInfoType = {
     ...trialSession,
-    chambersPhoneNumber: formatPhoneNumber(trialSession.chambersPhoneNumber),
+    chambersPhoneNumber: formatTrialNoticePhoneNumber(
+      trialSession.chambersPhoneNumber,
+    ),
     formattedJudge: trialSession.judge?.name || 'Not assigned',
     formattedStartDate,
     formattedStartTime,
-    joinPhoneNumber: formatPhoneNumber(trialSession.joinPhoneNumber),
+    joinPhoneNumber: formatTrialNoticePhoneNumber(trialSession.joinPhoneNumber),
   };
 
   if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson) {

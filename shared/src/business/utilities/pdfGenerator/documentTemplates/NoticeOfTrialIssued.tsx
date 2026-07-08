@@ -65,7 +65,7 @@ export const NoticeOfTrialIssued = ({
         </p>
 
         <div className="notice-access-remote-section">
-          <p className="notice-body-indent text-underline text-bold">
+          <p className="notice-body-indent text-underline">
             ACCESS REMOTE PROCEEDING
           </p>
           <p className="notice-body-indent">

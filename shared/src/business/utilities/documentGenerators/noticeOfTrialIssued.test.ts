@@ -20,7 +20,7 @@ describe('documentGenerators', () => {
             formattedJudge: 'Carluzzo',
             formattedStartDate: '01/01/2001',
             formattedStartTime: '12:00 am',
-            joinPhoneNumber: '444-444-4444',
+            joinPhoneNumber: '(444) 444-4444',
             meetingId: 'sdsd',
             password: '123',
             trialLocation: 'Birmingham, Alabama',
