@@ -41,12 +41,11 @@ export const docketClerkReportMessagesHelper = (
   const formatBox = (
     rawMessages: RawMessage[],
   ): DocketClerkReportMessageBox => {
-    const { completedMessages: formattedCompleted, messages } =
-      getFormattedMessages({
-        applicationContext,
-        messages: rawMessages,
-        tableSort,
-      });
+    const { messages } = getFormattedMessages({
+      applicationContext,
+      messages: rawMessages,
+      tableSort,
+    });
 
     messages.forEach(message => {
       message.caseStatus = applicationContext
@@ -63,16 +62,25 @@ export const docketClerkReportMessagesHelper = (
       screenMetadata,
     });
 
-    const { filterValues: completedFilterValues } =
+    const completedMessagesForFilter = filteredMessages.filter(
+      m => m.isCompleted,
+    );
+
+    const { filterValues: completedFilterValues, filteredCompletedMessages } =
       applyFiltersToCompletedMessages({
-        completedMessages: formattedCompleted,
+        completedMessages: completedMessagesForFilter,
         screenMetadata,
       });
+
+    const isCompletedOnlyBox =
+      rawMessages.length > 0 && rawMessages.every(m => m.isCompleted);
 
     return {
       ...filterValues,
       ...completedFilterValues,
-      messages: filteredMessages,
+      messages: isCompletedOnlyBox
+        ? filteredCompletedMessages
+        : filteredMessages,
     };
   };
 
