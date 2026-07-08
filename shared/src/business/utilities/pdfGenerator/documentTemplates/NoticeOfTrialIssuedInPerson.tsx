@@ -28,7 +28,7 @@ export const NoticeOfTrialIssuedInPerson = ({
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
-      <div>
+      <div className="notice-info-boxes">
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
