@@ -1406,8 +1406,7 @@ export const ALL_STATE_OPTIONS = {
 };
 
 export type AbbreviatedStates =
-  | keyof typeof US_STATES
-  | keyof typeof US_STATES_OTHER;
+  keyof typeof US_STATES | keyof typeof US_STATES_OTHER;
 
 export const NOT_AVAILABLE_OPTION = 'N/A';
 export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
@@ -1897,6 +1896,7 @@ export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
   DISCIPLINARY: 'Disciplinary',
   CHANGE_OF_NAME: 'Change of Name',
+  CHANGE_OF_STATUS: 'Change of Status',
   EXAM_RELATED: 'Exam-Related',
   MISCELLANEOUS: 'Miscellaneous',
 };
@@ -1934,8 +1934,7 @@ export type FileUploadProgressType = {
 };
 
 export type FileUploadProgressValueType =
-  | FileUploadProgressType
-  | FileUploadProgressType[];
+  FileUploadProgressType | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -2058,8 +2057,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   other: 'Other',
 } as const;
 export type StatusReportOrderedForOption =
-  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
-  | '';
+  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS | '';
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',
