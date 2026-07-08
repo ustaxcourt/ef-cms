@@ -63,16 +63,21 @@ export const docketClerkReportMessagesHelper = (
       screenMetadata,
     });
 
-    const { filterValues: completedFilterValues } =
+    const completedMessagesForFilter = filteredMessages.filter(m => m.isCompleted);
+
+    const { filterValues: completedFilterValues, filteredCompletedMessages } =
       applyFiltersToCompletedMessages({
-        completedMessages: formattedCompleted,
+        completedMessages: completedMessagesForFilter,
         screenMetadata,
       });
+
+    const isCompletedOnlyBox =
+      rawMessages.length > 0 && rawMessages.every(m => m.isCompleted);
 
     return {
       ...filterValues,
       ...completedFilterValues,
-      messages: filteredMessages,
+      messages: isCompletedOnlyBox ? filteredCompletedMessages : filteredMessages,
     };
   };
 
