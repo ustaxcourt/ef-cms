@@ -105,9 +105,8 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
 
           cy.wait('@courtIssuedOrder').then(({ request }) => {
             const html: string = request.body.contentHtml;
-            expect(html).to.include(
-              `On ${formattedToday}, petitioner filed a ${motionType}`,
-            );
+            expect(html).to.include(`On ${formattedToday}, petitioner filed a`);
+            expect(html).to.include(`${motionType} (doc. no.`);
             expect(html).to.include(
               `ORDERED that petitioner's ${motionType} is granted.`,
             );
