@@ -16,7 +16,6 @@ describe('resetDocketClerkReportAction', () => {
           box: 'processed',
           completedMessages: [{ messageId: 'abc' }],
           docketClerks: [{ userId: 'u1', name: 'Alice' }],
-          errors: { docketClerkUserId: 'Select a Docket Clerk' },
           form: { docketClerkUserId: 'u1', pageType: 'documentQC' },
           inboxMessages: [{ messageId: 'def' }],
           inboxWorkItems: [{ workItemId: 'w1' }],
@@ -25,6 +24,7 @@ describe('resetDocketClerkReportAction', () => {
           sentMessages: [{ messageId: 'ghi' }],
           servedWorkItems: [{ workItemId: 'w2' }],
         },
+        validationErrors: { docketClerkUserId: 'Select a Docket Clerk' },
       },
     });
 
@@ -37,6 +37,6 @@ describe('resetDocketClerkReportAction', () => {
     expect(state.docketClerkReport.inboxMessages).toEqual([]);
     expect(state.docketClerkReport.sentMessages).toEqual([]);
     expect(state.docketClerkReport.completedMessages).toEqual([]);
-    expect(state.docketClerkReport.errors).toBeNull();
+    expect(state.validationErrors).toEqual({});
   });
 });

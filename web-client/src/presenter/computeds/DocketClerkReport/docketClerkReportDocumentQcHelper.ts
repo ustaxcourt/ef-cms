@@ -1,7 +1,4 @@
-import {
-  DOCKET_SECTION,
-  Role,
-} from '@shared/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import {
   FormattedWorkItemWithCaseInfo,
   formatWorkItem,
@@ -47,7 +44,7 @@ export const docketClerkReportDocumentQcHelper = (
   const filters = getWorkQueueFilters({
     section: DOCKET_SECTION,
     user: {
-      role: selectedClerk.role as Role,
+      role: selectedClerk.role,
       section: selectedClerk.section,
       userId: selectedClerk.userId,
     },

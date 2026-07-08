@@ -25,15 +25,15 @@ describe('validateDocketClerkReportAction', () => {
       modules: { presenter },
       state: {
         docketClerkReport: {
-          errors: { docketClerkUserId: 'old error' },
           form: { docketClerkUserId: 'u1', pageType: 'documentQC' },
         },
+        validationErrors: { docketClerkUserId: 'old error' },
       },
     });
 
     expect(successStub).toHaveBeenCalled();
     expect(errorStub).not.toHaveBeenCalled();
-    expect(state.docketClerkReport.errors).toBeNull();
+    expect(state.validationErrors).toEqual({});
   });
 
   it('should call path.error and set errors when docketClerkUserId is missing', async () => {
@@ -41,18 +41,18 @@ describe('validateDocketClerkReportAction', () => {
       modules: { presenter },
       state: {
         docketClerkReport: {
-          errors: null,
           form: { pageType: 'messages' },
         },
+        validationErrors: {},
       },
     });
 
     expect(errorStub).toHaveBeenCalled();
     expect(successStub).not.toHaveBeenCalled();
-    expect(state.docketClerkReport.errors?.docketClerkUserId).toBe(
+    expect(state.validationErrors.docketClerkUserId).toBe(
       'Select a Docket Clerk',
     );
-    expect(state.docketClerkReport.errors?.pageType).toBeUndefined();
+    expect(state.validationErrors.pageType).toBeUndefined();
   });
 
   it('should call path.error and set errors when pageType is missing', async () => {
@@ -60,16 +60,16 @@ describe('validateDocketClerkReportAction', () => {
       modules: { presenter },
       state: {
         docketClerkReport: {
-          errors: null,
           form: { docketClerkUserId: 'u1' },
         },
+        validationErrors: {},
       },
     });
 
     expect(errorStub).toHaveBeenCalled();
     expect(successStub).not.toHaveBeenCalled();
-    expect(state.docketClerkReport.errors?.pageType).toBe('Select a Page Type');
-    expect(state.docketClerkReport.errors?.docketClerkUserId).toBeUndefined();
+    expect(state.validationErrors.pageType).toBe('Select a Page Type');
+    expect(state.validationErrors.docketClerkUserId).toBeUndefined();
   });
 
   it('should call path.error and set both errors when both fields are missing', async () => {
@@ -77,17 +77,17 @@ describe('validateDocketClerkReportAction', () => {
       modules: { presenter },
       state: {
         docketClerkReport: {
-          errors: null,
           form: {},
         },
+        validationErrors: {},
       },
     });
 
     expect(errorStub).toHaveBeenCalled();
     expect(successStub).not.toHaveBeenCalled();
-    expect(state.docketClerkReport.errors?.docketClerkUserId).toBe(
+    expect(state.validationErrors.docketClerkUserId).toBe(
       'Select a Docket Clerk',
     );
-    expect(state.docketClerkReport.errors?.pageType).toBe('Select a Page Type');
+    expect(state.validationErrors.pageType).toBe('Select a Page Type');
   });
 });

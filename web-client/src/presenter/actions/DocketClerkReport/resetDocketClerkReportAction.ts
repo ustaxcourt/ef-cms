@@ -15,5 +15,5 @@ export const resetDocketClerkReportAction = ({ store }: ActionProps): void => {
   store.set(state.docketClerkReport.inboxMessages, []);
   store.set(state.docketClerkReport.sentMessages, []);
   store.set(state.docketClerkReport.completedMessages, []);
-  store.set(state.docketClerkReport.errors, null);
+  store.set(state.validationErrors, {});
 };
