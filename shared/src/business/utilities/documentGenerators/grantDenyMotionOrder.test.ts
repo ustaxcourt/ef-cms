@@ -64,7 +64,7 @@ describe('Grant/Deny Motion orders', () => {
 
         <p ${INDENT_CLASS}>ORDERED that petitioner's Motion to Compel is granted. It is further</p>
 
-        <p ${INDENT_CLASS}>ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that this case is stricken from the September 15, 2026, Washington, DC trial session. It is further</p>
 
         <p ${INDENT_CLASS}>ORDERED that petitioner(s) shall file a status report by December 31, 2026.</p>`,
       }),
@@ -118,6 +118,30 @@ describe('Grant/Deny Motion orders', () => {
       }),
     testDescription:
       'generates a Grant/Deny Motion order granting a motion filed by respondent',
+  });
+
+  generateAndVerifyPdfDiff({
+    fileName: 'Grant_Deny_Motion_Granted_Parties.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      generateGrantDenyMotionOrder({
+        caseTitle: 'Jane Doe',
+        docketNumberWithSuffix: '127-26',
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 9)',
+          motionTitle: 'Motion for Continuance',
+          movant: 'petitioner',
+        })}
+
+        <p ${INDENT_CLASS}>ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
+
+        <p ${INDENT_CLASS}>ORDERED that the parties shall file a status report(s) by December 31, 2026. It is further</p>
+
+        <p ${INDENT_CLASS}>ORDERED that the parties shall file a status report(s) or proposed stipulated decision by January 15, 2027.</p>`,
+      }),
+    testDescription:
+      'generates a Grant/Deny Motion order with parties as the filing party',
   });
 
   generateAndVerifyPdfDiff({

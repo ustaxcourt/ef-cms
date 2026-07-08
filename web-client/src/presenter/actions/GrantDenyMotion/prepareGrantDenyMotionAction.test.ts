@@ -261,7 +261,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'This case is set for trial at the session of the Court commencing on September 15, 2026 in Washington, DC.',
+      'This case is set for trial at the session of the Court commencing on September 15, 2026, in Washington, DC.',
     );
   });
 
@@ -284,7 +284,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session.',
+      'ORDERED that this case is stricken from the September 15, 2026, Washington, DC trial session.',
     );
     expect(result.state.form.richText).toContain('It is further');
   });
@@ -480,6 +480,47 @@ describe('prepareGrantDenyMotionAction', () => {
 
     expect(result.state.form.richText).toContain(
       'ORDERED that the parties shall file a joint status report or proposed stipulated decision by December 31, 2026.',
+    );
+  });
+
+  it('builds a parties status report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a status report(s) by December 31, 2026.',
+    );
+  });
+
+  it('builds a parties status report or proposed stipulated decision clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
+              .statusReportOrStipulatedDecision,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a status report(s) or proposed stipulated decision by December 31, 2026.',
     );
   });
 

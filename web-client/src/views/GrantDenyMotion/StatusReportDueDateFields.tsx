@@ -16,6 +16,7 @@ export type StatusReportDueDateFieldsProps = {
   filingPartyErrorText?: string;
   filingPartyOptions: {
     joint: string;
+    parties: string;
     petitioners: string;
     respondent: string;
   };
@@ -81,6 +82,9 @@ export const StatusReportDueDateFields: React.FC<
             </option>
             <option value={filingPartyOptions.joint}>
               {filingPartyOptions.joint}
+            </option>
+            <option value={filingPartyOptions.parties}>
+              {filingPartyOptions.parties}
             </option>
           </select>
         </div>

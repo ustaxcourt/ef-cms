@@ -2223,6 +2223,7 @@ export const GRANT_DENY_MOTION_OPTIONS = {
     petitioners: 'Petitioner(s)',
     respondent: 'Respondent',
     joint: 'Joint',
+    parties: 'Parties',
   },
   orderType: 'grantDenyMotion',
   pdfParagraphClass: 'grant-deny-indent-paragraph',
