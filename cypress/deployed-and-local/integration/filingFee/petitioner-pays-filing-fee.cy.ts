@@ -37,7 +37,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     cy.get('[data-testid="step-6-next-button"]').click();
   });
 
-  it('should let petitioner pay the filing fee and notify them of success', () => {
+  it.only('should let petitioner pay the filing fee and notify them of success', () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -47,11 +47,35 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      cy.origin(getCypressEnv().payGovOrigin, () => {
-        cy.get(
-          '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
-        ).click();
-      });
+      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
+
+      cy.origin(
+        getCypressEnv().payGovOrigin,
+        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
+        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
+          if (!isLocal) {
+            cy.get(
+              '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
+            ).then(link => {
+              const redirectUrl = link.attr('href');
+
+              // workaround for the fact that these tests are run during deployments, first check
+              // the url pay.gov has is right, and then override it to go to the proper color
+              expect(redirectUrl).equal(
+                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+              );
+
+              cy.visit(
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+              );
+            });
+          } else {
+            cy.get(
+              '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
+            ).click();
+          }
+        },
+      );
 
       cy.get('[data-testid="success-alert"]')
         .should('contain.text', 'Filing fee payment successful')

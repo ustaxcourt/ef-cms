@@ -13,7 +13,10 @@ export const processFilingFeePaymentAction = async ({
 
   const alerts: any = {};
 
-  store.set(state.processPaymentStatus, result);
+  store.set(state.processPaymentStatus, {
+    docketNumber: props.docketNumber,
+    ...result,
+  });
 
   return alerts;
 };

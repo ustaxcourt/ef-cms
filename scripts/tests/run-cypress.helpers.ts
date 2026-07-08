@@ -263,6 +263,8 @@ export const setEnvironmentVariables = ({
     dependencies.env.CYPRESS_DISABLE_EMAILS = dependencies.env.DISABLE_EMAILS;
     dependencies.env.CYPRESS_EFCMS_DOMAIN = efcmsDomain;
     dependencies.env.CYPRESS_MIGRATE = 'false';
+    dependencies.env.CYPRESS_PAY_GOV_ORIGIN =
+      'https://pay-gov-dev.ustaxcourt.gov';
     dependencies.env.CYPRESS_POSTGRES_HOST = dependencies.env.POSTGRES_HOST;
     dependencies.env.CYPRESS_POSTGRES_PASSWORD =
       dependencies.env.POSTGRES_PASSWORD;
