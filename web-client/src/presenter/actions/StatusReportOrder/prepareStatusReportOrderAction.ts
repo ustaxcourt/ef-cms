@@ -65,7 +65,7 @@ export const prepareStatusReportOrderAction = ({
     const formattedTrialDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.trialDate, FORMATS.MONTH_DAY_YEAR);
-    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${caseDetail.trialLocation}. `;
+    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${caseDetail.trialLocation}. `;
   }
 
   const filedLine =

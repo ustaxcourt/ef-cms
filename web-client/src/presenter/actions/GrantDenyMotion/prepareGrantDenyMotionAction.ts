@@ -75,18 +75,26 @@ const buildStatusReportClause = ({
 
   const isJoint =
     filingParty === GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.joint;
+  const isParties =
+    filingParty === GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties;
 
   if (
     dueDateMessage ===
     GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport
   ) {
-    return isJoint
-      ? wrap(
-          `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
-        )
-      : wrap(
-          `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report by ${dueDateFormatted}.`,
-        );
+    if (isJoint) {
+      return wrap(
+        `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
+      );
+    }
+    if (isParties) {
+      return wrap(
+        `ORDERED that the parties shall file a status report(s) by ${dueDateFormatted}.`,
+      );
+    }
+    return wrap(
+      `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report by ${dueDateFormatted}.`,
+    );
   }
 
   if (
@@ -94,13 +102,19 @@ const buildStatusReportClause = ({
     GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
       .statusReportOrStipulatedDecision
   ) {
-    return isJoint
-      ? wrap(
-          `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
-        )
-      : wrap(
-          `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
-        );
+    if (isJoint) {
+      return wrap(
+        `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
+      );
+    }
+    if (isParties) {
+      return wrap(
+        `ORDERED that the parties shall file a status report(s) or proposed stipulated decision by ${dueDateFormatted}.`,
+      );
+    }
+    return wrap(
+      `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
+    );
   }
 
   return '';
@@ -188,7 +202,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
       FORMATS.MONTH_DAY_YEAR,
     );
     trialLocationText = caseDetail.trialLocation || '';
-    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${trialLocationText}. `;
+    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
   }
 
   const preamble = buildPreamble({
@@ -214,7 +228,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
 
   const strickenClause = strickenFromTrialSession
     ? wrap(
-        `ORDERED that this case is stricken from the ${formattedTrialDate} ${trialLocationText} trial session.`,
+        `ORDERED that this case is stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
       )
     : '';
 

@@ -46,6 +46,17 @@ describe('GrantDenyMotionForm', () => {
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
 
+    it('should be valid when parties is selected as filing party', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        dueDate: futureDate(),
+        dueDateMessage:
+          GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+        filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+      });
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
+
     it('should be valid when isOnLeadCase is true and issueOrder is provided', () => {
       const form = new GrantDenyMotionForm({
         disposition: MOTION_DISPOSITIONS.GRANTED,
