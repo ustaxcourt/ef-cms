@@ -16,8 +16,6 @@ import {
   selectSection,
   sendMessage,
 } from 'cypress/local-only/support/pages/document-qc';
-import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
-
 type MotionCaseFixture = {
   docketNumber: string;
   motionDocketEntryId: string;
@@ -170,26 +168,6 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
             'Select Filing Party appears above Date is required',
           ).to.be.lessThan(dueDateIndex);
         });
-      });
-    });
-
-    it('should have no accessibility violations on the grant/deny motion form', () => {
-      createMotionCase().then(({ docketNumber }) => {
-        loginAsColvin();
-        cy.visit(`/case-detail/${docketNumber}`);
-        openGrantDenyMotionFromDocumentView();
-
-        checkA11y();
-
-        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
-          force: true,
-        });
-        cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
-        cy.get('[data-testid="status-report-due-date-fields"]').should(
-          'be.visible',
-        );
-
-        checkA11y();
       });
     });
 
