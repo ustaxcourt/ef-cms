@@ -7,7 +7,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 export const addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
@@ -51,17 +51,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   let nameOfClerk = '';
   let titleOfClerk = '';
   if (isNotice) {
-    const { CLERK_OF_THE_COURT_CONFIGURATION } =
-      applicationContext.getConstants();
-
-    const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-      CLERK_OF_THE_COURT_CONFIGURATION,
-    ]);
-
-    const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-      name: string;
-      title: string;
-    };
+    const { name, title } = await getClerkOfTheCourtInfo();
     nameOfClerk = name;
     titleOfClerk = title;
   }
