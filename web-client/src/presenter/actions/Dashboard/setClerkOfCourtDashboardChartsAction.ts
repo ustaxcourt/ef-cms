@@ -5,9 +5,8 @@ export const setClerkOfCourtDashboardChartsAction = async ({
   applicationContext,
   store,
 }: ActionProps) => {
-  let stats: ClerkDashboardStats;
   try {
-    stats = await applicationContext
+    const stats: ClerkDashboardStats = await applicationContext
       .getUseCases()
       .getClerkDashboardStatsInteractor(applicationContext, {});
 

@@ -59,7 +59,7 @@ const CustomTooltip = ({
       const entry = payload[0].payload;
       const { value } = payload[0];
       const total = data.reduce((sum, d) => sum + d.value, 0);
-      const percentage = ((value / total) * 100).toFixed(1);
+      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
 
       const announcement = `${title ? title + ': ' : ''}${entry.name}: ${value} (${percentage}%)`;
       onAnnounce(announcement);
@@ -71,7 +71,7 @@ const CustomTooltip = ({
   const entry = payload[0].payload;
   const { value } = payload[0];
   const total = data.reduce((sum, d) => sum + d.value, 0);
-  const percentage = ((value / total) * 100).toFixed(1);
+  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
   const { color } = entry;
 
   return (
