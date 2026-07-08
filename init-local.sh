@@ -177,9 +177,6 @@ setup_cognito() {
 }
 
 start_payment_portal() {
-  if [ "$SKIP_DOCKER" = "true" ]; then
-    return
-  fi
   echo "Starting payment portal"
   npm run payment-portal &
   URL=http://localhost:8080/ ./wait-until.sh
