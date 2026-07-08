@@ -13,6 +13,22 @@ export const setClerkOfCourtDashboardChartsAction = async ({
     store.set(state.clerkOfCourtDashboardStats, stats);
   } catch (e) {
     console.error('setClerkOfCourtDashboardChartsAction failed:', e);
+    store.set(state.alertError, { message: 'Error getting dashboard data' });
+    store.set(state.clerkOfCourtDashboardStats, {
+      year: '',
+      calendarYearPetitionStats: {
+        petitionFullPaperMonths: [],
+        petitionFullElectronicMonths: [],
+        petitionsByRepresentation: [],
+        petitionsByServiceType: [],
+      },
+      fiscalYearPetitionStats: {
+        petitionFullPaperMonths: [],
+        petitionFullElectronicMonths: [],
+        petitionsByRepresentation: [],
+        petitionsByServiceType: [],
+      },
+    } as ClerkDashboardStats);
     return;
   }
 };
