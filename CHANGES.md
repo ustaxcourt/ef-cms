@@ -9,6 +9,11 @@ nvm use
 nvm alias default "$(cat .nvmrc)"
 ```
 
+#### Install Gitleaks (secrets scanning pre-commit hook)
+```bash
+brew install gitleaks
+```
+
 #### Upgrade Terraform to `1.15.7`
 use either tfswitch or tfenv
 ```bash
