@@ -96,7 +96,7 @@ const getPetitionsDataByYear = async (
     .filter(pet => pet.isRepresenting != null)
     .map(pet => ({
       total: Number(pet.total),
-      isRepresenting: pet.isRepresenting!,
+      isRepresenting: !!pet.isRepresenting,
     }));
 
   const orderCallback = isFiscal
