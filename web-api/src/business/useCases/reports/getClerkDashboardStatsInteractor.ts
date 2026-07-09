@@ -90,7 +90,7 @@ const getPetitionsDataByYear = async (
 
   const petitionsByServiceType = petitionData
     .filter(pet => pet.isPaper != null && !pet.month)
-    .map(pet => ({ total: Number(pet.total), isPaper: pet.isPaper! }));
+    .map(pet => ({ total: Number(pet.total), isPaper: !!pet.isPaper }));
 
   const petitionsByRepresentation = petitionData
     .filter(pet => pet.isRepresenting != null)
