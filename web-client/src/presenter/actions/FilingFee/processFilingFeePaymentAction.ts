@@ -1,22 +1,22 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 export const processFilingFeePaymentAction = async ({
   applicationContext,
   props,
-  store,
+  path,
 }: ActionProps) => {
-  const result = await applicationContext
-    .getUseCases()
-    .processPaymentInteractor(applicationContext, {
-      docketNumber: props.docketNumber,
+  try {
+    const result = await applicationContext
+      .getUseCases()
+      .processPaymentInteractor(applicationContext, {
+        docketNumber: props.docketNumber,
+      });
+
+    return path.success({
+      processPaymentStatus: {
+        docketNumber: props.docketNumber,
+        ...result,
+      },
     });
-
-  const alerts: any = {};
-
-  store.set(state.processPaymentStatus, {
-    docketNumber: props.docketNumber,
-    ...result,
-  });
-
-  return alerts;
+  } catch (e) {
+    return path.error();
+  }
 };
