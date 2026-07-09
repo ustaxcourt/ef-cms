@@ -20,10 +20,14 @@ import { Case } from '@shared/business/entities/cases/Case';
 describe('initPaymentInteractor', () => {
   const docketNumber = '101-01';
   const transactionReferenceId = 'mockTransactionReferenceId';
+  const mockPetitioner = {
+    ...mockPetitionerUser,
+    userId: MOCK_CASE.petitioners[0].contactId,
+  };
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const tryGetLocks = jest.mocked(tryGetLocksMock).mock;
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const oldEnv = process.env;
 
@@ -53,7 +57,7 @@ describe('initPaymentInteractor', () => {
       initPaymentInteractor(
         applicationContext,
         { docketNumber },
-        mockPetitionerUser,
+        mockPetitioner,
       ),
     ).rejects.toThrow(NotFoundError);
 
@@ -65,9 +69,19 @@ describe('initPaymentInteractor', () => {
       initPaymentInteractor(
         applicationContext,
         { docketNumber },
-        mockPetitionerUser,
+        mockPetitioner,
       ),
     ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw unauthorized error if user is not associated with the case', async () => {
+    await expect(
+      initPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        { ...mockPetitionerUser, userId: '1' },
+      ),
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should throw unauthorized error if user cannot initiate filing fee payment', async () => {
@@ -84,7 +98,7 @@ describe('initPaymentInteractor', () => {
     const result = await initPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPetitionerUser,
+      mockPetitioner,
     );
 
     expect(applicationContext.getUniqueId).toHaveBeenCalled();
@@ -102,9 +116,9 @@ describe('initPaymentInteractor', () => {
     });
 
     expect(updateCaseAndAssociations).toHaveBeenCalledWith({
-      authorizedUser: mockPetitionerUser,
+      authorizedUser: mockPetitioner,
       caseToUpdate: {
-        ...new Case(MOCK_CASE, { authorizedUser: mockPetitionerUser }),
+        ...new Case(MOCK_CASE, { authorizedUser: mockPetitioner }),
         petitionPaymentTransactionReferenceId: transactionReferenceId,
         petitionPaymentToken: 'mockPaymentToken',
       },
@@ -124,7 +138,7 @@ describe('initPaymentInteractor', () => {
     await initPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPetitionerUser,
+      mockPetitioner,
     );
 
     expect(applicationContext.getUniqueId).not.toHaveBeenCalled();
@@ -137,7 +151,7 @@ describe('initPaymentInteractor', () => {
     await initPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPetitionerUser,
+      mockPetitioner,
     );
 
     expect(
@@ -157,7 +171,7 @@ describe('initPaymentInteractor', () => {
     await initPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPetitionerUser,
+      mockPetitioner,
     );
 
     expect(tryGetLocks).toHaveBeenCalledWith(

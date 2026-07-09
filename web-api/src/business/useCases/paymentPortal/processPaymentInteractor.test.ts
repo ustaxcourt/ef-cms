@@ -9,7 +9,7 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS } from '@shared/test/mockCase';
 import {
   InvalidRequest,
   NotFoundError,
@@ -24,6 +24,11 @@ describe('processPaymentInteractor', () => {
   const docketNumber = '101-01';
   const transactionReferenceId = 'mockTransactionReferenceId';
   const mockPaymentToken = 'mockPaymentToken';
+  const mockPractitioner = {
+    ...mockPrivatePractitionerUser,
+    userId:
+      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0].userId,
+  };
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
@@ -31,7 +36,7 @@ describe('processPaymentInteractor', () => {
 
   beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
+      ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       petitionPaymentToken: mockPaymentToken,
     });
     applicationContext
@@ -54,7 +59,7 @@ describe('processPaymentInteractor', () => {
       processPaymentInteractor(
         applicationContext,
         { docketNumber },
-        mockPrivatePractitionerUser,
+        mockPractitioner,
       ),
     ).rejects.toThrow(NotFoundError);
 
@@ -66,7 +71,7 @@ describe('processPaymentInteractor', () => {
       processPaymentInteractor(
         applicationContext,
         { docketNumber },
-        mockPrivatePractitionerUser,
+        mockPractitioner,
       ),
     ).rejects.toThrow(NotFoundError);
   });
@@ -81,14 +86,26 @@ describe('processPaymentInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should throw unauthorized error if user is not associated with the case', async () => {
+    await expect(
+      processPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        { ...mockPractitioner, userId: '1' },
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
   it('should throw invalid request error if case entity does not have a payment token', async () => {
-    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(
+      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+    );
 
     await expect(
       processPaymentInteractor(
         applicationContext,
         { docketNumber },
-        mockPrivatePractitionerUser,
+        mockPractitioner,
       ),
     ).rejects.toThrow(InvalidRequest);
   });
@@ -97,7 +114,7 @@ describe('processPaymentInteractor', () => {
     const result = await processPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPrivatePractitionerUser,
+      mockPractitioner,
     );
 
     expect(
@@ -107,9 +124,11 @@ describe('processPaymentInteractor', () => {
     });
 
     expect(updateCaseAndAssociations).toHaveBeenCalledWith({
-      authorizedUser: mockPrivatePractitionerUser,
+      authorizedUser: mockPractitioner,
       caseToUpdate: {
-        ...new Case(MOCK_CASE, { authorizedUser: mockPrivatePractitionerUser }),
+        ...new Case(MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS, {
+          authorizedUser: mockPractitioner,
+        }),
       },
     });
 
@@ -131,7 +150,7 @@ describe('processPaymentInteractor', () => {
     await processPaymentInteractor(
       applicationContext,
       { docketNumber },
-      mockPrivatePractitionerUser,
+      mockPractitioner,
     );
 
     expect(tryGetLocks).toHaveBeenCalledWith(

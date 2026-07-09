@@ -16,7 +16,10 @@ import { getTransactionDetailsInteractor } from '@web-api/business/useCases/paym
 describe('getTransactionDetailsInteractor', () => {
   const docketNumber = '101-01';
   const transactionReferenceId = 'mockTransactionReferenceId';
-
+  const mockPetitioner = {
+    ...mockPetitionerUser,
+    userId: MOCK_CASE.petitioners[0].contactId,
+  };
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
@@ -42,7 +45,7 @@ describe('getTransactionDetailsInteractor', () => {
       getTransactionDetailsInteractor(
         applicationContext,
         { docketNumber },
-        mockPetitionerUser,
+        mockPetitioner,
       ),
     ).rejects.toThrow(NotFoundError);
 
@@ -54,7 +57,7 @@ describe('getTransactionDetailsInteractor', () => {
       getTransactionDetailsInteractor(
         applicationContext,
         { docketNumber },
-        mockPetitionerUser,
+        mockPetitioner,
       ),
     ).rejects.toThrow(NotFoundError);
   });
@@ -69,6 +72,16 @@ describe('getTransactionDetailsInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should throw unauthorized error if user is not associated with the case', async () => {
+    await expect(
+      getTransactionDetailsInteractor(
+        applicationContext,
+        { docketNumber },
+        { ...mockPetitioner, userId: '1' },
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
   it('should throw not found error if case does not have an active payment portal transaction', async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
@@ -76,7 +89,7 @@ describe('getTransactionDetailsInteractor', () => {
       getTransactionDetailsInteractor(
         applicationContext,
         { docketNumber },
-        mockPetitionerUser,
+        mockPetitioner,
       ),
     ).rejects.toThrow(NotFoundError);
   });
@@ -85,7 +98,7 @@ describe('getTransactionDetailsInteractor', () => {
     const results = await getTransactionDetailsInteractor(
       applicationContext,
       { docketNumber },
-      mockPetitionerUser,
+      mockPetitioner,
     );
 
     expect(

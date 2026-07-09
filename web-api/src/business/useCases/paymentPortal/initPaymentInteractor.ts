@@ -11,7 +11,10 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { Case } from '@shared/business/entities/cases/Case';
+import {
+  Case,
+  userIsDirectlyAssociated,
+} from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -42,6 +45,17 @@ export const initPayment = async (
   });
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
+
+  if (
+    !userIsDirectlyAssociated({
+      aCase: currentCaseEntity,
+      userId: authorizedUser.userId,
+    })
+  ) {
+    throw new UnauthorizedError(
+      `Invalid User attempting to init payment for docket Number: ${docketNumber}`,
+    );
+  }
 
   // TODO: check petitionPaymentStatus before letting user initiate a filing fee payment
 

@@ -3,7 +3,10 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '@shared/business/entities/cases/Case';
+import {
+  Case,
+  userIsDirectlyAssociated,
+} from '@shared/business/entities/cases/Case';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -40,6 +43,17 @@ export const getTransactionDetailsInteractor = async (
   });
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
+
+  if (
+    !userIsDirectlyAssociated({
+      aCase: currentCaseEntity,
+      userId: authorizedUser.userId,
+    })
+  ) {
+    throw new UnauthorizedError(
+      `Invalid User attempting to init payment for docket Number: ${docketNumber}`,
+    );
+  }
 
   if (!currentCaseEntity.petitionPaymentTransactionReferenceId) {
     throw new NotFoundError(
