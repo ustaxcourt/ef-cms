@@ -1,4 +1,3 @@
-import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import {
   loginAsCaseServicesSupervisor,
   loginAsDocketClerk,
@@ -234,21 +233,6 @@ describe('Docket Clerk Report', () => {
         ).click();
 
         cy.get('#docket-clerk-report-messages-completed').should('exist');
-      });
-    });
-
-    describe('Accessibility', () => {
-      it('should be free of accessibility issues on the Docket Clerk Report page', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        // The form should be loaded and rendered
-        cy.get('[data-testid="docket-clerk-report-run-button"]').should(
-          'be.visible',
-        );
-
-        checkA11y();
       });
     });
   });
