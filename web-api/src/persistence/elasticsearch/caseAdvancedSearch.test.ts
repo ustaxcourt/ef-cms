@@ -47,7 +47,24 @@ describe('caseAdvancedSearch', () => {
       { _score: { order: 'desc' } },
       { 'docketNumber.S': { order: 'asc' } },
     ]);
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.preference,
+    ).toBeUndefined();
     expect(results).toMatchObject(['some', 'matches']);
+  });
+
+  it('forwards the preference value to the search parameters', async () => {
+    (search as jest.Mock).mockReturnValue({ results: [], total: 0 });
+
+    await caseAdvancedSearch({
+      applicationContext,
+      preference: 'test-preference-uuid',
+      searchTerms: { petitionerName: 'search for this' },
+    });
+
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.preference,
+    ).toBe('test-preference-uuid');
   });
 
   it('uses the non-exact query and pagination parameters when requested', async () => {
@@ -58,6 +75,7 @@ describe('caseAdvancedSearch', () => {
 
     const results = await caseAdvancedSearch({
       applicationContext,
+      preference: 'another-uuid',
       resultSize: 25,
       searchAfter: [10, '101-20'],
       searchTerms: { petitionerName: 'search for this' },
@@ -76,6 +94,9 @@ describe('caseAdvancedSearch', () => {
       search_after: [10, '101-20'],
       size: 25,
     });
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.preference,
+    ).toBe('another-uuid');
     expect(results).toMatchObject(['other', 'matches']);
   });
 });
