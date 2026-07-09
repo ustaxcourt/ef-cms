@@ -1,3 +1,12 @@
+<details><summary>Install gitleaks</summary>
+
+## Local
+
+#### Install gitleaks (secrets scanning) for the pre-commit hook
+```bash
+brew update && brew install gitleaks
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-06-29</summary>
 
 ## Local
