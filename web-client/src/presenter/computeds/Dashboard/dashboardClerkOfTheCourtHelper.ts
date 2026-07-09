@@ -4,39 +4,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { DashboardClerkOfTheCourtHelper } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { sum } from 'lodash';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const FISCAL_MONTHS = [
-  'October',
-  'November',
-  'December',
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-];
-
-const COLOR_BLUE = '#005EA2';
-const COLOR_YELLOW = '#FFBE2E';
+import {
+  FISCAL_MONTH_LABELS,
+  GRAPH_COLORS,
+  MONTH_LABELS,
+} from '@shared/business/entities/EntityConstants';
 
 export const dashboardClerkOfTheCourtHelper = (
   get: Get,
@@ -54,12 +26,12 @@ export const dashboardClerkOfTheCourtHelper = (
 
   const petitionsByMonthAndServiceTypeChartData = [
     {
-      color: COLOR_BLUE,
+      color: GRAPH_COLORS.BLUE,
       data: petitionerStats.petitionFullElectronicMonths.map(p => p.total),
       label: 'Electronic',
     },
     {
-      color: COLOR_YELLOW,
+      color: GRAPH_COLORS.YELLOW,
       data: petitionerStats.petitionFullPaperMonths.map(p => p.total),
       label: 'Paper',
     },
@@ -68,7 +40,7 @@ export const dashboardClerkOfTheCourtHelper = (
   const petitionsByServiceTypePieData =
     petitionerStats.petitionsByServiceType.length > 0
       ? petitionerStats.petitionsByServiceType.map(({ isPaper, total }) => ({
-          color: isPaper ? COLOR_YELLOW : COLOR_BLUE,
+          color: isPaper ? GRAPH_COLORS.YELLOW : GRAPH_COLORS.BLUE,
           name: isPaper ? 'Paper' : 'Electronic',
           value: total,
         }))
@@ -78,7 +50,7 @@ export const dashboardClerkOfTheCourtHelper = (
     petitionerStats.petitionsByRepresentation.length > 0
       ? petitionerStats.petitionsByRepresentation.map(
           ({ isRepresenting, total }) => ({
-            color: isRepresenting ? COLOR_YELLOW : COLOR_BLUE,
+            color: isRepresenting ? GRAPH_COLORS.YELLOW : GRAPH_COLORS.BLUE,
             name: isRepresenting ? 'Represented' : 'Pro Se',
             value: total,
           }),
@@ -94,7 +66,7 @@ export const dashboardClerkOfTheCourtHelper = (
     petitionsByRepresentationPieData,
     petitionsByServiceTypePieData,
     totalPetitions: formatPositiveNumber(totalPetitions),
-    months: petitionsByYearIsFiscal ? FISCAL_MONTHS : MONTHS,
+    months: petitionsByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
     year: stats.year,
   };
 };
