@@ -377,6 +377,13 @@ The major version of this package should match our major version of Node. We sho
 
 - Ensure the pinned version of typescript globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version and is compatible with ts-node. On 7/08/2026, we started pulling TS7 when building this Dockerfile, and the batch job would not start up because ts-node was unable to find the TS compiler, so we pinned it to 6.0.3.
 
+### ts-node
+**Installed Version: 10.9.2**
+
+**When upgrading TypeScript, make sure that the new version is supported by ts-jest and ts-node.**
+
+- Ensure the pinned version of ts-node globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version.
+
 ### Commander override for s3rver
 **Current Installed Version: 12.1.0 (Override Version, see notes below)**
 
