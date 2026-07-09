@@ -651,6 +651,13 @@ label.ustc-upload {
   }
 }
 
+.grant-deny-motion-page {
+  > .usa-alert {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+}
+
 .grant-deny-motion-form {
   .usa-form-group {
     max-width: 100%;
@@ -707,30 +714,37 @@ label.ustc-upload {
         display: block;
       }
     }
+
+    .usa-checkbox + .grant-deny-motion-status-report-fields {
+      margin-top: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .grant-deny-motion-status-report-fields + .usa-checkbox {
+      margin-top: 0.25rem;
+    }
   }
 
   .grant-deny-motion-status-report-fields {
     padding-left: 2rem;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
 
     .grant-deny-motion-status-report-field {
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
 
       &:last-child {
         margin-bottom: 0;
       }
-    }
 
-    .grant-deny-motion-status-report-field-error {
-      padding: 0;
-      margin: 0.125rem 0 0;
-      color: $red-primary;
-      font-weight: $font-bold;
-      line-height: 1.1;
+      > .usa-error-message {
+        margin-left: -0.25rem;
+      }
     }
 
     .grant-deny-motion-status-report-field-inputs {
       max-width: 100%;
+      margin-top: 0;
       margin-bottom: 0;
 
       &.usa-form-group--error {
@@ -742,7 +756,6 @@ label.ustc-upload {
 
       .usa-label {
         margin-bottom: 0.25rem;
-        font-weight: $font-normal;
       }
 
       .usa-form-group {

@@ -20,8 +20,9 @@ describe('Grant/Deny Motion preview (T13534, T13535)', () => {
       cy.wait('@courtIssuedOrder').then(({ request }) => {
         const html: string = request.body.contentHtml;
         expect(html).to.include(
-          `On ${grantDenyMotionFormattedToday}, petitioner filed a ${GRANT_DENY_MOTION_TYPE}`,
+          `On ${grantDenyMotionFormattedToday}, petitioner filed a`,
         );
+        expect(html).to.include(`${GRANT_DENY_MOTION_TYPE} (doc. no.`);
         expect(html).to.include('For cause, it is');
         expect(html).not.to.include('ORDERED that');
       });

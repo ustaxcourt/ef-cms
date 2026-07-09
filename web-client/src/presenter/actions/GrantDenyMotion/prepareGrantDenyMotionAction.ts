@@ -35,10 +35,30 @@ const buildDispositionPhrase = ({
   return parts.join(' ');
 };
 
-const wrap = (inner: string) => `<p>&emsp;&emsp;&emsp;${inner}</p>`;
+const wrap = (inner: string) =>
+  `<p class="${GRANT_DENY_MOTION_OPTIONS.pdfParagraphClass}">${inner}</p>`;
+
+const buildPreamble = ({
+  documentNumberText,
+  motionDocumentTitle,
+  motionFilingDateFormatted,
+  movant,
+  preamblePrepend,
+}: {
+  documentNumberText: string;
+  motionDocumentTitle: string;
+  motionFilingDateFormatted: string;
+  movant: string;
+  preamblePrepend: string;
+}): string =>
+  wrap(`${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a`) +
+  wrap(`${motionDocumentTitle} ${documentNumberText}. For cause, it is`);
 
 const getMovantPossessive = (movant: string): string =>
   movant === 'respondent' ? "respondent's" : "petitioner's";
+
+const formatFilingPartyForDocument = (filingParty: string): string =>
+  filingParty.toLowerCase();
 
 const buildStatusReportClause = ({
   dueDateFormatted,
@@ -55,18 +75,26 @@ const buildStatusReportClause = ({
 
   const isJoint =
     filingParty === GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.joint;
+  const isParties =
+    filingParty === GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties;
 
   if (
     dueDateMessage ===
     GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport
   ) {
-    return isJoint
-      ? wrap(
-          `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
-        )
-      : wrap(
-          `ORDERED that ${filingParty} shall file a status report by ${dueDateFormatted}.`,
-        );
+    if (isJoint) {
+      return wrap(
+        `ORDERED that the parties shall file a joint status report by ${dueDateFormatted}.`,
+      );
+    }
+    if (isParties) {
+      return wrap(
+        `ORDERED that the parties shall file a status report(s) by ${dueDateFormatted}.`,
+      );
+    }
+    return wrap(
+      `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report by ${dueDateFormatted}.`,
+    );
   }
 
   if (
@@ -74,13 +102,19 @@ const buildStatusReportClause = ({
     GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
       .statusReportOrStipulatedDecision
   ) {
-    return isJoint
-      ? wrap(
-          `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
-        )
-      : wrap(
-          `ORDERED that ${filingParty} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
-        );
+    if (isJoint) {
+      return wrap(
+        `ORDERED that the parties shall file a joint status report or proposed stipulated decision by ${dueDateFormatted}.`,
+      );
+    }
+    if (isParties) {
+      return wrap(
+        `ORDERED that the parties shall file a status report(s) or proposed stipulated decision by ${dueDateFormatted}.`,
+      );
+    }
+    return wrap(
+      `ORDERED that ${formatFilingPartyForDocument(filingParty)} shall file a status report or proposed stipulated decision by ${dueDateFormatted}.`,
+    );
   }
 
   return '';
@@ -168,12 +202,16 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
       FORMATS.MONTH_DAY_YEAR,
     );
     trialLocationText = caseDetail.trialLocation || '';
-    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${trialLocationText}. `;
+    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
   }
 
-  const preamble = wrap(
-    `${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText}. For cause, it is`,
-  );
+  const preamble = buildPreamble({
+    documentNumberText,
+    motionDocumentTitle,
+    motionFilingDateFormatted,
+    movant,
+    preamblePrepend,
+  });
 
   const dispositionPhrase = buildDispositionPhrase({
     deniedAsMoot,
@@ -190,7 +228,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
 
   const strickenClause = strickenFromTrialSession
     ? wrap(
-        `ORDERED that this case is stricken from the ${formattedTrialDate} ${trialLocationText} trial session.`,
+        `ORDERED that this case is stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
       )
     : '';
 
@@ -248,4 +286,9 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   store.set(state.form.richText, richText);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
   store.set(state.form.previousDocument, motion);
+
+  const documentToEdit = get(state.documentToEdit);
+  if (documentToEdit?.docketEntryId) {
+    store.set(state.form.docketEntryIdToEdit, documentToEdit.docketEntryId);
+  }
 };

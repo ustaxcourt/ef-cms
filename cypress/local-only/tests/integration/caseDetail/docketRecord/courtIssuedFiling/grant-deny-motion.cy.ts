@@ -16,7 +16,6 @@ import {
   selectSection,
   sendMessage,
 } from 'cypress/local-only/support/pages/document-qc';
-
 type MotionCaseFixture = {
   docketNumber: string;
   motionDocketEntryId: string;
@@ -104,9 +103,8 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
 
           cy.wait('@courtIssuedOrder').then(({ request }) => {
             const html: string = request.body.contentHtml;
-            expect(html).to.include(
-              `On ${formattedToday}, petitioner filed a ${motionType}`,
-            );
+            expect(html).to.include(`On ${formattedToday}, petitioner filed a`);
+            expect(html).to.include(`${motionType} (doc. no.`);
             expect(html).to.include(
               `ORDERED that petitioner's ${motionType} is granted.`,
             );
@@ -169,6 +167,58 @@ describe('Judge grants/denies a motion (replaces Apply Stamp flow)', () => {
             filingPartyIndex,
             'Select Filing Party appears above Date is required',
           ).to.be.lessThan(dueDateIndex);
+        });
+      });
+    });
+
+    it('should show filing party and due date directly under the stip decision checkbox', () => {
+      createMotionCase().then(({ docketNumber }) => {
+        loginAsColvin();
+        cy.visit(`/case-detail/${docketNumber}`);
+        openGrantDenyMotionFromDocumentView();
+
+        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
+        cy.get('[data-testid="due-date-message-stip"]').should('be.checked');
+        cy.get('[data-testid="status-report-due-date-fields"]').should(
+          'be.visible',
+        );
+
+        cy.get('[data-testid="due-date-message-stip"]')
+          .parent('.usa-checkbox')
+          .next('[data-testid="status-report-due-date-fields"]')
+          .should('exist');
+      });
+    });
+
+    it('should use joint parties language for stip decision status report clause', () => {
+      createMotionCase().then(({ docketNumber }) => {
+        loginAsColvin();
+        cy.visit(`/case-detail/${docketNumber}`);
+        openGrantDenyMotionFromDocumentView();
+
+        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
+        cy.get('[data-testid="filing-party"]').select('Joint');
+        cy.get(
+          '.usa-date-picker__external-input[data-testid="grant-deny-due-date-picker"]',
+        ).type(today);
+
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+        cy.get('[data-testid="preview-pdf-button"]').click();
+
+        cy.wait('@courtIssuedOrder').then(({ request }) => {
+          const html: string = request.body.contentHtml;
+          expect(html).to.include(
+            'ORDERED that the parties shall file a joint status report or proposed stipulated decision',
+          );
+          expect(html).not.to.include('Joint shall file');
         });
       });
     });

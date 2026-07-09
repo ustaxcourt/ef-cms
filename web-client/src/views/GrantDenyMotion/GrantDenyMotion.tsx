@@ -74,7 +74,7 @@ export const GrantDenyMotion = connect(
     return (
       <>
         <CaseDetailHeader />
-        <div className="grid-container">
+        <div className="grid-container grant-deny-motion-page">
           <ErrorNotification />
           <div className="grid-row grid-gap">
             <h1 className="heading-1" id="page-title">

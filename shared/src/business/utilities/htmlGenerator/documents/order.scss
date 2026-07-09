@@ -43,4 +43,18 @@
       line-height: 15px;
     }
   }
+
+  &.grant-deny-motion-order {
+    .order-docket-header #caption {
+      #caption-extension,
+      #caption-v,
+      #caption-respondent {
+        padding-left: 56px;
+      }
+    }
+
+    #order-content p.grant-deny-indent-paragraph {
+      text-indent: 56px;
+    }
+  }
 }

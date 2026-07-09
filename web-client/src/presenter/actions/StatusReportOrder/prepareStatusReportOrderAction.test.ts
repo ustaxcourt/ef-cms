@@ -276,7 +276,7 @@ describe('prepareStatusReportOrderAction,', () => {
       },
     });
     expect(result.state.form.richText).toContain(
-      `This case is set for trial at the session of the Court commencing on ${trialDateFormatted} in ${trialLocation}.`,
+      `This case is set for trial at the session of the Court commencing on ${trialDateFormatted}, in ${trialLocation}.`,
     );
   });
   it('should not list the time and place of the trial if it is calendared and a motion/hearing', async () => {

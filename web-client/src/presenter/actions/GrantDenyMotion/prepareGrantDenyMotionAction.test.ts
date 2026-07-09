@@ -9,6 +9,18 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareGrantDenyMotionAction', () => {
+  const wrap = (inner: string) =>
+    `<p class="grant-deny-indent-paragraph">${inner}</p>`;
+
+  const expectedPreamble = ({
+    date = 'March 15, 2026',
+    documentNumberText = '(doc. no. 7)',
+    motionTitle = 'Motion to Compel',
+    movant = 'petitioner',
+    preamblePrepend = '',
+  } = {}) =>
+    `${wrap(`${preamblePrepend}On ${date}, ${movant} filed a`)}${wrap(`${motionTitle} ${documentNumberText}. For cause, it is`)}`;
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -54,9 +66,7 @@ describe('prepareGrantDenyMotionAction', () => {
     expect(result.state.form.orderType).toEqual(
       GRANT_DENY_MOTION_OPTIONS.orderType,
     );
-    expect(result.state.form.richText).toContain(
-      'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7).',
-    );
+    expect(result.state.form.richText).toContain(expectedPreamble());
     expect(result.state.form.richText).toContain(
       "ORDERED that petitioner's Motion to Compel is granted.",
     );
@@ -75,11 +85,16 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    const paragraphs = result.state.form.richText.match(/<p>.*?<\/p>/g) || [];
+    const paragraphs =
+      result.state.form.richText.match(
+        /<p class="grant-deny-indent-paragraph">[\s\S]*?<\/p>/g,
+      ) || [];
 
-    expect(paragraphs).toHaveLength(4);
+    expect(paragraphs).toHaveLength(5);
     paragraphs.forEach(paragraph => {
-      expect(paragraph.startsWith('<p>&emsp;&emsp;&emsp;')).toBe(true);
+      expect(
+        paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
+      ).toBe(true);
     });
   });
 
@@ -246,7 +261,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'This case is set for trial at the session of the Court commencing on September 15, 2026 in Washington, DC.',
+      'This case is set for trial at the session of the Court commencing on September 15, 2026, in Washington, DC.',
     );
   });
 
@@ -269,7 +284,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that this case is stricken from the September 15, 2026 Washington, DC trial session.',
+      'ORDERED that this case is stricken from the September 15, 2026, Washington, DC trial session.',
     );
     expect(result.state.form.richText).toContain('It is further');
   });
@@ -328,7 +343,30 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that Respondent shall file a status report by December 31, 2026.',
+      'ORDERED that respondent shall file a status report by December 31, 2026.',
+    );
+  });
+
+  it('lowercases petitioner(s) in the status-report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.petitioners,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that petitioner(s) shall file a status report by December 31, 2026.',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'Petitioner(s) shall file',
     );
   });
 
@@ -399,9 +437,7 @@ describe('prepareGrantDenyMotionAction', () => {
       },
     });
 
-    expect(result.state.form.richText).toContain(
-      'On March 15, 2026, petitioner filed a Motion to Compel (doc. no. 7). For cause, it is',
-    );
+    expect(result.state.form.richText).toContain(expectedPreamble());
     expect(result.state.form.richText).not.toContain('ORDERED that');
     expect(result.state.form.documentTitle).toEqual('Order - Motion to Compel');
   });
@@ -447,6 +483,47 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
+  it('builds a parties status report clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a status report(s) by December 31, 2026.',
+    );
+  });
+
+  it('builds a parties status report or proposed stipulated decision clause', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          dueDate: '2026-12-31',
+          dueDateMessage:
+            GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions
+              .statusReportOrStipulatedDecision,
+          filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that the parties shall file a status report(s) or proposed stipulated decision by December 31, 2026.',
+    );
+  });
+
   it('normalizes additionalOrderText by removing whitespace-only entries', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
@@ -465,6 +542,21 @@ describe('prepareGrantDenyMotionAction', () => {
     expect(result.state.form.richText).toContain(
       'ORDERED that Parties shall comply.',
     );
+  });
+
+  it('sets docketEntryIdToEdit when editing an existing draft order', async () => {
+    const draftOrderId = 'draft-order-entry-id';
+
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        documentToEdit: { docketEntryId: draftOrderId },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.docketEntryIdToEdit).toEqual(draftOrderId);
   });
 
   it('throws when motion docket entry not found', async () => {

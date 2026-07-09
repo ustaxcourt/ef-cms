@@ -15,16 +15,19 @@ export const setDocketEntrySelectedFromMessageAction = ({
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 
-  // @ts-ignore
   const messageViewerDocumentToDisplay = caseDetail.docketEntries.find(
-    entries => entries.docketEntryId === docketEntryId,
+    entry => entry.docketEntryId === docketEntryId,
   );
-  // @ts-ignore
-  messageViewerDocumentToDisplay.documentId = docketEntryId;
 
-  store.set(
-    state.messageViewerDocumentToDisplay,
-    messageViewerDocumentToDisplay,
-  );
+  if (!messageViewerDocumentToDisplay) {
+    throw new Error(
+      `Could not find docket entry ${docketEntryId} on case ${caseDetail.docketNumber}`,
+    );
+  }
+
+  store.set(state.messageViewerDocumentToDisplay, {
+    ...messageViewerDocumentToDisplay,
+    documentId: docketEntryId,
+  });
   store.set(state.documentId, docketEntryId);
 };
