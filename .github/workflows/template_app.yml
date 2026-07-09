@@ -87,6 +87,7 @@ jobs:
         if: ${{ inputs.is_cypress }}
         run: |
           mkdir -p /tmp/cypress/
+          mkdir -p /tmp/cypress-logs/
       - name: Start DAWSON
         run: |
           npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output.txt &
@@ -94,14 +95,29 @@ jobs:
         run: |
           WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
       - name: Run tests
+        shell: bash
         run: |
-          ${{ inputs.run_command }}
+          if [[ "${{ inputs.is_cypress }}" == "true" ]]; then
+            set -o pipefail
+            export DEBUG="cypress:launcher,cypress:browsers"
+            {
+              ${{ inputs.run_command }}
+            } 2>&1 | tee /tmp/cypress-logs/${{ inputs.workflow_filename }}-cypress-output.txt
+          else
+            ${{ inputs.run_command }}
+          fi
       - name: Upload DAWSON logs
         if: ${{ always() && inputs.upload_logs }}
         uses: actions/upload-artifact@v7
         with:
           name: dawson-output
           path: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
+      - name: Upload Cypress logs
+        if: ${{ always() && inputs.is_cypress }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-cypress-output
+          path: /tmp/cypress-logs/${{ inputs.workflow_filename }}-cypress-output.txt
       - name: Compile Cypress Videos
         if: ${{ always() && inputs.is_cypress }}
         run: |
