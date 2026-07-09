@@ -380,7 +380,7 @@ The major version of this package should match our major version of Node. We sho
 ### ts-node
 **Installed Version: 10.9.2**
 
-**When upgrading TypeScript, make sure that the new version is supported by ts-jest and ts-node.**
+**When upgrading ts-node, make sure that the new version is compatible with our pinned TypeScript version.**
 
 - Ensure the pinned version of ts-node globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version.
 

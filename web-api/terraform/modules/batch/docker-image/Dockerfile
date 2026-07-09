@@ -15,7 +15,7 @@ ENV WEBSOCKET_API_GATEWAY_ID=${WEBSOCKET_API_GATEWAY_ID}
 WORKDIR /usr/src/app
 
 COPY . .
-RUN npm install
+RUN npm ci
 
 RUN npm install -g ts-node@10.9.2 typescript@6.0.3
 CMD ["ts-node", "src/docketEntryBatchDownloader.ts"]
