@@ -1,7 +1,12 @@
 jest.mock('@web-api/persistence/elasticsearch/caseAdvancedSearch');
-jest.mock('@shared/sharedAppContext', () => ({
-  getUniqueId: jest.fn().mockReturnValue('mock-preference-uuid'),
-}));
+jest.mock('@shared/sharedAppContext', () => {
+  const actual = jest.requireActual('@shared/sharedAppContext');
+
+  return {
+    ...actual,
+    getUniqueId: jest.fn().mockReturnValue('mock-preference-uuid'),
+  };
+});
 
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { getUniqueId } from '@shared/sharedAppContext';
