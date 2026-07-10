@@ -1207,6 +1207,17 @@ const router = {
     );
 
     registerRoute(
+      '/reports/docket-clerk-report',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.DOCKET_CLERK_REPORT },
+        () => {
+          setPageTitle('Docket Clerk Report');
+          return app.getSequence('gotoDocketClerkReportSequence')();
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-sessions..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
