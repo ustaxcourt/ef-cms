@@ -1,67 +1,124 @@
+@page notice-of-trial {
+  margin: 1.2cm 1cm 1.2cm 1cm;
+  size: 8.5in 11in;
+}
+
+@page notice-of-trial:first {
+  margin-top: 0;
+  margin-bottom: 1.2cm;
+}
+
+body:has(#notice-of-trial-pdf) {
+  margin-bottom: 20px;
+}
+
 #notice-of-trial-pdf {
+  page: notice-of-trial;
+
   .order-court-header {
-    margin-bottom: 28pt;
+    margin-bottom: 20pt;
+    line-height: 120%;
 
     .us-tax-court-seal {
-      width: 37pt;
-      height: 37pt;
-      margin-right: -37pt;
+      width: 32pt;
+      height: 32pt;
+      margin-right: -32pt;
     }
 
     h1 {
       margin-bottom: 0;
-      font-size: 20pt;
+      font-size: 14pt;
       font-weight: normal;
+      line-height: 1;
     }
 
     .court-address {
-      font-size: 13pt;
-      line-height: 14pt;
+      margin-top: calc(10pt - 10px);
+      font-size: 11pt;
+      line-height: 12pt;
     }
   }
 
   .order-docket-header {
     #caption {
-      line-height: 14pt;
+      font-size: 10pt;
+      line-height: 12pt;
 
       #caption-title {
         margin-top: 0;
+        margin-bottom: 0;
+        line-height: 10pt;
       }
 
-      #caption-extension,
+      #caption-extension {
+        margin-top: 17px;
+        margin-bottom: 0;
+        line-height: 10pt;
+      }
+
       #caption-v,
       #caption-respondent {
-        margin-top: 2pt;
+        margin-top: 6pt;
+        margin-bottom: 0;
       }
 
       #caption-commissioner {
-        margin-top: 2pt;
+        margin-top: 6pt;
+        margin-bottom: 0;
       }
     }
 
     #docket-number {
-      margin-top: 28pt;
+      margin-top: 36pt;
+      font-size: 10pt;
+      line-height: 12pt;
     }
 
     .document-title {
-      margin-top: 10pt;
-      margin-bottom: 6pt;
-      font-size: 14pt;
+      padding: 0;
+      margin: 23pt 0 0 0;
+      font-size: 16pt;
+      line-height: 1;
     }
   }
 
-  .info-box {
-    margin: 10px 0 15px 0;
+  .notice-info-boxes {
+    display: flex;
+    align-items: stretch;
+    padding-top: 0;
+    margin-top: 14pt;
+
+    .info-box {
+      margin: 0 0 12pt 0;
+    }
+
+    .info-box-trial,
+    .info-box-judge {
+      display: flex;
+      width: 49%;
+      height: auto;
+      flex-direction: column;
+      float: none;
+    }
+
+    .info-box-trial {
+      margin-right: 2%;
+    }
+
+    .info-box-content {
+      flex: 1;
+    }
   }
 
   .info-box-header {
+    padding: 6pt;
     font-size: 12pt;
   }
 
   .info-box-content {
-    padding: 10px;
-    font-size: 12pt;
-    line-height: 14pt;
+    padding: 8pt;
+    font-size: 10pt;
+    line-height: 12pt;
   }
 
   .info-box-chambers-phone {
@@ -71,8 +128,15 @@
   #notice-body {
     p {
       margin-top: 0;
-      font-size: 14pt;
-      line-height: 15pt;
+      font-size: 12pt;
+      line-height: 14pt;
+    }
+
+    a {
+      color: #0050d8;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      text-decoration: underline;
     }
 
     .notice-body-indent {
@@ -80,78 +144,34 @@
       text-indent: 56pt;
     }
 
-    .notice-access-instructions {
-      margin-bottom: 0;
-      text-indent: 0;
-    }
+    #notice-clerk-signature {
+      margin-top: 14pt;
 
-    p.text-center {
-      margin-bottom: 4pt;
-      text-indent: 0;
-    }
-
-    #notice-clerk-signature p {
-      width: auto;
-      margin-top: 0;
-      margin-right: 10px;
+      p {
+        width: auto;
+        margin-top: 0;
+        margin-right: 10pt;
+      }
     }
   }
 
   &.notice-of-trial-remote {
-    .order-docket-header .document-title {
-      margin-top: 4pt;
-      margin-bottom: 2pt;
-    }
-
-    .info-box {
-      margin: 0 0 2pt 0;
-    }
-
     #notice-body {
       p {
         line-height: 13pt;
       }
 
       .notice-body-indent {
-        margin-bottom: 8pt;
-      }
-
-      > .notice-body-indent:first-of-type {
-        margin-bottom: 4pt;
-      }
-
-      > .notice-body-indent:nth-of-type(2) {
-        margin-bottom: 8pt;
+        margin-bottom: 14pt;
       }
 
       .notice-access-remote-section {
-        margin-bottom: 0;
-
-        > p.text-center {
-          margin-bottom: 6pt;
+        .notice-body-indent {
+          margin-bottom: 10pt;
         }
 
-        .notice-access-meeting-info {
-          margin-bottom: 6pt;
-
-          p.text-center {
-            padding: 0;
-            margin: 0;
-            line-height: 13pt;
-          }
-
-          p.text-center:first-child {
-            margin-bottom: 6pt;
-          }
-        }
-
-        .notice-access-instructions {
-          margin-bottom: 6pt;
-          text-indent: 0;
-
-          &:last-of-type {
-            margin-bottom: 10pt;
-          }
+        .notice-meeting-info {
+          margin-bottom: calc(10pt + 6px);
         }
       }
 
@@ -161,7 +181,7 @@
         }
 
         #notice-clerk-signature {
-          margin-top: 6pt;
+          margin-top: calc(8pt + 13px);
         }
       }
     }

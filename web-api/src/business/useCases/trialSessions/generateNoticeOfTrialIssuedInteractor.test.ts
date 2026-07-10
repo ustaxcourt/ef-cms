@@ -93,8 +93,8 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     ).toMatchObject({
       data: {
         trialInfo: {
-          chambersPhoneNumber: '202-521-3339',
-          joinPhoneNumber: '444-444-4444',
+          chambersPhoneNumber: '(202) 521-3339',
+          joinPhoneNumber: '(444) 444-4444',
         },
       },
     });

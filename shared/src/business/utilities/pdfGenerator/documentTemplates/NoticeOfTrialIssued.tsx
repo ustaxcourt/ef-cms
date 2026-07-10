@@ -28,7 +28,7 @@ export const NoticeOfTrialIssued = ({
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
-      <div>
+      <div className="notice-info-boxes">
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
@@ -54,11 +54,8 @@ export const NoticeOfTrialIssued = ({
           . The calendar for that Session will be called at that date and time,
           and the parties are directed to appear before the Court at a
           proceeding to be held using Zoomgov and to be prepared to try the
-          case.{' '}
-          <span className="text-bold">
-            Your failure to appear may result in dismissal of the case and entry
-            of decision against you.
-          </span>
+          case. Your failure to appear may result in dismissal of the case and
+          entry of decision against you.
         </p>
         <p className="notice-body-indent">
           The Court will set the time for each trial at the end of the calendar
@@ -68,33 +65,31 @@ export const NoticeOfTrialIssued = ({
         </p>
 
         <div className="notice-access-remote-section">
-          <p className="text-center text-underline text-bold">
+          <p className="notice-body-indent text-underline">
             ACCESS REMOTE PROCEEDING
           </p>
-          <p className="text-center">
-            Your Meeting ID and Passcode for the remote proceeding are:
-          </p>
-          <div className="notice-access-meeting-info">
-            <p className="text-center">
-              <span className="text-bold">Meeting ID:</span>{' '}
-              {trialInfo.meetingId}
-            </p>
-            <p className="text-center">
-              <span className="text-bold">Passcode:</span> {trialInfo.password}
-            </p>
-          </div>
-
-          <p className="notice-access-instructions">
-            <span className="text-italic text-bold">Join online</span>: Go to{' '}
-            <span className="text-bold">www.zoomgov.com</span> and click
-            &apos;Join&apos;. Enter the Meeting ID and Passcode above when
-            prompted.
+          <p className="notice-body-indent notice-meeting-info">
+            <span className="text-bold">Meeting ID:</span> {trialInfo.meetingId}{' '}
+            <span className="text-bold">Passcode:</span> {trialInfo.password}
           </p>
 
-          <p className="notice-access-instructions">
-            <span className="text-italic text-bold">Join by telephone</span>:
-            Call {trialInfo.joinPhoneNumber}. Enter the Meeting ID and Passcode
-            above when prompted.
+          <p className="notice-body-indent">
+            Join online: Go to{' '}
+            <a
+              href="https://www.zoomgov.com"
+              rel="noreferrer"
+              style={{ color: '#0050d8', textDecoration: 'underline' }}
+              target="_blank"
+            >
+              www.zoomgov.com
+            </a>{' '}
+            and click &apos;Join&apos;. Enter the Meeting ID and Passcode above
+            when prompted.
+          </p>
+
+          <p className="notice-body-indent">
+            Join by telephone: Call {trialInfo.joinPhoneNumber}. Enter the
+            Meeting ID and Passcode above when prompted.
           </p>
         </div>
 
@@ -114,6 +109,7 @@ export const NoticeOfTrialIssued = ({
               titleOfClerk={titleOfClerk}
             />
           </div>
+          <div className="clear" />
         </div>
       </div>
     </div>
