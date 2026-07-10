@@ -128,6 +128,20 @@ describe('Petitioner', () => {
         state: '"state" is not allowed',
       });
     });
+
+    it('should be false when petitioner is not sealed but available and address is undefined', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        sealedAndUnavailable: false,
+        isAddressSealed: true,
+        address1: undefined,
+      });
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        address1: 'Enter mailing address',
+      });
+    });
   });
 
   describe('phone number formatting', () => {
