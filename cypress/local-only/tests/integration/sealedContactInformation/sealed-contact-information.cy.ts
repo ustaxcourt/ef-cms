@@ -78,7 +78,7 @@ describe('Sealed Contact Information', () => {
     });
   });
 
-  it('should allow users to edit case', () => {
+  it('should allow users to add/edit case notes when petitioner contact info is sealed', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       // Login as docket clerk and seal a petitioners contact info
       loginAsDocketClerk();
@@ -99,7 +99,12 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="edit-case-note-textarea"]').type(
         'Docket Clerk able to edit',
       );
+      cy.intercept('PUT', '**/case-notes/**').as('putCaseNoteDocketClerk');
       cy.get('[data-testid="modal-confirm"]').click();
+      cy.wait('@putCaseNoteDocketClerk')
+        .its('response.statusCode')
+        .should('eq', 200);
+      cy.contains('Docket Clerk able to edit').should('exist');
 
       // Add a note as an ADC
       loginAsAdc();
@@ -112,7 +117,8 @@ describe('Sealed Contact Information', () => {
       );
       cy.intercept('PUT', '**/case-notes/**').as('putCaseNote');
       cy.get('[data-testid="modal-confirm"]').click();
-      cy.wait('@putCaseNote');
+      cy.wait('@putCaseNote').its('response.statusCode').should('eq', 200);
+      cy.contains('ADC able to edit').should('exist');
     });
   });
 });
