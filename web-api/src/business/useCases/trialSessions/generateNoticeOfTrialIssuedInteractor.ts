@@ -11,6 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
+import { formatTrialNoticePhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -58,10 +59,14 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   const { name, title } = await getClerkOfTheCourtInfo();
 
   const trialInfo: FormattedTrialInfoType = {
+    ...trialSession,
+    chambersPhoneNumber: formatTrialNoticePhoneNumber(
+      trialSession.chambersPhoneNumber,
+    ),
     formattedJudge: trialSession.judge?.name || 'Not assigned',
     formattedStartDate,
     formattedStartTime,
-    ...trialSession,
+    joinPhoneNumber: formatTrialNoticePhoneNumber(trialSession.joinPhoneNumber),
   };
 
   if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson) {

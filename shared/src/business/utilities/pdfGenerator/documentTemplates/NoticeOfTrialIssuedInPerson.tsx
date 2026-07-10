@@ -1,5 +1,4 @@
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { DocumentParagraphIndent } from '../components/DocumentParagraphIndent';
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { NoticeSettingCaseForTrialDocketHeader } from '../components/NoticeSettingCaseForTrialDocketHeader';
 import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
@@ -29,7 +28,7 @@ export const NoticeOfTrialIssuedInPerson = ({
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
-      <div>
+      <div className="notice-info-boxes">
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
@@ -50,40 +49,37 @@ export const NoticeOfTrialIssuedInPerson = ({
       </div>
 
       <div id="notice-body">
-        <p>
-          <DocumentParagraphIndent />
+        <p className="notice-body-indent">
           The parties are hereby notified that this case is set for trial at the
           Trial Session beginning at{' '}
-          <b>
+          <span className="text-bold">
             {trialInfo.formattedStartTime} on {trialInfo.formattedStartDate}
-          </b>
+          </span>
           . The calendar for that Session will be called at that date and time,
           and the parties are expected to be present and to be prepared to try
           the case.{' '}
-          <b>
+          <span className="text-bold">
             Your failure to appear may result in dismissal of the case and entry
             of decision against you.
-          </b>
+          </span>
         </p>
-        <p>
-          <DocumentParagraphIndent />
+        <p className="notice-body-indent">
           The Court will set the time for each trial at the end of the calendar
           call (unless the parties request in advance a specific date and time
           for trial and the Court grants the request). In setting trial times
           the Court attempts to accommodate the parties, but the final
           determination of trial times rests in the Court’s discretion.
         </p>
-        <p>
-          <DocumentParagraphIndent />
+        <p className="notice-body-indent">
           Your attention is called to the requirements set out in the Standing
           Pretrial Order that is served with this notice.
         </p>
-        <p>
-          <DocumentParagraphIndent />
-          <b>IMPORTANT:</b> Your case is currently set for an in-person
-          proceeding. In the event that the Court is unable to hold an in-person
-          proceeding and needs to proceed remotely, you will be notified and be
-          given detailed instructions for accessing your remote proceeding.
+        <p className="notice-body-indent">
+          <span className="text-bold">IMPORTANT:</span> Your case is currently
+          set for an in-person proceeding. In the event that the Court is unable
+          to hold an in-person proceeding and needs to proceed remotely, you
+          will be notified and be given detailed instructions for accessing your
+          remote proceeding.
         </p>
 
         <div id="notice-clerk-signature">
