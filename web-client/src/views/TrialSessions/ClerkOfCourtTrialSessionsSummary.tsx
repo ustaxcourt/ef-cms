@@ -25,7 +25,7 @@ const getFieldValue = (value: string | undefined, fallback: string): string => {
 };
 
 const renderTrialSessionsHeader = () => (
-  <h2 className="margin-top-4 margin-bottom-4">
+  <h2 className="margin-bottom-4">
     {CLERK_OF_COURT_DASHBOARD_LABELS.TRIAL_SESSIONS_HEADER}
   </h2>
 );

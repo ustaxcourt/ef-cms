@@ -1,5 +1,5 @@
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { getJsTimeframeForYear } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
 
 export type EventCodeReportDocketEntry = {

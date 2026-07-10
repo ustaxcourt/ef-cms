@@ -1623,6 +1623,38 @@ export const SESSION_TERMS_BY_MONTH = {
   winter: [1, 2, 3],
 };
 
+export const MONTH_LABELS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export const FISCAL_MONTH_LABELS = [
+  'October',
+  'November',
+  'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+];
+
+export const FISCAL_MONTH_PRIORITY = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
+
 export const SESSION_TYPES = {
   regular: 'Regular',
   small: 'Small',
@@ -2242,6 +2274,7 @@ export const ALLOWED_EVENT_CODES = [
   'NCTL',
   'NODC',
 ];
+
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
 export const NOT_PROVIDED = 'Not Provided';
@@ -2288,3 +2321,12 @@ export const EVENT_CODES_WITH_NO_ORDER = [
 ];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
+
+export const GRAPH_COLORS = {
+  BLUE: '#005EA2',
+  DARK_BLUE: '#162E51',
+  YELLOW: '#FFBE2E',
+  RED: '#D83933',
+  DARK_RED: '#B50909',
+  GREEN: '#2E8540',
+};

@@ -107,6 +107,7 @@ jobs:
         if: ${{ inputs.is_cypress }}
         run: |
           mkdir -p /tmp/cypress/
+          mkdir -p /tmp/cypress-logs/
       - name: Create Test Execution Times Directory
         run: |
           mkdir -p /tmp/test-file-times
@@ -117,8 +118,17 @@ jobs:
         run: |
           WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
       - name: Run tests
+        shell: bash
         run: |
-          ${{ inputs.run_command }}
+          if [[ "${{ inputs.is_cypress }}" == "true" ]]; then
+            set -o pipefail
+            export DEBUG="cypress:launcher,cypress:browsers"
+            {
+              ${{ inputs.run_command }}
+            } 2>&1 | tee /tmp/cypress-logs/${{ inputs.workflow_filename }}-cypress-output-shard-${{ inputs.ci_node_index }}.txt
+          else
+            ${{ inputs.run_command }}
+          fi
       - name: Record shard test file timings
         if: ${{ success() && inputs.record_jest_test_timings }}
         run: |
@@ -131,6 +141,12 @@ jobs:
         with:
           name: ${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}
           path: /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt
+      - name: Upload Cypress logs
+        if: ${{ always() && inputs.is_cypress }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.workflow_filename }}-cypress-output-shard-${{ inputs.ci_node_index }}
+          path: /tmp/cypress-logs/${{ inputs.workflow_filename }}-cypress-output-shard-${{ inputs.ci_node_index }}.txt
       - name: Compile Cypress Videos
         if: ${{ always() && inputs.is_cypress }}
         run: |
