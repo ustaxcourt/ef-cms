@@ -68,19 +68,23 @@ export const NoticeOfTrialIssued = ({
           <p className="notice-body-indent text-underline">
             ACCESS REMOTE PROCEEDING
           </p>
-          <p className="notice-body-indent">
-            Your Meeting ID and Passcode for the remote proceeding are:
-          </p>
-          <p className="notice-body-indent">
+          <p className="notice-body-indent notice-meeting-info">
             <span className="text-bold">Meeting ID:</span> {trialInfo.meetingId}{' '}
             <span className="text-bold">Passcode:</span> {trialInfo.password}
           </p>
 
           <p className="notice-body-indent">
             Join online: Go to{' '}
-            <span className="text-bold">www.zoomgov.com</span> and click
-            &apos;Join&apos;. Enter the Meeting ID and Passcode above when
-            prompted.
+            <a
+              href="https://www.zoomgov.com"
+              rel="noreferrer"
+              style={{ color: '#0050d8', textDecoration: 'underline' }}
+              target="_blank"
+            >
+              www.zoomgov.com
+            </a>{' '}
+            and click &apos;Join&apos;. Enter the Meeting ID and Passcode above
+            when prompted.
           </p>
 
           <p className="notice-body-indent">

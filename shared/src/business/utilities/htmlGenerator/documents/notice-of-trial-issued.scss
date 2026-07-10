@@ -29,10 +29,11 @@ body:has(#notice-of-trial-pdf) {
       margin-bottom: 0;
       font-size: 14pt;
       font-weight: normal;
+      line-height: 1;
     }
 
     .court-address {
-      margin-top: 10pt;
+      margin-top: calc(10pt - 10px);
       font-size: 11pt;
       line-height: 12pt;
     }
@@ -46,9 +47,15 @@ body:has(#notice-of-trial-pdf) {
       #caption-title {
         margin-top: 0;
         margin-bottom: 0;
+        line-height: 10pt;
       }
 
-      #caption-extension,
+      #caption-extension {
+        line-height: 10pt;
+        margin-top: 17px;
+        margin-bottom: 0;
+      }
+
       #caption-v,
       #caption-respondent {
         margin-top: 6pt;
@@ -69,7 +76,7 @@ body:has(#notice-of-trial-pdf) {
 
     .document-title {
       padding: 0;
-      margin: 34pt 0 0 0;
+      margin: 23pt 0 0 0;
       font-size: 16pt;
       line-height: 1;
     }
@@ -79,7 +86,7 @@ body:has(#notice-of-trial-pdf) {
     display: flex;
     align-items: stretch;
     padding-top: 0;
-    margin-top: 18pt;
+    margin-top: 14pt;
 
     .info-box {
       margin: 0 0 12pt 0;
@@ -125,6 +132,13 @@ body:has(#notice-of-trial-pdf) {
       line-height: 14pt;
     }
 
+    a {
+      color: #0050d8;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      text-decoration: underline;
+    }
+
     .notice-body-indent {
       margin-bottom: 17pt;
       text-indent: 56pt;
@@ -155,6 +169,10 @@ body:has(#notice-of-trial-pdf) {
         .notice-body-indent {
           margin-bottom: 10pt;
         }
+
+        .notice-meeting-info {
+          margin-bottom: calc(10pt + 6px);
+        }
       }
 
       .notice-remote-closing {
@@ -163,7 +181,7 @@ body:has(#notice-of-trial-pdf) {
         }
 
         #notice-clerk-signature {
-          margin-top: 8pt;
+          margin-top: calc(8pt + 13px);
         }
       }
     }
