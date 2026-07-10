@@ -34,13 +34,24 @@ export const clearWizardDataAction = ({ get, props, store }: ActionProps) => {
       store.set(state.form.secondaryDocument, pickedDocument);
 
       break;
-    case 'secondaryDocument.documentType':
+    case 'secondaryDocument.documentType': {
       pickedDocument = pick(get(state.form.secondaryDocument), [
         'category',
         'documentType',
       ]);
-      store.set(state.form.secondaryDocument, pickedDocument);
-
+      const primaryDocument = pick(get(state.form), [
+        'category',
+        'documentType',
+        'documentTitle',
+        'eventCode',
+        'scenario',
+        'selectedCases',
+      ]);
+      store.set(state.form, {
+        ...primaryDocument,
+        secondaryDocument: pickedDocument,
+      });
       break;
+    }
   }
 };

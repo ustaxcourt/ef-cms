@@ -33,4 +33,30 @@ describe('serve status report order', () => {
     cy.contains('Document served.').should('exist');
     getLastDraftOrderElementFromDrafts().should('exist');
   });
+
+  it('should serve status report order created from message workflow', () => {
+    // Create a Status Report Order from case messages as a judge
+    loginAsColvin();
+    cy.visit(`/case-detail/${docketNumber}`);
+    cy.get('#tab-case-messages').click();
+    cy.contains('a', 'Status Report').click();
+    cy.get('[data-testid="status-report-order-button"]').click();
+    cy.get('[data-testid="save-draft-button"]').click();
+    cy.get('[data-testid="sign-pdf-canvas"]').click();
+    cy.get('[data-testid="save-signature-button"]').click();
+    cy.contains('Order updated.').should('exist');
+    logout();
+
+    // Serve the newly created order as a docket clerk
+    loginAsDocketClerk();
+    cy.visit(`/case-detail/${docketNumber}`);
+    cy.get('#tab-drafts').click();
+    getLastDraftOrderElementFromDrafts().click();
+    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    cy.get('[data-testid="service-stamp-Served"]').click({ force: true });
+    cy.get('[data-testid="serve-to-parties-btn"]').click();
+    cy.get('[data-testid="modal-button-confirm"]').click();
+    cy.contains('Document served.').should('exist');
+    getLastDraftOrderElementFromDrafts().should('exist');
+  });
 });

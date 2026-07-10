@@ -9,7 +9,10 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { generateAndServeDocketEntry } from './createChangeItems';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { inTransaction, onTransactionCommit } from '@web-api/persistence/postgres/utils/transactions';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 jest.mock('@web-api/persistence/postgres/utils/transactions', () => ({
   inTransaction: jest.fn().mockReturnValue(false),
