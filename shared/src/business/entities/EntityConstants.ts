@@ -1617,6 +1617,38 @@ export const SESSION_TERMS_BY_MONTH = {
   winter: [1, 2, 3],
 };
 
+export const MONTH_LABELS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export const FISCAL_MONTH_LABELS = [
+  'October',
+  'November',
+  'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+];
+
+export const FISCAL_MONTH_PRIORITY = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
+
 export const SESSION_TYPES = {
   regular: 'Regular',
   small: 'Small',
@@ -1786,7 +1818,8 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for documents
+export const ADVANCED_CASE_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for cases
 export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
@@ -1896,6 +1929,7 @@ export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
   DISCIPLINARY: 'Disciplinary',
   CHANGE_OF_NAME: 'Change of Name',
+  CHANGE_OF_STATUS: 'Change of Status',
   EXAM_RELATED: 'Exam-Related',
   MISCELLANEOUS: 'Miscellaneous',
 };
@@ -1911,9 +1945,8 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 5000;
 export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
-export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -2226,8 +2259,12 @@ export const GRANT_DENY_MOTION_OPTIONS = {
     petitioners: 'Petitioner(s)',
     respondent: 'Respondent',
     joint: 'Joint',
+    parties: 'Parties',
   },
   orderType: 'grantDenyMotion',
+  pdfParagraphClass: 'grant-deny-indent-paragraph',
+  pdfOrderModifierClass: 'grant-deny-motion-order',
+  pdfParagraphIndentPx: 56,
 };
 
 export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;
@@ -2260,6 +2297,7 @@ export const ALLOWED_EVENT_CODES = [
   'NCTL',
   'NODC',
 ];
+
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
 export const NOT_PROVIDED = 'Not Provided';
@@ -2306,3 +2344,12 @@ export const EVENT_CODES_WITH_NO_ORDER = [
 ];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
+
+export const GRAPH_COLORS = {
+  BLUE: '#005EA2',
+  DARK_BLUE: '#162E51',
+  YELLOW: '#FFBE2E',
+  RED: '#D83933',
+  DARK_RED: '#B50909',
+  GREEN: '#2E8540',
+};

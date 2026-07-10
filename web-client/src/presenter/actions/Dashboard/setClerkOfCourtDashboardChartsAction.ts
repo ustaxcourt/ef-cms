@@ -5,15 +5,15 @@ export const setClerkOfCourtDashboardChartsAction = async ({
   applicationContext,
   store,
 }: ActionProps) => {
-  let stats: ClerkDashboardStats;
   try {
-    stats = await applicationContext
+    const stats: ClerkDashboardStats = await applicationContext
       .getUseCases()
       .getClerkDashboardStatsInteractor(applicationContext, {});
 
     store.set(state.clerkOfCourtDashboardStats, stats);
   } catch (e) {
     console.error('setClerkOfCourtDashboardChartsAction failed:', e);
+    store.set(state.alertError, { message: 'Error getting dashboard data' });
     return;
   }
 };

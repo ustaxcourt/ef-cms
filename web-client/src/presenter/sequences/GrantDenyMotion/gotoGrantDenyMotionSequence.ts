@@ -10,6 +10,7 @@ import { setDocumentToEditAction } from '@web-client/presenter/actions/setDocume
 import { setEditGrantDenyMotionFormAction } from '@web-client/presenter/actions/GrantDenyMotion/setEditGrantDenyMotionFormAction';
 import { setParentMessageIdAction } from '@web-client/presenter/actions/setParentMessageIdAction';
 import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
+import { setupGrantDenyMotionRedirectUrlAction } from '@web-client/presenter/actions/GrantDenyMotion/setupGrantDenyMotionRedirectUrlAction';
 import { setupGrantDenyMotionFormAction } from '@web-client/presenter/actions/GrantDenyMotion/setupGrantDenyMotionFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '@web-client/presenter/utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '@web-client/presenter/actions/stopShowValidationAction';
@@ -21,6 +22,7 @@ export const gotoGrantDenyMotionSequence =
     getCaseAction,
     setCaseAction,
     setParentMessageIdAction,
+    setupGrantDenyMotionRedirectUrlAction,
     clearPdfPreviewUrlAction,
     clearFormAction,
     stopShowValidationAction,
@@ -45,4 +47,5 @@ export const gotoGrantDenyMotionSequence =
     docketEntryId?: string;
     isEditing?: boolean;
     parentMessageId?: string;
+    redirectUrl?: string;
   }) => void;

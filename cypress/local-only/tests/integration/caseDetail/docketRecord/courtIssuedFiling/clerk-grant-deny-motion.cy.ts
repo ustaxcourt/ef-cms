@@ -117,9 +117,8 @@ describe('Clerk of Court grants/denies a motion (replaces Apply Stamp flow)', ()
 
         cy.wait('@courtIssuedOrder').then(({ request }) => {
           const html: string = request.body.contentHtml;
-          expect(html).to.include(
-            `On ${formattedToday}, petitioner filed a ${motionType}`,
-          );
+          expect(html).to.include(`On ${formattedToday}, petitioner filed a`);
+          expect(html).to.include(`${motionType} (doc. no.`);
           expect(html).to.include(
             `ORDERED that petitioner's ${motionType} is granted.`,
           );
@@ -136,6 +135,48 @@ describe('Clerk of Court grants/denies a motion (replaces Apply Stamp flow)', ()
         cy.url().should('contain', `/case-detail/${docketNumber}`);
         cy.get('[data-testid="tab-drafts"]').click();
         cy.contains(`Order - ${motionType} is granted`).should('be.visible');
+      });
+    });
+
+    it('should list the status report validation errors in field order (Filing Party above Due Date)', () => {
+      createMotionCase().then(({ docketNumber }) => {
+        loginAsClerkOfCourt();
+        openGrantDenyMotionFromDocumentView(docketNumber);
+
+        cy.get('[data-testid="motion-disposition-GRANTED"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="due-date-message-status-report"]').click({
+          force: true,
+        });
+        cy.get('[data-testid="status-report-due-date-fields"]').should(
+          'be.visible',
+        );
+
+        cy.get('[data-testid="save-draft-button"]').click();
+
+        cy.get('[data-testid="error-alert"]')
+          .should('contain.text', 'Select Filing Party')
+          .and('contain.text', 'Date is required');
+
+        cy.get('[data-testid="error-alert"] li').then($lis => {
+          const texts = [...$lis].map(li => li.innerText);
+          const filingPartyIndex = texts.findIndex(text =>
+            text.includes('Select Filing Party'),
+          );
+          const dueDateIndex = texts.findIndex(text =>
+            text.includes('Date is required'),
+          );
+
+          expect(filingPartyIndex, 'Select Filing Party is present').to.be.gte(
+            0,
+          );
+          expect(dueDateIndex, 'Date is required is present').to.be.gte(0);
+          expect(
+            filingPartyIndex,
+            'Select Filing Party appears above Date is required',
+          ).to.be.lessThan(dueDateIndex);
+        });
       });
     });
   });

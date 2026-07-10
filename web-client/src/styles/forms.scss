@@ -651,6 +651,13 @@ label.ustc-upload {
   }
 }
 
+.grant-deny-motion-page {
+  > .usa-alert {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+}
+
 .grant-deny-motion-form {
   .usa-form-group {
     max-width: 100%;
@@ -662,6 +669,29 @@ label.ustc-upload {
       &.usa-form-group--error {
         margin-left: -0.1rem;
       }
+    }
+
+    &.grant-deny-motion-form-group-error {
+      margin-left: -0.1rem;
+    }
+  }
+
+  .grant-deny-motion-additional-order-text {
+    .usa-label {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    [data-testid^='additional-order-text-row-']
+      + [data-testid^='additional-order-text-row-'] {
+      .usa-label {
+        margin-top: 1rem;
+      }
+    }
+
+    .grant-deny-motion-additional-order-text-divider {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -684,17 +714,64 @@ label.ustc-upload {
         display: block;
       }
     }
+
+    .usa-checkbox + .grant-deny-motion-status-report-fields {
+      margin-top: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .grant-deny-motion-status-report-fields + .usa-checkbox {
+      margin-top: 0.25rem;
+    }
   }
 
   .grant-deny-motion-status-report-fields {
     padding-left: 2rem;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
 
-    .usa-form-group {
-      margin: 0 0 1rem;
+    .grant-deny-motion-status-report-field {
+      margin-bottom: 1rem;
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      > .usa-error-message {
+        margin-left: -0.25rem;
+      }
+    }
+
+    .grant-deny-motion-status-report-field-inputs {
+      max-width: 100%;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &.usa-form-group--error {
+        padding-left: 1rem;
+        border-left: none;
+        margin-left: -1.25rem;
+        box-shadow: inset 4px 0 0 0 $red-primary;
+      }
+
+      .usa-label {
+        margin-bottom: 0.25rem;
+      }
+
+      .usa-form-group {
+        max-width: 100%;
+        padding-left: 0;
+        border-left: none;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 0;
+        box-shadow: none;
+      }
+
+      .grant-deny-motion-status-report-due-date {
+        .usa-date-picker {
+          margin-bottom: 0;
+        }
       }
     }
   }

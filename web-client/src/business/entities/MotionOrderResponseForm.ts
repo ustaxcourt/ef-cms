@@ -42,17 +42,16 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     additionalOrderTextArray: joi
       .array()
       .items(
-        JoiValidationConstants.STRING.max(
-          MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
-        ).allow(''),
+        JoiValidationConstants.STRING.max(MAX_ORDER_RESPONSE_TEXT_CHARACTERS)
+          .allow('')
+          .messages({
+            'string.max': 'Limit is 240 characters.',
+          }),
       )
       .min(1)
       .optional()
       .allow(null)
-      .description('Additional text for the response.')
-      .messages({
-        'string.max': 'Limit is 240 characters.',
-      }),
+      .description('Additional text for the response.'),
     issueOrderFor: joi
       .when('isOnLeadCase', {
         is: true,

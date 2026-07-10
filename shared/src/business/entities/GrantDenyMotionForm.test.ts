@@ -46,11 +46,31 @@ describe('GrantDenyMotionForm', () => {
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
 
+    it('should be valid when parties is selected as filing party', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        dueDate: futureDate(),
+        dueDateMessage:
+          GRANT_DENY_MOTION_OPTIONS.dueDateMessageOptions.statusReport,
+        filingParty: GRANT_DENY_MOTION_OPTIONS.filingPartyOptions.parties,
+      });
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
+
     it('should be valid when isOnLeadCase is true and issueOrder is provided', () => {
       const form = new GrantDenyMotionForm({
         disposition: MOTION_DISPOSITIONS.GRANTED,
         isOnLeadCase: true,
         issueOrder: GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+      });
+      expect(form.getFormattedValidationErrors()).toBeNull();
+    });
+
+    it('should be valid when stricken from trial session with jurisdiction selected', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
+        strickenFromTrialSession: true,
       });
       expect(form.getFormattedValidationErrors()).toBeNull();
     });
@@ -117,6 +137,17 @@ describe('GrantDenyMotionForm', () => {
       });
       expect(form.getFormattedValidationErrors()).toMatchObject({
         dueDate: 'Due date cannot be prior to today. Enter a valid date.',
+      });
+    });
+
+    it('should be invalid when stricken from trial session without jurisdiction', () => {
+      const form = new GrantDenyMotionForm({
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        strickenFromTrialSession: true,
+      });
+      expect(form.getFormattedValidationErrors()).toMatchObject({
+        jurisdiction:
+          'Jurisdiction is required since case is stricken from the trial session',
       });
     });
 

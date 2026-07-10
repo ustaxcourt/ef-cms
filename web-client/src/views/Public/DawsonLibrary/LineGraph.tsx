@@ -10,6 +10,8 @@ import {
   Dot,
   Tooltip,
 } from 'recharts';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
+import { GRAPH_COLORS } from '@shared/business/entities/EntityConstants';
 
 export interface LineGraphDataset {
   label: string;
@@ -31,11 +33,11 @@ export interface LineGraphProps {
 }
 
 const defaultColors = [
-  '#005EA2', // blue primary
-  '#162E51', // blue darker
-  '#D83933', // red primary
-  '#2E8540', // green
-  '#B50909', // red darker
+  GRAPH_COLORS.BLUE, // blue primary
+  GRAPH_COLORS.DARK_BLUE, // blue darker
+  GRAPH_COLORS.RED, // red primary
+  GRAPH_COLORS.GREEN, // green
+  GRAPH_COLORS.DARK_RED, // red darker
 ];
 
 const renderCustomLegend = (props: any) => {
@@ -48,7 +50,7 @@ const renderCustomLegend = (props: any) => {
             className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-semibold tw:text-base tw:xs:text-xl">
+          <span className="tw:text-black tw:font-bold tw:text-base tw:xs:text-xl">
             {entry.value}
           </span>
         </div>
@@ -109,7 +111,7 @@ const LineYAxisTick = (props: any) => {
         className="tw:text-base tw:xs:text-xl"
         fontWeight="400"
       >
-        {payload.value}
+        {formatPositiveNumber(payload.value)}
       </text>
     </g>
   );
@@ -164,7 +166,7 @@ const TooltipContent = ({
               style={{ backgroundColor: color }}
             />
             <span className="tw:text-base tw:xs:text-xl">
-              {ds.label} : {row[`${ds.label}_tip`]}
+              {ds.label} : {formatPositiveNumber(row[`${ds.label}_tip`])}
             </span>
           </div>
         );

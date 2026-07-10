@@ -1,14 +1,16 @@
-import {
-  CaseAdvancedSearchParamsRequestType,
-  CaseSearchResult,
-} from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import {
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '@web-api/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  PublicCaseSearchResult,
+  RawPublicCaseSearchResult,
+} from '@shared/business/entities/cases/PublicCaseSearchResult';
 
 export const casePublicSearch = async ({
   applicationContext,
@@ -16,7 +18,7 @@ export const casePublicSearch = async ({
 }: {
   applicationContext: ServerApplicationContext;
   searchTerms: CaseAdvancedSearchParamsRequestType;
-}): Promise<{ results: CaseSearchResult[] }> => {
+}): Promise<{ results: RawPublicCaseSearchResult[] }> => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -59,16 +61,23 @@ export const casePublicSearch = async ({
 
   return {
     results: cases.results.map(c => {
-      return {
+      const petitioners = c.petitioners || [];
+      const result = new PublicCaseSearchResult({
         caseCaption: c.caseCaption,
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
-        petitionerNames: c.petitioners?.map(p => p.name),
-        petitionerStateNames: c.petitioners?.map(
-          p => US_STATES[p.state] || p.state,
-        ),
+        petitionerNames: petitioners.map(p => p.name),
+        petitionerStateNames: petitioners
+          .map(p =>
+            p.state
+              ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+              : undefined,
+          )
+          .filter((stateName): stateName is string => !!stateName),
         receivedAt: c.receivedAt,
-      };
+      }).toRawObject();
+
+      return result;
     }),
   };
 };

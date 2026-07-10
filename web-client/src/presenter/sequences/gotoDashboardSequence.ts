@@ -15,6 +15,7 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
+import { setRumUserContextAction } from '@web-client/presenter/actions/setRumUserContextAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -28,6 +29,7 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+import { resetClerkOfCourtDashboardOptionsAction } from '@web-client/presenter/actions/Dashboard/resetClerkOfCourtDashboardOptionsAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -41,6 +43,7 @@ export const gotoDashboardSequence = [
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   setUserPermissionsAction,
+  setRumUserContextAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],
@@ -63,8 +66,9 @@ export const gotoDashboardSequence = [
         ),
         clerkofcourt: [
           fetchUserNotificationsSequence,
-          setClerkOfCourtDashboardChartsAction,
+          resetClerkOfCourtDashboardOptionsAction,
           parallel([
+            setClerkOfCourtDashboardChartsAction,
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
           ]),

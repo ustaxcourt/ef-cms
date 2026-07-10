@@ -2,7 +2,7 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 export const generateNoticeOfChangeOfTrialStartDateInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,17 +22,7 @@ export const generateNoticeOfChangeOfTrialStartDateInteractor = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
-
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const clerkOfTheCourtRecord = CLERK_OF_THE_COURT_RECORD.value.current as {
-    name: string;
-    title: string;
-  };
+  const clerkOfTheCourtRecord = await getClerkOfTheCourtInfo();
 
   return await applicationContext
     .getDocumentGenerators()
@@ -44,7 +34,7 @@ export const generateNoticeOfChangeOfTrialStartDateInteractor = async (
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix!,
         previousTrialSession,
         updatedTrialSession,
-        clerkOfTheCourtRecord
+        clerkOfTheCourtRecord,
       },
     });
 };

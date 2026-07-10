@@ -27,6 +27,10 @@ const caveats: string[] = [
   'eslint',
   '@eslint/js',
   'pica',
+  '@babel/core',
+  '@babel/preset-env',
+  '@babel/preset-react',
+  '@babel/preset-typescript',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

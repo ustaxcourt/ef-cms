@@ -300,10 +300,10 @@ import { updateUserContactInformationInteractor } from '@web-client/proxies/user
 import { updateUserPendingEmailInteractor } from '@web-client/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
-import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
+import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadPdfFromClient } from '@web-client/persistence/s3/uploadPdfFromClient';
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
@@ -598,6 +598,7 @@ const allUseCases = {
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
 };
+
 tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({

@@ -10,7 +10,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { formatTrialNoticePhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 
 export type FormattedTrialInfoType = RawTrialSession & {
@@ -56,17 +56,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
+  const { name, title } = await getClerkOfTheCourtInfo();
 
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-    name: string;
-    title: string;
-  };
   const trialInfo: FormattedTrialInfoType = {
     ...trialSession,
     chambersPhoneNumber: formatTrialNoticePhoneNumber(

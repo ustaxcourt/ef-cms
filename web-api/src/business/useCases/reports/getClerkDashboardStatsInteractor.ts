@@ -11,6 +11,7 @@ import {
   getJsTimeframeForYear,
 } from '@shared/business/utilities/DateHandler';
 import { orderBy } from 'lodash';
+import { FISCAL_MONTH_PRIORITY } from '@shared/business/entities/EntityConstants';
 
 export enum Month {
   January = 1,
@@ -54,8 +55,6 @@ export type ClerkDashboardStats = {
   fiscalYearPetitionStats: ClerkDashboardPetitionsStats;
 };
 
-const fiscalMonthPriority = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
-
 const getPetitionsDataByYear = async (
   isFiscal: boolean,
   yearStart: Date,
@@ -90,17 +89,17 @@ const getPetitionsDataByYear = async (
 
   const petitionsByServiceType = petitionData
     .filter(pet => pet.isPaper != null && !pet.month)
-    .map(pet => ({ total: Number(pet.total), isPaper: pet.isPaper! }));
+    .map(pet => ({ total: Number(pet.total), isPaper: !!pet.isPaper }));
 
   const petitionsByRepresentation = petitionData
     .filter(pet => pet.isRepresenting != null)
     .map(pet => ({
       total: Number(pet.total),
-      isRepresenting: pet.isRepresenting!,
+      isRepresenting: !!pet.isRepresenting,
     }));
 
   const orderCallback = isFiscal
-    ? ({ month }) => fiscalMonthPriority[month - 1]
+    ? ({ month }) => FISCAL_MONTH_PRIORITY[month - 1]
     : ({ month }) => month;
 
   return {

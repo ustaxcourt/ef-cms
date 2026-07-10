@@ -35,7 +35,10 @@ describe('setEditGrantDenyMotionFormAction', () => {
       },
     });
 
-    expect(result.state.form).toMatchObject(draftOrderState);
+    expect(result.state.form).toMatchObject({
+      ...draftOrderState,
+      docketEntryIdToEdit: 'doc-1',
+    });
     expect(result.output.path).toEqual(
       '/case-detail/123-26/documents/doc-1/grant-deny-motion-edit',
     );
@@ -80,7 +83,7 @@ describe('setEditGrantDenyMotionFormAction', () => {
     expect(result.state.docketEntryId).toEqual(motionDocketEntryId);
   });
 
-  it('falls back to empty additionalOrderText when draftOrderState lacks it', async () => {
+  it('falls back to a single empty additional-order text field when draftOrderState lacks it', async () => {
     const result = await runAction(setEditGrantDenyMotionFormAction, {
       modules: { presenter },
       props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
@@ -90,6 +93,26 @@ describe('setEditGrantDenyMotionFormAction', () => {
       },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual([]);
+    expect(result.state.form.additionalOrderText).toEqual(['']);
+  });
+
+  it('hydrates additionalOrderText from additionalOrderTextArray when needed', async () => {
+    const result = await runAction(setEditGrantDenyMotionFormAction, {
+      modules: { presenter },
+      props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
+      state: {
+        caseDetail,
+        documentToEdit: {
+          draftOrderState: {
+            additionalOrderTextArray: ['Parties shall comply.'],
+            disposition: MOTION_DISPOSITIONS.GRANTED,
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderText).toEqual([
+      'Parties shall comply.',
+    ]);
   });
 });

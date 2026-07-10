@@ -18,10 +18,20 @@ export const validateGrantDenyMotionFormAction = ({
     return path.success();
   }
 
+  const errorDisplayOrder = [
+    'issueOrder',
+    'disposition',
+    'jurisdiction',
+    'filingParty',
+    'dueDate',
+    'additionalOrderText',
+  ];
+
   return path.error({
     alertError: {
       title: 'Errors were found. Please correct your form and resubmit.',
     },
+    errorDisplayOrder,
     errors,
   });
 };

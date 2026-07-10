@@ -7,6 +7,7 @@ import { Inputs } from '@web-client/views/Public/DawsonLibrary/Inputs';
 import { PieGraph } from './PieGraph';
 import { LineGraph } from './LineGraph';
 import { SingleBarGraph, MultiBarGraph } from './BarGraph';
+import { GRAPH_COLORS } from '@shared/business/entities/EntityConstants';
 
 const DEFAULT_CHART_WIDTH = 1344;
 
@@ -19,12 +20,12 @@ export const DawsonLibrary = () => {
         width={DEFAULT_CHART_WIDTH}
         showLabels={false}
         data={[
-          { label: 'Atlanta, GA', value: 9, color: '#005EA2' },
-          { label: 'Des Moines, IA', value: 9, color: '#005EA2' },
-          { label: 'Indianapolis, IN', value: 9, color: '#005EA2' },
-          { label: 'Birmingham, AL', value: 7, color: '#005EA2' },
-          { label: 'Denver, CO', value: 5, color: '#005EA2' },
-          { label: 'Louisville, KY', value: 5, color: '#005EA2' },
+          { label: 'Atlanta, GA', value: 9, color: GRAPH_COLORS.BLUE },
+          { label: 'Des Moines, IA', value: 9, color: GRAPH_COLORS.BLUE },
+          { label: 'Indianapolis, IN', value: 9, color: GRAPH_COLORS.BLUE },
+          { label: 'Birmingham, AL', value: 7, color: GRAPH_COLORS.BLUE },
+          { label: 'Denver, CO', value: 5, color: GRAPH_COLORS.BLUE },
+          { label: 'Louisville, KY', value: 5, color: GRAPH_COLORS.BLUE },
         ]}
       />
       <div className="tw:mt-12" />
@@ -52,7 +53,7 @@ export const DawsonLibrary = () => {
           {
             label: 'Electronic',
             data: [1175, 810, 1175, 875, 125, 0, 0, 0, 0, 0, 0, 0],
-            color: '#005EA2',
+            color: GRAPH_COLORS.BLUE,
           },
           {
             label: 'Paper',
@@ -86,7 +87,7 @@ export const DawsonLibrary = () => {
           {
             label: 'Closed/Closed-Dismissed',
             data: [130, 113, 130, 113, 13, 0, 0, 0, 0, 0, 0, 0],
-            color: '#005EA2',
+            color: GRAPH_COLORS.BLUE,
           },
           {
             label: 'Changed to On Appeal',
@@ -192,7 +193,7 @@ export const DawsonLibrary = () => {
           <PieGraph
             title="Procedure Type"
             data={[
-              { name: 'In Person', value: 75, color: '#005EA2' },
+              { name: 'In Person', value: 75, color: GRAPH_COLORS.BLUE },
               {
                 name: 'Remote',
                 value: 25,

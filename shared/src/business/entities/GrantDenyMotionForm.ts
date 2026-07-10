@@ -127,6 +127,14 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
       GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
       GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored,
     )
+      .when('strickenFromTrialSession', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required().messages({
+          'any.required':
+            'Jurisdiction is required since case is stricken from the trial session',
+        }),
+      })
       .optional()
       .allow(null),
     strickenFromTrialSession: joi.boolean().optional().allow(null),

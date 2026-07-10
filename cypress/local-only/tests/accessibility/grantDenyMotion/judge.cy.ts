@@ -9,7 +9,33 @@ describe('Grant/Deny Motion - Judge Accessibility', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  it('should be free of a11y issues on the grant/deny motion form', () => {
+  it('should be free of a11y issues on the default grant/deny motion form', () => {
+    loginAsColvin();
+    cy.visit(
+      `/case-detail/${docketNumber}/documents/${motionDocketEntryId}/grant-deny-motion-create`,
+    );
+
+    cy.get('[data-testid="motion-disposition-GRANTED"]').should('be.visible');
+
+    checkA11y();
+  });
+
+  it('should be free of a11y issues with stip decision status report fields', () => {
+    loginAsColvin();
+    cy.visit(
+      `/case-detail/${docketNumber}/documents/${motionDocketEntryId}/grant-deny-motion-create`,
+    );
+
+    cy.get('[data-testid="motion-disposition-GRANTED"]').click({ force: true });
+    cy.get('[data-testid="due-date-message-stip"]').click({ force: true });
+    cy.get('[data-testid="status-report-due-date-fields"]').should(
+      'be.visible',
+    );
+
+    checkA11y();
+  });
+
+  it('should be free of a11y issues with additional order text fields', () => {
     loginAsColvin();
     cy.visit(
       `/case-detail/${docketNumber}/documents/${motionDocketEntryId}/grant-deny-motion-create`,
