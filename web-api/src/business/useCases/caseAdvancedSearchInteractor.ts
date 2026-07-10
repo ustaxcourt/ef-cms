@@ -25,6 +25,7 @@ import type {
   CaseAdvancedSearchResult,
   SearchAfter,
 } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -89,9 +90,15 @@ export const caseAdvancedSearchInteractor = async (
   let searchAfter: SearchAfter | undefined;
   let useNonExactQuery = false;
 
+  // A per-search preference key pins every search_after page to the same shard
+  // copies, keeping relevance (`_score`) ordering stable across pages so cases
+  // are not duplicated or skipped between requests.
+  const preference = getUniqueId();
+
   while (accessibleCases.length < MAX_CASE_SEARCH_RESULTS) {
     const foundCases = await caseAdvancedSearch({
       applicationContext,
+      preference,
       resultSize: MAX_CASE_SEARCH_RESULTS - accessibleCases.length,
       searchAfter,
       searchTerms,

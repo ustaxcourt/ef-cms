@@ -23,12 +23,14 @@ export type CaseAdvancedSearchResult = {
 
 export const caseAdvancedSearch = async ({
   applicationContext,
+  preference,
   resultSize = MAX_CASE_SEARCH_RESULTS,
   searchAfter,
   searchTerms,
   useNonExactQuery = false,
 }: {
   applicationContext: ServerApplicationContext;
+  preference?: string;
   resultSize?: number;
   searchAfter?: SearchAfter;
   searchTerms: CaseAdvancedSearchParamsRequestType;
@@ -54,8 +56,11 @@ export const caseAdvancedSearch = async ({
     ? nonExactMatchesQuery
     : exactMatchesQuery;
 
-  // The docket-number tie-breaker gives equal-scoring cases a stable order
-  // across search_after requests, preventing skipped or duplicate results
+  // Sort by relevance `_score` with docketNumber as a stable tie-breaker.
+  // The `preference` value routes every search_after page to the same shard copies,
+  // so `_score` is computed from the same segments on each request.
+  // Without it, scores are float-valued and computed per shard copy,
+  // letting a boundary document be duplicated or skipped between pages.
   const body: NonNullable<Search_Request['body']> = {
     _source: source,
     query: { bool: { must: [...matchQuery, ...commonQuery] } },
@@ -75,6 +80,7 @@ export const caseAdvancedSearch = async ({
     searchParameters: {
       body,
       index: 'efcms-case',
+      preference,
     },
   });
 

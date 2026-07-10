@@ -1,6 +1,15 @@
 jest.mock('@web-api/persistence/elasticsearch/caseAdvancedSearch');
+jest.mock('@shared/sharedAppContext', () => {
+  const actual = jest.requireActual('@shared/sharedAppContext');
+
+  return {
+    ...actual,
+    getUniqueId: jest.fn().mockReturnValue('mock-preference-uuid'),
+  };
+});
 
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import { getUniqueId } from '@shared/sharedAppContext';
 import {
   CASE_TYPES_MAP,
   MAX_CASE_SEARCH_RESULTS,
@@ -75,6 +84,40 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({ useNonExactQuery: true }),
+    );
+  });
+
+  it('generates a single preference UUID and passes it to every search call', async () => {
+    const inaccessibleCase = {
+      docketNumber: '100-20',
+      isSealed: true,
+      petitioners: [],
+      sort: [10, '100-20'],
+    };
+    const accessibleCase = {
+      docketNumber: '101-20',
+      petitioners: [],
+      sort: [9, '101-20'],
+    };
+
+    caseAdvancedSearch
+      .mockResolvedValueOnce([inaccessibleCase])
+      .mockResolvedValueOnce([accessibleCase]);
+
+    await caseAdvancedSearchInteractor(
+      applicationContext,
+      { petitionerName: 'test person' },
+      mockPetitionsClerkUser,
+    );
+
+    expect(getUniqueId).toHaveBeenCalledTimes(1);
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ preference: 'mock-preference-uuid' }),
+    );
+    expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ preference: 'mock-preference-uuid' }),
     );
   });
 
@@ -261,6 +304,7 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(caseAdvancedSearch).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
+        preference: 'mock-preference-uuid',
         resultSize: 1,
         searchAfter: firstBatchAccessibleCases.at(-1)?.sort,
         useNonExactQuery: false,
