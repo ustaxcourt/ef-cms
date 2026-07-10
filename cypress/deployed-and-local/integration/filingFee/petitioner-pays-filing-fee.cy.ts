@@ -65,6 +65,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
                 `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
               );
 
+              cy.get(
+                '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
+              ).click();
+
               cy.visit(
                 `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
               );
@@ -113,6 +117,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
               expect(redirectUrl).equal(
                 `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
               );
+
+              cy.get(
+                '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
+              ).click();
 
               cy.visit(
                 `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
@@ -163,6 +171,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
                 `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
               );
 
+              cy.get(
+                '[data-payment-method="ACH"][data-payment-status="Success"]',
+              ).click();
+
               cy.visit(
                 `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
               );
@@ -210,6 +222,8 @@ describe('Pay Filing Fee Through pay.gov', () => {
                 `https://app.${efcmsDomain}/payment-cancel/${docketNumber}`,
               );
 
+              cy.contains('a', 'Cancel Payment').click();
+
               cy.visit(
                 `https://app-${deployingColor}.${efcmsDomain}/payment-cancel/${docketNumber}`,
               );
@@ -240,6 +254,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
               expect(redirectUrl).equal(
                 `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
               );
+
+              cy.get(
+                '[data-payment-method="PLASTIC_CARD"][data-payment-status="Success"]',
+              ).click();
 
               cy.visit(
                 `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
