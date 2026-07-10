@@ -22,6 +22,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
+import { GRAPH_COLORS } from '@shared/business/entities/EntityConstants';
 
 // ─── Single-dataset bar graph ─────────────────────────────────────────────────
 
@@ -73,10 +74,7 @@ export interface MultiBarGraphProps {
   legendTotals?: number[];
 }
 
-const defaultColors = [
-  '#005EA2', // blue primary
-  '#FFBE2E', // yellow primary
-];
+const defaultColors = [GRAPH_COLORS.BLUE, GRAPH_COLORS.YELLOW];
 
 // ─── SingleBarGraph ───────────────────────────────────────────────────────────
 
@@ -183,7 +181,7 @@ export const SingleBarGraph: React.FC<SingleBarGraphProps> = ({
                 content={({ active, payload, label }) => {
                   if (!active || !payload || payload.length === 0) return null;
                   const item = data.find(d => d.label === label);
-                  const color = item?.color || '#005EA2';
+                  const color = item?.color || GRAPH_COLORS.BLUE;
                   return (
                     <div
                       role="status"

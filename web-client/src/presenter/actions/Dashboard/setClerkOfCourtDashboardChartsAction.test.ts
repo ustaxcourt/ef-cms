@@ -54,13 +54,43 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
 
     const { state } = await runAction(setClerkOfCourtDashboardChartsAction, {
       modules: { presenter },
-      state: { clerkOfCourtDashboard: {} },
+      state: {
+        clerkOfCourtDashboardStats: {
+          year: '',
+          calendarYearPetitionStats: {
+            petitionFullPaperMonths: [],
+            petitionFullElectronicMonths: [],
+            petitionsByRepresentation: [],
+            petitionsByServiceType: [],
+          },
+          fiscalYearPetitionStats: {
+            petitionFullPaperMonths: [],
+            petitionFullElectronicMonths: [],
+            petitionsByRepresentation: [],
+            petitionsByServiceType: [],
+          },
+        },
+      },
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'setClerkOfCourtDashboardChartsAction failed:',
       'Failed getting stats',
     );
-    expect(state.clerkOfCourtDashboardStats).toBeUndefined();
+    expect(state.clerkOfCourtDashboardStats).toEqual({
+      year: '',
+      calendarYearPetitionStats: {
+        petitionFullPaperMonths: [],
+        petitionFullElectronicMonths: [],
+        petitionsByRepresentation: [],
+        petitionsByServiceType: [],
+      },
+      fiscalYearPetitionStats: {
+        petitionFullPaperMonths: [],
+        petitionFullElectronicMonths: [],
+        petitionsByRepresentation: [],
+        petitionsByServiceType: [],
+      },
+    });
   });
 });

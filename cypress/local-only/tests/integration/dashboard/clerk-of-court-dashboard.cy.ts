@@ -24,6 +24,7 @@ import {
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
 describe('Clerk of Court Dashboard', () => {
   const { year } = deconstructDate(createISODateString());
@@ -146,7 +147,7 @@ describe('Clerk of Court Dashboard', () => {
 
           cy.get('[data-testid="petitions-data-header"]').should(
             'contain.text',
-            `Total petitions created in YTD ${year}: ${calendarYearTotal}`,
+            `Total petitions created in YTD ${year}: ${formatPositiveNumber(calendarYearTotal)}`,
           );
 
           cy.get(
@@ -194,7 +195,7 @@ describe('Clerk of Court Dashboard', () => {
           cy.get('[data-testid="fiscal-year-to-date"]').click();
           cy.get('[data-testid="petitions-data-header"]').should(
             'contain.text',
-            `Total petitions created in FYTD ${year}: ${fiscalYearTotal}`,
+            `Total petitions created in FYTD ${year}: ${formatPositiveNumber(fiscalYearTotal)}`,
           );
 
           cy.get(
@@ -242,7 +243,7 @@ describe('Clerk of Court Dashboard', () => {
           cy.get('[data-testid="calendar-year-to-date"]').click();
           cy.get('[data-testid="petitions-data-header"]').should(
             'contain.text',
-            `Total petitions created in YTD ${year}: ${calendarYearTotal}`,
+            `Total petitions created in YTD ${year}: ${formatPositiveNumber(calendarYearTotal)}`,
           );
 
           cy.get(

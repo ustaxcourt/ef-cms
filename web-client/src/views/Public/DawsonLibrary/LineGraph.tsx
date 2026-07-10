@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
+import { GRAPH_COLORS } from '@shared/business/entities/EntityConstants';
 
 export interface LineGraphDataset {
   label: string;
@@ -32,11 +33,11 @@ export interface LineGraphProps {
 }
 
 const defaultColors = [
-  '#005EA2', // blue primary
-  '#162E51', // blue darker
-  '#D83933', // red primary
-  '#2E8540', // green
-  '#B50909', // red darker
+  GRAPH_COLORS.BLUE, // blue primary
+  GRAPH_COLORS.DARK_BLUE, // blue darker
+  GRAPH_COLORS.RED, // red primary
+  GRAPH_COLORS.GREEN, // green
+  GRAPH_COLORS.DARK_RED, // red darker
 ];
 
 const renderCustomLegend = (props: any) => {

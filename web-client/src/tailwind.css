@@ -3,10 +3,9 @@
 @import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
 @import 'tw-animate-css';
 
-/* Remove focus outline on recharts SVG elements on click, preserve on keyboard nav */
 .recharts-wrapper svg:focus:not(:focus-visible),
 .recharts-wrapper:focus:not(:focus-visible),
-g:focus:not(:focus-visible) {
+.recharts-wrapper g:focus:not(:focus-visible) {
   outline: none;
 }
 
