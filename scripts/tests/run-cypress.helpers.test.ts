@@ -41,6 +41,7 @@ jest.mock('../github-actions/test-file-times.helpers');
 
 import {
   determineSuiteFromSpecs,
+  isRetryableCypressLaunchFailure,
   onOpen,
   onSpecs,
   onSuite,
@@ -60,6 +61,8 @@ describe('run-cypress', () => {
       env: {} as NodeJS.ProcessEnv,
       exit: jest.fn(),
       getCypressTestFileTimes: jest.fn(),
+      log: jest.fn(),
+      sleep: jest.fn().mockResolvedValue(undefined),
       writeTestFileTimes: jest.fn(),
     };
   };
@@ -170,6 +173,55 @@ describe('run-cypress', () => {
     expect(cypress.run).toHaveBeenCalled();
     expect(exitSpy).toHaveBeenCalled();
     exitSpy.mockRestore();
+  });
+
+  it('runCypressWithTiming uses the default retry sleep path when Cypress launch fails transiently', async () => {
+    const cypress = require('cypress');
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {
+      return undefined;
+    });
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
+      return undefined as never;
+    });
+    const setTimeoutSpy = jest
+      .spyOn(global, 'setTimeout')
+      .mockImplementation((handler: TimerHandler): NodeJS.Timeout => {
+        if (typeof handler === 'function') {
+          handler();
+        }
+
+        return {} as NodeJS.Timeout;
+      });
+    const originalCi = process.env.CI;
+
+    process.env.CI = 'true';
+    cypress.run
+      .mockResolvedValueOnce({
+        failures: 1,
+        message: 'Timed out waiting for the browser to connect.',
+      })
+      .mockResolvedValueOnce({
+        runs: [],
+        totalFailed: 0,
+      });
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      outputFilePath: 'results.json',
+    });
+
+    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 5000);
+    expect(cypress.run).toHaveBeenCalledTimes(2);
+
+    if (originalCi === undefined) {
+      delete process.env.CI;
+    } else {
+      process.env.CI = originalCi;
+    }
+    setTimeoutSpy.mockRestore();
+    exitSpy.mockRestore();
+    consoleLogSpy.mockRestore();
   });
 
   it('disables command logs and forwards ENV', async () => {
@@ -328,6 +380,234 @@ describe('run-cypress', () => {
     expect(dependencies.getCypressTestFileTimes).not.toHaveBeenCalled();
     expect(dependencies.writeTestFileTimes).not.toHaveBeenCalled();
     expect(dependencies.exit).not.toHaveBeenCalled();
+  });
+
+  it('retries a transient browser launch failure in CI and succeeds on the second Edge attempt', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run
+      .mockResolvedValueOnce({
+        failures: 1,
+        message:
+          'Still waiting to connect to Edge, retrying in 1 second (attempt 51/62)\nTimed out waiting for the browser to connect. Retrying...\nError: connect ECONNREFUSED 127.0.0.1:33785',
+      })
+      .mockResolvedValueOnce({
+        runs: [],
+        totalFailed: 0,
+      });
+    dependencies.getCypressTestFileTimes.mockReturnValue({});
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      dependencies,
+      outputFilePath: 'timings.json',
+    });
+
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(1, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+    });
+    expect(dependencies.sleep).toHaveBeenCalledWith(5000);
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(2, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+    });
+    expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('falls back to Chrome after repeated Edge launch failures in CI when browser is not explicitly provided', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run
+      .mockResolvedValueOnce({
+        failures: 1,
+        message:
+          'Still waiting to connect to Edge, retrying in 1 second (attempt 51/62)',
+      })
+      .mockResolvedValueOnce({
+        failures: 1,
+        message:
+          'There was an error reconnecting to the Chrome DevTools protocol. Please restart the browser.',
+      })
+      .mockResolvedValueOnce({
+        runs: [],
+        totalFailed: 0,
+      });
+    dependencies.getCypressTestFileTimes.mockReturnValue({});
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      dependencies,
+      outputFilePath: 'timings.json',
+      specs: 'example.cy.ts',
+    });
+
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(1, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+      spec: 'example.cy.ts',
+    });
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(2, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+      spec: 'example.cy.ts',
+    });
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(3, {
+      browser: 'chrome',
+      configFile: 'cypress.config.ts',
+      spec: 'example.cy.ts',
+    });
+    expect(dependencies.sleep).toHaveBeenCalledTimes(2);
+    expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('does not fall back to Chrome when the browser was explicitly provided', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run
+      .mockResolvedValueOnce({
+        failures: 1,
+        message: 'Timed out waiting for the browser to connect.',
+      })
+      .mockResolvedValueOnce({
+        failures: 1,
+        message:
+          'There was an error reconnecting to the Chrome DevTools protocol. Please restart the browser.',
+      });
+
+    await expect(
+      runCypressWithTiming({
+        browserArg: 'edge',
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'timings.json',
+      }),
+    ).rejects.toThrow(
+      'There was an error reconnecting to the Chrome DevTools protocol. Please restart the browser.',
+    );
+
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledTimes(2);
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(1, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+    });
+    expect(dependencies.cypressRunner.run).toHaveBeenNthCalledWith(2, {
+      browser: 'edge',
+      configFile: 'cypress.config.ts',
+    });
+  });
+
+  it('retries when Cypress throws a retryable browser launch error', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run
+      .mockRejectedValueOnce(
+        new Error('The browser never connected. Attempting to reconnect...'),
+      )
+      .mockResolvedValueOnce({
+        runs: [],
+        totalFailed: 0,
+      });
+    dependencies.getCypressTestFileTimes.mockReturnValue({});
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      dependencies,
+      outputFilePath: 'timings.json',
+    });
+
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledTimes(2);
+    expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('retries when Cypress throws a retryable non-Error browser launch value', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run
+      .mockRejectedValueOnce('The browser never connected.')
+      .mockResolvedValueOnce({
+        runs: [],
+        totalFailed: 0,
+      });
+    dependencies.getCypressTestFileTimes.mockReturnValue({});
+
+    await runCypressWithTiming({
+      configFile: 'cypress.config.ts',
+      current: false,
+      dependencies,
+      outputFilePath: 'timings.json',
+    });
+
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledTimes(2);
+    expect(dependencies.exit).toHaveBeenCalledWith(0);
+  });
+
+  it('does not retry non-browser-launch failures', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run.mockResolvedValue({
+      failures: 1,
+      message:
+        'Cypress could not verify that this server is running: http://localhost:1234',
+    });
+
+    await expect(
+      runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'timings.json',
+      }),
+    ).rejects.toThrow(
+      'Cypress could not verify that this server is running: http://localhost:1234',
+    );
+
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledTimes(1);
+    expect(dependencies.sleep).not.toHaveBeenCalled();
+  });
+
+  it('rethrows non-retryable thrown values from Cypress', async () => {
+    const dependencies = createDependencies();
+    dependencies.env.CI = 'true';
+    dependencies.cypressRunner.run.mockRejectedValue('plain string failure');
+
+    await expect(
+      runCypressWithTiming({
+        configFile: 'cypress.config.ts',
+        current: false,
+        dependencies,
+        outputFilePath: 'timings.json',
+      }),
+    ).rejects.toBe('plain string failure');
+
+    expect(dependencies.cypressRunner.run).toHaveBeenCalledTimes(1);
+  });
+
+  describe('isRetryableCypressLaunchFailure', () => {
+    it('returns true for DevTools connection failures', () => {
+      expect(
+        isRetryableCypressLaunchFailure(
+          'There was an error reconnecting to the Chrome DevTools protocol. Please restart the browser.',
+        ),
+      ).toBe(true);
+      expect(
+        isRetryableCypressLaunchFailure(
+          'Error: connect ECONNREFUSED 127.0.0.1:33785',
+        ),
+      ).toBe(true);
+    });
+
+    it('returns false for application readiness failures', () => {
+      expect(
+        isRetryableCypressLaunchFailure(
+          'Cypress could not verify that this server is running: http://localhost:1234',
+        ),
+      ).toBe(false);
+    });
   });
 
   describe('determineSuiteFromSpecs', () => {
