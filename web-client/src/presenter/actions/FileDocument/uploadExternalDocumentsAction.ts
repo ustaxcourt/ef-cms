@@ -41,9 +41,11 @@ export const uploadExternalDocumentsAction = async ({
       fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
-    await applicationContext.getUseCases().logErrorInteractor(applicationContext, {
-      error: err,
-    });
+    await applicationContext
+      .getUseCases()
+      .logErrorInteractor(applicationContext, {
+        error: err,
+      });
     return path.error();
   }
 };
