@@ -162,14 +162,15 @@ import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/util
 import { getCaseDocketEntriesInteractor } from '@web-client/proxies/getCaseDocketEntriesProxy';
 import { getCaseExistsInteractor } from '@web-client/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '@web-client/proxies/getCaseProxy';
-import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseWorksheetsByJudgeInteractor } from '@web-client/proxies/reports/getCaseWorksheetsByJudgeProxy';
-import { getCasesClosedByJudgeInteractor } from '@web-client/proxies/reports/getCasesClosedByJudgeProxy';
-import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
+import { getClerkDashboardStatsInteractor } from '@web-client/proxies/reports/getClerkDashboardStatsProxy';
 import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
-import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
+import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
 import { getCompletedMessagesForSectionInteractor } from '@web-client/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '@web-client/proxies/messages/getCompletedMessagesForUserProxy';
+import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
+import { getCasesClosedByJudgeInteractor } from '@web-client/proxies/reports/getCasesClosedByJudgeProxy';
+import { getCaseWorksheetsByJudgeInteractor } from '@web-client/proxies/reports/getCaseWorksheetsByJudgeProxy';
+import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-client/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
@@ -452,6 +453,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getClerkDashboardStatsInteractor,
   getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,

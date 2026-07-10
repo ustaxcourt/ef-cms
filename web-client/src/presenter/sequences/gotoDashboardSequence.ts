@@ -1,3 +1,4 @@
+import { setClerkOfCourtDashboardChartsAction } from '../actions/Dashboard/setClerkOfCourtDashboardChartsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -28,6 +29,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFileingFeeAlertsAction';
+import { resetClerkOfCourtDashboardOptionsAction } from '@web-client/presenter/actions/Dashboard/resetClerkOfCourtDashboardOptionsAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -63,7 +65,9 @@ export const gotoDashboardSequence = [
         ),
         clerkofcourt: [
           fetchUserNotificationsSequence,
+          resetClerkOfCourtDashboardOptionsAction,
           parallel([
+            setClerkOfCourtDashboardChartsAction,
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
           ]),

@@ -654,6 +654,7 @@ import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/
 import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
+import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1294,6 +1295,8 @@ export const presenterSequences = {
     setCaseDetailPrimaryTabSequence as unknown as Function,
   setCaseTypeToDisplaySequence:
     setCaseTypeToDisplaySequence as unknown as Function,
+  setClerkOfCourtDashboardOptionsSequence:
+    setClerkOfCourtDashboardOptionsSequence as unknown as Function,
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
   setCurrentTabSequence,

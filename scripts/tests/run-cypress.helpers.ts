@@ -44,6 +44,8 @@ type RunCypressTestsWithTimingDependencies = {
   env: NodeJS.ProcessEnv;
   exit: (code: number) => void;
   getCypressTestFileTimes: typeof getCypressTestFileTimes;
+  log: (message: string) => void;
+  sleep: (ms: number) => Promise<void>;
   writeTestFileTimes: typeof writeTestFileTimes;
 };
 
@@ -53,7 +55,165 @@ const defaultDependencies: RunCypressTestsWithTimingDependencies = {
   env: process.env,
   exit: (code: number) => process.exit(code),
   getCypressTestFileTimes,
+  log: (message: string) => console.log(message),
+  sleep: async (ms: number) =>
+    await new Promise(resolve => setTimeout(resolve, ms)),
   writeTestFileTimes,
+};
+
+const BROWSER_CONNECT_RETRY_DELAY_MS = 5000;
+
+const RETRYABLE_CYPRESS_LAUNCH_FAILURE_PATTERNS: RegExp[] = [
+  /still waiting to connect to (edge|chrome)/i,
+  /there was an error reconnecting to the chrome devtools protocol/i,
+  /the browser never connected/i,
+  /timed out waiting for the browser to connect/i,
+  /browser.*failed to start/i,
+  /error:\s*connect\s+econnrefused\s+127\.0\.0\.1:\d+/i,
+];
+
+type BrowserLaunchAttempt = {
+  browser: string;
+  description: string;
+  waitBeforeMs?: number;
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return String(error);
+};
+
+export const isRetryableCypressLaunchFailure = (message: string): boolean => {
+  return RETRYABLE_CYPRESS_LAUNCH_FAILURE_PATTERNS.some(
+    (pattern: RegExp): boolean => pattern.test(message),
+  );
+};
+
+const getBrowserLaunchAttempts = ({
+  browser,
+  browserWasExplicitlyProvided,
+  isCi,
+}: {
+  browser: string;
+  browserWasExplicitlyProvided: boolean;
+  isCi: boolean;
+}): BrowserLaunchAttempt[] => {
+  const attempts: BrowserLaunchAttempt[] = [
+    {
+      browser,
+      description: 'initial browser launch',
+    },
+  ];
+
+  if (!isCi) {
+    return attempts;
+  }
+
+  attempts.push({
+    browser,
+    description: 'retrying browser launch after transient connection failure',
+    waitBeforeMs: BROWSER_CONNECT_RETRY_DELAY_MS,
+  });
+
+  if (!browserWasExplicitlyProvided && browser === 'edge') {
+    attempts.push({
+      browser: 'chrome',
+      description:
+        'falling back to chrome after repeated Edge connection failures',
+      waitBeforeMs: BROWSER_CONNECT_RETRY_DELAY_MS,
+    });
+  }
+
+  return attempts;
+};
+
+const runCypressWithBrowserRetries = async ({
+  browser,
+  browserWasExplicitlyProvided,
+  configFile,
+  dependencies,
+  specs,
+}: {
+  browser: string;
+  browserWasExplicitlyProvided: boolean;
+  configFile: string;
+  dependencies: RunCypressTestsWithTimingDependencies;
+  specs?: string;
+}): Promise<CypressSuccessfulRunResult> => {
+  const attempts = getBrowserLaunchAttempts({
+    browser,
+    browserWasExplicitlyProvided,
+    isCi: Boolean(dependencies.env.CI),
+  });
+  let lastError: Error = new Error(
+    'Cypress browser launch failed unexpectedly.',
+  );
+
+  for (const [index, attempt] of attempts.entries()) {
+    if (attempt.waitBeforeMs) {
+      dependencies.log(
+        `Cypress ${attempt.description}; waiting ${attempt.waitBeforeMs}ms before attempt ${index + 1}/${attempts.length}.`,
+      );
+      await dependencies.sleep(attempt.waitBeforeMs);
+    }
+
+    dependencies.log(
+      `Starting Cypress attempt ${index + 1}/${attempts.length} with browser ${attempt.browser} using config ${configFile}.`,
+    );
+
+    try {
+      const results = specs
+        ? await dependencies.cypressRunner.run({
+            browser: attempt.browser,
+            configFile,
+            spec: specs,
+          })
+        : await dependencies.cypressRunner.run({
+            browser: attempt.browser,
+            configFile,
+          });
+
+      if ('failures' in results) {
+        const errorMessage = results.message;
+
+        if (
+          isRetryableCypressLaunchFailure(errorMessage) &&
+          index < attempts.length - 1
+        ) {
+          dependencies.log(
+            `Retryable Cypress browser launch failure on attempt ${index + 1}/${attempts.length}: ${errorMessage}`,
+          );
+          lastError = new Error(errorMessage);
+          continue;
+        }
+
+        lastError = new Error(errorMessage);
+        break;
+      }
+
+      return results;
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error);
+
+      if (
+        isRetryableCypressLaunchFailure(errorMessage) &&
+        index < attempts.length - 1
+      ) {
+        dependencies.log(
+          `Caught retryable Cypress browser launch error on attempt ${index + 1}/${attempts.length}: ${errorMessage}`,
+        );
+        lastError = error instanceof Error ? error : new Error(errorMessage);
+        continue;
+      }
+
+      throw error;
+    }
+  }
+
+  throw lastError;
 };
 
 export const determineSuiteFromSpecs = ({
@@ -309,20 +469,22 @@ export const runCypressWithTiming = async ({
   specs?: string;
 }): Promise<void> => {
   setEnvironmentVariables({ configFile, current, dependencies });
-  const browser =
-    browserArg && browserArg.length > 0
-      ? browserArg
-      : dependencies.dawson.isPublic
-        ? 'chrome'
-        : 'edge';
+  const browserWasExplicitlyProvided = !!browserArg && browserArg.length > 0;
+  let browser: string;
 
-  const results = specs
-    ? await dependencies.cypressRunner.run({ browser, configFile, spec: specs })
-    : await dependencies.cypressRunner.run({ browser, configFile });
-
-  if ('failures' in results) {
-    throw new Error(results.message);
+  if (browserWasExplicitlyProvided) {
+    browser = browserArg;
+  } else {
+    browser = dependencies.dawson.isPublic ? 'chrome' : 'edge';
   }
+
+  const results = await runCypressWithBrowserRetries({
+    browser,
+    browserWasExplicitlyProvided,
+    configFile,
+    dependencies,
+    specs,
+  });
 
   dependencies.writeTestFileTimes({
     filePath: outputFilePath,

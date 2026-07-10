@@ -2,9 +2,9 @@
 
 import {
   type ScriptConfig,
-  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { trialSessionsReport } from './trial-sessions-report-helpers';
 
 const scriptConfig: ScriptConfig = {
