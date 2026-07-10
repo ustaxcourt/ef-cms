@@ -91,7 +91,9 @@ export const pollForCoversheetComplete = async ({
 
     const results = settled
       .filter(
-        (r): r is PromiseFulfilledResult<{
+        (
+          r,
+        ): r is PromiseFulfilledResult<{
           docketEntryId: string;
           processingStatus: string;
         }> => r.status === 'fulfilled',

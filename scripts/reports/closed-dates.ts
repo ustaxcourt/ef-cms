@@ -2,9 +2,9 @@
 
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
