@@ -76,6 +76,58 @@ describe('Petitioner', () => {
           '"title" length must be less than or equal to 100 characters long',
       });
     });
+
+    it('should be true when petitioner is sealed and address fields are undefined', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        sealedAndUnavailable: true,
+        address1: undefined,
+        city: undefined,
+        countryType: undefined,
+        phone: undefined,
+        postalCode: undefined,
+        state: undefined,
+      });
+
+      expect(entity.isValid()).toBe(true);
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be false when petitioner is sealed and address is defined', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        sealedAndUnavailable: true,
+        city: undefined,
+        countryType: undefined,
+        phone: undefined,
+        postalCode: undefined,
+        state: undefined,
+      });
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        address1: '"address1" is not allowed',
+      });
+    });
+
+    it('should be false when petitioner is sealed and all address fields are defined', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        sealedAndUnavailable: true,
+        countryType: 'USA',
+        state: 'MD',
+      });
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        address1: '"address1" is not allowed',
+        city: '"city" is not allowed',
+        countryType: '"countryType" is not allowed',
+        phone: '"phone" is not allowed',
+        postalCode: '"postalCode" is not allowed',
+        state: '"state" is not allowed',
+      });
+    });
   });
 
   describe('phone number formatting', () => {
