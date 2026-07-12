@@ -455,6 +455,7 @@ const router = {
           return app.getSequence('gotoStatusReportOrderSequence')({
             docketEntryId,
             docketNumber,
+            redirectUrl: `/case-detail/${docketNumber}`,
             statusReportFilingDate,
             statusReportIndex,
           });
@@ -474,6 +475,7 @@ const router = {
             docketEntryId,
             docketNumber,
             isEditing: true,
+            redirectUrl: `/case-detail/${docketNumber}`,
           });
         },
       ),
