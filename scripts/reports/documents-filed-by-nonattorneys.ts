@@ -3,8 +3,8 @@
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
-  getJsTimeframeForYear,
 } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';

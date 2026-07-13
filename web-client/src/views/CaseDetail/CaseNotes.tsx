@@ -54,6 +54,7 @@ export const CaseNotes = connect(
                     {!caseDetail.caseNote && (
                       <Button
                         link
+                        data-testid="add-case-note"
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         icon="sticky-note"
                         id="add-procedural-note-button"
@@ -68,6 +69,7 @@ export const CaseNotes = connect(
                       <div className="float-right margin-top-1">
                         <Button
                           link
+                          data-testid="edit-case-note"
                           className="padding-0 margin-right-0"
                           icon="edit"
                           onClick={() => {
@@ -78,6 +80,7 @@ export const CaseNotes = connect(
                         </Button>
                         <Button
                           link
+                          data-testid="delete-case-note"
                           className="red-warning padding-0 margin-left-205 margin-right-0"
                           icon="trash"
                           id="delete-procedural-note-button"
@@ -122,6 +125,7 @@ export const CaseNotes = connect(
                         <div className="float-right margin-top-1">
                           <Button
                             link
+                            data-testid="edit-case-judge-notes-button"
                             className="padding-0 margin-right-0"
                             icon="edit"
                             onClick={() => {
@@ -134,6 +138,7 @@ export const CaseNotes = connect(
                           </Button>
                           <Button
                             link
+                            data-testid="delete-case-judge-notes-button"
                             className="red-warning padding-0 margin-left-205 margin-right-0"
                             icon="trash"
                             onClick={() => {

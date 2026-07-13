@@ -176,7 +176,9 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -317,6 +319,10 @@ export const computeds = {
   customCaseReportHelper: customCaseReportHelper as unknown as ReturnType<
     typeof customCaseReportHelper
   >,
+  dashboardClerkOfTheCourtHelper:
+    dashboardClerkOfTheCourtHelper as unknown as ReturnType<
+      typeof dashboardClerkOfTheCourtHelper
+    >,
   dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
     typeof dashboardExternalHelper
   >,
@@ -631,8 +637,7 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    | RawGenerateSuggestedTermForm
-    | undefined,
+    RawGenerateSuggestedTermForm | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -725,11 +730,9 @@ export const baseState = {
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
     updatedTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -779,6 +782,24 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  clerkOfCourtDashboardStats: {
+    year: '',
+    calendarYearPetitionStats: {
+      petitionFullPaperMonths: [],
+      petitionFullElectronicMonths: [],
+      petitionsByRepresentation: [],
+      petitionsByServiceType: [],
+    },
+    fiscalYearPetitionStats: {
+      petitionFullPaperMonths: [],
+      petitionFullElectronicMonths: [],
+      petitionsByRepresentation: [],
+      petitionsByServiceType: [],
+    },
+  } as ClerkDashboardStats,
+  clerkOfCourtDashboardOptions: {
+    petitionsByYearIsFiscal: false,
+  },
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
@@ -933,8 +954,7 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
-      | undefined,
+      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],
