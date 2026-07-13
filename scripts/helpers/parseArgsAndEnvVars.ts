@@ -442,11 +442,8 @@ const parseAndTransformValues = (
     // parseArgs doesn't distinguish longName from varName like we do
     const longName = paramConfig.long?.length ? paramConfig.long : varName;
     let value:
-      | string
-      | boolean
-      | number
-      | (string | boolean | number)[]
-      | undefined = paramConfig.default;
+      string | boolean | number | (string | boolean | number)[] | undefined =
+      paramConfig.default;
     if (
       'position' in paramConfig &&
       typeof paramConfig.position !== 'undefined' &&
