@@ -15,7 +15,7 @@ const buildPreamble = ({
   motionTitle: string;
   movant: string;
 }): string =>
-  `<p ${INDENT_CLASS}>On ${date}, ${movant} filed a</p><p ${INDENT_CLASS}>${motionTitle} ${documentNumberText}. For cause, it is</p>`;
+  `<p ${INDENT_CLASS}>On ${date}, ${movant} filed a ${motionTitle} ${documentNumberText}. For cause, it is</p>`;
 
 type OrderData = Parameters<typeof order>[0]['data'];
 
