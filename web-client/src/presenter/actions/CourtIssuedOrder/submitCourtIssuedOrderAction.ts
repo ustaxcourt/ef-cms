@@ -40,7 +40,6 @@ export const submitCourtIssuedOrderAction = async ({
       disposition: formData.disposition,
       dueDateMessage: formData.dueDateMessage,
       filingParty: formData.filingParty,
-      strickenFromTrialSession: formData.strickenFromTrialSession,
       affectedDocketEntries: formData.affectedDocketEntries,
       attachments: formData.attachments,
       date: formData.date,
