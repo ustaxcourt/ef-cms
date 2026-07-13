@@ -28,16 +28,21 @@ export const setEditMotionOrderResponseFormAction = ({
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-order-response-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
-  const { ...draftFields } = draftOrderState;
-
   const rawAdditionalOrderTextArray =
     draftOrderState.additionalOrderTextArray ?? [];
 
   store.set(state.form, {
-    ...draftFields,
+    ...draftOrderState,
     additionalOrderTextArray: additionalOrderTextArrayWithRequiredFirstField(
       normalizeAdditionalOrderTextArray(rawAdditionalOrderTextArray),
     ),
+    docketEntryIdToEdit,
+    motionOrderResponse:
+      draftOrderState.motionOrderResponse ?? !!draftOrderState.dueDate,
+    strickenFromTrialSession:
+      draftOrderState.strickenFromTrialSession ??
+      draftOrderState.showStrickenFromTrialSession ??
+      false,
   });
   store.set(
     state.docketEntryId,
