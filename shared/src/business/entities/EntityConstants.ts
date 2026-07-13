@@ -1934,6 +1934,7 @@ export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
   DISCIPLINARY: 'Disciplinary',
   CHANGE_OF_NAME: 'Change of Name',
+  CHANGE_OF_STATUS: 'Change of Status',
   EXAM_RELATED: 'Exam-Related',
   MISCELLANEOUS: 'Miscellaneous',
 };
