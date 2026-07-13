@@ -15,6 +15,9 @@ export const setEditMotionOrderResponseFormAction = ({
       previousDocument: {
         docketEntryId: string;
       };
+      motionOrderResponse?: boolean;
+      strickenFromTrialSession?: boolean;
+      showStrickenFromTrialSession?: boolean;
     };
   } = get(state.documentToEdit);
   const { draftOrderState } = documentToEdit;
