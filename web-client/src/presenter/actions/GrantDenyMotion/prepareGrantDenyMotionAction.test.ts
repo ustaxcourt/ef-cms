@@ -19,7 +19,9 @@ describe('prepareGrantDenyMotionAction', () => {
     movant = 'petitioner',
     preamblePrepend = '',
   } = {}) =>
-    `${wrap(`${preamblePrepend}On ${date}, ${movant} filed a`)}${wrap(`${motionTitle} ${documentNumberText}. For cause, it is`)}`;
+    wrap(
+      `${preamblePrepend}On ${date}, ${movant} filed a ${motionTitle} ${documentNumberText}. For cause, it is`,
+    );
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -90,7 +92,7 @@ describe('prepareGrantDenyMotionAction', () => {
         /<p class="grant-deny-indent-paragraph">[\s\S]*?<\/p>/g,
       ) || [];
 
-    expect(paragraphs).toHaveLength(5);
+    expect(paragraphs).toHaveLength(4);
     paragraphs.forEach(paragraph => {
       expect(
         paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
