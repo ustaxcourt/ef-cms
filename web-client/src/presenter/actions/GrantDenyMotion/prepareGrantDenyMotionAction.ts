@@ -51,8 +51,9 @@ const buildPreamble = ({
   movant: string;
   preamblePrepend: string;
 }): string =>
-  wrap(`${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a`) +
-  wrap(`${motionDocumentTitle} ${documentNumberText}. For cause, it is`);
+  wrap(
+    `${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText}. For cause, it is`,
+  );
 
 const getMovantPossessive = (movant: string): string =>
   movant === 'respondent' ? "respondent's" : "petitioner's";
