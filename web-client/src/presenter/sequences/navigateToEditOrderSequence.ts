@@ -18,6 +18,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 import { setEditGrantDenyMotionFormAction } from '@web-client/presenter/actions/GrantDenyMotion/setEditGrantDenyMotionFormAction';
 import { setEditMotionOrderResponseFormAction } from '../actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
+import { motionOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 
 export const navigateToEditOrderSequence = [
   setupConfirmWithPropsAction,
@@ -45,6 +46,7 @@ export const navigateToEditOrderSequence = [
         isMotionOrderResponse: [
           setEditMotionOrderResponseFormAction,
           navigateToPathAction,
+          motionOrderResponsePdfPreviewSequence,
         ],
         isStandardOrder: [getDocumentEditUrlAsPathAction, navigateToPathAction],
         isStatusReportOrder: [
