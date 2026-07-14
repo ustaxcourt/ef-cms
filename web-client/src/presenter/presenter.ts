@@ -521,6 +521,7 @@ import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySort
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
+import { unsealAddressSequence } from './sequences/unsealAddressSequence';
 import { unsealCaseSequence } from './sequences/unsealCaseSequence';
 import { unsealDocketEntrySequence } from './sequences/unsealDocketEntrySequence';
 import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
@@ -1498,6 +1499,7 @@ export const presenterSequences = {
     unblockCaseFromTrialSequence as unknown as Function,
   unidentifiedUserErrorSequence:
     unidentifiedUserErrorSequence as unknown as Function,
+  unsealAddressSequence: unsealAddressSequence as unknown as Function,
   unsealCaseSequence: unsealCaseSequence as unknown as Function,
   unsealDocketEntrySequence: unsealDocketEntrySequence as unknown as Function,
   updateAddDeficiencyFormValueSequence:
