@@ -50,10 +50,16 @@ body:has(#notice-of-trial-pdf) {
         line-height: 10pt;
       }
 
+      #caption-extension,
+      #caption-v,
+      #caption-respondent {
+        padding-left: 56px;
+      }
+
       #caption-extension {
-        line-height: 10pt;
         margin-top: 17px;
         margin-bottom: 0;
+        line-height: 10pt;
       }
 
       #caption-v,
@@ -141,7 +147,7 @@ body:has(#notice-of-trial-pdf) {
 
     .notice-body-indent {
       margin-bottom: 17pt;
-      text-indent: 56pt;
+      text-indent: 56px;
     }
 
     #notice-clerk-signature {
