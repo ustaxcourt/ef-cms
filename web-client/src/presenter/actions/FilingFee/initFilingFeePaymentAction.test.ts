@@ -31,7 +31,7 @@ describe('initFilingFeePaymentAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { docketNumer: '101-20' },
+        caseDetail: { docketNumber: '101-20' },
       },
     });
 

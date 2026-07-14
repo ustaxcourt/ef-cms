@@ -128,6 +128,7 @@ export const gotoDashboardSequence = [
           setupCurrentPageAction('DashboardExternalUser'),
         ],
         privatePractitioner: [
+          setFilingFeeAlertsAction,
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesForUserAction,
           setCasesAction,

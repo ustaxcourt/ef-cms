@@ -16,7 +16,6 @@ export const DashboardExternalUser = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
     user: state.user,
-    processPaymentStatus: state.processPaymentStatus,
   },
   function DashboardExternalUser({ dashboardExternalHelper, user }) {
     const renderRecentFilingsButton = () => (

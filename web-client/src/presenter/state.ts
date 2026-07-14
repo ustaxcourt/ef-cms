@@ -181,7 +181,7 @@ import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSes
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
-import { ProcessPaymentResponse } from 'node_modules/@ustaxcourt/payment-portal/dist';
+import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -1135,7 +1135,7 @@ export const baseState = {
     sortOrder: 'desc' as 'asc' | 'desc',
   },
   processPaymentStatus: undefined as
-    undefined | (ProcessPaymentResponse & { docketNumber?: string }),
+    undefined | (ProcessPaymentResponse & { docketNumber: string }),
 };
 
 export const initialState = {
