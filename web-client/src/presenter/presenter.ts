@@ -654,6 +654,9 @@ import { updateAdvancedSearchResultsSortSequence } from './sequences/updateAdvan
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
+import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
+import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
+import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 
 export const presenterSequences = {
@@ -1023,6 +1026,8 @@ export const presenterSequences = {
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
   initAppSequence,
+  initFilingFeePaymentSequence:
+    initFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
@@ -1214,6 +1219,8 @@ export const presenterSequences = {
     openUnsealDocketEntryModalSequence as unknown as Function,
   openUpdateCaseModalSequence:
     openUpdateCaseModalSequence as unknown as Function,
+  paymentCancelSequence: paymentCancelSequence as unknown as Function,
+  paymentSuccessSequence: paymentSuccessSequence as unknown as Function,
   paperServiceCompleteSequence:
     paperServiceCompleteSequence as unknown as Function,
   petitionGenerationLiveValidationSequence,

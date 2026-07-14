@@ -6,7 +6,8 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 
 import React from 'react';
 
@@ -14,8 +15,18 @@ export const FilePetitionStep7 = connect(
   {
     alertSuccess: state.alertSuccess,
     filePetitionHelper: state.filePetitionHelper,
+    initFilingFeePaymentSequence: sequences.initFilingFeePaymentSequence,
+    enablePaymentPortalIntegration:
+      state.featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
+      ],
   },
-  function FilePetitionStep7({ alertSuccess, filePetitionHelper }) {
+  function FilePetitionStep7({
+    alertSuccess,
+    filePetitionHelper,
+    initFilingFeePaymentSequence,
+    enablePaymentPortalIntegration,
+  }) {
     const { isPetitioner } = filePetitionHelper;
 
     return (
@@ -34,15 +45,27 @@ export const FilePetitionStep7 = connect(
           {`${isPetitioner ? 'Your' : 'The'} case’s filing fee status may take 2-3 business days from payment
           date to update.`}
         </div>
-
-        <Button
-          className="margin-top-205"
-          href="https://www.pay.gov/public/form/start/60485840"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Pay Now Online
-        </Button>
+        {!enablePaymentPortalIntegration && (
+          <Button
+            className="margin-top-205"
+            href="https://www.pay.gov/public/form/start/60485840"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Pay Now Online
+          </Button>
+        )}
+        {enablePaymentPortalIntegration && (
+          <Button
+            className="margin-top-205"
+            data-testid="pay-filing-fee-button"
+            onClick={() => {
+              initFilingFeePaymentSequence();
+            }}
+          >
+            Pay Now Online
+          </Button>
+        )}
 
         <div className="grid-row grid-gap margin-top-205" role="list">
           <Accordion role="listitem">
