@@ -10,7 +10,7 @@ export const checkCaseAssociationAndPaymentStatusAction = ({
 
   if (
     props.isDirectlyAssociated &&
-    caseDetail.petitionPaymentStatus == PAYMENT_STATUS.UNPAID
+    caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID
   )
     return path.success();
   else return path.error();

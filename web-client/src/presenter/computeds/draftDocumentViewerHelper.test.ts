@@ -599,7 +599,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showDocumentNotSignedAlert).toEqual(true);
   });
 
-  it('should return addDocketEntryLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
+  it('should return addDocketEntryLink with docketNumber and viewerDraftDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
