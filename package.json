@@ -365,12 +365,12 @@
     "bufferutil": false,
     "canvas": false,
     "core-js": false,
-    "cypress": false,
     "es5-ext": false,
     "esbuild": false,
     "fsevents": false,
     "puppeteer": false,
     "unrs-resolver": false,
-    "utf-8-validate": false
+    "utf-8-validate": false,
+    "cypress@15.18.1": true
   }
 }
