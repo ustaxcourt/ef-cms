@@ -4,8 +4,7 @@ import moize from 'moize';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export type RequestApplicationContext =
-  | ClientApplicationContext
-  | ClientPublicApplicationContext;
+  ClientApplicationContext | ClientPublicApplicationContext;
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
