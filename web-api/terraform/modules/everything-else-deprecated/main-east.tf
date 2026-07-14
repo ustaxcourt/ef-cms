@@ -1,4 +1,8 @@
 resource "aws_s3_bucket" "api_lambdas_bucket_east" {
+  #checkov:skip=CKV_AWS_21: deployment artifact bucket — overwritten on every deploy, versioning adds cost with no recovery value
+  #checkov:skip=CKV_AWS_18: deployment artifact bucket — Lambda zip files only, no sensitive data; access logging adds cost with no security benefit
+  #checkov:skip=CKV_AWS_145: AWS-managed SSE is sufficient for Lambda deployment artifacts — no sensitive data; CMK adds key management overhead without security benefit
+  #checkov:skip=CKV2_AWS_6: no public access block resource needed — bucket has no bucket policy granting public access; account-level S3 Block Public Access covers this
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
 
   tags = {
@@ -27,6 +31,10 @@ resource "aws_s3_object" "amended-petition-form-bucket-object-east" {
 resource "aws_acm_certificate" "api_gateway_cert_east" {
   domain_name       = "*.${var.dns_domain}"
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = {
     Name          = "wildcard.${var.dns_domain}"

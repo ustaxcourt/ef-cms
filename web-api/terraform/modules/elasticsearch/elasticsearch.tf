@@ -1,12 +1,15 @@
 resource "aws_cloudwatch_log_group" "elasticsearch_application_logs" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for OpenSearch debug logs; CMK adds key management overhead with no security benefit for log data
   name = "/aws/aes/debug_${var.domain_name}"
 }
 
 resource "aws_cloudwatch_log_group" "elasticsearch_index_slow_logs" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for OpenSearch slow query logs; CMK adds key management overhead with no security benefit for log data
   name = "/aws/aes/${var.domain_name}_index_slow_queries"
 }
 
 resource "aws_cloudwatch_log_group" "elasticsearch_search_slow_logs" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for OpenSearch slow query logs; CMK adds key management overhead with no security benefit for log data
   name = "/aws/aes/${var.domain_name}_search_slow_queries"
 }
 
@@ -35,6 +38,8 @@ CONFIG
 }
 
 resource "aws_opensearch_domain" "efcms-search" {
+  #checkov:skip=CKV_AWS_5:encrypt_at_rest block not declared — AWS enforces encryption at rest by default for OpenSearch Service domains; omitting the Terraform block does not disable it
+  #checkov:skip=CKV_AWS_247:AWS-managed encryption key is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   domain_name           = var.domain_name
   engine_version        = var.es_engine_version
 

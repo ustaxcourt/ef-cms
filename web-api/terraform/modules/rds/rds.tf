@@ -23,6 +23,8 @@ resource "aws_rds_cluster_parameter_group" "postgres_parameter_group" {
 }
 
 resource "aws_rds_cluster" "postgres" {
+  #checkov:skip=CKV_AWS_324: RDS log exports to CloudWatch not enabled — application-level Prisma query logging covers audit needs; log export adds cost and volume with marginal security benefit
+  #checkov:skip=CKV2_AWS_8: AWS Backup not configured — automated RDS snapshots with 35-day retention already provide point-in-time recovery; AWS Backup would be redundant
   cluster_identifier              = "${var.environment}-dawson-cluster"
   engine                          = "aurora-postgresql"
   engine_mode                     = "provisioned"
@@ -53,11 +55,16 @@ resource "aws_rds_cluster" "postgres" {
 }
 
 resource "aws_rds_cluster_instance" "cluster_instance" {
+  #checkov:skip=CKV_AWS_17:publicly_accessible is intentional — developers connect directly via RDS IAM auth from local machines; long-term fix tracked in Devex ticket (replace with bastion/VPN pattern)
+  #checkov:skip=CKV_AWS_118: RDS enhanced monitoring not enabled — deliberate ops choice; standard CloudWatch metrics cover operational needs; enhanced monitoring adds per-instance cost
+  #checkov:skip=CKV_AWS_226: auto minor version upgrade disabled — deliberate ops policy; upgrades are controlled via scheduled maintenance windows and Terraform applies to prevent unexpected restarts
+  #checkov:skip=CKV_AWS_353: Performance Insights not enabled — standard CloudWatch metrics cover operational needs; PI adds per-instance cost without meaningful benefit for Aurora Serverless v2
+  #checkov:skip=CKV_AWS_354: Performance Insights encryption CMK not configured — PI not enabled; CMK moot; AWS-managed encryption adequate if PI is ever enabled
   cluster_identifier  = aws_rds_cluster.postgres.id
   instance_class      = "db.serverless"
   engine              = aws_rds_cluster.postgres.engine
   engine_version      = aws_rds_cluster.postgres.engine_version
-  publicly_accessible = true
+  publicly_accessible = true #intentional
 
   lifecycle {
     prevent_destroy = true
@@ -78,6 +85,8 @@ resource "aws_rds_cluster_parameter_group" "west_replica_parameter_group" {
 }
 
 resource "aws_rds_cluster" "west_replica" {
+  #checkov:skip=CKV_AWS_324: RDS log exports to CloudWatch not enabled — application-level Prisma query logging covers audit needs; log export adds cost and volume with marginal security benefit
+  #checkov:skip=CKV2_AWS_8: AWS Backup not configured — automated RDS snapshots with 35-day retention already provide point-in-time recovery; AWS Backup would be redundant
   provider                            = aws.us-west-1
   cluster_identifier                  = "${var.environment}-dawson-replica"
   engine                              = "aurora-postgresql"
@@ -102,12 +111,17 @@ resource "aws_rds_cluster" "west_replica" {
 }
 
 resource "aws_rds_cluster_instance" "west_replica_instance" {
+  #checkov:skip=CKV_AWS_17:publicly_accessible is intentional — developers connect directly via RDS IAM auth from local machines; long-term fix tracked in Devex ticket (replace with bastion/VPN pattern)
+  #checkov:skip=CKV_AWS_118: RDS enhanced monitoring not enabled — deliberate ops choice; standard CloudWatch metrics cover operational needs; enhanced monitoring adds per-instance cost
+  #checkov:skip=CKV_AWS_226: auto minor version upgrade disabled — deliberate ops policy; upgrades are controlled via scheduled maintenance windows and Terraform applies to prevent unexpected restarts
+  #checkov:skip=CKV_AWS_353: Performance Insights not enabled — standard CloudWatch metrics cover operational needs; PI adds per-instance cost without meaningful benefit for Aurora Serverless v2
+  #checkov:skip=CKV_AWS_354: Performance Insights encryption CMK not configured — PI not enabled; CMK moot; AWS-managed encryption adequate if PI is ever enabled
   provider            = aws.us-west-1
   cluster_identifier  = aws_rds_cluster.west_replica.id
   instance_class      = "db.serverless"
   engine              = aws_rds_cluster.west_replica.engine
   engine_version      = aws_rds_cluster.west_replica.engine_version
-  publicly_accessible = true
+  publicly_accessible = true  #intentional
 
   lifecycle {
     prevent_destroy = true

@@ -1,25 +1,15 @@
 {
-    "failed_checks": [
+  "failed_checks": [
+    {
+      "file": "/terraform-state-backend.tf",
+      "findings": [
         {
-            "file": "/terraform-state-backend.tf",
-            "findings": [
-                {
-                    "resource": "aws_dynamodb_table.terraform_state_lock",
-                    "check_ids": [
-                        "CKV_AWS_119",
-                        "CKV_AWS_28"
-                    ]
-                },
-                {
-                    "resource": "aws_s3_bucket.terraform_state_bucket",
-                    "check_ids": [
-                        "CKV2_AWS_6",
-                        "CKV_AWS_145",
-                        "CKV_AWS_18",
-                        "CKV_AWS_21"
-                    ]
-                }
-            ]
+          "resource": "aws_s3_bucket.terraform_state_bucket",
+          "check_ids": [
+            "CKV2_AWS_6"
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }
