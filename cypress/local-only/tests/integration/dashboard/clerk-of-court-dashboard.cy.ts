@@ -2,6 +2,7 @@ import {
   FORMATS,
   createDateAtStartOfWeekEST,
   createISODateString,
+  deconstructDate,
   formatDateString,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
@@ -9,6 +10,7 @@ import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   loginAsClerkOfCourt,
   loginAsPetitionsClerk1,
+  loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import {
@@ -19,19 +21,25 @@ import {
   selectSection,
   sendMessage,
 } from '../../../support/pages/document-qc';
+import { logout } from '../../../../helpers/authentication/logout';
+import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
 describe('Clerk of Court Dashboard', () => {
+  const { year } = deconstructDate(createISODateString());
+
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  it('should display the dashboard with trial sessions and recent messages', () => {
+  it('should display the dashboard with trial sessions and petitions', () => {
     loginAsClerkOfCourt();
 
     cy.get('h2:contains("Trial Sessions")').should('exist');
     cy.get('[data-testid="current-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="next-week-trial-sessions-card"]').should('exist');
-    cy.get('[data-testid="recent-messages-table"]').should('exist');
+    cy.get('[data-testid="petitions-data-div"]').should('exist');
   });
 
   it('should display all required trial session fields when sessions exist', () => {
@@ -114,6 +122,176 @@ describe('Clerk of Court Dashboard', () => {
     });
   });
 
+  it('should display petitions data', () => {
+    loginAsPrivatePractitioner('privatePractitioner@example.com');
+    externalUserCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkServesPetition(docketNumber);
+      logout();
+      loginAsPetitionsClerk1();
+      createAndServePaperPetition({ yearReceived: year }).then(() => {
+        cy.intercept('GET', '**/clerk-dashboard-stats').as(
+          'clerkDashboardStats',
+        );
+        loginAsClerkOfCourt();
+        cy.get('@clerkDashboardStats').then(clerkDashboardStats => {
+          const calendarYearTotal =
+            clerkDashboardStats.response.body.calendarYearPetitionStats.petitionsByServiceType.reduce(
+              (yearTotal: number, entry: any) => yearTotal + entry.total,
+              0,
+            );
+          const fiscalYearTotal =
+            clerkDashboardStats.response.body.fiscalYearPetitionStats.petitionsByServiceType.reduce(
+              (yearTotal: number, entry: any) => yearTotal + entry.total,
+              0,
+            );
+
+          cy.get('[data-testid="petitions-data-header"]').should(
+            'contain.text',
+            `Total petitions created in YTD ${year}: ${formatPositiveNumber(calendarYearTotal)}`,
+          );
+
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(0)
+            .should('exist');
+
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(1)
+            .should('exist');
+
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-legend"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-html-button"]',
+          ).should('exist');
+
+          cy.get('[data-testid="fiscal-year-to-date"]').click();
+          cy.get('[data-testid="petitions-data-header"]').should(
+            'contain.text',
+            `Total petitions created in FYTD ${year}: ${formatPositiveNumber(fiscalYearTotal)}`,
+          );
+
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-div"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(0)
+            .should('exist');
+
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-div"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(1)
+            .should('exist');
+
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-legend"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-html-button"]',
+          ).should('exist');
+
+          cy.get('[data-testid="calendar-year-to-date"]').click();
+          cy.get('[data-testid="petitions-data-header"]').should(
+            'contain.text',
+            `Total petitions created in YTD ${year}: ${formatPositiveNumber(calendarYearTotal)}`,
+          );
+
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(0)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(0)
+            .should('exist');
+
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`,
+          )
+            .eq(1)
+            .should('exist');
+          cy.get(
+            `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+          )
+            .eq(1)
+            .should('exist');
+
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-legend"]',
+          ).should('exist');
+          cy.get(
+            '[data-testid="Petitions: Total Petitions by Month-bar-graph-html-button"]',
+          ).should('exist');
+        });
+      });
+    });
+  });
+
   it('should display messages', () => {
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -129,6 +307,7 @@ describe('Clerk of Court Dashboard', () => {
       cy.wait('@createMessage');
       cy.intercept('GET', '**/messages/**').as('getMessages');
       cy.visit('/');
+      cy.get('#tabButton-recentMessages').click();
       cy.wait('@getMessages');
       cy.get('[data-testid="recent-messages-table"]').within(() => {
         cy.get('tbody tr').should('have.length.greaterThan', 0);
@@ -139,17 +318,71 @@ describe('Clerk of Court Dashboard', () => {
 
   it('should navigate to messages page when clicking View All Messages', () => {
     loginAsClerkOfCourt();
+    cy.get('#tabButton-recentMessages').click();
 
     cy.get('a:contains("View All Messages")').click();
     cy.url().should('include', '/messages/my/inbox');
   });
 
-  it('should display mobile view correctly', () => {
+  it('should display mobile view correctly for recent messages', () => {
     cy.viewport('iphone-x');
     loginAsClerkOfCourt();
+    cy.get('[data-testid="dashboard-clerk-of-court-mobile-selector"]').select(
+      'recentMessages',
+    );
 
     cy.get('[data-testid="current-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="next-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="recent-messages-table"]').should('exist');
+  });
+
+  it('should display mobile view correctly for petitions data', () => {
+    cy.viewport('iphone-x');
+    loginAsClerkOfCourt();
+    cy.get('[data-testid="dashboard-clerk-of-court-mobile-selector"]').select(
+      'petitions',
+    );
+
+    cy.get('[data-testid="petitions-data-header"]').should(
+      'contain.text',
+      'Total petitions created in YTD',
+    );
+
+    cy.get(`[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`)
+      .eq(0)
+      .should('exist');
+    cy.get(`[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`)
+      .eq(0)
+      .should('exist');
+    cy.get(
+      `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+    )
+      .eq(0)
+      .should('exist');
+
+    cy.get(`[data-testid="Petitions Created in YTD ${year}-pie-graph-div"]`)
+      .eq(1)
+      .should('exist');
+    cy.get(`[data-testid="Petitions Created in YTD ${year}-pie-graph-legend"]`)
+      .eq(1)
+      .should('exist');
+    cy.get(
+      `[data-testid="Petitions Created in YTD ${year}-pie-graph-html-button"]`,
+    )
+      .eq(1)
+      .should('exist');
+
+    cy.get(
+      '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
+    ).should('exist');
+    cy.get(
+      '[data-testid="Petitions: Total Petitions by Month-bar-graph-legend"]',
+    ).should('exist');
+    cy.get(
+      '[data-testid="Petitions: Total Petitions by Month-bar-graph-html-button"]',
+    ).should('exist');
+
+    cy.get('[data-testid="calendar-year-to-date"]').should('exist');
+    cy.get('[data-testid="fiscal-year-to-date"]').should('exist');
   });
 });
