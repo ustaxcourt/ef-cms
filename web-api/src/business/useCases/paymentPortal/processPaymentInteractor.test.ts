@@ -123,14 +123,18 @@ describe('processPaymentInteractor', () => {
       token: mockPaymentToken,
     });
 
-    expect(updateCaseAndAssociations).toHaveBeenCalledWith({
-      authorizedUser: mockPractitioner,
-      caseToUpdate: {
-        ...new Case(MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS, {
-          authorizedUser: mockPractitioner,
-        }),
-      },
-    });
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authorizedUser: mockPractitioner,
+        caseToUpdate: {
+          ...new Case(MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS, {
+            authorizedUser: mockPractitioner,
+          }),
+          createdAt: expect.any(String),
+          receivedAt: expect.any(String),
+        },
+      }),
+    );
 
     expect(result).toEqual({
       paymentStatus: 'success',
