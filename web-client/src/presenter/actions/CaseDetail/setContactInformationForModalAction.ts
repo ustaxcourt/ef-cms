@@ -8,8 +8,14 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setContactInformationForModalAction = ({
+  path,
   props,
   store,
 }: ActionProps) => {
   store.set(state.contactToSeal, props.contactToSeal);
+  if (props.contactToSeal.isAddressSealed) {
+    return path.unseal();
+  } else {
+    return path.seal();
+  }
 };
