@@ -13,17 +13,9 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-/**
- * unsealCaseContactAddress
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.contactId the id of the contact address to be unsealed
- * @param {string} providers.docketNumber the docket number of the case to update
- * @returns {object} the updated case data
- */
 export const unsealCaseContactAddress = async (
   _applicationContext: ServerApplicationContext,
-  { contactId, docketNumber },
+  { contactId, docketNumber }: { contactId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UNSEAL_ADDRESS)) {

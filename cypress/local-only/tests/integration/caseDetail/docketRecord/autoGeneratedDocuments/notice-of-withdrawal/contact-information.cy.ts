@@ -224,7 +224,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
     });
   });
 
-  it.only('should allow a docket clerk to seal and then unseal a petitioner address', () => {
+  it('should allow a docket clerk to seal and then unseal a petitioner address', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
       goToCase(docketNumber);
