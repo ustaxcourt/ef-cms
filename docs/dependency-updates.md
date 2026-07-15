@@ -290,10 +290,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.7.284**
+**Current Version Installed: 6.1.200**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
+
+- Updated to next major version on 7/13/2026. `pdfjs` now supports at minimum Chrome version 125 and Safari version 18. However, after testing with older versions of Chrome, we can say that as long as the browser can run ES2022, it _should_ work.
 
 ### DWT
 **Current Installed DWT: 19.4.1**
@@ -348,11 +350,11 @@ If an update is available for DWT:
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
-- As of June 23, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` which is the only published version of that package, which declares a peer dependency of `@babel/core@^7.0.0`. Attempting to install `@babel/core@8.x` causes peer-dependency conflicts that break `@babel/preset-react` and the rest of the babel preset chain. All four `@babel/*` packages have been added to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent the upgrade script from touching them. Revisit once `esbuild-plugin-babel-cached` publishes a version compatible with `@babel/core@^8`. Note: a nested override (e.g. `"esbuild-plugin-babel-cached": { "@babel/core": "^8" }`) could potentially bypass the peer-dependency conflict, but this may break at runtime if the plugin relies on `@babel/core` v7-specific APIs. Needs investigation before attempting ([PR #10187](https://github.com/ustaxcourt/ef-cms/pull/10187)).
+- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
 
 ### @types/node
-**Installed Version: 24.13.2**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.3**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.3, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -368,14 +370,20 @@ The major version of this package should match our major version of Node. We sho
 
 - As of June 23, 2026: Node.js updated to `v24.17.0`; `@types/node@24.13.x` is now available for the first time (previously stuck at `24.12.4`). Updated to **24.13.2**, the latest published version under major `24`. No `24.14+` published yet.
 
+- As of July 13, 2026: Updated to **24.13.3**, the latest published version under major `24`. No `24.14+` published yet.
+
 ### TypeScript
-**Installed Version: 6.0.3**
+**Installed Version: 7.0.2 and 6.0.2**
+
+- As of July 13, 2026, we have updated to TypeScript v7. However, version 7.0 does not ship with an API, so libraries that need it, such as `typescript-eslint` and `ts-node`, will not run. To fix this, we have an aliased version of TS 6.0.2 installed running simultaneously with TS v7, under `"typescript": "npm:@typescript/typescript6@6.0.3"` and `"@typescript/native": "npm:typescript@7.0.2"` respectively. TS v6 will be available for the libraries that need it, and `tsc` will use the new, faster v7. See [here](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0) for further details.
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest and ts-node.**
 
 - After upgrading cypress past 15.14.0, it is now compatible with TS6. Updated tsconfig for cypress to support version 6 during the week of 5/18/2026
 
-- Ensure the pinned version of typescript globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version and is compatible with ts-node. On 7/08/2026, we started pulling TS7 when building this Dockerfile, and the batch job would not start up because ts-node was unable to find the TS compiler, so we pinned it to 6.0.3.
+- Ensure the pinned version of typescript globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version and is compatible with ts-node. On 7/08/2026, we started pulling TS7 when building this Dockerfile, and the batch job would not start up because ts-node was unable to find the TS compiler, so we pinned it to 6.0.2.
+
+- On 7/13/2026, we updated the batch job docker to use the same aliased install as our package.json `typescript@npm:@typescript/typescript6@6.0.2`. Once TS 7.1.x is released, we should check if `ts-node` is compatible with it.
 
 ### ts-node
 **Installed Version: 10.9.2**
@@ -403,6 +411,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated.
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
+- July 13, 2026: it was decided to no longer update these packages outside of a vulnerability, due to the reasons above. Seeing as these packages are mostly CSS, it is unlikely any vulnerabilities will come up.
 
 ### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
@@ -415,14 +424,16 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 - As of June 25, 2026: minimatch 10.2.5 is the latest. Still blocked since upstream packages have not yet migrated to minimatch 10.x.
+- July 13, 2026: According to the link above, even major versions of minimatch < 10 have been patched. It appears that all of our dependencies are using a patched version of minimatch, which is corroborated by the fact `npm audit` no longer shows this vulnerability. Consider deleting this section.
 
 ### eslint and @eslint/js
 **Installed Versions:**
-**eslint: 9.39.4**
-**@eslint/js: 9.39.4**
+**eslint: 9.39.5**
+**@eslint/js: 9.39.5**
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
 - As of June 25, 2026: eslint 10.5.0 is the latest, but still blocked since `eslint-plugin-jsx-a11y` and `eslint-plugin-react` still declare `eslint ^9` as their peer dependency. `9.39.4` is the latest 9.x patch; nothing new to install.
+- July 13, 2026: updated to 9.39.5
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
