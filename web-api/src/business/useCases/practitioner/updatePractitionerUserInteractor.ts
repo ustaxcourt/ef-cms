@@ -59,20 +59,6 @@ export const updatePractitionerUser = async (
     throw new Error('Bar number does not match user data.');
   }
 
-  if (oldUser.practiceType !== user.practiceType) {
-    const practitionerCases = await applicationContext
-      .getUseCases()
-      .getPractitionerCasesInteractor(
-        applicationContext,
-        { userId: oldUser.userId },
-        authorizedUser,
-      );
-    if (practitionerCases.openCases.length !== 0)
-      throw new Error(
-        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
-      );
-  }
-
   if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({
       applicationContext,
