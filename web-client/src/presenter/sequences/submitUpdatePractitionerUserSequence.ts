@@ -12,6 +12,8 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
 import { validatePractitionerAction } from '../actions/validatePractitionerAction';
+import { hasUpdatedPracticeTypeFactoryAction } from '../actions/hasUpdatedPracticeTypeFactoryAction';
+import { validatePracticeTypeChangeAction } from '../actions/validatePracticeTypeChangeAction';
 
 const afterSuccess = [
   updatePractitionerUserAction,
@@ -53,6 +55,22 @@ export const submitUpdatePractitionerUserSequence = [
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
-    success: validateEmailTasks,
+    success: [
+      hasUpdatedPracticeTypeFactoryAction('practiceType'),
+      {
+        yes: [
+          validatePracticeTypeChangeAction,
+          {
+            success: validateEmailTasks,
+            error: [
+              setValidationErrorsAction,
+              setScrollToErrorNotificationAction,
+              setValidationAlertErrorsAction,
+            ],
+          },
+        ],
+        no: validateEmailTasks,
+      },
+    ],
   },
 ];

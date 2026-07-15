@@ -444,12 +444,18 @@ describe('updatePractitionerUser', () => {
   });
 
   describe('update practiceType', () => {
-    it('should not throw an error when the practice type changed and the practitioner has open cases', async () => {
+    it('should throw error when practitioner has open cases and practice type has been changed', async () => {
       getPractitionerByBarNumber.mockResolvedValue({
         ...mockPractitioner,
         userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
         practiceType: 'DOJ',
       });
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: [],
+          openCases: ['practitioner'],
+        });
       await expect(
         updatePractitionerUser(
           applicationContext,
@@ -460,13 +466,16 @@ describe('updatePractitionerUser', () => {
             user: {
               ...mockPractitioner,
               barNumber: 'AB1111',
+              updatedEmail: 'bc@example.com',
               userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
               practiceType: 'IRS',
             },
           },
           mockAdmissionsClerkUser,
         ),
-      ).resolves.not.toThrow();
+      ).rejects.toThrow(
+        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
+      );
     });
     it('should not throw an error when the practice type changed and there are no open cases', async () => {
       getPractitionerByBarNumber.mockResolvedValue({
@@ -474,6 +483,12 @@ describe('updatePractitionerUser', () => {
         userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
         practiceType: 'DOJ',
       });
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: ['practitioner'],
+          openCases: [],
+        });
       await expect(
         updatePractitionerUser(
           applicationContext,
