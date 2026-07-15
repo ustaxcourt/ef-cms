@@ -342,6 +342,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 resource "aws_api_gateway_stage" "api_stage" {
   #checkov:skip=CKV2_AWS_4:Stage logging level not set to INFO/ERROR — access log destination IS configured; execution logging deliberately omitted to avoid per-request cost on high-traffic stage
   #checkov:skip=CKV2_AWS_51:WAF IS attached via aws_wafv2_web_acl_association resource in this file — Checkov cross-resource reference limitation
+  #checkov:skip=CKV2_AWS_77:WAF ACL does not include Log4j managed rule groups — DAWSON WAF has 5 custom rules tailored to court traffic; managed rule adoption tracked in TICKET-8
   #checkov:skip=CKV_AWS_120:API caching intentionally disabled — responses are user-specific court case data; caching would cause cross-user data leakage
   #checkov:skip=CKV_AWS_73:X-Ray tracing on API GW stage adds per-request cost; Lambda already has tracing_config mode=Active — accepted operational trade-off
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
