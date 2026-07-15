@@ -42,7 +42,7 @@ export type CaseSearchResult = {
   docketNumber: string;
   receivedAt: string;
   caseCaption: string;
-  petitionerStateNames?: (string | undefined)[];
+  petitionerStateNames?: string[];
 };
 
 export const caseAdvancedSearchInteractor = async (
@@ -144,11 +144,13 @@ export const caseAdvancedSearchInteractor = async (
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(p =>
-        p.state
-          ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
-          : undefined,
-      ),
+      petitionerStateNames: filteredCase.petitioners
+        ?.map(p =>
+          p.state
+            ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+            : undefined,
+        )
+        .filter((stateName): stateName is string => !!stateName),
       receivedAt: filteredCase.receivedAt,
     };
   });

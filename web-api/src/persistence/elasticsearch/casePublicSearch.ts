@@ -65,9 +65,13 @@ export const casePublicSearch = async ({
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
         petitionerNames: c.petitioners?.map(p => p.name),
-        petitionerStateNames: c.petitioners?.map(
-          p => US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state,
-        ),
+        petitionerStateNames: c.petitioners
+          ?.map(p =>
+            p.state
+              ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+              : undefined,
+          )
+          .filter((stateName): stateName is string => !!stateName),
         receivedAt: c.receivedAt,
       };
     }),

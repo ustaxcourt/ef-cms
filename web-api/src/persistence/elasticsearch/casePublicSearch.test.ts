@@ -119,13 +119,15 @@ describe('casePublicSearch', () => {
     ]);
   });
 
-  it('converts state and territory abbreviations to full names', async () => {
+  it('converts state and territory abbreviations, preserves unmapped values, and filters missing states', async () => {
     search.mockResolvedValue({
       results: [
         {
           petitioners: [
             { name: 'State Petitioner', state: 'TN' },
             { name: 'Territory Petitioner', state: 'PR' },
+            { name: 'International Petitioner', state: 'Ontario' },
+            { name: 'Petitioner Without State' },
           ],
         },
       ],
@@ -140,6 +142,7 @@ describe('casePublicSearch', () => {
     expect(results[0].petitionerStateNames).toEqual([
       'Tennessee',
       'Puerto Rico',
+      'Ontario',
     ]);
   });
 });
