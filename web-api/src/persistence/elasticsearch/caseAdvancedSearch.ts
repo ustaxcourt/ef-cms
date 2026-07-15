@@ -8,7 +8,7 @@ import type { Search_Request } from 'node_modules/@opensearch-project/opensearch
 
 export type SearchAfter = Common.SortResults;
 
-type CaseAdvancedSearchResult = {
+export type CaseAdvancedSearchResult = {
   caseCaption: string;
   docketNumber: string;
   docketNumberWithSuffix: string;

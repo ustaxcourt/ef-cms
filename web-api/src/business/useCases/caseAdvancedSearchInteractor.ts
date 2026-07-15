@@ -20,12 +20,11 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import type { SearchAfter } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+import type {
+  SearchAfter,
+  CaseAdvancedSearchResult,
+} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { getUniqueId } from '@shared/sharedAppContext';
-
-type CaseAdvancedSearchResult = Awaited<
-  ReturnType<typeof caseAdvancedSearch>
->[number];
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
