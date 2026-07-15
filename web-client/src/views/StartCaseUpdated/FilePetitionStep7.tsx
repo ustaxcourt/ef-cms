@@ -14,6 +14,7 @@ import React from 'react';
 export const FilePetitionStep7 = connect(
   {
     alertSuccess: state.alertSuccess,
+    alertError: state.alertError,
     filePetitionHelper: state.filePetitionHelper,
     initFilingFeePaymentSequence: sequences.initFilingFeePaymentSequence,
     enablePaymentPortalIntegration:
@@ -23,6 +24,7 @@ export const FilePetitionStep7 = connect(
   },
   function FilePetitionStep7({
     alertSuccess,
+    alertError,
     filePetitionHelper,
     initFilingFeePaymentSequence,
     enablePaymentPortalIntegration,
@@ -56,15 +58,22 @@ export const FilePetitionStep7 = connect(
           </Button>
         )}
         {enablePaymentPortalIntegration && (
-          <Button
-            className="margin-top-205"
-            data-testid="pay-filing-fee-button"
-            onClick={() => {
-              initFilingFeePaymentSequence();
-            }}
-          >
-            Pay Now Online
-          </Button>
+          <>
+            <Button
+              className="margin-top-205"
+              data-testid="pay-filing-fee-button"
+              onClick={() => {
+                initFilingFeePaymentSequence();
+              }}
+            >
+              Pay Now Online
+            </Button>
+            {alertError && (
+              <span className="tw:text-destructive-dark semi-bold">
+                Error: payment cannot be started
+              </span>
+            )}
+          </>
         )}
 
         <div className="grid-row grid-gap margin-top-205" role="list">
