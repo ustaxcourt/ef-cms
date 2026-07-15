@@ -75,7 +75,15 @@ export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
-export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+export const EXHIBIT_EVENT_CODES = [
+  'EXH',
+  'EXS',
+  'PTE',
+  'HE',
+  'TE',
+  'M123',
+  'STIP',
+];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
