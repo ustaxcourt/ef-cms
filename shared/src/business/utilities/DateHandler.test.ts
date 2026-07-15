@@ -39,6 +39,8 @@ import {
   validateDateAndCreateISO,
   isValidPastDate,
   formatDateFromDatePicker,
+  getJsTimeframeForYear,
+  getTimeframeForYear,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1170,6 +1172,40 @@ describe('DateHandler', () => {
       const output = formatDateFromDatePicker('9/9/2023', FORMATS.YYYYMMDD);
 
       expect(output).toEqual('2023-09-09');
+    });
+  });
+
+  describe('getTimeframeForYear', () => {
+    it('determines the timeframe for a given calendar year', () => {
+      const timeframe = getTimeframeForYear({ year: '2024' });
+      expect(timeframe).toEqual({
+        begin: '2024-01-01T05:00:00.000Z',
+        end: '2025-01-01T05:00:00.000Z',
+      });
+    });
+    it('determines the timeframe for a given fiscal year', () => {
+      const timeframe = getTimeframeForYear({ fiscal: true, year: '2024' });
+      expect(timeframe).toEqual({
+        begin: '2023-10-01T04:00:00.000Z',
+        end: '2024-10-01T04:00:00.000Z',
+      });
+    });
+  });
+
+  describe('getJsTimeframeForYear', () => {
+    it('determines the timeframe for a given calendar year and returns JS dates', () => {
+      const jsTimeframe = getJsTimeframeForYear({ year: '2024' });
+      expect(jsTimeframe).toEqual({
+        begin: new Date('2024-01-01T05:00:00.000Z'),
+        end: new Date('2025-01-01T05:00:00.000Z'),
+      });
+    });
+    it('determines the timeframe for a given fiscal year and returns JS dates', () => {
+      const jsTimeframe = getJsTimeframeForYear({ fiscal: true, year: '2024' });
+      expect(jsTimeframe).toEqual({
+        begin: new Date('2023-10-01T04:00:00.000Z'),
+        end: new Date('2024-10-01T04:00:00.000Z'),
+      });
     });
   });
 });
