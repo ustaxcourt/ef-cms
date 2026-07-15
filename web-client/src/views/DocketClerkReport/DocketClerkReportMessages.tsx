@@ -253,7 +253,7 @@ export const DocketClerkReportMessages = connect<
         <Tab
           data-testid="docket-clerk-report-messages-sent-tab"
           tabName="sent"
-          title={`Sent (${messages.sent.messages.length})`}
+          title={`Sent`}
         >
           <MessagePanel
             box={messages.sent}
@@ -265,7 +265,7 @@ export const DocketClerkReportMessages = connect<
         <Tab
           data-testid="docket-clerk-report-messages-completed-tab"
           tabName="completed"
-          title={`Completed (${messages.completed.messages.length})`}
+          title={`Completed`}
         >
           <MessagePanel
             box={messages.completed}

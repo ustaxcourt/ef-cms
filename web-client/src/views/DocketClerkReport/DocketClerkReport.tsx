@@ -128,7 +128,10 @@ export const DocketClerkReport = connect(
           {docketClerkReportHelper.showResults && (
             <div className="margin-top-5">
               <div className="title">
-                <h2 data-testid="docket-clerk-report-title">
+                <h2
+                  className="docket-clerk-report-title"
+                  data-testid="docket-clerk-report-title"
+                >
                   {docketClerkReportHelper.reportTitle}
                 </h2>
               </div>
