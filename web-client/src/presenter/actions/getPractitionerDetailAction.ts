@@ -12,16 +12,18 @@ import {
 } from '@web-client/presenter/state';
 import { RawPublicContact } from '@shared/business/entities/cases/PublicContact';
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Role } from '@shared/business/entities/EntityConstants';
 
 // getPractitionerByBarNumberInteractor returns different types depending on whether the user is logged in or not
 const isPractitionerForInternalUser = (
   detail: PractitionerDetail | RawPublicContact | undefined,
-  applicationContext: any,
-  user: any,
+  applicationContext: ClientApplicationContext,
+  role: Role,
 ): detail is PractitionerDetail => {
   return (
     detail !== undefined &&
-    applicationContext.getUtilities().isInternalUser(user.role)
+    applicationContext.getUtilities().isInternalUser(role)
   );
 };
 
@@ -45,7 +47,11 @@ export const getPractitionerDetailAction = async ({
       : (practitionerResult as PractitionerDetail | undefined);
 
   if (
-    isPractitionerForInternalUser(practitionerDetail, applicationContext, user)
+    isPractitionerForInternalUser(
+      practitionerDetail,
+      applicationContext,
+      user.role,
+    )
   ) {
     const { closedCases, openCases } = await applicationContext
       .getUseCases()
