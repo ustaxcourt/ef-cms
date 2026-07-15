@@ -106,5 +106,14 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
       'have.text',
       'Motion to Lift Stay of Proceedings (No Objection)',
     );
+
+    // Auto-served motions (MLSP) get a single coversheet at filing time:
+    // sample.pdf (1 page) + 1 coversheet = 2. Asserting this pins the
+    // auto-served coversheet behavior so a regression that drops or
+    // duplicates the coversheet is caught here.
+    cy.contains('[data-testid^="docket-entry-eventCode-"]', 'MLSP')
+      .parents('tr')
+      .find('.number-of-pages')
+      .should('have.text', '2');
   });
 });

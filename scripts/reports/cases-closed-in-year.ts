@@ -3,9 +3,9 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
-  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import {
   calculateDifferenceInDays,
   getIsoFromJsDate,

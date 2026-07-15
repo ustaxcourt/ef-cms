@@ -32,7 +32,6 @@ import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '@web-client/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '@web-client/proxies/addConsolidatedCaseProxy';
-import { addCoversheetInteractor } from '@web-client/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '@web-client/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { addPaperFilingInteractor } from '@web-client/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '@web-client/proxies/addPetitionerToCaseProxy';
@@ -163,14 +162,15 @@ import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/util
 import { getCaseDocketEntriesInteractor } from '@web-client/proxies/getCaseDocketEntriesProxy';
 import { getCaseExistsInteractor } from '@web-client/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '@web-client/proxies/getCaseProxy';
-import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseWorksheetsByJudgeInteractor } from '@web-client/proxies/reports/getCaseWorksheetsByJudgeProxy';
-import { getCasesClosedByJudgeInteractor } from '@web-client/proxies/reports/getCasesClosedByJudgeProxy';
-import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
+import { getClerkDashboardStatsInteractor } from '@web-client/proxies/reports/getClerkDashboardStatsProxy';
 import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
-import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
+import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
 import { getCompletedMessagesForSectionInteractor } from '@web-client/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '@web-client/proxies/messages/getCompletedMessagesForUserProxy';
+import { getCaseInventoryReportInteractor } from '@web-client/proxies/reports/getCaseInventoryReportProxy';
+import { getCasesClosedByJudgeInteractor } from '@web-client/proxies/reports/getCasesClosedByJudgeProxy';
+import { getCaseWorksheetsByJudgeInteractor } from '@web-client/proxies/reports/getCaseWorksheetsByJudgeProxy';
+import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-client/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
@@ -353,6 +353,7 @@ import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
+import { getDocketEntryProcessingStatusInteractor } from '@web-client/proxies/documents/getDocketEntryProcessingStatusProxy';
 
 const reduce = ImageBlobReduce({
   pica: Pica({ features: ['js'] }),
@@ -366,7 +367,7 @@ let forceRefreshCallback: () => {};
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
-  addCoversheetInteractor,
+  getDocketEntryProcessingStatusInteractor,
   addDeficiencyStatisticInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
@@ -449,6 +450,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getClerkDashboardStatsInteractor,
   getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,

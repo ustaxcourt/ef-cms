@@ -45,7 +45,7 @@ describe('edit status report order', () => {
       });
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
-      cy.get('#additional-order-text').should('contain', 'Test');
+      cy.get('#additional-order-text-array-0').should('have.value', 'Test');
     });
 
     it('should load existing signed order', () => {
@@ -62,7 +62,7 @@ describe('edit status report order', () => {
       cy.get('#status-report-due-date-picker').invoke('val').should('exist');
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
-      cy.get('#additional-order-text').should('contain', 'Test');
+      cy.get('#additional-order-text-array-0').should('have.value', 'Test');
 
       cy.get('#status-report-due-date-picker').clear();
       cy.get('#status-report-due-date-picker').type(
@@ -133,7 +133,7 @@ describe('edit status report order', () => {
       });
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
-      cy.get('#additional-order-text').should('contain', 'Test');
+      cy.get('#additional-order-text-array-0').should('have.value', 'Test');
     });
 
     it('should load existing signed order', () => {
@@ -150,7 +150,7 @@ describe('edit status report order', () => {
       cy.get('#status-report-due-date-picker').invoke('val').should('exist');
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
-      cy.get('#additional-order-text').should('contain', 'Test');
+      cy.get('#additional-order-text-array-0').should('have.value', 'Test');
 
       cy.get('#status-report-due-date-picker').clear();
       cy.get('#status-report-due-date-picker').type(
