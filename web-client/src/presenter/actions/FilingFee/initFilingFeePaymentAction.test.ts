@@ -8,10 +8,6 @@ describe('initFilingFeePaymentAction', () => {
 
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
-    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
-      paymentRedirect: 'newUrl',
-    });
-
     const implSymbol = Reflect.ownKeys(window.location).find(
       k => typeof k === 'symbol',
     )!;
@@ -26,6 +22,9 @@ describe('initFilingFeePaymentAction', () => {
   });
 
   it('should call the initPaymentInteractor', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
+      paymentRedirect: 'newUrl',
+    });
     await runAction(initFilingFeePaymentAction, {
       modules: {
         presenter,
@@ -40,5 +39,21 @@ describe('initFilingFeePaymentAction', () => {
     ).toHaveBeenCalled();
 
     expect(hrefSetter).toHaveBeenCalledWith('newUrl');
+  });
+
+  it('should set alertError if initPaymentInteractor fails', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
+    const { state } = await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+      },
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Error calling init filing fee payment',
+    });
   });
 });
