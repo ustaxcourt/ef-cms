@@ -1,11 +1,8 @@
-import { ClientApplicationContext } from '../../../applicationContext';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import {
-  PRACTITIONER_SEARCH_PAGE_SIZE,
-  US_STATES,
-  US_STATES_OTHER,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
+import { getFullStateName } from './getFullStateName';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type FormattedPractitionerSearchResultType = {
@@ -105,13 +102,13 @@ export const formatPractitionerSearchResultRecord = (
     result.petitionerFullStateNames = result.petitioners.map(petitioner => {
       return {
         contactId: petitioner.contactId,
-        state: US_STATES[petitioner.state] || petitioner.state,
+        state: getFullStateName(petitioner.state),
       };
     });
   }
 
-  result.stateFullName = getFullState(result.state);
-  result.originalBarStateFullName = getFullState(result.originalBarState);
+  result.stateFullName = getFullStateName(result.state);
+  result.originalBarStateFullName = getFullStateName(result.originalBarState);
 
   result.formattedAdmissionsDate = applicationContext
     .getUtilities()
@@ -119,8 +116,3 @@ export const formatPractitionerSearchResultRecord = (
 
   return result;
 };
-
-function getFullState(state: string): string | undefined {
-  if (!state) return;
-  return US_STATES[state] || US_STATES_OTHER[state] || state;
-}
