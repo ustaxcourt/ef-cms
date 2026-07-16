@@ -14,11 +14,17 @@ import {
   ProcedureType,
   MAX_CASE_SEARCH_RESULTS,
   US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import type {
+  SearchAfter,
+  CaseAdvancedSearchResult,
+} from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -79,33 +85,72 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await caseAdvancedSearch({
-    applicationContext,
-    searchTerms: {
-      countryType,
-      endDate: searchEndDate,
-      petitionerName,
-      petitionerState,
-      startDate: searchStartDate,
-      caseTypes: caseType,
-      procedureType,
-    },
-  });
+  const searchTerms = {
+    countryType,
+    endDate: searchEndDate,
+    petitionerName,
+    petitionerState,
+    startDate: searchStartDate,
+    caseTypes: caseType,
+    procedureType,
+  };
+  const accessibleCases: CaseAdvancedSearchResult[] = [];
+  let searchAfter: SearchAfter | undefined;
+  let useNonExactQuery = false;
 
-  const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
-    foundCases,
-    authorizedUser,
-  ).slice(0, MAX_CASE_SEARCH_RESULTS);
+  // A per-search preference key pins every search_after page to the same shard
+  // copies, keeping relevance (`_score`) ordering stable across pages so cases
+  // are not duplicated or skipped between requests.
+  const preference = getUniqueId();
 
-  return filteredCases.map(filteredCase => {
+  while (accessibleCases.length < MAX_CASE_SEARCH_RESULTS) {
+    const foundCases = await caseAdvancedSearch({
+      applicationContext,
+      preference,
+      resultSize: MAX_CASE_SEARCH_RESULTS - accessibleCases.length,
+      searchAfter,
+      searchTerms,
+      useNonExactQuery,
+    });
+
+    if (foundCases.length === 0) {
+      if (!searchAfter && !useNonExactQuery) {
+        useNonExactQuery = true;
+      } else {
+        break;
+      }
+    } else {
+      const filteredCases: CaseAdvancedSearchResult[] =
+        filterCaseSearchResultsNotAccessibleToUser(foundCases, authorizedUser);
+      accessibleCases.push(
+        ...filteredCases.slice(
+          0,
+          MAX_CASE_SEARCH_RESULTS - accessibleCases.length,
+        ),
+      );
+
+      if (accessibleCases.length >= MAX_CASE_SEARCH_RESULTS) break;
+
+      const lastFoundCase = foundCases[foundCases.length - 1];
+      if (!lastFoundCase.sort) break;
+
+      searchAfter = lastFoundCase.sort;
+    }
+  }
+
+  return accessibleCases.map(filteredCase => {
     return {
       caseCaption: filteredCase.caseCaption,
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
-      petitionerStateNames: filteredCase.petitioners?.map(
-        p => US_STATES[p.state] || p.state,
-      ),
+      petitionerStateNames: filteredCase.petitioners
+        ?.map(p =>
+          p.state
+            ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
+            : undefined,
+        )
+        .filter((stateName): stateName is string => !!stateName),
       receivedAt: filteredCase.receivedAt,
     };
   });
