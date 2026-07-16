@@ -8,7 +8,7 @@ import {
   InitPaymentResponse,
   ProcessPaymentRequest,
   ProcessPaymentResponse,
-} from 'node_modules/@ustaxcourt/payment-portal/dist';
+} from '@ustaxcourt/payment-portal';
 import { signRequest } from 'aws-sigv4-sign';
 
 async function makePaymentPortalRequest(
