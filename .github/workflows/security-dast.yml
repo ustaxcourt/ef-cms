@@ -57,31 +57,11 @@ jobs:
       - name: NPM Install
         uses: ./.github/actions/dawson-node-bootstrap
 
-      - name: Configure sysctl
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
         with:
-          opensearch-version: 3.5.0
-
-      - name: Prepare Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-
-      - name: Start DAWSON
-        run: |
-          npm run start:all:ci >> /tmp/dast-dawson-output.txt 2>&1 &
-
-      - name: Wait for DAWSON
-        run: |
-          MAX_TRIES=150 WAIT_FOR_PUBLIC_API=1 ./wait-until-services.sh
+          log_file: /tmp/dast-dawson-output.txt
+          wait_flags: MAX_TRIES=150 WAIT_FOR_PUBLIC_API=1
 
       - name: Acquire ZAP auth token (${{ matrix.role }})
         env:
@@ -175,31 +155,10 @@ jobs:
       - name: NPM Install
         uses: ./.github/actions/dawson-node-bootstrap
 
-      - name: Configure sysctl
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
         with:
-          opensearch-version: 3.5.0
-
-      - name: Prepare Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
-
-      - name: Start DAWSON
-        run: |
-          npm run start:all:ci >> /tmp/dast-web-dawson-output.txt 2>&1 &
-
-      - name: Wait for DAWSON
-        run: |
-          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+          log_file: /tmp/dast-web-dawson-output.txt
 
       - name: Acquire ZAP auth token
         run: node scripts/get-local-zap-token.mjs

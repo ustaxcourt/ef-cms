@@ -1,0 +1,36 @@
+name: DAWSON App Setup
+description: Start DAWSON locally — OpenSearch, Postgres, app process, and wait. Single source of truth for all CI workflows.
+
+inputs:
+  log_file:
+    description: Path to redirect DAWSON stdout/stderr.
+    required: true
+  wait_flags:
+    description: Environment variables prepended to wait-until-services.sh (e.g. "MAX_TRIES=150 WAIT_FOR_PUBLIC_API=1").
+    required: false
+    default: 'WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup OpenSearch
+      uses: ankane/setup-opensearch@v1
+      with:
+        opensearch-version: 3.5.0
+
+    - name: Prepare Postgres
+      shell: bash
+      run: |
+        npm run migration:postgres
+        npm run migration:postgres:contract
+        npm run seed:postgres
+
+    - name: Start DAWSON
+      shell: bash
+      run: |
+        npm run start:all:ci >> ${{ inputs.log_file }} 2>&1 &
+
+    - name: Wait for DAWSON
+      shell: bash
+      run: |
+        ${{ inputs.wait_flags }} ./wait-until-services.sh
