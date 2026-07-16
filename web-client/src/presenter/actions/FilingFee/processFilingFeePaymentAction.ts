@@ -17,6 +17,13 @@ export const processFilingFeePaymentAction = async ({
       },
     });
   } catch (e) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message:
+          'Something went wrong when paying the filing fee. Please try again.',
+        overwritable: true,
+        title: 'Filing fee payment failed',
+      },
+    });
   }
 };
