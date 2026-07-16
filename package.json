@@ -359,18 +359,8 @@
     "typescript-eslint": "8.64.0"
   },
   "allowScripts": {
-    "@parcel/watcher": false,
-    "@scarf/scarf": false,
-    "aws-sdk": false,
-    "bufferutil": false,
-    "canvas": false,
-    "core-js": false,
-    "es5-ext": false,
-    "esbuild": false,
-    "fsevents": false,
-    "unrs-resolver": false,
-    "utf-8-validate": false,
     "cypress@15.18.1": true,
-    "puppeteer@25.1.0": true
+    "puppeteer@25.1.0": true,
+    "canvas@3.2.3": true
   }
 }
