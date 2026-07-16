@@ -1,4 +1,7 @@
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsPetitioner,
+  loginAsPrivatePractitioner,
+} from '../../../helpers/authentication/login-as-helpers';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import {
   fillPetitionerInformation,
@@ -26,18 +29,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     }
   });
 
-  beforeEach(() => {
-    loginAsPetitioner();
-    cy.visit('/file-a-petition/new');
-    fillPetitionerInformation();
-    fillPetitionFileInformation(VALID_FILE);
-    fillIrsNoticeInformation(VALID_FILE);
-    fillCaseProcedureInformation();
-    fillStinInformation(VALID_FILE);
-    cy.get('[data-testid="step-6-next-button"]').click();
-  });
-
-  it('should let petitioner pay the filing fee and notify them of success', () => {
+  const payFeeSuccess = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -88,9 +80,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
         );
     });
-  });
+  };
 
-  it('should let petitioner pay the filing fee and notify them of failure', () => {
+  const payFeeFailsure = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -141,9 +133,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'Something went wrong when paying the filing fee. Please try again.',
         );
     });
-  });
+  };
 
-  it('should let petitioner pay the filing fee via ACH and notify them their payment is pending', () => {
+  const payFeePending = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -194,9 +186,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           `Allow 24-48 hours for the payment status to update for docket number(s): ${docketNumber}`,
         );
     });
-  });
+  };
 
-  it('should let petitioner cancel their payment and return step 7, then attempt again and successfully pay', () => {
+  const payFeeCancel = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -278,5 +270,71 @@ describe('Pay Filing Fee Through pay.gov', () => {
           `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
         );
     });
+  };
+
+  describe('Petitioner flow', () => {
+    beforeEach(() => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition/new');
+      fillPetitionerInformation();
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+      cy.get('[data-testid="step-6-next-button"]').click();
+    });
+
+    it(
+      'should let petitioner pay the filing fee and notify them of success',
+      payFeeSuccess,
+    );
+
+    it(
+      'should let petitioner pay the filing fee and notify them of failure',
+      payFeeFailsure,
+    );
+
+    it(
+      'should let petitioner pay the filing fee via ACH and notify them their payment is pending',
+      payFeePending,
+    );
+
+    it(
+      'should let petitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      payFeeCancel,
+    );
+  });
+
+  describe('Practitioner flow', () => {
+    beforeEach(() => {
+      loginAsPrivatePractitioner();
+      cy.visit('/file-a-petition/new');
+      fillPetitionerInformation();
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+      cy.get('[data-testid="step-6-next-button"]').click();
+    });
+
+    it(
+      'should let practitioner pay the filing fee and notify them of success',
+      payFeeSuccess,
+    );
+
+    it(
+      'should let practitioner pay the filing fee and notify them of failure',
+      payFeeFailsure,
+    );
+
+    it(
+      'should let practitioner pay the filing fee via ACH and notify them their payment is pending',
+      payFeePending,
+    );
+
+    it(
+      'should let practitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      payFeeCancel,
+    );
   });
 });
