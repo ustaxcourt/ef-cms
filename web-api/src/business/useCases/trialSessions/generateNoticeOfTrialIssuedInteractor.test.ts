@@ -126,6 +126,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       data: {
         docketNumberWithSuffix: '123-45',
         trialInfo: {
+          formattedJudge: 'Judge Test Judge',
           formattedStartDate: 'Sunday, August 25, 2019',
           formattedStartTime: '10:00 am',
           joinPhoneNumber: '3333',

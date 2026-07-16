@@ -57,8 +57,10 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
+  let formattedJudge = trialSession.judge?.name || 'Not assigned';
+
   if (trialSession.judge?.name) {
-    await getJudgeWithTitle({
+    formattedJudge = await getJudgeWithTitle({
       judgeUserName: trialSession.judge.name,
     });
   }
@@ -79,7 +81,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     chambersPhoneNumber: formatTrialNoticePhoneNumber(
       trialSession.chambersPhoneNumber,
     ),
-    formattedJudge: trialSession.judge?.name || 'Not assigned',
+    formattedJudge,
     formattedStartDate,
     formattedStartTime,
     joinPhoneNumber: formatTrialNoticePhoneNumber(trialSession.joinPhoneNumber),
