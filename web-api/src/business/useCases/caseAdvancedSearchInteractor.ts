@@ -22,8 +22,8 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawPublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import type {
-  CaseAdvancedSearchResult,
   SearchAfter,
+  CaseAdvancedSearchResult,
 } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import { getUniqueId } from '@shared/sharedAppContext';
 
@@ -135,9 +135,9 @@ export const caseAdvancedSearchInteractor = async (
       caseCaption: filteredCase.caseCaption,
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      petitionerNames: filteredCase.petitioners.map(p => p.name),
+      petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners
-        .map(p =>
+        ?.map(p =>
           p.state
             ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
             : undefined,

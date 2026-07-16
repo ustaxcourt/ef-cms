@@ -223,4 +223,37 @@ describe('Notice of Withdrawal - Contact Information', () => {
       });
     });
   });
+
+  it('should allow a docket clerk to seal and then unseal a petitioner address', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+
+      // Seal the address
+      cy.get('#seal-address').should('not.be.checked');
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="confirm-modal-header"]').should('contain', 'Seal');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('#seal-address').should('be.checked');
+
+      // Unseal the address
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="confirm-modal-header"]').should(
+        'contain',
+        'Unseal',
+      );
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('#seal-address').should('not.be.checked');
+
+      // Toggle again to confirm the seal/unseal routing stays correct after
+      // repeated toggles (regression for stale form.contact sealed state)
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="confirm-modal-header"]').should('contain', 'Seal');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('#seal-address').should('be.checked');
+    });
+  });
 });

@@ -221,6 +221,7 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCaseContactAddressLambda';
 import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
 import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
 import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
@@ -592,6 +593,10 @@ app.use(expressLogger);
   app.put(
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/unseal-address/:contactId',
+    lambdaWrapper(unsealCaseContactAddressLambda),
   );
   app.post(
     '/case-meta/:docketNumber/other-statistics',

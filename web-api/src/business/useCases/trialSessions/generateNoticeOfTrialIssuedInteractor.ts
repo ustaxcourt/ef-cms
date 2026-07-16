@@ -9,6 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { formatTrialNoticePhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
@@ -56,14 +57,21 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
-  const { name, title } = await getClerkOfTheCourtInfo();
+  let formattedJudge = trialSession.judge?.name || 'Not assigned';
 
+  if (trialSession.judge?.name) {
+    formattedJudge = await getJudgeWithTitle({
+      judgeUserName: trialSession.judge.name,
+    });
+  }
+
+  const { name, title } = await getClerkOfTheCourtInfo();
   const trialInfo: FormattedTrialInfoType = {
     ...trialSession,
     chambersPhoneNumber: formatTrialNoticePhoneNumber(
       trialSession.chambersPhoneNumber,
     ),
-    formattedJudge: trialSession.judge?.name || 'Not assigned',
+    formattedJudge,
     formattedStartDate,
     formattedStartTime,
     joinPhoneNumber: formatTrialNoticePhoneNumber(trialSession.joinPhoneNumber),

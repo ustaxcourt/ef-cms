@@ -64,7 +64,6 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#seal-address').should('be.checked');
-      cy.get('#seal-address').should('be.disabled');
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
