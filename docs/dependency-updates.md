@@ -55,6 +55,10 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
 > These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
+#### 1.3 Approve or deny scripts as needed
+
+Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
+
 ### 2. Update third-party dependencies
 
 #### 2.1 Update Node.js version
@@ -375,7 +379,7 @@ The major version of this package should match our major version of Node. We sho
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
 
-- As of July 13, 2026, we have updated to TypeScript v7. However, version 7.0 does not ship with an API, so libraries that need it, such as `typescript-eslint` and `ts-node`, will not run. To fix this, we have an aliased version of TS 6.0.2 installed running simultaneously with TS v7, under `"typescript": "npm:@typescript/typescript6@6.0.3"` and `"@typescript/native": "npm:typescript@7.0.2"` respectively. TS v6 will be available for the libraries that need it, and `tsc` will use the new, faster v7. See [here](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0) for further details.
+- As of July 13, 2026, we have updated to TypeScript v7. However, version 7.0 does not ship with an API, so libraries that need it, such as `typescript-eslint` and `ts-node`, will not run. To fix this, we have an aliased version of TS 6.0.2 installed running simultaneously with TS v7, under `"typescript": "npm:@typescript/typescript6@6.0.2"` and `"@typescript/native": "npm:typescript@7.0.2"` respectively. TS v6 will be available for the libraries that need it, and `tsc` will use the new, faster v7. See [here](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0) for further details.
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest and ts-node.**
 

@@ -368,9 +368,9 @@
     "es5-ext": false,
     "esbuild": false,
     "fsevents": false,
-    "puppeteer": false,
     "unrs-resolver": false,
     "utf-8-validate": false,
-    "cypress@15.18.1": true
+    "cypress@15.18.1": true,
+    "puppeteer@25.1.0": true
   }
 }
