@@ -55,6 +55,12 @@ const config: Config = {
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
     '^@aws-sdk/core/client$':
       '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
+    '^@aws-sdk/checksums/crc$':
+      '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/crc/index.js',
+    '^@aws-sdk/checksums/sha$':
+      '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/sha/index.js',
+    '^@aws-sdk/middleware-sdk-s3/s3$':
+      '<rootDir>/../node_modules/@aws-sdk/middleware-sdk-s3/dist-cjs/submodules/s3/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(

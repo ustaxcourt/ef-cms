@@ -52,6 +52,7 @@ export const AddEditCaseNoteModal = connect<
             aria-label="notes"
             bind="modal.notes"
             id="procedural-notes"
+            data-testid="edit-case-note-textarea"
             onChange={() => {
               validateNoteSequence();
             }}

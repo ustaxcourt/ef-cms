@@ -11,6 +11,7 @@ import {
 import {
   expireUserConfirmationCode,
   getDocketEntryIdsByDocketNumberAndEventCode,
+  getDocketEntryPageCountByDocketNumberAndEventCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
@@ -69,6 +70,18 @@ export default defineConfig({
           eventCode: string;
         }) {
           return getDocketEntryIdsByDocketNumberAndEventCode({
+            docketNumber,
+            eventCode,
+          });
+        },
+        getDocketEntryPageCountByDocketNumberAndEventCode({
+          docketNumber,
+          eventCode,
+        }: {
+          docketNumber: string;
+          eventCode: string;
+        }) {
+          return getDocketEntryPageCountByDocketNumberAndEventCode({
             docketNumber,
             eventCode,
           });

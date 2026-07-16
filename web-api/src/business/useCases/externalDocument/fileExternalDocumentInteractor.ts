@@ -13,11 +13,13 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -239,6 +241,19 @@ export const fileExternalDocument = async (
       workItems,
     });
   });
+
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(docketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber,
+    }),
+  );
 };
 
 export const fileExternalDocumentInteractor = withLocking(
