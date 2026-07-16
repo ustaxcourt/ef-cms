@@ -4,12 +4,14 @@ export const setCurrentPaginationPageAction = ({
   props,
   store,
 }: ActionProps & {
-  props: { currentPaginationPage: number; advancedSearchTab: string };
+  props: { advancedSearchTab: string; currentPaginationPage: number };
 }) => {
   const { advancedSearchTab, currentPaginationPage } = props;
-  if (advancedSearchTab === 'opinion') {
-    store.set(state.opinionCurrentPaginationPage, currentPaginationPage);
-  } else {
+  if (advancedSearchTab === 'case') {
+    store.set(state.caseCurrentPaginationPage, currentPaginationPage);
+  } else if (advancedSearchTab === 'order') {
     store.set(state.orderCurrentPaginationPage, currentPaginationPage);
+  } else if (advancedSearchTab === 'opinion') {
+    store.set(state.opinionCurrentPaginationPage, currentPaginationPage);
   }
 };

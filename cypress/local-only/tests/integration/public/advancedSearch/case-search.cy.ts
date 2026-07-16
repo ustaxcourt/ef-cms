@@ -10,8 +10,35 @@ import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenanc
 import { searchForCaseByDocketNumber } from 'cypress/local-only/support/pages/public/advanced-search';
 import { logout } from '../../../../../helpers/authentication/logout';
 
+// 103 cases -> 2 pages (100 on page 1, 3 on page 2).
+const TOTAL_PAGINATION_CASES = 103;
+const paginationMockCases = Array.from(
+  { length: TOTAL_PAGINATION_CASES },
+  (_, index) => ({
+    caseCaption: `Pagination Case ${index + 1}, Petitioner`,
+    docketNumber: `${20000 + index + 1}-26`,
+    docketNumberWithSuffix: `${20000 + index + 1}-26`,
+    entityName: 'PublicCaseSearchResult',
+    petitionerNames: [`Pagination Petitioner ${index + 1}`],
+    petitionerStateNames: ['California'],
+    receivedAt: `2026-06-${String((index % 28) + 1).padStart(2, '0')}T12:00:00.000Z`,
+  }),
+);
+
 describe('Case Search', () => {
   describe('Case Search By Name', () => {
+    it('should show public search boilerplate text', () => {
+      cy.visit('/');
+      cy.contains(
+        'li',
+        'If you aren’t affiliated with a case, you will only see limited information about that case.',
+      ).should('be.visible');
+      cy.contains(
+        'li',
+        'Sealed cases and affiliated documents will not display in search results.',
+      ).should('be.visible');
+    });
+
     it('should show order search results by [petitioner name, secondary contact name, case caption] when searching', () => {
       const nameToSearchFor = `${faker.person.firstName()} ${faker.person.lastName()}`;
       createAndServePaperPetition({ name: nameToSearchFor }).then(
@@ -98,6 +125,99 @@ describe('Case Search', () => {
       cy.get('[data-testid=petitioner-name]').type(searchTerm);
       cy.get('[data-testid=submit-case-search-by-name-button]').click();
       cy.get('[data-testid=no-search-results]');
+    });
+
+    describe('Case Search By Name - Pagination', () => {
+      beforeEach(() => {
+        cy.intercept('GET', '/public-api/search?**', {
+          body: {
+            results: paginationMockCases,
+          },
+        }).as('getCaseSearchResults');
+
+        cy.visit('/');
+        cy.get('[data-testid=petitioner-name]').type('Pagination Petitioner');
+        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.wait('@getCaseSearchResults');
+        cy.get('table.search-results').should('be.visible');
+      });
+
+      it('should show the paginator when results span more than one page', () => {
+        cy.get('[data-testid="paginator-page-1"]').first().should('exist');
+        cy.get('[data-testid="paginator-page-2"]').first().should('exist');
+      });
+
+      it('should display page 1 with 100 rows and page 1 highlighted', () => {
+        cy.get('tr.search-result').should('have.length', 100);
+        cy.get('[data-testid="paginator-page-1"]')
+          .first()
+          .should('have.class', 'paginator-current');
+        cy.get('tr.search-result')
+          .first()
+          .should(
+            'have.attr',
+            'data-testid',
+            `advanced-case-search-result-${paginationMockCases[0].docketNumber}`,
+          );
+      });
+
+      it('should navigate to page 2 and show the remaining 3 rows', () => {
+        cy.get('[data-testid="paginator-page-2"]').first().click();
+
+        cy.get('tr.search-result').should('have.length', 3);
+        cy.get('[data-testid="paginator-page-2"]')
+          .first()
+          .should('have.class', 'paginator-current');
+        cy.get('tr.search-result')
+          .first()
+          .should(
+            'have.attr',
+            'data-testid',
+            `advanced-case-search-result-${paginationMockCases[100].docketNumber}`,
+          );
+      });
+
+      it('should navigate forward via the Next button', () => {
+        cy.get('[aria-label="Next page"]').first().click();
+
+        cy.get('[data-testid="paginator-page-2"]')
+          .first()
+          .should('have.class', 'paginator-current');
+        cy.get('tr.search-result').should('have.length', 3);
+      });
+
+      it('should navigate back to page 1 via the Previous button', () => {
+        cy.get('[data-testid="paginator-page-2"]').first().click();
+        cy.get('[aria-label="Previous page"]').first().click();
+
+        cy.get('[data-testid="paginator-page-1"]')
+          .first()
+          .should('have.class', 'paginator-current');
+        cy.get('tr.search-result').should('have.length', 100);
+      });
+
+      it('should display the total case count', () => {
+        cy.contains('span', 'Count:').should(
+          'have.attr',
+          'title',
+          'Search is limited to 5,000 results.',
+        );
+        cy.contains(TOTAL_PAGINATION_CASES.toLocaleString()).should('exist');
+      });
+
+      it('should reset to page 1 when the sort column changes', () => {
+        cy.get('[data-testid="paginator-page-2"]').first().click();
+        cy.get('[data-testid="paginator-page-2"]')
+          .first()
+          .should('have.class', 'paginator-current');
+
+        cy.contains('button', 'Docket No.').click();
+
+        cy.get('[data-testid="paginator-page-1"]')
+          .first()
+          .should('have.class', 'paginator-current');
+        cy.get('tr.search-result').should('have.length', 100);
+      });
     });
   });
 

@@ -104,7 +104,7 @@ describe('practitionerSearchHelper', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab: 'practitioner',
         searchResults: { practitioner: [] },
       },
@@ -138,7 +138,7 @@ describe('practitionerSearchHelper', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab: 'practitioner',
         searchResults: {
           practitioner: {
@@ -166,7 +166,7 @@ describe('practitionerSearchHelper', () => {
       const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
-          advancedSearchForm: { currentPage: 1 },
+          advancedSearchForm: {},
           advancedSearchTab: 'practitioner',
           searchResults: {
             practitioner: {
@@ -238,7 +238,7 @@ describe('practitionerSearchHelper', () => {
       const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
-          advancedSearchForm: { currentPage: 1 },
+          advancedSearchForm: {},
           advancedSearchTab: 'practitioner',
           searchResults: {
             practitioner: {

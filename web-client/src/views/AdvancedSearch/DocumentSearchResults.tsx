@@ -31,9 +31,8 @@ export const DocumentSearchResults = connect(
     advancedSearchTab: state.advancedSearchTab,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
-    showMoreResultsSequence: sequences.showMoreResultsSequence,
-    updateDocumentSearchResultsSequence:
-      sequences.updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence:
+      sequences.updateAdvancedSearchResultsSortSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -43,7 +42,7 @@ export const DocumentSearchResults = connect(
     advancedDocumentSearchHelper,
     isPublic,
     openCaseDocumentDownloadUrlSequence,
-    updateDocumentSearchResultsSequence,
+    updateAdvancedSearchResultsSortSequence,
     setCurrentPaginationPageSequence,
     orderCurrentPaginationPage,
     opinionCurrentPaginationPage,
@@ -88,7 +87,7 @@ export const DocumentSearchResults = connect(
     // Handle sorting column header click
     const handleSort = (columnKey: string) => {
       if (advancedDocumentSearchHelper.sortColumn === columnKey) {
-        updateDocumentSearchResultsSequence({
+        updateAdvancedSearchResultsSortSequence({
           sortColumn: columnKey,
           sortDirection:
             advancedDocumentSearchHelper.sortDirection === 'asc'
@@ -96,7 +95,7 @@ export const DocumentSearchResults = connect(
               : 'asc',
         });
       } else {
-        updateDocumentSearchResultsSequence({
+        updateAdvancedSearchResultsSortSequence({
           sortColumn: columnKey,
           sortDirection: 'asc',
         });
@@ -111,7 +110,7 @@ export const DocumentSearchResults = connect(
     const handleMobileSortChange = e => {
       const { value } = e.target;
       const [column, direction] = value.split('|');
-      updateDocumentSearchResultsSequence({
+      updateAdvancedSearchResultsSortSequence({
         sortColumn: column,
         sortDirection: direction,
       });
@@ -210,7 +209,7 @@ export const DocumentSearchResults = connect(
                     <tr>
                       <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
-                          ascText={SORT_ASCENDING_TEXT.string}
+                          ascText={SORT_ASCENDING_TEXT.date}
                           currentlySortedField={
                             advancedDocumentSearchHelper.sortColumn
                           }
@@ -218,7 +217,7 @@ export const DocumentSearchResults = connect(
                             advancedDocumentSearchHelper.sortDirection
                           }
                           defaultSortOrder={ASCENDING}
-                          descText={SORT_DESCENDING_TEXT.string}
+                          descText={SORT_DESCENDING_TEXT.date}
                           hasRows={true}
                           sortField="formattedFiledDate"
                           title="Filed Date"

@@ -9,7 +9,6 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
-import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const advancedDocumentSearchHelper = (
@@ -60,11 +59,14 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    paginatedResults = paginationHelper(
-      searchResults,
-      get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
-    );
+    paginatedResults = {
+      formattedSearchResults: [],
+      numberOfResults: searchResults.length,
+      searchResults: [...searchResults],
+      searchResultsCount: searchResults.length,
+      showNoMatches: searchResults.length === 0,
+      showSearchResults: searchResults.length > 0,
+    };
 
     paginatedResults.formattedSearchResults =
       paginatedResults.searchResults.map(searchResult =>
