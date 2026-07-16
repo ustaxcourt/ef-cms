@@ -49,7 +49,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
-import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -724,6 +724,7 @@ export const baseState = {
   createOrderTab: 'generate' as 'generate' | 'edit',
   currentJudges: [],
   currentPage: 'Loading',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   opinionDocumentTypes: [] as string[],
@@ -805,6 +806,10 @@ export const baseState = {
   documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
+  caseSearchSort: {
+    sortColumn: 'resultIndex',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',

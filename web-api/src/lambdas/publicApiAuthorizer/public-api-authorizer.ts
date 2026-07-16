@@ -1,8 +1,8 @@
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 const getWhiteListIps = async () => {
-  const [IPS_RECORD] = await getFeatureFlagValues(['allowed-terminal-ips']);
-  return IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
+  const ips = await getFeatureFlagValue<string[]>('allowed-terminal-ips');
+  return ips ?? [];
 };
 
 export const createAuthorizer = ({ getWhiteListIpsFunction }) => {
