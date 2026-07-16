@@ -194,4 +194,40 @@ describe('submitCourtIssuedOrderAction', () => {
         .calls[0][1].documentMetadata.additionalOrderTextArray,
     ).toEqual([]);
   });
+
+  it('persists Motion Order Response form fields in draftOrderState', async () => {
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocumentStorageId,
+      },
+      state: {
+        caseDetail: { docketNumber: '111-20' },
+        form: {
+          additionalOrderTextArray: ['Parties shall comply.'],
+          documentType: 'Order',
+          dueDate: '2026-12-31',
+          motionOrderResponse: true,
+          orderType: 'motionOrderResponse',
+          primaryDocumentFile: {},
+          responseDate: '2026-12-01',
+          strickenFromTrialSession: true,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
+        .calls[0][1].documentMetadata.draftOrderState,
+    ).toMatchObject({
+      additionalOrderTextArray: ['Parties shall comply.'],
+      dueDate: '2026-12-31',
+      motionOrderResponse: true,
+      orderType: 'motionOrderResponse',
+      responseDate: '2026-12-01',
+      strickenFromTrialSession: true,
+    });
+  });
 });
