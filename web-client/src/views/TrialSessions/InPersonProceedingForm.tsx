@@ -13,6 +13,7 @@ const inPersonProceedingFormDeps = {
     sequences.updateTrialSessionFormDataSequence,
   usStates: state.constants.US_STATES,
   usStatesOther: state.constants.US_STATES_OTHER,
+  usStatesSorted: state.constants.US_STATES_SORTED,
   validateTrialSessionSequence: sequences.validateTrialSessionSequence,
   validationErrors: state.validationErrors,
 };
@@ -29,6 +30,7 @@ export const InPersonProceedingForm = connect<
     updateTrialSessionFormDataSequence,
     usStates,
     usStatesOther,
+    usStatesSorted,
     validateTrialSessionSequence,
     validationErrors,
   }) => {
@@ -157,7 +159,7 @@ export const InPersonProceedingForm = connect<
               >
                 <option value="">- Select -</option>
                 <optgroup label="State">
-                  {Object.keys(usStates).map(abbrev => {
+                  {usStatesSorted.map(abbrev => {
                     return (
                       <option key={abbrev} value={abbrev}>
                         {usStates[abbrev]}
