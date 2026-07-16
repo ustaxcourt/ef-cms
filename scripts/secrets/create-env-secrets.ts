@@ -91,6 +91,24 @@ const scriptConfig: ScriptConfig = {
       transform: 'number',
       type: 'string',
     },
+    paymentPortalArn: {
+      description: 'The ARN of the payment portal API',
+      long: 'payment-portal-arn',
+      required: true,
+      type: 'string',
+    },
+    paymentPortalHost: {
+      description: 'The URL of the payment portal API',
+      long: 'payment-portal-host',
+      required: true,
+      type: 'string',
+    },
+    payGovOrigin: {
+      description: 'The URL of the payment portal UI',
+      long: 'pay-gov-origin',
+      required: true,
+      type: 'string',
+    },
     postgresOriginalUsername: {
       default: 'master', // yuck
       long: 'postgres-original-username',
@@ -163,6 +181,9 @@ const {
   opensearchInstanceCount,
   opensearchInstanceType,
   opensearchVolumeSize,
+  paymentPortalArn,
+  paymentportalHost,
+  payGovOrigin,
   postgresOriginalUsername,
   prodAccountId,
   prodDocumentsBucket,
@@ -188,6 +209,9 @@ const {
   opensearchInstanceCount: number;
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
+  paymentPortalArn: string;
+  paymentportalHost: string;
+  payGovOrigin: string;
   postgresOriginalUsername: string;
   prodAccountId: string;
   prodDocumentsBucket: string;
@@ -238,6 +262,9 @@ if (env === 'prod') {
     IRS_SUPERUSER_EMAIL:
       irsSuperuserEmail || `service.agent.${env}@example.com`,
     IS_DYNAMSOFT_ENABLED: enableDynamsoft ? 1 : 0,
+    PAYMENT_PORTAL_ARN: paymentPortalArn,
+    PAYMENT_PORTAL_HOST: paymentportalHost,
+    PAY_GOV_ORIGIN: payGovOrigin,
     POSTGRES_MASTER_PASSWORD: postgresOriginalPassword,
     POSTGRES_MASTER_USERNAME: postgresOriginalUsername,
     POSTGRES_USER: `${env}_dawson`,
