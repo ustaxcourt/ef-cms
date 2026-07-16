@@ -358,7 +358,7 @@ export const PractitionerForm: React.FC<PractitionerFormProps> = connect(
                       <option value="">- Select -</option>
                       <option value="N/A">N/A</option>
                       <optgroup label="State">
-                        {Object.keys(constants.US_STATES).map(abbrev => {
+                        {constants.US_STATES_SORTED.map(abbrev => {
                           const fullStateName = constants.US_STATES[abbrev];
                           return (
                             <option key={fullStateName} value={abbrev}>

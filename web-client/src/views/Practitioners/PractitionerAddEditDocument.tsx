@@ -31,6 +31,7 @@ export const PractitionerAddEditDocument = connect(
       sequences.submitEditPractitionerDocumentSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
+    usStatesSorted: state.constants.US_STATES_SORTED,
     validateAddPractitionerDocumentSequence:
       sequences.validateAddPractitionerDocumentSequence,
     validationErrors: state.validationErrors,
@@ -47,6 +48,7 @@ export const PractitionerAddEditDocument = connect(
     submitEditPractitionerDocumentSequence,
     usStates,
     usStatesOther,
+    usStatesSorted,
     validateAddPractitionerDocumentSequence,
     validationErrors,
   }) {
@@ -141,7 +143,7 @@ export const PractitionerAddEditDocument = connect(
                         >
                           <option value="">- Select -</option>
                           <optgroup label="State">
-                            {Object.keys(usStates).map(abbrev => {
+                            {usStatesSorted.map(abbrev => {
                               const fullStateName = usStates[abbrev];
                               return (
                                 <option

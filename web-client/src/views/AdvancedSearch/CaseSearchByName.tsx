@@ -16,6 +16,7 @@ import {
   MULTI_SELECT_PLACEHOLDER,
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_SORTED,
 } from '@shared/business/entities/EntityConstants';
 import { TextField } from '@web-client/dawson-ui/ui/input';
 
@@ -35,6 +36,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
       sequences.updateCaseAdvancedSearchByNameFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
+    usStatesSorted: state.constants.US_STATES_SORTED,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
@@ -49,6 +51,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence,
     usStates,
     usStatesOther,
+    usStatesSorted,
     validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }: {
@@ -61,6 +64,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence: Function;
     usStates: typeof US_STATES;
     usStatesOther: typeof US_STATES_OTHER;
+    usStatesSorted: typeof US_STATES_SORTED;
     validateCaseAdvancedSearchFormSequence: Function;
     validationErrors: any;
   }) {
@@ -77,23 +81,21 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
             <div className="grid-row grid-gap  tw:mt-[16px]">
               <div className="tablet:grid-col-12">
                 <FormGroup errorText={validationErrors.petitionerName}>
-                 
-                  
                   <TextField
                     label={
                       <label
-                      className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
-                      htmlFor="petitioner-name"
+                        className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
+                        htmlFor="petitioner-name"
                       >
                         Petitioner name
                       </label>
                     }
                     required={true}
                     helpText={
-                    <span className="usa-hint">
-                      Advanced syntax search (*, “”, - , etc. ) is not supported
-                      at this time.
-                    </span>        
+                      <span className="usa-hint">
+                        Advanced syntax search (*, “”, - , etc. ) is not
+                        supported at this time.
+                      </span>
                     }
                     aria-describedby="case-search-by-name"
                     className="usa-input"
@@ -323,7 +325,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                           >
                             <option value="">- Select -</option>
                             <optgroup label="State">
-                              {Object.keys(usStates).map(abbrev => {
+                              {usStatesSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
                                     {usStates[abbrev]}
@@ -359,7 +361,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                           >
                             <option value="">- Select -</option>
                             <optgroup label="State">
-                              {Object.keys(usStates).map(abbrev => {
+                              {usStatesSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
                                     {usStates[abbrev]}

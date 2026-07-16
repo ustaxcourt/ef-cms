@@ -31,4 +31,23 @@ describe('getGroupedStateOptions', () => {
       }),
     );
   });
+
+  it('should list the state options in alphabetical order by full state name', () => {
+    const stateLabels = getGroupedStateOptions()[1].options.map(
+      option => option.label,
+    );
+
+    expect(stateLabels.slice(0, 5)).toEqual([
+      'Alabama',
+      'Alaska',
+      'Arizona',
+      'Arkansas',
+      'California',
+    ]);
+    expect(stateLabels).toEqual(
+      [...stateLabels].sort((firstLabel, secondLabel) =>
+        firstLabel.localeCompare(secondLabel),
+      ),
+    );
+  });
 });
