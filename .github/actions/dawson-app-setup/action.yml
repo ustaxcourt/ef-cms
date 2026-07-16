@@ -27,10 +27,14 @@ runs:
 
     - name: Start DAWSON
       shell: bash
+      env:
+        LOG_FILE: ${{ inputs.log_file }}
       run: |
-        npm run start:all:ci >> ${{ inputs.log_file }} 2>&1 &
+        npm run start:all:ci >> "$LOG_FILE" 2>&1 &
 
     - name: Wait for DAWSON
       shell: bash
+      env:
+        WAIT_FLAGS: ${{ inputs.wait_flags }}
       run: |
-        ${{ inputs.wait_flags }} ./wait-until-services.sh
+        env $WAIT_FLAGS ./wait-until-services.sh
