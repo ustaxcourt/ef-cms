@@ -66,9 +66,9 @@ export const casePublicSearch = async ({
         caseCaption: c.caseCaption,
         docketNumber: c.docketNumber,
         docketNumberWithSuffix: c.docketNumberWithSuffix,
-        petitionerNames: petitioners.map(p => p.name),
-        petitionerStateNames: petitioners
-          .map(p =>
+        petitionerNames: c.petitioners?.map(p => p.name),
+        petitionerStateNames: c.petitioners
+          ?.map(p =>
             p.state
               ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
               : undefined,
