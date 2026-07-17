@@ -65,35 +65,4 @@ describe('getCompletedMessagesForUserInteractor', () => {
     expect(getCompletedUserInboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([messageData]);
   });
-
-  it('passes filterByInbox to the persistence function when provided', async () => {
-    (getCompletedUserInboxMessages as jest.Mock).mockReturnValue([]);
-
-    await getCompletedMessagesForUserInteractor(
-      applicationContext,
-      { filterByInbox: true, userId: 'some-user-id' },
-      mockPetitionsClerkUser,
-    );
-
-    expect(getCompletedUserInboxMessages).toHaveBeenCalledWith(
-      expect.objectContaining({ filterByInbox: true, userId: 'some-user-id' }),
-    );
-  });
-
-  it('defaults filterByInbox to undefined when not provided', async () => {
-    (getCompletedUserInboxMessages as jest.Mock).mockReturnValue([]);
-
-    await getCompletedMessagesForUserInteractor(
-      applicationContext,
-      { userId: 'some-user-id' },
-      mockPetitionsClerkUser,
-    );
-
-    expect(getCompletedUserInboxMessages).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'some-user-id' }),
-    );
-    expect(getCompletedUserInboxMessages).toHaveBeenCalledWith(
-      expect.not.objectContaining({ filterByInbox: true }),
-    );
-  });
 });

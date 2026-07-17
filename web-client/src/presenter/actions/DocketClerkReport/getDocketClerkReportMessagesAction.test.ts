@@ -92,10 +92,7 @@ describe('getDocketClerkReportMessagesAction', () => {
       applicationContext.getUseCases().getCompletedMessagesForUserInteractor,
     ).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({
-        filterByInbox: true,
-        userId: 'clerk-uuid-002',
-      }),
+      expect.objectContaining({ userId: 'clerk-uuid-002' }),
     );
   });
 
