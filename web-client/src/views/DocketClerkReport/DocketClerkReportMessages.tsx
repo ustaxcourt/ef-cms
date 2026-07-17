@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import {
   DocketClerkReportMessageBox,
@@ -9,7 +10,7 @@ import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 type ColumnConfig = {
   label: string;
@@ -131,7 +132,9 @@ const FILTERS: Record<string, FilterConfig[]> = {
 };
 
 const messagePanelDeps = {
+  batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
   screenMetadata: state.screenMetadata,
+  setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
   sortTableSequence: sequences.sortTableSequence,
   tableSort: state.tableSort,
   updateMessageFilterSequence: sequences.updateMessageFilterSequence,
@@ -142,20 +145,35 @@ type MessagePanelOwnProps = {
   columns: ColumnConfig[];
   filterConfigs: FilterConfig[];
   id: string;
+  selectable?: boolean;
 };
 
 const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
   messagePanelDeps,
   function MessagePanel({
+    batchCompleteMessageSequence,
     box,
     columns,
     filterConfigs,
     id,
     screenMetadata,
+    selectable = false,
+    setSelectedMessagesSequence,
     sortTableSequence,
     tableSort,
     updateMessageFilterSequence,
   }) {
+    const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
+    const allMessagesSelected =
+      box.messages.length > 0 && box.messages.every((m: any) => m.isSelected);
+    const someMessagesSelected = box.messages.some((m: any) => m.isSelected);
+
+    useEffect(() => {
+      if (!selectAllCheckboxRef.current || !selectable) return;
+      selectAllCheckboxRef.current.indeterminate =
+        someMessagesSelected && !allMessagesSelected;
+    }, [someMessagesSelected, allMessagesSelected, selectable]);
+
     const hasMessages = box.messages.length > 0;
 
     const filters = filterConfigs.map(filter => ({
@@ -167,14 +185,64 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
 
     return (
       <>
-        <TableFilters
-          filters={filters}
-          onSelect={updateMessageFilterSequence}
-        ></TableFilters>
+        <div className="grid-row grid-gap">
+          <div
+            className={
+              selectable
+                ? 'desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center'
+                : undefined
+            }
+          >
+            <TableFilters
+              filters={filters}
+              onSelect={updateMessageFilterSequence}
+            ></TableFilters>
+          </div>
+          {selectable && (
+            <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+              <Button
+                link
+                className="action-button"
+                data-testid={`${id}-batch-complete`}
+                disabled={!someMessagesSelected}
+                icon="check-circle"
+                id={`${id}-button-batch-complete`}
+                onClick={() => batchCompleteMessageSequence()}
+              >
+                Complete
+              </Button>
+            </div>
+          )}
+        </div>
         <div className="overflow-x-auto overflow-y-hidden" id={id}>
           <table className="usa-table ustc-table subsection">
             <thead>
               <tr>
+                {selectable && (
+                  <th>
+                    <input
+                      aria-label="all-messages-checkbox"
+                      checked={allMessagesSelected}
+                      data-testid={`${id}-all-messages-checkbox`}
+                      disabled={!hasMessages}
+                      id={`${id}-all-messages-checkbox`}
+                      ref={selectAllCheckboxRef}
+                      type="checkbox"
+                      onChange={() => {
+                        if (allMessagesSelected) {
+                          setSelectedMessagesSequence({ messages: [] });
+                        } else {
+                          setSelectedMessagesSequence({
+                            messages: box.messages.map((m: any) => ({
+                              messageId: m.messageId,
+                              parentMessageId: m.parentMessageId,
+                            })),
+                          });
+                        }
+                      }}
+                    />
+                  </th>
+                )}
                 {columns.map(column => (
                   <th aria-label={column.label} key={column.label}>
                     {column.sortField ? (
@@ -200,6 +268,26 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
             <tbody>
               {box.messages.map(message => (
                 <tr key={message.messageId}>
+                  {selectable && (
+                    <td>
+                      <input
+                        aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
+                        checked={message.isSelected || false}
+                        id={`${message.messageId}-message-checkbox`}
+                        type="checkbox"
+                        onChange={() => {
+                          setSelectedMessagesSequence({
+                            messages: [
+                              {
+                                messageId: message.messageId,
+                                parentMessageId: message.parentMessageId,
+                              },
+                            ],
+                          });
+                        }}
+                      />
+                    </td>
+                  )}
                   {columns.map(column => (
                     <td className="message-queue-row" key={column.label}>
                       {column.render(message)}
@@ -244,6 +332,7 @@ export const DocketClerkReportMessages = connect<
           title={`Inbox (${messages.inbox.messages.length})`}
         >
           <MessagePanel
+            selectable
             box={messages.inbox}
             columns={COLUMNS.inbox}
             filterConfigs={FILTERS.inbox}

@@ -30,6 +30,7 @@ export const docketClerkReportMessagesHelper = (
 ): DocketClerkReportMessagesResults => {
   const tableSort = get(state.tableSort);
   const screenMetadata = get(state.screenMetadata);
+  const selectedMessages = get(state.messagesPage.selectedMessages);
   const inboxMessages: RawMessage[] = get(
     state.docketClerkReport.inboxMessages,
   );
@@ -72,7 +73,10 @@ export const docketClerkReportMessagesHelper = (
     return {
       ...filterValues,
       ...completedFilterValues,
-      messages: filteredMessages,
+      messages: filteredMessages.map(message => ({
+        ...message,
+        isSelected: selectedMessages.has(message.messageId),
+      })),
     };
   };
 
