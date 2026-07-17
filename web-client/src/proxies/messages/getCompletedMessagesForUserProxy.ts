@@ -4,10 +4,11 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getCompletedMessagesForUserInteractor = (
   applicationContext: ClientApplicationContext,
-  { userId },
+  { filterByInbox, userId }: { filterByInbox?: boolean; userId: string },
 ): Promise<ExcludeMethods<MessageResult>[]> => {
+  const query = filterByInbox ? '?filterByInbox=true' : '';
   return get({
     applicationContext,
-    endpoint: `/messages/completed/${userId}`,
+    endpoint: `/messages/completed/${userId}${query}`,
   });
 };

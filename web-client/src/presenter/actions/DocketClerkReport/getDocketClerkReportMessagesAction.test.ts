@@ -75,7 +75,7 @@ describe('getDocketClerkReportMessagesAction', () => {
     );
   });
 
-  it('should call getCompletedMessagesForUserInteractor with selectedClerk userId', async () => {
+  it('should call getCompletedMessagesForUserInteractor with selectedClerk userId and filterByInbox: true', async () => {
     await runAction(getDocketClerkReportMessagesAction, {
       modules: { presenter },
       state: {
@@ -92,7 +92,10 @@ describe('getDocketClerkReportMessagesAction', () => {
       applicationContext.getUseCases().getCompletedMessagesForUserInteractor,
     ).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ userId: 'clerk-uuid-002' }),
+      expect.objectContaining({
+        filterByInbox: true,
+        userId: 'clerk-uuid-002',
+      }),
     );
   });
 

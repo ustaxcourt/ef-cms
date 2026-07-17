@@ -7277,6 +7277,13 @@
           "in": "path",
           "required": true,
           "type": "string"
+        },
+        {
+          "name": "filterByInbox",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "description": "When 'true', filters completed messages by toUserId (messages addressed to this user that were completed) instead of completedByUserId."
         }
       ],
       "get": {

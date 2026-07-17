@@ -29,6 +29,7 @@ export const getDocketClerkReportMessagesAction = async ({
       userId: selectedClerk.userId,
     }),
     useCases.getCompletedMessagesForUserInteractor(applicationContext, {
+      filterByInbox: true,
       userId: selectedClerk.userId,
     }),
   ]);

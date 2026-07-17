@@ -7,9 +7,11 @@ export const getCompletedMessagesForUserLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
+    const filterByInbox = event.queryStringParameters?.filterByInbox === 'true';
     return await getCompletedMessagesForUserInteractor(
       applicationContext,
       {
+        filterByInbox,
         userId: event.pathParameters.userId,
       },
       authorizedUser,

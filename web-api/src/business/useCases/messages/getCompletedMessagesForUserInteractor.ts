@@ -10,7 +10,7 @@ import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/mes
 
 export const getCompletedMessagesForUserInteractor = async (
   _applicationContext: ServerApplicationContext,
-  { userId }: { userId: string },
+  { filterByInbox, userId }: { filterByInbox?: boolean; userId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<ExcludeMethods<MessageResult>[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
@@ -18,6 +18,7 @@ export const getCompletedMessagesForUserInteractor = async (
   }
 
   const messages = await getCompletedUserInboxMessages({
+    filterByInbox,
     userId,
   });
 

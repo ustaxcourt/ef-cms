@@ -4,8 +4,10 @@ import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getCompletedUserInboxMessages = async ({
+  filterByInbox = false,
   userId,
 }: {
+  filterByInbox?: boolean;
   userId: string;
 }): Promise<Message[]> => {
   const filterDate = calculateDate({ howMuch: -7 });
@@ -14,7 +16,7 @@ export const getCompletedUserInboxMessages = async ({
     reader
       .selectFrom('dwMessage as m')
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
-      .where('m.completedByUserId', '=', userId)
+      .where(filterByInbox ? 'm.toUserId' : 'm.completedByUserId', '=', userId)
       .where('m.isCompleted', '=', true)
       .where('m.completedAt', '>=', filterDate)
       .selectAll('m')
