@@ -250,6 +250,7 @@ export const VirtualizedDocumentList: React.FC<
           rowHeight={getRowHeight}
           overscanCount={3}
           listRef={listRef}
+          onResize={setListDimensions}
           rowComponent={Row}
           rowCount={docketEntries.length}
           rowProps={{} as never}
