@@ -1,15 +1,3 @@
 {
-  "failed_checks": [
-    {
-      "file": "/terraform-state-backend.tf",
-      "findings": [
-        {
-          "resource": "aws_s3_bucket.terraform_state_bucket",
-          "check_ids": [
-            "CKV2_AWS_6"
-          ]
-        }
-      ]
-    }
-  ]
+  "failed_checks": []
 }

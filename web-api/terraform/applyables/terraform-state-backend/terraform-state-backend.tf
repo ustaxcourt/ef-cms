@@ -15,6 +15,14 @@ resource "aws_s3_bucket" "terraform_state_bucket" {
   bucket = var.bucket_name
 }
 
+resource "aws_s3_bucket_public_access_block" "terraform_state_bucket" {
+  bucket                  = aws_s3_bucket.terraform_state_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_dynamodb_table" "terraform_state_lock" {
   #checkov:skip=CKV_AWS_119:Table holds only Terraform lock IDs (LockID, digest) — no sensitive data; AWS-owned default encryption is adequate
   #checkov:skip=CKV_AWS_28:PITR not needed on ephemeral lock table — rows exist only during active Terraform applies and can be recreated trivially
