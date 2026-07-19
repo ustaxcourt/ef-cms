@@ -438,7 +438,6 @@ import { validateFileSequence } from './sequences/validateFileSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
-import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
@@ -647,7 +646,7 @@ import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/seque
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
-import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
+import { updateAdvancedSearchResultsSortSequence } from './sequences/updateAdvancedSearchResultsSortSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
@@ -1350,7 +1349,6 @@ export const presenterSequences = {
   showMoreClosedCasesSequence:
     showMoreClosedCasesSequence as unknown as Function,
   showMoreOpenCasesSequence: showMoreOpenCasesSequence as unknown as Function,
-  showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
   showRemovePetitionerEmailModalSequence,
   showPaperServiceProgressSequence:
     showPaperServiceProgressSequence as unknown as Function,
@@ -1527,8 +1525,8 @@ export const presenterSequences = {
     updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
-  updateDocumentSearchResultsSequence:
-    updateDocumentSearchResultsSequence as unknown as Function,
+  updateAdvancedSearchResultsSortSequence:
+    updateAdvancedSearchResultsSortSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,

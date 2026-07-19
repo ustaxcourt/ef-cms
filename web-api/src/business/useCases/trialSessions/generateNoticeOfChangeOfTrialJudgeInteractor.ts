@@ -9,7 +9,7 @@ import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConst
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -47,17 +47,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     docketNumber,
   });
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
-
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-    name: string;
-    title: string;
-  };
+  const { name, title } = await getClerkOfTheCourtInfo();
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 

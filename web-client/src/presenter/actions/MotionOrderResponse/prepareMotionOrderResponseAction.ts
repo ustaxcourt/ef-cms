@@ -169,4 +169,9 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
   store.set(state.form.previousDocument, motion);
+
+  const documentToEdit = get(state.documentToEdit);
+  if (documentToEdit?.docketEntryId) {
+    store.set(state.form.docketEntryIdToEdit, documentToEdit.docketEntryId);
+  }
 };
