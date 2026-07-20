@@ -71,7 +71,7 @@ export const messageDocumentHelper = (
   const showEditButtonForDocument =
     isNonCorrespondenceDraft && !isStipulatedDecision;
   const showEditButtonSigned = isGrantDenyMotion
-    ? permissions.STAMP_MOTION && isSigned
+    ? permissions.GRANT_DENY_MOTION && isSigned
     : isStatusReportOrder
       ? permissions.STATUS_REPORT_ORDER && isSigned
       : showEditButtonForRole &&
@@ -80,7 +80,7 @@ export const messageDocumentHelper = (
         !isNotice &&
         !isDraftStampOrder;
   const showEditButtonNotSigned = isGrantDenyMotion
-    ? permissions.STAMP_MOTION && !isSigned
+    ? permissions.GRANT_DENY_MOTION && !isSigned
     : isStatusReportOrder
       ? permissions.STATUS_REPORT_ORDER && !isSigned
       : showEditButtonForRole &&

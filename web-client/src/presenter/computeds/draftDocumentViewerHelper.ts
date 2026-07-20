@@ -109,7 +109,7 @@ export const draftDocumentViewerHelper = (
   const showEditButtonSigned =
     !isRestrictedEventCode &&
     (isGrantDenyMotion
-      ? permissions.STAMP_MOTION && isSigned
+      ? permissions.GRANT_DENY_MOTION && isSigned
       : isStatusReportOrder
         ? permissions.STATUS_REPORT_ORDER && isSigned
         : showEditButtonForRole &&
@@ -121,7 +121,7 @@ export const draftDocumentViewerHelper = (
   const showEditButtonNotSigned =
     !isRestrictedEventCode &&
     (isGrantDenyMotion
-      ? permissions.STAMP_MOTION && !isSigned
+      ? permissions.GRANT_DENY_MOTION && !isSigned
       : isStatusReportOrder
         ? permissions.STATUS_REPORT_ORDER && !isSigned
         : showEditButtonForRole && (!isSigned || isNotice));

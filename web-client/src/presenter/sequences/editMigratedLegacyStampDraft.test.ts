@@ -86,7 +86,7 @@ describe('Grant/Deny edit flow for migrated legacy stamp drafts', () => {
       state: {
         documentToEdit: stampedDraftEntry,
         permissions: {
-          STAMP_MOTION: true,
+          GRANT_DENY_MOTION: true,
         },
       },
     });
