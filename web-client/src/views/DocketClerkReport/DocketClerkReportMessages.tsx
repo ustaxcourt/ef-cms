@@ -133,6 +133,7 @@ const FILTERS: Record<string, FilterConfig[]> = {
 
 const messagePanelDeps = {
   batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
+  messagesPage: state.messagesPage,
   screenMetadata: state.screenMetadata,
   setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
   sortTableSequence: sequences.sortTableSequence,
@@ -156,6 +157,7 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
     columns,
     filterConfigs,
     id,
+    messagesPage,
     screenMetadata,
     selectable = false,
     setSelectedMessagesSequence,
@@ -185,6 +187,21 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
 
     return (
       <>
+        {selectable && screenMetadata.completionSuccess && (
+          <div
+            aria-live="polite"
+            className="usa-alert usa-alert--success"
+            data-testid="docket-clerk-report-messages-completion-success"
+            role="alert"
+          >
+            <div className="usa-alert__body">
+              <p className="usa-alert__text">
+                Message(s) completed at {messagesPage.messagesCompletedAt} by{' '}
+                {messagesPage.messagesCompletedBy}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="grid-row grid-gap">
           <div
             className={
@@ -232,6 +249,7 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                         if (allMessagesSelected) {
                           setSelectedMessagesSequence({ messages: [] });
                         } else {
+                          setSelectedMessagesSequence({ messages: [] });
                           setSelectedMessagesSequence({
                             messages: box.messages.map((m: any) => ({
                               messageId: m.messageId,

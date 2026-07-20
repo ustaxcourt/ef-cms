@@ -5,11 +5,13 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getMessagePageAction', () => {
   const pathDetailMock = jest.fn();
+  const pathDocketClerkReportMock = jest.fn();
   const pathInboxMock = jest.fn();
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       detail: pathDetailMock,
+      docketClerkReport: pathDocketClerkReportMock,
       inbox: pathInboxMock,
     };
   });
@@ -53,6 +55,21 @@ describe('getMessagePageAction', () => {
     });
 
     expect(pathInboxMock).toHaveBeenCalled();
+    expect(pathDetailMock).not.toHaveBeenCalled();
+  });
+
+  it('should return path.docketClerkReport when currentPage is "DocketClerkReport"', async () => {
+    await runAction(getMessagePageAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        currentPage: 'DocketClerkReport',
+      },
+    });
+
+    expect(pathDocketClerkReportMock).toHaveBeenCalled();
+    expect(pathInboxMock).not.toHaveBeenCalled();
     expect(pathDetailMock).not.toHaveBeenCalled();
   });
 });
