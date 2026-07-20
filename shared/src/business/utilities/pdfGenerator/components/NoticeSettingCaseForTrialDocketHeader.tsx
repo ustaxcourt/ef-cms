@@ -12,7 +12,7 @@ export const NoticeSettingCaseForTrialDocketHeader = ({
   return (
     <div className="order-docket-header">
       <div id="caption">
-        <div id="caption-title">{caseTitle.toUpperCase()},</div>
+        <div id="caption-title">{caseTitle},</div>
         <div id="caption-extension">{caseCaptionExtension}</div>
         <div id="caption-v">v.</div>
         <div id="caption-commissioner">
