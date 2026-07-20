@@ -34,7 +34,7 @@ export const TRANSLATE_STAMP_FIELDS_SQL_FRAGMENT = `
         THEN to_char(to_date(SOURCE->>'date', 'MM/DD/YY'), 'YYYY-MM-DD')
       ELSE NULL
     END,
-    'additionalOrderText',      CASE
+    'additionalOrderTextArray',      CASE
       WHEN COALESCE(SOURCE->>'customText', '') <> ''
         THEN jsonb_build_array(SOURCE->>'customText')
       ELSE jsonb_build_array('')

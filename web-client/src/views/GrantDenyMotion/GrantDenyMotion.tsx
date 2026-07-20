@@ -48,7 +48,8 @@ export const GrantDenyMotion = connect(
     validateGrantDenyMotionSequence,
     validationErrors,
   }) {
-    const additionalOrderText: string[] = form.additionalOrderText || [''];
+    const additionalOrderTextArray: string[] =
+      form.additionalOrderTextArray || [''];
     const isDenied = form.disposition === constants.MOTION_DISPOSITIONS.DENIED;
     const { isCalendared } = grantDenyMotionFormHelper;
     const calendaredDisabledTitle = isCalendared
@@ -482,7 +483,7 @@ export const GrantDenyMotion = connect(
                       grantDenyMotionFormHelper.additionalOrderTextErrorText
                     }
                   >
-                    {additionalOrderText.map((value, index) => (
+                    {additionalOrderTextArray.map((value, index) => (
                       <div
                         data-testid={`additional-order-text-row-${index}`}
                         key={index}
@@ -501,13 +502,13 @@ export const GrantDenyMotion = connect(
                           data-testid={`additional-order-text-${index}`}
                           id={`additional-order-text-${index}`}
                           maxLength={MAX_ADDITIONAL_TEXT_CHARS}
-                          name="additionalOrderText"
+                          name="additionalOrderTextArray"
                           value={value}
                           onChange={e =>
                             updateFormValueSequence({
                               allowEmptyString: true,
                               index,
-                              key: 'additionalOrderText',
+                              key: 'additionalOrderTextArray',
                               value: e.target.value,
                             })
                           }

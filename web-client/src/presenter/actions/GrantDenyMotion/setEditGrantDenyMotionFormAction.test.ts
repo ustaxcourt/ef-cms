@@ -12,7 +12,7 @@ describe('setEditGrantDenyMotionFormAction', () => {
   };
 
   const draftOrderState = {
-    additionalOrderText: ['some text'],
+    additionalOrderTextArray: ['some text'],
     deniedAsMoot: true,
     deniedWithoutPrejudice: false,
     disposition: MOTION_DISPOSITIONS.DENIED,
@@ -93,10 +93,10 @@ describe('setEditGrantDenyMotionFormAction', () => {
       },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual(['']);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
-  it('hydrates additionalOrderText from additionalOrderTextArray when needed', async () => {
+  it('hydrates additionalOrderTextArray from additionalOrderTextArray when needed', async () => {
     const result = await runAction(setEditGrantDenyMotionFormAction, {
       modules: { presenter },
       props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
@@ -111,7 +111,7 @@ describe('setEditGrantDenyMotionFormAction', () => {
       },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual([
+    expect(result.state.form.additionalOrderTextArray).toEqual([
       'Parties shall comply.',
     ]);
   });
