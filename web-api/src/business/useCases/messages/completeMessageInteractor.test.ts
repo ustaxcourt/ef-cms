@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
@@ -12,6 +13,7 @@ import { completeMessageInteractor } from './completeMessageInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import {
+  mockCaseServicesSupervisorUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
@@ -148,6 +150,113 @@ describe('completeMessageInteractor', () => {
     ).toEqual({
       action: 'message_completion_success',
       completedMessageIds: [mockMessages[1].messageId],
+    });
+  });
+
+  describe('completing on behalf of another user', () => {
+    const OTHER_CLERK_USER_ID = '1805d1ab-18d0-43ec-bafb-654e83405416';
+
+    it('should attribute the completion to the other user when the requester has DOCKET_CLERK_REPORT permission', async () => {
+      getUserById.mockResolvedValueOnce({
+        name: 'Test Docketclerk',
+        role: ROLES.docketClerk,
+        section: DOCKET_SECTION,
+        userId: OTHER_CLERK_USER_ID,
+      } as DbUser);
+
+      await completeMessageInteractor(
+        applicationContext,
+        {
+          completedByUserId: OTHER_CLERK_USER_ID,
+          messages: [{ messageBody: '', parentMessageId: PARENT_MESSAGE_ID_1 }],
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      expect(getUserById).toHaveBeenCalledWith({
+        userId: OTHER_CLERK_USER_ID,
+      });
+      expect((upsertMessages as jest.Mock).mock.calls[0][0]).toMatchObject([
+        {
+          completedBy: 'Test Docketclerk',
+          completedBySection: DOCKET_SECTION,
+          completedByUserId: OTHER_CLERK_USER_ID,
+          isCompleted: true,
+        },
+      ]);
+    });
+
+    it('should notify the requester rather than the user the completion is attributed to', async () => {
+      getUserById.mockResolvedValueOnce({
+        name: 'Test Docketclerk',
+        role: ROLES.docketClerk,
+        section: DOCKET_SECTION,
+        userId: OTHER_CLERK_USER_ID,
+      } as DbUser);
+
+      await completeMessageInteractor(
+        applicationContext,
+        {
+          completedByUserId: OTHER_CLERK_USER_ID,
+          messages: [{ messageBody: '', parentMessageId: PARENT_MESSAGE_ID_1 }],
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      expect(
+        applicationContext.getNotificationGateway().sendNotificationToUser.mock
+          .calls[0][0].userId,
+      ).toEqual(mockCaseServicesSupervisorUser.userId);
+    });
+
+    it('should throw unauthorized when the requester lacks DOCKET_CLERK_REPORT permission', async () => {
+      await expect(
+        completeMessageInteractor(
+          applicationContext,
+          {
+            completedByUserId: OTHER_CLERK_USER_ID,
+            messages: [
+              { messageBody: '', parentMessageId: PARENT_MESSAGE_ID_1 },
+            ],
+          },
+          mockPetitionsClerkUser,
+        ),
+      ).rejects.toThrow(UnauthorizedError);
+
+      expect(upsertMessages).not.toHaveBeenCalled();
+    });
+
+    it('should not require DOCKET_CLERK_REPORT permission when completedByUserId is the requester', async () => {
+      await completeMessageInteractor(
+        applicationContext,
+        {
+          completedByUserId: mockPetitionsClerkUser.userId,
+          messages: [{ messageBody: '', parentMessageId: PARENT_MESSAGE_ID_1 }],
+        },
+        mockPetitionsClerkUser,
+      );
+
+      expect(getUserById).toHaveBeenCalledWith({
+        userId: mockPetitionsClerkUser.userId,
+      });
+      expect(upsertMessages).toHaveBeenCalled();
+    });
+
+    it('should throw not found when the user the completion is attributed to does not exist', async () => {
+      getUserById.mockResolvedValueOnce(undefined as unknown as DbUser);
+
+      await expect(
+        completeMessageInteractor(
+          applicationContext,
+          {
+            completedByUserId: OTHER_CLERK_USER_ID,
+            messages: [
+              { messageBody: '', parentMessageId: PARENT_MESSAGE_ID_1 },
+            ],
+          },
+          mockCaseServicesSupervisorUser,
+        ),
+      ).rejects.toThrow(`User not found with user id ${OTHER_CLERK_USER_ID}`);
     });
   });
 

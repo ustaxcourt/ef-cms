@@ -6,12 +6,18 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('getMessagePageAction', () => {
   const pathDetailMock = jest.fn();
   const pathInboxMock = jest.fn();
+  const pathDocketClerkReportMock = jest.fn();
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       detail: pathDetailMock,
+      docketClerkReport: pathDocketClerkReportMock,
       inbox: pathInboxMock,
     };
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should return path.detail when currentPage is "MessageDetail"', async () => {
@@ -28,6 +34,21 @@ describe('getMessagePageAction', () => {
     expect(pathInboxMock).not.toHaveBeenCalled();
   });
 
+  it('should return path.docketClerkReport when currentPage is "DocketClerkReport"', async () => {
+    await runAction(getMessagePageAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        currentPage: 'DocketClerkReport',
+      },
+    });
+
+    expect(pathDocketClerkReportMock).toHaveBeenCalled();
+    expect(pathInboxMock).not.toHaveBeenCalled();
+    expect(pathDetailMock).not.toHaveBeenCalled();
+  });
+
   it('should return path.inbox when currentPage is not "MessageDetail"', async () => {
     await runAction(getMessagePageAction, {
       modules: {
@@ -40,6 +61,7 @@ describe('getMessagePageAction', () => {
 
     expect(pathInboxMock).toHaveBeenCalled();
     expect(pathDetailMock).not.toHaveBeenCalled();
+    expect(pathDocketClerkReportMock).not.toHaveBeenCalled();
   });
 
   it('should return path.inbox when currentPage is undefined', async () => {
@@ -48,11 +70,12 @@ describe('getMessagePageAction', () => {
         presenter,
       },
       state: {
-        currentPage: 'Inbox',
+        currentPage: undefined,
       },
     });
 
     expect(pathInboxMock).toHaveBeenCalled();
     expect(pathDetailMock).not.toHaveBeenCalled();
+    expect(pathDocketClerkReportMock).not.toHaveBeenCalled();
   });
 });

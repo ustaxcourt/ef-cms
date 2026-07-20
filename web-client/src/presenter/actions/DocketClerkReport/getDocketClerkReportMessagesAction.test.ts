@@ -75,7 +75,7 @@ describe('getDocketClerkReportMessagesAction', () => {
     );
   });
 
-  it('should call getCompletedMessagesForUserInteractor with selectedClerk userId', async () => {
+  it('should call getCompletedMessagesForUserInteractor with selectedClerk userId and filterByInbox: true', async () => {
     await runAction(getDocketClerkReportMessagesAction, {
       modules: { presenter },
       state: {

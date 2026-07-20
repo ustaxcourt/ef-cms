@@ -24,6 +24,7 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associateIrsPractitionerWithCaseSequence } from './sequences/CaseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/CaseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
+import { batchCompleteDocketClerkReportMessagesSequence } from './sequences/batchCompleteDocketClerkReportMessagesSequence';
 import {
   batchCompleteMessageSequence,
   completeMessageErrorSequence,
@@ -690,6 +691,8 @@ export const presenterSequences = {
     asyncServiceUnavailablrHandlerSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
+  batchCompleteDocketClerkReportMessagesSequence:
+    batchCompleteDocketClerkReportMessagesSequence as unknown as Function,
   batchCompleteMessageSequence:
     batchCompleteMessageSequence as unknown as Function,
   batchDownloadDocketEntriesSequence,

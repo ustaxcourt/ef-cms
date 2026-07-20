@@ -19,20 +19,35 @@ import {
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
   {
+    completedByUserId,
     messages,
-  }: { messages: { messageBody: string; parentMessageId: string }[] },
+  }: {
+    completedByUserId?: string;
+    messages: { messageBody: string; parentMessageId: string }[];
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await getUserById({ userId: authorizedUser.userId });
+  // By default a user completes their own messages. Completing on behalf of
+  // another clerk (the docket clerk report) attributes the completion to that
+  // clerk and is gated behind the report permission.
+  let completingUserId = authorizedUser.userId;
+  if (completedByUserId && completedByUserId !== authorizedUser.userId) {
+    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_CLERK_REPORT)) {
+      throw new UnauthorizedError(
+        'Unauthorized to complete messages on behalf of another user',
+      );
+    }
+    completingUserId = completedByUserId;
+  }
+
+  const user = await getUserById({ userId: completingUserId });
 
   if (!user) {
-    throw new NotFoundError(
-      `User not found with user id ${authorizedUser.userId}`,
-    );
+    throw new NotFoundError(`User not found with user id ${completingUserId}`);
   }
 
   const completedMessageIds: string[] = [];
@@ -74,7 +89,7 @@ export const completeMessageInteractor = async (
               action: 'message_completion_success',
               completedMessageIds,
             },
-            userId: user.userId,
+            userId: authorizedUser.userId,
           });
       });
     });
@@ -88,7 +103,7 @@ export const completeMessageInteractor = async (
           title: 'Message(s) could not be completed',
         },
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   }
 };
