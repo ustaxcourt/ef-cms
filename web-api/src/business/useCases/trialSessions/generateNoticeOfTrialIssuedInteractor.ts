@@ -66,6 +66,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   }
 
   const { name, title } = await getClerkOfTheCourtInfo();
+
   const trialInfo: FormattedTrialInfoType = {
     ...trialSession,
     chambersPhoneNumber: formatTrialNoticePhoneNumber(

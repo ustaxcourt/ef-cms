@@ -49,7 +49,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
-import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -637,7 +637,8 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    RawGenerateSuggestedTermForm | undefined,
+    | RawGenerateSuggestedTermForm
+    | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -724,14 +725,17 @@ export const baseState = {
   createOrderTab: 'generate' as 'generate' | 'edit',
   currentJudges: [],
   currentPage: 'Loading',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      TrialSessionLocationInfo | undefined,
+      | TrialSessionLocationInfo
+      | undefined,
     updatedTrialSessionLocation: undefined as
-      TrialSessionLocationInfo | undefined,
+      | TrialSessionLocationInfo
+      | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -805,6 +809,10 @@ export const baseState = {
   documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
+  caseSearchSort: {
+    sortColumn: 'resultIndex',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
@@ -949,7 +957,8 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
+      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
+      | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],

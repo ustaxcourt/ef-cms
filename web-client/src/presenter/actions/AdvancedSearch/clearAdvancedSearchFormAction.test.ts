@@ -22,7 +22,6 @@ describe('clearAdvancedSearchFormAction', () => {
             petitionerState: 'TN',
             sure: 'yes',
           },
-          currentPage: 83,
           orderSearch: { keyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
@@ -40,7 +39,6 @@ describe('clearAdvancedSearchFormAction', () => {
         petitionerState: 'TN',
         sure: 'yes',
       },
-      currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
         lastKeysOfPages: [],
@@ -62,7 +60,6 @@ describe('clearAdvancedSearchFormAction', () => {
             petitionerState: 'TN',
             sure: 'yes',
           },
-          currentPage: 83,
           orderSearch: { keyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
@@ -77,7 +74,6 @@ describe('clearAdvancedSearchFormAction', () => {
         countryType: ALL_SELECTION,
         procedureType: ALL_SELECTION,
       },
-      currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
         practitionerName: 'Ricky',
