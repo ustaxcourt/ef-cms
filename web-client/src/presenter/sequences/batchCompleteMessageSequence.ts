@@ -6,6 +6,7 @@ import { clearUsersAction } from '@web-client/presenter/actions/clearUsersAction
 import { getMessagePageAction } from '@web-client/presenter/actions/getMessagePageAction';
 import { getMessageThreadAction } from '@web-client/presenter/actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '@web-client/presenter/actions/getMostRecentMessageInThreadAction';
+import { moveDocketClerkReportMessagesToCompletedAction } from '@web-client/presenter/actions/DocketClerkReport/moveDocketClerkReportMessagesToCompletedAction';
 import { removeCompletedMessagesFromDisplayAction } from '../actions/removeCompletedMessagesFromDisplayAction';
 import { resetCacheKeyAction } from '@web-client/presenter/actions/resetCacheKeyAction';
 import { resetSelectedMessageAction } from '../actions/Messages/resetSelectedMessageAction';
@@ -31,6 +32,12 @@ export const completeMessageSuccessSequence = [
       getMostRecentMessageInThreadAction,
       getMessageThreadAction,
       setMessageAction,
+    ],
+    // The report renders another clerk's boxes from state.docketClerkReport, so
+    // move the rows there rather than in the logged-in user's own message list.
+    docketClerkReport: [
+      moveDocketClerkReportMessagesToCompletedAction,
+      resetSelectedMessageAction,
     ],
     inbox: [
       setCompleteMessageAlertAction,

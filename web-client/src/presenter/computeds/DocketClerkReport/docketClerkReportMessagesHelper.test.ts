@@ -21,6 +21,9 @@ describe('docketClerkReportMessagesHelper', () => {
       inboxMessages: [],
       sentMessages: [],
     },
+    messagesPage: {
+      selectedMessages: new Map<string, string>(),
+    },
     screenMetadata: {},
     tableSort: {
       sortField: 'createdAt',
@@ -158,5 +161,49 @@ describe('docketClerkReportMessagesHelper', () => {
     expect(result.inbox.messages).toHaveLength(2);
     expect(result.sent.messages).toHaveLength(1);
     expect(result.completed.messages).toHaveLength(0);
+  });
+
+  it('should set isSelected true on messages whose messageId is in selectedMessages', () => {
+    const selectedMsg = buildMessage({ messageId: 'inbox-selected' });
+    const unselectedMsg = buildMessage({ messageId: 'inbox-unselected' });
+    const selectedMessages = new Map<string, string>([
+      ['inbox-selected', selectedMsg.parentMessageId],
+    ]);
+
+    const result = runCompute(docketClerkReportMessagesHelper, {
+      state: {
+        ...emptyState,
+        docketClerkReport: {
+          ...emptyState.docketClerkReport,
+          inboxMessages: [selectedMsg, unselectedMsg],
+        },
+        messagesPage: { selectedMessages },
+      },
+    });
+
+    const selected = result.inbox.messages.find(
+      (m: any) => m.messageId === 'inbox-selected',
+    );
+    const unselected = result.inbox.messages.find(
+      (m: any) => m.messageId === 'inbox-unselected',
+    );
+    expect(selected?.isSelected).toBe(true);
+    expect(unselected?.isSelected).toBe(false);
+  });
+
+  it('should set isSelected false on all messages when selectedMessages is empty', () => {
+    const msg = buildMessage({ messageId: 'inbox-1' });
+
+    const result = runCompute(docketClerkReportMessagesHelper, {
+      state: {
+        ...emptyState,
+        docketClerkReport: {
+          ...emptyState.docketClerkReport,
+          inboxMessages: [msg],
+        },
+      },
+    });
+
+    expect(result.inbox.messages[0].isSelected).toBe(false);
   });
 });
