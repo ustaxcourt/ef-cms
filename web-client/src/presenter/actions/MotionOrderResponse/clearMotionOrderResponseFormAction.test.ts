@@ -24,7 +24,7 @@ describe('clearMotionOrderResponseFormAction', () => {
       additionalOrderTextArray: [''],
       issueOrderFor: MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
     });
-    expect(result.state.form).not.toHaveProperty('additionalOrderText');
+    expect(result.state.form).not.toHaveProperty('additionalOrderTextArray');
   });
 
   it('should handle clearing empty form fields', async () => {

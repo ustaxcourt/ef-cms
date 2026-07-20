@@ -7,10 +7,10 @@ describe('removeAdditionalOrderTextAction', () => {
     const result = await runAction(removeAdditionalOrderTextAction, {
       modules: { presenter },
       props: { index: 1 },
-      state: { form: { additionalOrderText: ['a', 'b', 'c'] } },
+      state: { form: { additionalOrderTextArray: ['a', 'b', 'c'] } },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual(['a', 'c']);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['a', 'c']);
   });
 
   it('returns an empty array when the array is undefined', async () => {
@@ -20,6 +20,6 @@ describe('removeAdditionalOrderTextAction', () => {
       state: { form: {} },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual([]);
+    expect(result.state.form.additionalOrderTextArray).toEqual([]);
   });
 });

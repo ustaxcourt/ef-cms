@@ -31,10 +31,10 @@ export const grantDenyMotionFormHelper = (
   const showStatusReportFields = !!form.dueDateMessage;
 
   const additionalOrderTextErrors = Array.isArray(
-    validationErrors.additionalOrderText,
+    validationErrors.additionalOrderTextArray,
   )
-    ? validationErrors.additionalOrderText.find(Boolean)
-    : validationErrors.additionalOrderText;
+    ? validationErrors.additionalOrderTextArray.find(Boolean)
+    : validationErrors.additionalOrderTextArray;
 
   const jurisdictionErrorText =
     validationErrors.jurisdiction && 'Select jurisdiction';

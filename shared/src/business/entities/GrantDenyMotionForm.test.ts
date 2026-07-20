@@ -77,7 +77,7 @@ describe('GrantDenyMotionForm', () => {
 
     it('should be valid with multiple non-empty additional order text entries', () => {
       const form = new GrantDenyMotionForm({
-        additionalOrderText: ['first clause', '', 'second clause'],
+        additionalOrderTextArray: ['first clause', '', 'second clause'],
         disposition: MOTION_DISPOSITIONS.GRANTED,
       });
       expect(form.getFormattedValidationErrors()).toBeNull();
@@ -156,7 +156,7 @@ describe('GrantDenyMotionForm', () => {
         MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS + 1,
       );
       const form = new GrantDenyMotionForm({
-        additionalOrderText: [longText],
+        additionalOrderTextArray: [longText],
         disposition: MOTION_DISPOSITIONS.GRANTED,
       });
       const errors = form.getFormattedValidationErrors();

@@ -145,7 +145,9 @@ export const translateStampDataToDraftOrderState = (
     null;
 
   const draftOrderState: Record<string, unknown> = {
-    additionalOrderText: translateAdditionalOrderText(stampData.customText),
+    additionalOrderTextArray: translateAdditionalOrderText(
+      stampData.customText,
+    ),
     deniedAsMoot: stampData.deniedAsMoot ?? null,
     deniedWithoutPrejudice: stampData.deniedWithoutPrejudice ?? null,
     disposition: stampData.disposition ?? null,
