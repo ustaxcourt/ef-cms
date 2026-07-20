@@ -17,6 +17,7 @@ import { statusReportOrderPdfPreviewSequence } from '@web-client/presenter/seque
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 import { setEditMotionOrderResponseFormAction } from '../actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
+import { motionOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 
 export const navigateToEditOrderSequence = [
   setupConfirmWithPropsAction,
@@ -37,7 +38,11 @@ export const navigateToEditOrderSequence = [
     documentTypeOrder: [
       getOrderTypeAction,
       {
-        isMotionOrderResponse: [setEditMotionOrderResponseFormAction, navigateToPathAction],
+        isMotionOrderResponse: [
+          setEditMotionOrderResponseFormAction,
+          navigateToPathAction,
+          motionOrderResponsePdfPreviewSequence,
+        ],
         isStandardOrder: [getDocumentEditUrlAsPathAction, navigateToPathAction],
         isStatusReportOrder: [
           setEditStatusReportOrderFormAction,
