@@ -12,8 +12,8 @@ const resolveAdditionalOrderTextFromDraft = (
     return draftOrderState.additionalOrderTextArray;
   }
 
-  if (Array.isArray(draftOrderState.additionalOrderTextArray)) {
-    return draftOrderState.additionalOrderTextArray;
+  if (Array.isArray(draftOrderState.additionalOrderText)) {
+    return draftOrderState.additionalOrderText;
   }
 
   return [];

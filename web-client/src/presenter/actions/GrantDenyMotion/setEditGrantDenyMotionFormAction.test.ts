@@ -96,7 +96,7 @@ describe('setEditGrantDenyMotionFormAction', () => {
     expect(result.state.form.additionalOrderTextArray).toEqual(['']);
   });
 
-  it('hydrates additionalOrderTextArray from additionalOrderTextArray when needed', async () => {
+  it('hydrates additionalOrderTextArray from legacy additionalOrderText when needed', async () => {
     const result = await runAction(setEditGrantDenyMotionFormAction, {
       modules: { presenter },
       props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
@@ -104,7 +104,7 @@ describe('setEditGrantDenyMotionFormAction', () => {
         caseDetail,
         documentToEdit: {
           draftOrderState: {
-            additionalOrderTextArray: ['Parties shall comply.'],
+            additionalOrderText: ['Parties shall comply.'],
             disposition: MOTION_DISPOSITIONS.GRANTED,
           },
         },
@@ -113,6 +113,27 @@ describe('setEditGrantDenyMotionFormAction', () => {
 
     expect(result.state.form.additionalOrderTextArray).toEqual([
       'Parties shall comply.',
+    ]);
+  });
+
+  it('prefers additionalOrderTextArray over legacy additionalOrderText when both exist', async () => {
+    const result = await runAction(setEditGrantDenyMotionFormAction, {
+      modules: { presenter },
+      props: { caseDetail, docketEntryIdToEdit: 'doc-1' },
+      state: {
+        caseDetail,
+        documentToEdit: {
+          draftOrderState: {
+            additionalOrderText: ['Legacy text.'],
+            additionalOrderTextArray: ['Current text.'],
+            disposition: MOTION_DISPOSITIONS.GRANTED,
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.additionalOrderTextArray).toEqual([
+      'Current text.',
     ]);
   });
 });
