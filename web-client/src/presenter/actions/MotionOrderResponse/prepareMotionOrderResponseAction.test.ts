@@ -453,6 +453,21 @@ describe('prepareMotionOrderResponseAction', () => {
     );
   });
 
+  it('sets docketEntryIdToEdit when editing an existing draft order', async () => {
+    const draftOrderId = 'draft-order-entry-id';
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        documentToEdit: { docketEntryId: draftOrderId },
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.docketEntryIdToEdit).toEqual(draftOrderId);
+  });
+
   it.each([
     { scenario: 'basic order (response + reply)', formOverrides: {} },
     {

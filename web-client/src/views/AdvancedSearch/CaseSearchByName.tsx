@@ -12,6 +12,7 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { isEmpty } from 'lodash';
 import {
+  ADVANCED_SEARCH_TABS,
   ALL_SELECTION,
   MULTI_SELECT_PLACEHOLDER,
   US_STATES,
@@ -29,6 +30,8 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence:
+      sequences.setCurrentPaginationPageSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence:
@@ -44,6 +47,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     advancedSearchHelper,
     caseSearchByNameHelper,
     clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence,
@@ -56,6 +60,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     advancedSearchHelper: any;
     caseSearchByNameHelper: any;
     clearAdvancedSearchFormSequence: Function;
+    setCurrentPaginationPageSequence: Function;
     submitAdvancedSearchSequence: Function;
     updateAdvancedSearchFormValueSequence: Function;
     updateCaseAdvancedSearchByNameFormValueSequence: Function;
@@ -77,23 +82,21 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
             <div className="grid-row grid-gap  tw:mt-[16px]">
               <div className="tablet:grid-col-12">
                 <FormGroup errorText={validationErrors.petitionerName}>
-                 
-                  
                   <TextField
                     label={
                       <label
-                      className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
-                      htmlFor="petitioner-name"
+                        className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
+                        htmlFor="petitioner-name"
                       >
                         Petitioner name
                       </label>
                     }
                     required={true}
                     helpText={
-                    <span className="usa-hint">
-                      Advanced syntax search (*, “”, - , etc. ) is not supported
-                      at this time.
-                    </span>        
+                      <span className="usa-hint">
+                        Advanced syntax search (*, “”, - , etc. ) is not
+                        supported at this time.
+                      </span>
                     }
                     aria-describedby="case-search-by-name"
                     className="usa-input"
@@ -248,7 +251,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                         <div className="usa-radio margin-bottom-1">
                           <input
                             aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
+                            aria-labelledby="united-states-country-selection-label"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'domestic'
@@ -257,7 +260,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                             id="united-states-country-selection"
                             name="country"
                             type="radio"
-                            value="United States"
+                            value="domestic"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
@@ -276,7 +279,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                         <div className="usa-radio margin-bottom-1">
                           <input
                             aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
+                            aria-labelledby="international-country-selection-label"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'international'
@@ -568,6 +571,10 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                   id="advanced-search-button"
                   onClick={e => {
                     e.preventDefault();
+                    setCurrentPaginationPageSequence({
+                      advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
+                      currentPaginationPage: 0,
+                    });
                     submitAdvancedSearchSequence();
                   }}
                 >

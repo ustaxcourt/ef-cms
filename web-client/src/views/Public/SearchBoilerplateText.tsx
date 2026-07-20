@@ -28,7 +28,9 @@ export function SearchBoilerplateText({
 
   const showBullets =
     isPractitionerUser ||
-    (formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
+    (formTypeText !== 'a case' &&
+      formTypeText !== 'an order' &&
+      formTypeText !== 'an opinion') ||
     !user?.userId;
 
   return (
@@ -44,7 +46,7 @@ export function SearchBoilerplateText({
           </>
         )}
       </p>
-      {/* Only render bullets if external user, not an order, not an opinion */}
+      {/* Only render bullets if external user */}
       {showBullets && (
         <ul>
           <li>
