@@ -124,7 +124,7 @@ const translateAdditionalOrderText = (customText: unknown): string[] => {
 
 /**
  * Mirrors the Postgres translation in
- * `2026-05-01T17_00_00Z-backfill-draftOrderState-from-stampData.expand.ts`.
+ * `2026-05-01T17_00_00Z-backfill-draft-order-state-from-stamp-data.expand.ts`.
  */
 export const translateStampDataToDraftOrderState = (
   stampData: StampDataRecord,
