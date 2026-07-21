@@ -36,40 +36,44 @@ function generateMockDocketEntries(docketNumber: string, count: number) {
   return entries;
 }
 
-describe('VirtualizedDocumentList - Large Document List', () => {
+function setupMockCase(entryCount: number): void {
+  createAndServePaperPetition().then(result => {
+    cy.wrap(result.docketNumber).as('docketNumber');
+    const mockDocketEntries = generateMockDocketEntries(
+      result.docketNumber,
+      entryCount,
+    );
+
+    cy.intercept(
+      'GET',
+      `**/cases/${result.docketNumber}/docket-entries*`,
+      req => {
+        req.reply({
+          body: {
+            docketEntries: mockDocketEntries,
+            page: 0,
+            pageSize: entryCount,
+            totalCount: entryCount,
+          },
+        });
+      },
+    ).as('getDocketEntries');
+
+    cy.intercept(
+      'GET',
+      `**/case-documents/${result.docketNumber}/*/document-download-url*`,
+      { url: 'http://localhost:4000/mock-pdf-url' },
+    );
+  });
+
+  loginAsDocketClerk();
+}
+
+describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => {
   const LARGE_ENTRY_COUNT = 1050;
 
   beforeEach(() => {
-    createAndServePaperPetition().then(result => {
-      cy.wrap(result.docketNumber).as('docketNumber');
-      const mockDocketEntries = generateMockDocketEntries(
-        result.docketNumber,
-        LARGE_ENTRY_COUNT,
-      );
-
-      cy.intercept(
-        'GET',
-        `**/cases/${result.docketNumber}/docket-entries*`,
-        req => {
-          req.reply({
-            body: {
-              docketEntries: mockDocketEntries,
-              page: 0,
-              pageSize: LARGE_ENTRY_COUNT,
-              totalCount: LARGE_ENTRY_COUNT,
-            },
-          });
-        },
-      ).as('getDocketEntries');
-
-      cy.intercept(
-        'GET',
-        `**/case-documents/${result.docketNumber}/*/document-download-url*`,
-        { url: 'http://localhost:4000/mock-pdf-url' },
-      );
-    });
-
-    loginAsDocketClerk();
+    setupMockCase(LARGE_ENTRY_COUNT);
   });
 
   it('should render the virtualized document list when docket entries exceed 1000', () => {
@@ -269,6 +273,96 @@ describe('VirtualizedDocumentList - Large Document List', () => {
       for (let i = 1; i < indices.length; i++) {
         expect(indices[i]).to.be.greaterThan(indices[i - 1]);
       }
+    });
+  });
+
+  it('should center the selected docket entry in the virtualized index nav when opening the document viewer for a mid-list entry', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="index-sortable-button"]').click();
+
+    cy.get('[data-testid="paginator-page-2"]').first().click();
+
+    cy.get('[data-testid="docket-entry-index-700"]')
+      .parents('tr')
+      .find('[data-testid="document-viewer-link-O"]')
+      .click();
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized.active').should(
+      'have.length',
+      1,
+    );
+    cy.get('.attachment-viewer-button.virtualized.active').should('be.visible');
+    cy.get('.attachment-viewer-button.virtualized.active .grid-col-2').should(
+      'contain.text',
+      '700',
+    );
+  });
+});
+
+describe('DocumentViewer - standard index nav (≤1000 docket entries)', () => {
+  const STANDARD_ENTRY_COUNT = 200;
+
+  beforeEach(() => {
+    setupMockCase(STANDARD_ENTRY_COUNT);
+  });
+
+  it('should center the selected docket entry in the standard index nav when opening the document viewer for a mid-list entry', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="index-sortable-button"]').click();
+
+    cy.get('[data-testid="docket-entry-index-150"]')
+      .parents('tr')
+      .find('[data-testid="document-viewer-link-O"]')
+      .click();
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.active').should('have.length', 1);
+    cy.get('.attachment-viewer-button.active .grid-col-2').should(
+      'contain.text',
+      '150',
+    );
+
+    cy.get('.document-viewer--documents-list').should($container => {
+      const container = $container[0];
+      const activeButton = container.querySelector<HTMLElement>(
+        '.attachment-viewer-button.active',
+      );
+      expect(
+        activeButton,
+        'active button rendered in list container',
+      ).to.not.equal(null);
+
+      expect(
+        container.scrollTop,
+        'index nav container scrolled away from the top',
+      ).to.be.greaterThan(0);
+
+      const buttonTop = activeButton!.offsetTop;
+      const buttonBottom = buttonTop + activeButton!.offsetHeight;
+      const visibleTop = container.scrollTop;
+      const visibleBottom = visibleTop + container.clientHeight;
+
+      expect(
+        buttonTop,
+        'active button top is inside the visible scroll range',
+      ).to.be.at.least(visibleTop);
+      expect(
+        buttonBottom,
+        'active button bottom is inside the visible scroll range',
+      ).to.be.at.most(visibleBottom);
     });
   });
 });

@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { List, useDynamicRowHeight, useListRef } from 'react-window';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 interface VirtualizedDocumentListProps {
@@ -15,10 +15,14 @@ export const VirtualizedDocumentList: React.FC<
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
   const listRef = useListRef(null);
   const rowHeightManager = useDynamicRowHeight({ defaultRowHeight: 80 });
+  const [listDimensions, setListDimensions] = useState<{
+    height: number;
+    width: number;
+  }>();
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
-    if (viewDocumentId && listRef.current) {
+    if (viewDocumentId && listRef.current && listDimensions) {
       const selectedIndex = docketEntries.findIndex(
         entry => entry.docketEntryId === viewDocumentId,
       );
@@ -26,7 +30,7 @@ export const VirtualizedDocumentList: React.FC<
         listRef.current.scrollToRow({ align: 'center', index: selectedIndex });
       }
     }
-  }, [viewDocumentId, docketEntries]);
+  }, [viewDocumentId, docketEntries, listDimensions]);
 
   // Row renderer for virtualized list
   const Row = ({
@@ -165,6 +169,7 @@ export const VirtualizedDocumentList: React.FC<
     >
       <List<object>
         listRef={listRef}
+        onResize={setListDimensions}
         rowComponent={Row}
         rowCount={docketEntries.length}
         rowHeight={rowHeightManager}

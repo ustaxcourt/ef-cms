@@ -4,7 +4,7 @@ import { VirtualizedDocumentList } from './VirtualizedDocumentList';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
@@ -23,6 +23,7 @@ export const DocumentViewer = connect(
     setViewerDocumentToDisplaySequence,
     viewDocumentId,
   }) {
+    const listRef = useRef<HTMLDivElement>(null);
     const hasLargeDocketEntryCount =
       formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length > 1000;
 
@@ -31,12 +32,20 @@ export const DocumentViewer = connect(
     }, []);
 
     useEffect(() => {
+      if (!hasLargeDocketEntryCount && viewDocumentId) {
+        const selectedDocument = listRef.current?.querySelector<HTMLElement>(
+          `button[data-entry-id="${viewDocumentId}"]`,
+        );
+
+        selectedDocument?.scrollIntoView({ block: 'center' });
+      }
+
       // Scroll the page to the blue header
       const blueHeader = window.document.querySelector(
         '#tab-docket-sub-record',
       );
       blueHeader?.scrollIntoView();
-    }, [viewDocumentId]);
+    }, [hasLargeDocketEntryCount, viewDocumentId]);
 
     return (
       <>
@@ -63,7 +72,7 @@ export const DocumentViewer = connect(
                   }
                 />
               ) : (
-                <div className="document-viewer--documents-list">
+                <div className="document-viewer--documents-list" ref={listRef}>
                   {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
                     entry => {
                       return (
