@@ -54,14 +54,9 @@ resource "aws_iam_role" "batch_service_role" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "batch_service_role_admin_policy" {
-  role       = aws_iam_role.batch_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = aws_iam_role.batch_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
 }
 
 resource "aws_iam_role_policy" "batch_service_role_policy" {
@@ -96,6 +91,13 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
                 "arn:aws:ecs:us-west-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "execute-api:ManageConnections"
+            ],
+            "Resource": "arn:aws:execute-api:*:*:*"
         }
     ]
 }
