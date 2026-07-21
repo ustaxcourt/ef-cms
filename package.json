@@ -260,10 +260,15 @@
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
   },
   "overrides": {
+    "body-parser": "2.3.0",
+    "brace-expansion@^1": "1.1.16",
+    "brace-expansion@^2": "2.1.2",
+    "brace-expansion@^5": "5.0.7",
+    "shell-quote": "1.10.0",
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "canvas": "$canvas",
-    "js-yaml": "4.2.0",
+    "js-yaml": "4.3.0",
     "semver": "7.7.4",
     "cypress": "$cypress",
     "s3rver": {
