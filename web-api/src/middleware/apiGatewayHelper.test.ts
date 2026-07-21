@@ -173,14 +173,45 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, () => ({
-      pk: 'this is bad!',
-    }));
+  it('should return a 500 response for unsanitized public entity payloads on public routes', async () => {
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => ({
+        entityName: 'PublicUser',
+        privateField: 'this is bad!',
+      }),
+    );
     expect(response).toEqual({
-      body: JSON.stringify('Unsanitized entity'),
+      body: JSON.stringify(
+        'Unsanitized entity: unauthorized field privateField',
+      ),
       headers: EXPECTED_HEADERS,
       statusCode: 500,
+    });
+  });
+
+  it('should allow valid public entity payloads on public routes', async () => {
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => ({
+        entityName: 'PublicUser',
+        name: 'Public User',
+        role: 'petitioner',
+      }),
+    );
+
+    expect(response).toEqual({
+      body: JSON.stringify({
+        entityName: 'PublicUser',
+        name: 'Public User',
+        role: 'petitioner',
+      }),
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
     });
   });
 
@@ -202,16 +233,22 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, () => [
+  it('should not enforce public payload sanitizer rules on non-public routes', async () => {
+    const response = await handle(
       {
-        pk: 'this is bad!',
+        path: '/api/some-internal-endpoint',
       },
-    ]);
+      () => ({
+        privateField: 'allowed for non-public routes',
+      }),
+    );
+
     expect(response).toEqual({
-      body: JSON.stringify('Unsanitized entity'),
+      body: JSON.stringify({
+        privateField: 'allowed for non-public routes',
+      }),
       headers: EXPECTED_HEADERS,
-      statusCode: 500,
+      statusCode: '200',
     });
   });
 

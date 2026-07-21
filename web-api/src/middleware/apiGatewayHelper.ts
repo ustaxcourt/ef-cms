@@ -6,6 +6,10 @@ import {
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getHeaderOverride } from '../lambdaWrapper';
+import {
+  findUnauthorizedPublicFields,
+  isPublicSiteRequest,
+} from './publicDataSanitizer';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 type LoggedError = ErrorWithStatusCode & {
@@ -50,12 +54,19 @@ export const handle = async (event, fun) => {
         statusCode: 200,
       };
     } else {
-      const privateKeys = ['pk', 'sk', 'gsi1pk'];
-      (Array.isArray(response) ? response : [response]).forEach(item => {
-        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
-          throw new UnsanitizedEntityError();
+      if (isPublicSiteRequest(event)) {
+        const unauthorizedFindings = findUnauthorizedPublicFields({
+          event,
+          response,
+        });
+        if (unauthorizedFindings.length > 0) {
+          const firstUnauthorizedField = unauthorizedFindings[0].fieldName;
+          throw new UnsanitizedEntityError(
+            `Unsanitized entity: unauthorized field ${firstUnauthorizedField}`,
+          );
         }
-      });
+      }
+
       if (event.queryStringParameters && event.queryStringParameters.fields) {
         const { fields } = event.queryStringParameters;
         const fieldsArr = fields.split(',');
