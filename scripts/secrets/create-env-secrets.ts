@@ -182,7 +182,7 @@ const {
   opensearchInstanceType,
   opensearchVolumeSize,
   paymentPortalArn,
-  paymentportalHost,
+  paymentPortalHost,
   payGovOrigin,
   postgresOriginalUsername,
   prodAccountId,
@@ -210,7 +210,7 @@ const {
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
   paymentPortalArn: string;
-  paymentportalHost: string;
+  paymentPortalHost: string;
   payGovOrigin: string;
   postgresOriginalUsername: string;
   prodAccountId: string;
@@ -263,7 +263,7 @@ if (env === 'prod') {
       irsSuperuserEmail || `service.agent.${env}@example.com`,
     IS_DYNAMSOFT_ENABLED: enableDynamsoft ? 1 : 0,
     PAYMENT_PORTAL_ARN: paymentPortalArn,
-    PAYMENT_PORTAL_HOST: paymentportalHost,
+    PAYMENT_PORTAL_HOST: paymentPortalHost,
     PAY_GOV_ORIGIN: payGovOrigin,
     POSTGRES_MASTER_PASSWORD: postgresOriginalPassword,
     POSTGRES_MASTER_USERNAME: postgresOriginalUsername,
