@@ -402,7 +402,7 @@ const router = {
     registerRoute(
       '/case-detail/*/documents/*/grant-deny-motion-create',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
         (docketNumber, docketEntryId) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
@@ -418,7 +418,7 @@ const router = {
     registerRoute(
       '/case-detail/*/documents/*/grant-deny-motion-edit',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
         (docketNumber, docketEntryIdToEdit) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
@@ -1417,7 +1417,7 @@ const router = {
     registerRoute(
       '/messages/*/message-detail/*/*/grant-deny-motion-create',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
         (docketNumber, parentMessageId, docketEntryId) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
@@ -1435,7 +1435,7 @@ const router = {
     registerRoute(
       '/messages/*/message-detail/*/*/grant-deny-motion-edit',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.STAMP_MOTION },
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
         (docketNumber, parentMessageId, docketEntryIdToEdit) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,

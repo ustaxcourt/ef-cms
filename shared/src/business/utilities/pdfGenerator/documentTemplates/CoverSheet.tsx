@@ -1,6 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
 
+export type CoverSheetParams = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  certificateOfService?: boolean;
+  consolidatedCases?: { docketNumber: string; documentNumber?: number }[];
+  dateFiledLodged: string;
+  dateFiledLodgedLabel: string;
+  dateReceived?: string;
+  docketNumberWithSuffix: string;
+  documentTitle: string;
+  electronicallyFiled?: boolean;
+  index?: number;
+  mailingDate?: string;
+};
+
 export const CoverSheet = ({
   caseCaptionExtension,
   caseTitle,
@@ -14,7 +29,7 @@ export const CoverSheet = ({
   electronicallyFiled,
   index,
   mailingDate,
-}) => {
+}: CoverSheetParams) => {
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
 

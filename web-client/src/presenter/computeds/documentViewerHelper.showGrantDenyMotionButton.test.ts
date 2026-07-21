@@ -37,7 +37,7 @@ describe('documentViewerHelper.showGrantDenyMotionButton', () => {
     };
   };
 
-  it('should be false when the user does not have the STAMP_MOTION permission', () => {
+  it('should be false when the user does not have the GRANT_DENY_MOTION permission', () => {
     const { showGrantDenyMotionButton } = runCompute(documentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -46,7 +46,7 @@ describe('documentViewerHelper.showGrantDenyMotionButton', () => {
             { ...baseDocketEntry, eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0] },
           ],
         },
-        permissions: { STAMP_MOTION: false },
+        permissions: { GRANT_DENY_MOTION: false },
       },
     });
 
@@ -60,14 +60,14 @@ describe('documentViewerHelper.showGrantDenyMotionButton', () => {
         caseDetail: {
           docketEntries: [{ ...baseDocketEntry, eventCode: 'NOT_CORRECT' }],
         },
-        permissions: { STAMP_MOTION: true },
+        permissions: { GRANT_DENY_MOTION: true },
       },
     });
 
     expect(showGrantDenyMotionButton).toBe(false);
   });
 
-  it('should be true when the selected document can be stamped and the user has STAMP_MOTION permissions', () => {
+  it('should be true when the selected document can be stamped and the user has GRANT_DENY_MOTION permissions', () => {
     const { showGrantDenyMotionButton } = runCompute(documentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -76,7 +76,7 @@ describe('documentViewerHelper.showGrantDenyMotionButton', () => {
             { ...baseDocketEntry, eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0] },
           ],
         },
-        permissions: { STAMP_MOTION: true },
+        permissions: { GRANT_DENY_MOTION: true },
       },
     });
 

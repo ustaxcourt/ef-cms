@@ -47,7 +47,7 @@ describe('validateGrantDenyMotionFormAction', () => {
         'jurisdiction',
         'filingParty',
         'dueDate',
-        'additionalOrderText',
+        'additionalOrderTextArray',
       ],
       errors: { disposition: 'Select Granted or Denied' },
     });

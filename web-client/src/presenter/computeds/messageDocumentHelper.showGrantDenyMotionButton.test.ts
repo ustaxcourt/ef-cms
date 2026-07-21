@@ -47,7 +47,7 @@ describe('messageDocumentHelper.showGrantDenyMotionButton', () => {
       });
   });
 
-  it('should be false when the user does not have the STAMP_MOTION permission', () => {
+  it('should be false when the user does not have the GRANT_DENY_MOTION permission', () => {
     const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -113,7 +113,7 @@ describe('messageDocumentHelper.showGrantDenyMotionButton', () => {
     expect(showGrantDenyMotionButton).toBe(false);
   });
 
-  it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
+  it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the GRANT_DENY_MOTION permission', () => {
     const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(colvinsChambersUser),
@@ -129,7 +129,7 @@ describe('messageDocumentHelper.showGrantDenyMotionButton', () => {
     expect(showGrantDenyMotionButton).toBe(true);
   });
 
-  it('should be true when the selected message document is a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
+  it('should be true when the selected message document is a draft and is a document that can be stamped and the user has the GRANT_DENY_MOTION permission', () => {
     const { showGrantDenyMotionButton } = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(adcUser),

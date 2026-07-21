@@ -28,7 +28,7 @@ export const getOrderTypeAction = ({ get, path }) => {
 
   const permissions = get(state.permissions);
 
-  if (isGrantDenyMotion && permissions.STAMP_MOTION) {
+  if (isGrantDenyMotion && permissions.GRANT_DENY_MOTION) {
     return path.isGrantDenyMotion();
   }
 

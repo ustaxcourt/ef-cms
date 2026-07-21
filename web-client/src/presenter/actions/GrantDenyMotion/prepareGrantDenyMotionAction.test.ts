@@ -80,7 +80,7 @@ describe('prepareGrantDenyMotionAction', () => {
       state: {
         ...baseState,
         form: {
-          additionalOrderText: ['additional directive'],
+          additionalOrderTextArray: ['additional directive'],
           disposition: MOTION_DISPOSITIONS.GRANTED,
           jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
         },
@@ -393,13 +393,13 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
-  it('appends one ORDERED clause per non-empty additionalOrderText entry, ignoring empties', async () => {
+  it('appends one ORDERED clause per non-empty additionalOrderTextArray entry, ignoring empties', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
         ...baseState,
         form: {
-          additionalOrderText: ['first thing', '   ', '', 'second thing'],
+          additionalOrderTextArray: ['first thing', '   ', '', 'second thing'],
           disposition: MOTION_DISPOSITIONS.GRANTED,
         },
       },
@@ -419,7 +419,7 @@ describe('prepareGrantDenyMotionAction', () => {
       state: {
         ...baseState,
         form: {
-          additionalOrderText: ['extra'],
+          additionalOrderTextArray: ['extra'],
           disposition: MOTION_DISPOSITIONS.GRANTED,
           jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.retained,
         },
@@ -526,19 +526,19 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
-  it('normalizes additionalOrderText by removing whitespace-only entries', async () => {
+  it('normalizes additionalOrderTextArray by removing whitespace-only entries', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
         ...baseState,
         form: {
-          additionalOrderText: ['  ', '', 'Parties shall comply.'],
+          additionalOrderTextArray: ['  ', '', 'Parties shall comply.'],
           disposition: MOTION_DISPOSITIONS.GRANTED,
         },
       },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual([
+    expect(result.state.form.additionalOrderTextArray).toEqual([
       'Parties shall comply.',
     ]);
     expect(result.state.form.richText).toContain(

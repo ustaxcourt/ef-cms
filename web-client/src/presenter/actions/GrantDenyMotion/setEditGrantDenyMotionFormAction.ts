@@ -8,12 +8,12 @@ import {
 const resolveAdditionalOrderTextFromDraft = (
   draftOrderState: Record<string, unknown>,
 ): string[] => {
-  if (Array.isArray(draftOrderState.additionalOrderText)) {
-    return draftOrderState.additionalOrderText;
-  }
-
   if (Array.isArray(draftOrderState.additionalOrderTextArray)) {
     return draftOrderState.additionalOrderTextArray;
+  }
+
+  if (Array.isArray(draftOrderState.additionalOrderText)) {
+    return draftOrderState.additionalOrderText;
   }
 
   return [];
@@ -33,7 +33,7 @@ export const setEditGrantDenyMotionFormAction = ({
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/grant-deny-motion-edit`;
 
   store.set(state.form, {
-    additionalOrderText: additionalOrderTextArrayWithRequiredFirstField(
+    additionalOrderTextArray: additionalOrderTextArrayWithRequiredFirstField(
       normalizeAdditionalOrderTextArray(
         resolveAdditionalOrderTextFromDraft(draftOrderState),
       ),

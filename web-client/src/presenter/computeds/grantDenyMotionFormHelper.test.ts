@@ -68,13 +68,13 @@ describe('grantDenyMotionFormHelper', () => {
     expect(result.minDate).toEqual(today);
   });
 
-  it('extracts the first additionalOrderText error from an array of errors', () => {
+  it('extracts the first additionalOrderTextArray error from an array of errors', () => {
     const result = runCompute(grantDenyMotionFormHelper, {
       state: {
         caseDetail: {},
         form: {},
         validationErrors: {
-          additionalOrderText: [
+          additionalOrderTextArray: [
             undefined,
             'Limit is 256 characters per entry.',
           ],

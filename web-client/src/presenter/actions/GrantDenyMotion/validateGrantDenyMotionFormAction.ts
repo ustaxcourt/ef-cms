@@ -24,7 +24,7 @@ export const validateGrantDenyMotionFormAction = ({
     'jurisdiction',
     'filingParty',
     'dueDate',
-    'additionalOrderText',
+    'additionalOrderTextArray',
   ];
 
   return path.error({
