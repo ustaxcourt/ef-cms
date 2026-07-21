@@ -19,7 +19,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 
 describe('initPaymentInteractor', () => {
   const docketNumber = '101-01';
-  const transactionReferenceId = 'mockTransactionReferenceId';
+  const transactionReferenceId = '77d9b6e2-508f-4e36-8fb1-0b2e20557898';
   const mockPetitioner = {
     ...mockPetitionerUser,
     userId: MOCK_CASE.petitioners[0].contactId,

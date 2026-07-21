@@ -666,6 +666,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Status of the case fee payment.')
       .messages({ '*': 'Enter payment status' }),
+    petitionPaymentToken: JoiValidationConstants.STRING.allow(null)
+      .optional()
+      .description(
+        'A temporary token used when processing the case fee payment with pay.gov',
+      ),
+    petitionPaymentTransactionReferenceId: JoiValidationConstants.UUID.allow(
+      null,
+    )
+      .optional()
+      .description(
+        'A UUID used to reference the case fee transaction for this case in the payment portal',
+      ),
     petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
