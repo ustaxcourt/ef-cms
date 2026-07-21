@@ -5,10 +5,30 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocketClerksForReportAction', () => {
   const mockDocketClerks = [
-    { name: 'Zelda Smith', role: 'docketclerk', userId: 'z1' },
-    { name: 'Alice Jones', role: 'docketclerk', userId: 'a1' },
-    { name: 'Mary Brown', role: 'docketclerk', userId: 'm1' },
-    { name: 'Candy Case', role: 'caseServicesSupervisor', userId: 'css1' },
+    {
+      name: 'Zelda Smith',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'z1',
+    },
+    {
+      name: 'Alice Jones',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'a1',
+    },
+    {
+      name: 'Mary Brown',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'm1',
+    },
+    {
+      name: 'Candy Case',
+      role: 'caseServicesSupervisor',
+      section: 'caseServicesSupervisor',
+      userId: 'css1',
+    },
   ];
 
   beforeAll(() => {
@@ -42,9 +62,24 @@ describe('getDocketClerksForReportAction', () => {
     });
 
     expect(state.docketClerkReport.docketClerks).toEqual([
-      { name: 'Alice Jones', role: 'docketclerk', userId: 'a1' },
-      { name: 'Mary Brown', role: 'docketclerk', userId: 'm1' },
-      { name: 'Zelda Smith', role: 'docketclerk', userId: 'z1' },
+      {
+        name: 'Alice Jones',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'a1',
+      },
+      {
+        name: 'Mary Brown',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'm1',
+      },
+      {
+        name: 'Zelda Smith',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'z1',
+      },
     ]);
     expect(
       state.docketClerkReport.docketClerks.find(
