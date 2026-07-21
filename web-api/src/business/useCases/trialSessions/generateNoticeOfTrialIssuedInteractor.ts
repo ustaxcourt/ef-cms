@@ -11,7 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -60,17 +60,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     judgeUserName: trialSession.judge?.name,
   });
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
+  const { name, title } = await getClerkOfTheCourtInfo();
 
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-    name: string;
-    title: string;
-  };
   const trialInfo: FormattedTrialInfoType = {
     formattedJudge: judgeWithTitle,
     formattedStartDate,
