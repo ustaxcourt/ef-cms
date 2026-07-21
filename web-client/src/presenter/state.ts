@@ -181,6 +181,7 @@ import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSes
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -651,8 +652,7 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    | RawGenerateSuggestedTermForm
-    | undefined,
+    RawGenerateSuggestedTermForm | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -757,11 +757,9 @@ export const baseState = {
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
     updatedTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -983,8 +981,7 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
-      | undefined,
+      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],
@@ -1137,6 +1134,8 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  processPaymentStatus: undefined as
+    undefined | (ProcessPaymentResponse & { docketNumber: string }),
 };
 
 export const initialState = {
