@@ -101,7 +101,7 @@ Cypress.Commands.add('assertCorrectNetworkData', () => {
           message: 'passed',
         });
 
-        return;
+        return result;
       }
 
       const message = formatSensitiveNetworkFailure(result.findings);

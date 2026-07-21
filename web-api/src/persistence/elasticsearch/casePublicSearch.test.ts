@@ -49,9 +49,11 @@ describe('casePublicSearch', () => {
     caseTypes: [CASE_TYPES_MAP.cdp],
   };
 
-  search.mockResolvedValue({
-    results: [MOCK_CASE_SEARCH_RESULT],
-    total: 0,
+  beforeAll(() => {
+    search.mockResolvedValue({
+      results: [MOCK_CASE_SEARCH_RESULT],
+      total: 0,
+    });
   });
 
   const mustNotClause = [
@@ -116,5 +118,61 @@ describe('casePublicSearch', () => {
         receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
       },
     ]);
+  });
+
+  it('converts state and territory abbreviations, preserves unmapped values, and filters missing states', async () => {
+    search.mockResolvedValueOnce({
+      results: [
+        {
+          ...MOCK_CASE_SEARCH_RESULT,
+          petitioners: [
+            { name: 'State Petitioner', state: 'TN' },
+            { name: 'Territory Petitioner', state: 'PR' },
+            { name: 'International Petitioner', state: 'Ontario' },
+            { name: 'Petitioner Without State' },
+          ],
+        },
+        {
+          ...MOCK_CASE_SEARCH_RESULT,
+          petitioners: [],
+        },
+      ],
+      total: 2,
+    });
+
+    const { results } = await casePublicSearch({
+      applicationContext,
+      searchTerms,
+    });
+
+    expect(results[0].petitionerStateNames).toEqual([
+      'Tennessee',
+      'Puerto Rico',
+      'Ontario',
+    ]);
+    expect(results[1].petitionerNames).toEqual([]);
+    expect(results[1].petitionerStateNames).toEqual([]);
+  });
+
+  it('throws when a result fails PublicCaseSearchResult validation', async () => {
+    search.mockResolvedValueOnce({
+      results: [
+        {
+          caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
+          docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
+          docketNumberWithSuffix:
+            MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+          petitioners: undefined,
+        },
+      ],
+      total: 1,
+    });
+
+    await expect(
+      casePublicSearch({
+        applicationContext,
+        searchTerms,
+      }),
+    ).rejects.toThrow('PublicCaseSearchResult entity was invalid');
   });
 });

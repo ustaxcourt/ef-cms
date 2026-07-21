@@ -1,4 +1,4 @@
-import { caseSearchByNameHelper } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from '@web-client/presenter/computeds/AdvancedSearch/caseSearchByNameHelper';
 import {
   ALL_SELECTION,
   CASE_TYPES_MAP,
