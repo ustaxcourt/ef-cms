@@ -11,31 +11,44 @@ import {
 } from '@ustaxcourt/payment-portal';
 import { signRequest } from 'aws-sigv4-sign';
 
+type PaymentPortalRequest =
+  | {
+      endpoint: 'init';
+      data: InitPaymentRequest;
+    }
+  | {
+      endpoint: 'process';
+      data: ProcessPaymentRequest;
+    }
+  | {
+      endpoint: 'details';
+      data: GetDetailsPathParams;
+    };
+
 async function makePaymentPortalRequest(
   applicationContext: ServerApplicationContext,
-  endpoint: 'init' | 'process' | 'details',
+  request: PaymentPortalRequest,
   method: 'GET' | 'POST',
-  data: InitPaymentRequest | ProcessPaymentRequest | GetDetailsPathParams,
 ): Promise<InitPaymentResponse | ProcessPaymentResponse | GetDetailsResponse> {
   let response;
   try {
     if (environment.stage === 'local') {
-      const url = `${environment.paymentPortalHost}/${endpoint}`;
-      if (method === 'GET') {
+      const url = `${environment.paymentPortalHost}/${request.endpoint}`;
+      if (method === 'GET' && request.endpoint === 'details') {
         response = await applicationContext
           .getHttpClient()
-          .get(
-            `${url}/${(data as GetDetailsPathParams).transactionReferenceId}`,
-          );
+          .get(`${url}/${request.data.transactionReferenceId}`);
       }
       if (method === 'POST') {
-        response = await applicationContext.getHttpClient().post(url, data);
+        response = await applicationContext
+          .getHttpClient()
+          .post(url, request.data);
       }
     } else {
-      const url = `${environment.paymentPortalHost}/${endpoint}`;
-      if (method === 'GET') {
+      const url = `${environment.paymentPortalHost}/${request.endpoint}`;
+      if (method === 'GET' && request.endpoint === 'details') {
         const signedRequest = await signRequest(
-          `${url}/${(data as GetDetailsPathParams).transactionReferenceId}`,
+          `${url}/${request.data.transactionReferenceId}`,
           {
             service: 'execute-api',
           },
@@ -52,7 +65,7 @@ async function makePaymentPortalRequest(
           url,
           {
             method,
-            body: JSON.stringify(data),
+            body: JSON.stringify(request.data),
           },
           {
             service: 'execute-api',
@@ -61,13 +74,13 @@ async function makePaymentPortalRequest(
         const headers = Object.fromEntries(signedRequest.headers.entries());
         response = await applicationContext
           .getHttpClient()
-          .post(signedRequest.url, data, { headers });
+          .post(signedRequest.url, request.data, { headers });
       }
     }
   } catch (e: unknown) {
     console.log(e);
     getDawsonLogger().error(`Error calling payment portal: ${e}`, e);
-    throw new Error(`There was an error calling ${endpoint}`);
+    throw new Error(`There was an error calling ${request.endpoint}`);
   }
 
   return response.data;
@@ -81,9 +94,8 @@ export const getPaymentPortalClient = () => {
     ): Promise<InitPaymentResponse> => {
       return makePaymentPortalRequest(
         applicationContext,
-        'init',
+        { endpoint: 'init', data },
         'POST',
-        data,
       ) as Promise<InitPaymentResponse>;
     },
     processPayment: async (
@@ -92,9 +104,8 @@ export const getPaymentPortalClient = () => {
     ): Promise<ProcessPaymentResponse> => {
       return makePaymentPortalRequest(
         applicationContext,
-        'process',
+        { endpoint: 'process', data },
         'POST',
-        data,
       ) as Promise<ProcessPaymentResponse>;
     },
     getTransactionDetails: async (
@@ -103,9 +114,8 @@ export const getPaymentPortalClient = () => {
     ): Promise<GetDetailsResponse> => {
       return makePaymentPortalRequest(
         applicationContext,
-        'details',
+        { endpoint: 'details', data },
         'GET',
-        data,
       ) as Promise<GetDetailsResponse>;
     },
   };
