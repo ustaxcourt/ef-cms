@@ -99,6 +99,17 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.allowMultiDocketing).toEqual(false);
     });
 
+    it('should be false when form is undefined and no docket entry can be resolved', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          form: undefined,
+        },
+      });
+
+      expect(result.allowMultiDocketing).toEqual(false);
+    });
+
     it('should use the current docket entry when form does not have an event code', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {

@@ -28,6 +28,10 @@ describe('createNewPetitionerUser', () => {
     });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should call createUser and upsertUser when creating a user outside of a transaction', async () => {
     inTransaction.mockReturnValueOnce(false);
 

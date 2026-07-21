@@ -12,6 +12,7 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
+import { formatTrialNoticePhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -56,17 +57,24 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
-  const judgeWithTitle = await getJudgeWithTitle({
-    judgeUserName: trialSession.judge?.name,
-  });
+  let formattedJudge = trialSession.judge?.name || 'Not assigned';
+
+  if (trialSession.judge?.name) {
+    formattedJudge = await getJudgeWithTitle({
+      judgeUserName: trialSession.judge.name,
+    });
+  }
 
   const { name, title } = await getClerkOfTheCourtInfo();
-
   const trialInfo: FormattedTrialInfoType = {
-    formattedJudge: judgeWithTitle,
+    ...trialSession,
+    chambersPhoneNumber: formatTrialNoticePhoneNumber(
+      trialSession.chambersPhoneNumber,
+    ),
+    formattedJudge,
     formattedStartDate,
     formattedStartTime,
-    ...trialSession,
+    joinPhoneNumber: formatTrialNoticePhoneNumber(trialSession.joinPhoneNumber),
   };
 
   if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson) {

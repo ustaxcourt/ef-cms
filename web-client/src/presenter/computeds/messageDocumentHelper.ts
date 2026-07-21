@@ -12,6 +12,7 @@ export const messageDocumentHelper = (
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
+    GRANT_DENY_MOTION_OPTIONS,
     NOTICE_EVENT_CODES,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
@@ -48,6 +49,10 @@ export const messageDocumentHelper = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(caseDocument?.draftOrderState?.orderType);
 
+  const isGrantDenyMotion =
+    caseDocument.draftOrderState?.orderType ===
+      GRANT_DENY_MOTION_OPTIONS.orderType || false;
+
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 
   const isStipulatedDecision =
@@ -65,18 +70,22 @@ export const messageDocumentHelper = (
   const showEditButtonForRole = isInternalUser;
   const showEditButtonForDocument =
     isNonCorrespondenceDraft && !isStipulatedDecision;
-  const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && isSigned
-    : showEditButtonForRole &&
-      showEditButtonForDocument &&
-      isSigned &&
-      !isNotice &&
-      !isDraftStampOrder;
-  const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !isSigned
-    : showEditButtonForRole &&
-      showEditButtonForDocument &&
-      (!isSigned || isNotice);
+  const showEditButtonSigned = isGrantDenyMotion
+    ? permissions.STAMP_MOTION && isSigned
+    : isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && isSigned
+      : showEditButtonForRole &&
+        showEditButtonForDocument &&
+        isSigned &&
+        !isNotice &&
+        !isDraftStampOrder;
+  const showEditButtonNotSigned = isGrantDenyMotion
+    ? permissions.STAMP_MOTION && !isSigned
+    : isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && !isSigned
+      : showEditButtonForRole &&
+        showEditButtonForDocument &&
+        (!isSigned || isNotice);
 
   const showAddDocumentEntryButtonForRole =
     permissions.CREATE_ORDER_DOCKET_ENTRY;
@@ -110,7 +119,7 @@ export const messageDocumentHelper = (
     showStatusReportOrderButton,
     showOrderResponseButton,
     showSignStipulatedDecisionButton,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showServiceWarning,
     showLeadCaseNotification: showLeadCaseWarning,
   } = getDocumentDisplayFlags({
@@ -127,7 +136,7 @@ export const messageDocumentHelper = (
 
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplayDocumentId}/add-court-issued-docket-entry/${parentMessageId}`;
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplayDocumentId}/sign/${parentMessageId}`;
-  const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
+  const grantDenyMotionFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/grant-deny-motion-create`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
   const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
@@ -136,19 +145,19 @@ export const messageDocumentHelper = (
   return {
     addDocketEntryLink,
     applySignatureLink,
-    applyStampFromMessagesLink,
     archived: isArchived,
     docketEntryId: caseDocument.docketEntryId,
     documentType: caseDocument.documentType,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
+    grantDenyMotionFromMessagesLink,
     index: caseDocument.index,
     messageDetailLink,
     motionOrderResponseFromMessagesLink,
     servePetitionLink,
     showAddDocketEntryButton,
     showApplySignatureButton,
-    showApplyStampButton,
+    showGrantDenyMotionButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned,
     showEditButtonSigned,

@@ -5,10 +5,15 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
+import { ErrorBoundary } from './views/ErrorBoundary';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
-import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
+import {
+  getRumPageIdFromRoutePattern,
+  initializeRealUserMonitoring,
+  recordRumPageView,
+} from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -51,6 +56,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons/faClipboardList';
 import { faClock as faClockSolid } from '@fortawesome/free-solid-svg-icons/faClock';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons/faCloudDownloadAlt';
@@ -171,6 +177,7 @@ const app = {
       faCheckCircle,
       faCheckCircleRegular,
       faCircle,
+      faCircleXmark,
       faClipboardList,
       faClock,
       faClockSolid,
@@ -296,7 +303,9 @@ const app = {
             <AppInstanceManager />
             <GlobalModalWrapper />
           </>
-          <AppComponent />
+          <ErrorBoundary>
+            <AppComponent />
+          </ErrorBoundary>
 
           {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
         </Container>,
@@ -318,6 +327,7 @@ const app = {
     let processQueue = Promise.resolve();
     const wrappedRoute = (path, cb) => {
       route(path, function () {
+        recordRumPageView(getRumPageIdFromRoutePattern(path));
         return (processQueue = processQueue.then(() => {
           // eslint-disable-next-line prefer-rest-params
           return cb(...arguments);

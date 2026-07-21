@@ -182,7 +182,7 @@ const applicationContextPublic = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    const apiUrl = process.env.API_URL || 'http://localhost:4000';
+    const apiUrl = applicationContextPublic.getBaseUrl();
     return getHttpClient(forceRefreshCallback, apiUrl);
   },
   getLogger: () => ({

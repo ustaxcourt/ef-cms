@@ -2,6 +2,7 @@
 
 import {
   CASE_STATUS_TYPES,
+  GRANT_DENY_MOTION_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   STATUS_REPORT_ORDER_OPTIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -660,6 +661,100 @@ describe('messageDocumentHelper', () => {
     expect(result.showEditButtonNotSigned).toEqual(false);
   });
 
+  it('should return showEditSigned true and showEditNotSigned false when document is signed and is a grant/deny motion order and the user has permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+              eventCode: 'O',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(true);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned true when document is not signed and is a grant/deny motion order and the user has permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+              eventCode: 'O',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(true);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is signed and is a grant/deny motion order and the user does not have permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+              eventCode: 'O',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is not signed and is a grant/deny motion order and the user does not have permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+              eventCode: 'O',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
   describe('showEditCorrespondenceButton', () => {
     it('returns true for a correspondence document when the user has permission to edit', () => {
       const result = runCompute(messageDocumentHelper, {
@@ -1293,8 +1388,8 @@ describe('messageDocumentHelper', () => {
     expect(result.addDocketEntryLink).toEqual(
       `/case-detail/101-20/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
     );
-    expect(result.applyStampFromMessagesLink).toEqual(
-      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
+    expect(result.grantDenyMotionFromMessagesLink).toEqual(
+      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/grant-deny-motion-create`,
     );
     expect(result.editCorrespondenceLink).toEqual(
       `/case-detail/101-20/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,

@@ -24,17 +24,12 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   const mockPdfUrl = 'www.example.com';
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
-  const inTransaction = jest.mocked(inTransactionMock);
-  const onTransactionCommit = jest.mocked(onTransactionCommitMock);
-
   beforeEach(() => {
     caseEntity = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
 
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: mockPdfUrl });
-
-    inTransaction.mockReturnValue(false);
   });
 
   it('should use case-specific docket entries to load document', async () => {
@@ -278,7 +273,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   });
 
   it('should send service emails via onTransactionCommit if in a transaction', async () => {
-    inTransaction.mockReturnValueOnce(true);
+    (inTransactionMock as jest.Mock).mockReturnValueOnce(true);
 
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
@@ -289,7 +284,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(onTransactionCommit).toHaveBeenCalledTimes(1);
+    expect(onTransactionCommitMock).toHaveBeenCalledTimes(1);
   });
 
   it('should use stampedPdf if cachedPdfData does not exist', async () => {

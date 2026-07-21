@@ -34,7 +34,6 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
@@ -43,6 +42,7 @@ import {
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 type CompleteDocketEntryQCEntryMetadata = Pick<
   DocketEntry,
@@ -199,8 +199,8 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
+  let paperServicePdfUrl: string | undefined = undefined;
+  let paperServiceDocumentTitle: string | undefined = undefined;
   let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
 

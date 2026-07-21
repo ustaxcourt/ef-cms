@@ -10,6 +10,7 @@ import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
@@ -144,6 +145,7 @@ export const serveExternallyFiledDocument = async (
               multiDocketedOn: docketNumbers,
               originallyFiledDocketNumber: subjectCaseDocketNumber,
               numberOfPages,
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             },
             { authorizedUser },
           );

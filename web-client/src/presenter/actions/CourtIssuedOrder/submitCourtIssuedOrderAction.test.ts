@@ -230,4 +230,46 @@ describe('submitCourtIssuedOrderAction', () => {
       strickenFromTrialSession: true,
     });
   });
+
+  it('persists Grant/Deny motion form fields in draftOrderState', async () => {
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocumentStorageId,
+      },
+      state: {
+        caseDetail: { docketNumber: '111-20' },
+        form: {
+          additionalOrderText: ['', 'Parties shall comply.'],
+          deniedAsMoot: true,
+          deniedWithoutPrejudice: false,
+          disposition: 'DENIED',
+          documentType: 'Order',
+          dueDate: '2026-12-31',
+          dueDateMessage: 'statusReport',
+          filingParty: 'Respondent',
+          orderType: 'grantDenyMotion',
+          primaryDocumentFile: {},
+          strickenFromTrialSession: false,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
+        .calls[0][1].documentMetadata.draftOrderState,
+    ).toMatchObject({
+      additionalOrderText: ['Parties shall comply.'],
+      deniedAsMoot: true,
+      deniedWithoutPrejudice: false,
+      disposition: 'DENIED',
+      dueDate: '2026-12-31',
+      dueDateMessage: 'statusReport',
+      filingParty: 'Respondent',
+      orderType: 'grantDenyMotion',
+      strickenFromTrialSession: false,
+    });
+  });
 });

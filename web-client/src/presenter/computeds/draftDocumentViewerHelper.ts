@@ -4,6 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  GRANT_DENY_MOTION_OPTIONS,
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -65,6 +66,10 @@ export const draftDocumentViewerHelper = (
       )
     : false;
 
+  const isGrantDenyMotion =
+    formattedDocumentToDisplay?.draftOrderState?.orderType ===
+    GRANT_DENY_MOTION_OPTIONS.orderType;
+
   const isNotice = NOTICE_EVENT_CODES.includes(
     formattedDocumentToDisplay.eventCode,
   );
@@ -103,19 +108,23 @@ export const draftDocumentViewerHelper = (
 
   const showEditButtonSigned =
     !isRestrictedEventCode &&
-    (isStatusReportOrder
-      ? permissions.STATUS_REPORT_ORDER && isSigned
-      : showEditButtonForRole &&
-        isSigned &&
-        !isNotice &&
-        !isDraftStampOrder &&
-        !isStipulatedDecision);
+    (isGrantDenyMotion
+      ? permissions.STAMP_MOTION && isSigned
+      : isStatusReportOrder
+        ? permissions.STATUS_REPORT_ORDER && isSigned
+        : showEditButtonForRole &&
+          isSigned &&
+          !isNotice &&
+          !isDraftStampOrder &&
+          !isStipulatedDecision);
 
   const showEditButtonNotSigned =
     !isRestrictedEventCode &&
-    (isStatusReportOrder
-      ? permissions.STATUS_REPORT_ORDER && !isSigned
-      : showEditButtonForRole && (!isSigned || isNotice));
+    (isGrantDenyMotion
+      ? permissions.STAMP_MOTION && !isSigned
+      : isStatusReportOrder
+        ? permissions.STATUS_REPORT_ORDER && !isSigned
+        : showEditButtonForRole && (!isSigned || isNotice));
 
   const showAddDocketEntryButtonForDocument = isSigned || !requiresSignature;
   const showAddDocketEntryButton =

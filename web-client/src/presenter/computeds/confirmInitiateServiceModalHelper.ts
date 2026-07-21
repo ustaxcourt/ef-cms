@@ -30,7 +30,7 @@ export const confirmInitiateServiceModalHelper = (
   const form = get(state.form);
   let docketEntry = form;
 
-  if (!docketEntry.eventCode) {
+  if (!docketEntry?.eventCode) {
     docketEntry = formattedCaseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     );
@@ -46,10 +46,12 @@ export const confirmInitiateServiceModalHelper = (
   let casesToIterateOver: (ComputedFormattedCaseDetail | FormattedCase)[] = [];
 
   const isLead = isLeadCase(formattedCaseDetail);
-  const allowMultiDocketing = shouldAllowMultiDocketing({
-    docketEntry,
-    isLead,
-  });
+  const allowMultiDocketing = docketEntry
+    ? shouldAllowMultiDocketing({
+        docketEntry,
+        isLead,
+      })
+    : false;
 
   if (allowMultiDocketing) {
     additionalServedCases = formattedCaseDetail.consolidatedCases

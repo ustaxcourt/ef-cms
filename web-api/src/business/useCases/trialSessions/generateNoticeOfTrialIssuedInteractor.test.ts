@@ -78,6 +78,39 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
 
+  it('should format chambers and join phone numbers for the notice', async () => {
+    getTrialSessionById.mockResolvedValue({
+      chambersPhoneNumber: '2025213339',
+      joinPhoneNumber: '4444444444',
+      judge: {
+        name: 'Test Judge',
+      },
+      meetingId: '1111',
+      password: '2222',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
+
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        trialInfo: {
+          chambersPhoneNumber: '(202) 521-3339',
+          joinPhoneNumber: '(444) 444-4444',
+        },
+      },
+    });
+  });
+
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
     await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '123-45',
@@ -93,6 +126,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       data: {
         docketNumberWithSuffix: '123-45',
         trialInfo: {
+          formattedJudge: 'Judge Test Judge',
           formattedStartDate: 'Sunday, August 25, 2019',
           formattedStartTime: '10:00 am',
           joinPhoneNumber: '3333',
@@ -125,7 +159,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     getTrialSessionById.mockResolvedValue({
       address1: '1111',
       address2: '2222',
-      city: 'troutville',
+      city: 'Troutville',
       judge: { name: 'Test Judge' },
       postalCode: 'Boise, Idaho',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -147,6 +181,35 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       data: {
         nameOfClerk: 'bob',
         titleOfClerk: 'clerk of court',
+      },
+    });
+  });
+
+  it('should generate a notice with "Not assigned" when the trial session has no judge', async () => {
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      meetingId: '1111',
+      password: '2222',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
+
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(getUsersInSections).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        trialInfo: {
+          formattedJudge: 'Not assigned',
+        },
       },
     });
   });
@@ -192,7 +255,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     getTrialSessionById.mockResolvedValue({
       address1: '1111',
       address2: '2222',
-      city: 'troutville',
+      city: 'Troutville',
       judge: { name: 'Test Judge' },
       postalCode: 'Boise, Idaho',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,

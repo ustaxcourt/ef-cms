@@ -137,7 +137,6 @@ import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '@web-client/proxies/generateDocketRecordPdfProxy';
 import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
-import { generateDraftStampOrderInteractor } from '@web-client/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '@web-client/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generateNoticeOfWithdrawalPdfInteractor } from '@web-client/proxies/documents/generateNoticeOfWithdrawalPdfProxy';
@@ -211,8 +210,8 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '@web-client/proxie
 import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
 import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
+import { getRotationAdjustedBoxCoordinates } from '../../shared/src/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
-import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getTrialSessionDetailsInteractor } from '@web-client/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionPlanningReportDataInteractor } from '@web-client/proxies/trialSessions/getTrialSessionPlanningReportProxy';
@@ -253,13 +252,13 @@ import { saveCaseNoteInteractor } from '@web-client/proxies/caseNote/saveCaseNot
 import { saveSignedDocumentInteractor } from '@web-client/proxies/documents/saveSignedDocumentProxy';
 import { sealCaseContactAddressInteractor } from '@web-client/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '@web-client/proxies/sealCaseProxy';
+import { unsealCaseContactAddressInteractor } from '@web-client/proxies/unsealCaseContactAddressProxy';
 import { sealDocketEntryInteractor } from '@web-client/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseToIrsInteractor } from '@web-client/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '@web-client/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '@web-client/proxies/documents/serveExternallyFiledDocumentProxy';
 import { serveThirtyDayNoticeInteractor } from '@web-client/proxies/trialSessions/serveThirtyDayNoticeProxy';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
-import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '@web-client/proxies/trialSessions/setForHearingProxy';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -302,10 +301,10 @@ import { updateUserContactInformationInteractor } from '@web-client/proxies/user
 import { updateUserPendingEmailInteractor } from '@web-client/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentAndMakeSafeInteractor } from '@web-client/business/useCases/uploadDocumentAndMakeSafeInteractor';
-import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
+import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadPdfFromClient } from '@web-client/persistence/s3/uploadPdfFromClient';
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
@@ -341,7 +340,6 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
-import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
 import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
@@ -422,7 +420,6 @@ const allUseCases = {
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDocumentIds,
-  generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generateNoticeOfWithdrawalPdfInteractor,
   generatePDFFromJPGDataInteractor,
@@ -517,12 +514,12 @@ const allUseCases = {
   saveSignedDocumentInteractor,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
+  unsealCaseContactAddressInteractor,
   sealDocketEntryInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
   serveThirtyDayNoticeInteractor,
-  setDocumentTitleFromStampDataInteractor,
   setForHearingInteractor,
   setItemInteractor,
   setMessageAsReadInteractor,
@@ -597,13 +594,13 @@ const allUseCases = {
   validatePetitionerInteractor,
   validatePractitionerInteractor,
   validateSearchDeadlinesInteractor,
-  validateStampInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,
   validateUserContactInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
 };
+
 tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({
@@ -648,8 +645,7 @@ const applicationContext = {
     return forceRefreshCallback;
   },
   getHttpClient: () => {
-    const apiUrl = process.env.API_URL || 'http://localhost:4000';
-    return getHttpClient(forceRefreshCallback, apiUrl);
+    return getHttpClient(forceRefreshCallback, applicationContext.getBaseUrl());
   },
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');
@@ -737,9 +733,9 @@ const applicationContext = {
       getPractitionersRepresenting,
       getSealedDocketEntryTooltip,
       getSelectedConsolidatedCasesToMultiDocketOn,
+      getRotationAdjustedBoxCoordinates,
       getServedPartiesCode,
       getSortableDocketNumber: Case.getSortableDocketNumber,
-      getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
       hasPartyWithServiceType,
       isClosed,

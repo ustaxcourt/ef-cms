@@ -1047,8 +1047,12 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalled();
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === mockDocketEntries[0].docketEntryId,
+      );
+
+    expect(updatedDocketEntry).toBeDefined();
+    expect(updatedDocketEntry?.numberOfPages).toBe(5);
   });
 });

@@ -2,7 +2,7 @@ import { CamelCasePlugin, Kysely, PostgresDialect, Transaction } from 'kysely';
 import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
-import { environment } from '../../environment';
+import { environment } from '@web-api/environment';
 import fs from 'fs';
 import { AsyncLocalStorage } from 'async_hooks';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
