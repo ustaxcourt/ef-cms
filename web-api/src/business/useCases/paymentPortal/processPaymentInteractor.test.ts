@@ -22,7 +22,7 @@ import { processPaymentInteractor } from '@web-api/business/useCases/paymentPort
 
 describe('processPaymentInteractor', () => {
   const docketNumber = '101-01';
-  const transactionReferenceId = 'mockTransactionReferenceId';
+  const transactionReferenceId = '77d9b6e2-508f-4e36-8fb1-0b2e20557898';
   const mockPaymentToken = 'mockPaymentToken';
   const mockPractitioner = {
     ...mockPrivatePractitionerUser,
