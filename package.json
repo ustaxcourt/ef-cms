@@ -265,6 +265,7 @@
     "brace-expansion@^2": "2.1.2",
     "brace-expansion@^5": "5.0.7",
     "shell-quote": "1.10.0",
+    "fast-xml-parser": "5.10.1",
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "canvas": "$canvas",
