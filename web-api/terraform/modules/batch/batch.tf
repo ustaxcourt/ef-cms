@@ -29,7 +29,7 @@ data "aws_security_group" "default" {
 }
 
 resource "aws_iam_role" "batch_service_role" {
-  name = "batch_role_${var.environment}_${var.current_color}_${var.region}"
+  name = "batch_service_role_${var.environment}_${var.current_color}_${var.region}"
 
   assume_role_policy = <<EOF
 {
@@ -60,7 +60,7 @@ resource "aws_iam_role_policy_attachment" "batch_service_role_policy" {
 }
 
 resource "aws_iam_role" "batch_job_role" {
-  name = "batch_role_${var.environment}_${var.current_color}_${var.region}"
+  name = "batch_job_role_${var.environment}_${var.current_color}_${var.region}"
 
   assume_role_policy = <<EOF
 {
