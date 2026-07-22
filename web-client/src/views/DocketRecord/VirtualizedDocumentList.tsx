@@ -15,22 +15,22 @@ export const VirtualizedDocumentList: React.FC<
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
   const listRef = useListRef(null);
   const rowHeightManager = useDynamicRowHeight({ defaultRowHeight: 80 });
-  const [listDimensions, setListDimensions] = useState<{
-    height: number;
-    width: number;
-  }>();
+  const [isVirtualListReady, setIsVirtualListReady] = useState(false);
+  const selectedIndex = docketEntries.findIndex(
+    entry => entry.docketEntryId === viewDocumentId,
+  );
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
-    if (viewDocumentId && listRef.current && listDimensions) {
-      const selectedIndex = docketEntries.findIndex(
-        entry => entry.docketEntryId === viewDocumentId,
-      );
-      if (selectedIndex !== -1) {
-        listRef.current.scrollToRow({ align: 'center', index: selectedIndex });
-      }
+    if (
+      isVirtualListReady &&
+      viewDocumentId &&
+      listRef.current &&
+      selectedIndex !== -1
+    ) {
+      listRef.current.scrollToRow({ align: 'center', index: selectedIndex });
     }
-  }, [viewDocumentId, docketEntries, listDimensions]);
+  }, [isVirtualListReady, selectedIndex, viewDocumentId]);
 
   // Row renderer for virtualized list
   const Row = ({
@@ -169,7 +169,7 @@ export const VirtualizedDocumentList: React.FC<
     >
       <List<object>
         listRef={listRef}
-        onResize={setListDimensions}
+        onResize={() => setIsVirtualListReady(true)}
         rowComponent={Row}
         rowCount={docketEntries.length}
         rowHeight={rowHeightManager}
