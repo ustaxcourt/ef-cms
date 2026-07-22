@@ -11,12 +11,18 @@
     "@sparticuz/chromium": "149.0.0",
     "pug": "3.0.4",
     "puppeteer-core": "25.1.0",
-    "sass": "1.101.0"
+    "sass": "1.101.3"
   },
   "scripts": {},
   "main": "index.js",
   "keywords": [
     "Lambda",
     "Layers"
-  ]
+  ],
+  "overrides": {
+    "immutable": "5.1.9"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.6": true
+  }
 }
