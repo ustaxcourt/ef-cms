@@ -1,0 +1,246 @@
+name: Security - SAST
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
+  push:
+    branches: [staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 15
+    container:
+      image: semgrep/semgrep:1.167.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run Semgrep
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          semgrep scan \
+            --config p/typescript \
+            --config p/nodejs \
+            --config p/react \
+            --config p/jwt \
+            --config p/sql-injection \
+            --config p/xss \
+            --config p/command-injection \
+            --config p/expressjs \
+            --config .semgrep/ \
+            --sarif --output semgrep-results.sarif \
+            --error \
+            --exclude='node_modules' \
+            --exclude='coverage' \
+            --exclude='dist' \
+            --exclude='dist-public' \
+            --exclude='dist-lambdas' \
+            --exclude='*.test.ts' \
+            --exclude='*.test.tsx' \
+            --exclude='cypress' \
+            --exclude='aws/lambdas' \
+            --exclude='.terraform' \
+            --exclude='docs' \
+            --metrics=off \
+            --baseline-commit "$BASE_SHA"
+
+      - name: Upload SARIF
+        if: >-
+          always() &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
+
+  checkov:
+    name: Checkov IaC Scan
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Checkov
+        run: pip install checkov==3.3.2
+
+      - name: Run Checkov
+        run: |
+          # Scan each applyable dir individually so relative module paths resolve correctly
+          # and each dir's .checkov.baseline is used to suppress pre-existing findings.
+          DIRS=(
+            web-api/terraform/applyables/account-specific
+            web-api/terraform/applyables/allColors
+            web-api/terraform/applyables/blue
+            web-api/terraform/applyables/green
+            web-api/terraform/applyables/reindex-cron
+            web-api/terraform/applyables/stale-cases-email-cron
+            web-api/terraform/applyables/switch-colors-cron
+            web-api/terraform/applyables/terraform-state-backend
+            web-api/terraform/applyables/wait-for-workflow
+          )
+          EXIT_CODE=0
+          for DIR in "${DIRS[@]}"; do
+            checkov \
+              --directory "$DIR" \
+              --baseline "${DIR}/.checkov.baseline" \
+              --framework terraform \
+              --skip-path node_modules \
+              --skip-path .terraform \
+              --compact \
+              --soft-fail \
+              --skip-check CKV_AWS_117,CKV_AWS_115,CKV_AWS_116,CKV_AWS_272,CKV2_AWS_62,CKV2_AWS_61,CKV_AWS_144,CKV_AWS_338,CKV_AWS_66,CKV_TF_3,CKV_TF_1 \
+              --output cli \
+              --output sarif \
+              --output-file-path "console,checkov-results-$(basename $DIR).sarif" \
+              --hard-fail-on CKV_AWS_57,CKV_AWS_20,CKV_AWS_23,CKV_AWS_7 || EXIT_CODE=$?
+          done
+          # Merge per-dir SARIFs into a single run (GitHub rejects multi-run SARIFs per category)
+          python3 - << 'PYEOF'
+          import json, glob
+          results, rules, seen_rule_ids = [], [], set()
+          tool_driver = None
+          for f in sorted(glob.glob("checkov-results-*.sarif")):
+              try:
+                  data = json.load(open(f))
+                  for run in data.get("runs", []):
+                      results.extend(run.get("results", []))
+                      driver = run.get("tool", {}).get("driver", {})
+                      if tool_driver is None:
+                          tool_driver = driver
+                      for rule in driver.get("rules", []):
+                          if rule["id"] not in seen_rule_ids:
+                              seen_rule_ids.add(rule["id"])
+                              rules.append(rule)
+              except Exception:
+                  pass
+          if tool_driver is not None:
+              tool_driver["rules"] = rules
+          merged = {
+              "version": "2.1.0",
+              "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+              "runs": [{"tool": {"driver": tool_driver or {"name": "Checkov"}}, "results": results}]
+          }
+          json.dump(merged, open("checkov-results.sarif", "w"), indent=2)
+          PYEOF
+          exit $EXIT_CODE
+
+      - name: Upload SARIF
+        if: >-
+          always() &&
+          hashFiles('checkov-results.sarif') != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: checkov-results.sarif
+          category: checkov
+
+  codeql:
+    name: CodeQL Deep Analysis
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-extended,security-and-quality
+          config-file: .github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: '/language:${{ matrix.language }}'
+
+  shellcheck:
+    name: Shellcheck (Shell Script SAST)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install shellcheck
+        run: |
+          SHELLCHECK_VERSION=0.10.0
+          curl -sSL "https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
+            | tar -xJf - -C /tmp
+          sudo mv "/tmp/shellcheck-v${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
+          shellcheck --version
+
+      - name: Run shellcheck
+        run: ./run-shellcheck.sh
+
+  security-gate:
+    name: Security Gate (SAST)
+    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    needs: [semgrep, checkov, shellcheck]
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Check scan outcomes
+        env:
+          SEMGREP_RESULT: ${{ needs.semgrep.result }}
+          CHECKOV_RESULT: ${{ needs.checkov.result }}
+          SHELLCHECK_RESULT: ${{ needs.shellcheck.result }}
+        run: |
+          if [[ "$SEMGREP_RESULT" == "failure" ]]; then
+            echo "Semgrep scan failed"
+            exit 1
+          fi
+          if [[ "$CHECKOV_RESULT" == "failure" ]]; then
+            echo "Checkov scan failed"
+            exit 1
+          fi
+          if [[ "$SHELLCHECK_RESULT" == "failure" ]]; then
+            echo "Shellcheck scan failed"
+            exit 1
+          fi
+          echo "SAST gate passed"

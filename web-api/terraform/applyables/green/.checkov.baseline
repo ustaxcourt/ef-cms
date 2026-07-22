@@ -1,0 +1,109 @@
+{
+  "failed_checks": [
+    {
+      "file": "/../../modules/batch/batch.tf",
+      "findings": [
+        {
+          "resource": "module.zip_batch_east.aws_iam_role_policy_attachment.batch_service_role_admin_policy",
+          "check_ids": [
+            "CKV_AWS_274"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "/../../modules/ui/frontend-public.tf",
+      "findings": [
+        {
+          "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket",
+          "check_ids": [
+            "CKV_AWS_283"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket_failover",
+          "check_ids": [
+            "CKV_AWS_283"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket.failover_public",
+          "check_ids": [
+            "CKV2_AWS_6"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket.frontend_public",
+          "check_ids": [
+            "CKV2_AWS_6"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_failover_public",
+          "check_ids": [
+            "CKV_AWS_53",
+            "CKV_AWS_54",
+            "CKV_AWS_55",
+            "CKV_AWS_56"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_frontend_public",
+          "check_ids": [
+            "CKV_AWS_53",
+            "CKV_AWS_54",
+            "CKV_AWS_55",
+            "CKV_AWS_56"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "/../../modules/ui/frontend.tf",
+      "findings": [
+        {
+          "resource": "module.ui-green.aws_iam_policy_document.allow_public",
+          "check_ids": [
+            "CKV_AWS_283"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_iam_policy_document.allow_public_failover",
+          "check_ids": [
+            "CKV_AWS_283"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket.failover",
+          "check_ids": [
+            "CKV2_AWS_6"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket.frontend",
+          "check_ids": [
+            "CKV2_AWS_6"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_failover",
+          "check_ids": [
+            "CKV_AWS_53",
+            "CKV_AWS_54",
+            "CKV_AWS_55",
+            "CKV_AWS_56"
+          ]
+        },
+        {
+          "resource": "module.ui-green.aws_s3_bucket_public_access_block.unblock_frontend",
+          "check_ids": [
+            "CKV_AWS_53",
+            "CKV_AWS_54",
+            "CKV_AWS_55",
+            "CKV_AWS_56"
+          ]
+        }
+      ]
+    }
+  ]
+}

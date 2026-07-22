@@ -346,6 +346,8 @@ resource "aws_iam_user_policy_attachment" "ci_cd_route53_policy_attachment" {
 }
 
 resource "aws_iam_policy" "ci_cd_route53_policy" {
+  #checkov:skip=CKV_AWS_290: Route53 actions on Resource:* — hosted zone IDs are environment-specific; accepted as-is, resolved when CI/CD migrates to OIDC (we have a ticket for this)
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — wildcard resource on Route53 policy is known tech debt tracked in a github issue
   name = "circle_ci_route53_policy"
 
   policy = <<EOF
