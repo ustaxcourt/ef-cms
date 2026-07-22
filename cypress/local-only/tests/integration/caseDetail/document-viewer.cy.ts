@@ -288,7 +288,10 @@ describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => 
     cy.get('[data-testid="paginator-page-2"]').first().click();
 
     cy.get('td[data-testid^="docket-entry-index-"]').then($entries => {
-      cy.wrap($entries.eq(Math.floor($entries.length / 2)))
+      const $selectedEntry = $entries.eq(Math.floor($entries.length / 2));
+      cy.wrap($selectedEntry.text().trim()).as('selectedDocketEntryIndex');
+
+      cy.wrap($selectedEntry)
         .parents('tr')
         .find('[data-testid="document-viewer-link-O"]')
         .click();
@@ -296,21 +299,32 @@ describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => 
 
     cy.get('[data-testid="document-view-container"]').should('exist');
 
-    cy.get(
-      '[data-testid="document-viewer-documents-list"] > [role="list"]',
-    ).then($list => {
-      const listRect = $list[0].getBoundingClientRect();
-      const listCenter = listRect.top + listRect.height / 2;
-
+    cy.get<string>('@selectedDocketEntryIndex').then(selectedIndex => {
       cy.get('.attachment-viewer-button.virtualized.active').should(
-        $activeButton => {
-          const activeButtonRect = $activeButton[0].getBoundingClientRect();
-          const activeButtonCenter =
-            activeButtonRect.top + activeButtonRect.height / 2;
-
-          expect(activeButtonCenter).to.be.closeTo(listCenter, 100);
-        },
+        'have.length',
+        1,
       );
+      cy.get('.attachment-viewer-button.virtualized.active .grid-col-2').should(
+        'have.text',
+        selectedIndex,
+      );
+
+      cy.get(
+        '[data-testid="document-viewer-documents-list"] > [role="list"]',
+      ).then($list => {
+        const listRect = $list[0].getBoundingClientRect();
+        const listCenter = listRect.top + listRect.height / 2;
+
+        cy.get('.attachment-viewer-button.virtualized.active').should(
+          $activeButton => {
+            const activeButtonRect = $activeButton[0].getBoundingClientRect();
+            const activeButtonCenter =
+              activeButtonRect.top + activeButtonRect.height / 2;
+
+            expect(activeButtonCenter).to.be.closeTo(listCenter, 100);
+          },
+        );
+      });
     });
   });
 });
