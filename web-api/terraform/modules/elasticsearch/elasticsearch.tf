@@ -43,6 +43,11 @@ resource "aws_opensearch_domain" "efcms-search" {
   domain_name           = var.domain_name
   engine_version        = var.es_engine_version
 
+  domain_endpoint_options {
+    enforce_https       = true
+    tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+  }
+
   depends_on = [
     aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs
   ]
@@ -66,13 +71,13 @@ resource "aws_opensearch_domain" "efcms-search" {
     log_type                 = "INDEX_SLOW_LOGS"
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_index_slow_logs.arn
   }
-  
+
   log_publishing_options {
     enabled                  = true
     log_type                 = "SEARCH_SLOW_LOGS"
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_search_slow_logs.arn
   }
-  
+
   log_publishing_options {
     enabled                  = true
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_application_logs.arn
