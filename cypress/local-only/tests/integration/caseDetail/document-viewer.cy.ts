@@ -8,6 +8,8 @@ function generateMockDocketEntries(docketNumber: string, count: number) {
   for (let i = 0; i < count; i++) {
     entries.push({
       createdAt: `2020-01-${String((i % 28) + 1).padStart(2, '0')}T12:00:00.000Z`,
+      additionalInfo:
+        'This additional information is long enough to wrap across multiple lines in the document viewer index.',
       docketEntryId: uuidv4(),
       docketNumber,
       documentStorageId: uuidv4(),
@@ -283,26 +285,47 @@ describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => 
 
     cy.wait('@getDocketEntries');
 
-    cy.get('[data-testid="index-sortable-button"]').click();
-
     cy.get('[data-testid="paginator-page-2"]').first().click();
 
-    cy.get('[data-testid="docket-entry-index-700"]')
-      .parents('tr')
-      .find('[data-testid="document-viewer-link-O"]')
-      .click();
+    cy.get('td[data-testid^="docket-entry-index-"]').then($entries => {
+      const $selectedEntry = $entries.eq(Math.floor($entries.length / 2));
+      cy.wrap($selectedEntry.text().trim()).as('selectedDocketEntryIndex');
+
+      cy.wrap($selectedEntry)
+        .parents('tr')
+        .find('[data-testid="document-viewer-link-O"]')
+        .click();
+    });
 
     cy.get('[data-testid="document-view-container"]').should('exist');
 
-    cy.get('.attachment-viewer-button.virtualized.active').should(
-      'have.length',
-      1,
-    );
-    cy.get('.attachment-viewer-button.virtualized.active').should('be.visible');
-    cy.get('.attachment-viewer-button.virtualized.active .grid-col-2').should(
-      'contain.text',
-      '700',
-    );
+    cy.get<string>('@selectedDocketEntryIndex').then(selectedIndex => {
+      cy.get('.attachment-viewer-button.virtualized.active').should(
+        'have.length',
+        1,
+      );
+      cy.get('.attachment-viewer-button.virtualized.active .grid-col-2').should(
+        'have.text',
+        selectedIndex,
+      );
+
+      cy.get(
+        '[data-testid="document-viewer-documents-list"] > [role="list"]',
+      ).then($list => {
+        const listRect = $list[0].getBoundingClientRect();
+        const listCenter = listRect.top + listRect.height / 2;
+
+        cy.get('.attachment-viewer-button.virtualized.active').should(
+          $activeButton => {
+            const activeButtonRect = $activeButton[0].getBoundingClientRect();
+            const activeButtonCenter =
+              activeButtonRect.top + activeButtonRect.height / 2;
+
+            expect(activeButtonCenter).to.be.closeTo(listCenter, 100);
+          },
+        );
+      });
+    });
   });
 });
 
