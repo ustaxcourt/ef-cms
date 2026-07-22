@@ -19,6 +19,10 @@ export const VirtualizedDocumentList: React.FC<
     width: number;
     height: number;
   } | null>(null);
+  const [isVirtualListReady, setIsVirtualListReady] = useState(false);
+  const selectedIndex = docketEntries.findIndex(
+    entry => entry.docketEntryId === viewDocumentId,
+  );
 
   // Get row height from cache or provide a generous overestimate.
   // Overestimating is safe (extra whitespace), underestimating causes overlap.
@@ -96,15 +100,15 @@ export const VirtualizedDocumentList: React.FC<
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
-    if (viewDocumentId && listRef.current && listDimensions) {
-      const selectedIndex = docketEntries.findIndex(
-        entry => entry.docketEntryId === viewDocumentId,
-      );
-      if (selectedIndex !== -1) {
-        listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
-      }
+    if (
+      isVirtualListReady &&
+      viewDocumentId &&
+      listRef.current &&
+      selectedIndex !== -1
+    ) {
+      listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
     }
-  }, [viewDocumentId, listDimensions, docketEntries]);
+  }, [isVirtualListReady, selectedIndex, viewDocumentId]);
 
   // Row renderer for virtualized list
   const Row = ({
@@ -250,7 +254,7 @@ export const VirtualizedDocumentList: React.FC<
           rowHeight={getRowHeight}
           overscanCount={3}
           listRef={listRef}
-          onResize={setListDimensions}
+          onResize={() => setIsVirtualListReady(true)}
           rowComponent={Row}
           rowCount={docketEntries.length}
           rowProps={{} as never}
