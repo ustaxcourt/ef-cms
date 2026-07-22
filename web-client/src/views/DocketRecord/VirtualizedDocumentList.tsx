@@ -19,7 +19,7 @@ export const VirtualizedDocumentList: React.FC<
     width: number;
     height: number;
   } | null>(null);
-  const [isVirtualListReady, setIsVirtualListReady] = useState(false);
+  const [renderedSelectedIndex, setRenderedSelectedIndex] = useState(-1);
   const selectedIndex = docketEntries.findIndex(
     entry => entry.docketEntryId === viewDocumentId,
   );
@@ -100,15 +100,29 @@ export const VirtualizedDocumentList: React.FC<
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
+    const listElement = listRef.current?.element;
+
     if (
-      isVirtualListReady &&
+      listElement &&
       viewDocumentId &&
-      listRef.current &&
-      selectedIndex !== -1
+      selectedIndex !== -1 &&
+      renderedSelectedIndex === selectedIndex
     ) {
-      listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
+      const selectedDocument = listElement.querySelector<HTMLElement>(
+        `button[data-entry-id="${viewDocumentId}"]`,
+      );
+
+      if (selectedDocument) {
+        const listRect = listElement.getBoundingClientRect();
+        const selectedDocumentRect = selectedDocument.getBoundingClientRect();
+        const listCenter = listRect.top + listRect.height / 2;
+        const selectedDocumentCenter =
+          selectedDocumentRect.top + selectedDocumentRect.height / 2;
+
+        listElement.scrollTop += selectedDocumentCenter - listCenter;
+      }
     }
-  }, [isVirtualListReady, selectedIndex, viewDocumentId]);
+  }, [renderedSelectedIndex, selectedIndex, viewDocumentId]);
 
   // Row renderer for virtualized list
   const Row = ({
@@ -254,7 +268,16 @@ export const VirtualizedDocumentList: React.FC<
           rowHeight={getRowHeight}
           overscanCount={3}
           listRef={listRef}
-          onResize={() => setIsVirtualListReady(true)}
+          onRowsRendered={({ startIndex, stopIndex }) => {
+            if (selectedIndex >= startIndex && selectedIndex <= stopIndex) {
+              setRenderedSelectedIndex(selectedIndex);
+            } else if (selectedIndex !== -1) {
+              listRef.current?.scrollToRow({
+                align: 'center',
+                index: selectedIndex,
+              });
+            }
+          }}
           rowComponent={Row}
           rowCount={docketEntries.length}
           rowProps={{} as never}
