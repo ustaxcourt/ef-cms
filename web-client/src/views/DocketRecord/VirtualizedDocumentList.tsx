@@ -186,7 +186,10 @@ export const VirtualizedDocumentList: React.FC<
         onRowsRendered={({ startIndex, stopIndex }) => {
           if (selectedIndex >= startIndex && selectedIndex <= stopIndex) {
             setRenderedSelectedIndex(selectedIndex);
-          } else if (selectedIndex !== -1) {
+          } else if (
+            selectedIndex !== -1 &&
+            renderedSelectedIndex !== selectedIndex
+          ) {
             listRef.current?.scrollToRow({
               align: 'center',
               index: selectedIndex,
