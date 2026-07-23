@@ -16,6 +16,7 @@ done < <(find . -type f -name '*.sh' \
   ! -path '*/node_modules/*' \
   ! -path '*/.terraform/*' \
   ! -path '*/dist/*' \
-  ! -path '*/coverage/*')
+  ! -path '*/coverage/*' \
+  -print0)
 
 exit $EXIT_CODE
