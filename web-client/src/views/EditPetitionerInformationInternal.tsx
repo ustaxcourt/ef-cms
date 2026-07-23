@@ -13,6 +13,7 @@ import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { SealAddressModal } from './CaseDetail/SealAddressModal';
+import { UnsealAddressModal } from './CaseDetail/UnsealAddressModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -199,7 +200,9 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
-            <FormGroup errorText={validationErrors?.contact?.contactEmailAddress}>
+            <FormGroup
+              errorText={validationErrors?.contact?.contactEmailAddress}
+            >
               <label className="usa-label" htmlFor="contactEmailAddress">
                 Contact email address{' '}
                 <span className="usa-hint">(optional)</span>
@@ -229,13 +232,15 @@ export const EditPetitionerInformationInternal = connect(
                   <input
                     checked={form.isAddressSealed || false}
                     className="usa-checkbox__input"
-                    disabled={form.isAddressSealed}
                     id="seal-address"
                     name="isAddressSealed"
                     type="checkbox"
                     onChange={() => {
                       openSealAddressModalSequence({
-                        contactToSeal: form.contact,
+                        contactToSeal: {
+                          ...form.contact,
+                          isAddressSealed: form.isAddressSealed,
+                        },
                       });
                     }}
                   />
@@ -394,6 +399,7 @@ export const EditPetitionerInformationInternal = connect(
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
         {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'UnsealAddressModal' && <UnsealAddressModal />}
       </>
     );
   },

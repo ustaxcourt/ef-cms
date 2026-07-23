@@ -4,8 +4,7 @@ import moize from 'moize';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export type RequestApplicationContext =
-  | ClientApplicationContext
-  | ClientPublicApplicationContext;
+  ClientApplicationContext | ClientPublicApplicationContext;
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
@@ -86,7 +85,9 @@ const getMemoized = moize({
 
 const memoizedOrInternal = process.env.CI ? internalGet : getMemoized;
 
-export const get = (args: Parameters<typeof internalGet>[0] & { skipCache?: boolean }) => {
+export const get = (
+  args: Parameters<typeof internalGet>[0] & { skipCache?: boolean },
+) => {
   const { skipCache, ...rest } = args;
   return skipCache ? internalGet(rest) : memoizedOrInternal(rest);
 };

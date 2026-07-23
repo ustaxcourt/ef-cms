@@ -3,9 +3,9 @@
 import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/persistence/postgres/database';

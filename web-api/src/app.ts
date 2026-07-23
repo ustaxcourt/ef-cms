@@ -21,6 +21,7 @@ import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabi
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
 import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
+import { getClerkDashboardStatsLambda } from './lambdas/reports/getClerkDashboardStatsLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -221,6 +222,7 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCaseContactAddressLambda';
 
 export const app = express();
 
@@ -594,6 +596,10 @@ app.use(expressLogger);
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
   );
+  app.put(
+    '/case-meta/:docketNumber/unseal-address/:contactId',
+    lambdaWrapper(unsealCaseContactAddressLambda),
+  );
   app.post(
     '/case-meta/:docketNumber/other-statistics',
     lambdaWrapper(updateOtherStatisticsLambda),
@@ -904,6 +910,10 @@ app.delete(
     lambdaWrapper(exportPendingReportLambda),
   );
   app.get('/reports/cold-case-report', lambdaWrapper(coldCaseReportLambda));
+  app.get(
+    '/reports/clerk-dashboard-stats',
+    lambdaWrapper(getClerkDashboardStatsLambda),
+  );
   app.post(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),

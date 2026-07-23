@@ -10,7 +10,7 @@ import {
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -49,10 +49,7 @@ async function getDaysToRetrieve(
   const daysToRetrieveKey =
     CONFIGURATION_ITEM_KEYS.SECTION_OUTBOX_NUMBER_OF_DAYS.key;
 
-  const daysToRetrieveRecord = await getFeatureFlagValues([daysToRetrieveKey]);
-  if (!daysToRetrieveRecord || daysToRetrieveRecord.length === 0) return 7;
-
-  const { current } = daysToRetrieveRecord[0].value;
+  const current = await getFeatureFlagValue<number>(daysToRetrieveKey);
   if (!current || !Number.isInteger(current)) {
     return 7;
   }

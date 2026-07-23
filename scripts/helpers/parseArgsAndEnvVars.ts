@@ -2,8 +2,6 @@ import {
   FORMATS,
   formatDateString,
   formatNow,
-  getJsDateFromIso,
-  validateDateAndCreateISO,
 } from '@shared/business/utilities/DateHandler';
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
@@ -444,11 +442,8 @@ const parseAndTransformValues = (
     // parseArgs doesn't distinguish longName from varName like we do
     const longName = paramConfig.long?.length ? paramConfig.long : varName;
     let value:
-      | string
-      | boolean
-      | number
-      | (string | boolean | number)[]
-      | undefined = paramConfig.default;
+      string | boolean | number | (string | boolean | number)[] | undefined =
+      paramConfig.default;
     if (
       'position' in paramConfig &&
       typeof paramConfig.position !== 'undefined' &&
@@ -612,42 +607,4 @@ export const parseArgsAndEnvVars = (
   }
 
   return { ...environmentVariables, ...parsedParameters };
-};
-
-export const getTimeframeForYear = ({
-  fiscal,
-  year,
-}: {
-  fiscal?: boolean;
-  year: string;
-}): {
-  begin: string; // ISO date string
-  end: string; // ISO date string
-} => {
-  return {
-    begin: validateDateAndCreateISO({
-      day: '1',
-      month: fiscal ? '10' : '1',
-      year: fiscal ? `${Number(year) - 1}` : year,
-    })!,
-    end: validateDateAndCreateISO({
-      day: '1',
-      month: fiscal ? '10' : '1',
-      year: fiscal ? year : `${Number(year) + 1}`,
-    })!,
-  };
-};
-
-export const getJsTimeframeForYear = ({
-  fiscal,
-  year,
-}: {
-  fiscal?: boolean;
-  year: string;
-}): { begin: Date; end: Date } => {
-  const { begin, end } = getTimeframeForYear({ fiscal, year });
-  return {
-    begin: getJsDateFromIso(begin),
-    end: getJsDateFromIso(end),
-  };
 };

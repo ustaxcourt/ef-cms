@@ -26,7 +26,7 @@ export const sealCaseContactAddress = async (
   { contactId, docketNumber },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEAL_ADDRESS)) {
     throw new UnauthorizedError(
       'Unauthorized for sealing case contact addresses',
     );

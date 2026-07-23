@@ -1,98 +1,70 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
-  CASE_SEARCH_PAGE_SIZE,
-  COUNTRY_TYPES,
-  MAX_CASE_SEARCH_RESULTS,
-  US_STATES,
-} from '@shared/business/entities/EntityConstants';
+  advancedCaseSearchHelper,
+  type AdvancedCaseSearchHelperResult,
+  CASE_SEARCH_SORT_OPTIONS,
+  type CaseSearchSortDirection,
+  DEFAULT_CASE_SEARCH_SORT,
+} from './advancedCaseSearchHelper';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const formatSearchResultRecord = (
-  result,
-  { applicationContext }: { applicationContext: ClientApplicationContext },
-) => {
-  result.formattedFiledDate = applicationContext
-    .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYY');
-
-  if (result.petitioners) {
-    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
-      return {
-        contactId: petitioner.contactId,
-        state: US_STATES[petitioner.state] || petitioner.state,
-      };
-    });
-  }
-
-  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-
-  return result;
+type AdvancedSearchHelperResult = AdvancedCaseSearchHelperResult & {
+  caseSearchMobileSortValue: string;
+  caseSearchSortColumnForDisplay: string;
+  caseSearchSortDirectionForDisplay: CaseSearchSortDirection;
+  showNoMatches: boolean;
+  showPractitionerSearch: boolean | undefined;
+  showSearchResults: boolean;
+  showStateSelect: boolean;
 };
 
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): AdvancedSearchHelperResult => {
   const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  const currentPage = get(state.advancedSearchForm.currentPage);
+  const caseCurrentPaginationPage = get(state.caseCurrentPaginationPage) || 0;
+  const caseSearchSort = get(state.caseSearchSort) || {};
 
-  const result = {
+  let result: AdvancedSearchHelperResult = {
+    caseSearchMobileSortValue: `${DEFAULT_CASE_SEARCH_SORT.sortColumn}|${DEFAULT_CASE_SEARCH_SORT.sortDirection}`,
+    caseSearchSortColumnForDisplay: DEFAULT_CASE_SEARCH_SORT.sortColumn,
+    caseSearchSortDirectionForDisplay: DEFAULT_CASE_SEARCH_SORT.sortDirection,
+    formattedSearchResults: [],
+    numberOfResults: 0,
+    showManyResultsMessage: false,
+    showNoMatches: false,
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
+    showSearchResults: false,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
+    sortOptions: CASE_SEARCH_SORT_OPTIONS,
+    totalPages: 0,
   };
 
   if (advancedSearchTab === 'practitioner') {
     return result;
   }
 
-  if (searchResults) {
-    const paginatedResults = paginationHelper(
+  if (advancedSearchTab === 'case' && searchResults) {
+    const caseSearchHelperResult = advancedCaseSearchHelper({
+      applicationContext,
+      caseCurrentPaginationPage,
+      caseSearchSort,
       searchResults,
-      currentPage,
-      CASE_SEARCH_PAGE_SIZE,
-    );
-
-    if (advancedSearchTab === 'case') {
-      paginatedResults.formattedSearchResults =
-        paginatedResults.searchResults.map(searchResult =>
-          formatSearchResultRecord(searchResult, { applicationContext }),
-        );
-    } else {
-      paginatedResults.formattedSearchResults = paginatedResults.searchResults;
-    }
-
-    const showManyResultsMessage =
-      searchResults.length >= MAX_CASE_SEARCH_RESULTS;
-
-    Object.assign(result, {
-      ...paginatedResults,
-      manyResults: MAX_CASE_SEARCH_RESULTS,
-      showManyResultsMessage,
     });
+
+    result = {
+      ...result,
+      ...caseSearchHelperResult,
+    };
   }
 
   return result;
-};
-
-export const paginationHelper = (searchResults, currentPage, pageSize) => {
-  if (!searchResults) {
-    return {};
-  }
-
-  return {
-    formattedSearchResults: [],
-    numberOfResults: searchResults.length,
-    searchResults: searchResults.slice(0, currentPage * pageSize),
-    searchResultsCount: searchResults.length,
-    showLoadMore: searchResults.length > currentPage * pageSize,
-    showNoMatches: searchResults.length === 0,
-    showSearchResults: searchResults.length > 0,
-  };
 };

@@ -30,6 +30,9 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
       someFormField: 'value',
       additionalOrderTextArray: [''],
+      docketEntryIdToEdit: 'xyz',
+      motionOrderResponse: false,
+      strickenFromTrialSession: false,
     });
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
@@ -64,6 +67,9 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
       someFormField: 'value',
       additionalOrderTextArray: [''],
+      docketEntryIdToEdit: 'xyz',
+      motionOrderResponse: false,
+      strickenFromTrialSession: false,
     });
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
@@ -98,7 +104,49 @@ describe('setEditMotionOrderResponseFormAction', () => {
       },
       someFormField: 'value',
       additionalOrderTextArray: ['Some additional text'],
+      docketEntryIdToEdit: 'xyz',
+      motionOrderResponse: false,
+      strickenFromTrialSession: false,
     });
+  });
+
+  it('hydrates motionOrderResponse from dueDate when motionOrderResponse is missing', async () => {
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: {
+            dueDate: '2026-12-31',
+            previousDocument: { docketEntryId: '123' },
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.motionOrderResponse).toEqual(true);
+    expect(result.state.form.dueDate).toEqual('2026-12-31');
+  });
+
+  it('hydrates strickenFromTrialSession from showStrickenFromTrialSession when needed', async () => {
+    const result = await runAction(setEditMotionOrderResponseFormAction, {
+      props: {
+        caseDetail: { docketNumber: '123-45' },
+        docketEntryIdToEdit: 'xyz',
+      },
+      state: {
+        documentToEdit: {
+          draftOrderState: {
+            previousDocument: { docketEntryId: '123' },
+            showStrickenFromTrialSession: true,
+          },
+        },
+      },
+    });
+
+    expect(result.state.form.strickenFromTrialSession).toEqual(true);
   });
 
   it('should default to empty array when additionalOrderTextArray is not present', async () => {
