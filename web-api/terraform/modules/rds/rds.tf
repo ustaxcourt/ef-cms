@@ -23,7 +23,7 @@ resource "aws_rds_cluster_parameter_group" "postgres_parameter_group" {
 }
 
 resource "aws_rds_cluster" "postgres" {
-  #checkov:skip=CKV_AWS_324: RDS log exports to CloudWatch not enabled — application-level Prisma query logging covers audit needs; log export adds cost and volume with marginal security benefit
+  #checkov:skip=CKV_AWS_324: RDS log exports to CloudWatch not enabled — application-level query logging covers audit needs; log export adds cost and volume with marginal security benefit
   #checkov:skip=CKV2_AWS_8: AWS Backup not configured — automated RDS snapshots with 35-day retention already provide point-in-time recovery; AWS Backup would be redundant
   cluster_identifier              = "${var.environment}-dawson-cluster"
   engine                          = "aurora-postgresql"
