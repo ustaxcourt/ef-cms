@@ -35,6 +35,4 @@ export const defaultAdvancedSearchFormAction = ({
     },
   });
   store.set(state.opinionDocumentTypes, []);
-
-  store.set(state.advancedSearchForm.currentPage, 1);
 };

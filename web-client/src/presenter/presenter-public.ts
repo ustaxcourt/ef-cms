@@ -44,7 +44,6 @@ import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequ
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { setTodaysOrdersCurrentPaginationPageSequence } from './sequences/Public/setTodaysOrdersCurrentPaginationPageSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
-import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
@@ -62,7 +61,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
-import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
+import { updateAdvancedSearchResultsSortSequence } from './sequences/updateAdvancedSearchResultsSortSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
@@ -137,7 +136,6 @@ export const presenterSequences = {
   resetPublicTrialSessionsDataSequence,
   setCurrentPaginationPageSequence,
   setTodaysOrdersCurrentPaginationPageSequence,
-  showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
   sortTableSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence:
@@ -168,7 +166,7 @@ export const presenterSequences = {
     updateCaseAdvancedSearchByNameFormValueSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
-  updateDocumentSearchResultsSequence,
+  updateAdvancedSearchResultsSortSequence,
   updateFormValueSequence,
   updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence:
