@@ -25,6 +25,9 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 ### 2. Set the time window
 1. Set the time range to when the user says it happened. Start wider than you think and tighten — ticket times are often vague.
 
+### 2.1 Filter by userId
+1. If userId is known, filtering by userId can make it easier to narrow down the session and corresponding metrics for the error being investigated. Example: userId = <USER_ID>
+
 ### 3. Find the specific error - JS errors
 1. Select JS errors tab.
 2. You can locate the error in the histogram or by the "Top 100 JS errors by exception message" table.
