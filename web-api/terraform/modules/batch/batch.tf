@@ -41,13 +41,6 @@ resource "aws_iam_role" "batch_service_role" {
         "Service": "batch.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
-    },
-		{
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
     }
   ]
 }
@@ -66,13 +59,6 @@ resource "aws_iam_role" "batch_job_role" {
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "batch.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    },
 		{
       "Effect": "Allow",
       "Principal": {
@@ -104,17 +90,6 @@ resource "aws_iam_role_policy" "batch_job_role_policy" {
             "Resource": [
                 "arn:aws:s3:::${var.dns_domain}-documents-*",
                 "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "ecs:DeleteCluster",
-                "ecs:DescribeClusters"
-            ],
-            "Resource": [
-                "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*",
-                "arn:aws:ecs:us-west-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*"
             ],
             "Effect": "Allow"
         },
