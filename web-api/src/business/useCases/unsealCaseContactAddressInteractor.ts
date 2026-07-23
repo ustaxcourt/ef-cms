@@ -13,22 +13,14 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-/**
- * sealCaseContactAddress
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.contactId the id of the contact address to be sealed
- * @param {string} providers.docketNumber the docket number of the case to update
- * @returns {object} the updated case data
- */
-export const sealCaseContactAddress = async (
+export const unsealCaseContactAddress = async (
   _applicationContext: ServerApplicationContext,
-  { contactId, docketNumber },
+  { contactId, docketNumber }: { contactId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEAL_ADDRESS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UNSEAL_ADDRESS)) {
     throw new UnauthorizedError(
-      'Unauthorized for sealing case contact addresses',
+      'Unauthorized for unsealing case contact addresses',
     );
   }
 
@@ -40,16 +32,16 @@ export const sealCaseContactAddress = async (
     authorizedUser,
   });
 
-  const contactToSeal = caseEntity.getPetitionerById(contactId);
+  const contactToUnseal = caseEntity.getPetitionerById(contactId);
 
-  if (!contactToSeal) {
+  if (!contactToUnseal) {
     throw new UnprocessableEntityError(
-      `Cannot seal contact ${contactId}: not found on ${docketNumber}`,
+      `Cannot unseal contact ${contactId}: not found on ${docketNumber}`,
     );
   }
-  contactToSeal.isAddressSealed = true;
+  contactToUnseal.isAddressSealed = false;
 
-  caseEntity.updatePetitioner({ updatedPetitioner: contactToSeal });
+  caseEntity.updatePetitioner({ updatedPetitioner: contactToUnseal });
 
   await updateCaseAndAssociations({
     authorizedUser,
@@ -57,8 +49,8 @@ export const sealCaseContactAddress = async (
   });
 };
 
-export const sealCaseContactAddressInteractor = withLocking(
-  sealCaseContactAddress,
+export const unsealCaseContactAddressInteractor = withLocking(
+  unsealCaseContactAddress,
   (_applicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
