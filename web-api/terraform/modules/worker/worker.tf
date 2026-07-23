@@ -12,7 +12,8 @@ module "worker_lambda" {
 }
 
 resource "aws_sqs_queue" "worker_queue" {
-  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name                       = "worker_queue_${var.environment}_${var.color}"
   visibility_timeout_seconds = 901
   redrive_policy = jsonencode({
