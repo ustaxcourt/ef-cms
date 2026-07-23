@@ -29,7 +29,17 @@ Run this to enable payment portal integration
 brew update && brew install gitleaks
 ```
 </details>
+<details><summary>Updating batch job roles/permissions</summary>
 
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>
 
 ## Manual Deployment Steps

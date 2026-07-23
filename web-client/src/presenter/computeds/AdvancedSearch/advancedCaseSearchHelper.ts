@@ -27,10 +27,7 @@ export type CaseSearchSortOption = {
 };
 
 type CaseSearchResultValue =
-  | number
-  | string
-  | (string | undefined)[]
-  | undefined;
+  number | string | (string | undefined)[] | undefined;
 
 export type CaseSearchResult = {
   [key: string]: CaseSearchResultValue;
