@@ -3,7 +3,7 @@ import { setContactInformationForModalAction } from './setContactInformationForM
 
 describe('setContactInformationForModalAction', () => {
   let providers;
-  beforeAll(() => {
+  beforeEach(() => {
     providers = {
       path: {
         seal: jest.fn(),

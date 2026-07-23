@@ -26,21 +26,21 @@ export const UnsealAddressModal = connect(
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={unsealAddressSequence}
       >
-        <div className="margin-bottom-1">
-          <div className="grid-row margin-bottom-05">
-            <div className="grid-col-4 text-bold">Address:</div>
+        <div className="tw:mb-2">
+          <div className="tw:flex tw:flex-wrap tw:mb-1">
+            <div className="tw:w-4/12 tw:font-bold">Address:</div>
             <div
-              className="grid-col-fill"
+              className="tw:flex-1"
               data-testid="seal-address-modal-address-1"
             >
               {contactToSeal.address1}
             </div>
           </div>
           {contactToSeal.address2 && (
-            <div className="grid-row margin-bottom-05">
-              <div className="grid-col-4"></div>
+            <div className="tw:flex tw:flex-wrap tw:mb-1">
+              <div className="tw:w-4/12"></div>
               <div
-                className="grid-col-fill"
+                className="tw:flex-1"
                 data-testid="seal-address-modal-address-2"
               >
                 {contactToSeal.address2}
@@ -48,21 +48,21 @@ export const UnsealAddressModal = connect(
             </div>
           )}
           {contactToSeal.address3 && (
-            <div className="grid-row margin-bottom-05">
-              <div className="grid-col-4"></div>
+            <div className="tw:flex tw:flex-wrap tw:mb-1">
+              <div className="tw:w-4/12"></div>
               <div
-                className="grid-col-fill"
+                className="tw:flex-1"
                 data-testid="seal-address-modal-address-3"
               >
                 {contactToSeal.address3}
               </div>
             </div>
           )}
-          <div className="grid-row">
-            <div className="grid-col-4"></div>
-            <div className="grid-col-fill">
+          <div className="tw:flex tw:flex-wrap">
+            <div className="tw:w-4/12"></div>
+            <div className="tw:flex-1">
               <span
-                className="no-wrap"
+                className="tw:whitespace-nowrap"
                 data-testid="seal-address-modal-address-city-state-zip"
               >
                 {contactToSeal.city}, {contactToSeal.state}{' '}
@@ -72,27 +72,33 @@ export const UnsealAddressModal = connect(
           </div>
         </div>
 
-        <div className="grid-row margin-bottom-1">
-          <div className="grid-col-4 text-bold">Phone Number:</div>
-          <div className="grid-col-fill">
-            <span className="no-wrap" data-testid="seal-address-modal-phone">
+        <div className="tw:flex tw:flex-wrap tw:mb-2">
+          <div className="tw:w-4/12 tw:font-bold">Phone Number:</div>
+          <div className="tw:flex-1">
+            <span
+              className="tw:whitespace-nowrap"
+              data-testid="seal-address-modal-phone"
+            >
               {contactToSeal.phone}
             </span>
           </div>
         </div>
-        <div className="grid-row margin-bottom-1">
-          <div className="grid-col-4 text-bold">Service email address:</div>
-          <div className="grid-col-fill">
-            <span className="no-wrap" data-testid="seal-address-modal-email">
+        <div className="tw:flex tw:flex-wrap tw:mb-2">
+          <div className="tw:w-4/12 tw:font-bold">Service email address:</div>
+          <div className="tw:flex-1">
+            <span
+              className="tw:whitespace-nowrap"
+              data-testid="seal-address-modal-email"
+            >
               {contactToSeal.email ?? NOT_PROVIDED}
             </span>
           </div>
         </div>
-        <div className="grid-row margin-bottom-1">
-          <div className="grid-col-4 text-bold">Contact email address:</div>
-          <div className="grid-col-fill">
+        <div className="tw:flex tw:flex-wrap tw:mb-2">
+          <div className="tw:w-4/12 tw:font-bold">Contact email address:</div>
+          <div className="tw:flex-1">
             <span
-              className="no-wrap"
+              className="tw:whitespace-nowrap"
               data-testid="seal-address-modal-address-petition-email"
             >
               {contactToSeal.contactEmailAddress ?? NOT_PROVIDED}
