@@ -1,7 +1,12 @@
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsCaseServicesSupervisor,
   loginAsDocketClerk,
+  loginAsPetitionsClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
+
+const DOCKET_CLERK_USER_ID = '1805d1ab-18d0-43ec-bafb-654e83405416';
 
 describe('Docket Clerk Report', () => {
   beforeEach(() => {
@@ -252,6 +257,113 @@ describe('Docket Clerk Report', () => {
 
       // ifHasAccess redirects unauthorized users to /404
       cy.url().should('include', '404');
+    });
+  });
+
+  describe('Messages batch-selection', () => {
+    before(() => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsPetitionsClerk1();
+        goToCase(docketNumber);
+        for (let i = 0; i < 2; i++) {
+          cy.get('[data-testid="case-detail-menu-button"]').click();
+          cy.get('[data-testid="menu-button-add-new-message"]').click();
+          cy.get('[data-testid="message-to-section"]').select('docket');
+          cy.get('[data-testid="message-to-user-id"]').select(
+            DOCKET_CLERK_USER_ID,
+          );
+          cy.get('[data-testid="message-subject"]').type(
+            `DCR Batch Test ${i + 1}`,
+          );
+          cy.get('[data-testid="message-body"]').type('Test message body');
+          cy.get('[data-testid="modal-confirm"]').click();
+          cy.get('[data-testid="success-alert"]').should('exist');
+        }
+      });
+    });
+
+    function runDocketClerkMessagesReport(): void {
+      loginAsCaseServicesSupervisor();
+      cy.visit('/reports/docket-clerk-report');
+      cy.get('[data-testid="docket-clerk-report-clerk-select"]').select(
+        DOCKET_CLERK_USER_ID,
+      );
+      cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
+        'messages',
+      );
+      cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+      cy.get('#docket-clerk-report-messages-inbox table tbody tr').should(
+        'have.length.at.least',
+        1,
+      );
+    }
+
+    it('should select all inbox messages when the select-all checkbox is clicked', () => {
+      runDocketClerkMessagesReport();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      )
+        .should('not.be.checked')
+        .click();
+
+      cy.get(
+        '#docket-clerk-report-messages-inbox table tbody input[type="checkbox"]',
+      ).each($checkbox => {
+        cy.wrap($checkbox).should('be.checked');
+      });
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-batch-complete"]',
+      ).should('not.be.disabled');
+    });
+
+    it('should deselect all inbox messages when select-all is clicked a second time', () => {
+      runDocketClerkMessagesReport();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      ).click();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      ).click();
+
+      cy.get(
+        '#docket-clerk-report-messages-inbox table tbody input[type="checkbox"]',
+      ).each($checkbox => {
+        cy.wrap($checkbox).should('not.be.checked');
+      });
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-batch-complete"]',
+      ).should('be.disabled');
+    });
+
+    it('should clear stale selections from the inbox when the report is re-run', () => {
+      runDocketClerkMessagesReport();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      ).click();
+
+      cy.get(
+        '#docket-clerk-report-messages-inbox table tbody input[type="checkbox"]',
+      )
+        .first()
+        .should('be.checked');
+
+      cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      ).should('not.be.checked');
+
+      cy.get(
+        '#docket-clerk-report-messages-inbox table tbody input[type="checkbox"]',
+      ).each($checkbox => {
+        cy.wrap($checkbox).should('not.be.checked');
+      });
     });
   });
 });
