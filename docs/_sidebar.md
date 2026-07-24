@@ -20,7 +20,7 @@
 * [Terraform](terraform.md)
 * [Deploying](deploying.md)
 * [Kibana](kibana.md)
-* [AWS CloudWatch RUM](aws-rum.md)
+* [AWS CloudWatch RUM](operations/runbooks/investigate-an-error-using-aws-rum.md)
 * [AWS](aws.md)
 * [Additional Resources](additional-resources/README.md)
 * [Operations](operations/README.md)
