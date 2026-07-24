@@ -1,17 +1,6 @@
 {
   "failed_checks": [
     {
-      "file": "/../../modules/batch/batch.tf",
-      "findings": [
-        {
-          "resource": "module.zip_batch_east.aws_iam_role_policy_attachment.batch_service_role_admin_policy",
-          "check_ids": [
-            "CKV_AWS_274"
-          ]
-        }
-      ]
-    },
-    {
       "file": "/../../modules/ui/frontend-public.tf",
       "findings": [
         {
