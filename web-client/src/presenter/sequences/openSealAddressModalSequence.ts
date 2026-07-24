@@ -5,5 +5,8 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 export const openSealAddressModalSequence = [
   clearModalStateAction,
   setContactInformationForModalAction,
-  setShowModalFactoryAction('SealAddressModal'),
+  {
+    unseal: [setShowModalFactoryAction('UnsealAddressModal')],
+    seal: [setShowModalFactoryAction('SealAddressModal')],
+  },
 ];
