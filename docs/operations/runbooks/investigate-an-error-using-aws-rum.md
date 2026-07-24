@@ -7,7 +7,7 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 
 ## Prerequisites
 - AWS Console access to **CloudWatch RUM** in the DAWSON account, region **us-east-1**. (Ask the Tax Court tech lead if you don't have it.)
-- The name of the app monitor for the environment the user was on: `prod_dawson_rum_app_monitor` for production, or `${env}_dawson_rum_app_monitor` for a lower environment (e.g. `dev_`, `test_`).
+- The name of the app monitor for the environment the user was on: `prod_dawson_rum_app_monitor` for production, or `${env}_dawson_rum_app_monitor` for a lower environment (e.g. `dev_dawson_rum_app_monitor`, `test_dawson_rum_app_monitor`).
 - As much of the following from the help desk ticket as you can get:
   - **Who** reported it — their DAWSON user id or email.
   - **When** it happened — approximate date/time.
@@ -19,7 +19,7 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 
 ### 1. Open the right app monitor
 1. Open the [CloudWatch RUM console](https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#home)
-2. Click on "RUM" in the side bar under Application Signals (APM).
+2. Click on "RUM" in the sidebar under Application Signals (APM).
 3. Select one of the app monitors under "App Monitors" (e.g. `{env}_dawson_rum_app_monitor`).
 
 ### 2. Set the time window
@@ -31,10 +31,10 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 ### 3. Find the specific error - JS errors
 1. Select JS errors tab.
 2. You can locate the error in the histogram or by the "Top 100 JS errors by exception message" table.
-3. A side bar will appear and there you select the session ID corresponding to the desired error.
-4. At the bottom you will see a "Sessions performance detail" table, click on one of the events to bring up a side tab.
-5. This side tab will show various pieces of information. Click on the "Raw event" tab.
-6. Scroll down on this raw event tab and scroll down on this until you find the unminified stack "key".
+3. A sidebar will appear; select the session ID corresponding to the desired error.
+4. At the bottom you will see a "Sessions performance detail" table, click on one of the events to bring up a side panel.
+5. This side panel will show various pieces of information. Click on the "Raw event" tab.
+6. Scroll down on this raw event tab until you find the unminified stack "key".
 7. Use the Error and the file name to troubleshoot the issue.
 
 **For a JS error** — read the stack trace top-down:
