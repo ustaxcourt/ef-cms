@@ -1,4 +1,8 @@
 /* eslint-disable max-lines */
+import {
+  getRumPageIdFromRoutePattern,
+  recordRumPageView,
+} from '@web-client/providers/realUserMonitoring';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import qs from 'qs';
 import route from 'riot-route';
@@ -97,13 +101,30 @@ const ifHasAccess = (
 };
 
 const router = {
-  initialize: (app, registerRoute) => {
+  initialize: (app, _registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
 
     (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
       path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
+
+    // Wrap every route registration to fire a RUM page view event on
+    // navigation, mirroring the trackedRoute pattern in routerPublic.ts.
+    const registerRoute = (
+      pattern: string,
+      handler: (...args: any[]) => any,
+      ...rest: any[]
+    ): void => {
+      _registerRoute(
+        pattern,
+        (...args) => {
+          recordRumPageView(getRumPageIdFromRoutePattern(pattern));
+          return handler(...args);
+        },
+        ...rest,
+      );
+    };
 
     registerRoute(
       '/',
