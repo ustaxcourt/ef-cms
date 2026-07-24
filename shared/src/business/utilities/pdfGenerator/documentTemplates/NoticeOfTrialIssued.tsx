@@ -69,8 +69,13 @@ export const NoticeOfTrialIssued = ({
             ACCESS REMOTE PROCEEDING
           </p>
           <p className="notice-body-indent notice-meeting-info">
-            <span className="text-bold">Meeting ID:</span> {trialInfo.meetingId}{' '}
-            <span className="text-bold">Passcode:</span> {trialInfo.password}
+            <span className="notice-meeting-id">
+              <span className="text-bold">Meeting ID:</span>{' '}
+              {trialInfo.meetingId}
+            </span>
+            <span className="notice-passcode">
+              <span className="text-bold">Passcode:</span> {trialInfo.password}
+            </span>
           </p>
 
           <p className="notice-body-indent">
