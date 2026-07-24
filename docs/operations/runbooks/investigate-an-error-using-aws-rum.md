@@ -7,7 +7,7 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 
 ## Prerequisites
 - AWS Console access to **CloudWatch RUM** in the DAWSON account, region **us-east-1**. (Ask the Tax Court tech lead if you don't have it.)
-- The name of the app monitor for the environment the user was on: `prod_dawson_rum_app_monitor` for production, or `${env}_dawson_rum_app_monitor` for a lower environment (e.g. `dev_dawson_rum_app_monitor`, `test_dawson_rum_app_monitor`).
+- The name of the app monitor for the environment the user was on: `prod_dawson_rum_app_monitor` for production, or `${env}_dawson_rum_app_monitor` for a lower environment (e.g. `expN_dawson_rum_app_monitor`, `test_dawson_rum_app_monitor`).
 - As much of the following from the help desk ticket as you can get:
   - **Who** reported it — their DAWSON user id or email.
   - **When** it happened — approximate date/time.
