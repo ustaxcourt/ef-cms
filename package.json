@@ -263,7 +263,7 @@
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "canvas": "$canvas",
-    "js-yaml": "4.2.0",
+    "js-yaml": "4.3.0",
     "semver": "7.7.4",
     "cypress": "$cypress",
     "s3rver": {
