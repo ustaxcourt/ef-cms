@@ -22,6 +22,10 @@ export const featureFlags: FeatureFlagTable[] = [
     value: { current: true },
   },
   {
+    name: 'new-trial-cities',
+    value: { current: false },
+  },
+  {
     name: 'clerk-of-court-configuration',
     value: {
       current: {

@@ -18,6 +18,8 @@ import {
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
+  NEW_TRIAL_CITY_STRINGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_TITLES,
@@ -40,6 +42,7 @@ import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -90,6 +93,15 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // eslint-disable-next-line prefer-const
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
+
+  const newTrialCitiesEnabled = await getFeatureFlagValue<boolean>(
+    ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+  );
+  if (!newTrialCitiesEnabled) {
+    NEW_TRIAL_CITY_STRINGS.forEach(
+      trialCity => delete caseCountsAndSessionsByCity[trialCity],
+    );
+  }
 
   let userMessages: string[];
 

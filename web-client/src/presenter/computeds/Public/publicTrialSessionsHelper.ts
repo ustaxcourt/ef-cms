@@ -1,5 +1,6 @@
 import { Get } from 'cerebral';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -183,7 +184,9 @@ export const publicTrialSessionsHelper = (
   };
   const trialCitiesByState = [
     standaloneRemoteOption,
-    ...getTrialCitiesGroupedByState(),
+    ...getTrialCitiesGroupedByState(
+      !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key]),
+    ),
   ];
 
   const trialSessionJudgeOptions = trialSessionJudges.map(

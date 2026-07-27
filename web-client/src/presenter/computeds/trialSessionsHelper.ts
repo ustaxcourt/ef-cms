@@ -9,6 +9,7 @@ import {
 import { Get } from 'cerebral';
 import { RawUser } from '@shared/business/entities/User';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -97,7 +98,9 @@ export const trialSessionsHelper = (
     });
   }
 
-  const states = getTrialCitiesGroupedByState();
+  const states = getTrialCitiesGroupedByState(
+    !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key]),
+  );
   states.unshift({
     label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     options: [

@@ -176,6 +176,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  NEW_TRIAL_CITIES: {
+    key: 'new-trial-cities',
+  },
   RESTRICTED_EVENT_CODES: {
     key: 'restricted-event-codes',
   },
@@ -1492,6 +1495,14 @@ export const PETITIONER_CONTACT_TYPES = [
   CONTACT_TYPES.otherPetitioner,
 ];
 
+export const NEW_TRIAL_CITIES = {
+  AUSTIN: { city: 'Austin', state: 'Texas' },
+  CHARLOTTE: { city: 'Charlotte', state: 'North Carolina' },
+  NEWARK: { city: 'Newark', state: 'New Jersey' },
+  ORLANDO: { city: 'Orlando', state: 'Florida' },
+  SACRAMENTO: { city: 'Sacramento', state: 'California' },
+};
+
 export const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -1499,6 +1510,7 @@ export const COMMON_CITIES = [
   { city: 'Phoenix', state: 'Arizona' },
   { city: 'Little Rock', state: 'Arkansas' },
   { city: 'Los Angeles', state: 'California' },
+  NEW_TRIAL_CITIES.SACRAMENTO,
   { city: 'San Diego', state: 'California' },
   { city: 'San Francisco', state: 'California' },
   { city: 'Denver', state: 'Colorado' },
@@ -1506,6 +1518,7 @@ export const COMMON_CITIES = [
   { city: 'Washington', state: 'District of Columbia' },
   { city: 'Jacksonville', state: 'Florida' },
   { city: 'Miami', state: 'Florida' },
+  NEW_TRIAL_CITIES.ORLANDO,
   { city: 'Tampa', state: 'Florida' },
   { city: 'Atlanta', state: 'Georgia' },
   { city: 'Honolulu', state: 'Hawaii' },
@@ -1526,9 +1539,11 @@ export const COMMON_CITIES = [
   { city: 'Omaha', state: 'Nebraska' },
   { city: 'Las Vegas', state: 'Nevada' },
   { city: 'Reno', state: 'Nevada' },
+  NEW_TRIAL_CITIES.NEWARK,
   { city: 'Albuquerque', state: 'New Mexico' },
   { city: 'Buffalo', state: 'New York' },
   { city: 'New York City', state: 'New York' },
+  NEW_TRIAL_CITIES.CHARLOTTE,
   { city: 'Winston-Salem', state: 'North Carolina' },
   { city: 'Cincinnati', state: 'Ohio' },
   { city: 'Cleveland', state: 'Ohio' },
@@ -1541,6 +1556,7 @@ export const COMMON_CITIES = [
   { city: 'Knoxville', state: 'Tennessee' },
   { city: 'Memphis', state: 'Tennessee' },
   { city: 'Nashville', state: 'Tennessee' },
+  NEW_TRIAL_CITIES.AUSTIN,
   { city: 'Dallas', state: 'Texas' },
   { city: 'El Paso', state: 'Texas' },
   { city: 'Houston', state: 'Texas' },
@@ -1591,6 +1607,10 @@ export const LEGACY_TRIAL_CITIES = [
 ];
 
 export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
+);
+
+export const NEW_TRIAL_CITY_STRINGS = Object.values(NEW_TRIAL_CITIES).map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
