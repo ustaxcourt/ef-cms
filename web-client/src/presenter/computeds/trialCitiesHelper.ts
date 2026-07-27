@@ -1,9 +1,11 @@
 import { findIndex, sortBy } from 'lodash';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { getTrialCitiesForFeatureFlag } from '@web-client/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  NEW_TRIAL_CITY_STRINGS,
+} from '@shared/business/entities/EntityConstants';
 
 export const trialCitiesHelper =
   (get: Get, applicationContext: ClientApplicationContext): any =>
@@ -30,11 +32,16 @@ export const trialCitiesHelper =
         break;
     }
 
-    trialCities = getTrialCitiesForFeatureFlag({
-      newTrialCitiesEnabled: !!get(
-        state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
-      ),
-      trialCities,
+    const newTrialCitiesEnabled = !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
+    );
+
+    trialCities = trialCities.filter(trialCity => {
+      const trialCityName = `${trialCity.city}, ${trialCity.state}`;
+
+      return (
+        newTrialCitiesEnabled || !NEW_TRIAL_CITY_STRINGS.includes(trialCityName)
+      );
     });
     trialCities = sortBy(trialCities, ['state', 'city']);
 

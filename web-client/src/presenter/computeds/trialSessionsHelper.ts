@@ -98,9 +98,11 @@ export const trialSessionsHelper = (
     });
   }
 
-  const states = getTrialCitiesGroupedByState(
-    !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key]),
-  );
+  const states = getTrialCitiesGroupedByState({
+    newTrialCitiesEnabled: !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
+    ),
+  });
   states.unshift({
     label: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     options: [

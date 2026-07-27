@@ -184,9 +184,11 @@ export const publicTrialSessionsHelper = (
   };
   const trialCitiesByState = [
     standaloneRemoteOption,
-    ...getTrialCitiesGroupedByState(
-      !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key]),
-    ),
+    ...getTrialCitiesGroupedByState({
+      newTrialCitiesEnabled: !!get(
+        state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
+      ),
+    }),
   ];
 
   const trialSessionJudgeOptions = trialSessionJudges.map(

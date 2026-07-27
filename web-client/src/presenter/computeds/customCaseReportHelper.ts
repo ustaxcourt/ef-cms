@@ -95,9 +95,11 @@ export const customCaseReportHelper = (
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
-  const trialCitiesByState = getTrialCitiesGroupedByState(
-    !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key]),
-  );
+  const trialCitiesByState = getTrialCitiesGroupedByState({
+    newTrialCitiesEnabled: !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
+    ),
+  });
 
   return {
     caseStatuses,
