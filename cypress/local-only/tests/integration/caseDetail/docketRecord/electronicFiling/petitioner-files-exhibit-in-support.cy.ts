@@ -279,5 +279,164 @@ describe(
         cy.get('[data-testid="document-download-link-EXS"]').should('exist');
       });
     });
+
+    it('should file "Exhibit in Support" as the primary document, with Certificate of Service and Attachments, and reflect it on the Docket Record', () => {
+      const primaryFilerName = 'John';
+      const today = formatNow(FORMATS.MMDDYYYY);
+      const todayShort = formatNow(FORMATS.MMDDYY);
+
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        loginAsPetitioner();
+        externalUserSearchesDocketNumber(docketNumber);
+
+        // Steps 3-4: File a Document.
+        cy.get('[data-testid="button-file-document"]').click();
+        cy.get('[data-testid="ready-to-file"]').click();
+
+        // Step 6: select "Exhibit in Support" as the primary document type.
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Exhibit in Support',
+        );
+
+        // Step 7: Nonstandard A requires identifying the associated
+        // docketed filing. The label rendered here is "Which document is
+        // this exhibit in support of?"
+        cy.get('[data-testid="previous-document-search"]')
+          .find('option')
+          .then($options => {
+            const petitionOption = Array.from($options).find(opt =>
+              opt.textContent?.includes('Petition'),
+            );
+            const optionText = petitionOption?.textContent?.trim() || '';
+            cy.get('[data-testid="previous-document-search"]').select(
+              optionText,
+            );
+          });
+
+        // Step 8: Continue.
+        cy.get('[data-testid="submit-document"]').click();
+
+        // Step 9: upload the primary document PDF.
+        attachFile({
+          filePath: '../../helpers/file/sample.pdf',
+          selector: '[data-testid="primary-document"]',
+          selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+        });
+        cy.get('[data-testid="primary-document-label"]').should(
+          'have.class',
+          'validated',
+        );
+
+        // Step 10: Certificate of Service, today's date.
+        cy.get('#primaryDocument-certificateOfService-label').click();
+        cy.get(
+          '.usa-date-picker__wrapper > [data-testid="primaryDocument-service-date-picker"]',
+        ).type(today);
+
+        // Step 11: Attachments.
+        cy.get('label[for="primaryDocument-attachments"]').click();
+
+        // Step 12: Who are you filing for. A petitioner filing on their own
+        // case is pre-selected here and can't uncheck themselves.
+        cy.get(`[data-testid="filingParty-${primaryFilerName}, Petitioner"]`)
+          .parent()
+          .find('input')
+          .should('be.checked')
+          .and('be.disabled');
+
+        // Step 13: Review Filing.
+        cy.get('[data-testid="file-document-submit-document"]').click();
+        cy.contains('h1', 'Review Your Filing').should('exist');
+
+        // "Exhibit in Support of Petition" displays under My Documents with
+        // Attachments and Certificate of Service; Petitioner name displays
+        // under Parties Filing This Document.
+        cy.contains('.usa-label', 'Exhibit in Support of Petition')
+          .closest('.grid-row')
+          .within(() => {
+            cy.contains('Attachment(s)').should('exist');
+            cy.contains('Certificate of Service').should('exist');
+          });
+        cy.get('[data-testid="filing-parties-card"]').should(
+          'contain',
+          primaryFilerName,
+        );
+
+        // Step 15: the redaction acknowledgement gates the submit button.
+        cy.get('[data-testid="file-document-review-submit-document"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').should(
+          'not.be.disabled',
+        );
+
+        // Step 16: submit the filing.
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
+        cy.get('[data-testid="loading-overlay"]').should('not.exist');
+        cy.get('[data-testid="success-alert"]')
+          .should(
+            'contain',
+            'Document filed and is accessible from the Docket Record.',
+          )
+          .and('contain', 'Print receipt.');
+
+        // Step 17: a Print receipt link is offered (opens the receipt PDF
+        // in a new tab).
+        cy.get('[data-testid="success-alert"] a')
+          .should('have.attr', 'href')
+          .and('not.be.empty');
+
+        // Step 18: verify the Docket Record.
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+
+        cy.contains('[data-testid^="docket-entry-eventCode-"]', 'EXS')
+          .parents('tr')
+          .as('exsRow');
+
+        cy.get('@exsRow').within(() => {
+          cy.get('[data-testid^="docket-entry-index-"]')
+            .invoke('text')
+            .should('not.be.empty');
+          cy.get('[data-testid^="docket-entry-filedDate-"]').should(
+            'have.text',
+            todayShort,
+          );
+          cy.get('[data-testid="docket-entry-filedBy"]').should(
+            'contain',
+            primaryFilerName,
+          );
+          cy.get('[data-testid="docket-record-cell-not-served"]').should(
+            'not.contain',
+            'Not served',
+          );
+          cy.get('[data-testid="docket-record-cell-not-served"]').should(
+            'contain',
+            todayShort,
+          );
+          // Step 19: coversheet applied — 1-page sample.pdf + generated
+          // coversheet = 2.
+          cy.get('.number-of-pages').should('have.text', '2');
+        });
+
+        // The link text also carries the inclusion badges, e.g.
+        // "... (C/S 07/27/26) (Attachment(s))".
+        cy.get('[data-testid="document-download-link-EXS"]').should(
+          'contain',
+          'Exhibit in Support of Petition',
+        );
+        cy.contains('#docket-record-table tr', 'Exhibit in Support of Petition')
+          .should('contain', '(Attachment(s))')
+          .and('contain', '(C/S');
+
+        // Exhibit in Support docs display when the docket record is
+        // filtered to show "Exhibits".
+        cy.get('#document-filter-by').select('Exhibits');
+        cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+      });
+    });
   },
 );
