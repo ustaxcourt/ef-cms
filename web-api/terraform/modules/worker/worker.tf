@@ -29,7 +29,8 @@ resource "aws_lambda_event_source_mapping" "worker_event_mapping" {
 }
 
 resource "aws_sqs_queue" "worker_dl_queue" {
-  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name = "worker_dl_queue_${var.environment}_${var.color}"
   message_retention_seconds = 1209600
 }
