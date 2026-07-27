@@ -17,22 +17,26 @@ export const validateNoteOnCaseDetailAction = ({
   const note = get(state.modal.notes);
   const user = get(state.user);
 
-  const errors = applicationContext.getUseCases().validateCaseDetailInteractor(
-    {
-      caseDetail: { ...caseDetail, caseNote: note },
-      useCaseEntity: true,
-    },
-    user,
-  );
+  const validationErrors = applicationContext
+    .getUseCases()
+    .validateCaseDetailInteractor(
+      {
+        caseDetail: { ...caseDetail, caseNote: note },
+        useCaseEntity: true,
+      },
+      user,
+    );
 
-  if (!errors) {
+  const caseNoteError = validationErrors && validationErrors.caseNote;
+
+  if (!caseNoteError) {
     return path.success();
   } else {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors,
+      errors: { caseNote: caseNoteError },
     });
   }
 };
