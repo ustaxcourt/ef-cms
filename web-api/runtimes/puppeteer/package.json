@@ -23,6 +23,6 @@
     "immutable": "5.1.9"
   },
   "allowScripts": {
-    "@parcel/watcher@2.5.6": true
+    "@parcel/watcher@2.5.6": false
   }
 }
