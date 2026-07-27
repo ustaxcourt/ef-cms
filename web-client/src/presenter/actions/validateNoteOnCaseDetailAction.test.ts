@@ -47,20 +47,23 @@ describe('validateNoteOnCaseDetailAction', () => {
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue('error');
+      .validateCaseDetailInteractor.mockReturnValue({
+        caseNote: 'Limited to 9000 characters.',
+      });
+
     await runAction(validateNoteOnCaseDetailAction, {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: mockNote,
-        modal: {
-          notes: mockNote,
-        },
-      },
     });
 
     expect(errorStub.mock.calls.length).toEqual(1);
+    expect(errorStub.mock.calls[0][0]).toMatchObject({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errors: { caseNote: 'Limited to 9000 characters.' },
+    });
   });
 
   it('should call validateCaseDetailInteractor with useCaseEntity true', async () => {
