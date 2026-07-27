@@ -55,6 +55,18 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
 > These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
+> **Why am I seeing a high severity for `fast-xml-parser`?**
+> [See below](#fast-xml-parser).
+
+> **Why am I seeing a high severity for `shell-quote`?**
+> [See below](#shell-quote).
+
+> **Why am I seeing a high severity for `@ustaxcourt/payment-portal`?**
+> [See below](#ustaxcourtpayment-portal).
+
+> **Why am I seeing a high severity for `exceljs`?**
+> [See below](#exceljs).
+
 #### 1.3 Approve or deny scripts as needed
 
 Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
@@ -475,6 +487,30 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### js-yaml
 - On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
+- July 27, 2026: moved the override from `4.2.0` to `4.3.0` to address [GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m) (YAML merge-key chains can force quadratic CPU consumption).
+
+### fast-xml-parser
+**Installed Version: 5.10.1 (via override)**
+- A high severity vulnerability ([GHSA-8r6m-32jq-jx6q](https://github.com/advisories/GHSA-8r6m-32jq-jx6q)) affects versions `>=5.9.3 <5.10.1`.
+- July 27, 2026: confirmed the `@aws-sdk/*` bump to 3.1096.0 does **not** clear this finding. The vulnerable copies are bundled by `@ustaxcourt/payment-portal` and `@ustaxcourt/ustc-pay-gov-test-server`, not by AWS SDK.
+- On 07-27-2026, we added a `fast-xml-parser` override to `5.10.1` to force the patched version across the tree. `@ustaxcourt/payment-portal` should still be republished with `fast-xml-parser@^5.10.1` so the override can be removed eventually.
+
+### shell-quote
+**Installed Version: 1.10.0 (via override)**
+- A high severity DoS vulnerability ([GHSA-395f-4hp3-45gv](https://github.com/advisories/GHSA-395f-4hp3-45gv)) affects versions `<=1.8.4`.
+- Transitive via `npm-run-all` (root devDependency) and `concurrently` (via `@ustaxcourt/ustc-pay-gov-test-server`). Neither parent has published a fix yet.
+- On 07-27-2026, we added a `shell-quote` override to `1.10.0`.
+
+### @ustaxcourt/payment-portal
+**Installed Version: 1.0.1**
+- An internal USTC package used for payment portal / Pay.gov integration development and testing.
+- July 27, 2026: `npm audit` may suggest a semver-major *downgrade* to `0.1.3` as a fix. **Do not downgrade.** Escalate to the payment-portal maintainers so the package can be republished with updated transitive dependencies (notably `fast-xml-parser@^5.10.1`).
+- See also [Node.js upgrade guidance](#21-update-nodejs-version) above for `engines.node` compatibility when bumping Node.
+
+### exceljs
+**Installed Version: 4.4.0**
+- `exceljs` depends on `archiver`, which in turn depends on `readdir-glob` and `zip-stream`. When `npm audit` flags this chain, the suggested fix is often a semver-major *downgrade* to `exceljs@4.1.1`. **Do not downgrade.**
+- July 27, 2026: the `brace-expansion` override to `5.0.8` cleared the prior `minimatch`/`glob` cascade through this chain, so `npm audit` no longer reports it. If it reappears after a future dependency bump, document and escalate rather than downgrading `exceljs`.
 
 ### image-blob-reduce and pica
 **Installed Versions:**

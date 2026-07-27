@@ -265,6 +265,8 @@
     "canvas": "$canvas",
     "js-yaml": "4.3.0",
     "brace-expansion": "5.0.8",
+    "fast-xml-parser": "5.10.1",
+    "shell-quote": "1.10.0",
     "semver": "7.7.4",
     "cypress": "$cypress",
     "s3rver": {
