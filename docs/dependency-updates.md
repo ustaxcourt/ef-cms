@@ -289,6 +289,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 - New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 - Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
 
+### babel-plugin-cerebral
+**Installed Version: 1.0.2**
+
+- Required by `babel.config.js` to transpile Cerebral template-literal syntax (for example, `state`foo``). Keep this pinned alongside the `cerebral` and `@cerebral/react` versions above.
+- See [removeCerebrealBabelPlugin.md](./removeCerebrealBabelPlugin.md) for the migration path if we remove this plugin in the future.
+
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
@@ -350,6 +356,31 @@ If an update is available for DWT:
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
+
+### quill-delta-to-html
+**Installed Version: 0.12.1**
+
+- Used by `TextEditor.tsx` to convert Quill deltas to HTML. Keep this pinned alongside `quill` 1.3.7 until the embedded Microsoft Word editor replaces Quill.
+
+### jest and jest-environment-jsdom
+**Installed Versions:**
+**jest: 30.4.2**
+**jest-environment-jsdom: 30.4.1**
+
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. Verify the full unit test suites after any bump.
+- On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
+- On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+
+### websocket
+**Installed Version: 1.0.35**
+
+- Direct dependency for the local websocket server in `web-api/src/app-local.ts` and for the integration-test WebSocket polyfill in `web-client/integration-tests/helpers.ts`. Verify local stack websocket behavior after upgrading.
+
+### p-queue
+**Installed Version: 9.3.1**
+
+- `p-queue` v7 and above are ESM-only. Jest must transpile them via `transformIgnorePatterns` in `web-api/jest-unit.config.ts` (added December 10, 2025).
+- On September 19, 2025, upgrading past v6 caused module-import errors in GitHub Actions until the Jest config was updated. Patch upgrades within v9 are generally safe but require re-running the web-api unit tests.
 
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
@@ -447,8 +478,8 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
-**image-blob-reduce: 5.0.0**
-**pica: 10.0.1**
+**image-blob-reduce: 5.0.1**
+**pica: 10.0.2**
 - image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
 - If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
