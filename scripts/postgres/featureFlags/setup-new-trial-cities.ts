@@ -3,7 +3,7 @@
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 async function setupNewTrialCities() {
-  const VALUE = false;
+  const VALUE = true;
 
   await pgInsertInto({
     table: 'dwFeatureFlag',
