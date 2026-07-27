@@ -77,6 +77,16 @@ describe('Petitioner', () => {
       });
     });
 
+    it('should be true when petitioner is sealed and address fields are provided', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        isAddressSealed: true,
+        sealedAndUnavailable: true,
+      });
+      expect(entity.isValid()).toBe(true);
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
+    });
+
     it('should be false when petitioner is not sealed but available and address is undefined', () => {
       const entity = new Petitioner({
         ...mockValidPetitioner,
