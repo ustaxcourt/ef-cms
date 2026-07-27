@@ -264,6 +264,7 @@
     "jsonwebtoken": "$jsonwebtoken",
     "canvas": "$canvas",
     "js-yaml": "4.3.0",
+    "brace-expansion": "5.0.8",
     "semver": "7.7.4",
     "cypress": "$cypress",
     "s3rver": {
