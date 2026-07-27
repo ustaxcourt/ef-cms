@@ -10,6 +10,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
   ...applicationContext,
   getConstants: () => {
     return {
+      NEW_TRIAL_CITY_STRINGS: [],
       TRIAL_CITIES: {
         ALL: [
           {
@@ -115,5 +116,66 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
         { cities: ['Oklahoma City, Oklahoma'], state: US_STATES.OK },
       ],
     });
+  });
+});
+
+describe('trialCitiesHelper with the real trial-city registry - DAW-10170 feature-flag gate', () => {
+  const trialCitiesHelperReal = withAppContextDecorator(
+    trialCitiesHelperComputed,
+  );
+
+  const NEW_CITIES = [
+    'Austin, Texas',
+    'Charlotte, North Carolina',
+    'Newark, New Jersey',
+    'Orlando, Florida',
+    'Sacramento, California',
+  ];
+
+  const flattenCityList = (result: {
+    trialCitiesByState: { cities: string[]; state: string }[];
+  }): string[] =>
+    result.trialCitiesByState.flatMap(stateGroup => stateGroup.cities);
+
+  it('exposes the DAW-10170 cities in "All" when the feature flag is enabled', () => {
+    const result = runCompute(trialCitiesHelperReal, {
+      state: { featureFlags: { 'new-trial-cities-enabled': true } },
+    });
+    const trialCitiesResult = result('All');
+
+    expect(flattenCityList(trialCitiesResult)).toEqual(
+      expect.arrayContaining(NEW_CITIES),
+    );
+  });
+
+  it('hides the DAW-10170 cities in "All" when the feature flag is disabled', () => {
+    const result = runCompute(trialCitiesHelperReal, {
+      state: { featureFlags: { 'new-trial-cities-enabled': false } },
+    });
+    const trialCitiesResult = result('All');
+
+    expect(flattenCityList(trialCitiesResult)).not.toEqual(
+      expect.arrayContaining(NEW_CITIES),
+    );
+  });
+
+  it('hides the DAW-10170 cities in "Regular" when the feature flag is disabled', () => {
+    const result = runCompute(trialCitiesHelperReal, {
+      state: { featureFlags: { 'new-trial-cities-enabled': false } },
+    });
+    const trialCitiesResult = result('Regular');
+
+    expect(flattenCityList(trialCitiesResult)).not.toEqual(
+      expect.arrayContaining(NEW_CITIES),
+    );
+  });
+
+  it('defaults to hiding the DAW-10170 cities when state.featureFlags is undefined', () => {
+    const result = runCompute(trialCitiesHelperReal, { state: {} });
+    const trialCitiesResult = result('All');
+
+    expect(flattenCityList(trialCitiesResult)).not.toEqual(
+      expect.arrayContaining(NEW_CITIES),
+    );
   });
 });

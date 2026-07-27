@@ -169,4 +169,47 @@ describe('customCaseReportHelper', () => {
 
     expect(result.today).toEqual(mockToday);
   });
+
+  describe('trialCitiesByState (DAW-10170 feature-flag gate)', () => {
+    const NEW_CITIES = [
+      'Austin, Texas',
+      'Charlotte, North Carolina',
+      'Newark, New Jersey',
+      'Orlando, Florida',
+      'Sacramento, California',
+    ];
+
+    const flattenCityValues = (result: {
+      trialCitiesByState: { options: { value: string }[] }[];
+    }): string[] =>
+      result.trialCitiesByState.flatMap(group =>
+        group.options.map(option => option.value),
+      );
+
+    it('should include the DAW-10170 trial cities when the "new-trial-cities-enabled" feature flag is on', () => {
+      const result = runCompute(customCaseReportHelper, {
+        state: {
+          ...initialState,
+          featureFlags: { 'new-trial-cities-enabled': true },
+        },
+      });
+
+      expect(flattenCityValues(result)).toEqual(
+        expect.arrayContaining(NEW_CITIES),
+      );
+    });
+
+    it('should exclude the DAW-10170 trial cities when the "new-trial-cities-enabled" feature flag is off', () => {
+      const result = runCompute(customCaseReportHelper, {
+        state: {
+          ...initialState,
+          featureFlags: { 'new-trial-cities-enabled': false },
+        },
+      });
+
+      expect(flattenCityValues(result)).not.toEqual(
+        expect.arrayContaining(NEW_CITIES),
+      );
+    });
+  });
 });

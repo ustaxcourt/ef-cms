@@ -298,6 +298,56 @@ describe('trialSessionsHelper', () => {
 
       expect(hasStandaloneRemote).toBeTruthy();
     });
+
+    it('should include the DAW-10170 trial cities when the "new-trial-cities-enabled" feature flag is on', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          featureFlags: { 'new-trial-cities-enabled': true },
+          judges: [judgeUser],
+          permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: trialSessionsPageState,
+        },
+      });
+
+      const allOptionValues = result.trialCitiesByState.flatMap(group =>
+        group.options.map(option => option.value),
+      );
+
+      expect(allOptionValues).toEqual(
+        expect.arrayContaining([
+          'Austin, Texas',
+          'Charlotte, North Carolina',
+          'Newark, New Jersey',
+          'Orlando, Florida',
+          'Sacramento, California',
+        ]),
+      );
+    });
+
+    it('should exclude the DAW-10170 trial cities when the "new-trial-cities-enabled" feature flag is off', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          featureFlags: { 'new-trial-cities-enabled': false },
+          judges: [judgeUser],
+          permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: trialSessionsPageState,
+        },
+      });
+
+      const allOptionValues = result.trialCitiesByState.flatMap(group =>
+        group.options.map(option => option.value),
+      );
+
+      expect(allOptionValues).not.toEqual(
+        expect.arrayContaining([
+          'Austin, Texas',
+          'Charlotte, North Carolina',
+          'Newark, New Jersey',
+          'Orlando, Florida',
+          'Sacramento, California',
+        ]),
+      );
+    });
   });
 
   describe('trialSessionRows', () => {

@@ -39,4 +39,22 @@ describe('MessageResult', () => {
 
     expect(messageResult.isValid()).toBeFalsy();
   });
+
+  it.each([
+    'Austin, Texas',
+    'Charlotte, North Carolina',
+    'Newark, New Jersey',
+    'Orlando, Florida',
+    'Sacramento, California',
+  ])(
+    'should pass validation when trialLocation is the DAW-10170 city %s',
+    trialLocation => {
+      const messageResult = new MessageResult({
+        ...mockRawMessageResult,
+        trialLocation,
+      });
+
+      expect(messageResult.isValid()).toBeTruthy();
+    },
+  );
 });
