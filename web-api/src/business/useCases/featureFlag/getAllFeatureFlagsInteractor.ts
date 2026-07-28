@@ -3,6 +3,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   FeatureFlagKeys,
 } from '@shared/business/entities/EntityConstants';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { isEmpty } from 'lodash';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
@@ -12,7 +13,7 @@ const allFeatureFlags: AllFeatureFlags = {};
 export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
   hardReload: boolean = false,
-): Promise<AllFeatureFlags> => {
+): Promise<FeatureFlagResponseDTO> => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     flag => flag.key,
   );
@@ -40,5 +41,5 @@ export const getAllFeatureFlagsInteractor = async (
     });
   }
 
-  return allFeatureFlags;
+  return new FeatureFlagResponseDTO(allFeatureFlags);
 };
