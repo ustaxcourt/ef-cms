@@ -13,17 +13,6 @@ import { petitionsClerkServesPetition } from '../../../../../../helpers/document
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { updateCaseStatus } from '../../../../../../helpers/caseDetail/caseInformation/update-case-status';
 
-/**
- * Story 10192 ("Verify other Practitioner Types: DOJ, IRS") — confirms
- * respondent-side practitioners can file the same Motion + "Exhibit in
- * Support" (EXS) combination as a private practitioner, once they've
- * established access to the case.
- *
- * IRS and DOJ gain that access differently: IRS practitioners can pick any
- * case and file their "first IRS document"; DOJ practitioners only see
- * "Represent a Party" once a case is "On Appeal" with a respondent already
- * on file (see doj-practitioner-should-not-be-able-to-represent-case-for-non-appeal-cases.cy.ts).
- */
 describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () => {
   it('IRS practitioner files a Motion with an Exhibit in Support after filing their first IRS document', () => {
     loginAsPetitioner();
@@ -72,7 +61,6 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       });
       cy.get('label[for="supportingDocuments-0-attachments"]').click();
 
-      // IRS practitioner files on behalf of Respondent.
       cy.get('[data-testid="party-irs-practitioner-label"]').click();
       cy.get('[data-testid="file-document-submit-document"]').click();
 
@@ -115,8 +103,6 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       goToCase(docketNumber);
       updateCaseStatus('On Appeal');
 
-      // DOJ only sees "Represent a Party" on an On Appeal case with a
-      // respondent already on file.
       loginAsDojPractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="request-represent-a-party-button"]').click();
@@ -156,7 +142,6 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       });
       cy.get('label[for="supportingDocuments-0-attachments"]').click();
 
-      // DOJ files on behalf of Respondent.
       cy.get('[data-testid="party-irs-practitioner-label"]').click();
       cy.get('[data-testid="file-document-submit-document"]').click();
 

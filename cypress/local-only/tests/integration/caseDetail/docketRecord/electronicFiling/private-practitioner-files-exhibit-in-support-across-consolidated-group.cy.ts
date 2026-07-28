@@ -12,18 +12,6 @@ import {
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { updateCaseStatus } from '../../../../../../helpers/caseDetail/caseInformation/update-case-status';
 
-/**
- * Story 10192 ("Verify that you can file across a Consolidated Group") — a
- * private practitioner who represents the petitioner on every case in a
- * consolidated group can file a Motion with an "Exhibit in Support" (EXS)
- * once, scoped to "All in the consolidated group", and have it land on
- * every case's Docket Record.
- *
- * Representation is per-case (there's no existing spec, for any role, where
- * group membership alone grants filing access — the IRS/DOJ consolidated
- * filing specs associate the practitioner with every member case first), so
- * this test requests access on both the lead and member case before filing.
- */
 describe('Private practitioner files an Exhibit in Support across a consolidated group', () => {
   it('should land the Exhibit in Support on every case in the group', () => {
     createAndServePaperPetition({ name: 'Group Lead Petitioner' }).then(
@@ -39,8 +27,6 @@ describe('Private practitioner files an Exhibit in Support across a consolidated
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
             addCaseToGroup(leadDocketNumber);
 
-            // The practitioner must represent the petitioner on each case
-            // individually before filing across the group.
             [
               { docketNumber: leadDocketNumber, name: leadName },
               { docketNumber: memberDocketNumber, name: memberName },
@@ -66,8 +52,6 @@ describe('Private practitioner files an Exhibit in Support across a consolidated
               );
             });
 
-            // File the Motion + Exhibit in Support from the lead case,
-            // scoped to the whole consolidated group.
             loginAsPrivatePractitioner();
             externalUserSearchesDocketNumber(leadDocketNumber);
             cy.get('[data-testid="button-file-document"]').click();
@@ -107,8 +91,6 @@ describe('Private practitioner files an Exhibit in Support across a consolidated
             cy.get('[data-testid="loading-overlay"]').should('not.exist');
             cy.get('[data-testid="success-alert"]').should('exist');
 
-            // The Exhibit in Support shows up on the Docket Record of both
-            // the lead case and the member case, coversheet included.
             [leadDocketNumber, memberDocketNumber].forEach(docketNumber => {
               cy.visit(`/case-detail/${docketNumber}`);
               cy.get('[data-testid="docket-record-table"]').should('exist');
