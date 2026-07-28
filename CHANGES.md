@@ -33,7 +33,6 @@ Run this to enable payment portal integration
 ./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
 ```
 </details>
-
 <details><summary>Install gitleaks</summary>
 
 ## Local
