@@ -1,6 +1,9 @@
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 import { PublicTrialSessionInfoDTO } from '@shared/business/dto/trialSessions/PublicTrialSessionInfoDTO';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
+import { HealthCheckResponseDTO } from '@shared/business/dto/public/HealthCheckResponseDTO';
+import { PublicDocumentDownloadUrlDTO } from '@shared/business/dto/public/PublicDocumentDownloadUrlDTO';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
@@ -10,16 +13,13 @@ import { PublicDocumentSearchResult } from '@shared/business/entities/documents/
 import { PublicUser } from '@shared/business/entities/PublicUser';
 import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 
 export type UnauthorizedPublicFieldFinding = {
   entityName?: string;
   fieldName: string;
   matchPreview: string;
 };
-
-const FEATURE_FLAG_PATH_REGEX = /\/system\/feature-flag\/?$/i;
-const DOWNLOAD_URL_PATH_REGEX = /\/public-document-download-url\/?$/i;
-const HEALTH_CHECK_PATH_REGEX = /\/health\/?$/i;
 
 const PUBLIC_ENTITY_FACTORIES = {
   PublicCase: (): PublicCase =>
@@ -53,7 +53,39 @@ const PUBLIC_ENTITY_FACTORIES = {
     new RestrictedCase({ docketNumber: '' }),
   RestrictedCaseDTO: (): RestrictedCaseDTO =>
     new RestrictedCaseDTO(new RestrictedCase({ docketNumber: '' })),
+  FeatureFlagResponseDTO: (): FeatureFlagResponseDTO =>
+    new FeatureFlagResponseDTO({}),
+  HealthCheckResponseDTO: (): HealthCheckResponseDTO =>
+    new HealthCheckResponseDTO({
+      cognito: false,
+      elasticsearch: false,
+      emailService: false,
+      s3: {
+        app: false,
+        appFailover: false,
+        eastDocuments: false,
+        eastTempDocuments: false,
+        public: false,
+        publicFailover: false,
+        westDocuments: false,
+        westTempDocuments: false,
+      },
+    }),
+  PublicDocumentDownloadUrlDTO: (): PublicDocumentDownloadUrlDTO =>
+    new PublicDocumentDownloadUrlDTO({ url: '' }),
 } as const;
+
+const DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME: Map<string, Set<string>> = new Map(
+  [
+    [
+      'FeatureFlagResponseDTO',
+      new Set([
+        'entityName',
+        ...Object.values(ALLOWLIST_FEATURE_FLAGS).map(flag => flag.key),
+      ]),
+    ],
+  ],
+);
 
 function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
   const allowedFieldsByEntityName = new Map<string, Set<string>>();
@@ -61,6 +93,15 @@ function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
   for (const [entityName, createEntity] of Object.entries(
     PUBLIC_ENTITY_FACTORIES,
   )) {
+    // Use overridden allowed fields if available
+    if (DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.has(entityName)) {
+      allowedFieldsByEntityName.set(
+        entityName,
+        DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.get(entityName)!,
+      );
+      continue;
+    }
+
     const instance = createEntity();
     const allowedFields = new Set<string>(Object.keys(instance));
     allowedFields.add('entityName');
@@ -83,15 +124,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isNumericValue(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value);
-}
-
-function isAllowedSystemStatusValue(value: unknown): boolean {
-  return (
-    value === null ||
-    typeof value === 'string' ||
-    typeof value === 'boolean' ||
-    isNumericValue(value)
-  );
 }
 
 function isArrayItemPath(path: string): boolean {
@@ -164,19 +196,6 @@ function validateNumericObject(args: {
   });
 }
 
-function validateSystemStatusObject(args: {
-  obj: Record<string, unknown>;
-  path: string;
-  url: string;
-}): UnauthorizedPublicFieldFinding[] {
-  return validateObjectByFieldRule({
-    isAllowed: (_key, value) => isAllowedSystemStatusValue(value),
-    obj: args.obj,
-    path: args.path,
-    url: args.url,
-  });
-}
-
 function validateObjectWithoutEntityName(args: {
   obj: Record<string, unknown>;
   path: string;
@@ -209,34 +228,6 @@ function validateObjectWithoutEntityName(args: {
   }
 
   return validateNumericObject(args);
-}
-
-function validateRootObjectByPath(args: {
-  obj: Record<string, unknown>;
-  path: string;
-  url: string;
-}): UnauthorizedPublicFieldFinding[] | undefined {
-  if (
-    args.path === '' &&
-    (FEATURE_FLAG_PATH_REGEX.test(args.url) ||
-      HEALTH_CHECK_PATH_REGEX.test(args.url))
-  ) {
-    return validateSystemStatusObject({
-      obj: args.obj,
-      path: args.path,
-      url: args.url,
-    });
-  }
-
-  if (args.path === '' && DOWNLOAD_URL_PATH_REGEX.test(args.url)) {
-    return validateUrlOnlyObject({
-      obj: args.obj,
-      path: args.path,
-      url: args.url,
-    });
-  }
-
-  return undefined;
 }
 
 function validateEntityMetadata(args: {
@@ -335,15 +326,6 @@ function findUnauthorizedPublicFieldsRecursive(
       );
     });
     return findings;
-  }
-
-  const rootValidationResult = validateRootObjectByPath({
-    obj: data,
-    path,
-    url,
-  });
-  if (rootValidationResult) {
-    return rootValidationResult;
   }
 
   const candidateEntityName =

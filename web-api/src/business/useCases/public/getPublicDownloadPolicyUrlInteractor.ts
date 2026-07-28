@@ -7,6 +7,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { PublicDocumentDownloadUrlDTO } from '@shared/business/dto/public/PublicDocumentDownloadUrlDTO';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
@@ -17,7 +18,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     key,
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
   authorizdeUser: UnknownAuthUser,
-): Promise<{ url: string }> => {
+): Promise<PublicDocumentDownloadUrlDTO> => {
   const caseToCheck: any = await getCaseByDocketNumber({
     docketNumber,
   });
@@ -80,8 +81,12 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
-  return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: docketEntryEntity.documentStorageId,
-  });
+  const downloadUrl = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: docketEntryEntity.documentStorageId,
+    });
+
+  return new PublicDocumentDownloadUrlDTO(downloadUrl);
 };

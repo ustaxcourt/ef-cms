@@ -4,6 +4,7 @@ describe('publicDataValidation', () => {
   it('passes for feature-flag primitive payloads', () => {
     const findings = findUnauthorizedPublicFields({
       data: {
+        entityName: 'FeatureFlagResponseDTO',
         'aws-batch-zipper-minimum-count': 5,
         'chief-judge-name': 'Bootsy Collins',
         'document-visibility-policy-change-date': '2023-05-01',
