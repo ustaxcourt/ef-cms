@@ -178,6 +178,10 @@ body:has(#notice-of-trial-pdf) {
 
         .notice-meeting-info {
           margin-bottom: calc(10pt + 6px);
+
+          .notice-passcode {
+            margin-left: 24pt;
+          }
         }
       }
 
