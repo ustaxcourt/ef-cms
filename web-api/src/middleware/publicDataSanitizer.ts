@@ -1,7 +1,5 @@
-import {
-  findUnauthorizedPublicFields as findUnauthorizedPublicFieldsCore,
-  UnauthorizedPublicFieldFinding,
-} from '@shared/business/utilities/publicDataValidation';
+import { findUnauthorizedPublicFields as findUnauthorizedPublicFieldsCore } from '@shared/business/utilities/publicDataValidation';
+import type { UnauthorizedPublicFieldFinding } from '@shared/business/utilities/publicDataValidation';
 import { getHeaderValue } from '@shared/utils/headers';
 
 type ApiGatewayLikeEvent = {
