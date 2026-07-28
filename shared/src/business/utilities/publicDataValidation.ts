@@ -76,7 +76,13 @@ const PUBLIC_ENTITY_FACTORIES = {
     new PublicDocumentDownloadUrlDTO({ url: '' }),
   PublicDocketRecordPdfJobResponseDTO:
     (): PublicDocketRecordPdfJobResponseDTO =>
-      new PublicDocketRecordPdfJobResponseDTO({ jobId: '' }),
+      new PublicDocketRecordPdfJobResponseDTO({
+        status: 'pending',
+        jobId: '',
+        url: '',
+        message: '',
+        statusCode: 200,
+      }),
 } as const;
 
 const DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME: Map<string, Set<string>> = new Map(
