@@ -1,3 +1,17 @@
+<details><summary>Dependency Updates - Week of 2026-07-20</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.89`
+
+This script will prompt for an environment to pull the image from; choose `exp3`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Payment Portal Integration</summary>
 
 ## Manual Deployment Steps
@@ -19,9 +33,6 @@ Run this to enable payment portal integration
 ./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
 ```
 </details>
-
-
-
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>
 
 ## Manual Deployment Steps
