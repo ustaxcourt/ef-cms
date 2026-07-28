@@ -16,6 +16,7 @@ import { MessagesInProgress } from './MessagesInProgress';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PartiesInformation } from './PartiesInformation';
 import { SealAddressModal } from './SealAddressModal';
+import { UnsealAddressModal } from './UnsealAddressModal';
 import { SealCaseModal } from './SealCaseModal';
 import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
@@ -187,6 +188,7 @@ export const CaseDetailInternal = connect(
         )}
         {showModal === 'SealCaseModal' && <SealCaseModal />}
         {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'UnsealAddressModal' && <UnsealAddressModal />}
         {showModal === 'UnsealCaseModal' && <UnsealCaseModal />}
       </>
     );
