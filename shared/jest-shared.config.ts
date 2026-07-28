@@ -67,6 +67,8 @@ const config: Config = {
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
     '^@aws-sdk/core/client$':
       '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
+    '^@aws-sdk/core/httpAuthSchemes$':
+      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js',
     '^@aws-sdk/checksums/crc$':
       '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/crc/index.js',
     '^@aws-sdk/checksums/sha$':
