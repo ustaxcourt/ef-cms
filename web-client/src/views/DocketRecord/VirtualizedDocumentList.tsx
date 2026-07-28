@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { List, useListRef } from 'react-window';
+import { List, useDynamicRowHeight, useListRef } from 'react-window';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 interface VirtualizedDocumentListProps {
@@ -14,97 +14,37 @@ export const VirtualizedDocumentList: React.FC<
   VirtualizedDocumentListProps
 > = ({ docketEntries, viewDocumentId, setViewerDocumentToDisplaySequence }) => {
   const listRef = useListRef(null);
-  const listContainerRef = useRef<HTMLDivElement>(null);
-  const [listDimensions, setListDimensions] = useState<{
-    width: number;
-    height: number;
-  } | null>(null);
-
-  // Get row height from cache or provide a generous overestimate.
-  // Overestimating is safe (extra whitespace), underestimating causes overlap.
-  // The measurement pass in useLayoutEffect corrects these to actual heights.
-  const getRowHeight = (index: number) => {
-    const entry = docketEntries[index];
-    if (!entry) return 80;
-
-    const descriptionLength = entry.descriptionDisplay?.length || 0;
-
-    // Button padding: 15px top + 15px bottom + 1px border = 31px
-    let estimatedHeight = 31;
-
-    // Use a very conservative 18 chars per line.
-    // The grid-col-5 column is narrow (~175px), and at the actual font size
-    // only about 20-22 chars fit per line. Using 18 ensures we always
-    // overestimate, which means extra whitespace (acceptable) but never overlap.
-    const charsPerLine = 18;
-
-    const estimatedLines = Math.max(
-      1,
-      Math.ceil(descriptionLength / charsPerLine),
-    );
-    // line-height: 1.4 on ~15px font ≈ 21px per line
-    estimatedHeight += estimatedLines * 21;
-
-    // Related docket entries
-    if (entry.relatedDocketEntries && entry.relatedDocketEntries.length > 0) {
-      entry.relatedDocketEntries.forEach((affectedEntry: any) => {
-        estimatedHeight += 21; // <br /> line break
-        const dispositionLines = affectedEntry.dispositionLinkText?.length || 0;
-        estimatedHeight += dispositionLines * 21;
-      });
-    }
-
-    // Stacked icons can make the row taller than the text
-    if (entry.iconsToDisplay && entry.iconsToDisplay.length > 1) {
-      const iconHeight = entry.iconsToDisplay.length * 20;
-      const textHeight = estimatedHeight - 31;
-      if (iconHeight > textHeight) {
-        estimatedHeight = 31 + iconHeight;
-      }
-    }
-
-    if (entry.isStricken) {
-      estimatedHeight += 21;
-    }
-
-    // Small buffer for rounding/padding — keep minimal to reduce spacing inconsistency
-    estimatedHeight += 5;
-
-    return Math.max(estimatedHeight, 60);
-  };
-
-  // Measure container dimensions for VariableSizeList
-  useLayoutEffect(() => {
-    const updateDimensions = () => {
-      if (listContainerRef.current) {
-        const rect = listContainerRef.current.getBoundingClientRect();
-        setListDimensions({
-          width: rect.width,
-          height: rect.height,
-        });
-      }
-    };
-
-    const timeout = setTimeout(updateDimensions, 0);
-    window.addEventListener('resize', updateDimensions);
-
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener('resize', updateDimensions);
-    };
-  }, []);
+  const rowHeightManager = useDynamicRowHeight({ defaultRowHeight: 80 });
+  const [renderedSelectedIndex, setRenderedSelectedIndex] = useState(-1);
+  const selectedIndex = docketEntries.findIndex(
+    entry => entry.docketEntryId === viewDocumentId,
+  );
 
   // Scroll to the selected document in the virtualized list
   useEffect(() => {
-    if (viewDocumentId && listRef.current && listDimensions) {
-      const selectedIndex = docketEntries.findIndex(
-        entry => entry.docketEntryId === viewDocumentId,
+    const listElement = listRef.current?.element;
+
+    if (
+      listElement &&
+      viewDocumentId &&
+      selectedIndex !== -1 &&
+      renderedSelectedIndex === selectedIndex
+    ) {
+      const selectedDocument = listElement.querySelector<HTMLElement>(
+        `button[data-entry-id="${viewDocumentId}"]`,
       );
-      if (selectedIndex !== -1) {
-        listRef.current.scrollToRow({ index: selectedIndex, align: 'center' });
+
+      if (selectedDocument) {
+        const listRect = listElement.getBoundingClientRect();
+        const selectedDocumentRect = selectedDocument.getBoundingClientRect();
+        const listCenter = listRect.top + listRect.height / 2;
+        const selectedDocumentCenter =
+          selectedDocumentRect.top + selectedDocumentRect.height / 2;
+
+        listElement.scrollTop += selectedDocumentCenter - listCenter;
       }
     }
-  }, [viewDocumentId, listDimensions, docketEntries]);
+  }, [renderedSelectedIndex, rowHeightManager, selectedIndex, viewDocumentId]);
 
   // Row renderer for virtualized list
   const Row = ({
@@ -118,11 +58,8 @@ export const VirtualizedDocumentList: React.FC<
 
     if (!entry) return null;
 
-    // Extract height from react-window's style to apply to button
-    const { height: rowHeight, ...positionStyle } = style;
-
     return (
-      <div style={{ ...positionStyle, boxShadow: 'inset 0 -1px 0 #dfe1e2' }}>
+      <div style={{ ...style, boxShadow: 'inset 0 -1px 0 #dfe1e2' }}>
         <div data-row-index={index}>
           <Button
             className={classNames(
@@ -139,9 +76,9 @@ export const VirtualizedDocumentList: React.FC<
               });
             }}
             style={{
-              height: rowHeight,
-              overflow: 'hidden',
               display: 'block',
+              overflow: 'hidden',
+              width: '100%',
             }}
           >
             <div
@@ -237,7 +174,6 @@ export const VirtualizedDocumentList: React.FC<
     <div
       className="document-viewer--documents-list"
       data-testid="document-viewer-documents-list"
-      ref={listContainerRef}
       style={{
         height: '1000px',
         width: '100%',
@@ -245,16 +181,27 @@ export const VirtualizedDocumentList: React.FC<
         overflow: 'hidden',
       }}
     >
-      {listDimensions && (
-        <List
-          rowHeight={getRowHeight}
-          overscanCount={3}
-          listRef={listRef}
-          rowComponent={Row}
-          rowCount={docketEntries.length}
-          rowProps={{} as never}
-        />
-      )}
+      <List<object>
+        listRef={listRef}
+        onRowsRendered={({ startIndex, stopIndex }) => {
+          if (selectedIndex >= startIndex && selectedIndex <= stopIndex) {
+            setRenderedSelectedIndex(selectedIndex);
+          } else if (
+            selectedIndex !== -1 &&
+            renderedSelectedIndex !== selectedIndex
+          ) {
+            listRef.current?.scrollToRow({
+              align: 'center',
+              index: selectedIndex,
+            });
+          }
+        }}
+        rowComponent={Row}
+        rowCount={docketEntries.length}
+        rowHeight={rowHeightManager}
+        rowProps={{}}
+        style={{ height: '100%', width: '100%' }}
+      />
     </div>
   );
 };
