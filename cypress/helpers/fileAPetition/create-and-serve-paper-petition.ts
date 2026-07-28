@@ -157,7 +157,9 @@ export function createAndServePaperPetition(
     });
   }
 
-  cy.get('[data-testid="submit-paper-petition"]').click();
+  cy.get('[data-testid="submit-paper-petition"]')
+    .should('not.be.disabled')
+    .click();
   return getDocketNumberAfterPaperPetitionSubmit().then(docketNumber => {
     cy.get('[data-testid="serve-case-to-irs"]').click();
     cy.get('[data-testid="modal-confirm"]').click();
@@ -306,7 +308,9 @@ export function createAndServePaperPetitionMyselfAndSpouse(
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
 
-  cy.get('[data-testid="submit-paper-petition"]').click();
+  cy.get('[data-testid="submit-paper-petition"]')
+    .should('not.be.disabled')
+    .click();
 
   return getDocketNumberAfterPaperPetitionSubmit().then(docketNumber => {
     cy.get('[data-testid="serve-case-to-irs"]').click();
