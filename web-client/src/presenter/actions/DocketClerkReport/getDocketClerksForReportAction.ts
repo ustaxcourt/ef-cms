@@ -13,7 +13,7 @@ export const getDocketClerksForReportAction = async ({
   applicationContext,
   store,
 }: ActionProps): Promise<void> => {
-  const { DOCKET_SECTION } = applicationContext.getConstants();
+  const { DOCKET_SECTION, USER_ROLES } = applicationContext.getConstants();
 
   const users: RawUser[] = await applicationContext
     .getUseCases()
@@ -21,5 +21,9 @@ export const getDocketClerksForReportAction = async ({
       section: DOCKET_SECTION,
     });
 
-  store.set(state.docketClerkReport.docketClerks, sortBy(users, 'name'));
+  const docketClerks = users.filter(
+    user => user.role === USER_ROLES.docketClerk,
+  );
+
+  store.set(state.docketClerkReport.docketClerks, sortBy(docketClerks, 'name'));
 };

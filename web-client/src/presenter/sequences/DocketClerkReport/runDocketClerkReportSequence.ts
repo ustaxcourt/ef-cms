@@ -3,6 +3,7 @@ import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataActi
 import { commitDocketClerkReportSelectionAction } from '../../actions/DocketClerkReport/commitDocketClerkReportSelectionAction';
 import { getDocketClerkReportDocumentQcAction } from '../../actions/DocketClerkReport/getDocketClerkReportDocumentQcAction';
 import { getDocketClerkReportMessagesAction } from '../../actions/DocketClerkReport/getDocketClerkReportMessagesAction';
+import { resetSelectedMessageAction } from '@web-client/presenter/actions/Messages/resetSelectedMessageAction';
 import { validateDocketClerkReportAction } from '../../actions/DocketClerkReport/validateDocketClerkReportAction';
 
 export const runDocketClerkReportSequence = [
@@ -12,6 +13,7 @@ export const runDocketClerkReportSequence = [
     success: [
       commitDocketClerkReportSelectionAction,
       clearScreenMetadataAction,
+      resetSelectedMessageAction,
       chooseDocketClerkReportPageTypeAction,
       {
         documentQC: [getDocketClerkReportDocumentQcAction],

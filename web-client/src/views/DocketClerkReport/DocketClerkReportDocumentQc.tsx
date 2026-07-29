@@ -134,7 +134,7 @@ export const DocketClerkReportDocumentQc = connect(
         <Tab
           data-testid="docket-clerk-report-qc-processed-tab"
           tabName="processed"
-          title={`Processed (${documentQc.processed.length})`}
+          title={`Processed`}
         >
           <DocketClerkReportWorkItemTable
             ariaLabelId="qc-tabs"
