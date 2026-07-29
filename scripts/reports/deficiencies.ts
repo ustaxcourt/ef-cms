@@ -75,7 +75,7 @@ const { city, home, includeClosed, max, min, startDate } = parseArgsAndEnvVars(
   home: string;
   max: number;
   min: number;
-  startDate: string;
+  startDate?: string;
 };
 
 type tDeficiencyCase = {
