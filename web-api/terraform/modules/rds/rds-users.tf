@@ -2,10 +2,12 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_iam_user" "rds_user_dawson" {
+  #checkov:skip=CKV_AWS_273: IAM user used for human developer local RDS access — long-term fix (replace with SSO/federated access) tracked in Devex TICKET-2; roles impractical for interactive psql sessions today
   name = "${var.environment}_dawson"
 }
 
 resource "aws_iam_user" "rds_user_developers" {
+  #checkov:skip=CKV_AWS_273: IAM user used for human developer local RDS access — long-term fix (replace with SSO/federated access) tracked in Devex TICKET-2; roles impractical for interactive psql sessions today
   name = "${var.environment}_developers"
 }
 

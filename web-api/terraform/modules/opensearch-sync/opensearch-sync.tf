@@ -12,6 +12,8 @@ module "opensearch_sync_lambda" {
 }
 
 resource "aws_sqs_queue" "opensearch_sync_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name                       = "opensearch_sync_queue_${var.environment}_${var.color}"
   visibility_timeout_seconds = 901
   redrive_policy = jsonencode({
@@ -27,6 +29,8 @@ resource "aws_lambda_event_source_mapping" "opensearch_sync_event_mapping" {
 }
 
 resource "aws_sqs_queue" "opensearch_sync_dl_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name                      = "opensearch_sync_dl_queue_${var.environment}_${var.color}"
   message_retention_seconds = 1209600
 }

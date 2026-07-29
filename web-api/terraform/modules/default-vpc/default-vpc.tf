@@ -1,5 +1,6 @@
 # Special AWS TF Lookup for Default VPC
 resource "aws_default_vpc" "default" {
+  #checkov:skip=CKV_AWS_148:Default VPC intentionally used — RDS is publicly accessible for developer local access via IAM auth; long-term fix tracked in Devex ticket (bastion/VPN + remove 0.0.0.0/0 SG rule)
 }
 
 resource "aws_default_security_group" "default" {
