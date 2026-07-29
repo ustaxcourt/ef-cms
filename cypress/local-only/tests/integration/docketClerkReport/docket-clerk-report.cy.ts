@@ -365,5 +365,58 @@ describe('Docket Clerk Report', () => {
         cy.wrap($checkbox).should('not.be.checked');
       });
     });
+
+    it("should complete the selected inbox messages on the docket clerk's behalf and move them into the completing supervisor's own Completed box", () => {
+      runDocketClerkMessagesReport();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-all-messages-checkbox"]',
+      ).click();
+
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-inbox-batch-complete"]',
+      )
+        .should('not.be.disabled')
+        .click();
+
+      cy.get('[data-testid="docket-clerk-report-messages-completion-success"]')
+        .should('be.visible')
+        .and('contain', 'Message(s) completed at');
+
+      // The docket clerk's inbox no longer shows the completed messages...
+      cy.get('[data-testid="docket-clerk-report-messages-inbox-tab"]').should(
+        'contain',
+        'Inbox (0)',
+      );
+      cy.get('#docket-clerk-report-messages-inbox table tbody tr').should(
+        'not.exist',
+      );
+
+      // ...and the docket clerk's own Completed tab does NOT show them, because
+      // the Case Services Supervisor completed them, not the docket clerk.
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-completed-tab"]',
+      ).click();
+      cy.get('#docket-clerk-report-messages-completed').should(
+        'not.contain',
+        'DCR Batch Test 1',
+      );
+      cy.get('#docket-clerk-report-messages-completed').should(
+        'not.contain',
+        'DCR Batch Test 2',
+      );
+
+      // Instead, the completing party (the supervisor) finds them in their own
+      // "My Messages" Completed box.
+      cy.visit('/messages/my/completed');
+      cy.get('#messages-individual-completed').should(
+        'contain',
+        'DCR Batch Test 1',
+      );
+      cy.get('#messages-individual-completed').should(
+        'contain',
+        'DCR Batch Test 2',
+      );
+    });
   });
 });
