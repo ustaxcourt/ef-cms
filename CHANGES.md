@@ -1,4 +1,4 @@
-<details><summary>Dependency Updates - Week of 2026-07-20</summary>
+<details><summary>Dependency Updates - Week of 2026-07-27</summary>
 
 ## Manual Deployment Steps
 

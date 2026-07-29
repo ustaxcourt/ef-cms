@@ -288,6 +288,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 - Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
+- As of July 27, 2026: **cerebral 6.0.0** is now published on npm. Still blocked for the same reasons as 5.2.x — the import syntax in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute` is incompatible. Keep pinned to 5.2.1 and `"github:ustaxcourt/cerebral-react#main"` respectively.
 
 ### babel-plugin-cerebral
 **Installed Version: 1.0.2**
@@ -343,6 +344,7 @@ If an update is available for DWT:
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
 - As of June 23, 2026: Puppeteer 25.2.0 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.0 update until `@sparticuz/chromium@150.x` is available.
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
+- As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -386,6 +388,7 @@ If an update is available for DWT:
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
 - Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
+- As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
 
 ### @types/node
 **Installed Version: 24.13.3**
@@ -459,7 +462,8 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 - As of June 25, 2026: minimatch 10.2.5 is the latest. Still blocked since upstream packages have not yet migrated to minimatch 10.x.
-- July 13, 2026: According to the link above, even major versions of minimatch < 10 have been patched. It appears that all of our dependencies are using a patched version of minimatch, which is corroborated by the fact `npm audit` no longer shows this vulnerability. Consider deleting this section.
+- July 13, 2026: An earlier note incorrectly stated that `npm audit` no longer reported this vulnerability.
+- As of July 27, 2026: `npm audit` still flags `minimatch` 2.0.0–10.0.2 (high) via the `brace-expansion` advisory ([GHSA-7r86-64r9-qc3w](https://github.com/advisories/GHSA-7r86-64r9-qc3w), DoS via unbounded expansion length). A `brace-expansion` override above 5.0.7 clears most of the cascade through `minimatch`, `glob`, and the Jest/Babel/ESLint dependency trees. Upstream packages migrating to minimatch 10.x remains the long-term fix.
 
 ### eslint and @eslint/js
 **Installed Versions:**
@@ -469,6 +473,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
 - As of June 25, 2026: eslint 10.5.0 is the latest, but still blocked since `eslint-plugin-jsx-a11y` and `eslint-plugin-react` still declare `eslint ^9` as their peer dependency. `9.39.4` is the latest 9.x patch; nothing new to install.
 - July 13, 2026: updated to 9.39.5
+- As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
