@@ -10,7 +10,10 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { sql } from 'kysely';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import {
+  createISODateString,
+  getJsDateFromIso,
+} from '@shared/business/utilities/DateHandler';
 import { generateCsv } from '../helpers/generate-csv';
 import { pick } from 'lodash';
 import {
@@ -34,6 +37,11 @@ const scriptConfig: ScriptConfig = {
       short: 'c',
       type: 'boolean',
     },
+    includeClosed: {
+      description: 'Include closed cases in report',
+      long: 'include-closed',
+      type: 'boolean',
+    },
     max: {
       default: '0',
       description: 'Maximum IRS deficiency amount to include in report',
@@ -50,14 +58,24 @@ const scriptConfig: ScriptConfig = {
       transform: 'number',
       type: 'string',
     },
+    startDate: {
+      description: 'Include cases created after this start date (YYYY-MM-DD)',
+      long: 'start-date',
+      required: false,
+      type: 'string',
+    },
   },
   requireActiveAwsSession: true,
 };
-const { city, home, max, min } = parseArgsAndEnvVars(scriptConfig) as {
+const { city, home, includeClosed, max, min, startDate } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
   city: boolean;
+  includeClosed: boolean;
   home: string;
   max: number;
   min: number;
+  startDate: string;
 };
 
 type tDeficiencyCase = {
@@ -88,11 +106,6 @@ const getDeficiencyCases = async (
         'c.status',
       ])
       .where(sql`stats->>'irsDeficiencyAmount'`, 'is not', null)
-      .where('c.status', 'not in', [
-        CASE_STATUS_TYPES.closed,
-        CASE_STATUS_TYPES.closedDismissed,
-        CASE_STATUS_TYPES.onAppeal,
-      ])
       .groupBy([
         'c.docketNumber',
         'c.associatedJudge',
@@ -102,6 +115,17 @@ const getDeficiencyCases = async (
       ]);
     if (filterByTrialCity) {
       cteQuery = cteQuery.where('c.preferredTrialCity', '=', filterByTrialCity);
+    }
+    if (!includeClosed) {
+      cteQuery = cteQuery.where('c.status', 'not in', [
+        CASE_STATUS_TYPES.closed,
+        CASE_STATUS_TYPES.closedDismissed,
+        CASE_STATUS_TYPES.onAppeal,
+      ]);
+    }
+    if (startDate) {
+      const startDateJs = getJsDateFromIso(createISODateString(startDate));
+      cteQuery = cteQuery.where('c.createdAt', '>=', startDateJs);
     }
 
     let query = reader
