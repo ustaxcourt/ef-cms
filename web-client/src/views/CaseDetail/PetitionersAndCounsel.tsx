@@ -76,6 +76,19 @@ export const PetitionersAndCounsel = connect(
                         })}
                         data-testid="petitioner-email"
                       >
+                        {petitioner.isAddressSealed && (
+                          <span
+                            aria-label="sealed paper petition email"
+                            className="sealed-contact-icon"
+                            role="img"
+                          >
+                            <FontAwesomeIcon
+                              className="margin-right-05"
+                              icon={['fas', 'lock']}
+                              size="sm"
+                            />
+                          </span>
+                        )}
                         <span>{petitioner.formattedEmail}</span>
                         {petitioner.showEAccessFlag && (
                           <FontAwesomeIcon
