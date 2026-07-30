@@ -6,7 +6,7 @@ export const clearGrantDenyMotionFormAction = ({ get, store }: ActionProps) => {
   const isOnLeadCase = isLeadCase(get(state.caseDetail));
 
   store.set(state.form, {
-    additionalOrderText: [''],
+    additionalOrderTextArray: [''],
     deniedAsMoot: undefined,
     deniedWithoutPrejudice: undefined,
     disposition: undefined,

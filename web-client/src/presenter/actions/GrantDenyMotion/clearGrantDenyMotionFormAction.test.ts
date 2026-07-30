@@ -12,14 +12,14 @@ describe('clearGrantDenyMotionFormAction', () => {
         form: {
           disposition: 'GRANTED',
           deniedAsMoot: true,
-          additionalOrderText: ['some'],
+          additionalOrderTextArray: ['some'],
           jurisdiction: 'retained',
         },
       },
     });
 
     expect(result.state.form).toEqual({
-      additionalOrderText: [''],
+      additionalOrderTextArray: [''],
       deniedAsMoot: undefined,
       deniedWithoutPrejudice: undefined,
       disposition: undefined,

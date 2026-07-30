@@ -12,10 +12,10 @@ export const setContactInformationForModalAction = ({
   props,
   store,
 }: ActionProps) => {
-  store.set(state.contactToSeal, props.contactToSeal);
-  if (props.contactToSeal.isAddressSealed) {
-    return path.unseal();
-  } else {
-    return path.seal();
+  const { contactToSeal } = props;
+  if (!contactToSeal) {
+    throw new Error('contactToSeal is required');
   }
+  store.set(state.contactToSeal, contactToSeal);
+  return contactToSeal.isAddressSealed ? path.unseal() : path.seal();
 };

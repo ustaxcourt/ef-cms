@@ -24,7 +24,7 @@ describe('translateStampDataToDraftOrderState', () => {
     const result = translateStampDataToDraftOrderState(legacyStampData);
 
     expect(result).toMatchObject({
-      additionalOrderText: ['Extra clause'],
+      additionalOrderTextArray: ['Extra clause'],
       deniedAsMoot: true,
       deniedWithoutPrejudice: false,
       disposition: MOTION_DISPOSITIONS.DENIED,
@@ -95,7 +95,7 @@ describe('translateStampDataToDraftOrderState', () => {
     });
 
     expect(result).toEqual({
-      additionalOrderText: [''],
+      additionalOrderTextArray: [''],
       orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
     });
   });

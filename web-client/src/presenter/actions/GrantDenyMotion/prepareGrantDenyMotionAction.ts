@@ -132,7 +132,7 @@ const joinWithItIsFurther = (clauses: string[]): string =>
 
 export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   const {
-    additionalOrderText,
+    additionalOrderTextArray,
     deniedAsMoot,
     deniedWithoutPrejudice,
     disposition,
@@ -250,10 +250,10 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   });
 
   const meaningfulAdditionalOrderText = normalizeAdditionalOrderTextArray(
-    additionalOrderText ?? [],
+    additionalOrderTextArray ?? [],
   );
   store.set(
-    state.form.additionalOrderText,
+    state.form.additionalOrderTextArray,
     additionalOrderTextArrayWithRequiredFirstField(
       meaningfulAdditionalOrderText,
     ),

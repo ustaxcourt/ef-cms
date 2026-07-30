@@ -242,7 +242,7 @@ describe('submitCourtIssuedOrderAction', () => {
       state: {
         caseDetail: { docketNumber: '111-20' },
         form: {
-          additionalOrderText: ['', 'Parties shall comply.'],
+          additionalOrderTextArray: ['', 'Parties shall comply.'],
           deniedAsMoot: true,
           deniedWithoutPrejudice: false,
           disposition: 'DENIED',
@@ -261,7 +261,7 @@ describe('submitCourtIssuedOrderAction', () => {
       applicationContext.getUseCases().fileCourtIssuedOrderInteractor.mock
         .calls[0][1].documentMetadata.draftOrderState,
     ).toMatchObject({
-      additionalOrderText: ['Parties shall comply.'],
+      additionalOrderTextArray: ['Parties shall comply.'],
       deniedAsMoot: true,
       deniedWithoutPrejudice: false,
       disposition: 'DENIED',

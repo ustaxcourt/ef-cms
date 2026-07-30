@@ -16,7 +16,7 @@ import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
 
 export class GrantDenyMotionForm extends JoiValidationEntity {
-  public additionalOrderText?: string[];
+  public additionalOrderTextArray?: string[];
   public deniedAsMoot?: boolean;
   public deniedWithoutPrejudice?: boolean;
   public disposition?: string;
@@ -31,7 +31,7 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
   constructor(rawProps) {
     super('GrantDenyMotionForm');
 
-    this.additionalOrderText = rawProps.additionalOrderText;
+    this.additionalOrderTextArray = rawProps.additionalOrderTextArray;
     this.deniedAsMoot = rawProps.deniedAsMoot;
     this.deniedWithoutPrejudice = rawProps.deniedWithoutPrejudice;
     this.disposition = rawProps.disposition;
@@ -50,7 +50,7 @@ export class GrantDenyMotionForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalOrderText: joi
+    additionalOrderTextArray: joi
       .array()
       .items(
         JoiValidationConstants.STRING.max(

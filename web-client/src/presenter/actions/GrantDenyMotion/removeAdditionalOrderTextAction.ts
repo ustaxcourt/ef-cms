@@ -5,7 +5,7 @@ export const removeAdditionalOrderTextAction = ({
   props,
   store,
 }: ActionProps<{ index: number }>) => {
-  const current: string[] = get(state.form.additionalOrderText) || [];
+  const current: string[] = get(state.form.additionalOrderTextArray) || [];
   const next = current.filter((_, i) => i !== props.index);
-  store.set(state.form.additionalOrderText, next);
+  store.set(state.form.additionalOrderTextArray, next);
 };

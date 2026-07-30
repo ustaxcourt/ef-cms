@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setupGrantDenyMotionFormAction } from './setupGrantDenyMotionFormAction';
 
 describe('setupGrantDenyMotionFormAction', () => {
-  it('initializes additionalOrderText as an empty array on a non-lead case', async () => {
+  it('initializes additionalOrderTextArray as an empty array on a non-lead case', async () => {
     const result = await runAction(setupGrantDenyMotionFormAction, {
       modules: { presenter },
       state: {
@@ -13,7 +13,7 @@ describe('setupGrantDenyMotionFormAction', () => {
       },
     });
 
-    expect(result.state.form.additionalOrderText).toEqual(['']);
+    expect(result.state.form.additionalOrderTextArray).toEqual(['']);
     expect(result.state.form.isOnLeadCase).toBe(false);
     expect(result.state.form.issueOrder).toBeUndefined();
   });

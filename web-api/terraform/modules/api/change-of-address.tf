@@ -26,6 +26,8 @@ resource "aws_lambda_event_source_mapping" "change_of_address_mapping" {
 }
 
 resource "aws_sqs_queue" "change_of_address_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name                       = "change_of_address_queue_${var.environment}_${var.current_color}"
   visibility_timeout_seconds = local.timeout_time
 
@@ -36,6 +38,8 @@ resource "aws_sqs_queue" "change_of_address_queue" {
 }
 
 resource "aws_sqs_queue" "change_of_address_dl_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name = "change_of_address_dl_queue_${var.environment}_${var.current_color}"
 }
 

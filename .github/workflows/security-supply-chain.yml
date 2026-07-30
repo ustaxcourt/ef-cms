@@ -1,0 +1,116 @@
+name: Security - Supply Chain
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Dependency Review (PR gate)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: high
+          allow-ghsas: ''
+          warn-only: true
+
+  lockfile-lint:
+    name: Lockfile integrity
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: lockfile-lint
+        continue-on-error: true
+        run: |
+          npx lockfile-lint@5.0.0 \
+            --path package-lock.json \
+            --type npm \
+            --allowed-hosts npm \
+            --validate-https \
+            --validate-integrity
+
+  npm-audit:
+    name: npm audit (production deps)
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      # warn-only: 2 known open findings in production deps (--omit=dev):
+      #   shell-quote@1.8.3 CRITICAL (GHSA-w7jw-789q-3m8p) via npm-run-all — fix: npm audit fix
+      #   form-data@4.0.5 HIGH (GHSA-hmw2-7cc7-3qxx) via axios — fix: npm audit fix --force
+      # Remove continue-on-error once both are resolved or risk-accepted.
+      - name: npm audit
+        continue-on-error: true #will flip these to false once the two known open findings are resolved or risk-accepted
+        run: npm audit --audit-level=high --omit=dev
+
+  trivy:
+    name: Trivy Full-Tree Scan
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Trivy filesystem scan
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@v0.31.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          format: sarif
+          output: trivy-results.sarif
+
+      - name: Upload SARIF to Security tab
+        if: >-
+          always() &&
+          hashFiles('trivy-results.sarif') != '' &&
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy
+        continue-on-error: true

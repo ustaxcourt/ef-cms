@@ -12,6 +12,8 @@ module "worker_lambda" {
 }
 
 resource "aws_sqs_queue" "worker_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name                       = "worker_queue_${var.environment}_${var.color}"
   visibility_timeout_seconds = 901
   redrive_policy = jsonencode({
@@ -27,6 +29,8 @@ resource "aws_lambda_event_source_mapping" "worker_event_mapping" {
 }
 
 resource "aws_sqs_queue" "worker_dl_queue" {
+  sqs_managed_sse_enabled = true
+  # AWS-managed SSE-SQS is sufficient; CMK would add key management overhead without meaningful security benefit
   name = "worker_dl_queue_${var.environment}_${var.color}"
   message_retention_seconds = 1209600
 }

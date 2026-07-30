@@ -83,7 +83,7 @@ describe('Authorization client service', () => {
 
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 
@@ -97,7 +97,7 @@ describe('Authorization client service', () => {
   describe('chambers role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 
@@ -169,7 +169,7 @@ describe('Authorization client service', () => {
   describe('judge role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 

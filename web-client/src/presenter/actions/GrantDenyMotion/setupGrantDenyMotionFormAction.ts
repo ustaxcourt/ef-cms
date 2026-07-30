@@ -7,7 +7,7 @@ export const setupGrantDenyMotionFormAction = ({ get, store }: ActionProps) => {
   const isOnLeadCase = isLeadCase(caseDetail);
 
   store.set(state.form, {
-    additionalOrderText: [''],
+    additionalOrderTextArray: [''],
     isOnLeadCase,
     issueOrder: isOnLeadCase
       ? GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup

@@ -67,3 +67,10 @@ variable "viewer_protocol_policy" {
   type    = string
   default = "redirect-to-https"
 }
+variable "payment_portal_arn" {
+  type    = string
+}
+
+variable "payment_portal_host" {
+  type    = string
+}

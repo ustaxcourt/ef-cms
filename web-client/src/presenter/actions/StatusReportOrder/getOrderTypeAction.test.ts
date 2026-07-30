@@ -74,7 +74,7 @@ describe('getOrderTypeAction,', () => {
           },
         },
         permissions: {
-          STAMP_MOTION: true,
+          GRANT_DENY_MOTION: true,
         },
       },
     });

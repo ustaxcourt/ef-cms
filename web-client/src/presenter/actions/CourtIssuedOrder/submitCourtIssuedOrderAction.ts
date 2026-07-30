@@ -33,7 +33,6 @@ export const submitCourtIssuedOrderAction = async ({
 
   const documentMetadata = Object.fromEntries(
     Object.entries({
-      additionalOrderText: formData.additionalOrderText,
       additionalOrderTextArray: formData.additionalOrderTextArray,
       deniedAsMoot: formData.deniedAsMoot,
       deniedWithoutPrejudice: formData.deniedWithoutPrejudice,
@@ -90,14 +89,6 @@ export const submitCourtIssuedOrderAction = async ({
       documentMetadata.additionalOrderTextArray,
     );
     documentMetadata.additionalOrderTextArray =
-      forPersistence.length > 0 ? forPersistence : [];
-  }
-
-  if (Array.isArray(documentMetadata.additionalOrderText)) {
-    const forPersistence = normalizeAdditionalOrderTextArray(
-      documentMetadata.additionalOrderText,
-    );
-    documentMetadata.additionalOrderText =
       forPersistence.length > 0 ? forPersistence : [];
   }
 

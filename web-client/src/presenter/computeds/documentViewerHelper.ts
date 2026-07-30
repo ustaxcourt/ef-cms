@@ -168,7 +168,7 @@ export const getDocumentDisplayFlags = ({
     );
 
   const showGrantDenyMotionButton =
-    permissions.STAMP_MOTION &&
+    permissions.GRANT_DENY_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(document.eventCode);
 
   const showServiceWarning =

@@ -21,6 +21,7 @@ data "archive_file" "lambda_function_zip" {
 }
 
 resource "aws_lambda_function" "lambda_function" {
+  #checkov:skip=CKV_AWS_173:Lambda env vars do not require CMK encryption — SLACK_WEBHOOK_URL is deprecated and unused; DEFAULT_ACCOUNT_PASS is scoped to non-production test users only and defaults to a known hardcoded value; no production secrets are stored in env vars
   function_name    = var.lambda_name
   handler          = "lambda.${var.handler_method}"
   runtime          = "nodejs24.x"

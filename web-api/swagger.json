@@ -3732,6 +3732,147 @@
         }
       }
     },
+    "/filing-fee/init-payment": {
+      "put": {
+        "tags": ["payment-portal"],
+        "summary": "Initializes a payment with the payment portal",
+        "description": "Initializes a payment with the payment portal.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/putFeeInitPaymentResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filing-fee/process-payment": {
+      "put": {
+        "tags": ["payment-portal"],
+        "summary": "Processes a payment over at the payment portal",
+        "description": "Processes a payment over at the payment portal.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/filingFeePaymentDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filing-fee/get-transaction-details/{docketNumber}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["payment-portal"],
+        "summary": "Gets details of transactions done with the payment portal",
+        "description": "Gets details of transactions done with the payment portal.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/filingFeePaymentDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/sections/{section}/users": {
       "parameters": [
         {
@@ -9094,6 +9235,37 @@
         "sort",
         "userHeading"
       ]
+    },
+    "putFeeInitPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "paymentRedirect": {
+          "type": "string",
+          "description": "redirect to payment portal"
+        }
+      }
+    },
+    "filingFeePaymentDetails": {
+      "type": "object",
+      "properties": {
+        "paymentStatus": { "type": "string" },
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transactionStatus": { "type": "string" },
+              "payGovTrackingId": { "type": "string" },
+              "paymentMethod": { "type": "string" },
+              "returnDetail": { "type": "string" },
+              "createdTimestamp": { "type": "string" },
+              "updatedTimestamp": { "type": "string" }
+            },
+            "required": ["transactionStatus"]
+          }
+        }
+      },
+      "required": ["transactionStatus", "transactions"]
     }
   }
 }
