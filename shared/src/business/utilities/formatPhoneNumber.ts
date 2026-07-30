@@ -1,9 +1,3 @@
-/**
- * formats a 10-digit phone number with hyphens
- *
- * @param {string} phone the phone number to format
- * @returns {string|void} the formatted string
- */
 export const formatPhoneNumber = function (phone) {
   if (!phone) return;
 
@@ -15,12 +9,6 @@ export const formatPhoneNumber = function (phone) {
   return phone;
 };
 
-/**
- * formats a 10-digit phone number for trial notices with area code in parentheses
- *
- * @param {string} phone the phone number to format
- * @returns {string|void} the formatted string
- */
 export const formatTrialNoticePhoneNumber = function (
   phone?: string,
 ): string | undefined {
