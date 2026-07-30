@@ -30,12 +30,13 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 
 ### 3. Find the specific error - JS errors
 1. Select JS errors tab.
-2. You can locate the error in the histogram or by the "Top 100 JS errors by exception message" table.
-3. A sidebar will appear; select the session ID corresponding to the desired error.
-4. At the bottom you will see a "Sessions performance detail" table, click on one of the events to bring up a side panel.
-5. This side panel will show various pieces of information. Click on the "Raw event" tab.
-6. Scroll down on this raw event tab until you find the unminified stack "key".
-7. Use the Error and the file name to troubleshoot the issue.
+2. You can locate the error in the time series graph or by the "Top 100 JS errors by exception message" table. Or by clicking ‘Sessions’ Count under ‘Top 100 JS Errors by exception Message’
+  1. If you clicked from the Chart A side bar will appear and there you select the session ID corresponding to the desired error.
+  2. Or if you selected ‘Sessions’ Count under ‘Top 100 JS Errors By Exception Message’ Table go to step 3
+3. At the bottom you will see a "Sessions performance detail" table, click on one of the events to bring up a side tab. Click ‘View’ Link under the Exception column for the specific error you would like to look at
+4. This side tab will show various pieces of information. Click on the "Raw event" tab.
+5. Scroll down on this raw event tab until you find the unminified stack "key" or afflicted 'userId'
+6. Use the Error, file name, and userId Information to troubleshoot the issue.
 
 **For a JS error** — read the stack trace top-down:
 1. Find the **topmost frame that points into our code** (`web-client/src/...`). That line is where the error actually threw. Example:
@@ -52,14 +53,20 @@ Reach for this runbook when you've already looked in Kibana ([logging.md](../log
 
 ### 4. Find the specific error - HTTP errors
 1. Select HTTP request tab.
-2. Select a data point from either the graph or select a request.
+2. Select a data point from the graph.
 3. Click on the session id.
 4. Click on the event.
 5. Go to raw event tab for additional information that you can use to debug.
 
+### 4.1. HTTP errors (continued)
+Another useful view is the ‘Top 100 network routes with issues’ at the bottom of the http errors tab page. This view breaks down client side requests that AWS RUM caught and categorizes them into
+1. ‘Request Fault Rate’ - Request Fault Rate Tracks A request that reached the service, and the service responded with a failure HTTP 5xx Errors (500, 502, 503, etc) unhandled exceptions, application crashes, backend failures.
+2. ‘Request Error Rate’ - Request Error Rate Tracks requests that ended in an error condition HTTP 4xx Errors (400, 401, 403, 404), Timeouts, Validation Failures
+3. ‘Network Failure Rate’ - Tracks requests that never successfully completed due to network issues this can include connection refused, DNS failures, TLS handshake failure, socket resets, packet loss, connection timeout, connection loss.
+
 **For an HTTP error** — you get a request URL and status code, not a stack trace:
 1. Map the path (e.g. `POST /case-documents/123-45/...`) to its interactor/use case by searching the repo for the route.
-2. If it's a **5xx**, the server erred — pivot to Kibana and search that request's docket number / timestamp for the server-side stack trace.
+2. If it's a **5xx**, the server errored — pivot to Kibana and search that request's docket number / timestamp for the server-side stack trace.
 3. If it's a **4xx**, the client sent something the server rejected, or it's an expected condition (e.g. a 404 for a missing case).
 
 
