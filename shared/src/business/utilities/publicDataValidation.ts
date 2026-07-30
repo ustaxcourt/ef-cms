@@ -20,6 +20,7 @@ export type UnauthorizedPublicFieldFinding = {
   entityName?: string;
   fieldName: string;
   matchPreview: string;
+  type?: 'unauthorized_field' | 'not_validated';
 };
 
 const PUBLIC_ENTITY_FACTORIES = {
@@ -290,11 +291,12 @@ function findUnauthorizedFieldsForEntity(args: {
     return findings;
   }
 
-  if ((args.obj as any).isValidated !== true) {
+  if (args.path === '' && (args.obj as any).isValidated !== true) {
     findings.push({
       entityName: args.candidateEntityName,
       fieldName: args.path ? `${args.path}.isValidated` : 'isValidated',
       matchPreview: '[not validated]',
+      type: 'not_validated',
     });
   }
 

@@ -29,14 +29,21 @@ export const dataSecurityFilter = (
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
     const entityConstructor = getEntityByName(data[0].entityName);
     if (entityConstructor) {
-      returnData = data.map(
-        result =>
-          new entityConstructor(result, {
-            applicationContext,
-            authorizedUser,
-            filtered: true,
-          }),
-      );
+      returnData = data.map(result => {
+        const entity = new entityConstructor(result, {
+          applicationContext,
+          authorizedUser,
+          filtered: true,
+        });
+        if ((result as any).isValidated === true) {
+          Object.defineProperty(entity, 'isValidated', {
+            enumerable: false,
+            value: true,
+            writable: false,
+          });
+        }
+        return entity;
+      });
     }
   } else if (data && data.entityName) {
     const entityConstructor = getEntityByName(data.entityName);
@@ -46,6 +53,13 @@ export const dataSecurityFilter = (
         authorizedUser,
         filtered: true,
       });
+      if ((data as any).isValidated === true) {
+        Object.defineProperty(returnData, 'isValidated', {
+          enumerable: false,
+          value: true,
+          writable: false,
+        });
+      }
     }
   }
   return returnData;
