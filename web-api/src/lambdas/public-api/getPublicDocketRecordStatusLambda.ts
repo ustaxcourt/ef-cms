@@ -31,7 +31,7 @@ export const getPublicDocketRecordStatusLambda = event =>
         message: 'Invalid jobId',
         status: 'error',
         statusCode: 400,
-      });
+      }).validate();
     }
 
     const [isReady, hasError] = await Promise.all([
@@ -67,7 +67,7 @@ export const getPublicDocketRecordStatusLambda = event =>
           message: 'Failed to generate docket record',
           status: 'error',
           statusCode: 500,
-        });
+        }).validate();
       }
 
       const { url } = await applicationContext
@@ -77,7 +77,10 @@ export const getPublicDocketRecordStatusLambda = event =>
           key: fileId,
           useTempBucket: true,
         });
-      return new PublicDocketRecordPdfJobResponse({ status: 'ready', url });
+      return new PublicDocketRecordPdfJobResponse({
+        status: 'ready',
+        url,
+      }).validate();
     }
 
     if (hasError) {
@@ -103,8 +106,10 @@ export const getPublicDocketRecordStatusLambda = event =>
         message,
         status: 'error',
         statusCode,
-      });
+      }).validate();
     }
 
-    return new PublicDocketRecordPdfJobResponse({ status: 'pending' });
+    return new PublicDocketRecordPdfJobResponse({
+      status: 'pending',
+    }).validate();
   });

@@ -57,6 +57,36 @@ describe('publicDataValidation', () => {
     expect(findings).toEqual([]);
   });
 
+  it('passes for root numeric payloads without entityName', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        count: 2,
+        threshold: 7.5,
+      },
+      url: 'http://localhost:4001/public-api/metrics',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('fails for nonnumeric root payload values without entityName', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        status: 'bad',
+      },
+      url: 'http://localhost:4001/public-api/metrics',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'status',
+          matchPreview: '[redacted]',
+        }),
+      ]),
+    );
+  });
+
   it('fails on unauthorized fields for known public entities', () => {
     const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
     user.validate();
@@ -125,6 +155,26 @@ describe('publicDataValidation', () => {
         expect.objectContaining({
           entityName: 'PublicUser',
           fieldName: 'nested',
+        }),
+      ]),
+    );
+  });
+
+  it('finds nested missing entityName in non-root objects', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        container: {
+          nested: [{ foo: 'bar' }],
+        },
+      },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'container.nested[0].entityName',
+          matchPreview: '[missing]',
         }),
       ]),
     );

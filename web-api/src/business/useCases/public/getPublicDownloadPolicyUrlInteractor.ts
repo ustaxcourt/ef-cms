@@ -88,5 +88,5 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       key: docketEntryEntity.documentStorageId,
     });
 
-  return new PublicDocumentDownloadUrl(downloadUrl);
+  return new PublicDocumentDownloadUrl(downloadUrl).validate();
 };
