@@ -20,8 +20,8 @@ import {
 import joi from 'joi';
 
 export class PublicCaseResponse extends JoiValidationEntity {
-  public canAllowDocumentService?: string;
-  public canAllowPrintableDocketRecord?: string;
+  public canAllowDocumentService?: boolean;
+  public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public caseCaption: string;
   public createdAt?: string;
@@ -73,8 +73,8 @@ export class PublicCaseResponse extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    canAllowDocumentService: JoiValidationConstants.STRING.optional(),
-    canAllowPrintableDocketRecord: JoiValidationConstants.STRING.optional(),
+    canAllowDocumentService: joi.boolean().optional(),
+    canAllowPrintableDocketRecord: joi.boolean().optional(),
     canDojPractitionersRepresentParty: joi.boolean().optional(),
     caseCaption: CASE_CAPTION_RULE,
     consolidatedCases: joi.array().optional(),
