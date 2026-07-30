@@ -41,5 +41,5 @@ export const getAllFeatureFlagsInteractor = async (
     });
   }
 
-  return new FeatureFlagResponseDTO(allFeatureFlags);
+  return new FeatureFlagResponseDTO(allFeatureFlags).validate();
 };
