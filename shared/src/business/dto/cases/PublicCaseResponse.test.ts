@@ -1,4 +1,4 @@
-import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import {
   DOCKET_NUMBER_SUFFIXES,
@@ -32,14 +32,14 @@ describe('PublicCaseResponse', () => {
   const mock_publicCase = new PublicCase(mock_rawPublicCase, {
     authorizedUser: mockIrsPractitionerUser,
   });
-  it('should create a PublicCaseDTO without options', () => {
+  it('should create a PublicCaseResponse without options', () => {
     const publicCaseDTO = new PublicCaseResponse(mock_publicCase.toRawObject());
     expect(publicCaseDTO).toMatchObject({
       ...mock_publicCase.toRawObject(),
       entityName: 'PublicCaseResponse',
     });
   });
-  it('should create a PublicCaseDTO with options', () => {
+  it('should create a PublicCaseResponse with options', () => {
     const publicCaseDTO = new PublicCaseResponse(
       mock_publicCase.toRawObject(),
       {

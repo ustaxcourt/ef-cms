@@ -3,7 +3,7 @@ import {
   resultKey,
 } from './generatePublicDocketRecordPdfWorkerLambda';
 import { genericHandler } from '../../genericHandler';
-import { PublicDocketRecordPdfJobResponseDTO } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponseDTO';
+import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponse';
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -27,7 +27,7 @@ export const getPublicDocketRecordStatusLambda = event =>
     // Reject anything that isn't a UUID so clients can't craft keys like
     // `../foo` and probe the temp bucket via the S3 client.
     if (typeof jobId !== 'string' || !UUID_REGEX.test(jobId)) {
-      return new PublicDocketRecordPdfJobResponseDTO({
+      return new PublicDocketRecordPdfJobResponse({
         message: 'Invalid jobId',
         status: 'error',
         statusCode: 400,
@@ -63,7 +63,7 @@ export const getPublicDocketRecordStatusLambda = event =>
         // fall through to the corrupted-marker branch below
       }
       if (!fileId) {
-        return new PublicDocketRecordPdfJobResponseDTO({
+        return new PublicDocketRecordPdfJobResponse({
           message: 'Failed to generate docket record',
           status: 'error',
           statusCode: 500,
@@ -77,7 +77,7 @@ export const getPublicDocketRecordStatusLambda = event =>
           key: fileId,
           useTempBucket: true,
         });
-      return new PublicDocketRecordPdfJobResponseDTO({ status: 'ready', url });
+      return new PublicDocketRecordPdfJobResponse({ status: 'ready', url });
     }
 
     if (hasError) {
@@ -99,12 +99,12 @@ export const getPublicDocketRecordStatusLambda = event =>
       } catch {
         // leave defaults
       }
-      return new PublicDocketRecordPdfJobResponseDTO({
+      return new PublicDocketRecordPdfJobResponse({
         message,
         status: 'error',
         statusCode,
       });
     }
 
-    return new PublicDocketRecordPdfJobResponseDTO({ status: 'pending' });
+    return new PublicDocketRecordPdfJobResponse({ status: 'pending' });
   });

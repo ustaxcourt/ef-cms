@@ -7,7 +7,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { PublicDocumentDownloadUrlDTO } from '@shared/business/dto/public/PublicDocumentDownloadUrlDTO';
+import { PublicDocumentDownloadUrl } from '@shared/business/dto/public/PublicDocumentDownloadUrl';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
@@ -18,7 +18,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     key,
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
   authorizdeUser: UnknownAuthUser,
-): Promise<PublicDocumentDownloadUrlDTO> => {
+): Promise<PublicDocumentDownloadUrl> => {
   const caseToCheck: any = await getCaseByDocketNumber({
     docketNumber,
   });
@@ -88,5 +88,5 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       key: docketEntryEntity.documentStorageId,
     });
 
-  return new PublicDocumentDownloadUrlDTO(downloadUrl);
+  return new PublicDocumentDownloadUrl(downloadUrl);
 };

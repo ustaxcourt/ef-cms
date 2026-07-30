@@ -3,7 +3,7 @@ import { environment } from '@web-api/environment';
 import { genericHandler } from '../../genericHandler';
 import { getLambdaClient } from '@web-api/gateways/lambda/getLambdaClient';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { PublicDocketRecordPdfJobResponseDTO } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponseDTO';
+import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponse';
 
 /**
  * Public "start" endpoint for generating a printable docket record PDF.
@@ -47,7 +47,7 @@ export const generatePublicDocketRecordPdfLambda = event =>
         );
       }
 
-      return new PublicDocketRecordPdfJobResponseDTO({ jobId });
+      return new PublicDocketRecordPdfJobResponse({ jobId });
     },
     { logResults: false },
   );

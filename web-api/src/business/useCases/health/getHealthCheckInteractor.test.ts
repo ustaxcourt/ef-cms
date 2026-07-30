@@ -1,7 +1,7 @@
 jest.mock('@web-api/persistence/elasticsearch/elasticSearchHealthCheck.ts');
 import { S3 } from '@aws-sdk/client-s3';
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
-import { HealthCheckResponseDTO } from '@shared/business/dto/public/HealthCheckResponseDTO';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { elasticSearchHealthCheck as elasticSearchHealthCheckMock } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 import { SearchClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 
@@ -45,7 +45,7 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(statusResult).toEqual(
-      new HealthCheckResponseDTO({
+      new HealthCheckResponse({
         cognito: true,
         elasticsearch: true,
         emailService: true,
@@ -99,7 +99,7 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(status).toEqual(
-      new HealthCheckResponseDTO({
+      new HealthCheckResponse({
         cognito: false,
         elasticsearch: false,
         emailService: false,

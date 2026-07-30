@@ -1,6 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { HealthCheckResponseDTO } from '@shared/business/dto/public/HealthCheckResponseDTO';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { elasticSearchHealthCheck } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 
 const regionEast = 'us-east-1';
@@ -170,7 +170,7 @@ const getEmailServiceStatus = async ({
 
 export const getHealthCheckInteractor = async (
   applicationContext: ServerApplicationContext,
-): Promise<HealthCheckResponseDTO> => {
+): Promise<HealthCheckResponse> => {
   const [
     elasticSearchStatus,
     s3BucketStatus,
@@ -187,7 +187,7 @@ export const getHealthCheckInteractor = async (
     }),
   ]);
 
-  return new HealthCheckResponseDTO({
+  return new HealthCheckResponse({
     cognito: cognitoStatus,
     elasticsearch: elasticSearchStatus,
     emailService: emailServiceStatus,

@@ -60,7 +60,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       key: mockCase.docketEntries[0].documentStorageId,
     });
     expect(result).toEqual({
-      entityName: 'PublicDocumentDownloadUrlDTO',
+      entityName: 'PublicDocumentDownloadUrl',
       url: 'localhost',
     });
   });
@@ -142,7 +142,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       mockDocketClerkUser,
     );
     expect(result).toEqual({
-      entityName: 'PublicDocumentDownloadUrlDTO',
+      entityName: 'PublicDocumentDownloadUrl',
       url: 'localhost',
     });
   });
@@ -173,7 +173,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       mockDocketClerkUser,
     );
     expect(result).toEqual({
-      entityName: 'PublicDocumentDownloadUrlDTO',
+      entityName: 'PublicDocumentDownloadUrl',
       url: 'localhost',
     });
   });

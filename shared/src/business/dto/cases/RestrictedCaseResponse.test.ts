@@ -1,4 +1,4 @@
-import { RestrictedCaseResponse } from './RestrictedCaseDTO';
+import { RestrictedCaseResponse } from './RestrictedCaseResponse';
 
 describe('RestrictedCaseResponse', () => {
   it('maps a restricted raw case and removes served parties from docket entries', () => {

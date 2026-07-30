@@ -12,7 +12,7 @@ export type S3BucketsStatusDTO = {
   westTempDocuments: boolean;
 };
 
-export type HealthCheckResponseDTOType = {
+export type HealthCheckResponseData = {
   cognito: boolean;
   elasticsearch: boolean;
   emailService: boolean;
@@ -32,14 +32,14 @@ const S3_STATUS_RULES = {
 
 export class HealthCheckResponse
   extends JoiValidationEntity
-  implements HealthCheckResponseDTOType
+  implements HealthCheckResponseData
 {
   cognito: boolean;
   elasticsearch: boolean;
   emailService: boolean;
   s3: S3BucketsStatusDTO;
 
-  constructor(data: HealthCheckResponseDTOType) {
+  constructor(data: HealthCheckResponseData) {
     super('HealthCheckResponse');
     this.cognito = data.cognito;
     this.elasticsearch = data.elasticsearch;

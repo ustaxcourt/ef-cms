@@ -1,10 +1,10 @@
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicTrialSessionInfoDTO } from '@shared/business/dto/trialSessions/PublicTrialSessionInfoDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
+import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
-import { HealthCheckResponseDTO } from '@shared/business/dto/public/HealthCheckResponseDTO';
-import { PublicDocumentDownloadUrlDTO } from '@shared/business/dto/public/PublicDocumentDownloadUrlDTO';
-import { PublicDocketRecordPdfJobResponseDTO } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponseDTO';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
+import { PublicDocumentDownloadUrl } from '@shared/business/dto/public/PublicDocumentDownloadUrl';
+import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponse';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
@@ -30,8 +30,8 @@ const PUBLIC_ENTITY_FACTORIES = {
         authorizedUser: undefined,
       },
     ),
-  PublicCaseDTO: (): PublicCaseDTO =>
-    new PublicCaseDTO(
+  PublicCaseResponse: (): PublicCaseResponse =>
+    new PublicCaseResponse(
       new PublicCase(
         {},
         {
@@ -47,17 +47,17 @@ const PUBLIC_ENTITY_FACTORIES = {
     new PublicDocumentSearchResult({}),
   PublicTrialSessionDetails: (): PublicTrialSessionDetails =>
     new PublicTrialSessionDetails({}),
-  PublicTrialSessionInfoDTO: (): PublicTrialSessionInfoDTO =>
-    new PublicTrialSessionInfoDTO(new TrialSession({})),
+  PublicTrialSessionInfo: (): PublicTrialSessionInfo =>
+    new PublicTrialSessionInfo(new TrialSession({})),
   PublicUser: (): PublicUser => new PublicUser({}),
   RestrictedCase: (): RestrictedCase =>
     new RestrictedCase({ docketNumber: '' }),
-  RestrictedCaseDTO: (): RestrictedCaseDTO =>
-    new RestrictedCaseDTO(new RestrictedCase({ docketNumber: '' })),
+  RestrictedCaseResponse: (): RestrictedCaseResponse =>
+    new RestrictedCaseResponse(new RestrictedCase({ docketNumber: '' })),
   FeatureFlagResponseDTO: (): FeatureFlagResponseDTO =>
     new FeatureFlagResponseDTO({}),
-  HealthCheckResponseDTO: (): HealthCheckResponseDTO =>
-    new HealthCheckResponseDTO({
+  HealthCheckResponse: (): HealthCheckResponse =>
+    new HealthCheckResponse({
       cognito: false,
       elasticsearch: false,
       emailService: false,
@@ -72,17 +72,16 @@ const PUBLIC_ENTITY_FACTORIES = {
         westTempDocuments: false,
       },
     }),
-  PublicDocumentDownloadUrlDTO: (): PublicDocumentDownloadUrlDTO =>
-    new PublicDocumentDownloadUrlDTO({ url: '' }),
-  PublicDocketRecordPdfJobResponseDTO:
-    (): PublicDocketRecordPdfJobResponseDTO =>
-      new PublicDocketRecordPdfJobResponseDTO({
-        status: 'pending',
-        jobId: '',
-        url: '',
-        message: '',
-        statusCode: 200,
-      }),
+  PublicDocumentDownloadUrl: (): PublicDocumentDownloadUrl =>
+    new PublicDocumentDownloadUrl({ url: '' }),
+  PublicDocketRecordPdfJobResponse: (): PublicDocketRecordPdfJobResponse =>
+    new PublicDocketRecordPdfJobResponse({
+      status: 'pending',
+      jobId: '',
+      url: '',
+      message: '',
+      statusCode: 200,
+    }),
 } as const;
 
 const DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME: Map<string, Set<string>> = new Map(
@@ -289,6 +288,14 @@ function findUnauthorizedFieldsForEntity(args: {
 
   if (entityMetadata.findings.length > 0 && !entityMetadata.allowedFields) {
     return findings;
+  }
+
+  if ((args.obj as any).isValidated !== true) {
+    findings.push({
+      entityName: args.candidateEntityName,
+      fieldName: args.path ? `${args.path}.isValidated` : 'isValidated',
+      matchPreview: '[not validated]',
+    });
   }
 
   for (const [key, value] of Object.entries(args.obj)) {
