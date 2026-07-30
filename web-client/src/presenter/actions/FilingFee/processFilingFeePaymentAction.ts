@@ -1,7 +1,6 @@
 export const processFilingFeePaymentAction = async ({
   applicationContext,
   props,
-  path,
 }: ActionProps) => {
   try {
     const result = await applicationContext
@@ -10,20 +9,17 @@ export const processFilingFeePaymentAction = async ({
         docketNumber: props.docketNumber,
       });
 
-    return path.success({
+    return {
       processPaymentStatus: {
         docketNumber: props.docketNumber,
         ...result,
       },
-    });
+    };
   } catch (e) {
-    return path.error({
-      alertError: {
-        message:
-          'Something went wrong when paying the filing fee. Please try again.',
-        overwritable: true,
-        title: 'Filing fee payment failed',
+    return {
+      processPaymentStatus: {
+        paymentStatus: 'failed',
       },
-    });
+    };
   }
 };
