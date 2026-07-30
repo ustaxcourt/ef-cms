@@ -7,6 +7,7 @@ const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
   'aws-sdk-client-mock',
+  '@aws-sdk/core',
   'dom-serializer',
   'domelementtype',
   'domhandler',
