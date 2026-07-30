@@ -1,6 +1,7 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { EXPOSED_RESPONSE_HEADERS } from '@shared/utils/headers';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 import {
   getAuthHeader,
   getConnectionIdFromEvent,
@@ -174,14 +175,16 @@ describe('handle', () => {
   });
 
   it('should return a 500 response for unsanitized public entity payloads on public routes', async () => {
+    const user = new PublicUser({
+      name: 'Bad User',
+      role: 'petitioner',
+    }).validate();
+    (user as any).privateField = 'this is bad!';
     const response = await handle(
       {
         path: '/public-api/some-endpoint',
       },
-      () => ({
-        entityName: 'PublicUser',
-        privateField: 'this is bad!',
-      }),
+      () => user,
     );
     expect(response).toEqual({
       body: JSON.stringify(
@@ -192,16 +195,31 @@ describe('handle', () => {
     });
   });
 
-  it('should allow valid public entity payloads on public routes', async () => {
+  it('should return a 500 response for unvalidated public entity payloads on public routes', async () => {
+    const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
     const response = await handle(
       {
         path: '/public-api/some-endpoint',
       },
-      () => ({
-        entityName: 'PublicUser',
-        name: 'Public User',
-        role: 'petitioner',
-      }),
+      () => user,
+    );
+    expect(response).toEqual({
+      body: JSON.stringify(
+        'Unsanitized entity: entity PublicUser was not validated before being returned',
+      ),
+      headers: EXPECTED_HEADERS,
+      statusCode: 500,
+    });
+  });
+
+  it('should allow valid public entity payloads on public routes', async () => {
+    const user = new PublicUser({ name: 'Public User', role: 'petitioner' });
+    user.validate();
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => user,
     );
 
     expect(response).toEqual({

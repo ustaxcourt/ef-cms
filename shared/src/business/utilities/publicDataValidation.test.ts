@@ -48,6 +48,15 @@ describe('publicDataValidation', () => {
     );
   });
 
+  it('passes for top-level array items that are URL-only objects', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: [{ url: 'https://example.com/doc.pdf' }],
+      url: 'http://localhost:4001/public-api/documents',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
   it('fails on unauthorized fields for known public entities', () => {
     const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
     user.validate();
@@ -62,6 +71,60 @@ describe('publicDataValidation', () => {
         expect.objectContaining({
           entityName: 'PublicUser',
           fieldName: 'privateField',
+        }),
+      ]),
+    );
+  });
+
+  it('fails for root entities that have not been validated', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    const findings = findUnauthorizedPublicFields({
+      data: user,
+      url: 'http://localhost:4001/public-api/users',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicUser',
+          fieldName: 'isValidated',
+          matchPreview: '[not validated]',
+          type: 'not_validated',
+        }),
+      ]),
+    );
+  });
+
+  it('fails for root entities with an unrecognized entityName', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: { entityName: 'SomeUnknownEntity', field: 'value' },
+      url: 'http://localhost:4001/public-api/something',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'SomeUnknownEntity',
+          fieldName: 'entityName',
+        }),
+      ]),
+    );
+  });
+
+  it('recurses into nested untagged objects within a known entity', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    user.validate();
+    (user as any).nested = { entityName: 'SomeUnknownEntity', field: 'value' };
+    const findings = findUnauthorizedPublicFields({
+      data: user,
+      url: 'http://localhost:4001/public-api/users',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicUser',
+          fieldName: 'nested',
         }),
       ]),
     );
