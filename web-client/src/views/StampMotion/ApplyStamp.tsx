@@ -8,7 +8,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import { RenderParameters } from 'pdfjs-dist/types/src/display/api';
-import { PageViewport } from 'pdfjs-dist/types/src/display/display_utils';
+import type { PageViewport } from 'pdfjs-dist/types/src/display/page_viewport';
 
 type RenderParametersWithCanvas = RenderParameters & {
   canvas?: HTMLCanvasElement;

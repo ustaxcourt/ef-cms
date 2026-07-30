@@ -253,6 +253,7 @@ import { saveCaseNoteInteractor } from '@web-client/proxies/caseNote/saveCaseNot
 import { saveSignedDocumentInteractor } from '@web-client/proxies/documents/saveSignedDocumentProxy';
 import { sealCaseContactAddressInteractor } from '@web-client/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '@web-client/proxies/sealCaseProxy';
+import { unsealCaseContactAddressInteractor } from '@web-client/proxies/unsealCaseContactAddressProxy';
 import { sealDocketEntryInteractor } from '@web-client/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseToIrsInteractor } from '@web-client/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '@web-client/proxies/serveCourtIssuedDocumentProxy';
@@ -523,6 +524,7 @@ const allUseCases = {
   saveSignedDocumentInteractor,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
+  unsealCaseContactAddressInteractor,
   sealDocketEntryInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,

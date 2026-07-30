@@ -225,6 +225,7 @@ import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinut
 import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
 import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
 import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
+import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCaseContactAddressLambda';
 
 export const app = express();
 
@@ -597,6 +598,10 @@ app.use(expressLogger);
   app.put(
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/unseal-address/:contactId',
+    lambdaWrapper(unsealCaseContactAddressLambda),
   );
   app.post(
     '/case-meta/:docketNumber/other-statistics',

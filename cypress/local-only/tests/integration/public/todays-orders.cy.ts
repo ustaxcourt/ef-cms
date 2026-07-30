@@ -6,6 +6,7 @@ const mockOrders = [
     docketEntryId: 'aaa00001-0001-4000-8000-000000000001',
     docketNumber: '102-20',
     documentTitle: 'Order Denying Motion',
+    entityName: 'PublicDocumentSearchResult',
     eventCode: 'O',
     filingDate: '2026-06-03T15:00:00.000Z',
     numberOfPages: 3,
@@ -16,6 +17,7 @@ const mockOrders = [
     docketEntryId: 'bbb00002-0002-4000-8000-000000000002',
     docketNumber: '101-20',
     documentTitle: 'Order Granting Motion',
+    entityName: 'PublicDocumentSearchResult',
     eventCode: 'O',
     filingDate: '2026-06-03T10:00:00.000Z',
     numberOfPages: 1,
@@ -27,6 +29,7 @@ const mockOrders = [
     docketNumber: '103-20',
     documentTitle: 'Order to Show Cause',
     eventCode: 'O',
+    entityName: 'PublicDocumentSearchResult',
     filingDate: '2026-06-03T12:00:00.000Z',
     numberOfPages: 2,
     signedJudgeName: 'Kathleen Kerrigan',
@@ -143,6 +146,7 @@ const paginationMockOrders = Array.from(
     docketNumber: `${100 + i + 1}-20`,
     // Padded so "Order #001" is not a substring of "Order #010"
     documentTitle: `Order #${String(i + 1).padStart(3, '0')}`,
+    entityName: 'PublicDocumentSearchResult',
     eventCode: 'O',
     // i=0 → 23:59:59Z (newest); each increment subtracts one minute
     filingDate: (() => {
