@@ -33,7 +33,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     getTrialSessionById.mockResolvedValue({
       joinPhoneNumber: '3333',
       judge: {
-        name: 'Test Judge',
+        name: 'Buch',
       },
       meetingId: '1111',
       password: '2222',
@@ -72,7 +72,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       chambersPhoneNumber: '2025213339',
       joinPhoneNumber: '4444444444',
       judge: {
-        name: 'Test Judge',
+        name: 'Buch',
       },
       meetingId: '1111',
       password: '2222',
@@ -115,7 +115,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       data: {
         docketNumberWithSuffix: '123-45',
         trialInfo: {
-          formattedJudge: 'Test Judge',
+          formattedJudge: 'Buch',
           formattedStartDate: 'Sunday, August 25, 2019',
           formattedStartTime: '10:00 am',
           joinPhoneNumber: '3333',
@@ -149,7 +149,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       address1: '1111',
       address2: '2222',
       city: 'Troutville',
-      judge: { name: 'Test Judge' },
+      judge: { name: 'Buch' },
       postalCode: 'Boise, Idaho',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       startDate: '2019-08-25T05:00:00.000Z',
@@ -170,6 +170,9 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       data: {
         nameOfClerk: 'bob',
         titleOfClerk: 'clerk of court',
+        trialInfo: {
+          formattedJudge: 'Buch',
+        },
       },
     });
   });
@@ -225,7 +228,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       address1: '1111',
       address2: '2222',
       city: 'Troutville',
-      judge: { name: 'Test Judge' },
+      judge: { name: 'Buch' },
       postalCode: 'Boise, Idaho',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       startDate: '2019-08-25T05:00:00.000Z',
@@ -245,6 +248,9 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     ).toMatchObject({
       data: {
         docketNumberWithSuffix: '234-56S',
+        trialInfo: {
+          formattedJudge: 'Buch',
+        },
       },
     });
   });
