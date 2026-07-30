@@ -1,5 +1,5 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
-import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 
 export const getPublicTrialSessionDetailsAction = async ({
   applicationContext,
@@ -9,7 +9,7 @@ export const getPublicTrialSessionDetailsAction = async ({
     trialSessionId: string;
   },
   ClientPublicApplicationContext
->): Promise<{ trialSession: PublicTrialSessionDetails }> => {
+>): Promise<{ trialSession: RawPublicTrialSessionDetails }> => {
   const { trialSessionId } = props;
   const trialSession = await applicationContext
     .getUseCases()
