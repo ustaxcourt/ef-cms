@@ -82,7 +82,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     });
   };
 
-  const payFeeFailsure = () => {
+  const payFeeFailure = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -291,7 +291,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
     it(
       'should let petitioner pay the filing fee and notify them of failure',
-      payFeeFailsure,
+      payFeeFailure,
     );
 
     it(
@@ -324,7 +324,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
     it(
       'should let practitioner pay the filing fee and notify them of failure',
-      payFeeFailsure,
+      payFeeFailure,
     );
 
     it(
