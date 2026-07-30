@@ -31,5 +31,5 @@ export const getPublicCaseInteractor = async ({
     caseDTO.docketEntries = [];
   }
 
-  return caseDTO;
+  return caseDTO.validate();
 };

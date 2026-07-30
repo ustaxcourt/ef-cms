@@ -60,9 +60,13 @@ export const handle = async (event, fun) => {
           response,
         });
         if (unauthorizedFindings.length > 0) {
-          const firstUnauthorizedField = unauthorizedFindings[0].fieldName;
+          const firstFinding = unauthorizedFindings[0];
+          const errorDetail =
+            firstFinding.type === 'not_validated'
+              ? `entity ${firstFinding.entityName} was not validated before being returned`
+              : `unauthorized field ${firstFinding.fieldName}`;
           throw new UnsanitizedEntityError(
-            `Unsanitized entity: unauthorized field ${firstUnauthorizedField}`,
+            `Unsanitized entity: ${errorDetail}`,
           );
         }
       }
