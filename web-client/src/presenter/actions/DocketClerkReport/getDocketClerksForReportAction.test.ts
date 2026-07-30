@@ -5,9 +5,30 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocketClerksForReportAction', () => {
   const mockDocketClerks = [
-    { name: 'Zelda Smith', userId: 'z1' },
-    { name: 'Alice Jones', userId: 'a1' },
-    { name: 'Mary Brown', userId: 'm1' },
+    {
+      name: 'Zelda Smith',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'z1',
+    },
+    {
+      name: 'Alice Jones',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'a1',
+    },
+    {
+      name: 'Mary Brown',
+      role: 'docketclerk',
+      section: 'docket',
+      userId: 'm1',
+    },
+    {
+      name: 'Candy Case',
+      role: 'caseServicesSupervisor',
+      section: 'caseServicesSupervisor',
+      userId: 'css1',
+    },
   ];
 
   beforeAll(() => {
@@ -34,17 +55,37 @@ describe('getDocketClerksForReportAction', () => {
     );
   });
 
-  it('should store the returned users sorted alphabetically by name', async () => {
+  it('should store the returned users sorted alphabetically by name, filtered to docket clerks only', async () => {
     const { state } = await runAction(getDocketClerksForReportAction, {
       modules: { presenter },
       state: { docketClerkReport: { docketClerks: [] } },
     });
 
     expect(state.docketClerkReport.docketClerks).toEqual([
-      { name: 'Alice Jones', userId: 'a1' },
-      { name: 'Mary Brown', userId: 'm1' },
-      { name: 'Zelda Smith', userId: 'z1' },
+      {
+        name: 'Alice Jones',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'a1',
+      },
+      {
+        name: 'Mary Brown',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'm1',
+      },
+      {
+        name: 'Zelda Smith',
+        role: 'docketclerk',
+        section: 'docket',
+        userId: 'z1',
+      },
     ]);
+    expect(
+      state.docketClerkReport.docketClerks.find(
+        (u: any) => u.role === 'caseServicesSupervisor',
+      ),
+    ).toBeUndefined();
   });
 
   it('should store an empty array when no users are returned', async () => {
