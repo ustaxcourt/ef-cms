@@ -18,7 +18,7 @@ export class PublicContact extends JoiValidationEntity {
   public originalBarState?: string;
   public practiceType?: string;
   public practitionerType?: string;
-  public serviceIndicator: string;
+  public serviceIndicator?: string;
   public state?: string;
 
   constructor(rawProps) {

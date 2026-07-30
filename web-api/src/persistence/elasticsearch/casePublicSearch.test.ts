@@ -49,7 +49,7 @@ describe('casePublicSearch', () => {
     caseTypes: [CASE_TYPES_MAP.cdp],
   };
 
-  beforeEach(() => {
+  beforeAll(() => {
     search.mockResolvedValue({
       results: [MOCK_CASE_SEARCH_RESULT],
       total: 0,
@@ -121,9 +121,10 @@ describe('casePublicSearch', () => {
   });
 
   it('converts state and territory abbreviations, preserves unmapped values, and filters missing states', async () => {
-    search.mockResolvedValue({
+    search.mockResolvedValueOnce({
       results: [
         {
+          ...MOCK_CASE_SEARCH_RESULT,
           petitioners: [
             { name: 'State Petitioner', state: 'TN' },
             { name: 'Territory Petitioner', state: 'PR' },
@@ -131,8 +132,12 @@ describe('casePublicSearch', () => {
             { name: 'Petitioner Without State' },
           ],
         },
+        {
+          ...MOCK_CASE_SEARCH_RESULT,
+          petitioners: [],
+        },
       ],
-      total: 1,
+      total: 2,
     });
 
     const { results } = await casePublicSearch({
@@ -145,5 +150,29 @@ describe('casePublicSearch', () => {
       'Puerto Rico',
       'Ontario',
     ]);
+    expect(results[1].petitionerNames).toEqual([]);
+    expect(results[1].petitionerStateNames).toEqual([]);
+  });
+
+  it('throws when a result fails PublicCaseSearchResult validation', async () => {
+    search.mockResolvedValueOnce({
+      results: [
+        {
+          caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
+          docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
+          docketNumberWithSuffix:
+            MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+          petitioners: undefined,
+        },
+      ],
+      total: 1,
+    });
+
+    await expect(
+      casePublicSearch({
+        applicationContext,
+        searchTerms,
+      }),
+    ).rejects.toThrow('PublicCaseSearchResult entity was invalid');
   });
 });

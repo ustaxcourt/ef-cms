@@ -75,7 +75,9 @@ export const casePublicSearch = async ({
           )
           .filter((stateName): stateName is string => !!stateName),
         receivedAt: c.receivedAt,
-      }).toRawObject();
+      })
+        .validate()
+        .toRawObject();
 
       return result;
     }),

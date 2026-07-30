@@ -137,7 +137,7 @@ export const caseAdvancedSearchInteractor = async (
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
       petitionerNames: filteredCase.petitioners?.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners
-        ?.map(p =>
+        .map(p =>
           p.state
             ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
             : undefined,
