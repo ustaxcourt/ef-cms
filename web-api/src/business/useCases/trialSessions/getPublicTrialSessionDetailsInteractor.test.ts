@@ -1,9 +1,7 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
-import {
-  PublicTrialSessionDetails,
-  getPublicTrialSessionDetailsInteractor,
-} from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import { getPublicTrialSessionDetailsInteractor } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { NotFoundError } from '@web-api/errors/errors';
 import {
   SESSION_STATUS_TYPES,
@@ -49,7 +47,7 @@ describe('getPublicTrialSessionDetailsInteractor', () => {
   });
 
   it('should get the relevant session details for public users', async () => {
-    const expectedPublicDetails: PublicTrialSessionDetails = {
+    const expectedPublicDetails: RawPublicTrialSessionDetails = {
       address1: '123 E Underwater',
       address2: 'P.O. Box 2',
       calendaredCases: [],

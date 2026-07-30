@@ -6,9 +6,7 @@ import {
 import { state } from '@web-client/presenter/app.cerebral';
 
 type AdvancedSearchResultsSortStateKey =
-  | 'caseSearchSort'
-  | 'opinionDocumentSearchSort'
-  | 'orderDocumentSearchSort';
+  'caseSearchSort' | 'opinionDocumentSearchSort' | 'orderDocumentSearchSort';
 
 export const setAdvancedSearchResultsSortAction = ({
   get,
