@@ -1,5 +1,6 @@
 import { attachFile } from '../../../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { getCypressEnv } from '../../../../../helpers/env/cypressEnvironment';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
@@ -12,16 +13,28 @@ describe('Docket clerk seals / unseals an "Exhibit in Support" (EXS)', () => {
   const primaryFilerName = 'Cody';
   const exhibitTitle = 'Exhibit in Support of Petition';
 
+  // The public site is a separate app served from its own origin, so we must
+  // cross into it with cy.origin rather than visiting the logged-in app's root.
   const assertPublicCannotViewExhibit = (docketNumber: string) => {
-    cy.visit('/');
-    cy.get('[data-testid="docket-number"]').type(docketNumber.trim());
-    cy.get('[data-testid="docket-search-button"]').click();
-    cy.get('[data-testid="header-public-case-detail"]');
+    const { publicSiteUrl } = getCypressEnv();
 
-    cy.contains(
-      '[data-testid="Filing-and-Proceedings-link-to-docket-entry"]',
-      'Exhibit in Support',
-    ).should('not.exist');
+    cy.origin(
+      publicSiteUrl,
+      { args: { docketNumber: docketNumber.trim(), publicSiteUrl } },
+      ({ docketNumber: dn, publicSiteUrl: url }) => {
+        cy.visit(url);
+        cy.get('[data-testid="docket-number"]').type(dn);
+        cy.get('[data-testid="docket-search-button"]').click();
+        cy.get('[data-testid="header-public-case-detail"]').contains(
+          `Docket Number: ${dn}`,
+        );
+
+        cy.contains(
+          '[data-testid="Filing-and-Proceedings-link-to-docket-entry"]',
+          'Exhibit in Support',
+        ).should('not.exist');
+      },
+    );
   };
 
   it('seals to the public, then to the public and parties, verifying visibility for the clerk, the associated practitioner, and the public at each step', () => {
