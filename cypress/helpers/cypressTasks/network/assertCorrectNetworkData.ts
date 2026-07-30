@@ -15,7 +15,9 @@ export type UnauthorizedFieldFinding = {
 type InternalUnauthorizedFieldFinding = Omit<
   UnauthorizedFieldFinding,
   'url' | 'method' | 'location'
->;
+> & {
+  findingType?: UnauthorizedPublicFieldFinding['type'];
+};
 
 export type PublicDataValidationResult = {
   passed: boolean;
@@ -112,11 +114,16 @@ function appendFindingsForBody(args: {
     }).map((finding: UnauthorizedPublicFieldFinding) => ({
       entityName: finding.entityName,
       fieldName: finding.fieldName,
+      findingType: finding.type,
       matchPreview: finding.matchPreview,
     }));
 
+  const relevantFindings = bodyFindings.filter(
+    finding => finding.findingType !== 'not_validated',
+  );
+
   args.findings.push(
-    ...bodyFindings.map(finding => ({
+    ...relevantFindings.map(finding => ({
       ...finding,
       url: args.url,
       method: args.method,
