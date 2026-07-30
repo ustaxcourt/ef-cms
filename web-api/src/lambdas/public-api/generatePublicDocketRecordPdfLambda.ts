@@ -47,7 +47,7 @@ export const generatePublicDocketRecordPdfLambda = event =>
         );
       }
 
-      return new PublicDocketRecordPdfJobResponse({ jobId });
+      return new PublicDocketRecordPdfJobResponse({ jobId }).validate();
     },
     { logResults: false },
   );

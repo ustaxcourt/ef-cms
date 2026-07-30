@@ -192,5 +192,5 @@ export const getHealthCheckInteractor = async (
     elasticsearch: elasticSearchStatus,
     emailService: emailServiceStatus,
     s3: s3BucketStatus,
-  });
+  }).validate();
 };
