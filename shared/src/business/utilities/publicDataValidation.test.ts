@@ -1,17 +1,20 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 
 describe('publicDataValidation', () => {
   it('passes for feature-flag primitive payloads', () => {
+    const dto = new FeatureFlagResponseDTO({
+      'aws-batch-zipper-minimum-count': 5,
+      'chief-judge-name': 'Bootsy Collins',
+      'document-visibility-policy-change-date': '2023-05-01',
+      'e-consent-fields-enabled-feature-flag': true,
+      'restricted-event-codes': ['something'],
+      'use-change-of-address-lambda': false,
+    });
+    dto.validate();
     const findings = findUnauthorizedPublicFields({
-      data: {
-        entityName: 'FeatureFlagResponseDTO',
-        'aws-batch-zipper-minimum-count': 5,
-        'chief-judge-name': 'Bootsy Collins',
-        'document-visibility-policy-change-date': '2023-05-01',
-        'e-consent-fields-enabled-feature-flag': true,
-        'restricted-event-codes': ['something'],
-        'use-change-of-address-lambda': false,
-      },
+      data: dto,
       url: 'http://localhost:4001/system/feature-flag',
     });
 
@@ -46,11 +49,11 @@ describe('publicDataValidation', () => {
   });
 
   it('fails on unauthorized fields for known public entities', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    user.validate();
+    (user as any).privateField = 'do-not-leak';
     const findings = findUnauthorizedPublicFields({
-      data: {
-        entityName: 'PublicUser',
-        privateField: 'do-not-leak',
-      },
+      data: user,
       url: 'http://localhost:4001/public-api/users',
     });
 

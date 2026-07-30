@@ -8,9 +8,9 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-type CalendaredPublicCase = PublicCaseDTO | RestrictedCaseDTO;
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+type CalendaredPublicCase = PublicCaseResponse | RestrictedCaseResponse;
 
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
@@ -100,7 +100,7 @@ export const publicTrialSessionDetailsHelper = (
 
 const isRestrictedCaseDTO = (
   calendaredCase: CalendaredPublicCase,
-): calendaredCase is RestrictedCaseDTO => {
+): calendaredCase is RestrictedCaseResponse => {
   return calendaredCase.entityName === 'RestrictedCaseDTO';
 };
 

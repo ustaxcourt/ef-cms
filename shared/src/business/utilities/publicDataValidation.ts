@@ -1,5 +1,5 @@
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
@@ -30,8 +30,8 @@ const PUBLIC_ENTITY_FACTORIES = {
         authorizedUser: undefined,
       },
     ),
-  PublicCaseDTO: (): PublicCaseDTO =>
-    new PublicCaseDTO(
+  PublicCaseResponse: (): PublicCaseResponse =>
+    new PublicCaseResponse(
       new PublicCase(
         {},
         {
@@ -52,8 +52,8 @@ const PUBLIC_ENTITY_FACTORIES = {
   PublicUser: (): PublicUser => new PublicUser({}),
   RestrictedCase: (): RestrictedCase =>
     new RestrictedCase({ docketNumber: '' }),
-  RestrictedCaseDTO: (): RestrictedCaseDTO =>
-    new RestrictedCaseDTO(new RestrictedCase({ docketNumber: '' })),
+  RestrictedCaseResponse: (): RestrictedCaseResponse =>
+    new RestrictedCaseResponse(new RestrictedCase({ docketNumber: '' })),
   FeatureFlagResponseDTO: (): FeatureFlagResponseDTO =>
     new FeatureFlagResponseDTO({}),
   HealthCheckResponse: (): HealthCheckResponse =>
@@ -288,6 +288,14 @@ function findUnauthorizedFieldsForEntity(args: {
 
   if (entityMetadata.findings.length > 0 && !entityMetadata.allowedFields) {
     return findings;
+  }
+
+  if ((args.obj as any).isValidated !== true) {
+    findings.push({
+      entityName: args.candidateEntityName,
+      fieldName: args.path ? `${args.path}.isValidated` : 'isValidated',
+      matchPreview: '[not validated]',
+    });
   }
 
   for (const [key, value] of Object.entries(args.obj)) {

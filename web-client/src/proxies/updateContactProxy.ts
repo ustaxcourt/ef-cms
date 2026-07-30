@@ -1,13 +1,13 @@
 import { put } from './requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 
 export const updateContactInteractor = (
   applicationContext: ClientApplicationContext,
   { contactInfo, docketNumber },
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<CaseDTO | PublicCaseResponse | RestrictedCaseResponse> => {
   return put({
     applicationContext,
     body: { contactInfo, docketNumber },
