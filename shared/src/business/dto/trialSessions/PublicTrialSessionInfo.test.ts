@@ -1,5 +1,5 @@
 import { MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
-import { PublicTrialSessionInfo } from './PublicTrialSessionInfoDTO';
+import { PublicTrialSessionInfo } from './PublicTrialSessionInfo';
 
 describe('PublicTrialSessionInfo', () => {
   it('maps a raw trial session to public DTO fields', () => {

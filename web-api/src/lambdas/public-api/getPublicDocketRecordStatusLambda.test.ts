@@ -47,7 +47,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       status: 'ready',
       url: 'https://s3/presigned',
     });
@@ -71,7 +71,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       message: 'boom',
       status: 'error',
       statusCode: 403,
@@ -87,7 +87,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
     const response = await getPublicDocketRecordStatusLambda(buildEvent());
 
     const body = JSON.parse(response.body);
-    expect(body.entityName).toBe('PublicDocketRecordPdfJobResponseDTO');
+    expect(body.entityName).toBe('PublicDocketRecordPdfJobResponse');
     expect(body.status).toBe('error');
     expect(body.message).toBe('Failed to generate docket record');
     expect(body.statusCode).toBe(500);
@@ -103,7 +103,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       message: 'Failed to generate docket record',
       status: 'error',
       statusCode: 500,
@@ -121,7 +121,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       message: 'Failed to generate docket record',
       status: 'error',
       statusCode: 500,
@@ -136,7 +136,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       message: 'Invalid jobId',
       status: 'error',
       statusCode: 400,
@@ -152,7 +152,7 @@ describe('getPublicDocketRecordStatusLambda', () => {
 
     const body = JSON.parse(response.body);
     expect(body).toEqual({
-      entityName: 'PublicDocketRecordPdfJobResponseDTO',
+      entityName: 'PublicDocketRecordPdfJobResponse',
       status: 'pending',
     });
     expect(getDownloadPolicyUrl).not.toHaveBeenCalled();

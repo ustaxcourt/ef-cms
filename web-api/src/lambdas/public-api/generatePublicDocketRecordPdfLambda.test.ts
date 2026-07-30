@@ -52,7 +52,7 @@ describe('generatePublicDocketRecordPdfLambda', () => {
     const response = await generatePublicDocketRecordPdfLambda(buildEvent());
 
     const body = JSON.parse(response.body);
-    expect(body.entityName).toBe('PublicDocketRecordPdfJobResponseDTO');
+    expect(body.entityName).toBe('PublicDocketRecordPdfJobResponse');
     expect(body.jobId).toEqual(expect.any(String));
     expect(mockLambdaClientSend).toHaveBeenCalledTimes(1);
     const command = mockLambdaClientSend.mock.calls[0][0];

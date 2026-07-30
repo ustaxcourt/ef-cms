@@ -14,6 +14,10 @@ import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
+import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponse';
+import { PublicDocumentDownloadUrl } from '@shared/business/dto/public/PublicDocumentDownloadUrl';
+import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 
 export const getEntityByName = (name: string) => {
   const entitiesByName = {
@@ -22,11 +26,15 @@ export const getEntityByName = (name: string) => {
     CaseDeadline,
     Correspondence,
     DocketEntry,
+    HealthCheckResponse,
     IrsPractitioner,
     Message,
     Practitioner,
     PrivatePractitioner,
     PublicCaseDTO,
+    PublicDocketRecordPdfJobResponse,
+    PublicDocumentDownloadUrl,
+    PublicTrialSessionInfo,
     RestrictedCaseDTO,
     TrialSession,
     TrialSessionWorkingCopy,
