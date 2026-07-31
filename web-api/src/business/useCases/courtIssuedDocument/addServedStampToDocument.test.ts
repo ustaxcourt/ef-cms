@@ -41,7 +41,7 @@ describe('addServedStampToDocument', () => {
 
     applicationContext.getUtilities().getCropBox.mockReturnValue({});
 
-    applicationContext.getUtilities().getStampBoxCoordinates.mockReturnValue({
+    applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mockReturnValue({
       x: 0,
       y: 0,
     });
@@ -190,7 +190,7 @@ describe('computeCoordinates', () => {
     computeCoordinates(args);
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: mockPageWidth / 2 - mockBoxWidth / 2,
@@ -203,7 +203,7 @@ describe('computeCoordinates', () => {
     computeCoordinates(args);
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: mockPageWidth / 2 - mockBoxWidth / 2,

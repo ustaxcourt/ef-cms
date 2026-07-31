@@ -1,3 +1,4 @@
+import { GRANT_DENY_MOTION_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { createOrderAction } from './createOrderAction';
 import { presenter } from '../../presenter-mock';
@@ -43,5 +44,28 @@ describe('createOrderAction', () => {
     expect(result.output.contentHtml).toEqual('<b>Foo</b>');
     expect(result.output.documentTitle).toEqual('TEST TITLE');
     expect(result.output.eventCode).toEqual('NOT');
+  });
+
+  it('sets the document title to Order for grant deny motion PDFs', async () => {
+    const result = await runAction(createOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          caseCaption: 'Roslindis Angelino',
+        },
+        form: {
+          documentTitle: 'Order - Motion to Compel is granted',
+          eventCode: 'O',
+          orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          richText: '<b>Foo</b>',
+        },
+      },
+    });
+
+    expect(result.output.contentHtml).toEqual('<b>Foo</b>');
+    expect(result.output.documentTitle).toEqual('ORDER');
+    expect(result.output.eventCode).toEqual('O');
   });
 });

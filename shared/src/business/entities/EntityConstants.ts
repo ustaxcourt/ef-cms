@@ -71,8 +71,6 @@ export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
 export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
-export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
-
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
@@ -113,11 +111,6 @@ export const TRIAL_SESSION_SCOPE_TYPES = {
 export type TrialSessionScope =
   (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
-export const JURISDICTIONAL_OPTIONS = {
-  restoredToDocket: 'The case is restored to the general docket',
-  undersigned: 'Jurisdiction is retained by the undersigned',
-};
-
 export type DocketEntryRelation = {
   disposition: string;
   docketEntryId: string;
@@ -153,9 +146,6 @@ export const MOTION_DISPOSITION_VERBIAGE = {
     ORDER: ['GRANTING IN PART', 'DENYING IN PART'],
   },
 };
-
-export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
-  'This case is stricken from the trial session';
 
 export const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
@@ -1416,7 +1406,8 @@ export const ALL_STATE_OPTIONS = {
 };
 
 export type AbbreviatedStates =
-  keyof typeof US_STATES | keyof typeof US_STATES_OTHER;
+  | keyof typeof US_STATES
+  | keyof typeof US_STATES_OTHER;
 
 export const NOT_AVAILABLE_OPTION = 'N/A';
 export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
@@ -1988,7 +1979,8 @@ export type FileUploadProgressType = {
 };
 
 export type FileUploadProgressValueType =
-  FileUploadProgressType | FileUploadProgressType[];
+  | FileUploadProgressType
+  | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -2111,7 +2103,8 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   other: 'Other',
 } as const;
 export type StatusReportOrderedForOption =
-  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS | '';
+  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
+  | '';
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',
@@ -2260,6 +2253,33 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
 };
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+
+export const GRANT_DENY_MOTION_OPTIONS = {
+  issueOrderOptions: {
+    allCasesInGroup: 'allCasesInGroup',
+    justThisCase: 'justThisCase',
+  },
+  dueDateMessageOptions: {
+    statusReport: 'statusReport',
+    statusReportOrStipulatedDecision: 'statusReportOrStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+  filingPartyOptions: {
+    petitioners: 'Petitioner(s)',
+    respondent: 'Respondent',
+    joint: 'Joint',
+    parties: 'Parties',
+  },
+  orderType: 'grantDenyMotion',
+  pdfParagraphClass: 'grant-deny-indent-paragraph',
+  pdfOrderModifierClass: 'grant-deny-motion-order',
+  pdfParagraphIndentPx: 56,
+};
+
+export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;
 
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
