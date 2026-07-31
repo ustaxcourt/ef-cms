@@ -320,7 +320,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
       );
 
       cy.get('[data-testid="error-alert"]')
-        .should('contain.text', 'Filing Fee Status Unknown')
+        .should('contain.text', 'Filing fee status unknown')
         .and(
           'contain.text',
           'Unable to verify payment status. Contact dawson.support@ustaxcourt.gov.',
