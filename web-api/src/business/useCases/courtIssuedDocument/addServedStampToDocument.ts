@@ -19,7 +19,7 @@ export const computeCoordinates = ({
 
   const boxCoordinates = applicationContext
     .getUtilities()
-    .getStampBoxCoordinates({
+    .getRotationAdjustedBoxCoordinates({
       bottomLeftBoxCoordinates,
       cropBox: { x, y },
       pageHeight,
