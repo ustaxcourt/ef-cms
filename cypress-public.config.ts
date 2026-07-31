@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,6 +10,9 @@ export default defineConfig({
     baseUrl: 'http://localhost:5678',
     setupNodeEvents(on) {
       on('task', {
+        assertCorrectNetworkData(payloads) {
+          return assertCorrectNetworkData(payloads);
+        },
         modifyDeployedDateTextFile(deployedDate) {
           fs.writeFileSync(
             path.join(__dirname, './dist-public/deployed-date.txt'),
