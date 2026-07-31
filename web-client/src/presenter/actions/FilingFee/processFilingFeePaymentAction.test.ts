@@ -4,27 +4,16 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('processFilingFeePaymentAction', () => {
-  let pathSuccessStub;
-  let pathErrorStub;
-
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
-
-    pathSuccessStub = jest.fn();
-    pathErrorStub = jest.fn();
-
-    presenter.providers.path = {
-      success: pathSuccessStub,
-      error: pathErrorStub,
-    };
   });
 
-  it('should call the error path if an error is thrown', async () => {
+  it('should set processPaymentStatus.paymentStatus to failed if an error is thrown', async () => {
     applicationContext
       .getUseCases()
       .processPaymentInteractor.mockRejectedValueOnce(new Error());
 
-    await runAction(processFilingFeePaymentAction, {
+    const result = await runAction(processFilingFeePaymentAction, {
       modules: {
         presenter,
       },
@@ -33,10 +22,14 @@ describe('processFilingFeePaymentAction', () => {
       },
     });
 
-    expect(pathErrorStub).toHaveBeenCalled();
+    expect(result.output).toEqual({
+      processPaymentStatus: {
+        paymentStatus: 'failed',
+      },
+    });
   });
 
-  it('should call the success path if API call is successful', async () => {
+  it('should processPaymentStatus to the API call result if successful', async () => {
     applicationContext
       .getUseCases()
       .processPaymentInteractor.mockResolvedValue({
@@ -52,7 +45,7 @@ describe('processFilingFeePaymentAction', () => {
         ],
       });
 
-    await runAction(processFilingFeePaymentAction, {
+    const result = await runAction(processFilingFeePaymentAction, {
       modules: {
         presenter,
       },
@@ -61,7 +54,7 @@ describe('processFilingFeePaymentAction', () => {
       },
     });
 
-    expect(pathSuccessStub).toHaveBeenCalledWith({
+    expect(result.output).toEqual({
       processPaymentStatus: {
         docketNumber: '101-20',
         paymentStatus: 'success',
