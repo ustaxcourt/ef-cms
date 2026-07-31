@@ -23,7 +23,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost:5678' });
   });
 
   it('should throw an error for a document that is not publicly accessible', async () => {
@@ -61,7 +61,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     });
     expect(result).toEqual({
       entityName: 'PublicDocumentDownloadUrl',
-      url: 'localhost',
+      url: 'localhost:5678',
     });
   });
 
@@ -143,7 +143,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
     expect(result).toEqual({
       entityName: 'PublicDocumentDownloadUrl',
-      url: 'localhost',
+      url: 'localhost:5678',
     });
   });
 
@@ -174,7 +174,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
     expect(result).toEqual({
       entityName: 'PublicDocumentDownloadUrl',
-      url: 'localhost',
+      url: 'localhost:5678',
     });
   });
 
