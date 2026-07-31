@@ -10,12 +10,30 @@ import {
   findUnauthorizedPublicFields,
   isPublicSiteRequest,
 } from './publicDataSanitizer';
+import { X_MANUAL_REFRESH_REQUIRED } from '@shared/utils/headers';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 type LoggedError = ErrorWithStatusCode & {
   toResponseBody?: () => any;
   toJSON?: () => any;
   skipLogging?: boolean;
+};
+
+const validatePublicResponse = (event, response) => {
+  if (isPublicSiteRequest(event)) {
+    const unauthorizedFindings = findUnauthorizedPublicFields({
+      event,
+      response,
+    });
+    if (unauthorizedFindings.length > 0) {
+      const firstFinding = unauthorizedFindings[0];
+      const errorDetail =
+        firstFinding.type === 'not_validated'
+          ? `entity ${firstFinding.entityName} was not validated before being returned`
+          : `unauthorized field ${firstFinding.fieldName}`;
+      throw new UnsanitizedEntityError(`Unsanitized entity: ${errorDetail}`);
+    }
+  }
 };
 
 /**
@@ -41,6 +59,11 @@ export const handle = async (event, fun) => {
       response.headers
     ) {
       // the lambda function is more advanced and wants to control more aspects of the response
+      const isManualRefreshResponse =
+        !!response.headers[X_MANUAL_REFRESH_REQUIRED];
+      if (!isManualRefreshResponse) {
+        validatePublicResponse(event, response.body);
+      }
       return sendOk(response.body, response.statusCode, response.headers);
     } else if (isPdfBuffer) {
       return {
@@ -54,22 +77,7 @@ export const handle = async (event, fun) => {
         statusCode: 200,
       };
     } else {
-      if (isPublicSiteRequest(event)) {
-        const unauthorizedFindings = findUnauthorizedPublicFields({
-          event,
-          response,
-        });
-        if (unauthorizedFindings.length > 0) {
-          const firstFinding = unauthorizedFindings[0];
-          const errorDetail =
-            firstFinding.type === 'not_validated'
-              ? `entity ${firstFinding.entityName} was not validated before being returned`
-              : `unauthorized field ${firstFinding.fieldName}`;
-          throw new UnsanitizedEntityError(
-            `Unsanitized entity: ${errorDetail}`,
-          );
-        }
-      }
+      validatePublicResponse(event, response);
 
       if (event.queryStringParameters && event.queryStringParameters.fields) {
         const { fields } = event.queryStringParameters;

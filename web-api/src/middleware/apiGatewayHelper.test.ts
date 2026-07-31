@@ -302,6 +302,35 @@ describe('handle', () => {
       statusCode: '400',
     });
   });
+
+  it('should skip public validation for pre-formed responses with X-Manual-Refresh-Required header', async () => {
+    const response = await handle(
+      { path: '/public-api/some-endpoint' },
+      () => ({
+        body: {
+          message: 'Application version mismatch detected. Please refresh.',
+        },
+        headers: { 'X-Manual-Refresh-Required': 'true' },
+        statusCode: '409',
+      }),
+    );
+    expect(response).toMatchObject({ statusCode: '409' });
+  });
+
+  it('should enforce public validation for pre-formed responses without skipPublicValidation', async () => {
+    const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
+    (user as any).privateField = 'bad';
+    user.validate();
+    const response = await handle(
+      { path: '/public-api/some-endpoint' },
+      () => ({
+        body: user,
+        headers: {},
+        statusCode: '200',
+      }),
+    );
+    expect(response).toMatchObject({ statusCode: 500 });
+  });
 });
 
 describe('getAuthHeader', () => {
