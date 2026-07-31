@@ -19,4 +19,16 @@ describe('PublicTrialSessionInfo', () => {
     expect(dto.trialLocation).toBe(MOCK_TRIAL_REMOTE.trialLocation);
     expect(dto.trialSessionId).toBe(MOCK_TRIAL_REMOTE.trialSessionId);
   });
+
+  it('sets judge to undefined when raw trial session has no judge', () => {
+    const rawTrialSessionWithoutJudge = {
+      ...MOCK_TRIAL_REMOTE,
+      judge: undefined,
+    };
+
+    const dto = new PublicTrialSessionInfo(rawTrialSessionWithoutJudge);
+
+    expect(dto.entityName).toBe('PublicTrialSessionInfo');
+    expect(dto.judge).toBeUndefined();
+  });
 });
