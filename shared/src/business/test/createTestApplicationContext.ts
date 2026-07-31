@@ -77,8 +77,8 @@ import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/g
 import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@web-client/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
+import { getRotationAdjustedBoxCoordinates } from '@shared/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
-import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -258,6 +258,9 @@ export const createTestApplicationContext = () => {
     getPractitionersRepresenting: jest
       .fn()
       .mockImplementation(getPractitionersRepresenting),
+    getRotationAdjustedBoxCoordinates: jest
+      .fn()
+      .mockImplementation(getRotationAdjustedBoxCoordinates),
     getSealedDocketEntryTooltip: jest
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),
@@ -265,9 +268,6 @@ export const createTestApplicationContext = () => {
     getSortableDocketNumber: jest
       .fn()
       .mockImplementation(Case.getSortableDocketNumber),
-    getStampBoxCoordinates: jest
-      .fn()
-      .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     isDateWithinGivenInterval: jest
       .fn()
