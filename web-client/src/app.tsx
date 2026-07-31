@@ -5,6 +5,7 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
+import { ErrorBoundary } from './views/ErrorBoundary';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
@@ -298,7 +299,9 @@ const app = {
             <AppInstanceManager />
             <GlobalModalWrapper />
           </>
-          <AppComponent />
+          <ErrorBoundary>
+            <AppComponent />
+          </ErrorBoundary>
 
           {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
         </Container>,
