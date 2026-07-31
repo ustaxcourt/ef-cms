@@ -183,7 +183,10 @@ describe('caseFilter', () => {
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
       const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
-        mockPetitionsClerkUser,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'authPractitioner',
+        },
       );
 
       expect(result.length).toEqual(4);

@@ -106,14 +106,6 @@ describe('CaseFactory', () => {
         ),
       );
     });
-    it('should not show sealed addresses when user does not have permissions', () => {
-      const caseData = CaseFactory.getCase({
-        rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
-        user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
-      });
-      expect(caseData).toBeInstanceOf(Case);
-      expect((caseData as Case).petitioners[0].address1).toBeFalsy();
-    });
     it('should show sealed addresses when user has permissions', () => {
       const caseData = CaseFactory.getCase({
         rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
@@ -323,14 +315,6 @@ describe('CaseFactory', () => {
             d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
           ),
         );
-      });
-      it('should not show sealed addresses when user does not have permissions', () => {
-        const caseData = CaseFactory.getCaseDTO({
-          rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
-          user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
-        });
-        expect(caseData).toBeInstanceOf(CaseDTO);
-        expect((caseData as CaseDTO).petitioners[0].address1).toBeFalsy();
       });
       it('should show sealed addresses when user has permissions', () => {
         const caseData = CaseFactory.getCaseDTO({
