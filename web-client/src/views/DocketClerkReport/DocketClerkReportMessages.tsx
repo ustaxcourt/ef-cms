@@ -16,6 +16,7 @@ type ColumnConfig = {
   label: string;
   render: (message: any) => React.ReactNode;
   sortField?: string;
+  tdClassName?: string;
 };
 
 type FilterConfig = {
@@ -25,9 +26,19 @@ type FilterConfig = {
 };
 
 const subjectCell = (message: any) => (
-  <a className="case-link" href={message.messageDetailLink}>
-    {message.subject}
-  </a>
+  <>
+    <div className="message-document-title">
+      <Button
+        link
+        className="padding-0"
+        data-testid={`message-subject-cell-${message.messageId}`}
+        href={message.messageDetailLink}
+      >
+        {message.subject}
+      </Button>
+    </div>
+    <div className="message-document-detail">{message.message}</div>
+  </>
 );
 
 const docketNumberCell = (message: any) => <CaseLink formattedCase={message} />;
@@ -44,7 +55,12 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.completedAtFormatted,
       sortField: 'completedAt',
     },
-    { label: 'Last Message', render: subjectCell, sortField: 'subject' },
+    {
+      label: 'Last Message',
+      render: subjectCell,
+      sortField: 'subject',
+      tdClassName: 'message-subject',
+    },
     { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
     {
       label: 'Case Status',
@@ -73,7 +89,12 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
     },
-    { label: 'Message', render: subjectCell, sortField: 'subject' },
+    {
+      label: 'Message',
+      render: subjectCell,
+      sortField: 'subject',
+      tdClassName: 'message-subject',
+    },
     { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
     {
       label: 'Case Status',
@@ -98,7 +119,12 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
     },
-    { label: 'Message', render: subjectCell, sortField: 'subject' },
+    {
+      label: 'Message',
+      render: subjectCell,
+      sortField: 'subject',
+      tdClassName: 'message-subject',
+    },
     { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
     {
       label: 'Case Status',
@@ -307,7 +333,10 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                     </td>
                   )}
                   {columns.map(column => (
-                    <td className="message-queue-row" key={column.label}>
+                    <td
+                      className={`message-queue-row ${column.tdClassName || ''}`.trim()}
+                      key={column.label}
+                    >
                       {column.render(message)}
                     </td>
                   ))}
