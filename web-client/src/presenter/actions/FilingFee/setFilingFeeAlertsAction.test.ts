@@ -32,7 +32,8 @@ describe('setFilingFeeAlertsAction', () => {
     });
 
     expect(state.alertSuccess).toEqual({
-      message: `An email was sent confirming the filing fee was paid for docket number(s): 101-20`,
+      message:
+        'An email was sent confirming the filing fee was paid for docket number(s): 101-20',
       title: 'Filing fee payment successful',
       overwritable: true,
     });
@@ -62,7 +63,8 @@ describe('setFilingFeeAlertsAction', () => {
     });
 
     expect(state.alertWarning).toEqual({
-      message: `Allow 24-48 hours for the payment status to update for docket number(s): 101-20`,
+      message:
+        'Allow 24-48 hours for the payment status to update for docket number(s): 101-20',
       title: 'Filing fee payment is pending',
       overwritable: true,
     });
@@ -92,9 +94,32 @@ describe('setFilingFeeAlertsAction', () => {
     });
 
     expect(state.alertError).toEqual({
-      message: `Something went wrong when paying the filing fee. Please try again.`,
+      message:
+        'Something went wrong when paying the filing fee. Please try again.',
       title: 'Filing fee payment failed',
       overwritable: true,
+    });
+  });
+
+  it('should set the error alert for an unknown status if that status is returned', async () => {
+    const { state } = await runAction(setFilingFeeAlertsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        processPaymentStatus: {
+          docketNumber: '101-20',
+          paymentStatus: 'unknown',
+        },
+      },
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Unable to verify payment status.',
+      title: 'Filing fee status unknown',
+      overwritable: true,
+      insertContactSupportClause: true,
     });
   });
 });
