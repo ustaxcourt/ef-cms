@@ -24,7 +24,8 @@ describe('processFilingFeePaymentAction', () => {
 
     expect(result.output).toEqual({
       processPaymentStatus: {
-        paymentStatus: 'failed',
+        docketNumber: '101-20',
+        paymentStatus: 'unknown',
       },
     });
   });

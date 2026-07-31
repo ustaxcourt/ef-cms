@@ -61,4 +61,20 @@ describe('alertHelper', () => {
       responseCode: 504,
     });
   });
+
+  it('insertContactSupportClause is set to true', () => {
+    const result = runCompute(alertHelper, {
+      state: {
+        alertError: {
+          responseCode: 504,
+          insertContactSupportClause: true,
+        },
+        user,
+      },
+    });
+    expect(result).toMatchObject({
+      responseCode: 504,
+      insertContactSupportClause: true,
+    });
+  });
 });
