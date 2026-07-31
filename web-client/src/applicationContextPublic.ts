@@ -74,7 +74,6 @@ import { getPublicPractitionerByBarNumberInteractor } from '@web-client/proxies/
 import { getPublicPractitionersByNameInteractor } from '@web-client/proxies/public/getPublicPractitionersByNameProxy';
 import { getPublicTrialSessionDetailsInteractor } from '@web-client/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
 import { getPublicTrialSessionsInteractor } from '@web-client/proxies/trialSessions/getPublicTrialSessionsProxy';
-import { getPublicUsersInSectionInteractor } from '@web-client/proxies/users/getPublicUsersInSectionProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '@web-client/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '@web-client/proxies/public/getTodaysOrdersProxy';
@@ -121,7 +120,6 @@ const allUseCases = {
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionsInteractor: getPublicTrialSessionsInteractor,
-  getUsersInSectionInteractor: getPublicUsersInSectionInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,

@@ -179,4 +179,42 @@ describe('publicDataValidation', () => {
       ]),
     );
   });
+
+  it('finds nested missing entityName in non-root object values', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        container: {
+          nested: {
+            foo: 'bar',
+          },
+        },
+      },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('flags unauthorized fields for nested known entities', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        container: {
+          entityName: 'PublicUser',
+          isValidated: true,
+          privateField: 'do-not-leak',
+        },
+      },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicUser',
+          fieldName: 'container.privateField',
+          matchPreview: 'do-n...[redacted]...leak',
+        }),
+      ]),
+    );
+  });
 });
