@@ -116,6 +116,12 @@ data "aws_iam_policy_document" "public_policy_bucket" {
     resources = [
       "arn:aws:s3:::${var.current_color}.${var.dns_domain}/*"
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [var.zone_name]
+    }
   }
 }
 
@@ -134,6 +140,12 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
     resources = [
       "arn:aws:s3:::failover-${var.current_color}.${var.dns_domain}/*"
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [var.zone_name]
+    }
   }
 }
 
@@ -172,7 +184,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     }
 
     custom_header {
-      name  = "x-allowed-domain"
+      name  = "Referer"
       value = var.zone_name
     }
   }
@@ -190,7 +202,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     }
 
     custom_header {
-      name  = "x-allowed-domain"
+      name  = "Referer"
       value = var.zone_name
     }
   }

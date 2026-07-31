@@ -4,18 +4,6 @@
       "file": "/../../modules/ui/frontend-public.tf",
       "findings": [
         {
-          "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket",
-          "check_ids": [
-            "CKV_AWS_283"
-          ]
-        },
-        {
-          "resource": "module.ui-green.aws_iam_policy_document.public_policy_bucket_failover",
-          "check_ids": [
-            "CKV_AWS_283"
-          ]
-        },
-        {
           "resource": "module.ui-green.aws_s3_bucket.failover_public",
           "check_ids": [
             "CKV2_AWS_6"
@@ -50,18 +38,6 @@
     {
       "file": "/../../modules/ui/frontend.tf",
       "findings": [
-        {
-          "resource": "module.ui-green.aws_iam_policy_document.allow_public",
-          "check_ids": [
-            "CKV_AWS_283"
-          ]
-        },
-        {
-          "resource": "module.ui-green.aws_iam_policy_document.allow_public_failover",
-          "check_ids": [
-            "CKV_AWS_283"
-          ]
-        },
         {
           "resource": "module.ui-green.aws_s3_bucket.failover",
           "check_ids": [

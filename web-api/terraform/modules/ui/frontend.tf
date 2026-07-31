@@ -115,6 +115,12 @@ data "aws_iam_policy_document" "allow_public" {
     resources = [
       "arn:aws:s3:::app-${var.current_color}.${var.dns_domain}/*"
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [var.zone_name]
+    }
   }
 }
 
@@ -133,11 +139,13 @@ data "aws_iam_policy_document" "allow_public_failover" {
     resources = [
       "arn:aws:s3:::app-failover-${var.current_color}.${var.dns_domain}/*"
     ]
-  }
-}
 
-resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "origin used for cloudfront group origins"
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [var.zone_name]
+    }
+  }
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
@@ -175,7 +183,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
 
     custom_header {
-      name  = "x-allowed-domain"
+      name  = "Referer"
       value = var.zone_name
     }
   }
@@ -193,7 +201,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
 
     custom_header {
-      name  = "x-allowed-domain"
+      name  = "Referer"
       value = var.zone_name
     }
   }
