@@ -55,6 +55,8 @@ const config: Config = {
       '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
     '^@aws-sdk/core/client$':
       '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
+    '^@aws-sdk/core/httpAuthSchemes$':
+      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js',
     '^@aws-sdk/checksums/crc$':
       '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/crc/index.js',
     '^@aws-sdk/checksums/sha$':
@@ -73,7 +75,7 @@ const config: Config = {
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|@aws-sdk/core|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
