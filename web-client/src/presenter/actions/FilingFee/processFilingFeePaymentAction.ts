@@ -18,7 +18,8 @@ export const processFilingFeePaymentAction = async ({
   } catch (e) {
     return {
       processPaymentStatus: {
-        paymentStatus: 'failed',
+        docketNumber: props.docketNumber,
+        paymentStatus: 'unknown',
       },
     };
   }

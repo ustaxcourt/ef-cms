@@ -1109,7 +1109,9 @@ export const baseState = {
     sortOrder: 'desc' as 'asc' | 'desc',
   },
   processPaymentStatus: undefined as
-    undefined | (ProcessPaymentResponse & { docketNumber: string }),
+    | undefined
+    | (ProcessPaymentResponse & { docketNumber: string })
+    | ({ paymentStatus: 'unknown' } & { docketNumber: string }),
 };
 
 export const initialState = {

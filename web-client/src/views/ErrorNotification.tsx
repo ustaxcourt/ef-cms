@@ -2,6 +2,7 @@ import { Focus } from '../ustc-ui/Focus/Focus';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
+import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 
 export const ErrorNotification = connect(
   { alertError: state.alertError, alertHelper: state.alertHelper },
@@ -13,6 +14,7 @@ export const ErrorNotification = connect(
       title?: string;
       message?: string;
       scrollToErrorNotification?: boolean;
+      insertContactSupportClause?: boolean;
     };
     alertHelper: {
       showErrorAlert?: boolean;
@@ -20,6 +22,7 @@ export const ErrorNotification = connect(
       showMultipleMessages?: boolean;
       showTitleOnly?: boolean;
       messagesDeduped: any;
+      insertContactSupportClause: boolean;
     };
   }) {
     const notificationRef = useRef(null);
@@ -46,13 +49,38 @@ export const ErrorNotification = connect(
                 <h3 className="usa-alert__heading">{alertError.title}</h3>
               </Focus>
               {alertHelper.showSingleMessage && (
-                <p className="usa-alert__text">{alertError.message}</p>
+                <p className="usa-alert__text">
+                  {alertError.message}
+                  {alertHelper.insertContactSupportClause && (
+                    <span>
+                      {' '}
+                      Contact{' '}
+                      <a
+                        href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                      >
+                        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+                      </a>
+                      .
+                    </span>
+                  )}
+                </p>
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
                   {alertHelper.messagesDeduped.map(message => (
                     <li key={message}>{message}</li>
                   ))}
+                  {alertHelper.insertContactSupportClause && (
+                    <li>
+                      Contact{' '}
+                      <a
+                        href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                      >
+                        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+                      </a>
+                      .
+                    </li>
+                  )}
                 </ul>
               )}
               {alertHelper.showTitleOnly && (
