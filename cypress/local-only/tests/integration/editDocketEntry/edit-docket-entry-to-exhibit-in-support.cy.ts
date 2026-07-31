@@ -8,6 +8,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
+import { waitForDocketEntryByEventCode } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 
 /**
  * Docket clerk re-characterizes an existing served docket entry (that is not
@@ -61,6 +62,7 @@ describe('Docket clerk edits a docket entry to "Exhibit in Support" (EXS)', () =
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
       // Click Edit for the served Exhibit(s) docket entry.
+      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' });
       goToCase(docketNumber);
       cy.get('[data-testid="edit-EXH"]').click();
 
