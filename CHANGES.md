@@ -12,9 +12,9 @@ nvm alias default "$(cat .nvmrc)"
 
 ### Before Deployment
 
-#### Deploy Docker container `4.3.89`
+#### Deploy Docker container `4.3.90`
 
-This script will prompt for an environment to pull the image from; choose `exp3`.
+This script will prompt for an environment to pull the image from; choose `exp6`.
 
 ```bash
 npm run ecr:check-version
