@@ -10,7 +10,6 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import {
   mockDocketClerkUser,
   mockIrsSuperuser,
-  mockJudgeUser,
   mockPetitionerUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
@@ -57,8 +56,8 @@ const MOCK_LEAD_CASE = {
   consolidatedCases: [{ ...MOCK_UNSERVED_CASE, leadDocketNumber: '101-23' }],
 };
 
-const INTERNAL_USER_WHO_CAN_SEE_SEALED_CASES = mockDocketClerkUser;
-const INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES = mockJudgeUser;
+const INTERNAL_USER = mockDocketClerkUser;
+const EXTERNAL_USER = mockPrivatePractitionerUser;
 const PETITIONER_ASSOCIATED_WITH_MOCK_UNSERVED_CASE = {
   ...mockPetitionerUser,
   userId: MOCK_UNSERVED_CASE.petitioners[0].contactId,
@@ -85,7 +84,7 @@ describe('CaseFactory', () => {
     it('should get full case data for unsealed case', () => {
       const caseData = CaseFactory.getCase({
         rawCase: MOCK_UNSERVED_CASE,
-        user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
+        user: INTERNAL_USER,
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
@@ -97,7 +96,7 @@ describe('CaseFactory', () => {
     it('should get full case data for sealed case', () => {
       const caseData = CaseFactory.getCase({
         rawCase: MOCK_UNSERVED_AND_SEALED_CASE,
-        user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
+        user: INTERNAL_USER,
       });
       expect(caseData).toBeInstanceOf(Case);
       expect(caseData.docketEntries).toMatchObject(
@@ -106,10 +105,25 @@ describe('CaseFactory', () => {
         ),
       );
     });
+    it('should not show sealed addresses when user does not have permissions', () => {
+      const caseData = CaseFactory.getCase({
+        rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
+        user: EXTERNAL_USER,
+      });
+      expect(caseData).toBeInstanceOf(PublicCase);
+      expect((caseData as PublicCase).petitioners?.[0]).toEqual({
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        contactType: 'primary',
+        entityName: 'PublicContact',
+        name: 'Test Petitioner',
+        serviceIndicator: 'Electronic',
+        state: undefined,
+      });
+    });
     it('should show sealed addresses when user has permissions', () => {
       const caseData = CaseFactory.getCase({
         rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
-        user: INTERNAL_USER_WHO_CAN_SEE_SEALED_CASES,
+        user: INTERNAL_USER,
       });
       expect(caseData).toBeInstanceOf(Case);
       expect((caseData as Case).petitioners[0].address1).toBeTruthy();
@@ -295,7 +309,7 @@ describe('CaseFactory', () => {
       it('should get full case data for unsealed case', () => {
         const caseData = CaseFactory.getCaseDTO({
           rawCase: MOCK_UNSERVED_CASE,
-          user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
+          user: INTERNAL_USER,
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
@@ -307,7 +321,7 @@ describe('CaseFactory', () => {
       it('should get full case data for sealed case', () => {
         const caseData = CaseFactory.getCaseDTO({
           rawCase: MOCK_UNSERVED_AND_SEALED_CASE,
-          user: INTERNAL_USER_WHO_CANNOT_SEE_SEALED_CASES,
+          user: INTERNAL_USER,
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect(caseData.docketEntries).toMatchObject(
@@ -316,10 +330,25 @@ describe('CaseFactory', () => {
           ),
         );
       });
+      it('should not show sealed addresses when user does not have permissions', () => {
+        const caseData = CaseFactory.getCaseDTO({
+          rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
+          user: EXTERNAL_USER,
+        });
+        expect(caseData).toBeInstanceOf(PublicCaseDTO);
+        expect((caseData as PublicCaseDTO).petitioners?.[0]).toEqual({
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: 'primary',
+          entityName: 'PublicContact',
+          name: 'Test Petitioner',
+          serviceIndicator: 'Electronic',
+          state: undefined,
+        });
+      });
       it('should show sealed addresses when user has permissions', () => {
         const caseData = CaseFactory.getCaseDTO({
           rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
-          user: INTERNAL_USER_WHO_CAN_SEE_SEALED_CASES,
+          user: INTERNAL_USER,
         });
         expect(caseData).toBeInstanceOf(CaseDTO);
         expect((caseData as CaseDTO).petitioners[0].address1).toBeTruthy();
