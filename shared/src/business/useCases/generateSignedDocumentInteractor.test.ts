@@ -44,7 +44,7 @@ describe('generateSignedDocument', () => {
 
     applicationContext.getUtilities().getCropBox.mockReturnValue({});
 
-    applicationContext.getUtilities().getStampBoxCoordinates.mockReturnValue({
+    applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mockReturnValue({
       x: 0,
       y: 0,
     });
@@ -252,7 +252,7 @@ describe('computeCoordinates', () => {
     });
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: baseArguments.posX / baseArguments.scale,
@@ -278,7 +278,7 @@ describe('computeCoordinates', () => {
     });
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: baseArguments.posX / baseArguments.scale,
@@ -304,7 +304,7 @@ describe('computeCoordinates', () => {
     });
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: {
         x: baseArguments.posX / baseArguments.scale,
@@ -315,17 +315,17 @@ describe('computeCoordinates', () => {
     });
   });
 
-  it('should call getStampBoxCoordinates to generate the x, y coordinates of where to place the signature box on the page', () => {
+  it('should call getRotationAdjustedBoxCoordinates to generate the x, y coordinates of where to place the signature box on the page', () => {
     const mockCropBox = {
       pageHeight: 10,
       pageWidth: 20,
       x: 5,
       y: 10,
     };
-    const mockStampBoxCoordinates = { x: 50, y: 10 };
+    const mockBoxCoordinates = { x: 50, y: 10 };
     applicationContext
       .getUtilities()
-      .getStampBoxCoordinates.mockReturnValue(mockStampBoxCoordinates);
+      .getRotationAdjustedBoxCoordinates.mockReturnValue(mockBoxCoordinates);
 
     const result = computeCoordinates({
       ...baseArguments,
@@ -333,7 +333,7 @@ describe('computeCoordinates', () => {
     });
 
     expect(
-      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+      applicationContext.getUtilities().getRotationAdjustedBoxCoordinates.mock.calls[0][0],
     ).toMatchObject({
       bottomLeftBoxCoordinates: expect.anything(),
       cropBox: { x: expect.anything(), y: expect.anything() },
@@ -342,8 +342,8 @@ describe('computeCoordinates', () => {
       pageWidth: expect.anything(),
     });
     expect(result).toMatchObject({
-      rectangleX: mockStampBoxCoordinates.x,
-      rectangleY: mockStampBoxCoordinates.y,
+      rectangleX: mockBoxCoordinates.x,
+      rectangleY: mockBoxCoordinates.y,
     });
   });
 

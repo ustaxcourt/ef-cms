@@ -97,6 +97,13 @@ describe('sanitizeUserHtml', () => {
     expect(out).not.toContain('evil');
   });
 
+  it('preserves the grant-deny-indent-paragraph class used for Grant/Deny orders', () => {
+    const out = sanitizeUserHtml(
+      '<p class="grant-deny-indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>',
+    );
+    expect(out).toContain('class="grant-deny-indent-paragraph"');
+  });
+
   it('preserves the indent-paragraph class used for generated order indents', () => {
     const out = sanitizeUserHtml(
       '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>',
