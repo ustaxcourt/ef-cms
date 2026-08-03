@@ -60,6 +60,7 @@ describe('Docket clerk edits a docket entry to "Exhibit in Support" (EXS)', () =
         .click();
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
+      cy.get('[data-testid="success-alert"]').should('exist');
 
       // Click Edit for the served Exhibit(s) docket entry.
       waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' }).then(
