@@ -60,7 +60,9 @@ export const FilePetitionStep4 = connect(
                   validationKey: ['procedureType'],
                 });
 
-                form.preferredTrialCity = '';
+                if (!newTrialCitiesEnabled) {
+                  form.preferredTrialCity = '';
+                }
               }}
             />
           </div>
