@@ -65,6 +65,9 @@ describe('Docket clerk edits a docket entry to "Exhibit in Support" (EXS)', () =
       waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' }).then(
         () => {
           goToCase(docketNumber);
+          cy.get('[data-testid="edit-EXH"]', { timeout: 10000 }).should(
+            'be.visible',
+          );
           cy.get('[data-testid="edit-EXH"]').click();
         },
       );
