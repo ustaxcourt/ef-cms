@@ -162,7 +162,7 @@ export const setTrialSessionCalendarInteractor = async (
     ];
 
     await withTransaction(async () => {
-      const updatesToPersist: Promise<any>[] = [
+      const updatesToPersist: Promise<void>[] = [
         upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
         createOrUpdateTrialSessionCases({
           trialSessionCases: caseOrdersToAdd.map(TCO => ({
