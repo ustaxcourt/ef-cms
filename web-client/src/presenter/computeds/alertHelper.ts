@@ -7,6 +7,7 @@ const DEFAULT_ALERT_ERROR = {
   messages: undefined,
   responseCode: undefined,
   title: undefined,
+  insertContactSupportClause: undefined,
 };
 
 export const alertHelper = (get: Get): any => {
@@ -23,5 +24,6 @@ export const alertHelper = (get: Get): any => {
     showSingleMessage: !!alertError.message,
     showTitleOnly:
       !!alertError.title && !alertError.message && !alertError.messages,
+    insertContactSupportClause: alertError.insertContactSupportClause,
   };
 };

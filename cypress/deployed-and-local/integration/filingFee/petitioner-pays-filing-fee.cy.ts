@@ -82,7 +82,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     });
   };
 
-  const payFeeFailsure = () => {
+  const payFeeFailure = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -272,6 +272,62 @@ describe('Pay Filing Fee Through pay.gov', () => {
     });
   };
 
+  const payFeeUnknown = () => {
+    cy.intercept('PUT', '**/process-payment', {
+      statusCode: 500,
+    });
+    cy.intercept('POST', '**/cases').as('postCase');
+
+    cy.get('[data-testid="step-6-next-button"]').click();
+    cy.wait('@postCase').then(({ response }) => {
+      if (!response) throw Error('Did not find response');
+      const { docketNumber } = response.body;
+
+      cy.get('[data-testid="pay-filing-fee-button"]').click();
+
+      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
+
+      cy.origin(
+        getCypressEnv().payGovOrigin,
+        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
+        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
+          if (!isLocal) {
+            cy.get(
+              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
+            ).then(link => {
+              const redirectUrl = link.attr('href');
+
+              // workaround for the fact that these tests are run during deployments, first check
+              // the url pay.gov has is right, and then override it to go to the proper color
+              expect(redirectUrl).equal(
+                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+              );
+
+              cy.get(
+                '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
+              ).click();
+
+              cy.visit(
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+              );
+            });
+          } else {
+            cy.get(
+              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
+            ).click();
+          }
+        },
+      );
+
+      cy.get('[data-testid="error-alert"]')
+        .should('contain.text', 'Filing fee status unknown')
+        .and(
+          'contain.text',
+          'Unable to verify payment status. Contact dawson.support@ustaxcourt.gov.',
+        );
+    });
+  };
+
   describe('Petitioner flow', () => {
     beforeEach(() => {
       loginAsPetitioner();
@@ -291,7 +347,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
     it(
       'should let petitioner pay the filing fee and notify them of failure',
-      payFeeFailsure,
+      payFeeFailure,
     );
 
     it(
@@ -302,6 +358,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
     it(
       'should let petitioner cancel their payment and return step 7, then attempt again and successfully pay',
       payFeeCancel,
+    );
+
+    it(
+      'should show status unknown if process-payment endpoint returns an error',
+      payFeeUnknown,
     );
   });
 
@@ -324,7 +385,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
     it(
       'should let practitioner pay the filing fee and notify them of failure',
-      payFeeFailsure,
+      payFeeFailure,
     );
 
     it(
@@ -335,6 +396,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
     it(
       'should let practitioner cancel their payment and return step 7, then attempt again and successfully pay',
       payFeeCancel,
+    );
+
+    it(
+      'should show status unknown if process-payment endpoint returns an error for a practitioner',
+      payFeeUnknown,
     );
   });
 });
