@@ -12,6 +12,10 @@ REGION="us-east-1"
 API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 
+# Unique id per release used by CloudWatch RUM to locate the matching source
+# maps. Must match the S3 folder the `.map` files are uploaded to (deploy-ui.sh).
+RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
+
 PUBLIC_SITE_URL="https://${EFCMS_DOMAIN}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
@@ -41,6 +45,7 @@ STAGE="${ENV}" \
   CI="" \
   RUM_APP_MONITOR_ID="${RUM_APP_MONITOR_ID}" \
   RUM_IDENTITY_POOL_ID="${RUM_IDENTITY_POOL_ID}" \
+  RUM_RELEASE_ID="${RUM_RELEASE_ID}" \
   RUM_SAMPLE_RATE="${RUM_SAMPLE_RATE}" \
   DYNAMSOFT_PRODUCT_KEYS="${DYNAMSOFT_PRODUCT_KEYS}" \
   npm run build:client
