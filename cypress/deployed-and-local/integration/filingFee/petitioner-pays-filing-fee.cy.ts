@@ -397,5 +397,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
       'should let practitioner cancel their payment and return step 7, then attempt again and successfully pay',
       payFeeCancel,
     );
+
+    it(
+      'should show status unknown if process-payment endpoint returns an error for a practitioner',
+      payFeeUnknown,
+    );
   });
 });
