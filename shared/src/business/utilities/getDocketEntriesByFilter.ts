@@ -1,16 +1,9 @@
-import type {
-  DOCKET_RECORD_FILTER_OPTIONS,
-  EXHIBIT_EVENT_CODES,
-  MOTION_EVENT_CODES,
-  ORDER_EVENT_CODES,
-} from '@shared/business/entities/EntityConstants';
-
 type DocketEntryFilterContext = {
   getConstants: () => {
-    DOCKET_RECORD_FILTER_OPTIONS: typeof DOCKET_RECORD_FILTER_OPTIONS;
-    EXHIBIT_EVENT_CODES: typeof EXHIBIT_EVENT_CODES;
-    MOTION_EVENT_CODES: typeof MOTION_EVENT_CODES;
-    ORDER_EVENT_CODES: typeof ORDER_EVENT_CODES;
+    DOCKET_RECORD_FILTER_OPTIONS: Record<string, string>;
+    EXHIBIT_EVENT_CODES: string[];
+    MOTION_EVENT_CODES: string[];
+    ORDER_EVENT_CODES: string[];
   };
 };
 
