@@ -145,7 +145,7 @@ export const PetitionersAndCounsel = connect(
                       >
                         {petitioner.isAddressSealed && (
                           <span
-                            aria-label="sealed paper petition email"
+                            aria-label="sealed contact email"
                             className="sealed-contact-icon"
                             role="img"
                           >
