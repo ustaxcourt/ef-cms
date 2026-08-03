@@ -70,17 +70,6 @@ export const ErrorNotification = connect(
                   {alertHelper.messagesDeduped.map(message => (
                     <li key={message}>{message}</li>
                   ))}
-                  {alertHelper.insertContactSupportClause && (
-                    <li>
-                      Contact{' '}
-                      <a
-                        href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
-                      >
-                        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
-                      </a>
-                      .
-                    </li>
-                  )}
                 </ul>
               )}
               {alertHelper.showTitleOnly && (
