@@ -1,9 +1,22 @@
-import { DOCKET_RECORD_FILTER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  DOCKET_RECORD_FILTER_OPTIONS,
+  EXHIBIT_EVENT_CODES,
+  MOTION_EVENT_CODES,
+  ORDER_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getDocketEntriesByFilter } from './getDocketEntriesByFilter';
 
 describe('getDocketEntriesByFilter', () => {
+  const applicationContext = {
+    getConstants: () => ({
+      DOCKET_RECORD_FILTER_OPTIONS,
+      EXHIBIT_EVENT_CODES,
+      MOTION_EVENT_CODES,
+      ORDER_EVENT_CODES,
+    }),
+  };
+
   const MOCK_DOCKET_ENTRY = MOCK_CASE.docketEntries[0];
 
   const ORDER_DOCKET_ENTRY = {
