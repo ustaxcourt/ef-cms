@@ -31,13 +31,13 @@ describe('getDocketEntriesByFilter', () => {
     isDraft: false,
   };
 
-  const EXHIBITS_EVENT_CODE = {
+  const EXHIBIT_DOCKET_ENTRY = {
     ...MOCK_DOCKET_ENTRY,
     eventCode: 'STIP',
     isDraft: false,
   };
 
-  const EXHIBIT_IN_SUPPORT_EVENT_CODE = {
+  const EXHIBIT_IN_SUPPORT_DOCKET_ENTRY = {
     ...MOCK_DOCKET_ENTRY,
     eventCode: 'EXS',
     isDraft: false,
@@ -46,8 +46,8 @@ describe('getDocketEntriesByFilter', () => {
   const mockDocketEntries: RawDocketEntry[] = [
     ORDER_DOCKET_ENTRY,
     MOTION_DOCKET_ENTRY,
-    EXHIBITS_EVENT_CODE,
-    EXHIBIT_IN_SUPPORT_EVENT_CODE,
+    EXHIBIT_DOCKET_ENTRY,
+    EXHIBIT_IN_SUPPORT_DOCKET_ENTRY,
   ];
 
   it('should return all the documents if the filter is neither motions, exhibits, nor orders', () => {
@@ -82,8 +82,8 @@ describe('getDocketEntriesByFilter', () => {
 
   it('should return all the documents if the filter is "exhibits"', () => {
     const expectedResults = [
-      EXHIBITS_EVENT_CODE,
-      EXHIBIT_IN_SUPPORT_EVENT_CODE,
+      EXHIBIT_DOCKET_ENTRY,
+      EXHIBIT_IN_SUPPORT_DOCKET_ENTRY,
     ];
 
     const result = getDocketEntriesByFilter(applicationContext, {
