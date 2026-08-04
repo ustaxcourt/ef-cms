@@ -1,10 +1,10 @@
-import { attachFile } from '../../../../../../helpers/file/upload-file';
-import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { attachFile } from 'cypress/helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import { externalUserSearchesDocketNumber } from 'cypress/helpers/advancedSearch/external-user-searches-docket-number';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { loginAsPetitioner } from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
+import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
+import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 
 describe(
   'Petitioner files an Exhibit in Support (EXS)',
@@ -56,6 +56,13 @@ describe(
           'have.text',
           'Exhibit in Support of Petition',
         );
+
+        // The generated title also surfaces on Recent Filings for the filer.
+        cy.get('[data-testid="header-recent-filings-link"]').click();
+        cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+        cy.contains('[data-testid="case-number-link"]', docketNumber)
+          .closest('tr')
+          .should('contain', 'Exhibit in Support of Petition');
       });
     });
 
