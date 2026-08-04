@@ -322,6 +322,10 @@ describe('Docket Clerk Report', () => {
         'have.length.at.least',
         1,
       );
+      cy.contains(
+        '#docket-clerk-report-messages-inbox',
+        'Test message body',
+      ).should('be.visible');
     }
 
     it('should select all inbox messages when the select-all checkbox is clicked', () => {
