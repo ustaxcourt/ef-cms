@@ -27,6 +27,8 @@ const caveats: string[] = [
   'eslint',
   '@eslint/js',
   'pica',
+  'image-blob-reduce',
+  'ts-node',
   '@babel/core',
   '@babel/preset-env',
   '@babel/preset-react',
