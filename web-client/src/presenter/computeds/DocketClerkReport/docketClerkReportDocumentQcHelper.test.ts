@@ -22,31 +22,39 @@ describe('docketClerkReportDocumentQcHelper', () => {
     userId: CLERK_USER_ID,
   };
 
-  const buildWorkItem = (overrides = {}) => ({
-    assigneeId: CLERK_USER_ID,
-    assigneeName: 'Alice Jones',
-    caseStatus: 'Assigned - Case',
-    caseTitle: 'Test Case',
-    completedAt: null,
-    completedByUserId: null,
-    createdAt: '2024-01-15T12:00:00.000Z',
-    docketEntry: {
+  const buildWorkItem = (overrides: Record<string, any> = {}) => {
+    const merged = {
+      assigneeId: CLERK_USER_ID,
+      assigneeName: 'Alice Jones',
+      caseStatus: 'Assigned - Case',
+      caseTitle: 'Test Case',
+      completedAt: null,
+      completedByUserId: null,
       createdAt: '2024-01-15T12:00:00.000Z',
-      docketEntryId: 'de-uuid-001',
-      documentType: 'Petition',
-      eventCode: 'P',
-      isFileAttached: true,
+      docketEntry: {
+        createdAt: '2024-01-15T12:00:00.000Z',
+        docketEntryId: 'de-uuid-001',
+        documentType: 'Petition',
+        eventCode: 'P',
+        isFileAttached: true,
+        receivedAt: '2024-01-10T12:00:00.000Z',
+      },
+      docketNumber: '101-24',
+      inProgress: false,
+      isRead: true,
+      leadDocketNumber: null,
       receivedAt: '2024-01-10T12:00:00.000Z',
-    },
-    docketNumber: '101-24',
-    inProgress: false,
-    isRead: true,
-    leadDocketNumber: null,
-    receivedAt: '2024-01-10T12:00:00.000Z',
-    section: DOCKET_SECTION,
-    sentBySection: DOCKET_SECTION,
-    ...overrides,
-  });
+      section: DOCKET_SECTION,
+      sentBySection: DOCKET_SECTION,
+      ...overrides,
+    };
+
+    return {
+      ...merged,
+      docketEntryId:
+        overrides.docketEntryId ?? merged.docketEntry.docketEntryId,
+    };
+  };
 
   const baseState = {
     docketClerkReport: {

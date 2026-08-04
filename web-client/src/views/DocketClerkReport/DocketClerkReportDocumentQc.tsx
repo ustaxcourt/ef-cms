@@ -7,6 +7,16 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const getConsolidatedGroupAriaLabel = (item: FormattedWorkItemWithCaseInfo) => {
+  const labels = [
+    item.inLeadCase ? 'Lead case' : 'Consolidated case',
+    ...(item.groupedMemberCases || []).map(c =>
+      c.inLeadCase ? 'Lead case' : 'Consolidated case',
+    ),
+  ];
+  return `Consolidated case group: ${labels.join(', ')}`;
+};
+
 const DocketClerkReportWorkItemTable = ({
   ariaLabelId,
   emptyText,
@@ -55,25 +65,33 @@ const DocketClerkReportWorkItemTable = ({
             <tr key={item.workItemId}>
               <td className="consolidated-case-column">
                 {item.groupedMemberCases ? (
-                  <div className="consolidated-icons-stack" aria-hidden="true">
-                    <ConsolidatedCaseIcon
-                      consolidatedIconTooltipText={
-                        item.consolidatedIconTooltipText
-                      }
-                      inConsolidatedGroup={item.inConsolidatedGroup}
-                      showLeadCaseIcon={item.inLeadCase}
-                    />
-                    {item.groupedMemberCases.map(c => (
+                  <>
+                    <div
+                      aria-hidden="true"
+                      className="consolidated-icons-stack"
+                    >
                       <ConsolidatedCaseIcon
-                        key={`icon-${c.docketNumber}`}
                         consolidatedIconTooltipText={
-                          c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                          item.consolidatedIconTooltipText
                         }
-                        inConsolidatedGroup={true}
-                        showLeadCaseIcon={c.inLeadCase}
+                        inConsolidatedGroup={item.inConsolidatedGroup}
+                        showLeadCaseIcon={item.inLeadCase}
                       />
-                    ))}
-                  </div>
+                      {item.groupedMemberCases.map(c => (
+                        <ConsolidatedCaseIcon
+                          key={`icon-${c.docketNumber}`}
+                          consolidatedIconTooltipText={
+                            c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                          }
+                          inConsolidatedGroup={true}
+                          showLeadCaseIcon={c.inLeadCase}
+                        />
+                      ))}
+                    </div>
+                    <span className="usa-sr-only">
+                      {getConsolidatedGroupAriaLabel(item)}
+                    </span>
+                  </>
                 ) : (
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={

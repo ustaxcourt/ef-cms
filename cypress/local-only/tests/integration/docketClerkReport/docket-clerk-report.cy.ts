@@ -543,7 +543,7 @@ describe('Docket Clerk Report', () => {
           cy.get('[data-testid="upload-pdf-button"]').click();
           attachFile({
             filePath: '../../helpers/file/sample.pdf',
-            selector: '[data-testid="primaryDocumentFile-file-input"',
+            selector: '[data-testid="primaryDocumentFile-file-input"]',
             selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
           });
 

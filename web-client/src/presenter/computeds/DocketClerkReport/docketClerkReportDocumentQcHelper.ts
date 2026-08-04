@@ -85,23 +85,18 @@ const groupConsolidatedWorkItems = (
   > = [];
 
   for (const group of consolidatedGroups.values()) {
-    const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
+    const [leadOrLowestNumberedItem, ...memberItems] =
+      Case.sortByDocketNumber(group);
 
     const groupedMemberCases = Case.sortByDocketNumber(
-      group
-        .filter(item => item.docketNumber !== leadOrLowestNumber)
-        .map(item => {
-          return {
-            workItemId: item.workItemId,
-            docketNumber: item.docketNumber,
-            inLeadCase: isLeadCase(item),
-          };
-        }),
+      memberItems.map(item => {
+        return {
+          workItemId: item.workItemId,
+          docketNumber: item.docketNumber,
+          inLeadCase: isLeadCase(item),
+        };
+      }),
     );
-
-    const leadOrLowestNumberedItem = group.find(item => {
-      return item.docketNumber === leadOrLowestNumber;
-    })!;
 
     consolidatedResult.push({
       ...leadOrLowestNumberedItem,
