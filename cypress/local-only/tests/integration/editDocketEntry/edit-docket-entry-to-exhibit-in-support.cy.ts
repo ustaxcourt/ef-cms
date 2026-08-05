@@ -63,15 +63,12 @@ describe('Docket clerk edits a docket entry to "Exhibit in Support" (EXS)', () =
       cy.get('[data-testid="success-alert"]').should('exist');
 
       // Click Edit for the served Exhibit(s) docket entry.
-      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' }).then(
-        () => {
-          goToCase(docketNumber);
-          cy.get('[data-testid="edit-EXH"]', { timeout: 10000 }).should(
-            'be.visible',
-          );
-          cy.get('[data-testid="edit-EXH"]').click();
-        },
+      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' });
+      goToCase(docketNumber);
+      cy.get('[data-testid="edit-EXH"]', { timeout: 10000 }).should(
+        'be.visible',
       );
+      cy.get('[data-testid="edit-EXH"]').click();
 
       // Change the Document Type to "Exhibit in Support".
       selectTypeaheadInput(
