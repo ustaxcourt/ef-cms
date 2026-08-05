@@ -609,4 +609,227 @@ describe('Docket Clerk Report', () => {
       );
     });
   });
+
+  describe('Messages page type - unread icon and sort order', () => {
+    let docketClerkInfo: UserInfo;
+
+    function sendMessage({
+      section,
+      subject,
+      toUserId,
+    }: {
+      section: string;
+      subject: string;
+      toUserId?: string;
+    }): void {
+      cy.get('[data-testid="case-detail-menu-button"]').click();
+      cy.get('[data-testid="menu-button-add-new-message"]').click();
+      cy.get('[data-testid="message-to-section"]').select(section);
+      if (toUserId) {
+        cy.get('[data-testid="message-to-user-id"]').select(toUserId);
+      }
+      cy.get('[data-testid="message-subject"]').type(subject);
+      cy.get('[data-testid="message-body"]').type('Sort order test body');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+    }
+
+    function runMessagesReport(): void {
+      loginAsCaseServicesSupervisor();
+      cy.visit('/reports/docket-clerk-report');
+      cy.get('[data-testid="docket-clerk-report-clerk-select"]').select(
+        docketClerkInfo.userId,
+      );
+      cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
+        'messages',
+      );
+      cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+    }
+
+    function assertRowOrder(
+      tableId: string,
+      firstSubject: string,
+      secondSubject: string,
+    ): void {
+      cy.get(`${tableId} table tbody tr`).then($rows => {
+        const rowTexts = [...$rows].map(row => (row as HTMLElement).innerText);
+        const firstIndex = rowTexts.findIndex(text =>
+          text.includes(firstSubject),
+        );
+        const secondIndex = rowTexts.findIndex(text =>
+          text.includes(secondSubject),
+        );
+        expect(firstIndex).to.be.greaterThan(-1);
+        expect(secondIndex).to.be.greaterThan(-1);
+        expect(firstIndex).to.be.lessThan(secondIndex);
+      });
+    }
+
+    before(() => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        getUserByEmail('docketclerk1@example.com').then(info => {
+          docketClerkInfo = info;
+
+          getUserByEmail('petitionsclerk1@example.com').then(
+            petitionsClerkInfo => {
+              loginAsPetitionsClerk1();
+              goToCase(docketNumber);
+              sendMessage({
+                section: 'docket',
+                subject: 'Sort Order Test 1',
+                toUserId: docketClerkInfo.userId,
+              });
+              sendMessage({
+                section: 'docket',
+                subject: 'Sort Order Test 2',
+                toUserId: docketClerkInfo.userId,
+              });
+
+              loginAsDocketClerk1();
+              goToCase(docketNumber);
+              sendMessage({
+                section: 'petitions',
+                subject: 'Sent Order Test 1',
+                toUserId: petitionsClerkInfo.userId,
+              });
+              sendMessage({
+                section: 'petitions',
+                subject: 'Sent Order Test 2',
+                toUserId: petitionsClerkInfo.userId,
+              });
+            },
+          );
+        });
+      });
+    });
+
+    it('shows the unread icon in the Inbox tab for messages the docket clerk has not read', () => {
+      runMessagesReport();
+
+      cy.contains('#docket-clerk-report-messages-inbox tr', 'Sort Order Test 1')
+        .find('[aria-label="Unread message"]')
+        .should('exist');
+    });
+
+    it('sorts the Inbox and Sent tabs to match their non-DCR counterparts, and re-sorts correctly when switching tabs', () => {
+      runMessagesReport();
+
+      // Inbox defaults to ascending (oldest received first), matching
+      // MessagesIndividualInbox's default.
+      assertRowOrder(
+        '#docket-clerk-report-messages-inbox',
+        'Sort Order Test 1',
+        'Sort Order Test 2',
+      );
+
+      // Switching to Sent must reset to its own default: descending
+      // (newest sent first), not inherit Inbox's ascending order.
+      cy.get('[data-testid="docket-clerk-report-messages-sent-tab"]').click();
+      assertRowOrder(
+        '#docket-clerk-report-messages-sent',
+        'Sent Order Test 2',
+        'Sent Order Test 1',
+      );
+
+      // Switching back to Inbox must still be ascending, not leftover from Sent.
+      cy.get('[data-testid="docket-clerk-report-messages-inbox-tab"]').click();
+      assertRowOrder(
+        '#docket-clerk-report-messages-inbox',
+        'Sort Order Test 1',
+        'Sort Order Test 2',
+      );
+    });
+
+    it('sorts the Completed tab newest-completed-first, matching MessagesIndividualCompleted', () => {
+      loginAsDocketClerk1();
+      cy.visit('/messages/my/inbox');
+
+      // Complete the two inbox messages one at a time so they get distinct
+      // completedAt timestamps to sort by.
+      cy.contains('#messages-individual-inbox tr', 'Sort Order Test 1')
+        .find('input[type="checkbox"]')
+        .click();
+      cy.get('[data-testid="message-batch-mark-as-complete"]').click();
+      cy.get('[data-testid="message-detail-success-alert"]').should(
+        'be.visible',
+      );
+
+      cy.contains('#messages-individual-inbox tr', 'Sort Order Test 2')
+        .find('input[type="checkbox"]')
+        .click();
+      cy.get('[data-testid="message-batch-mark-as-complete"]').click();
+      cy.get('[data-testid="message-detail-success-alert"]').should(
+        'be.visible',
+      );
+
+      runMessagesReport();
+      cy.get(
+        '[data-testid="docket-clerk-report-messages-completed-tab"]',
+      ).click();
+      assertRowOrder(
+        '#docket-clerk-report-messages-completed',
+        'Sort Order Test 2',
+        'Sort Order Test 1',
+      );
+    });
+  });
+
+  describe('Messages page type - consolidated case icon', () => {
+    function sendMessageToDocketClerk(userId: string, subject: string): void {
+      cy.get('[data-testid="case-detail-menu-button"]').click();
+      cy.get('[data-testid="menu-button-add-new-message"]').click();
+      cy.get('[data-testid="message-to-section"]').select('docket');
+      cy.get('[data-testid="message-to-user-id"]').select(userId);
+      cy.get('[data-testid="message-subject"]').type(subject);
+      cy.get('[data-testid="message-body"]').type('Consolidated icon test');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
+    }
+
+    it('shows the lead-case and consolidated-case icons on messages sent from cases in a consolidated group', () => {
+      createAndServeConsolidatedGroup({ numberOfMemberCases: 1 }).then(
+        ({ leadDocketNumber, memberDocketNumbers }) => {
+          getUserByEmail('docketclerk1@example.com').then(docketClerkInfo => {
+            loginAsPetitionsClerk1();
+
+            goToCase(leadDocketNumber);
+            sendMessageToDocketClerk(
+              docketClerkInfo.userId,
+              'Lead Case Message',
+            );
+
+            goToCase(memberDocketNumbers[0]);
+            sendMessageToDocketClerk(
+              docketClerkInfo.userId,
+              'Member Case Message',
+            );
+
+            loginAsCaseServicesSupervisor();
+            cy.visit('/reports/docket-clerk-report');
+            cy.get('[data-testid="docket-clerk-report-clerk-select"]').select(
+              docketClerkInfo.userId,
+            );
+            cy.get(
+              '[data-testid="docket-clerk-report-page-type-select"]',
+            ).select('messages');
+            cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+
+            cy.contains(
+              '#docket-clerk-report-messages-inbox tr',
+              'Lead Case Message',
+            )
+              .find('[aria-label="Lead case"]')
+              .should('exist');
+
+            cy.contains(
+              '#docket-clerk-report-messages-inbox tr',
+              'Member Case Message',
+            )
+              .find('[aria-label="Consolidated case"]')
+              .should('exist');
+          });
+        },
+      );
+    });
+  });
 });
