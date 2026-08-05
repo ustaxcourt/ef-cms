@@ -2,6 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_THAT_ALLOW_FREE_TEXT,
+  GRANT_DENY_MOTION_OPTIONS,
   MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -74,8 +75,7 @@ export const fileCourtIssuedOrder = async (
 
   let documentContentsId: string | undefined;
   let contentToStore:
-    | { documentContents: string; richText: string | undefined }
-    | undefined;
+    { documentContents: string; richText: string | undefined } | undefined;
 
   if (documentMetadata.documentContents) {
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
@@ -213,6 +213,8 @@ function generateFreeText(documentMetadata: {
   if (eventCode === 'O') {
     if (orderType === MOTION_ORDER_RESPONSE_OPTIONS.orderType) {
       return initialFreeText;
+    } else if (orderType === GRANT_DENY_MOTION_OPTIONS.orderType) {
+      return documentTitle;
     } else if (orderType || jurisdiction) {
       return [
         'Order',

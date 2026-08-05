@@ -12,6 +12,7 @@ import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  GRANT_DENY_MOTION_OPTIONS,
   MOTION_ORDER_RESPONSE_OPTIONS,
   PARTY_TYPES,
   PETITIONS_SECTION,
@@ -526,6 +527,29 @@ describe('fileCourtIssuedOrderInteractor', () => {
             .docketEntries[3],
         ).toMatchObject({
           freeText: 'Custom free text for motion order response',
+        });
+      });
+
+      it('should set freeText to documentTitle when eventCode is O and orderType is grantDenyMotion', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'Order - Motion to Compel is granted',
+              eventCode: 'O',
+              orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockJudgeUser,
+        );
+
+        expect(
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
+        ).toMatchObject({
+          freeText: 'Order - Motion to Compel is granted',
         });
       });
 

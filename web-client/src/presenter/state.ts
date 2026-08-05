@@ -36,7 +36,6 @@ import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advance
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
-import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseAssociationRequestHelper } from './computeds/caseAssociationRequestHelper';
@@ -156,6 +155,7 @@ import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { grantDenyMotionFormHelper } from './computeds/grantDenyMotionFormHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { termBuilderHelper } from './computeds/termBuilderHelper';
@@ -225,9 +225,6 @@ export const computeds = {
   alertHelper: alertHelper as unknown as ReturnType<typeof alertHelper>,
   appInstanceManagerHelper: appInstanceManagerHelper as unknown as ReturnType<
     typeof appInstanceManagerHelper
-  >,
-  applyStampFormHelper: applyStampFormHelper as unknown as ReturnType<
-    typeof applyStampFormHelper
   >,
   batchDownloadHelper: batchDownloadHelper as unknown as ReturnType<
     typeof batchDownloadHelper
@@ -574,6 +571,9 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  grantDenyMotionFormHelper: grantDenyMotionFormHelper as unknown as ReturnType<
+    typeof grantDenyMotionFormHelper
+  >,
   statusReportOrderHelper: statusReportOrderHelper as unknown as ReturnType<
     typeof statusReportOrderHelper
   >,
@@ -638,7 +638,8 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    RawGenerateSuggestedTermForm | undefined,
+    | RawGenerateSuggestedTermForm
+    | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -731,9 +732,11 @@ export const baseState = {
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      TrialSessionLocationInfo | undefined,
+      | TrialSessionLocationInfo
+      | undefined,
     updatedTrialSessionLocation: undefined as
-      TrialSessionLocationInfo | undefined,
+      | TrialSessionLocationInfo
+      | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -955,7 +958,8 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
+      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
+      | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],
