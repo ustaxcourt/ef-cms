@@ -15,7 +15,6 @@ export const MessageDocument = connect(
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToStatusReportOrderSequence:
       sequences.navigateToStatusReportOrderSequence,
     navigateToPathAndSetRedirectUrlSequence:
@@ -41,7 +40,6 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
-    navigateToPathSequence,
     navigateToStatusReportOrderSequence,
     navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -194,18 +192,19 @@ export const MessageDocument = connect(
             Order Response
           </Button>
         )}
-        {messageDocumentHelper.showApplyStampButton && (
+        {messageDocumentHelper.showGrantDenyMotionButton && (
           <Button
             link
-            data-testid="apply-stamp"
+            data-testid="grant-deny-motion"
             icon="stamp"
             onClick={() => {
-              navigateToPathSequence({
-                path: messageDocumentHelper.applyStampFromMessagesLink,
+              navigateToPathAndSetRedirectUrlSequence({
+                path: messageDocumentHelper.grantDenyMotionFromMessagesLink,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
-            Apply Stamp
+            Grant/Deny
           </Button>
         )}
         {messageDocumentHelper.showStatusReportOrderButton && (

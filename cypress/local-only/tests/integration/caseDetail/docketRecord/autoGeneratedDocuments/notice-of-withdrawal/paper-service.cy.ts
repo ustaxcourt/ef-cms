@@ -62,67 +62,68 @@ describe('Notice of Withdrawal - Paper Service', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
-      });
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      addPetitionerAsPartyToCase();
-      cy.intercept('GET', `/cases/${docketNumber}*`).as('caseDetails');
-      goToCase(docketNumber);
-      cy.wait('@caseDetails').then(interception => {
-        cy.wrap(
-          interception.response?.body.petitioners.map(
-            (p: RawPetitioner) => p.contactId,
-          ),
-        ).as('petitionerContactIds');
-      });
-      cy.get('[data-testid="tab-case-information"]').click();
-      cy.get('[data-testid="tab-parties"]').click();
-      cy.get('[data-testid="petitioners-and-counsel"]').click();
-      cy.get('[data-testid="edit-private-practitioner-counsel"]').click();
-      cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
-        petitionerContactIds.forEach(contactId => {
-          cy.get(`input[data-testid="representing-${contactId}"]`).then(
-            $checkbox => {
-              if (!$checkbox.is(':checked')) {
-                cy.get(
-                  `label[data-testid="representing-${contactId}"]`,
-                ).click();
-              }
-            },
-          );
+
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        addPetitionerAsPartyToCase();
+        cy.intercept('GET', `/cases/${docketNumber}*`).as('caseDetails');
+        goToCase(docketNumber);
+        cy.wait('@caseDetails').then(interception => {
+          cy.wrap(
+            interception.response?.body.petitioners.map(
+              (p: RawPetitioner) => p.contactId,
+            ),
+          ).as('petitionerContactIds');
         });
-      });
-      cy.get(
-        '[data-testid="submit-edit-petitioner-information-button"]',
-      ).click();
-      addPrivatePractitionerToCaseAndAllParties(
-        docketNumber,
-        privatePractitioner2BarNumber,
-      );
-      cy.get('[data-testid="edit-petitioner-button"]').last().click();
-      cy.get('[data-testid="service-type-paper-label-form.contact"]').click();
-      cy.get(
-        '[data-testid="submit-edit-petitioner-information-button"]',
-      ).click();
-
-      cy.intercept('GET', `/cases/${docketNumber}*`).as(
-        'caseDetailsAfterUpdate',
-      );
-      loginAsPrivatePractitioner();
-      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
-
-      cy.wait('@caseDetailsAfterUpdate').then(interception => {
-        const petitioners = interception.response?.body.petitioners || [];
-        const paperServicePetitioners = petitioners.filter(
-          (p: RawPetitioner) => p.serviceIndicator === 'Paper',
+        cy.get('[data-testid="tab-case-information"]').click();
+        cy.get('[data-testid="tab-parties"]').click();
+        cy.get('[data-testid="petitioners-and-counsel"]').click();
+        cy.get('[data-testid="edit-private-practitioner-counsel"]').click();
+        cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
+          petitionerContactIds.forEach(contactId => {
+            cy.get(`input[data-testid="representing-${contactId}"]`).then(
+              $checkbox => {
+                if (!$checkbox.is(':checked')) {
+                  cy.get(
+                    `label[data-testid="representing-${contactId}"]`,
+                  ).click();
+                }
+              },
+            );
+          });
+        });
+        cy.get(
+          '[data-testid="submit-edit-petitioner-information-button"]',
+        ).click();
+        addPrivatePractitionerToCaseAndAllParties(
+          docketNumber,
+          privatePractitioner2BarNumber,
         );
-        paperServicePetitioners.forEach((petitioner: RawPetitioner) => {
-          cy.get(
-            `[data-testid="paper-service-acknowledgement-name-${petitioner.contactId}"]`,
-          ).contains(`${petitioner.name}`);
-          cy.get(
-            `[data-testid="paper-service-acknowledgement-address-${petitioner.contactId}"]`,
-          ).contains(petitioner.address1);
+        cy.get('[data-testid="edit-petitioner-button"]').last().click();
+        cy.get('[data-testid="service-type-paper-label-form.contact"]').click();
+        cy.get(
+          '[data-testid="submit-edit-petitioner-information-button"]',
+        ).click();
+
+        cy.intercept('GET', `/cases/${docketNumber}*`).as(
+          'caseDetailsAfterUpdate',
+        );
+        loginAsPrivatePractitioner();
+        selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
+
+        cy.wait('@caseDetailsAfterUpdate').then(interception => {
+          const petitioners = interception.response?.body.petitioners || [];
+          const paperServicePetitioners = petitioners.filter(
+            (p: RawPetitioner) => p.serviceIndicator === 'Paper',
+          );
+          paperServicePetitioners.forEach((petitioner: RawPetitioner) => {
+            cy.get(
+              `[data-testid="paper-service-acknowledgement-name-${petitioner.contactId}"]`,
+            ).contains(`${petitioner.name}`);
+            cy.get(
+              `[data-testid="paper-service-acknowledgement-address-${petitioner.contactId}"]`,
+            ).contains(petitioner.address1);
+          });
         });
       });
     });
