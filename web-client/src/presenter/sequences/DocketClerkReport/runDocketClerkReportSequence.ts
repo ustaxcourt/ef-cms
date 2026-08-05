@@ -4,6 +4,7 @@ import { commitDocketClerkReportSelectionAction } from '../../actions/DocketCler
 import { getDocketClerkReportDocumentQcAction } from '../../actions/DocketClerkReport/getDocketClerkReportDocumentQcAction';
 import { getDocketClerkReportMessagesAction } from '../../actions/DocketClerkReport/getDocketClerkReportMessagesAction';
 import { resetSelectedMessageAction } from '@web-client/presenter/actions/Messages/resetSelectedMessageAction';
+import { setDocketClerkReportMessagesTableSortAction } from '../../actions/DocketClerkReport/setDocketClerkReportMessagesTableSortAction';
 import { validateDocketClerkReportAction } from '../../actions/DocketClerkReport/validateDocketClerkReportAction';
 
 export const runDocketClerkReportSequence = [
@@ -17,7 +18,10 @@ export const runDocketClerkReportSequence = [
       chooseDocketClerkReportPageTypeAction,
       {
         documentQC: [getDocketClerkReportDocumentQcAction],
-        messages: [getDocketClerkReportMessagesAction],
+        messages: [
+          setDocketClerkReportMessagesTableSortAction,
+          getDocketClerkReportMessagesAction,
+        ],
       },
     ],
   },

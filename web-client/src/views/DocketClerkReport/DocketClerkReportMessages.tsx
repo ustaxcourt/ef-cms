@@ -1,9 +1,15 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import {
   DocketClerkReportMessageBox,
   DocketClerkReportMessagesResults,
 } from '@web-client/presenter/computeds/DocketClerkReport/docketClerkReportMessagesHelper';
+import {
+  SORT_ASCENDING_TEXT,
+  SORT_DESCENDING_TEXT,
+} from '@shared/business/entities/EntityConstants';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TableFilters } from '../../ustc-ui/Table/TableFilters';
@@ -11,11 +17,15 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 type ColumnConfig = {
   label: string;
   render: (message: any) => React.ReactNode;
+  cellIcon?: (message: any) => React.ReactNode;
+  headerIconClassName?: string;
   sortField?: string;
+  sortType?: 'string' | 'date';
   tdClassName?: string;
 };
 
@@ -41,98 +51,183 @@ const subjectCell = (message: any) => (
   </>
 );
 
+const inboxSubjectCell = (message: any) => {
+  const boldText = !message.isRead;
+  return (
+    <>
+      <div className="message-document-title">
+        <Button
+          link
+          className={classNames('padding-0', boldText && 'text-bold')}
+          data-testid={`message-subject-cell-${message.messageId}`}
+          href={message.messageDetailLink}
+        >
+          {message.subject}
+        </Button>
+      </div>
+      <div className="message-document-detail">{message.message}</div>
+    </>
+  );
+};
+
+const unreadIconCell = (message: any) =>
+  !message.isRead && (
+    <Icon
+      aria-label="Unread message"
+      className="fa-icon-blue"
+      icon="envelope"
+      size="1x"
+    />
+  );
+
 const docketNumberCell = (message: any) => <CaseLink formattedCase={message} />;
+
+const consolidatedCaseIconCell = (message: any) => (
+  <ConsolidatedCaseIcon
+    consolidatedIconTooltipText={message.consolidatedIconTooltipText}
+    inConsolidatedGroup={message.inConsolidatedGroup}
+    showLeadCaseIcon={message.isLeadCase}
+  />
+);
 
 const COLUMNS: Record<string, ColumnConfig[]> = {
   completed: [
     {
       label: 'Docket No.',
+      cellIcon: consolidatedCaseIconCell,
+      headerIconClassName: 'consolidated-case-column',
       render: docketNumberCell,
       sortField: 'docketNumber',
+      sortType: 'string',
     },
     {
       label: 'Completed',
       render: m => m.completedAtFormatted,
       sortField: 'completedAt',
+      sortType: 'date',
     },
     {
       label: 'Last Message',
       render: subjectCell,
       sortField: 'subject',
+      sortType: 'string',
       tdClassName: 'message-subject',
     },
-    { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
+    {
+      label: 'Case Title',
+      render: m => m.caseTitle,
+      sortField: 'caseTitle',
+      sortType: 'string',
+    },
     {
       label: 'Case Status',
       render: m => m.caseStatus,
       sortField: 'caseStatus',
+      sortType: 'string',
     },
     {
       label: 'Completed By',
       render: m => m.completedBy,
       sortField: 'completedBy',
+      sortType: 'date',
     },
     {
       label: 'Section',
       render: m => m.completedBySection,
       sortField: 'completedBySection',
+      sortType: 'string',
     },
   ],
   inbox: [
     {
       label: 'Docket No.',
+      cellIcon: consolidatedCaseIconCell,
+      headerIconClassName: 'consolidated-case-column',
       render: docketNumberCell,
       sortField: 'docketNumber',
+      sortType: 'string',
     },
     {
       label: 'Received',
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
+      sortType: 'date',
     },
     {
       label: 'Message',
-      render: subjectCell,
+      cellIcon: unreadIconCell,
+      headerIconClassName: 'message-unread-column',
+      render: inboxSubjectCell,
       sortField: 'subject',
+      sortType: 'string',
       tdClassName: 'message-subject',
     },
-    { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
+    {
+      label: 'Case Title',
+      render: m => m.caseTitle,
+      sortField: 'caseTitle',
+      sortType: 'string',
+    },
     {
       label: 'Case Status',
       render: m => m.caseStatus,
       sortField: 'caseStatus',
+      sortType: 'string',
     },
-    { label: 'From', render: m => m.from, sortField: 'from' },
+    {
+      label: 'From',
+      render: m => m.from,
+      sortField: 'from',
+      sortType: 'string',
+    },
     {
       label: 'Section',
       render: m => m.fromSectionFormatted,
       sortField: 'fromSectionFormatted',
+      sortType: 'string',
     },
   ],
   sent: [
     {
       label: 'Docket No.',
+      cellIcon: consolidatedCaseIconCell,
+      headerIconClassName: 'consolidated-case-column',
       render: docketNumberCell,
       sortField: 'docketNumber',
+      sortType: 'string',
     },
     {
       label: 'Sent',
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
+      sortType: 'date',
     },
     {
       label: 'Message',
       render: subjectCell,
       sortField: 'subject',
+      sortType: 'string',
       tdClassName: 'message-subject',
     },
-    { label: 'Case Title', render: m => m.caseTitle, sortField: 'caseTitle' },
+    {
+      label: 'Case Title',
+      render: m => m.caseTitle,
+      sortField: 'caseTitle',
+      sortType: 'string',
+    },
     {
       label: 'Case Status',
       render: m => m.caseStatus,
       sortField: 'caseStatus',
+      sortType: 'string',
     },
-    { label: 'To', render: m => m.to, sortField: 'to' },
-    { label: 'Section', render: m => m.toSection, sortField: 'toSection' },
+    { label: 'To', render: m => m.to, sortField: 'to', sortType: 'string' },
+    {
+      label: 'Section',
+      render: m => m.toSection,
+      sortField: 'toSection',
+      sortType: 'string',
+    },
   ],
 };
 
@@ -288,24 +383,29 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                   </th>
                 )}
                 {columns.map(column => (
-                  <th aria-label={column.label} key={column.label}>
-                    {column.sortField ? (
-                      <SortableColumn
-                        ascText="In ascending order"
-                        currentlySortedField={tableSort.sortField}
-                        currentlySortedOrder={tableSort.sortOrder}
-                        data-testid={`${id}-${column.sortField}-header-button`}
-                        defaultSortOrder="asc"
-                        descText="In descending order"
-                        hasRows={hasMessages}
-                        sortField={column.sortField}
-                        title={column.label}
-                        onClickSequence={sortTableSequence}
-                      />
-                    ) : (
-                      column.label
+                  <React.Fragment key={column.label}>
+                    {column.headerIconClassName && (
+                      <th className={column.headerIconClassName}></th>
                     )}
-                  </th>
+                    <th aria-label={column.label}>
+                      {column.sortField ? (
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT[column.sortType!]}
+                          currentlySortedField={tableSort.sortField}
+                          currentlySortedOrder={tableSort.sortOrder}
+                          data-testid={`${id}-${column.sortField}-header-button`}
+                          defaultSortOrder="asc"
+                          descText={SORT_DESCENDING_TEXT[column.sortType!]}
+                          hasRows={hasMessages}
+                          sortField={column.sortField}
+                          title={column.label}
+                          onClickSequence={sortTableSequence}
+                        />
+                      ) : (
+                        column.label
+                      )}
+                    </th>
+                  </React.Fragment>
                 ))}
               </tr>
             </thead>
@@ -333,12 +433,18 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                     </td>
                   )}
                   {columns.map(column => (
-                    <td
-                      className={`message-queue-row ${column.tdClassName || ''}`.trim()}
-                      key={column.label}
-                    >
-                      {column.render(message)}
-                    </td>
+                    <React.Fragment key={column.label}>
+                      {column.cellIcon && (
+                        <td className={column.headerIconClassName}>
+                          {column.cellIcon(message)}
+                        </td>
+                      )}
+                      <td
+                        className={`message-queue-row ${column.tdClassName || ''}`.trim()}
+                      >
+                        {column.render(message)}
+                      </td>
+                    </React.Fragment>
                   ))}
                 </tr>
               ))}
@@ -355,6 +461,8 @@ MessagePanel.displayName = 'MessagePanel';
 
 const docketClerkReportMessagesDeps = {
   messages: state.docketClerkReportMessagesHelper,
+  setDocketClerkReportMessagesTableSortSequence:
+    sequences.setDocketClerkReportMessagesTableSortSequence,
 };
 
 export const DocketClerkReportMessages = connect<
@@ -364,14 +472,19 @@ export const DocketClerkReportMessages = connect<
   docketClerkReportMessagesDeps,
   function DocketClerkReportMessages({
     messages,
+    setDocketClerkReportMessagesTableSortSequence,
   }: {
     messages: DocketClerkReportMessagesResults;
+    setDocketClerkReportMessagesTableSortSequence: Function;
   }) {
     return (
       <Tabs
         bind="docketClerkReport.box"
         defaultActiveTab="inbox"
         id="messages-tabs"
+        onSelect={(box: string) =>
+          setDocketClerkReportMessagesTableSortSequence({ box })
+        }
       >
         <Tab
           data-testid="docket-clerk-report-messages-inbox-tab"

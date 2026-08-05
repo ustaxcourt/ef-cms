@@ -409,6 +409,7 @@ import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequ
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
+import { setDocketClerkReportMessagesTableSortSequence } from './sequences/DocketClerkReport/setDocketClerkReportMessagesTableSortSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
@@ -1317,6 +1318,8 @@ export const presenterSequences = {
     setCurrentPaginationPageSequence as unknown as Function,
 
   setCustomCaseReportFiltersSequence,
+  setDocketClerkReportMessagesTableSortSequence:
+    setDocketClerkReportMessagesTableSortSequence as unknown as Function,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
   setDocumentForUploadSequence:
