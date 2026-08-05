@@ -16,9 +16,8 @@ export const initFilingFeePaymentAction = async ({
     window.location.href = result.paymentRedirect;
     return path.success();
   } catch (e) {
-    console.log('Error calling init filing fee payment');
     store.set(state.alertError, {
-      message: 'Error calling init filing fee payment',
+      message: 'Error: payment cannot be started',
     });
     return path.error();
   }

@@ -9265,7 +9265,7 @@
           }
         }
       },
-      "required": ["transactionStatus", "transactions"]
+      "required": ["paymentStatus", "transactions"]
     }
   }
 }

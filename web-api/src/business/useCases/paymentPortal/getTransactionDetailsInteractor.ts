@@ -14,7 +14,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import {
   GetDetailsPathParams,
   GetDetailsResponse,
-} from 'node_modules/@ustaxcourt/payment-portal/dist';
+} from '@ustaxcourt/payment-portal';
 
 export const getTransactionDetailsInteractor = async (
   applicationContext: ServerApplicationContext,
