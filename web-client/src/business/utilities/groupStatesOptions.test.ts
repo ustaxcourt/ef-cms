@@ -25,9 +25,7 @@ describe('getGroupedStateOptions', () => {
     expect(groupedStates[2]).toEqual(
       expect.objectContaining({
         label: 'Other',
-        options: expect.arrayContaining([
-          expect.objectContaining({ label: 'Other', value: 'Other' }),
-        ]),
+        options: expect.any(Array),
       }),
     );
   });
@@ -46,6 +44,31 @@ describe('getGroupedStateOptions', () => {
     ]);
     expect(stateLabels).toEqual(
       [...stateLabels].sort((firstLabel, secondLabel) =>
+        firstLabel.localeCompare(secondLabel),
+      ),
+    );
+  });
+
+  it('should list the territory options in alphabetical order by full territory name', () => {
+    const territoryLabels = getGroupedStateOptions()[2].options.map(
+      option => option.label,
+    );
+
+    expect(territoryLabels).toEqual([
+      'American Samoa',
+      'Armed Forces Americas',
+      'Armed Forces Europe',
+      'Armed Forces Pacific',
+      'Federated States of Micronesia',
+      'Guam',
+      'Marshall Islands',
+      'Northern Mariana Islands',
+      'Palau',
+      'Puerto Rico',
+      'Virgin Islands',
+    ]);
+    expect(territoryLabels).toEqual(
+      [...territoryLabels].sort((firstLabel, secondLabel) =>
         firstLabel.localeCompare(secondLabel),
       ),
     );
