@@ -107,6 +107,7 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.completedAtFormatted,
       sortField: 'completedAt',
       sortType: 'date',
+      tdClassName: 'no-wrap',
     },
     {
       label: 'Last Message',
@@ -160,6 +161,7 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
       sortType: 'date',
+      tdClassName: 'no-wrap',
     },
     {
       label: 'Message',
@@ -209,6 +211,7 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       render: m => m.createdAtFormatted,
       sortField: 'createdAt',
       sortType: 'date',
+      tdClassName: 'no-wrap',
     },
     {
       label: 'Message',
