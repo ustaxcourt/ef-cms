@@ -368,7 +368,7 @@ export const PractitionerForm: React.FC<PractitionerFormProps> = connect(
                         })}
                       </optgroup>
                       <optgroup label="Other">
-                        {Object.keys(constants.US_STATES_OTHER).map(abbrev => {
+                        {constants.US_STATES_OTHER_SORTED.map(abbrev => {
                           const fullStateName =
                             constants.US_STATES_OTHER[abbrev];
                           return (
