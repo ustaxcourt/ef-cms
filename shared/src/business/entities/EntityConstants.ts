@@ -77,7 +77,7 @@ export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
-export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+export const STANDING_ORDER_EVENT_CODES = ['SPOS', 'SPTO', 'SSO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
@@ -1403,8 +1403,7 @@ export const ALL_STATE_OPTIONS = {
 };
 
 export type AbbreviatedStates =
-  | keyof typeof US_STATES
-  | keyof typeof US_STATES_OTHER;
+  keyof typeof US_STATES | keyof typeof US_STATES_OTHER;
 
 export const NOT_AVAILABLE_OPTION = 'N/A';
 export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
@@ -1964,8 +1963,7 @@ export type FileUploadProgressType = {
 };
 
 export type FileUploadProgressValueType =
-  | FileUploadProgressType
-  | FileUploadProgressType[];
+  FileUploadProgressType | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -2088,8 +2086,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   other: 'Other',
 } as const;
 export type StatusReportOrderedForOption =
-  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
-  | '';
+  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS | '';
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',
