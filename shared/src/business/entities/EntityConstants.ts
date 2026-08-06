@@ -77,7 +77,7 @@ export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
-export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+export const STANDING_ORDER_EVENT_CODES = ['SPOS', 'SPTO', 'SSO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
