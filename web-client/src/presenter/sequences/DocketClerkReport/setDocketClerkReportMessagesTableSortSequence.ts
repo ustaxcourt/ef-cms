@@ -1,5 +1,5 @@
-import { setDocketClerkReportMessagesTableSortAction } from '../../actions/DocketClerkReport/setDocketClerkReportMessagesTableSortAction';
+import { setDefaultMessagePageTableSortAction } from '../../actions/setDefaultMessagePageTableSortAction';
 
 export const setDocketClerkReportMessagesTableSortSequence = [
-  setDocketClerkReportMessagesTableSortAction,
+  setDefaultMessagePageTableSortAction,
 ] as unknown as (props: { box?: string }) => void;

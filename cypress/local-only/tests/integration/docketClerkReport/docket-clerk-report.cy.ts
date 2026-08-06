@@ -34,6 +34,29 @@ const getUserByEmail = (email: string): Cypress.Chainable<UserInfo> => {
   return cy.task<UserInfo>('getUserByEmail', email);
 };
 
+function sendCaseMessage({
+  body = 'Test message body',
+  section,
+  subject,
+  toUserId,
+}: {
+  body?: string;
+  section: string;
+  subject: string;
+  toUserId?: string;
+}): void {
+  cy.get('[data-testid="case-detail-menu-button"]').click();
+  cy.get('[data-testid="menu-button-add-new-message"]').click();
+  cy.get('[data-testid="message-to-section"]').select(section);
+  if (toUserId) {
+    cy.get('[data-testid="message-to-user-id"]').select(toUserId);
+  }
+  cy.get('[data-testid="message-subject"]').type(subject);
+  cy.get('[data-testid="message-body"]').type(body);
+  cy.get('[data-testid="modal-confirm"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
+}
+
 describe('Docket Clerk Report', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -613,27 +636,6 @@ describe('Docket Clerk Report', () => {
   describe('Messages page type - unread icon and sort order', () => {
     let docketClerkInfo: UserInfo;
 
-    function sendMessage({
-      section,
-      subject,
-      toUserId,
-    }: {
-      section: string;
-      subject: string;
-      toUserId?: string;
-    }): void {
-      cy.get('[data-testid="case-detail-menu-button"]').click();
-      cy.get('[data-testid="menu-button-add-new-message"]').click();
-      cy.get('[data-testid="message-to-section"]').select(section);
-      if (toUserId) {
-        cy.get('[data-testid="message-to-user-id"]').select(toUserId);
-      }
-      cy.get('[data-testid="message-subject"]').type(subject);
-      cy.get('[data-testid="message-body"]').type('Sort order test body');
-      cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('[data-testid="success-alert"]').should('exist');
-    }
-
     function runMessagesReport(): void {
       loginAsCaseServicesSupervisor();
       cy.visit('/reports/docket-clerk-report');
@@ -674,12 +676,14 @@ describe('Docket Clerk Report', () => {
             petitionsClerkInfo => {
               loginAsPetitionsClerk1();
               goToCase(docketNumber);
-              sendMessage({
+              sendCaseMessage({
+                body: 'Sort order test body',
                 section: 'docket',
                 subject: 'Sort Order Test 1',
                 toUserId: docketClerkInfo.userId,
               });
-              sendMessage({
+              sendCaseMessage({
+                body: 'Sort order test body',
                 section: 'docket',
                 subject: 'Sort Order Test 2',
                 toUserId: docketClerkInfo.userId,
@@ -687,12 +691,14 @@ describe('Docket Clerk Report', () => {
 
               loginAsDocketClerk1();
               goToCase(docketNumber);
-              sendMessage({
+              sendCaseMessage({
+                body: 'Sort order test body',
                 section: 'petitions',
                 subject: 'Sent Order Test 1',
                 toUserId: petitionsClerkInfo.userId,
               });
-              sendMessage({
+              sendCaseMessage({
+                body: 'Sort order test body',
                 section: 'petitions',
                 subject: 'Sent Order Test 2',
                 toUserId: petitionsClerkInfo.userId,
@@ -775,17 +781,6 @@ describe('Docket Clerk Report', () => {
   });
 
   describe('Messages page type - consolidated case icon', () => {
-    function sendMessageToDocketClerk(userId: string, subject: string): void {
-      cy.get('[data-testid="case-detail-menu-button"]').click();
-      cy.get('[data-testid="menu-button-add-new-message"]').click();
-      cy.get('[data-testid="message-to-section"]').select('docket');
-      cy.get('[data-testid="message-to-user-id"]').select(userId);
-      cy.get('[data-testid="message-subject"]').type(subject);
-      cy.get('[data-testid="message-body"]').type('Consolidated icon test');
-      cy.get('[data-testid="modal-confirm"]').click();
-      cy.get('[data-testid="success-alert"]').should('exist');
-    }
-
     it('shows the lead-case and consolidated-case icons on messages sent from cases in a consolidated group', () => {
       createAndServeConsolidatedGroup({ numberOfMemberCases: 1 }).then(
         ({ leadDocketNumber, memberDocketNumbers }) => {
@@ -793,16 +788,20 @@ describe('Docket Clerk Report', () => {
             loginAsPetitionsClerk1();
 
             goToCase(leadDocketNumber);
-            sendMessageToDocketClerk(
-              docketClerkInfo.userId,
-              'Lead Case Message',
-            );
+            sendCaseMessage({
+              body: 'Consolidated icon test',
+              section: 'docket',
+              subject: 'Lead Case Message',
+              toUserId: docketClerkInfo.userId,
+            });
 
             goToCase(memberDocketNumbers[0]);
-            sendMessageToDocketClerk(
-              docketClerkInfo.userId,
-              'Member Case Message',
-            );
+            sendCaseMessage({
+              body: 'Consolidated icon test',
+              section: 'docket',
+              subject: 'Member Case Message',
+              toUserId: docketClerkInfo.userId,
+            });
 
             loginAsCaseServicesSupervisor();
             cy.visit('/reports/docket-clerk-report');
