@@ -17,6 +17,7 @@ import {
   MULTI_SELECT_PLACEHOLDER,
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_SORTED,
 } from '@shared/business/entities/EntityConstants';
 import { TextField } from '@web-client/dawson-ui/ui/input';
 
@@ -38,6 +39,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
       sequences.updateCaseAdvancedSearchByNameFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
+    usStatesSorted: state.constants.US_STATES_SORTED,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
@@ -53,6 +55,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence,
     usStates,
     usStatesOther,
+    usStatesSorted,
     validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }: {
@@ -66,6 +69,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence: Function;
     usStates: typeof US_STATES;
     usStatesOther: typeof US_STATES_OTHER;
+    usStatesSorted: typeof US_STATES_SORTED;
     validateCaseAdvancedSearchFormSequence: Function;
     validationErrors: any;
   }) {
@@ -326,7 +330,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                           >
                             <option value="">- Select -</option>
                             <optgroup label="State">
-                              {Object.keys(usStates).map(abbrev => {
+                              {usStatesSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
                                     {usStates[abbrev]}
@@ -362,7 +366,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                           >
                             <option value="">- Select -</option>
                             <optgroup label="State">
-                              {Object.keys(usStates).map(abbrev => {
+                              {usStatesSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
                                     {usStates[abbrev]}
