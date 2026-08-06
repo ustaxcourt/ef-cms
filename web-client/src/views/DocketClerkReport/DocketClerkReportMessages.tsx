@@ -6,6 +6,8 @@ import {
   DocketClerkReportMessagesResults,
 } from '@web-client/presenter/computeds/DocketClerkReport/docketClerkReportMessagesHelper';
 import {
+  ASCENDING,
+  DESCENDING,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
@@ -112,6 +114,12 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       sortField: 'subject',
       sortType: 'string',
       tdClassName: 'message-subject',
+    },
+    {
+      label: 'Comment',
+      render: m => m.completedMessage,
+      sortField: 'completedMessage',
+      sortType: 'string',
     },
     {
       label: 'Case Title',
@@ -396,7 +404,11 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                           currentlySortedField={tableSort.sortField}
                           currentlySortedOrder={tableSort.sortOrder}
                           data-testid={`${id}-${column.sortField}-header-button`}
-                          defaultSortOrder="asc"
+                          defaultSortOrder={
+                            column.sortField === 'docketNumber'
+                              ? DESCENDING
+                              : ASCENDING
+                          }
                           descText={
                             SORT_DESCENDING_TEXT[column.sortType || 'string']
                           }
