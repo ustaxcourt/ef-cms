@@ -129,7 +129,7 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       label: 'Completed By',
       render: m => m.completedBy,
       sortField: 'completedBy',
-      sortType: 'date',
+      sortType: 'string',
     },
     {
       label: 'Section',
@@ -390,12 +390,16 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
                     <th aria-label={column.label}>
                       {column.sortField ? (
                         <SortableColumn
-                          ascText={SORT_ASCENDING_TEXT[column.sortType!]}
+                          ascText={
+                            SORT_ASCENDING_TEXT[column.sortType || 'string']
+                          }
                           currentlySortedField={tableSort.sortField}
                           currentlySortedOrder={tableSort.sortOrder}
                           data-testid={`${id}-${column.sortField}-header-button`}
                           defaultSortOrder="asc"
-                          descText={SORT_DESCENDING_TEXT[column.sortType!]}
+                          descText={
+                            SORT_DESCENDING_TEXT[column.sortType || 'string']
+                          }
                           hasRows={hasMessages}
                           sortField={column.sortField}
                           title={column.label}
