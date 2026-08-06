@@ -2,4 +2,4 @@ import { setDocketClerkReportMessagesTableSortAction } from '../../actions/Docke
 
 export const setDocketClerkReportMessagesTableSortSequence = [
   setDocketClerkReportMessagesTableSortAction,
-] as unknown as (props: { box: string }) => void;
+] as unknown as (props: { box?: string }) => void;
