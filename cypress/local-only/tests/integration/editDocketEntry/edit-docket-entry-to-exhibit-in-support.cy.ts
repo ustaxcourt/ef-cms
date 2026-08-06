@@ -1,14 +1,14 @@
-import { attachFile } from '../../../../helpers/file/upload-file';
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { attachFile } from 'cypress/helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
   loginAsPrivatePractitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
-import { waitForDocketEntryByEventCode } from '../../../../helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { waitForDocketEntryByEventCode } from 'cypress/helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
 
 /**
  * Docket clerk re-characterizes an existing served docket entry (that is not
@@ -63,61 +63,69 @@ describe('Docket clerk edits a docket entry to "Exhibit in Support" (EXS)', () =
       cy.get('[data-testid="success-alert"]').should('exist');
 
       // Click Edit for the served Exhibit(s) docket entry.
-      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' });
-      goToCase(docketNumber);
-      cy.get('[data-testid="edit-EXH"]', { timeout: 10000 }).should(
-        'be.visible',
-      );
-      cy.get('[data-testid="edit-EXH"]').click();
-
-      // Change the Document Type to "Exhibit in Support".
-      selectTypeaheadInput(
-        'edit-docket-entry-meta-document-type-search',
-        'Exhibit in Support',
-      );
-
-      // The "Which document is this exhibit in support of?" section appears.
-      cy.contains('Which document is this exhibit in support of?').should(
-        'exist',
-      );
-
-      // Associate the exhibit with the served Petition.
-      cy.get('[data-testid="previous-document-search"]')
-        .find('option')
-        .then($options => {
-          const petitionOption = Array.from($options).find(opt =>
-            opt.textContent?.includes('Petition'),
+      waitForDocketEntryByEventCode({ docketNumber, eventCode: 'EXH' }).then(
+        () => {
+          goToCase(docketNumber);
+          cy.get('[data-testid="edit-EXH"]', { timeout: 10000 }).should(
+            'be.visible',
           );
-          const optionText = petitionOption?.textContent?.trim() || '';
-          cy.get('[data-testid="previous-document-search"]').select(optionText);
-        });
+          cy.get('[data-testid="edit-EXH"]').click();
 
-      // Select Attachments and Certificate of Service with today's date.
-      cy.get('#attachments').check({ force: true });
-      cy.get('[data-testid="certificate-of-service-label"]').click();
-      cy.get(
-        '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
-      ).type(serviceDate);
+          // Change the Document Type to "Exhibit in Support".
+          selectTypeaheadInput(
+            'edit-docket-entry-meta-document-type-search',
+            'Exhibit in Support',
+          );
 
-      cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
-      cy.get('[data-testid="loading-overlay"]').should('not.exist');
+          // The "Which document is this exhibit in support of?" section appears.
+          cy.contains('Which document is this exhibit in support of?').should(
+            'exist',
+          );
 
-      // Routed back to the Docket Record with the success banner.
-      cy.get('[data-testid="success-alert"]').should('exist');
+          // Associate the exhibit with the served Petition.
+          cy.get('[data-testid="previous-document-search"]')
+            .find('option')
+            .then($options => {
+              const petitionOption = Array.from($options).find(opt =>
+                opt.textContent?.includes('Petition'),
+              );
+              const optionText = petitionOption?.textContent?.trim() || '';
+              cy.get('[data-testid="previous-document-search"]').select(
+                optionText,
+              );
+            });
 
-      // Title is "Exhibit in Support of [Document Name]" under event code EXS.
-      cy.get('[data-testid="document-viewer-link-EXS"]').contains(
-        'Exhibit in Support of Petition',
+          // Select Attachments and Certificate of Service with today's date.
+          cy.get('#attachments').check({ force: true });
+          cy.get('[data-testid="certificate-of-service-label"]').click();
+          cy.get(
+            '.usa-date-picker__wrapper > [data-testid="service-date-picker"]',
+          ).type(serviceDate);
+
+          cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+          cy.get('[data-testid="loading-overlay"]').should('not.exist');
+
+          // Routed back to the Docket Record with the success banner.
+          cy.get('[data-testid="success-alert"]').should('exist');
+
+          // Title is "Exhibit in Support of [Document Name]" under event code EXS.
+          cy.get('[data-testid="document-viewer-link-EXS"]').contains(
+            'Exhibit in Support of Petition',
+          );
+
+          // The row shows Attachment(s) and Certificate of Service.
+          cy.contains(
+            '#docket-record-table tr',
+            'Exhibit in Support of Petition',
+          )
+            .should('contain', '(Attachment(s))')
+            .and('contain', '(C/S');
+
+          // Exhibit in Support docs display when filtered to show "Exhibits".
+          cy.get('#document-filter-by').select('Exhibits');
+          cy.get('[data-testid="document-viewer-link-EXS"]').should('exist');
+        },
       );
-
-      // The row shows Attachment(s) and Certificate of Service.
-      cy.contains('#docket-record-table tr', 'Exhibit in Support of Petition')
-        .should('contain', '(Attachment(s))')
-        .and('contain', '(C/S');
-
-      // Exhibit in Support docs display when filtered to show "Exhibits".
-      cy.get('#document-filter-by').select('Exhibits');
-      cy.get('[data-testid="document-viewer-link-EXS"]').should('exist');
     });
   });
 });
