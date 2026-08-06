@@ -1,32 +1,18 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
-export type PublicTrialSessionDetails = Pick<
-  TrialSession,
-  | 'swingSessionId'
-  | 'trialLocation'
-  | 'startDate'
-  | 'courthouseName'
-  | 'address1'
-  | 'address2'
-  | 'city'
-  | 'state'
-  | 'postalCode'
-> & {
-  calendaredCases: (PublicCaseDTO | RestrictedCaseDTO)[];
-  swingSessionLocation?: string;
-};
-
 export const getPublicTrialSessionDetailsInteractor = async ({
   trialSessionId,
 }: {
   trialSessionId: string;
-}): Promise<PublicTrialSessionDetails> => {
+}): Promise<RawPublicTrialSessionDetails> => {
   const trialSessionDetails = await getTrialSessionById({
     trialSessionId,
   });
@@ -62,7 +48,7 @@ export const getPublicTrialSessionDetailsInteractor = async ({
       }) as PublicCaseDTO | RestrictedCaseDTO;
     });
 
-  const publicTrialSessionData: PublicTrialSessionDetails = {
+  const publicTrialSessionData = new PublicTrialSessionDetails({
     address1: fullTrialSessionEntity.address1,
     address2: fullTrialSessionEntity.address2,
     calendaredCases: casesWithMinimalRequiredInformation,
@@ -74,7 +60,9 @@ export const getPublicTrialSessionDetailsInteractor = async ({
     swingSessionId: fullTrialSessionEntity.swingSessionId,
     swingSessionLocation,
     trialLocation: fullTrialSessionEntity.trialLocation,
-  };
+  })
+    .validate()
+    .toRawObject();
 
   return publicTrialSessionData;
 };

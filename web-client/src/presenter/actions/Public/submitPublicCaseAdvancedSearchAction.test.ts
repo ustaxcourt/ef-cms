@@ -1,9 +1,9 @@
-import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicCaseAdvancedSearchAction } from './submitPublicCaseAdvancedSearchAction';
+import { RawPublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 
 describe('submitPublicCaseAdvancedSearchAction', () => {
   beforeAll(() => {
@@ -16,19 +16,19 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction<{ searchResults: CaseSearchResult[] }, PublicClientState>(
-      submitPublicCaseAdvancedSearchAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          advancedSearchForm: {
-            caseSearchByName: { petitionerName: 'case name' },
-          },
+    await runAction<
+      { searchResults: RawPublicCaseSearchResult[] },
+      PublicClientState
+    >(submitPublicCaseAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          caseSearchByName: { petitionerName: 'case name' },
         },
       },
-    );
+    });
 
     expect(
       applicationContextForClient.getUseCases().casePublicSearchInteractor.mock

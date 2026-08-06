@@ -28,7 +28,10 @@ const ALLOWED_STYLE_PROPERTIES: ReadonlySet<string> = new Set([
 
 const QL_INDENT_CLASS = /^ql-indent-\d+$/;
 
-const ALLOWED_CLASSES: ReadonlySet<string> = new Set(['indent-paragraph']);
+const ALLOWED_CLASSES: ReadonlySet<string> = new Set([
+  'grant-deny-indent-paragraph',
+  'indent-paragraph',
+]);
 
 const isAllowedClass = (token: string): boolean =>
   QL_INDENT_CLASS.test(token) || ALLOWED_CLASSES.has(token);

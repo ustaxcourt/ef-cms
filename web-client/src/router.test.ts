@@ -1,5 +1,11 @@
 import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { recordRumPageView } from '@web-client/providers/realUserMonitoring';
 import { route, router } from '@web-client/router';
+
+jest.mock('@web-client/providers/realUserMonitoring', () => ({
+  ...jest.requireActual('@web-client/providers/realUserMonitoring'),
+  recordRumPageView: jest.fn(),
+}));
 
 describe('router', () => {
   const getUserMock = jest.fn();
@@ -76,6 +82,7 @@ describe('router', () => {
       );
       expect(getSequenceMock).toHaveBeenCalledWith('gotoCaseDetailSequence');
       expect(sequenceMock).toHaveBeenCalledWith({ docketNumber: '123-45' });
+      expect(recordRumPageView).toHaveBeenCalledWith('/case-detail/{id}');
     });
 
     it('/case-detail/*?openModal=*', () => {
@@ -88,6 +95,10 @@ describe('router', () => {
         docketNumber: '123-45',
         openModal: 'MyModal',
       });
+      // the recorded page id is normalized from the route pattern, so the
+      // `?openModal=*` query portion is stripped and it matches the plain
+      // /case-detail/{id} page view above
+      expect(recordRumPageView).toHaveBeenCalledWith('/case-detail/{id}');
     });
 
     it('/case-detail/*/documents/*/add-court-issued-docket-entry/*', () => {
@@ -136,6 +147,11 @@ describe('router', () => {
         statusReportFilingDate: '2026-06-18',
         statusReportIndex: '7',
       });
+      // the trailing `..` optional-segment marker on the route pattern is
+      // stripped when normalizing the recorded page id
+      expect(recordRumPageView).toHaveBeenCalledWith(
+        '/case-detail/{id}/documents/{id}/status-report-order-create',
+      );
     });
 
     it('/case-detail/*/documents/*/status-report-order-edit', () => {
