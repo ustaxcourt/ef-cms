@@ -18,6 +18,7 @@ import {
   US_STATES,
   US_STATES_OTHER,
   US_STATES_SORTED,
+  US_STATES_OTHER_SORTED,
 } from '@shared/business/entities/EntityConstants';
 import { TextField } from '@web-client/dawson-ui/ui/input';
 
@@ -40,6 +41,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     usStatesSorted: state.constants.US_STATES_SORTED,
+    usStatesOtherSorted: state.constants.US_STATES_OTHER_SORTED,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
@@ -55,6 +57,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence,
     usStates,
     usStatesOther,
+    usStatesOtherSorted,
     usStatesSorted,
     validateCaseAdvancedSearchFormSequence,
     validationErrors,
@@ -69,6 +72,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
     updateCaseAdvancedSearchByNameFormValueSequence: Function;
     usStates: typeof US_STATES;
     usStatesOther: typeof US_STATES_OTHER;
+    usStatesOtherSorted: typeof US_STATES_OTHER_SORTED;
     usStatesSorted: typeof US_STATES_SORTED;
     validateCaseAdvancedSearchFormSequence: Function;
     validationErrors: any;
@@ -339,7 +343,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                               })}
                             </optgroup>
                             <optgroup label="Other">
-                              {Object.keys(usStatesOther).map(abbrev => {
+                              {usStatesOtherSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
                                     {usStatesOther[abbrev]}
@@ -375,10 +379,10 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                               })}
                             </optgroup>
                             <optgroup label="Other">
-                              {Object.keys(usStatesOther).map(abbrev => {
+                              {usStatesOtherSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
-                                    {usStatesOther[abbrev]}
+                                    {usStatesOtherSorted[abbrev]}
                                   </option>
                                 );
                               })}
