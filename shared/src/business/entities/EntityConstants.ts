@@ -1405,6 +1405,12 @@ export const US_STATES_OTHER = {
   VI: 'Virgin Islands',
 } as const;
 
+export const US_STATES_OTHER_SORTED = (
+  Object.keys(US_STATES_OTHER) as (keyof typeof US_STATES_OTHER)[]
+).sort((firstState, secondState) =>
+  US_STATES_OTHER[firstState].localeCompare(US_STATES_OTHER[secondState]),
+);
+
 export const ALL_STATE_OPTIONS = {
   ...US_STATES,
   ...US_STATES_OTHER,

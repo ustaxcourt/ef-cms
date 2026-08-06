@@ -128,6 +128,7 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_OTHER_SORTED,
   US_STATES_SORTED,
   ENTERED_AND_SERVED_EVENT_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -322,6 +323,7 @@ export const getConstants = () => ({
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_OTHER_SORTED,
   US_STATES_SORTED,
   USER_ROLES: ROLES,
 });
