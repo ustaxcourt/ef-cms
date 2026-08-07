@@ -101,6 +101,7 @@ const checkParams = ({
           'floater',
           'general',
           'reportersOffice',
+          'caseServicesSupervisor',
           'chambers',
         ],
       ),
@@ -117,6 +118,7 @@ const checkParams = ({
           'floater',
           'general',
           'reportersOffice',
+          'caseServicesSupervisor',
           ...validChambersSections,
         ],
       ),
@@ -168,7 +170,7 @@ export const sendWelcomeEmail = async ({
   checkParams({ params, validChambersSections });
   await createOrUpdateUser(applicationContext, {
     password: getNewPasswordForEnvironment(),
-    setPasswordAsPermanent: true,
+    setPasswordAsPermanent: false,
     user: { ...params, accountStatus: ACCOUNT_STATUS.active } as RawUser,
   });
   await sendWelcomeEmail({ email, userPoolId });
