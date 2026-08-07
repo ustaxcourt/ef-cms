@@ -54,4 +54,26 @@ describe('runDocketClerkReportSequence', () => {
       0,
     );
   });
+
+  it('should reset tableSort to the Inbox default (createdAt ascending) when the messages report is run, even if a different sort was left over from a prior page', async () => {
+    cerebralTest.setState('docketClerkReport', {
+      docketClerks: [mockClerk],
+      form: {
+        docketClerkUserId: mockClerk.userId,
+        pageType: 'messages',
+      },
+    });
+
+    cerebralTest.setState('tableSort', {
+      sortField: 'caseTitle',
+      sortOrder: 'desc',
+    });
+
+    await cerebralTest.runSequence('runDocketClerkReportSequence');
+
+    expect(cerebralTest.getState('tableSort')).toEqual({
+      sortField: 'createdAt',
+      sortOrder: 'asc',
+    });
+  });
 });
