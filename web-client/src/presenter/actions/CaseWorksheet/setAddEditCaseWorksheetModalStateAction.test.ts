@@ -1,5 +1,8 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import {
+  CaseWorksheet,
+  RawCaseWorksheet,
+} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -50,5 +53,62 @@ describe('setAddEditCaseWorksheetModalStateAction', () => {
     });
 
     expect(state.form).toEqual({ docketNumber: MOCK_CASE.docketNumber });
+  });
+
+  it('should normalize a finalBriefDueDate that the API returned as an ISO timestamp to YYYY-MM-DD', async () => {
+    const mockWorksheet: RawCaseWorksheet = {
+      docketNumber: MOCK_CASE.docketNumber,
+      entityName: 'CaseWorksheet',
+      finalBriefDueDate: '2026-08-07T04:00:00.000Z',
+      judgeUserId: judgeColvin.userId,
+    };
+
+    const { state } = await runAction(setAddEditCaseWorksheetModalStateAction, {
+      props: {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      state: {
+        submittedAndCavCases: {
+          submittedAndCavCasesByJudge: [
+            {
+              caseWorksheet: mockWorksheet,
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(state.form.finalBriefDueDate).toBe('2026-08-07');
+    expect(
+      new CaseWorksheet(state.form).getFormattedValidationErrors(),
+    ).toBeNull();
+  });
+
+  it('should leave a finalBriefDueDate that is already YYYY-MM-DD untouched', async () => {
+    const mockWorksheet: RawCaseWorksheet = {
+      docketNumber: MOCK_CASE.docketNumber,
+      entityName: 'CaseWorksheet',
+      finalBriefDueDate: '2026-08-07',
+      judgeUserId: judgeColvin.userId,
+    };
+
+    const { state } = await runAction(setAddEditCaseWorksheetModalStateAction, {
+      props: {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      state: {
+        submittedAndCavCases: {
+          submittedAndCavCasesByJudge: [
+            {
+              caseWorksheet: mockWorksheet,
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(state.form.finalBriefDueDate).toBe('2026-08-07');
   });
 });

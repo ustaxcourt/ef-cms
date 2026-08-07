@@ -1,3 +1,7 @@
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setAddEditDocketEntryWorksheetModalStateAction = ({
@@ -14,8 +18,18 @@ export const setAddEditDocketEntryWorksheetModalStateAction = ({
     deWs => deWs.docketEntryId === docketEntryId,
   );
 
+  const worksheet = docketEntry?.docketEntryWorksheet;
+
+  // Same as the case worksheet: the API hands back an ISO timestamp and
+  // DocketEntryWorksheet validates YYYY-MM-DD.
   store.set(state.form, {
-    ...docketEntry?.docketEntryWorksheet,
+    ...worksheet,
     docketNumber: docketEntry?.docketNumber,
+    ...(worksheet?.finalBriefDueDate && {
+      finalBriefDueDate: formatDateString(
+        worksheet.finalBriefDueDate,
+        FORMATS.YYYYMMDD,
+      ),
+    }),
   });
 };

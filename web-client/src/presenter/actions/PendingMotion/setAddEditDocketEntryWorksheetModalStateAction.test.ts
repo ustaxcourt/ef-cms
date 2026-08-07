@@ -1,3 +1,4 @@
+import { DocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setAddEditDocketEntryWorksheetModalStateAction } from '@web-client/presenter/actions/PendingMotion/setAddEditDocketEntryWorksheetModalStateAction';
 
@@ -43,5 +44,36 @@ describe('setAddEditDocketEntryWorksheetModalStateAction', () => {
       worksheetProp2: 'worksheetProp2',
       worksheetProp3: 'worksheetProp3',
     });
+  });
+
+  it('should normalize a finalBriefDueDate that the API returned as an ISO timestamp to YYYY-MM-DD', async () => {
+    const results = await runAction(
+      setAddEditDocketEntryWorksheetModalStateAction,
+      {
+        props: {
+          docketEntryId: TEST_DOCKET_ENTRY_ID,
+        },
+        state: {
+          form: {},
+          pendingMotions: {
+            docketEntries: [
+              {
+                docketEntryId: TEST_DOCKET_ENTRY_ID,
+                docketEntryWorksheet: {
+                  docketEntryId: TEST_DOCKET_ENTRY_ID,
+                  finalBriefDueDate: '2026-08-07T04:00:00.000Z',
+                },
+                docketNumber: TEST_DOCKET_NUMBER,
+              },
+            ],
+          },
+        },
+      },
+    );
+
+    expect(results.state.form.finalBriefDueDate).toBe('2026-08-07');
+    expect(
+      new DocketEntryWorksheet(results.state.form).getFormattedValidationErrors(),
+    ).not.toHaveProperty('finalBriefDueDate');
   });
 });
