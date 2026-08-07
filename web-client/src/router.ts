@@ -1,4 +1,8 @@
 /* eslint-disable max-lines */
+import {
+  getRumPageIdFromRoutePattern,
+  recordRumPageView,
+} from '@web-client/providers/realUserMonitoring';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import qs from 'qs';
 import route from 'riot-route';
@@ -97,13 +101,30 @@ const ifHasAccess = (
 };
 
 const router = {
-  initialize: (app, registerRoute) => {
+  initialize: (app, _registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
 
     (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
       path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
+
+    // Wrap every route registration to fire a RUM page view event on
+    // navigation, mirroring the trackedRoute pattern in routerPublic.ts.
+    const registerRoute = (
+      pattern: string,
+      handler: (...args: any[]) => any,
+      ...rest: any[]
+    ): void => {
+      _registerRoute(
+        pattern,
+        (...args) => {
+          recordRumPageView(getRumPageIdFromRoutePattern(pattern));
+          return handler(...args);
+        },
+        ...rest,
+      );
+    };
 
     registerRoute(
       '/',
@@ -400,14 +421,36 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/apply-stamp',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
-        return app.getSequence('goToApplyStampSequence')({
-          docketEntryId,
-          docketNumber,
-        });
-      }),
+      '/case-detail/*/documents/*/grant-deny-motion-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/grant-deny-motion-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
+        (docketNumber, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
     );
 
     registerRoute(
@@ -1382,15 +1425,40 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/message-detail/*/*/apply-stamp',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
-        return app.getSequence('goToApplyStampSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-        });
-      }),
+      '/messages/*/message-detail/*/*/grant-deny-motion-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/grant-deny-motion-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.GRANT_DENY_MOTION },
+        (docketNumber, parentMessageId, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Grant/Deny Motion`,
+          );
+          return app.getSequence('gotoGrantDenyMotionSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(

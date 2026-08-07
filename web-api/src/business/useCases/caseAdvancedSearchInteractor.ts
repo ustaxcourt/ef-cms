@@ -20,6 +20,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import { RawPublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import type {
   SearchAfter,
   CaseAdvancedSearchResult,
@@ -36,15 +37,6 @@ export type CaseAdvancedSearchParamsRequestType = {
   procedureType?: ProcedureType;
 };
 
-export type CaseSearchResult = {
-  petitionerNames: string[];
-  docketNumberWithSuffix: string;
-  docketNumber: string;
-  receivedAt: string;
-  caseCaption: string;
-  petitionerStateNames?: string[];
-};
-
 export const caseAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -57,7 +49,7 @@ export const caseAdvancedSearchInteractor = async (
     procedureType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
-): Promise<CaseSearchResult[]> => {
+): Promise<RawPublicCaseSearchResult[]> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -143,9 +135,9 @@ export const caseAdvancedSearchInteractor = async (
       caseCaption: filteredCase.caseCaption,
       docketNumber: filteredCase.docketNumber,
       docketNumberWithSuffix: filteredCase.docketNumberWithSuffix,
-      petitionerNames: filteredCase.petitioners?.map(p => p.name),
+      petitionerNames: filteredCase.petitioners.map(p => p.name),
       petitionerStateNames: filteredCase.petitioners
-        ?.map(p =>
+        .map(p =>
           p.state
             ? US_STATES[p.state] || US_STATES_OTHER[p.state] || p.state
             : undefined,

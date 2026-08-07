@@ -4,6 +4,7 @@ import { isMaintenanceModeEngagedAction } from '@web-client/presenter/actions/Ma
 import { navigateToMaintenanceAction } from '@web-client/presenter/actions/navigateToMaintenanceAction';
 import { refreshTokenAction } from '@web-client/presenter/actions/Login/refreshTokenAction';
 import { setMaintenanceModeAction } from '@web-client/presenter/actions/setMaintenanceModeAction';
+import { setRumUserContextAction } from '@web-client/presenter/actions/setRumUserContextAction';
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
 import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserPermissionsAction';
@@ -24,6 +25,7 @@ export const initAppSequence = showProgressSequenceDecorator([
           getUserAction,
           setUserAction,
           setUserPermissionsAction,
+          setRumUserContextAction,
         ],
         userIsNotLoggedIn: [],
       },

@@ -11,6 +11,7 @@ import { createAndServeConsolidatedGroup } from '../../../../../helpers/fileAPet
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 // Each describe block relies on the previous one having been run
 
@@ -517,8 +518,9 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         'Returned Mail',
       );
 
-      cy.get('.usa-date-picker__button').click();
-      cy.get('.usa-date-picker__calendar__date--today').click();
+      cy.get(
+        '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
+      ).type(formatNow(FORMATS.MMDDYYYY));
 
       cy.get('[data-testid="save-docket-entry-button"]').click();
 
