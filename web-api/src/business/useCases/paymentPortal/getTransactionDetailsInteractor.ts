@@ -14,7 +14,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import {
   GetDetailsPathParams,
   GetDetailsResponse,
-} from 'node_modules/@ustaxcourt/payment-portal/dist';
+} from '@ustaxcourt/payment-portal';
 
 export const getTransactionDetailsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -51,7 +51,7 @@ export const getTransactionDetailsInteractor = async (
     })
   ) {
     throw new UnauthorizedError(
-      `Invalid User attempting to init payment for docket Number: ${docketNumber}`,
+      `Invalid User attempting to to access payment details for docket Number: ${docketNumber}`,
     );
   }
 

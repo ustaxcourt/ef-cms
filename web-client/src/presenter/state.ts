@@ -664,7 +664,7 @@ export const baseState = {
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
-  alertError: undefined,
+  alertError: undefined as AlertError | undefined,
   alertInfo: undefined,
   alertSuccess: undefined as AlertSuccess | undefined,
   alertWarning: undefined,
@@ -1170,6 +1170,15 @@ export type ViewerDocument = {
 };
 
 export type AlertSuccess = { message: string; overwritable?: boolean };
+
+export type AlertError = {
+  title?: string;
+  message?: string;
+  messages?: string[];
+  responseCode?: number;
+  scrollToErrorNotification?: boolean;
+  insertContactSupportClause?: boolean;
+};
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
 export type ServiceIndicatorType =

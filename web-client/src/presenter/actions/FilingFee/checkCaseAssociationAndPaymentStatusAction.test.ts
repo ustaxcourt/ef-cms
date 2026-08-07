@@ -15,7 +15,7 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     error: pathErrorStub,
   };
 
-  it('Should error if the case has already been payed', async () => {
+  it('should error if the case has already been paid', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
       modules: {
         presenter,
@@ -31,7 +31,7 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     expect(pathErrorStub).toHaveBeenCalled();
   });
 
-  it('Should error if the user is not related to the case', async () => {
+  it('should error if the user is not related to the case', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
       modules: {
         presenter,
@@ -47,7 +47,7 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     expect(pathErrorStub).toHaveBeenCalled();
   });
 
-  it('Should succeed if the user is related to the case, and the fee is unpaid', async () => {
+  it('should succeed if the user is related to the case, and the fee is unpaid', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
       modules: {
         presenter,

@@ -199,7 +199,7 @@ describe('caseFilter', () => {
       });
     });
 
-    it('should format sealed addresses in search results if user has permission to see sealed contact addresses', () => {
+    it('should NOT format sealed addresses in search results if user has permission to see sealed contact addresses', () => {
       const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockPetitionsClerkUser,

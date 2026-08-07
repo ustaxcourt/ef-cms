@@ -20,7 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import {
   ProcessPaymentRequest,
   ProcessPaymentResponse,
-} from 'node_modules/@ustaxcourt/payment-portal/dist';
+} from '@ustaxcourt/payment-portal';
 
 export const processPayment = async (
   applicationContext: ServerApplicationContext,
@@ -57,7 +57,7 @@ export const processPayment = async (
     })
   ) {
     throw new UnauthorizedError(
-      `Invalid User attempting to init payment for docket Number: ${docketNumber}`,
+      `Invalid User attempting to process payment for docket Number: ${docketNumber}`,
     );
   }
 

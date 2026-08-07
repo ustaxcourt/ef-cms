@@ -69,8 +69,11 @@ export const FilePetitionStep7 = connect(
               Pay Now Online
             </Button>
             {alertError && (
-              <span className="tw:text-destructive-dark semi-bold">
-                Error: payment cannot be started
+              <span
+                className="tw:text-destructive-dark tw:font-semibold"
+                role="alert"
+              >
+                {alertError.message}
               </span>
             )}
           </>
