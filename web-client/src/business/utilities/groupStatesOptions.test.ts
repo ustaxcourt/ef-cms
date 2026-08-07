@@ -66,9 +66,11 @@ describe('getGroupedStateOptions', () => {
       'Palau',
       'Puerto Rico',
       'Virgin Islands',
+      'Other',
     ]);
-    expect(territoryLabels).toEqual(
-      [...territoryLabels].sort((firstLabel, secondLabel) =>
+    // Other needs to be on the bottom, so just check the actual territories
+    expect(territoryLabels.slice(0, -2)).toEqual(
+      [...territoryLabels.slice(0, -2)].sort((firstLabel, secondLabel) =>
         firstLabel.localeCompare(secondLabel),
       ),
     );

@@ -23,10 +23,13 @@ export const getGroupedStateOptions = (): {
     },
     {
       label: 'Other',
-      options: US_STATES_OTHER_SORTED.map(value => ({
-        label: US_STATES_OTHER[value],
-        value,
-      })),
+      options: [
+        ...US_STATES_OTHER_SORTED.map(value => ({
+          label: US_STATES_OTHER[value],
+          value,
+        })),
+        { label: 'Other', value: 'Other' },
+      ],
     },
   ];
 };

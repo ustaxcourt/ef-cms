@@ -382,7 +382,7 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
                               {usStatesOtherSorted.map(abbrev => {
                                 return (
                                   <option key={abbrev} value={abbrev}>
-                                    {usStatesOtherSorted[abbrev]}
+                                    {usStatesOther[abbrev]}
                                   </option>
                                 );
                               })}
