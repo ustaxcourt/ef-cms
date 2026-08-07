@@ -8,7 +8,7 @@ import {
 import {
   NEW_TRIAL_CITY_STRINGS,
   PROCEDURE_TYPES_MAP,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
