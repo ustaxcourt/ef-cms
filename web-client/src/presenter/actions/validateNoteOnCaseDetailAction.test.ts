@@ -44,7 +44,7 @@ describe('validateNoteOnCaseDetailAction', () => {
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
-  it('should call the error path when any errors are found', async () => {
+  it('should call the error path when a case note error is found', async () => {
     applicationContext
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue({
