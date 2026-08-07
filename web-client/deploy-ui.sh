@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
+# Capture the commit SHA before secrets are loaded — load-environment-from-secrets.sh
+# sources the deploy secret which can overwrite CIRCLE_SHA1 if that key exists in the
+# secret, making RUM_RELEASE_ID empty and breaking source-map deobfuscation.
+#
+# Must be exported: build-dist.sh runs as a child process and bakes
+# RUM_RELEASE_ID into the JS bundle as the releaseId reported to RUM. Without the
+# export the child cannot see this captured value, re-derives it from the (now
+# secrets-clobbered) CIRCLE_SHA1, and the baked releaseId no longer matches the
+# S3 folder the .map files are uploaded to below — so RUM can't find the source
+# map and stack traces stay minified.
+export RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
+
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
@@ -10,12 +22,51 @@ set -e
 
 ./web-client/build-dist.sh "${ENV}" "${DEPLOYING_COLOR}"
 
-# private app
-aws s3 sync dist "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete
+# CloudWatch RUM source maps: upload the build's `.map` files to a PRIVATE
+# bucket under a folder named for the releaseId so RUM can unminify stack
+# traces. The releaseId must match the one baked into the client at build time
+# (build-dist.sh). Source maps are deliberately kept out of the public app
+# buckets below (--exclude "*.map") so original source is never served publicly.
+RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
+RUM_SOURCEMAP_BUCKET="rum-sourcemaps.${EFCMS_DOMAIN}"
+# The client (private) app reports to its own RUM monitor. The public app has a
+# separate monitor (see deploy-public.sh). Both apps share this source-map
+# bucket; their bundle names differ (index.* vs index-public.*) so they do not
+# collide within a release folder.
+RUM_APP_MONITOR_NAME="${ENV}_dawson_rum_app_monitor"
+if [ -n "${RUM_RELEASE_ID}" ]; then
+  aws s3 cp dist "s3://${RUM_SOURCEMAP_BUCKET}/${RUM_RELEASE_ID}/" --recursive --exclude "*" --include "*.map"
+
+  # Prune old source-map releases, keeping only the 2 most recent so the
+  # bucket does not grow unbounded during frequent releases. We always retain
+  # the previous release alongside the current one to cover the window of a
+  # blue/green deployment where the old color may still be serving requests.
+  # The S3 lifecycle rule in Terraform is a safety net for any objects that
+  # escape this cleanup (e.g. from a failed deploy).
+  # Terraform is the source of truth for the monitor (it also creates the
+  # Cognito identity pool). Only enable unminification if the monitor already
+  # exists; otherwise warn and skip so an unapplied environment does not fail
+  # the deploy. Done via the CLI because the pinned Terraform AWS provider
+  # (6.47.0) does not yet expose deobfuscation_configuration on
+  # aws_rum_app_monitor.
+  if aws rum get-app-monitor --name "${RUM_APP_MONITOR_NAME}" --region us-east-1 >/dev/null 2>&1; then
+    aws rum update-app-monitor \
+      --name "${RUM_APP_MONITOR_NAME}" \
+      --region us-east-1 \
+      --deobfuscation-configuration "{\"JavaScriptSourceMaps\":{\"Status\":\"ENABLED\",\"S3Uri\":\"s3://${RUM_SOURCEMAP_BUCKET}\"}}"
+  else
+    echo "RUM app monitor ${RUM_APP_MONITOR_NAME} not found; skipping deobfuscation config (apply terraform first)."
+  fi
+else
+  echo "RUM_RELEASE_ID is empty; skipping source map upload and RUM deobfuscation config."
+fi
+
+# private app (source maps excluded so they are never served from the public CDN)
+aws s3 sync dist "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --exclude "*.map"
 aws s3 cp "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" --metadata-directive REPLACE --content-type text/html --cache-control "no-cache, no-store, must-revalidate"
 
 # failover
-aws s3 sync dist "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --cache-control no-cache
+aws s3 sync dist "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --cache-control no-cache --exclude "*.map"
 aws s3 cp "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
 
 # invalidate cloudfront cache for this color

@@ -34,6 +34,11 @@ export const submitCourtIssuedOrderAction = async ({
   const documentMetadata = Object.fromEntries(
     Object.entries({
       additionalOrderTextArray: formData.additionalOrderTextArray,
+      deniedAsMoot: formData.deniedAsMoot,
+      deniedWithoutPrejudice: formData.deniedWithoutPrejudice,
+      disposition: formData.disposition,
+      dueDateMessage: formData.dueDateMessage,
+      filingParty: formData.filingParty,
       affectedDocketEntries: formData.affectedDocketEntries,
       attachments: formData.attachments,
       date: formData.date,

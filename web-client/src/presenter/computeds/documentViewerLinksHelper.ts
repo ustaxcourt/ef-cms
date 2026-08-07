@@ -10,7 +10,7 @@ export const documentViewerLinksHelper = (get: Get): any => {
   }
 
   return {
-    applyStampFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/apply-stamp`,
+    grantDenyMotionFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/grant-deny-motion-create`,
     completeQcLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/edit`,
     documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     orderResponseFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/motion-order-response`,
