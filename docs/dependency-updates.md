@@ -492,6 +492,25 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
+### @joi/date
+8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
+From
+
+```ts
+import joiDate from '@joi/date';
+...
+const joi: Root = joiImported.extend(joiDate);
+```
+to
+
+```ts
+import { JoiDate } from '@joi/date';
+...
+const joi: Root = joiImported.extend(JoiDate);
+```
+
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
