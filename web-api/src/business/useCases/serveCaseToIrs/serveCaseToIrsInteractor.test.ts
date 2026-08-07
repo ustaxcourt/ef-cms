@@ -1665,6 +1665,70 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
+  it('should omit the procedure type in ODT content when new-trial-cities flag is enabled', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'new-trial-cities',
+        value: { current: true },
+      },
+    ]);
+
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+      procedureType: 'Regular',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    const generatedDocument =
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument;
+
+    expect(generatedDocument.content).not.toMatch('regular');
+    expect(generatedDocument.content).toContain('TRIAL_LOCATION');
+  });
+
+  it('should include the procedure type in ODT content when new-trial-cities flag is disabled', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
+
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+      procedureType: 'Regular',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    const generatedDocument =
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument;
+
+    expect(generatedDocument.content).toContain(
+      MOCK_CASE.procedureType.toLowerCase(),
+    );
+  });
+
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
     mockCase = {
       ...MOCK_CASE,

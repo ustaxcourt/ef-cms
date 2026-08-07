@@ -1,6 +1,41 @@
 [
   {
     "procedureType": "Regular",
+    "preferredTrialCity": "Austin, Texas",
+    "docketNumber": "99001-24",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "_score": 5.610724
+  },
+  {
+    "procedureType": "Regular",
+    "preferredTrialCity": "Charlotte, North Carolina",
+    "docketNumber": "99002-24",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "_score": 5.610724
+  },
+  {
+    "procedureType": "Regular",
+    "preferredTrialCity": "Newark, New Jersey",
+    "docketNumber": "99003-24",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "_score": 5.610724
+  },
+  {
+    "procedureType": "Regular",
+    "preferredTrialCity": "Orlando, Florida",
+    "docketNumber": "99004-24",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "_score": 5.610724
+  },
+  {
+    "procedureType": "Regular",
+    "preferredTrialCity": "Sacramento, California",
+    "docketNumber": "99005-24",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "_score": 5.610724
+  },
+  {
+    "procedureType": "Regular",
     "preferredTrialCity": "Chicago, Illinois",
     "docketNumber": "10392-24",
     "status": "General Docket - At Issue (Ready for Trial)",
