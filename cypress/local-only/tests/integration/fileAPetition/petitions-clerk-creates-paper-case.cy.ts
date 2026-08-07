@@ -15,7 +15,7 @@ import {
 } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
 import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
-import { NEW_TRIAL_CITY_STRINGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { NEW_TRIAL_CITY_STRINGS } from '@shared/business/entities/EntityConstants';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
