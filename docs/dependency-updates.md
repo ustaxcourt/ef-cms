@@ -511,6 +511,9 @@ const joi: Root = joiImported.extend(JoiDate);
 
 The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
+### @recharts/devtools
+8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
