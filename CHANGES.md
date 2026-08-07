@@ -1,3 +1,24 @@
+<details><summary>Payment Portal Integration</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Add Payment Portal Secrets
+__ADD THESE OR YOUR DEPLOYMENTS WILL FAIL__
+```bash
+# Secret values can be gotten off of exp2
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_ARN -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_HOST -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAY_GOV_ORIGIN -v {VALUE}
+```
+### After Deployment
+Run this to enable payment portal integration
+```bash
+./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-07-27</summary>
 
 ## Local
