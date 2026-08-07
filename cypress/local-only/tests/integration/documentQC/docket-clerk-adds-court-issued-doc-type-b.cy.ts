@@ -43,7 +43,7 @@ describe('Docket Clerk adds a Type B Court Issued document', () => {
         'Standing Scheduling Order',
       );
 
-      // Type B documents require a judge; the field is empty until selected.
+      cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.contains('.usa-error-message', 'Select a judge').should('exist');
 
       cy.get('[data-testid="judge-select"]').select('Colvin');
