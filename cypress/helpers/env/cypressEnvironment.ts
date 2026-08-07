@@ -18,6 +18,8 @@ export const getCypressEnv = () => {
     efcmsDomain: getEnvValue('EFCMS_DOMAIN'),
     env,
     isLocal,
+    payGovOrigin:
+      env === 'local' ? 'http://localhost:3366' : getEnvValue('PAY_GOV_ORIGIN'),
     publicSiteUrl:
       env === 'local'
         ? 'http://localhost:5678'

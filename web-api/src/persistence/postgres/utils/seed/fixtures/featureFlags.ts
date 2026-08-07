@@ -34,4 +34,8 @@ export const featureFlags: FeatureFlagTable[] = [
       },
     },
   },
+  {
+    name: 'enable-payment-portal-integration',
+    value: { current: true },
+  },
 ];

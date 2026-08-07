@@ -118,6 +118,8 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentDate?: string;
   public petitionPaymentMethod?: string;
   public petitionPaymentStatus: string;
+  public petitionPaymentToken?: string;
+  public petitionPaymentTransactionReferenceId?: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
@@ -664,6 +666,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Status of the case fee payment.')
       .messages({ '*': 'Enter payment status' }),
+    petitionPaymentToken: JoiValidationConstants.STRING.allow(null)
+      .optional()
+      .description(
+        'A temporary token used when processing the case fee payment with pay.gov',
+      ),
+    petitionPaymentTransactionReferenceId: JoiValidationConstants.UUID.allow(
+      null,
+    )
+      .optional()
+      .description(
+        'A UUID used to reference the case fee transaction for this case in the payment portal',
+      ),
     petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -808,6 +822,9 @@ export class Case extends JoiValidationEntity {
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
+    this.petitionPaymentToken = rawCase.petitionPaymentToken;
+    this.petitionPaymentTransactionReferenceId =
+      rawCase.petitionPaymentTransactionReferenceId;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;
