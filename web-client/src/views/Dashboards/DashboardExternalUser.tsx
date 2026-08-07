@@ -107,7 +107,7 @@ export const DashboardExternalUser = connect(
                     <p>
                       <a
                         className="usa-link--external"
-                        href="https://ustaxcourt.gov/clinics.html"
+                        href="https://ustaxcourt.gov/clinics-and-pro-bono-programs/"
                         rel="noopener noreferrer"
                         target="_blank"
                       >
