@@ -15,6 +15,7 @@ import {
 } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
 import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+import { NEW_TRIAL_CITY_STRINGS } from '../../../../../shared/src/business/entities/EntityConstants';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
@@ -31,6 +32,19 @@ describe('Petition clerk creates a paper filing', function () {
       cy.get('#tab-parties').should('have.attr', 'aria-selected');
 
       fillInCreateCaseFromPaperForm();
+
+      cy.get('#tab-case-info').click();
+      NEW_TRIAL_CITY_STRINGS.forEach(trialCity => {
+        cy.get(
+          `[data-testid="preferred-trial-city"] option[value="${trialCity}"]`,
+        ).should('exist');
+      });
+      cy.get(
+        '[data-testid="preferred-trial-city"] option[value="Fresno, California"]',
+      ).should('exist');
+      cy.get('[data-testid="preferred-trial-city"]').select(
+        'Fresno, California',
+      );
     });
 
     it('should display check icons on file upload tabs', () => {
@@ -118,7 +132,7 @@ describe('Petition clerk creates a paper filing', function () {
         cy.visit(`case-detail/${docketNumber}/petition-qc?tab=partyInfo`);
         updateAlreadyCreatedCaseFromPaperForm();
         cy.get('[data-testid="submit-case"]').click();
-        const urlMatchStr = `/case-detail/${docketNumber}/documents/([^/]+)/review`
+        const urlMatchStr = `/case-detail/${docketNumber}/documents/([^/]+)/review`;
         const urlRegExp = new RegExp(urlMatchStr);
         cy.location('pathname').should('match', urlRegExp);
       });
