@@ -3738,6 +3738,22 @@
         "summary": "Initializes a payment with the payment portal",
         "description": "Initializes a payment with the payment portal.\n",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "init payment docket number",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "docketNumber": {
+                  "type": "string",
+                  "description": "the unique docket number associated with the case"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3782,6 +3798,22 @@
         "summary": "Processes a payment over at the payment portal",
         "description": "Processes a payment over at the payment portal.\n",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "process payment docket number",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "docketNumber": {
+                  "type": "string",
+                  "description": "the unique docket number associated with the case"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
