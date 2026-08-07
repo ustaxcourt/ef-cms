@@ -69,8 +69,8 @@ describe('getGroupedStateOptions', () => {
       'Other',
     ]);
     // Other needs to be on the bottom, so just check the actual territories
-    expect(territoryLabels.slice(0, -2)).toEqual(
-      [...territoryLabels.slice(0, -2)].sort((firstLabel, secondLabel) =>
+    expect(territoryLabels.slice(0, -1)).toEqual(
+      [...territoryLabels.slice(0, -1)].sort((firstLabel, secondLabel) =>
         firstLabel.localeCompare(secondLabel),
       ),
     );
