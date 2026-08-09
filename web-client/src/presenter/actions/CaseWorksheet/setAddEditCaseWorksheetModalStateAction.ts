@@ -20,9 +20,6 @@ export const setAddEditCaseWorksheetModalStateAction = ({
     submittedAndCavCasesByJudge.find(ws => ws.docketNumber === docketNumber)
       ?.caseWorksheet || { docketNumber };
 
-  // The API returns finalBriefDueDate as a full ISO timestamp, while CaseWorksheet
-  // validates it as YYYY-MM-DD, so saving without touching the date picker fails
-  // validation on a date the judge never edited.
   store.set(state.form, {
     ...caseWorksheet,
     ...(caseWorksheet.finalBriefDueDate && {

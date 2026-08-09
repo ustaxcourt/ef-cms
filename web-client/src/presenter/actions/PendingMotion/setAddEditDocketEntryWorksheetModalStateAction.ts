@@ -20,8 +20,6 @@ export const setAddEditDocketEntryWorksheetModalStateAction = ({
 
   const worksheet = docketEntry?.docketEntryWorksheet;
 
-  // Same as the case worksheet: the API hands back an ISO timestamp and
-  // DocketEntryWorksheet validates YYYY-MM-DD.
   store.set(state.form, {
     ...worksheet,
     docketNumber: docketEntry?.docketNumber,
