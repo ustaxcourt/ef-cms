@@ -309,9 +309,11 @@ Below is a list of dependencies that are locked down due to known issues with se
 - Updated to next major version on 7/13/2026. `pdfjs` now supports at minimum Chrome version 125 and Safari version 18. However, after testing with older versions of Chrome, we can say that as long as the browser can run ES2022, it _should_ work.
 
 ### DWT
-**Current Installed DWT: 19.4.1**
+**Current Installed DWT: 19.4.2**
 
-Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
+Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
+
+- As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
