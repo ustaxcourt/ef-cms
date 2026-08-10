@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.56.0"
+      version = "6.58.0"
     }
   }
 }
@@ -65,6 +65,7 @@ resource "terraform_data" "locals" {
     LOG_LEVEL                          = "info"
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
+    PAYMENT_PORTAL_HOST                = var.payment_portal_host
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
@@ -77,11 +78,12 @@ resource "terraform_data" "locals" {
 }
 
 module "lambda_role_green" {
-  source        = "../../modules/lambda-role"
-  role_name     = "lambda_role_${var.environment}_green"
-  environment   = var.environment
-  dns_domain    = var.dns_domain
-  postgres_user = data.terraform_remote_state.remote.outputs.postgres_user
+  source             = "../../modules/lambda-role"
+  role_name          = "lambda_role_${var.environment}_green"
+  environment        = var.environment
+  dns_domain         = var.dns_domain
+  payment_portal_arn = var.payment_portal_arn
+  postgres_user      = data.terraform_remote_state.remote.outputs.postgres_user
 }
 
 module "ecr-green-east" {
