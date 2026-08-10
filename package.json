@@ -362,7 +362,6 @@
     "typescript-eslint": "8.67.0"
   },
   "allowScripts": {
-    "cypress@15.20.0": true,
     "puppeteer@25.1.0": true,
     "@parcel/watcher": false,
     "@scarf/scarf": false,
@@ -374,6 +373,7 @@
     "esbuild": false,
     "fsevents": false,
     "unrs-resolver": false,
-    "utf-8-validate": false
+    "utf-8-validate": false,
+    "cypress@15.20.1": true
   }
 }
