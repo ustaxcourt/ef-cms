@@ -751,7 +751,7 @@ export function normalizeIsoDateRange(
     throw new Error('End date must be formatted as ISO');
   }
   return {
-    end: dtReconciliationDateEnd.toUTC().toISO(),
+    end: dtReconciliationDateEnd.toUTC().toISO()!,
     start: dtReconciliationDateStart.toUTC().toISO()!,
   };
 
