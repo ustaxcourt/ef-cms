@@ -37,6 +37,10 @@ parameters:
     default: false
     type: boolean
 
+  run_all_cypress_suites:
+    default: false
+    type: boolean
+
   lower_env:
     default: test
     type: string
@@ -915,6 +919,49 @@ jobs:
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
 
+  deployed-integration-tests:
+    parallelism: 9
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large
+    steps:
+      - setup_remote_docker:
+          version: docker29
+          docker_layer_caching: true
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Integration Tests'
+          command: |
+            TIMINGS_JSON="/tmp/cypress/cypress-integration-tests-${CIRCLE_NODE_INDEX}.json"
+            TIMINGS_XML="/tmp/cypress/results/cypress-integration-tests-${CIRCLE_NODE_INDEX}.xml"
+            mkdir -p /tmp/cypress/results
+
+            set +e
+            find cypress/local-only/tests/integration/ -type f -name "*.cy.ts" | circleci tests run --split-by=timings --timings-type=filename --command "paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {} --output-file-path ${TIMINGS_JSON}"
+            CYPRESS_RESULT=$?
+            set -e
+
+            if [ "${CYPRESS_RESULT}" -eq 0 ] && [ -f "${TIMINGS_JSON}" ]; then
+              ./scripts/tests/test-file-times-to-junit.ts "${TIMINGS_JSON}" "${TIMINGS_XML}" "cypress-integration-tests-${CIRCLE_NODE_INDEX}"
+            fi
+
+            exit "${CYPRESS_RESULT}"
+      - store_test_results:
+          path: /tmp/cypress/results
+      - store_artifacts:
+          path: /root/project/cypress/local-only/videos/
+
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -1140,3 +1187,17 @@ workflows:
     jobs:
       - cypress-real-user-tests:
           <<: *only-test
+
+  all-cypress-suites:
+    when: << pipeline.parameters.run_all_cypress_suites >>
+    jobs:
+      - smoketests:
+          <<: *only-test
+      - smoketests-readonly:
+          <<: *only-test
+          requires:
+            - smoketests
+      - integration-tests:
+          <<: *only-test
+          requires:
+            - smoketests-readonly
