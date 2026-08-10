@@ -85,7 +85,7 @@
     "object-hash": "3.0.0",
     "parse-full-name": "1.2.7",
     "pdf-lib": "1.17.1",
-    "pdfjs-dist": "6.1.200",
+    "pdfjs-dist": "6.2.108",
     "pg": "8.23.0",
     "pica": "10.0.2",
     "process": "0.11.10",
@@ -267,7 +267,7 @@
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "canvas": "$canvas",
-    "js-yaml": "4.3.0",
+    "js-yaml": "4.3.1",
     "semver": "7.7.4",
     "cypress": "$cypress",
     "s3rver": {
