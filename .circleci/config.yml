@@ -919,7 +919,7 @@ jobs:
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
 
-  deployed-integration-tests:
+  integration-tests:
     parallelism: 9
     docker:
       - image: *efcms-docker-image
