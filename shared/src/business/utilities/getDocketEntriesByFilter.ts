@@ -1,7 +1,14 @@
-import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
+type DocketEntryFilterContext = {
+  getConstants: () => {
+    DOCKET_RECORD_FILTER_OPTIONS: Record<string, string>;
+    EXHIBIT_EVENT_CODES: string[];
+    MOTION_EVENT_CODES: string[];
+    ORDER_EVENT_CODES: string[];
+  };
+};
 
 export const getDocketEntriesByFilter = (
-  applicationContext: ClientApplicationContext,
+  applicationContext: DocketEntryFilterContext,
   {
     docketEntries,
     docketRecordFilter,

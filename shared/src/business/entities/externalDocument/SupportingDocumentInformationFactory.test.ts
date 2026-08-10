@@ -37,6 +37,29 @@ describe('SupportingDocumentInformationFactory', () => {
       });
     });
 
+    it('should require a file to be uploaded when the supportingDocument is "Exhibit in Support"', () => {
+      const extDoc = new SupportingDocumentInformationFactory({
+        attachments: true,
+        certificateOfService: false,
+        supportingDocument: 'Exhibit in Support',
+      });
+
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        supportingDocumentFile: 'Upload a document',
+      });
+    });
+
+    it('should be valid for an "Exhibit in Support" when all fields are present', () => {
+      const extDoc = new SupportingDocumentInformationFactory({
+        attachments: true,
+        certificateOfService: false,
+        supportingDocument: 'Exhibit in Support',
+        supportingDocumentFile: {},
+      });
+
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
     it('should be valid when all fields are present', () => {
       const extDoc = new SupportingDocumentInformationFactory({
         attachments: true,
