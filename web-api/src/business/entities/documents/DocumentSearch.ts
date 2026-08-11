@@ -61,12 +61,13 @@ export class DocumentSearch extends JoiValidationEntity {
 
   static DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
+  // @joi/date@3 (dayjs): literal Z must be [Z]; same accepted shapes as before.
   static JOI_VALID_DATE_SEARCH_FORMATS = [
     'YYYY/MM/DD',
     'YYYY/MM/D',
     'YYYY/M/DD',
     'YYYY/M/D',
-    'YYYY-MM-DDTHH:mm:ss.SSSZ',
+    'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
   ] as const;
 
   static VALIDATION_RULES = joi

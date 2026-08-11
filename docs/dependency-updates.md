@@ -508,7 +508,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
 ### @joi/date
-8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
+**Installed Version: 3.0.0**
+
+- 8/7/26 - @joi/date had a major version update with breaking changes: the package is ESM-only (`.mjs`), and date format parsing moved from **moment** to **dayjs**. Updating requires changing how we import this package in validators that use tests.
 From
 
 ```ts
@@ -524,7 +526,9 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
+Because of the moment → dayjs switch, keep the same allowed date shapes but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches. Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
+
+- 8/11/26 - Upgraded to **3.0.0**. Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by widening the transform regex to `'\\.m?[jt]sx?$'`, adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`), and adding `mjs` to `moduleFileExtensions` where declared. Removed from the upgrade script's `caveats` array.
 
 ### @recharts/devtools
 **Installed Version: 0.0.14**

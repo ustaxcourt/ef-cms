@@ -6,6 +6,7 @@ import path from 'node:path';
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
+  '@joi/date',
   'aws-sdk-client-mock',
   'dom-serializer',
   'domelementtype',
@@ -44,7 +45,7 @@ const config: Config = {
   coverageDirectory: './coverage',
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx', 'mjs'],
   testMatch: [
     '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
     '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
@@ -71,7 +72,7 @@ const config: Config = {
   ),
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
     `/node_modules/(?!(${transformIgnoreModules.join('|')}))`,

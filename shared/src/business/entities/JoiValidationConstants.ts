@@ -7,14 +7,16 @@ import {
   MAX_FILE_SIZE_BYTES,
   MOTION_DISPOSITIONS,
 } from './EntityConstants';
-import joiDate from '@joi/date';
+import { JoiDate } from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(JoiDate);
 
-// These are specific to joi and cannot be shared with luxon
+// These are specific to joi/@joi/date (dayjs) and cannot be shared with luxon.
+// @joi/date@3 uses dayjs: a trailing literal Z must be escaped as [Z]
+// (moment treated bare Z as UTC; dayjs does not).
 const DATE_FORMATS = {
-  ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  ISO: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
   MMDDYYYY: 'MM/DD/YYYY',
   YYYYMMDD: 'YYYY-MM-DD',
 };
