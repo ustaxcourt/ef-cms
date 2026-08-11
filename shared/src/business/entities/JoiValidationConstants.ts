@@ -16,8 +16,17 @@ const joi: Root = joiImported.extend(JoiDate);
 // @joi/date@3 uses dayjs: a trailing literal Z must be escaped as [Z]
 // (moment treated bare Z as UTC; dayjs does not). ISO timestamps must set
 // utc: true on format() so dayjs parses the value as UTC instead of local time.
+/** ISO-8601 timestamp format accepted by DAWSON persistence (UTC, literal Z suffix). */
+export const ISO_DATE_FORMAT_STRING = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
+
+/** Pass to `joi.date().iso().format(...)` for UTC ISO timestamps (@joi/date 3 / dayjs). */
+export const ISO_DATE_JOI_FORMAT = {
+  format: ISO_DATE_FORMAT_STRING,
+  utc: true,
+} as const;
+
 const DATE_FORMATS = {
-  ISO: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
+  ISO: ISO_DATE_FORMAT_STRING,
   MMDDYYYY: 'MM/DD/YYYY',
   YYYYMMDD: 'YYYY-MM-DD',
 };
@@ -40,7 +49,7 @@ export const JoiValidationConstants = Object.freeze({
     ),
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
-  ISO_DATE: joi.date().iso().format({ format: DATE_FORMATS.ISO, utc: true }),
+  ISO_DATE: joi.date().iso().format(ISO_DATE_JOI_FORMAT),
   JUDGES_STATUSES: joi.array().items(
     joi
       .string()

@@ -526,9 +526,46 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-Because of the moment → dayjs switch, keep the same allowed date shapes but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches. Do **not** drop `.format(...)` / allowed-format lists — that widens validation. For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`); otherwise dayjs parses the time in the machine's local timezone and `.max('now')` can reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
+Because of the moment → dayjs switch:
 
-- 8/11/26 - Upgraded to **3.0.0**. Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by widening the transform regex to `'\\.m?[jt]sx?$'`, adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`), and adding `mjs` to `moduleFileExtensions` where declared. Removed from the upgrade script's `caveats` array. **`JoiValidationConstants.ISO_DATE`** now uses `utc: true` on its format rule for the same reason.
+- Keep the same allowed date shapes, but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches.
+- Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
+- For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`), reuse **`JoiValidationConstants.ISO_DATE`**, or chain `.format()` from it.
+
+Without `utc: true`, dayjs parses the time in the machine's local timezone. That makes `.max('now')` reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
+
+**UTC ISO validation (required pattern).**
+
+Prefer these exports from `shared/src/business/entities/JoiValidationConstants.ts`:
+
+- **`JoiValidationConstants.ISO_DATE`** — default for entity validators (already includes `utc: true`).
+- **`ISO_DATE_FORMAT_STRING`** — the canonical `'YYYY-MM-DDTHH:mm:ss.SSS[Z]'` string when building allowed-format lists.
+- **`ISO_DATE_JOI_FORMAT`** — `{ format: ISO_DATE_FORMAT_STRING, utc: true }` when a standalone `joi.date().iso().format(...)` is needed.
+
+Example: `DocumentSearch` chains `.format()` from `ISO_DATE` and includes `ISO_DATE_FORMAT_STRING` in its allowed formats.
+
+**ESLint guard: `custom-rules-plugin/joi-iso-date-utc`.**
+
+Registered in `eslint.config.mjs` and enforced on every `npm run lint` / CI run.
+
+The rule errors when code calls `.format(...)` with a format that includes the literal `[Z]` suffix but omits `utc: true`. Chaining from `JoiValidationConstants.ISO_DATE.format(...)` is allowed.
+
+- Rule: `eslint-custom-rules/eslint-joi-iso-date-utc-rule.js`
+- Tests: `scripts/eslint-custom-rules/eslint-joi-iso-date-utc-rule.test.ts`
+
+Calendar-only formats (`MM/DD/YYYY`, `YYYY-MM-DD`) are unaffected.
+
+- 8/11/26 - Upgraded to **3.0.0**.
+
+  Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by:
+
+  - Widening the transform regex to `'\\.m?[jt]sx?$'`
+  - Adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`)
+  - Adding `mjs` to `moduleFileExtensions` where declared
+
+  Removed from the upgrade script's `caveats` array.
+
+  Also fixed **`JoiValidationConstants.ISO_DATE`** to use `utc: true`, and added **`custom-rules-plugin/joi-iso-date-utc`** plus the exports above so future validators cannot reintroduce local-time parsing for UTC ISO strings.
 
 ### @recharts/devtools
 **Installed Version: 0.0.14**
