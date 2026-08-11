@@ -14,7 +14,8 @@ const joi: Root = joiImported.extend(JoiDate);
 
 // These are specific to joi/@joi/date (dayjs) and cannot be shared with luxon.
 // @joi/date@3 uses dayjs: a trailing literal Z must be escaped as [Z]
-// (moment treated bare Z as UTC; dayjs does not).
+// (moment treated bare Z as UTC; dayjs does not). ISO timestamps must set
+// utc: true on format() so dayjs parses the value as UTC instead of local time.
 const DATE_FORMATS = {
   ISO: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]',
   MMDDYYYY: 'MM/DD/YYYY',
@@ -39,7 +40,7 @@ export const JoiValidationConstants = Object.freeze({
     ),
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
-  ISO_DATE: joi.date().iso().format([DATE_FORMATS.ISO]),
+  ISO_DATE: joi.date().iso().format({ format: DATE_FORMATS.ISO, utc: true }),
   JUDGES_STATUSES: joi.array().items(
     joi
       .string()

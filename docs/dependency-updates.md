@@ -526,9 +526,9 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-Because of the moment → dayjs switch, keep the same allowed date shapes but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches. Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
+Because of the moment → dayjs switch, keep the same allowed date shapes but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches. Do **not** drop `.format(...)` / allowed-format lists — that widens validation. For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`); otherwise dayjs parses the time in the machine's local timezone and `.max('now')` can reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
 
-- 8/11/26 - Upgraded to **3.0.0**. Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by widening the transform regex to `'\\.m?[jt]sx?$'`, adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`), and adding `mjs` to `moduleFileExtensions` where declared. Removed from the upgrade script's `caveats` array.
+- 8/11/26 - Upgraded to **3.0.0**. Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by widening the transform regex to `'\\.m?[jt]sx?$'`, adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`), and adding `mjs` to `moduleFileExtensions` where declared. Removed from the upgrade script's `caveats` array. **`JoiValidationConstants.ISO_DATE`** now uses `utc: true` on its format rule for the same reason.
 
 ### @recharts/devtools
 **Installed Version: 0.0.14**
