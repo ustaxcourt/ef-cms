@@ -63,6 +63,27 @@ describe('Docket Clerk Report', () => {
   });
 
   describe('Case Services Supervisor', () => {
+    function runReportForFirstAvailableClerk(
+      pageType: 'documentQC' | 'messages',
+    ): void {
+      loginAsCaseServicesSupervisor();
+      cy.visit('/reports/docket-clerk-report');
+
+      cy.get('[data-testid="docket-clerk-report-clerk-select"]')
+        .find('option')
+        .should('have.length.at.least', 2);
+      cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
+        $select => {
+          cy.wrap($select).select($select.find('option').eq(1).val() as string);
+        },
+      );
+
+      cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
+        pageType,
+      );
+      cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+    }
+
     describe('Reports menu entry', () => {
       it('should show the Docket Clerk Report link at the top of the Reports menu', () => {
         loginAsCaseServicesSupervisor();
@@ -120,27 +141,7 @@ describe('Docket Clerk Report', () => {
 
     describe('Document QC page type', () => {
       it('should show the Document QC result section with Inbox, In Progress, and Processed tabs', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        // Select the first available clerk
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]')
-          .find('option')
-          .should('have.length.at.least', 2);
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'documentQC',
-        );
-
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('documentQC');
 
         cy.get('[data-testid="docket-clerk-report-title"]')
           .should('be.visible')
@@ -158,21 +159,7 @@ describe('Docket Clerk Report', () => {
       });
 
       it('should switch to the In Progress tab when clicked', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'documentQC',
-        );
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('documentQC');
 
         cy.get('[data-testid="docket-clerk-report-qc-inbox-tab"]').should(
           'be.visible',
@@ -183,50 +170,39 @@ describe('Docket Clerk Report', () => {
         ).click();
 
         cy.get('#docket-clerk-report-qc-in-progress').should('exist');
+        cy.get('#docket-clerk-report-qc-in-progress').within(() => {
+          cy.get('thead th').should('have.length', 6);
+          cy.get('thead th').eq(0).should('be.empty');
+          cy.get('thead th').eq(1).should('contain', 'Docket No.');
+          cy.get('thead th').eq(2).should('contain', 'Received');
+          cy.get('thead th').eq(3).should('contain', 'Case Title');
+          cy.get('thead th').eq(4).should('contain', 'Document');
+          cy.get('thead th').eq(5).should('contain', 'Filed By');
+        });
       });
 
       it('should switch to the Processed tab when clicked', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'documentQC',
-        );
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('documentQC');
 
         cy.get('[data-testid="docket-clerk-report-qc-processed-tab"]').click();
 
         cy.get('#docket-clerk-report-qc-processed').should('exist');
+        cy.get('#docket-clerk-report-qc-processed').within(() => {
+          cy.get('thead th').should('have.length', 7);
+          cy.get('thead th').eq(0).should('be.empty');
+          cy.get('thead th').eq(1).should('contain', 'Docket No.');
+          cy.get('thead th').eq(2).should('contain', 'Case Title');
+          cy.get('thead th').eq(3).should('contain', 'Document');
+          cy.get('thead th').eq(4).should('contain', 'Filed By');
+          cy.get('thead th').eq(5).should('contain', 'Case Status');
+          cy.get('thead th').eq(6).should('contain', 'Processed Date');
+        });
       });
     });
 
     describe('Messages page type', () => {
       it('should show the Messages result section with Inbox, Sent, and Completed tabs', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'messages',
-        );
-
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('messages');
 
         cy.get('[data-testid="docket-clerk-report-title"]')
           .should('be.visible')
@@ -244,21 +220,7 @@ describe('Docket Clerk Report', () => {
       });
 
       it('should switch to the Sent tab when clicked', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'messages',
-        );
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('messages');
 
         cy.get('[data-testid="docket-clerk-report-messages-sent-tab"]').click();
 
@@ -266,27 +228,23 @@ describe('Docket Clerk Report', () => {
       });
 
       it('should switch to the Completed tab when clicked', () => {
-        loginAsCaseServicesSupervisor();
-
-        cy.visit('/reports/docket-clerk-report');
-
-        cy.get('[data-testid="docket-clerk-report-clerk-select"]').then(
-          $select => {
-            cy.wrap($select).select(
-              $select.find('option').eq(1).val() as string,
-            );
-          },
-        );
-        cy.get('[data-testid="docket-clerk-report-page-type-select"]').select(
-          'messages',
-        );
-        cy.get('[data-testid="docket-clerk-report-run-button"]').click();
+        runReportForFirstAvailableClerk('messages');
 
         cy.get(
           '[data-testid="docket-clerk-report-messages-completed-tab"]',
         ).click();
 
         cy.get('#docket-clerk-report-messages-completed').should('exist');
+        cy.get('[data-testid="table-filters-component"]').should('not.exist');
+        cy.get('#docket-clerk-report-messages-completed').within(() => {
+          cy.get('thead th').should('have.length', 6);
+          cy.get('thead th').eq(0).should('be.empty');
+          cy.get('thead th').eq(1).should('contain', 'Docket No.');
+          cy.get('thead th').eq(2).should('contain', 'Completed');
+          cy.get('thead th').eq(3).should('contain', 'Last Message');
+          cy.get('thead th').eq(4).should('contain', 'Comment');
+          cy.get('thead th').eq(5).should('contain', 'Case Title');
+        });
       });
     });
   });
