@@ -21,12 +21,18 @@ const DocketClerkReportWorkItemTable = ({
   ariaLabelId,
   emptyText,
   id,
+  showCaseStatus = true,
+  showProcessedDate = false,
+  showReceived = true,
   showStatusIcon = false,
   workItems,
 }: {
   ariaLabelId: string;
   emptyText: string;
   id: string;
+  showCaseStatus?: boolean;
+  showProcessedDate?: boolean;
+  showReceived?: boolean;
   showStatusIcon?: boolean;
   workItems: FormattedWorkItemWithCaseInfo[];
 }) => {
@@ -45,10 +51,10 @@ const DocketClerkReportWorkItemTable = ({
         <thead>
           <tr>
             <th aria-hidden="true" className="consolidated-case-column"></th>
-            <th aria-label="Docket Number" className="small">
+            <th aria-label="Docket Number">
               <span className="padding-left-2px">Docket No.</span>
             </th>
-            <th className="small">Received</th>
+            {showReceived && <th>Received</th>}
             <th>Case Title</th>
             {showStatusIcon && (
               <th aria-label="Status Icon" className="padding-right-0">
@@ -57,7 +63,8 @@ const DocketClerkReportWorkItemTable = ({
             )}
             <th>Document</th>
             <th>Filed By</th>
-            <th>Case Status</th>
+            {showCaseStatus && <th>Case Status</th>}
+            {showProcessedDate && <th>Processed Date</th>}
           </tr>
         </thead>
         <tbody>
@@ -103,7 +110,7 @@ const DocketClerkReportWorkItemTable = ({
                 )}
               </td>
               <td
-                className="message-queue-row small"
+                className="message-queue-row"
                 data-testid={`docket-clerk-report-docket-number-${item.docketNumber}`}
               >
                 {item.groupedMemberCases ? (
@@ -121,9 +128,11 @@ const DocketClerkReportWorkItemTable = ({
                   <CaseLink formattedCase={item} />
                 )}
               </td>
-              <td className="message-queue-row small">
-                <span className="no-wrap">{item.received}</span>
-              </td>
+              {showReceived && (
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.received}</span>
+                </td>
+              )}
               <td className="message-queue-row message-queue-case-title">
                 {item.caseTitle}
               </td>
@@ -163,7 +172,16 @@ const DocketClerkReportWorkItemTable = ({
                 </div>
               </td>
               <td className="message-queue-row">{item.docketEntry.filedBy}</td>
-              <td className="message-queue-row">{item.formattedCaseStatus}</td>
+              {showCaseStatus && (
+                <td className="message-queue-row">
+                  {item.formattedCaseStatus}
+                </td>
+              )}
+              {showProcessedDate && (
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -212,6 +230,7 @@ export const DocketClerkReportDocumentQc = connect(
             ariaLabelId="qc-tabs"
             emptyText="There are no documents."
             id="docket-clerk-report-qc-in-progress"
+            showCaseStatus={false}
             workItems={documentQc.inProgress}
           />
         </Tab>
@@ -224,6 +243,8 @@ export const DocketClerkReportDocumentQc = connect(
             ariaLabelId="qc-tabs"
             emptyText="There are no documents."
             id="docket-clerk-report-qc-processed"
+            showProcessedDate={true}
+            showReceived={false}
             workItems={documentQc.processed}
           />
         </Tab>
