@@ -33,6 +33,8 @@ const caveats: string[] = [
   '@babel/preset-env',
   '@babel/preset-react',
   '@babel/preset-typescript',
+  '@recharts/devtools',
+  '@joi/date',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code
