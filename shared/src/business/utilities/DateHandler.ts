@@ -800,6 +800,14 @@ export const formatDateFromDatePicker = (
   try {
     inputFormat = getDateFormat(dateString, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
 
+    // Date pickers write persistence timestamps (Joi ISO_DATE / createISODateString
+    // shape). Do not use formatDateString(FORMATS.ISO) here — that Luxon token
+    // emits a numeric offset (…-05:00), which @joi/date 3 rejects.
+    if (toFormat === FORMATS.ISO) {
+      const isoDate = createISODateString(dateString, inputFormat);
+      return isoDate ?? dateString;
+    }
+
     const luxonDate = prepareDateFromString(dateString, inputFormat);
 
     const formattedDate = formatDateString(luxonDate.toString(), toFormat);

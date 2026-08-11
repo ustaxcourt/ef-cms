@@ -25,6 +25,24 @@ describe('formatDateFromDatePicker', () => {
     });
   });
 
+  it('should return a UTC ISO timestamp when formatting for persistence', async () => {
+    const { output } = await runAction(formatDateFromDatePickerAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '01/02/2020',
+      },
+    });
+
+    expect(output).toEqual({
+      key: 'receivedAt',
+      value: '2020-01-02T05:00:00.000Z',
+    });
+  });
+
   it('should not attempt to format when the date has been cleared', async () => {
     const { output } = await runAction(formatDateFromDatePickerAction, {
       modules: {
