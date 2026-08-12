@@ -12,6 +12,7 @@ import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -1653,7 +1654,9 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
+      content: expect.stringContaining(
+        `at which this Court tries ${MOCK_CASE.procedureType.toLowerCase()} tax cases`,
+      ),
     });
 
     expect(
@@ -1668,7 +1671,7 @@ describe('serveCaseToIrsInteractor', () => {
   it('should omit the procedure type in ODT content when new-trial-cities flag is enabled', async () => {
     getFeatureFlagValues.mockResolvedValue([
       {
-        name: 'new-trial-cities',
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
         value: { current: true },
       },
     ]);
@@ -1690,20 +1693,19 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument;
 
-    expect(generatedDocument.content).not.toMatch('regular');
+    expect(generatedDocument.content).toContain(
+      'at which this Court tries tax cases',
+    );
+    expect(generatedDocument.content).not.toContain('[PROCEDURE_TYPE]');
+    expect(generatedDocument.content).not.toContain('tries regular tax cases');
     expect(generatedDocument.content).toContain('TRIAL_LOCATION');
   });
 
   it('should include the procedure type in ODT content when new-trial-cities flag is disabled', async () => {
     getFeatureFlagValues.mockResolvedValue([
       {
-        name: 'entity-locking-feature-flag',
-        value: {
-          current: {
-            name: 'James Bond',
-            title: 'Clerk of the Court (Interim)',
-          },
-        },
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        value: { current: false },
       },
     ]);
 
@@ -1725,7 +1727,7 @@ describe('serveCaseToIrsInteractor', () => {
         .systemGeneratedDocument;
 
     expect(generatedDocument.content).toContain(
-      MOCK_CASE.procedureType.toLowerCase(),
+      'at which this Court tries regular tax cases',
     );
   });
 
