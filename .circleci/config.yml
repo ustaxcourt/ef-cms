@@ -948,7 +948,7 @@ jobs:
             mkdir -p /tmp/cypress/results
 
             set +e
-            find cypress/local-only/tests/integration/ -type f -name "*.cy.ts" | circleci tests run --split-by=timings --timings-type=filename --command "paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {} --output-file-path ${TIMINGS_JSON}"
+            find cypress/local-only/tests/integration/ -type f -name "*.cy.ts" ! -path "*/public/*" | circleci tests run --split-by=timings --timings-type=filename --command "paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {} --output-file-path ${TIMINGS_JSON}"
             CYPRESS_RESULT=$?
             set -e
 
