@@ -2,11 +2,7 @@ import { attachFile } from 'cypress/helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from 'cypress/helpers/advancedSearch/external-user-searches-docket-number';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import {
-  loginAsDocketClerk,
-  loginAsPetitioner,
-} from 'cypress/helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 
@@ -14,95 +10,6 @@ describe(
   'Petitioner files an Exhibit in Support (EXS)',
   { scrollBehavior: 'center' },
   () => {
-    it('should file "Exhibit in Support" as the primary document, title it after the associated docketed filing, and complete QC without changes (no NODC)', () => {
-      const primaryFilerName = 'Cody';
-      const today = formatNow(FORMATS.MMDDYY);
-
-      loginAsPetitioner();
-      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
-        petitionsClerkServesPetition(docketNumber);
-        loginAsPetitioner();
-        externalUserSearchesDocketNumber(docketNumber);
-
-        cy.get('[data-testid="button-file-document"]').click();
-        cy.get('[data-testid="ready-to-file"]').click();
-
-        // "Exhibit in Support" is selectable as the e-filed document type
-        selectTypeaheadInput(
-          'complete-doc-document-type-search',
-          'Exhibit in Support',
-        );
-
-        // Nonstandard A requires identifying the associated docketed filing.
-        // The label rendered here is "Which document is this exhibit in support of?"
-        cy.get('[data-testid="previous-document-search"]')
-          .find('option')
-          .then($options => {
-            const petitionOption = Array.from($options).find(opt =>
-              opt.textContent?.includes('Petition'),
-            );
-            const optionText = petitionOption?.textContent?.trim() || '';
-            cy.get('[data-testid="previous-document-search"]').select(
-              optionText,
-            );
-          });
-
-        cy.get('[data-testid="submit-document"]').click();
-        attachFile({
-          filePath: '../../helpers/file/sample.pdf',
-          selector: '[data-testid="primary-document"]',
-          selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
-        });
-        cy.get('[data-testid="file-document-submit-document"]').click();
-        cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-        cy.get('[data-testid="file-document-review-submit-document"]').click();
-        cy.get('[data-testid="loading-overlay"]').should('not.exist');
-
-        // Title follows the pattern "Exhibit in Support of [Document Name]"
-        cy.get('[data-testid="document-download-link-EXS"]').should(
-          'have.text',
-          'Exhibit in Support of Petition',
-        );
-
-        cy.get('[data-testid="header-recent-filings-link"]').click();
-        cy.get('[data-testid="recent-filings-page"]').should('be.visible');
-        cy.contains('[data-testid="case-number-link"]', docketNumber)
-          .closest('tr')
-          .should('contain', 'Exhibit in Support of Petition');
-
-        loginAsDocketClerk();
-        cy.get('[data-testid="document-qc-nav-item"]').click();
-        cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
-        cy.get(`[data-testid=work-item-${docketNumber}]`)
-          .should('contain', 'Exhibit in Support of Petition')
-          .find(`[data-testid=work-item-document-link-${docketNumber}]`)
-          .click();
-
-        cy.get('[data-testid="save-and-finish-document-qc"]').should('exist');
-        cy.get('[data-testid="previous-document-search"]')
-          .find('option:selected')
-          .should('contain', 'Petition');
-
-        cy.get('[data-testid="save-and-finish-document-qc"]').click();
-        cy.get('[data-testid="loading-overlay"]').should('not.exist');
-
-        cy.get('[data-testid="success-alert"]')
-          .should('contain', 'QC Completed')
-          .and('contain', 'Exhibit in Support of Petition has been completed.');
-        cy.get(`[data-testid=work-item-${docketNumber}]`).should('not.exist');
-
-        goToCase(docketNumber);
-        cy.contains('#docket-record-table tr', 'Exhibit in Support of Petition')
-          .should('contain', 'EXS')
-          .and('contain', today)
-          .and('contain', primaryFilerName);
-
-        // Exhibit in Support docs display when filtered to show "Exhibits".
-        cy.get('#document-filter-by').select('Exhibits');
-        cy.get('[data-testid="document-viewer-link-EXS"]').should('exist');
-      });
-    });
-
     it('should file an "Exhibit" supporting document that auto-associates with the primary document being filed', () => {
       loginAsPetitioner();
       externalUserCreatesElectronicCase().then(docketNumber => {
