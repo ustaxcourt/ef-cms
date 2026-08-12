@@ -74,7 +74,7 @@ describe('Pending Motions Table', () => {
         .click();
 
       // test that hydrated date saves properly
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
       cy.get('@pendingMotions')
         .first()
         .as('firstRow')
@@ -189,7 +189,7 @@ describe('Pending Motions Table', () => {
         .click();
 
       // test that hydrated date saves properly
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
       cy.get('@pendingMotions')
         .first()
         .as('firstRow')
