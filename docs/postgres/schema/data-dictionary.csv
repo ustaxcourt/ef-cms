@@ -48,6 +48,8 @@
 "dw_case","petition_payment_method","string","This field is populated by a Petitions Clerk once the filing fee has been paid. This field is a text field. If no data is in this field or if the status is Waived or Not Paid it is displayed as NULL."
 "dw_case","petition_payment_status","string","This field is a radio button and the default selection is ""Not paid"". Once the fee has been paid the clerk selects ""Paid"". If the payment is waived by the Court then the Clerk selected ""Waived""."
 "dw_case","petition_payment_waived_date","date","If a petitioner submits a fee waiver and it is approved by the Court then the date of the Court Order is added to this field. If no waived date or if ""Not Paid"" or ""Paid"" is selected in the petition_payment_status field NULL is displayed."
+"dw_case","petition_payment_transaction_reference_id","string","Payment portal ID for a petitions transaction. This field is set during payment init API call, right before we redirect to the payment portal."
+"dw_case","petition_payment_token","string","Token used for processing a request to the payment portal. Set during init before redirecting to payment portal, deleted during process after coming back from the payment portal."
 "dw_case","preferred_trial_city","string","This is the requested place of trial that the user selected or that the Court designates."
 "dw_case","procedure_type","string","The case procedure type (small or regular) that the user selects for the case."
 "dw_case","qc_complete_for_trial","string","This field is populated with the trial session ID and ""true"" when the case has been marked as ""QC Complete"" for a new trial session. Cases not yet QC'ed or legacy cases display ""{ }""."

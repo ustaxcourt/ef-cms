@@ -352,6 +352,9 @@ import { getTrialSessionOpenCasesCountInteractor } from '@web-client/proxies/tri
 import { getConsolidatedCaseDeadlinesInteractor } from '@web-client/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@web-client/proxies/removePetitionerEmailProxy';
 import { getDocketEntryProcessingStatusInteractor } from '@web-client/proxies/documents/getDocketEntryProcessingStatusProxy';
+import { initPaymentInteractor } from '@web-client/proxies/paymentPortal/initPaymentProxy';
+import { getTransactionDetailsInteractor } from '@web-client/proxies/paymentPortal/getTransactionDetailsProxy';
+import { processPaymentInteractor } from '@web-client/proxies/paymentPortal/processPaymentProxy';
 
 const reduce = ImageBlobReduce({
   pica: Pica({ features: ['js'] }),
@@ -477,6 +480,7 @@ const allUseCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
+  getTransactionDetailsInteractor,
   getTrialSessionDetailsInteractor,
   getTrialSessionOpenCasesCountInteractor,
   getTrialSessionPlanningReportDataInteractor,
@@ -491,12 +495,14 @@ const allUseCases = {
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
+  initPaymentInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
   logErrorInteractor,
   loginInteractor,
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,
+  processPaymentInteractor,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
