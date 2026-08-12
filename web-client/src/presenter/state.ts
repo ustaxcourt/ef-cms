@@ -181,6 +181,7 @@ import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSes
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -651,8 +652,7 @@ export const baseState = {
     sortOrder: 'asc' | 'desc';
   },
   [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
-    | RawGenerateSuggestedTermForm
-    | undefined,
+    RawGenerateSuggestedTermForm | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -664,7 +664,7 @@ export const baseState = {
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
-  alertError: undefined,
+  alertError: undefined as AlertError | undefined,
   alertInfo: undefined,
   alertSuccess: undefined as AlertSuccess | undefined,
   alertWarning: undefined,
@@ -757,11 +757,9 @@ export const baseState = {
   opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
     updatedTrialSessionLocation: undefined as
-      | TrialSessionLocationInfo
-      | undefined,
+      TrialSessionLocationInfo | undefined,
   },
   trialSessionStartDateChangeModalInfo: {
     currentTrialSessionStartDate: undefined as string | undefined,
@@ -983,8 +981,7 @@ export const baseState = {
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
-      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
-      | undefined,
+      (IrsNoticeForm & { irsNoticeFileUrl?: string })[] | undefined,
     noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],
@@ -1137,6 +1134,10 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  processPaymentStatus: undefined as
+    | undefined
+    | (ProcessPaymentResponse & { docketNumber: string })
+    | ({ paymentStatus: 'unknown' } & { docketNumber: string }),
 };
 
 export const initialState = {
@@ -1169,6 +1170,15 @@ export type ViewerDocument = {
 };
 
 export type AlertSuccess = { message: string; overwritable?: boolean };
+
+export type AlertError = {
+  title?: string;
+  message?: string;
+  messages?: string[];
+  responseCode?: number;
+  scrollToErrorNotification?: boolean;
+  insertContactSupportClause?: boolean;
+};
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
 export type ServiceIndicatorType =

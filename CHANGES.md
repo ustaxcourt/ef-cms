@@ -1,3 +1,46 @@
+<details><summary>Payment Portal Integration</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Add Payment Portal Secrets
+__ADD THESE OR YOUR DEPLOYMENTS WILL FAIL__
+```bash
+# Secret values can be gotten off of exp2
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_ARN -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_HOST -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAY_GOV_ORIGIN -v {VALUE}
+```
+### After Deployment
+Run this to enable payment portal integration
+```bash
+./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-03</summary>
+
+## Local
+#### Upgrade NodeJS to `24.19.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.91`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-07-27</summary>
 
 ## Local

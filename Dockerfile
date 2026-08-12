@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-24.18.1-chrome-150.0.7871.186-1-ff-153.0.1-edge-150.0.4078.105-1
+FROM cypress/browsers:node-24.19.0-chrome-151.0.7922.71-1-ff-153.0.1-edge-151.0.4129.59-1
 WORKDIR /home/app
 
 # needed to install jre successfully
@@ -33,7 +33,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.12.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.16.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip

@@ -166,6 +166,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENABLE_PAYMENT_PORTAL_INTEGRATION: {
+    key: 'enable-payment-portal-integration',
+  },
   RESTRICTED_EVENT_CODES: {
     key: 'restricted-event-codes',
   },
@@ -2341,6 +2344,10 @@ export const EVENT_CODES_WITH_NO_ORDER = [
 ];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
+
+export const PAYMENT_PORTAL_FEE_TYPES = {
+  PETITION_FILING_FEE: 'PETITION_FILING_FEE',
+} as Record<string, 'PETITION_FILING_FEE'>;
 
 export const GRAPH_COLORS = {
   BLUE: '#005EA2',
