@@ -962,6 +962,55 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress/local-only/videos/
 
+  public-integration-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Public Integration Tests'
+          command: |
+            npm run cypress:integration:public
+      - store_artifacts:
+          path: /root/project/cypress/local-only/videos/
+
+  accessibility-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Accessibility Tests'
+          command: |
+            export TESTFILES=$(scripts/github-actions/split-tests-cypress.ts accessibility)
+            scripts/tests/run-cypress.ts --file "$TESTFILES"
+      - store_artifacts:
+          path: /root/project/cypress/local-only/videos/
+
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -1201,3 +1250,15 @@ workflows:
           <<: *only-test
           requires:
             - smoketests-readonly
+      - public-integration-tests:
+          <<: *only-test
+          requires:
+            - integration-tests
+      - accessibility-tests:
+          <<: *only-test
+          requires:
+            - public-integration-tests
+      - cypress-real-user-tests:
+          <<: *only-test
+          requires:
+            - accessibility-tests
