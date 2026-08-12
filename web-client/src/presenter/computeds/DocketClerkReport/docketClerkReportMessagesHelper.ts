@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export type DocketClerkReportMessageBox = {
   caseStatuses: string[];
-  completedByUsers: string[];
   fromSections: string[];
   fromUsers: string[];
   messages: any[];
@@ -64,18 +63,16 @@ export const docketClerkReportMessagesHelper = (
       screenMetadata,
     });
 
-    const { filterValues: completedFilterValues, filteredCompletedMessages } =
-      applyFiltersToCompletedMessages({
-        completedMessages: formattedCompleted,
-        screenMetadata,
-      });
+    const { filteredCompletedMessages } = applyFiltersToCompletedMessages({
+      completedMessages: formattedCompleted,
+      screenMetadata,
+    });
 
     const isCompletedOnlyBox =
       rawMessages.length > 0 && rawMessages.every(m => m.isCompleted);
 
     return {
       ...filterValues,
-      ...completedFilterValues,
       messages: isCompletedOnlyBox
         ? filteredCompletedMessages
         : filteredMessages.map(message => ({

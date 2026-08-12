@@ -128,24 +128,6 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
       sortField: 'caseTitle',
       sortType: 'string',
     },
-    {
-      label: 'Case Status',
-      render: m => m.caseStatus,
-      sortField: 'caseStatus',
-      sortType: 'string',
-    },
-    {
-      label: 'Completed By',
-      render: m => m.completedBy,
-      sortField: 'completedBy',
-      sortType: 'string',
-    },
-    {
-      label: 'Section',
-      render: m => m.completedBySection,
-      sortField: 'completedBySection',
-      sortType: 'string',
-    },
   ],
   inbox: [
     {
@@ -243,14 +225,7 @@ const COLUMNS: Record<string, ColumnConfig[]> = {
 };
 
 const FILTERS: Record<string, FilterConfig[]> = {
-  completed: [
-    { key: 'caseStatus', label: 'Case Status', optionsField: 'caseStatuses' },
-    {
-      key: 'completedBy',
-      label: 'Completed By',
-      optionsField: 'completedByUsers',
-    },
-  ],
+  completed: [],
   inbox: [
     { key: 'caseStatus', label: 'Case Status', optionsField: 'caseStatuses' },
     { key: 'fromUser', label: 'From', optionsField: 'fromUsers' },
@@ -335,18 +310,20 @@ const MessagePanel = connect<MessagePanelOwnProps, typeof messagePanelDeps>(
           </div>
         )}
         <div className="grid-row grid-gap">
-          <div
-            className={
-              selectable
-                ? 'desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center'
-                : undefined
-            }
-          >
-            <TableFilters
-              filters={filters}
-              onSelect={updateMessageFilterSequence}
-            ></TableFilters>
-          </div>
+          {filters.length > 0 && (
+            <div
+              className={
+                selectable
+                  ? 'desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center'
+                  : undefined
+              }
+            >
+              <TableFilters
+                filters={filters}
+                onSelect={updateMessageFilterSequence}
+              ></TableFilters>
+            </div>
+          )}
           {selectable && (
             <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
               <Button
