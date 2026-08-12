@@ -71,9 +71,10 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const newTrialCitiesEnabled = await getFeatureFlagValue<boolean>(
-    ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
-  );
+  const newTrialCitiesEnabled =
+    (await getFeatureFlagValue<boolean>(
+      ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+    )) ?? false;
   const trialCities = TRIAL_CITIES.ALL.filter(trialCity => {
     const trialCityName = `${trialCity.city}, ${trialCity.state}`;
 

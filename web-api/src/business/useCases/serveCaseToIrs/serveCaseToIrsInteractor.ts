@@ -625,9 +625,10 @@ export const serveCaseToIrs = async (
 
     if (caseEntity.orderDesignatingPlaceOfTrial) {
       const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-      const newTrialCitiesEnabled = await getFeatureFlagValue<boolean>(
-        ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
-      );
+      const newTrialCitiesEnabled =
+        (await getFeatureFlagValue<boolean>(
+          ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        )) ?? false;
 
       generatedDocuments.push(
         generateDraftDocument({

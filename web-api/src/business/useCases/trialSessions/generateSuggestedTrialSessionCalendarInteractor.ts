@@ -93,9 +93,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
 
-  const newTrialCitiesEnabled = await getFeatureFlagValue<boolean>(
-    ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
-  );
+  const newTrialCitiesEnabled =
+    (await getFeatureFlagValue<boolean>(
+      ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+    )) ?? false;
 
   if (!newTrialCitiesEnabled) {
     NEW_TRIAL_CITY_STRINGS.forEach(
