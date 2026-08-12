@@ -1628,6 +1628,14 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
+    registerRoute('/payment-success/*', docketNumber => {
+      return app.getSequence('paymentSuccessSequence')({ docketNumber });
+    });
+
+    registerRoute('/payment-cancel/*', docketNumber => {
+      return app.getSequence('paymentCancelSequence')({ docketNumber });
+    });
+
     registerRoute(
       '..',
       () => {

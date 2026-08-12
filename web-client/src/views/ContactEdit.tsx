@@ -128,6 +128,7 @@ export const ContactEdit = connect(
           </div>
           <div className="button-container">
             <Button
+              data-testid="submit-contact-edit-button"
               onClick={() => {
                 submitEditContactSequence();
               }}
