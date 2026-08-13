@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { getDocketClerkReportDocumentQcAction } from './getDocketClerkReportDocumentQcAction';
 import { getDocumentQCInboxForUserInteractor } from '@web-client/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { getDocumentQCServedForUserInteractor } from '@web-client/proxies/workitems/getDocumentQCServedForUserProxy';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -9,8 +10,8 @@ jest.mock('@web-client/proxies/workitems/getDocumentQCInboxForUserProxy');
 jest.mock('@web-client/proxies/workitems/getDocumentQCServedForUserProxy');
 
 describe('getDocketClerkReportDocumentQcAction', () => {
-  const mockInboxForUser = getDocumentQCInboxForUserInteractor as jest.Mock;
-  const mockServedForUser = getDocumentQCServedForUserInteractor as jest.Mock;
+  const mockInboxForUser = jest.mocked(getDocumentQCInboxForUserInteractor);
+  const mockServedForUser = jest.mocked(getDocumentQCServedForUserInteractor);
 
   const mockClerk = {
     name: 'Alice Jones',
@@ -19,8 +20,13 @@ describe('getDocketClerkReportDocumentQcAction', () => {
     userId: 'clerk-uuid-001',
   };
 
-  const mockInboxItems = [{ workItemId: 'w1' }, { workItemId: 'w2' }];
-  const mockServedItems = [{ workItemId: 'w3' }];
+  const mockInboxItems = [
+    { workItemId: 'w1' },
+    { workItemId: 'w2' },
+  ] as RawWorkItemWithCaseAndDocketEntryInfo[];
+  const mockServedItems = [
+    { workItemId: 'w3' },
+  ] as RawWorkItemWithCaseAndDocketEntryInfo[];
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
