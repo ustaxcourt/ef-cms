@@ -16,17 +16,7 @@ resource "aws_s3_bucket" "frontend_public" {
 
 resource "aws_s3_bucket_policy" "frontend_public_s3_policy" {
   bucket = aws_s3_bucket.frontend_public.id
-  policy = data.aws_iam_policy_document.public_policy_bucket.json
-}
-
-resource "aws_s3_bucket_website_configuration" "frontend_public_s3_website" {
-  bucket = aws_s3_bucket.frontend_public.id
-  index_document {
-    suffix = "index.html"
-  }
-  error_document {
-    key = "index.html"
-  }
+  policy = data.aws_iam_policy_document.allow_cloudfront_public.json
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_public_sse" {
@@ -43,10 +33,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_public_s
 resource "aws_s3_bucket_public_access_block" "unblock_frontend_public" {
   bucket = aws_s3_bucket.frontend_public.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "failover_public" {
@@ -64,19 +54,8 @@ resource "aws_s3_bucket" "failover_public" {
 
 resource "aws_s3_bucket_policy" "failover_public_s3_policy" {
   bucket   = aws_s3_bucket.failover_public.id
-  policy   = data.aws_iam_policy_document.public_policy_bucket_failover.json
+  policy   = data.aws_iam_policy_document.allow_cloudfront_public_failover.json
   provider = aws.us-west-1
-}
-
-resource "aws_s3_bucket_website_configuration" "failover_public_s3_website" {
-  bucket   = aws_s3_bucket.failover_public.id
-  provider = aws.us-west-1
-  index_document {
-    suffix = "index.html"
-  }
-  error_document {
-    key = "index.html"
-  }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "failover_public_sse" {
@@ -92,23 +71,23 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "failover_public_s
 }
 
 resource "aws_s3_bucket_public_access_block" "unblock_failover_public" {
-  bucket = aws_s3_bucket.failover_public.id
+  bucket   = aws_s3_bucket.failover_public.id
   provider = aws.us-west-1
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-data "aws_iam_policy_document" "public_policy_bucket" {
+data "aws_iam_policy_document" "allow_cloudfront_public" {
   statement {
-    sid    = "PublicReadGetObject"
+    sid    = "AllowCloudFrontServicePrincipal"
     effect = "Allow"
 
     principals {
-      identifiers = ["*"]
-      type        = "AWS"
+      identifiers = ["cloudfront.amazonaws.com"]
+      type        = "Service"
     }
 
     actions = ["s3:GetObject"]
@@ -119,20 +98,20 @@ data "aws_iam_policy_document" "public_policy_bucket" {
 
     condition {
       test     = "StringEquals"
-      variable = "aws:Referer"
-      values   = [var.zone_name]
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.public_distribution.arn]
     }
   }
 }
 
-data "aws_iam_policy_document" "public_policy_bucket_failover" {
+data "aws_iam_policy_document" "allow_cloudfront_public_failover" {
   statement {
-    sid    = "PublicReadGetObject"
+    sid    = "AllowCloudFrontServicePrincipal"
     effect = "Allow"
 
     principals {
-      identifiers = ["*"]
-      type        = "AWS"
+      identifiers = ["cloudfront.amazonaws.com"]
+      type        = "Service"
     }
 
     actions = ["s3:GetObject"]
@@ -143,10 +122,24 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
 
     condition {
       test     = "StringEquals"
-      variable = "aws:Referer"
-      values   = [var.zone_name]
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.public_distribution.arn]
     }
   }
+}
+
+resource "aws_cloudfront_origin_access_control" "frontend_public" {
+  name                              = "${var.current_color}.${var.dns_domain}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_cloudfront_origin_access_control" "failover_public" {
+  name                              = "failover-${var.current_color}.${var.dns_domain}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "public_distribution" {
@@ -173,38 +166,22 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket_website_configuration.frontend_public_s3_website.website_endpoint
-    origin_id   = "primary-${var.current_color}.${var.dns_domain}"
-
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
-    custom_header {
-      name  = "Referer"
-      value = var.zone_name
-    }
+    domain_name              = aws_s3_bucket.frontend_public.bucket_regional_domain_name
+    origin_id                = "primary-${var.current_color}.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.frontend_public.id
   }
 
-
   origin {
-    domain_name = aws_s3_bucket_website_configuration.failover_public_s3_website.website_endpoint
-    origin_id   = "failover-${var.current_color}.${var.dns_domain}"
+    domain_name              = aws_s3_bucket.failover_public.bucket_regional_domain_name
+    origin_id                = "failover-${var.current_color}.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.failover_public.id
+  }
 
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
-    custom_header {
-      name  = "Referer"
-      value = var.zone_name
-    }
+  custom_error_response {
+    error_caching_min_ttl = 0
+    error_code            = 403
+    response_code         = 200
+    response_page_path    = "/index.html"
   }
 
   custom_error_response {
