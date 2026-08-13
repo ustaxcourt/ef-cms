@@ -1,22 +1,15 @@
 import type { CapturedNetworkPayload } from '../../../local-only/support/commands';
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
-import type { UnauthorizedPublicFieldFinding } from '@shared/business/utilities/publicDataValidation';
+import type {
+  UnauthorizedPublicFieldFinding,
+  UnauthorizedPublicFieldFindingCore,
+} from '@shared/business/utilities/publicDataValidation';
 import { getHeaderValue } from '@shared/utils/headers';
 
-export type UnauthorizedFieldFinding = {
+export type UnauthorizedFieldFinding = UnauthorizedPublicFieldFindingCore & {
   url: string;
   method: string;
   location: string;
-  entityName?: string;
-  fieldName: string;
-  matchPreview: string;
-};
-
-type InternalUnauthorizedFieldFinding = Omit<
-  UnauthorizedFieldFinding,
-  'url' | 'method' | 'location'
-> & {
-  findingType?: UnauthorizedPublicFieldFinding['type'];
 };
 
 export type PublicDataValidationResult = {
@@ -107,24 +100,17 @@ function appendFindingsForBody(args: {
   method: string;
   url: string;
 }): void {
-  const bodyFindings: InternalUnauthorizedFieldFinding[] =
+  const relevantFindings: UnauthorizedPublicFieldFinding[] =
     findUnauthorizedPublicFields({
       data: args.body,
       url: args.url,
-    }).map((finding: UnauthorizedPublicFieldFinding) => ({
-      entityName: finding.entityName,
-      fieldName: finding.fieldName,
-      findingType: finding.type,
-      matchPreview: finding.matchPreview,
-    }));
-
-  const relevantFindings = bodyFindings.filter(
-    finding => finding.findingType !== 'not_validated',
-  );
+    }).filter(finding => finding.type !== 'not_validated');
 
   args.findings.push(
     ...relevantFindings.map(finding => ({
-      ...finding,
+      entityName: finding.entityName,
+      fieldName: finding.fieldName,
+      matchPreview: finding.matchPreview,
       url: args.url,
       method: args.method,
       location: args.location,

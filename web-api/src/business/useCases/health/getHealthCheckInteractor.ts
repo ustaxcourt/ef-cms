@@ -17,13 +17,6 @@ type S3BucketsStatus = {
   westTempDocuments: boolean;
 };
 
-export type ApplicationHealth = {
-  cognito: boolean;
-  elasticsearch: boolean;
-  emailService: boolean;
-  s3: S3BucketsStatus;
-};
-
 const getElasticSearchStatus = async ({
   applicationContext,
 }: {
