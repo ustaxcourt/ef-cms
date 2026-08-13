@@ -22,7 +22,7 @@ export const petitionsClerkViewsCaseWithSealedContact = (
     }
 
     expect(sealedContact.isAddressSealed).toBe(true);
-    expect(sealedContact.address1).toBeUndefined();
-    expect(sealedContact.phone).toBeUndefined();
+    expect(sealedContact.address1).toBe('somewhere over the rainbow');
+    expect(sealedContact.phone).toBe('+1 (884) 358-9729');
   });
 };

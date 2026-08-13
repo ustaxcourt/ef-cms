@@ -27,5 +27,13 @@ export const setFilingFeeAlertsAction = ({ get, store }: ActionProps) => {
         overwritable: true,
       });
       break;
+    case 'unknown':
+      store.set(state.alertError, {
+        message: 'Unable to verify payment status.',
+        title: 'Filing fee status unknown',
+        overwritable: true,
+        insertContactSupportClause: true,
+      });
+      break;
   }
 };

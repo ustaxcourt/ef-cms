@@ -5,6 +5,8 @@ import { initFilingFeePaymentAction } from '@web-client/presenter/actions/Filing
 
 describe('initFilingFeePaymentAction', () => {
   let hrefSetter: jest.SpyInstance | undefined;
+  let pathSuccessStub;
+  let pathErrorStub;
 
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -19,9 +21,17 @@ describe('initFilingFeePaymentAction', () => {
         'set',
       )
       .mockImplementation(() => {});
+
+    pathSuccessStub = jest.fn();
+    pathErrorStub = jest.fn();
+
+    presenter.providers.path = {
+      success: pathSuccessStub,
+      error: pathErrorStub,
+    };
   });
 
-  it('should call the initPaymentInteractor', async () => {
+  it('should call the initPaymentInteractor and the success path when successful', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
       paymentRedirect: 'newUrl',
     });
@@ -39,9 +49,10 @@ describe('initFilingFeePaymentAction', () => {
     ).toHaveBeenCalled();
 
     expect(hrefSetter).toHaveBeenCalledWith('newUrl');
+    expect(pathSuccessStub).toHaveBeenCalled();
   });
 
-  it('should set alertError if initPaymentInteractor fails', async () => {
+  it('should set alertError and call error path if initPaymentInteractor fails', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
     const { state } = await runAction(initFilingFeePaymentAction, {
       modules: {
@@ -53,7 +64,8 @@ describe('initFilingFeePaymentAction', () => {
     });
 
     expect(state.alertError).toEqual({
-      message: 'Error calling init filing fee payment',
+      message: 'Error: payment cannot be started',
     });
+    expect(pathErrorStub).toHaveBeenCalled();
   });
 });

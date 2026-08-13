@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export type DocketClerkReportMessageBox = {
   caseStatuses: string[];
-  completedByUsers: string[];
   fromSections: string[];
   fromUsers: string[];
   messages: any[];
@@ -30,6 +29,7 @@ export const docketClerkReportMessagesHelper = (
 ): DocketClerkReportMessagesResults => {
   const tableSort = get(state.tableSort);
   const screenMetadata = get(state.screenMetadata);
+  const selectedMessages = get(state.messagesPage.selectedMessages);
   const inboxMessages: RawMessage[] = get(
     state.docketClerkReport.inboxMessages,
   );
@@ -41,11 +41,12 @@ export const docketClerkReportMessagesHelper = (
   const formatBox = (
     rawMessages: RawMessage[],
   ): DocketClerkReportMessageBox => {
-    const { messages } = getFormattedMessages({
-      applicationContext,
-      messages: rawMessages,
-      tableSort,
-    });
+    const { completedMessages: formattedCompleted, messages } =
+      getFormattedMessages({
+        applicationContext,
+        messages: rawMessages,
+        tableSort,
+      });
 
     messages.forEach(message => {
       message.caseStatus = applicationContext
@@ -62,25 +63,22 @@ export const docketClerkReportMessagesHelper = (
       screenMetadata,
     });
 
-    const completedMessagesForFilter = filteredMessages.filter(
-      m => m.isCompleted,
-    );
-
-    const { filterValues: completedFilterValues, filteredCompletedMessages } =
-      applyFiltersToCompletedMessages({
-        completedMessages: completedMessagesForFilter,
-        screenMetadata,
-      });
+    const { filteredCompletedMessages } = applyFiltersToCompletedMessages({
+      completedMessages: formattedCompleted,
+      screenMetadata,
+    });
 
     const isCompletedOnlyBox =
       rawMessages.length > 0 && rawMessages.every(m => m.isCompleted);
 
     return {
       ...filterValues,
-      ...completedFilterValues,
       messages: isCompletedOnlyBox
         ? filteredCompletedMessages
-        : filteredMessages,
+        : filteredMessages.map(message => ({
+            ...message,
+            isSelected: selectedMessages.has(message.messageId),
+          })),
     };
   };
 

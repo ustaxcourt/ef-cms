@@ -73,11 +73,19 @@ export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
-export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+export const EXHIBIT_EVENT_CODES = [
+  'EXH',
+  'EXS',
+  'PTE',
+  'HE',
+  'TE',
+  'M123',
+  'STIP',
+];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
-export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+export const STANDING_ORDER_EVENT_CODES = ['SPOS', 'SPTO', 'SSO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
@@ -1385,6 +1393,15 @@ export const US_STATES = {
   WY: 'Wyoming',
 } as const;
 
+// State abbreviations ordered by full state name, for dropdowns that present a
+// sorted list. US_STATES itself stays keyed by abbreviation so lookups and the
+// validation lists built from its keys are unaffected.
+export const US_STATES_SORTED = (
+  Object.keys(US_STATES) as (keyof typeof US_STATES)[]
+).sort((firstState, secondState) =>
+  US_STATES[firstState].localeCompare(US_STATES[secondState]),
+);
+
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
@@ -1398,6 +1415,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const US_STATES_OTHER_SORTED = (
+  Object.keys(US_STATES_OTHER) as (keyof typeof US_STATES_OTHER)[]
+).sort((firstState, secondState) =>
+  US_STATES_OTHER[firstState].localeCompare(US_STATES_OTHER[secondState]),
+);
 
 export const ALL_STATE_OPTIONS = {
   ...US_STATES,

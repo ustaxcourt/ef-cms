@@ -7,8 +7,6 @@ import { getCaseAssociationAction } from '@web-client/presenter/actions/getCaseA
 import { redirectToDashboardAction } from '@web-client/presenter/actions/redirectToDashboardAction';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
 
-//Does this need a guard once payment has been made??
-//Do we need to ensure that this is your case?
 export const paymentCancelSequence = [
   getCaseAction,
   setCaseAction,

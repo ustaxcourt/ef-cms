@@ -56,10 +56,15 @@ resource "aws_cognito_identity_pool_roles_attachment" "rum_roles" {
 resource "aws_rum_app_monitor" "app_monitor" {
   name   = "${var.environment}_dawson_rum_app_monitor"
   domain = "*.${var.domain}"
+  # telemetries only configures AWS's auto-generated JS snippet, which this
+  # app doesn't use. The client is initialized directly in
+  # web-client/src/providers/realUserMonitoring.ts, so that file's own
+  # `telemetries` config (currently performance, errors, http) is what
+  # actually determines what gets recorded - keep the two in sync.
   app_monitor_configuration {
     allow_cookies       = true
     session_sample_rate = var.sample_rate
-    telemetries         = ["performance"]
+    telemetries         = ["performance", "errors", "http"]
     identity_pool_id    = aws_cognito_identity_pool.rum_identity_pool.id
   }
   custom_events {
@@ -127,10 +132,13 @@ resource "aws_cognito_identity_pool_roles_attachment" "rum_roles_public" {
 resource "aws_rum_app_monitor" "public_app_monitor" {
   name   = "${var.environment}_dawson_public_rum_app_monitor"
   domain = "*.${var.domain}"
+  # See the comment on app_monitor above - this list is cosmetic (only used
+  # by AWS's unused auto-generated snippet) and should stay in sync with
+  # web-client/src/providers/realUserMonitoring.ts.
   app_monitor_configuration {
     allow_cookies       = true
     session_sample_rate = var.sample_rate
-    telemetries         = ["performance"]
+    telemetries         = ["performance", "errors", "http"]
     identity_pool_id    = aws_cognito_identity_pool.rum_identity_pool_public.id
   }
   custom_events {

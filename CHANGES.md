@@ -1,17 +1,3 @@
-<details><summary>Dependency Updates - Week of 2026-07-20</summary>
-
-## Manual Deployment Steps
-
-### Before Deployment
-
-#### Deploy Docker container `4.3.89`
-
-This script will prompt for an environment to pull the image from; choose `exp3`.
-
-```bash
-npm run ecr:check-version
-```
-</details>
 <details><summary>Payment Portal Integration</summary>
 
 ## Manual Deployment Steps
@@ -33,24 +19,62 @@ Run this to enable payment portal integration
 ./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
 ```
 </details>
-<details><summary>Install gitleaks</summary>
+<details><summary>Dependency Updates - Week of 2026-08-03</summary>
 
 ## Local
-
-#### Install gitleaks (secrets scanning) for the pre-commit hook
+#### Upgrade NodeJS to `24.19.0`
 ```bash
-brew update && brew install gitleaks
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
 ```
-</details>
-<details><summary>Updating batch job roles/permissions</summary>
 
 ## Manual Deployment Steps
 
 ### Before Deployment
 
-#### Run an `account-specific` terraform deployment
+#### Deploy Docker container `4.3.91`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
 ```bash
-npm run deploy:account-specific
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-07-27</summary>
+
+## Local
+#### Upgrade NodeJS to `24.18.1`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.90`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-07-20</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.89`
+
+This script will prompt for an environment to pull the image from; choose `exp3`.
+
+```bash
+npm run ecr:check-version
 ```
 </details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>

@@ -55,7 +55,9 @@ export const CaseWorksheets = connect(
             {caseWorksheetsHelper.caseWorksheetsFormatted.map(formattedCase => {
               return (
                 <React.Fragment key={`info-${formattedCase.docketNumber}`}>
-                  <tr>
+                  <tr
+                    data-testid={`submitted-cav-case-${formattedCase.docketNumber}`}
+                  >
                     <td className="consolidated-case-column">
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
@@ -82,7 +84,7 @@ export const CaseWorksheets = connect(
                     <td>
                       <Button
                         link
-                        data-testid="add-edit-case-worksheet"
+                        data-testid={`add-edit-case-worksheet-${formattedCase.docketNumber}`}
                         icon="edit"
                         onClick={() => {
                           openAddEditCaseWorksheetModalSequence({
@@ -94,7 +96,9 @@ export const CaseWorksheets = connect(
                       </Button>
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    data-testid={`submitted-cav-case-issue-${formattedCase.docketNumber}`}
+                  >
                     <td colSpan={3}></td>
                     <td colSpan={7}>
                       <span className="text-semibold margin-right-1">
