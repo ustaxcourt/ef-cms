@@ -16,12 +16,16 @@ import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessio
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 
-export type UnauthorizedPublicFieldFinding = {
+export type UnauthorizedPublicFieldFindingCore = {
   entityName?: string;
   fieldName: string;
   matchPreview: string;
-  type?: 'unauthorized_field' | 'not_validated';
 };
+
+export type UnauthorizedPublicFieldFinding =
+  UnauthorizedPublicFieldFindingCore & {
+    type?: 'unauthorized_field' | 'not_validated';
+  };
 
 const PUBLIC_ENTITY_FACTORIES = {
   PublicCase: (): PublicCase =>

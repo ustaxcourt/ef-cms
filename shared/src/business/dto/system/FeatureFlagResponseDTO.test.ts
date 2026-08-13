@@ -37,4 +37,17 @@ describe('FeatureFlagResponseDTO', () => {
       }),
     );
   });
+
+  it('is invalid when it includes a non-allowlisted feature flag key', () => {
+    const dto = new FeatureFlagResponseDTO({
+      'not-an-allowlisted-flag': true,
+    });
+
+    expect(dto.isValid()).toBe(false);
+    expect(dto.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        'not-an-allowlisted-flag': expect.any(String),
+      }),
+    );
+  });
 });
