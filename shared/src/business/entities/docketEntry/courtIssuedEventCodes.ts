@@ -575,4 +575,10 @@ export const COURT_ISSUED_EVENTS: CourtIssuedEvent[] = [
     scenario: 'Type A',
     isUnservable: true,
   },
+  {
+    eventCode: 'EXS',
+    documentType: 'Exhibit in Support',
+    documentTitle: 'Exhibit in Support of [Document Name]',
+    scenario: 'Type A',
+  },
 ];
