@@ -1,6 +1,8 @@
 import {
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_SORTED,
+  US_STATES_OTHER_SORTED,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 import classNames from 'classnames';
@@ -36,7 +38,7 @@ export const StateSelect = ({
     >
       <option value="">- Select -</option>
       <optgroup label="State">
-        {Object.keys(US_STATES).map(abbrev => {
+        {US_STATES_SORTED.map(abbrev => {
           const label = useFullStateName ? US_STATES[abbrev] : abbrev;
           return (
             <option key={abbrev} value={abbrev}>
@@ -46,7 +48,7 @@ export const StateSelect = ({
         })}
       </optgroup>
       <optgroup label="Other">
-        {Object.keys(US_STATES_OTHER).map(abbrev => {
+        {US_STATES_OTHER_SORTED.map(abbrev => {
           const label = useFullStateName ? US_STATES_OTHER[abbrev] : abbrev;
           return (
             <option key={abbrev} value={abbrev}>
