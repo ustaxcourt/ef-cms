@@ -7,9 +7,12 @@ export const reportMenuHelper = (get: Get): any => {
 
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
+  const isDocketClerkReport = currentPage.startsWith('DocketClerkReport');
 
   return {
-    pageIsReports: isCaseDeadlines || isBlockedCasesReport,
+    pageIsReports:
+      isCaseDeadlines || isBlockedCasesReport || isDocketClerkReport,
     showActivityReport: permissions?.JUDGE_ACTIVITY_REPORT,
+    showDocketClerkReport: permissions?.DOCKET_CLERK_REPORT,
   };
 };

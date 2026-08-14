@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const getCompletedMessagesForUserInteractor = (
   applicationContext: ClientApplicationContext,
-  { userId },
+  { userId }: { userId: string },
 ): Promise<ExcludeMethods<MessageResult>[]> => {
   return get({
     applicationContext,

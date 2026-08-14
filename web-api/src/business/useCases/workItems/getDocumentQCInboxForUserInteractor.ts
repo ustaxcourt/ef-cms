@@ -6,12 +6,23 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { isAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getDocumentQCInboxForUserInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const isSelf = isAuthUser(authorizedUser) && authorizedUser.userId === userId;
+  const canViewOtherUsersDocumentQc = isAuthorized(
+    authorizedUser,
+    ROLE_PERMISSIONS.DOCKET_CLERK_REPORT,
+  );
+
+  if (!isSelf && !canViewOtherUsersDocumentQc) {
     throw new UnauthorizedError('Unauthorized');
   }
 

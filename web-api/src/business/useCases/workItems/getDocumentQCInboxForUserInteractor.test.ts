@@ -5,6 +5,7 @@ import { docketClerkUser } from '@shared/test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 import { getDocumentQCInboxForUser as getDocumentQCInboxForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
+  mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
@@ -45,17 +46,37 @@ describe('getDocumentQCInboxForUserInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should query workItems that are associated with the provided userId', async () => {
+  it("should throw unauthorized when a user tries to access another user's document QC without DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getDocumentQCInboxForUserInteractor(
+        { userId: 'some-other-user-id' },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should query workItems when the caller is accessing their own inbox', async () => {
     const result = await getDocumentQCInboxForUserInteractor(
       {
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       },
       mockDocketClerkUser,
     );
 
     expect(getDocumentQCInboxForUser.mock.calls[0][0].userId).toEqual(
-      docketClerkUser.userId,
+      mockDocketClerkUser.userId,
     );
     expect(result).toMatchObject(workItems);
+  });
+
+  it("should query another user's workItems when the caller has DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getDocumentQCInboxForUserInteractor(
+        { userId: mockDocketClerkUser.userId },
+        mockCaseServicesSupervisorUser,
+      ),
+    ).resolves.not.toThrow();
+
+    expect(getDocumentQCInboxForUser).toHaveBeenCalled();
   });
 });
