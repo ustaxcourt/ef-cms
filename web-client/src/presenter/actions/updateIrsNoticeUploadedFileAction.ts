@@ -30,15 +30,22 @@ function formatValue(
       .getUtilities()
       .getDateFormat(value, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
 
+    // Persistence timestamps (Joi ISO_DATE / createISODateString shape). Do not use
+    // formatDateString(FORMATS.ISO) — that Luxon token emits a numeric offset, which
+    // @joi/date 3 rejects.
+    if (toFormat === FORMATS.ISO) {
+      return applicationContext
+        .getUtilities()
+        .createISODateString(value, inputFormat);
+    }
+
     const luxonDate = applicationContext
       .getUtilities()
       .prepareDateFromString(value, inputFormat) as unknown as string;
 
-    const formattedDate = applicationContext
+    return applicationContext
       .getUtilities()
       .formatDateString(luxonDate, toFormat);
-
-    return formattedDate;
   } catch {
     return value;
   }
