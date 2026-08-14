@@ -8,6 +8,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
 import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/getUserOutboxMessages';
 import {
+  mockCaseServicesSupervisorUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
@@ -25,7 +26,19 @@ describe('getOutboxMessagesForUserInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the messages from persistence and returns them', async () => {
+  it("throws unauthorized when a user with VIEW_MESSAGES tries to access another user's messages without DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getOutboxMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: 'some-other-user-id',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('retrieves messages when the caller is accessing their own outbox', async () => {
     const messageData = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -54,12 +67,28 @@ describe('getOutboxMessagesForUserInteractor', () => {
     const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
       {
-        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+        userId: mockPetitionsClerkUser.userId,
       },
       mockPetitionsClerkUser,
     );
 
     expect(getUserOutboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([messageData]);
+  });
+
+  it("retrieves another user's messages when the caller has DOCKET_CLERK_REPORT permission", async () => {
+    (getUserOutboxMessages as jest.Mock).mockReturnValue([]);
+
+    await expect(
+      getOutboxMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: mockPetitionsClerkUser.userId,
+        },
+        mockCaseServicesSupervisorUser,
+      ),
+    ).resolves.not.toThrow();
+
+    expect(getUserOutboxMessages).toHaveBeenCalled();
   });
 });
