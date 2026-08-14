@@ -1388,6 +1388,15 @@ export const US_STATES = {
   WY: 'Wyoming',
 } as const;
 
+// State abbreviations ordered by full state name, for dropdowns that present a
+// sorted list. US_STATES itself stays keyed by abbreviation so lookups and the
+// validation lists built from its keys are unaffected.
+export const US_STATES_SORTED = (
+  Object.keys(US_STATES) as (keyof typeof US_STATES)[]
+).sort((firstState, secondState) =>
+  US_STATES[firstState].localeCompare(US_STATES[secondState]),
+);
+
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
@@ -1401,6 +1410,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const US_STATES_OTHER_SORTED = (
+  Object.keys(US_STATES_OTHER) as (keyof typeof US_STATES_OTHER)[]
+).sort((firstState, secondState) =>
+  US_STATES_OTHER[firstState].localeCompare(US_STATES_OTHER[secondState]),
+);
 
 export const ALL_STATE_OPTIONS = {
   ...US_STATES,
