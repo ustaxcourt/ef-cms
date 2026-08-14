@@ -18,12 +18,12 @@ describe('Submitted/CAV table', () => {
 
       loginAsColvin();
       cy.get('[data-testid="tab-case-worksheets"]').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       // test cancel
       cy.get('[data-testid="confirm-modal-cancel-btn"]').click();
 
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="final-brief-due-date-picker"]',
       ).type('08/10/2026');
@@ -31,19 +31,19 @@ describe('Submitted/CAV table', () => {
         CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       );
       cy.get('#primary-issue').type('the primary issue');
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(7)
         .should('contain.text', '08/10/26');
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(8)
         .should('contain.text', CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0]);
 
-      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"]`)
         .find('td')
         .eq(1)
         .should('contain.text', 'the primary issue');
@@ -52,11 +52,17 @@ describe('Submitted/CAV table', () => {
       logout();
       loginAsColvin();
       cy.get('[data-testid="tab-case-worksheets"]').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       // test that hydrated date saves properly
-      cy.get('[data-testid="modal-confirm').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
+        .find('td')
+        .eq(7)
+        .should('contain.text', '08/10/26');
+
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="final-brief-due-date-picker"]',
@@ -68,19 +74,19 @@ describe('Submitted/CAV table', () => {
         CaseWorksheet.STATUS_OF_MATTER_OPTIONS[1],
       );
       cy.get('#primary-issue').type(' updated');
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(7)
         .should('contain.text', '09/10/26');
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(8)
         .should('contain.text', CaseWorksheet.STATUS_OF_MATTER_OPTIONS[1]);
 
-      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"]`)
         .find('td')
         .eq(1)
         .should('contain.text', 'the primary issue updated');
@@ -95,12 +101,12 @@ describe('Submitted/CAV table', () => {
 
       loginAsColvinChambers();
       cy.get('[data-testid="submitted-cav-cases-tab"]').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       // test cancel
       cy.get('[data-testid="confirm-modal-cancel-btn"]').click();
 
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="final-brief-due-date-picker"]',
       ).type('08/10/2026');
@@ -108,19 +114,19 @@ describe('Submitted/CAV table', () => {
         CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       );
       cy.get('#primary-issue').type('the primary issue');
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(7)
         .should('contain.text', '08/10/26');
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(8)
         .should('contain.text', CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0]);
 
-      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"]`)
         .find('td')
         .eq(1)
         .should('contain.text', 'the primary issue');
@@ -130,11 +136,16 @@ describe('Submitted/CAV table', () => {
       loginAsColvinChambers();
 
       cy.get('[data-testid="submitted-cav-cases-tab"]').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       // test that hydrated date saves properly
-      cy.get('[data-testid="modal-confirm').click();
-      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"`).click();
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
+        .find('td')
+        .eq(7)
+        .should('contain.text', '08/10/26');
+
+      cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="final-brief-due-date-picker"]',
@@ -146,19 +157,19 @@ describe('Submitted/CAV table', () => {
         CaseWorksheet.STATUS_OF_MATTER_OPTIONS[1],
       );
       cy.get('#primary-issue').type(' updated');
-      cy.get('[data-testid="modal-confirm').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(7)
         .should('contain.text', '09/10/26');
 
-      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
         .find('td')
         .eq(8)
         .should('contain.text', CaseWorksheet.STATUS_OF_MATTER_OPTIONS[1]);
 
-      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"`)
+      cy.get(`[data-testid="submitted-cav-case-issue-${docketNumber}"]`)
         .find('td')
         .eq(1)
         .should('contain.text', 'the primary issue updated');
