@@ -1,9 +1,10 @@
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import {
   FormattedWorkItemWithCaseInfo,
   formatWorkItem,
+  getHighPriorityOrderFields,
+  groupConsolidatedWorkItems,
 } from '@web-client/presenter/computeds/formattedWorkQueue';
 import { Get } from 'cerebral';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
@@ -25,108 +26,6 @@ const formatReportWorkItem = (
     ...formatted,
     // Read-only drill-in to the document; the report never edits a clerk's work.
     editLink: `/case-detail/${formatted.docketNumber}/document-view?docketEntryId=${formatted.docketEntry.docketEntryId}`,
-  };
-};
-
-const groupConsolidatedWorkItems = (
-  filtered: RawWorkItemWithCaseAndDocketEntryInfo[],
-): Array<
-  RawWorkItemWithCaseAndDocketEntryInfo & {
-    groupedMemberCases?: {
-      workItemId: string;
-      docketNumber: string;
-      inLeadCase: boolean;
-    }[];
-  }
-> => {
-  const docketEntryIdGroups = new Map<
-    string,
-    RawWorkItemWithCaseAndDocketEntryInfo[]
-  >();
-  const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-  const consolidatedGroups = new Map<
-    string,
-    RawWorkItemWithCaseAndDocketEntryInfo[]
-  >();
-
-  for (const wi of filtered) {
-    const key = wi.docketEntryId;
-    if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
-    docketEntryIdGroups.get(key)!.push(wi);
-  }
-
-  for (const group of docketEntryIdGroups.values()) {
-    if (group.length === 1) {
-      solo.push(group[0]);
-    } else {
-      group.forEach(item => {
-        // docket entries that were filed on a case that was later removed from a consolidated group
-        if (item.docketEntry.multiDocketedOn?.length < 2) {
-          solo.push(item);
-        } else if (item.leadDocketNumber) {
-          const key = item.docketEntryId;
-          if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
-          consolidatedGroups.get(key)!.push(item);
-        } else {
-          solo.push(item);
-        }
-      });
-    }
-  }
-
-  const consolidatedResult: Array<
-    RawWorkItemWithCaseAndDocketEntryInfo & {
-      groupedMemberCases?: {
-        workItemId: string;
-        docketNumber: string;
-        inLeadCase: boolean;
-      }[];
-    }
-  > = [];
-
-  for (const group of consolidatedGroups.values()) {
-    const [leadOrLowestNumberedItem, ...memberItems] =
-      Case.sortByDocketNumber(group);
-
-    const groupedMemberCases = Case.sortByDocketNumber(
-      memberItems.map(item => {
-        return {
-          workItemId: item.workItemId,
-          docketNumber: item.docketNumber,
-          inLeadCase: isLeadCase(item),
-        };
-      }),
-    );
-
-    consolidatedResult.push({
-      ...leadOrLowestNumberedItem,
-      groupedMemberCases,
-    });
-  }
-
-  return [...solo, ...consolidatedResult];
-};
-
-const getHighPriorityOrderFields = (
-  STATUS_TYPES: Record<string, string>,
-): {
-  fields: (string | ((workItemToSort: any) => any))[];
-  directions: ('asc' | 'desc')[];
-} => {
-  const caseStatusSortRank = {
-    [STATUS_TYPES.submitted]: 1,
-    [STATUS_TYPES.assignedCase]: 2,
-    [STATUS_TYPES.assignedMotion]: 3,
-    [STATUS_TYPES.jurisdictionRetained]: 4,
-  };
-
-  return {
-    directions: ['desc', 'asc', 'asc'],
-    fields: [
-      'highPriority',
-      'trialDate',
-      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-    ],
   };
 };
 

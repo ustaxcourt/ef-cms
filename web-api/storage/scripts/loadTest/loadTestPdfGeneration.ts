@@ -16,22 +16,8 @@ import axios from 'axios';
     username: 'petitionsclerk1@example.com',
   });
 
-  const MAX_POLL_ATTEMPTS = 60;
-  const POLL_INTERVAL_MS = 5000;
-
-  const checkPDFComplete = async (
-    asyncSyncId: string,
-    attempt: number = 0,
-  ): Promise<void> => {
-    if (attempt >= MAX_POLL_ATTEMPTS) {
-      throw new Error(
-        `PDF generation timed out for asyncSyncId ${asyncSyncId} after ${MAX_POLL_ATTEMPTS} attempts`,
-      );
-    }
-
-    await new Promise(resolve =>
-      setTimeout(() => resolve(null), POLL_INTERVAL_MS),
-    );
+  const checkPDFComplete = async (asyncSyncId: string) => {
+    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
     const URL = `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/results/fetch/${asyncSyncId}`;
     const headers = {
       Asyncsyncid: asyncSyncId,
@@ -47,9 +33,9 @@ import axios from 'axios';
       headers,
     });
 
-    if (!results) return await checkPDFComplete(asyncSyncId, attempt + 1);
+    if (!results) return await checkPDFComplete(asyncSyncId);
     const { response } = results.data;
-    if (!response) return await checkPDFComplete(asyncSyncId, attempt + 1);
+    if (!response) return await checkPDFComplete(asyncSyncId);
 
     const responseObj = JSON.parse(response);
     if (+responseObj.statusCode === 200) return;
@@ -62,9 +48,6 @@ import axios from 'axios';
   for (let i = 0; i < 100; i++) {
     try {
       const asyncSyncId = v4();
-      console.log(
-        `[${i + 1}/100] Requesting PDF generation (asyncSyncId: ${asyncSyncId})`,
-      );
       await axios.get(
         `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/async/reports/printable-case-inventory-report?associatedJudge=&status=New`,
         {
@@ -77,7 +60,6 @@ import axios from 'axios';
       );
 
       await checkPDFComplete(asyncSyncId);
-      console.log(`[${i + 1}/100] PDF generation complete`);
     } catch (e) {
       console.log('ERROR', e);
       throw e;
