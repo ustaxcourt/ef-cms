@@ -125,6 +125,15 @@ describe('Authorization client service', () => {
         ),
       ).toBeTruthy();
     });
+
+    it('should be authorized to view the docket clerk report', () => {
+      expect(
+        isAuthorized(
+          mockCaseServicesSupervisorUser,
+          ROLE_PERMISSIONS.DOCKET_CLERK_REPORT,
+        ),
+      ).toBeTruthy();
+    });
   });
 
   describe('docketClerk role', () => {
@@ -132,6 +141,12 @@ describe('Authorization client service', () => {
       expect(
         isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.WORKITEM),
       ).toBeTruthy();
+    });
+
+    it('should not be authorized to view the docket clerk report', () => {
+      expect(
+        isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.DOCKET_CLERK_REPORT),
+      ).toBeFalsy();
     });
 
     it('should be authorized to seal an address', () => {

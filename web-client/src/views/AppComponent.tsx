@@ -22,6 +22,7 @@ import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { ChangePassword } from '@web-client/views/Login/ChangePassword';
 import { ColdCaseReport } from '@web-client/views/ColdCaseReport/ColdCaseReport';
+import { DocketClerkReport } from '@web-client/views/DocketClerkReport/DocketClerkReport';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -151,6 +152,7 @@ const pages = {
   DashboardIrsSuperuser,
   DashboardJudge,
   DashboardRespondent,
+  DocketClerkReport,
   DocketEntryQc,
   EditCaseDetails,
   EditCorrespondenceDocument,
