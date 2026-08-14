@@ -7,5 +7,9 @@ export const getMessagePageAction = ({ get, path }: ActionProps) => {
     return path.detail();
   }
 
+  if (currentPage === 'DocketClerkReport') {
+    return path.docketClerkReport();
+  }
+
   return path.inbox();
 };

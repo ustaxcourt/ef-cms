@@ -16,7 +16,7 @@ describe('Dashboard - Judge Accessibility', () => {
     it('should be free of a11y issues when adding/editing case worksheet', () => {
       loginAsColvin();
       cy.get('[data-testid="tab-case-worksheets"]').click();
-      cy.get('button[data-testid="add-edit-case-worksheet"]').first().click();
+      cy.get('[data-testid^="add-edit-case-worksheet-"]').first().click();
       cy.get('.modal-screen').should('exist');
       cy.get('#confirm').click();
 
