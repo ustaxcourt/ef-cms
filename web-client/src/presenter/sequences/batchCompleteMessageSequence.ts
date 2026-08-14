@@ -3,6 +3,7 @@ import { clearModalAction } from '@web-client/presenter/actions/clearModalAction
 import { clearModalStateAction } from '@web-client/presenter/actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '@web-client/presenter/actions/clearScreenMetadataAction';
 import { clearUsersAction } from '@web-client/presenter/actions/clearUsersAction';
+import { getDocketClerkReportMessagesAction } from '../actions/DocketClerkReport/getDocketClerkReportMessagesAction';
 import { getMessagePageAction } from '@web-client/presenter/actions/getMessagePageAction';
 import { getMessageThreadAction } from '@web-client/presenter/actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '@web-client/presenter/actions/getMostRecentMessageInThreadAction';
@@ -31,6 +32,11 @@ export const completeMessageSuccessSequence = [
       getMostRecentMessageInThreadAction,
       getMessageThreadAction,
       setMessageAction,
+    ],
+    docketClerkReport: [
+      setCompleteMessageAlertAction,
+      getDocketClerkReportMessagesAction,
+      resetSelectedMessageAction,
     ],
     inbox: [
       setCompleteMessageAlertAction,

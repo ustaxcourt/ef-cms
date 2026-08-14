@@ -1,4 +1,10 @@
-import { ORDER_TYPES } from './EntityConstants';
+import {
+  ORDER_TYPES,
+  US_STATES,
+  US_STATES_OTHER,
+  US_STATES_SORTED,
+  US_STATES_OTHER_SORTED,
+} from './EntityConstants';
 import { OrderWithoutBody } from './orders/OrderWithoutBody';
 
 describe('EntityConstants', () => {
@@ -10,6 +16,38 @@ describe('EntityConstants', () => {
           expect(new OrderWithoutBody(orderType).isValid()).toBeTruthy();
         }
       });
+    });
+  });
+
+  describe('US_STATES_SORTED', () => {
+    it('lists every US_STATES abbreviation ordered by full state name', () => {
+      const fullNames = US_STATES_SORTED.map(abbrev => US_STATES[abbrev]);
+
+      expect([...US_STATES_SORTED].sort()).toEqual(
+        Object.keys(US_STATES).sort(),
+      );
+      expect(fullNames).toEqual(
+        [...fullNames].sort((firstName, secondName) =>
+          firstName.localeCompare(secondName),
+        ),
+      );
+    });
+  });
+
+  describe('US_STATES_OTHER_SORTED', () => {
+    it('lists every US_STATES territory abbreviation ordered by full state name', () => {
+      const fullNames = US_STATES_OTHER_SORTED.map(
+        abbrev => US_STATES_OTHER[abbrev],
+      );
+
+      expect([...US_STATES_OTHER_SORTED].sort()).toEqual(
+        Object.keys(US_STATES_OTHER).sort(),
+      );
+      expect(fullNames).toEqual(
+        [...fullNames].sort((firstName, secondName) =>
+          firstName.localeCompare(secondName),
+        ),
+      );
     });
   });
 });
