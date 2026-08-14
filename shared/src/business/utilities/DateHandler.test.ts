@@ -789,6 +789,16 @@ describe('DateHandler', () => {
 
       expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
     });
+
+    it('should return a UTC Z ISO string when outputFormat is ISO', () => {
+      const result = getBusinessDateInFuture({
+        numberOfDays: 30,
+        outputFormat: FORMATS.ISO,
+        startDate: '2021-05-31',
+      });
+
+      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+    });
   });
 
   describe('isDateWithinGivenInterval', () => {

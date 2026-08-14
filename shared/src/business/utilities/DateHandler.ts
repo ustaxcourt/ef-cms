@@ -641,6 +641,13 @@ export const getBusinessDateInFuture = ({
     );
   }
 
+  // Persistence timestamps (Joi ISO_DATE / createISODateString shape). Do not use
+  // toFormat(FORMATS.ISO) — that Luxon token emits a numeric offset, which
+  // @joi/date 3 rejects.
+  if (outputFormat === FORMATS.ISO) {
+    return laterDate.setZone('utc').toISO()!;
+  }
+
   return laterDate.toFormat(outputFormat);
 };
 
