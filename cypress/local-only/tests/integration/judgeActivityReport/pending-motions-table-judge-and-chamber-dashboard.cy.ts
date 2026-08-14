@@ -75,6 +75,12 @@ describe('Pending Motions Table', () => {
 
       // test that hydrated date saves properly
       cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
+
       cy.get('@pendingMotions')
         .first()
         .as('firstRow')
@@ -190,6 +196,12 @@ describe('Pending Motions Table', () => {
 
       // test that hydrated date saves properly
       cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
+
       cy.get('@pendingMotions')
         .first()
         .as('firstRow')

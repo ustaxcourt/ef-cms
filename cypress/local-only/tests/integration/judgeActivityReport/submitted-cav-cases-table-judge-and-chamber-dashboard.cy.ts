@@ -56,6 +56,12 @@ describe('Submitted/CAV table', () => {
 
       // test that hydrated date saves properly
       cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
+        .find('td')
+        .eq(7)
+        .should('contain.text', '08/10/26');
+
       cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       cy.get(
@@ -134,6 +140,11 @@ describe('Submitted/CAV table', () => {
 
       // test that hydrated date saves properly
       cy.get('[data-testid="modal-confirm"]').click();
+      cy.get(`[data-testid="submitted-cav-case-${docketNumber}"]`)
+        .find('td')
+        .eq(7)
+        .should('contain.text', '08/10/26');
+
       cy.get(`[data-testid="add-edit-case-worksheet-${docketNumber}"]`).click();
 
       cy.get(
