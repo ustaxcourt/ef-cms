@@ -28,6 +28,8 @@ fi
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "$PROD_ENV_ACCOUNT_ID" ] && echo "You must have PROD_ENV_ACCOUNT_ID set in your environment" && exit 1
+[ -z "${PAYMENT_PORTAL_ARN}" ] && echo "You must have PAYMENT_PORTAL_ARN set in your environment" && exit 1
+[ -z "${PAYMENT_PORTAL_HOST}" ] && echo "You must have PAYMENT_PORTAL_HOST set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
@@ -45,6 +47,8 @@ echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
+echo "  - PAYMENT_PORTAL_ARN=${PAYMENT_PORTAL_ARN}"
+echo "  - PAYMENT_PORTAL_HOST=${PAYMENT_PORTAL_HOST}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -121,6 +125,8 @@ export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
+export TF_VAR_payment_portal_arn=$PAYMENT_PORTAL_ARN
+export TF_VAR_payment_portal_host=$PAYMENT_PORTAL_HOST
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then

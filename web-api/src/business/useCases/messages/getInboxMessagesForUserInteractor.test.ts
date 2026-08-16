@@ -8,6 +8,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import {
+  mockCaseServicesSupervisorUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
@@ -25,7 +26,19 @@ describe('getInboxMessagesForUserInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the messages from persistence and returns them', async () => {
+  it("throws unauthorized when a user with VIEW_MESSAGES tries to access another user's messages without DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getInboxMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: 'some-other-user-id',
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('retrieves messages when the caller is accessing their own inbox', async () => {
     const messageData = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -54,12 +67,28 @@ describe('getInboxMessagesForUserInteractor', () => {
     const returnedMessages = await getInboxMessagesForUserInteractor(
       applicationContext,
       {
-        userId: 'bob',
+        userId: mockPetitionsClerkUser.userId,
       },
       mockPetitionsClerkUser,
     );
 
     expect(getUserInboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([messageData]);
+  });
+
+  it("retrieves another user's messages when the caller has DOCKET_CLERK_REPORT permission", async () => {
+    (getUserInboxMessages as jest.Mock).mockReturnValue([]);
+
+    await expect(
+      getInboxMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: mockPetitionsClerkUser.userId,
+        },
+        mockCaseServicesSupervisorUser,
+      ),
+    ).resolves.not.toThrow();
+
+    expect(getUserInboxMessages).toHaveBeenCalled();
   });
 });

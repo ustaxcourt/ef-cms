@@ -288,6 +288,13 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 - Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
+- As of July 27, 2026: **cerebral 6.0.0** is now published on npm. Still blocked for the same reasons as 5.2.x — the import syntax in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute` is incompatible. Keep pinned to 5.2.1 and `"github:ustaxcourt/cerebral-react#main"` respectively.
+
+### babel-plugin-cerebral
+**Installed Version: 1.0.2**
+
+- Required by `babel.config.js` to transpile Cerebral template-literal syntax (for example, `` state`foo` ``). Keep this pinned alongside the `cerebral` and `@cerebral/react` versions above.
+- See [removeCerebrealBabelPlugin.md](./removeCerebrealBabelPlugin.md) for the migration path if we remove this plugin in the future.
 
 ## Caveats
 
@@ -337,6 +344,7 @@ If an update is available for DWT:
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
 - As of June 23, 2026: Puppeteer 25.2.0 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.0 update until `@sparticuz/chromium@150.x` is available.
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
+- As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -351,10 +359,36 @@ If an update is available for DWT:
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
+### quill-delta-to-html
+**Installed Version: 0.12.1**
+
+- Used by `TextEditor.tsx` to convert Quill deltas to HTML. Keep this pinned alongside `quill` 1.3.7 until the embedded Microsoft Word editor replaces Quill.
+
+### jest and jest-environment-jsdom
+**Installed Versions:**
+**jest: 30.4.2**
+**jest-environment-jsdom: 30.4.1**
+
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. Verify the full unit test suites after any bump.
+- On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
+- On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+
+### websocket
+**Installed Version: 1.0.35**
+
+- Direct dependency for the local websocket server in `web-api/src/app-local.ts` and for the integration-test WebSocket polyfill in `web-client/integration-tests/helpers.ts`. Verify local stack websocket behavior after upgrading.
+
+### p-queue
+**Installed Version: 9.3.3**
+
+- `p-queue` v7 and above are ESM-only. Jest must transpile them via `transformIgnorePatterns` in `web-api/jest-unit.config.ts` (added December 10, 2025).
+- On September 19, 2025, upgrading past v6 caused module-import errors in GitHub Actions until the Jest config was updated. Patch upgrades within v9 are generally safe but require re-running the web-api unit tests.
+
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
 - Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
+- As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
 
 ### @types/node
 **Installed Version: 24.13.3**
@@ -428,7 +462,8 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 - As of June 25, 2026: minimatch 10.2.5 is the latest. Still blocked since upstream packages have not yet migrated to minimatch 10.x.
-- July 13, 2026: According to the link above, even major versions of minimatch < 10 have been patched. It appears that all of our dependencies are using a patched version of minimatch, which is corroborated by the fact `npm audit` no longer shows this vulnerability. Consider deleting this section.
+- July 13, 2026: An earlier note incorrectly stated that `npm audit` no longer reported this vulnerability.
+- As of July 27, 2026: `npm audit` still flags `minimatch` 2.0.0–10.0.2 (high) via the `brace-expansion` advisory ([GHSA-7r86-64r9-qc3w](https://github.com/advisories/GHSA-7r86-64r9-qc3w), DoS via unbounded expansion length). A `brace-expansion` override above 5.0.7 clears most of the cascade through `minimatch`, `glob`, and the Jest/Babel/ESLint dependency trees. Upstream packages migrating to minimatch 10.x remains the long-term fix.
 
 ### eslint and @eslint/js
 **Installed Versions:**
@@ -438,21 +473,46 @@ error: too many arguments. Expected 0 arguments but got 2.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
 - As of June 25, 2026: eslint 10.5.0 is the latest, but still blocked since `eslint-plugin-jsx-a11y` and `eslint-plugin-react` still declare `eslint ^9` as their peer dependency. `9.39.4` is the latest 9.x patch; nothing new to install.
 - July 13, 2026: updated to 9.39.5
+- As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
 
 ### js-yaml
+**Installed Version: 4.3.0**
 - On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
+- July 27, 2026: moved the override from 4.2.0 to 4.3.0. The 4.2.0 pin sat inside the vulnerable range for merge-key chain quadratic CPU consumption ([GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m), CVE-2026-59869). Keep the override at 4.3.0 or later unless all transitive consumers are confirmed to resolve to a patched version.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
-**image-blob-reduce: 5.0.0**
-**pica: 10.0.1**
+**image-blob-reduce: 5.0.1**
+**pica: 10.0.2**
 - image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
 - If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
+
+### @joi/date
+8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
+From
+
+```ts
+import joiDate from '@joi/date';
+...
+const joi: Root = joiImported.extend(joiDate);
+```
+to
+
+```ts
+import { JoiDate } from '@joi/date';
+...
+const joi: Root = joiImported.extend(JoiDate);
+```
+
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
+
+### @recharts/devtools
+8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
 
 ## Troubleshooting
 

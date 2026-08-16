@@ -29,6 +29,7 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
 import { resetClerkOfCourtDashboardOptionsAction } from '@web-client/presenter/actions/Dashboard/resetClerkOfCourtDashboardOptionsAction';
 
 const { USER_ROLES } = getConstants();
@@ -124,12 +125,14 @@ export const gotoDashboardSequence = [
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
           setupCurrentPageAction('DashboardExternalUser'),
+          setFilingFeeAlertsAction,
         ],
         privatePractitioner: [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
           setupCurrentPageAction('DashboardExternalUser'),
+          setFilingFeeAlertsAction,
         ],
       },
     ],

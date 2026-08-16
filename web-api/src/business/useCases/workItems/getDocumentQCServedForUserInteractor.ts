@@ -11,12 +11,23 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { isAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getDocumentQCServedForUserInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const isSelf = isAuthUser(authorizedUser) && authorizedUser.userId === userId;
+  const canViewOtherUsersDocumentQc = isAuthorized(
+    authorizedUser,
+    ROLE_PERMISSIONS.DOCKET_CLERK_REPORT,
+  );
+
+  if (!isSelf && !canViewOtherUsersDocumentQc) {
     throw new UnauthorizedError('Unauthorized');
   }
 

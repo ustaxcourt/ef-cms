@@ -970,6 +970,38 @@ describe('Case entity', () => {
         petitionPaymentWaivedDate: expect.anything(),
       });
     });
+
+    it('passes validation with valid petitionPaymentTransactionReferenceId and petitionPaymentToken', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentTransactionReferenceId:
+            '77d9b6e2-508f-4e36-8fb1-0b2e20557898',
+          petitionPaymentToken: 'paymentToken',
+        },
+        {
+          authorizedUser: mockDocketClerkUser,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('fails validation if a petitionPaymentTransactionReferenceId is not a UUID', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentTransactionReferenceId: 'notAUUID',
+        },
+        {
+          authorizedUser: mockDocketClerkUser,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentTransactionReferenceId: expect.anything(),
+      });
+    });
   });
 
   describe('validate', () => {

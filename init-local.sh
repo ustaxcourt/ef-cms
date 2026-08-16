@@ -26,12 +26,14 @@ fi
 SKIP_DOCKER=false
 BACKGROUND=false
 SKIP_ASSETS=false
+SKIP_PAYMENT_PORTAL=false
 
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --skip-docker) SKIP_DOCKER=true ;;
     --background) BACKGROUND=true ;;
     --skip-assets) SKIP_ASSETS=true ;;
+    --skip-payment-portal) SKIP_PAYMENT_PORTAL=true ;;
     *) echo "Unknown parameter passed: $1"; exit 1 ;;
   esac
   shift
@@ -176,11 +178,20 @@ setup_cognito() {
   URL=http://localhost:9229/ CHECK_CODE="404" ./wait-until.sh
 }
 
+start_payment_portal() {
+  echo "Starting payment portal"
+  npm run payment-portal &
+  URL=http://localhost:8080/ ./wait-until.sh
+}
+
 if [ "$SKIP_ASSETS" = "false" ]; then
   npm run build:assets
 fi
 
 start_docker_dependencies
+if [ "$SKIP_PAYMENT_PORTAL" = "false" ]; then
+  start_payment_portal
+fi
 wait_for_opensearch
 wait_for_postgres
 setup_opensearch
