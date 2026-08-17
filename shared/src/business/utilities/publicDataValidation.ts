@@ -295,7 +295,10 @@ function findUnauthorizedFieldsForEntity(args: {
     return findings;
   }
 
-  if (args.path === '' && (args.obj as any).isValidated !== true) {
+  if (
+    (args.path === '' || isArrayItemPath(args.path)) &&
+    (args.obj as any).isValidated !== true
+  ) {
     findings.push({
       entityName: args.candidateEntityName,
       fieldName: args.path ? `${args.path}.isValidated` : 'isValidated',
