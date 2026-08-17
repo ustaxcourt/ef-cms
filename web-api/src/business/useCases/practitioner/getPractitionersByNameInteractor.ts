@@ -67,7 +67,9 @@ export const getPractitionersByNameInteractor = async (
     new PublicContact({
       ...foundUser,
       state: isLoggedInUser ? foundUser.contact?.state : undefined,
-    }).toRawObject(),
+    })
+      .validate()
+      .toRawObject(),
   );
 
   return {
