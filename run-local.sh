@@ -21,11 +21,15 @@ cleanup() {
 
 . ./setup-local-env.sh
 
-if [[ -z "$CI" ]]; then
-  ./init-local.sh
-else
-  ./init-local.sh --skip-docker
+INIT_LOCAL_ARGS=()
+if [[ "$SKIP_PAYMENT_PORTAL" == "true" ]]; then
+  INIT_LOCAL_ARGS+=(--skip-payment-portal)
 fi
+if [[ -n "$CI" ]]; then
+  INIT_LOCAL_ARGS+=(--skip-docker)
+fi
+
+./init-local.sh "${INIT_LOCAL_ARGS[@]}"
 
 trap cleanup EXIT
 

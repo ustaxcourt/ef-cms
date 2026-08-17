@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./init-local.sh --background
+./init-local.sh --background --skip-payment-portal
