@@ -155,6 +155,7 @@ function createMissingEntityNameFinding(
 
 function validateObjectByFieldRule(args: {
   isAllowed: (key: string, value: unknown) => boolean;
+  isNestedInEntity: boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
@@ -170,7 +171,12 @@ function validateObjectByFieldRule(args: {
 
     if (Array.isArray(value) || isRecord(value)) {
       findings.push(
-        ...findUnauthorizedPublicFieldsRecursive(value, fieldPath, args.url),
+        ...findUnauthorizedPublicFieldsRecursive({
+          data: value,
+          path: fieldPath,
+          url: args.url,
+          isNestedInEntity: args.isNestedInEntity,
+        }),
       );
       continue;
     }
@@ -185,12 +191,14 @@ function validateObjectByFieldRule(args: {
 }
 
 function validateUrlOnlyObject(args: {
+  isNestedInEntity: boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
 }): UnauthorizedPublicFieldFinding[] {
   return validateObjectByFieldRule({
     isAllowed: (key, value) => key === 'url' && typeof value === 'string',
+    isNestedInEntity: args.isNestedInEntity,
     obj: args.obj,
     path: args.path,
     url: args.url,
@@ -198,12 +206,14 @@ function validateUrlOnlyObject(args: {
 }
 
 function validateNumericObject(args: {
+  isNestedInEntity: boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
 }): UnauthorizedPublicFieldFinding[] {
   return validateObjectByFieldRule({
     isAllowed: (_key, value) => isNumericValue(value),
+    isNestedInEntity: args.isNestedInEntity,
     obj: args.obj,
     path: args.path,
     url: args.url,
@@ -211,6 +221,7 @@ function validateNumericObject(args: {
 }
 
 function validateObjectWithoutEntityName(args: {
+  isNestedInEntity: boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
@@ -233,7 +244,12 @@ function validateObjectWithoutEntityName(args: {
 
       if (Array.isArray(value) || isRecord(value)) {
         nestedFindings.push(
-          ...findUnauthorizedPublicFieldsRecursive(value, fieldPath, args.url),
+          ...findUnauthorizedPublicFieldsRecursive({
+            data: value,
+            path: fieldPath,
+            url: args.url,
+            isNestedInEntity: args.isNestedInEntity,
+          }),
         );
       }
     }
@@ -278,6 +294,7 @@ function validateEntityMetadata(args: {
 }
 
 function findUnauthorizedFieldsForEntity(args: {
+  isNestedInEntity: boolean;
   obj: Record<string, unknown>;
   path: string;
   url: string;
@@ -295,10 +312,10 @@ function findUnauthorizedFieldsForEntity(args: {
     return findings;
   }
 
-  if (
-    (args.path === '' || isArrayItemPath(args.path)) &&
-    (args.obj as any).isValidated !== true
-  ) {
+  const requiresValidation =
+    args.path === '' || (isArrayItemPath(args.path) && !args.isNestedInEntity);
+
+  if (requiresValidation && (args.obj as any).isValidated !== true) {
     findings.push({
       entityName: args.candidateEntityName,
       fieldName: args.path ? `${args.path}.isValidated` : 'isValidated',
@@ -323,7 +340,12 @@ function findUnauthorizedFieldsForEntity(args: {
 
     if (typeof value === 'object' && value !== null) {
       findings.push(
-        ...findUnauthorizedPublicFieldsRecursive(value, fieldPath, args.url),
+        ...findUnauthorizedPublicFieldsRecursive({
+          data: value,
+          path: fieldPath,
+          url: args.url,
+          isNestedInEntity: true,
+        }),
       );
     }
   }
@@ -331,11 +353,12 @@ function findUnauthorizedFieldsForEntity(args: {
   return findings;
 }
 
-function findUnauthorizedPublicFieldsRecursive(
-  data: unknown,
+function findUnauthorizedPublicFieldsRecursive({
+  data,
   path = '',
   url = '',
-): UnauthorizedPublicFieldFinding[] {
+  isNestedInEntity = false,
+}): UnauthorizedPublicFieldFinding[] {
   const findings: UnauthorizedPublicFieldFinding[] = [];
   if (!isRecord(data) && !Array.isArray(data)) {
     return findings;
@@ -344,11 +367,12 @@ function findUnauthorizedPublicFieldsRecursive(
   if (Array.isArray(data)) {
     data.forEach((item, index) => {
       findings.push(
-        ...findUnauthorizedPublicFieldsRecursive(
-          item,
-          `${path}[${index}]`,
+        ...findUnauthorizedPublicFieldsRecursive({
+          data: item,
+          path: `${path}[${index}]`,
           url,
-        ),
+          isNestedInEntity,
+        }),
       );
     });
     return findings;
@@ -359,6 +383,7 @@ function findUnauthorizedPublicFieldsRecursive(
 
   if (!candidateEntityName) {
     return validateObjectWithoutEntityName({
+      isNestedInEntity,
       obj: data,
       path,
       url,
@@ -367,6 +392,7 @@ function findUnauthorizedPublicFieldsRecursive(
 
   return findUnauthorizedFieldsForEntity({
     candidateEntityName,
+    isNestedInEntity,
     obj: data,
     path,
     url,
@@ -377,5 +403,9 @@ export function findUnauthorizedPublicFields(args: {
   data: unknown;
   url: string;
 }): UnauthorizedPublicFieldFinding[] {
-  return findUnauthorizedPublicFieldsRecursive(args.data, '', args.url);
+  return findUnauthorizedPublicFieldsRecursive({
+    data: args.data,
+    path: '',
+    url: args.url,
+  });
 }
