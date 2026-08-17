@@ -125,6 +125,36 @@ describe('publicDataValidation', () => {
     );
   });
 
+  it('fails for array entities that have not been validated', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    const findings = findUnauthorizedPublicFields({
+      data: [user],
+      url: 'http://localhost:4001/public-api/users',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicUser',
+          fieldName: '[0].isValidated',
+          matchPreview: '[not validated]',
+          type: 'not_validated',
+        }),
+      ]),
+    );
+  });
+
+  it('passes for array entities that have been validated', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    user.validate();
+    const findings = findUnauthorizedPublicFields({
+      data: [user],
+      url: 'http://localhost:4001/public-api/users',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
   it('fails for root entities with an unrecognized entityName', () => {
     const findings = findUnauthorizedPublicFields({
       data: { entityName: 'SomeUnknownEntity', field: 'value' },

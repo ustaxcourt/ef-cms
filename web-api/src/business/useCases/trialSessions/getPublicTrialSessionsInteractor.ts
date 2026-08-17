@@ -9,6 +9,6 @@ export const getPublicTrialSessionsInteractor = async (): Promise<
 
   return trialSessions
     .map(t => new TrialSession(t).toRawObject())
-    .map(trialSession => new PublicTrialSessionInfo(trialSession))
+    .map(trialSession => new PublicTrialSessionInfo(trialSession).validate())
     .filter(trialSession => trialSession.sessionStatus === 'Open');
 };
