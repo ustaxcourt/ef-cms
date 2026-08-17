@@ -1,6 +1,20 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { PublicContact } from '@shared/business/entities/cases/PublicContact';
 import { PublicUser } from '@shared/business/entities/PublicUser';
+
+const MOCK_UUID = 'c7d90c05-f6cd-442c-a168-202db587f16f';
+
+const mockPublicCaseFields = {
+  caseCaption: 'Test Petitioner, Petitioner',
+  docketEntries: [],
+  docketNumber: '101-20',
+  docketNumberWithSuffix: '101-20',
+  hasIrsPractitioner: false,
+  isSealed: false,
+  receivedAt: '2020-01-05T03:30:45.007Z',
+};
 
 describe('publicDataValidation', () => {
   it('passes for feature-flag primitive payloads', () => {
@@ -153,6 +167,67 @@ describe('publicDataValidation', () => {
     });
 
     expect(findings).toEqual([]);
+  });
+
+  it('passes for unvalidated entities within arrays nested inside a validated entity', () => {
+    const publicCase = new PublicCaseResponse({
+      ...mockPublicCaseFields,
+      petitioners: [new PublicContact({ contactId: MOCK_UUID })],
+    } as any);
+    publicCase.validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: publicCase,
+      url: 'http://localhost:4001/public-api/cases/101-20',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('fails for unvalidated entities within arrays nested inside a plain object', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        container: {
+          petitioners: [new PublicContact({ contactId: MOCK_UUID })],
+        },
+      },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicContact',
+          fieldName: 'container.petitioners[0].isValidated',
+          matchPreview: '[not validated]',
+          type: 'not_validated',
+        }),
+      ]),
+    );
+  });
+
+  it('fails for unauthorized fields on entities nested inside a validated entity', () => {
+    const petitioner = new PublicContact({ contactId: MOCK_UUID });
+    (petitioner as any).privateField = 'do-not-leak';
+    const publicCase = new PublicCaseResponse({
+      ...mockPublicCaseFields,
+      petitioners: [petitioner],
+    } as any);
+    publicCase.validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: publicCase,
+      url: 'http://localhost:4001/public-api/cases/101-20',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicContact',
+          fieldName: 'petitioners[0].privateField',
+        }),
+      ]),
+    );
   });
 
   it('fails for root entities with an unrecognized entityName', () => {
