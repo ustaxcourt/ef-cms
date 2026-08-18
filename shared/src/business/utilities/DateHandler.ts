@@ -641,6 +641,13 @@ export const getBusinessDateInFuture = ({
     );
   }
 
+  // Persistence timestamps (Joi ISO_DATE / createISODateString shape). Do not use
+  // toFormat(FORMATS.ISO) — that Luxon token emits a numeric offset, which
+  // @joi/date 3 rejects.
+  if (outputFormat === FORMATS.ISO) {
+    return laterDate.setZone('utc').toISO()!;
+  }
+
   return laterDate.toFormat(outputFormat);
 };
 
@@ -799,6 +806,14 @@ export const formatDateFromDatePicker = (
 
   try {
     inputFormat = getDateFormat(dateString, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
+
+    // Date pickers write persistence timestamps (Joi ISO_DATE / createISODateString
+    // shape). Do not use formatDateString(FORMATS.ISO) here — that Luxon token
+    // emits a numeric offset (…-05:00), which @joi/date 3 rejects.
+    if (toFormat === FORMATS.ISO) {
+      const isoDate = createISODateString(dateString, inputFormat);
+      return isoDate ?? dateString;
+    }
 
     const luxonDate = prepareDateFromString(dateString, inputFormat);
 

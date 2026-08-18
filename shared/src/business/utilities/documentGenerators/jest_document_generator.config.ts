@@ -5,6 +5,7 @@ import { loadTsConfigPaths } from '../../../../../utils/load-tsconfig-paths.mjs'
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
+  '@joi/date',
   '@puppeteer',
   'dom-serializer',
   'domelementtype',
@@ -33,7 +34,7 @@ const config: Config = {
   ],
   testTimeout: 30000,
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
     `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,

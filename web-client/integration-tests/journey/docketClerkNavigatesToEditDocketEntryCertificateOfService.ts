@@ -40,7 +40,7 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       cerebralTest.getState('screenMetadata.documentTitlePreview'),
     ).toEqual('Certificate of Service of Petition 05-10-2005');
     expect(cerebralTest.getState('form.serviceDate')).toEqual(
-      '2005-05-10T00:00:00.000-04:00',
+      '2005-05-10T04:00:00.000Z',
     );
 
     await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {

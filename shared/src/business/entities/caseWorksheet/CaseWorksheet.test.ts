@@ -4,7 +4,7 @@ describe('CaseWorksheet', () => {
   describe('validation', () => {
     const VALID_ENTITY_DATA: RawCaseWorksheet = {
       docketNumber: '101-26',
-      finalBriefDueDate: '2023-07-29T00:00:00.000-04:00',
+      finalBriefDueDate: '2023-07-29T04:00:00.000Z',
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'Awaiting Consideration',
       judgeUserId: '208a959f-9526-4db5-b262-e58c476a4604',
