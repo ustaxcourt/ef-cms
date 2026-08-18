@@ -75,3 +75,7 @@ variable "payment_portal_arn" {
 variable "payment_portal_host" {
   type    = string
 }
+
+variable "managed_login_domain" {
+  type    = string
+}

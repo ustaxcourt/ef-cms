@@ -162,6 +162,19 @@ export const Login = connect(
                         Create your account now.
                       </Button>
                     </div>
+                    <div className="tw:flex tw:w-full">
+                      <Button
+                        aria-label="Sign in with Microsoft"
+                        variant="primaryTertiary"
+                        data-testid="microsoft-login-button"
+                        className="tw:mr-auto tw:w-auto"
+                        onClick={() => {
+                          window.location.href = `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize?identity_provider=${process.env.IDP_NAME}&redirect_uri=${process.env.EFCMS_DOMAIN}/auth-code&response_type=CODE&client_id=${process.env.COGNITO_CLIENT_ID}&scope=email%20openid`;
+                        }}
+                      >
+                        Sign in with Microsoft
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -127,6 +127,7 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_payment_portal_arn=$PAYMENT_PORTAL_ARN
 export TF_VAR_payment_portal_host=$PAYMENT_PORTAL_HOST
+export TF_VAR_managed_login_domain=$MANAGED_LOGIN_DOMAIN
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
