@@ -210,7 +210,7 @@ resource "aws_cognito_user_pool_client" "client" {
 
 resource "aws_cognito_user_pool_domain" "domain" {
   count                 = var.oidc_issuer_url != "" ? 1 : 0
-  domain                = "us-east-1n7l0balnj" # don't hardcode
+  domain                = "ef-cms-${var.environment}"
   user_pool_id          = aws_cognito_user_pool.pool.id
   managed_login_version = 2
 }
