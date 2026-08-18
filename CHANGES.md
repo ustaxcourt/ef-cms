@@ -11,6 +11,24 @@ This script will prompt for an environment to pull the image from; choose `exp7`
 ```bash
 npm run ecr:check-version
 ```
+
+#### Set the value of the `ES_ENGINE_VERSION` secret in the [env]_deploy secrets in Secrets Manager to `OpenSearch_3.7`
+
+```bash
+scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+#### PROD & TEST ONLY! Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager to `OpenSearch_3.7`
+
+```bash
+ENV=account scripts/secrets/update-secret.ts --key "ES_LOGS_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+#### PROD & TEST ONLY! Run an `account-specific` terraform deployment
+
+```bash
+npm run deploy:account-specific
+```
 </details>
 <details><summary>Dependency Updates - Week of 2026-08-10</summary>
 
