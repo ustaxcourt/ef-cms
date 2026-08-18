@@ -8,7 +8,7 @@ resource "aws_cognito_user_pool" "pool" {
     email_message        = <<EMAILMESSAGE
     <div>
     <div>
-      Hello DAWSON user, 
+      Hello DAWSON user,
     </div>
     <div style="margin-top: 20px;">
     You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
@@ -44,7 +44,7 @@ resource "aws_cognito_user_pool" "pool" {
       email_message = <<EMAILMESSAGE
       <div>
         <div>
-          Hello DAWSON user, 
+          Hello DAWSON user,
         </div>
         <div style="margin-top: 20px;">
           Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
@@ -52,10 +52,10 @@ resource "aws_cognito_user_pool" "pool" {
         <div style="margin-top: 20px;">
           Please verify that your contact information is correct in the system, and make any required changes.
         </div>
-        <div style="margin-top: 20px;"> 
+        <div style="margin-top: 20px;">
           <span style="font-weight: bold;">Your username: </span>{username}
         </div>
-        <div> 
+        <div>
           <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
         </div>
         <div style="margin-top: 20px;">
@@ -165,7 +165,7 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  allowed_oauth_flows_user_pool_client = false
+  allowed_oauth_flows_user_pool_client = var.oidc_issuer_url != "" ? true : false
 
   token_validity_units {
     access_token  = "hours"
@@ -180,7 +180,7 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # WARNING: Do NOT add custom:userId or custom:role to this list. Adding those
-  # attributes to this list will allow anyone with a valid access/id token to 
+  # attributes to this list will allow anyone with a valid access/id token to
   # update their role or userId directly in Cognito.
   write_attributes = [
     "address",
@@ -201,6 +201,44 @@ resource "aws_cognito_user_pool_client" "client" {
     "website",
     "zoneinfo",
   ]
+
+  callback_urls                = var.oidc_issuer_url != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
+  allowed_oauth_flows          = var.oidc_issuer_url != "" ? ["code"] : null
+  allowed_oauth_scopes         = var.oidc_issuer_url != "" ? ["openid", "email", "profile"] : null
+  supported_identity_providers = var.oidc_issuer_url != "" ? ["cognitoFakeUserPool"] : null # rename
+}
+
+resource "aws_cognito_user_pool_domain" "domain" {
+  count                 = var.oidc_issuer_url != "" ? 1 : 0
+  domain                = "us-east-1n7l0balnj" # don't hardcode
+  user_pool_id          = aws_cognito_user_pool.pool.id
+  managed_login_version = 2
+}
+
+resource "aws_cognito_managed_login_branding" "login_branding" {
+  count                       = var.oidc_issuer_url != "" ? 1 : 0
+  client_id                   = aws_cognito_user_pool_client.client.id
+  user_pool_id                = aws_cognito_user_pool.pool.id
+  use_cognito_provided_values = true
+}
+
+resource "aws_cognito_identity_provider" "idp" {
+  count         = var.oidc_issuer_url != "" ? 1 : 0
+  user_pool_id  = aws_cognito_user_pool.pool.id
+  provider_name = "cognitoFakeUserPool" # change to a real name
+  provider_type = "OIDC"
+  provider_details = {
+    authorize_scopes          = "openid"
+    client_id                 = var.oidc_client_id
+    client_secret             = var.oidc_client_secret
+    oidc_issuer               = var.oidc_issuer_url
+    attributes_request_method = "GET"
+  }
+  attribute_mapping = {
+    name     = "name"
+    email    = "email"
+    username = "sub"
+  }
 }
 
 resource "aws_cognito_user_pool" "irs_pool" {
@@ -230,7 +268,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
       email_message = <<EMAILMESSAGE
       <div>
         <div>
-          Hello DAWSON user, 
+          Hello DAWSON user,
         </div>
         <div style="margin-top: 20px;">
           Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
@@ -238,10 +276,10 @@ resource "aws_cognito_user_pool" "irs_pool" {
         <div style="margin-top: 20px;">
           Please verify that your contact information is correct in the system, and make any required changes.
         </div>
-        <div style="margin-top: 20px;"> 
+        <div style="margin-top: 20px;">
           <span style="font-weight: bold;">Your username: </span>{username}
         </div>
-        <div> 
+        <div>
           <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
         </div>
         <div style="margin-top: 20px;">
@@ -272,7 +310,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
           <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
         </div>
       </div>
-    EMAILMESSAGE      
+    EMAILMESSAGE
     }
   }
 
@@ -387,4 +425,20 @@ resource "aws_cognito_user_pool_client" "irs_client" {
 resource "aws_cognito_user_pool_domain" "irs" {
   domain       = "auth-irs-${var.environment}-${var.cognito_suffix}"
   user_pool_id = aws_cognito_user_pool.irs_pool.id
+}
+
+# fake pool to mimic microsoft
+resource "aws_cognito_user_pool" "fake_pool" {
+  name = "fake_user_pool"
+}
+
+resource "aws_cognito_user_pool_client" "fake_pool_client" {
+  name = "FakeUserPool"
+
+  user_pool_id                 = aws_cognito_user_pool.fake_pool.id
+  explicit_auth_flows          = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+  callback_urls                = ["https://app.exp4.ef-cms.ustaxcourt.gov/login"]
+  allowed_oauth_flows          = ["code"]
+  allowed_oauth_scopes         = ["openid", "email", "phone", "profile"]
+  supported_identity_providers = ["COGNITO"]
 }

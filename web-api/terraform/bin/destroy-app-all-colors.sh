@@ -36,6 +36,13 @@ echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
+echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
+echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
+if [[ -z "$VAR" ]]; then
+  echo "  - OIDC_CLIENT_SECRET=***"
+else
+  echo "  - OIDC_CLIENT_SECRET="
+fi
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -108,6 +115,9 @@ export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
 export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
 export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
+export TF_VAR_oidc_issuer_url=$OIDC_ISSUER_URL
+export TF_VAR_oidc_client_id=$OIDC_CLIENT_ID
+export TF_VAR_oidc_client_secret=$OIDC_CLIENT_SECRET
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then

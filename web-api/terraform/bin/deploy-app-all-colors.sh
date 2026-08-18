@@ -40,6 +40,13 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
+echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
+echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
+if [[ -z "$VAR" ]]; then
+  echo "  - OIDC_CLIENT_SECRET=***"
+else
+  echo "  - OIDC_CLIENT_SECRET="
+fi
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -114,6 +121,9 @@ export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
+export TF_VAR_oidc_issuer_url=$OIDC_ISSUER_URL
+export TF_VAR_oidc_client_id=$OIDC_CLIENT_ID
+export TF_VAR_oidc_client_secret=$OIDC_CLIENT_SECRET
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
@@ -136,9 +146,9 @@ terraform init -upgrade -backend=true \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
 
-if [ -z "${OUTPUT_ONLY}" ]; then 
+if [ -z "${OUTPUT_ONLY}" ]; then
   terraform plan -out execution-plan
   terraform apply -auto-approve execution-plan
-else 
+else
   terraform output -json > output.json
 fi
