@@ -44,11 +44,14 @@ if [[ "$MY_ORG" != "$COURT_ORG" ]]; then
   INTERMEDIARY="${MY_ORG}:${INTERMEDIARY}"
   git branch -D "$TARGET_TS"
 fi
+
+set +e
+
 compare_url="https://github.com/${COURT_ORG}/ef-cms/compare/${TARGET}...${INTERMEDIARY}"
 if command -v open >/dev/null 2>&1; then
-  open "$compare_url"
+  open "$compare_url" || echo "Open this URL in a browser: ${compare_url}"
 elif command -v xdg-open >/dev/null 2>&1; then
-  xdg-open "$compare_url"
+  xdg-open "$compare_url" || echo "Open this URL in a browser: ${compare_url}"
 else
   echo "Open this URL in a browser: ${compare_url}"
 fi

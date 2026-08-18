@@ -28,7 +28,7 @@ for param in "$@"; do
   { [[ "$param" =~ ^--file= ]] || [[ "$param" =~ ^-f= ]]; } && SQL_FILE="${param#*=}"
 done
 
-[[ -n "$SQL_FILE" ]] && [[ ! -e "$SQL_FILE" ]] && echo "Invalid file path: ${SQL_FILE}" && exit 1
+[[ -n "$SQL_FILE" ]] && [[ ! -f "$SQL_FILE" ]] && echo "Invalid file path: ${SQL_FILE}" && exit 1
 ./check-env-variables.sh "${CHECK_ENV_PARAMS[@]}"
 
 [[ -n "$DB_TOKEN" ]] && unset "DB_TOKEN"

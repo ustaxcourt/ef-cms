@@ -75,7 +75,7 @@ export ENV="$ENV"
 
 cp .env .env.sh
 sed -i.bak 's/^/export /g' .env.sh
-rm .env.sh.bak
+rm -f .env.sh.bak
 cat .env.sh >> "${BASH_ENV}"
 
 REGION=us-east-1
