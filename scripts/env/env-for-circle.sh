@@ -74,7 +74,8 @@ export ENV="$ENV"
 ./scripts/load-environment-from-secrets.sh
 
 cp .env .env.sh
-sed -i 's/^/export /g' .env.sh
+sed -i.bak 's/^/export /g' .env.sh
+rm .env.sh.bak
 cat .env.sh >> "${BASH_ENV}"
 
 REGION=us-east-1
