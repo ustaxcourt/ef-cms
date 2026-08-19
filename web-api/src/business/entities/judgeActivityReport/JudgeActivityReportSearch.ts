@@ -1,6 +1,6 @@
-import joiDate from '@joi/date';
+import { JoiDate } from '@joi/date';
 import joiImported, { Root } from 'joi';
-const joi: Root = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(JoiDate);
 import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   FORMATS,

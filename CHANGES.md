@@ -1,3 +1,17 @@
+<details><summary>Dependency Updates - Week of 2026-08-10</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.92`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Payment Portal Integration</summary>
 
 ## Manual Deployment Steps

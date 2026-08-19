@@ -9,10 +9,10 @@ import {
   MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS,
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
-import joiDate from '@joi/date';
+import { JoiDate } from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(JoiDate);
 
 export class StatusReportOrderForm extends JoiValidationEntity {
   public issueOrder?: string;
