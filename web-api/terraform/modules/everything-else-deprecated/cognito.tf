@@ -426,19 +426,3 @@ resource "aws_cognito_user_pool_domain" "irs" {
   domain       = "auth-irs-${var.environment}-${var.cognito_suffix}"
   user_pool_id = aws_cognito_user_pool.irs_pool.id
 }
-
-# fake pool to mimic microsoft
-resource "aws_cognito_user_pool" "fake_pool" {
-  name = "fake_user_pool"
-}
-
-resource "aws_cognito_user_pool_client" "fake_pool_client" {
-  name = "FakeUserPool"
-
-  user_pool_id                 = aws_cognito_user_pool.fake_pool.id
-  explicit_auth_flows          = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
-  callback_urls                = ["https://app.exp4.ef-cms.ustaxcourt.gov/login"]
-  allowed_oauth_flows          = ["code"]
-  allowed_oauth_scopes         = ["openid", "email", "phone", "profile"]
-  supported_identity_providers = ["COGNITO"]
-}
