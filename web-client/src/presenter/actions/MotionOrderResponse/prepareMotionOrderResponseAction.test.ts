@@ -282,6 +282,67 @@ describe('prepareMotionOrderResponseAction', () => {
     );
   });
 
+  it('should address the parties on both sides when the motion was filed jointly', async () => {
+    const jointDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Resp. & Petr. Test Petitioner',
+      filers: ['petitioner-1'],
+      partyIrsPractitioner: true,
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [jointDocketEntry],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Test Petitioner' }],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'the parties filed a Motion to Dismiss',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties shall file a Response',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties may file a Reply',
+    );
+  });
+
+  it('should name a non-party movant and leave the response to the parties', async () => {
+    const otherPartyDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'A Friend',
+      filers: [],
+      otherFilingParty: 'A Friend',
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [otherPartyDocketEntry],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Test Petitioner' }],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'A Friend filed a Motion to Dismiss',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties shall file a Response',
+    );
+    expect(result.state.form.richText).toContain('A Friend may file a Reply');
+    expect(result.state.form.richText).not.toContain('respondent');
+  });
+
   it('should handle consolidated cases', async () => {
     const result = await runAction(prepareMotionOrderResponseAction, {
       state: {

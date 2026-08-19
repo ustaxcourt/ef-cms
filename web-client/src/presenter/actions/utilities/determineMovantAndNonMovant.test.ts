@@ -34,4 +34,94 @@ describe('determineMovantAndNonMovant', () => {
     });
     expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
   });
+
+  it('returns "the parties" when the motion was filed jointly by a petitioner and respondent', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: {
+        filedBy: 'Resp. & Petr. Jane Doe',
+        filers: ['petitioner-1'],
+        partyIrsPractitioner: true,
+      },
+    });
+    expect(result).toEqual({
+      movant: 'the parties',
+      nonMovant: 'the parties',
+    });
+  });
+
+  it('names the other filing party as movant when a non-party filed the motion', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: {
+        filedBy: 'A Friend',
+        filers: [],
+        otherFilingParty: 'A Friend',
+      },
+    });
+    expect(result).toEqual({ movant: 'A Friend', nonMovant: 'the parties' });
+  });
+
+  it('trims surrounding whitespace from the other filing party name', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: { petitioners: [{ name: 'Jane Doe' }] },
+      motion: { otherFilingParty: '  A Friend  ' },
+    });
+    expect(result.movant).toEqual('A Friend');
+  });
+
+  it('prefers petitioner over the other filing party when both filed', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: {
+        filedBy: 'Petr. Jane Doe, A Friend',
+        filers: ['petitioner-1'],
+        otherFilingParty: 'A Friend',
+      },
+    });
+    expect(result).toEqual({ movant: 'petitioner', nonMovant: 'respondent' });
+  });
+
+  it('prefers respondent over the other filing party when both filed', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: { petitioners: [{ name: 'Jane Doe' }] },
+      motion: {
+        filedBy: 'Resp., A Friend',
+        filers: [],
+        otherFilingParty: 'A Friend',
+        partyIrsPractitioner: true,
+      },
+    });
+    expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
+  });
+
+  it('identifies a petitioner from filers when filedBy does not name them', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: { filers: ['petitioner-1'] },
+    });
+    expect(result).toEqual({ movant: 'petitioner', nonMovant: 'respondent' });
+  });
+
+  it('does not treat the motion as jointly filed when only respondent is checked', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: {
+        filedBy: 'Resp.',
+        filers: [],
+        partyIrsPractitioner: true,
+      },
+    });
+    expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
+  });
 });
