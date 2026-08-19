@@ -32,6 +32,20 @@ describe('PublicCaseResponse', () => {
   const mock_publicCase = new PublicCase(mock_rawPublicCase, {
     authorizedUser: mockIrsPractitionerUser,
   });
+
+  const getValidUnsealedRawPublicCase = () => ({
+    ...mock_publicCase.toRawObject(),
+    docketEntries: [],
+    isSealed: false,
+    partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        contactId: mockContactId,
+        contactType: CONTACT_TYPES.primary,
+      },
+    ],
+  });
+
   it('should create a PublicCaseResponse without options', () => {
     const publicCaseDTO = new PublicCaseResponse(mock_publicCase.toRawObject());
     expect(publicCaseDTO).toMatchObject({
@@ -50,5 +64,50 @@ describe('PublicCaseResponse', () => {
       ...mock_publicCase.toRawObject(),
       entityName: 'PublicCaseResponse',
     });
+  });
+
+  it('should require partyType and petitioners for unsealed cases', () => {
+    const rawPublicCase = {
+      ...getValidUnsealedRawPublicCase(),
+      partyType: undefined,
+      petitioners: undefined,
+    };
+
+    const publicCaseDTO = new PublicCaseResponse(rawPublicCase as any);
+
+    expect(publicCaseDTO.isValid()).toBe(false);
+    expect(publicCaseDTO.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        partyType: expect.any(String),
+        petitioners: expect.any(String),
+      }),
+    );
+  });
+
+  it('should reject public fields and docket entries for sealed cases', () => {
+    const publicCaseDTO = new PublicCaseResponse({
+      ...getValidUnsealedRawPublicCase(),
+      caseCaption: 'Sealed Case Caption',
+      docketEntries: mock_publicCase.toRawObject().docketEntries,
+      isSealed: true,
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+        },
+      ],
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    });
+
+    expect(publicCaseDTO.isValid()).toBe(false);
+    expect(publicCaseDTO.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        caseCaption: expect.any(String),
+        partyType: expect.any(String),
+        petitioners: expect.any(String),
+        receivedAt: expect.any(String),
+      }),
+    );
   });
 });

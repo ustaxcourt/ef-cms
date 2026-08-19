@@ -1,11 +1,13 @@
-import { RawPublicContact } from '@shared/business/entities/cases/PublicContact';
+import {
+  PublicContact,
+  RawPublicContact,
+} from '@shared/business/entities/cases/PublicContact';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ConsolidatedCaseSummary } from './ConsolidatedCaseSummary';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import {
-  CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
   CASE_IS_SEALED_RULE,
@@ -18,6 +20,7 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import joi from 'joi';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 
 export class PublicCaseResponse extends JoiValidationEntity {
   public canAllowDocumentService?: boolean;
@@ -76,10 +79,22 @@ export class PublicCaseResponse extends JoiValidationEntity {
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
     canDojPractitionersRepresentParty: joi.boolean().optional(),
-    caseCaption: CASE_CAPTION_RULE,
+    caseCaption: joi.when('isSealed', {
+      is: true,
+      otherwise: JoiValidationConstants.CASE_CAPTION.optional(),
+      then: joi.any().forbidden(),
+    }),
     consolidatedCases: joi.array().optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketEntries: joi.array().required(),
+    docketEntries: joi.when('isSealed', {
+      is: true,
+      otherwise: joi
+        .array()
+        .items(PublicDocketEntry.VALIDATION_RULES)
+        .required()
+        .description('List of DocketEntry Entities for the case.'),
+      then: joi.array().max(0),
+    }),
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberSuffix: JoiValidationConstants.STRING.valid(
       ...Object.values(DOCKET_NUMBER_SUFFIXES),
@@ -92,12 +107,26 @@ export class PublicCaseResponse extends JoiValidationEntity {
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
-    partyType: JoiValidationConstants.STRING.valid(
-      ...Object.values(PARTY_TYPES),
-    ).optional(),
-    petitioners: joi.array().optional(),
+    partyType: joi.when('isSealed', {
+      is: true,
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...Object.values(PARTY_TYPES),
+      )
+        .required()
+        .description('Party type of the case petitioner.'),
+      then: joi.any().forbidden(),
+    }),
+    petitioners: joi.when('isSealed', {
+      is: true,
+      otherwise: joi.array().items(PublicContact.VALIDATION_RULES).required(),
+      then: joi.any().forbidden(),
+    }),
     privatePractitioners: joi.array().optional(),
-    receivedAt: JoiValidationConstants.ISO_DATE.required(),
+    receivedAt: joi.when('isSealed', {
+      is: true,
+      otherwise: JoiValidationConstants.ISO_DATE.optional(),
+      then: joi.any().forbidden(),
+    }),
   };
 
   getValidationRules() {
