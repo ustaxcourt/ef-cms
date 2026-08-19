@@ -100,7 +100,7 @@ describe('prepareGrantDenyMotionAction', () => {
     });
   });
 
-  it('uses petitioner possessive when multiple petitioners filed the motion', async () => {
+  it('uses the plural petitioner possessive when multiple petitioners filed the motion', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
@@ -114,11 +114,11 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      "ORDERED that petitioner's Motion to Compel is granted.",
+      "ORDERED that petitioners' Motion to Compel is granted.",
     );
   });
 
-  it('uses petitioner possessive for a motion to consolidate on a consolidated lead case', async () => {
+  it('uses the plural petitioner possessive for a motion to consolidate on a consolidated lead case', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
       state: {
@@ -149,9 +149,117 @@ describe('prepareGrantDenyMotionAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      "ORDERED that petitioner's Motion to Consolidate Docket Numbers 124-26, 125-26 is granted.",
+      "ORDERED that petitioners' Motion to Consolidate Docket Numbers 124-26, 125-26 is granted.",
     );
-    expect(result.state.form.richText).not.toContain("petitioners'");
+    expect(result.state.form.richText).not.toContain("petitioner's");
+  });
+
+  it('uses "the parties" possessive when the motion was filed jointly by petitioner and respondent', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...motion,
+              documentTitle: 'Joint Motion for Continuance',
+              filedBy: 'Resp. & Petr. Jane Doe',
+              filers: ['petitioner-1'],
+              partyIrsPractitioner: true,
+            },
+          ],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+        },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      expectedPreamble({
+        motionTitle: 'Joint Motion for Continuance',
+        movant: 'the parties',
+      }),
+    );
+    expect(result.state.form.richText).toContain(
+      "ORDERED that the parties' Joint Motion for Continuance is granted.",
+    );
+  });
+
+  it('names the other filing party in the preamble and possessive when a non-party filed', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...motion,
+              filedBy: 'A Friend',
+              filers: [],
+              otherFilingParty: 'A Friend',
+            },
+          ],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+        },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      expectedPreamble({ movant: 'A Friend' }),
+    );
+    expect(result.state.form.richText).toContain(
+      "ORDERED that A Friend's Motion to Compel is granted.",
+    );
+    expect(result.state.form.richText).not.toContain('respondent');
+  });
+
+  describe("the acceptance criteria's amicus example", () => {
+    const amicusName = 'Chamber of Commerce of the United States of America';
+    const amicusMotion = {
+      ...motion,
+      documentTitle: 'Motion for Leave to File Amicus Brief',
+      eventCode: 'M115',
+      filedBy: amicusName,
+      filers: [],
+      otherFilingParty: amicusName,
+    };
+
+    const runWithDisposition = (disposition: string) =>
+      runAction(prepareGrantDenyMotionAction, {
+        modules: { presenter },
+        state: {
+          ...baseState,
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [amicusMotion],
+            petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+          },
+          form: { disposition },
+        },
+      });
+
+    it.each([
+      [MOTION_DISPOSITIONS.GRANTED, 'granted'],
+      [MOTION_DISPOSITIONS.DENIED, 'denied'],
+    ])('reads as the criteria specify when %s', async (disposition, verb) => {
+      const result = await runWithDisposition(disposition);
+
+      expect(result.state.form.richText).toContain(
+        expectedPreamble({
+          motionTitle: 'Motion for Leave to File Amicus Brief',
+          movant: amicusName,
+        }),
+      );
+      expect(result.state.form.richText).toContain(
+        `ORDERED that ${amicusName}'s Motion for Leave to File Amicus Brief is ${verb}.`,
+      );
+      expect(result.state.form.richText).not.toContain('respondent');
+      expect(result.state.form.richText).not.toContain('petitioner');
+    });
   });
 
   it('uses respondent possessive when respondent filed the motion', async () => {
