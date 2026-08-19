@@ -169,7 +169,7 @@ export const Login = connect(
                         data-testid="microsoft-login-button"
                         className="tw:mr-auto tw:w-auto"
                         onClick={() => {
-                          window.location.href = `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize?identity_provider=${process.env.IDP_NAME}&redirect_uri=${process.env.EFCMS_DOMAIN}/auth-code&response_type=CODE&client_id=${process.env.COGNITO_CLIENT_ID}&scope=email%20openid`;
+                          window.location.href = `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize?identity_provider=${process.env.IDP_NAME}&redirect_uri=https://app.${process.env.EFCMS_DOMAIN}/auth-code&response_type=CODE&client_id=${process.env.COGNITO_CLIENT_ID}&scope=email%20openid`;
                         }}
                       >
                         Sign in with Microsoft

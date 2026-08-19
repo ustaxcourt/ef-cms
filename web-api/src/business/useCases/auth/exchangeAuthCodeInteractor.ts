@@ -10,7 +10,10 @@ export const exchangeAuthCodeInteractor = async (
     params.append('grant_type', 'authorization_code');
     params.append('client_id', process.env.COGNITO_CLIENT_ID || '');
     params.append('code', authCode);
-    params.append('redirect_uri', `${process.env.EFCMS_DOMAIN}/auth-code`);
+    params.append(
+      'redirect_uri',
+      `https://app.${process.env.EFCMS_DOMAIN}/auth-code`,
+    );
 
     const response = await applicationContext
       .getHttpClient()
