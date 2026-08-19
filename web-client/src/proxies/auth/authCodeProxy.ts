@@ -4,7 +4,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 export const authCodeInteractor = (
   applicationContext: ClientApplicationContext,
   authCode: string,
-): Promise<any> => {
+): Promise<{ accessToken: string; idToken: string; refreshToken: string }> => {
   return post({
     applicationContext,
     body: {
