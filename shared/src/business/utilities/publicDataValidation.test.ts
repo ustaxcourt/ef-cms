@@ -3,6 +3,7 @@ import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagR
 import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
 import { PublicUser } from '@shared/business/entities/PublicUser';
+import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
 
 const MOCK_UUID = 'c7d90c05-f6cd-442c-a168-202db587f16f';
 
@@ -14,6 +15,7 @@ const mockPublicCaseFields = {
   hasIrsPractitioner: false,
   isSealed: false,
   receivedAt: '2020-01-05T03:30:45.007Z',
+  partyType: PARTY_TYPES.petitioner,
 };
 
 describe('publicDataValidation', () => {
