@@ -221,6 +221,7 @@ export default tseslint.config(
       'custom-rules-plugin': customRulesPlugin,
     },
     rules: {
+      'custom-rules-plugin/joi-iso-date-utc': 'error',
       'custom-rules-plugin/no-dates': 'error',
     },
   },

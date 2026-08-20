@@ -63,6 +63,17 @@ describe('JoiValidationConstants', () => {
       expect(results.error).toBeUndefined();
     });
 
+    it('validates an ISO string generated now against max("now")', () => {
+      const isoTimestamp = createISODateString();
+      const results = schema.max('now').validate(isoTimestamp);
+      expect(results.error).toBeUndefined();
+    });
+
+    it('validates a past ISO string against max("now")', () => {
+      const results = schema.max('now').validate('2020-01-02T05:00:00.000Z');
+      expect(results.error).toBeUndefined();
+    });
+
     describe('identifies as invalid a list of date formats which conform to ISO-8601 but are not valid for our application', () => {
       const iso8601Invalid = [
         // '2020-05-03', // TODO: this will soon become invalid also.

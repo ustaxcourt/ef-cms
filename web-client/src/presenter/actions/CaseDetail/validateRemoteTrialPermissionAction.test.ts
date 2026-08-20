@@ -185,6 +185,22 @@ describe('validateRemoteTrialPermissionAction', () => {
     expect(pathSuccessStub).toHaveBeenCalled();
   });
 
+  it('should return the success path when remoteTrialGrantedDate uses a UTC Z suffix', async () => {
+    await runAction(validateRemoteTrialPermissionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        modal: {
+          remoteTrialGrantedDate: '2024-01-14T05:00:00.000Z',
+        },
+      },
+    });
+
+    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathErrorStub).not.toHaveBeenCalled();
+  });
+
   it('should return the error path when remoteTrialGrantedDate is in the future', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {

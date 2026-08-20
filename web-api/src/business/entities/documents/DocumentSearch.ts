@@ -1,5 +1,8 @@
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
-import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import {
+  ISO_DATE_FORMAT_STRING,
+  JoiValidationConstants,
+} from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import {
   calculateISODate,
@@ -61,12 +64,13 @@ export class DocumentSearch extends JoiValidationEntity {
 
   static DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
+  // Chain from JoiValidationConstants.ISO_DATE so the ISO Z format keeps utc parsing.
   static JOI_VALID_DATE_SEARCH_FORMATS = [
     'YYYY/MM/DD',
     'YYYY/MM/D',
     'YYYY/M/DD',
     'YYYY/M/D',
-    'YYYY-MM-DDTHH:mm:ss.SSSZ',
+    ISO_DATE_FORMAT_STRING,
   ] as const;
 
   static VALIDATION_RULES = joi

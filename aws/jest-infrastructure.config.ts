@@ -4,7 +4,7 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
-const transformIgnoreModules = ['kysely', 'uuid'];
+const transformIgnoreModules = ['@joi/date', 'kysely', 'uuid'];
 
 const config: Config = {
   displayName: 'infrastructure',
@@ -23,7 +23,7 @@ const config: Config = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/lambdas/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
     `/node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
