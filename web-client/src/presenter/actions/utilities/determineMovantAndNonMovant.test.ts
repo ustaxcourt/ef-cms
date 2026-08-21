@@ -101,6 +101,55 @@ describe('determineMovantAndNonMovant', () => {
     expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
   });
 
+  it('prefers multiple petitioners over the other filing party when both filed', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [
+          { contactId: 'petitioner-1', name: 'Jane Doe' },
+          { contactId: 'petitioner-2', name: 'John Doe' },
+        ],
+      },
+      motion: {
+        filedBy: 'Petrs. Jane Doe & John Doe, A Friend',
+        filers: ['petitioner-1', 'petitioner-2'],
+        otherFilingParty: 'A Friend',
+      },
+    });
+    expect(result).toEqual({ movant: 'petitioners', nonMovant: 'respondent' });
+  });
+
+  it('prefers "the parties" over the other filing party when a petitioner and respondent both filed', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [{ contactId: 'petitioner-1', name: 'Jane Doe' }],
+      },
+      motion: {
+        filedBy: 'Resp. & Petr. Jane Doe, A Friend',
+        filers: ['petitioner-1'],
+        otherFilingParty: 'A Friend',
+        partyIrsPractitioner: true,
+      },
+    });
+    expect(result).toEqual({ movant: 'the parties', nonMovant: 'the parties' });
+  });
+
+  it('prefers "the parties" over the other filing party when multiple petitioners and respondent both filed', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [
+          { contactId: 'petitioner-1', name: 'Jane Doe' },
+          { contactId: 'petitioner-2', name: 'John Doe' },
+        ],
+      },
+      motion: {
+        filers: ['petitioner-1', 'petitioner-2'],
+        otherFilingParty: 'A Friend',
+        partyIrsPractitioner: true,
+      },
+    });
+    expect(result).toEqual({ movant: 'the parties', nonMovant: 'the parties' });
+  });
+
   it('identifies a petitioner from filers when filedBy does not name them', () => {
     const result = determineMovantAndNonMovant({
       caseDetail: {
