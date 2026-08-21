@@ -177,6 +177,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
+  ALLOW_IDP_LOGIN: {
+    key: 'allow-idp-login',
+  },
 };
 
 type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
@@ -1421,8 +1424,7 @@ export const ALL_STATE_OPTIONS = {
 };
 
 export type AbbreviatedStates =
-  | keyof typeof US_STATES
-  | keyof typeof US_STATES_OTHER;
+  keyof typeof US_STATES | keyof typeof US_STATES_OTHER;
 
 export const NOT_AVAILABLE_OPTION = 'N/A';
 export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
@@ -1982,8 +1984,7 @@ export type FileUploadProgressType = {
 };
 
 export type FileUploadProgressValueType =
-  | FileUploadProgressType
-  | FileUploadProgressType[];
+  FileUploadProgressType | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -2106,8 +2107,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   other: 'Other',
 } as const;
 export type StatusReportOrderedForOption =
-  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
-  | '';
+  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS | '';
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',

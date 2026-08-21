@@ -24,6 +24,7 @@ export const Login = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
     dismissAlertSequence: sequences.dismissAlertSequence,
+    loginHelper: state.loginHelper,
   },
   ({
     alertInfo,
@@ -36,6 +37,7 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
+    loginHelper,
   }) => {
     return (
       <>
@@ -162,19 +164,21 @@ export const Login = connect(
                         Create your account now.
                       </Button>
                     </div>
-                    <div className="tw:flex tw:w-full">
-                      <Button
-                        aria-label="Sign in with Microsoft"
-                        variant="primaryTertiary"
-                        data-testid="microsoft-login-button"
-                        className="tw:mr-auto tw:w-auto"
-                        onClick={() => {
-                          window.location.href = `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize?identity_provider=${process.env.IDP_NAME}&redirect_uri=https://app.${process.env.EFCMS_DOMAIN}/auth-code&response_type=CODE&client_id=${process.env.COGNITO_CLIENT_ID}`;
-                        }}
-                      >
-                        Sign in with Microsoft
-                      </Button>
-                    </div>
+                    {loginHelper.showIdpLoginButton && (
+                      <div className="tw:flex tw:w-full">
+                        <Button
+                          aria-label="Sign in with Microsoft"
+                          variant="primaryTertiary"
+                          data-testid="microsoft-login-button"
+                          className="tw:mr-auto tw:w-auto"
+                          onClick={() => {
+                            window.location.href = loginHelper.idpLoginUrl;
+                          }}
+                        >
+                          Sign in with Microsoft
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
