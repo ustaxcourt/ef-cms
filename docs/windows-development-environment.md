@@ -83,7 +83,7 @@ __Ready to begin? Let's go!__
    fi
    
    # set up JAVA
-   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+   export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
    
    # set circleci environment vars
    export CIRCLE_PROJECT_SLUG="github/ustaxcourt/ef-cms"
@@ -107,7 +107,6 @@ __Ready to begin? Let's go!__
 1. Install software (paste the following as a single command)
    ```bash
    sudo apt-get install \
-     2to3 \
      awscli \
      build-essential \
      chromium \
@@ -126,14 +125,12 @@ __Ready to begin? Let's go!__
      libjpeg-dev \
      libpango1.0-dev \
      librsvg2-dev \
-     openjdk-17-jdk \
-     openjdk-17-jdk-headless \
-     openjdk-17-jre \
-     openjdk-17-jre-headless \
+     openjdk-21-jdk \
+     openjdk-21-jdk-headless \
+     openjdk-21-jre \
+     openjdk-21-jre-headless \
      openssh-client \
      postgresql-client \
-     python-is-python3 \
-     python-dev-is-python3 \
      python3 \
      python3-dev \
      python3-pip \
