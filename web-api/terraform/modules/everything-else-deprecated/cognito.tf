@@ -159,7 +159,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   lambda_config {
-    pre_sign_up = "cognito_pre_signup_lambda_${var.environment}"
+    pre_sign_up = module.cognito_pre_signup_lambda.arn
   }
 }
 
@@ -249,7 +249,7 @@ module "cognito_pre_signup_lambda" {
   handler_file   = "./web-api/src/lambdas/cognitoPreSignup/cognitoPreSignupLambda.ts"
   handler_method = "cognitoPreSignupLambdaHandler"
   lambda_name    = "cognito_pre_signup_lambda_${var.environment}"
-  role           = aws_iam_role.dawson_dev.arn # create a new role
+  role           = aws_iam_role.pre_signup_lambda.arn
   environment    = {}
   timeout        = "29"
   memory_size    = "128"
@@ -264,7 +264,7 @@ resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
 }
 
 resource "aws_iam_role" "pre_signup_lambda" {
-  name = "authorizer_lambda_role_${var.environment}"
+  name = "pre_signup_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -288,7 +288,7 @@ EOF
 
 resource "aws_iam_role_policy" "presignup_policy" {
   name = "pre_signup_policy_${var.environment}"
-  role = aws_iam_role.authorizer_lambda.id
+  role = aws_iam_role.pre_signup_lambda.id
 
   policy = <<EOF
 {
@@ -304,16 +304,14 @@ resource "aws_iam_role_policy" "presignup_policy" {
       "Resource": "*"
     },
     {
-      {
-        "Effect": "Allow",
-        "Action": [
-          "cognito-idp:AdminGetUser",
-          "cognito-idp:AdminLinkProviderForUser",
-        ],
-        "Resource": [
-          "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/*"
-        ]
-      }
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:AdminGetUser",
+        "cognito-idp:AdminLinkProviderForUser"
+      ],
+      "Resource": [
+        "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/*"
+      ]
     }
   ]
 }
