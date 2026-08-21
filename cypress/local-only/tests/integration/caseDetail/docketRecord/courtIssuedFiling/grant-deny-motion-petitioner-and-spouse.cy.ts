@@ -25,15 +25,20 @@ describe('Judge grants a motion on an electronically filed case with a petitione
   const today = formatNow(FORMATS.MMDDYYYY);
   const motionType = 'Motion for Continuance';
   const expectedOrderDescription = `Order - ${motionType} is granted`;
+  const otherFilingPartyName = 'Chamber Of Commerce';
 
   const dismissPaperServiceNotice = (): void => {
     cy.get('[data-testid="print-paper-service-done-button"]').click();
   };
 
   const createMotionCase = ({
-    filedByRespondent,
+    filedByPetitioners = true,
+    filedByRespondent = false,
+    otherFilingParty,
   }: {
-    filedByRespondent: boolean;
+    filedByPetitioners?: boolean;
+    filedByRespondent?: boolean;
+    otherFilingParty?: string;
   }): Cypress.Chainable<MotionCaseFixture> => {
     const name = `Person One ${getCurrentDateTimeInMillis()}`;
     const spouseName = `Person One-Spouse ${getCurrentDateTimeInMillis()}`;
@@ -60,11 +65,19 @@ describe('Judge grants a motion on an electronically filed case with a petitione
           selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
         });
 
-        cy.get('[data-testid="filed-by-option"]').click({ multiple: true });
+        if (filedByPetitioners) {
+          cy.get('[data-testid="filed-by-option"]').click({ multiple: true });
+        }
 
         if (filedByRespondent) {
           cy.get('label[for="party-irs-practitioner"]').click();
           cy.get('#party-irs-practitioner').should('be.checked');
+        }
+
+        if (otherFilingParty) {
+          cy.get('label[for="has-other-filing-party"]').click();
+          cy.get('#has-other-filing-party').should('be.checked');
+          cy.get('#other-filing-party').type(otherFilingParty);
         }
 
         cy.get('[data-testid="objections-No"]').click();
@@ -137,6 +150,83 @@ describe('Judge grants a motion on an electronically filed case with a petitione
         expect(html).to.include(
           `ORDERED that petitioners' ${motionType} is granted.`,
         );
+      });
+
+      cy.contains('Apply Signature').should('exist');
+      cy.get('[data-testid="skip-signature-button"]').click();
+
+      cy.url().should('contain', `/case-detail/${docketNumber}`);
+      cy.get('[data-testid="tab-drafts"]').click();
+      cy.contains(expectedOrderDescription).should('be.visible');
+    });
+  });
+
+  it('should name the other filing party when granting a motion filed only by a non-party', () => {
+    createMotionCase({
+      filedByPetitioners: false,
+      otherFilingParty: otherFilingPartyName,
+    }).then(({ docketNumber }) => {
+      grantMotionAsJudge(docketNumber);
+
+      cy.wait('@courtIssuedOrder').then(({ request }) => {
+        const html: string = request.body.contentHtml;
+        expect(html).to.include(
+          `${otherFilingPartyName} filed a ${motionType}`,
+        );
+        expect(html).to.include(
+          `ORDERED that ${otherFilingPartyName}'s ${motionType} is granted.`,
+        );
+        expect(html).not.to.include(`ORDERED that petitioner's ${motionType}`);
+        expect(html).not.to.include(`ORDERED that respondent's ${motionType}`);
+      });
+
+      cy.contains('Apply Signature').should('exist');
+      cy.get('[data-testid="skip-signature-button"]').click();
+
+      cy.url().should('contain', `/case-detail/${docketNumber}`);
+      cy.get('[data-testid="tab-drafts"]').click();
+      cy.contains(expectedOrderDescription).should('be.visible');
+    });
+  });
+
+  it('should identify the filing party as petitioners when the petitioners filed alongside a non-party', () => {
+    createMotionCase({ otherFilingParty: otherFilingPartyName }).then(
+      ({ docketNumber }) => {
+        grantMotionAsJudge(docketNumber);
+
+        cy.wait('@courtIssuedOrder').then(({ request }) => {
+          const html: string = request.body.contentHtml;
+          expect(html).to.include(`petitioners filed a ${motionType}`);
+          expect(html).to.include(
+            `ORDERED that petitioners' ${motionType} is granted.`,
+          );
+          expect(html).not.to.include(otherFilingPartyName);
+        });
+
+        cy.contains('Apply Signature').should('exist');
+        cy.get('[data-testid="skip-signature-button"]').click();
+
+        cy.url().should('contain', `/case-detail/${docketNumber}`);
+        cy.get('[data-testid="tab-drafts"]').click();
+        cy.contains(expectedOrderDescription).should('be.visible');
+      },
+    );
+  });
+
+  it('should identify the filing party as the parties when the petitioners and respondent filed alongside a non-party', () => {
+    createMotionCase({
+      filedByRespondent: true,
+      otherFilingParty: otherFilingPartyName,
+    }).then(({ docketNumber }) => {
+      grantMotionAsJudge(docketNumber);
+
+      cy.wait('@courtIssuedOrder').then(({ request }) => {
+        const html: string = request.body.contentHtml;
+        expect(html).to.include(`the parties filed a ${motionType}`);
+        expect(html).to.include(
+          `ORDERED that the parties' ${motionType} is granted.`,
+        );
+        expect(html).not.to.include(otherFilingPartyName);
       });
 
       cy.contains('Apply Signature').should('exist');
