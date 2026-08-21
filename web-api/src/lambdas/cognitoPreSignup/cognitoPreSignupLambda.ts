@@ -5,12 +5,12 @@ export const cognitoPreSignupLambdaHandler = async event => {
 
   const { userPoolId, request } = event;
 
-  const user = await getCognito().adminGetUser({
-    UserPoolId: userPoolId,
-    Username: request.userAttributes.email,
-  });
+  try {
+    const user = await getCognito().adminGetUser({
+      UserPoolId: userPoolId,
+      Username: request.userAttributes.email,
+    });
 
-  if (user) {
     await getCognito().adminLinkProviderForUser({
       UserPoolId: userPoolId,
       SourceUser: {
@@ -23,6 +23,10 @@ export const cognitoPreSignupLambdaHandler = async event => {
         ProviderAttributeValue: user.Username,
       },
     });
+  } catch (error: any) {
+    if (error.name !== 'UserNotFoundException') {
+      throw error;
+    }
   }
 
   return event;
