@@ -53,6 +53,11 @@ describe('socketRouter', () => {
       sequence: 'serveToIrsErrorSequence',
     },
     {
+      args: { showModal: 'ServeCaseToIrsDuplicateErrorModal' },
+      message: { action: 'serve_to_irs_duplicate_error' },
+      sequence: 'serveToIrsDuplicateErrorSequence',
+    },
+    {
       message: { action: 'update_trial_session_complete' },
       sequence: 'updateTrialSessionCompleteSequence',
     },

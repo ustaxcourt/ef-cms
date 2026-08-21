@@ -65,7 +65,7 @@ describe('hasPractitionerDetailAction', () => {
       presenter.providers.path.setResultsInState.mock.calls;
     expect(setResultsInStateCalls.length).toEqual(1);
     expect(setResultsInStateCalls[0][0].searchResults).toEqual({
-      practitioners: { barNumber: 'PD1234' },
+      practitioners: [{ barNumber: 'PD1234' }],
       total: 1,
     });
   });

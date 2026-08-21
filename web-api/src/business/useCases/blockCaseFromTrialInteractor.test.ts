@@ -1,8 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -13,22 +10,19 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('blockCaseFromTrialInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    updateCaseAndAssociations.mockImplementation(
-      ({ caseToUpdate }) => caseToUpdate,
-    );
   });
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
-    const result = await blockCaseFromTrialInteractor(
+    await blockCaseFromTrialInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -37,10 +31,10 @@ describe('blockCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result).toMatchObject({
-      blocked: true,
-      blockedReason: 'just because',
-    });
+    expect(upsertCases).toHaveBeenCalled();
+    const casePassedToUpdate = upsertCases.mock.calls[0][0][0];
+    expect(casePassedToUpdate.blocked).toBe(true);
+    expect(casePassedToUpdate.blockedReason).toBe('just because');
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

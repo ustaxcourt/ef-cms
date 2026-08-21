@@ -82,6 +82,6 @@ export const getPublicDownloadPolicyUrlInteractor = async (
 
   return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key,
+    key: docketEntryEntity.documentStorageId,
   });
 };

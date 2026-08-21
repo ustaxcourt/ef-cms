@@ -33,7 +33,10 @@ type ServeDocumentCompleteNotification = {
     message: string;
     overwritable: boolean;
   };
-  generateCoversheet?: boolean;
+  // Set when the backend enqueued coversheet jobs for one or more entries.
+  // The frontend polls processing status until COMPLETE so the UI reflects
+  // the updated page count, but it never triggers generation itself.
+  pendingCoversheetDocketEntryIds?: string[];
   docketEntryId?: string;
   pdfUrl?: string;
 };
@@ -99,6 +102,11 @@ type ServeToIrsCompleteNotification = {
 
 type ServeToIrsErrorNotification = {
   action: 'serve_to_irs_error';
+};
+
+type ServeToIrsDuplicateErrorNotification = {
+  action: 'serve_to_irs_duplicate_error';
+  error?: string;
 };
 
 type BatchDownloadDocketGeneratedNotification = {
@@ -195,6 +203,7 @@ export type NotificationMessage =
   | AdminContactInitialUpdateCompleteNotification
   | ServeToIrsCompleteNotification
   | ServeToIrsErrorNotification
+  | ServeToIrsDuplicateErrorNotification
   | BatchDownloadDocketGeneratedNotification
   | NoticeGenerationUpdatedNotification
   | PaperServiceStartedNotification

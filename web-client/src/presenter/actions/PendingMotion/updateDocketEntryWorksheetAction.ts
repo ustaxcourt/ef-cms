@@ -1,10 +1,10 @@
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const updateDocketEntryWorksheetAction = async ({
   applicationContext,
   get,
-}: ActionProps): Promise<{ updatedWorksheet: RawCaseWorksheet }> => {
+}: ActionProps): Promise<{ updatedWorksheet: RawDocketEntryWorksheet }> => {
   const { docketEntryId, finalBriefDueDate, primaryIssue, statusOfMatter } =
     get(state.form);
 

@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from '../../entities/externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 
 /**
  * validateExternalDocumentInteractor

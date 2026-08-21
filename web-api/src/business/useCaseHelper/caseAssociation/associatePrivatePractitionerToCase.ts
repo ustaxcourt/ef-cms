@@ -20,7 +20,7 @@ export const associatePrivatePractitionerToCase = async ({
   serviceIndicator?: string;
   user: RawPractitioner;
   representing: string[];
-}): Promise<RawCase> => {
+}): Promise<void> => {
   const isAssociated = await verifyCaseForUser({
     docketNumber,
     userId: user.userId,
@@ -43,7 +43,7 @@ export const associatePrivatePractitionerToCase = async ({
         `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
       );
     }
-    return caseEntity.toRawObject();
+    return;
   }
 
   const { petitioners } = caseEntity;
@@ -66,6 +66,4 @@ export const associatePrivatePractitionerToCase = async ({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return caseEntity.toRawObject();
 };

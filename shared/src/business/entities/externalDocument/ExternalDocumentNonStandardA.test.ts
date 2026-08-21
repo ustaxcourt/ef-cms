@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardA', () => {
@@ -86,6 +86,16 @@ describe('ExternalDocumentNonStandardA', () => {
       expect(externalDocumentA.getDocumentTitle()).toEqual(
         'Brief in Support of',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentA = ExternalDocumentFactory({
+        category: 'Supporting Document',
+        documentType: 'Brief in Support',
+        scenario: 'Nonstandard A',
+      });
+
+      expect(externalDocumentA.getDocumentTitle()).toEqual('');
     });
   });
 });

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Usage
 #   smoketest to verify that the authorizer is working on the api

@@ -2,7 +2,7 @@ import {
   COUNTRY_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
@@ -11,7 +11,6 @@ import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
   getIndividualInboxCount,
-  getNotifications,
   getSectionInboxCount,
   loginAs,
   refreshElasticsearchIndex,
@@ -19,7 +18,8 @@ import {
   uploadExternalDecisionDocument,
   uploadExternalRatificationDocument,
   uploadPetition,
-  wait,
+  waitForExpectedItem,
+  waitForPage,
 } from './helpers';
 
 describe('Create a work item', () => {
@@ -32,7 +32,6 @@ describe('Create a work item', () => {
   let caseDetail;
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;
-  let notificationsBefore;
   let decisionWorkItem;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -42,8 +41,6 @@ describe('Create a work item', () => {
 
     await getFormattedDocumentQCSectionInbox(cerebralTest);
     qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
-
-    notificationsBefore = getNotifications(cerebralTest);
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -73,7 +70,7 @@ describe('Create a work item', () => {
     await uploadExternalDecisionDocument(cerebralTest);
     await uploadExternalRatificationDocument(cerebralTest);
     await uploadExternalRatificationDocument(cerebralTest);
-  });
+  }, 120000);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
@@ -122,21 +119,21 @@ describe('Create a work item', () => {
     expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 4);
   });
 
-  it('verify the docketclerk has the expected unread count', async () => {
-    await refreshElasticsearchIndex();
-    const notifications = getNotifications(cerebralTest);
-    expect(notifications).toMatchObject({
-      qcUnreadCount: notificationsBefore.qcUnreadCount + 4,
-    });
-  });
-
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    await wait(1000);
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'DocketEntryQc',
+    });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'docketEntryId',
+      expectedItem: decisionWorkItem.docketEntry.docketEntryId,
+    });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',

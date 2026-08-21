@@ -27,7 +27,7 @@ export const validateEditPetitionerCounselAction = ({
       practitioner,
     });
 
-  const oldPractitioner = oldPractitioners.find(
+  const oldPractitioner = oldPractitioners!.find(
     foundPractitioner => foundPractitioner.userId === practitioner.userId,
   );
 

@@ -1,6 +1,10 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
-import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from './EntityConstants';
 import { User } from './User';
 import joi from 'joi';
 
@@ -24,7 +28,8 @@ export class PrivatePractitioner extends User {
 
   static ENTITY_NAME = 'PrivatePractitioner';
 
-  static VALIDATION_RULES = joi.object().keys({
+  static VALIDATION_RULES = {
+    ...super.VALIDATION_RULES,
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
       .description(
@@ -55,7 +60,10 @@ export class PrivatePractitioner extends User {
     ).required(),
     token: JoiValidationConstants.STRING.optional(),
     userId: JoiValidationConstants.UUID.required(),
-  });
+    accountStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(ACCOUNT_STATUS),
+    ),
+  };
 
   getValidationRules() {
     return PrivatePractitioner.VALIDATION_RULES;

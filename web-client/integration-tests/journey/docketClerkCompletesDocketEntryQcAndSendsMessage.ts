@@ -1,7 +1,8 @@
-import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '@web-client/presenter/computeds/formattedWorkQueue';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
@@ -65,7 +66,7 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage =
         value: 'please sign this',
       });
 
-      cerebralTest.testMessageSubject = `your message, ma'am ${Date.now()}`;
+      cerebralTest.testMessageSubject = `your message, ma'am ${getCurrentDateTimeInMillis()}`;
 
       await cerebralTest.runSequence('updateModalFormValueSequence', {
         key: 'subject',

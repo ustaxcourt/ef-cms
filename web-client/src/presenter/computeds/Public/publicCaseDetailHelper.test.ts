@@ -3,7 +3,9 @@ import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  MOTION_DISPOSITIONS,
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -107,7 +109,7 @@ const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
     updatedAt: '2023-07-25T15:32:03.737Z',
     workItemId: 'e142cd9f-cd77-458d-abeb-960bfdfb559c',
   },
-});
+} as unknown as RawDocketEntry);
 
 describe('publicCaseDetailHelper', () => {
   let mockCase;
@@ -436,6 +438,38 @@ describe('publicCaseDetailHelper', () => {
             caseDetail.docketEntries.length,
           );
         });
+      });
+    });
+
+    describe('hasLargeDocketEntryCount', () => {
+      it('should be true when the number of docket entries is greater than DOCKET_RECORD_PAGINATION_THRESHOLD', () => {
+        state.caseDetail.docketEntries = Array.from(
+          { length: DOCKET_RECORD_PAGINATION_THRESHOLD + 1 },
+          (_, i) => ({
+            ...baseDocketEntry,
+            docketEntryId: `docket-entry-${i}`,
+            index: i + 1,
+          }),
+        );
+
+        const result = runCompute(publicCaseDetailHelper, { state });
+
+        expect(result.hasLargeDocketEntryCount).toBe(true);
+      });
+
+      it('should be false when the number of docket entries is not greater than DOCKET_RECORD_PAGINATION_THRESHOLD', () => {
+        state.caseDetail.docketEntries = Array.from(
+          { length: DOCKET_RECORD_PAGINATION_THRESHOLD },
+          (_, i) => ({
+            ...baseDocketEntry,
+            docketEntryId: `docket-entry-${i}`,
+            index: i + 1,
+          }),
+        );
+
+        const result = runCompute(publicCaseDetailHelper, { state });
+
+        expect(result.hasLargeDocketEntryCount).toBe(false);
       });
     });
 
@@ -1597,5 +1631,146 @@ describe('formatDocketEntryOnDocketRecord', () => {
         showServed: false,
       },
     ]);
+  });
+
+  describe('relatedDocketEntries', () => {
+    const mockMotionEntry = {
+      ...baseDocketEntry,
+      docketEntryId: 'motion-123',
+      eventCode: 'M115',
+      index: 5,
+      documentTitle: 'Motion for Leave to File',
+    };
+
+    const mockOrderEntry = {
+      ...baseDocketEntry,
+      docketEntryId: 'order-456',
+      eventCode: 'O',
+      index: 10,
+      documentTitle: 'Order',
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      servedAt: '2019-03-01T21:00:00.000Z',
+    };
+
+    describe('affectedByDocketEntries - dispositionLinkText from MOTION perspective', () => {
+      it('should format dispositionLinkText as "GRANTED BY #[index]" when disposition is GRANTED', () => {
+        const entryWithAffectedBy = {
+          ...mockOrderEntry,
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-123',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: entryWithAffectedBy,
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTED BY #5',
+        ]);
+      });
+
+      it('should format dispositionLinkText as array with both "GRANTED IN PART BY" and "DENIED IN PART BY" when disposition is GRANTED IN PART AND DENIED IN PART', () => {
+        const entryWithAffectedBy = {
+          ...mockOrderEntry,
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-123',
+              disposition:
+                MOTION_DISPOSITIONS.GRANTED_IN_PART_AND_DENIED_IN_PART,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: entryWithAffectedBy,
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTED IN PART BY #5',
+          'DENIED IN PART BY #5',
+        ]);
+      });
+    });
+
+    describe('affectedDocketEntries - dispositionLinkText from ORDER perspective', () => {
+      it('should format dispositionLinkText as "GRANTING #[index]" when disposition is GRANTED', () => {
+        const entryWithAffected = {
+          ...mockMotionEntry,
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'order-456',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: entryWithAffected,
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTING #10',
+        ]);
+      });
+
+      it('should format dispositionLinkText as array with both "GRANTING IN PART" and "DENYING IN PART" when disposition is GRANTED IN PART AND DENIED IN PART', () => {
+        const entryWithAffected = {
+          ...mockMotionEntry,
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'order-456',
+              disposition:
+                MOTION_DISPOSITIONS.GRANTED_IN_PART_AND_DENIED_IN_PART,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: entryWithAffected,
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTING IN PART #10',
+          'DENYING IN PART #10',
+        ]);
+      });
+    });
   });
 });

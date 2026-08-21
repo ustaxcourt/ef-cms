@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getNotificationsInteractor } from '@shared/business/useCases/getNotificationsInteractor';
+import { getNotificationsInteractor } from '@web-api/business/useCases/getNotificationsInteractor';
 
 /**
  * creates a new document and attaches it to a case. It also creates a work item on the docket section.

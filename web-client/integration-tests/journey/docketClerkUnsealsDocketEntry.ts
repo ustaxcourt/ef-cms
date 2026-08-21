@@ -24,9 +24,9 @@ export const docketClerkUnsealsDocketEntry = (
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
 
-    expect(unsealedDocketEntry.isSealed).toBe(false);
-    expect(unsealedDocketEntry.sealedTo).toBeUndefined();
-    expect(unsealedDocketEntry.iconsToDisplay).toEqual(
+    expect(unsealedDocketEntry?.isSealed).toBe(false);
+    expect(unsealedDocketEntry?.sealedTo).toBeUndefined();
+    expect(unsealedDocketEntry?.iconsToDisplay).toEqual(
       expect.not.arrayContaining([
         expect.objectContaining({
           className: 'sealed-docket-entry',

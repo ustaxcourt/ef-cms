@@ -1,0 +1,87 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getClinicLetterKey } from './getClinicLetterKey';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { shouldAppendClinicLetter } from './shouldAppendClinicLetter';
+
+jest.mock('./getClinicLetterKey');
+const mockGetClinicLetterKey: jest.MockedFunction<typeof getClinicLetterKey> =
+  jest.mocked(getClinicLetterKey);
+
+describe('shouldAppendClinicLetter', () => {
+  const clinicLetterKey = 'clinic-letter-key';
+
+  const caseEntityWithoutPractitioners = new Case(
+    {
+      ...MOCK_CASE,
+    },
+    {
+      authorizedUser: mockDocketClerkUser,
+    },
+  );
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
+
+    mockGetClinicLetterKey.mockReturnValue(clinicLetterKey);
+  });
+
+  it('should return appendClinicLetter as true when petitioner is pro se and when a clinic letter exists for the trial location', async () => {
+    const result = await shouldAppendClinicLetter({
+      applicationContext,
+      caseEntity: caseEntityWithoutPractitioners,
+      procedureType: 'Small',
+      trialSession: MOCK_TRIAL_INPERSON,
+    });
+
+    expect(result.appendClinicLetter).toBe(true);
+    expect(result.clinicLetterKey).toBe(clinicLetterKey);
+  });
+
+  it('should return appendClinicLetter as false when petitioner is pro se but a clinic letter does not exist for the trial location', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValueOnce(false);
+
+    const result = await shouldAppendClinicLetter({
+      applicationContext,
+      caseEntity: caseEntityWithoutPractitioners,
+      procedureType: 'Small',
+      trialSession: MOCK_TRIAL_INPERSON,
+    });
+
+    expect(result.appendClinicLetter).toBe(false);
+    expect(result.clinicLetterKey).toBe(clinicLetterKey);
+  });
+
+  it('should return appendClinicLetter as false and clinicLetterKey as undefined when petitioner is not pro se', async () => {
+    const caseEntityWithPractitoner = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: [
+          {
+            barNumber: 'PP123',
+            representing: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
+          },
+        ],
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    const result = await shouldAppendClinicLetter({
+      applicationContext,
+      caseEntity: caseEntityWithPractitoner,
+      procedureType: 'Small',
+      trialSession: MOCK_TRIAL_INPERSON,
+    });
+
+    expect(result.appendClinicLetter).toBe(false);
+    expect(result.clinicLetterKey).toBeFalsy();
+  });
+});

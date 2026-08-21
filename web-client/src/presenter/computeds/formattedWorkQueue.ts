@@ -2,7 +2,7 @@ import {
   applicationContext,
   ClientApplicationContext,
 } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   AuthUser,
@@ -11,14 +11,12 @@ import {
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
-  CASE_STATUS_TYPES,
+  ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES,
   ORDER_TYPES,
   ROLES,
-  TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
-import { abbreviateState } from '@shared/business/utilities/abbreviateState';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   calculateISODate,
   formatDateString,
@@ -28,6 +26,115 @@ import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDe
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+
+export type WorkItemWithGroupedMemberCases =
+  RawWorkItemWithCaseAndDocketEntryInfo & {
+    groupedMemberCases?: {
+      workItemId: string;
+      docketNumber: string;
+      inLeadCase: boolean;
+    }[];
+  };
+
+/**
+ * Collapses work items that share a docketEntryId across a consolidated group
+ * into a single item representing the lead (or lowest numbered) case, with the
+ * remaining cases attached as groupedMemberCases.
+ */
+export const groupConsolidatedWorkItems = (
+  filtered: RawWorkItemWithCaseAndDocketEntryInfo[],
+): WorkItemWithGroupedMemberCases[] => {
+  const docketEntryIdGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
+  const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+  const consolidatedGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
+
+  for (const wi of filtered) {
+    const key = wi.docketEntryId;
+    if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
+    docketEntryIdGroups.get(key)!.push(wi);
+  }
+
+  for (const group of docketEntryIdGroups.values()) {
+    if (group.length === 1) {
+      solo.push(group[0]);
+    } else {
+      group.forEach(item => {
+        // docket entries that were filed on a case that was later removed from a consolidated group
+        if (item.docketEntry.multiDocketedOn?.length < 2) {
+          solo.push(item);
+        } else if (item.leadDocketNumber) {
+          const key = item.docketEntryId;
+          if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
+          consolidatedGroups.get(key)!.push(item);
+        } else {
+          solo.push(item);
+        }
+      });
+    }
+  }
+
+  const consolidatedResult: WorkItemWithGroupedMemberCases[] = [];
+
+  for (const group of consolidatedGroups.values()) {
+    const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
+
+    const groupedMemberCases = Case.sortByDocketNumber(
+      group
+        .filter(item => item.docketNumber !== leadOrLowestNumber)
+        .map(item => {
+          return {
+            workItemId: item.workItemId,
+            docketNumber: item.docketNumber,
+            inLeadCase: isLeadCase(item),
+          };
+        }),
+    );
+
+    const leadOrLowestNumberedItem = group.find(item => {
+      return item.docketNumber === leadOrLowestNumber;
+    })!;
+
+    consolidatedResult.push({
+      ...leadOrLowestNumberedItem,
+      groupedMemberCases,
+    });
+  }
+
+  return [...solo, ...consolidatedResult];
+};
+
+/**
+ * Sort fields and directions that float high priority work items to the top of
+ * an inbox, ranking them by case status.
+ */
+export const getHighPriorityOrderFields = (
+  STATUS_TYPES: Record<string, string>,
+): {
+  fields: (string | ((workItemToSort: any) => any))[];
+  directions: ('asc' | 'desc')[];
+} => {
+  const caseStatusSortRank = {
+    [STATUS_TYPES.submitted]: 1,
+    [STATUS_TYPES.assignedCase]: 2,
+    [STATUS_TYPES.assignedMotion]: 3,
+    [STATUS_TYPES.jurisdictionRetained]: 4,
+  };
+
+  return {
+    directions: ['desc', 'asc', 'asc'],
+    fields: [
+      'highPriority',
+      'trialDate',
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+    ],
+  };
+};
 
 export const formattedWorkQueue = (
   get: Get,
@@ -46,19 +153,33 @@ export const formattedWorkQueue = (
   const users = get(state.users);
   const authorizedUser = get(state.user);
 
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
     assignmentFilterValue = users.find(
       user => user.userId === assignmentFilterValue.userId,
     );
   }
 
-  let workQueue: FormattedWorkItemWithCaseInfo[] = filterWorkItems({
+  let filtered = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
-  })
+  });
+
+  if (
+    (workQueueToDisplay.queue === 'section' ||
+      workQueueToDisplay.queue === 'my') &&
+    (workQueueToDisplay.box === 'inbox' || workQueueToDisplay.box === 'outbox')
+  ) {
+    filtered = groupConsolidatedWorkItems(filtered);
+  }
+
+  let workQueue: FormattedWorkItemWithCaseInfo[] = filtered
     .map(workItem =>
       formatWorkItem({
         isSelected: selectedWorkItemIds.includes(workItem.workItemId),
@@ -66,12 +187,17 @@ export const formattedWorkQueue = (
       }),
     )
     .map(workItem => {
-      const editLink = getWorkItemDocumentLink({
-        authorizedUser,
-        permissions,
-        workItem,
-        workQueueToDisplay,
-      });
+      const { eventCode } = workItem.docketEntry;
+
+      const editLink =
+        restrictedEventCodes && restrictedEventCodes?.includes(eventCode)
+          ? null
+          : getWorkItemDocumentLink({
+              authorizedUser,
+              permissions,
+              workItem,
+              workQueueToDisplay,
+            });
       return {
         ...workItem,
         editLink,
@@ -109,21 +235,12 @@ export const formattedWorkQueue = (
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [] as (string | ((workItemToSort: any) => any))[];
-  let highPriorityDirection = [] as string[];;
+  let highPriorityDirection = [] as string[];
   if (workQueueToDisplay.box == 'inbox') {
-    const caseStatusSortRank = {
-      [STATUS_TYPES.submitted]: 1,
-      [STATUS_TYPES.assignedCase]: 2,
-      [STATUS_TYPES.assignedMotion]: 3,
-      [STATUS_TYPES.jurisdictionRetained]: 4,
-    };
+    const highPriorityOrder = getHighPriorityOrderFields(STATUS_TYPES);
 
-    highPriorityField = [
-      'highPriority',
-      'trialDate',
-      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-    ];
-    highPriorityDirection = ['desc', 'asc', 'asc'];
+    highPriorityField = highPriorityOrder.fields;
+    highPriorityDirection = highPriorityOrder.directions;
   }
 
   workQueue = orderBy(
@@ -224,24 +341,11 @@ export const formatWorkItem = ({
     }
   }
 
-  let formattedCaseStatus = workItem.caseStatus || '';
-
-  if (
-    workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
-    workItem.trialLocation &&
-    workItem.trialDate
-  ) {
-    let formattedTrialLocation = '';
-    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-      formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
-    } else {
-      formattedTrialLocation = workItem.trialLocation;
-    }
-
-    const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
-
-    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
-  }
+  const formattedCaseStatus = Case.formatCaseStatus({
+    caseStatus: workItem.caseStatus,
+    trialDate: workItem.trialDate,
+    trialLocation: workItem.trialLocation,
+  });
 
   const createdAtFormatted = formatDateString(workItem.createdAt, 'MMDDYY');
 
@@ -490,7 +594,7 @@ export type FormattedWorkItemWithCaseInfo =
     consolidatedIconTooltipText: string;
     createdAtFormatted: string;
     docketEntry: any;
-    editLink: string;
+    editLink: string | null;
     formattedCaseStatus: string;
     highPriority: boolean;
     inConsolidatedGroup: boolean;
@@ -506,4 +610,9 @@ export type FormattedWorkItemWithCaseInfo =
     showUnassignedIcon: boolean;
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
+    groupedMemberCases?: {
+      docketNumber: string;
+      inLeadCase: boolean;
+      workItemId: string;
+    }[];
   };

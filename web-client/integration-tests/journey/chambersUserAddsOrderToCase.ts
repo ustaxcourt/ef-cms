@@ -1,4 +1,4 @@
-import { applicationContext } from '../../src/applicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 export const chambersUserAddsOrderToCase = cerebralTest => {
   return it('Chambers user adds order to case', async () => {
@@ -54,6 +54,6 @@ export const chambersUserAddsOrderToCase = cerebralTest => {
 
     cerebralTest.docketEntryId = draftDocuments.find(
       document => document.eventCode === createdOrderEventCode,
-    ).docketEntryId;
+    )!.docketEntryId;
   });
 };

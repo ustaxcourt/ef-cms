@@ -5,12 +5,13 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
+import { RawUserCaseNote } from 'shared/src/business/entities/notes/UserCaseNote';
 
 export const getUserCaseNoteForCasesInteractor = async (
   applicationContext,
   { docketNumbers }: { docketNumbers: string[] },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawUserCaseNote[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }

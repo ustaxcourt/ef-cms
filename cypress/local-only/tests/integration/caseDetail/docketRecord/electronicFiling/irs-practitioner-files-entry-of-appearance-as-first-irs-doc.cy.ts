@@ -32,24 +32,32 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
         cy.get('[data-testid="auto-generation"]').click();
         cy.get('[data-testid="file-document-submit-document"]').click();
 
-        cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
-          'exist',
-        );
-        cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
+        cy.get('[data-testid="auto-generated-pdf-preview"]').should('exist');
+        cy.get('[data-testid="submit-auto-generated-document-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'contain.text',
           'Entry of Appearance for Respondent',
         );
-        // should not allow filing Entry of Appearance once already associated
+        // should not allow filing Entry of Appearance once already associated:
+        // the application enforces this by filtering "Entry of Appearance" out
+        // of the document-type typeahead options for an IRS practitioner whose
+        // case already has an IRS filing
         cy.get('[data-testid="button-file-document"]').click();
         cy.get('[data-testid="ready-to-file"]').click();
-        selectTypeaheadInput(
-          'complete-doc-document-type-search',
-          'Entry of Appearance',
-        );
-        cy.get('[data-testid="submit-document"]').click();
-        cy.get('[data-testid="error-alert"]').should('be.visible');
+        cy.get(
+          '[data-testid="complete-doc-document-type-search"] .select-react-element__control',
+        )
+          .should('be.visible')
+          .click();
+        cy.get(
+          '[data-testid="complete-doc-document-type-search"] .select-react-element__input',
+        ).type('Entry of Appearance', { force: true });
+        cy.get(
+          '[data-testid="complete-doc-document-type-search"] .select-react-element__menu',
+        )
+          .should('be.visible')
+          .and('not.contain.text', 'Entry of Appearance');
       });
     });
   });

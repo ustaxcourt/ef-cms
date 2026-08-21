@@ -1,18 +1,37 @@
 import { loginAsPetitionsClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
 
-export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
+export function petitionsClerkQcsAndServesElectronicCase(
+  docketNumber: string,
+  orderCreationOptions: {
+    checkOrderToShowCause?: boolean;
+    checkNoticeOfAttachments?: boolean;
+    checkOrderForAmendedPetition?: boolean;
+  } = {
+    checkOrderToShowCause: true,
+    checkNoticeOfAttachments: true,
+    checkOrderForAmendedPetition: true,
+  },
+) {
   loginAsPetitionsClerk1();
-  cy.visit(`/case-detail/${docketNumber}/petition-qc`)
+  cy.visit(`/case-detail/${docketNumber}/petition-qc`);
 
   cy.get('[data-testid="tab-case-info"]').click();
 
-  cy.get('[data-testid="order-to-show-cause-checkbox"]').check({ force: true });
-  cy.get('[data-testid="notice-of-attachments-checkbox"]').check({
-    force: true,
-  });
-  cy.get('[data-testid="order-for-amended-petition-checkbox"]').check({
-    force: true,
-  });
+  if (orderCreationOptions.checkOrderToShowCause) {
+    cy.get('[data-testid="order-to-show-cause-checkbox"]').check({
+      force: true,
+    });
+  }
+  if (orderCreationOptions.checkNoticeOfAttachments) {
+    cy.get('[data-testid="notice-of-attachments-checkbox"]').check({
+      force: true,
+    });
+  }
+  if (orderCreationOptions.checkOrderForAmendedPetition) {
+    cy.get('[data-testid="order-for-amended-petition-checkbox"]').check({
+      force: true,
+    });
+  }
 
   cy.get('[data-testid="tab-irs-notice"]').click();
 

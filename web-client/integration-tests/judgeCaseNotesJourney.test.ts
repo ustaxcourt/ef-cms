@@ -1,11 +1,12 @@
 import {
   CASE_TYPES_MAP,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { judgeAddsNotesFromWorkingCopyCaseList } from './journey/judgeAddsNotesFromWorkingCopyCaseList';
 import { judgeViewsNotesFromCaseDetail } from './journey/judgeViewsNotesFromCaseDetail';
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
@@ -17,7 +18,7 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('Trial Session Eligible Cases Journey (judge)', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,

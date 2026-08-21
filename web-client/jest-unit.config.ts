@@ -1,15 +1,16 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 import path from 'node:path';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-client-unit',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
+    '!src/proxies/**/*.ts',
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.ts',
@@ -27,37 +28,47 @@ const config: Config = {
     '!src/test/createClientTestApplicationContext.ts',
   ],
   coverageDirectory: './coverage-unit',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   globals: {
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  maxWorkers: '50%',
+
+  moduleFileExtensions: ['js', 'jsx', 'mjs', 'ts', 'tsx'],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
+    // @smithy/core@3.24.2 and @aws-sdk/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
+    // in its browser bundles. Jest's jsdom environment picks up the browser
+    // export condition via its `exports` map, breaking any test that
+    // transitively instantiates an AWS SDK client. Force the Node.js CJS
+    // bundles for all affected subpaths.
+    '^@smithy/core/(.*)$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/$1/index.js',
+    '^@aws-sdk/(.*)/(.*)$':
+      '<rootDir>/../node_modules/@aws-sdk/$1/dist-cjs/submodules/$2/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(
     process.cwd(),
     'web-client/JsdomWithTextEncoderEnvironment.ts',
   ),
-  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
+  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+    '/node_modules/(?!@joi/date|uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
   ],
-  verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
+  workerIdleMemoryLimit: '20%',
 };
 
 export default config;

@@ -27,8 +27,8 @@ describe('sealInLowerEnvironment', () => {
       .mockReturnValue(true);
   });
 
-  it('should seal the case with the docketNumber provided and return the updated case', async () => {
-    const result = await sealInLowerEnvironment(
+  it('should seal the case with the docketNumber provided', async () => {
+    await sealInLowerEnvironment(
       applicationContext,
       [
         {
@@ -41,7 +41,6 @@ describe('sealInLowerEnvironment', () => {
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).toHaveBeenCalled();
-    expect(result[0].sealedDate).toBeTruthy();
   });
 
   it('should only log a warning if we do not have a docketNumber', async () => {

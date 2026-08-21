@@ -20,8 +20,8 @@ import {
   TrialSessionsFilters,
   initialTrialSessionPageState,
 } from '@web-client/presenter/state/trialSessionsPageState';
-import { TrialSessionsPageValidation } from '@shared/business/entities/trialSessions/TrialSessionsPageValidation';
-import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
+import { TrialSessionsPageValidation } from '@web-client/business/entities/trialSessions/TrialSessionsPageValidation';
+import { getTrialCitiesGroupedByState } from '@web-client/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (
@@ -267,6 +267,7 @@ export const formatTrialSessions = ({
         Look at how formattedTrialSessions.ts calculates userIsAssignedToSession for reference
       */
       const userIsAssignedToSession = isJudgeUserAssigned;
+      const { trialClerk } = trialSession;
 
       return {
         alertMessageForNOTT,
@@ -281,6 +282,7 @@ export const formatTrialSessions = ({
         showAlertForNOTTReminder,
         startDate: trialSession.startDate,
         swingSession: !!trialSession.swingSession,
+        trialClerk,
         trialLocation: trialSession.trialLocation || '',
         trialSessionId: trialSession.trialSessionId || '',
         userIsAssignedToSession,
@@ -341,6 +343,7 @@ export type TrialSessionRow = {
   judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
+  trialClerk?: { name: string; userId: string };
 };
 export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;

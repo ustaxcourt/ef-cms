@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -6,6 +7,10 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
+jest.mock(
+  '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf',
 );
 import {
   DOCKET_SECTION,
@@ -16,13 +21,16 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { docketClerkUser } from '@shared/test/mockUsers';
+import {
+  caseServicesSupervisorUser,
+  docketClerkUser,
+} from '@shared/test/mockUsers';
 import {
   mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
@@ -30,24 +38,41 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-
-const getUserById = jest.mocked(getUserByIdMock);
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { generateNoticeOfDocketChangePdf as generateNoticeOfDocketChangePdfMock } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const mockDocumentStorageId = '99a187df-cfee-402f-a211-7ebc2a883583';
+  const getUserById = jest.mocked(getUserByIdMock);
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
-
-  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
-  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
-
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const upsertWorkItems = jest.mocked(upsertWorkItemsMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
+  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
+  const generateNoticeOfDocketChangePdf = jest.mocked(
+    generateNoticeOfDocketChangePdfMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  generateNoticeOfDocketChangePdf.mockResolvedValue(mockDocumentStorageId);
+
+  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
+  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  const workItem = {
+    docketEntryId: mockDocketEntryId,
+    docketNumber: '45678-18',
+    section: DOCKET_SECTION,
+    sentBy: 'Test User',
+    sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    updatedAt: applicationContext.getUtilities().createISODateString(),
+    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
 
   beforeEach(() => {
     getFeatureFlagValues.mockResolvedValue([
@@ -61,15 +86,6 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       },
     ]);
-    const workItem = {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: '45678-18',
-      section: DOCKET_SECTION,
-      sentBy: 'Test User',
-      sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      updatedAt: applicationContext.getUtilities().createISODateString(),
-      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
 
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(workItem),
@@ -93,12 +109,13 @@ describe('completeDocketEntryQCInteractor', () => {
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
         },
+        MOCK_CASE.docketEntries[1],
       ],
     };
 
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
-    getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
 
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
@@ -136,6 +153,84 @@ describe('completeDocketEntryQCInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if user not found', async () => {
+    getUserById.mockResolvedValueOnce(undefined);
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockDocketClerkUser.userId}`,
+    );
+  });
+
+  it('should throw an error if currentDocketEntry is not found', async () => {
+    const notFoundId = '2f73eb0c-6820-4534-98b9-a1359ef49305';
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+            docketEntryId: notFoundId,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find docket entry with id ${notFoundId} on case ${caseRecord.docketNumber}`,
+    );
+  });
+
+  it('should throw an error if workItem is not found', async () => {
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValueOnce(undefined);
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find work item associated with ${caseRecord.docketNumber} document ${caseRecord.docketEntries[0].docketEntryId}`,
+    );
+  });
+
+  it('should throw an error if workItem is already completed', async () => {
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValueOnce(
+      new WorkItem({
+        ...workItem,
+        completedAt: 'this is a completed date',
+      }),
+    );
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `The work item was already completed on case ${caseRecord.docketNumber}`,
+    );
+  });
+
   it('adds documents and workitems', async () => {
     await expect(
       completeDocketEntryQCInteractor(
@@ -150,20 +245,28 @@ describe('completeDocketEntryQCInteractor', () => {
       ),
     ).resolves.not.toThrow();
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
+    const mockDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      { ...caseRecord, docketNumber: caseRecord.docketNumber },
+      { ...caseRecord, docketNumber: mockDocketNumber },
+    ]);
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
       {
-        entryMetadata: caseRecord.docketEntries[0],
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          multiDocketedOn: [caseRecord.docketNumber, mockDocketNumber],
+        },
       },
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
@@ -188,12 +291,38 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer 123 abc',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
+  });
+
+  // Spec: "new coversheet is appended to the front of the document
+  // (original coversheet still exists)". `replaceCoversheet: true` would
+  // drop the original first page before inserting the new cover, which
+  // is not what the spec calls for during QC metadata edits.
+  it('should append (not replace) the coversheet when QC metadata edits trigger regeneration', async () => {
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: '123',
+          additionalInfo2: 'abc',
+          certificateOfService: false,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    const addCoversheetMock = applicationContext.getUseCases()
+      .addCoversheetInteractor as jest.Mock;
+    expect(addCoversheetMock).toHaveBeenCalled();
+    const [, callArgs] = addCoversheetMock.mock.calls[0];
+    expect(callArgs.replaceCoversheet).not.toBe(true);
   });
 
   it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
@@ -212,8 +341,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo,
     ).toMatchObject({
       nameOfClerk: 'bob',
       titleOfClerk: 'clerk of court',
@@ -265,8 +393,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info (C/S 08/06/19) additional info 2',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -289,8 +417,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after:
         'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
@@ -317,8 +445,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -345,8 +473,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Something Different',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -368,9 +496,7 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange,
-    ).not.toHaveBeenCalled();
+    expect(generateNoticeOfDocketChangePdf).not.toHaveBeenCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
@@ -392,8 +518,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info 221',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -419,8 +545,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
+      generateNoticeOfDocketChangePdf.mock.calls[0][0].docketChangeInfo
+        .filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
@@ -428,24 +554,22 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...caseRecord,
-      isPaper: true,
-      mailingDate: '2019-03-01T21:40:46.415Z',
-      petitioners: [
-        {
-          ...caseRecord.petitioners[0],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
-      ],
-    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
 
     const mockNumberOfPages = 999;
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockImplementation(() => {
-        return mockNumberOfPages;
-      });
+    countPagesInDocument.mockResolvedValueOnce(mockNumberOfPages);
 
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
@@ -459,13 +583,16 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const noticeOfDocketChange = result.caseDetail.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'NODC',
+    expect(countPagesInDocument).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: mockDocumentStorageId,
+      }),
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const noticeOfDocketChange = caseToUpdate.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'NODC',
+    );
 
     expect(noticeOfDocketChange).toMatchObject({
       isFileAttached: true,
@@ -473,24 +600,32 @@ describe('completeDocketEntryQCInteractor', () => {
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(countPagesInDocument).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: mockDocumentStorageId,
+      }),
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
 
   it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
-    getCaseByDocketNumber.mockReturnValue({
-      ...caseRecord,
-      isPaper: true,
-      mailingDate: '2019-03-01T21:40:46.415Z',
-      petitioners: [
-        {
-          ...caseRecord.petitioners[0],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
-      ],
-    });
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
 
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
@@ -504,7 +639,7 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
@@ -523,7 +658,7 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
@@ -583,7 +718,7 @@ describe('completeDocketEntryQCInteractor', () => {
   it('updates automaticBlocked on a case if pending is true', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -597,11 +732,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(caseDetail.automaticBlocked).toBeTruthy();
+
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.automaticBlocked).toBeTruthy();
   });
 
   it('normalizes receivedAt dates to ISO string format', async () => {
-    const { caseDetail } = await completeDocketEntryQCInteractor(
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
@@ -612,7 +749,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(caseDetail.docketEntries[0].receivedAt).toEqual(
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
     );
   });
@@ -633,5 +771,187 @@ describe('completeDocketEntryQCInteractor', () => {
         mockCaseServicesSupervisorUser,
       ),
     ).rejects.toThrow('The document is currently being updated');
+  });
+
+  it('should still generate new coversheet when original filing case docket entry cannot be used', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            originallyFiledDocketNumber: '999-99',
+          },
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          documentTitle: 'different title',
+          multiDocketedOn: [],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should assign Work Item to selectedSection when user is Case Services', async () => {
+    getUserById.mockResolvedValueOnce(caseServicesSupervisorUser as DbUser);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: DOCKET_SECTION,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertWorkItems).toHaveBeenCalledWith({
+      workItems: [expect.objectContaining({ section: DOCKET_SECTION })],
+    });
+  });
+
+  it('should add paper service parties with docket number', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
+
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      { entryMetadata: caseRecord.docketEntries[0] },
+      mockDocketClerkUser,
+    );
+
+    expect(result.paperServiceParties[0].docketNumber).toEqual(
+      caseRecord.docketNumber,
+    );
+  });
+
+  it('should update work items and case records for each case in a multi-docketed QC', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertWorkItems).toHaveBeenCalledTimes(2);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+  });
+
+  it('should not evaluate coversheet for member case when cannotUseOriginalFilingCase is false', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+            receivedAt: '2018-01-01T00:00:00.000Z', // differs from entryMetadata so it would trigger coversheet if evaluated
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          // originallyFiledDocketNumber '101-18' IS in multiDocketedOn so cannotUseOriginalFilingCase is false
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    // Original case '101-18': evaluated, no receivedAt change so isNewCoverSheetNeeded is false
+    // Member case '102-20': skipped because cannotUseOriginalFilingCase is false and not the original filing case
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should evaluate coversheet for member case when cannotUseOriginalFilingCase is true', async () => {
+    const secondDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      {
+        ...caseRecord,
+        docketNumber: secondDocketNumber,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            docketNumber: secondDocketNumber,
+            originallyFiledDocketNumber: caseRecord.docketNumber,
+            receivedAt: '2018-01-01T00:00:00.000Z', // differs from entryMetadata so it would trigger coversheet when evaluated
+          },
+          caseRecord.docketEntries[1],
+        ],
+      },
+    ]);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          originallyFiledDocketNumber: '999-99', // NOT in multiDocketedOn so cannotUseOriginalFilingCase is true
+          multiDocketedOn: [caseRecord.docketNumber, secondDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    // Original case '101-18': evaluated, no receivedAt change so isNewCoverSheetNeeded is false
+    // Member case '102-20': evaluated cannotUseOriginalFilingCase is true and receivedAt differs so isNewCoverSheetNeeded is true
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardH', () => {
@@ -113,6 +113,16 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(externalDocumentH.getDocumentTitle()).toEqual(
         'Motion for Leave to File Brief in Support of Petition',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentH = ExternalDocumentFactory({
+        category: 'Motion',
+        documentType: 'Motion for Leave to File',
+        scenario: 'Nonstandard H',
+      });
+
+      expect(externalDocumentH.getDocumentTitle()).toEqual('');
     });
   });
 });

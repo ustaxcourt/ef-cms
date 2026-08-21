@@ -1,4 +1,5 @@
-FROM node:22
+ARG TARGETARCH=amd64
+FROM node:24
 
 RUN apt-get update && \
 	apt-get install -y awscli && \
@@ -14,7 +15,7 @@ ENV WEBSOCKET_API_GATEWAY_ID=${WEBSOCKET_API_GATEWAY_ID}
 WORKDIR /usr/src/app
 
 COPY . .
-RUN npm install
+RUN npm ci
 
-RUN npm install -g ts-node typescript
+RUN npm install -g ts-node@10.9.2 typescript@npm:@typescript/typescript6@6.0.2
 CMD ["ts-node", "src/docketEntryBatchDownloader.ts"]

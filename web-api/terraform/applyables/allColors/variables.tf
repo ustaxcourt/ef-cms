@@ -29,7 +29,7 @@ variable "es_instance_count" {
 
 variable "es_instance_type" {
   type    = string
-  default = "t2.small.search"
+  default = "t3.small.search"
 }
 
 variable "es_volume_size" {

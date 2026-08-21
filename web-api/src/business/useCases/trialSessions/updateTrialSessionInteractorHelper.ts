@@ -11,7 +11,6 @@ import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions
 import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 type GetCasesInTrialSessionParams = {
@@ -53,6 +52,7 @@ type UpdateCasesAndSetNoticeOfChangeParams = {
   authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
 };
@@ -65,74 +65,107 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
   updatedTrialSessionEntity,
-}: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
+}: UpdateCasesAndSetNoticeOfChangeParams): Promise<{
+  paperServicePdfsCombined: PDFDocumentType;
+  updatedCasesToSave: Case[];
+  sendEmailCalls: (() => Promise<void>)[];
+}> => {
   const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
     trialSession: currentTrialSession,
     includeHearings: true,
     authorizedUser,
   });
 
+  const updatedCasesToSave: Case[] = [];
+  const sendEmailCalls: (() => Promise<void>)[] = [];
+
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
     const newPdfDoc = await PDFDocument.create();
 
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
-      await applicationContext
-        .getUseCaseHelpers()
-        .setNoticeOfChangeToRemoteProceeding(
-          applicationContext,
-          {
-            caseEntity,
-            newPdfDoc,
-            newTrialSessionEntity: updatedTrialSessionEntity,
-          },
-          authorizedUser,
-        );
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding(
+            applicationContext,
+            {
+              caseEntity,
+              newPdfDoc,
+              newTrialSessionEntity: updatedTrialSessionEntity,
+            },
+            authorizedUser,
+          ),
+      );
     }
 
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
-      await applicationContext
-        .getUseCaseHelpers()
-        .setNoticeOfChangeToInPersonProceeding(
-          applicationContext,
-          {
-            caseEntity,
-            newPdfDoc,
-            newTrialSessionEntity: updatedTrialSessionEntity,
-          },
-          authorizedUser,
-        );
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding(
+            applicationContext,
+            {
+              caseEntity,
+              newPdfDoc,
+              newTrialSessionEntity: updatedTrialSessionEntity,
+            },
+            authorizedUser,
+          ),
+      );
     }
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
-      await applicationContext
-        .getUseCaseHelpers()
-        .setNoticeOfChangeOfTrialJudge(
-          applicationContext,
-          {
-            caseEntity,
-            currentTrialSession,
-            newPdfDoc,
-            newTrialSessionEntity: updatedTrialSessionEntity,
-          },
-          authorizedUser,
-        );
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeOfTrialJudge(
+            applicationContext,
+            {
+              caseEntity,
+              currentTrialSession,
+              newPdfDoc,
+              newTrialSessionEntity: updatedTrialSessionEntity,
+            },
+            authorizedUser,
+          ),
+      );
     }
 
     if (shouldSetNoticeOfTrialSessionLocationChange) {
-      await applicationContext
-        .getUseCaseHelpers()
-        .setNoticeOfChangeOfTrialLocation(
-          applicationContext,
-          {
-            caseEntity,
-            newPdfDoc,
-            newTrialSessionEntity: updatedTrialSessionEntity,
-            previousTrialSession: currentTrialSession,
-          },
-          authorizedUser,
-        );
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeOfTrialLocation(
+            applicationContext,
+            {
+              caseEntity,
+              newPdfDoc,
+              newTrialSessionEntity: updatedTrialSessionEntity,
+              previousTrialSession: currentTrialSession,
+            },
+            authorizedUser,
+          ),
+      );
+    }
+
+    if (shouldSetNoticeOfTrialSessionStartDateChange) {
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeOfTrialStartDate(
+            applicationContext,
+            {
+              caseEntity,
+              newPdfDoc,
+              newTrialSessionEntity: updatedTrialSessionEntity,
+              previousTrialSession: currentTrialSession,
+            },
+            authorizedUser,
+          ),
+      );
     }
 
     if (
@@ -141,10 +174,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
       caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
     }
 
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+    updatedCasesToSave.push(caseEntity);
 
     return newPdfDoc;
   });
@@ -154,7 +184,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     .getUtilities()
     .combineAllPdfDocuments(applicationContext, casePdfDocuments);
 
-  return paperServicePdfsCombined;
+  return { paperServicePdfsCombined, updatedCasesToSave, sendEmailCalls };
 };
 
 type CreateWorkingCopyForNewUserOnSessionParams = {
@@ -183,11 +213,13 @@ export const getPaperServicePdfName = ({
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   shouldSetNoticeOfTrialSessionLocationChange,
+  shouldSetNoticeOfTrialSessionStartDateChange,
 }: {
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
   shouldSetNoticeOfTrialSessionLocationChange: boolean;
+  shouldSetNoticeOfTrialSessionStartDateChange: boolean;
 }): string => {
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     return 'Notice of Change of Trial Judge';
@@ -197,6 +229,8 @@ export const getPaperServicePdfName = ({
     return 'Notice of Change to Remote Proceeding';
   } else if (shouldSetNoticeOfTrialSessionLocationChange) {
     return 'Notice of Change of Trial Location';
+  } else if (shouldSetNoticeOfTrialSessionStartDateChange) {
+    return 'Notice of Change of Trial Date';
   } else {
     return 'Notice of Change';
   }
@@ -247,10 +281,10 @@ export function shouldCreateWorkingCopyForNewJudge(
   return Boolean(
     (!get(currentTrialSession, 'judge.userId') &&
       get(updatedTrialSessionEntity, 'judge.userId')) ||
-      (currentTrialSession.judge &&
-        updatedTrialSessionEntity.judge &&
-        currentTrialSession.judge.userId !==
-          updatedTrialSessionEntity.judge.userId),
+    (currentTrialSession.judge &&
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId),
   );
 }
 
@@ -261,9 +295,9 @@ export function shouldCreateWorkingCopyForNewTrialClerk(
   return Boolean(
     (!get(currentTrialSession, 'trialClerk.userId') &&
       get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
-      (currentTrialSession.trialClerk &&
-        updatedTrialSessionEntity.trialClerk &&
-        currentTrialSession.trialClerk.userId !==
-          updatedTrialSessionEntity.trialClerk.userId),
+    (currentTrialSession.trialClerk &&
+      updatedTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        updatedTrialSessionEntity.trialClerk.userId),
   );
 }

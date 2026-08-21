@@ -1,7 +1,7 @@
 import { FormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
-import { minuteSheet } from './minuteSheet';
+import { minuteSheet } from '@web-api/business/utilities/documentGenerators/minuteSheet';
 
 describe('minuteSheet', () => {
   generateAndVerifyPdfDiff({

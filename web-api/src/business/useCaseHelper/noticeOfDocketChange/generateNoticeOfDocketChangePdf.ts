@@ -15,7 +15,7 @@ export const generateNoticeOfDocketChangePdf = async ({
   docketChangeInfo: {
     caseCaptionExtension: string;
     caseTitle: string;
-    docketEntryIndex: string;
+    docketEntryIndex: number;
     docketNumber: string;
     titleOfClerk: string;
     nameOfClerk: string;
@@ -55,13 +55,13 @@ export const generateNoticeOfDocketChangePdf = async ({
       },
     });
 
-  const docketEntryId = applicationContext.getUniqueId();
+  const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: noticePdf,
-    pdfName: docketEntryId,
+    key: documentStorageId,
   });
 
-  return docketEntryId;
+  return documentStorageId;
 };

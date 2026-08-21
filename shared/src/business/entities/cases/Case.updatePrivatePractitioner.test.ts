@@ -33,7 +33,7 @@ describe('updatePrivatePractitioner', () => {
     );
 
     expect(caseToVerify.privatePractitioners).not.toBeNull();
-    expect(caseToVerify.privatePractitioners[0].representing).toEqual([
+    expect(caseToVerify.privatePractitioners![0].representing).toEqual([
       '182e1a2c-0252-4d76-8590-593324efaee3',
     ]);
 
@@ -41,7 +41,7 @@ describe('updatePrivatePractitioner', () => {
       representing: [],
       userId: 'privatePractitioner',
     });
-    expect(caseToVerify.privatePractitioners[0].representing).toEqual([]);
+    expect(caseToVerify.privatePractitioners![0].representing).toEqual([]);
   });
 
   it('updates a matching private practitioner found on the case', () => {

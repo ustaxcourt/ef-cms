@@ -1,8 +1,29 @@
+/* eslint-disable max-lines */
 import { CASE_STATUS_TYPES, PAYMENT_STATUS } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { formatCase, getFormattedCaseDetail } from './getFormattedCaseDetail';
+import {
+  formatCase,
+  FormattedCase,
+  getFormattedCaseDetail,
+} from './getFormattedCaseDetail';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { type RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { type RawCorrespondence } from '@shared/business/entities/Correspondence';
+
+const BASE_CASE: RawCase = {
+  ...MOCK_CASE,
+  correspondence: [],
+  docketEntries: [],
+};
+
+const BASE_DOCKET_ENTRY: RawDocketEntry = {
+  docketNumber: MOCK_CASE.docketNumber,
+  entityName: 'DocketEntry',
+  filingDate: '2018-03-01T00:01:00.000Z',
+  index: 1,
+  isOnDocketRecord: true,
+} as RawDocketEntry;
 
 describe('getFormattedCaseDetail', () => {
   const getDateISO = () =>
@@ -47,15 +68,27 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should return an empty object if caseDetail is empty', () => {
-      const mockApplicationContext = {};
-      const caseDetail = {};
+      const caseDetail = {} as RawCase;
       const result = formatCase(
-        mockApplicationContext,
+        applicationContext,
         caseDetail,
         mockDocketClerkUser,
       );
 
       expect(result).toMatchObject({});
+    });
+
+    it('should handle cases with no docket entries', () => {
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [],
+        } as RawCase,
+        mockDocketClerkUser,
+      );
+
+      expect(result.docketEntries).toEqual([]);
     });
 
     it('should format the filing date of all correspondence documents', () => {
@@ -68,7 +101,7 @@ describe('getFormattedCaseDetail', () => {
               documentTitle: 'Test Correspondence',
               filedBy: 'Test Docket Clerk',
               filingDate: '2020-05-21T18:21:59.818Z',
-            },
+            } as RawCorrespondence,
           ],
         },
         mockDocketClerkUser,
@@ -88,28 +121,28 @@ describe('getFormattedCaseDetail', () => {
               docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
               documentType: 'Administrative Record',
               filingDate: getDateISO(),
-              index: '1',
+              index: 1,
               isOnDocketRecord: true,
               pending: true,
               servedAt: '2019-08-25T05:00:00.000Z',
-            },
+            } as RawDocketEntry,
             {
               createdAt: getDateISO(),
               docketEntryId: 'dabe913f-5310-48df-b63d-44cfccb83326',
               documentType: 'Administrative Record',
               filingDate: getDateISO(),
-              index: '2',
+              index: 2,
               isOnDocketRecord: true,
               pending: true,
-            },
+            } as RawDocketEntry,
             {
               createdAt: getDateISO(),
               docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
               documentType: 'Administrative Record',
               filingDate: getDateISO(),
-              index: '3',
+              index: 3,
               isOnDocketRecord: true,
-            },
+            } as RawDocketEntry,
           ],
         },
         mockDocketClerkUser,
@@ -117,7 +150,7 @@ describe('getFormattedCaseDetail', () => {
 
       expect(result.pendingItemsDocketEntries).toMatchObject([
         {
-          index: '1',
+          index: 1,
         },
       ]);
     });
@@ -215,7 +248,7 @@ describe('getFormattedCaseDetail', () => {
           hasVerifiedIrsNotice: true,
           irsNoticeDate: undefined,
           preferredTrialCity: undefined,
-          trialTime: 11,
+          trialTime: '11',
         },
         mockDocketClerkUser,
       );
@@ -228,6 +261,65 @@ describe('getFormattedCaseDetail', () => {
       expect(result.formattedPreferredTrialCity).toEqual(
         'No location selected',
       );
+    });
+
+    it('should format irsPractitioners with and without barNumber', () => {
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            {
+              name: 'John Doe',
+            },
+            {
+              barNumber: 'BN1234',
+              name: 'Jane Smith',
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.irsPractitioners[0].formattedName).toEqual('John Doe');
+      expect(result.irsPractitioners[1].formattedName).toEqual(
+        'Jane Smith (BN1234)',
+      );
+    });
+
+    it('should format privatePractitioners representing specific petitioners', () => {
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              contactId: 'p1',
+              name: 'Petitioner 1',
+            },
+            {
+              contactId: 'p2',
+              name: 'Petitioner 2',
+            },
+          ],
+          privatePractitioners: [
+            {
+              name: 'C1',
+              representing: ['p1'],
+            },
+            {
+              name: 'C2',
+              representing: ['p3'], // Representing someone not in petitioners
+            },
+          ],
+        } as RawCase,
+        mockDocketClerkUser,
+      );
+
+      expect(
+        result.privatePractitioners[0].representingFormatted,
+      ).toMatchObject([{ name: 'Petitioner 1' }]);
+      expect(result.privatePractitioners[1].representingFormatted).toEqual([]);
     });
 
     it('should format irs notice date', () => {
@@ -273,12 +365,14 @@ describe('getFormattedCaseDetail', () => {
           mockDocketClerkUser,
         );
 
-        expect(result).toMatchObject({
-          blockedDateFormatted: applicationContext
-            .getUtilities()
-            .formatDateString(getDateISO(), 'MMDDYY'),
-          showBlockedFromTrial: true,
-        });
+        expect(result).toMatchObject(
+          expect.objectContaining({
+            blockedDateFormatted: applicationContext
+              .getUtilities()
+              .formatDateString(getDateISO(), 'MMDDYY'),
+            showBlockedFromTrial: true,
+          }),
+        );
       });
     });
 
@@ -301,9 +395,9 @@ describe('getFormattedCaseDetail', () => {
         formattedTrialDate: '11/11/11',
         showTrialCalendared: true,
       });
-      expect(result).not.toHaveProperty('showBlockedFromTrial');
-      expect(result).not.toHaveProperty('showNotScheduled');
-      expect(result).not.toHaveProperty('showScheduled');
+      expect(result.showBlockedFromTrial).toBeFalsy();
+      expect(result.showNotScheduled).toBeFalsy();
+      expect(result.showScheduled).toBeFalsy();
     });
 
     it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
@@ -325,9 +419,9 @@ describe('getFormattedCaseDetail', () => {
         formattedTrialDate: '11/11/11 02:00 am',
         showScheduled: true,
       });
-      expect(result).not.toHaveProperty('showTrialCalendared');
-      expect(result).not.toHaveProperty('showBlockedFromTrial');
-      expect(result).not.toHaveProperty('showNotScheduled');
+      expect(result.showTrialCalendared).toBeFalsy();
+      expect(result.showBlockedFromTrial).toBeFalsy();
+      expect(result.showNotScheduled).toBeFalsy();
     });
 
     it('should format hearing details if the case has associated hearings', () => {
@@ -372,9 +466,35 @@ describe('getFormattedCaseDetail', () => {
         ],
         showTrialCalendared: true,
       });
-      expect(result).not.toHaveProperty('showBlockedFromTrial');
-      expect(result).not.toHaveProperty('showNotScheduled');
-      expect(result).not.toHaveProperty('showScheduled');
+      expect(result.showBlockedFromTrial).toBeFalsy();
+      expect(result.showNotScheduled).toBeFalsy();
+      expect(result.showScheduled).toBeFalsy();
+    });
+
+    it('should format hearing details with missing trialDate and trialTime', () => {
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          hearings: [
+            {
+              trialLocation: 'Megacity One',
+            },
+            {
+              startDate: '2011-11-11T05:00:00.000Z',
+              trialLocation: 'Megacity One',
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.hearings[0]).toMatchObject({
+        formattedTrialDate: 'Not scheduled',
+      });
+      expect(result.hearings[1]).toMatchObject({
+        formattedTrialDate: '11/11/11',
+      });
     });
 
     it('should format trial details with incomplete trial information', () => {
@@ -403,9 +523,11 @@ describe('getFormattedCaseDetail', () => {
         mockDocketClerkUser,
       );
 
-      expect(result).toMatchObject({
-        showNotScheduled: true,
-      });
+      expect(result).toEqual(
+        expect.objectContaining({
+          showNotScheduled: true,
+        }),
+      );
     });
 
     it('should return showNotScheduled as true when the case has not been added to a trial session', () => {
@@ -486,7 +608,7 @@ describe('getFormattedCaseDetail', () => {
         applicationContext,
         {
           ...MOCK_CASE,
-          consolidatedCases: [MOCK_CASE],
+          consolidatedCases: [MOCK_CASE as RawConsolidatedCaseSummary],
         },
         mockDocketClerkUser,
       );
@@ -508,6 +630,151 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('createdAtFormatted');
       expect(result).toHaveProperty('formattedDocketEntries');
       expect(result).toHaveProperty('docketRecordSort');
+    });
+
+    it('should handle sorting descending', () => {
+      const result = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            {
+              ...BASE_DOCKET_ENTRY,
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+            },
+            {
+              ...BASE_DOCKET_ENTRY,
+              filingDate: '2018-03-02T00:01:00.000Z',
+              index: 2,
+            },
+          ],
+        },
+        docketRecordSort: 'byDateDesc',
+      });
+
+      expect(result.formattedDocketEntries[0].index).toEqual(2);
+      expect(result.formattedDocketEntries[1].index).toEqual(1);
+    });
+
+    it('should sort docket entries with undefined createdAtFormatted at the bottom', () => {
+      const result = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            {
+              ...BASE_DOCKET_ENTRY,
+              createdAt: '2018-03-01T00:01:00.000Z',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+              isOnDocketRecord: false,
+            },
+            {
+              ...BASE_DOCKET_ENTRY,
+              createdAt: '',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 2,
+              isOnDocketRecord: false,
+            },
+          ],
+        },
+        docketRecordSort: 'byDate',
+      });
+
+      expect(result.formattedDocketEntries[0].index).toEqual(1);
+      expect(result.formattedDocketEntries[1].index).toEqual(2);
+
+      const result2 = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            {
+              ...BASE_DOCKET_ENTRY,
+              createdAt: '',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+              isOnDocketRecord: false,
+            },
+            {
+              ...BASE_DOCKET_ENTRY,
+              createdAt: '2018-03-01T00:01:00.000Z',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 2,
+              isOnDocketRecord: false,
+            },
+          ],
+        },
+        docketRecordSort: 'byDate',
+      });
+
+      expect(result2.formattedDocketEntries[0].index).toEqual(2);
+      expect(result2.formattedDocketEntries[1].index).toEqual(1);
+    });
+
+    it('should handle missing indexes in byIndexSortFunction', () => {
+      const result = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            { ...BASE_DOCKET_ENTRY, index: undefined },
+            { ...BASE_DOCKET_ENTRY, index: 1 },
+          ],
+        },
+        docketRecordSort: 'byIndex',
+      });
+      expect(result.formattedDocketEntries[0].index).toEqual(1);
+
+      const result2 = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            { ...BASE_DOCKET_ENTRY, index: 1 },
+            { ...BASE_DOCKET_ENTRY, index: undefined },
+          ],
+        },
+        docketRecordSort: 'byIndex',
+      });
+      expect(result2.formattedDocketEntries[0].index).toEqual(1);
+
+      const result3 = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            { ...BASE_DOCKET_ENTRY, index: undefined },
+            { ...BASE_DOCKET_ENTRY, index: undefined },
+          ],
+        },
+        docketRecordSort: 'byIndex',
+      });
+      expect(result3.formattedDocketEntries.length).toEqual(2);
+    });
+
+    it('should handle byIndexDesc sort', () => {
+      const result = getFormattedCaseDetail({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: {
+          ...BASE_CASE,
+          docketEntries: [
+            { ...BASE_DOCKET_ENTRY, index: 1 },
+            { ...BASE_DOCKET_ENTRY, index: 2 },
+          ],
+        },
+        docketRecordSort: 'byIndexDesc',
+      });
+      expect(result.formattedDocketEntries[0].index).toEqual(2);
+      expect(result.formattedDocketEntries[1].index).toEqual(1);
     });
 
     it('should format draft documents', () => {
@@ -603,6 +870,30 @@ describe('getFormattedCaseDetail', () => {
       ]);
     });
 
+    it('should format miscellaneous draft documents with a different editUrl', () => {
+      const result: FormattedCase = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              archived: false,
+              createdAt: getDateISO(),
+              docketEntryId: 'd-1-2-3',
+              docketNumber: '101-18',
+              documentType: 'Miscellaneous',
+              isDraft: true,
+            } as RawDocketEntry,
+          ],
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(result.draftDocuments[0].editUrl).toContain(
+        '/edit-upload-court-issued/',
+      );
+    });
+
     it('should sort draft documents by their receivedAt', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
@@ -633,11 +924,40 @@ describe('getFormattedCaseDetail', () => {
       });
 
       expect(result.draftDocuments).toMatchObject([
-        { receivedAt: '2018-07-03T06:26:44.000Z' },
-        { receivedAt: '2019-08-03T06:10:44.000Z' },
         { receivedAt: '2019-08-03T06:26:44.000Z' },
+        { receivedAt: '2019-08-03T06:10:44.000Z' },
+        { receivedAt: '2018-07-03T06:26:44.000Z' },
       ]);
     });
+  });
+
+  it('should handle missing petitionPaymentMethod for paid case', () => {
+    const result = formatCase(
+      applicationContext,
+      {
+        ...MOCK_CASE,
+        petitionPaymentMethod: undefined,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.filingFee).toEqual('Paid  ');
+  });
+
+  it('should handle undefined irsPractitioners and privatePractitioners', () => {
+    const result = formatCase(
+      applicationContext,
+      {
+        ...MOCK_CASE,
+        irsPractitioners: undefined,
+        privatePractitioners: undefined,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.irsPractitioners).toEqual([]);
+    expect(result.privatePractitioners).toEqual([]);
   });
 
   it('should format filing fee string for a paid petition fee', () => {

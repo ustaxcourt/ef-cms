@@ -4,14 +4,15 @@ import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSe
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import {
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
 import { setupTest } from './helpers';
-import { unauthedUserViewsTodaysOrders } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrders';
-import { unauthedUserViewsTodaysOrdersOnSealedCase } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrdersOnSealedCase';
+import { unauthedUserViewsTodaysOrders } from './journey/unauthedUserViewsTodaysOrders';
+import { unauthedUserViewsTodaysOrdersOnSealedCase } from './journey/unauthedUserViewsTodaysOrdersOnSealedCase';
 
 describe('Unauthed user views todays orders', () => {
   const cerebralTest = setupTest();
@@ -35,7 +36,8 @@ describe('Unauthed user views todays orders', () => {
   });
 
   loginAs(testClient, 'docketclerk@example.com');
-  const uniqueDocumentTitle = 'Order to do something' + Date.now();
+  const uniqueDocumentTitle =
+    'Order to do something' + getCurrentDateTimeInMillis();
   cerebralTest.documentTitle1 = uniqueDocumentTitle;
 
   docketClerkCreatesAnOrder(testClient, {
@@ -49,7 +51,7 @@ describe('Unauthed user views todays orders', () => {
   docketClerkServesDocument(testClient, 0);
 
   const uniqueDocumentTitle2 =
-    'Order to do something a second time' + Date.now();
+    'Order to do something a second time' + getCurrentDateTimeInMillis();
   cerebralTest.documentTitle2 = uniqueDocumentTitle2;
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: uniqueDocumentTitle2,

@@ -1,4 +1,4 @@
-import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
+import type { Property } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
 export const efcmsDocketEntryMappings: Property = {

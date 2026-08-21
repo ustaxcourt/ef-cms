@@ -16,6 +16,7 @@ export const gotoPrintTrialCalendarPreviewAction = ({
   const { openNewTab = false, openNewView = true } = props;
 
   if (openNewView) {
+    store.set(state.printablePreview, 'trialCalendar');
     store.set(state.currentPage, 'PrintableTrialCalendar');
   }
 

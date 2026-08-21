@@ -13,21 +13,26 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -79,6 +84,7 @@ export const fileExternalDocument = async (
 
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
+      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
@@ -127,17 +133,34 @@ export const fileExternalDocument = async (
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
-  for (const [docketEntryId] of documentsToAdd) {
-    if (docketEntryId) {
+  // Process page counts in batches of 3 to balance speed and memory usage
+  // This prevents OutOfMemory errors when filing multiple large documents
+  // while being faster than sequential processing
+  const docketEntryIds = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  const BATCH_SIZE = 3;
+  for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
+    const batch = docketEntryIds.slice(i, i + BATCH_SIZE);
+    const batchPromises = batch.map(async docketEntryId => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, docketEntryId });
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryId,
+        });
+      return { docketEntryId, numberOfPages };
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    for (const { docketEntryId, numberOfPages } of batchResults) {
       pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
     }
   }
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
-    async caseToUpdate => {
+  await withTransaction(async () => {
+    const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const servedParties = aggregatePartiesForService(caseEntity);
@@ -150,6 +173,9 @@ export const fileExternalDocument = async (
               ...baseMetadata,
               ...metadata,
               docketEntryId,
+              documentStorageId: docketEntryId,
+              multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
+              originallyFiledDocketNumber: docketNumber,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,
@@ -182,14 +208,16 @@ export const fileExternalDocument = async (
           if (isAutoServed) {
             docketEntryEntity.setAsServed(servedParties.all);
 
-            await applicationContext
-              .getUseCaseHelpers()
-              .sendServedPartiesEmails({
-                applicationContext,
-                caseEntity,
-                docketEntryId: docketEntryEntity.docketEntryId,
-                servedParties,
-              });
+            onTransactionCommit(async () => {
+              await applicationContext
+                .getUseCaseHelpers()
+                .sendServedPartiesEmails({
+                  applicationContext,
+                  caseEntity,
+                  docketEntryId: docketEntryEntity.docketEntryId,
+                  servedParties,
+                });
+            });
           }
         }
       }
@@ -205,30 +233,27 @@ export const fileExternalDocument = async (
         caseToUpdate: caseEntity,
         includeCorrespondence: false,
       });
+    });
 
-      const rawCaseEntity = caseEntity.toRawObject();
-      return rawCaseEntity;
-    },
-  );
+    await settlePromises(consolidatedCaseEntities);
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
-
-  await upsertWorkItems({
-    workItems,
+    await upsertWorkItems({
+      workItems,
+    });
   });
 
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(docketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber,
+    }),
   );
-
-  const filteredCase = CaseFactory.getCase({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

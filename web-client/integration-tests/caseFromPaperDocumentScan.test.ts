@@ -14,8 +14,22 @@ import { practitionerViewsCaseDetailWithPaperService } from './journey/practitio
 describe('Case from Paper Document Scan journey', () => {
   const cerebralTest = setupTest();
 
+  const scannerSources = ['scanner A', 'scanner B'];
   let scannerSourceIndex = 0;
-  let scannerSourceName = 'scanner A';
+  let scannerSourceName = scannerSources[scannerSourceIndex];
+
+  const incrementScannerSource = () => {
+    scannerSourceIndex = (scannerSourceIndex + 1) % scannerSources.length;
+    scannerSourceName = scannerSources[scannerSourceIndex];
+  };
+
+  const petitionsClerkAddsScannedBatchAndIncrement = () => {
+    petitionsClerkAddsScannedBatch(cerebralTest, {
+      scannerSourceIndex,
+      scannerSourceName,
+    });
+    incrementScannerSource();
+  };
 
   beforeEach(() => {
     global.window.localStorage.getItem = key => {
@@ -42,29 +56,14 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkAddsScannedBatch(cerebralTest, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  petitionsClerkAddsScannedBatchAndIncrement();
   petitionsClerkDeletesScannedBatch(cerebralTest);
-  petitionsClerkAddsScannedBatch(cerebralTest, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
-  petitionsClerkAddsScannedBatch(cerebralTest, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  petitionsClerkAddsScannedBatchAndIncrement();
+  petitionsClerkAddsScannedBatchAndIncrement();
   petitionsClerkDeletesMultipleScannedBatches(cerebralTest, { numBatches: 2 });
-  petitionsClerkAddsScannedBatch(cerebralTest, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  petitionsClerkAddsScannedBatchAndIncrement();
   petitionsClerkRescansAddedBatch(cerebralTest);
-  petitionsClerkAddsScannedBatch(cerebralTest, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  petitionsClerkAddsScannedBatchAndIncrement();
   petitionsClerkCreatesScannedPDF(cerebralTest);
   petitionsClerkCreatesNewCase(cerebralTest, { shouldServe: false });
   petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);

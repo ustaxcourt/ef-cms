@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { generatePractitionerCaseListPdfInteractor } from '@shared/business/useCases/generatePractitionerCaseListPdfInteractor';
+import { generatePractitionerCaseListPdfInteractor } from '@web-api/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

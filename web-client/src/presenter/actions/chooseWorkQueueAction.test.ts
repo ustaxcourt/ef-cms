@@ -17,7 +17,11 @@ describe('chooseWorkQueueAction', () => {
         props: {
           queue: 'de Lancie',
         },
-        providers,
+        modules: {
+          presenter: {
+            providers,
+          },
+        },
         state: {},
       }),
     ).rejects.toThrow();
@@ -28,7 +32,11 @@ describe('chooseWorkQueueAction', () => {
       props: {
         box: 'cardboard',
       },
-      providers,
+      modules: {
+        presenter: {
+          providers,
+        },
+      },
       state: {
         workQueueToDisplay: {
           box: 'something',

@@ -1,8 +1,9 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest } from './helpers';
 
 describe('Docket Clerk Creates A Trial', () => {
@@ -27,7 +28,7 @@ describe('Docket Clerk Creates A Trial', () => {
   docketClerkEditsTrialSession(cerebralTest);
 
   docketClerkCreatesARemoteTrialSession(cerebralTest, {
-    trialLocation: `San Diego, California, ${Date.now()}`,
+    trialLocation: `San Diego, California, ${getCurrentDateTimeInMillis()}`,
   });
   docketClerkViewsTrialSessionList(cerebralTest);
 

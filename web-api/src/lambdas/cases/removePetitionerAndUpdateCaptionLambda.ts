@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { removePetitionerAndUpdateCaptionInteractor } from '@shared/business/useCases/removePetitionerAndUpdateCaptionInteractor';
+import { removePetitionerAndUpdateCaptionInteractor } from '@web-api/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 
 /**
  * lambda which is used for removing a petitioner from a case
@@ -13,7 +13,7 @@ export const removePetitionerAndUpdateCaptionLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await removePetitionerAndUpdateCaptionInteractor(
+    await removePetitionerAndUpdateCaptionInteractor(
       applicationContext,
       {
         ...event.pathParameters,

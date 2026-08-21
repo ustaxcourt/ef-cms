@@ -17,10 +17,10 @@ describe('removeIrsPractitioner', () => {
       },
     );
 
-    expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    expect(caseToVerify.irsPractitioners!.length).toEqual(3);
 
     caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner99' });
-    expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    expect(caseToVerify.irsPractitioners!.length).toEqual(3);
   });
 
   it('removes the user from associated case irsPractitioners array', () => {
@@ -38,12 +38,12 @@ describe('removeIrsPractitioner', () => {
     );
 
     expect(caseToVerify.irsPractitioners).not.toBeNull();
-    expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    expect(caseToVerify.irsPractitioners!.length).toEqual(3);
 
     caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner2' });
-    expect(caseToVerify.irsPractitioners.length).toEqual(2);
+    expect(caseToVerify.irsPractitioners!.length).toEqual(2);
     expect(
-      caseToVerify.irsPractitioners.find(
+      caseToVerify.irsPractitioners!.find(
         practitioner => practitioner.userId === 'irsPractitioner2',
       ),
     ).toBeFalsy();

@@ -5,7 +5,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import {
+  RawTrialSessionWorkingCopy,
+  TrialSessionWorkingCopy,
+} from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
@@ -13,19 +16,11 @@ import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/tria
 import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-/**
- * getTrialSessionWorkingCopyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId id of the trial session
- * @returns {TrialSessionWorkingCopy} the trial session working copy returned from persistence
- */
 export const getTrialSessionWorkingCopyInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawTrialSessionWorkingCopy> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {
@@ -47,7 +42,8 @@ export const getTrialSessionWorkingCopyInteractor = async (
   const chambersUserId =
     (judgeUser && judgeUser.userId) || authorizedUser?.userId || '';
 
-  let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
+  let trialSessionWorkingCopyEntity: TrialSessionWorkingCopy;
+  let validRawTrialSessionWorkingCopyEntity: RawTrialSessionWorkingCopy;
 
   const trialSessionWorkingCopy = (
     await getTrialSessionWorkingCopies({

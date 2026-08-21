@@ -1,5 +1,5 @@
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyNewTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/mapper';
 
 export const getTrialSessionWorkingCopies = async ({

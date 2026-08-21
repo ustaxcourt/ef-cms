@@ -11,7 +11,7 @@ import {
   isTrialSessionRow,
   isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
-import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
+import { getTrialCitiesGroupedByState } from '@web-client/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import {
   createISODateAtStartOfDayEST,

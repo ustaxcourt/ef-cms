@@ -1,4 +1,4 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -16,6 +16,11 @@ export const IndividualWorkQueueInProgress = connect(
   }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {formattedWorkQueue.length}
+        </div>
+        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
@@ -35,19 +40,20 @@ export const IndividualWorkQueueInProgress = connect(
               {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <tbody key={item.workItemId}>
-                <tr data-testid={`${item.docketNumber}-qc-item-row`}>
+          <tbody>
+            {formattedWorkQueue.map(item => {
+              return (
+                <tr
+                  key={item.workItemId}
+                  data-testid={`${item.docketNumber}-qc-item-row`}
+                >
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
                         item.consolidatedIconTooltipText
                       }
                       inConsolidatedGroup={item.inConsolidatedGroup}
-                      showLeadCaseIcon={
-                        isLeadCase(item)
-                      }
+                      showLeadCaseIcon={isLeadCase(item)}
                     />
                   </td>
                   <td className="message-queue-row">
@@ -61,14 +67,21 @@ export const IndividualWorkQueueInProgress = connect(
                   </td>
                   <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
-                      <a
-                        className="case-link"
-                        data-testid="qc-link"
-                        href={item.editLink}
-                      >
-                        {item.docketEntry.descriptionDisplay ||
-                          item.docketEntry.documentType}
-                      </a>
+                      {item.editLink ? (
+                        <a
+                          className="case-link"
+                          data-testid="qc-link"
+                          href={item.editLink}
+                        >
+                          {item.docketEntry.descriptionDisplay ||
+                            item.docketEntry.documentType}
+                        </a>
+                      ) : (
+                        <span>
+                          {item.docketEntry.descriptionDisplay ||
+                            item.docketEntry.documentType}
+                        </span>
+                      )}
                     </div>
                   </td>
                   {workQueueHelper.showFiledByColumn && (
@@ -85,9 +98,9 @@ export const IndividualWorkQueueInProgress = connect(
                     <td>{item.assigneeName}</td>
                   )}
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>

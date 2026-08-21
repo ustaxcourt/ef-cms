@@ -1,15 +1,16 @@
 import { ProcedureType } from '../../../shared/src/business/entities/EntityConstants';
 import { attachFile } from '../file/upload-file';
 import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 export function createAndServePaperPetition(
   {
-    name = 'rick james ' + Date.now(),
+    name = 'rick james ' + getCurrentDateTimeInMillis(),
     procedureType = 'Regular',
     trialLocation = 'Birmingham, Alabama',
     yearReceived = '2020',
     includeApwDocument = true,
-    caseType = 'CDP (Lien/Levy)'
+    caseType = 'CDP (Lien/Levy)',
   }: Partial<{
     yearReceived: string;
     procedureType: ProcedureType;
@@ -18,13 +19,13 @@ export function createAndServePaperPetition(
     includeApwDocument: boolean;
     caseType: string;
   }> = {
-      name: 'rick james ' + Date.now(),
-      procedureType: 'Regular',
-      trialLocation: 'Birmingham, Alabama',
-      yearReceived: '2020',
-      includeApwDocument: true,
-      caseType: 'CDP (Lien/Levy)'
-    },
+    name: 'rick james ' + getCurrentDateTimeInMillis(),
+    procedureType: 'Regular',
+    trialLocation: 'Birmingham, Alabama',
+    yearReceived: '2020',
+    includeApwDocument: true,
+    caseType: 'CDP (Lien/Levy)',
+  },
 ): Cypress.Chainable<{
   docketNumber: string;
   documentsCreated: {
@@ -219,9 +220,9 @@ export function createAndServePaperPetitionMyselfAndSpouse(
     primaryContactName: string;
     secondaryContactName: string;
   }> = {
-      primaryContactName: 'John',
-      secondaryContactName: 'John Spouse',
-    },
+    primaryContactName: 'John',
+    secondaryContactName: 'John Spouse',
+  },
 ): Cypress.Chainable<{
   docketNumber: string;
 }> {

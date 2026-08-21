@@ -36,7 +36,7 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
 
   getDocumentTitle(): string {
     return replaceBracketed(
-      this.documentTitle,
+      this.documentTitle || '',
       this.freeText,
       this.previousDocument
         ? this.previousDocument.documentTitle ||

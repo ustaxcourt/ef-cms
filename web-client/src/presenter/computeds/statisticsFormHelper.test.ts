@@ -59,7 +59,7 @@ describe('case detail edit computed', () => {
   });
 
   it('sets showAddMoreStatisticsButton false if statistics array length is greater than 12', () => {
-    const manyStatistics = [];
+    const manyStatistics: Array<{ yearOrPeriod: string }> = [];
     for (let i = 0; i < 12; i++) {
       manyStatistics.push({ yearOrPeriod: 'Period' });
     }

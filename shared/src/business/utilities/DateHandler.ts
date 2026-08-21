@@ -22,6 +22,7 @@ export const FORMATS = {
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
+  TIME_12_HOUR: 'h:mm a',
   TIME_24_HOUR: 'HH:mm',
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
@@ -118,7 +119,7 @@ export const getJsDateFromIso = (isoDate: string): Date => {
 };
 
 export const getIsoFromJsDate = (jsDate: Date): string | null => {
-  return DateTime.fromJSDate(jsDate).toISO();
+  return DateTime.fromJSDate(jsDate).setZone('utc').toISO();
 };
 
 export const getNowObject = (): ToObjectOutput => {
@@ -132,13 +133,21 @@ export const calculateISODate = ({
 }: {
   dateString?: string;
   howMuch?: number;
-  units?: string;
+  units?: 'days' | 'months' | 'years' | 'hours' | 'minutes';
 }): string => {
-  if (!howMuch) return dateString!;
+  if (!howMuch && dateString) return dateString;
 
-  return prepareDateFromString(dateString)
-    .plus({ [units]: howMuch })
-    .toISO()!;
+  const date = prepareDateFromString(dateString, FORMATS.ISO);
+
+  if (['days', 'months', 'years'].includes(units)) {
+    return date
+      .setZone(USTC_TZ)
+      .plus({ [units]: howMuch })
+      .setZone('utc')
+      .toISO()!;
+  }
+
+  return date.plus({ [units]: howMuch }).toISO()!;
 };
 
 export const calculateDate = ({
@@ -632,6 +641,13 @@ export const getBusinessDateInFuture = ({
     );
   }
 
+  // Persistence timestamps (Joi ISO_DATE / createISODateString shape). Do not use
+  // toFormat(FORMATS.ISO) — that Luxon token emits a numeric offset, which
+  // @joi/date 3 rejects.
+  if (outputFormat === FORMATS.ISO) {
+    return laterDate.setZone('utc').toISO()!;
+  }
+
   return laterDate.toFormat(outputFormat);
 };
 
@@ -742,7 +758,7 @@ export function normalizeIsoDateRange(
     throw new Error('End date must be formatted as ISO');
   }
   return {
-    end: dtReconciliationDateEnd.toUTC().toISO(),
+    end: dtReconciliationDateEnd.toUTC().toISO()!,
     start: dtReconciliationDateStart.toUTC().toISO()!,
   };
 
@@ -775,13 +791,74 @@ export const getWeeksInRange = ({
 };
 
 export const roundDateDownToNearestHour = (isoDateString: string) => {
-  const formattedDate = calculateDate({ dateString: isoDateString });
-  formattedDate.setMinutes(0);
-  formattedDate.setSeconds(0);
-  formattedDate.setMilliseconds(0);
-  return formattedDate;
+  return prepareDateFromString(isoDateString).startOf('hour').toJSDate();
 };
 
 export const getCurrentDateTimeInMillis = (): number => {
   return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+};
+
+export const formatDateFromDatePicker = (
+  dateString: string,
+  toFormat: TimeFormats,
+) => {
+  let inputFormat: TimeFormats;
+
+  try {
+    inputFormat = getDateFormat(dateString, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
+
+    // Date pickers write persistence timestamps (Joi ISO_DATE / createISODateString
+    // shape). Do not use formatDateString(FORMATS.ISO) here — that Luxon token
+    // emits a numeric offset (…-05:00), which @joi/date 3 rejects.
+    if (toFormat === FORMATS.ISO) {
+      const isoDate = createISODateString(dateString, inputFormat);
+      return isoDate ?? dateString;
+    }
+
+    const luxonDate = prepareDateFromString(dateString, inputFormat);
+
+    const formattedDate = formatDateString(luxonDate.toString(), toFormat);
+
+    return formattedDate;
+  } catch {
+    return dateString;
+  }
+};
+
+export const getTimeframeForYear = ({
+  fiscal,
+  year,
+}: {
+  fiscal?: boolean;
+  year: string;
+}): {
+  begin: string; // ISO date string
+  end: string; // ISO date string
+} => {
+  return {
+    begin: validateDateAndCreateISO({
+      day: '1',
+      month: fiscal ? '10' : '1',
+      year: fiscal ? `${Number(year) - 1}` : year,
+    })!,
+    end: validateDateAndCreateISO({
+      day: '1',
+      month: fiscal ? '10' : '1',
+      year: fiscal ? year : `${Number(year) + 1}`,
+    })!,
+  };
+};
+
+export const getJsTimeframeForYear = ({
+  fiscal,
+  year,
+}: {
+  fiscal?: boolean;
+  year: string;
+}): { begin: Date; end: Date } => {
+  const { begin, end } = getTimeframeForYear({ fiscal, year });
+  return {
+    begin: getJsDateFromIso(begin),
+    end: getJsDateFromIso(end),
+  };
 };

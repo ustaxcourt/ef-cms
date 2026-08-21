@@ -1,11 +1,11 @@
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { CompiledQuery, Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.alterTable('dwWorkItem').dropColumn('docketEntry').execute();
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<Database>): Promise<void> {
   await db.schema
     .alterTable('dwWorkItem')
     .addColumn('docketEntry', 'jsonb', col =>

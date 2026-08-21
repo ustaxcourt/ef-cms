@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -16,6 +17,7 @@ import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,
 } from '@shared/business/entities/DocketEntryTestFixtures';
+import { omit } from 'lodash';
 
 describe('DocketEntry entity', () => {
   it('defaults stampData to an empty object when no stamp data is passed in', () => {
@@ -126,6 +128,28 @@ describe('DocketEntry entity', () => {
       );
       expect(myDoc.isValid()).toBeFalsy();
     });
+
+    it('Defaults documentStorageId to docketEntryId if it is not passed in', () => {
+      const myDoc = new DocketEntry(
+        omit(A_VALID_DOCKET_ENTRY, 'docketEntryId'),
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(myDoc.isValid()).toBeTruthy();
+      expect(myDoc.documentStorageId).toEqual(myDoc.docketEntryId);
+    });
+
+    it('Sets documentStorageId to the passed in value if it was passed in', () => {
+      const mockDocumentStorageId = '65b42116-0125-4223-b1c0-4f8658684f2c';
+      const myDoc = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY, documentStorageId: mockDocumentStorageId },
+        {
+          authorizedUser: undefined,
+          petitioners: MOCK_PETITIONERS,
+        },
+      );
+      expect(myDoc.isValid()).toBeTruthy();
+      expect(myDoc.documentStorageId).toEqual(mockDocumentStorageId);
+    });
   });
 
   describe('unsignDocument', () => {
@@ -154,6 +178,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           filers: ['Manually edited filers for served docket entry'],
+          originallyFiledDocketNumber: '101-18',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
@@ -301,6 +326,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
@@ -328,6 +354,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
+          originallyFiledDocketNumber: '101-21',
           servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: {
             email: 'me@example.com',
@@ -679,6 +706,88 @@ describe('DocketEntry entity', () => {
       const expected = { orderType: 'hello' };
       doc.setDraftOrderState(expected);
       expect(doc.draftOrderState).toEqual(expected);
+    });
+  });
+
+  describe('documentTypeForStampedDocketEntry', () => {
+    it('should get the document title if the document type contains a placeholder', () => {
+      const documentTitle =
+        'Motion to Dismiss for Lack of Jurisdiction as to John Doe';
+      const documentType =
+        'Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle,
+          documentType,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
+        documentTitle,
+      );
+    });
+
+    it('should get the document type if the document type does not contain a placeholder', () => {
+      const documentTitleAndType = 'Agreed Computation for Entry of Decision';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle: documentTitleAndType,
+          documentType: documentTitleAndType,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
+        documentTitleAndType,
+      );
+    });
+  });
+
+  describe('multiDocketedOn', () => {
+    it('should store the provided multiDocketedOn array', () => {
+      const multiDocketedOn = ['101-21', '102-21', '103-21'];
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY, multiDocketedOn },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.multiDocketedOn).toEqual(multiDocketedOn);
+    });
+
+    it('should default to an empty array when not provided', () => {
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.multiDocketedOn).toEqual([]);
+    });
+  });
+
+  describe('originallyFiledDocketNumber', () => {
+    it('should store the provided originallyFiledDocketNumber', () => {
+      const mockOriginallyFiledDocketNumber = '101-21';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          originallyFiledDocketNumber: mockOriginallyFiledDocketNumber,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.originallyFiledDocketNumber).toBe(
+        mockOriginallyFiledDocketNumber,
+      );
+    });
+
+    it('should be undefined when not provided', () => {
+      const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(docketEntry.originallyFiledDocketNumber).toBeUndefined();
     });
   });
 });

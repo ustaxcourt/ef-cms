@@ -17,6 +17,9 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
+import { checkMultiDocketedOriginalCaseAction } from '../actions/EditDocketRecordEntry/checkMultiDocketedOriginalCaseAction';
+import { getMultiDocketedOriginalCaseAction } from '../actions/getMultiDocketedOriginalCaseAction';
+import { setMultiDocketedOriginalCaseAction } from '../actions/setMultiDocketedOriginalCaseAction';
 
 export const gotoDocketEntryQcSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -29,6 +32,9 @@ export const gotoDocketEntryQcSequence =
     clearScreenMetadataAction,
     getCaseAction,
     setCaseAction,
+    checkMultiDocketedOriginalCaseAction,
+    getMultiDocketedOriginalCaseAction,
+    setMultiDocketedOriginalCaseAction,
     setDocketEntryFormForDocketEditAction,
     updateDocketEntryWizardDataAction,
     setDocketEntryIdAction,

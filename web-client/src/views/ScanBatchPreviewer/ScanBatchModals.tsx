@@ -24,11 +24,7 @@ export const EmptyHopperModal = connect(
 );
 EmptyHopperModal.displayName = 'EmptyHopperModal';
 
-type BatchModalProps = {
-  batchIndex: number;
-}
-
-export const ConfirmRescanBatchModal: React.FC<BatchModalProps> = connect(
+const ConfirmRescanBatchModalComponent = connect(
   {
     batchIndex: state.scanner.batchIndexToRescan,
     clearModalSequence: sequences.clearModalSequence,
@@ -39,6 +35,10 @@ export const ConfirmRescanBatchModal: React.FC<BatchModalProps> = connect(
     clearModalSequence,
     rescanBatchSequence,
   }) {
+    if (batchIndex === null || batchIndex === undefined) {
+      return null;
+    }
+
     return (
       <ConfirmModal
         cancelLabel="No, Cancel"
@@ -52,9 +52,10 @@ export const ConfirmRescanBatchModal: React.FC<BatchModalProps> = connect(
     );
   },
 );
-ConfirmRescanBatchModal.displayName = 'ConfirmRescanBatchModal';
+ConfirmRescanBatchModalComponent.displayName = 'ConfirmRescanBatchModal';
+export const ConfirmRescanBatchModal = ConfirmRescanBatchModalComponent as React.FC<{}>;
 
-export const DeleteBatchModal: React.FC<BatchModalProps> = connect(
+const DeleteBatchModalComponent = connect(
   {
     batchIndex: state.scanner.batchIndexToDelete,
     clearModalSequence: sequences.clearModalSequence,
@@ -67,6 +68,10 @@ export const DeleteBatchModal: React.FC<BatchModalProps> = connect(
     pageCount,
     removeBatchSequence,
   }) {
+    if (batchIndex === null || batchIndex === undefined) {
+      return null;
+    }
+
     return (
       <ConfirmModal
         cancelLabel="No, Cancel"
@@ -81,7 +86,8 @@ export const DeleteBatchModal: React.FC<BatchModalProps> = connect(
     );
   },
 );
-DeleteBatchModal.displayName = 'DeleteBatchModal';
+DeleteBatchModalComponent.displayName = 'DeleteBatchModal';
+export const DeleteBatchModal = DeleteBatchModalComponent as React.FC<{}>;
 
 export const ScanErrorModal = connect(
   {

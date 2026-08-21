@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { removePdfFromDocketEntryInteractor } from '@shared/business/useCases/removePdfFromDocketEntryInteractor';
+import { removePdfFromDocketEntryInteractor } from '@web-api/business/useCases/removePdfFromDocketEntryInteractor';
 
 /**
  * used for removing a pdf from a docket entry
@@ -13,7 +13,7 @@ export const removePdfFromDocketEntryLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await removePdfFromDocketEntryInteractor(
+    await removePdfFromDocketEntryInteractor(
       applicationContext,
       event.pathParameters,
       authorizedUser,

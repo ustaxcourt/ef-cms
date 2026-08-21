@@ -41,6 +41,8 @@ describe('updateTrialSessionInteractorHelper', () => {
     const MOCK_PAPER_SERVICE_PDF_COMBINED = 'MOCK_PAPER_SERVICE_PDF_COMBINED';
     const VALIDATED_TRIAL_SESSION_ENTITY = 'VALIDATED_TRIAL_SESSION_ENTITY';
 
+    const mockSendEmailsCall = async () => {};
+
     beforeEach(() => {
       getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
         function getMockedCase(docketNumber: string) {
@@ -66,16 +68,19 @@ describe('updateTrialSessionInteractorHelper', () => {
       });
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation =
-        jest.fn();
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
+
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialStartDate =
+        jest.fn().mockResolvedValue(mockSendEmailsCall);
 
       applicationContext
         .getUtilities()
@@ -84,7 +89,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         );
     });
 
-    it('should generate all notices for the cases that are callendared and update case hearing', async () => {
+    it('should generate all notices for the cases that are calendared and update case hearing and return cases to update and send email calls', async () => {
       const TEST_PARAMS = {
         applicationContext,
         authorizedUser: mockCaseServicesSupervisorUser,
@@ -101,6 +106,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: true,
         shouldSetNoticeOfChangeToRemoteProceeding: true,
         shouldSetNoticeOfTrialSessionLocationChange: true,
+        shouldSetNoticeOfTrialSessionStartDateChange: true,
         updatedTrialSessionEntity: {
           caseOrder: TEST_DOCKET_NUMBERS,
           trialSessionId: TEST_TRIAL_SESSION_ID,
@@ -111,7 +117,15 @@ describe('updateTrialSessionInteractorHelper', () => {
       };
 
       const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
-      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+
+      expect(results).toEqual({
+        paperServicePdfsCombined: MOCK_PAPER_SERVICE_PDF_COMBINED,
+        updatedCasesToSave: [
+          expect.objectContaining({ docketNumber: '333-25' }),
+          expect.objectContaining({ docketNumber: '444-25' }),
+        ],
+        sendEmailCalls: Array(10).fill(mockSendEmailsCall),
+      });
 
       const setNoticeOfChangeToRemoteProceedingCalls =
         applicationContext.getUseCaseHelpers()
@@ -188,6 +202,25 @@ describe('updateTrialSessionInteractorHelper', () => {
           ]),
         ]),
       );
+
+      const setNoticeOfChangeOfTrialStartDateCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialStartDate
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialStartDateCalls.length).toEqual(2);
+      expect(setNoticeOfChangeOfTrialStartDateCalls).toEqual(
+        expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '444-25' }),
+            }),
+          ]),
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '333-25' }),
+            }),
+          ]),
+        ]),
+      );
     });
 
     it('should not generate notices when flags are "false"', async () => {
@@ -207,6 +240,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: false,
         shouldSetNoticeOfChangeToRemoteProceeding: false,
         shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
         updatedTrialSessionEntity: {
           caseOrder: TEST_DOCKET_NUMBERS,
           trialSessionId: TEST_TRIAL_SESSION_ID,
@@ -217,7 +251,14 @@ describe('updateTrialSessionInteractorHelper', () => {
       };
 
       const results = await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
-      expect(results).toBe(MOCK_PAPER_SERVICE_PDF_COMBINED);
+      expect(results).toEqual({
+        paperServicePdfsCombined: MOCK_PAPER_SERVICE_PDF_COMBINED,
+        updatedCasesToSave: [
+          expect.objectContaining({ docketNumber: '333-25' }),
+          expect.objectContaining({ docketNumber: '444-25' }),
+        ],
+        sendEmailCalls: [],
+      });
 
       const setNoticeOfChangeToRemoteProceedingCalls =
         applicationContext.getUseCaseHelpers()
@@ -238,6 +279,11 @@ describe('updateTrialSessionInteractorHelper', () => {
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation
           .mock.calls;
       expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(0);
+
+      const setNoticeOfChangeOfTrialStartDateCalls =
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialStartDate
+          .mock.calls;
+      expect(setNoticeOfChangeOfTrialStartDateCalls.length).toEqual(0);
     });
 
     it('should filter out hearings in getCasesInTrialSession', async () => {
@@ -295,6 +341,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: false,
         shouldSetNoticeOfChangeToRemoteProceeding: false,
         shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       };
 
       const results = await getPaperServicePdfName(TEST_PARAMS);
@@ -308,6 +355,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: false,
         shouldSetNoticeOfChangeToRemoteProceeding: false,
         shouldSetNoticeOfTrialSessionLocationChange: true,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       };
 
       const results = await getPaperServicePdfName(TEST_PARAMS);
@@ -321,6 +369,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: false,
         shouldSetNoticeOfChangeToRemoteProceeding: true,
         shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       };
 
       const results = await getPaperServicePdfName(TEST_PARAMS);
@@ -334,6 +383,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: true,
         shouldSetNoticeOfChangeToRemoteProceeding: false,
         shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       };
 
       const results = await getPaperServicePdfName(TEST_PARAMS);
@@ -347,11 +397,26 @@ describe('updateTrialSessionInteractorHelper', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: false,
         shouldSetNoticeOfChangeToRemoteProceeding: false,
         shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
       };
 
       const results = await getPaperServicePdfName(TEST_PARAMS);
 
       expect(results).toEqual('Notice of Change of Trial Judge');
+    });
+
+    it('should return "Notice of Change of Trial Date" when shouldSetNoticeOfTrialSessionStartDateChange is true', async () => {
+      const TEST_PARAMS = {
+        shouldIssueNoticeOfChangeOfTrialJudge: false,
+        shouldSetNoticeOfChangeToInPersonProceeding: false,
+        shouldSetNoticeOfChangeToRemoteProceeding: false,
+        shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: true,
+      };
+
+      const results = await getPaperServicePdfName(TEST_PARAMS);
+
+      expect(results).toEqual('Notice of Change of Trial Date');
     });
   });
 

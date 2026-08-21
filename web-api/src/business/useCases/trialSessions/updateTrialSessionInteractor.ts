@@ -20,7 +20,7 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
@@ -30,6 +30,16 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  formatDateString,
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { Case } from '@shared/business/entities/cases/Case';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -49,75 +59,134 @@ export const updateTrialSession = async (
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
-  if (currentTrialSession.startDate < createISODateString()) {
-    throw new Error('Trial session cannot be updated after its start date');
+  const startDateFormatted = formatDateString(
+    currentTrialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+  const nowFormatted = formatNow(FORMATS.YYYYMMDD);
+
+  if (
+    startDateFormatted <= nowFormatted &&
+    authorizedUser &&
+    authorizedUser.role !== ROLES.caseServicesSupervisor
+  ) {
+    throw new Error(
+      'Trial session cannot be updated after its start date and you are not a case services supervisor.',
+    );
   }
 
-  const editableFields = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    alternateTrialClerkName: trialSession.alternateTrialClerkName,
-    chambersPhoneNumber: trialSession.chambersPhoneNumber,
-    city: trialSession.city,
-    courtReporter: trialSession.courtReporter,
-    courthouseName: trialSession.courthouseName,
-    dismissedAlertForNott: trialSession.dismissedAlertForNott,
-    estimatedEndDate: trialSession.estimatedEndDate,
-    irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
-    irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
-    joinPhoneNumber: trialSession.joinPhoneNumber,
-    judge: trialSession.judge,
-    maxCases: trialSession.maxCases,
-    meetingId: trialSession.meetingId,
-    notes: trialSession.notes,
-    password: trialSession.password,
-    postalCode: trialSession.postalCode,
-    proceedingType: trialSession.proceedingType,
-    sessionType: trialSession.sessionType,
-    startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
-    state: trialSession.state,
-    swingSession: trialSession.swingSession,
-    swingSessionId: trialSession.swingSessionId,
-    term: trialSession.term,
-    termYear: trialSession.termYear,
-    trialClerk: trialSession.trialClerk,
-    trialLocation: trialSession.trialLocation,
-  };
+  if (
+    startDateFormatted <= nowFormatted &&
+    authorizedUser?.role === ROLES.caseServicesSupervisor &&
+    !currentTrialSession.isCalendared
+  ) {
+    throw new Error(
+      'Non-calendared trial sessions cannot be updated after their start date.',
+    );
+  }
+
+  const inputStartDateFormatted = formatDateString(
+    trialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+
+  if (
+    startDateFormatted !== inputStartDateFormatted &&
+    inputStartDateFormatted <= nowFormatted
+  ) {
+    throw new Error('Cannot change the start date to today or a past date.');
+  }
+
+  const LIMITED_EDITABLE_FIELDS: string[] = [
+    'alternateTrialClerkName',
+    'courtReporter',
+    'dismissedAlertForNott',
+    'estimatedEndDate',
+    'irsCalendarAdministrator',
+    'irsCalendarAdministratorInfo',
+    'term',
+    'termYear',
+    'trialClerk',
+    'trialClerkId',
+  ];
+
+  const ALL_EDITABLE_FIELDS: string[] = [
+    'address1',
+    'address2',
+    'alternateTrialClerkName',
+    'chambersPhoneNumber',
+    'city',
+    'courtReporter',
+    'courthouseName',
+    'dismissedAlertForNott',
+    'estimatedEndDate',
+    'irsCalendarAdministrator',
+    'irsCalendarAdministratorInfo',
+    'joinPhoneNumber',
+    'judge',
+    'maxCases',
+    'meetingId',
+    'notes',
+    'password',
+    'postalCode',
+    'proceedingType',
+    'sessionType',
+    'startDate',
+    'startTime',
+    'state',
+    'swingSession',
+    'swingSessionId',
+    'term',
+    'termYear',
+    'trialClerk',
+    'trialClerkId',
+    'trialLocation',
+  ];
+
+  const isCaseServicesSupervisorLimitedEdit =
+    startDateFormatted <= nowFormatted &&
+    authorizedUser?.role === ROLES.caseServicesSupervisor &&
+    currentTrialSession.isCalendared;
+
+  if (isCaseServicesSupervisorLimitedEdit) {
+    const limitedEditableFieldSet = new Set<string>(LIMITED_EDITABLE_FIELDS);
+    const disallowedChanges = Object.keys(trialSession)
+      .filter(key => ALL_EDITABLE_FIELDS.includes(key))
+      .filter(key => {
+        if (limitedEditableFieldSet.has(key)) return false;
+        if (
+          JSON.stringify(trialSession[key]) !==
+          JSON.stringify(currentTrialSession[key])
+        ) {
+          return true;
+        }
+      });
+
+    if (disallowedChanges.length > 0) {
+      throw new UnauthorizedError(
+        `Unauthorized changes: ${disallowedChanges.join(', ')}`,
+      );
+    }
+  }
+
+  const allowedFields = isCaseServicesSupervisorLimitedEdit
+    ? LIMITED_EDITABLE_FIELDS
+    : ALL_EDITABLE_FIELDS;
+
+  const editableFields = Object.fromEntries(
+    allowedFields.map(key => [key, trialSession[key]]),
+  );
 
   const updatedTrialSessionEntity = new TrialSession({
     ...currentTrialSession,
     ...editableFields,
   });
 
-  const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
-    currentTrialSession,
-    updatedTrialSessionEntity,
-  );
-
-  if (createWorkingCopyForNewJudge) {
-    await createWorkingCopyForNewUserOnSession({
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge?.userId,
-    });
-  }
-
-  const createWorkingCopyForNewTrialClerk =
-    shouldCreateWorkingCopyForNewTrialClerk(
-      currentTrialSession,
-      updatedTrialSessionEntity,
-    );
-
-  if (createWorkingCopyForNewTrialClerk) {
-    await createWorkingCopyForNewUserOnSession({
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk?.userId,
-    });
-  }
-
   let hasPaper: boolean | undefined;
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
+  let updatedCasesToSave: Case[] | undefined;
+  let sendEmailCalls: (() => Promise<void>)[] | undefined;
   if (currentTrialSession.caseOrder?.length) {
     const shouldSetNoticeOfChangeToInPersonProceeding =
       shouldGenerateNoticeOfChangeToInPersonProceeding(
@@ -143,7 +212,17 @@ export const updateTrialSession = async (
         updatedTrialSessionEntity,
       );
 
-    const paperServicePdfsCombined = await updateCasesAndSetNoticeOfChange({
+    const shouldSetNoticeOfTrialSessionStartDateChange =
+      shouldGenerateNoticeOfChangeTrialStartDate(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
+    const {
+      paperServicePdfsCombined,
+      updatedCasesToSave: updatedCasesToSaveReturn,
+      sendEmailCalls: sendEmailCallsReturn,
+    } = await updateCasesAndSetNoticeOfChange({
       applicationContext,
       authorizedUser,
       currentTrialSession,
@@ -151,8 +230,12 @@ export const updateTrialSession = async (
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
       shouldSetNoticeOfTrialSessionLocationChange,
+      shouldSetNoticeOfTrialSessionStartDateChange,
       updatedTrialSessionEntity,
     });
+
+    updatedCasesToSave = updatedCasesToSaveReturn;
+    sendEmailCalls = sendEmailCallsReturn;
 
     hasPaper = !!paperServicePdfsCombined.getPageCount();
     const paperServicePdfData = await paperServicePdfsCombined.save();
@@ -169,26 +252,71 @@ export const updateTrialSession = async (
         shouldSetNoticeOfChangeToInPersonProceeding,
         shouldSetNoticeOfChangeToRemoteProceeding,
         shouldSetNoticeOfTrialSessionLocationChange,
+        shouldSetNoticeOfTrialSessionStartDateChange,
       });
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
     }
   }
 
-  if (trialSession.swingSession && trialSession.swingSessionId) {
-    
-    await associateSwingTrialSessions(
-      {
-        swingSessionId: trialSession.swingSessionId,
-        trialSessionEntity: updatedTrialSessionEntity,
-      },
-      authorizedUser,
+  await withTransaction(async () => {
+    const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
+      currentTrialSession,
+      updatedTrialSessionEntity,
+    );
+
+    if (createWorkingCopyForNewJudge) {
+      await createWorkingCopyForNewUserOnSession({
+        trialSessionId: updatedTrialSessionEntity.trialSessionId,
+        userId: updatedTrialSessionEntity.judge?.userId,
+      });
+    }
+
+    const createWorkingCopyForNewTrialClerk =
+      shouldCreateWorkingCopyForNewTrialClerk(
+        currentTrialSession,
+        updatedTrialSessionEntity,
+      );
+
+    if (createWorkingCopyForNewTrialClerk) {
+      await createWorkingCopyForNewUserOnSession({
+        trialSessionId: updatedTrialSessionEntity.trialSessionId,
+        userId: updatedTrialSessionEntity.trialClerk?.userId,
+      });
+    }
+
+    if (trialSession.swingSession && trialSession.swingSessionId) {
+      await associateSwingTrialSessions(
+        {
+          swingSessionId: trialSession.swingSessionId,
+          trialSessionEntity: updatedTrialSessionEntity,
+        },
+        authorizedUser,
+      );
+    }
+
+    if (updatedCasesToSave) {
+      const updateCases = updatedCasesToSave.map(async caseEntity => {
+        await updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: caseEntity,
+        });
+      });
+      await settlePromises(updateCases);
+    }
+
+    await updateTrialSessionPersistence({
+      trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+    });
+  });
+
+  if (sendEmailCalls) {
+    await settlePromises(
+      sendEmailCalls.map(async sendEmailCall => {
+        await sendEmailCall();
+      }),
     );
   }
-
-  await updateTrialSessionPersistence({
-    trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-  });
 
   await sendNotificationToUser({
     applicationContext,
@@ -209,8 +337,8 @@ export const determineEntitiesToLock = async (
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId: trialSession.trialSessionId || '',
-    });
+    trialSessionId: trialSession.trialSessionId || '',
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(

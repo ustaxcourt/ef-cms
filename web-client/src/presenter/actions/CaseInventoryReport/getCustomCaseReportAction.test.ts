@@ -1,4 +1,4 @@
-jest.mock('@shared/proxies/reports/getCustomCaseReportProxy');
+jest.mock('@web-client/proxies/reports/getCustomCaseReportProxy');
 import {
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
@@ -9,7 +9,7 @@ import {
   GetCustomCaseReportResponse,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
-import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@shared/proxies/reports/getCustomCaseReportProxy';
+import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@web-client/proxies/reports/getCustomCaseReportProxy';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

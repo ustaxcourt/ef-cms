@@ -4,17 +4,18 @@ import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
-import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getJudgeWithTitle } from '@web-api/business/utilities/getJudgeWithTitle';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
-jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
+jest.mock('@web-api/business/utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),
 }));
 const mockGetJudgeWithTitle: jest.MockedFunction<typeof getJudgeWithTitle> =
   jest.mocked(getJudgeWithTitle);
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
+  const mockSendEmailsCall = async () => {};
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
 
   const currentTrialSession = {
@@ -53,6 +54,10 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
         getFakeFile,
       );
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createAndServeNoticeDocketEntry.mockResolvedValue(mockSendEmailsCall);
   });
 
   it('should retrieve the judge title and fullname for the current and new judges', async () => {
@@ -78,7 +83,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should create a docket entry and serve the generated notice', async () => {
-    await setNoticeOfChangeOfTrialJudge(
+    const result = await setNoticeOfChangeOfTrialJudge(
       applicationContext,
       {
         caseEntity: mockOpenCase,
@@ -95,5 +100,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     ).toMatchObject({
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
     });
+    expect(result).toEqual(mockSendEmailsCall);
   });
 });

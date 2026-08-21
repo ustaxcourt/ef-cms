@@ -16,7 +16,7 @@ export const strikeDocketEntryInteractor = async (
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,
@@ -63,6 +63,4 @@ export const strikeDocketEntryInteractor = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return caseEntity.toRawObject();
 };

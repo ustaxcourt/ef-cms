@@ -1,9 +1,13 @@
 @layer theme, components, utilities;
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-@import "tw-animate-css";
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
+@import 'tw-animate-css';
 
-
+.recharts-wrapper svg:focus:not(:focus-visible),
+.recharts-wrapper:focus:not(:focus-visible),
+.recharts-wrapper g:focus:not(:focus-visible) {
+  outline: none;
+}
 
 :root {
   --background: rgb(255 255 255 / 100%);
@@ -34,6 +38,8 @@
   --chart-3: rgb(60 76 152 / 100%);
   --chart-4: rgb(151 200 65 / 100%);
   --chart-5: rgb(206 184 57 / 100%);
+
+  /* This scales up border radius to be larger than it should be the multiplier should be .5 */
   --radius: 0.625rem;
   --sidebar: rgb(250 250 250 / 100%);
   --sidebar-foreground: rgb(37 37 37 / 100%);
@@ -131,6 +137,9 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-green: var(--green);
   --breakpoint-xs: 30rem;
+  --text-xxxl: 32px;
+  /* stylelint-disable-next-line custom-property-pattern -- tailwind v4 requires --text-{size}--line-height */
+  --text-xxxl--line-height: 1.4375;
 
   /* DAWSON UI palette -> semantic color mappings */
   --color-blue-primary: var(--blue-primary);
@@ -164,4 +173,47 @@
   --color-green-primary: var(--green-primary);
   --color-green-success: var(--green-success);
   --color-purple-visited-link: var(--purple-visited-link);
+}
+
+/* stylelint-disable scss/at-rule-no-unknown, order/properties-order, nesting-selector-no-missing-scoping-root, rule-empty-line-before */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* from custom.scss */
+@layer components {
+  .background-blue {
+    background-color: var(--blue-darker);
+
+    @media (width >= 480px) {
+      padding-top: 3rem;
+    }
+
+    @media (width < 480px) {
+      padding-top: 2rem;
+    }
+
+    .usa-alert__body {
+      padding-right: 1rem !important;
+    }
+  }
+}
+
+/* Font face */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2')
+    format('woff2');
+}
+
+/* Custom utility */
+.font-noto-serif {
+  font-family: 'Noto Serif', serif;
 }

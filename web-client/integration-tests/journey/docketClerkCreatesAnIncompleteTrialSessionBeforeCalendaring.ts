@@ -17,6 +17,7 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
+      estimatedEndDate: 'Enter a valid estimated end date',
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',
@@ -51,6 +52,15 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
     });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '12/15/2099',
+      },
+    );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 

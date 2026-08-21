@@ -1,6 +1,6 @@
 import { Get } from 'cerebral';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
-import { sortRecentFilings } from '@shared/business/utilities/sortRecentFilings';
+import { sortRecentFilings } from '@web-client/business/utilities/sortRecentFilings';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
@@ -69,6 +69,7 @@ const SORT_FIELDS = [
   { field: 'filedDate', label: 'Filed Date' },
   { field: 'document', label: 'Document' },
   { field: 'caseTitle', label: 'Case Title' },
+  { field: 'status', label: 'Case Status' },
 ] as const;
 
 const generateSortOptions = () => {
@@ -114,6 +115,7 @@ export const recentFilingsHelper = (get: Get) => {
     'filedDate',
     'document',
     'caseTitle',
+    'status',
   ] as const;
   const sortField = validSortFields.includes(tableSort.sortField as any)
     ? (tableSort.sortField as (typeof validSortFields)[number])

@@ -1,0 +1,48 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+
+/**
+ * used for unblocking a case
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {string} providers.docketNumber the docket number to unblock
+ * @returns {object} the case data
+ */
+export const unblockCaseFromTrial = async (
+  _applicationContext: ServerApplicationContext,
+  { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+): Promise<void> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
+
+  caseEntity.unsetAsBlocked();
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
+};
+
+export const unblockCaseFromTrialInteractor = withLocking(
+  unblockCaseFromTrial,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -13,7 +13,7 @@ export const updateContactAction = async ({
 }: ActionProps) => {
   const { contact, docketNumber } = get(state.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .updateContactInteractor(applicationContext, {
       contactInfo: contact,
@@ -24,6 +24,6 @@ export const updateContactAction = async ({
     alertSuccess: {
       message: 'Changes saved.',
     },
-    docketNumber: updatedCase.docketNumber,
+    docketNumber,
   };
 };

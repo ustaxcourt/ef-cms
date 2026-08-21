@@ -1,5 +1,3 @@
-/* eslint-disable jest/no-disabled-tests */
-
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';

@@ -8,13 +8,12 @@ import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
  * @param {object} providers.practitioner metadata
  * @returns {object} errors
  */
-export const validatePractitionerInteractor = (
-  applicationContext: IApplicationContext,
-  { practitioner }: { practitioner: RawPractitioner },
-) => {
-  const errors = new Practitioner(practitioner, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+export const validatePractitionerInteractor = ({
+  practitioner,
+}: {
+  practitioner: RawPractitioner;
+}) => {
+  const errors = new Practitioner(practitioner).getFormattedValidationErrors();
 
   if (!errors) return null;
   return errors;

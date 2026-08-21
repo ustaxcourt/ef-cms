@@ -11,11 +11,9 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
   testFormBehavior = true,
 ) => {
   return it(`Docket Clerk adds and serves a docket entry from the given order ${draftOrderIndex}`, async () => {
-    let caseDetailFormatted;
     let nonstandardHelperComputed;
-    let addCourtIssuedDocketEntryHelperComputed;
 
-    caseDetailFormatted = runCompute(
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: cerebralTest.getState(),
@@ -31,17 +29,17 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
     // default
     expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
+      draftOrderDocument?.eventCode,
     );
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
+      draftOrderDocument?.documentType,
     );
 
     // eventCode: O
@@ -60,7 +58,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       },
     );
 
-    addCourtIssuedDocketEntryHelperComputed = runCompute(
+    const addCourtIssuedDocketEntryHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryHelper),
       {
         state: cerebralTest.getState(),
@@ -182,7 +180,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'eventCode',
-        value: draftOrderDocument.eventCode,
+        value: draftOrderDocument?.eventCode,
       },
     );
 
@@ -190,11 +188,11 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'freeText',
-        value: draftOrderDocument.freeText,
+        value: draftOrderDocument?.freeText,
       },
     );
 
-    if (draftOrderDocument.eventCode === 'O') {
+    if (draftOrderDocument?.eventCode === 'O') {
       await cerebralTest.runSequence(
         'updateCourtIssuedDocketEntryFormValueSequence',
         {
@@ -212,11 +210,11 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     );
 
     expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
+      draftOrderDocument?.eventCode,
     );
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
+      draftOrderDocument?.documentType,
     );
 
     const caseDetail = cerebralTest.getState('caseDetail');

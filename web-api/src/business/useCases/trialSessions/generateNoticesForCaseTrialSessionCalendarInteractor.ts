@@ -12,12 +12,17 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter } from '@web-api/business/utilities/shouldAppendClinicLetter';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { NotFoundError } from '@web-api/errors/errors';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -46,19 +51,27 @@ const serveNoticesForCase = async ({
   standingPretrialDocketEntryEntity,
   standingPretrialFile,
 }) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+  const sendEmails = async () => {
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: noticeDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
+      servedParties,
+    });
+  };
+
+  if (inTransaction()) {
+    onTransactionCommit(sendEmails);
+  } else {
+    await sendEmails();
+  }
 
   const standingPretrialPdf = await PDFDocument.load(standingPretrialFile);
   const combinedDocumentsPdf = await PDFDocument.create();
@@ -164,7 +177,8 @@ const setNoticeForCase = async ({
 
   let clinicLetter;
   let noticeOfTrialIssuedWithClinicLetter;
-  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
+  const newNoticeOfTrialIssuedDocumentStorageId =
+    applicationContext.getUniqueId();
   if (appendClinicLetter) {
     clinicLetter = await applicationContext
       .getPersistenceGateway()
@@ -182,12 +196,12 @@ const setNoticeForCase = async ({
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssuedWithClinicLetter,
-      key: newNoticeOfTrialIssuedDocketEntryId,
+      key: newNoticeOfTrialIssuedDocumentStorageId,
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssued,
-      key: newNoticeOfTrialIssuedDocketEntryId,
+      key: newNoticeOfTrialIssuedDocumentStorageId,
     });
   }
 
@@ -200,12 +214,14 @@ const setNoticeForCase = async ({
   const noticeOfTrialDocketEntry = new DocketEntry(
     {
       date: trialSessionEntity.startDate,
-      docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
+      docketEntryId: newNoticeOfTrialIssuedDocumentStorageId,
+      documentStorageId: newNoticeOfTrialIssuedDocumentStorageId,
       documentTitle: noticeOfTrialDocumentTitle,
       documentType: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
@@ -215,12 +231,10 @@ const setNoticeForCase = async ({
 
   noticeOfTrialDocketEntry.setFiledBy(user);
 
-  noticeOfTrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
-    });
+  noticeOfTrialDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: noticeOfTrialDocketEntry.documentStorageId,
+  });
 
   caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
   caseEntity.setNoticeOfTrialDate();
@@ -257,23 +271,25 @@ const setNoticeForCase = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode;
   }
 
-  const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
+  const newStandingPretrialDocumentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: standingPretrialFile,
-    key: newStandingPretrialDocketEntryId,
+    key: newStandingPretrialDocumentStorageId,
   });
 
   const standingPretrialDocketEntry = new DocketEntry(
     {
       attachments: false,
       description: standingPretrialDocumentTitle,
-      docketEntryId: newStandingPretrialDocketEntryId,
+      docketEntryId: newStandingPretrialDocumentStorageId,
+      documentStorageId: newStandingPretrialDocumentStorageId,
       documentTitle: standingPretrialDocumentTitle,
       documentType: standingPretrialDocumentTitle,
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },
@@ -282,12 +298,10 @@ const setNoticeForCase = async ({
 
   standingPretrialDocketEntry.setFiledBy(user);
 
-  standingPretrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: standingPretrialDocketEntry.docketEntryId,
-    });
+  standingPretrialDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: standingPretrialDocketEntry.documentStorageId,
+  });
 
   caseEntity.addDocketEntry(standingPretrialDocketEntry);
 

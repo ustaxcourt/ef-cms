@@ -1,0 +1,126 @@
+import { Kysely, sql } from 'kysely';
+
+export async function up(db: Kysely<any>): Promise<void> {
+  // Final backfill: ensure every row has additionalOrderTextArray before the old field is removed,
+  // in case any rows were missed while the expand trigger was active.
+  await sql`
+    UPDATE dw_docket_entry
+    SET draft_order_state = draft_order_state
+      || jsonb_build_object(
+        'additionalOrderTextArray',
+        jsonb_build_array(draft_order_state ->> 'additionalOrderText')
+      )
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderText'
+      AND jsonb_typeof(draft_order_state -> 'additionalOrderText') = 'string'
+      AND NOT (draft_order_state ? 'additionalOrderTextArray')
+  `.execute(db);
+
+  await sql`DROP TRIGGER IF EXISTS trg_sync_additional_order_text_fields ON dw_docket_entry;`.execute(
+    db,
+  );
+  await sql`DROP FUNCTION IF EXISTS sync_additional_order_text_fields();`.execute(
+    db,
+  );
+
+  // Remove the legacy additionalOrderText field now that all app colors use additionalOrderTextArray.
+  // Restricted to rows where additionalOrderText is a plain string to avoid removing the field
+  // from unrelated draftOrderState shapes (e.g., Grant/Deny motion orders) where it is a JSON array.
+  await sql`
+    UPDATE dw_docket_entry
+    SET draft_order_state = draft_order_state - 'additionalOrderText'
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderText'
+      AND jsonb_typeof(draft_order_state -> 'additionalOrderText') = 'string'
+  `.execute(db);
+}
+
+export async function down(db: Kysely<any>): Promise<void> {
+  // Restore additionalOrderText from additionalOrderTextArray
+  await sql`
+    UPDATE dw_docket_entry
+    SET draft_order_state = draft_order_state
+      || jsonb_build_object(
+        'additionalOrderText',
+        draft_order_state -> 'additionalOrderTextArray' ->> 0
+      )
+    WHERE draft_order_state IS NOT NULL
+      AND draft_order_state ? 'additionalOrderTextArray'
+      AND jsonb_typeof(draft_order_state -> 'additionalOrderTextArray') = 'array'
+      AND jsonb_array_length(draft_order_state -> 'additionalOrderTextArray') > 0
+      AND NOT (draft_order_state ? 'additionalOrderText')
+  `.execute(db);
+
+  // Recreate trigger function
+  await sql`
+    CREATE OR REPLACE FUNCTION sync_additional_order_text_fields()
+    RETURNS trigger
+    AS $$
+    DECLARE
+      old_text text;
+      new_text text;
+      old_array jsonb;
+      new_array jsonb;
+      array_changed boolean;
+      text_changed boolean;
+    BEGIN
+      IF NEW.draft_order_state IS NOT NULL THEN
+        -- Skip sync when additionalOrderText exists but is not a plain string
+        -- (e.g., it is a JSON array as used by Grant/Deny motion orders) to
+        -- avoid overwriting that array (e.g., syncing from additionalOrderTextArray[0]).
+        IF (NEW.draft_order_state ? 'additionalOrderText')
+          AND jsonb_typeof(NEW.draft_order_state -> 'additionalOrderText') != 'string'
+        THEN
+          RETURN NEW;
+        END IF;
+
+        old_text := OLD.draft_order_state ->> 'additionalOrderText';
+        new_text := NEW.draft_order_state ->> 'additionalOrderText';
+        old_array := OLD.draft_order_state -> 'additionalOrderTextArray';
+        new_array := NEW.draft_order_state -> 'additionalOrderTextArray';
+
+        array_changed := (new_array IS DISTINCT FROM old_array);
+        text_changed  := (new_text  IS DISTINCT FROM old_text);
+
+        IF NOT (NEW.draft_order_state ? 'additionalOrderTextArray') THEN
+          -- Old code path: array key absent in the written object; rebuild it from text
+          IF new_text IS NOT NULL THEN
+            NEW.draft_order_state := NEW.draft_order_state
+              || jsonb_build_object('additionalOrderTextArray', jsonb_build_array(new_text));
+          END IF;
+        ELSIF array_changed THEN
+          -- New code path: array key present and changed; sync text from array
+          IF new_array IS NOT NULL
+            AND jsonb_typeof(new_array) = 'array'
+            AND jsonb_array_length(new_array) > 0
+          THEN
+            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderText')
+              || jsonb_build_object('additionalOrderText', new_array ->> 0);
+          ELSE
+            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderText';
+          END IF;
+        ELSIF text_changed THEN
+          -- Array present and unchanged, but text changed; sync array from text
+          IF new_text IS NOT NULL THEN
+            NEW.draft_order_state := (NEW.draft_order_state - 'additionalOrderTextArray')
+              || jsonb_build_object('additionalOrderTextArray', jsonb_build_array(new_text));
+          ELSE
+            NEW.draft_order_state := NEW.draft_order_state - 'additionalOrderTextArray';
+          END IF;
+        END IF;
+      END IF;
+
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+  `.execute(db);
+
+  // Recreate trigger
+  await sql`
+    CREATE TRIGGER trg_sync_additional_order_text_fields
+    BEFORE INSERT OR UPDATE OF draft_order_state
+    ON dw_docket_entry
+    FOR EACH ROW
+    EXECUTE FUNCTION sync_additional_order_text_fields();
+  `.execute(db);
+}

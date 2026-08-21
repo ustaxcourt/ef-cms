@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardB', () => {
@@ -70,6 +70,16 @@ describe('ExternalDocumentNonStandardB', () => {
       expect(externalDocumentB.getDocumentTitle()).toEqual(
         'Application to Take Deposition of Petition',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentB = ExternalDocumentFactory({
+        category: 'Application',
+        documentType: 'Application to Take Deposition',
+        scenario: 'Nonstandard B',
+      });
+
+      expect(externalDocumentB.getDocumentTitle()).toEqual('');
     });
   });
 });

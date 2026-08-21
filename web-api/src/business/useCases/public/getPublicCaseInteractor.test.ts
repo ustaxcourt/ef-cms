@@ -160,4 +160,16 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
   });
+
+  it('should return the case with an empty docketEntries array when excludeDocketEntries is true', async () => {
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+
+    const result = await getPublicCaseInteractor({
+      docketNumber: MOCK_CASE.docketNumber,
+      excludeDocketEntries: true,
+    });
+
+    expect(result.docketEntries).toEqual([]);
+    expect(result.docketNumber).toEqual(MOCK_CASE.docketNumber);
+  });
 });

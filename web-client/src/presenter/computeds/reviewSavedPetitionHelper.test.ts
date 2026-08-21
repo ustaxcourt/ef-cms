@@ -384,11 +384,11 @@ describe('reviewSavedPetitionHelper', () => {
           form: {
             contactPrimary: {
               hasConsentedToElectronicService: true,
-              paperPetitionEmail: 'aCoolEmail@example.com',
+              contactEmailAddress: 'aCoolEmail@example.com',
             },
             contactSecondary: {
               hasConsentedToElectronicService: true,
-              paperPetitionEmail: 'anotherCoolEmail@example.com',
+              contactEmailAddress: 'anotherCoolEmail@example.com',
             },
           },
         },
@@ -412,11 +412,11 @@ describe('reviewSavedPetitionHelper', () => {
           form: {
             contactPrimary: {
               hasConsentedToElectronicService: false,
-              paperPetitionEmail: 'aCoolEmail@example.com',
+              contactEmailAddress: 'aCoolEmail@example.com',
             },
             contactSecondary: {
               hasConsentedToElectronicService: false,
-              paperPetitionEmail: 'anotherCoolEmail@example.com',
+              contactEmailAddress: 'anotherCoolEmail@example.com',
             },
           },
         },
@@ -436,7 +436,7 @@ describe('reviewSavedPetitionHelper', () => {
           form: {
             contactPrimary: {
               hasConsentedToElectronicService: true,
-              paperPetitionEmail: undefined,
+              contactEmailAddress: undefined,
             },
           },
         },
@@ -456,11 +456,11 @@ describe('reviewSavedPetitionHelper', () => {
         form: {
           contactPrimary: {
             hasConsentedToElectronicService: false,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
           contactSecondary: {
             hasConsentedToElectronicService: false,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
         },
       },
@@ -480,11 +480,11 @@ describe('reviewSavedPetitionHelper', () => {
         form: {
           contactPrimary: {
             hasConsentedToElectronicService: false,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
           contactSecondary: {
             hasConsentedToElectronicService: false,
-            paperPetitionEmail: undefined,
+            contactEmailAddress: undefined,
           },
         },
       },

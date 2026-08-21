@@ -23,7 +23,7 @@ const getEConsentAttributesForContact = (
   contact: any = {},
 ): { eServiceConsentText: string; shouldDisplayEConsentText: boolean } => {
   const shouldDisplayEConsentText =
-    !!contact.paperPetitionEmail || contact.hasConsentedToElectronicService;
+    !!contact.contactEmailAddress || contact.hasConsentedToElectronicService;
 
   const eServiceConsentText = contact.hasConsentedToElectronicService
     ? 'E-service consent'
@@ -109,8 +109,8 @@ export const reviewSavedPetitionHelper = (
     ordersAndNoticesInDraftsCodes,
   ).filter(order => Boolean(caseDetail[order]));
 
-  const ordersAndNoticesNeeded = [];
-  const ordersAndNoticesInDraft = [];
+  const ordersAndNoticesNeeded: string[] = [];
+  const ordersAndNoticesInDraft: string[] = [];
 
   for (const [key, value] of Object.entries(ordersAndNoticesNeededCodes)) {
     if (ordersAndNoticesNeededCodesSelected.includes(key)) {
@@ -146,7 +146,11 @@ export const reviewSavedPetitionHelper = (
   const showStatistics = statistics && statistics.length > 0;
 
   const formattedStatistics = (statistics || []).map(statistic =>
-    formatStatistic({ applicationContext, statistic }),
+    formatStatistic({
+      applicationContext,
+      docketNumber: caseDetail.docketNumber,
+      statistic,
+    }),
   );
 
   const renderOrderSummary =

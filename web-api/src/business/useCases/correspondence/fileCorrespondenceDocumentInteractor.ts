@@ -16,7 +16,7 @@ export const fileCorrespondenceDocumentInteractor = async (
     primaryDocumentFileId,
   }: { documentMetadata: TDocumentMetaData; primaryDocumentFileId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -54,6 +54,4 @@ export const fileCorrespondenceDocumentInteractor = async (
       correspondenceEntity.validate().toRawObject(),
     ]);
   }
-
-  return caseEntity.toRawObject();
 };

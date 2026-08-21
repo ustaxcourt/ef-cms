@@ -21,6 +21,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 
 export const completeDocketEntryQCSequence = [
   getCaseAction,
@@ -46,17 +47,23 @@ export const completeDocketEntryQCSequence = [
           {
             error: [
               switchErrorActionFactory({
-                'currently being updated': 'completed',
+                'was already completed': 'completed',
+                'currently being updated': 'lockError',
               }),
               {
                 completed: [
                   setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+                ],
+                lockError: [
+                  setShowModalFactoryAction('AsyncServiceUnavailableModal'),
                 ],
                 default: [setShowModalFactoryAction('GenericErrorModal')],
               },
             ],
             success: [
               setPdfPreviewUrlAction,
+              setDocketEntryIdAction,
+              getCaseAction,
               setCaseAction,
               setAlertSuccessAction,
               setPaperServicePartiesAction,

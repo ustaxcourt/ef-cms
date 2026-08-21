@@ -3,10 +3,10 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
 
@@ -74,6 +74,10 @@ const countCasesWithRepresentation = async (): Promise<number> => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const totalCases = await countCasesFiledInYear();
+  if (totalCases === 0) {
+    console.error(`No cases filed in ${fiscal ? 'FY ' : ''}${year}`);
+    process.exit(1);
+  }
   const numberOfCasesWithRepresentation = await countCasesWithRepresentation();
   const numberOfProSeCases = totalCases - numberOfCasesWithRepresentation;
   console.log(`${fiscal ? 'Fiscal' : 'Calendar'} Year ${year}`);

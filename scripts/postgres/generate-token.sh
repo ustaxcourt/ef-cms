@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Generates a temporary auth token for the given environment's RDS cluster
 

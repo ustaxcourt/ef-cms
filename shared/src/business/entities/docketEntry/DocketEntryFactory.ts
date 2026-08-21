@@ -7,7 +7,7 @@ import {
   MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
-import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';

@@ -6,7 +6,7 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ContactFactory } from './ContactFactory';
-import { ElectronicPetition } from '../cases/ElectronicPetition';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 
 describe('ContactFactory', () => {
   const baseElectronicPetition = {

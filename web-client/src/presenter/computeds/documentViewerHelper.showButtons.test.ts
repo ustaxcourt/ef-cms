@@ -9,7 +9,7 @@ import {
 } from '@shared/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
@@ -26,7 +26,7 @@ describe('documentViewerHelper', () => {
     docketEntryId: DOCKET_ENTRY_ID,
     documentTitle: 'Petition',
     documentType: 'Petition',
-    eventCode: INITIAL_DOCUMENT_TYPES.petition.documentType,
+    eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
     index: 1,
     isOnDocketRecord: true,
   };
@@ -34,6 +34,7 @@ describe('documentViewerHelper', () => {
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
+      user,
       viewerDocumentToDisplay: {
         docketEntryId: DOCKET_ENTRY_ID,
       },
@@ -50,7 +51,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
-          workItemId: 'someId'
+          workItemId: 'someId',
         },
         expectation: true,
       },
@@ -62,7 +63,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
-          workItemId: 'someId'
+          workItemId: 'someId',
         },
         expectation: false,
         user: adcUser,
@@ -86,7 +87,7 @@ describe('documentViewerHelper', () => {
           isFileAttached: false,
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
-          workItemId: 'someId'
+          workItemId: 'someId',
         },
         expectation: false,
       },

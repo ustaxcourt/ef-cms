@@ -7,11 +7,11 @@ import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityCo
 import type {
   Common,
   Core_Search,
-} from '@opensearch-project/opensearch/api/_types';
+} from 'node_modules/@opensearch-project/opensearch/api/_types';
 import type {
   Count_Request,
   Search_Request,
-} from '@opensearch-project/opensearch/api';
+} from 'node_modules/@opensearch-project/opensearch/api';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 const CHUNK_SIZE = MAX_ELASTICSEARCH_PAGINATION;

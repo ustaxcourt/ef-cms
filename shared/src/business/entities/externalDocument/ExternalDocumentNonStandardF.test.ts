@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardF', () => {
@@ -103,6 +103,16 @@ describe('ExternalDocumentNonStandardF', () => {
       });
 
       expect(externalDocumentF.getDocumentTitle()).toEqual('Fiftieth Amended');
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentF = ExternalDocumentFactory({
+        category: 'Miscellaneous',
+        documentType: 'Amended',
+        scenario: 'Nonstandard F',
+      });
+
+      expect(externalDocumentF.getDocumentTitle()).toEqual('');
     });
   });
 });

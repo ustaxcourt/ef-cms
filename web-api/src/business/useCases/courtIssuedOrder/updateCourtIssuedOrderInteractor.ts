@@ -21,7 +21,7 @@ export const updateCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
   { docketEntryIdToEdit, documentMetadata },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -103,7 +103,7 @@ export const updateCourtIssuedOrder = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId: docketEntryIdToEdit,
+      documentStorageId: currentDocument.documentStorageId,
     });
 
   const docketEntryEntity = new DocketEntry(
@@ -127,12 +127,10 @@ export const updateCourtIssuedOrder = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const result = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateCourtIssuedOrderInteractor = withLocking(

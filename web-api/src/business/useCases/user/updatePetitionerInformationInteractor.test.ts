@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/userContacts/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
@@ -23,7 +25,6 @@ import {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -38,6 +39,7 @@ import { updatePetitionerInformationInteractor } from './updatePetitionerInforma
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -47,6 +49,9 @@ describe('updatePetitionerInformationInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const generateAndServeDocketEntry = jest.mocked(
     generateAndServeDocketEntryMock,
+  );
+  const invalidateUserContactGeocode = jest.mocked(
+    invalidateUserContactGeocodeMock,
   );
   const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
@@ -76,19 +81,20 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .createUserForContact.mockImplementation(() => new UserCase(mockCase));
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
       privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
+
+    applicationContext
+      .getUseCaseHelpers()
+      .createUserForContact.mockResolvedValue(mockCase);
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     generateAndServeDocketEntry.mockResolvedValue({
@@ -169,7 +175,7 @@ describe('updatePetitionerInformationInteractor', () => {
         },
         mockPrivatePractitionerUser,
       ),
-    ).resolves.toBeDefined();
+    ).resolves.not.toThrow();
   });
 
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
@@ -253,6 +259,42 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
+  it('should invalidate the user contact geocode when petitioner contact info changes', async () => {
+    await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          address1: 'changed address',
+          contactId: mockPetitioners[0].contactId,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(invalidateUserContactGeocode).toHaveBeenCalledWith(
+      MOCK_CASE.docketNumber,
+      mockPetitioners[0].contactId,
+    );
+  });
+
+  it('should not invalidate the user contact geocode when petitioner contact info has not changed', async () => {
+    await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(invalidateUserContactGeocode).not.toHaveBeenCalled();
+  });
+
   it('should update contact information even when the update is changing a value to null', async () => {
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -272,8 +314,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).toBeUndefined();
   });
 
-  it('should update petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
-    const result = await updatePetitionerInformationInteractor(
+  it('should update petitioner contact when secondary contact info changes and serves the generated notice', async () => {
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -287,11 +329,11 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toEqual(mockUrl);
+    expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
-  it('should not serve a document or return a paperServicePdfUrl when only the serviceIndicator for the petitioner changes but not the address', async () => {
-    const result = await updatePetitionerInformationInteractor(
+  it('should not serve a document when only the serviceIndicator for the petitioner changes but not the address', async () => {
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -310,7 +352,6 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toBeUndefined();
   });
 
   it('should not update petitioner email even when it is provided', async () => {
@@ -332,8 +373,8 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
-  it("should not update the user's paper petition email and e-service consent information", async () => {
-    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+  it('should allow updating contactEmailAddress (Contact email address) but preserve e-service consent information', async () => {
+    mockPetitioners[0].contactEmailAddress = 'contactEmailAddress@example.com';
     mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
@@ -342,6 +383,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
         },
       },
       mockDocketClerkUser,
@@ -351,8 +393,24 @@ describe('updatePetitionerInformationInteractor', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
       hasConsentedToElectronicService: true,
-      paperPetitionEmail: 'paperPetitionEmail@example.com',
+      contactEmailAddress: 'newContactEmail@example.com',
     });
+  });
+
+  it('should not generate a notice of change when only contactEmailAddress (Contact email address) is updated', async () => {
+    await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          contactEmailAddress: 'newContactEmail@example.com',
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should update petitioner additionalName when it is passed in', async () => {
@@ -569,6 +627,28 @@ describe('updatePetitionerInformationInteractor', () => {
 
     expect(updatePetitionerSpy).toHaveBeenCalled();
     expect(generateAndServeDocketEntry).toHaveBeenCalled();
+  });
+
+  it('should not generate and serve the docket entry if transaction fails', async () => {
+    invalidateUserContactGeocode.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      updatePetitionerInformationInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
+            ...mockPetitioners[0],
+            address1: 'changed address',
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   describe('admissions clerk adds a verified petitioner email', () => {

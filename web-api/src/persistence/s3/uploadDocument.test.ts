@@ -15,7 +15,7 @@ describe('uploadDocument', () => {
       uploadDocument({
         applicationContext,
         pdfData: testPdfDoc,
-        pdfName: 'pdf name',
+        key: 'pdf name',
       }),
     ).rejects.toEqual(new Error('Upload failed'));
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
@@ -29,7 +29,21 @@ describe('uploadDocument', () => {
     await uploadDocument({
       applicationContext,
       pdfData: testPdfDoc,
-      pdfName: 'pdf name',
+      key: 'pdf name',
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
+
+  it('should use the temp documents bucket when useTempBucket is true', async () => {
+    mockUploadDone.mockResolvedValue({ $metadata: {} });
+    applicationContext.environment.tempDocumentsBucketName = 'temp-bucket';
+
+    await uploadDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      key: 'pdf name',
+      useTempBucket: true,
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();

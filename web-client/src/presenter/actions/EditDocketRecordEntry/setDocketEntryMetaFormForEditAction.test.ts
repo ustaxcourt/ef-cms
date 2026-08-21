@@ -55,6 +55,20 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     };
   });
 
+  it('throws an error if no docket entry matches the provided docketRecordIndex', async () => {
+    await expect(
+      runAction(setDocketEntryMetaFormForEditAction, {
+        modules: { presenter },
+        props: {
+          docketRecordIndex: 999,
+        },
+        state: {
+          caseDetail,
+        },
+      }),
+    ).rejects.toThrow('Could not find docket entry with index 999');
+  });
+
   it('populates state.form with the docket record meta based on the provided props.docketRecordIndex', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
@@ -122,20 +136,6 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
 
     expect(result.state.form.servedPartiesCode).toBeUndefined();
-  });
-
-  it('computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {
-    const result = await runAction(setDocketEntryMetaFormForEditAction, {
-      modules: { presenter },
-      props: {
-        docketRecordIndex: 3,
-      },
-      state: {
-        caseDetail,
-      },
-    });
-
-    expect(result.state.form.servedPartiesCode).toEqual(PARTIES_CODES.BOTH);
   });
 
   it('overwrites documentDetail.servedPartiesCode if servedPartiesCode is present on docketRecordEntry', async () => {

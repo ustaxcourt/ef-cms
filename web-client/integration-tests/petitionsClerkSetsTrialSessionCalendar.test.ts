@@ -1,12 +1,13 @@
 import {
   CASE_TYPES_MAP,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
+import { formattedTrialSessionDetails } from '@web-client/presenter/computeds/formattedTrialSessionDetails';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
@@ -15,12 +16,12 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('petitions clerk sets a trial session calendar', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Denver, Colorado, ${Date.now()}`;
+  const trialLocation = `Denver, Colorado, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,

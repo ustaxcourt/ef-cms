@@ -9,7 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const appendAmendedPetitionFormInteractor = async (
   applicationContext: ServerApplicationContext,
-  { docketEntryId }: { docketEntryId: string },
+  { documentStorageId }: { documentStorageId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   const hasPermission = isAuthorized(
@@ -25,7 +25,7 @@ export const appendAmendedPetitionFormInteractor = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      key: docketEntryId,
+      key: documentStorageId,
       useTempBucket: false,
     });
 
@@ -44,6 +44,6 @@ export const appendAmendedPetitionFormInteractor = async (
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedPdf),
-    pdfName: docketEntryId,
+    key: documentStorageId,
   });
 };

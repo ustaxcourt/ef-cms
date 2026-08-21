@@ -14,44 +14,25 @@ describe('Document QC Complete', () => {
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
-  before(() => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase().then(docketNumber => {
-      cy.wrap(docketNumber).as('DOCKET_NUMBER');
-      petitionsClerkServesPetition(docketNumber);
-      petitionerFilesADocument(docketNumber);
-    });
-
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase().then(docketNumber => {
-      cy.wrap(docketNumber).as('UNSERVED_DOCKET_NUMBER');
-    });
-  });
-
-  beforeEach(() => {
-    cy.keepAliases();
-  });
-
   it('should organize messages correctly in each section', () => {
-    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
+    setupServedCaseWithFiledDocument().then(({ docketNumber }) => {
       loginAsAdmissionsClerk();
       goToCase(docketNumber);
-      cy.task<{ userId: string; name: string; email: string; role: string }>(
-        'getUserByEmail',
-        'caseServicesSupervisor1@example.com',
-      ).then(caseServiceSupervisorInfo => {
-        sendMessages(
-          caseServiceSupervisorInfo.userId,
-          docketSectionMessage,
-          'docket',
-        );
+      getUserByEmail('caseServicesSupervisor1@example.com').then(
+        caseServiceSupervisorInfo => {
+          sendMessages(
+            caseServiceSupervisorInfo.userId,
+            docketSectionMessage,
+            'docket',
+          );
 
-        sendMessages(
-          caseServiceSupervisorInfo.userId,
-          petitionsSectionMessage,
-          'petitions',
-        );
-      });
+          sendMessages(
+            caseServiceSupervisorInfo.userId,
+            petitionsSectionMessage,
+            'petitions',
+          );
+        },
+      );
 
       retry(() => {
         loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
@@ -103,16 +84,13 @@ describe('Document QC Complete', () => {
   });
 
   it('should have the served case document qc assigned and completed', () => {
-    loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
-    cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
-    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
+    setupServedCaseWithFiledDocument().then(({ docketNumber }) => {
+      loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+      cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
-      cy.task<{ userId: string; name: string; email: string; role: string }>(
-        'getUserByEmail',
-        'docketclerk1@example.com',
-      ).then(docketClerkInfo => {
+      getUserByEmail('docketclerk1@example.com').then(docketClerkInfo => {
         cy.get('[data-testid="dropdown-select-assignee"]').select(
           docketClerkInfo.name,
         );
@@ -154,7 +132,7 @@ describe('Document QC Complete', () => {
   });
 
   it('should have the unserved case in the petition qc assigned', () => {
-    cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
+    setupUnservedCase().then(({ docketNumber: unservedDocketNumber }) => {
       retry(() => {
         loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
         cy.visit(
@@ -170,14 +148,13 @@ describe('Document QC Complete', () => {
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
 
-      cy.task<{ userId: string; name: string; email: string; role: string }>(
-        'getUserByEmail',
-        'caseServicesSupervisor1@example.com',
-      ).then(caseServiceSupervisorInfo => {
-        cy.get('[data-testid="dropdown-select-assignee"]').select(
-          caseServiceSupervisorInfo.name,
-        );
-      });
+      getUserByEmail('caseServicesSupervisor1@example.com').then(
+        caseServiceSupervisorInfo => {
+          cy.get('[data-testid="dropdown-select-assignee"]').select(
+            caseServiceSupervisorInfo.name,
+          );
+        },
+      );
 
       cy.visit('/document-qc/my/inbox');
       cy.get(
@@ -187,7 +164,41 @@ describe('Document QC Complete', () => {
   });
 });
 
-function petitionerFilesADocument(docketNumber: string) {
+type UserInfo = {
+  email: string;
+  name: string;
+  role: string;
+  userId: string;
+};
+
+const getUserByEmail = (email: string): Cypress.Chainable<UserInfo> => {
+  return cy.task<UserInfo>('getUserByEmail', email);
+};
+
+const setupServedCaseWithFiledDocument = (): Cypress.Chainable<{
+  docketNumber: string;
+}> => {
+  loginAsPetitioner();
+
+  return externalUserCreatesElectronicCase().then(docketNumber => {
+    petitionsClerkServesPetition(docketNumber);
+    petitionerFilesADocument(docketNumber);
+
+    return cy.wrap({ docketNumber });
+  });
+};
+
+const setupUnservedCase = (): Cypress.Chainable<{
+  docketNumber: string;
+}> => {
+  loginAsPetitioner();
+
+  return externalUserCreatesElectronicCase().then(docketNumber => {
+    return cy.wrap({ docketNumber });
+  });
+};
+
+function petitionerFilesADocument(docketNumber: string): void {
   loginAsPetitioner();
   cy.get('[data-testid="docket-search-field"]').type(docketNumber);
   cy.get('[data-testid="search-by-docket-number"]').click();
@@ -207,7 +218,7 @@ function assertMessageRecordCountForDocketNumberAndSubject(
   subject: string,
   count: number,
   inboxType: string,
-) {
+): void {
   cy.get(`[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`).then(
     $elements => {
       const parentElements = $elements.map((_index, element) =>
@@ -231,7 +242,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
   subject: string,
   count: number,
   inboxType: string,
-) {
+): Cypress.Chainable<boolean> {
   return cy.get('body').then(body => {
     const $elements = body.find(
       `[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`,
@@ -250,10 +261,10 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
   });
 }
 
-function sendMessages(userId: string, subject: string, section: string) {
+function sendMessages(userId: string, subject: string, section: string): void {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-new-message"]').click();
-  cy.get('[data-testid="message-to-section"').select(section);
+  cy.get('[data-testid="message-to-section"]').select(section);
   cy.get('[data-testid="message-to-user-id"]').select(userId);
   cy.get('[data-testid="message-subject"]').type(subject);
   cy.get('[data-testid="message-body"]').type('Message');

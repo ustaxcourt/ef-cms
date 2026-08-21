@@ -147,7 +147,9 @@ export const IRSNotice = connect<IrsNoticeType, typeof irsNoticeDependencies>(
 
         {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
 
-        {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
+        {statisticsFormHelper.showStatisticsForm && (
+          <StatisticsForm validateFormData={validateFormData} />
+        )}
 
         {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
       </section>

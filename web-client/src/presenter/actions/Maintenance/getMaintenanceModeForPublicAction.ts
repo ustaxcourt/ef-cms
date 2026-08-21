@@ -1,3 +1,4 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -11,7 +12,7 @@ export const getMaintenanceModeForPublicAction = async ({
   applicationContext,
   path,
   store,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const { data: maintenanceMode, headers } = await applicationContext
     .getUseCases()
     .getMaintenanceModePublicInteractor(applicationContext);

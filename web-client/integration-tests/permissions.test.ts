@@ -171,7 +171,7 @@ const printableDocketRecordVisible = async () => {
 describe('Case permissions test', () => {
   beforeEach(() => {
     global.window ??= Object.create({
-      ...global.window,
+      ...(global.window as Window),
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

@@ -46,11 +46,12 @@ describe('Docket Record Filter Journey', () => {
       DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     );
 
-    const docketEntries = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .filter(doc => !doc.isDraft);
     const filteredDocketEntriesOnDocketRecord =
       await getFormattedDocketEntriesForTest(cerebralTest);
+
+    const docketEntries = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .filter(doc => doc.isOnDocketRecord);
 
     expect(
       filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord

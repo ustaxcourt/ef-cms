@@ -16,7 +16,7 @@ export const addTrialSessionInformationHelper = (
   isStandaloneSession: boolean;
   sessionTypes: string[];
   title: string;
-  today: string;
+  tomorrow: string;
   swingSessions: { trialSessionId: string; swingSessionText: string }[];
   showSwingSessionList: boolean;
   showSwingSessionOption: boolean;
@@ -56,7 +56,15 @@ export const addTrialSessionInformationHelper = (
       ? DOCKETCLERK_EDITABLE_SESSION_TYPES
       : sessionTypes;
   };
-  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
+  const tomorrow = applicationContext.getUtilities().formatDateString(
+    applicationContext.getUtilities().calculateISODate({
+      dateString: applicationContext.getUtilities().createISODateString(),
+      howMuch: 1,
+      units: 'days',
+    }),
+    FORMATS.YYYYMMDD,
+  );
 
   const validSwingSessions: {
     trialSessionId: string;
@@ -95,6 +103,6 @@ export const addTrialSessionInformationHelper = (
     showSwingSessionOption: validSwingSessions.length > 0,
     swingSessions: validSwingSessions,
     title,
-    today,
+    tomorrow,
   };
 };

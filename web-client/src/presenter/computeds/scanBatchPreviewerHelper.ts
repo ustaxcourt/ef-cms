@@ -25,6 +25,7 @@ export const scanBatchPreviewerHelper = (
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
+  const pdfPreviewUrl = get(state.pdfPreviewUrl);
   let selectPageImage: string | null = null;
 
   const bufferToBase64 = buf => {
@@ -37,7 +38,7 @@ export const scanBatchPreviewerHelper = (
   };
 
   if (batches.length && currentPageIndex !== null) {
-    const page = selectedBatch.pages[currentPageIndex];
+    const page = selectedBatch!.pages[currentPageIndex];
     const b64encoded = bufferToBase64(page);
     selectPageImage = b64encoded;
   }
@@ -59,6 +60,7 @@ export const scanBatchPreviewerHelper = (
   return {
     batches,
     currentPage: currentPageIndex,
+    pdfPreviewUrl,
     scannerSource,
     scannerSourceDisplayName,
     selectedBatch: batches.length
@@ -67,7 +69,7 @@ export const scanBatchPreviewerHelper = (
     selectedPageImage: selectPageImage,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
-    totalPages: selectedBatch.pages.length,
+    totalPages: selectedBatch!.pages.length,
     uploadMode: documentUploadMode,
   };
 };

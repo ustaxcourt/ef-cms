@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
+import { autoGenerateFilingPdfAction } from '@web-client/presenter/actions/FileDocument/autoGenerateFilingPdfAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
@@ -13,6 +13,7 @@ import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/s
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { setCustomValidationAlertErrorsFileDocumentAction } from '../actions/setCustomValidationAlertErrorsFileDocumentAction';
 
 export const reviewExternalDocumentInformationSequence =
   showProgressSequenceDecorator([
@@ -25,9 +26,10 @@ export const reviewExternalDocumentInformationSequence =
         setValidationErrorsAction,
         setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
+        setCustomValidationAlertErrorsFileDocumentAction,
       ],
       success: [
-        generateEntryOfAppearancePdfAction,
+        autoGenerateFilingPdfAction,
         setPdfPreviewUrlAction,
         setSupportingDocumentScenarioAction,
         generateTitleAction,

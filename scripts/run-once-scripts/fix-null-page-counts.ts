@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getDbReader, getDbWriter } from '@web-api/database';
+import { getDbReader, getDbWriter } from '@web-api/persistence/postgres/database';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { sql } from 'kysely';
 import pLimit from 'p-limit';
@@ -31,7 +31,7 @@ parseArgsAndEnvVars(scriptConfig);
       .where('isFileAttached', '=', true)
       .where('numberOfPages', 'is', null)
       .where('servedAt', 'is not', null)
-      .select(['docketNumber', 'docketEntryId'])
+      .select(['docketNumber', 'docketEntryId', 'documentStorageId'])
       .execute(),
   );
 
@@ -55,11 +55,11 @@ parseArgsAndEnvVars(scriptConfig);
             .getUseCaseHelpers()
             .countPagesInDocument({
               applicationContext,
-              docketEntryId: docketEntry.docketEntryId,
+              documentStorageId: docketEntry.documentStorageId,
             });
           return {
             ...docketEntry,
-            numberOfPages: numberOfPages,
+            numberOfPages,
           };
         } catch (e) {
           failedDocketEntryIds.push(docketEntry.docketEntryId);
@@ -94,11 +94,10 @@ parseArgsAndEnvVars(scriptConfig);
     cb: writer =>
       writer
         .mergeInto('dwDocketEntry as d')
-        .using(valuesList,
-          join =>
-            join
-              .onRef('valuesList.column2', '=', 'd.docketEntryId')
-              .onRef('valuesList.column1', '=', 'd.docketNumber'),
+        .using(valuesList, join =>
+          join
+            .onRef('valuesList.column2', '=', 'd.docketEntryId')
+            .onRef('valuesList.column1', '=', 'd.docketNumber'),
         )
         .whenMatched()
         .thenUpdate(update =>

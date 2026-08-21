@@ -1,6 +1,6 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
-  domain   = var.dns_domain
+  domain = var.dns_domain
 }
 
 resource "aws_route53_record" "ses_verification_record" {

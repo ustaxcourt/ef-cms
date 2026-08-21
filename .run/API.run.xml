@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="API" type="NodeJSConfigurationType" node-parameters="node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec &quot;bash -c '. ./setup-local-env.sh &amp;&amp; (lsof -ti :9001 &gt; /dev/null || nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml &gt; /dev/null 2&gt;&amp;1 &lt; /dev/null &amp;) &amp;&amp; (lsof -ti :9229 &gt; /dev/null || nohup env HOST=0.0.0.0 CODE=\&quot;385030\&quot; ./node_modules/.bin/cognito-local &gt; /dev/null 2&gt;&amp;1 &lt; /dev/null &amp;) &amp;&amp; ./node_modules/.bin/ts-node --transpile-only \&quot;$@\&quot;' --&quot;" path-to-js-file="web-api/src/app-local.ts" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="TS_NODE_TRANSPILE_ONLY" value="true" />
+      <env name="AWS_ACCESS_KEY_ID" value="S3RVER" />
+      <env name="AWS_SECRET_ACCESS_KEY" value="S3RVER" />
+      <env name="AWS_REGION" value="us-east-1" />
+      <env name="EFCMS_DOMAIN" value="localhost" />
+      <env name="ELASTICSEARCH_HOST" value="localhost" />
+      <env name="ELASTICSEARCH_ENDPOINT" value="http://localhost:9200" />
+      <env name="IRS_SUPERUSER_EMAIL" value="irs-superuser@example.com" />
+      <env name="USER_POOL_ID" value="local_2pHzece7" />
+      <env name="COGNITO_CLIENT_ID" value="bvjrggnd3co403c0aahscinne" />
+      <env name="DISABLE_EMAILS" value="true" />
+      <env name="ENV" value="local" />
+      <env name="USTC_ENV" value="dev" />
+      <env name="POSTGRES_HOST" value="localhost" />
+      <env name="POSTGRES_USER" value="postgres" />
+      <env name="POSTGRES_PASSWORD" value="example" />
+      <env name="DATABASE_NAME" value="postgres" />
+    </envs>
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Prepare Local Environment" run_configuration_type="ShConfigurationType" />
+    </method>
+  </configuration>
+</component>

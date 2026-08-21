@@ -1,4 +1,4 @@
-import { getUserPermissions } from '@shared/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

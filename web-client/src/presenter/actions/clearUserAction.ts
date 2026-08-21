@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { emptyUserState } from '@web-client/presenter/state/userState';
-import { setCurrentUserToken } from '@shared/proxies/requests';
+import { setCurrentUserToken } from '@web-client/proxies/requests';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearUserAction = ({ store }: ActionProps) => {

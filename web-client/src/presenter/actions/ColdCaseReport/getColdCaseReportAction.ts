@@ -1,4 +1,4 @@
-import { getColdCaseReportInteractor } from '@shared/proxies/reports/getColdCaseReportProxy';
+import { getColdCaseReportInteractor } from '@web-client/proxies/reports/getColdCaseReportProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getColdCaseReportAction = async ({

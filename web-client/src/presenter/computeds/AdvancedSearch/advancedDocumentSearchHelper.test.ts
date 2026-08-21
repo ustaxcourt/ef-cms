@@ -1,11 +1,10 @@
 import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
-  const pageSizeOverride = 5;
   const manyResultsOverride = 4;
 
   const { DATE_RANGE_SEARCH_OPTIONS, DOCKET_NUMBER_SUFFIXES, USER_ROLES } =
@@ -49,7 +48,6 @@ describe('advancedDocumentSearchHelper', () => {
       getConstants: () => {
         return {
           ...applicationContext.getConstants(),
-          CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
           MAX_DOCUMENT_SEARCH_RESULTS: manyResultsOverride,
         };
       },
@@ -210,7 +208,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: { opinion: [], order: [] },
@@ -218,7 +216,6 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      showLoadMore: false,
       showNoMatches: true,
       showSearchResults: false,
     });
@@ -228,7 +225,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -250,7 +247,6 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toMatchObject({
       manyResults: manyResultsOverride,
       searchResultsCount: 1,
-      showLoadMore: false,
       showManyResultsMessage: false,
       showNoMatches: false,
       showSearchResults: true,
@@ -261,7 +257,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -310,7 +306,6 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toMatchObject({
       manyResults: manyResultsOverride,
       searchResultsCount: 4,
-      showLoadMore: false,
       showManyResultsMessage: true,
       showNoMatches: false,
       showSearchResults: true,
@@ -321,7 +316,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
@@ -379,7 +374,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: {
@@ -445,7 +440,7 @@ describe('advancedDocumentSearchHelper', () => {
     const { searchResults } = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: {
@@ -477,7 +472,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -512,7 +507,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -554,7 +549,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
@@ -592,7 +587,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         opinionDocumentSearchSort: {
@@ -622,7 +617,7 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         opinionDocumentSearchSort: {

@@ -12,6 +12,7 @@ import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -34,7 +35,7 @@ const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const start = Date.now();
+  const start = getCurrentDateTimeInMillis();
 
   try {
     let paginationToken;
@@ -62,7 +63,11 @@ const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
   } catch (error) {
     console.error('Error updating users:', error);
   }
-  console.log('Time to run: ', (Date.now() - start) / 1000, 's');
+  console.log(
+    'Time to run: ',
+    (getCurrentDateTimeInMillis() - start) / 1000,
+    's',
+  );
 })();
 
 async function verifyLowerCasedEmails(

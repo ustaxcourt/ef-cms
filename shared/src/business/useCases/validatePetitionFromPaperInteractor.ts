@@ -1,5 +1,5 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { PaperPetition } from '../entities/cases/PaperPetition';
+import { PaperPetition } from '@web-api/business/entities/cases/PaperPetition';
 
 /**
  * validatePetitionFromPaper

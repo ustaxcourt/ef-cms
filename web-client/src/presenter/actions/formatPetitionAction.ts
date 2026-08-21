@@ -40,6 +40,10 @@ export const formatPetitionAction = ({
 
   contactPrimary.email = user.email;
 
+  if (!isRawPractitioner(user)) {
+    contactPrimary.contactEmailAddress = user.email;
+  }
+
   const irsNoticesWithCaseTypes = irsNotices.map(irsNotice => {
     return {
       ...irsNotice,

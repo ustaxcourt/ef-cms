@@ -86,9 +86,7 @@ export const caseDetailHeaderHelper = (
 
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
-      const caseHasRespondent = !!(
-        !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
-      );
+      const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
 
       showFileFirstDocumentButton =
         !caseHasRespondent && !isCaseSealed && !isDojPractitioner;

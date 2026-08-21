@@ -9,11 +9,14 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { generateCsv } from '../helpers/generate-csv';
-import {
-  getIsoFromJsDate,
-  getNowObject,
-} from '@shared/business/utilities/DateHandler';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { pick } from 'lodash';
+import {
+  formatCaseCaption,
+  formatDate,
+  formatDocketNumber,
+  formatJudgeName,
+} from '../helpers/formatters';
 
 const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
@@ -27,6 +30,11 @@ const scriptConfig: ScriptConfig = {
     count: {
       default: false,
       short: 'c',
+      type: 'boolean',
+    },
+    distinct: {
+      default: false,
+      short: 'd',
       type: 'boolean',
     },
     eventCodes: {
@@ -56,15 +64,15 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { count, eventCodes, fiscal, stricken, years } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
-  count: boolean;
-  eventCodes: string[];
-  fiscal: boolean;
-  stricken: boolean;
-  years: number[];
-};
+const { count, distinct, eventCodes, fiscal, stricken, years } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    count: boolean;
+    distinct: boolean;
+    eventCodes: string[];
+    fiscal: boolean;
+    stricken: boolean;
+    years: number[];
+  };
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
@@ -82,17 +90,15 @@ const outputCsv = ({
     { header: 'Case Title', key: 'caption' },
   ];
   const filename =
-    `${OUTPUT_DIR}/${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
+    `${OUTPUT_DIR}/${distinct ? 'distinct-' : ''}` +
+    `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
-    ...pick(de, ['docketNumber', 'documentType', 'status']),
-    caption: de.caption.replace(/\r\n|\r|\n/g, ' ').trim(),
-    filed: getIsoFromJsDate(de.receivedAt)?.split('T')[0] || '',
-    judge:
-      de.associatedJudge
-        ?.replace('Chief Special Trial ', '')
-        .replace('Special Trial ', '')
-        .replace('Judge ', '') || '',
+    ...pick(de, ['documentType', 'status']),
+    caption: formatCaseCaption(de.caption),
+    docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
+    filed: formatDate(de.receivedAt),
+    judge: formatJudgeName(de.associatedJudge),
   }));
   generateCsv({ columns, filename, rows });
   console.log(`Generated ${filename}`);
@@ -103,28 +109,30 @@ const outputCsv = ({
   if (count) {
     const docCount: number = (await getDocketEntriesByEventCodesAndYears({
       count,
+      distinct,
       eventCodes,
       fiscal,
       onlyNonStricken: !stricken,
       years,
     })) as number;
     console.log(
-      `Found ${docCount} ${stricken ? '' : 'non-stricken '}` +
-        `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
-        `${years.join(',')}`,
+      `Found ${docCount} ${distinct ? 'distinct ' : ''}` +
+        `${stricken ? '' : 'non-stricken '} ${eventCodes.join(',')} ` +
+        `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
     );
     return;
   }
   const docketEntries = (await getDocketEntriesByEventCodesAndYears({
+    distinct,
     eventCodes,
     fiscal,
     onlyNonStricken: !stricken,
     years,
   })) as EventCodeReportDocketEntry[];
   console.log(
-    `Found ${docketEntries.length} ${stricken ? '' : 'non-stricken '}` +
-      `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
-      `${years.join(',')}`,
+    `Found ${docketEntries.length} ${distinct ? 'distinct ' : ''}` +
+      `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} ` +
+      `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
   );
   outputCsv({ docketEntries });
 })();

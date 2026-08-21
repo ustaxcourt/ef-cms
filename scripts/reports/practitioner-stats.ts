@@ -3,11 +3,11 @@
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
-  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getUniqueValues } from './trial-sessions-report-helpers';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 

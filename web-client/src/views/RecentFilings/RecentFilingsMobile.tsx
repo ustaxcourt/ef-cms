@@ -13,6 +13,7 @@ import React from 'react';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
+import { Case } from 'shared/src/business/entities/cases/Case';
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -54,6 +55,7 @@ export const RecentFilingsMobile = ({
   count,
   totalPages,
   isLoading = false,
+  showCaseStatusInfoSequence,
 }: {
   recentFilingsTableSort: RecentFilingsTableSort;
   setRecentFilingsTableSortSequence: SequenceFunction;
@@ -67,6 +69,7 @@ export const RecentFilingsMobile = ({
   count: number;
   totalPages: number;
   isLoading?: boolean;
+  showCaseStatusInfoSequence: SequenceFunction;
 }) => {
   const renderViewMyCasesButton = () => (
     <Button link className="mobile-header-button" href="/">
@@ -108,8 +111,8 @@ export const RecentFilingsMobile = ({
         </div>
         <div id="sort-options-description" className="sr-only">
           Choose how to sort the recent filings table. Options include sorting
-          by Docket Number, Filed Date, Document, or Case Title in ascending or
-          descending order.
+          by Docket Number, Filed Date, Document, Case Title, or Case Status in
+          ascending or descending order.
         </div>
 
         <div className="grid-row margin-bottom-4">
@@ -234,6 +237,23 @@ export const RecentFilingsMobile = ({
                     </td>
                     <th>Case Title</th>
                     <td className="divider">{filing.caseTitle}</td>
+                    <th>Case Status</th>
+                    <td>
+                      <Button
+                        link
+                        onClick={() =>
+                          showCaseStatusInfoSequence({
+                            status: filing.status,
+                          })
+                        }
+                      >
+                        {Case.formatCaseStatus({
+                          caseStatus: filing.status,
+                          trialDate: filing.trialDate,
+                          trialLocation: filing.trialLocation,
+                        })}
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

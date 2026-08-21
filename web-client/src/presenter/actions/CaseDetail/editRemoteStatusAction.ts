@@ -16,7 +16,7 @@ export const editRemoteStatusAction = async ({
 
   const hasDate = remoteTrialGrantedDate?.trim();
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
@@ -30,6 +30,5 @@ export const editRemoteStatusAction = async ({
     alertSuccess: {
       message: 'Successfully updated motion to proceed remotely date.',
     },
-    caseDetail,
   };
 };

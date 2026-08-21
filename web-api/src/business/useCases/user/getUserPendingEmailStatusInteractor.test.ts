@@ -71,7 +71,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
     expect(result).toEqual(false);
   });
 
-  it('should return undefined when the user is not found in persistence', async () => {
+  it('should return false when the user is not found in persistence', async () => {
     getUserById.mockResolvedValue(undefined);
 
     const result = await getUserPendingEmailStatusInteractor(
@@ -82,6 +82,6 @@ describe('getUserPendingEmailStatusInteractor', () => {
       mockPetitionerUser,
     );
 
-    expect(result).toBeUndefined();
+    expect(result).toEqual(false);
   });
 });

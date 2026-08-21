@@ -1,4 +1,7 @@
-import { fileUploadStatusHelper } from './fileUploadStatusHelper';
+import {
+  createFileUploadStatusHelper,
+  fileUploadStatusHelper,
+} from './fileUploadStatusHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('fileUploadStatusHelper', () => {
@@ -129,8 +132,22 @@ describe('fileUploadStatusHelper', () => {
   });
 
   describe('throttled messages', () => {
+    let throttledFileUploadStatusHelper: ReturnType<
+      typeof createFileUploadStatusHelper
+    >;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      throttledFileUploadStatusHelper = createFileUploadStatusHelper();
+    });
+
+    afterEach(() => {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+    });
+
     it('throttles the message inside of a three-second window', () => {
-      const result1 = runCompute(fileUploadStatusHelper, {
+      const result1 = runCompute(throttledFileUploadStatusHelper, {
         state: {
           fileUploadProgress: {
             isUploading: true,
@@ -142,7 +159,7 @@ describe('fileUploadStatusHelper', () => {
 
       expect(result1.statusMessage).toEqual('Preparing Upload');
 
-      const result2 = runCompute(fileUploadStatusHelper, {
+      const result2 = runCompute(throttledFileUploadStatusHelper, {
         state: {
           fileUploadProgress: {
             isUploading: true,
@@ -155,8 +172,8 @@ describe('fileUploadStatusHelper', () => {
       expect(result2.statusMessage).toEqual(result1.statusMessage);
     });
 
-    it('will update the message returned if executions are more than three seconds apart', async () => {
-      const result1 = runCompute(fileUploadStatusHelper, {
+    it('will update the message returned if executions are more than three seconds apart', () => {
+      const result1 = runCompute(throttledFileUploadStatusHelper, {
         state: {
           fileUploadProgress: {
             isUploading: true,
@@ -168,9 +185,9 @@ describe('fileUploadStatusHelper', () => {
 
       expect(result1.statusMessage).toEqual('Preparing Upload');
 
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      jest.advanceTimersByTime(3001);
 
-      const result2 = runCompute(fileUploadStatusHelper, {
+      const result2 = runCompute(throttledFileUploadStatusHelper, {
         state: {
           fileUploadProgress: {
             isUploading: true,

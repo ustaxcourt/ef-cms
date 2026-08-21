@@ -81,6 +81,7 @@ export const createDbBackup = async ({
       '--verbose',
     ],
     { ...process.env, PGPASSWORD: sourcePassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
@@ -122,6 +123,7 @@ export const createSingleTableBackup = async ({
       '--verbose',
     ],
     { ...process.env, PGPASSWORD: sourcePassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
@@ -178,10 +180,8 @@ export const restoreFromBackup = async ({
       `--file=${backUpFileName}`,
       '--echo-errors',
     ],
-    {
-      ...process.env,
-      PGPASSWORD: targetPassword,
-    },
+    { ...process.env, PGPASSWORD: targetPassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
@@ -241,10 +241,8 @@ export const restoreSingleTableFromBackup = async ({
       `--file=${backUpFileName}`,
       '--echo-errors',
     ],
-    {
-      ...process.env,
-      PGPASSWORD: targetPassword,
-    },
+    { ...process.env, PGPASSWORD: targetPassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
@@ -314,10 +312,8 @@ export const dropAllTargetTables = async ({
         END
         $$;`,
     ],
-    {
-      ...process.env,
-      PGPASSWORD: targetPassword,
-    },
+    { ...process.env, PGPASSWORD: targetPassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
@@ -346,14 +342,15 @@ export const dropTargetTable = async ({
       '--no-password',
       `--command=DROP TABLE IF EXISTS ${targetTableName} CASCADE;`,
     ],
-    {
-      ...process.env,
-      PGPASSWORD: targetPassword,
-    },
+    { ...process.env, PGPASSWORD: targetPassword },
+    { captureStdout: false, streamStdout: true },
   );
 };
 
 export const removeFiles = async (backupFiles: string[]): Promise<void> => {
-  await runCommand('rm', ['-f', ...backupFiles]);
+  await runCommand('rm', ['-f', ...backupFiles], undefined, {
+    captureStdout: false,
+    streamStdout: true,
+  });
   console.log(`Removed ${backupFiles.join(' ')}`);
 };

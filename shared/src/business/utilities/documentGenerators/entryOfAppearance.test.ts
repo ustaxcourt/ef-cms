@@ -1,5 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { entryOfAppearance } from './entryOfAppearance';
+import { entryOfAppearance } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('entryOfAppearance', () => {

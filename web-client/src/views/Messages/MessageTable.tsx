@@ -392,7 +392,7 @@ const getMessageSubjectCell = ({
           <Button
             link
             className={classNames('padding-0', boldText ? 'text-bold' : '')}
-            data-testid={`${messageListId}-subject-cell`}
+            data-testid={`${messageListId}-subject-cell-${message.docketNumber}`}
             href={message.messageDetailLink}
           >
             {message.subject}

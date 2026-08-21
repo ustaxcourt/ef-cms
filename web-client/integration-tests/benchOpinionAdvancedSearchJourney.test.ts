@@ -2,7 +2,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   BENCH_OPINION_EVENT_CODE,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { chambersUserAddsOrderToCase } from './journey/chambersUserAddsOrderToCase';
 import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersUserAppliesSignatureToDraftDocument';
 import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
@@ -105,7 +105,7 @@ describe('Bench opinion advanced search journey', () => {
     });
   });
 
-  describe('Create a bench opinion, sign as Judge Ashford, and serve the document', () => {
+  describe('Create another bench opinion, sign as Judge Ashford, and serve the document', () => {
     loginAs(cerebralTest, 'ashfordschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);

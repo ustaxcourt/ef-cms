@@ -18,7 +18,7 @@ export const saveMinuteSheetToDraftsInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, trialSessionId },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -35,14 +35,14 @@ export const saveMinuteSheetToDraftsInteractor = async (
     throw new Error('Case and trial session could not be retrieved');
   }
 
-  const docketEntryId = getUniqueId();
+  const documentStorageId = getUniqueId();
 
   const pdf = await createAndUploadMinuteSheet(applicationContext, {
     docketNumber,
     trialSessionId,
     aCase,
     trialSession,
-    docketEntryId,
+    documentStorageId,
   });
 
   const documentTitle = `Minutes`;
@@ -56,7 +56,8 @@ export const saveMinuteSheetToDraftsInteractor = async (
   const draftDocketEntry = new DocketEntry(
     {
       ...documentMetadata,
-      docketEntryId,
+      docketEntryId: documentStorageId,
+      documentStorageId,
       filedBy: authorizedUser.name,
       isDraft: true,
       isFileAttached: true,
@@ -71,7 +72,7 @@ export const saveMinuteSheetToDraftsInteractor = async (
   const caseEntity = new Case(aCase, { authorizedUser });
   caseEntity.addDocketEntry(draftDocketEntry);
 
-  return await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

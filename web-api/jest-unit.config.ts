@@ -1,12 +1,32 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
+
+const transformIgnoreModules = [
+  '@joi/date',
+  '@puppeteer',
+  'cookie',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'htmlparser2',
+  'kysely',
+  'p-queue',
+  'p-timeout',
+  'puppeteer',
+  'puppeteer-core',
+  'uuid',
+];
 
 const config: Config = {
+  displayName: 'web-api',
   clearMocks: true,
-  collectCoverage: true,
+  maxWorkers: '50%',
+  workerIdleMemoryLimit: '20%',
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
     'elasticsearch/*.test.{js,ts}',
@@ -24,6 +44,7 @@ const config: Config = {
     '!src/app-local.{js,ts}',
     '!src/app-public-local.{js,ts}',
     '!src/getDocumentGenerators.ts',
+    '!src/business/utilities/documentGenerators/**/*.ts',
     '!src/persistence/cognito/getCognito.ts',
     '!src/persistence/s3/zipDocuments.ts',
     '!src/persistence/sqs/deleteMessage.ts',
@@ -47,7 +68,10 @@ const config: Config = {
     '!src/gateways/lambda/getLambdaClient.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
+  testMatch: [
+    '<rootDir>/elasticsearch/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   coverageThreshold: {
     global: {
       branches: 90,
@@ -57,7 +81,7 @@ const config: Config = {
     },
   },
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
@@ -65,10 +89,11 @@ const config: Config = {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
-  verbose: false,
+  transformIgnorePatterns: [
+    `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
+  ],
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],

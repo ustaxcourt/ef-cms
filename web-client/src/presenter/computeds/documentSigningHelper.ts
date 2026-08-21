@@ -10,7 +10,7 @@ import { Get } from 'cerebral';
 export const documentSigningHelper = (get: Get): any => {
   const signatureData = get(state.pdfForSigning.signatureData);
   const currentPageNumber = get(state.pdfForSigning.pageNumber);
-  const totalPages = get(state.pdfForSigning.pdfjsObj.numPages);
+  const totalPages = get(state.pdfForSigning.pdfjsObj!.numPages);
   const disablePrevious = currentPageNumber === 1 || !!signatureData;
   const disableNext = currentPageNumber === totalPages || !!signatureData;
   const previousPageNumber =

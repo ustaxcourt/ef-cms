@@ -1,0 +1,127 @@
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} from '@shared/business/entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+
+export const updateCaseDetails = async (
+  _applicationContext: ServerApplicationContext,
+  { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+): Promise<void> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
+    throw new UnauthorizedError('Unauthorized for editing case details');
+  }
+
+  const allowedFields = [
+    'caseType',
+    'hasVerifiedIrsNotice',
+    'irsNoticeDate',
+    'petitionPaymentDate',
+    'petitionPaymentMethod',
+    'petitionPaymentStatus',
+    'petitionPaymentWaivedDate',
+    'preferredTrialCity',
+    'procedureType',
+    'remoteTrialGranted',
+    'remoteTrialGrantedDate',
+    'statistics',
+  ];
+
+  const editableFields = Object.fromEntries(
+    Object.entries(caseDetails).filter(
+      ([key, value]) => allowedFields.includes(key) && value !== undefined,
+    ),
+  );
+
+  const oldCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
+  const oldCaseClone = structuredClone(oldCase) as RawCase;
+
+  const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
+  const isWaived =
+    editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
+
+  const newCaseEntity = new Case(
+    {
+      ...oldCase,
+      ...editableFields,
+      irsNoticeDate: editableFields.hasVerifiedIrsNotice
+        ? editableFields.irsNoticeDate
+        : undefined,
+      ...('petitionPaymentStatus' in editableFields && {
+        petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
+        petitionPaymentMethod: isPaid
+          ? editableFields.petitionPaymentMethod
+          : null,
+        petitionPaymentWaivedDate: isWaived
+          ? editableFields.petitionPaymentWaivedDate
+          : null,
+      }),
+    },
+    { authorizedUser },
+  );
+
+  if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
+    if (isPaid) {
+      const filingFeePaidEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Paid',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+          filingDate: newCaseEntity.petitionPaymentDate,
+          isFileAttached: false,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { authorizedUser },
+      );
+
+      filingFeePaidEntry.setFiledBy(authorizedUser);
+
+      newCaseEntity.addDocketEntry(filingFeePaidEntry);
+    } else if (isWaived) {
+      const filingFeeWaivedEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Waived',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
+          filingDate: newCaseEntity.petitionPaymentWaivedDate,
+          isFileAttached: false,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { authorizedUser },
+      );
+
+      filingFeeWaivedEntry.setFiledBy(authorizedUser);
+
+      newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
+    }
+  }
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: newCaseEntity,
+    oldCase: oldCaseClone,
+  });
+};
+
+export const updateCaseDetailsInteractor = withLocking(
+  updateCaseDetails,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

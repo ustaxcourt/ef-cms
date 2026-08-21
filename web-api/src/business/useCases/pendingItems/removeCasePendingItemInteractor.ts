@@ -22,7 +22,7 @@ export const removeCasePendingItem = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -51,8 +51,6 @@ export const removeCasePendingItem = async (
     authorizedUser,
     caseToUpdate: updatedCaseEntity,
   });
-
-  return updatedCaseEntity.toRawObject();
 };
 
 export const removeCasePendingItemInteractor = withLocking(

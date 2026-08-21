@@ -34,7 +34,7 @@ describe('computeSubmitTrialSessionDataAction', () => {
     expect(spyComputeTermAndUpdateState).toHaveBeenCalled();
   });
 
-  it('should clear trialClerkId and trialClerk when alternateTrialClerkName is present', async () => {
+  it('should clear trialClerk but keep trialClerkId when alternateTrialClerkName is present', async () => {
     const alternateTrialClerkName = 'Wonder Woman';
 
     const result = await runAction(computeSubmitTrialSessionDataAction, {
@@ -51,7 +51,7 @@ describe('computeSubmitTrialSessionDataAction', () => {
       },
     });
 
-    expect(result.state.form.trialClerkId).toEqual(undefined);
+    expect(result.state.form.trialClerkId).toEqual('Other');
     expect(result.state.form.trialClerk).toEqual(undefined);
     expect(result.state.form.alternateTrialClerkName).toEqual(
       alternateTrialClerkName,

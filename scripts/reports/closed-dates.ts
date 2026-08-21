@@ -2,12 +2,13 @@
 
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
+import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
 
 const thisYear = getNowObject().year;
@@ -66,11 +67,11 @@ const getAllCasesOpenedInYear = async (): Promise<RawCase[]> => {
     { header: 'Case Type', key: 'caseType' },
   ];
   const rows = casesOpenedInYear.map(c => ({
-    caseCaption: c.caseCaption,
+    caseCaption: formatCaseCaption(c.caseCaption),
     caseType: c.caseType,
-    closedHumanized: c.closedDate?.split('T')[0] || '',
+    closedHumanized: formatDate(c.closedDate),
     docketNumber: c.docketNumber,
-    rcvdAtHumanized: c.receivedAt?.split('T')[0],
+    rcvdAtHumanized: formatDate(c.receivedAt),
     status: c.status,
   }));
   generateCsv({ columns, filename, rows });

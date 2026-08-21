@@ -1,10 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmTrialSessionLocationChangeModalDialog } from '@web-client/views/ConfirmTrialSessionLocationChangeModalDialog';
+import { ConfirmTrialSessionStartDateChangeModalDialog } from '@web-client/views/ConfirmTrialSessionStartDateChangeModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
+import { SessionNotesForm } from './SessionNotesForm';
 import { TrialSessionDetailsHeader } from '../TrialSessionDetails/TrialSessionDetailsHeader';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -17,23 +19,22 @@ export const EditTrialSession = connect(
       sequences.closeModalAndNavigateBackSequence,
     handleEditedTrialSessionSequence:
       sequences.handleEditedTrialSessionSequence,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.modal.showModal,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
+    persistModal: state.trialSessionChangeModalState.persist,
+    openConfirmTrialSessionLocationChangeModalSequence: sequences.openConfirmTrialSessionLocationChangeModalSequence
   },
   function EditTrialSession({
     closeModalAndNavigateBackSequence,
     handleEditedTrialSessionSequence,
-    form,
     formattedTrialSessionDetails,
     formCancelToggleCancelSequence,
     showModal,
-    updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
+    persistModal,
+    openConfirmTrialSessionLocationChangeModalSequence
   }) {
     return (
       <>
@@ -60,6 +61,12 @@ export const EditTrialSession = connect(
                 confirmSequence={updateTrialSessionSequence}
               />
             )}
+            {showModal === 'ConfirmTrialSessionStartDateChangeModalDialog' && (
+              <ConfirmTrialSessionStartDateChangeModalDialog
+                cancelSequence={closeModalAndNavigateBackSequence}
+                confirmSequence={persistModal ? openConfirmTrialSessionLocationChangeModalSequence : updateTrialSessionSequence}
+              />
+            )}
             <ErrorNotification />
 
             <p className="margin-bottom-2 required-statement margin-top-05">
@@ -67,31 +74,10 @@ export const EditTrialSession = connect(
             </p>
 
             <SessionInformationForm addingTrialSession={false} />
-            <LocationInformationForm />
-            <SessionAssignmentsForm />
+            <LocationInformationForm addingTrialSession={false} />
+            <SessionAssignmentsForm addingTrialSession={false} />
+            <SessionNotesForm addingTrialSession={false} />
 
-            <h2 className="margin-top-4">Session Notes</h2>
-            <div className="blue-container margin-bottom-2">
-              <div className="usa-form-group margin-bottom-0">
-                <label className="usa-label" htmlFor="notes">
-                  Trial session notes{' '}
-                  <span className="usa-hint">(optional)</span>
-                </label>
-                <textarea
-                  className="usa-textarea textarea-resize-vertical"
-                  id="notes"
-                  maxLength={400}
-                  name="notes"
-                  value={form.notes}
-                  onChange={e => {
-                    updateTrialSessionFormDataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
             <div className="button-container">
               <Button
                 data-testid="submit-edit-trial-session"

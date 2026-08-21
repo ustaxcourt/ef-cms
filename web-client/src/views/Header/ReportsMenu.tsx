@@ -49,6 +49,20 @@ export const ReportsMenu = connect<ReportsMenuProps, typeof reportsMenuDeps>(
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
+            {reportMenuHelper.showDocketClerkReport && (
+              <li className="usa-nav__submenu-item">
+                <a
+                  data-testid="docket-clerk-report-link"
+                  href="/reports/docket-clerk-report"
+                  onClick={() => {
+                    resetHeaderAccordionsSequence();
+                    toggleMobileMenuSequence();
+                  }}
+                >
+                  Docket Clerk Report
+                </a>
+              </li>
+            )}
             {reportMenuHelper.showActivityReport && (
               <li className="usa-nav__submenu-item">
                 <a

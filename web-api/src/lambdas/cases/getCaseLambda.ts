@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
+import { getCaseInteractor } from '@web-api/business/useCases/getCaseInteractor';
 
 /**
  * used for fetching a single case
@@ -13,6 +13,8 @@ export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
     getCaseInteractor(
       {
         docketNumber: event.pathParameters.docketNumber,
+        excludeDocketEntries:
+          event.queryStringParameters?.excludeDocketEntries === 'true',
       },
       authorizedUser,
     ),

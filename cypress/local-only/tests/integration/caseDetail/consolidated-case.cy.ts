@@ -14,14 +14,14 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('[data-testid="descriptionDisplay-sortable-button"]')
         .find('svg')
         .invoke('attr', 'data-icon')
-        .should('equal', 'right-left');
+        .should('equal', 'arrow-right-arrow-left');
 
       cy.get('[data-testid="descriptionDisplay-sortable-button"]').click();
 
       cy.get('[data-testid="descriptionDisplay-sortable-button"]')
         .find('svg')
         .invoke('attr', 'data-icon')
-        .should('equal', 'up-long');
+        .should('equal', 'arrow-up-long');
 
       cy.get('#tab-document-view').click();
       cy.get('#tab-docket-sub-record').click();
@@ -29,7 +29,7 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('[data-testid="descriptionDisplay-sortable-button"]')
         .find('svg')
         .invoke('attr', 'data-icon')
-        .should('equal', 'up-long');
+        .should('equal', 'arrow-up-long');
     });
 
     it('should persist the populated consolidated cases in the overview tab when petitioner counsel is added to parties', () => {

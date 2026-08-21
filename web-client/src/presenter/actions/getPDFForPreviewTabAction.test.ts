@@ -27,14 +27,18 @@ describe('getPDFForPreviewTabAction', () => {
   });
 
   it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and docketEntryId', async () => {
-    const props = { file: { docketEntryId: '456' } };
     await runAction(getPDFForPreviewTabAction, {
       modules: {
         presenter,
       },
-      props,
+      props: {
+        file: {
+          docketEntryId: '789',
+        },
+      },
       state: {
         caseDetail: {
+          docketEntries: [{ docketEntryId: '789', documentStorageId: '456' }],
           docketNumber: '123-20',
         },
       },
@@ -43,7 +47,7 @@ describe('getPDFForPreviewTabAction', () => {
       applicationContext.getUseCases().loadPDFForPreviewInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      docketEntryId: '456',
+      documentStorageId: '456',
       docketNumber: '123-20',
     });
   });

@@ -1,4 +1,7 @@
-import { formatPhoneNumber } from './formatPhoneNumber';
+import {
+  formatPhoneNumber,
+  formatTrialNoticePhoneNumber,
+} from './formatPhoneNumber';
 
 describe('formatPhoneNumber', () => {
   it('should return a formatted string with hyphens if the original string has 10 digits', () => {
@@ -36,7 +39,34 @@ describe('formatPhoneNumber', () => {
   }
 
   it('should return undefined if nothing is passed in', () => {
+    // @ts-expect-error
     const result = formatPhoneNumber();
+
+    expect(result).toBeUndefined();
+  });
+});
+
+describe('formatTrialNoticePhoneNumber', () => {
+  it('should return a formatted string with parentheses for 10 digits', () => {
+    const result = formatTrialNoticePhoneNumber('4444444444');
+
+    expect(result).toEqual('(444) 444-4444');
+  });
+
+  it('should reformat a hyphenated 10-digit phone number', () => {
+    const result = formatTrialNoticePhoneNumber('444-444-4444');
+
+    expect(result).toEqual('(444) 444-4444');
+  });
+
+  it('should return the original string if it is not 10 digits', () => {
+    const result = formatTrialNoticePhoneNumber('3333');
+
+    expect(result).toEqual('3333');
+  });
+
+  it('should return undefined if nothing is passed in', () => {
+    const result = formatTrialNoticePhoneNumber();
 
     expect(result).toBeUndefined();
   });

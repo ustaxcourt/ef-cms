@@ -27,19 +27,19 @@ export const docketClerkFilesAndServesDocumentOnLeadCase = (
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
     expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
+      draftOrderDocument?.eventCode,
     );
 
     expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
+      draftOrderDocument?.documentType,
     );
 
-    if (draftOrderDocument.eventCode === 'O') {
+    if (draftOrderDocument?.eventCode === 'O') {
       await cerebralTest.runSequence(
         'updateCourtIssuedDocketEntryFormValueSequence',
         {

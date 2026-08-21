@@ -167,4 +167,67 @@ describe('setDefaultGenerationTypeAction', () => {
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
   });
+
+  it('should set the generation type to auto if the event code is NOTW and the user is a private practitioner', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'NOTW',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [],
+        },
+        form: {
+          generationType: GENERATION_TYPES.MANUAL,
+        },
+        user: privatePractitionerUser,
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
+  });
+
+  it('should set the generation type to auto if the event code is NOTW and the user is an IRS Practitioner', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'NOTW',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [],
+        },
+        form: {
+          generationType: GENERATION_TYPES.MANUAL,
+        },
+        user: irsPractitionerUser,
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
+  });
+
+  it('should set the generation type to manual if the event code is NOTW and the user is not a private or IRS practitioner', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'NOTW',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [],
+        },
+        form: {
+          generationType: GENERATION_TYPES.AUTO,
+        },
+        user: { role: 'someOtherRole' },
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
+  });
 });

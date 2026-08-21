@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-conditional-expect */
-import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
+import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
@@ -12,6 +12,7 @@ import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServes
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
@@ -23,7 +24,7 @@ describe('Case Consolidation Journey', () => {
 
   cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

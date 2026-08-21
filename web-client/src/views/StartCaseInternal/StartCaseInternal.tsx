@@ -38,7 +38,7 @@ export const StartCaseInternal = connect(
       <>
         <BigHeader text="Create Case" />
         <section className="usa-section grid-container">
-          <div noValidate aria-labelledby="start-case-header" role="form">
+          <form noValidate aria-labelledby="start-case-header">
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog
                 onCancelSequence={closeModalAndReturnToDashboardSequence}
@@ -114,7 +114,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-7" />
             </div>
-          </div>
+          </form>
         </section>
       </>
     );

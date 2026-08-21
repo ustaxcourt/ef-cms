@@ -38,7 +38,7 @@ export class ExternalDocumentNonStandardG extends ExternalDocumentBase {
 
   getDocumentTitle(): string {
     return replaceBracketed(
-      this.documentTitle,
+      this.documentTitle || '',
       this.ordinalValue === 'Other'
         ? transformFormValueToTitleCaseOrdinal(this.otherIteration)
         : transformFormValueToTitleCaseOrdinal(this.ordinalValue),

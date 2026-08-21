@@ -2,7 +2,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
@@ -17,7 +17,7 @@ import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperC
 describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (OAPF) is served', () => {
   const cerebralTest = setupTest();
 
-  let formOverrides = [{ key: 'orderForFilingFee', value: false }];
+  const formOverrides = [{ key: 'orderForFilingFee', value: false }];
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -22,8 +22,6 @@ export const FileDocument = connect(
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.modal.showModal,
-    updateCaseAssociationFormValueSequence:
-      sequences.updateCaseAssociationFormValueSequence,
   },
   function FileDocument({
     fileDocumentHelper,

@@ -1,5 +1,11 @@
 import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { recordRumPageView } from '@web-client/providers/realUserMonitoring';
 import { route, router } from '@web-client/router';
+
+jest.mock('@web-client/providers/realUserMonitoring', () => ({
+  ...jest.requireActual('@web-client/providers/realUserMonitoring'),
+  recordRumPageView: jest.fn(),
+}));
 
 describe('router', () => {
   const getUserMock = jest.fn();
@@ -76,6 +82,7 @@ describe('router', () => {
       );
       expect(getSequenceMock).toHaveBeenCalledWith('gotoCaseDetailSequence');
       expect(sequenceMock).toHaveBeenCalledWith({ docketNumber: '123-45' });
+      expect(recordRumPageView).toHaveBeenCalledWith('/case-detail/{id}');
     });
 
     it('/case-detail/*?openModal=*', () => {
@@ -88,6 +95,10 @@ describe('router', () => {
         docketNumber: '123-45',
         openModal: 'MyModal',
       });
+      // the recorded page id is normalized from the route pattern, so the
+      // `?openModal=*` query portion is stripped and it matches the plain
+      // /case-detail/{id} page view above
+      expect(recordRumPageView).toHaveBeenCalledWith('/case-detail/{id}');
     });
 
     it('/case-detail/*/documents/*/add-court-issued-docket-entry/*', () => {
@@ -108,6 +119,64 @@ describe('router', () => {
         docketEntryId,
         docketNumber,
         redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`,
+      });
+    });
+
+    it('/case-detail/*/documents/*/status-report-order-create..', () => {
+      getPermissionsMock.mockReturnValue({
+        [ROLE_PERMISSIONS.STATUS_REPORT_ORDER]: true,
+      });
+
+      const docketNumber = '111-44';
+      const docketEntryId = '000-001';
+
+      route(
+        `/case-detail/${docketNumber}/documents/${docketEntryId}/status-report-order-create?statusReportFilingDate=2026-06-18&statusReportIndex=7`,
+      );
+
+      expect(window.document.title).toEqual(
+        expect.stringMatching('Status Report Order'),
+      );
+      expect(getSequenceMock).toHaveBeenCalledWith(
+        'gotoStatusReportOrderSequence',
+      );
+      expect(sequenceMock).toHaveBeenCalledWith({
+        docketEntryId,
+        docketNumber,
+        redirectUrl: `/case-detail/${docketNumber}`,
+        statusReportFilingDate: '2026-06-18',
+        statusReportIndex: '7',
+      });
+      // the trailing `..` optional-segment marker on the route pattern is
+      // stripped when normalizing the recorded page id
+      expect(recordRumPageView).toHaveBeenCalledWith(
+        '/case-detail/{id}/documents/{id}/status-report-order-create',
+      );
+    });
+
+    it('/case-detail/*/documents/*/status-report-order-edit', () => {
+      getPermissionsMock.mockReturnValue({
+        [ROLE_PERMISSIONS.STATUS_REPORT_ORDER]: true,
+      });
+
+      const docketNumber = '111-44';
+      const docketEntryId = '000-001';
+
+      route(
+        `/case-detail/${docketNumber}/documents/${docketEntryId}/status-report-order-edit`,
+      );
+
+      expect(window.document.title).toEqual(
+        expect.stringMatching('Status Report Order'),
+      );
+      expect(getSequenceMock).toHaveBeenCalledWith(
+        'gotoStatusReportOrderSequence',
+      );
+      expect(sequenceMock).toHaveBeenCalledWith({
+        docketEntryId,
+        docketNumber,
+        isEditing: true,
+        redirectUrl: `/case-detail/${docketNumber}`,
       });
     });
   });

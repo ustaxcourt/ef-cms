@@ -82,6 +82,7 @@ export const CaseSearchByDocketNumber: React.FC<CaseSearchByDocketNumberProps> =
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  type="submit"
                   overrideMargin
                   aria-describedby="search-by-docket-number"
                   className="margin-bottom-0"

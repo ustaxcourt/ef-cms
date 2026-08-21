@@ -196,7 +196,11 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Effect": "Allow",
       "Action": [
         "rds-db:connect",
-        "rds:DescribeDBEngineVersions"
+        "rds:DescribeDBEngineVersions",
+        "rds:DescribeDBClusters",
+        "rds:DescribeBlueGreenDeployments",
+        "rds:DescribeDBInstances",
+        "rds:DescribeGlobalClusters"
       ],
       "Resource": [
         "*"
@@ -247,12 +251,12 @@ resource "aws_iam_policy" "ci_cd_policy" {
        "Resource": [
           "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:global-cluster:*",
           "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster:*",
-          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:deployment:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster-pg:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:pg:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:subgrp:*",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
-          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*",
-          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*"
        ]
     },
     {
@@ -433,6 +437,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_elasticsearch_execution_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/pdf_generator_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",

@@ -10,7 +10,14 @@ import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/Minut
 export const updateMinuteSheetInteractor = async (
   { docketNumber, minuteSheet, trialSessionId }: MinuteSheetUpdateBody,
   authorizedUser: UnknownAuthUser,
-): Promise<any> => {
+): Promise<
+  | {
+      trialSessionId: string;
+      docketNumber: string;
+      content: MinuteSheet;
+    }
+  | undefined
+> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }

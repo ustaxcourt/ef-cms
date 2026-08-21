@@ -13,8 +13,34 @@ describe('hasPendingItems', () => {
       },
     );
 
-    expect(caseToUpdate.hasPendingItems).toEqual(false);
     expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
+  });
+
+  it('should pass through hasPendingItems from raw case data', () => {
+    const caseToUpdate = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        hasPendingItems: true,
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    expect(caseToUpdate.hasPendingItems).toEqual(true);
+  });
+
+  it('should default hasPendingItems to false when not provided', () => {
+    const caseToUpdate = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    expect(caseToUpdate.hasPendingItems).toEqual(false);
   });
 
   it('should not show the case as having pending items if some docketEntries are pending and not served', () => {
@@ -33,7 +59,6 @@ describe('hasPendingItems', () => {
       authorizedUser: mockDocketClerkUser,
     });
 
-    expect(caseToUpdate.hasPendingItems).toEqual(false);
     expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
   });
 
@@ -54,7 +79,6 @@ describe('hasPendingItems', () => {
       authorizedUser: mockDocketClerkUser,
     });
 
-    expect(caseToUpdate.hasPendingItems).toEqual(true);
     expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
   });
 
@@ -76,7 +100,31 @@ describe('hasPendingItems', () => {
       authorizedUser: mockDocketClerkUser,
     });
 
-    expect(caseToUpdate.hasPendingItems).toEqual(true);
     expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+  });
+
+  it('recomputeHasPendingItems should update hasPendingItems based on docket entries', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      hasPendingItems: false,
+      docketEntries: [
+        {
+          ...MOCK_CASE.docketEntries[0],
+          pending: true,
+          servedAt: '2019-08-25T05:00:00.000Z',
+          servedParties: [{ name: 'Bob' }],
+        },
+      ],
+    };
+
+    const caseToUpdate = new Case(mockCase, {
+      authorizedUser: mockDocketClerkUser,
+    });
+
+    expect(caseToUpdate.hasPendingItems).toEqual(false);
+
+    caseToUpdate.recomputeHasPendingItems();
+
+    expect(caseToUpdate.hasPendingItems).toEqual(true);
   });
 });

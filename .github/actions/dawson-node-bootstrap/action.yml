@@ -1,0 +1,55 @@
+name: DAWSON NodeJS/NPM Bootstrap
+description: Set up NodeJS, optionally restore/save the shared npm cache, and optionally run npm ci.
+
+inputs:
+  cache-paths:
+    description: Newline-delimited paths to restore/save in the shared npm cache.
+    default: |
+      node_modules
+      .cache/puppeteer
+      /home/runner/.cache/Cypress
+  install-dependencies:
+    description: Whether to run npm ci.
+    default: 'true'
+  node-version-file:
+    description: Path to the .nvmrc file to use with actions/setup-node.
+    default: '.nvmrc'
+  restore-cache:
+    description: Whether to restore the shared npm cache.
+    default: 'true'
+  save-cache:
+    description: Whether to save the shared npm cache after a cache miss install succeeds.
+    default: 'true'
+  setup-node:
+    description: Whether to run actions/setup-node.
+    default: 'true'
+  working-directory:
+    description: Working directory for npm ci.
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - if: ${{ inputs.setup-node == 'true' }}
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+
+    - if: ${{ inputs.restore-cache == 'true' }}
+      id: cache-dependencies
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ inputs.cache-paths }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+    - if: ${{ inputs.install-dependencies == 'true' && (inputs.restore-cache != 'true' || steps.cache-dependencies.outputs.cache-hit != 'true') }}
+      id: npm-clean-install
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npm ci
+
+    - if: ${{ inputs.save-cache == 'true' && inputs.install-dependencies == 'true' && steps.npm-clean-install.outcome == 'success' }}
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ inputs.cache-paths }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

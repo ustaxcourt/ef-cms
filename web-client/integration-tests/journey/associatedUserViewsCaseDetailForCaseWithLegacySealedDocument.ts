@@ -17,7 +17,7 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
         entry => entry.docketEntryId === cerebralTest.docketEntryId,
       );
 
-      expect(legacySealedDocketEntry.showLinkToDocument).toBeFalsy();
+      expect(legacySealedDocketEntry?.showLinkToDocument).toBeFalsy();
 
       const formattedCase = runCompute(formattedCaseDetail, {
         state: cerebralTest.getState(),

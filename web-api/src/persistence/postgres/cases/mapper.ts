@@ -6,7 +6,7 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
 import {
   CaseKysely,
   NewCaseKysely,
@@ -73,6 +73,9 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
       : null,
     petitionPaymentMethod: rawCase.petitionPaymentMethod,
     petitionPaymentStatus: rawCase.petitionPaymentStatus,
+    petitionPaymentToken: rawCase.petitionPaymentToken,
+    petitionPaymentTransactionReferenceId:
+      rawCase.petitionPaymentTransactionReferenceId,
     petitionPaymentWaivedDate: rawCase.petitionPaymentWaivedDate
       ? calculateDate({ dateString: rawCase.petitionPaymentWaivedDate })
       : null,

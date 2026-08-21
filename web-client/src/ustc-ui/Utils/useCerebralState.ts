@@ -1,5 +1,5 @@
 export const useCerebralStateFactory =
-  (simpleSetter, value) => (bind, defaultValue?) => {
+  (simpleSetter, value?) => (bind, defaultValue?) => {
     let getter = value;
 
     const setter = newValue => {
@@ -16,7 +16,7 @@ export const useCerebralStateFactory =
     return [getter, setter];
   };
 
-export const decorateWithPostCallback = (delegate, postCallbackFn) => {
+export const decorateWithPostCallback = (delegate, postCallbackFn?) => {
   if (!postCallbackFn) {
     return delegate;
   }
@@ -29,7 +29,7 @@ export const decorateWithPostCallback = (delegate, postCallbackFn) => {
 
 export const decorateWithPreemptiveCallback = (
   delegate,
-  preemptiveCallbackFn,
+  preemptiveCallbackFn?,
 ) => {
   if (!preemptiveCallbackFn) {
     return delegate;

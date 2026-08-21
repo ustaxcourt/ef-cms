@@ -66,7 +66,7 @@
         }
       }
     },
-    "/api/docket-record-pdf": {
+    "/async/docket-record-pdf": {
       "post": {
         "summary": "create a pdf of the docket record for a case",
         "description": "create a pdf of the docket record for a case.\n",
@@ -251,6 +251,50 @@
         "tags": [],
         "summary": "get all pending items",
         "description": "get all pending items.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/clerk-dashboard-stats": {
+      "get": {
+        "tags": [],
+        "summary": "get clerk of court dashboard stats",
+        "description": "get aggregated stats for the clerk of court dashboard.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1333,6 +1377,16 @@
         "summary": "get a case by docket number",
         "description": "Get a case by docket number.\n",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "excludeDocketEntries",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": ["true", "false"],
+            "description": "When set to 'true', returns the case with an empty docketEntries array."
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1415,6 +1469,67 @@
         }
       }
     },
+    "/cases/{docketNumber}/docket-entries": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get paginated docket entries for a case",
+        "description": "Get paginated docket entries for a case, enriched with work item information.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Zero-indexed page number. Page size is 1000 entries."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/cases/{docketNumber}": {
       "parameters": [
         {
@@ -1442,6 +1557,152 @@
             "CognitoUserPool": []
           }
         ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/cases/{docketNumber}/docket-entries": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get paginated public docket entries for a case",
+        "description": "Get paginated docket entries for a case (public, no authentication required).\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 20,
+            "description": "Zero-indexed page number. Page size is 1000 entries."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/cases/{docketNumber}/generate-docket-record": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["cases"],
+        "summary": "initiate asynchronous generation of a public docket record PDF",
+        "description": "Initiates asynchronous generation of a docket record PDF for a case (public, no authentication required). Returns a jobId for polling status.\n",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/docket-record-status/{jobId}": {
+      "parameters": [
+        {
+          "name": "jobId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "description": "The UUID job identifier returned from the generate-docket-record endpoint."
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get the status of a public docket record PDF generation job",
+        "description": "Poll for the status of an asynchronous docket record PDF generation job. Returns 'pending', 'ready' (with a presigned URL), or 'error'.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -3292,6 +3553,69 @@
         }
       }
     },
+    "/case-documents/{docketNumber}/{docketEntryId}/processing-status": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["case-documents"],
+        "summary": "returns the coversheet processing status of a docket entry",
+        "description": "returns the coversheet processing status of a docket entry. Used by the client to poll while a coversheet is being generated asynchronously.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "processingStatus": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
@@ -3408,6 +3732,179 @@
         }
       }
     },
+    "/filing-fee/init-payment": {
+      "put": {
+        "tags": ["payment-portal"],
+        "summary": "Initializes a payment with the payment portal",
+        "description": "Initializes a payment with the payment portal.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "init payment docket number",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "docketNumber": {
+                  "type": "string",
+                  "description": "the unique docket number associated with the case"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/putFeeInitPaymentResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filing-fee/process-payment": {
+      "put": {
+        "tags": ["payment-portal"],
+        "summary": "Processes a payment over at the payment portal",
+        "description": "Processes a payment over at the payment portal.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "process payment docket number",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "docketNumber": {
+                  "type": "string",
+                  "description": "the unique docket number associated with the case"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/filingFeePaymentDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filing-fee/get-transaction-details/{docketNumber}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["payment-portal"],
+        "summary": "Gets details of transactions done with the payment portal",
+        "description": "Gets details of transactions done with the payment portal.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/filingFeePaymentDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/sections/{section}/users": {
       "parameters": [
         {
@@ -4585,61 +5082,6 @@
             "schema": {
               "$ref": "#/definitions/workItem"
             }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
-      "parameters": [
-        {
-          "name": "docketNumber",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "docketEntryId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["workitems"],
-        "summary": "creates a coversheet and prepends it to the existing s3 document",
-        "description": "creates a coversheet and prepends it to the existing s3 document.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response"
           }
         },
         "security": [
@@ -6199,6 +6641,64 @@
         "tags": ["cases"],
         "summary": "updates the specified case contact address as sealed",
         "description": "updates the case contact address as sealed.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-meta/{docketNumber}/unseal-address/{contactId}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "contactId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the specified case contact address as unsealed",
+        "description": "updates the case contact address as unsealed.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -8767,6 +9267,37 @@
         "sort",
         "userHeading"
       ]
+    },
+    "putFeeInitPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "paymentRedirect": {
+          "type": "string",
+          "description": "redirect to payment portal"
+        }
+      }
+    },
+    "filingFeePaymentDetails": {
+      "type": "object",
+      "properties": {
+        "paymentStatus": { "type": "string" },
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transactionStatus": { "type": "string" },
+              "payGovTrackingId": { "type": "string" },
+              "paymentMethod": { "type": "string" },
+              "returnDetail": { "type": "string" },
+              "createdTimestamp": { "type": "string" },
+              "updatedTimestamp": { "type": "string" }
+            },
+            "required": ["transactionStatus"]
+          }
+        }
+      },
+      "required": ["paymentStatus", "transactions"]
     }
   }
 }

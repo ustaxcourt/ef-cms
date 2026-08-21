@@ -1,4 +1,7 @@
-import { caseIsEligibleForMinuteSheet } from './caseIsEligibleForMinuteSheet';
+import {
+  caseIsEligibleForMinuteSheet,
+  unscheduledCaseIsEligibleForMinuteSheet,
+} from './caseIsEligibleForMinuteSheet';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
@@ -163,6 +166,125 @@ describe('caseIsEligibleForMinuteSheet', () => {
     };
 
     const result = caseIsEligibleForMinuteSheet(mockCase, mockTrialSession);
+
+    expect(result).toBe(true);
+  });
+});
+
+describe('unscheduledCaseIsEligibleForMinuteSheet', () => {
+  it('should return true when unscheduled case is eligible (not a non-lead consolidated case)', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      leadDocketNumber: undefined,
+      docketNumber: '123-45',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false when trial session is not calendared', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      leadDocketNumber: undefined,
+      docketNumber: '123-45',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: false,
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
+
+    expect(result).toBe(false);
+  });
+
+  it('should return true when case is closed (closed cases are allowed for unscheduled minute sheets)', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.closed,
+      docketNumber: '123-45',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false when case is part of consolidated group but not lead case', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-45',
+      leadDocketNumber: '123-44',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
+
+    expect(result).toBe(false);
+  });
+
+  it('should return true when case is part of consolidated group and is lead case', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-45',
+      leadDocketNumber: '123-45',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
+
+    expect(result).toBe(true);
+  });
+
+  it('should NOT check removedFromTrialDate for unscheduled cases (since they are not calendared)', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-45',
+      leadDocketNumber: undefined,
+      removedFromTrialDate: '2020-01-01',
+    };
+    const mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+      startDate: '2020-02-01',
+      startTime: '10:00',
+    };
+
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
+      mockCase,
+      mockTrialSession,
+    );
 
     expect(result).toBe(true);
   });

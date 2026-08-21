@@ -81,7 +81,7 @@ export const SealAddressModal = connect(
           </div>
         </div>
         <div className="grid-row margin-bottom-1">
-          <div className="grid-col-4 text-bold">Email Address:</div>
+          <div className="grid-col-4 text-bold">Service email address:</div>
           <div className="grid-col-fill">
             <span className="no-wrap" data-testid="seal-address-modal-email">
               {contactToSeal.email ?? NOT_PROVIDED}
@@ -89,13 +89,13 @@ export const SealAddressModal = connect(
           </div>
         </div>
         <div className="grid-row margin-bottom-1">
-          <div className="grid-col-4 text-bold">Petition Email:</div>
+          <div className="grid-col-4 text-bold">Contact email address:</div>
           <div className="grid-col-fill">
             <span
               className="no-wrap"
               data-testid="seal-address-modal-address-petition-email"
             >
-              {contactToSeal.paperPetitionEmail ?? NOT_PROVIDED}
+              {contactToSeal.contactEmailAddress ?? NOT_PROVIDED}
             </span>
           </div>
         </div>

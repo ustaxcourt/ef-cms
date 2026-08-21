@@ -22,6 +22,7 @@ describe('caseInventoryReport', () => {
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               isLeadCase: true,
               status: CASE_STATUS_TYPES.closed,
+              inConsolidatedGroup: false,
             },
           ],
           reportTitle: 'General Docket - Not at Issue',

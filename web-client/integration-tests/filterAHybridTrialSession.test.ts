@@ -1,11 +1,12 @@
 import {
   CASE_TYPES_MAP,
   PROCEDURE_TYPES_MAP,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases } from './journey/petitionsClerkViewsAHybridTrialSessionsFilteredEligibleCases';
@@ -13,7 +14,7 @@ import { petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases } from './j
 describe('Filter A Hybrid Trial Session', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

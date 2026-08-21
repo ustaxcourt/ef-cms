@@ -1,0 +1,241 @@
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
+import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+
+describe('removePdfFromDocketEntryInteractor', () => {
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+
+  const MOCK_CASE: RawCase = {
+    caseCaption: 'Caption',
+    caseType: CASE_TYPES_MAP.other,
+    createdAt: applicationContext.getUtilities().createISODateString(),
+    correspondence: [],
+    consolidatedCases: [],
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    receivedAt: applicationContext.getUtilities().createISODateString(),
+    sortableDocketNumber: 56789,
+    hearings: [],
+    docketEntries: [
+      {
+        docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        documentStorageId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '56789-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
+        isFileAttached: true,
+        userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+      } as DocketEntry,
+      {
+        docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491',
+        documentStorageId: '1905d1ab-18d0-43ec-bafb-654e83405491',
+        docketNumber: '56789-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
+        isFileAttached: false,
+        userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+      } as DocketEntry,
+    ],
+    docketNumber: '56789-18',
+    docketNumberWithSuffix: '56789-18',
+    filingType: 'Myself',
+    partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '60c62fa0-fd90-5244-b7c7-9cb2302d7688',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Roslindis Angelino',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ] as TPetitioner[],
+    preferredTrialCity: 'Washington, District of Columbia',
+    procedureType: 'Regular',
+    status: CASE_STATUS_TYPES.new,
+  };
+
+  beforeAll(() => {
+    applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
+
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockDocketClerkUser,
+      name: 'docket clerk',
+    });
+
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+  });
+
+  it('should throw an error if the user is unauthorized to update a case', async () => {
+    await expect(
+      removePdfFromDocketEntryInteractor(
+        applicationContext,
+        {
+          docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
+    ).rejects.toThrow('Unauthorized for update case');
+  });
+
+  it('should fetch the case by the provided docketNumber', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+  });
+
+  it('should delete the pdf from s3 and update the case if the docketEntry has a file attached', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416', // entry with isFileAttached: true
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      key: MOCK_CASE.docketEntries[0].documentStorageId,
+    });
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+  });
+
+  it('should set the docketEntry isFileAttached flag to false', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const docketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === '7805d1ab-18d0-43ec-bafb-654e83405416',
+      );
+
+    expect(docketEntry.isFileAttached).toEqual(false);
+  });
+
+  it('does not modify the docketEntry or case if the isFileAttachedFlag is false', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491', // entry with isFileAttached: false
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
+    ).not.toHaveBeenCalled();
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('does not modify the docketEntry or case if the docketEntry can not be found on the case', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: 'nope',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile,
+    ).not.toHaveBeenCalled();
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
+
+    await expect(
+      removePdfFromDocketEntryInteractor(
+        applicationContext,
+        {
+          docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+  });
+
+  it('should acquire a lock on the case', async () => {
+    await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
+  });
+});

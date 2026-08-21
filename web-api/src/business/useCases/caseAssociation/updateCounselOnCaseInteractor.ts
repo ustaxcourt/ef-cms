@@ -33,7 +33,7 @@ const updateCounselOnCase = async (
     userId,
   }: { docketNumber: string; userData: any; userId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   const editableFields = {
     representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
@@ -86,12 +86,10 @@ const updateCounselOnCase = async (
     throw new Error('User is not a practitioner');
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateCounselOnCaseInteractor = withLocking(

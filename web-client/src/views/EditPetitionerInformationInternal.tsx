@@ -13,6 +13,7 @@ import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { SealAddressModal } from './CaseDetail/SealAddressModal';
+import { UnsealAddressModal } from './CaseDetail/UnsealAddressModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -135,6 +136,7 @@ export const EditPetitionerInformationInternal = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="additional-name-input"
                 id="additionalName"
                 name="contact.additionalName"
                 type="text"
@@ -198,23 +200,55 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
+            <FormGroup
+              errorText={validationErrors?.contact?.contactEmailAddress}
+            >
+              <label className="usa-label" htmlFor="contactEmailAddress">
+                Contact email address{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-email-input"
+                id="contactEmailAddress"
+                name="contact.contactEmailAddress"
+                type="email"
+                value={form.contact.contactEmailAddress || ''}
+                onBlur={() => {
+                  validatePetitionerSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
             {editPetitionerInformationHelper.showSealAddress && (
               <FormGroup>
                 <div className="usa-checkbox">
                   <input
                     checked={form.isAddressSealed || false}
                     className="usa-checkbox__input"
-                    disabled={form.isAddressSealed}
                     id="seal-address"
                     name="isAddressSealed"
                     type="checkbox"
                     onChange={() => {
                       openSealAddressModalSequence({
-                        contactToSeal: form.contact,
+                        contactToSeal: {
+                          ...form.contact,
+                          isAddressSealed: form.isAddressSealed,
+                        },
                       });
                     }}
                   />
-                  <label className="usa-checkbox__label" htmlFor="seal-address" data-testid="seal-address-label">
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="seal-address"
+                    data-testid="seal-address-label"
+                  >
                     Seal contact information
                   </label>
                 </div>
@@ -365,6 +399,7 @@ export const EditPetitionerInformationInternal = connect(
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
         {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'UnsealAddressModal' && <UnsealAddressModal />}
       </>
     );
   },

@@ -3,11 +3,16 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { type RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { alphabetizeCities, formatJudgeName } from '../helpers/formatters';
 import { generateCsv } from '../helpers/generate-csv';
-import { pick } from 'lodash';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
+import { pick } from 'lodash';
 
 let trialSessionsCache: RawTrialSession[] = [];
+
+export const clearTrialSessionsCache = (): void => {
+  trialSessionsCache = [];
+};
 
 export const getUniqueValues = ({
   arrayOfObjects,
@@ -73,12 +78,12 @@ const outputTrialSessionsReport = ({
   const rows = trialSessions.map(s => {
     const startDate = formatDateString(s.startDate, FORMATS['MMDDYYYY_DASHED']);
     let trialClerk = '';
-    if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
-      trialClerk = s.trialClerk.name;
+    if (s.trialClerk && s.trialClerk?.name) {
+      trialClerk = s.trialClerk.name.trim();
     } else if (s.alternateTrialClerkName) {
-      trialClerk = s.alternateTrialClerkName;
+      trialClerk = s.alternateTrialClerkName.trim();
     }
-    const judge = s.judge?.name ?? '';
+    const judge = formatJudgeName(s.judge?.name);
     return {
       ...pick(s, ['proceedingType', 'sessionType', 'trialLocation']),
       judge,
@@ -95,29 +100,85 @@ const outputTrialSessionsStats = ({
 }: {
   trialSessions: RawTrialSession[];
 }): void => {
-  const locations = getUniqueValues({
+  const unsortedLocations = getUniqueValues({
     arrayOfObjects: trialSessions,
     keyToFilter: 'trialLocation',
   });
-  const sessionTypes = getUniqueValues({
+  const unsortedSessionTypes = getUniqueValues({
     arrayOfObjects: trialSessions,
     keyToFilter: 'sessionType',
   });
-  const proceedingTypes = getUniqueValues({
+  const unsortedProceedingTypes = getUniqueValues({
     arrayOfObjects: trialSessions,
     keyToFilter: 'proceedingType',
   });
-  const judges = getUniqueValues({
-    arrayOfObjects: trialSessions.map(s => {
-      return { judgeName: s.judge?.name || '' };
-    }),
+  const unsortedJudges = getUniqueValues({
+    arrayOfObjects: trialSessions.map(s => ({
+      judgeName: formatJudgeName(s.judge?.name),
+    })),
     keyToFilter: 'judgeName',
   });
+  const justClerks: { trialClerk: string }[] = trialSessions.map(s => {
+    let trialClerk = '';
+    if (s.trialClerk && s.trialClerk?.name) {
+      trialClerk = s.trialClerk.name.trim();
+    } else if (s.alternateTrialClerkName) {
+      trialClerk = s.alternateTrialClerkName.trim();
+    }
+    return { trialClerk };
+  });
+  const unsortedTrialClerks = getUniqueValues({
+    arrayOfObjects: justClerks,
+    keyToFilter: 'trialClerk',
+  });
+
+  const locations = {};
+  alphabetizeCities(Object.keys(unsortedLocations)).forEach(key => {
+    locations[key] = unsortedLocations[key];
+  });
+
+  const sessionTypes = {};
+  Object.keys(unsortedSessionTypes)
+    .sort((a, b) => unsortedSessionTypes[b] - unsortedSessionTypes[a])
+    .forEach(key => {
+      sessionTypes[key] = unsortedSessionTypes[key];
+    });
+
+  const proceedingTypes = {};
+  Object.keys(unsortedProceedingTypes)
+    .sort((a, b) => a.localeCompare(b))
+    .forEach(key => {
+      proceedingTypes[key] = unsortedProceedingTypes[key];
+    });
+
+  const judges = {};
+  Object.keys(unsortedJudges)
+    .sort((a, b) => {
+      if (a === '') return 1;
+      if (b === '') return -1;
+      return a.localeCompare(b);
+    })
+    .forEach(key => {
+      judges[key] = unsortedJudges[key];
+    });
+
+  const trialClerks = {};
+  Object.keys(unsortedTrialClerks)
+    .sort((a, b) => {
+      if (a === '') return 1;
+      if (b === '') return -1;
+      return a.localeCompare(b);
+    })
+    .forEach(key => {
+      trialClerks[key] = unsortedTrialClerks[key];
+    });
+
   console.log({
     judges,
     locations,
     proceedingTypes,
     sessionTypes,
+    trialClerks,
     total: trialSessions.length,
   });
 };

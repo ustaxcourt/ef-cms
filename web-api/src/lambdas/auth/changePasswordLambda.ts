@@ -9,7 +9,7 @@ export const changePasswordLambda = (event: APIGatewayProxyEvent) =>
       const { accessToken, idToken, refreshToken } = await applicationContext
         .getUseCases()
         .changePasswordInteractor(applicationContext, {
-          ...JSON.parse(event.body!),
+          ...JSON.parse(event.body || '{}'),
         });
       const expiresAt = applicationContext.getUtilities().calculateISODate({
         dateString: applicationContext.getUtilities().createISODateString(),

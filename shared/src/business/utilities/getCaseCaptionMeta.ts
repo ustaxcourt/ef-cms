@@ -4,7 +4,7 @@ import { Case } from '../entities/cases/Case';
 export const getCaseCaptionMeta = ({
   caseCaption = '',
 }: {
-  caseCaption: string;
+  caseCaption?: string;
 }) => {
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseCaptionExtension = caseCaption

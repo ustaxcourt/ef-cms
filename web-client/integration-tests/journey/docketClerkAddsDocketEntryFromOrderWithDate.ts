@@ -21,7 +21,7 @@ export const docketClerkAddsDocketEntryFromOrderWithDate = cerebralTest => {
     expect(draftOrderDocument).toBeTruthy();
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: draftOrderDocument?.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 

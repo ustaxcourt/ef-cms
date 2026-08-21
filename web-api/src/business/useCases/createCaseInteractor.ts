@@ -1,4 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
+import { retrySettled } from '@web-api/utilities/retrySettled';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -6,7 +8,7 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
+import { ElectronicPetition } from '@web-api/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -26,6 +28,8 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -119,6 +123,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
       redactionAcknowledgement: petitionEntity.petitionRedactionAcknowledgement,
     },
@@ -141,6 +146,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       isFileAttached: false,
       isOnDocketRecord: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       processingStatus: 'complete',
     },
     {
@@ -165,6 +171,7 @@ const createCaseMetadata = async (
       filingDate: caseToAdd.createdAt,
       index: 0,
       isFileAttached: true,
+      originallyFiledDocketNumber: caseToAdd.docketNumber,
       privatePractitioners,
     },
     { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -187,6 +194,7 @@ const createCaseMetadata = async (
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
         isOnDocketRecord: true,
+        originallyFiledDocketNumber: caseToAdd.docketNumber,
         privatePractitioners,
       },
       { authorizedUser, petitioners: caseToAdd.petitioners },
@@ -219,6 +227,7 @@ const createCaseMetadata = async (
           noticeIssuedDate:
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
+          originallyFiledDocketNumber: caseToAdd.docketNumber,
           privatePractitioners,
           redactionAcknowledgement:
             petitionEntity.irsNoticesRedactionAcknowledgement,
@@ -259,7 +268,7 @@ export const createCaseInteractor = async (
     stinFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -295,7 +304,7 @@ export const createCaseInteractor = async (
 
     // remove the email from contactPrimary
     // since the practitioners array should have a service email
-    // and paperPetitionEmail is used as email for the petitioner
+    // and contactEmailAddress is used as email for the petitioner
     delete petitionEntity.getContactPrimary().email;
     delete petitionEntity.getContactPrimary().serviceIndicator;
 
@@ -311,34 +320,57 @@ export const createCaseInteractor = async (
   });
 
   let caseToAdd: Case;
-  let workItem: WorkItem;
 
   try {
-    ({ caseToAdd, workItem } = await createCaseMetadata(
-      applicationContext,
-      {
-        attachmentToPetitionFileIds,
-        corporateDisclosureFileId,
-        petitionEntity,
-        petitionFileId,
-        petitionMetadata,
-        privatePractitioners,
-        stinFileId,
-        user,
-      },
-      authorizedUser,
-    ));
+    ({ caseToAdd } = await withTransaction(async () => {
+      const result = await createCaseMetadata(
+        applicationContext,
+        {
+          attachmentToPetitionFileIds,
+          corporateDisclosureFileId,
+          petitionEntity,
+          petitionFileId,
+          petitionMetadata,
+          privatePractitioners,
+          stinFileId,
+          user,
+        },
+        authorizedUser,
+      );
+
+      await upsertWorkItems({
+        workItems: [result.workItem.validate().toRawObject()],
+      });
+
+      return result;
+    }));
   } finally {
     await removeLockFunction();
   }
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+  const coversheetDocketEntryIds = [
+    petitionFileId,
+    stinFileId,
+    ...(corporateDisclosureFileId ? [corporateDisclosureFileId] : []),
+    ...(attachmentToPetitionFileIds ?? []),
+  ];
+
+  // retrySettled (vs Promise.all) so a transient failure on one entry's
+  // SQS enqueue retries instead of bubbling up immediately and leaving
+  // sibling entries' enqueueAddCoversheet calls in a half-applied state.
+  // enqueueAddCoversheet itself flips a permanently-failed entry to
+  // ERROR_ADDING_COVERSHEET so the client poll terminates fast.
+  await retrySettled(coversheetDocketEntryIds, docketEntryId =>
+    enqueueAddCoversheet(applicationContext, {
+      authorizedUser,
+      docketEntryId,
+      docketNumber: caseToAdd.docketNumber,
+    }),
+  );
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,
   });
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  return new CaseDTO(new Case(caseToAdd, { authorizedUser }).toRawObject());
 };

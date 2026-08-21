@@ -61,7 +61,7 @@ describe('getUsersPendingEmailInteractor', () => {
     });
   });
 
-  it('should return undefined for each user if user does not have a pending email', async () => {
+  it('should return an empty string for each user if user does not have a pending email', async () => {
     getUsersByIds.mockResolvedValue([
       {
         name: 'Roslindis Angelino',
@@ -85,12 +85,12 @@ describe('getUsersPendingEmailInteractor', () => {
     );
 
     expect(result).toEqual({
-      [USER_IDS[0]]: undefined,
-      [USER_IDS[1]]: undefined,
+      [USER_IDS[0]]: '',
+      [USER_IDS[1]]: '',
     });
   });
 
-  it('should return undefined for each user when the user is not found in persistence', async () => {
+  it('should return an empty object when the user is not found in persistence', async () => {
     getUsersByIds.mockResolvedValue([]);
 
     const result = await getUsersPendingEmailInteractor(
@@ -100,6 +100,6 @@ describe('getUsersPendingEmailInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result).toBeUndefined();
+    expect(result).toEqual({});
   });
 });

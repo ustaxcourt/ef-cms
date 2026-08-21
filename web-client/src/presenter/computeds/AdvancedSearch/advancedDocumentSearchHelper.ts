@@ -1,15 +1,15 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Case } from '@shared/business/entities/cases/Case';
+import { type ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { Get } from 'cerebral';
+import { type Get } from 'cerebral';
+import { type RawUser } from '@shared/business/entities/User';
 import { capitalize } from 'lodash';
-import { paginationHelper } from './advancedSearchHelper';
-import { state } from '@web-client/presenter/app.cerebral';
 import {
   calculateISODate,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
-import { Case } from '@shared/business/entities/cases/Case';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
@@ -45,7 +45,7 @@ export const advancedDocumentSearchHelper = (
 
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
-  const formattedJudges = get(state.legacyAndCurrentJudges) as any[];
+  const formattedJudges = get(state.legacyAndCurrentJudges) as RawUser[];
   formattedJudges.forEach((judge: any) => {
     judge.lastName = applicationContext
       .getUtilities()
@@ -59,11 +59,14 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    paginatedResults = paginationHelper(
-      searchResults,
-      get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
-    );
+    paginatedResults = {
+      formattedSearchResults: [],
+      numberOfResults: searchResults.length,
+      searchResults: [...searchResults],
+      searchResultsCount: searchResults.length,
+      showNoMatches: searchResults.length === 0,
+      showSearchResults: searchResults.length > 0,
+    };
 
     paginatedResults.formattedSearchResults =
       paginatedResults.searchResults.map(searchResult =>

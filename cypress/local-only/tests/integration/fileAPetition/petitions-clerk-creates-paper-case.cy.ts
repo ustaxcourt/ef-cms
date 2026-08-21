@@ -2,6 +2,7 @@ import {
   createPaperPetition,
   fillInCreateCaseFromPaperForm,
   postPaperPetition,
+  updateAlreadyCreatedCaseFromPaperForm,
 } from '../../../support/pages/create-paper-petition';
 
 import { getCreateACaseButton } from '../../../support/pages/document-qc';
@@ -110,6 +111,16 @@ describe('Petition clerk creates a paper filing', function () {
               }
             });
           });
+      });
+    });
+    it('should allow filling out petitions form after creating case', () => {
+      createPaperPetition().then(({ docketNumber }) => {
+        cy.visit(`case-detail/${docketNumber}/petition-qc?tab=partyInfo`);
+        updateAlreadyCreatedCaseFromPaperForm();
+        cy.get('[data-testid="submit-case"]').click();
+        const urlMatchStr = `/case-detail/${docketNumber}/documents/([^/]+)/review`
+        const urlRegExp = new RegExp(urlMatchStr);
+        cy.location('pathname').should('match', urlRegExp);
       });
     });
   });

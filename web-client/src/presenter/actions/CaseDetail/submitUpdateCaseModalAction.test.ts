@@ -15,7 +15,7 @@ describe('submitUpdateCaseModalAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('Calls the update case context interactor if the case caption has been updated', async () => {
-    await runAction(submitUpdateCaseModalAction, {
+    const result = await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
       },
@@ -37,10 +37,11 @@ describe('submitUpdateCaseModalAction', () => {
       caseCaption: 'Updated Test Caption',
       docketNumber: '123-20',
     });
+    expect(result.output.alertSuccess).toEqual({ message: 'Changes saved.' });
   });
 
   it('Calls the update case context interactor if the case status has been updated', async () => {
-    await runAction(submitUpdateCaseModalAction, {
+    const result = await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
       },
@@ -62,6 +63,7 @@ describe('submitUpdateCaseModalAction', () => {
       caseStatus: STATUS_TYPES.generalDocket,
       docketNumber: '123-20',
     });
+    expect(result.output.alertSuccess).toEqual({ message: 'Changes saved.' });
   });
 
   it('Calls the update case context interactor if the associated judge has been updated', async () => {

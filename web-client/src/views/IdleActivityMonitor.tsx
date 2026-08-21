@@ -1,7 +1,7 @@
 import { AppTimeoutModal } from './AppTimeoutModal';
 import { applicationContext } from '@web-client/applicationContext';
-import { deleteAuthCookieInteractor } from '@shared/proxies/auth/deleteAuthCookieProxy';
-import { getCurrentUserToken } from '@shared/proxies/requests';
+import { deleteAuthCookieInteractor } from '@web-client/proxies/auth/deleteAuthCookieProxy';
+import { getCurrentUserToken } from '@web-client/proxies/requests';
 import { useIdleTimer } from 'react-idle-timer';
 import React, { useEffect, useState } from 'react';
 
@@ -78,6 +78,19 @@ export const IdleActivityMonitor = () => {
   useEffect(() => {
     message(openedANewTabMessage);
   }, []);
+
+  useEffect(() => {
+    // Listen for reset events from file uploads to keep session alive during long uploads
+    const handleResetIdleTimer = () => {
+      activate();
+    };
+
+    window.addEventListener('resetIdleTimer', handleResetIdleTimer);
+
+    return () => {
+      window.removeEventListener('resetIdleTimer', handleResetIdleTimer);
+    };
+  }, [activate]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

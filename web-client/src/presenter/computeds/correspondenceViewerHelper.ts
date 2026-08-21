@@ -5,7 +5,7 @@ export const correspondenceViewerHelper = (get: Get): any => {
   const permissions = get(state.permissions);
   const docketNumber = get(state.caseDetail.docketNumber);
   const correspondenceId = get(
-    state.viewerCorrespondenceToDisplay.correspondenceId,
+    state.viewerCorrespondenceToDisplay!.correspondenceId,
   );
 
   return {

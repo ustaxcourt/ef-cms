@@ -1,7 +1,11 @@
 import * as path from 'path';
-import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
+import { Migrator } from 'kysely/migration';
+import { Kysely, sql } from 'kysely';
 import { promises as fs } from 'fs';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { CjsMigrationProvider } from './CjsMigrationProvider';
+import { putSSMItem } from 'shared/admin-tools/aws/ssmHelper';
+import { environment } from '@web-api/environment';
 
 const migrationsDirectory = path.join(__dirname, 'migrations');
 const deprecatedMigrationsDirectory = path.join(
@@ -43,22 +47,25 @@ async function pruneDeprecatedMigrations(db: Kysely<any>) {
   );
 }
 
+function createMigrator({ disableTransactions = false, writer }) {
+  return new Migrator({
+    db: writer,
+    provider: new CjsMigrationProvider(migrationsDirectory),
+    allowUnorderedMigrations: true,
+    disableTransactions,
+  });
+}
+
 async function migrateToLatest(migrationType = 'expand') {
   await getDbWriter({
     cb: async writer => {
       await pruneDeprecatedMigrations(writer);
 
-      const migrator = new Migrator({
-        db: writer,
-        provider: new FileMigrationProvider({
-          fs,
-          migrationFolder: migrationsDirectory,
-          path,
-        }),
-        allowUnorderedMigrations: true,
-      });
+      let hasCreatedNewMigrator = false;
+      let migrator = createMigrator({ writer });
 
       const migrations = await migrator.getMigrations();
+      let didRunMigration = false;
       for (const migration of migrations) {
         const isContractMigration = migration.name.includes('.contract');
         const shouldRunMigration =
@@ -67,25 +74,40 @@ async function migrateToLatest(migrationType = 'expand') {
             : !isContractMigration;
 
         if (shouldRunMigration && migration.executedAt === undefined) {
+          if (migration.name.includes('.heavy')) {
+            console.log('Created migrator with disabledTransactions');
+            migrator = createMigrator({ disableTransactions: true, writer });
+            hasCreatedNewMigrator = true;
+          } else if (hasCreatedNewMigrator) {
+            console.log('Created migrator with Transactions');
+            migrator = createMigrator({ writer });
+            hasCreatedNewMigrator = false;
+          }
+          console.log(`Executing "${migration.name}"`);
           const { error, results } = await migrator.migrateTo(migration.name);
           results?.forEach(it => {
             if (it.status === 'Success') {
               console.log(
-                `migration "${it.migrationName}" was executed successfully`,
+                `Migration "${it.migrationName}" was executed successfully`,
               );
+              didRunMigration = true;
             } else if (it.status === 'Error') {
               console.error(
-                `failed to execute migration "${it.migrationName}"`,
+                `Failed to execute migration "${it.migrationName}"`,
               );
             }
           });
 
           if (error) {
-            console.error('failed to migrate');
+            console.error('Failed to migrate');
             console.error(error);
             process.exit(1);
           }
         }
+      }
+
+      if (didRunMigration && environment.stage !== 'local') {
+        await putSSMItem('entity-validation-required', 'true');
       }
 
       await writer.destroy();

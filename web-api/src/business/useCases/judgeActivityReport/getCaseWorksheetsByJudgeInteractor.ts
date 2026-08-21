@@ -1,5 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { JudgeActivityReportSearch } from '@web-api/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

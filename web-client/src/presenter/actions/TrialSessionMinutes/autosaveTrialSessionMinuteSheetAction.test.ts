@@ -2,7 +2,7 @@ import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '@web-client/presenter/presenter';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { updateMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy';
+import { updateMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/updateMinuteSheetProxy';
 import hash from 'object-hash';
 import {
   autosaveTrialSessionMinuteSheetAction,
@@ -10,7 +10,7 @@ import {
 } from '@web-client/presenter/actions/TrialSessionMinutes/autosaveTrialSessionMinuteSheetAction';
 import { CalendarEvent } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
-jest.mock('@shared/proxies/trialSessionMinutes/updateMinuteSheetProxy');
+jest.mock('@web-client/proxies/trialSessionMinutes/updateMinuteSheetProxy');
 
 describe('trialSessionMinutesAutosaveAction', () => {
   beforeEach(() => {

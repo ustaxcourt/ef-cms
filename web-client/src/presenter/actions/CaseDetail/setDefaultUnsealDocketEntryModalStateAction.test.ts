@@ -14,14 +14,15 @@ describe('setDefaultUnsealDocketEntryModalStateAction', () => {
     const { state } = await runAction(
       setDefaultUnsealDocketEntryModalStateAction,
       {
-        modal: {},
         modules: {
           presenter,
         },
         props: {
           docketEntryId: DOCKET_ENTRY_ID,
         },
-        state: {},
+        state: {
+          modal: {},
+        },
       },
     );
 

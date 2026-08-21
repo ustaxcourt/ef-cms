@@ -6,7 +6,9 @@ import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
+jest.mock('@web-api/business/utilities/shouldAppendClinicLetter');
+jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
+jest.mock('@web-api/persistence/postgres/utils/transactions');
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
@@ -22,16 +24,23 @@ import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
-import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter as shouldAppendClinicLetterMock } from '@web-api/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import {
+  inTransaction as inTransactionMock,
+  onTransactionCommit as onTransactionCommitMock,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const shouldAppendClinicLetter = jest.mocked(shouldAppendClinicLetterMock);
   const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
@@ -42,6 +51,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const updateTrialSessionNotificationProcessing = jest.mocked(
     updateTrialSessionNotificationProcessingMock,
   );
+  const inTransaction = jest.mocked(inTransactionMock);
+  const onTransactionCommit = jest.mocked(onTransactionCommitMock);
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -63,7 +74,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const clinicLetterKey = 'I am a key';
 
   beforeAll(() => {
-    (shouldAppendClinicLetter as jest.Mock).mockResolvedValue({
+    shouldAppendClinicLetter.mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
     });
@@ -96,6 +107,12 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       caseStatuses: {},
       unfinishedCases: 10,
     });
+
+    countPagesInDocument.mockResolvedValue(1);
+  });
+
+  beforeEach(() => {
+    inTransaction.mockReturnValue(false);
   });
 
   it('should return and do nothing if the job is already processed', async () => {
@@ -180,8 +197,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should only save a notice of trial order and NOT a clinic letter for practitioners', async () => {
-    (shouldAppendClinicLetter as jest.Mock).mockResolvedValueOnce({
+    shouldAppendClinicLetter.mockResolvedValueOnce({
       appendClinicLetter: false,
+      clinicLetterKey,
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -396,7 +414,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
-    console.log(JSON.stringify(updateTrialSessionNotificationProcessing.mock));
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
     ).toHaveBeenCalled();
@@ -426,5 +443,19 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       signedByUserId: undefined,
       signedJudgeName: undefined,
     });
+  });
+
+  it('should send service emails to onTransactionCommit if in a transaction', async () => {
+    inTransaction.mockReturnValueOnce(true);
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+    expect(onTransactionCommit).toHaveBeenCalledTimes(1);
   });
 });

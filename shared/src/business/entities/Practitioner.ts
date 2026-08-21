@@ -166,7 +166,7 @@ export class Practitioner extends User {
         'The type of practitioner - either Attorney or Non-Attorney.',
       )
       .messages({ '*': 'Select a practitioner type' }),
-    role: joi.alternatives().conditional('admissionsStatus', {
+    role: JoiValidationConstants.STRING.when('admissionsStatus', {
       is: joi.valid('Active'),
       otherwise: JoiValidationConstants.STRING.valid(
         ROLES.inactivePractitioner,
@@ -192,11 +192,11 @@ export class Practitioner extends User {
       .messages({
         'any.required': 'Enter a valid email address',
         'string.email': 'Enter email address in format: yourname@example.com',
-      }),
+      }) as joi.StringSchema | joi.AlternativesSchema,
   };
 
   getValidationRules() {
-    return Practitioner.VALIDATION_RULES as any;
+    return Practitioner.VALIDATION_RULES;
   }
 
   toRawObject(options: { removeValidationProperties?: boolean } = {}) {

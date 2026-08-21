@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getEligibleCasesForCityInteractor } from '@shared/business/useCases/getEligibleCasesForCityInteractor';
+import { getEligibleCasesForCityInteractor } from '@web-api/business/useCases/getEligibleCasesForCityInteractor';
 
 export const getEligibleCasesForCityLambda = (
   event,

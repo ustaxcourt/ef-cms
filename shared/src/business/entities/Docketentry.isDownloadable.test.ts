@@ -409,6 +409,18 @@ describe('isDownloadable', () => {
         ),
       ).toEqual(false);
     });
+
+    it('returns false if the document is stricken', () => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            isStricken: true,
+          },
+          options,
+        ),
+      ).toEqual(false);
+    });
   });
 
   describe('IRS Superuser', () => {

@@ -48,8 +48,8 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should delete the statistic and return the updated case', async () => {
-    const result = await deleteDeficiencyStatisticInteractor(
+  it('should delete the statistic', async () => {
+    await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -57,13 +57,18 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(result).toMatchObject({
-      statistics: [],
-    });
+
+    expect(upsertCases).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          statistics: [],
+        }),
+      ]),
+    );
   });
 
   it('should not delete any statistics when no statisticId on the case matches the passed in statisticId', async () => {
-    const result = await deleteDeficiencyStatisticInteractor(
+    await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -71,9 +76,12 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(result).toMatchObject({
-      statistics: [statistic],
-    });
+
+    expect(upsertCases).toHaveBeenCalled();
+    const callArg = upsertCases.mock.calls[0][0][0];
+    expect(callArg.statistics).toBeDefined();
+    expect(callArg.statistics).toHaveLength(1);
+    expect(callArg.statistics![0]).toMatchObject(statistic);
   });
 
   it('should throw an error and not update the case when attempting to delete the only statistic from a deficiency case with hasVerifiedIrsNotice true (at least one statistic is required)', async () => {

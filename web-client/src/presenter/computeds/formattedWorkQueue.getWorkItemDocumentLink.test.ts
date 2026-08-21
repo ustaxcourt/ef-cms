@@ -4,7 +4,7 @@ import {
   docketClerkUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { getWorkItemDocumentLink } from './formattedWorkQueue';
 
 describe('getWorkItemDocumentLink', () => {

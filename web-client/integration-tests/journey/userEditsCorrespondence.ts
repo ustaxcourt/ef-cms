@@ -13,9 +13,7 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
     });
 
     const iframeSrc = cerebralTest.getState('iframeSrc');
-    const initialDocumentLength = (
-      await axios.get(iframeSrc, { contentType: 'blob' })
-    ).data.length;
+    const initialDocumentLength = (await axios.get(iframeSrc)).data.length;
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
@@ -36,9 +34,7 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
 
     await cerebralTest.runSequence('editCorrespondenceDocumentSequence');
 
-    const updatedDocumentLength = (
-      await axios.get(iframeSrc, { contentType: 'blob' })
-    ).data.length;
+    const updatedDocumentLength = (await axios.get(iframeSrc)).data.length;
 
     expect(updatedDocumentLength).not.toEqual(initialDocumentLength);
 

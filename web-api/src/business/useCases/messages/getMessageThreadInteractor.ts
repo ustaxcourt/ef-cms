@@ -12,7 +12,7 @@ export const getMessageThreadInteractor = async (
   _applicationContext: ServerApplicationContext,
   { parentMessageId }: { parentMessageId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<ExcludeMethods<Message>[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }

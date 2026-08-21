@@ -1,5 +1,5 @@
 import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { practitionerDocumentEntity } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
 
 export const getPractitionerDocuments = async ({

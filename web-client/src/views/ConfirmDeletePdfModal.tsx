@@ -4,6 +4,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type ConfirmDeletePDFModalProps = {
+  cancelLabel?: string;
   confirmText: string;
   modalContent: string;
   title: string;
@@ -20,6 +21,7 @@ export const ConfirmDeletePDFModal = connect<
 >(
   confirmDeletePDFModal,
   function ConfirmDeletePDFModal({
+    cancelLabel = 'No, Keep Current PDF',
     clearModalSequence,
     confirmSequence,
     confirmText,
@@ -28,7 +30,7 @@ export const ConfirmDeletePDFModal = connect<
   }) {
     return (
       <ConfirmModal
-        cancelLabel="No, Cancel"
+        cancelLabel={cancelLabel}
         confirmLabel={confirmText}
         title={title}
         onCancelSequence={clearModalSequence}

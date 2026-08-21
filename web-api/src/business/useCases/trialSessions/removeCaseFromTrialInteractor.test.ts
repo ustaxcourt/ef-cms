@@ -28,6 +28,7 @@ import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { removeCaseFromTrialSession as removeCaseFromTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
@@ -42,6 +43,9 @@ describe('removeCaseFromTrialInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const removeCaseFromTrialSession = jest.mocked(
+    removeCaseFromTrialSessionMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
@@ -216,7 +220,7 @@ describe('removeCaseFromTrialInteractor', () => {
   it('sets the associatedJudge and caseStatus when provided', async () => {
     mockTrialSession.isCalendared = true;
 
-    const result = await removeCaseFromTrialInteractor(
+    await removeCaseFromTrialInteractor(
       applicationContext,
       {
         associatedJudge: 'Judge Dredd',
@@ -229,11 +233,13 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.associatedJudge).toEqual('Judge Dredd');
-    expect(result.associatedJudgeId).toEqual(
-      'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
-    );
-    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      associatedJudge: 'Judge Dredd',
+      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+      status: CASE_STATUS_TYPES.cav,
+    });
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -278,5 +284,29 @@ describe('removeCaseFromTrialInteractor', () => {
         identifiers: [`case|${MOCK_CASE.docketNumber}`],
       }),
     );
+  });
+
+  it('should not update trial session if updateCaseAndAssociations fails', async () => {
+    mockTrialSession.isCalendared = true;
+    removeCaseFromTrialSession.mockRejectedValueOnce(
+      new Error('Database error'),
+    );
+
+    await expect(
+      removeCaseFromTrialInteractor(
+        applicationContext,
+        {
+          associatedJudge: 'Judge Dredd',
+          associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+          caseStatus: CASE_STATUS_TYPES.cav,
+          disposition: 'because',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('Database error');
+
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 });

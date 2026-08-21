@@ -2,7 +2,7 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 //import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { emptyUserState } from '@web-client/presenter/state/userState';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';

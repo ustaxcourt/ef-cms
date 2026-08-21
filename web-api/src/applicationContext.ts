@@ -53,6 +53,8 @@ import * as sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
+import { getLongTimeoutSQSMessagingClient } from '@web-api/gateways/message/getLongTimeoutSQSMessagingClient';
+import { getPaymentPortalClient } from '@web-api/persistence/paymentPortal/getPaymentPortalClient';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
@@ -143,12 +145,14 @@ export const createApplicationContext = (appContextUser = {}) => {
       },
     }),
     getMessagingClient,
+    getLongTimeoutSQSMessagingClient,
     getNodeSass: () => {
       return sass;
     },
     getNotificationClient,
     getNotificationGateway,
     getNotificationService,
+    getPaymentPortalClient,
     getPdfLib: () => {
       return pdfLib;
     },

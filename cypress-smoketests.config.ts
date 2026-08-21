@@ -25,12 +25,13 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
-import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
+import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-noce';
 
 export default defineConfig({
-  chromeWebSecurity: false,
+  chromeWebSecurity: true,
   defaultCommandTimeout: 60000,
   e2e: {
+    baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {

@@ -19,7 +19,7 @@ type TPetitioner = {
   isAddressSealed: boolean;
   inCareOf?: string;
   name: string;
-  paperPetitionEmail?: string;
+  contactEmailAddress?: string;
   phone: string;
   postalCode: string;
   sealedAndUnavailable?: boolean;
@@ -32,7 +32,7 @@ type TPetitioner = {
   formattedTitle?: string;
   formattedPendingEmail?: string;
   formattedEmail?: string;
-  formattedPaperPetitionEmail?: string;
+  formattedContactEmailAddress?: string;
 };
 
 interface IValidateRawCollection<I> {

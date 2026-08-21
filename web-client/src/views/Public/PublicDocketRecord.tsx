@@ -1,13 +1,19 @@
-import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
+import {
+  DOCKET_RECORD_PAGE_SIZE,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-import React from 'react';
-import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import React, { useRef } from 'react';
+import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
@@ -22,11 +28,33 @@ export const PublicDocketRecord = connect(
     sortTableSequence,
   }) {
     const noDocumentsMessage = 'There are no documents of that type.';
+    const paginatorTop = useRef(null);
+
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(
+        publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord,
+        DOCKET_RECORD_PAGE_SIZE,
+      );
+
+    const { hasLargeDocketEntryCount } = publicCaseDetailHelper;
+
     return (
       <>
         <PublicDocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
+        <div ref={paginatorTop} className="margin-bottom-3">
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
+        </div>
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -122,69 +150,79 @@ export const PublicDocketRecord = connect(
                 </tr>
               </thead>
               <tbody>
-                {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
-                    return (
-                      <tr
-                        data-testid={`public-docket-record-no-${entry.index}`}
-                        key={entry.docketEntryId}
-                      >
-                        <td className="center-column hide-on-mobile">
-                          {entry.index}
-                        </td>
-                        <td data-label="Filed Date">
-                          <span
-                            className={classNames(
-                              entry.isStricken && 'stricken-docket-record',
-                              'no-wrap',
-                            )}
-                          >
-                            {entry.createdAtFormatted}
+                {(hasLargeDocketEntryCount
+                  ? pageRecords
+                  : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+                ).map(entry => {
+                  return (
+                    <tr
+                      data-testid={`public-docket-record-no-${entry.index}`}
+                      key={entry.docketEntryId}
+                    >
+                      <td className="center-column hide-on-mobile">
+                        {entry.index}
+                      </td>
+                      <td data-label="Filed Date">
+                        <span
+                          className={classNames(
+                            entry.isStricken && 'stricken-docket-record',
+                            'no-wrap',
+                          )}
+                        >
+                          {entry.createdAtFormatted}
+                        </span>
+                      </td>
+                      <td className="center-column hide-on-mobile">
+                        {entry.eventCode}
+                      </td>
+                      <td aria-hidden="true" className="filing-type-icon">
+                        {entry.isSealed && (
+                          <WrappedIcon
+                            iconClass="sealed-in-blackstone icon-sealed"
+                            icon="lock"
+                            size="1x"
+                            title={entry.sealedToTooltip}
+                          />
+                        )}
+                      </td>
+                      <td data-label="Filings and Proceedings">
+                        <PublicFilingsAndProceedings entry={entry} />
+                      </td>
+                      <td className="hide-on-mobile">{entry.numberOfPages}</td>
+                      <td className="hide-on-mobile">{entry.filedBy}</td>
+                      <td className="hide-on-mobile">{entry.action}</td>
+                      <td data-label="Served">
+                        {entry.showNotServed && (
+                          <span className="text-secondary text-semibold">
+                            Not served
                           </span>
-                        </td>
-                        <td className="center-column hide-on-mobile">
-                          {entry.eventCode}
-                        </td>
-                        <td aria-hidden="true" className="filing-type-icon">
-                          {entry.isSealed && (
-                            <WrappedIcon
-                              iconClass="sealed-in-blackstone icon-sealed"
-                              icon="lock"
-                              size="1x"
-                              title={entry.sealedToTooltip}
-                            />
-                          )}
-                        </td>
-                        <td data-label="Filings and Proceedings">
-                          <PublicFilingsAndProceedings entry={entry} />
-                        </td>
-                        <td className="hide-on-mobile">
-                          {entry.numberOfPages}
-                        </td>
-                        <td className="hide-on-mobile">{entry.filedBy}</td>
-                        <td className="hide-on-mobile">{entry.action}</td>
-                        <td data-label="Served">
-                          {entry.showNotServed && (
-                            <span className="text-secondary text-semibold">
-                              Not served
-                            </span>
-                          )}
-                          {entry.showServed && (
-                            <span>{entry.servedAtFormatted}</span>
-                          )}
-                        </td>
-                        <td className="center-column hide-on-mobile">
-                          {entry.servedPartiesCode}
-                        </td>
-                      </tr>
-                    );
-                  },
-                )}
+                        )}
+                        {entry.showServed && (
+                          <span>{entry.servedAtFormatted}</span>
+                        )}
+                      </td>
+                      <td className="center-column hide-on-mobile">
+                        {entry.servedPartiesCode}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
               .length && (
               <p className="margin-bottom-10">{noDocumentsMessage}</p>
+            )}
+
+            {hasLargeDocketEntryCount && totalPages > 1 && (
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
             )}
           </div>
         </NonPhone>
@@ -198,35 +236,45 @@ export const PublicDocketRecord = connect(
               </tr>
             </thead>
             <tbody>
-              {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
-                entry => {
-                  return (
-                    <tr key={entry.index}>
-                      <td data-label="No.">{entry.index}</td>
-                      <td data-label="Filed Date">
-                        {entry.createdAtFormatted}
-                      </td>
-                      <td data-label="Filings and Proceedings">
-                        <PublicFilingsAndProceedings entry={entry} />
-                      </td>
-                      <td data-label="Served">
-                        {entry.showNotServed && (
-                          <span className="text-secondary text-semibold">
-                            Not served
-                          </span>
-                        )}
-                        {entry.showServed && (
-                          <span>{entry.servedAtFormatted}</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+              {(hasLargeDocketEntryCount
+                ? pageRecords
+                : publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
+              ).map(entry => {
+                return (
+                  <tr key={entry.docketEntryId}>
+                    <td data-label="No.">{entry.index}</td>
+                    <td data-label="Filed Date">{entry.createdAtFormatted}</td>
+                    <td data-label="Filings and Proceedings">
+                      <PublicFilingsAndProceedings entry={entry} />
+                    </td>
+                    <td data-label="Served">
+                      {entry.showNotServed && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
+                      {entry.showServed && (
+                        <span>{entry.servedAtFormatted}</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {!publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
+
+          {hasLargeDocketEntryCount && totalPages > 1 && (
+            <Paginator
+              currentPageIndex={activePage}
+              totalPages={totalPages}
+              onPageChange={pageChange => {
+                setActivePage(pageChange);
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
         </Phone>
       </>
     );

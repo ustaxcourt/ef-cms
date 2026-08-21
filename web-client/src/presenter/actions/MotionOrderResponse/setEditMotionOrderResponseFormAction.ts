@@ -1,20 +1,55 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  additionalOrderTextArrayWithRequiredFirstField,
+  normalizeAdditionalOrderTextArray,
+} from '@web-client/utilities/normalizeAdditionalOrderTextArray';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const setEditMotionOrderResponseFormAction = ({
   get,
   props,
   store,
 }: ActionProps) => {
-  const documentToEdit = get(state.documentToEdit);
+  const documentToEdit: DocketEntry & {
+    draftOrderState?: DocketEntry['draftOrderState'] & {
+      previousDocument: {
+        docketEntryId: string;
+      };
+      motionOrderResponse?: boolean;
+      strickenFromTrialSession?: boolean;
+      showStrickenFromTrialSession?: boolean;
+    };
+  } = get(state.documentToEdit);
+  const { draftOrderState } = documentToEdit;
+  if (!draftOrderState) {
+    throw new Error(
+      'Draft order state is required to edit a motion order response',
+    );
+  }
   const { caseDetail, docketEntryIdToEdit } = props;
   const pathUrl = props.parentMessageId
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-order-response-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
 
-  store.set(state.form, documentToEdit.draftOrderState);
+  const rawAdditionalOrderTextArray =
+    draftOrderState.additionalOrderTextArray ?? [];
+
+  store.set(state.form, {
+    ...draftOrderState,
+    additionalOrderTextArray: additionalOrderTextArrayWithRequiredFirstField(
+      normalizeAdditionalOrderTextArray(rawAdditionalOrderTextArray),
+    ),
+    docketEntryIdToEdit,
+    motionOrderResponse:
+      draftOrderState.motionOrderResponse ?? !!draftOrderState.dueDate,
+    strickenFromTrialSession:
+      draftOrderState.strickenFromTrialSession ??
+      draftOrderState.showStrickenFromTrialSession ??
+      false,
+  });
   store.set(
     state.docketEntryId,
-    documentToEdit.draftOrderState.previousDocument.docketEntryId,
+    draftOrderState.previousDocument.docketEntryId,
   );
   return { path: pathUrl };
 };

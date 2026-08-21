@@ -1,18 +1,29 @@
-jest.mock('@shared/proxies/trialSessions/getEligibleCasesForCityProxy');
+jest.mock('@web-client/proxies/trialSessions/getEligibleCasesForCityProxy');
+import { MOCK_ELIGIBLE_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getEligibleCasesForLocationAction } from './getEligibleCasesForLocationAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { getEligibleCasesForCityInteractor as getEligibleCasesForCityInteractorMock } from '@shared/proxies/trialSessions/getEligibleCasesForCityProxy';
+import { getEligibleCasesForCityInteractor as getEligibleCasesForCityInteractorMock } from '@web-client/proxies/trialSessions/getEligibleCasesForCityProxy';
 
 describe('getEligibleCasesForLocationAction', () => {
   const getEligibleCasesForCityInteractor = jest.mocked(
     getEligibleCasesForCityInteractorMock,
   );
   presenter.providers.applicationContext = applicationContext;
+  const eligibleCaseOne = {
+    ...MOCK_ELIGIBLE_CASE,
+    docketNumber: '101-21',
+    docketNumberWithSuffix: '101-21',
+  };
+  const eligibleCaseTwo = {
+    ...MOCK_ELIGIBLE_CASE,
+    docketNumber: '102-21',
+    docketNumberWithSuffix: '102-21',
+  };
   getEligibleCasesForCityInteractor.mockResolvedValue([
-    { caseId: '1', caseTitle: 'Case One', trialCity: 'Boise, Idaho' },
-    { caseId: '2', caseTitle: 'Case Two', trialCity: 'Boise, Idaho' },
+    eligibleCaseOne,
+    eligibleCaseTwo,
   ]);
 
   it('should call getEligibleCasesForCityInteractor with the passed in trialLocation and return the result from the use case', async () => {
@@ -29,10 +40,7 @@ describe('getEligibleCasesForLocationAction', () => {
       getEligibleCasesForCityInteractor.mock.calls[0][1].trialCity,
     ).toEqual('Boise, Idaho');
     expect(result.output).toEqual({
-      eligibleCases: [
-        { caseId: '1', caseTitle: 'Case One', trialCity: 'Boise, Idaho' },
-        { caseId: '2', caseTitle: 'Case Two', trialCity: 'Boise, Idaho' },
-      ],
+      eligibleCases: [eligibleCaseOne, eligibleCaseTwo],
     });
   });
 });

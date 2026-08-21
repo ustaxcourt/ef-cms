@@ -28,7 +28,7 @@ export const strikeDocketEntryAction = async ({
         message: 'Docket entry has been stricken.',
       },
     });
-  } catch (err) {
+  } catch (err: any) {
     return path.error({
       alertError: {
         message: err.message,

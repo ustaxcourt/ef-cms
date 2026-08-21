@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { updateCaseContextInteractor } from '@shared/business/useCases/updateCaseContextInteractor';
+import { updateCaseContextInteractor } from '@web-api/business/useCases/updateCaseContextInteractor';
 
 /**
  * used for updating a case status

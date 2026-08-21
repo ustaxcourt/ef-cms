@@ -12,6 +12,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { PDFDocument } from 'pdf-lib';
+import { countPagesInDocument } from '../countPagesInDocument';
 
 type CreateAndServeNoticeDocketEntryParams = {
   additionalDocketEntryInfo?: any;
@@ -37,28 +38,27 @@ export const createAndServeNoticeDocketEntry = async (
     onlyProSePetitioners,
   }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
-) => {
-  const docketEntryId = applicationContext.getUniqueId();
+): Promise<() => Promise<void>> => {
+  const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: noticePdf,
-    key: docketEntryId,
+    key: documentStorageId,
   });
 
   const servedParties = aggregatePartiesForService(caseEntity, {
     onlyProSePetitioners,
   });
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId,
+  });
 
   const noticeDocketEntry = new DocketEntry(
     {
-      docketEntryId,
+      docketEntryId: documentStorageId,
+      documentStorageId,
       documentTitle: documentInfo.documentTitle,
       documentType: documentInfo.documentType,
       eventCode: documentInfo.eventCode,
@@ -66,6 +66,7 @@ export const createAndServeNoticeDocketEntry = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages,
+      originallyFiledDocketNumber: caseEntity.docketNumber,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       servedAt: createISODateString(),
       servedParties: servedParties.all,
@@ -81,7 +82,7 @@ export const createAndServeNoticeDocketEntry = async (
 
   caseEntity.addDocketEntry(noticeDocketEntry);
 
-  await applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
+  return applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
     applicationContext,
     caseEntity,
     newPdfDoc,

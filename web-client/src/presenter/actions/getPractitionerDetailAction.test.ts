@@ -99,4 +99,36 @@ describe('getPractitionerDetailAction', () => {
         .calls.length,
     ).toEqual(1);
   });
+
+  it('returns first array result for public users', async () => {
+    applicationContext
+      .getUseCases()
+      .getPractitionerByBarNumberInteractor.mockImplementationOnce(() => [
+        {
+          barNumber: 'PD1234',
+          name: 'Test Practitioner',
+        },
+      ]);
+
+    const result = await runAction(getPractitionerDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        barNumber: 'PD1234',
+      },
+      state: {
+        user: {
+          role: ROLES.privatePractitioner,
+        },
+      },
+    });
+
+    expect(result.output).toEqual({
+      practitionerDetail: {
+        barNumber: 'PD1234',
+        name: 'Test Practitioner',
+      },
+    });
+  });
 });

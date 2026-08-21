@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -30,11 +29,7 @@ describe('unblockCaseFromTrialAction', () => {
     ).toMatchObject({ docketNumber: mockDocketNumber });
   });
 
-  it('should return the updated caseDetail and an alertSuccess.message as props', async () => {
-    await applicationContext
-      .getUseCases()
-      .unblockCaseFromTrialInteractor.mockReturnValue(MOCK_CASE);
-
+  it('should return alertSuccess.message as props', async () => {
     const { output } = await runAction(unblockCaseFromTrialAction, {
       modules: {
         presenter,
@@ -46,12 +41,9 @@ describe('unblockCaseFromTrialAction', () => {
       },
     });
 
-    expect(output).toMatchObject({
-      alertSuccess: {
-        message:
-          'Block removed. Case is eligible for next available trial session.',
-      },
-      caseDetail: MOCK_CASE,
+    expect(output.alertSuccess).toEqual({
+      message:
+        'Block removed. Case is eligible for next available trial session.',
     });
   });
 });

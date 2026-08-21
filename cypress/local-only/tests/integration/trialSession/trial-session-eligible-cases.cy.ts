@@ -15,10 +15,13 @@ import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const trialLocation = `Phoenix, Arizona`;
-  let trialSessionId: string;
-  const createdDocketNumbers: string[] = [];
 
   it('should create trial session and cases, then verify eligible cases are properly assigned', () => {
+    const setup = {
+      createdDocketNumbers: [] as string[],
+      trialSessionId: '',
+    };
+
     loginAsPetitionsClerk1();
     createTrialSession({
       trialLocation,
@@ -28,7 +31,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       judge: 'Cohen',
       maxCases: '3',
     }).then(({ trialSessionId: createdTrialSessionId }) => {
-      trialSessionId = createdTrialSessionId;
+      setup.trialSessionId = createdTrialSessionId;
     });
 
     createAndServePaperPetition({
@@ -39,7 +42,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       includeApwDocument: false,
     })
       .then(({ docketNumber }) => {
-        createdDocketNumbers.push(docketNumber);
+        setup.createdDocketNumbers.push(docketNumber);
 
         loginAsDocketClerk();
         goToCase(docketNumber);
@@ -53,7 +56,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         });
       })
       .then(({ docketNumber }) => {
-        createdDocketNumbers.push(docketNumber);
+        setup.createdDocketNumbers.push(docketNumber);
 
         loginAsDocketClerk();
         goToCase(docketNumber);
@@ -66,7 +69,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         });
       })
       .then(({ docketNumber }) => {
-        createdDocketNumbers.push(docketNumber);
+        setup.createdDocketNumbers.push(docketNumber);
 
         loginAsDocketClerk();
         goToCase(docketNumber);
@@ -80,7 +83,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         });
       })
       .then(({ docketNumber }) => {
-        createdDocketNumbers.push(docketNumber);
+        setup.createdDocketNumbers.push(docketNumber);
 
         loginAsDocketClerk();
         goToCase(docketNumber);
@@ -94,7 +97,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         });
       })
       .then(({ docketNumber }) => {
-        createdDocketNumbers.push(docketNumber);
+        setup.createdDocketNumbers.push(docketNumber);
         loginAsDocketClerk();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -103,47 +106,55 @@ describe('Trial Session Eligible Cases Journey', () => {
     cy.then(() => {
       loginAsPetitionsClerk1();
 
-      cy.visit(`/trial-session-detail/${trialSessionId}`);
+      cy.visit(`/trial-session-detail/${setup.trialSessionId}`);
 
       cy.get('table#upcoming-sessions').within(() => {
-        cy.get('tr').should('contain', createdDocketNumbers[3]); // Case #4
-        cy.get('tr').should('contain', createdDocketNumbers[4]); // Case #5
-        cy.get('tr').should('contain', createdDocketNumbers[0]); // Case #1
-        cy.get('tr').should('contain', createdDocketNumbers[1]); // Case #2
+        cy.get('tr').should('contain', setup.createdDocketNumbers[3]); // Case #4
+        cy.get('tr').should('contain', setup.createdDocketNumbers[4]); // Case #5
+        cy.get('tr').should('contain', setup.createdDocketNumbers[0]); // Case #1
+        cy.get('tr').should('contain', setup.createdDocketNumbers[1]); // Case #2
       });
     });
 
     cy.then(() => {
       loginAsPetitionsClerk1();
 
-      cy.visit(`/trial-session-detail/${trialSessionId}`);
+      cy.visit(`/trial-session-detail/${setup.trialSessionId}`);
 
       cy.get('table#upcoming-sessions');
 
-      cy.get(`label[for="qc-complete-${createdDocketNumbers[3]}"]`).click();
-      cy.get(`label[for="qc-complete-${createdDocketNumbers[4]}"]`).click();
-      cy.get(`label[for="qc-complete-${createdDocketNumbers[0]}"]`).click();
-      cy.get(`label[for="qc-complete-${createdDocketNumbers[1]}"]`).click();
+      cy.get(
+        `label[for="qc-complete-${setup.createdDocketNumbers[3]}"]`,
+      ).click();
+      cy.get(
+        `label[for="qc-complete-${setup.createdDocketNumbers[4]}"]`,
+      ).click();
+      cy.get(
+        `label[for="qc-complete-${setup.createdDocketNumbers[0]}"]`,
+      ).click();
+      cy.get(
+        `label[for="qc-complete-${setup.createdDocketNumbers[1]}"]`,
+      ).click();
     });
 
     cy.then(() => {
-      calendarTrialSession(trialSessionId);
+      calendarTrialSession(setup.trialSessionId);
       cy.get('[data-testid^="warning-alert"]').should('exist');
     });
 
     cy.then(() => {
       loginAsPetitionsClerk1();
-      cy.visit(`/trial-session-detail/${trialSessionId}`);
+      cy.visit(`/trial-session-detail/${setup.trialSessionId}`);
 
       cy.get('table#open-cases').within(() => {
-        cy.get('tr').should('contain', createdDocketNumbers[0]);
-        cy.get('tr').should('contain', createdDocketNumbers[3]);
-        cy.get('tr').should('contain', createdDocketNumbers[4]);
+        cy.get('tr').should('contain', setup.createdDocketNumbers[0]);
+        cy.get('tr').should('contain', setup.createdDocketNumbers[3]);
+        cy.get('tr').should('contain', setup.createdDocketNumbers[4]);
       });
     });
 
     cy.then(() => {
-      goToCase(createdDocketNumbers[0]);
+      goToCase(setup.createdDocketNumbers[0]);
       cy.get('[data-testid="case-status"]').should('be.visible');
       cy.get('[data-testid="case-status"]').should(
         'contain',
@@ -155,7 +166,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         .and('contain', trialLocation);
 
       // Case #2 - should NOT be calendared
-      goToCase(createdDocketNumbers[3]);
+      goToCase(setup.createdDocketNumbers[3]);
       cy.get('[data-testid="case-status"]').should(
         'contain',
         CASE_STATUS_TYPES.calendared,
@@ -167,7 +178,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
 
       // Case #3 - should NOT be calendared
-      goToCase(createdDocketNumbers[4]);
+      goToCase(setup.createdDocketNumbers[4]);
       cy.get('[data-testid="case-status"]').should(
         'contain',
         CASE_STATUS_TYPES.calendared,
@@ -179,14 +190,14 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
 
       // Case #4 - should be calendared
-      goToCase(createdDocketNumbers[1]);
+      goToCase(setup.createdDocketNumbers[1]);
       cy.get('[data-testid="case-status"]').should(
         'contain',
         CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
 
       // Case #5 - should be calendared
-      goToCase(createdDocketNumbers[2]);
+      goToCase(setup.createdDocketNumbers[2]);
       cy.get('[data-testid="case-status"]').should(
         'contain',
         CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -195,7 +206,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     // // Step 12: Test removing and re-adding a case from trial session
     cy.then(() => {
-      goToCase(createdDocketNumbers[0]);
+      goToCase(setup.createdDocketNumbers[0]);
 
       // Remove case from trial session
       cy.get('[data-testid="tab-case-information"]').click();
@@ -215,7 +226,9 @@ describe('Trial Session Eligible Cases Journey', () => {
 
       // Add case back to trial session
       cy.get('[data-testid="add-to-trial-session-btn"]').click();
-      cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+      cy.get('[data-testid="trial-session-select"]').select(
+        setup.trialSessionId,
+      );
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').should('exist');
 
@@ -228,7 +241,12 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   it('should create trial session and cases, then verify eligible cases granted remote motion have an indicator', () => {
-    const date = formatNow(FORMATS.MMDDYYYY)
+    const date = formatNow(FORMATS.MMDDYYYY);
+    const setup = {
+      docketNumber: '',
+      docketNumberMotr: '',
+      trialSessionId: '',
+    };
 
     loginAsPetitionsClerk1();
     createTrialSession({
@@ -239,8 +257,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       judge: 'Cohen',
       maxCases: '3',
     }).then(({ trialSessionId: createdTrialSessionId }) => {
-      trialSessionId = createdTrialSessionId;
-      cy.wrap(trialSessionId).as('trialSessionId');
+      setup.trialSessionId = createdTrialSessionId;
     });
 
     createAndServePaperPetition({
@@ -251,8 +268,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       includeApwDocument: false,
     })
       .then(({ docketNumber }) => {
-        cy.wrap(docketNumber).as('docketNumber');
-        createdDocketNumbers.push(docketNumber);
+        setup.docketNumber = docketNumber;
 
         loginAsDocketClerk();
         goToCase(docketNumber);
@@ -266,8 +282,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         });
       })
       .then(({ docketNumber }) => {
-        cy.wrap(docketNumber).as('docketNumberMotr');
-        createdDocketNumbers.push(docketNumber);
+        setup.docketNumberMotr = docketNumber;
         loginAsDocketClerk();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -276,18 +291,23 @@ describe('Trial Session Eligible Cases Journey', () => {
         cy.get('[data-testid="modal-button-confirm"]').click();
         cy.get('[data-testid="trial-session-link"]').click();
       });
-    cy.get('@trialSessionId').then(trialSessionId => {
+
+    cy.then(() => {
       cy.get('[data-testid="new-trial-sessions-tab"] span.button-text').click();
-      cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-    });
-    cy.get('@docketNumberMotr').then(docketNumberMotr => {
       cy.get(
-        `[data-testid="table-row-${docketNumberMotr}"] [data-testid="laptop"]`,
+        `[data-testid="trial-location-link-${setup.trialSessionId}"]`,
+      ).click();
+    });
+
+    cy.then(() => {
+      cy.get(
+        `[data-testid="table-row-${setup.docketNumberMotr}"] [data-testid="laptop"]`,
       ).should('be.visible');
     });
-    cy.get('@docketNumber').then(docketNumber => {
+
+    cy.then(() => {
       cy.get(
-        `[data-testid="table-row-${docketNumber}"] [data-testid="laptop"]`,
+        `[data-testid="table-row-${setup.docketNumber}"] [data-testid="laptop"]`,
       ).should('not.be.visible');
     });
   });

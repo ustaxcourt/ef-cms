@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
-import { OrderSearchValidation } from '@shared/business/entities/orderSearch/OrderSearchValidation';
+import { OrderSearchValidation } from '@web-client/business/entities/orderSearch/OrderSearchValidation';
 import {
   createISODateString,
   FORMATS,

@@ -1,6 +1,3 @@
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -12,20 +9,14 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateOtherStatisticsInteractor } from './updateOtherStatisticsInteractor';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('updateOtherStatisticsInteractor', () => {
   let authorizedUser: UnknownAuthUser;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-
-  beforeAll(() => {
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
-  });
 
   beforeEach(() => {
     authorizedUser = mockDocketClerkUser;
@@ -45,8 +36,8 @@ describe('updateOtherStatisticsInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await updateOtherStatisticsInteractor(
+  it('should call updateCase with the updated case statistics', async () => {
+    await updateOtherStatisticsInteractor(
       applicationContext,
       {
         damages: 1234,
@@ -55,7 +46,9 @@ describe('updateOtherStatisticsInteractor', () => {
       },
       authorizedUser,
     );
-    expect(result).toMatchObject({
+
+    expect(upsertCases).toHaveBeenCalled();
+    expect(upsertCases.mock.calls[0][0][0]).toMatchObject({
       damages: 1234,
       litigationCosts: 5678,
     });

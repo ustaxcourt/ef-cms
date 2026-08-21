@@ -33,15 +33,18 @@ import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const updateCaseAndAssociations = async ({
   authorizedUser,
   caseToUpdate,
   includeCorrespondence = true,
+  oldCase,
 }: {
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   includeCorrespondence?: boolean;
+  oldCase?: RawCase;
 }): Promise<RawCase> => {
   // Validate the old (pre-update) and new (post-update) case entity
   const newCaseEntity: Case = caseToUpdate.validate
@@ -50,11 +53,14 @@ export const updateCaseAndAssociations = async ({
         authorizedUser,
       });
 
-  const oldCaseEntity = await getCaseByDocketNumber({
-    docketNumber: caseToUpdate.docketNumber,
-    includeConsolidatedCases: false,
-  });
+  const oldCaseEntity =
+    oldCase ??
+    (await getCaseByDocketNumber({
+      docketNumber: caseToUpdate.docketNumber,
+      includeConsolidatedCases: false,
+    }));
 
+  newCaseEntity.recomputeHasPendingItems();
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, {
@@ -111,34 +117,48 @@ export const updateCaseAndAssociations = async ({
       : [],
   ]);
 
-  // Persist primary case data first to ensure no errors
-  await upsertCases([validNewRawCaseEntity]);
+  return withTransaction(async () => {
+    // Persist primary case data first to ensure no errors
+    await upsertCases([validNewRawCaseEntity]);
 
-  // Then persist all related case data
-  await settlePromises([
-    upsertDocketEntries(docketEntries),
-    upsertMessages(messages),
-    upsertCaseCorrespondences(correspondences),
-    removeCasesFromHearings({
-      trialSessionCases: deletedHearings.map(dh => ({
-        trialSessionId: dh.trialSessionId,
-        docketNumber: caseToUpdate.docketNumber,
-      })),
-    }),
-    associateUsersWithCases([
-      ...irsPractitionersToUpdate,
-      ...privatePractitionersToUpdate,
-      ...petitionersToUpdate,
-    ]),
-    disassociateUsersFromCases([
-      ...irsPractitionersToDelete,
-      ...privatePractitionersToDelete,
-      ...petitionersToDelete,
-    ]),
-    upsertCaseDeadlines(deadlines),
-  ]);
+    // Split docket entries: those with servedParties loaded can be fully upserted;
+    // those without must exclude servedParties to avoid overwriting existing DB values with null.
+    const docketEntriesWithServedParties = docketEntries.filter(
+      de => de.servedParties !== undefined,
+    );
+    const docketEntriesWithoutServedParties = docketEntries.filter(
+      de => de.servedParties === undefined,
+    );
 
-  return validNewRawCaseEntity;
+    // Then persist all related case data
+    await settlePromises([
+      upsertDocketEntries(docketEntriesWithServedParties),
+      upsertDocketEntries(docketEntriesWithoutServedParties, {
+        excludeFromUpdateColumns: ['servedParties'],
+      }),
+      upsertMessages(messages),
+      upsertCaseCorrespondences(correspondences),
+      removeCasesFromHearings({
+        trialSessionCases: deletedHearings.map(dh => ({
+          trialSessionId: dh.trialSessionId,
+          docketNumber: caseToUpdate.docketNumber,
+        })),
+      }),
+      associateUsersWithCases([
+        ...irsPractitionersToUpdate,
+        ...privatePractitionersToUpdate,
+        ...petitionersToUpdate,
+      ]),
+      disassociateUsersFromCases([
+        ...irsPractitionersToDelete,
+        ...privatePractitionersToDelete,
+        ...petitionersToDelete,
+      ]),
+      upsertCaseDeadlines(deadlines),
+    ]);
+
+    return validNewRawCaseEntity;
+  });
 };
 
 const getDocketEntriesToUpdate = ({

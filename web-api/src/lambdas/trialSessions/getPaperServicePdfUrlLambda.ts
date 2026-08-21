@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getPaperServicePdfUrlInteractor } from '@shared/business/useCases/getPaperServicePdfUrlInteractor';
+import { getPaperServicePdfUrlInteractor } from '@web-api/business/useCases/getPaperServicePdfUrlInteractor';
 
 export const getPaperServicePdfUrlLambda = (
   event,

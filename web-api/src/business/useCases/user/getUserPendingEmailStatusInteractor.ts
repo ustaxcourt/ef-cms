@@ -8,19 +8,11 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-/**
- * getUserPendingEmailInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.userId the userId
- * @returns {Promise} the user's pending email
- */
 export const getUserPendingEmailStatusInteractor = async (
   _: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<boolean> => {
   if (
     !isAuthorized(
       authorizedUser,
@@ -36,7 +28,7 @@ export const getUserPendingEmailStatusInteractor = async (
     userId,
   });
 
-  if (!userRaw) return;
+  if (!userRaw) return false;
 
   const validatedUserRaw = new User(userRaw).validate().toRawObject();
 

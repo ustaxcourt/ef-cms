@@ -12,7 +12,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 export const updateCorrespondenceDocumentInteractor = async (
   { documentMetadata }: { documentMetadata: TDocumentMetaData },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -37,11 +37,9 @@ export const updateCorrespondenceDocumentInteractor = async (
 
   caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 
-  const caseEntityRaw = caseEntity.validate().toRawObject();
+  caseEntity.validate();
 
   await upsertCaseCorrespondences([
     updatedCorrespondenceEntity.validate().toRawObject(),
   ]);
-
-  return caseEntityRaw;
 };

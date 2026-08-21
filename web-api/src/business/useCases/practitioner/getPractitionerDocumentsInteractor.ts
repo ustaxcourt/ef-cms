@@ -1,21 +1,16 @@
-import { PractitionerDocument } from '../../../../../shared/src/business/entities/PractitionerDocument';
+import {
+  PractitionerDocument,
+  RawPractitionerDocument,
+} from '@shared/business/entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getPractitionerDocuments } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocuments';
 
-/**
- * getPractitionerDocumentsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.user the user data
- * @returns {Promise} the promise of the createUser call
- */
 export const getPractitionerDocumentsInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -24,7 +19,7 @@ export const getPractitionerDocumentsInteractor = async (
     barNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawPractitionerDocument[]> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {

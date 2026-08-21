@@ -7,6 +7,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -25,7 +26,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     trialSessionWorkingCopyHelperComputed,
   );
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     sessionType: SESSION_TYPES.small,

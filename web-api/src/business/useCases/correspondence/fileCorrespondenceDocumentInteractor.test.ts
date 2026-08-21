@@ -134,32 +134,21 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     ]);
   });
 
-  it('should return an updated raw case object', async () => {
+  it('should not throw when filing a valid correspondence document', async () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const result = await fileCorrespondenceDocumentInteractor(
-      {
-        documentMetadata: {
-          docketNumber: mockCase.docketNumber,
-          documentTitle: mockDocumentTitle,
-          filingDate: mockFilingDate,
-        } as any,
-        primaryDocumentFileId: mockCorrespondenceId,
-      },
-      mockDocketClerkUser,
-    );
-    expect(result).toMatchObject({
-      ...mockCase,
-      correspondence: [
+    await expect(
+      fileCorrespondenceDocumentInteractor(
         {
-          correspondenceId: mockCorrespondenceId,
-          docketNumber: mockCase.docketNumber,
-          documentTitle: mockDocumentTitle,
-          filedBy: docketClerkUser.name,
-          filingDate: mockFilingDate,
-          userId: docketClerkUser.userId,
+          documentMetadata: {
+            docketNumber: mockCase.docketNumber,
+            documentTitle: mockDocumentTitle,
+            filingDate: mockFilingDate,
+          } as any,
+          primaryDocumentFileId: mockCorrespondenceId,
         },
-      ],
-    });
+        mockDocketClerkUser,
+      ),
+    ).resolves.toBeUndefined();
   });
 });

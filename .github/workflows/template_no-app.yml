@@ -1,0 +1,52 @@
+name: GitHub Actions Workflow Template - DAWSON not running
+
+on:
+  workflow_call:
+    inputs:
+      coverage_source_dir:
+        default: ''
+        required: false
+        type: string
+      fetch_depth:
+        default: 1
+        type: number
+      run_command:
+        required: true
+        type: string
+      workflow_filename:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - name: NPM Install in Current Branch
+        uses: ./.github/actions/dawson-node-bootstrap
+      - name: Run tests
+        run: |
+          ${{ inputs.run_command }}
+      - name: Rename coverage to shard coverage
+        if: success() && inputs.coverage_source_dir != ''
+        run: |
+          mkdir -p coverage
+          cp "${{ inputs.coverage_source_dir }}/lcov.info" "coverage/lcov-0.info"
+          cp "${{ inputs.coverage_source_dir }}/coverage-final.json" "coverage/coverage-0.json"
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v7
+        if: success() && inputs.coverage_source_dir != '' && inputs.workflow_filename != ''
+        with:
+          name: ${{ inputs.workflow_filename }}-coverage-artifacts-0
+          path: coverage

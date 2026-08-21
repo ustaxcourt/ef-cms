@@ -3,11 +3,9 @@ import { computeIsNotServedDocument } from '@shared/business/utilities/getFormat
 export const getShowNotServedForDocument = ({
   caseDetail,
   docketEntryId,
-  draftDocuments = [],
 }: {
   caseDetail: RawCase;
   docketEntryId: string;
-  draftDocuments?: RawDocketEntry[];
 }) => {
   let showNotServed = false;
 
@@ -16,9 +14,7 @@ export const getShowNotServedForDocument = ({
   );
 
   if (caseDocument) {
-    const isDraftDocument =
-      draftDocuments &&
-      !!draftDocuments.find(draft => draft.docketEntryId === docketEntryId);
+    const isDraftDocument = caseDocument.isDraft && !caseDocument.archived;
 
     showNotServed =
       !isDraftDocument &&

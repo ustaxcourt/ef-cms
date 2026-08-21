@@ -1,18 +1,32 @@
 import {
+  BAR_NUMBER_MATCHER,
   CAV_AND_SUBMITTED_CASE_STATUS,
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SEARCH_MATCHER,
   MAX_FILE_SIZE_BYTES,
   MOTION_DISPOSITIONS,
 } from './EntityConstants';
-import joiDate from '@joi/date';
+import { JoiDate } from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(JoiDate);
 
-// These are specific to joi and cannot be shared with luxon
+// These are specific to joi/@joi/date (dayjs) and cannot be shared with luxon.
+// @joi/date@3 uses dayjs: a trailing literal Z must be escaped as [Z]
+// (moment treated bare Z as UTC; dayjs does not). ISO timestamps must set
+// utc: true on format() so dayjs parses the value as UTC instead of local time.
+/** ISO-8601 timestamp format accepted by DAWSON persistence (UTC, literal Z suffix). */
+export const ISO_DATE_FORMAT_STRING = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
+
+/** Pass to `joi.date().iso().format(...)` for UTC ISO timestamps (@joi/date 3 / dayjs). */
+export const ISO_DATE_JOI_FORMAT = {
+  format: ISO_DATE_FORMAT_STRING,
+  utc: true,
+} as const;
+
 const DATE_FORMATS = {
-  ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  ISO: ISO_DATE_FORMAT_STRING,
   MMDDYYYY: 'MM/DD/YYYY',
   YYYYMMDD: 'YYYY-MM-DD',
 };
@@ -21,10 +35,12 @@ const DATE_FORMATS = {
 const STRING = joi.string().min(1);
 
 export const JoiValidationConstants = Object.freeze({
+  BAR_NUMBER: STRING.regex(BAR_NUMBER_MATCHER).max(10),
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
   DATE_RANGE_PICKER_DATE: joi.date().iso().format([DATE_FORMATS.MMDDYYYY]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
+  DOCKET_NUMBER_SEARCH: STRING.regex(DOCKET_NUMBER_SEARCH_MATCHER),
   DOCKET_RECORD: joi
     .array()
     .unique(
@@ -33,7 +49,7 @@ export const JoiValidationConstants = Object.freeze({
     ),
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
-  ISO_DATE: joi.date().iso().format([DATE_FORMATS.ISO]),
+  ISO_DATE: joi.date().iso().format(ISO_DATE_JOI_FORMAT),
   JUDGES_STATUSES: joi.array().items(
     joi
       .string()

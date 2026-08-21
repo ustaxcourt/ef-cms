@@ -1,0 +1,95 @@
+name: Check Coverage
+
+on:
+  workflow_call:
+    inputs:
+      branches:
+        required: true
+        type: number
+      functions:
+        required: true
+        type: number
+      lines:
+        required: true
+        type: number
+      coverage_suite:
+        required: true
+        type: string
+      coverage_source_dir:
+        default: coverage
+        type: string
+      pull_request_number:
+        default: 0
+        type: number
+      statements:
+        required: true
+        type: number
+      workflow_filename:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  check-coverage:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSITE_COVERAGE_SUMMARY_PATH: /tmp/coverage-summary-${{ inputs.coverage_suite }}-pr-${{ inputs.pull_request_number }}.json
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Restore Node Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: NPM Install Trusted Dependencies
+        if: ${{ steps.cache-dependencies.outputs.cache-hit != 'true' }}
+        run: npm ci --ignore-scripts
+      - name: Clean Coverage Source Directory
+        run: rm -rf ${{ inputs.coverage_source_dir }}
+      - name: Download Coverage Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          pattern: ${{ inputs.workflow_filename }}-coverage-artifacts-*
+          merge-multiple: true
+          path: ${{ inputs.coverage_source_dir }}
+      - name: Process Coverage
+        run: |
+          npx nyc report \
+            --check-coverage \
+            --branches ${{ inputs.branches }} \
+            --functions ${{ inputs.functions }} \
+            --lines ${{ inputs.lines }} \
+            --statements ${{ inputs.statements }} \
+            --reporter json-summary \
+            --reporter lcov \
+            --reporter text \
+            --reporter clover \
+            --report-dir ./coverage-reports \
+            -t "${{ inputs.coverage_source_dir }}"
+          cp ./coverage-reports/coverage-summary.json "${{ inputs.coverage_source_dir }}/coverage-summary.json"
+      - name: Emit composite coverage summary
+        run: |
+          scripts/github-actions/emit-coverage-summary.ts \
+            "${{ inputs.coverage_suite }}" \
+            "${{ inputs.coverage_source_dir }}/coverage-summary.json" \
+            "${COMPOSITE_COVERAGE_SUMMARY_PATH}"
+      - name: Upload composite coverage summary
+        uses: actions/upload-artifact@v7
+        if: ${{ inputs.pull_request_number != 0 }}
+        with:
+          name: coverage-summary-${{ inputs.coverage_suite }}-pr-${{ inputs.pull_request_number }}
+          path: ${{ env.COMPOSITE_COVERAGE_SUMMARY_PATH }}
+      - name: Delete Coverage Artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ inputs.workflow_filename }}-coverage-artifacts-*
+          failOnError: false

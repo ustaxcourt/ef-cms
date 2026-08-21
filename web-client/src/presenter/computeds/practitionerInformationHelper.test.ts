@@ -42,10 +42,10 @@ describe('practitionerInformationHelper', () => {
     closedCasesCurrentPage?: number;
   }): PractitionerDetail => {
     return {
-      admissionStatus: 'Test',
+      admissionsStatus: 'Test',
       admissionsDate: '2019-03-01',
       barNumber: '1234',
-      birthYear: '1939',
+      birthYear: 1939,
       closedCaseInfo: {
         allCases: getFakeCases(numClosedCases),
         currentPage: closedCasesCurrentPage,

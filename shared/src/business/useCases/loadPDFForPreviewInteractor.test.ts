@@ -8,7 +8,7 @@ describe('loadPDFForPreviewInteractor', () => {
       .getDocument.mockReturnValue('pdf data');
 
     const result = await loadPDFForPreviewInteractor(applicationContext, {
-      docketEntryId: 'dba6fdd5-ae30-4018-9df1-7d04f123dee3',
+      documentStorageId: 'dba6fdd5-ae30-4018-9df1-7d04f123dee3',
       docketNumber: '123-45',
     });
 

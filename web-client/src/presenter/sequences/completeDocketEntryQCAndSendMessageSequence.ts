@@ -8,7 +8,6 @@ import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -19,6 +18,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
@@ -33,11 +33,15 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       {
         error: [
           switchErrorActionFactory({
-            'currently being updated': 'completed',
+            'was already completed': 'completed',
+            'currently being updated': 'lockError',
           }),
           {
             completed: [
               setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+            ],
+            lockError: [
+              setShowModalFactoryAction('AsyncServiceUnavailableModal'),
             ],
             default: [setShowModalFactoryAction('GenericErrorModal')],
           },
@@ -47,10 +51,10 @@ export const completeDocketEntryQCAndSendMessageSequence = [
           clearUsersAction,
           clearModalAction,
           setSaveAlertsForNavigationAction,
-          setCaseAction,
           setAlertSuccessAction,
           getMessagesForCaseAction,
           setPdfPreviewUrlAction,
+          setDocketEntryIdAction,
           setPaperServicePartiesAction,
           navigateToDocumentQCAction,
           clearFormAction,

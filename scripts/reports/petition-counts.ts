@@ -3,12 +3,12 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:

@@ -15,10 +15,19 @@ describe('advanced search pages', () => {
 
   it('should display "No Matches Found" when case search yields no results', () => {
     cy.visit('/');
-    cy.get('input#docket-number').type('99-21');
+    cy.get('input#docket-number').type('99999-21');
     cy.get('button#docket-search-button').click();
 
     cy.get('div#no-search-results').should('exist');
+  });
+
+  it('should display "Enter a valid docket number" when an invalid docket number is entered', () => {
+    cy.visit('/');
+    cy.get('input#docket-number').type('99-21');
+    cy.get('button#docket-search-button').click();
+
+    cy.get('[data-testid="error-alert"]').should('exist');
+    cy.get('span.usa-error-message').contains('Enter a valid docket number');
   });
 
   /*

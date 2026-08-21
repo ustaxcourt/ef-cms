@@ -9,11 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object|void} the next path to take
  */
-export const getDocumentEditUrlAsPathAction = ({
-  applicationContext,
-  get,
-  props,
-}: ActionProps) => {
+export const getDocumentEditUrlAsPathAction = ({ get, props }: ActionProps) => {
   const { caseDetail, docketEntryIdToEdit } = props;
   const parentMessageId = get(state.parentMessageId);
 
@@ -23,7 +19,6 @@ export const getDocumentEditUrlAsPathAction = ({
     );
 
     let editUrl = getDocumentEditUrl({
-      applicationContext,
       caseDetail,
       document: documentToEdit,
     });

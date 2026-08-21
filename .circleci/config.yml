@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.63
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.92
 
 parameters:
   run_build_and_deploy:
@@ -130,7 +130,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -143,13 +143,11 @@ jobs:
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
       - run:
-          name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
+          name: Perform an Aurora blue/green deployment if the RDS engine version has changed
           command: |
-            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region "$REGION" --output text)
             if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
-              npm run maintenance:engage
-              # NOTE: the lack of a companion "disengage" is intentional!
-              # maintenance mode is color-specific so when we switch colors it'll be off
+              ./scripts/postgres/upgrade-rds-engine-version.sh
             else
               echo "skipping…"
             fi
@@ -207,7 +205,7 @@ jobs:
               fi
               ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "$ES_DOMAIN" \
-                --region "us-east-1" \
+                --region "$REGION" \
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
@@ -224,7 +222,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:24.12.0
+      - image: cimg/node:24.19.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -236,7 +234,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - setup_remote_docker:
-          version: docker23
+          version: docker29
       - run:
           name: Setup Env
           command: |
@@ -255,7 +253,7 @@ jobs:
     resource_class: xlarge
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
@@ -280,16 +278,29 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+
+  validate-entities:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    steps:
+      - setup_remote_docker:
+          version: docker29
+          docker_layer_caching: true
+      - git-shallow-clone/checkout
+      - npm-install
       - run:
-          name: Migrate Trial Sessions
+          name: Setup Env
           command: |
-            NUM_TRIAL_SESSIONS=$(./scripts/postgres/connect.sh --quiet --yes \
-              --command="SELECT COUNT(*) FROM dw_trial_session;")
-            if [[ "$NUM_TRIAL_SESSIONS" -ne 0 ]]; then
-              echo "Already migrated trial sessions"
-              exit 0
-            fi
-            ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
+            ./scripts/env/env-for-circle.sh
+      - run:
+          no_output_timeout: 90m
+          name: Run Entity Validation
+          command: |
+            npm run validation:fingerprint
 
   smoketests:
     parallelism: 9
@@ -301,7 +312,7 @@ jobs:
     resource_class: large
     steps:
       - setup_remote_docker:
-          version: docker23
+          version: docker29
           docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-and-cypress-install
@@ -314,7 +325,23 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+          command: |
+            TIMINGS_JSON="/tmp/cypress/cypress-smoketests-${CIRCLE_NODE_INDEX}.json"
+            TIMINGS_XML="/tmp/cypress/results/cypress-smoketests-${CIRCLE_NODE_INDEX}.xml"
+            mkdir -p /tmp/cypress/results
+
+            set +e
+            find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --timings-type=filename --command "paste -sd, - | xargs -I {} ./scripts/tests/run-cypress.ts --file {} --output-file-path ${TIMINGS_JSON}"
+            CYPRESS_RESULT=$?
+            set -e
+
+            if [ "${CYPRESS_RESULT}" -eq 0 ] && [ -f "${TIMINGS_JSON}" ]; then
+              ./scripts/tests/test-file-times-to-junit.ts "${TIMINGS_JSON}" "${TIMINGS_XML}" "cypress-smoketests-${CIRCLE_NODE_INDEX}"
+            fi
+
+            exit "${CYPRESS_RESULT}"
+      - store_test_results:
+          path: /tmp/cypress/results
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
@@ -491,6 +518,10 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
+      - run:
+          name: Cleanup Entity Validation
+          command: |
+            npm run cleanup:entity-validation
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -553,11 +584,11 @@ jobs:
               exit 1
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" >> $BASH_ENV
       - run:
           name: 'Delete Cognito users'
           command: |
-            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
+            ./scripts/user/clear-all-cognito-users.ts
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -648,7 +679,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -675,7 +706,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -702,7 +733,7 @@ jobs:
             DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
             ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
               --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
+              --region "$REGION" \
               --query 'DomainStatus.Endpoint' \
               --output text)
             echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
@@ -735,7 +766,7 @@ jobs:
       - run:
           name: Populate test users in Cognito
           command: |
-            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
+            ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |
@@ -807,7 +838,7 @@ jobs:
               exit 1
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" >> $BASH_ENV
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -937,6 +968,10 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
+      - validate-entities:
+          <<: *only-deployed-lower-environments
+          requires:
+            - migrate
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
@@ -960,6 +995,7 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+            - validate-entities
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -986,11 +1022,16 @@ workflows:
           <<: *only-prod
           requires:
             - migrate
+      - validate-entities:
+          <<: *only-prod
+          requires:
+            - migrate
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
             - loadtests
             - smoketests-readonly
+            - validate-entities
       - wait-for-switch:
           <<: *only-prod
           type: approval
@@ -1034,6 +1075,7 @@ workflows:
           <<: *only-test
           requires:
             - delete-and-recreate-elasticsearch-cluster
+            - wait-for-s3-sync-workflow
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
@@ -1046,7 +1088,6 @@ workflows:
       - index-docket-entries:
           <<: *only-test
           requires:
-            - wait-for-s3-sync-workflow
             - index-users
       - cleanup-glue-job:
           <<: *only-test

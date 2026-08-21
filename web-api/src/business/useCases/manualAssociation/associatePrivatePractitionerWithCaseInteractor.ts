@@ -8,17 +8,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 
-/**
- * associatePrivatePractitionerWithCaseInteractor
- * @param {object} applicationContext the application context
- * @param {object} params the params object
- * @param {string} params.docketNumber the docket number of the case
- * @param {Array} params.representing the contact ids the private practitioner is representing
- * @param {boolean} params.serviceIndicator serviceIndicator for the practitioner
- * @param {string} params.userId the user id
- * @returns {*} the result
- */
 export const associatePrivatePractitionerWithCase = async (
   _applicationContext: ServerApplicationContext,
   {
@@ -33,16 +24,20 @@ export const associatePrivatePractitionerWithCase = async (
     userId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await getUserById({ userId });
+  const user = (await getUserById({ userId })) as RawPractitioner;
 
-  return await associatePrivatePractitionerToCase({
+  if (!user) {
+    throw new Error(`Could not find a user for ${userId}`);
+  }
+
+  await associatePrivatePractitionerToCase({
     authorizedUser,
     docketNumber,
     representing,

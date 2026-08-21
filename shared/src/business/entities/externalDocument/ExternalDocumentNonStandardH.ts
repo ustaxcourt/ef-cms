@@ -1,5 +1,5 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
@@ -32,7 +32,7 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
 
   getDocumentTitle(): string {
     return replaceBracketed(
-      this.documentTitle,
+      this.documentTitle || '',
       this.secondaryDocument.getDocumentTitle(),
     );
   }

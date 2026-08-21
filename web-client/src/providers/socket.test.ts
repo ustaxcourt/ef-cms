@@ -50,7 +50,7 @@ describe('socket', () => {
       set onclose(value) {
         oncloseFn = value;
       }
-    };
+    } as unknown as typeof WebSocket;
 
     mockApp = {
       getSequence: () => {
@@ -66,7 +66,7 @@ describe('socket', () => {
 
   afterEach(() => {
     stopSocket();
-  })
+  });
 
   it('should start and stop the socket', () => {
     startSocket();

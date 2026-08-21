@@ -8,6 +8,10 @@ describe('switchErrorActionFactory', () => {
     testing: jest.fn(),
   };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should return path.testing when testing path is passed in for a given error', async () => {
     await runAction(
       switchErrorActionFactory({
@@ -20,9 +24,7 @@ describe('switchErrorActionFactory', () => {
         props: {
           error: {
             originalError: {
-              response: {
-                data: 'some error',
-              },
+              body: 'some error',
             },
           },
         },
@@ -44,9 +46,7 @@ describe('switchErrorActionFactory', () => {
         props: {
           error: {
             originalError: {
-              response: {
-                data: 'unknown error',
-              },
+              body: 'unknown error',
             },
           },
         },
@@ -54,5 +54,68 @@ describe('switchErrorActionFactory', () => {
     );
 
     expect(presenter.providers.path.default).toHaveBeenCalled();
+  });
+
+  it('should catch an error when formatting error', async () => {
+    await runAction(
+      switchErrorActionFactory({
+        'some error': 'test',
+      }),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          error: {
+            originalError: {
+              body: undefined,
+            },
+          },
+        },
+      },
+    );
+
+    expect(presenter.providers.path.default).toHaveBeenCalled();
+  });
+
+  it('should return path.default when the error has no response data', async () => {
+    await runAction(
+      switchErrorActionFactory({
+        'some error': 'testing',
+      }),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          error: {
+            statusCode: 500,
+          },
+        },
+      },
+    );
+
+    expect(presenter.providers.path.default).toHaveBeenCalled();
+  });
+
+  it('should return path.testing when the async sync error body contains a matching string', async () => {
+    await runAction(
+      switchErrorActionFactory({
+        'currently being updated': 'testing',
+      }),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          error: {
+            body: 'The document is currently being updated',
+            statusCode: 400,
+          },
+        },
+      },
+    );
+
+    expect(presenter.providers.path.testing).toHaveBeenCalled();
   });
 });

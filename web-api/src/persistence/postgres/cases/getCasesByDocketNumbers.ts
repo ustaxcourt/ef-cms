@@ -1,6 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
@@ -8,14 +8,17 @@ import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorr
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
-import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
 import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
-import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
+import {
+  DOCKET_ENTRY_COLUMNS_WITHOUT_SERVED_PARTIES,
+  docketEntriesBaseQuery,
+  DocketEntryWithAffected,
+} from '@web-api/persistence/postgres/docketEntries/commonQueries';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -198,7 +201,7 @@ function sortCaseFields({
   docketNumbers: string[];
 }): EnrichedCaseRow[] {
   cases.forEach(c => {
-    c.docketEntries = sortBy(c.docketEntries, 'createdAt');
+    c.docketEntries = sortBy(c.docketEntries, ['createdAt', 'docketEntryId']);
     c.archivedDocketEntries = sortBy(c.archivedDocketEntries, 'createdAt');
 
     c.correspondence = sortBy(c.correspondence, 'filingDate');
@@ -283,9 +286,12 @@ async function getIrsPractitioners({
 }
 
 async function getDocketEntries(docketNumbers: string[]) {
-  const dbDocketEntries = await (await docketEntriesBaseQuery())
-    .where('de.docketNumber', 'in', docketNumbers)
-    .execute();
+  const dbDocketEntries = await (
+    await docketEntriesBaseQuery({
+      docketNumbers,
+      selectFields: DOCKET_ENTRY_COLUMNS_WITHOUT_SERVED_PARTIES,
+    })
+  ).execute();
 
   return dbDocketEntries;
 }
@@ -303,10 +309,8 @@ async function getCasesMetadata(docketNumbers: string[]) {
 
 export async function getDocketEntriesOnCases(
   docketNumbers: string[],
-): Promise<DocketEntryKysely[]> {
-  return (await docketEntriesBaseQuery())
-    .where('docketNumber', 'in', docketNumbers)
-    .execute();
+): Promise<DocketEntryWithAffected[]> {
+  return (await docketEntriesBaseQuery({ docketNumbers })).execute();
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
@@ -362,8 +366,8 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  docketEntries: DocketEntryKysely[];
-  archivedDocketEntries: DocketEntryKysely[];
+  docketEntries: DocketEntryWithAffected[];
+  archivedDocketEntries: DocketEntryWithAffected[];
   irsPractitioners: (UserKysely & UserOnCaseKysely)[];
   privatePractitioners: (UserKysely & UserOnCaseKysely)[];
   correspondence: CaseCorrespondenceKysely[];

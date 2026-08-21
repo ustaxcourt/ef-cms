@@ -10,20 +10,18 @@ There are a few areas that type error exist but are being ignored as we are tryi
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 import Quill, {
-  QuillOptions as QuillOptionsStatic,
-  Range as RangeStatic,
-  Bounds as BoundsStatic,
-  EmitterSource as Sources,
+  QuillOptionsStatic,
+  DeltaStatic,
+  RangeStatic,
+  BoundsStatic,
+  StringMap,
+  Sources,
 } from 'quill';
-import Delta from 'quill-delta';
-import type { AttributeMap as StringMap } from 'quill-delta';
-
-type DeltaStatic = Delta;
 
 type Value = string | DeltaStatic;
 type Range = RangeStatic | null;
 
-interface QuillOptions extends Omit<QuillOptionsStatic, 'tabIndex'> {
+interface QuillOptions extends QuillOptionsStatic {
   tabIndex?: number;
 }
 
@@ -69,8 +67,8 @@ interface UnprivilegedEditor {
   getLength(): number;
   getText(index?: number, length?: number): string;
   getHTML(): string;
-  getBounds(index: number, length?: number): BoundsStatic | null;
-  getSelection(focus?: boolean): RangeStatic | null;
+  getBounds(index: number, length?: number): BoundsStatic;
+  getSelection(focus?: boolean): RangeStatic;
   getContents(index?: number, length?: number): DeltaStatic;
 }
 
@@ -321,7 +319,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
   configuration, have its events bound,
   */
   createEditor(element: Element, config: QuillOptions) {
-    const editor = new Quill(element as HTMLElement, config);
+    const editor = new Quill(element, config);
     if (config.tabIndex != null) {
       this.setEditorTabIndex(editor, config.tabIndex);
     }
@@ -376,7 +374,7 @@ class ReactQuill extends React.Component<ReactQuillProps, ReactQuillState> {
     this.value = value;
     const sel = this.getEditorSelection();
     if (typeof value === 'string') {
-      editor.setContents(editor.clipboard.convert({ html: value }));
+      editor.setContents(editor.clipboard.convert(value));
     } else {
       editor.setContents(value);
     }

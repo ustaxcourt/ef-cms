@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable import/no-default-export */
-/* eslint-disable promise/no-nesting */
 import { clean } from 'esbuild-plugin-clean';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
@@ -34,6 +32,7 @@ const env = {
   PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
   RUM_APP_MONITOR_ID: process.env.RUM_APP_MONITOR_ID,
   RUM_IDENTITY_POOL_ID: process.env.RUM_IDENTITY_POOL_ID,
+  RUM_RELEASE_ID: process.env.RUM_RELEASE_ID,
   RUM_SAMPLE_RATE: process.env.RUM_SAMPLE_RATE,
   SESSION_MODAL_TIMEOUT: process.env.SESSION_MODAL_TIMEOUT,
   SESSION_TIMEOUT: process.env.SESSION_TIMEOUT,
@@ -80,6 +79,7 @@ export default async function ({
       '.woff': 'file',
       '.woff2': 'file',
     },
+    keepNames: true,
     logLevel: 'info',
     metafile: true,
     minify: process.env.USTC_ENV === 'prod',
@@ -188,6 +188,11 @@ export default async function ({
             keepStructure: true,
             to: ['.'],
           },
+          {
+            from: ['node_modules/pdfjs-dist/wasm/**'],
+            keepStructure: true,
+            to: ['./wasm'],
+          },
         ],
       }),
       {
@@ -201,7 +206,13 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    // Local dev keeps inline maps for fast iteration. Every deployed
+    // environment emits external `.map` files so they can be uploaded to the
+    // private RUM source-map bucket for unminified stack traces in CloudWatch
+    // RUM. 'external' (not 'linked') omits the sourceMappingURL comment so the
+    // public CDN bundle never points browsers at the maps.
+    sourcemap: process.env.ENV === 'local' ? 'inline' : 'external',
+    sourcesContent: process.env.ENV !== 'local',
     splitting: true,
   };
 

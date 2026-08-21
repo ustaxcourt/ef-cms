@@ -1,4 +1,7 @@
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  GRANT_DENY_MOTION_OPTIONS,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   clerkOfCourtUser,
@@ -8,7 +11,7 @@ import {
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { draftDocumentViewerHelper as draftDocumentViewerHelperComputed } from './draftDocumentViewerHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
@@ -552,6 +555,107 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonNotSigned).toEqual(false);
   });
 
+  it('should return showEditSigned true and showEditNotSigned false when document is signed and is a grant/deny motion order and the user has permission', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          docketEntries: [
+            { ...baseDraftDocketEntry, signedAt: '2020-06-25T20:49:28.192Z' },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+          draftOrderState: {
+            orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          },
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(true);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned true when document is not signed and is a grant/deny motion order and the user has permission', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          docketEntries: [baseDraftDocketEntry],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+          draftOrderState: {
+            orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          },
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(true);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is signed and is a grant/deny motion order and the user does not have permission', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDraftDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+          draftOrderState: {
+            orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          },
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is not signed and is a grant/deny motion order and the user does not have permission', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDraftDocketEntry,
+              draftOrderState: {
+                orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+              },
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+          draftOrderState: {
+            orderType: GRANT_DENY_MOTION_OPTIONS.orderType,
+          },
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
   it('should return showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
@@ -599,7 +703,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showDocumentNotSignedAlert).toEqual(true);
   });
 
-  it('should return addDocketEntryLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
+  it('should return addDocketEntryLink with docketNumber and viewerDraftDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),

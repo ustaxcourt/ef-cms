@@ -4,13 +4,14 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import {
   OPENSEARCH_SYNC_ACTIONS,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { indexOpenSearchUser } from 'web-api/elasticsearch/index-users';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -32,10 +33,11 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { startUserId: rawStartUserId, endUserId: rawEndUserId } = parseArgsAndEnvVars(scriptConfig) as {
-  startUserId: string;
-  endUserId: string;
-};
+const { startUserId: rawStartUserId, endUserId: rawEndUserId } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    startUserId: string;
+    endUserId: string;
+  };
 const isMin = (v: string) => v === '__MIN__';
 const isMax = (v: string) => v === '__MAX__';
 const startUserId = rawStartUserId;
@@ -49,14 +51,16 @@ This script is only meant to be kicked off by index-users.ts. It paginates over 
 of users in a userId range to index them.
 */
 async function main() {
-  let currentStartUserId: string | null = isMin(startUserId) ? null : startUserId;
+  let currentStartUserId: string | null = isMin(startUserId)
+    ? null
+    : startUserId;
   let usersToIndex = await getUsersToIndex(currentStartUserId);
 
   while (!isEmpty(usersToIndex)) {
     const message = {
       payload: usersToIndex.map(data => data.userId),
       type: 'dwUser' as OpenSearchSyncMessageType,
-      timestamp: Date.now().toString(),
+      timestamp: `${getCurrentDateTimeInMillis()}`,
       action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     };
 
@@ -83,16 +87,14 @@ const getUsersToIndex = async (start: string | null) => {
       .select(['userId'])
       .orderBy('userId')
       .where('userId', '>', start ?? '')
-    [isMax(endUserId) ? 'where' : 'where'](
-      'userId',
-      isMax(endUserId) ? '>' : '<=',
-      isMax(endUserId) ? '' : endUserId,
-    )
+      [isMax(endUserId) ? 'where' : 'where'](
+        'userId',
+        isMax(endUserId) ? '>' : '<=',
+        isMax(endUserId) ? '' : endUserId,
+      )
       .limit(PAGE_SIZE)
       .execute(),
   );
 };
 
 main().catch(console.error);
-
-

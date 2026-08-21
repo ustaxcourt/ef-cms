@@ -1,5 +1,9 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DocketEntry } from '../DocketEntry';
-import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES } from '../EntityConstants';
+import {
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  ROLES,
+} from '../EntityConstants';
 
 const formatPartyNames = (names: string[], prefix: string): string => {
   if (names.length === 0) return '';
@@ -12,9 +16,11 @@ const formatPartyNames = (names: string[], prefix: string): string => {
 export const generateFiledBy = ({
   docketEntry,
   petitioners,
+  user,
 }: {
   docketEntry: RawDocketEntry;
   petitioners: any[];
+  user?: UnknownAuthUser;
 }): string | undefined => {
   const isNoticeOfContactChange =
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
@@ -26,6 +32,17 @@ export const generateFiledBy = ({
     !DocketEntry.isServed(docketEntry);
 
   if (!shouldGenerateFiledBy) return docketEntry.filedBy;
+
+  const isNOTWRelated =
+    docketEntry.eventCode === 'NOTW' ||
+    docketEntry.previousDocument?.documentType ===
+      'Notice of Withdrawal as Counsel';
+  const isPractitioner =
+    user?.role === ROLES.irsPractitioner ||
+    user?.role === ROLES.privatePractitioner;
+  if (isNOTWRelated && isPractitioner) {
+    return docketEntry.filedBy;
+  }
 
   const partiesArray: string[] = [];
 

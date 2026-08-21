@@ -9,7 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -18,7 +17,7 @@ import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
  * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.filers the parties represented by the practitioner
- * @returns {Promise<*>} the promise of the case association request
+ * @returns {Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO>} the promise of the case association request
  */
 const submitCaseAssociationRequest = async (
   applicationContext: ServerApplicationContext,
@@ -30,7 +29,7 @@ const submitCaseAssociationRequest = async (
     filers: string[];
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
   ) {
@@ -48,7 +47,7 @@ const submitCaseAssociationRequest = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner && filers) {
-    const theCase = await applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         authorizedUser,
@@ -56,26 +55,17 @@ const submitCaseAssociationRequest = async (
         representing: filers,
         user: user as RawPractitioner,
       });
-
-    return CaseFactory.getCase({
-      rawCase: theCase,
-      user: authorizedUser,
-    });
+    return;
   }
 
   if (isIrsPractitioner) {
-    const theCase = await applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         authorizedUser,
         docketNumber,
         user,
       });
-
-    return CaseFactory.getCase({
-      rawCase: theCase,
-      user: authorizedUser,
-    });
   }
 };
 

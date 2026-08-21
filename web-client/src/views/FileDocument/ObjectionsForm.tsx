@@ -11,7 +11,11 @@ const props = cerebralProps as unknown as {
   validationBind: string;
 };
 
-export const ObjectionsForm = connect(
+export const ObjectionsForm: React.FC<{
+  bind: string;
+  type: string;
+  validationBind: string;
+}> = connect(
   {
     DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
     OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,

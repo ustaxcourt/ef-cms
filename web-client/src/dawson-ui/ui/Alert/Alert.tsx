@@ -13,12 +13,12 @@ import { Button } from '@web-client/dawson-ui/ui/button';
 
 const alertVariants = cva(
   cn(
-    'tw:relative tw:border-solid tw:border-0 tw:border-l-[6px] tw:p-[12px] tw:font-normal tw:text-[16px] tw:leading-[20px]',
-    'tw:[&_ul]:m-0 tw:[&_ul]:-ml-[16px] tw:[&_ul]:list-disc',
-    'tw:[&_svg]:h-[24px] tw:[&_svg]:w-[24px]',
-    'tw:xs:border-l-[8px] tw:xs:p-[16px] tw:xs:text-[18px] tw:xs:leading-[24px]',
-    'tw:xs:[&_svg]:h-[28px] tw:xs:[&_svg]:w-[28px]',
-    'tw:xs:max-w-[740px] tw:w-full',
+    'tw:relative tw:border-solid tw:border-0 tw:border-l-[0.375rem] tw:p-3 tw:font-normal tw:text-base tw:leading-5',
+    'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
+    'tw:[&_svg]:h-6 tw:[&_svg]:w-6',
+    'tw:xs:border-l-[0.5rem] tw:xs:p-4 tw:xs:text-lg tw:xs:leading-6',
+    'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7',
+    'tw:xs:max-w-185 tw:w-full',
   ),
   {
     variants: {
@@ -51,15 +51,12 @@ function Alert({
   closeButtonOnClick,
   variant,
   dataTestId,
-
 }: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
     isDismissible?: boolean;
     dataTestId?: string;
   }) {
-
-    
   return (
     /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
     <div
@@ -67,7 +64,8 @@ function Alert({
       role="alert"
       className={cn(alertVariants({ variant }), className)}
       data-testId={dataTestId}
-        onClick={closeButtonOnClick}>
+      onClick={closeButtonOnClick}
+    >
       <div className="tw:relative">{children}</div>
     </div>
   );
@@ -86,21 +84,21 @@ function AlertHeader({
   title,
   variant,
   dataTestId,
-  children
+  children,
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
     <div className="tw:flex">
-      <div className="tw:xs:text-[24px] tw:xs:leading-[24px] tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]">
+      <div className="tw:xs:text-2xl tw:xs:leading-6 tw:h-5! tw:w-5! tw:xs:h-6! tw:xs:w-6!">
         <FontAwesomeIcon
           icon={iconType[variant ?? 'info']}
-          className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
+          className="tw:h-5! tw:w-5! tw:xs:h-6! tw:xs:w-6!"
         />
       </div>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className={cn(
           title ? 'tw:font-bold' : '',
-          'tw:pb-0 tw:xs:ml-[16px] tw:ml-[12px] tw:xs:mr-[16px] tw:mr-[12px] tw:text-[16px] tw:leading-[20px] tw:xs:text-[18px] tw:xs:leading-[24px]',
+          'tw:pb-0 tw:xs:ml-4 tw:ml-3 tw:xs:mr-4 tw:mr-3 tw:text-base tw:leading-5 tw:xs:text-lg tw:xs:leading-6',
         )}
         data-slot="alert-title"
         data-testid={`alert-header-${dataTestId}`}
@@ -119,11 +117,14 @@ function AlertHeader({
   );
 }
 
-function AlertDescription({ dataTestId, children, ...props }: React.ComponentProps<'p'> & { dataTestId?: string }) {
-
+function AlertDescription({
+  dataTestId,
+  children,
+  ...props
+}: React.ComponentProps<'p'> & { dataTestId?: string }) {
   return (
     <div
-      className="tw:xs:mt-[8px] tw:xs:text-[18px] tw:xs:leading-[24px] tw:ml-[32px] tw:xs:ml-[40px] tw:pt-[8px] tw:xs:pt-0"
+      className="tw:xs:mt-2 tw:xs:text-lg tw:xs:leading-6 tw:ml-8 tw:xs:ml-10 tw:pt-2 tw:xs:pt-0"
       data-slot="alert-description"
       data-testid={`alert-description-${dataTestId}`}
       {...props}

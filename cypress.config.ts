@@ -10,6 +10,8 @@ import {
 } from './cypress/local-only/support/database';
 import {
   expireUserConfirmationCode,
+  getDocketEntryIdsByDocketNumberAndEventCode,
+  getDocketEntryPageCountByDocketNumberAndEventCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
@@ -17,19 +19,23 @@ import { changeUserAccountStatus } from './cypress/helpers/cypressTasks/postgres
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
-import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
+import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 
 export default defineConfig({
-  chromeWebSecurity: false,
+  chromeWebSecurity: true,
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
+        assertCorrectNetworkData(payloads) {
+          return assertCorrectNetworkData(payloads);
+        },
         confirmUser({ email }) {
           return confirmUser({ email });
         },
@@ -59,6 +65,30 @@ export default defineConfig({
           accountStatus: string;
         }) {
           return changeUserAccountStatus({ email, accountStatus });
+        },
+        getDocketEntryIdsByDocketNumberAndEventCode({
+          docketNumber,
+          eventCode,
+        }: {
+          docketNumber: string;
+          eventCode: string;
+        }) {
+          return getDocketEntryIdsByDocketNumberAndEventCode({
+            docketNumber,
+            eventCode,
+          });
+        },
+        getDocketEntryPageCountByDocketNumberAndEventCode({
+          docketNumber,
+          eventCode,
+        }: {
+          docketNumber: string;
+          eventCode: string;
+        }) {
+          return getDocketEntryPageCountByDocketNumberAndEventCode({
+            docketNumber,
+            eventCode,
+          });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);

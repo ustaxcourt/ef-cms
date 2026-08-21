@@ -13,15 +13,17 @@ export const validateNoteAction = ({
   get,
   path,
 }: ActionProps) => {
-  const note = {
+  const modal = {
     ...get(state.modal),
+  };
+
+  const note = {
+    notes: modal.notes as string,
   };
 
   const errors = applicationContext
     .getUseCases()
-    .validateNoteInteractor(applicationContext, {
-      note,
-    });
+    .validateNoteInteractor({ note });
 
   if (!errors) {
     return path.success();

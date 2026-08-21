@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { unblockCaseFromTrialInteractor } from '@shared/business/useCases/unblockCaseFromTrialInteractor';
+import { unblockCaseFromTrialInteractor } from '@web-api/business/useCases/unblockCaseFromTrialInteractor';
 
 /**
  * used for unblocking a case

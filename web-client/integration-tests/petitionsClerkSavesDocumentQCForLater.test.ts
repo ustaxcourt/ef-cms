@@ -1,7 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -39,13 +39,13 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  it('refresh elasticsearch index', async () => {
+  it('refreshes elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });
 
   petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
 
-  it('refresh elasticsearch index', async () => {
+  it('refreshes elasticsearch index again', async () => {
     await refreshElasticsearchIndex();
   });
 

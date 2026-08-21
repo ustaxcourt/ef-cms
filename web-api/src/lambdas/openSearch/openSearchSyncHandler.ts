@@ -1,5 +1,5 @@
 import { SQSEvent } from 'aws-lambda';
-import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
 
 export type OpenSearchSyncMessageType = keyof typeof DatabaseSchema;
 export type OpenSearchSyncAction =

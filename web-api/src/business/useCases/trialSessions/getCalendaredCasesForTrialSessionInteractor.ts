@@ -1,4 +1,7 @@
-import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
+import {
+  CalendaredCase,
+  RawCalendaredCase,
+} from '@shared/business/entities/cases/CalendaredCase';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,14 +13,14 @@ import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres
 export const getCalendaredCasesForTrialSessionInteractor = async (
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCalendaredCase[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const cases = await getCalendaredCasesForTrialSession({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   const casesWithMinimalRequiredInformation = cases.map(aCase => {
     return new CalendaredCase(aCase).validate().toRawObject();

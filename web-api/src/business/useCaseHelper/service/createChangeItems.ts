@@ -15,7 +15,11 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
-} from '@shared/business/utilities/calculateEmail';
+} from '@web-api/business/utilities/calculateEmail';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -95,13 +99,14 @@ const createDocketEntryForChange = async ({
       },
     });
 
-  const newDocketEntryId = applicationContext.getUniqueId();
+  const newDocumentStorageId = applicationContext.getUniqueId();
 
   const changeOfAddressDocketEntry = new DocketEntry(
     {
       addToCoversheet: true,
       additionalInfo: `for ${contactName}`,
-      docketEntryId: newDocketEntryId,
+      docketEntryId: newDocumentStorageId,
+      documentStorageId: newDocumentStorageId,
       docketNumber: caseEntity.docketNumber,
       documentTitle: documentType.title,
       documentType: documentType.title,
@@ -132,17 +137,22 @@ const createDocketEntryForChange = async ({
       applicationContext,
       documentBytes: changeOfAddressPdfWithCover,
     });
+
+  changeOfAddressDocketEntry.setOriginallyFiledDocketNumber(
+    caseEntity.docketNumber,
+  );
+
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: changeOfAddressPdfWithCover,
-    key: newDocketEntryId,
+    key: newDocumentStorageId,
   });
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
       applicationContext,
-      key: newDocketEntryId,
+      key: newDocumentStorageId,
     });
 
   return {
@@ -236,12 +246,21 @@ export const generateAndServeDocketEntry = async ({
       user,
     });
   }
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-    servedParties,
-  });
+
+  async function sendServedPartiesEmails() {
+    return applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
+    });
+  }
+
+  if (inTransaction()) {
+    onTransactionCommit(sendServedPartiesEmails);
+  } else {
+    await sendServedPartiesEmails();
+  }
 
   return { caseEntity, url };
 };

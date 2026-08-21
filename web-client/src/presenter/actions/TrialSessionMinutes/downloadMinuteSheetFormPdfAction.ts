@@ -1,4 +1,4 @@
-import { generateTrialSessionMinutesPdfInteractor } from '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
+import { generateTrialSessionMinutesPdfInteractor } from '@web-client/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
 import { openUrlInNewTab } from '@web-client/presenter/utilities/openUrlInNewTab';
 import { state } from '@web-client/presenter/app.cerebral';
 

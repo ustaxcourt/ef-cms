@@ -30,6 +30,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public isPaper?: boolean;
   public isSealed: boolean;
   public isStricken?: boolean;
+  public judge?: string;
   public lodged?: boolean;
   public numberOfPages?: number;
   public objections?: string;
@@ -38,6 +39,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public servedAt?: string;
   public servedPartiesCode?: string;
+  public signedJudgeName?: string;
   public affectedByDocketEntries?: any[];
   public affectedDocketEntries?: any[];
   public previousDocument?: {
@@ -64,6 +66,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.freeText = rawProps.freeText;
     this.index = rawProps.index;
     this.isFileAttached = rawProps.isFileAttached;
+    this.judge = rawProps.judge;
     this.filedByRole = rawProps.filedByRole;
     this.isLegacyServed = rawProps.isLegacyServed;
     this.isOnDocketRecord = rawProps.isOnDocketRecord;
@@ -78,6 +81,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.sealedTo = rawProps.sealedTo;
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
+    this.signedJudgeName = rawProps.signedJudgeName;
     this.affectedByDocketEntries = rawProps.affectedByDocketEntries;
     this.affectedDocketEntries = rawProps.affectedDocketEntries;
     if (rawProps.previousDocument) {

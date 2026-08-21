@@ -9,7 +9,7 @@ describe('setFormContactSecondaryAddressAction', () => {
           city: 'Flavortown',
           hasConsentedToElectronicService: true,
           name: 'Roslindis Angelino',
-          paperPetitionEmail: 'petitioner@example.com',
+          contactEmailAddress: 'petitioner@example.com',
         },
       },
       state: {
@@ -19,7 +19,7 @@ describe('setFormContactSecondaryAddressAction', () => {
             contactId: '123abc',
             hasConsentedToElectronicService: true,
             name: 'Roslindis Angelino',
-            paperPetitionEmail: 'petitioner@example.com',
+            contactEmailAddress: 'petitioner@example.com',
             email: 'contact@example.com',
           },
           contactSecondary: {
@@ -28,7 +28,7 @@ describe('setFormContactSecondaryAddressAction', () => {
             hasConsentedToElectronicService: false,
             inCareOf: 'Jennay',
             name: 'Forrest',
-            paperPetitionEmail: 'notacopy@example.com',
+            contactEmailAddress: 'notacopy@example.com',
           },
         },
       },
@@ -39,7 +39,7 @@ describe('setFormContactSecondaryAddressAction', () => {
       contactId: '123abc',
       hasConsentedToElectronicService: true,
       name: 'Roslindis Angelino',
-      paperPetitionEmail: 'petitioner@example.com',
+      contactEmailAddress: 'petitioner@example.com',
       email: 'contact@example.com',
     });
     expect(result.state.form.contactSecondary).toMatchObject({
@@ -48,7 +48,7 @@ describe('setFormContactSecondaryAddressAction', () => {
       hasConsentedToElectronicService: false,
       inCareOf: 'Jennay',
       name: 'Forrest',
-      paperPetitionEmail: 'notacopy@example.com',
+      contactEmailAddress: 'notacopy@example.com',
     });
     expect(result.state.form.contactSecondary.email).toBeUndefined();
   });

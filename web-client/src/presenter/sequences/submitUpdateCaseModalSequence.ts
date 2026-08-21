@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -18,7 +18,7 @@ export const submitUpdateCaseModalSequence = showProgressSequenceDecorator([
     success: [
       stopShowValidationAction,
       submitUpdateCaseModalAction,
-      setCaseAction,
+      refreshCaseMetadataAction,
       getCaseDeadlinesForCaseAction,
       setAlertSuccessAction,
       clearModalAction,

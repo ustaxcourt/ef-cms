@@ -1,3 +1,4 @@
+import { setClerkOfCourtDashboardChartsAction } from '../actions/Dashboard/setClerkOfCourtDashboardChartsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -8,11 +9,13 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
+import { setRumUserContextAction } from '@web-client/presenter/actions/setRumUserContextAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -26,6 +29,8 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
+import { resetClerkOfCourtDashboardOptionsAction } from '@web-client/presenter/actions/Dashboard/resetClerkOfCourtDashboardOptionsAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -39,6 +44,7 @@ export const gotoDashboardSequence = [
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   setUserPermissionsAction,
+  setRumUserContextAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],
@@ -50,7 +56,6 @@ export const gotoDashboardSequence = [
             USER_ROLES.adc,
             USER_ROLES.admin,
             USER_ROLES.admissionsClerk,
-            USER_ROLES.clerkOfCourt,
             USER_ROLES.caseServicesSupervisor,
             USER_ROLES.docketClerk,
             USER_ROLES.floater,
@@ -60,6 +65,16 @@ export const gotoDashboardSequence = [
           ],
           proceedToMessages,
         ),
+        clerkofcourt: [
+          fetchUserNotificationsSequence,
+          resetClerkOfCourtDashboardOptionsAction,
+          parallel([
+            setClerkOfCourtDashboardChartsAction,
+            getMessages,
+            [getTrialSessionsAction, setTrialSessionsAction],
+          ]),
+          setupCurrentPageAction('DashboardClerkOfCourt'),
+        ],
         chambers: [
           fetchUserNotificationsSequence,
           getJudgeForCurrentUserAction,
@@ -110,12 +125,14 @@ export const gotoDashboardSequence = [
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
           setupCurrentPageAction('DashboardExternalUser'),
+          setFilingFeeAlertsAction,
         ],
         privatePractitioner: [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
           setupCurrentPageAction('DashboardExternalUser'),
+          setFilingFeeAlertsAction,
         ],
       },
     ],

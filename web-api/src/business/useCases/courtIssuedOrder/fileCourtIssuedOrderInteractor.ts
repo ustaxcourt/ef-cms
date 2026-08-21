@@ -2,6 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_THAT_ALLOW_FREE_TEXT,
+  GRANT_DENY_MOTION_OPTIONS,
   MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -25,6 +26,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -33,7 +35,7 @@ export const fileCourtIssuedOrder = async (
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -71,24 +73,21 @@ export const fileCourtIssuedOrder = async (
     }
   }
 
+  let documentContentsId: string | undefined;
+  let contentToStore:
+    { documentContents: string; richText: string | undefined } | undefined;
+
   if (documentMetadata.documentContents) {
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
-    const documentContentsId = applicationContext.getUniqueId();
+    documentContentsId = applicationContext.getUniqueId();
 
-    const contentToStore = {
+    contentToStore = {
       documentContents: documentMetadata.documentContents,
       richText: documentMetadata.draftOrderState
         ? documentMetadata.draftOrderState.richText
         : undefined,
     };
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      contentType: 'application/json',
-      document: Buffer.from(JSON.stringify(contentToStore)),
-      key: documentContentsId,
-      useTempBucket: false,
-    });
 
     if (documentMetadata.draftOrderState) {
       delete documentMetadata.draftOrderState.documentContents;
@@ -123,36 +122,47 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
-
-  if (documentMetadata.parentMessageId) {
-    const messages = await getMessageThreadByParentId({
-      parentMessageId: documentMetadata.parentMessageId,
+  if (documentContentsId !== undefined && contentToStore !== undefined) {
+    const capturedId = documentContentsId;
+    const capturedContent = contentToStore;
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      contentType: 'application/json',
+      document: Buffer.from(JSON.stringify(capturedContent)),
+      key: capturedId,
+      useTempBucket: false,
     });
-
-    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
-
-    const messageEntity = new Message(mostRecentMessage).validate();
-
-    const isAttached = some(
-      messageEntity.attachments,
-      attachment => attachment.documentId === docketEntryEntity.docketEntryId,
-    );
-
-    if (!isAttached) {
-      messageEntity.addAttachment({
-        documentId: docketEntryEntity.docketEntryId,
-        documentTitle: docketEntryEntity.documentTitle,
-      });
-    }
-
-    await upsertMessages([messageEntity.validate().toRawObject()]);
   }
 
-  return caseEntity.toRawObject();
+  await withTransaction(async () => {
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
+
+    if (documentMetadata.parentMessageId) {
+      const messages = await getMessageThreadByParentId({
+        parentMessageId: documentMetadata.parentMessageId,
+      });
+
+      const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+      const messageEntity = new Message(mostRecentMessage).validate();
+
+      const isAttached = some(
+        messageEntity.attachments,
+        attachment => attachment.documentId === docketEntryEntity.docketEntryId,
+      );
+
+      if (!isAttached) {
+        messageEntity.addAttachment({
+          documentId: docketEntryEntity.docketEntryId,
+          documentTitle: docketEntryEntity.documentTitle,
+        });
+      }
+
+      await upsertMessages([messageEntity.validate().toRawObject()]);
+    }
+  });
 };
 
 export const fileCourtIssuedOrderInteractor = withLocking(
@@ -186,15 +196,15 @@ function generateFreeText(documentMetadata: {
   if (eventCode === 'OJR') {
     return [
       orderType === 'statusReport' &&
-      `. Parties by ${formattedDueDate} shall file a status report.`,
+        `. Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
-      `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+        `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
       orderType !== 'statusReportStipulatedDecision' &&
-      orderType !== 'statusReport' &&
+        orderType !== 'statusReport' &&
+        strickenFromTrialSessions &&
+        '.',
       strickenFromTrialSessions &&
-      '.',
-      strickenFromTrialSessions &&
-      'Case is stricken from the current trial session.',
+        'Case is stricken from the current trial session.',
     ]
       .filter(Boolean)
       .join(' ');
@@ -203,17 +213,19 @@ function generateFreeText(documentMetadata: {
   if (eventCode === 'O') {
     if (orderType === MOTION_ORDER_RESPONSE_OPTIONS.orderType) {
       return initialFreeText;
+    } else if (orderType === GRANT_DENY_MOTION_OPTIONS.orderType) {
+      return documentTitle;
     } else if (orderType || jurisdiction) {
       return [
         'Order',
         orderType === 'statusReport' &&
-        `parties by ${formattedDueDate} shall file a status report.`,
+          `parties by ${formattedDueDate} shall file a status report.`,
         orderType === 'statusReportStipulatedDecision' &&
-        `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+          `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
         strickenFromTrialSessions &&
-        'Case is stricken from the current trial session.',
+          'Case is stricken from the current trial session.',
         jurisdiction === 'restoredToGeneralDocket' &&
-        'Case is no longer jurisdiction retained and is restored to the general docket.',
+          'Case is no longer jurisdiction retained and is restored to the general docket.',
       ]
         .filter(Boolean)
         .join(' ');

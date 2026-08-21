@@ -2,7 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   SESSION_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { checkWorkitemOnCalendaredCase } from './journey/checkWorkitemOnCalendaredCase';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
@@ -15,6 +15,7 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsQCOutbox } from './journey/docketClerkViewsQCOutbox';
 import { fakeFile } from '../integration-tests-public/helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -29,7 +30,7 @@ describe('Docket Clerk Document QC Journey', () => {
     cerebralTest.closeSocket();
   });
 
-  const trialLocation = `Phoenix, Arizona, ${Date.now()}`;
+  const trialLocation = `Phoenix, Arizona, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,

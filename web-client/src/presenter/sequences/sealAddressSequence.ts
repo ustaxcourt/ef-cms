@@ -2,7 +2,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { sealAddressAction } from '../actions/sealAddressAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { refreshCaseMetadataAction } from '../actions/refreshCaseMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const sealAddressSequence = showProgressSequenceDecorator([
@@ -10,5 +10,5 @@ export const sealAddressSequence = showProgressSequenceDecorator([
   clearModalAction,
   clearModalStateAction,
   setAlertSuccessAction,
-  setCaseAction,
+  refreshCaseMetadataAction,
 ]);

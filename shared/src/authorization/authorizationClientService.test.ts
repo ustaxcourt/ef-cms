@@ -1,4 +1,5 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import type { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import * as AuthUserModule from '@shared/business/entities/authUser/AuthUser';
 import {
   AUTHORIZATION_MAP,
   ROLE_PERMISSIONS,
@@ -9,9 +10,11 @@ import {
   mockCaseServicesSupervisorUser,
   mockChambersUser,
   mockDocketClerkUser,
+  mockIrsPractitionerUser,
   mockJudgeUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('Authorization client service', () => {
@@ -82,7 +85,7 @@ describe('Authorization client service', () => {
 
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 
@@ -96,7 +99,7 @@ describe('Authorization client service', () => {
   describe('chambers role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 
@@ -122,6 +125,15 @@ describe('Authorization client service', () => {
         ),
       ).toBeTruthy();
     });
+
+    it('should be authorized to view the docket clerk report', () => {
+      expect(
+        isAuthorized(
+          mockCaseServicesSupervisorUser,
+          ROLE_PERMISSIONS.DOCKET_CLERK_REPORT,
+        ),
+      ).toBeTruthy();
+    });
   });
 
   describe('docketClerk role', () => {
@@ -129,6 +141,12 @@ describe('Authorization client service', () => {
       expect(
         isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.WORKITEM),
       ).toBeTruthy();
+    });
+
+    it('should not be authorized to view the docket clerk report', () => {
+      expect(
+        isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.DOCKET_CLERK_REPORT),
+      ).toBeFalsy();
     });
 
     it('should be authorized to seal an address', () => {
@@ -153,7 +171,7 @@ describe('Authorization client service', () => {
   describe('judge role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
-        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.STAMP_MOTION),
+        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.GRANT_DENY_MOTION),
       ).toBeTruthy();
     });
 
@@ -203,5 +221,99 @@ describe('Authorization client service', () => {
         isAuthorized(mockDocketClerkUser, ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY),
       ).toBeTruthy();
     });
+  });
+
+  describe('VIEW_SEALED_ADDRESS permission', () => {
+    describe('internal users', () => {
+      it('should authorize an adc to view a sealed address', () => {
+        expect(
+          isAuthorized(mockAdcUser, ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS),
+        ).toBe(true);
+      });
+
+      it('should authorize a chambers user to view a sealed address', () => {
+        expect(
+          isAuthorized(mockChambersUser, ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS),
+        ).toBe(true);
+      });
+
+      it('should authorize a case services supervisor to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockCaseServicesSupervisorUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(true);
+      });
+
+      it('should authorize a docketClerk to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockDocketClerkUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(true);
+      });
+
+      it('should authorize a judge to view a sealed address', () => {
+        expect(
+          isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS),
+        ).toBe(true);
+      });
+
+      it('should authorize a petitionsClerk to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockPetitionsClerkUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(true);
+      });
+    });
+
+    describe('external users', () => {
+      it('should NOT authorize a petitioner to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockPetitionerUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(false);
+      });
+
+      it('should NOT authorize a private practitioner to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockPrivatePractitionerUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(false);
+      });
+
+      it('should NOT authorize an irs practitioner to view a sealed address', () => {
+        expect(
+          isAuthorized(
+            mockIrsPractitionerUser,
+            ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+          ),
+        ).toBe(false);
+      });
+    });
+  });
+
+  it('returns false when isAuthUser passes but role is missing from AUTHORIZATION_MAP', () => {
+    jest.spyOn(AuthUserModule, 'isAuthUser').mockReturnValue(true);
+    expect(
+      isAuthorized(
+        {
+          role: 'notInAuthorizationMap' as any,
+          userId: '12345678-1234-4123-8123-123456789012',
+          name: 'Test User',
+          email: 'test@example.com',
+        },
+        ROLE_PERMISSIONS.WORKITEM,
+      ),
+    ).toBe(false);
+    jest.restoreAllMocks();
   });
 });

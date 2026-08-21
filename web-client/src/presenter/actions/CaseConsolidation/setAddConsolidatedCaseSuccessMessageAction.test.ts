@@ -3,7 +3,9 @@ import { setAddConsolidatedCaseSuccessMessageAction } from './setAddConsolidated
 
 describe('setAddConsolidatedCaseSuccessMessageAction', () => {
   it('should update the state from state', async () => {
-    const result = await runAction(setAddConsolidatedCaseSuccessMessageAction);
+    const result = await runAction(setAddConsolidatedCaseSuccessMessageAction, {
+      state: {}
+    });
 
     expect(result.output).toEqual({
       alertSuccess: {

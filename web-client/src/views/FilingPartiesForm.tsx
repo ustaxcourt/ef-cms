@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 type FilingPartiesFormProps = {
   updateSequence: Function;
-  validateSequence: Function
+  validateSequence: Function;
 };
 
 const filingPartiesFormDeps = {

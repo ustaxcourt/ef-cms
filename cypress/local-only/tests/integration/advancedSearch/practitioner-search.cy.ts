@@ -23,7 +23,7 @@ describe('Practitioner Search', () => {
           originalBarState,
         );
         cy.get(`[data-testid="bar-state-pill-NJ"]`).click();
-        selectTypeaheadInput('original-bar-state-filter', 'NY');
+        selectTypeaheadInput('original-bar-state-filter', 'New York');
         cy.get('[data-testid="practitioner-search-by-name-button"]').click();
         cy.get(`[data-testid="practitioner-row-${barNumber}"]`).should(
           'not.exist',

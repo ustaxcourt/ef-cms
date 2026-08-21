@@ -1,7 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from './caseDetailSubnavHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -11,9 +11,10 @@ const caseDetailSubnavHelper = withAppContextDecorator(
 );
 
 const getBaseState = user => {
+  const docketEntries: Array<{ isDraft: boolean }> = [];
   return {
     caseDetail: {
-      docketEntries: [],
+      docketEntries,
     },
     permissions: getUserPermissions(user),
     user,
@@ -21,7 +22,7 @@ const getBaseState = user => {
 };
 
 const generateDocketEntries = (numberInDraft, numberNotInDraft) => {
-  const docketEntries = [];
+  const docketEntries: Array<{ isDraft: boolean }> = [];
 
   for (let i = 0; i < numberInDraft; i++) {
     docketEntries.push({

@@ -24,7 +24,7 @@ export class ExternalDocumentNonStandardB extends ExternalDocumentBase {
   }
 
   getDocumentTitle(): string {
-    return replaceBracketed(this.documentTitle, this.freeText);
+    return replaceBracketed(this.documentTitle || '', this.freeText);
   }
 }
 

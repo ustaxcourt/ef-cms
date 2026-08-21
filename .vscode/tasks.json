@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Docker",
+      "type": "shell",
+      "command": "npm run start:all:docker",
+      "isBackground": true,
+      "options": { "env": { "IDE_DEBUGGING": "true" } },
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Debugger port is open.*"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "new" }
+    }
+  ]
+}

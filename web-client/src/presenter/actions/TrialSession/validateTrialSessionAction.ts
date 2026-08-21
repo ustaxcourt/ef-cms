@@ -9,7 +9,7 @@ export const validateTrialSessionAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateTrialSessionInteractor(applicationContext, {
+    .validateTrialSessionInteractor({
       trialSession: trialSessionForm,
     });
 

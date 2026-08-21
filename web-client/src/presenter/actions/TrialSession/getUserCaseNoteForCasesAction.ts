@@ -1,17 +1,12 @@
-/**
- * Fetches the cases notes
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting cases notes via getUserCaseNoteForCasesInteractor
- * @param {object} providers.props the cerebral props object containing the props.trialSession
- * @returns {object} contains the notes for all cases
- */
+import { RawUserCaseNote } from 'shared/src/business/entities/notes/UserCaseNote';
+
 export const getUserCaseNoteForCasesAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps): Promise<{ notes: RawUserCaseNote[] }> => {
   const { trialSession } = props;
 
-  let notes = [];
+  let notes: RawUserCaseNote[] = [];
   if (trialSession.caseOrder.length) {
     notes = await applicationContext
       .getUseCases()

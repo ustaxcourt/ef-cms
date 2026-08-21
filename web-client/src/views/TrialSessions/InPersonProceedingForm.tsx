@@ -4,21 +4,35 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const InPersonProceedingForm = connect(
-  {
-    form: state.form,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+type InPersonProceedingFormProps = { addingTrialSession: boolean };
+
+const inPersonProceedingFormDeps = {
+  form: state.form,
+  formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  usStates: state.constants.US_STATES,
+  usStatesOther: state.constants.US_STATES_OTHER,
+  usStatesOtherSorted: state.constants.US_STATES_OTHER_SORTED,
+  usStatesSorted: state.constants.US_STATES_SORTED,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const InPersonProceedingForm = connect<
+  InPersonProceedingFormProps,
+  typeof inPersonProceedingFormDeps
+>(
+  inPersonProceedingFormDeps,
   ({
+    addingTrialSession,
     form,
+    formattedTrialSessionDetails,
     updateTrialSessionFormDataSequence,
     usStates,
     usStatesOther,
+    usStatesOtherSorted,
+    usStatesSorted,
     validateTrialSessionSequence,
     validationErrors,
   }) => {
@@ -32,6 +46,10 @@ export const InPersonProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-courthouse-name"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="courthouse-name"
             name="courthouseName"
             type="text"
@@ -53,6 +71,10 @@ export const InPersonProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input"
             data-testid="trial-session-address-1-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="address1"
             name="address1"
             type="text"
@@ -73,6 +95,10 @@ export const InPersonProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="address2"
             name="address2"
             type="text"
@@ -96,6 +122,10 @@ export const InPersonProceedingForm = connect(
                 autoCapitalize="none"
                 className="usa-input usa-input--inline"
                 data-testid="trial-session-city-input"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.editPermissions === 'limited'
+                }
                 id="city"
                 name="city"
                 type="text"
@@ -115,6 +145,10 @@ export const InPersonProceedingForm = connect(
               <select
                 className="usa-select"
                 data-testid="trial-session-state-select"
+                disabled={
+                  !addingTrialSession &&
+                  formattedTrialSessionDetails.editPermissions === 'limited'
+                }
                 id="state"
                 name="state"
                 value={form.state || ''}
@@ -127,7 +161,7 @@ export const InPersonProceedingForm = connect(
               >
                 <option value="">- Select -</option>
                 <optgroup label="State">
-                  {Object.keys(usStates).map(abbrev => {
+                  {usStatesSorted.map(abbrev => {
                     return (
                       <option key={abbrev} value={abbrev}>
                         {usStates[abbrev]}
@@ -136,7 +170,7 @@ export const InPersonProceedingForm = connect(
                   })}
                 </optgroup>
                 <optgroup label="Other">
-                  {Object.keys(usStatesOther).map(abbrev => {
+                  {usStatesOtherSorted.map(abbrev => {
                     return (
                       <option key={abbrev} value={abbrev}>
                         {usStatesOther[abbrev]}
@@ -157,6 +191,10 @@ export const InPersonProceedingForm = connect(
             autoCapitalize="none"
             className="usa-input max-width-200 usa-input--medium"
             data-testid="trial-session-postal-code-input"
+            disabled={
+              !addingTrialSession &&
+              formattedTrialSessionDetails.editPermissions === 'limited'
+            }
             id="postal-code"
             name="postalCode"
             type="text"

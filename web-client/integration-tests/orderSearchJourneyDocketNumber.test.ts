@@ -25,7 +25,7 @@ describe('order search journey for docket number', () => {
 
   beforeEach(() => {
     global.window ??= Object.create({
-      ...global.window,
+      ...(global.window as Window),
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

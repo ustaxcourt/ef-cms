@@ -4,7 +4,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
+import { PaperPetition } from '@web-api/business/entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -24,6 +24,8 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -295,7 +297,7 @@ export const createCaseFromPaperInteractor = async (
     stinFileId?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
+): Promise<{ caseDetail: CaseDTO; workItem: RawWorkItem }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -318,31 +320,38 @@ export const createCaseFromPaperInteractor = async (
   let workItem: WorkItem;
 
   try {
-    ({ caseToAdd, workItem } = await createCaseMetadata(
-      applicationContext,
-      {
-        applicationForWaiverOfFilingFeeFileId,
-        attachmentToPetitionFileId,
-        corporateDisclosureFileId,
-        petitionFileId,
-        petitionMetadata,
-        requestForPlaceOfTrialFileId,
-        stinFileId,
-        user,
-      },
-      authorizedUser,
-    ));
+    ({ caseToAdd, workItem } = await withTransaction(async () => {
+      const result = await createCaseMetadata(
+        applicationContext,
+        {
+          applicationForWaiverOfFilingFeeFileId,
+          attachmentToPetitionFileId,
+          corporateDisclosureFileId,
+          petitionFileId,
+          petitionMetadata,
+          requestForPlaceOfTrialFileId,
+          stinFileId,
+          user,
+        },
+        authorizedUser,
+      );
+
+      setServiceIndicatorsForPetitionersOnCase(result.caseToAdd);
+
+      await upsertWorkItems({
+        workItems: [result.workItem.validate().toRawObject()],
+      });
+
+      return result;
+    }));
   } finally {
     await removeLockFunction();
   }
-  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
-
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
 
   return {
-    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    caseDetail: new CaseDTO(
+      new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    ),
     workItem: workItem.validate().toRawObject(),
   };
 };

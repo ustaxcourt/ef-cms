@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { NewPractitioner } from '../../entities/NewPractitioner';
 
 /**
@@ -9,7 +10,7 @@ import { NewPractitioner } from '../../entities/NewPractitioner';
  * @returns {object} errors
  */
 export const validateAddPractitionerInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   { practitioner },
 ) => {
   return new NewPractitioner(practitioner, {

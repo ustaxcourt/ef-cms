@@ -5,11 +5,18 @@ jest.mock(
   '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation',
 );
 jest.mock(
+  '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate',
+);
+jest.mock(
   '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions',
 );
 jest.mock('@web-api/business/useCaseHelper/saveFileAndGenerateUrl');
 jest.mock('@web-api/notifications/sendNotificationToUser');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
@@ -23,7 +30,10 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
+import {
+  mockCaseServicesSupervisorUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import {
   determineEntitiesToLock,
@@ -43,12 +53,22 @@ import {
 import { cloneDeep } from 'lodash';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
-import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
+import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialStartDate';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { Case } from '@shared/business/entities/cases/Case';
 
 describe('updateTrialSessionInteractor', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const updateTrialSessionMocked = jest.mocked(updateTrialSessionMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   describe('updateTrialSession', () => {
     let TEST_TRIAL_SESSION;
@@ -58,13 +78,24 @@ describe('updateTrialSessionInteractor', () => {
     const TEST_TRIAL_CLERK_ID = getUniqueId();
     const MOCK_SAVE_RESULTS = 'MOCK_SAVE_RESULTS';
     const MOCK_FILE_URL = 'MOCK_FILE_URL';
+    const tomorrow = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: 1,
+      units: 'days',
+    });
 
     beforeEach(() => {
       TEST_TRIAL_SESSION = cloneDeep(MOCK_TRIAL_INPERSON);
 
+      updateTrialSessionMocked.mockResolvedValue(undefined);
+
       (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
-        getPageCount: () => 1,
-        save: () => MOCK_SAVE_RESULTS,
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [],
+        sendEmailCalls: [],
       });
 
       (saveFileAndGenerateUrl as jest.Mock).mockReturnValue({
@@ -81,9 +112,66 @@ describe('updateTrialSessionInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('should throw an error when start date is in the past', async () => {
+    it('should update estimated end date if CSS user and start date is in the past', async () => {
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
+        isCalendared: true,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            isCalendared: true,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            startDate: '2000-03-01T21:40:46.415Z',
+            estimatedEndDate: '2000-04-01T21:40:46.415Z',
+          },
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      const updateTrialSessionCalls = updateTrialSessionMocked.mock.calls;
+      expect(updateTrialSessionCalls.length).toEqual(1);
+      expect(updateTrialSessionCalls[0][0].trialSessionToUpdate).toMatchObject({
+        estimatedEndDate: '2000-04-01T21:40:46.415Z',
+      });
+    });
+
+    it('should throw an error if the non CSS user tries to edit any field when start date is today or in the past', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+        estimatedEndDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2001-03-01T21:40:46.415Z',
+              estimatedEndDate: tomorrow,
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Trial session cannot be updated after its start date and you are not a case services supervisor.',
+      );
+    });
+
+    it('should throw an error if CSS user tries to edit a non-calendared session after start date', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        isCalendared: false,
         trialSessionId: TEST_TRIAL_SESSION_ID,
         startDate: '2000-03-01T21:40:46.415Z',
       });
@@ -93,13 +181,93 @@ describe('updateTrialSessionInteractor', () => {
           applicationContext,
           {
             trialSession: {
+              ...TEST_TRIAL_SESSION,
+              isCalendared: false,
               trialSessionId: TEST_TRIAL_SESSION_ID,
-            } as unknown as RawTrialSession,
+              startDate: '2000-03-01T21:40:46.415Z',
+              estimatedEndDate: '2000-04-01T21:40:46.415Z',
+            },
             clientConnectionId: TEST_CLIENT_CONNECTION_ID,
           },
           mockCaseServicesSupervisorUser,
         ),
-      ).rejects.toThrow('Trial session cannot be updated after its start date');
+      ).rejects.toThrow(
+        'Non-calendared trial sessions cannot be updated after their start date.',
+      );
+    });
+
+    it('should throw an error if CSS user tries to edit non allowed field when start date is today or in the past', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        address1: 'old',
+        isCalendared: true,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '2000-03-01T21:40:46.415Z',
+        estimatedEndDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              address1: 'new',
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2000-03-01T21:40:46.415Z',
+              estimatedEndDate: tomorrow,
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockCaseServicesSupervisorUser,
+        ),
+      ).rejects.toThrow('Unauthorized changes: address1');
+    });
+
+    it('should throw an error if user tries to update start date to a past date', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: tomorrow,
+      });
+
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: '2000-03-01T21:40:46.415Z',
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Cannot change the start date to today or a past date.',
+      );
+    });
+
+    it('should throw an error if user tries to update start date to today', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: tomorrow,
+      });
+      await expect(
+        updateTrialSession(
+          applicationContext,
+          {
+            trialSession: {
+              trialSessionId: TEST_TRIAL_SESSION_ID,
+              startDate: createISODateString(),
+            } as RawTrialSession,
+            clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          },
+          mockTrialClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Cannot change the start date to today or a past date.',
+      );
     });
 
     it('should call "createWorkingCopyForNewUserOnSession" for new judge and new trial clerk', async () => {
@@ -178,7 +346,7 @@ describe('updateTrialSessionInteractor', () => {
       expect(workingCopyCalls.length).toEqual(0);
     });
 
-    it('should generate all the notices for each case and update trial session', async () => {
+    it('should generate all the notices for each case, make send email calls, and update cases and trial session', async () => {
       (
         shouldGenerateNoticeOfChangeToInPersonProceeding as jest.Mock
       ).mockReturnValue(true);
@@ -194,6 +362,26 @@ describe('updateTrialSessionInteractor', () => {
       (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
         true,
       );
+
+      (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+        true,
+      );
+
+      const mockSendEmailCall = jest.fn();
+
+      const mockCase = new Case(
+        { ...MOCK_CASE, docketNumber: '111-25' },
+        { authorizedUser: mockCaseServicesSupervisorUser },
+      );
+
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [mockCase],
+        sendEmailCalls: [mockSendEmailCall],
+      });
 
       getTrialSessionById.mockResolvedValue({
         ...TEST_TRIAL_SESSION,
@@ -228,6 +416,7 @@ describe('updateTrialSessionInteractor', () => {
         shouldSetNoticeOfChangeToInPersonProceeding: true,
         shouldSetNoticeOfChangeToRemoteProceeding: true,
         shouldSetNoticeOfTrialSessionLocationChange: true,
+        shouldSetNoticeOfTrialSessionStartDateChange: true,
       });
 
       const saveFileAndGenerateUrlCalls = (saveFileAndGenerateUrl as jest.Mock)
@@ -265,6 +454,116 @@ describe('updateTrialSessionInteractor', () => {
         },
         userId: mockCaseServicesSupervisorUser.userId,
       });
+
+      expect(mockSendEmailCall).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledWith({
+        authorizedUser: mockCaseServicesSupervisorUser,
+        caseToUpdate: mockCase,
+      });
+    });
+
+    it('should not generate notices if helper methods return false', async () => {
+      (
+        shouldGenerateNoticeOfChangeToInPersonProceeding as jest.Mock
+      ).mockReturnValue(false);
+
+      (shouldGenerateNoticeOfChangeOfTrialJudge as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      (
+        shouldGenerateNoticeOfChangeToRemoteProceeding as jest.Mock
+      ).mockReturnValue(false);
+
+      (shouldGenerateNoticeOfChangeTrialLocation as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      (shouldGenerateNoticeOfChangeTrialStartDate as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: [{ docketNumber: '111-25' }],
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            trialClerk: {
+              userId: TEST_TRIAL_CLERK_ID,
+              name: 'TEST_TRIAL_CLERK_NAME',
+            },
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      const updateCasesAndSetNoticeOfChangeCalls = (
+        updateCasesAndSetNoticeOfChange as jest.Mock
+      ).mock.calls;
+
+      expect(updateCasesAndSetNoticeOfChangeCalls.length).toEqual(1);
+      expect(updateCasesAndSetNoticeOfChangeCalls[0][0]).toMatchObject({
+        shouldIssueNoticeOfChangeOfTrialJudge: false,
+        shouldSetNoticeOfChangeToInPersonProceeding: false,
+        shouldSetNoticeOfChangeToRemoteProceeding: false,
+        shouldSetNoticeOfTrialSessionLocationChange: false,
+        shouldSetNoticeOfTrialSessionStartDateChange: false,
+      });
+    });
+
+    it('should not update cases or send emails if there are no cases to update', async () => {
+      const mockSendEmailCall = jest.fn();
+
+      (updateCasesAndSetNoticeOfChange as jest.Mock).mockReturnValue({
+        paperServicePdfsCombined: {
+          getPageCount: () => 1,
+          save: () => MOCK_SAVE_RESULTS,
+        },
+        updatedCasesToSave: [],
+        sendEmailCalls: [],
+      });
+
+      getTrialSessionById.mockResolvedValue({
+        ...TEST_TRIAL_SESSION,
+        trialSessionId: TEST_TRIAL_SESSION_ID,
+        startDate: '9999-03-01T21:40:46.415Z',
+        caseOrder: [],
+      });
+
+      await updateTrialSession(
+        applicationContext,
+        {
+          trialSession: {
+            ...TEST_TRIAL_SESSION,
+            trialSessionId: TEST_TRIAL_SESSION_ID,
+            trialClerk: {
+              userId: TEST_TRIAL_CLERK_ID,
+              name: 'TEST_TRIAL_CLERK_NAME',
+            },
+          } as unknown as RawTrialSession,
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+        },
+        mockCaseServicesSupervisorUser,
+      );
+
+      const updateCasesAndSetNoticeOfChangeCalls = (
+        updateCasesAndSetNoticeOfChange as jest.Mock
+      ).mock.calls;
+
+      expect(updateCasesAndSetNoticeOfChangeCalls.length).toEqual(0);
+
+      expect(mockSendEmailCall).not.toHaveBeenCalled();
+      expect(updateCaseAndAssociations).not.toHaveBeenCalled();
     });
 
     it('should update associated swing trial session', async () => {
@@ -309,11 +608,11 @@ describe('updateTrialSessionInteractor', () => {
   describe('determineEntitiesToLock', () => {
     beforeEach(() => {
       getTrialSessionById.mockResolvedValue({
-          caseOrder: [
-            { docketNumber: '333-25' },
-            { docketNumber: '111-25' },
-            { docketNumber: '222-25' },
-          ] as TCaseOrder[],
+        caseOrder: [
+          { docketNumber: '333-25' },
+          { docketNumber: '111-25' },
+          { docketNumber: '222-25' },
+        ] as TCaseOrder[],
       } as RawTrialSession);
     });
 

@@ -51,10 +51,8 @@ export const getFileExternalDocumentAlertSuccessAction = ({
 
   if (isCreatingNotice) {
     store.unset(state.isCreatingOrder);
-    const noticeDocketEntry = props.caseDetail.docketEntries.find(
-      entry => entry.docketEntryId === props.docketEntryId,
-    );
-    alertSuccess.message = `${noticeDocketEntry.documentTitle} saved.`;
+    const documentTitle = get(state.form.documentTitle);
+    alertSuccess.message = `${documentTitle} saved.`;
   }
   if (!isEmpty(documentToEdit)) {
     return {

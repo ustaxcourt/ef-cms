@@ -23,7 +23,7 @@ describe('Case journey', () => {
 
   beforeEach(() => {
     global.window ??= Object.create({
-      ...global.window,
+      ...(global.window as Window),
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 const externalUserCasesHelper = withAppContextDecorator(
@@ -22,11 +23,13 @@ describe('externalUserCasesHelper', () => {
           caseCaption: 'Case Title for 101-20',
           createdAt: '2019-12-22T12:49:10.949Z',
           docketNumber: '101-20',
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           caseCaption: 'Case Title for 200-20',
           createdAt: '2019-12-22T12:49:10.949Z',
           docketNumber: '200-20',
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           caseCaption: 'Case Title for 103-20',
@@ -54,15 +57,16 @@ describe('externalUserCasesHelper', () => {
             },
           ],
           docketNumber: '103-20',
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           caseCaption: 'Case Title for 104-20',
           createdAt: '2019-12-22T12:49:10.949Z',
           docketNumber: '104-20',
           isRequestingUserAssociated: true,
+          status: CASE_STATUS_TYPES.closed,
         },
       ],
-      closedCasesCurrentPage: 1,
       openCases: [
         {
           caseCaption: 'Case Title for 102-20',
@@ -86,61 +90,32 @@ describe('externalUserCasesHelper', () => {
           docketNumber: '102-20',
           isRequestingUserAssociated: false,
           leadDocketNumber: '102-20',
+          status: CASE_STATUS_TYPES.new,
         },
         {
           caseCaption: 'Case Title for 103-21',
           createdAt: '2020-08-22T12:49:10.949Z',
           docketNumber: '103-21',
           isRequestingUserAssociated: true,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2021-08-22T12:49:10.949Z',
+          trialLocation: 'over there, New York',
         },
         {
           caseCaption: 'Case Title for 103-22',
           createdAt: '2021-08-22T12:49:10.949Z',
           docketNumber: '103-22',
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2022-08-22T12:49:10.949Z',
+          trialLocation: 'right here, Maryland',
         },
-        { createdAt: '2022-08-22T12:49:10.949Z', docketNumber: '103-23' },
+        {
+          createdAt: '2022-08-22T12:49:10.949Z',
+          docketNumber: '103-23',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        },
       ],
-      openCasesCurrentPage: 1,
     };
-  });
-
-  it('should display the load more button for both open and closed cases if there are more cases than page size', () => {
-    const result = runCompute(externalUserCasesHelper, {
-      state: baseState,
-    });
-
-    expect(result).toMatchObject({
-      showLoadMoreClosedCases: true,
-      showLoadMoreOpenCases: true,
-    });
-  });
-
-  it("should not show 'Load More' button for closed cases", () => {
-    const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-        closedCases: [{ docketNumber: '104-20' }],
-      },
-    });
-
-    expect(result).toMatchObject({
-      showLoadMoreClosedCases: false,
-      showLoadMoreOpenCases: true,
-    });
-  });
-
-  it("should not show 'Load More' button for open cases", () => {
-    const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-        openCases: [{ docketNumber: '103-23' }],
-      },
-    });
-
-    expect(result).toMatchObject({
-      showLoadMoreClosedCases: true,
-      showLoadMoreOpenCases: false,
-    });
   });
 
   it('sets the total count of both open and closed cases based on when the user is directly associated with the case', () => {
@@ -154,23 +129,306 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it('uses current pages in state', () => {
-    const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-        closedCasesCurrentPage: 2,
-        openCasesCurrentPage: 2,
-      },
-    });
-
-    expect(result).toMatchObject({
-      showLoadMoreClosedCases: false,
-      showLoadMoreOpenCases: false,
-    });
-  });
-
   it('should format associated open and closed cases', () => {
     const expectedOpenCasesResult = [
+      { createdAt: '2022-08-22T12:49:10.949Z', docketNumber: '103-23' },
+      {
+        caseTitle: 'Case Title for 103-22',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/21',
+        docketNumber: '103-22',
+      },
+      {
+        caseCaption: 'Case Title for 103-21',
+        caseTitle: 'Case Title for 103-21',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/20',
+        docketNumber: '103-21',
+      },
+      {
+        caseCaption: 'Case Title for 102-20',
+        caseTitle: 'Case Title for 102-20',
+        consolidatedCases: [
+          {
+            caseCaption: 'Case Title for 108-20',
+            caseTitle: 'Case Title for 108-20',
+            createdAtFormatted: '12/22/19',
+            docketNumber: '108-20',
+          },
+          {
+            caseTitle: 'Case Title for 109-20',
+            createdAtFormatted: '01/22/17',
+            docketNumber: '109-20',
+          },
+        ],
+        createdAtFormatted: '08/22/19',
+        docketNumber: '102-20',
+      },
+    ];
+
+    const expectedClosedCasesResult = [
+      {
+        caseTitle: 'Case Title for 103-20',
+        consolidatedCases: [
+          {
+            caseTitle: 'Case Title for 158-20',
+            createdAtFormatted: '12/22/15',
+            docketNumber: '158-20',
+          },
+          {
+            caseTitle: 'Case Title for 169-20',
+            createdAtFormatted: '12/22/14',
+            docketNumber: '169-20',
+          },
+          {
+            caseTitle: 'Case Title for 189-20',
+            createdAtFormatted: '12/22/12',
+            docketNumber: '189-20',
+          },
+        ],
+        createdAtFormatted: '',
+        docketNumber: '103-20',
+      },
+      {
+        caseTitle: 'Case Title for 101-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '101-20',
+      },
+      {
+        caseTitle: 'Case Title for 200-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '200-20',
+      },
+      {
+        caseCaption: 'Case Title for 104-20',
+        createdAt: '2019-12-22T12:49:10.949Z',
+        docketNumber: '104-20',
+        isRequestingUserAssociated: true,
+      },
+    ];
+    const { closedCaseResults, openCaseResults } = runCompute(
+      externalUserCasesHelper,
+      {
+        state: baseState,
+      },
+    );
+
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(13);
+
+    expect(openCaseResults).toMatchObject(expectedOpenCasesResult);
+    expect(closedCaseResults).toMatchObject(expectedClosedCasesResult);
+  });
+
+  it('should sort cases by docketNumber', () => {
+    baseState.caseListTableSort = {
+      sortField: 'docketNumber',
+      sortOrder: 'asc',
+    };
+
+    const expectedOpenCasesResult = [
+      {
+        caseCaption: 'Case Title for 102-20',
+        caseTitle: 'Case Title for 102-20',
+        consolidatedCases: [
+          {
+            caseCaption: 'Case Title for 108-20',
+            caseTitle: 'Case Title for 108-20',
+            createdAtFormatted: '12/22/19',
+            docketNumber: '108-20',
+          },
+          {
+            caseTitle: 'Case Title for 109-20',
+            createdAtFormatted: '01/22/17',
+            docketNumber: '109-20',
+          },
+        ],
+        createdAtFormatted: '08/22/19',
+        docketNumber: '102-20',
+      },
+      {
+        caseCaption: 'Case Title for 103-21',
+        caseTitle: 'Case Title for 103-21',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/20',
+        docketNumber: '103-21',
+      },
+      {
+        caseTitle: 'Case Title for 103-22',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/21',
+        docketNumber: '103-22',
+      },
+      { createdAt: '2022-08-22T12:49:10.949Z', docketNumber: '103-23' },
+    ];
+
+    const expectedClosedCasesResult = [
+      {
+        caseTitle: 'Case Title for 101-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '101-20',
+      },
+      {
+        caseTitle: 'Case Title for 103-20',
+        consolidatedCases: [
+          {
+            caseTitle: 'Case Title for 158-20',
+            createdAtFormatted: '12/22/15',
+            docketNumber: '158-20',
+          },
+          {
+            caseTitle: 'Case Title for 169-20',
+            createdAtFormatted: '12/22/14',
+            docketNumber: '169-20',
+          },
+          {
+            caseTitle: 'Case Title for 189-20',
+            createdAtFormatted: '12/22/12',
+            docketNumber: '189-20',
+          },
+        ],
+        createdAtFormatted: '',
+        docketNumber: '103-20',
+      },
+      {
+        caseCaption: 'Case Title for 104-20',
+        createdAt: '2019-12-22T12:49:10.949Z',
+        docketNumber: '104-20',
+        isRequestingUserAssociated: true,
+      },
+      {
+        caseTitle: 'Case Title for 200-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '200-20',
+      },
+    ];
+    const { closedCaseResults, openCaseResults } = runCompute(
+      externalUserCasesHelper,
+      {
+        state: baseState,
+      },
+    );
+
+    expect(openCaseResults).toMatchObject(expectedOpenCasesResult);
+    expect(closedCaseResults).toMatchObject(expectedClosedCasesResult);
+  });
+
+  it('should sort cases by Case Status', () => {
+    baseState.caseListTableSort = {
+      sortField: 'status',
+      sortOrder: 'asc',
+    };
+
+    const expectedOpenCasesResult = [
+      {
+        caseCaption: 'Case Title for 103-21',
+        caseTitle: 'Case Title for 103-21',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/20',
+        docketNumber: '103-21',
+        status: CASE_STATUS_TYPES.calendared,
+        formattedStatus: 'Calendared - 08/22/21 over there, NY',
+      },
+      {
+        caseTitle: 'Case Title for 103-22',
+        consolidatedCases: undefined,
+        createdAtFormatted: '08/22/21',
+        docketNumber: '103-22',
+        status: CASE_STATUS_TYPES.calendared,
+        formattedStatus: 'Calendared - 08/22/22 right here, MD',
+      },
+      {
+        createdAt: '2022-08-22T12:49:10.949Z',
+        docketNumber: '103-23',
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      {
+        caseCaption: 'Case Title for 102-20',
+        caseTitle: 'Case Title for 102-20',
+        consolidatedCases: [
+          {
+            caseCaption: 'Case Title for 108-20',
+            caseTitle: 'Case Title for 108-20',
+            createdAtFormatted: '12/22/19',
+            docketNumber: '108-20',
+          },
+          {
+            caseTitle: 'Case Title for 109-20',
+            createdAtFormatted: '01/22/17',
+            docketNumber: '109-20',
+          },
+        ],
+        createdAtFormatted: '08/22/19',
+        docketNumber: '102-20',
+        status: CASE_STATUS_TYPES.new,
+      },
+    ];
+
+    const expectedClosedCasesResult = [
+      {
+        caseTitle: 'Case Title for 101-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '101-20',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        caseTitle: 'Case Title for 200-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '200-20',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        caseTitle: 'Case Title for 103-20',
+        consolidatedCases: [
+          {
+            caseTitle: 'Case Title for 158-20',
+            createdAtFormatted: '12/22/15',
+            docketNumber: '158-20',
+          },
+          {
+            caseTitle: 'Case Title for 169-20',
+            createdAtFormatted: '12/22/14',
+            docketNumber: '169-20',
+          },
+          {
+            caseTitle: 'Case Title for 189-20',
+            createdAtFormatted: '12/22/12',
+            docketNumber: '189-20',
+          },
+        ],
+        createdAtFormatted: '',
+        docketNumber: '103-20',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        caseCaption: 'Case Title for 104-20',
+        createdAt: '2019-12-22T12:49:10.949Z',
+        docketNumber: '104-20',
+        isRequestingUserAssociated: true,
+
+        status: CASE_STATUS_TYPES.closed,
+      },
+    ];
+    const { closedCaseResults, openCaseResults } = runCompute(
+      externalUserCasesHelper,
+      {
+        state: baseState,
+      },
+    );
+
+    expect(openCaseResults).toMatchObject(expectedOpenCasesResult);
+    expect(closedCaseResults).toMatchObject(expectedClosedCasesResult);
+  });
+
+  it('should sort cases by Case Title', () => {
+    baseState.caseListTableSort = {
+      sortField: 'caseTitle',
+      sortOrder: 'asc',
+    };
+
+    const expectedOpenCasesResult = [
+      { createdAt: '2022-08-22T12:49:10.949Z', docketNumber: '103-23' },
       {
         caseCaption: 'Case Title for 102-20',
         caseTitle: 'Case Title for 102-20',
@@ -212,11 +470,6 @@ describe('externalUserCasesHelper', () => {
         docketNumber: '101-20',
       },
       {
-        caseTitle: 'Case Title for 200-20',
-        createdAtFormatted: '12/22/19',
-        docketNumber: '200-20',
-      },
-      {
         caseTitle: 'Case Title for 103-20',
         consolidatedCases: [
           {
@@ -238,6 +491,17 @@ describe('externalUserCasesHelper', () => {
         createdAtFormatted: '',
         docketNumber: '103-20',
       },
+      {
+        caseCaption: 'Case Title for 104-20',
+        createdAt: '2019-12-22T12:49:10.949Z',
+        docketNumber: '104-20',
+        isRequestingUserAssociated: true,
+      },
+      {
+        caseTitle: 'Case Title for 200-20',
+        createdAtFormatted: '12/22/19',
+        docketNumber: '200-20',
+      },
     ];
     const { closedCaseResults, openCaseResults } = runCompute(
       externalUserCasesHelper,
@@ -245,10 +509,6 @@ describe('externalUserCasesHelper', () => {
         state: baseState,
       },
     );
-
-    expect(
-      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
-    ).toHaveBeenCalledTimes(13);
 
     expect(openCaseResults).toMatchObject(expectedOpenCasesResult);
     expect(closedCaseResults).toMatchObject(expectedClosedCasesResult);

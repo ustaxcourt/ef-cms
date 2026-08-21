@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -17,7 +16,7 @@ describe('updateQcCompleteForTrialAction', () => {
 
     applicationContext
       .getUseCases()
-      .updateQcCompleteForTrialInteractor.mockResolvedValue(MOCK_CASE);
+      .updateQcCompleteForTrialInteractor.mockResolvedValue();
   });
 
   it('goes to success path if case is updated', async () => {

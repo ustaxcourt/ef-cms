@@ -16,7 +16,7 @@ describe('attachPrivatePractitioner', () => {
       }),
     );
     expect(caseToVerify.privatePractitioners).not.toBeNull();
-    expect(caseToVerify.privatePractitioners[0].userId).toEqual(
+    expect(caseToVerify.privatePractitioners![0].userId).toEqual(
       'privatePractitioner',
     );
   });

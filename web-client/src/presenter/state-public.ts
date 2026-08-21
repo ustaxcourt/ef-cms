@@ -4,12 +4,12 @@ import {
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   STATE_KEYS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { RawUser } from '@shared/business/entities/User';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
-import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
 import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -23,7 +23,11 @@ import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Publi
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
-type PublicAdvancedSearchForm = { caseSearchByName: { petitionerName: string }; opinionSearch?: Record<string, boolean>; orderSearch?: Record<string, boolean> };
+type PublicAdvancedSearchForm = {
+  caseSearchByName: { petitionerName: string };
+  opinionSearch?: Record<string, boolean>;
+  orderSearch?: Record<string, boolean>;
+};
 
 const computeds = {
   advancedDocumentSearchHelper:
@@ -90,8 +94,14 @@ export const baseState = {
   },
   constants: {} as Record<string, any>,
   currentPage: 'Interstitial',
+  caseCurrentPaginationPage: 0,
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
+  todaysOrdersCurrentPaginationPage: 0,
+  caseSearchSort: {
+    sortColumn: 'resultIndex',
+    sortDirection: 'asc' as 'asc' | 'desc',
+  },
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
@@ -124,9 +134,10 @@ export const baseState = {
     todaysOrdersSort: '',
   },
   showPassword: false,
-  tableSort: {
+  todaysOpinionsTableSort: {
     sortField: 'filingDate',
     sortOrder: DESCENDING,
+    sortKey: 'todaysOpinionsTableSort',
   },
   todaysOpinions: [] as Array<{
     filingDate: string;
@@ -134,6 +145,11 @@ export const baseState = {
     signedJudgeName?: string;
     numberOfPages?: number;
   }>,
+  todaysOrdersTableSort: {
+    sortField: 'filingDate',
+    sortOrder: DESCENDING,
+    sortKey: 'todaysOrdersTableSort',
+  },
   todaysOrders: {
     page: 1,
     results: [] as Array<{
@@ -147,7 +163,7 @@ export const baseState = {
     totalCount: 0,
   },
   trialSessionDetailsPage: {
-    trialSession: {} as PublicTrialSessionDetails,
+    trialSession: {} as RawPublicTrialSessionDetails,
   },
   trialSessionsPage: { trialSessions: [] } as {
     trialSessions: TrialSessionInfoDTO[];

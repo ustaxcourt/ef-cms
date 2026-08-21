@@ -14,7 +14,7 @@ export const deleteDeficiencyStatistic = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
@@ -28,8 +28,6 @@ export const deleteDeficiencyStatistic = async (
   const validRawCase = newCase.validate().toRawObject();
 
   await upsertCases([validRawCase]);
-
-  return validRawCase;
 };
 
 export const deleteDeficiencyStatisticInteractor = withLocking(

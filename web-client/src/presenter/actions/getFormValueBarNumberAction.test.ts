@@ -17,4 +17,20 @@ describe('getFormValueBarNumberAction', () => {
       barNumber: 'PD1234',
     });
   });
+
+  it('trims whitespace from barNumber from state', async () => {
+    const result = await runAction(getFormValueBarNumberAction, {
+      state: {
+        advancedSearchForm: {
+          practitionerSearchByBarNumber: {
+            barNumber: '  PD1234  ',
+          },
+        },
+      },
+    });
+
+    expect(result.output).toEqual({
+      barNumber: 'PD1234',
+    });
+  });
 });

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Returns the current color that is deployed (blue or green) for the environment
 

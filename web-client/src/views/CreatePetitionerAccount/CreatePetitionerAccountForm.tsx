@@ -226,6 +226,7 @@ export const CreatePetitionerAccountForm = connect(
                 className="usa-button margin-top-2"
                 data-testid="petitioner-account-creation-submit-button"
                 disabled={!createAccountHelper.formIsValid || submitDisabled}
+                type="submit"
                 id="submit-button"
               >
                 Continue

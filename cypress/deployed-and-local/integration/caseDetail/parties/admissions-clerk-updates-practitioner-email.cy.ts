@@ -217,17 +217,30 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           logout();
 
           loginAsPrivatePractitioner(practitionerEmail);
+          logout();
+
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
-            cy.visit(`/verify-email?token=${verificationToken}`);
-          });
-          cy.get('[data-testid="success-alert"]')
-            .should('be.visible')
-            .and(
-              'contain.text',
-              'Your email address is verified. You can now log in to DAWSON.',
+            cy.clearAllCookies();
+            cy.clearAllLocalStorage();
+            cy.clearAllSessionStorage();
+
+            const { publicSiteUrl } = getCypressEnv();
+            cy.origin(
+              publicSiteUrl,
+              { args: { publicSiteUrl, verificationToken } },
+              ({ publicSiteUrl: url, verificationToken: token }) => {
+                cy.visit(`${url}/verify-email?token=${token}`);
+                cy.get('[data-testid="success-alert"]')
+                  .should('be.visible')
+                  .and(
+                    'contain.text',
+                    'Your email address is verified. You can now log in to DAWSON.',
+                  );
+              },
             );
+          });
           loginAsPrivatePractitioner(updatedPractitionerEmail);
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)

@@ -49,7 +49,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
       );
 
-    expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
+    expect(stipulatedDecisionDocument?.showLinkToDocument).toEqual(true);
   });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
@@ -61,6 +61,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
       );
 
-    expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
+    expect(stipulatedDecisionDocument?.showLinkToDocument).toEqual(true);
   });
 });

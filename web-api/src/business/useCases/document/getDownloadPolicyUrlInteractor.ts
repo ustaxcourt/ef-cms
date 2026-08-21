@@ -29,14 +29,12 @@ export const getDownloadPolicyUrlInteractor = async (
   }
 
   const caseEntity = new Case(caseData, { authorizedUser });
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId: key,
-  });
 
   if (key.includes('.pdf')) {
     if (
       caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key ||
-      !caseEntity.userHasAccessToCase(authorizedUser)
+      (!caseEntity.userHasAccessToCase(authorizedUser) &&
+        !User.isInternalUser(authorizedUser.role))
     ) {
       throw new UnauthorizedError('Unauthorized');
     }
@@ -45,14 +43,27 @@ export const getDownloadPolicyUrlInteractor = async (
       throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
     }
   } else {
+    let docketEntryEntity = caseEntity.getDocketEntryById({
+      docketEntryId: key,
+    });
+
+    if (!docketEntryEntity) {
+      docketEntryEntity = caseEntity.docketEntries.find(de => {
+        return de.documentStorageId === key;
+      });
+    }
+
     if (!docketEntryEntity) {
       throw new NotFoundError(`Docket entry ${key} was not found.`);
     }
+
     if (!docketEntryEntity.isFileAttached) {
       throw new NotFoundError(
         `Docket entry ${key} does not have an attached file.`,
       );
     }
+
+    key = docketEntryEntity.documentStorageId;
 
     const featureFlags = await applicationContext
       .getUseCases()

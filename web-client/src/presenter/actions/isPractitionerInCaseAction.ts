@@ -13,7 +13,7 @@ export const isPractitionerInCaseAction = ({ get, path }: ActionProps) => {
 
   if (
     privatePractitioners.length === 1 &&
-    caseDetail.privatePractitioners.find(
+    caseDetail.privatePractitioners!.find(
       practitioner => practitioner.userId === privatePractitioners[0].userId,
     )
   ) {

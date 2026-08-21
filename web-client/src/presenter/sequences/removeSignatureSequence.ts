@@ -3,6 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPropsForRemoveSignatureAction } from '../actions/setPropsForRemoveSignatureAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
@@ -15,6 +16,7 @@ export const removeSignatureSequence = showProgressSequenceDecorator([
   setAlertSuccessAction,
   clearModalAction,
   clearModalStateAction,
+  getCaseAction,
   setCaseAction,
   setViewerDraftDocumentToDisplayAction,
 ]);

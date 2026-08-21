@@ -25,6 +25,11 @@ jest.mock(
 );
 
 jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesById',
+  () => mockFactory('getDocketEntriesById'),
+);
+
+jest.mock(
   '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries',
   () => mockFactory('upsertDocketEntryRelatedEntries'),
 );
@@ -32,4 +37,9 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed',
   () => mockFactory('updateDocketEntryRelatedEntryServed'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryProcessingStatus',
+  () => mockFactory('updateDocketEntryProcessingStatus'),
 );

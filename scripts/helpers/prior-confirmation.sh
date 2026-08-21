@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 function has_prior_confirmation() {
   for param in "$@"; do

@@ -6,7 +6,9 @@ describe('setWizardStepAction', () => {
     const { state } = await runAction(
       setWizardStepAction('SelectDocumentType'),
       {
-        modules: {},
+        modules: {
+          presenter: {}
+        },
         state: {
           wizardStep: 'BAD',
         },

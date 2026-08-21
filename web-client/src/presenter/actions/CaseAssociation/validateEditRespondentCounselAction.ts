@@ -22,7 +22,7 @@ export const validateEditRespondentCounselAction = ({
   const { irsPractitioners: oldRespondentCounsels } = get(state.caseDetail);
 
   let errors = {};
-  const oldRespondentCounsel = oldRespondentCounsels.find(
+  const oldRespondentCounsel = oldRespondentCounsels!.find(
     foundRespondent => foundRespondent.userId === respondentCounsel.userId,
   );
   if (

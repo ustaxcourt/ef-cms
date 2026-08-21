@@ -76,6 +76,30 @@ describe('Petitioner', () => {
           '"title" length must be less than or equal to 100 characters long',
       });
     });
+
+    it('should be true when petitioner is sealed and address fields are provided', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        isAddressSealed: true,
+        sealedAndUnavailable: true,
+      });
+      expect(entity.isValid()).toBe(true);
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be false when petitioner is not sealed but available and address is undefined', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        sealedAndUnavailable: false,
+        isAddressSealed: true,
+        address1: undefined,
+      });
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        address1: 'Enter mailing address',
+      });
+    });
   });
 
   describe('phone number formatting', () => {
@@ -90,15 +114,15 @@ describe('Petitioner', () => {
   });
 
   describe('optional fields', () => {
-    it('should populate paperPetitionEmail when one is provided', () => {
+    it('should populate contactEmailAddress when one is provided', () => {
       const mockEmail = 'petitioner@example.com';
 
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        paperPetitionEmail: mockEmail,
+        contactEmailAddress: mockEmail,
       });
 
-      expect(entity.paperPetitionEmail).toEqual(mockEmail);
+      expect(entity.contactEmailAddress).toEqual(mockEmail);
     });
 
     it('should populate hasConsentedToElectronicService when one is provided', () => {

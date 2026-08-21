@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
 
 const { PETITIONS_SECTION } = applicationContext.getConstants();
@@ -25,7 +26,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithNoAttachments =
         value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
       });
 
-      cerebralTest.testMessageSubject = `someone poisoned the coffee ${Date.now()}`;
+      cerebralTest.testMessageSubject = `someone poisoned the coffee ${getCurrentDateTimeInMillis()}`;
 
       await cerebralTest.runSequence('updateModalFormValueSequence', {
         key: 'subject',

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Deletes the specified elasticsearch domain for the environment
 

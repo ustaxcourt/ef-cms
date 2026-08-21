@@ -292,7 +292,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       entry => entry.documentTitle === 'Order to do something',
     );
 
-    expect(orderEntry.index).toBeUndefined();
+    expect(orderEntry?.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
       createdAtFormatted: '',
       eventCode: 'O',
@@ -388,9 +388,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketEntry => docketEntry.eventCode === 'A',
     );
 
-    cerebralTest.docketEntryId = entry.docketEntryId;
+    cerebralTest.docketEntryId = entry?.docketEntryId;
 
-    expect(entry.index).toBeUndefined();
+    expect(entry?.index).toBeUndefined();
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'A',
@@ -484,7 +484,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       entry => entry.eventCode === 'ADMR',
     );
 
-    expect(entryWithoutFile.index).toBeUndefined();
+    expect(entryWithoutFile?.index).toBeUndefined();
     expect(entryWithoutFile).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'ADMR',

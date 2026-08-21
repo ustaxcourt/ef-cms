@@ -10,7 +10,7 @@ describe('getAttachmentDocumentById', () => {
     });
     const result = Case.getAttachmentDocumentById({
       caseDetail: myCase.toRawObject(),
-      docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
+      documentId: MOCK_DOCUMENTS[0].docketEntryId,
     });
     expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
   });

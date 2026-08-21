@@ -47,7 +47,6 @@ describe('updateCaseDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-20' },
       docketNumber: '123-20',
       tab: 'caseInfo',
     });
@@ -83,7 +82,6 @@ describe('updateCaseDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-20' },
       docketNumber: '123-20',
       tab: 'caseInfo',
     });
@@ -117,7 +115,6 @@ describe('updateCaseDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-20' },
       docketNumber: '123-20',
       tab: 'caseInfo',
     });

@@ -19,7 +19,7 @@ export const deleteUserCaseNoteInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {

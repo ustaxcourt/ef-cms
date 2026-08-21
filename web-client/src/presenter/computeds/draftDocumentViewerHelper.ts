@@ -2,7 +2,11 @@
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  GRANT_DENY_MOTION_OPTIONS,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const draftDocumentViewerHelper = (
@@ -55,9 +59,16 @@ export const draftDocumentViewerHelper = (
     formattedDocumentToDisplay.eventCode === GENERIC_ORDER_EVENT_CODE &&
     formattedDocumentToDisplay.stampData?.disposition;
 
-  const isStatusReportOrder = Object.values(
-    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
-  ).includes(formattedDocumentToDisplay?.draftOrderState?.orderType);
+  const isStatusReportOrder = formattedDocumentToDisplay?.draftOrderState
+    ?.orderType
+    ? Object.values(STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions).includes(
+        formattedDocumentToDisplay?.draftOrderState?.orderType,
+      )
+    : false;
+
+  const isGrantDenyMotion =
+    formattedDocumentToDisplay?.draftOrderState?.orderType ===
+    GRANT_DENY_MOTION_OPTIONS.orderType;
 
   const isNotice = NOTICE_EVENT_CODES.includes(
     formattedDocumentToDisplay.eventCode,
@@ -77,16 +88,43 @@ export const draftDocumentViewerHelper = (
     : '';
 
   const showEditButtonForRole = isInternalUser;
-  const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && isSigned
-    : showEditButtonForRole &&
-      isSigned &&
-      !isNotice &&
-      !isDraftStampOrder &&
-      !isStipulatedDecision;
-  const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !isSigned
-    : showEditButtonForRole && (!isSigned || isNotice);
+
+  const eventCode = formattedDocumentToDisplay.eventCode
+    ? formattedDocumentToDisplay.eventCode
+    : null;
+
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
+
+  const isRestrictedEventCode = eventCode
+    ? restrictedEventCodesArray.includes(eventCode)
+    : false;
+
+  const showEditButtonSigned =
+    !isRestrictedEventCode &&
+    (isGrantDenyMotion
+      ? permissions.GRANT_DENY_MOTION && isSigned
+      : isStatusReportOrder
+        ? permissions.STATUS_REPORT_ORDER && isSigned
+        : showEditButtonForRole &&
+          isSigned &&
+          !isNotice &&
+          !isDraftStampOrder &&
+          !isStipulatedDecision);
+
+  const showEditButtonNotSigned =
+    !isRestrictedEventCode &&
+    (isGrantDenyMotion
+      ? permissions.GRANT_DENY_MOTION && !isSigned
+      : isStatusReportOrder
+        ? permissions.STATUS_REPORT_ORDER && !isSigned
+        : showEditButtonForRole && (!isSigned || isNotice));
 
   const showAddDocketEntryButtonForDocument = isSigned || !requiresSignature;
   const showAddDocketEntryButton =

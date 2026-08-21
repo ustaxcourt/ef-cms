@@ -20,17 +20,25 @@ export const STATE_KEYS = {
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
   RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
   CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
+  CASE_LIST_TABLE_SORT: 'CASE_LIST_TABLE_SORT',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
-// a number (100 to 99999) followed by a - and a 2 digit year
+
+// any combination of alphanumeric characters only
+export const BAR_NUMBER_MATCHER = /^[a-zA-Z0-9]+$/;
+
 export const COURT_ISSUED_EVENT_CODES = COURT_ISSUED_EVENTS;
 
 export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 
+// a number (100 to 99999) followed by a - and a 2 digit year
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+// a number (100 to 99999) followed by a - and a 2 digit year, with an optional alphabetic suffix
+export const DOCKET_NUMBER_SEARCH_MATCHER = /^([1-9]\d{2,4}-\d{2}[a-zA-Z]*)$/;
 
 export const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
@@ -38,12 +46,30 @@ export const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
 export const COLD_CASE_LOOKBACK_IN_DAYS = 120;
 
+export const DAYS_IN_WEEK = 7;
+export const DAYS_TO_WEEK_END = 6;
+
+export const CLERK_OF_COURT_DASHBOARD_LABELS = {
+  TRIAL_SESSIONS_HEADER: 'Trial Sessions',
+  WEEK_CURRENT: 'This Week',
+  WEEK_NEXT: 'Next Week',
+  EMPTY_MESSAGE_CURRENT_WEEK: 'There are no trial sessions for this week.',
+  EMPTY_MESSAGE_NEXT_WEEK: 'There are no trial sessions for next week.',
+  FIELD_START_DATE: 'Start Date',
+  FIELD_PROC_TYPE: 'Proc. Type',
+  FIELD_CITY: 'City',
+  FIELD_EST_END_DATE: 'Est. End Date',
+  FIELD_SESSION_TYPE: 'Session Type',
+  FIELD_JUDGE: 'Judge',
+  FIELD_CLERK: 'Clerk',
+  FALLBACK_UNASSIGNED: 'Unassigned',
+  FALLBACK_EMPTY: '—',
+} as const;
+
 export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 
 export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
 export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
-
-export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
@@ -85,11 +111,6 @@ export const TRIAL_SESSION_SCOPE_TYPES = {
 export type TrialSessionScope =
   (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
-export const JURISDICTIONAL_OPTIONS = {
-  restoredToDocket: 'The case is restored to the general docket',
-  undersigned: 'Jurisdiction is retained by the undersigned',
-};
-
 export type DocketEntryRelation = {
   disposition: string;
   docketEntryId: string;
@@ -99,25 +120,32 @@ export const MOTION_DISPOSITIONS = {
   DENIED: 'DENIED',
   GRANTED: 'GRANTED',
   GRANTED_IN_PART: 'GRANTED IN PART',
+  DENIED_IN_PART: 'DENIED IN PART',
+  GRANTED_IN_PART_AND_DENIED_IN_PART: 'GRANTED IN PART AND DENIED IN PART',
 };
 
 export const MOTION_DISPOSITION_VERBIAGE = {
   DENIED: {
-    MOTION: 'DENIED BY',
-    ORDER: 'DENYING',
+    MOTION: ['DENIED BY'],
+    ORDER: ['DENYING'],
   },
   GRANTED: {
-    MOTION: 'GRANTED BY',
-    ORDER: 'GRANTING',
+    MOTION: ['GRANTED BY'],
+    ORDER: ['GRANTING'],
   },
   'GRANTED IN PART': {
-    MOTION: 'GRANTED IN PART BY',
-    ORDER: 'GRANTING IN PART',
+    MOTION: ['GRANTED IN PART BY'],
+    ORDER: ['GRANTING IN PART'],
+  },
+  'DENIED IN PART': {
+    MOTION: ['DENIED IN PART BY'],
+    ORDER: ['DENYING IN PART'],
+  },
+  'GRANTED IN PART AND DENIED IN PART': {
+    MOTION: ['GRANTED IN PART BY', 'DENIED IN PART BY'],
+    ORDER: ['GRANTING IN PART', 'DENYING IN PART'],
   },
 };
-
-export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
-  'This case is stricken from the trial session';
 
 export const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
@@ -137,6 +165,12 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  ENABLE_PAYMENT_PORTAL_INTEGRATION: {
+    key: 'enable-payment-portal-integration',
+  },
+  RESTRICTED_EVENT_CODES: {
+    key: 'restricted-event-codes',
   },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
@@ -164,6 +198,7 @@ export const SERVICE_INDICATOR_TYPES = {
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
+  ERROR_ADDING_COVERSHEET: 'error_adding_coversheet',
   PENDING: 'pending',
 };
 
@@ -230,6 +265,25 @@ export const CASE_STATUS_TYPES = {
 } as const;
 export type CaseStatus =
   (typeof CASE_STATUS_TYPES)[keyof typeof CASE_STATUS_TYPES];
+
+export const CASE_STATUS_EXPLAINERS = {
+  [CASE_STATUS_TYPES.assignedCase]: 'Case is before a judge.',
+  [CASE_STATUS_TYPES.assignedMotion]: 'Motion is before a judge.',
+  [CASE_STATUS_TYPES.cav]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.generalDocket]:
+    'Case is awaiting calendaring or assignment.',
+  [CASE_STATUS_TYPES.generalDocketReadyForTrial]:
+    'Case is awaiting calendaring or assignment.',
+  [CASE_STATUS_TYPES.new]: 'Petition has been filed with the court.',
+  [CASE_STATUS_TYPES.jurisdictionRetained]: 'Case is before a judge.',
+  [CASE_STATUS_TYPES.onAppeal]: 'Case is on appeal.',
+  [CASE_STATUS_TYPES.rule155]: 'Case is awaiting computations.',
+  [CASE_STATUS_TYPES.submitted]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.submittedRule122]: 'Awaiting resolution.',
+  [CASE_STATUS_TYPES.calendared]: 'Case is scheduled for trial or hearing.',
+  [CASE_STATUS_TYPES.closed]: 'Case is closed.',
+  [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed.',
+};
 
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
@@ -475,6 +529,37 @@ export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
+export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
+  'additionalInfo',
+  'additionalInfo2',
+  'addToCoversheet',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'date',
+  'docketNumbers',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filers',
+  'filingDate',
+  'freeText',
+  'hasOtherFilingParty',
+  'judge',
+  'lodged',
+  'objections',
+  'ordinalValue',
+  'otherFilingParty',
+  'otherIteration',
+  'partyIrsPractitioner',
+  'pending',
+  'previousDocument',
+  'secondaryDocument',
+  'serviceDate',
+  'trialLocation',
+] as const;
+
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -497,9 +582,13 @@ export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(EXTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
+EXTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
+
 export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
+
+INTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
 
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
@@ -924,6 +1013,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change of Trial Location',
     eventCode: 'NCTL',
   },
+  noticeOfChangeOfTrialStartDate: {
+    documentTitle: 'Notice of Change of Trial Date',
+    documentType: 'Notice of Change of Trial Date',
+    eventCode: 'NOT',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
@@ -1229,7 +1323,7 @@ export type FilingType =
 
 export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 
-export const ANSWER_CUTOFF_UNIT = 'day';
+export const ANSWER_CUTOFF_UNIT = 'days';
 
 export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
@@ -1291,6 +1385,15 @@ export const US_STATES = {
   WY: 'Wyoming',
 } as const;
 
+// State abbreviations ordered by full state name, for dropdowns that present a
+// sorted list. US_STATES itself stays keyed by abbreviation so lookups and the
+// validation lists built from its keys are unaffected.
+export const US_STATES_SORTED = (
+  Object.keys(US_STATES) as (keyof typeof US_STATES)[]
+).sort((firstState, secondState) =>
+  US_STATES[firstState].localeCompare(US_STATES[secondState]),
+);
+
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
@@ -1304,6 +1407,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const US_STATES_OTHER_SORTED = (
+  Object.keys(US_STATES_OTHER) as (keyof typeof US_STATES_OTHER)[]
+).sort((firstState, secondState) =>
+  US_STATES_OTHER[firstState].localeCompare(US_STATES_OTHER[secondState]),
+);
 
 export const ALL_STATE_OPTIONS = {
   ...US_STATES,
@@ -1523,6 +1632,38 @@ export const SESSION_TERMS_BY_MONTH = {
   winter: [1, 2, 3],
 };
 
+export const MONTH_LABELS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export const FISCAL_MONTH_LABELS = [
+  'October',
+  'November',
+  'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+];
+
+export const FISCAL_MONTH_PRIORITY = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
+
 export const SESSION_TYPES = {
   regular: 'Regular',
   small: 'Small',
@@ -1692,8 +1833,9 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for documents
+export const ADVANCED_CASE_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for cases
+export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report when rendered in the browser
@@ -1701,6 +1843,8 @@ export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results 
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
+export const DOCKET_RECORD_PAGE_SIZE = 500; // number of results displayed for each page in the docket record
+export const DOCKET_RECORD_PAGINATION_THRESHOLD = 1000; // paginate when docket entry count exceeds this threshold
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
@@ -1781,11 +1925,13 @@ export const DESCENDING: 'desc' = 'desc';
 export const SORT_ASCENDING_TEXT = {
   date: 'Oldest to newest',
   string: 'In A-Z ascending order',
+  number: 'Lowest to highest',
 };
 
 export const SORT_DESCENDING_TEXT = {
   date: 'Newest to oldest',
   string: 'In Z-A descending order',
+  number: 'Highest to lowest',
 };
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
@@ -1798,6 +1944,7 @@ export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
   DISCIPLINARY: 'Disciplinary',
   CHANGE_OF_NAME: 'Change of Name',
+  CHANGE_OF_STATUS: 'Change of Status',
   EXAM_RELATED: 'Exam-Related',
   MISCELLANEOUS: 'Miscellaneous',
 };
@@ -1813,9 +1960,8 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 5000;
 export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
-export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -1847,7 +1993,7 @@ export type CreatedCaseType = {
     city: string;
     countryType: string;
     name: string;
-    paperPetitionEmail: string;
+    contactEmailAddress: string;
     phone: string;
     postalCode: string;
     state: string;
@@ -1910,6 +2056,8 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
     restored: 'restoredToGeneralDocket',
   },
 };
+
+export const MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS = 256;
 
 export const TROUBLESHOOTING_INFO = {
   APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
@@ -2109,6 +2257,33 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
 
+export const GRANT_DENY_MOTION_OPTIONS = {
+  issueOrderOptions: {
+    allCasesInGroup: 'allCasesInGroup',
+    justThisCase: 'justThisCase',
+  },
+  dueDateMessageOptions: {
+    statusReport: 'statusReport',
+    statusReportOrStipulatedDecision: 'statusReportOrStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+  filingPartyOptions: {
+    petitioners: 'Petitioner(s)',
+    respondent: 'Respondent',
+    joint: 'Joint',
+    parties: 'Parties',
+  },
+  orderType: 'grantDenyMotion',
+  pdfParagraphClass: 'grant-deny-indent-paragraph',
+  pdfOrderModifierClass: 'grant-deny-motion-order',
+  pdfParagraphIndentPx: 56,
+};
+
+export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;
+
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
   MAX_SESSIONS_PER_LOCATION: 5,
@@ -2137,6 +2312,7 @@ export const ALLOWED_EVENT_CODES = [
   'NCTL',
   'NODC',
 ];
+
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
 export const NOT_PROVIDED = 'Not Provided';
@@ -2144,3 +2320,55 @@ export const NOT_PROVIDED = 'Not Provided';
 export const AWS_BATCH_POLLING_INTERVAL = 5000;
 
 export const AWS_BATCH_POLLING_TIMEOUT = 600000;
+
+export const EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES = ['NOTW'];
+
+export const EVENT_CODES_WITH_NO_ORDER = [
+  'COED',
+  'MEMO',
+  'MOP',
+  'MOTR',
+  'NCON',
+  'NOA',
+  'NOB',
+  'NOC',
+  'NOCE',
+  'NOEI',
+  'NOEP',
+  'NOI',
+  'NOST',
+  'NOT',
+  'NOTT',
+  'NOTW',
+  'NOU',
+  'OBJ',
+  'OBJE',
+  'OBJN',
+  'OCS',
+  'OP',
+  'OPPO',
+  'RCOM',
+  'ROA',
+  'SEOB',
+  'SIOB',
+  'SIOM',
+  'SOMB',
+  'SOP',
+  'SORI',
+  'TCOP',
+];
+
+export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
+
+export const PAYMENT_PORTAL_FEE_TYPES = {
+  PETITION_FILING_FEE: 'PETITION_FILING_FEE',
+} as Record<string, 'PETITION_FILING_FEE'>;
+
+export const GRAPH_COLORS = {
+  BLUE: '#005EA2',
+  DARK_BLUE: '#162E51',
+  YELLOW: '#FFBE2E',
+  RED: '#D83933',
+  DARK_RED: '#B50909',
+  GREEN: '#2E8540',
+};

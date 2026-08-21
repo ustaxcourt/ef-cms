@@ -6,7 +6,7 @@ import {
 import { advancedDocumentSearch } from './advancedDocumentSearch';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { search as searchClient } from './searchClient';
-import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import type { QueryContainer } from 'node_modules/@opensearch-project/opensearch/api/_types/_common.query_dsl';
 jest.mock('./searchClient');
 
 const search = searchClient as jest.Mock;

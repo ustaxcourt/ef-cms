@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
   COUNTRY_TYPES,
@@ -27,7 +26,7 @@ describe('verify opinion search works for external users', () => {
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await setOpinionSearchEnabled(true);
+    await setOpinionSearchEnabled(true, '');
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -155,7 +154,16 @@ describe('verify opinion search works for external users', () => {
     loginAs(cerebralTest, 'privatePractitioner@example.com');
 
     // Search by keyword with opinion type and date range where matches exist
-    let getSearchParams = () => ({
+    let getSearchParams: () => {
+      dateRange?: string;
+      keyword?: string;
+      opinionTypes?: {
+        [x: string]: boolean;
+      };
+      keywordType?: string;
+      caseTitleOrPetitioner?: string;
+      docketNumber?: string;
+    } = () => ({
       dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
       keyword: 'sunglasses',
       opinionTypes: {

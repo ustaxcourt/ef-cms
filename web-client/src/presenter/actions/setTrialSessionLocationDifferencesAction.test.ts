@@ -31,8 +31,8 @@ describe('setTrialSessionLocationDifferencesAction', () => {
       setTrialSessionLocationDifferencesAction,
       {
         props: {
-          currentTrialSessionLocation: TEST_CURRENT_LOCATION,
-          updatedTrialSessionLocation: TEST_UPDATED_LOCATION,
+          currentTrialSession: TEST_CURRENT_LOCATION,
+          updatedTrialSession: TEST_UPDATED_LOCATION,
         },
       },
     );

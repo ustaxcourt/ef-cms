@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardE', () => {
@@ -61,6 +61,17 @@ describe('ExternalDocumentNonStandardE', () => {
       expect(externalDocumentD.getDocumentTitle()).toEqual(
         'Motion to Change Place of Submission of Declaratory Judgment Case to Little Rock, AR',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentE = ExternalDocumentFactory({
+        category: 'Motion',
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case',
+        scenario: 'Nonstandard E',
+      });
+
+      expect(externalDocumentE.getDocumentTitle()).toEqual('');
     });
   });
 });

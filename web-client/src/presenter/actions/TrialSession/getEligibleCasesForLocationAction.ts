@@ -1,4 +1,4 @@
-import { getEligibleCasesForCityInteractor } from '@shared/proxies/trialSessions/getEligibleCasesForCityProxy';
+import { getEligibleCasesForCityInteractor } from '@web-client/proxies/trialSessions/getEligibleCasesForCityProxy';
 
 export const getEligibleCasesForLocationAction = async ({
   applicationContext,

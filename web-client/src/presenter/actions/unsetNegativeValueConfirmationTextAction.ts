@@ -10,5 +10,5 @@ export const unsetNegativeValueConfirmationTextAction = ({
   props,
   store,
 }: ActionProps) => {
-  store.unset(state.confirmationText[props.key]);
+  store.unset(state.confirmationText![props.key]);
 };

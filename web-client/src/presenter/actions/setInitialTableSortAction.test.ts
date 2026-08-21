@@ -3,7 +3,7 @@ import { setInitialTableSortAction } from './setInitialTableSortAction';
 
 describe('setInitialTableSortAction', () => {
   it('should set state.tableSort to uploadDate ascending', async () => {
-    const { state } = await runAction(setInitialTableSortAction);
+    const { state } = await runAction(setInitialTableSortAction, { state: {} });
 
     expect(state.tableSort).toEqual({
       sortField: 'uploadDate',

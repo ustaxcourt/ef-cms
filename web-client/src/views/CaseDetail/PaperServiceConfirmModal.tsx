@@ -1,49 +1,87 @@
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
   {
-    clearModalSequence: sequences.clearModalSequence,
-    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     documentTitle: state.form.documentTitle,
+    confirmPaperServiceModalHelper: state.confirmPaperServiceModalHelper,
+    clearModalSequence: sequences.clearModalSequence,
     navigateToPrintPaperServiceSequence:
       sequences.navigateToPrintPaperServiceSequence,
   },
   function PaperServiceConfirmModal({
     clearModalSequence,
-    confirmInitiateServiceModalHelper,
+    confirmPaperServiceModalHelper,
     documentTitle,
     navigateToPrintPaperServiceSequence,
   }) {
     return (
-      <ConfirmModal
-        noCancel
-        className="paper-service-confirm-modal"
-        confirmLabel="Print Now"
-        title="Paper service is required for the following document:"
-        onCancelSequence={clearModalSequence}
-        onConfirmSequence={navigateToPrintPaperServiceSequence}
-      >
-        <p>The following document will be served on all parties:</p>
+      <div>
+        <ConfirmModal
+          className="paper-service-confirm-modal"
+          confirmLabel="Print Now"
+          cancelLabel="Close"
+          useLinkForCancel={true}
+          disableTooltip={true}
+          title="Paper Service Required"
+          onCancelSequence={clearModalSequence}
+          onConfirmSequence={navigateToPrintPaperServiceSequence}
+        >
+          <p className="margin-0">
+            The following document was served on all parties receiving
+            electronic service:
+          </p>
 
-        <p className="text-semibold">{documentTitle}</p>
+          <p className="margin-0 text-bold">
+            {documentTitle?.includes('Notice of Docket Change')
+              ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
+                  .documentType
+              : documentTitle}
+          </p>
 
-        <Hint fullWidth className="block">
-          <div className="margin-bottom-1">
-            This case has parties receiving paper service:
-          </div>
-          {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
-            contact => (
-              <div className="margin-bottom-1" key={contact.name}>
-                {contact.name}
-              </div>
-            ),
+          <ul className="margin-0 padding-left-3">
+            {confirmPaperServiceModalHelper.multiDocketedOn.map(
+              (c: { docketNumber: string; caseTitle: string }) => (
+                <li key={c.docketNumber}>
+                  <span>{c.docketNumber}</span> - {c.caseTitle}
+                </li>
+              ),
+            )}
+          </ul>
+
+          {confirmPaperServiceModalHelper.contactsNeedingPaperService && (
+            <AlertInfo
+              alertInfo={{
+                message: (
+                  <>
+                    <div>
+                      <strong>
+                        {confirmPaperServiceModalHelper.paperFilingText}
+                      </strong>
+                    </div>
+                    {confirmPaperServiceModalHelper.contactsNeedingPaperService.map(
+                      contact => (
+                        <div key={`${contact.docketNumber}-${contact.name}`}>
+                          {confirmPaperServiceModalHelper.wasMultiDocketed &&
+                            `${contact.docketNumber} - `}
+                          {contact.name}, {contact.formattedContactType}
+                        </div>
+                      ),
+                    )}
+                  </>
+                ),
+              }}
+              isDismissible={false}
+              scrollToTop={false}
+              className="tw:mt-6"
+            />
           )}
-        </Hint>
-      </ConfirmModal>
+        </ConfirmModal>
+      </div>
     );
   },
 );

@@ -24,12 +24,14 @@ describe('DocketEntry isPublic', () => {
     createdAt: '2018-11-21T20:49:28.192Z',
     docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
     docketNumber: '123-45',
+    documentStorageId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
     documentTitle: 'Some title',
     documentType: 'Stipulated Decision',
     entityName: 'DocketEntry',
     eventCode: 'SDEC',
     filers: [],
     filingDate: beforeVisibilityChangeDate,
+    multiDocketedOn: [],
     isOnDocketRecord: true,
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '',
@@ -131,7 +133,7 @@ describe('DocketEntry isPublic', () => {
           ![...amendmentEventCodes, 'SDEC', 'AMBR'].includes(eventCode),
       );
 
-      const practitionerRoles = [
+      const practitionerRoles: string[] = [
         ROLES.privatePractitioner,
         ROLES.irsPractitioner,
       ];

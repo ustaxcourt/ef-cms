@@ -1,4 +1,4 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
@@ -9,6 +9,7 @@ import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkVerifiesConsolidatedCases } from './journey/docketClerkVerifiesConsolidatedCases';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
@@ -21,7 +22,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
 
   cerebralTest.createdTrialSessions = [];
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const caseOverrides = {
     caseCaption: 'Mona Schultz, Petitioner',
     docketNumberSuffix: 'L',

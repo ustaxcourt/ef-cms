@@ -1,4 +1,4 @@
-import { getRecentFilingsForUserInteractor } from '@shared/proxies/getRecentFilingsForUserProxy';
+import { getRecentFilingsForUserInteractor } from '@web-client/proxies/getRecentFilingsForUserProxy';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 export const getRecentFilingsForUserAction = async ({

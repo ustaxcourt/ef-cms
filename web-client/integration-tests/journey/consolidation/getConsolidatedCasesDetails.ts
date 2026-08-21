@@ -9,7 +9,7 @@ export const getConsolidatedCasesDetails = (cerebralTest, docketNumber) => {
     );
 
     const consolidatedCaseDetailGroup: RawCase[] = [];
-    for (let consolidatedCase of consolidatedCases) {
+    for (const consolidatedCase of consolidatedCases) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: consolidatedCase.docketNumber,
       });

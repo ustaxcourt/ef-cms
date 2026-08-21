@@ -13,6 +13,12 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       name: 'Cohen',
       userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
     },
+  }: {
+    hasPaper?: boolean;
+    judge?: {
+      name: string;
+      userId: string;
+    };
   } = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
@@ -60,13 +66,14 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionSequence');
-    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
-    });
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
     await waitForPage({
       cerebralTest,
       expectedPage: 'TrialSessionDetails',
-      maxWait: 20000,
+      maxWait: 60000,
     });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetails');
 

@@ -93,7 +93,7 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
       expect(draftOrderDocument).toBeTruthy();
 
       await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-        docketEntryId: draftOrderDocument.docketEntryId,
+        docketEntryId: draftOrderDocument?.docketEntryId,
         docketNumber: cerebralTest.leadDocketNumber,
       });
 

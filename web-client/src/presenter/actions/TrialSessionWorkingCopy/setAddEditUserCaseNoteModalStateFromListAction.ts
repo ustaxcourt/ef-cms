@@ -26,7 +26,7 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
     docketNumber,
   });
 
-  const caseTitle = applicationContext.getCaseTitle(caseDetail.caseCaption);
+  const caseTitle = applicationContext.getCaseTitle(caseDetail!.caseCaption);
 
   store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.docketNumber, docketNumber);

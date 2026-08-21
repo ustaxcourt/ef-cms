@@ -20,7 +20,7 @@ export const SORT_FIELDS: Record<string, SortFieldInfo> = {
     sortField: 'completedAt',
     sortType: 'date',
   },
-  COMPLETED_BY: { sortField: 'completedBy', sortType: 'date' },
+  COMPLETED_BY: { sortField: 'completedBy', sortType: 'string' },
   COMPLETED_BY_SECTION: { sortField: 'completedBySection', sortType: 'string' },
   COMPLETED_MESSAGE: { sortField: 'completedMessage', sortType: 'string' },
   CREATED_AT: {

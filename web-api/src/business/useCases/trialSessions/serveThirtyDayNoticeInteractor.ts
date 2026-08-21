@@ -20,7 +20,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -28,10 +28,11 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -52,21 +53,11 @@ export const serveThirtyDayNotice = async (
     throw new InvalidRequest('No trial Session Id provided');
   }
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
-
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-    name: string;
-    title: string;
-  };
+  const { name, title } = await getClerkOfTheCourtInfo();
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -85,7 +76,7 @@ export const serveThirtyDayNotice = async (
     return;
   }
 
-  const trialSessionEntity = new TrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession).validate();
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();
@@ -110,6 +101,8 @@ export const serveThirtyDayNotice = async (
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => aCase.docketNumber);
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+  const updatedCasesToSave: Case[] = [];
+  const sendEmailCalls: (() => Promise<void>)[] = [];
 
   const generateNottForCases = casesToUpdate.map(async rawCase => {
     const caseEntity = new Case(rawCase, { authorizedUser });
@@ -192,39 +185,37 @@ export const serveThirtyDayNotice = async (
         });
       }
 
-      await applicationContext
-        .getUseCaseHelpers()
-        .createAndServeNoticeDocketEntry(
-          applicationContext,
-          {
-            additionalDocketEntryInfo: {
-              date: trialSession.startDate,
-              trialLocation: trialSession.trialLocation,
-            },
-            caseEntity,
-            documentInfo: {
-              documentTitle: replaceBracketed(
-                thirtyDayNoticeDocumentInfo!.documentTitle,
-                formatDateString(
-                  trialSession.startDate,
-                  FORMATS.MMDDYYYY_DASHED,
+      sendEmailCalls.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .createAndServeNoticeDocketEntry(
+            applicationContext,
+            {
+              additionalDocketEntryInfo: {
+                date: trialSession.startDate,
+                trialLocation: trialSession.trialLocation,
+              },
+              caseEntity,
+              documentInfo: {
+                documentTitle: replaceBracketed(
+                  thirtyDayNoticeDocumentInfo!.documentTitle,
+                  formatDateString(
+                    trialSession.startDate,
+                    FORMATS.MMDDYYYY_DASHED,
+                  ),
+                  trialSession.trialLocation!,
                 ),
-                trialSession.trialLocation!,
-              ),
-              documentType: thirtyDayNoticeDocumentInfo!.documentType,
-              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+                documentType: thirtyDayNoticeDocumentInfo!.documentType,
+                eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+              },
+              newPdfDoc: paperServicePdf,
+              noticePdf,
+              onlyProSePetitioners: true,
             },
-            newPdfDoc: paperServicePdf,
-            noticePdf,
-            onlyProSePetitioners: true,
-          },
-          authorizedUser,
-        );
-
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+            authorizedUser,
+          ),
+      );
+      updatedCasesToSave.push(caseEntity);
 
       pdfsAppended++;
 
@@ -268,11 +259,27 @@ export const serveThirtyDayNotice = async (
     );
   }
 
-  trialSessionEntity.hasNottBeenServed = true;
+  await withTransaction(async () => {
+    const updateCases = updatedCasesToSave.map(async caseEntity => {
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
+    });
+    await settlePromises(updateCases);
 
-  await updateTrialSession({
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    trialSessionEntity.hasNottBeenServed = true;
+
+    await updateTrialSession({
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
   });
+
+  await settlePromises(
+    sendEmailCalls.map(async sendEmailCall => {
+      await sendEmailCall();
+    }),
+  );
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -296,8 +303,8 @@ export const determineEntitiesToLock = async (
   },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

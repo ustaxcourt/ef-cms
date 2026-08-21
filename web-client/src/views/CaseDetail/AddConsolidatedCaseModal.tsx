@@ -51,7 +51,10 @@ export const AddConsolidatedCaseModal = connect(
         <ModalCaseSearchBox />
 
         {(caseDetail && (
-          <FormGroup errorText={error}>
+          <FormGroup
+            errorText={error}
+            data-testid="add-consolidated-case-modal"
+          >
             <legend className="usa-legend" id="confirm-selection-legend">
               Confirm this is the case you want to consolidate
             </legend>

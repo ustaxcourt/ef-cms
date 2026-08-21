@@ -5,10 +5,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-import {
-  AUTOMATIC_BLOCKED_REASONS,
-  CHIEF_JUDGE,
-} from '@shared/business/entities/EntityConstants';
+import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
 import {
   ServiceUnavailableError,
@@ -70,15 +67,12 @@ describe('createCaseDeadlineInteractor', () => {
   it('creates a case deadline and marks the case as automatically blocked when there are no pending items', async () => {
     mockCase = MOCK_CASE_WITHOUT_PENDING;
 
-    const caseDeadline = await createCaseDeadlineInteractor(
+    await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
       mockPetitionsClerkUser,
     );
 
-    expect(caseDeadline).toBeDefined();
-    expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
-    expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
@@ -94,17 +88,12 @@ describe('createCaseDeadlineInteractor', () => {
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
 
-    const caseDeadline = await createCaseDeadlineInteractor(
+    await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
       mockPetitionsClerkUser,
     );
 
-    expect(caseDeadline).toBeDefined();
-    expect(caseDeadline.associatedJudge).toEqual('Judge Buch');
-    expect(caseDeadline.associatedJudgeId).toEqual(
-      'dabbad02-18d0-43ec-bafb-654e83405416',
-    );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,

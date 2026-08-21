@@ -7,7 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
-import { ApplyStamp } from './StampMotion/ApplyStamp';
+import { GrantDenyMotion } from './GrantDenyMotion/GrantDenyMotion';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -22,6 +22,7 @@ import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { ChangePassword } from '@web-client/views/Login/ChangePassword';
 import { ColdCaseReport } from '@web-client/views/ColdCaseReport/ColdCaseReport';
+import { DocketClerkReport } from '@web-client/views/DocketClerkReport/DocketClerkReport';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -30,6 +31,7 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardClerkOfCourt } from './Dashboards/DashboardClerkOfCourt';
 import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -123,7 +125,7 @@ const pages = {
   AddTrialSession,
   AdvancedSearch,
   AppMaintenance,
-  ApplyStamp,
+  GrantDenyMotion,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -144,11 +146,13 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardClerkOfCourt,
   DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
   DashboardJudge,
   DashboardRespondent,
+  DocketClerkReport,
   DocketEntryQc,
   EditCaseDetails,
   EditCorrespondenceDocument,

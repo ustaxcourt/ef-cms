@@ -8,6 +8,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/Login/confirmSignUpSequence';
+import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
@@ -24,6 +25,7 @@ import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/seq
 import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
+import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
@@ -40,8 +42,8 @@ import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/
 import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionsDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
+import { setTodaysOrdersCurrentPaginationPageSequence } from './sequences/Public/setTodaysOrdersCurrentPaginationPageSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
-import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
@@ -59,7 +61,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
-import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
+import { updateAdvancedSearchResultsSortSequence } from './sequences/updateAdvancedSearchResultsSortSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
@@ -81,6 +83,7 @@ export const presenterSequences = {
   closeModalAndNavigateToMaintenanceSequence:
     closeModalAndNavigateToMaintenanceSequence as unknown as Function,
   confirmSignUpSequence,
+  dismissAlertSequence,
   dismissModalSequence: dismissModalSequence as unknown as Function,
   displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
@@ -109,6 +112,7 @@ export const presenterSequences = {
   gotoTodaysOrdersSequence: showMaintenancePageDecorator(
     gotoTodaysOrdersSequence,
   ),
+  gotoVerifyEmailSequence,
   loadMoreTodaysOrdersSequence:
     loadMoreTodaysOrdersSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,
@@ -131,7 +135,7 @@ export const presenterSequences = {
   redirectToLoginSequence,
   resetPublicTrialSessionsDataSequence,
   setCurrentPaginationPageSequence,
-  showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
+  setTodaysOrdersCurrentPaginationPageSequence,
   sortTableSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence:
@@ -162,7 +166,7 @@ export const presenterSequences = {
     updateCaseAdvancedSearchByNameFormValueSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
-  updateDocumentSearchResultsSequence,
+  updateAdvancedSearchResultsSortSequence,
   updateFormValueSequence,
   updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence:

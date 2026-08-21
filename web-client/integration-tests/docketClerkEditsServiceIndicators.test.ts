@@ -52,7 +52,7 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
   petitionsClerkAddsRespondentsToCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
+  docketClerkEditsServiceIndicatorForPetitioner(cerebralTest, null);
   docketClerkEditsServiceIndicatorForPractitioner(cerebralTest);
   docketClerkEditsServiceIndicatorForRespondent(cerebralTest);
   // create an order to serve - it should be served to 3 paper service parties now

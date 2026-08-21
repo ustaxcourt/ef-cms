@@ -12,7 +12,7 @@ import {
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
@@ -311,7 +311,6 @@ describe('caseDetailHeaderHelper', () => {
           ...getBaseState(irsPractitionerUser),
           caseDetail: {
             ...getBaseState(irsPractitionerUser).caseDetail,
-            hasIrsPractitioner: true,
             isSealed: true,
           },
           screenMetadata: {
@@ -323,13 +322,13 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showFileFirstDocumentButton).toEqual(false);
     });
 
-    it("should be false when the user's role is respondent and they are not directly associated with the case", () => {
+    it("should be false when the user's role is respondent and they are not directly associated with the case and an irsPractitioner is present", () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(irsPractitionerUser),
           caseDetail: {
             ...getBaseState(irsPractitionerUser).caseDetail,
-            hasIrsPractitioner: true,
+            irsPractitioners: [{ userId: 'something' }],
           },
           screenMetadata: {
             isDirectlyAssociated: false,
@@ -346,7 +345,6 @@ describe('caseDetailHeaderHelper', () => {
           ...getBaseState(irsPractitionerUser),
           caseDetail: {
             ...getBaseState(irsPractitionerUser).caseDetail,
-            hasIrsPractitioner: false,
           },
           screenMetadata: {
             isDirectlyAssociated: false,
@@ -506,7 +504,7 @@ describe('caseDetailHeaderHelper', () => {
             ...getBaseState(irsPractitionerUser),
             caseDetail: {
               ...getBaseState(irsPractitionerUser).caseDetail,
-              hasIrsPractitioner: true,
+              irsPractitioners: [{ userId: '789' }],
             },
             screenMetadata: {
               isDirectlyAssociated: false,
@@ -544,7 +542,7 @@ describe('caseDetailHeaderHelper', () => {
             caseDetail: {
               ...getBaseState(dojPractitionerUser).caseDetail,
               canDojPractitionersRepresentParty: true,
-              hasIrsPractitioner: true,
+              irsPractitioners: [{ userId: '789' }],
             },
             screenMetadata: {
               isDirectlyAssociated: false,

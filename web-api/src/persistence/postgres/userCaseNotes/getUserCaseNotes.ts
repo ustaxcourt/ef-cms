@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/mapper';
 
 export const getUserCaseNotes = async ({

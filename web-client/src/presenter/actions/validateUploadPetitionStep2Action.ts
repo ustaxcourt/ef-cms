@@ -1,4 +1,4 @@
-import { UploadPetitionStep2 } from '@shared/business/entities/startCase/UploadPetitionStep2';
+import { UploadPetitionStep2 } from '@web-client/business/entities/startCase/UploadPetitionStep2';
 
 export const validateUploadPetitionStep2Action = ({
   path,

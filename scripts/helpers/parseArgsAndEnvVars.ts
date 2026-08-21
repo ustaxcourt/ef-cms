@@ -2,8 +2,6 @@ import {
   FORMATS,
   formatDateString,
   formatNow,
-  getJsDateFromIso,
-  validateDateAndCreateISO,
 } from '@shared/business/utilities/DateHandler';
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
@@ -14,7 +12,7 @@ export type ScriptConfig = {
     /**
      * List of environment variables that are required to be present.
      * The key is the property by which the parsed value will be
-     * returned and the value is the environment variable name
+     * returned, and the value is the environment variable name
      * (e.g. `env: 'ENV'`).
      */
     [key: string]: string;
@@ -33,6 +31,12 @@ export type ScriptConfig = {
      */
     [key: string]: ScriptParameter;
   };
+  /**
+   * The `preventExecutionAgainst` property indicates environments the script
+   * should not execute against. If 'local' is provided, execution will be
+   * prevented if the `ENV` environment variable is not present.
+   */
+  preventExecutionAgainst?: string[];
   /**
    * The `requireActiveAwsSession` property indicates whether the AWS session
    * token should be currently active.
@@ -249,6 +253,9 @@ const usage = (sc: ScriptConfig, warning?: string): void => {
       Object.values(sc.environment),
     );
   }
+  if (sc.preventExecutionAgainst) {
+    console.log('\nPrevent Execution Against:', sc.preventExecutionAgainst);
+  }
   if (sc.requireActiveAwsSession) {
     console.log('\nActive AWS session required.');
   }
@@ -435,11 +442,8 @@ const parseAndTransformValues = (
     // parseArgs doesn't distinguish longName from varName like we do
     const longName = paramConfig.long?.length ? paramConfig.long : varName;
     let value:
-      | string
-      | boolean
-      | number
-      | (string | boolean | number)[]
-      | undefined = paramConfig.default;
+      string | boolean | number | (string | boolean | number)[] | undefined =
+      paramConfig.default;
     if (
       'position' in paramConfig &&
       typeof paramConfig.position !== 'undefined' &&
@@ -522,6 +526,21 @@ export const getEnvironmentVariables = (environment?: {
   return ret;
 };
 
+const preventExecutionAgainstEnvironment = (
+  sc: ScriptConfig,
+  verbose: boolean,
+): void => {
+  const { env } = getEnvironmentVariables({ env: 'ENV' });
+  const envToCheck = env || 'local';
+  if (sc.preventExecutionAgainst!.includes(envToCheck)) {
+    showErrorAndExit(
+      `Execution against ${envToCheck} is not permitted.`,
+      sc,
+      verbose,
+    );
+  }
+};
+
 const checkAwsSessionExpiration = (
   sc: ScriptConfig,
   verbose: boolean,
@@ -579,47 +598,13 @@ export const parseArgsAndEnvVars = (
     console.log('environment variables:', environmentVariables);
   }
 
+  if (sc.preventExecutionAgainst && sc.preventExecutionAgainst.length > 0) {
+    preventExecutionAgainstEnvironment(sc, !!parsedParameters.verbose);
+  }
+
   if (sc.requireActiveAwsSession) {
     checkAwsSessionExpiration(sc, !!parsedParameters.verbose);
   }
 
   return { ...environmentVariables, ...parsedParameters };
-};
-
-export const getTimeframeForYear = ({
-  fiscal,
-  year,
-}: {
-  fiscal?: boolean;
-  year: string;
-}): {
-  begin: string; // ISO date string
-  end: string; // ISO date string
-} => {
-  return {
-    begin: validateDateAndCreateISO({
-      day: '1',
-      month: fiscal ? '10' : '1',
-      year: fiscal ? `${Number(year) - 1}` : year,
-    })!,
-    end: validateDateAndCreateISO({
-      day: '1',
-      month: fiscal ? '10' : '1',
-      year: fiscal ? year : `${Number(year) + 1}`,
-    })!,
-  };
-};
-
-export const getJsTimeframeForYear = ({
-  fiscal,
-  year,
-}: {
-  fiscal?: boolean;
-  year: string;
-}): { begin: Date; end: Date } => {
-  const { begin, end } = getTimeframeForYear({ fiscal, year });
-  return {
-    begin: getJsDateFromIso(begin),
-    end: getJsDateFromIso(end),
-  };
 };

@@ -23,13 +23,13 @@ export const updateCreateOrderModalFormValueAction = ({
       const entry = ORDER_TYPES_MAP.find(item => {
         return item.eventCode === eventCode;
       });
-      store.set(state.modal.documentType, entry.documentType);
+      store.set(state.modal.documentType, entry!.documentType);
       if (eventCode === 'NOT') {
         store.set(state.modal.documentTitle, 'Notice');
       } else if (eventCode === 'O') {
         store.set(state.modal.documentTitle, 'Order');
       } else {
-        store.set(state.modal.documentTitle, entry.documentTitle);
+        store.set(state.modal.documentTitle, entry!.documentTitle);
       }
     } else {
       store.unset(state.modal.eventCode);

@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { clean } from 'esbuild-plugin-clean';
 import { copy } from 'esbuild-plugin-copy';
 import { fileURLToPath } from 'url';

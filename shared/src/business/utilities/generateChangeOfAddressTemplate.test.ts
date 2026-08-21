@@ -114,7 +114,6 @@ describe('getDocumentTypeForAddressChange', () => {
 
   it('Returns a Notice of Change of Address and Telephone Number when both the phone and address fields differ', () => {
     const result = getDocumentTypeForAddressChange({
-      caseDetail,
       newData: {
         address1: 'Address One',
         phone: '321-321-4321',

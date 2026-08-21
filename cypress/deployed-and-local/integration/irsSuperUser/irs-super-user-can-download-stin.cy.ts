@@ -5,41 +5,36 @@ import { loginAsPetitioner } from '../../../helpers/authentication/login-as-help
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { v4 } from 'uuid';
 
-if (!Cypress.env('SMOKETESTS_LOCAL')) {
-  describe('irs superuser integration', () => {
-    const password = getCypressEnv().defaultAccountPass;
-    const userName = `cypress_test_account_${v4().substring(0, 8)}@example.com`; // we substring because there is a 64 joi character limit on emails
+describe('irs superuser integration', () => {
+  const password = getCypressEnv().defaultAccountPass;
+  const userName = `cypress_test_account_${v4().substring(0, 8)}@example.com`; // we substring because there is a 64 joi character limit on emails
 
-    beforeEach(() => {
-      Cypress.session.clearCurrentSessionData();
+  beforeEach(function () {
+    if (getCypressEnv().isLocal) {
+      this.skip();
+    }
+    Cypress.session.clearCurrentSessionData();
+  });
+
+  it('should let an irs superuser view the reconciliation report and download a STIN', () => {
+    cy.task('createAccount', {
+      isIrsEnv: true,
+      name: 'irsSuperUser CI/CD',
+      password,
+      role: ROLES.irsSuperuser,
+      userId: v4(),
+      userName,
     });
 
-    it('should let an irs superuser view the reconciliation report and download a STIN', () => {
-      cy.task('createAccount', {
-        isIrsEnv: true,
-        name: 'irsSuperUser CI/CD',
-        password,
-        role: ROLES.irsSuperuser,
-        userId: v4(),
-        userName,
-      });
-
-      cy.task('getIrsBearerToken', { password, userName }).then(idToken => {
-        loginAsPetitioner();
-        externalUserCreatesElectronicCase().then(docketNumber => {
-          petitionsClerkQcsAndServesElectronicCase(docketNumber);
-          verifyReconciliationReportAndStinUrl(idToken as string);
-        });
+    cy.task('getIrsBearerToken', { password, userName }).then(idToken => {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        petitionsClerkQcsAndServesElectronicCase(docketNumber);
+        verifyReconciliationReportAndStinUrl(idToken as string);
       });
     });
   });
-} else {
-  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
-    it('should skip', () => {
-      expect(true).to.equal(true);
-    });
-  });
-}
+});
 
 /**
  *

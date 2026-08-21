@@ -1,7 +1,8 @@
+import { Get } from 'cerebral';
 import { withAppContextDecorator } from './withAppContext';
 
 const myFunc = jest.fn();
-const mockGet = jest.fn();
+const mockGet = jest.fn() as unknown as Get;
 const mockAppContext = {};
 
 describe('withAppContextDecorator', () => {

@@ -11,7 +11,7 @@ describe('setUserAction', () => {
 
   afterEach(() => {
     delete process.env.USTC_ENV;
-    delete global.window;
+    delete (global as any).window;
   });
 
   it('stores the user cerebral state', async () => {

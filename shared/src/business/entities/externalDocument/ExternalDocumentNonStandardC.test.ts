@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardC', () => {
@@ -107,6 +107,16 @@ describe('ExternalDocumentNonStandardC', () => {
       expect(externalDocumentC.getDocumentTitle()).toEqual(
         'Affidavit Of Lori Loughlin in Support Of',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentC = ExternalDocumentFactory({
+        category: 'Supporting Document',
+        documentType: 'Affidavit in Support',
+        scenario: 'Nonstandard C',
+      });
+
+      expect(externalDocumentC.getDocumentTitle()).toEqual('');
     });
   });
 });

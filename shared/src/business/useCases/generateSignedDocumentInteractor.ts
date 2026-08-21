@@ -28,7 +28,7 @@ export const computeCoordinates = ({
 
   const boxCoordinates = applicationContext
     .getUtilities()
-    .getStampBoxCoordinates({
+    .getRotationAdjustedBoxCoordinates({
       bottomLeftBoxCoordinates,
       cropBox: { x: cropBox.x, y: cropBox.y },
       pageHeight: cropBox.pageHeight,
@@ -104,7 +104,7 @@ export const generateSignedDocumentInteractor = async (
     pdfData: any;
     posX: number;
     posY: number;
-    scale: number;
+    scale?: number;
     sigTextData: any;
   },
 ) => {

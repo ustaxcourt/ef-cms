@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 BEARER_AUTH="Bearer petitioner"
 echo "$BEARER_AUTH"

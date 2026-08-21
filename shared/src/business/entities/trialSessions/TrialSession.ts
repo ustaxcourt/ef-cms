@@ -107,6 +107,7 @@ export class TrialSession extends JoiValidationEntity {
   public term: string;
   public termYear: string;
   public trialClerk?: TTrialClerk;
+  public trialClerkId?: string;
   public trialLocation?: string;
   public trialSessionId: string;
   public paperServicePdfs: { fileId: string; title: string }[];
@@ -180,6 +181,7 @@ export class TrialSession extends JoiValidationEntity {
     this.swingSessionId = rawSession.swingSessionId;
     this.term = rawSession.term;
     this.termYear = rawSession.termYear;
+    this.trialClerkId = rawSession.trialClerkId;
     this.trialLocation = this.isStandaloneRemote()
       ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       : rawSession.trialLocation;
@@ -243,11 +245,26 @@ export class TrialSession extends JoiValidationEntity {
     COMMON: {
       address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
       address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
-      alternateTrialClerkName: joi.when('trialClerk', {
-        is: joi.exist(),
-        otherwise: JoiValidationConstants.STRING.max(100).allow('').optional(),
-        then: joi.any().forbidden(),
-      }),
+      alternateTrialClerkName: joi
+        .when('trialClerk', {
+          is: joi.exist(),
+          otherwise: JoiValidationConstants.STRING.max(100)
+            .allow('')
+            .optional(),
+          then: joi.any().forbidden(),
+        })
+        .when('trialClerkId', {
+          is: 'Other',
+          otherwise: joi.optional(),
+          then: JoiValidationConstants.STRING.max(100).required().messages({
+            'string.max':
+              'Maximum length of alternate trial clerk name is 100 characters',
+            'any.required':
+              'An alternate trial clerk name must be provided if "Other" is selected',
+            'string.empty':
+              'An alternate trial clerk name must be provided if "Other" is selected',
+          }),
+        }),
       chambersPhoneNumber: stringRequiredForRemoteProceedings,
       city: JoiValidationConstants.STRING.max(100).allow('').optional(),
       courtReporter: JoiValidationConstants.STRING.max(100).optional(),

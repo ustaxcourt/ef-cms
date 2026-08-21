@@ -10,8 +10,8 @@ const JUDGES_CHAMBERS = getTestJudgesChambers();
 export const userSendsMessage = (
   cerebralTest,
   subject,
-  judgesChambersSection,
-  judgeUserId,
+  judgesChambersSection?,
+  judgeUserId?,
 ) => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {

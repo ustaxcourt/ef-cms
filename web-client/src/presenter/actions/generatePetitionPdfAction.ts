@@ -1,4 +1,4 @@
-import { GeneratePetitionPdf } from '@shared/business/entities/startCase/GeneratePetitionPdf';
+import { GeneratePetitionPdf } from '@web-client/business/entities/startCase/GeneratePetitionPdf';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 

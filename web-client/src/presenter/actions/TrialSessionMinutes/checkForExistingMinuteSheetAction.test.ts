@@ -1,10 +1,10 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { checkForExistingMinuteSheetAction } from './checkForExistingMinuteSheetAction';
-import { getMinuteSheetInteractor } from '@shared/proxies/trialSessionMinutes/getMinuteSheetProxy';
+import { getMinuteSheetInteractor } from '@web-client/proxies/trialSessionMinutes/getMinuteSheetProxy';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-jest.mock('@shared/proxies/trialSessionMinutes/getMinuteSheetProxy');
+jest.mock('@web-client/proxies/trialSessionMinutes/getMinuteSheetProxy');
 
 describe('checkForExistingMinuteSheetAction', () => {
   const mockYesPath = jest.fn();

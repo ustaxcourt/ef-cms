@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 ENV=$1
 DEPLOYING_COLOR=$2
@@ -10,6 +11,10 @@ DEPLOYING_COLOR=$2
 REGION="us-east-1"
 API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+
+# Unique id per release used by CloudWatch RUM to locate the matching source
+# maps. Must match the S3 folder the `.map` files are uploaded to (deploy-ui.sh).
+RUM_RELEASE_ID="${RUM_RELEASE_ID:-$CIRCLE_SHA1}"
 
 PUBLIC_SITE_URL="https://${EFCMS_DOMAIN}"
 
@@ -40,6 +45,7 @@ STAGE="${ENV}" \
   CI="" \
   RUM_APP_MONITOR_ID="${RUM_APP_MONITOR_ID}" \
   RUM_IDENTITY_POOL_ID="${RUM_IDENTITY_POOL_ID}" \
+  RUM_RELEASE_ID="${RUM_RELEASE_ID}" \
   RUM_SAMPLE_RATE="${RUM_SAMPLE_RATE}" \
   DYNAMSOFT_PRODUCT_KEYS="${DYNAMSOFT_PRODUCT_KEYS}" \
   npm run build:client

@@ -9,22 +9,13 @@ import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persist
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
-/**
- * unseals a given docket entry on a case
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to unseal
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated docket entry after it has been unsealed
- */
 export const unsealDocketEntryInteractor = async (
   {
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawDocketEntry> => {
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY,

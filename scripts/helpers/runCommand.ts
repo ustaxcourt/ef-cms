@@ -5,6 +5,10 @@ export const runCommand = async (
   cmd: string,
   params?: string[],
   envvars?: { [key: string]: string },
+  {
+    captureStdout = true,
+    streamStdout = false,
+  }: { captureStdout?: boolean; streamStdout?: boolean } = {},
 ): Promise<string> => {
   const env = envvars ? { ...process.env, ...envvars } : { ...process.env };
   return new Promise((resolve, reject) => {
@@ -12,10 +16,15 @@ export const runCommand = async (
     let stderr: string;
     const result = spawn(cmd, params, { env, stdio: 'pipe' });
     result.stdout.on('data', data => {
-      if (!stdout) {
-        stdout = data.toString('utf-8');
-      } else {
-        stdout += data.toString('utf-8');
+      if (streamStdout) {
+        process.stdout.write(data);
+      }
+      if (captureStdout) {
+        if (!stdout) {
+          stdout = data.toString('utf-8');
+        } else {
+          stdout += data.toString('utf-8');
+        }
       }
     });
     result.stderr.on('data', data => {

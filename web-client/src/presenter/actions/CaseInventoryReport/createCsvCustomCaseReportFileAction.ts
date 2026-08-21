@@ -1,5 +1,5 @@
 import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
-import { createCsvCustomCaseReportFileInteractor } from '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
+import { createCsvCustomCaseReportFileInteractor } from '@web-client/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
 import {
   createEndOfDayISO,
   createStartOfDayISO,

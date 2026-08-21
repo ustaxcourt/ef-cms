@@ -12,7 +12,7 @@ export const isRespondentInCaseAction = ({ get, path }: ActionProps) => {
   const irsPractitioners = get(state.modal.respondentMatches);
   if (
     irsPractitioners.length === 1 &&
-    caseDetail.irsPractitioners.find(
+    caseDetail.irsPractitioners!.find(
       respondent => respondent.userId === irsPractitioners[0].userId,
     )
   ) {

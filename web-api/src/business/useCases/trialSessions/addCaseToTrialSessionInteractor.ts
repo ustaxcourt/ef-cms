@@ -13,10 +13,10 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  * addCaseToTrialSession
- * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
  * @param {string} providers.trialSessionId the id of the trial session
@@ -35,7 +35,7 @@ const addCaseToTrialSession = async (
     trialSessionId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)
   ) {
@@ -78,23 +78,23 @@ const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  await withTransaction(async () => {
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
-  await createOrUpdateTrialSessionCases({
-    trialSessionCases: [
-      {
-        caseOrder,
-        docketNumber,
-        isHearing: false,
-        trialSessionId,
-      },
-    ],
+    await createOrUpdateTrialSessionCases({
+      trialSessionCases: [
+        {
+          caseOrder,
+          docketNumber,
+          isHearing: false,
+          trialSessionId,
+        },
+      ],
+    });
   });
-
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addCaseToTrialSessionInteractor = withLocking(

@@ -15,9 +15,10 @@ export const MessageDocument = connect(
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToStatusReportOrderSequence:
       sequences.navigateToStatusReportOrderSequence,
+    navigateToPathAndSetRedirectUrlSequence:
+      sequences.navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -39,8 +40,8 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
-    navigateToPathSequence,
     navigateToStatusReportOrderSequence,
+    navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -182,26 +183,28 @@ export const MessageDocument = connect(
             data-testid="order-response-button"
             icon="edit"
             onClick={() => {
-              navigateToPathSequence({
+              navigateToPathAndSetRedirectUrlSequence({
                 path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
             Order Response
           </Button>
         )}
-        {messageDocumentHelper.showApplyStampButton && (
+        {messageDocumentHelper.showGrantDenyMotionButton && (
           <Button
             link
-            data-testid="apply-stamp"
+            data-testid="grant-deny-motion"
             icon="stamp"
             onClick={() => {
-              navigateToPathSequence({
-                path: messageDocumentHelper.applyStampFromMessagesLink,
+              navigateToPathAndSetRedirectUrlSequence({
+                path: messageDocumentHelper.grantDenyMotionFromMessagesLink,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
-            Apply Stamp
+            Grant/Deny
           </Button>
         )}
         {messageDocumentHelper.showStatusReportOrderButton && (
@@ -257,6 +260,13 @@ export const MessageDocument = connect(
           messageDocumentHelper.showServiceWarning && (
             <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
               Document cannot be served until the Petition is served.
+            </div>
+          )}
+        {messageViewerDocumentToDisplay &&
+          messageDocumentHelper.showLeadCaseWarning && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              This document can only be served from the lead case in a
+              consolidated group. This is a member case.
             </div>
           )}
 

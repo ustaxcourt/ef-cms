@@ -38,7 +38,11 @@ import {
   subtractISODates,
   validateDateAndCreateISO,
   isValidPastDate,
+  formatDateFromDatePicker,
+  getJsTimeframeForYear,
+  getTimeframeForYear,
 } from './DateHandler';
+import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 
 describe('DateHandler', () => {
   const timeZones = [
@@ -222,6 +226,62 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
+    });
+
+    it('returns the same day if how much is 0', () => {
+      const result = calculateISODate({
+        dateString: '2020-03-01T05:00:00.000Z',
+        howMuch: 0,
+        units: 'days',
+      });
+
+      expect(result).toEqual('2020-03-01T05:00:00.000Z');
+    });
+
+    describe('Daylight Saving Time (DST) arithmetic logic', () => {
+      it('calculates boundaries correctly crossing Fall back (Nov)', () => {
+        // Midnight EDT (-04:00) before boundary jump
+        const dateString = '2026-10-31T04:00:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: 5,
+          units: 'days',
+        });
+
+        // 5 days later is Nov 5th. DST ends on Nov 1 in 2026.
+        // It should map to midnight EST (-05:00)
+        expect(result).toEqual('2026-11-05T05:00:00.000Z');
+      });
+
+      it('calculates boundaries correctly crossing Spring forward (March)', () => {
+        // Midnight EST (-05:00) before boundary jump
+        const dateString = '2026-03-06T05:00:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: 5,
+          units: 'days',
+        });
+
+        // 5 days later is March 11. DST starts on March 8 in 2026.
+        // It should map to midnight EDT (-04:00)
+        expect(result).toEqual('2026-03-11T04:00:00.000Z');
+      });
+
+      it('accurately retrieves yesterday during Fall back regardless of 24h/25h elapsed cycle', () => {
+        // 23:30 EDT on Nov 1, 2026.
+        const dateString = '2026-11-01T23:30:00.000Z';
+
+        const result = calculateISODate({
+          dateString,
+          howMuch: -1,
+          units: 'days',
+        });
+
+        // Should logically represent exactly Oct 31, 23:30 EDT
+        expect(result).toEqual('2026-10-31T22:30:00.000Z');
+      });
     });
   });
 
@@ -729,6 +789,16 @@ describe('DateHandler', () => {
 
       expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
     });
+
+    it('should return a UTC Z ISO string when outputFormat is ISO', () => {
+      const result = getBusinessDateInFuture({
+        numberOfDays: 30,
+        outputFormat: FORMATS.ISO,
+        startDate: '2021-05-31',
+      });
+
+      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+    });
   });
 
   describe('isDateWithinGivenInterval', () => {
@@ -1093,6 +1163,75 @@ describe('DateHandler', () => {
 
     it('returns false for invalid input', () => {
       expect(isValidPastDate('not-a-date')).toBe(false);
+    });
+  });
+
+  describe('formatDateFromDatePicker', () => {
+    it('should return a date, formatted using the pattern provided when the input date is valid', () => {
+      const output = formatDateFromDatePicker('08/29/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-08-29');
+    });
+
+    it('should return the exact date provided when the input date is invalid', () => {
+      const output = formatDateFromDatePicker('08/xy/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('08/xy/2023');
+    });
+
+    it('should format the date when month and day is only one digit', () => {
+      const output = formatDateFromDatePicker('9/9/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-09-09');
+    });
+
+    it('should return a UTC ISO timestamp with a Z suffix when formatting for persistence', () => {
+      const output = formatDateFromDatePicker('01/02/2020', FORMATS.ISO);
+
+      expect(output).toEqual('2020-01-02T05:00:00.000Z');
+    });
+
+    it('should return an ISO timestamp that passes JoiValidationConstants.ISO_DATE', () => {
+      const output = formatDateFromDatePicker('01/02/2020', FORMATS.ISO);
+
+      const { error } =
+        JoiValidationConstants.ISO_DATE.max('now').validate(output);
+
+      expect(error).toBeUndefined();
+    });
+  });
+
+  describe('getTimeframeForYear', () => {
+    it('determines the timeframe for a given calendar year', () => {
+      const timeframe = getTimeframeForYear({ year: '2024' });
+      expect(timeframe).toEqual({
+        begin: '2024-01-01T05:00:00.000Z',
+        end: '2025-01-01T05:00:00.000Z',
+      });
+    });
+    it('determines the timeframe for a given fiscal year', () => {
+      const timeframe = getTimeframeForYear({ fiscal: true, year: '2024' });
+      expect(timeframe).toEqual({
+        begin: '2023-10-01T04:00:00.000Z',
+        end: '2024-10-01T04:00:00.000Z',
+      });
+    });
+  });
+
+  describe('getJsTimeframeForYear', () => {
+    it('determines the timeframe for a given calendar year and returns JS dates', () => {
+      const jsTimeframe = getJsTimeframeForYear({ year: '2024' });
+      expect(jsTimeframe).toEqual({
+        begin: new Date('2024-01-01T05:00:00.000Z'),
+        end: new Date('2025-01-01T05:00:00.000Z'),
+      });
+    });
+    it('determines the timeframe for a given fiscal year and returns JS dates', () => {
+      const jsTimeframe = getJsTimeframeForYear({ fiscal: true, year: '2024' });
+      expect(jsTimeframe).toEqual({
+        begin: new Date('2023-10-01T04:00:00.000Z'),
+        end: new Date('2024-10-01T04:00:00.000Z'),
+      });
     });
   });
 });

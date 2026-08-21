@@ -1,0 +1,330 @@
+import {
+  type CoverageSuite,
+  type CoverageSummary,
+} from '../github-actions/suite-coverage.helpers';
+import { getCoverageSummary as getStoredCoverageSummary } from '../github-actions/suite-coverage.helpers';
+import { runCommand } from '../helpers/runCommand';
+
+export type GitHubLabel = {
+  name: string;
+};
+
+export type GitHubUser = {
+  login?: string | null;
+  name?: string | null;
+};
+
+export type GitHubCommit = {
+  authors: GitHubUser[];
+  messageHeadline: string;
+};
+
+export type GitHubPullRequestFile = {
+  path: string;
+};
+
+export type GitHubStatusCheck = {
+  context: string;
+  createdAt?: string;
+  targetUrl?: string;
+};
+
+export type GitHubPullRequest = {
+  author: GitHubUser | null;
+  body: string;
+  commits: GitHubCommit[];
+  createdAt: string;
+  files?: GitHubPullRequestFile[];
+  labels: GitHubLabel[];
+  mergeCommit?: {
+    oid: string;
+  } | null;
+  mergedAt: string | null;
+  number: number;
+  statusCheckRollup?: GitHubStatusCheck[];
+  title: string;
+  url: string;
+};
+
+export type GitHubIssue = {
+  assignees: GitHubUser[];
+  body: string;
+  labels: GitHubLabel[];
+  number: number;
+};
+
+export type LatestProdPullRequest = {
+  mergedAt: string;
+  number: number;
+};
+
+export interface GitHubClient {
+  getCoverageSummary(
+    pullRequestNumber: number,
+    suite: CoverageSuite,
+    headSha?: string,
+  ): Promise<CoverageSummary | undefined>;
+  getIssue(issueNumber: number): Promise<GitHubIssue>;
+  getLatestProdPullRequest(): Promise<LatestProdPullRequest>;
+  getMergeCommitStatusContexts(
+    mergeCommitOid: string,
+  ): Promise<GitHubStatusCheck[]>;
+  getPullRequest(pullRequestNumber: number): Promise<GitHubPullRequest>;
+  listMergedStagingPullRequests(
+    mergedAfter: string,
+  ): Promise<GitHubPullRequest[]>;
+}
+
+export type CommandRunner = (
+  cmd: string,
+  params?: string[],
+  envvars?: { [key: string]: string },
+) => Promise<string>;
+
+const GH_ENV_VARS = {
+  GH_PAGER: 'cat',
+  PAGER: 'cat',
+};
+
+const parseJsonOutput = <T>(output: string): T => {
+  return JSON.parse(output) as T;
+};
+
+const runGhJsonCommand = async <T>({
+  args,
+  commandRunner,
+}: {
+  args: string[];
+  commandRunner: CommandRunner;
+}): Promise<T> => {
+  const output = await commandRunner('gh', args, GH_ENV_VARS);
+
+  return parseJsonOutput<T>(output);
+};
+
+type MergeCommitStatusContextNode = {
+  context?: string | null;
+  createdAt?: string | null;
+  targetUrl?: string | null;
+};
+
+type MergeCommitStatusContextsResponse = {
+  data?: {
+    repository?: {
+      object?: {
+        statusCheckRollup?: {
+          contexts?: {
+            nodes?: Array<MergeCommitStatusContextNode | null>;
+          };
+        };
+      } | null;
+    } | null;
+  };
+};
+
+export class GhCliGitHubClient implements GitHubClient {
+  private readonly commandRunner: CommandRunner;
+  private cachedRepositoryNameWithOwner?: Promise<string>;
+  private cachedToken?: Promise<string>;
+
+  constructor({
+    commandRunner = runCommand,
+  }: { commandRunner?: CommandRunner } = {}) {
+    this.commandRunner = commandRunner;
+  }
+
+  async getCoverageSummary(
+    pullRequestNumber: number,
+    suite: CoverageSuite,
+    headSha?: string,
+  ): Promise<CoverageSummary | undefined> {
+    return await getStoredCoverageSummary({
+      headSha,
+      pullRequestNumber,
+      repository: await this.getRepositoryNameWithOwner(),
+      suite,
+      token: await this.getGitHubToken(),
+    });
+  }
+
+  async getIssue(issueNumber: number): Promise<GitHubIssue> {
+    return await runGhJsonCommand<GitHubIssue>({
+      args: [
+        'issue',
+        'view',
+        issueNumber.toString(),
+        '--json',
+        'assignees,body,labels,number',
+      ],
+      commandRunner: this.commandRunner,
+    });
+  }
+
+  private async getGitHubToken(): Promise<string> {
+    if (!this.cachedToken) {
+      this.cachedToken = this.commandRunner(
+        'gh',
+        ['auth', 'token'],
+        GH_ENV_VARS,
+      );
+    }
+
+    return await this.cachedToken;
+  }
+
+  async getLatestProdPullRequest(): Promise<LatestProdPullRequest> {
+    const pullRequests = await runGhJsonCommand<LatestProdPullRequest[]>({
+      args: [
+        'pr',
+        'list',
+        '--base',
+        'prod',
+        '--state',
+        'merged',
+        '--limit',
+        '100',
+        '--json',
+        'mergedAt,number',
+      ],
+      commandRunner: this.commandRunner,
+    });
+
+    const latestProdPullRequest = pullRequests
+      .filter(
+        (pullRequest): pullRequest is LatestProdPullRequest =>
+          Boolean(pullRequest.mergedAt) && Boolean(pullRequest.number),
+      )
+      .sort((a, b) => b.mergedAt.localeCompare(a.mergedAt))[0];
+
+    if (!latestProdPullRequest) {
+      throw new Error(
+        'Unable to determine the latest merged prod pull request timestamp.',
+      );
+    }
+
+    return latestProdPullRequest;
+  }
+
+  async getMergeCommitStatusContexts(
+    mergeCommitOid: string,
+  ): Promise<GitHubStatusCheck[]> {
+    const repository = await this.getRepositoryNameWithOwner();
+    const [owner, name] = repository.split('/');
+    const query = `
+      query($oid: GitObjectID!, $owner: String!, $name: String!) {
+        repository(owner: $owner, name: $name) {
+          object(oid: $oid) {
+            ... on Commit {
+              statusCheckRollup {
+                contexts(first: 100) {
+                  nodes {
+                    ... on StatusContext {
+                      context
+                      targetUrl
+                      createdAt
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`;
+
+    const output = await runGhJsonCommand<MergeCommitStatusContextsResponse>({
+      args: [
+        'api',
+        'graphql',
+        '-F',
+        `oid=${mergeCommitOid}`,
+        '-F',
+        `owner=${owner}`,
+        '-F',
+        `name=${name}`,
+        '-f',
+        `query=${query}`,
+      ],
+      commandRunner: this.commandRunner,
+    });
+
+    const nodes =
+      output.data?.repository?.object?.statusCheckRollup?.contexts?.nodes || [];
+    const statusChecks: GitHubStatusCheck[] = [];
+
+    for (const node of nodes) {
+      if (node?.context) {
+        const statusCheck: GitHubStatusCheck = {
+          context: node.context,
+        };
+
+        if (node.createdAt) {
+          statusCheck.createdAt = node.createdAt;
+        }
+
+        if (node.targetUrl) {
+          statusCheck.targetUrl = node.targetUrl;
+        }
+
+        statusChecks.push(statusCheck);
+      }
+    }
+
+    return statusChecks;
+  }
+
+  async getPullRequest(pullRequestNumber: number): Promise<GitHubPullRequest> {
+    return await runGhJsonCommand<GitHubPullRequest>({
+      args: [
+        'pr',
+        'view',
+        pullRequestNumber.toString(),
+        '--json',
+        'author,body,commits,createdAt,files,labels,mergeCommit,mergedAt,number,statusCheckRollup,title,url',
+      ],
+      commandRunner: this.commandRunner,
+    });
+  }
+
+  private async getRepositoryNameWithOwner(): Promise<string> {
+    if (!this.cachedRepositoryNameWithOwner) {
+      this.cachedRepositoryNameWithOwner = runGhJsonCommand<{
+        nameWithOwner: string;
+      }>({
+        args: ['repo', 'view', '--json', 'nameWithOwner'],
+        commandRunner: this.commandRunner,
+      }).then(repository => repository.nameWithOwner);
+    }
+
+    return await this.cachedRepositoryNameWithOwner;
+  }
+
+  async listMergedStagingPullRequests(
+    mergedAfter: string,
+  ): Promise<GitHubPullRequest[]> {
+    const pullRequestNumbers = await runGhJsonCommand<
+      Array<{ number: number }>
+    >({
+      args: [
+        'pr',
+        'list',
+        '--base',
+        'staging',
+        '--state',
+        'merged',
+        '--search',
+        `merged:>${mergedAfter}`,
+        '--limit',
+        '100',
+        '--json',
+        'number',
+      ],
+      commandRunner: this.commandRunner,
+    });
+
+    return await Promise.all(
+      pullRequestNumbers.map(({ number }: { number: number }) =>
+        this.getPullRequest(number),
+      ),
+    );
+  }
+}

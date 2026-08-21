@@ -2,7 +2,7 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import {
   attachDocketEntriesToWorkItemQC,
   workItemQCQueryBase,

@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
-import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
+import { getDocketEntryProcessingStatusLambda } from './lambdas/documents/getDocketEntryProcessingStatusLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
@@ -21,6 +21,7 @@ import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabi
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
 import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
+import { getClerkDashboardStatsLambda } from './lambdas/reports/getClerkDashboardStatsLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -59,7 +60,6 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
-import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
@@ -78,6 +78,7 @@ import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDea
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
@@ -104,6 +105,7 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
+import { getUnscheduledMinuteSheetsLambda } from './lambdas/trialSessionMinutes/getUnscheduledMinuteSheetsLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -117,6 +119,11 @@ import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPract
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
+import {
+  EXPOSED_RESPONSE_HEADERS,
+  X_DEPLOYMENT_TIMESTAMP,
+  X_FORCE_REFRESH,
+} from '@shared/utils/headers';
 import { getTrialSessionPlanningReportLambda } from '@web-api/lambdas/trialSessions/getTrialSessionPlanningReportLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
@@ -196,14 +203,15 @@ import { updateUserContactInformationLambda } from './lambdas/users/updateUserCo
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
+import { getCaseDocketEntriesLambda as v2GetCaseDocketEntriesLambda } from './lambdas/v2/getCaseDocketEntriesLambda';
 import { getCaseLambda as v2GetCaseLambda } from './lambdas/v2/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from './lambdas/v2/getDocumentDownloadUrlLambda';
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
+import qs from 'qs';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
@@ -211,11 +219,34 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
+import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
+import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
+import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCaseContactAddressLambda';
 
 export const app = express();
 
-// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
-app.set('query parser', 'extended');
+// We explicitly use qs as our query parser: it was the default in express 4.x.,
+// but was no longer the default in express 5.x, so we need to explicitly set it
+// here. See https://github.com/ustaxcourt/ef-cms/pull/6020
+//
+// By default, qs limits arrays to a maximum of 20:
+//
+// > qs will also limit arrays to a maximum of 20 elements. Any array members
+// > with an index of 20 or greater will instead be converted to an object with
+// > the index as the key. This is needed to handle cases when someone sent,
+// > for example, a[999999999] and it will take significant time to iterate over
+// > this huge array. (https://www.npmjs.com/package/qs)
+//
+// Some API requests involve more than 20 query string parameters by necessity
+// due to the number of judges (for example, searching for all judges using
+// getPendingMotionDocketEntriesForCurrentJudgeInteractor). Here we set the
+// array length to 200 to prohibit DoS attacks, while at the same time
+// accommodating cases when we need to pass more than 20 items in an array as
+// query string parameters.
+app.set('query parser', str => qs.parse(str, { arrayLimit: 200 }));
 
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
@@ -278,14 +309,21 @@ app.use((req, res, next) => {
     process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.set(X_FORCE_REFRESH, 'true');
+    res.set(
+      'Access-Control-Expose-Headers',
+      EXPOSED_RESPONSE_HEADERS.join(', '),
+    );
+    if (process.env.DEPLOYMENT_TIMESTAMP) {
+      res.set(X_DEPLOYMENT_TIMESTAMP, process.env.DEPLOYMENT_TIMESTAMP);
+    }
     res.status(500).send('this api is disabled due to a deployment');
     return;
   }
 
   next();
 });
+
 app.use(expressLogger);
 
 /**
@@ -314,8 +352,14 @@ app.use(expressLogger);
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
   app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
+    '/async/docket-record-pdf',
+    lambdaWrapper(
+      generateDocketRecordPdfLambda,
+      {
+        isAsyncSync: true,
+      },
+      applicationContext,
+    ),
   );
 }
 
@@ -390,7 +434,7 @@ app.use(expressLogger);
   );
   // POST
   app.post(
-    '/async/case-documents/:docketEntryId/append-pdf',
+    '/async/case-documents/:documentStorageId/append-pdf',
     lambdaWrapper(
       appendAmendedPetitionFormLambda,
       { isAsyncSync: true },
@@ -402,17 +446,9 @@ app.use(expressLogger);
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
 
-  app.post(
-    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(
-      addCoversheetLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
-  );
-  app.post(
-    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
-    lambdaWrapper(generateDraftStampOrderLambda),
+  app.get(
+    '/case-documents/:docketNumber/:docketEntryId/processing-status',
+    lambdaWrapper(getDocketEntryProcessingStatusLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
@@ -431,8 +467,12 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
@@ -554,6 +594,10 @@ app.use(expressLogger);
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
   );
+  app.put(
+    '/case-meta/:docketNumber/unseal-address/:contactId',
+    lambdaWrapper(unsealCaseContactAddressLambda),
+  );
   app.post(
     '/case-meta/:docketNumber/other-statistics',
     lambdaWrapper(updateOtherStatisticsLambda),
@@ -670,10 +714,18 @@ app.use(expressLogger);
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
+  );
+  app.post(
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
+  );
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',
@@ -720,6 +772,18 @@ app.delete(
   app.post(
     '/documents/filing-receipt-pdf',
     lambdaWrapper(generatePrintableFilingReceiptLambda),
+  );
+}
+
+/**
+ * filing-fee
+ */
+{
+  app.put('/filing-fee/init-payment', lambdaWrapper(initPaymentLambda));
+  app.put('/filing-fee/process-payment', lambdaWrapper(processPaymentLambda));
+  app.get(
+    '/filing-fee/get-transaction-details/:docketNumber',
+    lambdaWrapper(getTransactionDetailsLambda),
   );
 }
 
@@ -856,6 +920,10 @@ app.delete(
     lambdaWrapper(exportPendingReportLambda),
   );
   app.get('/reports/cold-case-report', lambdaWrapper(coldCaseReportLambda));
+  app.get(
+    '/reports/clerk-dashboard-stats',
+    lambdaWrapper(getClerkDashboardStatsLambda),
+  );
   app.post(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),
@@ -909,6 +977,10 @@ app.delete(
  */
 {
   app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.get(
+    '/trial-sessions/minutes/unscheduled',
+    lambdaWrapper(getUnscheduledMinuteSheetsLambda),
+  );
   app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
@@ -965,6 +1037,10 @@ app.delete(
   app.put(
     '/trial-sessions/:trialSessionId/set-calendar-note',
     lambdaWrapper(saveCalendarNoteLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/validate-case-for-minute-sheet',
+    lambdaWrapper(validateCaseForNewMinuteSheetLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',
@@ -1056,7 +1132,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
@@ -1089,6 +1164,10 @@ app.delete(
  */
 {
   app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+  app.get(
+    '/v2/cases/:docketNumber/docket-entries',
+    lambdaWrapper(v2GetCaseDocketEntriesLambda),
+  );
   app.get(
     '/v2/cases/:docketNumber/entries/:key/document-download-url',
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),

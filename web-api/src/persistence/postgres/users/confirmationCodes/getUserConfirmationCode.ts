@@ -1,5 +1,5 @@
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getUserConfirmationCode = async ({
   userId,

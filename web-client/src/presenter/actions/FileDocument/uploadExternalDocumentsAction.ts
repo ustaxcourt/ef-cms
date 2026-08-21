@@ -1,14 +1,6 @@
 import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
+import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { state } from '@web-client/presenter/app.cerebral';
-
-const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
-  return applicationContext
-    .getUseCases()
-    .addCoversheetInteractor(applicationContext, {
-      docketEntryId,
-      docketNumber,
-    });
-};
 
 export const uploadExternalDocumentsAction = async ({
   applicationContext,
@@ -25,7 +17,7 @@ export const uploadExternalDocumentsAction = async ({
   const user = get(state.user);
 
   try {
-    const { caseDetail, docketEntryIdsAdded } = await applicationContext
+    const { docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor(
         applicationContext,
@@ -37,21 +29,23 @@ export const uploadExternalDocumentsAction = async ({
         user,
       );
 
-    for (const docketEntryId of docketEntryIdsAdded) {
-      await addCoversheet({
-        applicationContext,
-        docketEntryId,
-        docketNumber,
-      });
-    }
+    await pollForCoversheetComplete({
+      applicationContext,
+      docketEntryIds: docketEntryIdsAdded,
+      docketNumber,
+    });
 
     return path.success({
-      caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
       fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
+    await applicationContext
+      .getUseCases()
+      .logErrorInteractor(applicationContext, {
+        error: err,
+      });
     return path.error();
   }
 };

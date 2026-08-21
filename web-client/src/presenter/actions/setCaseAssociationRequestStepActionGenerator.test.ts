@@ -7,6 +7,7 @@ describe('setCaseAssociationRequestStepActionGenerator', () => {
 
     const { state } = await runAction(
       setCaseAssociationRequestStepActionGenerator(mockWizardStep),
+      { state: {} },
     );
 
     expect(state.wizardStep).toBe(mockWizardStep);

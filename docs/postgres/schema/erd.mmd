@@ -103,8 +103,16 @@ erDiagram
     }
 
     dwChangeOfAddress {
-        string changeOfAddressId PK "Primary key"
-        string userId FK "User ID"
+        string jobId PK "Primary key"
+        string docketNumber PK "Case to be updated"
+    }
+
+    dwUserContact {
+        string userId PK "Associated user ID"
+        string docketNumber PK,FK "Associated case docket number"
+        number lat "Latitude coordinate"
+        number lng "Longitude coordinate"
+        boolean geodataMatch "Whether geodata matched"
     }
 
     dwFeatureFlag {
@@ -155,6 +163,7 @@ erDiagram
     dwCase ||--o{ dwMessage : "has"
     dwCase }o--|| dwTrialSession : "assigned_to"
     dwCase ||--o{ dwTrialSessionCase : "has"
+    dwCase ||--o{ dwUserContact : "has"
     dwCase }o--|| dwUser : "associated_judge"
 
     dwCaseWorksheet }o--|| dwUser : "judge"

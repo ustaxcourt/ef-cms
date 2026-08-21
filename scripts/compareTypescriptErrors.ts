@@ -20,11 +20,35 @@ import { spawnSync } from 'child_process';
 function countTypescriptErrors(text: string): number {
   const matchedText = text.match(/: error TS/g);
   if (!matchedText) {
-    throw new Error(
-      'Unable to find typescript text to count errors: ": error TS"',
-    );
+    return 0;
   }
   return matchedText.length;
+}
+
+function validateTscResult(
+  result: ReturnType<typeof spawnSync>,
+  label: string,
+): void {
+  if (result.error) {
+    throw new Error(`Failed to run tsc for ${label}: ${result.error.message}`);
+  }
+  if (result.signal) {
+    throw new Error(
+      `tsc process for ${label} was killed by signal: ${result.signal}`,
+    );
+  }
+  if (result.status !== null && result.status !== 0 && !result.stdout) {
+    let stderr: string = '(no stderr)';
+    if (result.stderr) {
+      stderr =
+        typeof result.stderr === 'string'
+          ? result.stderr.trim()
+          : `${result.stderr}`.trim();
+    }
+    throw new Error(
+      `tsc process for ${label} exited with code ${result.status} but produced no output. stderr: ${stderr}`,
+    );
+  }
 }
 
 // ************************************ Your Branch Errors ***********************************
@@ -37,6 +61,7 @@ const branchToBeComparedTypescriptOutput = spawnSync(
     maxBuffer: 1024 * 5000,
   },
 );
+validateTscResult(branchToBeComparedTypescriptOutput, 'branchToBeCompared');
 const branchToBeComparedErrorCount = countTypescriptErrors(
   branchToBeComparedTypescriptOutput.stdout,
 );
@@ -52,6 +77,7 @@ const stagingTypescriptOutput = spawnSync(
     maxBuffer: 1024 * 5000,
   },
 );
+validateTscResult(stagingTypescriptOutput, 'staging');
 const stagingProjectErrorCount = countTypescriptErrors(
   stagingTypescriptOutput.stdout,
 );

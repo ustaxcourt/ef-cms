@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { updateQcCompleteForTrialInteractor } from '@shared/business/useCases/updateQcCompleteForTrialInteractor';
+import { updateQcCompleteForTrialInteractor } from '@web-api/business/useCases/updateQcCompleteForTrialInteractor';
 
 /**
  * used for updating whether a case is qc complete for trial
@@ -12,7 +12,7 @@ export const updateQcCompleteForTrialLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }): Promise<RawCase> => {
+  genericHandler(event, async ({ applicationContext }) => {
     return await updateQcCompleteForTrialInteractor(
       applicationContext,
       {

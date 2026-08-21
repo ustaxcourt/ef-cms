@@ -5,6 +5,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { formatDate } from '../helpers/formatters';
 import { generateStaleCasesReport } from './stale-cases.helpers';
 
 const scriptConfig: ScriptConfig = {
@@ -18,7 +19,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const today = createISODateString().split('T')[0];
+const today = formatDate(createISODateString());
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const OUTPUT_FILENAME = `${OUTPUT_DIR}/12-month-inactivity_${today}.csv`;
 

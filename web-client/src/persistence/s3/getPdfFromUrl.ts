@@ -1,8 +1,10 @@
+import { ClientApplicationContext } from "@web-client/applicationContext";
+
 export const getPdfFromUrl = async ({
   applicationContext,
   url,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ClientApplicationContext;
   url: string;
 }): Promise<Blob> => {
   const { data: fileBlob } = await applicationContext.getHttpClient()({

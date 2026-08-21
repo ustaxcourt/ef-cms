@@ -12,25 +12,18 @@ import { isEmpty, isEqual } from 'lodash';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
-/**
- * closeTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {string} providers.trialSessionId the id of the trial session to be closed
- * @returns {Promise} the promise of the updateTrialSession call
- */
 export const closeTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

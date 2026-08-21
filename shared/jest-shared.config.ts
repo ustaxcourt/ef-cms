@@ -1,13 +1,28 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 import path from 'node:path';
 
-const tsconfig = loadTsConfig('tsconfig.json');
+const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
+
+const transformIgnoreModules = [
+  '@joi/date',
+  'aws-sdk-client-mock',
+  'dom-serializer',
+  'domelementtype',
+  'domhandler',
+  'domutils',
+  'entities',
+  'export-to-csv',
+  'htmlparser2',
+  'kysely',
+  'sinon',
+  'uuid',
+];
 
 const config: Config = {
+  displayName: 'shared',
   clearMocks: true,
-  collectCoverage: true,
   // type files ignored
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
@@ -15,11 +30,11 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/business/test/**/*.ts',
     '!src/business/assets/*.ts',
-    '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
     '!src/**/*_.ts',
     '!src/business/utilities/documentGenerators/**/*.ts',
+    '!src/business/utilities/chromium/**',
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
@@ -28,15 +43,27 @@ const config: Config = {
     '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx', 'mjs'],
+  testMatch: [
+    '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
     }),
     '^uuid$': 'uuid',
+    // @smithy/core@3.24.2 and @aws-sdk/core@3.1051.0 stub node-only exports as Symbol.for("node-only")
+    // in its browser bundles. Jest's jsdom environment picks up the browser
+    // export condition via its `exports` map, breaking any test that
+    // transitively instantiates an AWS SDK client. Force the Node.js CJS
+    // bundles for all affected subpaths.
+    '^@smithy/core/(.*)$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/$1/index.js',
+    '^@aws-sdk/(.*)/(.*)$':
+      '<rootDir>/../node_modules/@aws-sdk/$1/dist-cjs/submodules/$2/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(
@@ -45,13 +72,12 @@ const config: Config = {
   ),
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+    `/node_modules/(?!(${transformIgnoreModules.join('|')}))`,
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
-  verbose: false,
   workerIdleMemoryLimit: '20%',
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

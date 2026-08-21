@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # creates an S3 bucket for holding Terraform state, assigning appropriate permissions to the AWS user executing the script
 
 BUCKET=$1

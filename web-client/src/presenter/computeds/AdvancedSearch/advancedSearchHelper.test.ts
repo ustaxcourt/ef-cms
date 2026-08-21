@@ -1,25 +1,24 @@
+import { RawUser } from '@shared/business/entities/User';
 import {
-  advancedSearchHelper as advancedSearchHelperComputed,
-  paginationHelper,
-} from './advancedSearchHelper';
+  CASE_SEARCH_SORT_OPTIONS,
+  DEFAULT_CASE_SEARCH_SORT,
+  type CaseSearchSort,
+  type CaseSearchResult,
+} from './advancedCaseSearchHelper';
+import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { docketClerk1User } from '@shared/test/mockUsers';
-import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
+import {
+  docketClerk1User,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
+import { getUserPermissions } from '@web-client/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedSearchHelper', () => {
-  const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, US_STATES, USER_ROLES } =
+  const { ASCENDING, DESCENDING, COUNTRY_TYPES } =
     applicationContext.getConstants();
-
-  let globalUser;
-
-  const getBaseState = user => {
-    return {
-      permissions: getUserPermissions(user),
-      user,
-    };
-  };
+  const { ADVANCED_SEARCH_TABS } = applicationContext.getConstants();
 
   const advancedSearchHelper = withAppContextDecorator(
     advancedSearchHelperComputed,
@@ -28,277 +27,190 @@ describe('advancedSearchHelper', () => {
     },
   );
 
-  const mockPetitionerOne = {
-    contactId: '4572d453-fae3-44c8-a298-254cc0eb43cd',
-    name: 'Daenerys Stormborn',
-    state: 'TN',
-  };
-  const mockPetitionerTwo = {
-    contactId: '52f678c6-ba27-4c64-9479-10604684dc7a',
-    name: 'Another Person',
-    state: 'TX',
-  };
-
-  beforeEach(() => {
-    globalUser = docketClerk1User;
-  });
-
-  it('returns appropriate defaults if permissions are not defined in state', () => {
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        advancedSearchForm: {},
-        advancedSearchTab: 'case',
-      },
-    });
-    expect(result).toEqual({
-      showPractitionerSearch: undefined,
-      showStateSelect: false,
-    });
-  });
-
-  it('does not return search results when searchResults is undefined', () => {
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {},
-        advancedSearchTab: 'case',
-      },
-    });
-    expect(result).toEqual({
-      showPractitionerSearch: true,
-      showStateSelect: false,
-    });
-  });
-
-  it('returns showPractitionerSearch false when user is an external user', () => {
-    globalUser = {
-      advancedSearchTab: 'case',
-      role: USER_ROLES.privatePractitioner,
-      userId: 'practitioner',
+  const getBaseState = (user: RawUser = docketClerk1User) => {
+    return {
+      permissions: getUserPermissions(user),
+      user,
     };
+  };
 
+  const getCaseSearchState = ({
+    caseCurrentPaginationPage,
+    caseSearchSort,
+    countryType,
+    searchResults,
+    user = docketClerk1User,
+  }: {
+    caseCurrentPaginationPage?: number;
+    caseSearchSort?: CaseSearchSort;
+    countryType?: string;
+    searchResults?: CaseSearchResult[];
+    user?: RawUser;
+  }) => {
+    return {
+      ...getBaseState(user),
+      advancedSearchForm: {
+        caseSearchByName: {
+          countryType,
+        },
+      },
+      advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
+      caseCurrentPaginationPage,
+      caseSearchSort: caseSearchSort || DEFAULT_CASE_SEARCH_SORT,
+      searchResults:
+        searchResults === undefined ? undefined : { case: searchResults },
+    };
+  };
+
+  const runCaseSearchHelper = (
+    options: Parameters<typeof getCaseSearchState>[0],
+  ) => {
+    return runCompute(advancedSearchHelper, {
+      state: getCaseSearchState(options),
+    });
+  };
+
+  it('should return default display values when permissions are not defined in state', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        ...getBaseState(globalUser),
         advancedSearchForm: {},
-        advancedSearchTab: 'case',
+        advancedSearchTab: ADVANCED_SEARCH_TABS.CASE,
       },
     });
-    expect(result).toMatchObject({
-      showPractitionerSearch: false,
+
+    expect(result).toEqual({
+      caseSearchMobileSortValue: `resultIndex|${ASCENDING}`,
+      caseSearchSortColumnForDisplay: 'resultIndex',
+      caseSearchSortDirectionForDisplay: ASCENDING,
+      formattedSearchResults: [],
+      numberOfResults: 0,
+      showManyResultsMessage: false,
+      showNoMatches: false,
+      showPractitionerSearch: undefined,
+      showSearchResults: false,
+      showStateSelect: false,
+      sortOptions: CASE_SEARCH_SORT_OPTIONS,
+      totalPages: 0,
     });
   });
 
-  it('returns showStateSelect true when state.advancedSearchForm.countryType is "domestic"', () => {
+  it('should return default display values when searchResults is undefined', () => {
+    const result = runCaseSearchHelper({});
+
+    expect(result).toMatchObject({
+      formattedSearchResults: [],
+      numberOfResults: 0,
+      showNoMatches: false,
+      showPractitionerSearch: true,
+      showSearchResults: false,
+      showStateSelect: false,
+      caseSearchMobileSortValue: `resultIndex|${ASCENDING}`,
+      caseSearchSortColumnForDisplay: 'resultIndex',
+      caseSearchSortDirectionForDisplay: ASCENDING,
+      totalPages: 0,
+    });
+  });
+
+  it('should return shared default values when search results exist for a tab that is not CASE', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {
-          caseSearchByName: {
-            countryType: COUNTRY_TYPES.DOMESTIC,
-          },
+        ...getBaseState(),
+        advancedSearchForm: {},
+        advancedSearchTab: ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [{}],
         },
-        advancedSearchTab: 'case',
       },
     });
+
+    expect(result).toMatchObject({
+      formattedSearchResults: [],
+      numberOfResults: 0,
+      showNoMatches: false,
+      showSearchResults: false,
+      totalPages: 0,
+    });
+  });
+
+  it('should hide practitioner search when the user is external', () => {
+    const result = runCaseSearchHelper({
+      user: privatePractitionerUser,
+    });
+
+    expect(result.showPractitionerSearch).toBe(false);
+  });
+
+  it('should show the state selector when the case search country type is domestic', () => {
+    const result = runCaseSearchHelper({
+      countryType: COUNTRY_TYPES.DOMESTIC,
+    });
+
     expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: true,
     });
   });
 
-  it('returns showStateSelect false when state.advancedSearchForm.countryType is "international"', () => {
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {
-          caseSearchByName: {
-            countryType: COUNTRY_TYPES.INTERNATIONAL,
-          },
-        },
-        advancedSearchTab: 'case',
-      },
+  it('should hide the state selector when the case search country type is international', () => {
+    const result = runCaseSearchHelper({
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
     });
+
     expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: false,
     });
   });
 
-  it('returns showNoMatches true and showSearchResults false if searchResults is an empty array', () => {
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'case',
-        searchResults: { case: [] },
+  it('should delegate case search state to the advanced case search helper', () => {
+    const result = runCaseSearchHelper({
+      caseSearchSort: {
+        sortColumn: 'docketNumber',
+        sortDirection: DESCENDING,
       },
+      searchResults: [],
     });
+
     expect(result).toMatchObject({
-      showLoadMore: false,
+      formattedSearchResults: [],
+      numberOfResults: 0,
+      showManyResultsMessage: false,
       showNoMatches: true,
       showSearchResults: false,
+      totalPages: 0,
+    });
+    expect(result).toMatchObject({
+      caseSearchMobileSortValue: `docketNumber|${DESCENDING}`,
+      caseSearchSortColumnForDisplay: 'docketNumber',
+      caseSearchSortDirectionForDisplay: DESCENDING,
     });
   });
 
-  it('returns showNoMatches false, showSearchResults true, and the results count if searchResults is an not empty array', () => {
+  it('should return shared default values when on the practitioner tab', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'case',
+        ...getBaseState(),
+        advancedSearchForm: {},
+        advancedSearchTab: ADVANCED_SEARCH_TABS.PRACTITIONER,
         searchResults: {
-          case: [
+          practitioner: [
             {
-              docketNumber: '101-19',
-              petitioners: [mockPetitionerOne],
+              admissionsDate: '2012-03-13',
+              barNumber: '1111',
+              contact: { state: 'WA' },
+              name: 'pablo escobar',
             },
           ],
         },
       },
     });
+
     expect(result).toMatchObject({
-      searchResultsCount: 1,
-      showLoadMore: false,
-      showNoMatches: false,
-      showSearchResults: true,
-    });
-    expect(result.showManyResultsMessage).toBeFalsy();
-  });
-
-  it('formats search results for a case search', () => {
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'case',
-        searchResults: {
-          case: [
-            {
-              caseCaption: 'Test Petitioner, Petitioner',
-              docketNumber: '101-19',
-              docketNumberWithSuffix: '101-19',
-              petitioners: [mockPetitionerOne],
-              receivedAt: '2019-03-01T05:00:00.000Z',
-            },
-            {
-              caseCaption:
-                'Test Petitioner & Another Petitioner, Petitioner(s)',
-              docketNumber: '102-18',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              docketNumberWithSuffix: '102-18W',
-              petitioners: [mockPetitionerOne, mockPetitionerTwo],
-              receivedAt: '2019-05-01T05:00:00.000Z',
-            },
-          ],
-        },
-      },
-    });
-    expect(result.numberOfResults).toEqual(2);
-    expect(result.formattedSearchResults).toMatchObject([
-      {
-        caseTitle: 'Test Petitioner',
-        docketNumberWithSuffix: '101-19',
-        formattedFiledDate: '03/01/19',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
-        ],
-      },
-      {
-        caseTitle: 'Test Petitioner & Another Petitioner',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/19',
-        petitionerFullStateNames: [
-          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
-          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TX },
-        ],
-      },
-    ]);
-  });
-
-  it('shows warning of maximum search results if threshold is reached', () => {
-    const actualMax =
-      applicationContext.getConstants().MAX_DOCUMENT_SEARCH_RESULTS;
-    const resultsAtThreshold = Array.from({ length: actualMax }, (_, i) => ({
-      docketNumber: `${i + 1}-19`,
-      petitioners: [mockPetitionerOne],
-    }));
-
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'case',
-        searchResults: { case: resultsAtThreshold },
-      },
-    });
-
-    expect(result.showManyResultsMessage).toBe(true);
-    expect(result.manyResults).toBeDefined();
-  });
-
-  it('returns all formatted results regardless of currentPage since load more is removed', () => {
-    const searchResultsData = [
-      {
-        caseCaption: 'Test Petitioner, Petitioner',
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19',
-        petitioners: [mockPetitionerOne],
-        receivedAt: '2019-03-01T05:00:00.000Z',
-      },
-      {
-        caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
-        docketNumber: '102-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        docketNumberWithSuffix: '102-18W',
-        petitioners: [mockPetitionerOne, mockPetitionerTwo],
-        receivedAt: '2018-05-01T05:00:00.000Z',
-      },
-    ];
-
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'case',
-        searchResults: { case: searchResultsData },
-      },
-    });
-
-    expect(result.showLoadMore).toEqual(false);
-    expect(result.formattedSearchResults.length).toEqual(2);
-  });
-
-  it('should return without formatting if on the practitioner tab', () => {
-    const initialState = {
-      ...getBaseState(globalUser),
-      advancedSearchForm: { currentPage: 1 },
-      advancedSearchTab: 'practitioner',
-      searchResults: {
-        practitioner: [
-          {
-            admissionsDate: '2012-03-13',
-            barNumber: '1111',
-            contact: { state: 'WA' },
-            name: 'pablo escobar',
-          },
-          { barNumber: '2222', name: 'ricardo diaz' },
-        ],
-      },
-    };
-    const result = runCompute(advancedSearchHelper, {
-      state: initialState,
-    });
-    expect(result).toMatchObject({
+      formattedSearchResults: [],
+      numberOfResults: 0,
       showPractitionerSearch: true,
+      showSearchResults: false,
       showStateSelect: false,
-    });
-  });
-
-  describe('paginationHelper', () => {
-    it('should return an empty object when searchResults are undefined', () => {
-      const result = paginationHelper(undefined, 1, 25);
-      expect(result).toEqual({});
     });
   });
 });

@@ -179,3 +179,37 @@ export async function getRecentEventsByCode(
       return casesObject;
     });
 }
+
+export async function getDocketEntryIdsByDocketNumberAndEventCode({
+  docketNumber,
+  eventCode,
+}: {
+  docketNumber: string;
+  eventCode: string;
+}): Promise<{ docketEntryId: string }[]> {
+  const dbConnection = await getCypressPostgresDb();
+
+  return await dbConnection
+    .selectFrom('dwDocketEntry')
+    .where('docketNumber', '=', docketNumber)
+    .where('eventCode', '=', eventCode)
+    .select(['docketEntryId'])
+    .execute();
+}
+
+export async function getDocketEntryPageCountByDocketNumberAndEventCode({
+  docketNumber,
+  eventCode,
+}: {
+  docketNumber: string;
+  eventCode: string;
+}): Promise<{ docketEntryId: string; numberOfPages: number | null }[]> {
+  const dbConnection = await getCypressPostgresDb();
+
+  return await dbConnection
+    .selectFrom('dwDocketEntry')
+    .where('docketNumber', '=', docketNumber)
+    .where('eventCode', '=', eventCode)
+    .select(['docketEntryId', 'numberOfPages'])
+    .execute();
+}

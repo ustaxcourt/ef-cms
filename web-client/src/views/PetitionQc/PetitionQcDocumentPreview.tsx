@@ -17,11 +17,16 @@ export const PetitionQcDocumentPreview: React.FC<PetitionQcDocumentPreviewProps>
     documentSelectedForPreview,
     petitionQcHelper,
   }) {
+    if (!documentSelectedForPreview) {
+      return null;
+    }
+
     return (
       <>
         <PetitionQcScanBatchPreviewer
           documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
+          scanOnly={false}
           title="Add Document(s)"
         />
       </>

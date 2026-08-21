@@ -1,4 +1,7 @@
-import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import {
+  EligibleCase,
+  RawEligibleCase,
+} from '@shared/business/entities/cases/EligibleCase';
 import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -10,21 +13,13 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-import { getEligibleCasesWithIsAgedCase } from '@shared/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
+import { getEligibleCasesWithIsAgedCase } from '@web-api/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
 
-/**
- * get eligible cases for trial session
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session to get the eligible cases
- * @returns {Promise} the promise of the getEligibleCasesForTrialSession call
- */
 export const getEligibleCasesForTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawEligibleCase[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }

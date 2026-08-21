@@ -89,6 +89,7 @@ export const TrialSessionMetadataFieldset = ({
             </label>
             <input
               className="usa-input grid-col-10"
+              data-testid="trial-session-metadata-fieldset-trial-clerk"
               id="trialClerk"
               name="trialClerk"
               type="text"

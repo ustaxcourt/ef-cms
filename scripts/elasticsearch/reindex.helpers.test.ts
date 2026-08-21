@@ -90,6 +90,21 @@ describe('reindexIfNecessary', () => {
       wait_for_completion: false,
     });
   });
+
+  it('does not reindex if the index does not have an existing alias to reindex from', async () => {
+    aliases.mockReturnValueOnce({
+      body: [
+        {
+          alias: 'not-the-alias-you-are-looking-for',
+          index: 'some-index',
+        },
+      ],
+      statusCode: 200,
+    });
+
+    await reindexIfNecessary({ client: mockedClient });
+    expect(mockedClient.reindex).not.toHaveBeenCalled();
+  });
 });
 
 describe('waitForReindexTasksToComplete', () => {

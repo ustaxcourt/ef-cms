@@ -1,9 +1,9 @@
 jest.mock(
-  '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy',
+  '@web-client/proxies/customCaseReport/createCsvCustomCaseReportFileProxy',
 );
 import { cloneDeep } from 'lodash';
 import { createCsvCustomCaseReportFileAction } from '@web-client/presenter/actions/CaseInventoryReport/createCsvCustomCaseReportFileAction';
-import { createCsvCustomCaseReportFileInteractor as createCsvCustomCaseReportFileInteractorMock } from '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
+import { createCsvCustomCaseReportFileInteractor as createCsvCustomCaseReportFileInteractorMock } from '@web-client/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
 import { initialCustomCaseReportState } from '../../customCaseReportState';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

@@ -55,6 +55,12 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
           showModal: 'ServeCaseToIrsErrorModal',
         });
         break;
+      case 'serve_to_irs_duplicate_error':
+        await app.getSequence('serveToIrsDuplicateErrorSequence')({
+          ...message,
+          showModal: 'ServeCaseToIrsDuplicateErrorModal',
+        });
+        break;
       case 'update_trial_session_complete':
         await app.getSequence('updateTrialSessionCompleteSequence')(message);
         break;

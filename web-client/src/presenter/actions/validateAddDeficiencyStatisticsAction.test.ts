@@ -25,11 +25,13 @@ describe('validateAddDeficiencyStatisticsAction', () => {
       .validateAddDeficiencyStatisticsInteractor.mockReturnValue(null);
 
     await runAction(validateAddDeficiencyStatisticsAction, {
-      form: {
-        irsTotalPenalties: 3,
-      },
       modules: {
         presenter,
+      },
+      state: {
+        form: {
+          irsTotalPenalties: 3,
+        },
       },
     });
 
@@ -44,9 +46,11 @@ describe('validateAddDeficiencyStatisticsAction', () => {
       });
 
     await runAction(validateAddDeficiencyStatisticsAction, {
-      form: {},
       modules: {
         presenter,
+      },
+      state: {
+        form: {},
       },
     });
 
@@ -67,9 +71,11 @@ describe('validateAddDeficiencyStatisticsAction', () => {
       });
 
     await runAction(validateAddDeficiencyStatisticsAction, {
-      form: {},
       modules: {
         presenter,
+      },
+      state: {
+        form: {},
       },
     });
 

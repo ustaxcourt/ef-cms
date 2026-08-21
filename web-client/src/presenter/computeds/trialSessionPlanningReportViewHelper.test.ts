@@ -27,7 +27,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
             ...BASE_STATE,
           },
         },
-      } as any),
+      }),
     ).not.toThrow();
   });
 
@@ -76,7 +76,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
               ],
             },
           },
-        } as any,
+        },
       );
 
       expect(citiesNotCalendaredInTwoPreviousTerms).toEqual([
@@ -100,7 +100,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
               trialYear: 'TEST_TRIAL_YEAR',
             },
           },
-        } as any,
+        },
       );
 
       expect(trialSessionPlanningReportHeader).toEqual(
@@ -124,7 +124,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
               ],
             },
           },
-        } as any,
+        },
       );
 
       expect(previousTermsFormatted).toEqual([
@@ -177,7 +177,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
               ],
             },
           },
-        } as any,
+        },
       );
 
       expect(trialLocationDataFormatted).toEqual([
@@ -225,7 +225,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
         state: {
           trialSessionPlanningReportData: BASE_STATE,
         },
-      } as any);
+      });
 
       expect(trialTerm).toEqual(BASE_STATE.trialTerm);
     });
@@ -237,7 +237,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
         state: {
           trialSessionPlanningReportData: BASE_STATE,
         },
-      } as any);
+      });
 
       expect(trialYear).toEqual(TEST_TRIAL_YEAR);
     });

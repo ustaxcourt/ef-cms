@@ -31,7 +31,7 @@ resource "aws_sqs_queue" "change_of_address_queue" {
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.change_of_address_dl_queue.arn
-    maxReceiveCount     = 1
+    maxReceiveCount     = 3
   })
 }
 

@@ -60,7 +60,6 @@ export const validatePdf = ({
         const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
-          isEvalSupported: false,
         }).promise;
 
         // Check that the PDF doesn't have password protection on edits

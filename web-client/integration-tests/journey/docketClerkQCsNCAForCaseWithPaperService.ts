@@ -56,7 +56,10 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
+      docketNumber:
+        formattedDocketEntriesOnDocketRecord[
+          noticeOfChangeOfAddressQCItem.index
+        ].docketNumber,
     });
 
     const addDocketEntryHelper = withAppContextDecorator(
@@ -80,6 +83,6 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
       document => document.docketEntryId === docketEntryId,
     );
 
-    expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
+    expect(selectedDocument?.qcWorkItemsCompleted).toEqual(true);
   });
 };

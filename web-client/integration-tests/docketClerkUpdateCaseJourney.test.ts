@@ -4,6 +4,7 @@ import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketCle
 import { docketClerkViewsEligibleCasesForTrialSession } from './journey/docketClerkViewsEligibleCasesForTrialSession';
 import { docketClerkViewsInactiveCasesForTrialSession } from './journey/docketClerkViewsInactiveCasesForTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -11,7 +12,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 describe('docket clerk update case journey', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
 
   const overrides = {
     preferredTrialCity: trialLocation,

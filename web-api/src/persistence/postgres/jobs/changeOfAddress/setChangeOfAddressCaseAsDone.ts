@@ -1,12 +1,12 @@
-import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
-import { sql } from 'kysely';
+import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 
-export async function setChangeOfAddressCaseAsDone(jobId: string) {
-  return await pgUpdateTable({
+export async function setChangeOfAddressCaseAsDone(
+  jobId: string,
+  docketNumber: string,
+) {
+  return await pgDeleteFrom({
     table: 'dwChangeOfAddress',
-    values: {
-      remaining: sql<number>`remaining - 1`,
-    },
-    where: qb => qb.where('jobId', '=', jobId),
+    where: qb =>
+      qb.where('jobId', '=', jobId).where('docketNumber', '=', docketNumber),
   });
 }

@@ -56,14 +56,12 @@ export const generateCoverSheetData = async ({
   caseEntity,
   docketEntryEntity,
   filingDateUpdated = false,
-  stampData,
   useInitialData = false,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
-  stampData?: any;
   useInitialData?: boolean;
 }) => {
   const dateServedFormatted = docketEntryEntity.servedAt
@@ -92,7 +90,7 @@ export const generateCoverSheetData = async ({
   }
 
   const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    ? caseEntity.initialDocketNumberSuffix?.replace('_', '')
     : caseEntity.docketNumberSuffix;
 
   const docketNumberWithSuffix =
@@ -113,7 +111,6 @@ export const generateCoverSheetData = async ({
     electronicallyFiled: !docketEntryEntity.isPaper,
     index: docketEntryEntity.index,
     mailingDate: docketEntryEntity.mailingDate || '',
-    stamp: stampData,
   };
 
   if (

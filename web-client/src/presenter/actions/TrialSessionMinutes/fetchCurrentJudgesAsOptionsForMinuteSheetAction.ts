@@ -1,5 +1,5 @@
 import { getConstants } from '@web-client/getConstants';
-import { getUsersInSectionInteractor } from '@shared/proxies/users/getUsersInSectionProxy';
+import { getUsersInSectionInteractor } from '@web-client/proxies/users/getUsersInSectionProxy';
 import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export const fetchCurrentJudgesAsOptionsForMinuteSheetAction = async ({

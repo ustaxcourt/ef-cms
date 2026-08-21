@@ -2,7 +2,7 @@ import { IS_PRACTITIONER } from './helpers/searchClauses';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Search_Request } from '@opensearch-project/opensearch/api';
+import type { Search_Request } from 'node_modules/@opensearch-project/opensearch/api';
 
 export type PractitionerSearchResultType = {
   admissionsStatus: string;

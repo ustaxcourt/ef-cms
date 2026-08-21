@@ -45,6 +45,7 @@ export const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
   isRunningOnLambda,
+  paymentPortalHost: process.env.PAYMENT_PORTAL_HOST || 'http://localhost:8080',
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
@@ -53,8 +54,8 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
-      max: 1,
+      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed. Be careful changing this.
+      max: 1, // increasing this might not work. Do so with caution.
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',
@@ -63,7 +64,7 @@ export const environment = {
   },
   region,
   s3Endpoint: isLocal
-    ? 'http://0.0.0.0:9001'
+    ? 'http://localhost:9001'
     : 'https://s3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: isLocal

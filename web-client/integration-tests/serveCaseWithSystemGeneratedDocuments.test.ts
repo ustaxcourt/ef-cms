@@ -3,15 +3,15 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src/presenter/computeds/caseDetailSubnavHelper';
+import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '@web-client/presenter/computeds/caseDetailSubnavHelper';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { faker } from '@faker-js/faker';
 import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '@web-client/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Petitions Clerk Serves Paper Petition With System Generated Documents', () => {
   const cerebralTest = setupTest();
@@ -60,7 +60,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       value: `${faker.person.firstName()} ${faker.person.lastName()}`,
     };
 
-    let formValues = [
+    const formValues = [
       {
         key: 'mailingDate',
         value: faker.date.recent().toDateString(),
@@ -210,7 +210,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       state: cerebralTest.getState(),
     });
 
-    for (let document of Object.values(ordersAndNoticesToGenerate)) {
+    for (const document of Object.values(ordersAndNoticesToGenerate)) {
       expect(helper.ordersAndNoticesInDraft).toContain(document.title);
     }
   });
@@ -231,7 +231,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     );
   });
 
-  it('should display the orders and notices that will be generated after service', () => {
+  it('should once again display the orders and notices that will be generated after service', () => {
     const eventCodes = Object.keys(ordersAndNoticesToGenerate);
     for (const eventCodesIndex in eventCodes) {
       const docketEntry = cerebralTest

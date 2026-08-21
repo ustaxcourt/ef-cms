@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { saveSignedDocumentInteractor } from '@shared/business/useCases/saveSignedDocumentInteractor';
+import { saveSignedDocumentInteractor } from '@web-api/business/useCases/saveSignedDocumentInteractor';
 
 /**
  * used for signing PDF documents

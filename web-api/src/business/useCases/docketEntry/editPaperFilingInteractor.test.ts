@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -109,8 +110,8 @@ describe('editPaperFilingInteractor', () => {
       new WorkItem(workItem),
     );
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
-    fileAndServeDocumentOnOneCase.mockImplementation(
-      ({ caseEntity }) => caseEntity,
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
     );
   });
 
@@ -423,10 +424,40 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockPdfUrl,
             },
             userId: docketClerkUser.userId,
+          });
+        });
+
+        it('should enqueue a coversheet job for the served docket entry', async () => {
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
+            },
+            mockDocketClerkUser,
+          );
+
+          const queueWorkCalls = (
+            applicationContext.getWorkerGateway().queueWork as jest.Mock
+          ).mock.calls;
+          const coversheetMessages = queueWorkCalls
+            .map(args => args[1]?.message)
+            .filter(message => message?.type === 'ADD_COVERSHEET');
+          expect(coversheetMessages).toHaveLength(1);
+          expect(coversheetMessages[0].payload).toMatchObject({
+            docketEntryId: mockDocketEntryId,
+            docketNumber: caseRecord.docketNumber,
           });
         });
       });
@@ -466,6 +497,29 @@ describe('editPaperFilingInteractor', () => {
             docketNumber: caseRecord.docketNumber,
             status: false,
           });
+        });
+        it('should not serve the document if filing a document fails', async () => {
+          fileAndServeDocumentOnOneCase.mockRejectedValueOnce(
+            new Error('Database error'),
+          );
+          const docketEntry = caseRecord.docketEntries[1];
+          await expect(
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: docketEntry.docketEntryId,
+                documentMetadata: docketEntry,
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
+          ).rejects.toThrow('Database error');
+
+          expect(
+            applicationContext.getUseCaseHelpers()
+              .serveDocumentAndGetPaperServicePdf,
+          ).not.toHaveBeenCalled();
         });
       });
     });
@@ -509,12 +563,44 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const expectedCount = [
+          const expectedMultiDocketedOn = [
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
-          ].length;
+          ];
+          const expectedCount = expectedMultiDocketedOn.length;
+
           expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
             expectedCount,
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: caseRecord.docketNumber,
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[0],
+              }),
+            }),
+          );
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledWith(
+            expect.objectContaining({
+              docketEntryEntity: expect.objectContaining({
+                multiDocketedOn: expectedMultiDocketedOn,
+              }),
+              caseEntity: expect.objectContaining({
+                docketNumber: mockConsolidatedGroupDocketNumbers[1],
+              }),
+            }),
           );
         });
 
@@ -545,11 +631,6 @@ describe('editPaperFilingInteractor', () => {
               leadDocketNumber: caseRecord.docketNumber,
             },
           ]);
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
@@ -594,7 +675,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: mockedPaperServicePdfUrl,
             },
             userId: docketClerkUser.userId,
@@ -615,11 +696,6 @@ describe('editPaperFilingInteractor', () => {
               ],
             }),
           );
-          applicationContext
-            .getUseCaseHelpers()
-            .fileAndServeDocumentOnOneCase.mockImplementation(
-              ({ caseEntity }) => caseEntity,
-            );
           applicationContext
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
@@ -654,7 +730,7 @@ describe('editPaperFilingInteractor', () => {
                 overwritable: false,
               },
               docketEntryId: mockDocketEntryId,
-              generateCoversheet: true,
+              pendingCoversheetDocketEntryIds: [mockDocketEntryId],
               pdfUrl: undefined,
             },
             userId: docketClerkUser.userId,

@@ -20,7 +20,7 @@ export const setForHearingInteractor = async (
     trialSessionId,
   }: { calendarNotes: string; docketNumber: string; trialSessionId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_FOR_HEARING)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -73,11 +73,4 @@ export const setForHearingInteractor = async (
       },
     ],
   });
-
-  // retrieve the case again since we've added the mapped hearing record :)
-  const updatedCase = await getCaseByDocketNumber({
-    docketNumber,
-  });
-
-  return updatedCase;
 };

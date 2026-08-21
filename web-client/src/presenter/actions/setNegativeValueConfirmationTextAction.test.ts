@@ -17,6 +17,6 @@ describe('setNegativeValueConfirmationTextAction', () => {
       },
       state: {},
     });
-    expect(state.confirmationText[mockPropsKey]).toEqual(mockConfirmation);
+    expect(state.confirmationText![mockPropsKey]).toEqual(mockConfirmation);
   });
 });

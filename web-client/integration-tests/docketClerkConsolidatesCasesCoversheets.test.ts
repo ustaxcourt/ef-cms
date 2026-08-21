@@ -3,13 +3,14 @@ import { docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase } from 
 import { docketClerkAddsDocketEntryForTrialExhibit } from './journey/docketClerkAddsDocketEntryForTrialExhibit';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 
 describe('Case Consolidation Coversheets Journey', () => {
   const cerebralTest = setupTest();
 
   let firstMemberCaseDocketNumber, secondMemberCaseDocketNumber;
 
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

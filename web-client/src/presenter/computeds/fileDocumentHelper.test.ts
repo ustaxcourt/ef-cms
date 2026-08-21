@@ -8,6 +8,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
 import {
+  casePetitioner,
   docketClerkUser,
   irsPractitionerUser,
   privatePractitionerUser,
@@ -246,6 +247,28 @@ describe('fileDocumentHelper', () => {
       state: { ...state, user: docketClerkUser },
     });
     expect(result.partyValidationError).toEqual('You did something bad.');
+  });
+
+  it('should show default party header text and label text in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
+    expect(result.partiesLabelText).toEqual('Filing Parties');
+    expect(result.partiesHeaderText).toEqual('Parties Filing The Document(s)');
+  });
+
+  it('should show party header text and label text for notw in document review', () => {
+    const result: any = runCompute(fileDocumentHelper, {
+      state: {
+        ...state,
+        user: privatePractitionerUser,
+        form: { ...state.form, eventCode: 'NOTW' },
+      },
+    });
+    expect(result.partiesLabelText).toEqual('Parties');
+    expect(result.partiesHeaderText).toEqual(
+      "Parties You're Withdrawing From as Counsel",
+    );
   });
 
   describe('supporting documents', () => {
@@ -625,8 +648,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           },
         ],
@@ -647,8 +672,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
@@ -667,6 +694,7 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         irsPractitioners: [
           {
             barNumber: '1234',
@@ -674,6 +702,7 @@ describe('fileDocumentHelper', () => {
         ],
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
@@ -691,8 +720,10 @@ describe('fileDocumentHelper', () => {
       };
 
       state.caseDetail = {
+        ...MOCK_CASE,
         petitioners: [
           {
+            ...casePetitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],

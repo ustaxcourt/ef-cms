@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardG', () => {
@@ -71,6 +71,16 @@ describe('ExternalDocumentNonStandardG', () => {
       expect(externalDocumentG.getDocumentTitle()).toEqual(
         'Fiftieth Amendment to Answer',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentG = ExternalDocumentFactory({
+        category: 'Answer',
+        documentType: 'Amendment to Answer',
+        scenario: 'Nonstandard G',
+      });
+
+      expect(externalDocumentG.getDocumentTitle()).toEqual('');
     });
   });
 });

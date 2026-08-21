@@ -16,7 +16,7 @@ export const updateTrialSessionWorkingCopyInteractor = async (
     trialSessionWorkingCopyToUpdate,
   }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawTrialSessionWorkingCopy> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {

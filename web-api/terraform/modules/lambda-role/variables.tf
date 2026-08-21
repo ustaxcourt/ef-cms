@@ -13,3 +13,7 @@ variable "dns_domain" {
 variable "postgres_user" {
   type = string
 }
+
+variable "payment_portal_arn" {
+  type = string
+}

@@ -7,6 +7,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { IRSNoticeCaseReview } from '@web-client/views/CaseDetailEdit/IRSNoticeCaseReview';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
+import { ServeCaseToIrsDuplicateErrorModal } from '../ServeCaseToIrsDuplicateErrorModal';
 import { ServeCaseToIrsErrorModal } from '../ServeCaseToIrsErrorModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -98,9 +99,9 @@ export const ReviewSavedPetition = connect(
                             </address>
                             {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                               <>
-                                {form.contactPrimary.paperPetitionEmail && (
+                                {form.contactPrimary.contactEmailAddress && (
                                   <div className="margin-top-1 word-wrap-break-word">
-                                    {form.contactPrimary.paperPetitionEmail}
+                                    {form.contactPrimary.contactEmailAddress}
                                   </div>
                                 )}
                                 {reviewSavedPetitionHelper.shouldDisplayEConsentTextForPrimaryContact && (
@@ -132,9 +133,9 @@ export const ReviewSavedPetition = connect(
                               </address>
                               {reviewSavedPetitionHelper.eConsentFieldsEnabledFeatureFlag && (
                                 <>
-                                  {form.contactSecondary.paperPetitionEmail && (
+                                  {form.contactSecondary.contactEmailAddress && (
                                     <div className="margin-top-1 word-wrap-break-word">
-                                      {form.contactSecondary.paperPetitionEmail}
+                                      {form.contactSecondary.contactEmailAddress}
                                     </div>
                                   )}
                                   {reviewSavedPetitionHelper.shouldDisplayEConsentTextForSecondaryContact && (
@@ -285,6 +286,9 @@ export const ReviewSavedPetition = connect(
           <FormCancelModalDialog
             onCancelSequence={closeModalAndNavigateSequence}
           />
+        )}
+        {showModal === 'ServeCaseToIrsDuplicateErrorModal' && (
+          <ServeCaseToIrsDuplicateErrorModal/>
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />

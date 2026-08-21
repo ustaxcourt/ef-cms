@@ -1,4 +1,4 @@
-import { CaseWithSelectionInfo } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
+import { CaseWithSelectionInfo } from '@web-client/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

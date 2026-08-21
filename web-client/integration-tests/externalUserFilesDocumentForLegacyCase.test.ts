@@ -1,8 +1,12 @@
 import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/associatedExternalUserViewsCaseDetailForOwnedCase';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 import { userTriesToFileAnUnavailableDocumentType } from './journey/userTriesToFileAnUnavailableDocumentType';
+import { withAppContextDecorator } from '@web-client/withAppContext';
+import { confirmPaperServiceModalHelper } from '@web-client/presenter/computeds/confirmPaperServiceModalHelper';
+import { runCompute } from '@web-client/presenter/test.cerebral';
+import { getOtherFilers } from '@shared/business/entities/cases/Case';
+import { CONTACT_TYPE_TITLES } from '@shared/business/entities/EntityConstants';
 
 describe('an external user files a document for their legacy case', () => {
   const cerebralTest = setupTest();
@@ -38,14 +42,39 @@ describe('an external user files a document for their legacy case', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const otherFilers = getOtherFilers(cerebralTest.getState('caseDetail'));
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const lastServedDocument = docketEntries.pop();
 
-    const isOtherFilerServed = lastServedDocument.servedParties.find(
-      p => p.name === otherFilers[0].name && p.email === otherFilers[0].email,
+    const otherFilers = getOtherFilers(cerebralTest.getState('caseDetail'));
+
+    const otherFiler = {
+      name: otherFilers[0].name,
+      formattedContactType: CONTACT_TYPE_TITLES[otherFilers[0].contactType],
+      docketNumber: cerebralTest.docketNumber,
+    };
+
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
+      docketEntryId: lastServedDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'additionalInfo',
+      value: 'Some additional information',
+    });
+
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
+
+    const showModal = cerebralTest.getState('modal.showModal');
+
+    const modalHelper = runCompute(
+      withAppContextDecorator(confirmPaperServiceModalHelper),
+      {
+        state: cerebralTest.getState(),
+      },
     );
 
-    expect(isOtherFilerServed).toBeTruthy();
+    expect(showModal).toEqual('PaperServiceConfirmModal');
+    expect(modalHelper.contactsNeedingPaperService![0]).toEqual(otherFiler);
   });
 });

@@ -1,21 +1,17 @@
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { type RawCorrespondence } from '@shared/business/entities/Correspondence';
 
-/**
- * gets the first correspondence document from the current case detail to set as the default viewerCorrespondenceToDisplay
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get method
- * @param {object} providers.props the cerebral props object
- * @returns {object} object containing viewerDocumentToDisplay
- */
 export const getDefaultViewerCorrespondenceToDisplayAction = ({
   applicationContext,
   get,
   props,
-}: ActionProps) => {
+}: ActionProps): {
+  viewerCorrespondenceToDisplay: RawCorrespondence;
+} => {
   const { correspondenceId } = props;
-  let viewerCorrespondenceToDisplay = null;
+  let viewerCorrespondenceToDisplay: RawCorrespondence;
+  let foundCorrespondence: RawCorrespondence | undefined;
   const user = get(state.user);
 
   const caseDetail = get(state.caseDetail);
@@ -25,9 +21,12 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
     .formatCase(applicationContext, cloneDeep(caseDetail), user);
 
   if (correspondenceId) {
-    viewerCorrespondenceToDisplay = correspondence.find(
+    foundCorrespondence = correspondence.find(
       d => d.correspondenceId === correspondenceId,
     );
+  }
+  if (foundCorrespondence) {
+    viewerCorrespondenceToDisplay = foundCorrespondence;
   } else {
     viewerCorrespondenceToDisplay = correspondence[0];
   }

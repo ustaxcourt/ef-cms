@@ -11,7 +11,7 @@ export const updateUserCaseNoteInteractor = async (
   applicationContext,
   { docketNumber, notes }: { docketNumber: string; notes: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<UserCaseNote> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {

@@ -1,11 +1,11 @@
 import { downloadMinuteSheetFormPdfAction } from './downloadMinuteSheetFormPdfAction';
-import { generateTrialSessionMinutesPdfInteractor } from '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
+import { generateTrialSessionMinutesPdfInteractor } from '@web-client/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy';
 import { openUrlInNewTab } from '@web-client/presenter/utilities/openUrlInNewTab';
 import { presenter } from '@web-client/presenter/presenter';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 jest.mock(
-  '@shared/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy',
+  '@web-client/proxies/trialSessionMinutes/generateTrialSessionMinutesPdfProxy',
 );
 jest.mock('@web-client/presenter/utilities/openUrlInNewTab');
 

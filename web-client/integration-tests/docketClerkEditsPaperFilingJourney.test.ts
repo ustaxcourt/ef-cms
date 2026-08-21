@@ -5,7 +5,6 @@ import {
   loginAs,
   setupTest,
   uploadPetition,
-  wait,
   waitForCondition,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
@@ -144,7 +143,12 @@ describe('Docket Clerk edits a paper filing journey', () => {
     ).toEqual('preview');
 
     await cerebralTest.runSequence('removeScannedPdfSequence');
-    await wait(200);
+
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentViewMetadata.documentUploadMode') ===
+        'scan',
+    });
 
     expect(
       cerebralTest.getState('currentViewMetadata.documentUploadMode'),

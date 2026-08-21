@@ -25,6 +25,7 @@ import {
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
 import {
   AuthUser,
@@ -57,6 +58,7 @@ import {
   calculateISODate,
   createISODateString,
   dateStringsCompared,
+  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -75,6 +77,7 @@ import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -99,11 +102,11 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption: string='';
+  public caseCaption: string = '';
   public caseType: CaseType;
   public closedDate?: string;
   public createdAt?: string;
-  public docketNumber: string='';
+  public docketNumber: string = '';
   public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
@@ -115,6 +118,8 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentDate?: string;
   public petitionPaymentMethod?: string;
   public petitionPaymentStatus: string;
+  public petitionPaymentToken?: string;
+  public petitionPaymentTransactionReferenceId?: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
@@ -136,10 +141,10 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: DocketEntry[]= [];
+  public docketEntries: DocketEntry[] = [];
   public isSealed?: boolean;
-  public hearings: any[]= [];
-  public privatePractitioners?: any[]= [];
+  public hearings: any[] = [];
+  public privatePractitioners?: any[] = [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
@@ -320,6 +325,34 @@ export class Case extends JoiValidationEntity {
   static formatDocketNumber(docketNumber) {
     const regex = /^0*(\d+-\d{2}).*/;
     return docketNumber.replace(regex, '$1');
+  }
+
+  static formatCaseStatus(workItem: {
+    caseStatus?: string;
+    trialLocation?: string;
+    trialDate?: string;
+  }) {
+    let formattedCaseStatus = workItem.caseStatus || '';
+
+    if (
+      workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
+      workItem.trialLocation &&
+      workItem.trialDate
+    ) {
+      let formattedTrialLocation = '';
+      if (
+        workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      ) {
+        formattedTrialLocation = abbreviateState(workItem.trialLocation);
+      } else {
+        formattedTrialLocation = workItem.trialLocation;
+      }
+
+      const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
+
+      formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+    }
+    return formattedCaseStatus;
   }
 
   /**
@@ -504,10 +537,9 @@ export class Case extends JoiValidationEntity {
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketNumberWithSuffix:
-      JoiValidationConstants.STRING.optional().description(
-        'Auto-generated from docket number and the suffix.',
-      ).min(0),
+    docketNumberWithSuffix: JoiValidationConstants.STRING.optional()
+      .description('Auto-generated from docket number and the suffix.')
+      .min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
@@ -634,6 +666,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Status of the case fee payment.')
       .messages({ '*': 'Enter payment status' }),
+    petitionPaymentToken: JoiValidationConstants.STRING.allow(null)
+      .optional()
+      .description(
+        'A temporary token used when processing the case fee payment with pay.gov',
+      ),
+    petitionPaymentTransactionReferenceId: JoiValidationConstants.UUID.allow(
+      null,
+    )
+      .optional()
+      .description(
+        'A UUID used to reference the case fee transaction for this case in the payment portal',
+      ),
     petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -778,6 +822,9 @@ export class Case extends JoiValidationEntity {
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
+    this.petitionPaymentToken = rawCase.petitionPaymentToken;
+    this.petitionPaymentTransactionReferenceId =
+      rawCase.petitionPaymentTransactionReferenceId;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;
@@ -794,9 +841,7 @@ export class Case extends JoiValidationEntity {
       this.initialCaption = rawCase.initialCaption || this.caseCaption;
     }
 
-    this.hasPendingItems = this.docketEntries.some(docketEntry =>
-      DocketEntry.isPending(docketEntry),
-    );
+    this.hasPendingItems = rawCase.hasPendingItems ?? false;
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
@@ -848,7 +893,11 @@ export class Case extends JoiValidationEntity {
               petitioners: this.petitioners,
             }),
         )
-        .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+        .sort(
+          (a, b) =>
+            compareStrings(a.createdAt, b.createdAt) ||
+            compareStrings(a.docketEntryId, b.docketEntryId),
+        );
 
       this.isSealed = isSealedCase(rawCase);
 
@@ -1000,14 +1049,8 @@ export class Case extends JoiValidationEntity {
   }
 
   //@ts-ignore
-  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
-    const { processPendingItems = true } = options;
+  toRawObject(): RawCase {
     const result = this.toRawObjectFromJoi();
-
-    if (processPendingItems) {
-      (result as any).hasPendingItems = this.doesHavePendingItems();
-    }
-
     // @ts-ignore
     return result as RawCase;
   }
@@ -1016,6 +1059,10 @@ export class Case extends JoiValidationEntity {
     return this.docketEntries.some(docketEntry =>
       DocketEntry.isPending(docketEntry),
     );
+  }
+
+  recomputeHasPendingItems(): void {
+    this.hasPendingItems = this.doesHavePendingItems();
   }
 
   /**
@@ -1420,11 +1467,11 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
-    const hasPendingItems = this.doesHavePendingItems();
+    this.hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && hasCaseDeadline) {
+    if (this.hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-    } else if (hasPendingItems) {
+    } else if (this.hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
     } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
@@ -1947,8 +1994,8 @@ export class Case extends JoiValidationEntity {
   setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
     const hasDate = Boolean(
       remoteTrialGrantedDate &&
-        typeof remoteTrialGrantedDate === 'string' &&
-        remoteTrialGrantedDate.trim() !== '',
+      typeof remoteTrialGrantedDate === 'string' &&
+      remoteTrialGrantedDate.trim() !== '',
     );
     this.remoteTrialGranted = hasDate;
     this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
@@ -2135,6 +2182,15 @@ export const isLeadCase = (rawCase: {
   docketNumber: string;
   leadDocketNumber?: string;
 }): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
+
+export const isMemberCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean =>
+  Boolean(
+    rawCase.leadDocketNumber &&
+    rawCase.leadDocketNumber !== rawCase.docketNumber,
+  );
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>

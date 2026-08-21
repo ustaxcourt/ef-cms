@@ -1,11 +1,15 @@
+jest.mock('@web-client/presenter/utilities/pollForCoversheetComplete');
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { pollForCoversheetComplete } from '@web-client/presenter/utilities/pollForCoversheetComplete';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
 describe('uploadExternalDocumentsAction', () => {
   presenter.providers.applicationContext = applicationContext;
+
+  const mockPollForCoversheetComplete = jest.mocked(pollForCoversheetComplete);
 
   const mockAnswerDocketEntry = {
     createdAt: '2018-11-21T20:49:28.192Z',
@@ -47,15 +51,17 @@ describe('uploadExternalDocumentsAction', () => {
     };
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the case docketNumber for the added document', async () => {
+  beforeEach(() => {
+    mockPollForCoversheetComplete.mockReset();
+    mockPollForCoversheetComplete.mockResolvedValue(undefined);
+  });
+
+  it('calls uploadExternalDocumentsInteractor and polls for coversheet completion for the added document', async () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -88,19 +94,16 @@ describe('uploadExternalDocumentsAction', () => {
         fileAcrossConsolidatedGroup: false,
       },
     });
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
-        .length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
+    expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketEntryIds: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    );
   });
 
-  it('should call uploadExternalDocumentsInteractor with a list of consolidated cases when filing across consolidated case group', async () => {
+  it('calls uploadExternalDocumentsInteractor with a list of consolidated cases when filing across consolidated case group', async () => {
     const testCase = {
       ...MOCK_CASE,
       consolidatedCases: [
@@ -113,11 +116,8 @@ describe('uploadExternalDocumentsAction', () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...testCase,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: testCase.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -155,22 +155,22 @@ describe('uploadExternalDocumentsAction', () => {
         fileAcrossConsolidatedGroup: true,
       },
     });
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
-        .length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: testCase.docketNumber,
-    });
+    expect(mockPollForCoversheetComplete).toHaveBeenCalledTimes(1);
+    expect(mockPollForCoversheetComplete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketEntryIds: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: testCase.docketNumber,
+      }),
+    );
   });
 
-  it('should call uploadExternalDocumentsInteractor for a primary and secondary document with multiple supporting documents', async () => {
+  it('calls uploadExternalDocumentsInteractor for a primary and secondary document with multiple supporting documents', async () => {
     applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor.mockReturnValue(MOCK_CASE);
+      .uploadExternalDocumentsInteractor.mockReturnValue({
+        docketEntryIdsAdded: [],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
 
     await runAction(uploadExternalDocumentsAction, {
       modules: {
@@ -248,18 +248,15 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should set documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner case association request', async () => {
+  it('sets documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner case association request', async () => {
     const mockPrivatePractitioner = {
       name: 'Simone Baulk',
     };
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -288,15 +285,12 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should not set documentMetadata.privatePractitioners to form.practitioner when the document to upload does not have field filedByPractitioner', async () => {
+  it('does not set documentMetadata.privatePractitioners to form.practitioner when the document to upload does not have field filedByPractitioner', async () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -324,5 +318,39 @@ describe('uploadExternalDocumentsAction', () => {
       fileAcrossConsolidatedGroup: undefined,
       privatePractitioners: null,
     });
+  });
+
+  it('returns path.error when the poll times out', async () => {
+    applicationContext
+      .getUseCases()
+      .uploadExternalDocumentsInteractor.mockReturnValue({
+        docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+    mockPollForCoversheetComplete.mockRejectedValue(new Error('poll timeout'));
+
+    const errorSpy = jest.fn();
+    const originalError = console.error;
+    console.error = jest.fn();
+    presenter.providers.path = {
+      error: errorSpy,
+      success: () => null,
+    };
+
+    await runAction(uploadExternalDocumentsAction, {
+      modules: { presenter },
+      props: {
+        documentMetadata: mockDocumentMetadata,
+        fileUploadProgressMap: mockFileUploadProgressMap,
+        files: mockFiles,
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+      },
+    });
+
+    expect(errorSpy).toHaveBeenCalledTimes(1);
+    console.error = originalError;
   });
 });

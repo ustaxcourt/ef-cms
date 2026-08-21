@@ -20,7 +20,7 @@ export const addPetitionerToCase = async (
     docketNumber,
   }: { caseCaption: string; contact: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
@@ -43,12 +43,10 @@ export const addPetitionerToCase = async (
 
   caseEntity.addPetitioner(petitionerEntity);
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addPetitionerToCaseInteractor = withLocking(

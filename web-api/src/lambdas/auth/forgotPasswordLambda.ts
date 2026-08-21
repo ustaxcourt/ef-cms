@@ -5,6 +5,6 @@ import { genericHandler } from '../../genericHandler';
 export const forgotPasswordLambda = (event: APIGatewayProxyEvent) =>
   genericHandler(event, async ({ applicationContext }) => {
     return await forgotPasswordInteractor(applicationContext, {
-      ...JSON.parse(event.body!),
+      ...JSON.parse(event.body || '{}'),
     });
   });

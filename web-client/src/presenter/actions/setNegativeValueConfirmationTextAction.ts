@@ -13,7 +13,7 @@ export const setNegativeValueConfirmationTextAction = ({
   store,
 }: ActionProps) => {
   store.set(
-    state.confirmationText[props.key],
+    state.confirmationText![props.key],
     applicationContext.getConstants().NEGATIVE_VALUE_CONFIRMATION_TEXT,
   );
 };

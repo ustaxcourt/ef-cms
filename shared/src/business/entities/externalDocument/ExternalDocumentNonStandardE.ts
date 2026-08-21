@@ -23,7 +23,7 @@ export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
   }
 
   getDocumentTitle(): string {
-    return replaceBracketed(this.documentTitle, this.trialLocation);
+    return replaceBracketed(this.documentTitle || '', this.trialLocation);
   }
 }
 

@@ -13,7 +13,7 @@ export const deleteCaseDeadlineLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await deleteCaseDeadlineInteractor(
+    await deleteCaseDeadlineInteractor(
       applicationContext,
       {
         ...event.pathParameters,

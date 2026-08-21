@@ -4,6 +4,7 @@ import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/se
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { setCustomValidationAlertErrorsFileDocumentAction } from '@web-client/presenter/actions/setCustomValidationAlertErrorsFileDocumentAction';
 
 export const validateExternalDocumentInformationSequence = [
   shouldValidateAction,
@@ -13,7 +14,11 @@ export const validateExternalDocumentInformationSequence = [
       setFilersFromFilersMapAction,
       validateExternalDocumentInformationAction,
       {
-        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+        error: [
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+          setCustomValidationAlertErrorsFileDocumentAction,
+        ],
         success: [clearAlertsAction],
       },
     ],

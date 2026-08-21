@@ -1,6 +1,6 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '@web-client/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
@@ -55,7 +55,7 @@ export const petitionsClerkAddsPractitionerToPrimaryContact = (
       ).toContain(cerebralTest.intervenorContactId);
     }
 
-    let formatted = runCompute(formattedCaseDetail, {
+    const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
 

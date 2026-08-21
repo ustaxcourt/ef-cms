@@ -5,7 +5,7 @@ import { props as cerebralProps } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
+export type PreviewControlsProps = {
   currentPage: number;
   disableLeftButtons: boolean;
   disableRightButtons: boolean;
@@ -16,28 +16,24 @@ const props = cerebralProps as unknown as {
   totalPages: number;
 };
 
-type PreviewControlsProps = {
-  currentPage: number
-  disableLeftButtons: boolean;
-  disableRightButtons: boolean;
-  totalPages: number;
-  onFirstPage: (e: any) => void;
-  onLastPage: (e: any) => void;
-  onNextPage: (e: any) => void;
-  onPreviousPage: (e: any) => void;
-}
+const props = cerebralProps as unknown as PreviewControlsProps;
 
-export const PreviewControls: React.FC<PreviewControlsProps> = connect(
-  {
-    currentPage: props.currentPage,
-    disableLeftButtons: props.disableLeftButtons,
-    disableRightButtons: props.disableRightButtons,
-    onFirstPage: props.onFirstPage,
-    onLastPage: props.onLastPage,
-    onNextPage: props.onNextPage,
-    onPreviousPage: props.onPreviousPage,
-    totalPages: props.totalPages,
-  },
+const previewControlsDeps = {
+  currentPage: props.currentPage,
+  disableLeftButtons: props.disableLeftButtons,
+  disableRightButtons: props.disableRightButtons,
+  onFirstPage: props.onFirstPage,
+  onLastPage: props.onLastPage,
+  onNextPage: props.onNextPage,
+  onPreviousPage: props.onPreviousPage,
+  totalPages: props.totalPages,
+};
+
+export const PreviewControls = connect<
+  PreviewControlsProps,
+  typeof previewControlsDeps
+>(
+  previewControlsDeps,
   function PreviewControls({
     currentPage,
     disableLeftButtons,

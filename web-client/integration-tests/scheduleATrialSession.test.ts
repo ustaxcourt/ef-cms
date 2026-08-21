@@ -2,6 +2,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
@@ -19,8 +20,8 @@ describe('Schedule A Trial Session', () => {
   cerebralTest.casesReadyForTrial = [];
 
   const caseCount = 2;
-  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
-  const trialLocation2 = `Boise, Idaho, ${Date.now()}`;
+  const trialLocation = `Albuquerque, New Mexico, ${getCurrentDateTimeInMillis()}`;
+  const trialLocation2 = `Boise, Idaho, ${getCurrentDateTimeInMillis()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,

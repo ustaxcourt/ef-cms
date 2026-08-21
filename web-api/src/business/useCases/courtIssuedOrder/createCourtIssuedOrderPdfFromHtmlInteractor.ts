@@ -1,7 +1,4 @@
-import {
-  CLERK_OF_THE_COURT_CONFIGURATION,
-  NOTICE_EVENT_CODE,
-} from '@shared/business/entities/EntityConstants';
+import { NOTICE_EVENT_CODE } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
@@ -10,9 +7,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getClerkOfTheCourtInfo } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { sanitizeUserHtml } from '@shared/business/utilities/sanitizeUserHtml';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -51,17 +49,12 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   let titleOfClerk = '';
 
   if (isNoticeEvent) {
-    const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-      CLERK_OF_THE_COURT_CONFIGURATION,
-    ]);
-
-    const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
-      name: string;
-      title: string;
-    };
+    const { name, title } = await getClerkOfTheCourtInfo();
     nameOfClerk = name;
     titleOfClerk = title;
   }
+
+  const sanitizedOrderContent = sanitizeUserHtml(contentHtml);
 
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
@@ -73,7 +66,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       caseTitle,
       docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
       nameOfClerk,
-      orderContent: contentHtml,
+      orderContent: sanitizedOrderContent,
       orderTitle: documentTitle,
       titleOfClerk,
     },

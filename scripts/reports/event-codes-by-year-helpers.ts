@@ -1,10 +1,12 @@
-import { getDbReader } from '@web-api/database';
-import { getJsTimeframeForYear } from '../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
 export type EventCodeReportDocketEntry = {
   associatedJudge: string;
   caption: string;
   docketNumber: string;
+  docketNumberSuffix?: string | null;
   documentType: string;
   receivedAt: Date;
   status: string;
@@ -12,12 +14,14 @@ export type EventCodeReportDocketEntry = {
 
 export const getDocketEntriesByEventCodesAndYears = async ({
   count,
+  distinct,
   eventCodes,
   fiscal,
   onlyNonStricken,
   years,
 }: {
   count?: boolean;
+  distinct?: boolean;
   eventCodes: string[];
   fiscal: boolean;
   onlyNonStricken?: boolean;
@@ -25,24 +29,12 @@ export const getDocketEntriesByEventCodesAndYears = async ({
 }): Promise<number | EventCodeReportDocketEntry[]> => {
   const results: { count: number } | EventCodeReportDocketEntry[] =
     await getDbReader(async reader => {
-      let query = reader.selectFrom('dwDocketEntry as de');
-      if (count) {
-        query = query.select(reader.fn.countAll().as('count'));
-      } else {
-        query = query
-          .innerJoin('dwCase as c', 'de.docketNumber', 'c.docketNumber')
-          .select([
-            'de.docketNumber',
-            'de.documentType',
-            'de.receivedAt',
-            'c.associatedJudge',
-            'c.caption',
-            'c.status',
-          ]);
-      }
-      query = query.where('de.eventCode', 'in', eventCodes);
+      let baseQuery = reader
+        .selectFrom('dwDocketEntry as de')
+        .where('de.eventCode', 'in', eventCodes);
+
       if (onlyNonStricken) {
-        query = query.where('de.isStricken', '!=', true);
+        baseQuery = baseQuery.where('de.isStricken', '!=', true);
       }
       if (years && years.length) {
         if (years.length === 1) {
@@ -50,11 +42,11 @@ export const getDocketEntriesByEventCodesAndYears = async ({
             fiscal,
             year: `${years[0]}`,
           });
-          query = query
+          baseQuery = baseQuery
             .where('de.receivedAt', '>=', begin)
             .where('de.receivedAt', '<', end);
         } else {
-          query = query.where(qb =>
+          baseQuery = baseQuery.where(qb =>
             qb.or(
               years.map(year => {
                 const { begin, end } = getJsTimeframeForYear({
@@ -70,9 +62,47 @@ export const getDocketEntriesByEventCodesAndYears = async ({
           );
         }
       }
+
       if (count) {
-        return (await query.executeTakeFirst()) as { count: number };
+        const countQuery = distinct
+          ? baseQuery.select(({ ref }) =>
+              sql<number>`count(distinct ${ref('de.docketEntryId')})`.as(
+                'count',
+              ),
+            )
+          : baseQuery.select(reader.fn.countAll().as('count'));
+
+        return (await countQuery.executeTakeFirst()) as { count: number };
       }
+
+      const query = baseQuery
+        .innerJoin('dwCase as c', 'de.docketNumber', 'c.docketNumber')
+        .select([
+          'de.docketNumber',
+          'de.documentType',
+          'de.receivedAt',
+          'c.associatedJudge',
+          'c.caption',
+          'c.docketNumberSuffix',
+          'c.status',
+        ]);
+
+      if (distinct) {
+        const distinctQuery = query
+          .distinctOn('de.docketEntryId')
+          .orderBy('de.docketEntryId', 'asc')
+          .orderBy('de.servedAt', 'asc')
+          .orderBy('de.docketNumber', 'asc');
+
+        return (await reader
+          .with('distinctDocketEntries', () => distinctQuery)
+          .selectFrom('distinctDocketEntries')
+          .selectAll()
+          .orderBy('receivedAt', 'asc')
+          .orderBy('docketNumber', 'asc')
+          .execute()) as EventCodeReportDocketEntry[];
+      }
+
       return (await query.execute()) as EventCodeReportDocketEntry[];
     });
   return count

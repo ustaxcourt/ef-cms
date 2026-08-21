@@ -4,7 +4,6 @@ import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/Co
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setCorrespondenceIdToDisplayAction } from '../actions/CorrespondenceDocument/setCorrespondenceIdToDisplayAction';
@@ -44,7 +43,6 @@ export const uploadCorrespondenceDocumentSequence = [
               setDocumentTitleFromFormAction,
               submitCorrespondenceAction,
               setCorrespondenceIdToDisplayAction,
-              setCaseAction,
               getUploadCorrespondenceDocumentAlertSuccessAction,
               setAlertSuccessAction,
               setSaveAlertsForNavigationAction,

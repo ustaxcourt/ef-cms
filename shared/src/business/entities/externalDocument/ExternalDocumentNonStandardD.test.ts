@@ -1,4 +1,4 @@
-import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentFactory } from '@web-client/business/entities/externalDocument/ExternalDocumentFactory';
 import {
   calculateISODate,
   createISODateString,
@@ -137,6 +137,16 @@ describe('ExternalDocumentNonStandardD', () => {
       expect(externalDocumentD.getDocumentTitle()).toEqual(
         'Certificate of Service  04-10-2012',
       );
+    });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentD = ExternalDocumentFactory({
+        category: 'Supporting Document',
+        documentType: 'Certificate of Service',
+        scenario: 'Nonstandard D',
+      });
+
+      expect(externalDocumentD.getDocumentTitle()).toEqual('');
     });
   });
 });

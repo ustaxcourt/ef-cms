@@ -34,7 +34,11 @@ describe('deletePractitionerDocumentAction', () => {
     expect(
       applicationContext.getUseCases().deletePractitionerDocumentInteractor.mock
         .calls[0][0],
-    ).toMatchObject(applicationContext, {
+    ).toMatchObject(applicationContext);
+    expect(
+      applicationContext.getUseCases().deletePractitionerDocumentInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       barNumber,
       practitionerDocumentFileId,
     });

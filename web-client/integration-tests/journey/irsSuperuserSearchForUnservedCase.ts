@@ -15,6 +15,6 @@ export const irsSuperuserSearchForUnservedCase = cerebralTest => {
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
     // irsSuperuser should NOT see a link to a petition
     // document that has not been served
-    expect(petitionDocketEntry.showLinkToDocument).toBeFalsy();
+    expect(petitionDocketEntry?.showLinkToDocument).toBeFalsy();
   });
 };

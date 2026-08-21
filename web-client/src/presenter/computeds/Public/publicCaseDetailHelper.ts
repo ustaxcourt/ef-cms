@@ -1,5 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_RECORD_PAGINATION_THRESHOLD,
   MOTION_DISPOSITION_VERBIAGE,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -125,12 +126,15 @@ export const formatDocketEntryOnDocketRecord = (
         isTerminalUser,
       );
 
+      const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+        affectedEntry.disposition
+      ].MOTION.map(d => `${d} #${index}`);
+
       return {
         ...affectedEntry,
         docketEntryIndex: index,
         showDownloadLink,
-        disposition:
-          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.MOTION,
+        dispositionLinkText,
       };
     });
   }
@@ -147,12 +151,15 @@ export const formatDocketEntryOnDocketRecord = (
           isTerminalUser,
         );
 
+        const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+          affectedEntry.disposition
+        ].ORDER.map(d => `${d} #${index}`);
+
         return {
           ...affectedEntry,
           docketEntryIndex: index,
           showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.ORDER,
+          dispositionLinkText,
         };
       }),
     );
@@ -258,6 +265,7 @@ export type PublicFormattedDocketEntryInfo = {
   hasDocument: boolean;
   relatedDocketEntries: {
     disposition?: string;
+    dispositionLinkText?: string[];
     docketEntryId?: string;
     docketEntryIndex?: number;
     showDownloadLink: boolean;
@@ -266,6 +274,7 @@ export type PublicFormattedDocketEntryInfo = {
 
 export type PublicCaseDetailHelperResults = {
   formattedDocketEntriesOnDocketRecord: PublicFormattedDocketEntryInfo[];
+  hasLargeDocketEntryCount: boolean;
   isCaseSealed: boolean;
   showPrintableDocketRecord: string | undefined;
 };
@@ -312,9 +321,14 @@ export const publicCaseDetailHelper = (
       sortOrder,
     );
 
+  const hasLargeDocketEntryCount =
+    sortedAndFilteredFormattedDocketEntriesOnDocketRecord.length >
+    DOCKET_RECORD_PAGINATION_THRESHOLD;
+
   return {
     formattedDocketEntriesOnDocketRecord:
       sortedAndFilteredFormattedDocketEntriesOnDocketRecord,
+    hasLargeDocketEntryCount,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
   };

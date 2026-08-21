@@ -1,6 +1,5 @@
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { addDraftStampOrderDocketEntryInteractor } from '@web-api/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
-import { addDraftWatermarkToDocument } from '@shared/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
+import { addDraftWatermarkToDocument } from '@web-api/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from './business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from './business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
@@ -20,7 +19,6 @@ import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInv
 import { generateChangeOfAddressHelper } from './business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generatePdfFromHtmlHelper } from './business/useCaseHelper/generatePdfFromHtmlHelper';
-import { generateStampedCoversheetInteractor } from './business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getJudgeForUserHelper } from '@web-api/business/useCaseHelper/getJudgeForUserHelper';
 import { getJudgeInSectionHelper } from './business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from './business/useCaseHelper/getUserIdForNote';
@@ -36,6 +34,7 @@ import { serveDocumentAndGetPaperServicePdf } from './business/useCaseHelper/ser
 import { serveGeneratedNoticesOnCase } from './business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
 import { setNoticeOfChangeOfTrialJudge } from './business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';
 import { setNoticeOfChangeOfTrialLocation } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialLocation';
+import { setNoticeOfChangeOfTrialStartDate } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialStartDate';
 import { setNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from './business/useCaseHelper/pdf/setPdfFormFields';
@@ -46,7 +45,6 @@ import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFi
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
-  addDraftStampOrderDocketEntryInteractor,
   addDraftWatermarkToDocument,
   addExistingUserToCase,
   addServedStampToDocument,
@@ -67,7 +65,6 @@ const useCaseHelpers = {
   generateChangeOfAddressHelper,
   generateNoticeOfChangeToInPersonProceeding,
   generatePdfFromHtmlHelper,
-  generateStampedCoversheetInteractor,
   getJudgeForUserHelper,
   getJudgeInSectionHelper,
   getUserIdForNote,
@@ -83,6 +80,7 @@ const useCaseHelpers = {
   serveGeneratedNoticesOnCase,
   setNoticeOfChangeOfTrialJudge,
   setNoticeOfChangeOfTrialLocation,
+  setNoticeOfChangeOfTrialStartDate,
   setNoticeOfChangeToInPersonProceeding,
   setNoticeOfChangeToRemoteProceeding,
   setPdfFormFields,

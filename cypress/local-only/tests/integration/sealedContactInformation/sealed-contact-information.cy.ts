@@ -1,4 +1,5 @@
 import {
+  loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
@@ -39,7 +40,7 @@ describe('Sealed Contact Information', () => {
       );
       cy.get(
         '[data-testid="seal-address-modal-address-petition-email"]',
-      ).contains('Not Provided');
+      ).contains('petitioner1@example.com');
       cy.get('[data-testid="confirm-modal-close-btn"]').click();
       cy.get('#seal-address').should('not.be.checked');
       goToCase(docketNumber);
@@ -63,7 +64,6 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#seal-address').should('be.checked');
-      cy.get('#seal-address').should('be.disabled');
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
@@ -72,8 +72,84 @@ describe('Sealed Contact Information', () => {
         'sealed-address',
       );
       cy.get('[data-testid="petitioner-paper-petition-email"]').contains(
-        'Not Provided',
+        'petitioner1@example.com',
       );
+    });
+  });
+
+  it('should allow users to add/edit case notes when petitioner contact info is sealed', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      // Login as docket clerk and seal a petitioners contact info
+      loginAsDocketClerk();
+      goToCase(docketNumber);
+      updateCaseStatus('General Docket - At Issue (Ready for Trial)');
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+
+      // Add a note as a docket clerk
+      cy.get('[data-testid="tab-notes"]').click();
+      cy.get('[data-testid="add-case-note"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').type(
+        'Docket Clerk able to edit',
+      );
+      cy.intercept('PUT', '**/case-notes/**').as('putCaseNoteDocketClerk');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.wait('@putCaseNoteDocketClerk')
+        .its('response.statusCode')
+        .should('eq', 200);
+      cy.contains('Docket Clerk able to edit').should('exist');
+
+      // Add a note as an ADC
+      loginAsAdc();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-notes"]').click();
+      cy.get('[data-testid="edit-case-note"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').click();
+      cy.get('[data-testid="edit-case-note-textarea"]').type(
+        '\nADC able to edit',
+      );
+      cy.intercept('PUT', '**/case-notes/**').as('putCaseNote');
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.wait('@putCaseNote').its('response.statusCode').should('eq', 200);
+      cy.contains('ADC able to edit').should('exist');
+    });
+  });
+
+  it('should let petitioner edit own contact information when sealed', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      loginAsDocketClerk();
+      goToCase(docketNumber);
+      updateCaseStatus('General Docket - At Issue (Ready for Trial)');
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="seal-address-label"]').contains(
+        'Seal contact information',
+      );
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      loginAsPetitioner();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="submit-contact-edit-button"]').click();
+      cy.get('[data-testid="error-alert"]').should('be.visible');
+      cy.get('[data-testid="domestic-country-btn"]').click();
+      cy.get('[data-testid="contact.address1"]').type('123 Main St');
+      cy.get('[data-testid="contact.city"]').type('Anytown');
+      cy.get('[data-testid="contact.state"]').select('NY');
+      cy.get('[data-testid="contact.postalCode"]').type('12345');
+      cy.get('[data-testid="phone-number-input"]').type('555-555-5555');
+      cy.get('[data-testid="submit-contact-edit-button"]').click();
+      cy.get('[data-testid="success-alert"]').should('be.visible');
+      cy.get('[data-testid="success-alert"]').contains('Changes saved.');
     });
   });
 });

@@ -1,7 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 

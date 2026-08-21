@@ -1,8 +1,0 @@
-import { Penalty } from '../entities/Penalty';
-
-export const validatePenaltiesInteractor = (
-  _applicationContext: IApplicationContext,
-  { rawPenalty }: { rawPenalty: object },
-): Record<string, string> | null => {
-  return new Penalty(rawPenalty).getFormattedValidationErrors();
-};

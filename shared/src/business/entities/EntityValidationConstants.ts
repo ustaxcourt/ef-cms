@@ -74,7 +74,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'An optional date used when generating a fully concatenated document title.',
     ),
   docketEntryId: JoiValidationConstants.UUID.required().description(
-    'System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key.',
+    'System-generated unique ID for the docket entry.',
   ),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Docket Number of the associated Case in XXXXX-YY format.',
@@ -89,6 +89,9 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   ),
   documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
     'The id for the original document that was uploaded.',
+  ),
+  documentStorageId: JoiValidationConstants.UUID.required().description(
+    'System-generated unique ID for the document in S3.',
   ),
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional()
     .description('The title of this document.')
@@ -261,6 +264,23 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     )
     .messages({ '*': 'Enter selection for filing status.' }),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
+  multiDocketedOn: joi
+    .array()
+    .items(JoiValidationConstants.DOCKET_NUMBER)
+    .required()
+    .description(
+      'Docket Numbers of the Cases on which the document was filed in XXXXX-YY format.',
+    ),
+  originallyFiledDocketNumber: JoiValidationConstants.DOCKET_NUMBER.when(
+    'servedAt',
+    {
+      is: joi.exist(),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    },
+  ).description(
+    'Docket Number of the Case originally filed on in XXXXX-YY format.',
+  ),
   numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
@@ -366,11 +386,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
         .optional()
         .description('Currently only required for the IRS'),
     })
-    .when('servedAt', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional(),
-      then: joi.required(),
-    })
+    .optional()
     .description('The parties to whom the document has been served.'),
   servedPartiesCode: JoiValidationConstants.STRING.valid(
     ...Object.values(PARTIES_CODES),

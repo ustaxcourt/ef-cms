@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getPractitionerCasesInteractor } from '@shared/business/useCases/getPractitionerCasesInteractor';
+import { getPractitionerCasesInteractor } from '@web-api/business/useCases/getPractitionerCasesInteractor';
 
 export const getPractitionerCasesLambda = (
   event,

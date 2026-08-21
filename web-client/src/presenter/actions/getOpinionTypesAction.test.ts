@@ -3,7 +3,9 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getOpinionTypesAction', () => {
   it('returns a list of opinion document types', async () => {
-    const result = await runAction(getOpinionTypesAction);
+    const result = await runAction(getOpinionTypesAction, {
+      state: {}
+    });
 
     expect(result.output).toEqual({
       opinionDocumentTypes: [

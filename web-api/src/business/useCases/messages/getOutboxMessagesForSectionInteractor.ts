@@ -12,7 +12,7 @@ export const getOutboxMessagesForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<ExcludeMethods<MessageResult>[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }

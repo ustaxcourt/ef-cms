@@ -29,7 +29,7 @@ export const docketClerkViewsNewTrialSession = (
       expect(foundCase).toBeTruthy();
 
       if (calendarNote) {
-        expect(foundCase.calendarNotes).toEqual(calendarNote);
+        expect(foundCase!.calendarNotes).toEqual(calendarNote);
       }
     }
   });

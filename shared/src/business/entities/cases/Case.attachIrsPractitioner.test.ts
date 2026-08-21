@@ -17,6 +17,6 @@ describe('attachIrsPractitioner', () => {
     );
 
     expect(caseToVerify.irsPractitioners).not.toBeNull();
-    expect(caseToVerify.irsPractitioners[0].userId).toEqual('irsPractitioner');
+    expect(caseToVerify.irsPractitioners![0].userId).toEqual('irsPractitioner');
   });
 });

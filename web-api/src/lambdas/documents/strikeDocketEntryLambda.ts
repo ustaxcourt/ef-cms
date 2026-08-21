@@ -18,7 +18,7 @@ export const strikeDocketEntryLambda = (
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
-    return await strikeDocketEntryInteractor(
+    await strikeDocketEntryInteractor(
       {
         docketEntryId,
         docketNumber,
