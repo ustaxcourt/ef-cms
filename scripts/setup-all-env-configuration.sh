@@ -16,7 +16,6 @@ set -e
 ./scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
 ./scripts/postgres/featureFlags/setup-document-visibility-policy-change-date.ts
 ./scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
-./scripts/postgres/featureFlags/setup-new-trial-cities.ts
 ./scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
 ./scripts/postgres/featureFlags/setup-terminal-ip-allowlist.ts
 ./scripts/postgres/featureFlags/setup-use-change-of-address-lambda-flag.ts
