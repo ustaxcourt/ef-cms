@@ -160,6 +160,77 @@ describe('determineMovantAndNonMovant', () => {
     expect(result).toEqual({ movant: 'petitioner', nonMovant: 'respondent' });
   });
 
+  describe('when a filing party name contains a petitioner name', () => {
+    it('names the other filing party, not the petitioner, when only the other filing party filed', () => {
+      const result = determineMovantAndNonMovant({
+        caseDetail: {
+          petitioners: [{ contactId: 'petitioner-1', name: 'John Doe' }],
+        },
+        motion: {
+          filedBy: 'John Doe Foundation',
+          filers: [],
+          otherFilingParty: 'John Doe Foundation',
+        },
+      });
+      expect(result).toEqual({
+        movant: 'John Doe Foundation',
+        nonMovant: 'the parties',
+      });
+    });
+
+    it('names the petitioner when the petitioner filed alongside the other filing party', () => {
+      const result = determineMovantAndNonMovant({
+        caseDetail: {
+          petitioners: [{ contactId: 'petitioner-1', name: 'John Doe' }],
+        },
+        motion: {
+          filedBy: 'Petr. John Doe, John Doe Foundation',
+          filers: ['petitioner-1'],
+          otherFilingParty: 'John Doe Foundation',
+        },
+      });
+      expect(result).toEqual({ movant: 'petitioner', nonMovant: 'respondent' });
+    });
+
+    it('does not treat the petitioner as the filer when filedBy only names a party whose name contains theirs', () => {
+      const result = determineMovantAndNonMovant({
+        caseDetail: { petitioners: [{ name: 'John Doe' }] },
+        motion: { filedBy: 'John Doe Foundation' },
+      });
+      expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
+    });
+
+    it('does not treat the petitioner as the filer when their name ends another party name', () => {
+      const result = determineMovantAndNonMovant({
+        caseDetail: { petitioners: [{ name: 'Doe Foundation' }] },
+        motion: { filedBy: 'John Doe Foundation' },
+      });
+      expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
+    });
+  });
+
+  it('identifies a petitioner whose own name contains commas', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: {
+        petitioners: [
+          { name: 'Estate of John Doe, Deceased, Jane Doe, Executrix' },
+        ],
+      },
+      motion: {
+        filedBy: 'Petr. Estate of John Doe, Deceased, Jane Doe, Executrix',
+      },
+    });
+    expect(result).toEqual({ movant: 'petitioner', nonMovant: 'respondent' });
+  });
+
+  it('ignores petitioners that have no name', () => {
+    const result = determineMovantAndNonMovant({
+      caseDetail: { petitioners: [{ name: '' }] },
+      motion: { filedBy: 'Respt. Commissioner' },
+    });
+    expect(result).toEqual({ movant: 'respondent', nonMovant: 'petitioner' });
+  });
+
   it('does not treat the motion as jointly filed when only respondent is checked', () => {
     const result = determineMovantAndNonMovant({
       caseDetail: {

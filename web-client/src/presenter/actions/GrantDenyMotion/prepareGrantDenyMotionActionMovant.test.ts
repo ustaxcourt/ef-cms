@@ -245,6 +245,36 @@ describe('prepareGrantDenyMotionAction movant identification', () => {
     });
   });
 
+  it('names the other filing party when their name contains the petitioner name', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...motion,
+              filedBy: 'John Doe Foundation',
+              filers: [],
+              otherFilingParty: 'John Doe Foundation',
+            },
+          ],
+          petitioners: [{ contactId: 'petitioner-1', name: 'John Doe' }],
+        },
+        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      expectedPreamble({ movant: 'John Doe Foundation' }),
+    );
+    expect(result.state.form.richText).toContain(
+      "ORDERED that John Doe Foundation's Motion to Compel is granted.",
+    );
+    expect(result.state.form.richText).not.toContain('petitioner');
+  });
+
   describe("the acceptance criteria's amicus example", () => {
     const amicusName = 'Chamber of Commerce of the United States of America';
     const amicusMotion = {
