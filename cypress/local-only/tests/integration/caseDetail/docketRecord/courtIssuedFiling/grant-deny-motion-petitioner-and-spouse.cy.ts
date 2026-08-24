@@ -1,16 +1,19 @@
 import {
   GRANT_DENY_MOTION_TYPE,
+  GRANT_DENY_OTHER_FILING_PARTY,
   MotionFilingParties,
   createElectronicMotionCase,
   dismissPaperServiceNotice,
+  grantMotionAndAssertOrderHtml,
   grantMotionAsJudge,
+  grantedOrderDescription,
 } from 'cypress/helpers/grantDenyMotion/grant-deny-motion-helpers';
 import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Judge grants a motion on an electronically filed case with a petitioner and spouse', () => {
   const motionType = GRANT_DENY_MOTION_TYPE;
-  const expectedOrderDescription = `Order - ${motionType} is granted`;
-  const otherFilingPartyName = 'Chamber Of Commerce';
+  const expectedOrderDescription = grantedOrderDescription();
+  const otherFilingPartyName = GRANT_DENY_OTHER_FILING_PARTY;
 
   const createMotionCase = (filingParties: MotionFilingParties) =>
     createElectronicMotionCase({ ...filingParties, withSpouse: true });
@@ -26,45 +29,31 @@ describe('Judge grants a motion on an electronically filed case with a petitione
           );
         });
 
-        grantMotionAsJudge(docketNumber);
-
-        cy.wait('@courtIssuedOrder').then(({ request }) => {
-          const html: string = request.body.contentHtml;
-          expect(html).to.include(`the parties filed a ${motionType}`);
-          expect(html).to.include(
-            `ORDERED that the parties' ${motionType} is granted.`,
-          );
+        grantMotionAndAssertOrderHtml({
+          assertOrderHtml: html => {
+            expect(html).to.include(`the parties filed a ${motionType}`);
+            expect(html).to.include(
+              `ORDERED that the parties' ${motionType} is granted.`,
+            );
+          },
+          docketNumber,
         });
-
-        cy.contains('Apply Signature').should('exist');
-        cy.get('[data-testid="skip-signature-button"]').click();
-
-        cy.url().should('contain', `/case-detail/${docketNumber}`);
-        cy.get('[data-testid="tab-drafts"]').click();
-        cy.contains(expectedOrderDescription).should('be.visible');
       },
     );
   });
 
   it('should identify the filing party as petitioners when granting a motion filed by both petitioners and not respondent', () => {
     createMotionCase({ filedByRespondent: false }).then(({ docketNumber }) => {
-      grantMotionAsJudge(docketNumber);
-
-      cy.wait('@courtIssuedOrder').then(({ request }) => {
-        const html: string = request.body.contentHtml;
-        expect(html).to.include(`petitioners filed a ${motionType}`);
-        expect(html).not.to.include(`the parties filed a ${motionType}`);
-        expect(html).to.include(
-          `ORDERED that petitioners' ${motionType} is granted.`,
-        );
+      grantMotionAndAssertOrderHtml({
+        assertOrderHtml: html => {
+          expect(html).to.include(`petitioners filed a ${motionType}`);
+          expect(html).not.to.include(`the parties filed a ${motionType}`);
+          expect(html).to.include(
+            `ORDERED that petitioners' ${motionType} is granted.`,
+          );
+        },
+        docketNumber,
       });
-
-      cy.contains('Apply Signature').should('exist');
-      cy.get('[data-testid="skip-signature-button"]').click();
-
-      cy.url().should('contain', `/case-detail/${docketNumber}`);
-      cy.get('[data-testid="tab-drafts"]').click();
-      cy.contains(expectedOrderDescription).should('be.visible');
     });
   });
 
@@ -73,49 +62,39 @@ describe('Judge grants a motion on an electronically filed case with a petitione
       filedByPetitioners: false,
       otherFilingParty: otherFilingPartyName,
     }).then(({ docketNumber }) => {
-      grantMotionAsJudge(docketNumber);
-
-      cy.wait('@courtIssuedOrder').then(({ request }) => {
-        const html: string = request.body.contentHtml;
-        expect(html).to.include(
-          `${otherFilingPartyName} filed a ${motionType}`,
-        );
-        expect(html).to.include(
-          `ORDERED that ${otherFilingPartyName}'s ${motionType} is granted.`,
-        );
-        expect(html).not.to.include(`ORDERED that petitioner's ${motionType}`);
-        expect(html).not.to.include(`ORDERED that respondent's ${motionType}`);
+      grantMotionAndAssertOrderHtml({
+        assertOrderHtml: html => {
+          expect(html).to.include(
+            `${otherFilingPartyName} filed a ${motionType}`,
+          );
+          expect(html).to.include(
+            `ORDERED that ${otherFilingPartyName}'s ${motionType} is granted.`,
+          );
+          expect(html).not.to.include(
+            `ORDERED that petitioner's ${motionType}`,
+          );
+          expect(html).not.to.include(
+            `ORDERED that respondent's ${motionType}`,
+          );
+        },
+        docketNumber,
       });
-
-      cy.contains('Apply Signature').should('exist');
-      cy.get('[data-testid="skip-signature-button"]').click();
-
-      cy.url().should('contain', `/case-detail/${docketNumber}`);
-      cy.get('[data-testid="tab-drafts"]').click();
-      cy.contains(expectedOrderDescription).should('be.visible');
     });
   });
 
   it('should identify the filing party as petitioners when the petitioners filed alongside a non-party', () => {
     createMotionCase({ otherFilingParty: otherFilingPartyName }).then(
       ({ docketNumber }) => {
-        grantMotionAsJudge(docketNumber);
-
-        cy.wait('@courtIssuedOrder').then(({ request }) => {
-          const html: string = request.body.contentHtml;
-          expect(html).to.include(`petitioners filed a ${motionType}`);
-          expect(html).to.include(
-            `ORDERED that petitioners' ${motionType} is granted.`,
-          );
-          expect(html).not.to.include(otherFilingPartyName);
+        grantMotionAndAssertOrderHtml({
+          assertOrderHtml: html => {
+            expect(html).to.include(`petitioners filed a ${motionType}`);
+            expect(html).to.include(
+              `ORDERED that petitioners' ${motionType} is granted.`,
+            );
+            expect(html).not.to.include(otherFilingPartyName);
+          },
+          docketNumber,
         });
-
-        cy.contains('Apply Signature').should('exist');
-        cy.get('[data-testid="skip-signature-button"]').click();
-
-        cy.url().should('contain', `/case-detail/${docketNumber}`);
-        cy.get('[data-testid="tab-drafts"]').click();
-        cy.contains(expectedOrderDescription).should('be.visible');
       },
     );
   });
@@ -125,23 +104,16 @@ describe('Judge grants a motion on an electronically filed case with a petitione
       filedByRespondent: true,
       otherFilingParty: otherFilingPartyName,
     }).then(({ docketNumber }) => {
-      grantMotionAsJudge(docketNumber);
-
-      cy.wait('@courtIssuedOrder').then(({ request }) => {
-        const html: string = request.body.contentHtml;
-        expect(html).to.include(`the parties filed a ${motionType}`);
-        expect(html).to.include(
-          `ORDERED that the parties' ${motionType} is granted.`,
-        );
-        expect(html).not.to.include(otherFilingPartyName);
+      grantMotionAndAssertOrderHtml({
+        assertOrderHtml: html => {
+          expect(html).to.include(`the parties filed a ${motionType}`);
+          expect(html).to.include(
+            `ORDERED that the parties' ${motionType} is granted.`,
+          );
+          expect(html).not.to.include(otherFilingPartyName);
+        },
+        docketNumber,
       });
-
-      cy.contains('Apply Signature').should('exist');
-      cy.get('[data-testid="skip-signature-button"]').click();
-
-      cy.url().should('contain', `/case-detail/${docketNumber}`);
-      cy.get('[data-testid="tab-drafts"]').click();
-      cy.contains(expectedOrderDescription).should('be.visible');
     });
   });
 

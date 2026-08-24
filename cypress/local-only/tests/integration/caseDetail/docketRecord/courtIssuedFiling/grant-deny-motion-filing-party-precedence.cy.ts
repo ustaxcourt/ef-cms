@@ -1,36 +1,23 @@
 import {
   GRANT_DENY_MOTION_TYPE,
+  GRANT_DENY_OTHER_FILING_PARTY,
   MotionFilingParties,
   createElectronicMotionCase,
-  grantMotionAsJudge,
+  grantMotionAndAssertOrderHtml,
 } from 'cypress/helpers/grantDenyMotion/grant-deny-motion-helpers';
 
 describe('Grant/Deny Motion filing party precedence', () => {
-  const otherFilingPartyName = 'Chamber Of Commerce';
-  const expectedOrderDescription = `Order - ${GRANT_DENY_MOTION_TYPE} is granted`;
-
-  const grantMotionAndAssertOrderHtml = (
+  const grantMotionOnCaseFiledBy = (
     filingParties: MotionFilingParties,
     assertOrderHtml: (html: string) => void,
   ): void => {
     createElectronicMotionCase(filingParties).then(({ docketNumber }) => {
-      grantMotionAsJudge(docketNumber);
-
-      cy.wait('@courtIssuedOrder').then(({ request }) => {
-        assertOrderHtml(request.body.contentHtml);
-      });
-
-      cy.contains('Apply Signature').should('exist');
-      cy.get('[data-testid="skip-signature-button"]').click();
-
-      cy.url().should('contain', `/case-detail/${docketNumber}`);
-      cy.get('[data-testid="tab-drafts"]').click();
-      cy.contains(expectedOrderDescription).should('be.visible');
+      grantMotionAndAssertOrderHtml({ assertOrderHtml, docketNumber });
     });
   };
 
   it('should identify the filing party as respondent when only respondent filed the motion', () => {
-    grantMotionAndAssertOrderHtml(
+    grantMotionOnCaseFiledBy(
       { filedByPetitioners: false, filedByRespondent: true },
       html => {
         expect(html).to.include(`respondent filed a ${GRANT_DENY_MOTION_TYPE}`);
@@ -48,31 +35,31 @@ describe('Grant/Deny Motion filing party precedence', () => {
   });
 
   it('should identify the filing party as respondent when respondent filed alongside a non-party', () => {
-    grantMotionAndAssertOrderHtml(
+    grantMotionOnCaseFiledBy(
       {
         filedByPetitioners: false,
         filedByRespondent: true,
-        otherFilingParty: otherFilingPartyName,
+        otherFilingParty: GRANT_DENY_OTHER_FILING_PARTY,
       },
       html => {
         expect(html).to.include(`respondent filed a ${GRANT_DENY_MOTION_TYPE}`);
         expect(html).to.include(
           `ORDERED that respondent's ${GRANT_DENY_MOTION_TYPE} is granted.`,
         );
-        expect(html).not.to.include(otherFilingPartyName);
+        expect(html).not.to.include(GRANT_DENY_OTHER_FILING_PARTY);
       },
     );
   });
 
   it('should identify the filing party as petitioner (singular) when the sole petitioner filed alongside a non-party', () => {
-    grantMotionAndAssertOrderHtml(
-      { otherFilingParty: otherFilingPartyName },
+    grantMotionOnCaseFiledBy(
+      { otherFilingParty: GRANT_DENY_OTHER_FILING_PARTY },
       html => {
         expect(html).to.include(`petitioner filed a ${GRANT_DENY_MOTION_TYPE}`);
         expect(html).to.include(
           `ORDERED that petitioner's ${GRANT_DENY_MOTION_TYPE} is granted.`,
         );
-        expect(html).not.to.include(otherFilingPartyName);
+        expect(html).not.to.include(GRANT_DENY_OTHER_FILING_PARTY);
         expect(html).not.to.include(
           `ORDERED that petitioners' ${GRANT_DENY_MOTION_TYPE}`,
         );
@@ -81,7 +68,7 @@ describe('Grant/Deny Motion filing party precedence', () => {
   });
 
   it('should identify the filing party as the parties when the sole petitioner and respondent filed jointly', () => {
-    grantMotionAndAssertOrderHtml({ filedByRespondent: true }, html => {
+    grantMotionOnCaseFiledBy({ filedByRespondent: true }, html => {
       expect(html).to.include(`the parties filed a ${GRANT_DENY_MOTION_TYPE}`);
       expect(html).to.include(
         `ORDERED that the parties' ${GRANT_DENY_MOTION_TYPE} is granted.`,
@@ -96,10 +83,10 @@ describe('Grant/Deny Motion filing party precedence', () => {
   });
 
   it('should identify the filing party as the parties when the sole petitioner and respondent filed alongside a non-party', () => {
-    grantMotionAndAssertOrderHtml(
+    grantMotionOnCaseFiledBy(
       {
         filedByRespondent: true,
-        otherFilingParty: otherFilingPartyName,
+        otherFilingParty: GRANT_DENY_OTHER_FILING_PARTY,
       },
       html => {
         expect(html).to.include(
@@ -108,7 +95,7 @@ describe('Grant/Deny Motion filing party precedence', () => {
         expect(html).to.include(
           `ORDERED that the parties' ${GRANT_DENY_MOTION_TYPE} is granted.`,
         );
-        expect(html).not.to.include(otherFilingPartyName);
+        expect(html).not.to.include(GRANT_DENY_OTHER_FILING_PARTY);
       },
     );
   });

@@ -36,6 +36,15 @@ export type MotionFilingParties = {
 
 export const GRANT_DENY_MOTION_TYPE = 'Motion for Continuance';
 
+export const GRANT_DENY_OTHER_FILING_PARTY = 'Chamber Of Commerce';
+
+/**
+ * The description the application generates for a granted motion's draft order.
+ */
+export const grantedOrderDescription = (
+  motionType: string = GRANT_DENY_MOTION_TYPE,
+): string => `Order - ${motionType} is granted`;
+
 export const grantDenyMotionToday = formatNow(FORMATS.MMDDYYYY);
 export const grantDenyMotionFormattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
 
@@ -69,9 +78,13 @@ export const dismissPaperServiceNotice = (): void => {
 const addAndServeMotion = ({
   filedByPetitioners,
   filedByRespondent,
+  hasPaperServiceParty,
   motionType,
   otherFilingParty,
-}: MotionFilingParties & { motionType: string }): void => {
+}: MotionFilingParties & {
+  hasPaperServiceParty: boolean;
+  motionType: string;
+}): void => {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-paper-filing"]').click();
   cy.get(
@@ -105,8 +118,21 @@ const addAndServeMotion = ({
   cy.intercept('GET', '**/documents/**/upload-policy').as('uploadPolicy');
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
-  dismissPaperServiceNotice();
+
+  // The paper service printout only renders when a party is served on paper, so
+  // a case whose parties are all electronic goes straight back to case detail.
+  if (hasPaperServiceParty) {
+    dismissPaperServiceNotice();
+  }
+
   cy.wait('@uploadPolicy');
+
+  // Serving a paper filing finishes asynchronously, and clicking through the
+  // paper service printout was what used to hold the test until it did. Wait
+  // for the motion to reach the docket record so every caller gets a case the
+  // motion is actually filed on.
+  cy.get('[data-testid="tab-docket-record"]').click();
+  cy.contains(motionType).should('be.visible');
 };
 
 /**
@@ -142,6 +168,9 @@ export const createElectronicMotionCase = ({
     addAndServeMotion({
       filedByPetitioners,
       filedByRespondent,
+      // the spouse is added by the petitioner without an email, so they are the
+      // only party on these cases that receives paper service
+      hasPaperServiceParty: withSpouse,
       motionType,
       otherFilingParty,
     });
@@ -184,4 +213,32 @@ export const grantMotionAsJudge = (
 
   cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
   cy.get('[data-testid="save-draft-button"]').click();
+};
+
+/**
+ * Grants the served motion as the judge, hands the generated order HTML to the
+ * caller to assert on, then skips signing and confirms the draft order landed
+ * on the Drafts tab.
+ */
+export const grantMotionAndAssertOrderHtml = ({
+  assertOrderHtml,
+  docketNumber,
+  motionType = GRANT_DENY_MOTION_TYPE,
+}: {
+  assertOrderHtml: (html: string) => void;
+  docketNumber: string;
+  motionType?: string;
+}): void => {
+  grantMotionAsJudge(docketNumber, motionType);
+
+  cy.wait('@courtIssuedOrder').then(({ request }) => {
+    assertOrderHtml(request.body.contentHtml);
+  });
+
+  cy.contains('Apply Signature').should('exist');
+  cy.get('[data-testid="skip-signature-button"]').click();
+
+  cy.url().should('contain', `/case-detail/${docketNumber}`);
+  cy.get('[data-testid="tab-drafts"]').click();
+  cy.contains(grantedOrderDescription(motionType)).should('be.visible');
 };
