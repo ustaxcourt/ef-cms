@@ -31,7 +31,7 @@ export class DocketEntryWorksheet extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     docketEntryId: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketEntryId,
-    finalBriefDueDate: JoiValidationConstants.DATE.allow('')
+    finalBriefDueDate: JoiValidationConstants.ISO_DATE.allow('')
       .optional()
       .messages({
         '*': 'Enter a valid due date',

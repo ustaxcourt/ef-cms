@@ -19,11 +19,12 @@ Before using these run configurations, ensure you have:
 Each run configuration is a "single click" experience. JetBrains IDEs allow the user to run or debug, whereas VSCode always debugs. This documentation assumes that you will be debugging.
 
 ### 1. DAWSON local (Combined)
-- **What it does:** This is a Compound configuration that launches the `API`, `Client`, and `Public` configurations simultaneously.
+- **What it does:** This is a Compound configuration that launches the `API`, `Client`, `Public`, and `Payment Portal` configurations simultaneously.
 - **How to run:** Select `DAWSON local` and click the **Debug** button. This will:
   1. **Debug the API** (Backend).
   1. **Run the Private Client** server.
   1. **Run the Public Client** server.
+  1. **Run the Payment Portal**.
 - **Note:** Because Chrome only allows one debugger to be attached at a time per user profile, the frontend debuggers are not part of the initial "DAWSON local" launch. You can attach them manually once the servers are up (see below).
 
 ### 2. API (Backend)
@@ -40,6 +41,11 @@ Each run configuration is a "single click" experience. JetBrains IDEs allow the 
 - **What it does:** Runs the (public) frontend server with live reload.
 - **How to run:** Select **Public** and click **Debug**.
 - **Access:** [http://localhost:5678](http://localhost:5678)
+
+### 5. Payment Portal
+- **What it does:** Runs the Payment Portal server.
+- **How to run:** Select **Payment Portal** and click **Debug**.
+- **Access:** [http://localhost:8080](http://localhost:8080)
 
 ---
 
@@ -59,4 +65,4 @@ To debug the UI in your IDE:
 - **Chrome Debug "Browser process terminated":** This error usually means Chrome is already being debugged by another process or another tab in the same profile. Make sure to close any existing debugger-controlled Chrome windows before starting a new one.
 - **Docker Errors:** Ensure Docker Desktop is running. The **API** configuration will automatically attempt to start the necessary containers.
 - **Clean Slate:** If you need to reset your local data completely, stop all running processes, run `docker compose down` in your terminal, and then click **Debug** on the **API** configuration again to re-initialize everything.
-- **Port Conflicts:** Ensure no other processes are using ports 4000 (API), 5432 (Postgres), 9200 (OpenSearch), 9001 (S3), or 9229 (Cognito).
+- **Port Conflicts:** Ensure no other processes are using ports 4000 (API), 5432 (Postgres), 9200 (OpenSearch), 9001 (S3), 9229 (Cognito), or 8080 (Payment Portal).
