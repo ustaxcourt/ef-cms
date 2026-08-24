@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/10/2026, `babel-jest`, `ts-jest`, `recharts`, and `eslint-plugin-cypress` are documented as hand-managed caveats below but are absent from the script's `caveats` array — the upgrade script will bump them unless reverted manually after each run. Only `eslint-plugin-cypress` required attention during the 8/10/2026 rotation (the other three were already at their latest versions), but the gap is real and should be closed over time.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/17/2026, the script and docs are in sync; the following hand-managed packages are excluded by the upgrade script: `babel-jest`, `ts-jest`, `recharts`, `eslint-plugin-cypress`, and `aws-sigv4-sign`.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -374,7 +374,7 @@ If an update is available for DWT:
 **jest: 30.4.2**
 **jest-environment-jsdom: 30.4.1**
 
-- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. Verify the full unit test suites after any bump.
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
 
@@ -487,7 +487,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
 
-- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is absent from the upgrade script's `caveats` array, so the script will bump it to 7.x each rotation unless reverted manually afterward.
+- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is excluded by the upgrade script's `caveats` array.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
@@ -567,11 +567,21 @@ Calendar-only formats (`MM/DD/YYYY`, `YYYY-MM-DD`) are unaffected.
 
   Also fixed **`JoiValidationConstants.ISO_DATE`** to use `utc: true`, and added **`custom-rules-plugin/joi-iso-date-utc`** plus the exports above so future validators cannot reintroduce local-time parsing for UTC ISO strings.
 
+### recharts
+**Installed Version: 3.10.1**
+
+- Pinned because `@recharts/devtools` does not yet peer-match recharts 3.10.x. Upgrade manually in coordination with `@recharts/devtools` when a compatible devtools release is available. This package is excluded by the upgrade script's `caveats` array.
+
 ### @recharts/devtools
 **Installed Version: 0.0.14**
 
 - 8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
+
+### aws-sigv4-sign
+**Installed Version: 1.2.1**
+
+- Pinned until tested in an experimental environment with payment-portal integration. A 2.x release is available but was reverted in [PR #10354](https://github.com/ustaxcourt/ef-cms/pull/10354) pending validation. This package is excluded by the upgrade script's `caveats` array.
 
 ## Troubleshooting
 
