@@ -508,9 +508,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
 ### @joi/date
-**Installed Version: 3.0.0**
+**Installed Version: 2.1.1**
 
-- 8/7/26 - @joi/date had a major version update with breaking changes: the package is ESM-only (`.mjs`), and date format parsing moved from **moment** to **dayjs**. Updating requires changing how we import this package in validators that use tests.
+- 8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
 From
 
 ```ts
@@ -526,46 +526,9 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-Because of the moment → dayjs switch:
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
-- Keep the same allowed date shapes, but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches.
-- Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
-- For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`), reuse **`JoiValidationConstants.ISO_DATE`**, or chain `.format()` from it.
-
-Without `utc: true`, dayjs parses the time in the machine's local timezone. That makes `.max('now')` reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
-
-**UTC ISO validation (required pattern).**
-
-Prefer these exports from `shared/src/business/entities/JoiValidationConstants.ts`:
-
-- **`JoiValidationConstants.ISO_DATE`** — default for entity validators (already includes `utc: true`).
-- **`ISO_DATE_FORMAT_STRING`** — the canonical `'YYYY-MM-DDTHH:mm:ss.SSS[Z]'` string when building allowed-format lists.
-- **`ISO_DATE_JOI_FORMAT`** — `{ format: ISO_DATE_FORMAT_STRING, utc: true }` when a standalone `joi.date().iso().format(...)` is needed.
-
-Example: `DocumentSearch` chains `.format()` from `ISO_DATE` and includes `ISO_DATE_FORMAT_STRING` in its allowed formats.
-
-**ESLint guard: `custom-rules-plugin/joi-iso-date-utc`.**
-
-Registered in `eslint.config.mjs` and enforced on every `npm run lint` / CI run.
-
-The rule errors when code calls `.format(...)` with a format that includes the literal `[Z]` suffix but omits `utc: true`. Chaining from `JoiValidationConstants.ISO_DATE.format(...)` is allowed.
-
-- Rule: `eslint-custom-rules/eslint-joi-iso-date-utc-rule.js`
-- Tests: `scripts/eslint-custom-rules/eslint-joi-iso-date-utc-rule.test.ts`
-
-Calendar-only formats (`MM/DD/YYYY`, `YYYY-MM-DD`) are unaffected.
-
-- 8/11/26 - Upgraded to **3.0.0**.
-
-  Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by:
-
-  - Widening the transform regex to `'\\.m?[jt]sx?$'`
-  - Adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`)
-  - Adding `mjs` to `moduleFileExtensions` where declared
-
-  Removed from the upgrade script's `caveats` array.
-
-  Also fixed **`JoiValidationConstants.ISO_DATE`** to use `utc: true`, and added **`custom-rules-plugin/joi-iso-date-utc`** plus the exports above so future validators cannot reintroduce local-time parsing for UTC ISO strings.
+- 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
 
 ### recharts
 **Installed Version: 3.10.1**
