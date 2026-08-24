@@ -1,3 +1,22 @@
+<details><summary>Fix stale automaticBlocked on cases set for trial</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Cases that were automatically blocked before being set for trial kept a stale
+`automaticBlocked` flag, because the recompute was skipped whenever the case had
+a trial date. This excluded them from trial eligibility and left them on the
+Blocked Cases Report. Run the following to recompute those cases:
+
+```bash
+# Preview the cases that will be updated
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts --dryRun
+
+# Apply the fix
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-10</summary>
 
 ## Manual Deployment Steps
