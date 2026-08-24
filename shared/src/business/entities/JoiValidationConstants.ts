@@ -7,10 +7,10 @@ import {
   MAX_FILE_SIZE_BYTES,
   MOTION_DISPOSITIONS,
 } from './EntityConstants';
-import { JoiDate } from '@joi/date';
+import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(JoiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 // These are specific to joi/@joi/date (dayjs) and cannot be shared with luxon.
 // @joi/date@3 uses dayjs: a trailing literal Z must be escaped as [Z]
