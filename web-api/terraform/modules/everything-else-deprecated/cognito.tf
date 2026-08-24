@@ -209,7 +209,7 @@ resource "aws_cognito_user_pool_client" "client" {
   callback_urls                = var.oidc_issuer_url != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
   allowed_oauth_flows          = var.oidc_issuer_url != "" ? ["code"] : null
   allowed_oauth_scopes         = var.oidc_issuer_url != "" ? ["openid", "email", "profile"] : null
-  supported_identity_providers = var.oidc_issuer_url != "" ? ["cognitoFakeUserPool"] : null # rename
+  supported_identity_providers = var.oidc_issuer_url != "" ? [aws_cognito_identity_provider.idp.provider_name] : null
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
