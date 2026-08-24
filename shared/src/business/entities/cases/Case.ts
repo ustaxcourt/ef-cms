@@ -3,6 +3,7 @@ import {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
+  AutomaticBlockedReasons,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CASE_TYPES,
@@ -1466,9 +1467,18 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
+  updateAutomaticBlocked({
+    hasCaseDeadline,
+  }: {
+    hasCaseDeadline: boolean;
+  }): Case {
     this.hasPendingItems = this.doesHavePendingItems();
-    let automaticBlockedReason;
+
+    if (this.trialDate) {
+      return this.setAutomaticBlock();
+    }
+
+    let automaticBlockedReason: AutomaticBlockedReasons | undefined;
     if (this.hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
     } else if (this.hasPendingItems) {
@@ -1476,15 +1486,14 @@ export class Case extends JoiValidationEntity {
     } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
     }
-    if (automaticBlockedReason) {
-      this.automaticBlocked = true;
-      this.automaticBlockedDate = createISODateString();
-      this.automaticBlockedReason = automaticBlockedReason;
-    } else {
-      this.automaticBlocked = false;
-      this.automaticBlockedDate = undefined;
-      this.automaticBlockedReason = undefined;
-    }
+
+    return this.setAutomaticBlock(automaticBlockedReason);
+  }
+
+  private setAutomaticBlock(reason?: AutomaticBlockedReasons): Case {
+    this.automaticBlocked = !!reason;
+    this.automaticBlockedDate = reason ? createISODateString() : undefined;
+    this.automaticBlockedReason = reason;
 
     this.consolidatedCases.forEach(c => {
       if (c.docketNumber === this.docketNumber) {
@@ -1848,6 +1857,9 @@ export class Case extends JoiValidationEntity {
         changedBy: SYSTEM_ROLE,
         updatedCaseStatus: CASE_STATUS_TYPES.calendared,
       });
+    }
+    if (this.trialDate) {
+      this.setAutomaticBlock();
     }
     return this;
   }
