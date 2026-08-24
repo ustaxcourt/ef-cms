@@ -13,7 +13,59 @@ procedure-neutral Order Designating Place of Trial by running:
 ./scripts/postgres/featureFlags/setup-new-trial-cities.ts
 ```
 </details>
+<details><summary>Dependency Updates - Week of 2026-08-17</summary>
 
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.93`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+
+#### OpenSearch 3.5 → 3.7 engine upgrade
+
+Run the OpenSearch indices report and note the indices and aliases in the target environment:
+
+```bash
+. scripts/env/set-env.zsh {YOUR_ENV}
+scripts/reports/indices.ts
+```
+
+Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager to `OpenSearch_3.7`:
+
+```bash
+scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+Deploy to the environment. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify the cluster is still functional by running search smoketests against the current color:
+
+```bash
+scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
+```
+
+After the deployment's `cleanup` job is finished, rerun the OpenSearch indices report and ensure that all indices are present and populated, and that the aliases are configured as expected:
+
+```bash
+scripts/reports/indices.ts
+```
+
+#### PROD & TEST ONLY! Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager to `OpenSearch_3.7`
+
+```bash
+ENV=account scripts/secrets/update-secret.ts --key "ES_LOGS_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+#### PROD & TEST ONLY! Run an `account-specific` terraform deployment
+
+```bash
+npm run deploy:account-specific
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-10</summary>
 
 ## Manual Deployment Steps
