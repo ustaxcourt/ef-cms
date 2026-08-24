@@ -210,7 +210,7 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cerebralTest.docketNumber,
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
-        finalBriefDueDate: '2023-08-29T04:00:00.000Z',
+        finalBriefDueDate: '2023-08-29T00:00:00.000-04:00',
       },
     });
 
@@ -269,7 +269,7 @@ describe('Case Worksheets Journey', () => {
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
         docketNumber: cerebralTest.docketNumber,
-        finalBriefDueDate: '2023-08-29T04:00:00.000Z',
+        finalBriefDueDate: '2023-08-29T00:00:00.000-04:00',
         statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       },
     });
