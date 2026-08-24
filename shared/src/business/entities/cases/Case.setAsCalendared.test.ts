@@ -1,4 +1,5 @@
 import {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   SESSION_TYPES,
@@ -82,5 +83,64 @@ describe('setAsCalendared', () => {
     expect(myCase.trialLocation).toBeTruthy();
     expect(myCase.trialSessionId).toBeTruthy();
     expect(myCase.trialTime).toBeTruthy();
+  });
+
+  it('should clear an existing automatic block when the case is set for trial', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+    const trialSession = new TrialSession({
+      isCalendared: true,
+      judge: { name: 'Judge Buch', userId: 'buch-id' },
+      maxCases: 100,
+      sessionType: SESSION_TYPES.regular,
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
+
+    myCase.setAsCalendared(trialSession);
+
+    expect(myCase.automaticBlocked).toEqual(false);
+    expect(myCase.automaticBlockedDate).toBeUndefined();
+    expect(myCase.automaticBlockedReason).toBeUndefined();
+  });
+
+  it('should not clear a manual block when the case is set for trial', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-03-01T21:42:29.073Z',
+        blockedReason: 'because reasons',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+    const trialSession = new TrialSession({
+      isCalendared: true,
+      judge: { name: 'Judge Buch', userId: 'buch-id' },
+      maxCases: 100,
+      sessionType: SESSION_TYPES.regular,
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
+
+    myCase.setAsCalendared(trialSession);
+
+    expect(myCase.blocked).toEqual(true);
+    expect(myCase.blockedReason).toEqual('because reasons');
   });
 });
