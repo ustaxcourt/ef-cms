@@ -1,3 +1,18 @@
+<details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Do not enable this feature before the last weekend in August 2026. After both
+stories are deployed, and no later than September 8, 2026, enable the five new
+trial cities, consolidated petition trial-location menus, and
+procedure-neutral Order Designating Place of Trial by running:
+
+```bash
+./scripts/postgres/featureFlags/setup-new-trial-cities.ts
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-17</summary>
 
 ## Manual Deployment Steps
@@ -63,21 +78,6 @@ This script will prompt for an environment to pull the image from; choose `exp7`
 
 ```bash
 npm run ecr:check-version
-```
-</details>
-<details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
-
-## Manual Deployment Steps
-
-### After Deployment
-
-Do not enable this feature before the last weekend in August 2026. After both
-stories are deployed, and no later than September 8, 2026, enable the five new
-trial cities, consolidated petition trial-location menus, and
-procedure-neutral Order Designating Place of Trial by running:
-
-```bash
-./scripts/postgres/featureFlags/setup-new-trial-cities.ts
 ```
 </details>
 <details><summary>Payment Portal Integration</summary>
