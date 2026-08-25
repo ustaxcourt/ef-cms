@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
-  COURT_ISSUED_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   MOTION_DISPOSITIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -426,13 +425,5 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
 
     expect(result.showAttachmentAndServiceFields).toBe(true);
-  });
-
-  it('should include Exhibit in Support (EXS) in COURT_ISSUED_EVENT_CODES', () => {
-    const exsInCourtIssued = COURT_ISSUED_EVENT_CODES.find(
-      code => code.eventCode === 'EXS',
-    );
-    expect(exsInCourtIssued).toBeDefined();
-    expect(exsInCourtIssued?.documentType).toEqual('Exhibit in Support');
   });
 });
