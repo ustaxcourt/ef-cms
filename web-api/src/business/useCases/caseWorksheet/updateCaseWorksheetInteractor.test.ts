@@ -49,7 +49,7 @@ describe('updateCaseWorksheetInteractor', () => {
   });
 
   it('should persist and return the updated case worksheet when the updates are valid', async () => {
-    const mockFinalBriefDueDate = '2023-08-29T04:00:00.000Z';
+    const mockFinalBriefDueDate = '2023-08-29T00:00:00.000-04:00';
     getCaseWorksheetsByDocketNumber.mockResolvedValue([mockCaseWorksheet]);
 
     const result = await updateCaseWorksheetInteractor(
@@ -73,7 +73,7 @@ describe('updateCaseWorksheetInteractor', () => {
   });
 
   it('should persist the updated case worksheet when the updates are valid, using the judge`s userId in the section when the current user is a chambers user', async () => {
-    const mockFinalBriefDueDate = '2023-08-29T04:00:00.000Z';
+    const mockFinalBriefDueDate = '2023-08-29T00:00:00.000-04:00';
     getCaseWorksheetsByDocketNumber.mockResolvedValue([mockCaseWorksheet]);
 
     const result = await updateCaseWorksheetInteractor(
