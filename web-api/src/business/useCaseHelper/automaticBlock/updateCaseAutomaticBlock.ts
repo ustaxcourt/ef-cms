@@ -1,7 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty } from 'lodash';
-import { SIGNED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const updateCaseAutomaticBlock = async ({
   caseEntity,
@@ -9,17 +8,8 @@ export const updateCaseAutomaticBlock = async ({
 }: {
   caseEntity: Case;
   hasCaseDeadline?: boolean;
-}) => {
-  const docketedStipulatedDecision = caseEntity.docketEntries.find(
-    de =>
-      de.eventCode ===
-        SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode &&
-      de.isOnDocketRecord,
-  );
-
-  if (caseEntity.trialDate && !docketedStipulatedDecision) return caseEntity;
-
-  if (hasCaseDeadline === undefined) {
+}): Promise<Case> => {
+  if (hasCaseDeadline === undefined && !caseEntity.trialDate) {
     hasCaseDeadline = !isEmpty(
       await getCaseDeadlinesByDocketNumber({
         docketNumber: caseEntity.docketNumber,
@@ -27,7 +17,7 @@ export const updateCaseAutomaticBlock = async ({
     );
   }
 
-  caseEntity.updateAutomaticBlocked({ hasCaseDeadline });
+  caseEntity.updateAutomaticBlocked({ hasCaseDeadline: !!hasCaseDeadline });
 
   return caseEntity;
 };
