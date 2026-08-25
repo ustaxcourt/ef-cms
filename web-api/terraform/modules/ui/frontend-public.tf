@@ -169,12 +169,28 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     domain_name              = aws_s3_bucket.frontend_public.bucket_regional_domain_name
     origin_id                = "primary-${var.current_color}.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.frontend_public.id
+
+    # Config channel for header_security_lambda (origin-response) — supplies the domain it
+    # interpolates into the CSP. NOT an authorization mechanism: access is enforced by OAC
+    # SigV4 + the AWS:SourceArn condition on the bucket policy.
+    custom_header {
+      name  = "x-allowed-domain"
+      value = var.zone_name
+    }
   }
 
   origin {
     domain_name              = aws_s3_bucket.failover_public.bucket_regional_domain_name
     origin_id                = "failover-${var.current_color}.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.failover_public.id
+
+    # Config channel for header_security_lambda (origin-response) — supplies the domain it
+    # interpolates into the CSP. NOT an authorization mechanism: access is enforced by OAC
+    # SigV4 + the AWS:SourceArn condition on the bucket policy.
+    custom_header {
+      name  = "x-allowed-domain"
+      value = var.zone_name
+    }
   }
 
   custom_error_response {
