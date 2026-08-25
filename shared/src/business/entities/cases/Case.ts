@@ -1461,12 +1461,6 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  /**
-   * update as automaticBlocked with an automaticBlockedReason based on
-   * provided case deadlines and pending items
-   * @param {object} caseDeadlines - the case deadlines
-   * @returns {Case} the updated case entity
-   */
   updateAutomaticBlocked({
     hasCaseDeadline,
   }: {

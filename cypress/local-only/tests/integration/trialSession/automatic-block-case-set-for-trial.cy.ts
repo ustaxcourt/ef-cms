@@ -40,12 +40,12 @@ describe('Automatic block on a case set for trial', () => {
         dateReceived: '01/01/2021',
         documentType: 'Motion to Dismiss',
       });
-      cy.get('[data-testid="save-and-serve"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
       cy.intercept(
         'GET',
         `**/cases/${docketNumber}?excludeDocketEntries=true`,
       ).as('getCase');
+      cy.get('[data-testid="save-and-serve"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
       cy.wait('@getCase').then(({ response }) => {
         cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
         const caseEntity = response?.body;
