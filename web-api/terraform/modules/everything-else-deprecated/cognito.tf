@@ -169,7 +169,7 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  allowed_oauth_flows_user_pool_client = var.oidc_issuer_url != "" ? true : false
+  allowed_oauth_flows_user_pool_client = var.idp_name != "" ? true : false
 
   token_validity_units {
     access_token  = "hours"
@@ -206,37 +206,37 @@ resource "aws_cognito_user_pool_client" "client" {
     "zoneinfo",
   ]
 
-  callback_urls                = var.oidc_issuer_url != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
-  allowed_oauth_flows          = var.oidc_issuer_url != "" ? ["code"] : null
-  allowed_oauth_scopes         = var.oidc_issuer_url != "" ? ["openid", "email", "profile"] : null
-  supported_identity_providers = var.oidc_issuer_url != "" ? [aws_cognito_identity_provider.idp[0].provider_name] : null
+  callback_urls                = var.idp_name != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
+  allowed_oauth_flows          = var.idp_name != "" ? ["code"] : null
+  allowed_oauth_scopes         = var.idp_name != "" ? ["openid", "email", "profile"] : null
+  supported_identity_providers = var.idp_name != "" ? [aws_cognito_identity_provider.idp[0].provider_name] : null
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  count                 = var.oidc_issuer_url != "" ? 1 : 0
+  count                 = var.idp_name != "" ? 1 : 0
   domain                = "ef-cms-${var.environment}"
   user_pool_id          = aws_cognito_user_pool.pool.id
   managed_login_version = 2
 }
 
 resource "aws_cognito_managed_login_branding" "login_branding" {
-  count                       = var.oidc_issuer_url != "" ? 1 : 0
+  count                       = var.idp_name != "" ? 1 : 0
   client_id                   = aws_cognito_user_pool_client.client.id
   user_pool_id                = aws_cognito_user_pool.pool.id
   use_cognito_provided_values = true
 }
 
 resource "aws_cognito_identity_provider" "idp" {
-  count         = var.oidc_issuer_url != "" ? 1 : 0
+  count         = var.idp_name != "" ? 1 : 0
   user_pool_id  = aws_cognito_user_pool.pool.id
-  provider_name = "cognitoFakeUserPool" # change to a real name
+  provider_name = var.idp_name
   provider_type = "OIDC"
   provider_details = {
     authorize_scopes          = "openid"
     client_id                 = var.oidc_client_id
     client_secret             = var.oidc_client_secret
     oidc_issuer               = var.oidc_issuer_url
-    attributes_request_method = "GET"
+    attributes_request_method = "POST"
   }
   attribute_mapping = {
     name     = "name"
@@ -250,7 +250,9 @@ module "cognito_pre_signup_lambda" {
   handler_method = "cognitoPreSignupLambdaHandler"
   lambda_name    = "cognito_pre_signup_lambda_${var.environment}"
   role           = aws_iam_role.pre_signup_lambda.arn
-  environment    = {}
+  environment    = {
+    IDP_NAME = var.idp_name
+  }
   timeout        = "29"
   memory_size    = "128"
 }

@@ -147,7 +147,7 @@ export async function createOrUpdateUser(
       await applicationContext.getCognito().adminLinkProviderForUser({
         UserPoolId: userPoolId,
         SourceUser: {
-          ProviderName: 'cognitoFakeUserPool',
+          ProviderName: process.env.IDP_NAME,
           ProviderAttributeName: 'email',
           ProviderAttributeValue: rawUser.email,
         },

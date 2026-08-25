@@ -40,6 +40,7 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
+echo "  - IDP_NAME=${IDP_NAME}"
 echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
 echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
 if [[ -z "$VAR" ]]; then
@@ -121,6 +122,7 @@ export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
+export TF_VAR_idp_name=$IDP_NAME
 export TF_VAR_oidc_issuer_url=$OIDC_ISSUER_URL
 export TF_VAR_oidc_client_id=$OIDC_CLIENT_ID
 export TF_VAR_oidc_client_secret=$OIDC_CLIENT_SECRET

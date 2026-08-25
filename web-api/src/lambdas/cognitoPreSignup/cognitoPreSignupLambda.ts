@@ -8,13 +8,13 @@ export const cognitoPreSignupLambdaHandler = async event => {
   try {
     const user = await getCognito().adminGetUser({
       UserPoolId: userPoolId,
-      Username: request.userAttributes.email,
+      Username: request.userAttributes.email.toLowerCase(),
     });
 
     await getCognito().adminLinkProviderForUser({
       UserPoolId: userPoolId,
       SourceUser: {
-        ProviderName: 'cognitoFakeUserPool',
+        ProviderName: process.env.IDP_NAME,
         ProviderAttributeName: 'email',
         ProviderAttributeValue: request.userAttributes.email,
       },

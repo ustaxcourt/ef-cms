@@ -79,3 +79,7 @@ variable "payment_portal_host" {
 variable "managed_login_domain" {
   type    = string
 }
+
+variable "idp_name" {
+  type    = string
+}

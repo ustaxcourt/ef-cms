@@ -46,6 +46,7 @@ module "ef-cms_apis" {
   should_es_alpha_exist           = var.should_es_alpha_exist
   should_es_beta_exist            = var.should_es_beta_exist
   zone_name                       = var.zone_name
+  idp_name                        = var.idp_name
   oidc_issuer_url                 = var.oidc_issuer_url
   oidc_client_id                  = var.oidc_client_id
   oidc_client_secret              = var.oidc_client_secret

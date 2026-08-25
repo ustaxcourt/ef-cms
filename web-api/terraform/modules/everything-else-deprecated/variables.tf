@@ -58,6 +58,11 @@ variable "es_engine_version" {
   type = string
 }
 
+variable "idp_name" {
+  type     = string
+  nullable = true
+}
+
 variable "oidc_issuer_url" {
   type     = string
   nullable = true
