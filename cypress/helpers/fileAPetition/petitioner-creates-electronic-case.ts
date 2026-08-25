@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = faker.person.firstName(),
+  preferredTrialCity: string = 'Mobile, Alabama',
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -31,7 +32,7 @@ export function externalUserCreatesElectronicCase(
   cy.get(
     `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
   ).click();
-  cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
+  cy.get('[data-testid="preferred-trial-city"]').select(preferredTrialCity);
   cy.get('[data-testid="step-4-next-button"]').click();
 
   attachSamplePdfFile('stin-file');
