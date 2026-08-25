@@ -121,6 +121,7 @@
     "admin:create-user": "./scripts/user/add-user.ts",
     "admin:download-case-documents": "./scripts/download-all-case-documents.ts",
     "admin:lookup-user": "./scripts/user/lookup-user.ts",
+    "admin:query-suppression-list": "./scripts/email/query-suppression-list.ts",
     "admin:resend-service-email-to-irs-superuser": "./scripts/email/resend-service-email-to-irs-superuser.ts",
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
     "build:assets": "npx ts-node --transpile-only shared/createModule.ts",
