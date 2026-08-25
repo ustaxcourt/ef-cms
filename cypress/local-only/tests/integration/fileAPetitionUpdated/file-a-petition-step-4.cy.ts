@@ -5,8 +5,14 @@ import {
   fillPetitionerInformation,
   selectInput,
 } from './petition-helper';
-import { PROCEDURE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
-import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  NEW_TRIAL_CITY_STRINGS,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
+import {
+  loginAsPetitioner,
+  loginAsPrivatePractitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -28,6 +34,48 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
     cy.get(
       `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
     ).should('have.text', 'Small case');
+  });
+
+  it('should display consolidated trial locations and preserve the selection when the procedure type changes', () => {
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+    ).click();
+
+    NEW_TRIAL_CITY_STRINGS.forEach(trialCity => {
+      cy.get(
+        `[data-testid="preferred-trial-city"] option[value="${trialCity}"]`,
+      ).should('exist');
+    });
+    cy.get(
+      '[data-testid="preferred-trial-city"] option[value="Fresno, California"]',
+    ).should('exist');
+    cy.contains(
+      'Trial locations may vary based on case procedure selected.',
+    ).should('not.exist');
+
+    cy.get('[data-testid="preferred-trial-city"]').select('Fresno, California');
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
+    ).click();
+    cy.get('[data-testid="preferred-trial-city"]').should(
+      'have.value',
+      'Fresno, California',
+    );
+  });
+
+  it('should display consolidated trial locations for a private practitioner', () => {
+    loginAsPrivatePractitioner();
+    cy.visit('/file-a-petition/new');
+    fillPetitionerInformation();
+    fillPetitionFileInformation(VALID_FILE);
+    fillIrsNoticeInformation(VALID_FILE);
+
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+    ).click();
+    cy.get(
+      `[data-testid="preferred-trial-city"] option[value="${NEW_TRIAL_CITY_STRINGS[0]}"]`,
+    ).should('exist');
   });
 
   describe('Regular case', () => {

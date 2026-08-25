@@ -6,6 +6,7 @@ import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const CaseInformation = connect(
@@ -16,6 +17,8 @@ export const CaseInformation = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    newTrialCitiesEnabled:
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
     startCaseInternalHelper: state.startCaseInternalHelper,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -33,6 +36,7 @@ export const CaseInformation = connect(
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    newTrialCitiesEnabled,
     startCaseInternalHelper,
     updateFormValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
@@ -137,7 +141,7 @@ export const CaseInformation = connect(
         </FormGroup>
         <TrialCity
           label="Trial location"
-          procedureType={form.procedureType}
+          procedureType={newTrialCitiesEnabled ? 'All' : form.procedureType}
           showDefaultOption={true}
           showHint={false}
           showRegularTrialCitiesHint={false}

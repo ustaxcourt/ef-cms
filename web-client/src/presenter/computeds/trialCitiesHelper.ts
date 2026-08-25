@@ -1,9 +1,14 @@
 import { findIndex, sortBy } from 'lodash';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  NEW_TRIAL_CITY_STRINGS,
+} from '@shared/business/entities/EntityConstants';
 
 export const trialCitiesHelper =
-  (_get: Get, applicationContext: ClientApplicationContext): any =>
+  (get: Get, applicationContext: ClientApplicationContext): any =>
   procedureType => {
     const { TRIAL_CITIES, TRIAL_SESSION_SCOPE_TYPES } =
       applicationContext.getConstants();
@@ -27,6 +32,17 @@ export const trialCitiesHelper =
         break;
     }
 
+    const newTrialCitiesEnabled = !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
+    );
+
+    trialCities = trialCities.filter(trialCity => {
+      const trialCityName = `${trialCity.city}, ${trialCity.state}`;
+
+      return (
+        newTrialCitiesEnabled || !NEW_TRIAL_CITY_STRINGS.includes(trialCityName)
+      );
+    });
     trialCities = sortBy(trialCities, ['state', 'city']);
 
     const getTrialLocationName = trialLocation =>
