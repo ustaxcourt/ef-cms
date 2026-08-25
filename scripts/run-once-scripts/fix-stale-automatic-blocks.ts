@@ -124,6 +124,10 @@ const logProgress = (label: string, completed: number, total: number): void => {
             )
             .map(rawCase => rawCase.docketNumber);
         } catch (e) {
+          console.error('Failed to evaluate batch', {
+            docketNumbers: batch,
+            error: e,
+          });
           failedDocketNumbers.push(...batch);
           return [];
         } finally {
