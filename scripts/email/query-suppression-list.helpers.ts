@@ -143,24 +143,29 @@ export const querySuppressionList = async ({
   region,
   sesClient,
 }: QuerySuppressionListOptions): Promise<SuppressionListEntry[]> => {
-  const client = sesClient ?? new SESv2Client({ region });
-  let results: SuppressionListEntry[];
+  try {
+    const client = sesClient ?? new SESv2Client({ region });
+    let results: SuppressionListEntry[];
 
-  if (isFullEmailAddress(emailAddress)) {
-    results = await getExactSuppressedDestination({
-      emailAddress,
-      sesClient: client,
-    });
-  } else {
-    const matcher = createEmailMatcher(emailAddress);
-    const allSuppressedDestinations = await getAllSuppressedDestinations({
-      sesClient: client,
-    });
-    results = allSuppressedDestinations.filter(entry =>
-      matcher(entry.emailAddress),
-    );
+    if (isFullEmailAddress(emailAddress)) {
+      results = await getExactSuppressedDestination({
+        emailAddress,
+        sesClient: client,
+      });
+    } else {
+      const matcher = createEmailMatcher(emailAddress);
+      const allSuppressedDestinations = await getAllSuppressedDestinations({
+        sesClient: client,
+      });
+      results = allSuppressedDestinations.filter(entry =>
+        matcher(entry.emailAddress),
+      );
+    }
+
+    outputResults({ emailAddress, exportResults, results });
+    return results;
+  } catch (error: unknown) {
+    console.error('Error:', error);
+    process.exit(1);
   }
-
-  outputResults({ emailAddress, exportResults, results });
-  return results;
 };

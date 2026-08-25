@@ -30,8 +30,10 @@ describe('querySuppressionList', () => {
   beforeEach(() => {
     sesMock.reset();
     generateCsv.mockReset();
+    jest.spyOn(console, 'error').mockImplementation(() => undefined);
     jest.spyOn(console, 'log').mockImplementation(() => undefined);
     jest.spyOn(console, 'table').mockImplementation(() => undefined);
+    jest.spyOn(process, 'exit').mockImplementation(() => undefined as never);
   });
 
   afterEach(() => {
@@ -120,18 +122,19 @@ describe('querySuppressionList', () => {
     );
   });
 
-  it('rethrows an unexpected exact lookup error', async () => {
+  it('reports unexpected exact lookup errors and exits with a failure status', async () => {
     const error = new Error('SES is unavailable');
     sesMock.on(GetSuppressedDestinationCommand).rejects(error);
 
-    await expect(
-      querySuppressionList({
-        emailAddress: 'user@example.com',
-        exportResults: false,
-        region: 'us-east-1',
-        sesClient: createSesClient(),
-      }),
-    ).rejects.toThrow('SES is unavailable');
+    await querySuppressionList({
+      emailAddress: 'user@example.com',
+      exportResults: false,
+      region: 'us-east-1',
+      sesClient: createSesClient(),
+    });
+
+    expect(console.error).toHaveBeenCalledWith('Error:', error);
+    expect(process.exit).toHaveBeenCalledWith(1);
     expect(console.log).not.toHaveBeenCalled();
   });
 
@@ -315,19 +318,45 @@ describe('querySuppressionList', () => {
     expect(emptyPageResults).toEqual([]);
   });
 
-  it('rethrows errors from the paginated list lookup', async () => {
-    sesMock
-      .on(ListSuppressedDestinationsCommand)
-      .rejects(new Error('SES list failed'));
+  it('reports paginated list errors and exits with a failure status', async () => {
+    const error = new Error('SES list failed');
+    sesMock.on(ListSuppressedDestinationsCommand).rejects(error);
 
-    await expect(
-      querySuppressionList({
-        emailAddress: '.gov',
-        exportResults: false,
-        region: 'us-east-1',
-        sesClient: createSesClient(),
-      }),
-    ).rejects.toThrow('SES list failed');
+    await querySuppressionList({
+      emailAddress: '.gov',
+      exportResults: false,
+      region: 'us-east-1',
+      sesClient: createSesClient(),
+    });
+
+    expect(console.error).toHaveBeenCalledWith('Error:', error);
+    expect(process.exit).toHaveBeenCalledWith(1);
+  });
+
+  it('reports CSV export errors and exits with a failure status', async () => {
+    const error = new Error('CSV export failed');
+    generateCsv.mockImplementation(() => {
+      throw error;
+    });
+    sesMock.on(GetSuppressedDestinationCommand).resolves({
+      SuppressedDestination: {
+        EmailAddress: 'user@example.com',
+        LastUpdateTime: calculateDate({
+          dateString: '2026-08-15T12:00:00.000Z',
+        }),
+        Reason: 'BOUNCE',
+      },
+    });
+
+    await querySuppressionList({
+      emailAddress: 'user@example.com',
+      exportResults: true,
+      region: 'us-east-1',
+      sesClient: createSesClient(),
+    });
+
+    expect(console.error).toHaveBeenCalledWith('Error:', error);
+    expect(process.exit).toHaveBeenCalledWith(1);
   });
 
   it('prints results and exports a CSV when requested', async () => {
