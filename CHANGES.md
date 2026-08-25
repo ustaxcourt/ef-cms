@@ -1,3 +1,17 @@
+<details><summary>Dependency Updates - Week of 2026-08-24</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.94`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
 
 ## Manual Deployment Steps
