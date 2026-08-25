@@ -10,6 +10,7 @@ const scriptConfig: ScriptConfig = {
   description:
     'query-suppression-list - Finds suppressed email addresses by exact, partial, or wildcard match.',
   environment: {
+    home: 'HOME',
     region: 'REGION',
   },
   parameters: {
