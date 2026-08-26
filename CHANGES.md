@@ -10,13 +10,8 @@ a trial date. This excluded them from trial eligibility and left them on the
 Blocked Cases Report. Run the following to recompute those cases:
 
 ```bash
-# First, use the environment switcher to select the environment you want to fix
-. scripts/env/set-env.zsh {YOUR_ENV}
-
-# Then run the following commands:
-
 # Preview the cases that will be updated
-./scripts/run-once-scripts/fix-stale-automatic-blocks.ts --dryRun
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts --dry-run
 
 # Apply the fix
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
