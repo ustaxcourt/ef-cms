@@ -193,7 +193,7 @@ describe('Case Worksheets Journey', () => {
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'finalBriefDueDate',
-        toFormat: FORMATS.YYYYMMDD,
+        toFormat: FORMATS.ISO,
         value: briefDueDate,
       },
     );
@@ -210,7 +210,7 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cerebralTest.docketNumber,
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
-        finalBriefDueDate: '2023-08-29',
+        finalBriefDueDate: '2023-08-29T04:00:00.000Z',
       },
     });
 
@@ -232,7 +232,7 @@ describe('Case Worksheets Journey', () => {
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'finalBriefDueDate',
-        toFormat: FORMATS.YYYYMMDD,
+        toFormat: FORMATS.ISO,
         value: 'abcdefghi', // not a valid date
       },
     );
@@ -269,7 +269,7 @@ describe('Case Worksheets Journey', () => {
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
         docketNumber: cerebralTest.docketNumber,
-        finalBriefDueDate: '2023-08-29',
+        finalBriefDueDate: '2023-08-29T04:00:00.000Z',
         statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       },
     });

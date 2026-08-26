@@ -6,6 +6,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { getDocumentQCServedForUserInteractor } from './getDocumentQCServedForUserInteractor';
 import { getDocumentQCServedForUser as getDocumentQCServedForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 import {
+  mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -48,10 +49,10 @@ describe('getDocumentQCServedForUserInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('successfully returns the work item for a petitions clerk', async () => {
+  it('successfully returns the work item for a petitions clerk accessing their own served items', async () => {
     const result = await getDocumentQCServedForUserInteractor(
       {
-        userId: '123',
+        userId: mockPetitionsClerkUser.userId,
       },
       mockPetitionsClerkUser,
     );
@@ -70,10 +71,10 @@ describe('getDocumentQCServedForUserInteractor', () => {
     ]);
   });
 
-  it('successfully returns the work items for a docket clerk', async () => {
+  it('successfully returns the work items for a docket clerk accessing their own served items', async () => {
     const result = await getDocumentQCServedForUserInteractor(
       {
-        userId: 'abc',
+        userId: mockDocketClerkUser.userId,
       },
       mockDocketClerkUser,
     );
@@ -89,5 +90,23 @@ describe('getDocumentQCServedForUserInteractor', () => {
         sentBy: 'docketclerk',
       },
     ]);
+  });
+
+  it("throws unauthorized when a user tries to access another user's served items without DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getDocumentQCServedForUserInteractor(
+        { userId: 'some-other-user-id' },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it("successfully returns another user's served items when the caller has DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getDocumentQCServedForUserInteractor(
+        { userId: mockDocketClerkUser.userId },
+        mockCaseServicesSupervisorUser,
+      ),
+    ).resolves.not.toThrow();
   });
 });

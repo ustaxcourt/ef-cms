@@ -22,6 +22,10 @@ export const featureFlags: FeatureFlagTable[] = [
     value: { current: true },
   },
   {
+    name: 'new-trial-cities',
+    value: { current: true },
+  },
+  {
     name: 'clerk-of-court-configuration',
     value: {
       current: {
@@ -29,5 +33,9 @@ export const featureFlags: FeatureFlagTable[] = [
         title: 'Clerk of the Court',
       },
     },
+  },
+  {
+    name: 'enable-payment-portal-integration',
+    value: { current: true },
   },
 ];

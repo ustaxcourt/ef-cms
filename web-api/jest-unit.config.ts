@@ -5,6 +5,7 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
+  '@joi/date',
   '@puppeteer',
   'cookie',
   'dom-serializer',
@@ -88,7 +89,7 @@ const config: Config = {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
     `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,

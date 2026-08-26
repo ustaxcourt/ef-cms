@@ -8,7 +8,7 @@ import { judgeColvin } from '@shared/test/mockUsers';
 export const MOCK_CASE_WORKSHEET: RawCaseWorksheet = {
   docketNumber: MOCK_CASE.docketNumber,
   entityName: 'CaseWorksheet',
-  finalBriefDueDate: '2023-07-29',
+  finalBriefDueDate: '2023-07-29T04:00:00.000Z',
   judgeUserId: judgeColvin.userId,
   primaryIssue: 'anything',
   statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],

@@ -181,6 +181,7 @@ import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoCustomCaseReportSequence } from './sequences/gotoCustomCaseReportSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
+import { gotoDocketClerkReportSequence } from './sequences/DocketClerkReport/gotoDocketClerkReportSequence';
 import { gotoDocketEntryQcSequence } from './sequences/gotoDocketEntryQcSequence';
 import { gotoEditCaseDetailsSequence } from './sequences/gotoEditCaseDetailsSequence';
 import { gotoEditCorrespondenceDocumentSequence } from './sequences/gotoEditCorrespondenceDocumentSequence';
@@ -374,6 +375,7 @@ import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddress
 import { resetTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/resetTrialSessionsFiltersSequence';
 import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
+import { runDocketClerkReportSequence } from './sequences/DocketClerkReport/runDocketClerkReportSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCourtIssuedDocketEntrySequence } from './sequences/saveCourtIssuedDocketEntrySequence';
 import { saveDocketEntryForLaterCompleteSequence } from './sequences/saveDocketEntryForLaterCompleteSequence';
@@ -407,6 +409,7 @@ import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequ
 import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
+import { setDocketClerkReportMessagesTableSortSequence } from './sequences/DocketClerkReport/setDocketClerkReportMessagesTableSortSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
@@ -653,6 +656,9 @@ import { updateAdvancedSearchResultsSortSequence } from './sequences/updateAdvan
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
+import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
+import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
+import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 
 export const presenterSequences = {
@@ -928,6 +934,8 @@ export const presenterSequences = {
   gotoCustomCaseReportSequence:
     gotoCustomCaseReportSequence as unknown as Function,
   gotoDashboardSequence: gotoDashboardSequence as unknown as Function,
+  gotoDocketClerkReportSequence:
+    gotoDocketClerkReportSequence as unknown as Function,
   gotoDocketEntryQcSequence: gotoDocketEntryQcSequence as unknown as Function,
   gotoEditCaseDetailsSequence:
     gotoEditCaseDetailsSequence as unknown as Function,
@@ -1020,6 +1028,8 @@ export const presenterSequences = {
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
   initAppSequence,
+  initFilingFeePaymentSequence:
+    initFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
@@ -1211,6 +1221,8 @@ export const presenterSequences = {
     openUnsealDocketEntryModalSequence as unknown as Function,
   openUpdateCaseModalSequence:
     openUpdateCaseModalSequence as unknown as Function,
+  paymentCancelSequence: paymentCancelSequence as unknown as Function,
+  paymentSuccessSequence: paymentSuccessSequence as unknown as Function,
   paperServiceCompleteSequence:
     paperServiceCompleteSequence as unknown as Function,
   petitionGenerationLiveValidationSequence,
@@ -1259,6 +1271,8 @@ export const presenterSequences = {
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
+  runDocketClerkReportSequence:
+    runDocketClerkReportSequence as unknown as Function,
   runTrialSessionPlanningReportSequence,
   saveCourtIssuedDocketEntrySequence:
     saveCourtIssuedDocketEntrySequence as unknown as Function,
@@ -1311,6 +1325,8 @@ export const presenterSequences = {
     setCurrentPaginationPageSequence as unknown as Function,
 
   setCustomCaseReportFiltersSequence,
+  setDocketClerkReportMessagesTableSortSequence:
+    setDocketClerkReportMessagesTableSortSequence as unknown as Function,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
   setDocumentForUploadSequence:

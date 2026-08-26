@@ -22,7 +22,10 @@
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "SKIP_PAYMENT_PORTAL": "true"
+      }
     },
     {
       "name": "Client",
@@ -37,6 +40,15 @@
       "name": "Public",
       "request": "launch",
       "runtimeArgs": ["run-script", "start:public"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Payment Portal",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "payment-portal"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "node",
@@ -79,7 +91,7 @@
   "compounds": [
     {
       "name": "DAWSON local",
-      "configurations": ["API", "Client", "Public"]
+      "configurations": ["API", "Client", "Public", "Payment Portal"]
     },
     {
       "name": "DAWSON Docker",
