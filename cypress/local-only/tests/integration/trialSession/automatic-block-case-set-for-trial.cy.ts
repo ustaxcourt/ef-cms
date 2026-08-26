@@ -159,9 +159,16 @@ describe('Automatic block on a case set for trial', () => {
           AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         );
       });
+      // check blocked cases report
+      cy.get('[data-testid="dropdown-select-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="trial-location-filter"]').select(location);
+      cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+        'be.visible',
+      );
+
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         scheduleTrialSession(docketNumber, trialSessionId);
-
         cy.intercept(
           'GET',
           `**/cases/${docketNumber}?excludeDocketEntries=true`,
@@ -173,8 +180,15 @@ describe('Automatic block on a case set for trial', () => {
           expect(caseEntity.automaticBlocked).to.equal(false);
           expect(caseEntity.automaticBlockedReason).to.equal(undefined);
         });
-
         cy.get('[data-testid="blocked-case-icon"]').should('not.exist');
+
+        // check blocked cases report
+        cy.get('[data-testid="dropdown-select-report"]').click();
+        cy.get('[data-testid="blocked-cases-report"]').click();
+        cy.get('[data-testid="trial-location-filter"]').select(location);
+        cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+          'not.exist',
+        );
       });
     });
   });
