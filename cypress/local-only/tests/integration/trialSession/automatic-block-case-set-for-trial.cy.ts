@@ -22,7 +22,7 @@ import {
 
 describe('Automatic block on a case set for trial', () => {
   const location = 'Phoenix, Arizona';
-  before(() => {
+  beforeEach(() => {
     loginAsPetitioner();
     externalUserCreatesElectronicCase(undefined, location).then(
       docketNumber => {
