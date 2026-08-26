@@ -73,4 +73,125 @@ describe('prod-release-pr-description manual steps', () => {
       '   ```',
     ]);
   });
+
+  it('retains trailing annotations until the deployment section ends', () => {
+    const annotatedSteps = extractManualSteps(
+      [
+        '## Manual Deployment Steps',
+        '',
+        '### Before Deployment',
+        '',
+        '#### Deploy the change',
+        '',
+        'Run the deployment:',
+        '',
+        '```bash',
+        'npm run deploy',
+        '```',
+        '',
+        'Confirm the deployment completed successfully.',
+        '',
+        '### After Deployment',
+      ].join('\n'),
+    );
+
+    expect(annotatedSteps).toEqual([
+      {
+        command: 'npm run deploy',
+        description:
+          'Deploy the change\n\nRun the deployment:\n\nConfirm the deployment completed successfully.',
+        section: 'before',
+      },
+    ]);
+
+    const genericAnnotatedSteps = extractManualSteps(
+      [
+        '### Before Deployment',
+        '',
+        '```bash',
+        'npm run deploy',
+        '```',
+        '',
+        'Remember to confirm the deployment status.',
+        '',
+        '## Notes',
+        '',
+        'This note is not a deployment annotation.',
+      ].join('\n'),
+    );
+
+    expect(genericAnnotatedSteps).toEqual([
+      {
+        command: 'npm run deploy',
+        description: 'Remember to confirm the deployment status.',
+        section: 'before',
+      },
+    ]);
+
+    const unscopedSteps = extractManualSteps(
+      [
+        'Run this command:',
+        '',
+        '```bash',
+        'npm run deploy',
+        '```',
+        '',
+        'This is general PR text.',
+      ].join('\n'),
+    );
+
+    expect(unscopedSteps).toEqual([
+      {
+        command: 'npm run deploy',
+        description: 'Run this command:',
+      },
+    ]);
+  });
+
+  it('keeps annotations before a section boundary with the preceding step', () => {
+    const manualSteps = extractManualSteps(
+      [
+        '## Manual Deployment Steps',
+        '',
+        '### Before Deployment',
+        '',
+        '#### Prepare the deployment',
+        '',
+        '```bash',
+        'npm run deploy:prepare',
+        '```',
+        '',
+        'Confirm the preparation completed successfully.',
+        '',
+        '### After Deployment',
+        '',
+        '#### Verify the deployment',
+        '',
+        'Run the verification:',
+        '',
+        '```bash',
+        'npm run deploy:verify',
+        '```',
+        '',
+        'Confirm the verification completed successfully.',
+        '',
+        '## Notes',
+      ].join('\n'),
+    );
+
+    expect(manualSteps).toEqual([
+      {
+        command: 'npm run deploy:prepare',
+        description:
+          'Prepare the deployment\n\nConfirm the preparation completed successfully.',
+        section: 'before',
+      },
+      {
+        command: 'npm run deploy:verify',
+        description:
+          'Verify the deployment\n\nRun the verification:\n\nConfirm the verification completed successfully.',
+        section: 'after',
+      },
+    ]);
+  });
 });

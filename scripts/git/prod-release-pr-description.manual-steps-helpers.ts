@@ -47,6 +47,19 @@ type MarkdownHeading = {
   text: string;
 };
 
+type ManualStepContext = {
+  manualDeploymentHeadingLevel?: number;
+  manualStep: ManualStep;
+  sectionHeadingLevel?: number;
+  stepEndIndex: number;
+};
+
+const isScopedManualStepContext = (
+  context: ManualStepContext | undefined,
+): context is ManualStepContext =>
+  context?.manualDeploymentHeadingLevel !== undefined ||
+  context?.sectionHeadingLevel !== undefined;
+
 const parseHeading = (line: string): MarkdownHeading | undefined => {
   const match = line.match(HEADING_PATTERN);
 
@@ -176,6 +189,29 @@ const normalizeManualStepDescription = (lines: string[]): string => {
   return description || 'Manual step';
 };
 
+const appendTrailingDescription = (
+  manualStepContext: ManualStepContext,
+  lines: string[],
+  endIndex: number = lines.length,
+): void => {
+  if (!isScopedManualStepContext(manualStepContext)) {
+    return;
+  }
+
+  const trailingDescription = normalizeManualStepDescription(
+    lines.slice(manualStepContext.stepEndIndex + 1, endIndex),
+  );
+
+  if (trailingDescription === 'Manual step') {
+    return;
+  }
+
+  manualStepContext.manualStep.description =
+    manualStepContext.manualStep.description === 'Manual step'
+      ? trailingDescription
+      : `${manualStepContext.manualStep.description}\n\n${trailingDescription}`;
+};
+
 export const extractManualSteps = (body: string): ManualStep[] => {
   const normalizedBody = normalizeLineEndings(body);
   const lines = normalizedBody.split('\n');
@@ -191,11 +227,17 @@ export const extractManualSteps = (body: string): ManualStep[] => {
   let currentSection: ManualStepSection | undefined;
   let currentSectionHeadingLevel: number | undefined;
   let previousBlockEndIndex = 0;
+  let lastManualStepContext: ManualStepContext | undefined;
 
   for (let index = 0; index < lines.length; index += 1) {
     const heading = parseHeading(lines[index]);
 
     if (heading) {
+      if (isScopedManualStepContext(lastManualStepContext)) {
+        appendTrailingDescription(lastManualStepContext, lines, index);
+        lastManualStepContext = undefined;
+      }
+
       if (isManualDeploymentHeading(heading)) {
         currentManualDeploymentHeadingLevel = heading.level;
         currentSection = undefined;
@@ -213,6 +255,7 @@ export const extractManualSteps = (body: string): ManualStep[] => {
         ) {
           currentSection = section;
           currentSectionHeadingLevel = heading.level;
+          previousBlockEndIndex = index + 1;
         } else if (
           currentManualDeploymentHeadingLevel !== undefined &&
           heading.level <= currentManualDeploymentHeadingLevel
@@ -227,6 +270,7 @@ export const extractManualSteps = (body: string): ManualStep[] => {
         ) {
           currentSection = undefined;
           currentSectionHeadingLevel = undefined;
+          previousBlockEndIndex = index;
         }
       }
     }
@@ -259,6 +303,16 @@ export const extractManualSteps = (body: string): ManualStep[] => {
       description,
       ...(currentSection ? { section: currentSection } : {}),
     });
+    lastManualStepContext = {
+      manualDeploymentHeadingLevel: currentManualDeploymentHeadingLevel,
+      manualStep: manualSteps[manualSteps.length - 1],
+      sectionHeadingLevel: currentSectionHeadingLevel,
+      stepEndIndex: bashCodeBlock.closingFenceIndex,
+    };
+  }
+
+  if (lastManualStepContext) {
+    appendTrailingDescription(lastManualStepContext, lines);
   }
 
   return manualSteps;
