@@ -194,4 +194,30 @@ describe('prod-release-pr-description manual steps', () => {
       },
     ]);
   });
+
+  it('does not treat heading descriptions as deployment section headings', () => {
+    const manualSteps = extractManualSteps(
+      [
+        '## Manual Deployment Steps',
+        '',
+        '### Before Deployment',
+        '',
+        '#### After Deployment: verify aliases',
+        '',
+        'Run this command:',
+        '',
+        '```bash',
+        'npm run deploy:verify',
+        '```',
+      ].join('\n'),
+    );
+
+    expect(manualSteps).toEqual([
+      {
+        command: 'npm run deploy:verify',
+        description: 'After Deployment: verify aliases\n\nRun this command:',
+        section: 'before',
+      },
+    ]);
+  });
 });

@@ -261,13 +261,21 @@ const resolveManualSteps = ({
     resolveTicketTask(pullRequest.title) === 'dependencies' &&
     hasDockerfileChange(pullRequest)
   ) {
-    manualSteps.push({
-      command: 'npm run ecr:check-version',
-      description: dockerImageTag
-        ? `docker container \`${dockerImageTag}\``
-        : 'docker container',
-      section: 'before',
-    });
+    const dockerCheckAlreadyIncluded = manualSteps.some(
+      manualStep =>
+        manualStep.command === 'npm run ecr:check-version' &&
+        (manualStep.section === undefined || manualStep.section === 'before'),
+    );
+
+    if (!dockerCheckAlreadyIncluded) {
+      manualSteps.push({
+        command: 'npm run ecr:check-version',
+        description: dockerImageTag
+          ? `docker container \`${dockerImageTag}\``
+          : 'docker container',
+        section: 'before',
+      });
+    }
   }
 
   return dedupeManualSteps(manualSteps);

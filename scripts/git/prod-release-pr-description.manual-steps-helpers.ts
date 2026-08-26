@@ -11,7 +11,7 @@ const BASH_CODE_BLOCK_OPENING_PATTERN = /^```bash\s*$/i;
 const LIST_ITEM_PREFIX_PATTERN = /^\s*-\s*(?:\[[ xX]\]\s*)?/;
 const HEADING_PATTERN = /^\s*(#{1,6})\s+(.+?)\s*#*\s*$/;
 const MANUAL_DEPLOYMENT_HEADING_PATTERN = /^manual deployment steps?:?$/i;
-const DEPLOYMENT_SECTION_HEADING_PATTERN = /^(before|after)\s+deployment\b/i;
+const DEPLOYMENT_SECTION_HEADING_PATTERN = /^(before|after)\s+deployment:?$/i;
 
 const normalizeLineEndings = (value: string): string => {
   return value.replace(/\r\n/g, '\n');

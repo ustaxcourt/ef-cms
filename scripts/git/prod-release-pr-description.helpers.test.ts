@@ -809,6 +809,90 @@ describe('prod-release-pr-description', () => {
       expect(description).not.toContain('npm run ecr:check-version');
     });
 
+    it('does not duplicate a docker-image manual step already listed before deployment', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        dockerImageTag: '4.3.80',
+        pullRequest: {
+          ...dockerDependencyPullRequest,
+          body: [
+            '## Manual Deployment Steps',
+            '',
+            '### Before Deployment',
+            '',
+            'Check the Docker image:',
+            '',
+            '```bash',
+            'npm run ecr:check-version',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run ecr:check-version',
+          description: 'Check the Docker image:',
+          section: 'before',
+        },
+      ]);
+    });
+
+    it('does not duplicate a docker-image manual step already listed without a section', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        dockerImageTag: '4.3.80',
+        pullRequest: {
+          ...dockerDependencyPullRequest,
+          body: [
+            'Check the Docker image:',
+            '',
+            '```bash',
+            'npm run ecr:check-version',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run ecr:check-version',
+          description: 'Check the Docker image:',
+        },
+      ]);
+    });
+
+    it('keeps an explicit after-deployment docker-image step distinct', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        dockerImageTag: '4.3.80',
+        pullRequest: {
+          ...dockerDependencyPullRequest,
+          body: [
+            '## Manual Deployment Steps',
+            '',
+            '### After Deployment',
+            '',
+            'Check the Docker image after deployment:',
+            '',
+            '```bash',
+            'npm run ecr:check-version',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run ecr:check-version',
+          description: 'Check the Docker image after deployment:',
+          section: 'after',
+        },
+        {
+          command: 'npm run ecr:check-version',
+          description: 'docker container `4.3.80`',
+          section: 'before',
+        },
+      ]);
+    });
+
     it('ignores empty bash code blocks when enriching pull requests', () => {
       const enrichedPullRequest = enrichPullRequest({
         pullRequest: {
