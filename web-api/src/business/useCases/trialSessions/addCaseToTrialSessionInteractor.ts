@@ -14,6 +14,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 /**
  * addCaseToTrialSession
@@ -77,6 +78,10 @@ const addCaseToTrialSession = async (
   });
 
   caseEntity.setAsCalendared(trialSessionEntity);
+  await updateCaseAutomaticBlock({
+    caseEntity,
+    hasCaseDeadline: false,
+  });
 
   await withTransaction(async () => {
     await updateCaseAndAssociations({

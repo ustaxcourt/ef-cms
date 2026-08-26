@@ -23,6 +23,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -123,21 +124,31 @@ export const setTrialSessionCalendarInteractor = async (
     });
 
     const manuallyAddedQcCompleteCaseEntities =
-      manuallyAddedQcCompleteCases.map(c => {
+      manuallyAddedQcCompleteCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.setAsCalendared(trialSessionEntity);
+        await updateCaseAutomaticBlock({
+          caseEntity: theCase,
+          hasCaseDeadline: false,
+        });
         return theCase.validate().toRawObject();
       });
 
     const caseOrdersToAdd: TCaseOrder[] = [];
     const caseOrdersToDelete: TCaseOrder[] = [];
 
-    const eligibleCaseEntities = eligibleCases.map(c => {
-      const theCase = new Case(c, { authorizedUser });
-      theCase.setAsCalendared(trialSessionEntity);
-      caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
-      return theCase.validate().toRawObject();
-    });
+    const eligibleCaseEntities = await Promise.all(
+      eligibleCases.map(async c => {
+        const theCase = new Case(c, { authorizedUser });
+        theCase.setAsCalendared(trialSessionEntity);
+        await updateCaseAutomaticBlock({
+          caseEntity: theCase,
+          hasCaseDeadline: false,
+        });
+        caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
+        return theCase.validate().toRawObject();
+      }),
+    );
 
     const manuallyAddedQcIncompleteCaseEntities =
       manuallyAddedQcIncompleteCases.map(c => {
@@ -152,7 +163,7 @@ export const setTrialSessionCalendarInteractor = async (
       });
 
     const caseEntitiesToCalendar = [
-      ...manuallyAddedQcCompleteCaseEntities,
+      ...(await Promise.all(manuallyAddedQcCompleteCaseEntities)),
       ...eligibleCaseEntities,
     ];
 
