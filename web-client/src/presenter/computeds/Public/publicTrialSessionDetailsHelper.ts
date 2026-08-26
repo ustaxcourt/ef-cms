@@ -98,10 +98,10 @@ export const publicTrialSessionDetailsHelper = (
   };
 };
 
-const isRestrictedCaseDTO = (
+const isRestrictedCaseResponse = (
   calendaredCase: CalendaredPublicCase,
 ): calendaredCase is RestrictedCaseResponse => {
-  return calendaredCase.entityName === 'RestrictedCaseDTO';
+  return calendaredCase.entityName === 'RestrictedCaseResponse';
 };
 
 const formatPublicCase = (
@@ -111,9 +111,11 @@ const formatPublicCase = (
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
   const isTheLeadCase = isLeadCase(calendaredCase);
   const caseTitle = isSealed
-    ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseDTO'
+    ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseResponse'
     : Case.getCaseTitle(
-        isRestrictedCaseDTO(calendaredCase) ? '' : calendaredCase.caseCaption,
+        isRestrictedCaseResponse(calendaredCase)
+          ? ''
+          : calendaredCase.caseCaption,
       );
   let consolidatedIconTooltipText;
 
@@ -131,12 +133,12 @@ const formatPublicCase = (
     docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
-    irsPractitioners: isRestrictedCaseDTO(calendaredCase)
+    irsPractitioners: isRestrictedCaseResponse(calendaredCase)
       ? undefined
       : calendaredCase.irsPractitioners,
     isLeadCase: isTheLeadCase,
     isSealed: !!isSealed,
-    privatePractitioners: isRestrictedCaseDTO(calendaredCase)
+    privatePractitioners: isRestrictedCaseResponse(calendaredCase)
       ? undefined
       : calendaredCase.privatePractitioners,
   };
