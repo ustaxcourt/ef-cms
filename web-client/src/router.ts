@@ -1270,8 +1270,12 @@ const router = {
     });
 
     registerRoute('/auth-code?..', () => {
-      const { code } = route.query();
-      return app.getSequence('authCodeSequence')({ authCode: code });
+      const { code, error, error_description } = route.query();
+      return app.getSequence('authCodeSequence')({
+        authCode: code,
+        error,
+        errorDescription: error_description,
+      });
     });
 
     registerRoute('/login', () => {

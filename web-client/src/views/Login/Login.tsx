@@ -175,7 +175,7 @@ export const Login = connect(
                             window.location.href = loginHelper.idpLoginUrl;
                           }}
                         >
-                          Sign in with Microsoft
+                          Court user sign in
                         </Button>
                       </div>
                     )}
