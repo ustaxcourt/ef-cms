@@ -577,7 +577,7 @@ describe('prod-release-pr-description', () => {
             manualSteps: [
               {
                 command: 'npm run ecr:check-version',
-                description: 'docker container `4.3.80`',
+                description: 'Manual step',
               },
             ],
             otherContributors: [],
@@ -587,6 +587,10 @@ describe('prod-release-pr-description', () => {
           },
           {
             manualSteps: [
+              {
+                command: 'npm run ecr:check-version',
+                description: 'docker container `4.3.80`',
+              },
               {
                 command: 'npm run ecr:check-version',
                 description: 'docker container `4.3.80`',
@@ -601,6 +605,35 @@ describe('prod-release-pr-description', () => {
       });
 
       expect(description.match(/npm run ecr:check-version/g)).toHaveLength(1);
+    });
+
+    it('keeps identical commands when they belong to different deployment sections', () => {
+      const description = renderPrDescription({
+        enrichedPullRequests: [
+          {
+            manualSteps: [
+              {
+                command: 'npm run verify',
+                description: 'Verify before deployment',
+                section: 'before',
+              },
+              {
+                command: 'npm run verify',
+                description: 'Verify after deployment',
+                section: 'after',
+              },
+            ],
+            otherContributors: [],
+            pullRequest: blankPullRequest,
+            ticketTask: '',
+            type: '',
+          },
+        ],
+      });
+
+      expect(description.match(/npm run verify/g)).toHaveLength(2);
+      expect(description).toContain('- [ ] Verify before deployment');
+      expect(description).toContain('- [ ] Verify after deployment');
     });
 
     it('does not collapse non-issue task types like devex or dependencies into one row', () => {
@@ -787,7 +820,18 @@ describe('prod-release-pr-description', () => {
       expect(enrichedPullRequest.manualSteps).toEqual([]);
     });
 
-    it('uses the checklist text before a bash block as the manual step description', () => {
+    it('ignores unclosed bash code blocks when enriching pull requests', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: ['Before', '', '```bash', 'npm run incomplete'].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([]);
+    });
+
+    it('retains surrounding text and checklist text before a bash block', () => {
       const enrichedPullRequest = enrichPullRequest({
         pullRequest: {
           ...blankPullRequest,
@@ -806,9 +850,211 @@ describe('prod-release-pr-description', () => {
       expect(enrichedPullRequest.manualSteps).toEqual([
         {
           command: 'npm run deploy:account-specific',
-          description: 'Deploy account-specific terraform',
+          description:
+            'Manual release work is required.\n\nDeploy account-specific terraform:',
         },
       ]);
+    });
+
+    it('retains manual deployment sections and surrounding text for each bash command', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: [
+            '## Verification',
+            '',
+            '```bash',
+            'npm run verify',
+            '```',
+            '',
+            '## Manual Deployment Steps',
+            '',
+            '### Before Deployment',
+            '',
+            '#### Prepare the deployment',
+            '',
+            'Run this command before deploying:',
+            '',
+            '```bash',
+            'npm run deploy:prepare',
+            '```',
+            '',
+            '### After Deployment',
+            '',
+            'Confirm the deployment completed successfully:',
+            '',
+            '```bash',
+            'npm run deploy:verify',
+            '```',
+            '',
+            '## Notes',
+            '',
+            '```bash',
+            'npm run ignore',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run deploy:prepare',
+          description:
+            'Prepare the deployment\n\nRun this command before deploying:',
+          section: 'before',
+        },
+        {
+          command: 'npm run deploy:verify',
+          description: 'Confirm the deployment completed successfully:',
+          section: 'after',
+        },
+      ]);
+
+      const description = renderPrDescription({
+        enrichedPullRequests: [enrichedPullRequest],
+      });
+
+      expect(description.match(/#### Before Deployment/g)).toHaveLength(1);
+      expect(description.match(/#### After Deployment/g)).toHaveLength(1);
+      expect(description.indexOf('#### Before Deployment')).toBeLessThan(
+        description.indexOf('#### After Deployment'),
+      );
+      expect(description).toContain(
+        [
+          '- [ ] Prepare the deployment',
+          '   ',
+          '   Run this command before deploying:',
+          '   ```bash',
+          '   npm run deploy:prepare',
+          '   ```',
+        ].join('\n'),
+      );
+      expect(description).toContain(
+        [
+          '- [ ] Confirm the deployment completed successfully:',
+          '   ```bash',
+          '   npm run deploy:verify',
+          '   ```',
+        ].join('\n'),
+      );
+      expect(description).not.toContain('npm run verify');
+      expect(description).not.toContain('npm run ignore');
+    });
+
+    it('does not carry a deployment section through an unrelated heading', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: [
+            '## Manual Deployment Steps',
+            '',
+            '### Before Deployment',
+            '',
+            '### Verification',
+            '',
+            '```bash',
+            'npm run verify',
+            '```',
+            '',
+            '## Before Deployment',
+            '',
+            '```bash',
+            'npm run outside',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run verify',
+          description: 'Verification',
+        },
+      ]);
+    });
+
+    it('uses a generic checkbox description when no surrounding text exists', () => {
+      const enrichedPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: [
+            '### Before Deployment',
+            '',
+            '```bash',
+            'npm run verify',
+            '```',
+          ].join('\n'),
+        },
+      });
+
+      expect(enrichedPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run verify',
+          description: 'Manual step',
+          section: 'before',
+        },
+      ]);
+
+      const emptyDescriptionPullRequest = enrichPullRequest({
+        pullRequest: {
+          ...blankPullRequest,
+          body: ['- [ ]', '', '```bash', 'npm run verify', '```'].join('\n'),
+        },
+      });
+
+      expect(emptyDescriptionPullRequest.manualSteps).toEqual([
+        {
+          command: 'npm run verify',
+          description: 'Manual step',
+        },
+      ]);
+    });
+
+    it('groups before and after manual steps from multiple pull requests', () => {
+      const description = renderPrDescription({
+        enrichedPullRequests: [
+          {
+            manualSteps: [
+              {
+                command: 'before-one',
+                description: 'Before one',
+                section: 'before',
+              },
+              {
+                command: 'after-one',
+                description: 'After one',
+                section: 'after',
+              },
+            ],
+            otherContributors: [],
+            pullRequest: { ...blankPullRequest, number: 7005 },
+            ticketTask: '',
+            type: '',
+          },
+          {
+            manualSteps: [
+              {
+                command: 'before-two',
+                description: 'Before two',
+                section: 'before',
+              },
+            ],
+            otherContributors: [],
+            pullRequest: { ...blankPullRequest, number: 7006 },
+            ticketTask: '',
+            type: '',
+          },
+        ],
+      });
+
+      expect(description.match(/#### Before Deployment/g)).toHaveLength(1);
+      expect(description.match(/#### After Deployment/g)).toHaveLength(1);
+      expect(description.indexOf('before-one')).toBeLessThan(
+        description.indexOf('before-two'),
+      );
+      expect(description.indexOf('before-two')).toBeLessThan(
+        description.indexOf('after-one'),
+      );
     });
   });
   describe('cli integration', () => {
