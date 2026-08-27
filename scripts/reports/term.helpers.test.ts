@@ -60,7 +60,7 @@ describe('term.helpers', () => {
 
     it('rejects unsupported term names', () => {
       expect(() => normalizeTerm('Summer')).toThrow(
-        'Expected Winter, Spring, or Fall',
+        'Invalid term "Summer". Expected Winter, Spring, Fall',
       );
     });
   });
