@@ -26,7 +26,7 @@ describe('updateCaseAutomaticBlock', () => {
     applicationContext.getUniqueId.mockReturnValue('unique-id-1');
   });
 
-  it('sets the case to automaticBlocked if it has pending documents', async () => {
+  it('sets the case to automaticBlocked if it has pending items', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
@@ -44,7 +44,7 @@ describe('updateCaseAutomaticBlock', () => {
     });
   });
 
-  it('sets the case to automaticBlocked and if it has deadlines', async () => {
+  it('sets the case to automaticBlocked if it has deadlines', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       { deadline: 'something' } as any,
     ]);
@@ -60,6 +60,26 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
+    });
+  });
+
+  it('sets the case to automaticBlock if it has deadlines and pending items', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { deadline: 'something' } as any,
+    ]);
+    mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
+
+    const caseEntity = new Case(mockCase, {
+      authorizedUser: mockDocketClerkUser,
+    });
+    const updatedCase = await updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+    expect(updatedCase).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
   });
 
@@ -89,24 +109,6 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase.automaticBlockedReason).toBeUndefined();
   });
 
-  it('does not fetch deadlines when the case has a trial date', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE_WITHOUT_PENDING,
-        trialDate: '2021-03-01T21:40:46.415Z',
-      },
-      {
-        authorizedUser: mockDocketClerkUser,
-      },
-    );
-
-    await updateCaseAutomaticBlock({
-      caseEntity,
-    });
-
-    expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
-  });
-
   it('clears the automatic block when the last pending item is removed from a case set for trial', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
@@ -131,7 +133,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase.automaticBlockedReason).toBeUndefined();
   });
 
-  it('sets the case to not automaticBlocked if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
+  it('sets automaticBlocked to false if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
@@ -189,5 +191,64 @@ describe('updateCaseAutomaticBlock', () => {
     });
 
     expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch deadlines from persistence when the case has a trial date', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        trialDate: '2021-03-01T21:40:46.415Z',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+    expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
+  });
+
+  describe('consolidated cases', () => {
+    const MEMBER_DOCKET_NUMBER = '102-18';
+
+    it('update its own automaticBlocked to true in consolidated cases if pending items is true', async () => {
+      getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          consolidatedCases: [
+            { ...MOCK_CASE, automaticBlocked: false },
+            {
+              ...MOCK_CASE,
+              automaticBlocked: false,
+              docketNumber: MEMBER_DOCKET_NUMBER,
+            },
+          ],
+          docketEntries: [PENDING_DOCKET_ENTRY],
+          leadDocketNumber: MOCK_CASE.docketNumber,
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      const updatedCase = await updateCaseAutomaticBlock({ caseEntity });
+
+      expect(updatedCase.automaticBlockedReason).toBe(
+        AUTOMATIC_BLOCKED_REASONS.pending,
+      );
+      expect(
+        updatedCase.consolidatedCases.find(
+          c => c.docketNumber === MOCK_CASE.docketNumber,
+        )?.automaticBlocked,
+      ).toBe(true); // changes to true
+      expect(
+        updatedCase.consolidatedCases.find(
+          c => c.docketNumber === MEMBER_DOCKET_NUMBER,
+        )?.automaticBlocked,
+      ).toBe(false); // stays the same
+    });
   });
 });

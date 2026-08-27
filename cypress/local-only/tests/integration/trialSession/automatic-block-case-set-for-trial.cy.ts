@@ -1,5 +1,6 @@
 import {
   loginAsDocketClerk1,
+  loginAsPetitioner,
   loginAsPetitionsClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
 import {
@@ -10,7 +11,8 @@ import { createTrialSession } from '../../../../helpers/trialSession/create-tria
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { scheduleTrialSession } from '../../../../helpers/trialSession/schedule-trial-session';
 import { fillPaperFilingForm } from '../../../../helpers/caseDetail/docketRecord/paperFiling/fill-paper-filing-form';
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
@@ -19,31 +21,31 @@ import {
 } from '@shared/business/utilities/DateHandler';
 
 describe('Automatic block on a case set for trial', () => {
-  const trialLocation = 'Phoenix, Arizona';
-  const procedureType = 'Regular';
-
-  const createServedCase = (): Cypress.Chainable<string> => {
-    return createAndServePaperPetition({
-      trialLocation,
-      procedureType,
-      includeApwDocument: false,
-    }).then(({ docketNumber }) => cy.wrap(docketNumber));
-  };
+  const location = 'Phoenix, Arizona';
+  beforeEach(() => {
+    loginAsPetitioner();
+    externalUserCreatesElectronicCase(undefined, location).then(
+      docketNumber => {
+        cy.wrap(docketNumber).as('docketNumber');
+        petitionsClerkQcsAndServesElectronicCase(docketNumber);
+      },
+    );
+  });
 
   it('should clear the automatic block when the last pending item is removed from a case not set for trial', () => {
-    createServedCase().then(docketNumber => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
       goToCase(docketNumber);
       fillPaperFilingForm({
         dateReceived: '01/01/2021',
         documentType: 'Motion to Dismiss',
       });
+      cy.get('[data-testid="save-and-serve"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
       cy.intercept(
         'GET',
         `**/cases/${docketNumber}?excludeDocketEntries=true`,
       ).as('getCase');
-      cy.get('[data-testid="save-and-serve"]').click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
       cy.wait('@getCase').then(({ response }) => {
         cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
         const caseEntity = response?.body;
@@ -66,9 +68,10 @@ describe('Automatic block on a case set for trial', () => {
   });
 
   it('should clear the automatic block when the last deadline is removed from a case', () => {
-    createServedCase().then(docketNumber => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
       goToCase(docketNumber);
+      // add a deadline
       const today = createISODateAtStartOfDayEST();
       const tomorrow = calculateISODate({
         dateString: today,
@@ -97,6 +100,7 @@ describe('Automatic block on a case set for trial', () => {
           AUTOMATIC_BLOCKED_REASONS.dueDate,
         );
       });
+      // remove the deadline
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="delete-case-deadline-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
@@ -110,50 +114,61 @@ describe('Automatic block on a case set for trial', () => {
   });
 
   it('should clear the automatic block when a blocked case is manually added to a trial session and should not appear in the blocked cases report', () => {
-    createServedCase().then(docketNumber => {
-      loginAsPetitionsClerk1();
-      createTrialSession({
-        sessionType: SESSION_TYPES.regular,
-        trialLocation,
-      }).then(({ trialSessionId }) => {
-        loginAsDocketClerk1();
-        goToCase(docketNumber);
-        fillPaperFilingForm({
-          dateReceived: '01/01/2021',
-          documentType: 'Motion to Dismiss',
-        });
-        cy.get('[data-testid="save-and-serve"]').click();
-        cy.get('[data-testid="modal-button-confirm"]').click();
-        const today = createISODateAtStartOfDayEST();
-        const tomorrow = calculateISODate({
-          dateString: today,
-          howMuch: 1,
-          units: 'days',
-        });
-        cy.get('[data-testid="case-detail-menu-button"]').click();
-        cy.get('[data-testid="menu-button-create-deadline"]').click();
-        cy.get('#deadline-date-picker').clear();
-        cy.get('#deadline-date-picker').type(
-          formatDateString(tomorrow, FORMATS.MMDDYYYY),
+    loginAsPetitionsClerk1();
+    createTrialSession({
+      sessionType: SESSION_TYPES.regular,
+      trialLocation: location,
+    }).then(({ trialSessionId }) => {
+      cy.wrap(trialSessionId).as('trialSessionId');
+    });
+    // add a pending item and deadline to the case
+    loginAsDocketClerk1();
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+      fillPaperFilingForm({
+        dateReceived: '01/01/2021',
+        documentType: 'Motion to Dismiss',
+      });
+      cy.get('[data-testid="save-and-serve"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      const today = createISODateAtStartOfDayEST();
+      const tomorrow = calculateISODate({
+        dateString: today,
+        howMuch: 1,
+        units: 'days',
+      });
+      cy.get('[data-testid="case-detail-menu-button"]').click();
+      cy.get('[data-testid="menu-button-create-deadline"]').click();
+      cy.get('#deadline-date-picker').clear();
+      cy.get('#deadline-date-picker').type(
+        formatDateString(tomorrow, FORMATS.MMDDYYYY),
+      );
+      cy.get('[data-testid="case-deadline-description-input"]').type(
+        'alex was here',
+      );
+      cy.intercept(
+        'GET',
+        `**/cases/${docketNumber}?excludeDocketEntries=true`,
+      ).as('getCase');
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.wait('@getCase').then(({ response }) => {
+        cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
+        const caseEntity = response?.body;
+        expect(caseEntity.automaticBlocked).to.equal(true);
+        expect(caseEntity.automaticBlockedReason).to.equal(
+          AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         );
-        cy.get('[data-testid="case-deadline-description-input"]').type(
-          'alex was here',
-        );
-        cy.intercept(
-          'GET',
-          `**/cases/${docketNumber}?excludeDocketEntries=true`,
-        ).as('getCase');
-        cy.get('[data-testid="modal-button-confirm"]').click();
-        cy.wait('@getCase').then(({ response }) => {
-          cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
-          const caseEntity = response?.body;
-          expect(caseEntity.automaticBlocked).to.equal(true);
-          expect(caseEntity.automaticBlockedReason).to.equal(
-            AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
-          );
-        });
-        scheduleTrialSession(docketNumber, trialSessionId);
+      });
+      // check blocked cases report
+      cy.get('[data-testid="dropdown-select-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="trial-location-filter"]').select(location);
+      cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+        'be.visible',
+      );
 
+      cy.get<string>('@trialSessionId').then(trialSessionId => {
+        scheduleTrialSession(docketNumber, trialSessionId);
         cy.intercept(
           'GET',
           `**/cases/${docketNumber}?excludeDocketEntries=true`,
@@ -165,8 +180,15 @@ describe('Automatic block on a case set for trial', () => {
           expect(caseEntity.automaticBlocked).to.equal(false);
           expect(caseEntity.automaticBlockedReason).to.equal(undefined);
         });
-
         cy.get('[data-testid="blocked-case-icon"]').should('not.exist');
+
+        // check blocked cases report
+        cy.get('[data-testid="dropdown-select-report"]').click();
+        cy.get('[data-testid="blocked-cases-report"]').click();
+        cy.get('[data-testid="trial-location-filter"]').select(location);
+        cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
+          'not.exist',
+        );
       });
     });
   });

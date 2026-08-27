@@ -3,7 +3,6 @@ import {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
-  AutomaticBlockedReasons,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CASE_TYPES,
@@ -1461,43 +1460,6 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  updateAutomaticBlocked({
-    hasCaseDeadline,
-  }: {
-    hasCaseDeadline: boolean;
-  }): Case {
-    this.hasPendingItems = this.doesHavePendingItems();
-
-    if (this.trialDate) {
-      return this.setAutomaticBlock();
-    }
-
-    let automaticBlockedReason: AutomaticBlockedReasons | undefined;
-    if (this.hasPendingItems && hasCaseDeadline) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-    } else if (this.hasPendingItems) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-    } else if (hasCaseDeadline) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
-    }
-
-    return this.setAutomaticBlock(automaticBlockedReason);
-  }
-
-  private setAutomaticBlock(reason?: AutomaticBlockedReasons): Case {
-    this.automaticBlocked = !!reason;
-    this.automaticBlockedDate = reason ? createISODateString() : undefined;
-    this.automaticBlockedReason = reason;
-
-    this.consolidatedCases.forEach(c => {
-      if (c.docketNumber === this.docketNumber) {
-        c.automaticBlocked = this.automaticBlocked;
-      }
-    });
-
-    return this;
-  }
-
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
     associatedJudgeId = undefined,
@@ -1851,9 +1813,6 @@ export class Case extends JoiValidationEntity {
         changedBy: SYSTEM_ROLE,
         updatedCaseStatus: CASE_STATUS_TYPES.calendared,
       });
-    }
-    if (this.trialDate) {
-      this.setAutomaticBlock();
     }
     return this;
   }
