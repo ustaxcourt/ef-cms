@@ -123,7 +123,7 @@ export const setTrialSessionCalendarInteractor = async (
       identifiers: docketNumbersToLock.map(item => `case|${item}`),
     });
 
-    const manuallyAddedQcCompleteCaseEntities =
+    const manuallyAddedQcCompleteCaseEntities = await Promise.all(
       manuallyAddedQcCompleteCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.setAsCalendared(trialSessionEntity);
@@ -132,7 +132,8 @@ export const setTrialSessionCalendarInteractor = async (
           hasCaseDeadline: false,
         });
         return theCase.validate().toRawObject();
-      });
+      }),
+    );
 
     const caseOrdersToAdd: TCaseOrder[] = [];
     const caseOrdersToDelete: TCaseOrder[] = [];
@@ -163,7 +164,7 @@ export const setTrialSessionCalendarInteractor = async (
       });
 
     const caseEntitiesToCalendar = [
-      ...(await Promise.all(manuallyAddedQcCompleteCaseEntities)),
+      ...manuallyAddedQcCompleteCaseEntities,
       ...eligibleCaseEntities,
     ];
 
