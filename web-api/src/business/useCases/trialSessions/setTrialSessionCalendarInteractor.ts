@@ -135,10 +135,9 @@ export const setTrialSessionCalendarInteractor = async (
       }),
     );
 
-    const caseOrdersToAdd: TCaseOrder[] = [];
     const caseOrdersToDelete: TCaseOrder[] = [];
 
-    const eligibleCaseEntities = await Promise.all(
+    const calendaredEligibleCases = await Promise.all(
       eligibleCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.setAsCalendared(trialSessionEntity);
@@ -146,9 +145,18 @@ export const setTrialSessionCalendarInteractor = async (
           caseEntity: theCase,
           hasCaseDeadline: false,
         });
-        caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
-        return theCase.validate().toRawObject();
+        return theCase;
       }),
+    );
+
+    // caseOrder drives the trial calendar sequence, so it is built in a synchronous
+    // pass rather than from within the concurrent map above.
+    const caseOrdersToAdd: TCaseOrder[] = calendaredEligibleCases.map(theCase =>
+      trialSessionEntity.addCaseToCalendar(theCase),
+    );
+
+    const eligibleCaseEntities = calendaredEligibleCases.map(theCase =>
+      theCase.validate().toRawObject(),
     );
 
     const manuallyAddedQcIncompleteCaseEntities =
