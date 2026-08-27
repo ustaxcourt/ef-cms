@@ -296,6 +296,23 @@ describe('recentFilingsHelper', () => {
       }),
     });
     expect(unservableResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Unserved Standing Scheduling Order (allowed for external users, like
+    // the other standing orders)
+    const unservedStandingSchedulingOrder = createFiling({
+      eventCode: 'SSO',
+      servedAt: undefined,
+    });
+
+    const standingSchedulingOrderResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedStandingSchedulingOrder],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(standingSchedulingOrderResult.sortedRecentFilings[0].canAccess).toBe(
+      true,
+    );
   });
 
   it('should handle display properties and user types', () => {

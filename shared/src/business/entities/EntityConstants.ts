@@ -576,7 +576,11 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
 
 export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
   eventCode => {
-    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    const excludedOrderEventCodes = [
+      'OAJ',
+      ...STANDING_ORDER_EVENT_CODES,
+      'OST',
+    ];
     return !excludedOrderEventCodes.includes(eventCode);
   },
 );
@@ -2316,8 +2320,7 @@ export const ALLOWED_EVENT_CODES = [
   'NOT',
   'NOTR',
   'NTD',
-  'SPOS',
-  'SPTO',
+  ...STANDING_ORDER_EVENT_CODES,
   'TCRP',
   'NORP',
   'NOIP',
