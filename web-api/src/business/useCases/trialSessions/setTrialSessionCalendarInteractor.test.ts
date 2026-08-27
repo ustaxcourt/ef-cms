@@ -34,6 +34,7 @@ import {
 } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('setTrialSessionCalendarInteractor', () => {
@@ -46,6 +47,9 @@ describe('setTrialSessionCalendarInteractor', () => {
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getCalendaredCasesForTrialSession = jest.mocked(
     getCalendaredCasesForTrialSessionMock,
+  );
+  const createOrUpdateTrialSessionCases = jest.mocked(
+    createOrUpdateTrialSessionCasesMock,
   );
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const updateTrialSession = jest.mocked(updateTrialSessionMock);
@@ -298,6 +302,17 @@ describe('setTrialSessionCalendarInteractor', () => {
     );
 
     expect(updatedDocketNumbers).toEqual([
+      hpSuffixDocketNumber,
+      regularDocketNumber1,
+      regularDocketNumber2,
+    ]);
+
+    const calendaredDocketNumbers =
+      createOrUpdateTrialSessionCases.mock.calls[0][0].trialSessionCases.map(
+        tsc => tsc.docketNumber,
+      );
+
+    expect(calendaredDocketNumbers).toEqual([
       hpSuffixDocketNumber,
       regularDocketNumber1,
       regularDocketNumber2,
