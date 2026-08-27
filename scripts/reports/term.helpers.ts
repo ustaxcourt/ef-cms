@@ -72,63 +72,39 @@ const getReportSessions = ({
   sessions.filter(session => isReportSession(session, term, termYear));
 
 const toReportRows = (
-  sessions: RawTrialSession[],
+  session: RawTrialSession,
   cases: ReportCase[],
   seenReportDockets = new Set<string>(),
-): TermReportRow[] =>
-  sessions.flatMap(session => {
-    const casesByDocketNumber = new Map(
-      cases.map(caseItem => [caseItem.docketNumber, caseItem]),
-    );
-    const caseOrdersByReportDocket = new Map<string, TCaseOrder>();
+): TermReportRow[] => {
+  const casesByDocketNumber = new Map(
+    cases.map(caseItem => [caseItem.docketNumber, caseItem]),
+  );
+  const caseOrdersByReportDocket = new Map<string, TCaseOrder>();
 
-    session.caseOrder.forEach(caseOrder => {
-      const reportDocketNumber =
-        casesByDocketNumber.get(caseOrder.docketNumber)?.leadDocketNumber ??
-        caseOrder.docketNumber;
-      const existingCaseOrder =
-        caseOrdersByReportDocket.get(reportDocketNumber);
+  session.caseOrder.forEach(caseOrder => {
+    const reportDocketNumber =
+      casesByDocketNumber.get(caseOrder.docketNumber)?.leadDocketNumber ??
+      caseOrder.docketNumber;
+    const existingCaseOrder = caseOrdersByReportDocket.get(reportDocketNumber);
 
-      if (!existingCaseOrder || caseOrder.docketNumber === reportDocketNumber) {
-        caseOrdersByReportDocket.set(reportDocketNumber, caseOrder);
-      }
-    });
-
-    return [...caseOrdersByReportDocket.entries()].flatMap(
-      ([docketNumber, caseOrder]) => {
-        if (seenReportDockets.has(docketNumber)) return [];
-        // The first matching session owns the group's report details.
-        seenReportDockets.add(docketNumber);
-        return [
-          {
-            disposition: caseOrder.disposition ?? '',
-            docketNumber,
-            judge: formatJudgeName(session.judge?.name),
-          },
-        ];
-      },
-    );
+    if (!existingCaseOrder || caseOrder.docketNumber === reportDocketNumber) {
+      caseOrdersByReportDocket.set(reportDocketNumber, caseOrder);
+    }
   });
 
-export const getTermRows = ({
-  sessions,
-  term,
-  termYear,
-  cases = [],
-}: {
-  sessions: RawTrialSession[];
-  term: string;
-  termYear: string;
-  cases?: ReportCase[];
-}): TermReportRow[] => {
-  const normalizedTerm = normalizeTerm(term);
-  const matchingSessions = getReportSessions({
-    sessions,
-    term: normalizedTerm,
-    termYear,
-  });
-  return toReportRows(matchingSessions, cases).sort((a, b) =>
-    a.disposition.localeCompare(b.disposition),
+  return [...caseOrdersByReportDocket.entries()].flatMap(
+    ([docketNumber, caseOrder]) => {
+      if (seenReportDockets.has(docketNumber)) return [];
+      // The first matching session owns the group's report details.
+      seenReportDockets.add(docketNumber);
+      return [
+        {
+          disposition: caseOrder.disposition ?? '',
+          docketNumber,
+          judge: formatJudgeName(session.judge?.name),
+        },
+      ];
+    },
   );
 };
 
@@ -154,7 +130,7 @@ export const getTermRowsByLocation = ({
 
   reportSessions.forEach(session => {
     const location = session.trialLocation || 'Unknown';
-    const sessionRows = toReportRows([session], cases, seenReportDockets);
+    const sessionRows = toReportRows(session, cases, seenReportDockets);
     if (!sessionRows.length) return;
     rowsByLocation[location] = [
       ...(rowsByLocation[location] || []),

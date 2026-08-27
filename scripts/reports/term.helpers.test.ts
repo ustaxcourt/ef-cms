@@ -15,7 +15,6 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 import { generateCsv as generateCsvMock } from '../helpers/generate-csv';
 import {
-  getTermRows,
   getTermRowsByLocation,
   normalizeTerm,
   termReport,
@@ -65,7 +64,7 @@ describe('term.helpers', () => {
     });
   });
 
-  describe('getTermRows', () => {
+  describe('getTermRowsByLocation', () => {
     it('includes every case linked to a matching session', () => {
       const matchingSession = createSession({
         caseOrder: [
@@ -87,7 +86,7 @@ describe('term.helpers', () => {
         ],
       });
 
-      const rows = getTermRows({
+      const rowsByLocation = getTermRowsByLocation({
         sessions: [
           matchingSession,
           createSession({ isCalendared: false }),
@@ -99,32 +98,18 @@ describe('term.helpers', () => {
         termYear: '2026',
       });
 
-      expect(rows).toEqual([
-        {
-          disposition: '',
-          docketNumber: '123-48',
-          judge: 'Alpha',
-        },
-        {
-          disposition: 'Hearing',
-          docketNumber: '123-46',
-          judge: 'Alpha',
-        },
-        {
-          disposition: 'Removed',
-          docketNumber: '123-47',
-          judge: 'Alpha',
-        },
-        {
-          disposition: 'Settled',
-          docketNumber: '123-45',
-          judge: 'Alpha',
-        },
-      ]);
+      expect(rowsByLocation).toEqual({
+        'Denver, Colorado': [
+          { disposition: '', docketNumber: '123-48', judge: 'Alpha' },
+          { disposition: 'Hearing', docketNumber: '123-46', judge: 'Alpha' },
+          { disposition: 'Removed', docketNumber: '123-47', judge: 'Alpha' },
+          { disposition: 'Settled', docketNumber: '123-45', judge: 'Alpha' },
+        ],
+      });
     });
 
     it('uses a blank judge when the session has no judge', () => {
-      const [row] = getTermRows({
+      const rowsByLocation = getTermRowsByLocation({
         sessions: [
           createSession({
             caseOrder: [createCase()],
@@ -135,39 +120,13 @@ describe('term.helpers', () => {
         termYear: '2026',
       });
 
-      expect(row.judge).toBe('');
-    });
-
-    it('renders one row using the lead docket number for consolidated cases', () => {
-      const matchingSession = createSession({
-        caseOrder: [
-          createCase({ docketNumber: '102-20', disposition: 'Settled' }),
-          createCase({ docketNumber: '101-20', disposition: 'Decided' }),
-          createCase({ docketNumber: '104-20', disposition: 'Settled' }),
-          createCase({ docketNumber: '103-20', disposition: 'Dismissed' }),
+      expect(rowsByLocation).toEqual({
+        'Denver, Colorado': [
+          { disposition: '', docketNumber: '123-45', judge: '' },
         ],
       });
-
-      const rows = getTermRows({
-        sessions: [matchingSession],
-        term: 'Spring',
-        termYear: '2026',
-        cases: [
-          { docketNumber: '101-20', leadDocketNumber: '101-20' },
-          { docketNumber: '102-20', leadDocketNumber: '101-20' },
-          { docketNumber: '104-20', leadDocketNumber: '101-20' },
-          { docketNumber: '103-20' },
-        ],
-      });
-
-      expect(rows).toEqual([
-        { disposition: 'Decided', docketNumber: '101-20', judge: 'Alpha' },
-        { disposition: 'Dismissed', docketNumber: '103-20', judge: 'Alpha' },
-      ]);
     });
-  });
 
-  describe('getTermRowsByLocation', () => {
     it('combines sessions by location and sorts by disposition', () => {
       const rowsByLocation = getTermRowsByLocation({
         sessions: [
@@ -211,6 +170,14 @@ describe('term.helpers', () => {
                 docketNumber: '102-20',
                 disposition: 'Settled',
               }),
+              createCase({
+                docketNumber: '101-20',
+                disposition: 'Decided',
+              }),
+              createCase({
+                docketNumber: '104-20',
+                disposition: 'Settled',
+              }),
             ],
             trialLocation: 'Denver, Colorado',
           }),
@@ -228,6 +195,7 @@ describe('term.helpers', () => {
         term: 'Spring',
         termYear: '2026',
         cases: [
+          { docketNumber: '101-20', leadDocketNumber: '101-20' },
           { docketNumber: '102-20', leadDocketNumber: '101-20' },
           { docketNumber: '104-20', leadDocketNumber: '101-20' },
         ],
@@ -235,7 +203,7 @@ describe('term.helpers', () => {
 
       expect(rowsByLocation).toEqual({
         'Denver, Colorado': [
-          { disposition: 'Settled', docketNumber: '101-20', judge: 'Alpha' },
+          { disposition: 'Decided', docketNumber: '101-20', judge: 'Alpha' },
         ],
       });
     });
