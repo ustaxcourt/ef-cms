@@ -27,4 +27,18 @@ describe('removeCoversheet', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
   });
+
+  it('should write the coversheet-free pdf with a classic cross-reference table and no object streams', async () => {
+    await removeCoversheet(applicationContext, {
+      documentStorageId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+
+    const { document } =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0];
+    const saved = Buffer.from(document).toString('latin1');
+
+    expect(saved).toMatch(/\nxref\r?\n/);
+    expect(saved).not.toMatch(/\/Type\s*\/ObjStm/);
+  });
 });

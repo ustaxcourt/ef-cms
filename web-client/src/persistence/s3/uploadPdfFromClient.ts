@@ -1,5 +1,6 @@
 import promiseRetry from 'promise-retry';
 import { DateTime } from 'luxon';
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
 
 const resetIdleTimerDuringUpload = () => {
   if (typeof window !== 'undefined' && window.dispatchEvent) {
@@ -86,7 +87,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
   pdfDoc.setCreationDate(nowJSDate);
   pdfDoc.setModificationDate(nowJSDate);
 
-  const modifiedPdfBytes: number[] = await pdfDoc.save();
+  const modifiedPdfBytes: number[] = await pdfDoc.save(PDF_SAVE_OPTIONS);
   const finalModifiedPdfBytes: BlobPart =
     handleAdobeAdditionalMetadata(modifiedPdfBytes);
 

@@ -1,3 +1,4 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const removeCoversheet = async (
@@ -18,7 +19,7 @@ export const removeCoversheet = async (
 
     pdfDoc.removePage(0);
 
-    const pdfWithoutCoversheet = await pdfDoc.save();
+    const pdfWithoutCoversheet = await pdfDoc.save(PDF_SAVE_OPTIONS);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: pdfWithoutCoversheet,

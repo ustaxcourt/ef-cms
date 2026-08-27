@@ -1,3 +1,5 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
+
 /**
  * takes an array of JPG images (each a byte array) and combines
  * them into one PDF file
@@ -26,7 +28,7 @@ export const generatePDFFromJPGs = async (applicationContext, { imgData }) => {
     await addImageToPage(image);
   }
 
-  const pdfBytes = await pdfDoc.save();
+  const pdfBytes = await pdfDoc.save(PDF_SAVE_OPTIONS);
 
   return pdfBytes;
 };

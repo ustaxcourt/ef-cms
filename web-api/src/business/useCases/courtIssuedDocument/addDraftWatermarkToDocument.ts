@@ -1,3 +1,5 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
+
 const WATERMARK_TEXT = 'DRAFT';
 
 export const addDraftWatermarkToDocument = async ({
@@ -39,7 +41,5 @@ export const addDraftWatermarkToDocument = async ({
     });
   });
 
-  return await pdfDoc.save({
-    useObjectStreams: false,
-  });
+  return await pdfDoc.save(PDF_SAVE_OPTIONS);
 };

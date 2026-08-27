@@ -1,3 +1,5 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
+
 const TEXT_SIZE = 14;
 export const PADDING = 3;
 
@@ -101,7 +103,5 @@ export const addServedStampToDocument = async ({
     y: boxCoordinates.y + PADDING * 2,
   });
 
-  return await pdfDoc.save({
-    useObjectStreams: false,
-  });
+  return await pdfDoc.save(PDF_SAVE_OPTIONS);
 };

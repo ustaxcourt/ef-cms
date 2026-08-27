@@ -27,4 +27,15 @@ describe('generatePDFFromJPGs', () => {
     const newPdfDocPages = newPdfDoc.getPages();
     expect(newPdfDocPages.length).toEqual(2);
   });
+
+  it('writes the scanned document with a classic cross-reference table and no object streams', async () => {
+    const newPdfData = await generatePDFFromJPGs(applicationContext, {
+      imgData: [testImg],
+    });
+
+    const saved = Buffer.from(newPdfData).toString('latin1');
+
+    expect(saved).toMatch(/\nxref\r?\n/);
+    expect(saved).not.toMatch(/\/Type\s*\/ObjStm/);
+  });
 });

@@ -1,3 +1,4 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   cleanFileMetadata,
@@ -174,6 +175,19 @@ describe('uploadPdfFromClient', () => {
             )
             .toString(),
         );
+      });
+
+      it('should save the cleaned PDF with a classic cross-reference table and no object streams', async () => {
+        loadMock.save.mockReturnValue(new Uint8Array([37, 80, 68, 70]));
+
+        const pdfContent = new Uint8Array([37, 80, 68, 70, 45, 49, 46, 51]); // bytes representing "%PDF-1.3"
+
+        await cleanFileMetadata(pdfLibMock, {
+          result: pdfContent,
+        } as unknown as FileReader);
+
+        expect(loadMock.save).toHaveBeenCalledWith(PDF_SAVE_OPTIONS);
+        expect(PDF_SAVE_OPTIONS.useObjectStreams).toBe(false);
       });
     });
 

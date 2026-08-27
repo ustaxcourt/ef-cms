@@ -1,3 +1,4 @@
+import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
 import { addCoverToPdf } from './addCoverToPdf';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -65,6 +66,18 @@ describe('addCoverToPdf', () => {
     expect(result.numberOfPages).toBe(5);
     expect(mockPdfDoc.insertPage).toHaveBeenCalledWith(0, { page: 'mockPage' });
     expect(mockPdfDoc.save).toHaveBeenCalled();
+  });
+
+  it('should save the stamped pdf with a classic cross-reference table and no object streams', async () => {
+    await addCoverToPdf({
+      applicationContext,
+      caseEntity: testingCaseData,
+      docketEntryEntity: testingCaseData.docketEntries[0],
+      pdfData: mockPdfData,
+    } as any);
+
+    expect(mockPdfDoc.save).toHaveBeenCalledWith(PDF_SAVE_OPTIONS);
+    expect(PDF_SAVE_OPTIONS.useObjectStreams).toBe(false);
   });
 
   it('should call generateCoverSheetData with correct parameters', async () => {
