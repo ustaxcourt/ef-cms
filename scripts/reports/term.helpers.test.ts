@@ -176,12 +176,16 @@ describe('term.helpers', () => {
             trialLocation: 'Denver, Colorado',
           }),
           createSession({
-            caseOrder: [createCase({ disposition: 'A' })],
+            caseOrder: [
+              createCase({ docketNumber: '123-46', disposition: 'A' }),
+            ],
             judge: { name: 'Judge Beta', userId: 'judge-beta-id' },
             trialLocation: 'Denver, Colorado',
           }),
           createSession({
-            caseOrder: [createCase({ disposition: 'M' })],
+            caseOrder: [
+              createCase({ docketNumber: '123-47', disposition: 'M' }),
+            ],
             trialLocation: undefined,
           }),
         ],
@@ -191,10 +195,48 @@ describe('term.helpers', () => {
 
       expect(rowsByLocation).toEqual({
         'Denver, Colorado': [
-          { disposition: 'A', docketNumber: '123-45', judge: 'Beta' },
+          { disposition: 'A', docketNumber: '123-46', judge: 'Beta' },
           { disposition: 'Z', docketNumber: '123-45', judge: 'Alpha' },
         ],
-        Unknown: [{ disposition: 'M', docketNumber: '123-45', judge: 'Alpha' }],
+        Unknown: [{ disposition: 'M', docketNumber: '123-47', judge: 'Alpha' }],
+      });
+    });
+
+    it('uses the first matching session when a consolidated group spans sessions', () => {
+      const rowsByLocation = getTermRowsByLocation({
+        sessions: [
+          createSession({
+            caseOrder: [
+              createCase({
+                docketNumber: '102-20',
+                disposition: 'Settled',
+              }),
+            ],
+            trialLocation: 'Denver, Colorado',
+          }),
+          createSession({
+            caseOrder: [
+              createCase({
+                docketNumber: '104-20',
+                disposition: 'Dismissed',
+              }),
+            ],
+            judge: { name: 'Judge Beta', userId: 'judge-beta-id' },
+            trialLocation: 'St. Louis, Missouri',
+          }),
+        ],
+        term: 'Spring',
+        termYear: '2026',
+        cases: [
+          { docketNumber: '102-20', leadDocketNumber: '101-20' },
+          { docketNumber: '104-20', leadDocketNumber: '101-20' },
+        ],
+      });
+
+      expect(rowsByLocation).toEqual({
+        'Denver, Colorado': [
+          { disposition: 'Settled', docketNumber: '101-20', judge: 'Alpha' },
+        ],
       });
     });
 
@@ -217,7 +259,12 @@ describe('term.helpers', () => {
           trialLocation: 'Denver, Colorado',
         }),
         createSession({
-          caseOrder: [createCase({ disposition: 'Dismissed' })],
+          caseOrder: [
+            createCase({
+              docketNumber: '123-46',
+              disposition: 'Dismissed',
+            }),
+          ],
           trialLocation: 'St. Louis, Missouri',
         }),
       ]);
@@ -230,7 +277,7 @@ describe('term.helpers', () => {
 
       expect(generateCsv).toHaveBeenCalledTimes(2);
       expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
-        docketNumbers: ['123-45'],
+        docketNumbers: ['123-45', '123-46'],
         excludeFields: [
           'docketEntries',
           'privatePractitioners',

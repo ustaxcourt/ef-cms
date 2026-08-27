@@ -74,6 +74,7 @@ const getReportSessions = ({
 const toReportRows = (
   sessions: RawTrialSession[],
   cases: ReportCase[],
+  seenReportDockets = new Set<string>(),
 ): TermReportRow[] =>
   sessions.flatMap(session => {
     const casesByDocketNumber = new Map(
@@ -93,12 +94,19 @@ const toReportRows = (
       }
     });
 
-    return [...caseOrdersByReportDocket.entries()].map(
-      ([docketNumber, caseOrder]) => ({
-        disposition: caseOrder.disposition ?? '',
-        docketNumber,
-        judge: formatJudgeName(session.judge?.name),
-      }),
+    return [...caseOrdersByReportDocket.entries()].flatMap(
+      ([docketNumber, caseOrder]) => {
+        if (seenReportDockets.has(docketNumber)) return [];
+        // The first matching session owns the group's report details.
+        seenReportDockets.add(docketNumber);
+        return [
+          {
+            disposition: caseOrder.disposition ?? '',
+            docketNumber,
+            judge: formatJudgeName(session.judge?.name),
+          },
+        ];
+      },
     );
   });
 
@@ -142,10 +150,11 @@ export const getTermRowsByLocation = ({
     term: normalizedTerm,
     termYear,
   });
+  const seenReportDockets = new Set<string>();
 
   reportSessions.forEach(session => {
     const location = session.trialLocation || 'Unknown';
-    const sessionRows = toReportRows([session], cases);
+    const sessionRows = toReportRows([session], cases, seenReportDockets);
     if (!sessionRows.length) return;
     rowsByLocation[location] = [
       ...(rowsByLocation[location] || []),
