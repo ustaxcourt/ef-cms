@@ -231,6 +231,13 @@ describe('term.helpers', () => {
       expect(generateCsv).toHaveBeenCalledTimes(2);
       expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
         docketNumbers: ['123-45'],
+        excludeFields: [
+          'docketEntries',
+          'privatePractitioners',
+          'irsPractitioners',
+          'correspondence',
+          'hearings',
+        ],
       });
       expect(generateCsv).toHaveBeenCalledWith({
         columns: [

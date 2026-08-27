@@ -43,7 +43,7 @@ export const normalizeTerm = (term: string): string => {
   );
   if (!normalizedTerm) {
     throw new Error(
-      `Invalid term "${term}". Expected Winter, Spring, or Fall.`,
+      `Invalid term "${term}". Expected ${REPORT_TERMS.join(', ')}.`,
     );
   }
   return normalizedTerm;
@@ -200,7 +200,16 @@ export const termReport = async ({
     `Retrieving case data for ${docketNumbers.length} linked docket numbers...`,
   );
   const cases = docketNumbers.length
-    ? await getCasesByDocketNumbers({ docketNumbers })
+    ? await getCasesByDocketNumbers({
+        docketNumbers,
+        excludeFields: [
+          'docketEntries',
+          'privatePractitioners',
+          'irsPractitioners',
+          'correspondence',
+          'hearings',
+        ],
+      })
     : [];
   console.log(`Retrieved ${cases.length} case records.`);
   reportSessions.forEach(session => {
