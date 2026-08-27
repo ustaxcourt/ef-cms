@@ -2267,7 +2267,7 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
   orderType: 'motionOrderResponse',
 };
 
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 256;
 
 export const GRANT_DENY_MOTION_OPTIONS = {
   issueOrderOptions: {

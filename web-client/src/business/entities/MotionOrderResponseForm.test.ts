@@ -227,7 +227,7 @@ describe('MotionOrderResponseForm', () => {
 
       const errors = form.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        'additionalOrderTextArray-0': 'Limit is 240 characters.',
+        'additionalOrderTextArray-0': 'Limit is 256 characters.',
       });
     });
 
