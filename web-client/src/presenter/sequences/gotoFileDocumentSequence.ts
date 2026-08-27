@@ -8,7 +8,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { getCaseAssociationAction } from '@web-client/presenter/actions/getCaseAssociationAction';
-import { isUserAssociatedWithTrialSessionAction } from '@web-client/presenter/actions/isUserDirectlyAssociatedToCaseAction';
+import { isUserDirectlyAssociatedToCaseAction } from '@web-client/presenter/actions/isUserDirectlyAssociatedToCaseAction';
 import { navigateToPathSequence } from '@web-client/presenter/sequences/navigateToPathSequence';
 
 export const gotoFileDocumentSequence =
@@ -21,7 +21,7 @@ export const gotoFileDocumentSequence =
     getCaseAction,
     setCaseAction,
     getCaseAssociationAction,
-    isUserAssociatedWithTrialSessionAction,
+    isUserDirectlyAssociatedToCaseAction,
     {
       yes: [
         setWizardStepAction('SelectDocumentType'),

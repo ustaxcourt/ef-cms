@@ -93,4 +93,32 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
       });
     });
   });
+  describe('IRS Practitioner Access', () => {
+    it('should not let IRS practitioner not associated with case file a document on it after first appearance is filed', () => {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        // file first appearance
+        loginAsIrsPractitioner1();
+        cy.visit(
+          `/case-detail/${docketNumber}/before-you-file-a-document`,
+        ).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document`).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/details`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/review`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+      });
+    });
+  });
 });

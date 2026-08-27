@@ -1,4 +1,4 @@
-import { isUserAssociatedWithTrialSessionAction } from '@web-client/presenter/actions/isUserDirectlyAssociatedToCaseAction';
+import { isUserDirectlyAssociatedToCaseAction } from '@web-client/presenter/actions/isUserDirectlyAssociatedToCaseAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -12,7 +12,7 @@ describe('isUserDirectlyAssociatedToCase', () => {
   };
 
   it('should return no if the user is not directly associated', async () => {
-    await runAction(isUserAssociatedWithTrialSessionAction, {
+    await runAction(isUserDirectlyAssociatedToCaseAction, {
       modules: {
         presenter,
       },
@@ -25,7 +25,7 @@ describe('isUserDirectlyAssociatedToCase', () => {
   });
 
   it('should return no if no isDirectlyAssociated prop is found', async () => {
-    await runAction(isUserAssociatedWithTrialSessionAction, {
+    await runAction(isUserDirectlyAssociatedToCaseAction, {
       modules: {
         presenter,
       },
@@ -35,7 +35,7 @@ describe('isUserDirectlyAssociatedToCase', () => {
   });
 
   it('should return yes if the user is directly associated', async () => {
-    await runAction(isUserAssociatedWithTrialSessionAction, {
+    await runAction(isUserDirectlyAssociatedToCaseAction, {
       modules: {
         presenter,
       },
