@@ -2,7 +2,10 @@ import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
+import {
+  Case,
+  userIsDirectlyAssociated,
+} from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -53,6 +56,17 @@ export const fileExternalDocument = async (
   });
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
+
+  if (
+    !userIsDirectlyAssociated({
+      aCase: currentCaseEntity,
+      userId: authorizedUser.userId,
+    })
+  ) {
+    throw new UnauthorizedError(
+      `User is not associated with case: ${docketNumber}`,
+    );
+  }
 
   const {
     consolidatedCasesToFileAcross,
