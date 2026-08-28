@@ -28,7 +28,7 @@ const createCase = (overrides: Partial<TCaseOrder> = {}): TCaseOrder => ({
   docketNumber: '123-45',
   isHearing: false,
   isManuallyAdded: false,
-  removedFromTrial: false,
+  removedFromTrial: true,
   ...overrides,
 });
 
@@ -65,13 +65,14 @@ describe('term.helpers', () => {
   });
 
   describe('getTermRowsByLocation', () => {
-    it('includes every case linked to a matching session', () => {
+    it('includes only cases removed from a matching session', () => {
       const matchingSession = createSession({
         caseOrder: [
           createCase({ disposition: 'Settled' }),
           createCase({
             docketNumber: '123-46',
             isHearing: true,
+            removedFromTrial: true,
             disposition: 'Hearing',
           }),
           createCase({
@@ -81,6 +82,7 @@ describe('term.helpers', () => {
           }),
           createCase({
             docketNumber: '123-48',
+            removedFromTrial: false,
             disposition: undefined,
           }),
         ],
@@ -100,7 +102,6 @@ describe('term.helpers', () => {
 
       expect(rowsByLocation).toEqual({
         'Denver, Colorado': [
-          { disposition: '', docketNumber: '123-48', judge: 'Alpha' },
           { disposition: 'Hearing', docketNumber: '123-46', judge: 'Alpha' },
           { disposition: 'Removed', docketNumber: '123-47', judge: 'Alpha' },
           { disposition: 'Settled', docketNumber: '123-45', judge: 'Alpha' },
@@ -112,7 +113,7 @@ describe('term.helpers', () => {
       const rowsByLocation = getTermRowsByLocation({
         sessions: [
           createSession({
-            caseOrder: [createCase()],
+            caseOrder: [createCase({ disposition: 'Settled' })],
             judge: undefined,
           }),
         ],
@@ -122,7 +123,7 @@ describe('term.helpers', () => {
 
       expect(rowsByLocation).toEqual({
         'Denver, Colorado': [
-          { disposition: '', docketNumber: '123-45', judge: '' },
+          { disposition: 'Settled', docketNumber: '123-45', judge: '' },
         ],
       });
     });
@@ -147,6 +148,12 @@ describe('term.helpers', () => {
             ],
             trialLocation: undefined,
           }),
+          createSession({
+            caseOrder: [
+              createCase({ docketNumber: '99-26', disposition: 'A' }),
+            ],
+            trialLocation: 'Denver, Colorado',
+          }),
         ],
         term: 'Spring',
         termYear: '2026',
@@ -154,10 +161,34 @@ describe('term.helpers', () => {
 
       expect(rowsByLocation).toEqual({
         'Denver, Colorado': [
+          { disposition: 'A', docketNumber: '99-26', judge: 'Alpha' },
           { disposition: 'A', docketNumber: '123-46', judge: 'Beta' },
           { disposition: 'Z', docketNumber: '123-45', judge: 'Alpha' },
         ],
         Unknown: [{ disposition: 'M', docketNumber: '123-47', judge: 'Alpha' }],
+      });
+    });
+
+    it('keeps repeated unconsolidated cases from different sessions', () => {
+      const rowsByLocation = getTermRowsByLocation({
+        sessions: [
+          createSession({
+            caseOrder: [createCase({ disposition: 'Settled' })],
+          }),
+          createSession({
+            caseOrder: [createCase({ disposition: 'Dismissed' })],
+            judge: { name: 'Judge Beta', userId: 'judge-beta-id' },
+          }),
+        ],
+        term: 'Spring',
+        termYear: '2026',
+      });
+
+      expect(rowsByLocation).toEqual({
+        'Denver, Colorado': [
+          { disposition: 'Dismissed', docketNumber: '123-45', judge: 'Beta' },
+          { disposition: 'Settled', docketNumber: '123-45', judge: 'Alpha' },
+        ],
       });
     });
 
@@ -223,7 +254,14 @@ describe('term.helpers', () => {
     it('writes one CSV per location', async () => {
       getTrialSessions.mockResolvedValue([
         createSession({
-          caseOrder: [createCase({ disposition: 'Settled' })],
+          caseOrder: [
+            createCase({ disposition: 'Settled' }),
+            createCase({
+              docketNumber: '123-47',
+              removedFromTrial: false,
+              disposition: undefined,
+            }),
+          ],
           trialLocation: 'Denver, Colorado',
         }),
         createSession({

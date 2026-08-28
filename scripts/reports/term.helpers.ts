@@ -2,6 +2,7 @@ import {
   SESSION_TERMS_DICT,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   type RawTrialSession,
   type TCaseOrder,
@@ -30,11 +31,15 @@ export type TermReportRow = {
   judge: string;
 };
 
-export type termReportRowsByLocation = Record<string, TermReportRow[]>;
+export type TermReportRowsByLocation = Record<string, TermReportRow[]>;
 
 type ReportCase = {
   docketNumber: string;
   leadDocketNumber?: string;
+};
+
+type ReportCaseOrder = TCaseOrder & {
+  disposition: string;
 };
 
 export const normalizeTerm = (term: string): string => {
@@ -71,17 +76,21 @@ const getReportSessions = ({
 }): RawTrialSession[] =>
   sessions.filter(session => isReportSession(session, term, termYear));
 
+const isRemovedCaseOrder = (
+  caseOrder: TCaseOrder,
+): caseOrder is ReportCaseOrder => caseOrder.removedFromTrial === true;
+
 const toReportRows = (
   session: RawTrialSession,
   cases: ReportCase[],
-  seenReportDockets = new Set<string>(),
+  seenReportDockets: Set<string>,
 ): TermReportRow[] => {
   const casesByDocketNumber = new Map(
     cases.map(caseItem => [caseItem.docketNumber, caseItem]),
   );
-  const caseOrdersByReportDocket = new Map<string, TCaseOrder>();
+  const caseOrdersByReportDocket = new Map<string, ReportCaseOrder>();
 
-  session.caseOrder.forEach(caseOrder => {
+  session.caseOrder.filter(isRemovedCaseOrder).forEach(caseOrder => {
     const reportDocketNumber =
       casesByDocketNumber.get(caseOrder.docketNumber)?.leadDocketNumber ??
       caseOrder.docketNumber;
@@ -94,12 +103,17 @@ const toReportRows = (
 
   return [...caseOrdersByReportDocket.entries()].flatMap(
     ([docketNumber, caseOrder]) => {
-      if (seenReportDockets.has(docketNumber)) return [];
-      // The first matching session owns the group's report details.
-      seenReportDockets.add(docketNumber);
+      const isConsolidated = Boolean(
+        casesByDocketNumber.get(caseOrder.docketNumber)?.leadDocketNumber,
+      );
+      if (isConsolidated) {
+        if (seenReportDockets.has(docketNumber)) return [];
+        // The first matching session owns the group's report details.
+        seenReportDockets.add(docketNumber);
+      }
       return [
         {
-          disposition: caseOrder.disposition ?? '',
+          disposition: caseOrder.disposition,
           docketNumber,
           judge: formatJudgeName(session.judge?.name),
         },
@@ -108,24 +122,14 @@ const toReportRows = (
   );
 };
 
-export const getTermRowsByLocation = ({
-  sessions,
-  term,
-  termYear,
-  cases = [],
+const getRowsByLocation = ({
+  cases,
+  reportSessions,
 }: {
-  sessions: RawTrialSession[];
-  term: string;
-  termYear: string;
-  cases?: ReportCase[];
-}): termReportRowsByLocation => {
-  const normalizedTerm = normalizeTerm(term);
-  const rowsByLocation: termReportRowsByLocation = {};
-  const reportSessions = getReportSessions({
-    sessions,
-    term: normalizedTerm,
-    termYear,
-  });
+  cases: ReportCase[];
+  reportSessions: RawTrialSession[];
+}): TermReportRowsByLocation => {
+  const rowsByLocation: TermReportRowsByLocation = {};
   const seenReportDockets = new Set<string>();
 
   reportSessions.forEach(session => {
@@ -139,9 +143,33 @@ export const getTermRowsByLocation = ({
   });
 
   Object.values(rowsByLocation).forEach(locationRows =>
-    locationRows.sort((a, b) => a.disposition.localeCompare(b.disposition)),
+    locationRows.sort(
+      (a, b) =>
+        a.disposition.localeCompare(b.disposition) ||
+        Case.docketNumberSort(a.docketNumber, b.docketNumber),
+    ),
   );
   return rowsByLocation;
+};
+
+export const getTermRowsByLocation = ({
+  sessions,
+  term,
+  termYear,
+  cases = [],
+}: {
+  sessions: RawTrialSession[];
+  term: string;
+  termYear: string;
+  cases?: ReportCase[];
+}): TermReportRowsByLocation => {
+  const normalizedTerm = normalizeTerm(term);
+  const reportSessions = getReportSessions({
+    sessions,
+    term: normalizedTerm,
+    termYear,
+  });
+  return getRowsByLocation({ cases, reportSessions });
 };
 
 const toFilenamePart = (location: string): string =>
@@ -177,7 +205,9 @@ export const termReport = async ({
   const docketNumbers = [
     ...new Set(
       reportSessions.flatMap(session =>
-        session.caseOrder.map(caseOrder => caseOrder.docketNumber),
+        session.caseOrder
+          .filter(isRemovedCaseOrder)
+          .map(caseOrder => caseOrder.docketNumber),
       ),
     ),
   ];
@@ -207,12 +237,7 @@ export const termReport = async ({
     );
   });
 
-  const rowsByLocation = getTermRowsByLocation({
-    sessions: reportSessions,
-    term: normalizedTerm,
-    termYear,
-    cases,
-  });
+  const rowsByLocation = getRowsByLocation({ cases, reportSessions });
   const totalRows = Object.values(rowsByLocation).reduce(
     (count, rows) => count + rows.length,
     0,
