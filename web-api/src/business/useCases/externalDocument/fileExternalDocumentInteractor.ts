@@ -60,9 +60,6 @@ export const fileExternalDocument = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
-  console.log(JSON.stringify(currentCaseEntity));
-  console.log(JSON.stringify(authorizedUser));
-
   const isFilingEntryOfAppearance =
     user.role === ROLES.privatePractitioner &&
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.some(
