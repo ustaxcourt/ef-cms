@@ -26,6 +26,7 @@ import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
   mockPetitionerUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -681,5 +682,25 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow(
       `User is not associated with case: ${caseRecord.docketNumber}`,
     );
+  });
+
+  it('should allow private practitioner to file an entry of appearance', async () => {
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for Private Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'Private Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+      mockPrivatePractitionerUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });

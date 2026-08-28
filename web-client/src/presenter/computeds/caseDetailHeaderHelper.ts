@@ -9,6 +9,7 @@ import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
+import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
 
 const isUserADojPractitioner = (
   user: RawUser | RawPractitioner | RawIrsPractitioner,
@@ -88,8 +89,7 @@ export const caseDetailHeaderHelper = (
     } else if (user.role === USER_ROLES.irsPractitioner) {
       const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
 
-      showFileFirstDocumentButton =
-        !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
+      showFileFirstDocumentButton = canUserFileFirstIrsFiling(user, caseDetail);
 
       showRepresentAPartyButton = shouldShowRepresentAPartyButton(
         caseDetail,

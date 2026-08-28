@@ -1,7 +1,7 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-  PRACTICE_TYPE,
+  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -32,7 +32,7 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -60,29 +60,22 @@ export const fileExternalDocument = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
-  let isFirstIrsFiling = false;
-
-  if (user.role === ROLES.irsPractitioner) {
-    const isCaseSealed = applicationContext
-      .getUtilities()
-      .isSealedCase(currentCaseEntity);
-    const isDojPractitioner =
-      (user as RawPractitioner).practiceType === PRACTICE_TYPE.DOJ;
-    const caseHasRespondent = !!currentCaseEntity.irsPractitioners?.length;
-
-    isFirstIrsFiling =
-      !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
-  }
-
   console.log(JSON.stringify(currentCaseEntity));
   console.log(JSON.stringify(authorizedUser));
+
+  const isFilingEntryOfAppearance =
+    user.role === ROLES.privatePractitioner &&
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.some(
+      event => event.eventCode === documentMetadata.eventCode,
+    );
 
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
       userId: authorizedUser.userId,
     }) &&
-    !isFirstIrsFiling
+    !canUserFileFirstIrsFiling(user, currentCaseEntity) &&
+    !isFilingEntryOfAppearance
   ) {
     throw new UnauthorizedError(
       `User is not associated with case: ${docketNumber}`,
