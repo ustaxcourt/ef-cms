@@ -25,6 +25,8 @@ import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } 
 import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -121,6 +123,7 @@ describe('fileExternalDocumentInteractor', () => {
           state: 'CA',
         },
       ],
+      irsPractitioners: [mockIrsPractitionerUser],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -655,5 +658,48 @@ describe('fileExternalDocumentInteractor', () => {
         identifiers: [`case|${caseRecord.docketNumber}`],
       }),
     );
+  });
+
+  it('should throw an unauthorized error if the user is not related to a case', async () => {
+    getUserById.mockResolvedValue(mockPetitionerUser as DbUser);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            category: 'Application',
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Application for Waiver of Filing Fee',
+            documentType: 'Application for Waiver of Filing Fee',
+            eventCode: 'APPW',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+        },
+        mockPetitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User is not associated with case: ${caseRecord.docketNumber}`,
+    );
+  });
+
+  it('should allow private practitioner to file an entry of appearance', async () => {
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for Private Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'Private Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+      mockPrivatePractitionerUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });
