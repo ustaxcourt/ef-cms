@@ -5,7 +5,6 @@ type CaseRow = {
   automaticBlockedReason: string | null;
   trialDate: string | null;
   hasDeadline: boolean;
-  hasPendingFlaggedEntry: boolean;
 };
 
 // Stands in for the `dwCase` table; the `pgUpdateTable` mock writes back into it.
@@ -20,7 +19,6 @@ const blockedCase = (
   automaticBlockedDate: '2020-01-01T00:00:00.000Z',
   automaticBlockedReason: 'Pending Item',
   hasDeadline: false,
-  hasPendingFlaggedEntry: false,
   trialDate: null,
   ...overrides,
 });
@@ -201,18 +199,17 @@ describe('fix-stale-automatic-blocks.ts', () => {
     jest.restoreAllMocks();
   });
 
-  it('should fix stale automatic blocks for cases that are definitely unblocked', async () => {
+  it('should resolve cases with a trial date by query alone', async () => {
     caseTable = [
       blockedCase({
         docketNumber: '101-20',
         hasDeadline: true,
-        hasPendingFlaggedEntry: true,
         trialDate: '2020-01-01T00:00:00.000Z',
       }),
       blockedCase({
         docketNumber: '102-20',
         hasDeadline: false,
-        hasPendingFlaggedEntry: false,
+        trialDate: '2020-01-01T00:00:00.000Z',
       }),
     ];
 
@@ -244,14 +241,8 @@ describe('fix-stale-automatic-blocks.ts', () => {
 
   it('should fix stale automatic blocks for cases that need evaluation', async () => {
     caseTable = [
-      blockedCase({
-        docketNumber: '103-20',
-        hasPendingFlaggedEntry: true,
-      }),
-      blockedCase({
-        docketNumber: '104-20',
-        hasPendingFlaggedEntry: true,
-      }),
+      blockedCase({ docketNumber: '103-20' }),
+      blockedCase({ docketNumber: '104-20' }),
     ];
     mockGetCasesByDocketNumbers.mockImplementation(
       ({ docketNumbers }: { docketNumbers: string[] }) =>
@@ -282,17 +273,38 @@ describe('fix-stale-automatic-blocks.ts', () => {
     expect(getCaseRow('104-20')).toMatchObject({ automaticBlocked: true });
   });
 
+  it('should evaluate a case with no pending-flagged docket entries rather than clearing it outright', async () => {
+    // A docket entry whose persisted `pending` column is null is read back as
+    // undefined, and DocketEntry derives `pending` from tracked event codes, so the
+    // entity can still report the case as blocked. The script must defer to it.
+    caseTable = [blockedCase({ docketNumber: '111-20', hasDeadline: false })];
+    mockGetCasesByDocketNumbers.mockImplementation(
+      ({ docketNumbers }: { docketNumbers: string[] }) =>
+        docketNumbers.map(docketNumber => ({ docketNumber })),
+    );
+    mockUpdateCaseAutomaticBlock.mockResolvedValue({
+      automaticBlocked: true,
+    });
+
+    await runScript();
+
+    expect(mockGetCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: ['111-20'],
+      excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
+    });
+    expect(mockPgUpdateTable).not.toHaveBeenCalled();
+    expect(getCaseRow('111-20')).toMatchObject({ automaticBlocked: true });
+  });
+
   it('should skip cases that are definitely blocked', async () => {
     caseTable = [
       blockedCase({
         docketNumber: '105-20',
         hasDeadline: true,
-        hasPendingFlaggedEntry: true,
       }),
       blockedCase({
         docketNumber: '106-20',
         hasDeadline: true,
-        hasPendingFlaggedEntry: false,
       }),
     ];
 
@@ -306,7 +318,12 @@ describe('fix-stale-automatic-blocks.ts', () => {
 
   it('should not update any cases when the dry run flag is set', async () => {
     mockParseArgsAndEnvVars.mockReturnValue({ dryRun: true });
-    caseTable = [blockedCase({ docketNumber: '107-20' })];
+    caseTable = [
+      blockedCase({
+        docketNumber: '107-20',
+        trialDate: '2020-01-01T00:00:00.000Z',
+      }),
+    ];
 
     await runScript();
 
@@ -316,9 +333,7 @@ describe('fix-stale-automatic-blocks.ts', () => {
   });
 
   it('should report cases whose evaluation failed without updating them', async () => {
-    caseTable = [
-      blockedCase({ docketNumber: '108-20', hasPendingFlaggedEntry: true }),
-    ];
+    caseTable = [blockedCase({ docketNumber: '108-20' })];
     mockGetCasesByDocketNumbers.mockRejectedValue(new Error('load failed'));
 
     await runScript();
@@ -332,7 +347,12 @@ describe('fix-stale-automatic-blocks.ts', () => {
   });
 
   it('should skip a batch when the update fails', async () => {
-    caseTable = [blockedCase({ docketNumber: '109-20' })];
+    caseTable = [
+      blockedCase({
+        docketNumber: '109-20',
+        trialDate: '2020-01-01T00:00:00.000Z',
+      }),
+    ];
     mockPgUpdateTable.mockRejectedValue(new Error('lock failed'));
 
     await runScript();
@@ -346,12 +366,17 @@ describe('fix-stale-automatic-blocks.ts', () => {
   });
 
   it('should not update a case that was re-blocked between the scan and the update', async () => {
-    caseTable = [blockedCase({ docketNumber: '110-20' })];
+    caseTable = [
+      blockedCase({
+        docketNumber: '110-20',
+        trialDate: '2020-01-01T00:00:00.000Z',
+      }),
+    ];
     caseTableAtRescan = [
       blockedCase({
         docketNumber: '110-20',
         hasDeadline: true,
-        hasPendingFlaggedEntry: true,
+        trialDate: null,
       }),
     ];
 

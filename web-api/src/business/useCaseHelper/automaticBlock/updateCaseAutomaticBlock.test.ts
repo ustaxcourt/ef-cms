@@ -4,6 +4,7 @@ jest.mock(
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  TRACKED_DOCUMENT_TYPES_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
@@ -41,6 +42,29 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  it('sets the case to automaticBlocked when a served tracked entry has no persisted pending flag', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+    const { pending, ...entryWithoutPendingFlag } = PENDING_DOCKET_ENTRY;
+    expect(pending).toBe(true);
+    expect(TRACKED_DOCUMENT_TYPES_EVENT_CODES).toContain(
+      entryWithoutPendingFlag.eventCode,
+    );
+    mockCase.docketEntries = [entryWithoutPendingFlag];
+
+    const caseEntity = new Case(mockCase, {
+      authorizedUser: mockDocketClerkUser,
+    });
+    const updatedCase = await updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+    expect(updatedCase).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+      hasPendingItems: true,
     });
   });
 
