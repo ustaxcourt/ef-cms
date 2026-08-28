@@ -123,7 +123,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
           'Entry of Appearance for Respondent',
         );
 
-        // Second IRS practitoiner tries to file on case
+        // Second IRS practitioner tries to file on case
         loginAsIrsPractitioner2();
         cy.visit(
           `/case-detail/${docketNumber}/before-you-file-a-document`,
