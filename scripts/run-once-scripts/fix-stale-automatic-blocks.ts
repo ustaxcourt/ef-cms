@@ -13,6 +13,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import pLimit from 'p-limit';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -62,8 +63,10 @@ const findStaleDocketNumbers = async ({
   docketNumbers?: string[];
   verbose?: boolean;
 }): Promise<{ stale: string[]; failed: string[]; total: number }> => {
-  // `pending` is a necessary condition for DocketEntry.isPending, so a case with no
-  // pending-flagged entries and no deadlines is decidable without loading the case.
+  // A deadline alone is sufficient for an automatic block, so cases with one are still
+  // blocked without loading them. The persisted `pending` flag is NOT usable as negative
+  // proof: it is nullable, and DocketEntry treats a null (read back as undefined) flag as
+  // pending when the event code is tracked. Every other candidate is therefore loaded.
   const candidates = await getDbReader(reader => {
     const blocked = reader
       .selectFrom('dwCase as c')
@@ -85,24 +88,13 @@ const findStaleDocketNumbers = async ({
               .whereRef('d.docketNumber', '=', 'c.docketNumber'),
           )
           .as('hasDeadline'),
-        eb
-          .exists(
-            eb
-              .selectFrom('dwDocketEntry as de')
-              .select('de.docketEntryId')
-              .whereRef('de.docketNumber', '=', 'c.docketNumber')
-              .where('de.pending', '=', true),
-          )
-          .as('hasPendingFlaggedEntry'),
       ])
       .execute();
   });
 
-  const definitelyUnblocked = candidates.filter(
-    c => c.trialDate || (!c.hasDeadline && !c.hasPendingFlaggedEntry),
-  );
+  const definitelyUnblocked = candidates.filter(c => c.trialDate);
   const needsEvaluation = candidates.filter(
-    c => !c.trialDate && !c.hasDeadline && c.hasPendingFlaggedEntry,
+    c => !c.trialDate && !c.hasDeadline,
   );
 
   if (verbose) {
@@ -184,16 +176,17 @@ const updateStaleCases = withLocking(
 
     if (!stillStale.length) return 0;
 
-    await pgUpdateTable({
-      table: 'dwCase',
-      values: {
-        automaticBlocked: false,
-        automaticBlockedDate: null,
-        automaticBlockedReason: null,
-      },
-      where: qb => qb.where('docketNumber', 'in', stillStale),
+    await withTransaction(async () => {
+      await pgUpdateTable({
+        table: 'dwCase',
+        values: {
+          automaticBlocked: false,
+          automaticBlockedDate: null,
+          automaticBlockedReason: null,
+        },
+        where: qb => qb.where('docketNumber', 'in', stillStale),
+      });
     });
-
     return stillStale.length;
   },
   (_applicationContext, { docketNumbers }: { docketNumbers: string[] }) => ({
