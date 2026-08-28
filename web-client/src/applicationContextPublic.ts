@@ -28,7 +28,9 @@ import {
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
+  US_STATES_SORTED,
   US_STATES_OTHER,
+  US_STATES_OTHER_SORTED,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
   Case,
@@ -162,7 +164,9 @@ const frozenConstants = deepFreeze({
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
+  US_STATES_SORTED,
   US_STATES_OTHER,
+  US_STATES_OTHER_SORTED,
   USER_ROLES: ROLES,
   MAX_ELASTICSEARCH_PAGINATION,
 });

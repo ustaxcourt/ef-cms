@@ -36,7 +36,6 @@ import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advance
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
-import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseAssociationRequestHelper } from './computeds/caseAssociationRequestHelper';
@@ -66,6 +65,9 @@ import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { customCaseReportHelper } from './computeds/customCaseReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
+import { docketClerkReportDocumentQcHelper } from './computeds/DocketClerkReport/docketClerkReportDocumentQcHelper';
+import { docketClerkReportHelper } from './computeds/DocketClerkReport/docketClerkReportHelper';
+import { docketClerkReportMessagesHelper } from './computeds/DocketClerkReport/docketClerkReportMessagesHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
@@ -156,6 +158,7 @@ import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { grantDenyMotionFormHelper } from './computeds/grantDenyMotionFormHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { termBuilderHelper } from './computeds/termBuilderHelper';
@@ -178,6 +181,7 @@ import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSes
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
+import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -224,9 +228,6 @@ export const computeds = {
   alertHelper: alertHelper as unknown as ReturnType<typeof alertHelper>,
   appInstanceManagerHelper: appInstanceManagerHelper as unknown as ReturnType<
     typeof appInstanceManagerHelper
-  >,
-  applyStampFormHelper: applyStampFormHelper as unknown as ReturnType<
-    typeof applyStampFormHelper
   >,
   batchDownloadHelper: batchDownloadHelper as unknown as ReturnType<
     typeof batchDownloadHelper
@@ -326,6 +327,17 @@ export const computeds = {
   dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
     typeof dashboardExternalHelper
   >,
+  docketClerkReportDocumentQcHelper:
+    docketClerkReportDocumentQcHelper as unknown as ReturnType<
+      typeof docketClerkReportDocumentQcHelper
+    >,
+  docketClerkReportHelper: docketClerkReportHelper as unknown as ReturnType<
+    typeof docketClerkReportHelper
+  >,
+  docketClerkReportMessagesHelper:
+    docketClerkReportMessagesHelper as unknown as ReturnType<
+      typeof docketClerkReportMessagesHelper
+    >,
   docketEntryQcHelper: docketEntryQcHelper as unknown as ReturnType<
     typeof docketEntryQcHelper
   >,
@@ -573,6 +585,9 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  grantDenyMotionFormHelper: grantDenyMotionFormHelper as unknown as ReturnType<
+    typeof grantDenyMotionFormHelper
+  >,
   statusReportOrderHelper: statusReportOrderHelper as unknown as ReturnType<
     typeof statusReportOrderHelper
   >,
@@ -649,7 +664,7 @@ export const baseState = {
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
-  alertError: undefined,
+  alertError: undefined as AlertError | undefined,
   alertInfo: undefined,
   alertSuccess: undefined as AlertSuccess | undefined,
   alertWarning: undefined,
@@ -708,6 +723,18 @@ export const baseState = {
     entries: [],
   },
   completeForm: {},
+  docketClerkReport: {
+    box: 'inbox' as 'inbox' | 'inProgress' | 'processed' | 'sent' | 'completed',
+    completedMessages: [] as RawMessage[],
+    docketClerks: [] as RawUser[],
+    form: {} as { docketClerkUserId?: string; pageType?: string },
+    inboxMessages: [] as RawMessage[],
+    inboxWorkItems: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
+    pageType: null as 'documentQC' | 'messages' | null,
+    selectedClerk: null as RawUser | null,
+    sentMessages: [] as RawMessage[],
+    servedWorkItems: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
+  },
   confirmationText: undefined as unknown as
     | string
     | {
@@ -1107,6 +1134,10 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  processPaymentStatus: undefined as
+    | undefined
+    | (ProcessPaymentResponse & { docketNumber: string })
+    | ({ paymentStatus: 'unknown' } & { docketNumber: string }),
 };
 
 export const initialState = {
@@ -1139,6 +1170,15 @@ export type ViewerDocument = {
 };
 
 export type AlertSuccess = { message: string; overwritable?: boolean };
+
+export type AlertError = {
+  title?: string;
+  message?: string;
+  messages?: string[];
+  responseCode?: number;
+  scrollToErrorNotification?: boolean;
+  insertContactSupportClause?: boolean;
+};
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
 export type ServiceIndicatorType =

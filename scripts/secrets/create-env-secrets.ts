@@ -70,7 +70,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     opensearchEngineVersion: {
-      default: 'OpenSearch_2.19',
+      default: 'OpenSearch_3.7',
       long: 'opensearch-engine-version',
       type: 'string',
     },
@@ -89,6 +89,24 @@ const scriptConfig: ScriptConfig = {
       default: '10',
       long: 'opensearch-volume-size',
       transform: 'number',
+      type: 'string',
+    },
+    paymentPortalArn: {
+      description: 'The ARN of the payment portal API',
+      long: 'payment-portal-arn',
+      required: true,
+      type: 'string',
+    },
+    paymentPortalHost: {
+      description: 'The URL of the payment portal API',
+      long: 'payment-portal-host',
+      required: true,
+      type: 'string',
+    },
+    payGovOrigin: {
+      description: 'The URL of the payment portal UI',
+      long: 'pay-gov-origin',
+      required: true,
       type: 'string',
     },
     postgresOriginalUsername: {
@@ -163,6 +181,9 @@ const {
   opensearchInstanceCount,
   opensearchInstanceType,
   opensearchVolumeSize,
+  paymentPortalArn,
+  paymentPortalHost,
+  payGovOrigin,
   postgresOriginalUsername,
   prodAccountId,
   prodDocumentsBucket,
@@ -188,6 +209,9 @@ const {
   opensearchInstanceCount: number;
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
+  paymentPortalArn: string;
+  paymentPortalHost: string;
+  payGovOrigin: string;
   postgresOriginalUsername: string;
   prodAccountId: string;
   prodDocumentsBucket: string;
@@ -238,6 +262,9 @@ if (env === 'prod') {
     IRS_SUPERUSER_EMAIL:
       irsSuperuserEmail || `service.agent.${env}@example.com`,
     IS_DYNAMSOFT_ENABLED: enableDynamsoft ? 1 : 0,
+    PAYMENT_PORTAL_ARN: paymentPortalArn,
+    PAYMENT_PORTAL_HOST: paymentPortalHost,
+    PAY_GOV_ORIGIN: payGovOrigin,
     POSTGRES_MASTER_PASSWORD: postgresOriginalPassword,
     POSTGRES_MASTER_USERNAME: postgresOriginalUsername,
     POSTGRES_USER: `${env}_dawson`,

@@ -1,0 +1,391 @@
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
+import { v4 as uuidv4 } from 'uuid';
+
+function generateMockDocketEntries(docketNumber: string, count: number) {
+  const entries: any[] = [];
+  for (let i = 0; i < count; i++) {
+    entries.push({
+      createdAt: `2020-01-${String((i % 28) + 1).padStart(2, '0')}T12:00:00.000Z`,
+      additionalInfo:
+        'This additional information is long enough to wrap across multiple lines in the document viewer index.',
+      docketEntryId: uuidv4(),
+      docketNumber,
+      documentStorageId: uuidv4(),
+      documentTitle: `Test Document ${i + 1}`,
+      documentType: 'Order',
+      draftOrderState: {},
+      entityName: 'DocketEntry',
+      eventCode: 'O',
+      filedByRole: 'docketclerk',
+      filers: [],
+      filingDate: `2020-01-${String((i % 28) + 1).padStart(2, '0')}T05:00:00.000Z`,
+      index: i + 1,
+      isDraft: false,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      isStricken: false,
+      pending: false,
+      processingStatus: 'complete',
+      receivedAt: `2020-01-${String((i % 28) + 1).padStart(2, '0')}T05:00:00.000Z`,
+      servedAt: `2020-01-${String((i % 28) + 1).padStart(2, '0')}T12:00:00.000Z`,
+      servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
+      stampData: {},
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+  }
+  return entries;
+}
+
+function setupMockCase(entryCount: number): void {
+  createAndServePaperPetition().then(result => {
+    cy.wrap(result.docketNumber).as('docketNumber');
+    const mockDocketEntries = generateMockDocketEntries(
+      result.docketNumber,
+      entryCount,
+    );
+
+    cy.intercept(
+      'GET',
+      `**/cases/${result.docketNumber}/docket-entries*`,
+      req => {
+        req.reply({
+          body: {
+            docketEntries: mockDocketEntries,
+            page: 0,
+            pageSize: entryCount,
+            totalCount: entryCount,
+          },
+        });
+      },
+    ).as('getDocketEntries');
+
+    cy.intercept(
+      'GET',
+      `**/case-documents/${result.docketNumber}/*/document-download-url*`,
+      { url: 'http://localhost:4000/mock-pdf-url' },
+    );
+  });
+
+  loginAsDocketClerk();
+}
+
+describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => {
+  const LARGE_ENTRY_COUNT = 1050;
+
+  beforeEach(() => {
+    setupMockCase(LARGE_ENTRY_COUNT);
+  });
+
+  it('should render the virtualized document list when docket entries exceed 1000', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+    cy.get('#tab-document-view').click();
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+    cy.get('[data-testid="document-viewer-documents-list"]').should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized').should(
+      'have.length.lessThan',
+      100,
+    );
+
+    cy.get('.attachment-viewer-button.virtualized').should(
+      'have.length.greaterThan',
+      0,
+    );
+  });
+
+  it('should allow clicking a document entry in the virtualized list', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+    cy.get('#tab-document-view').click();
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized').first().should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized')
+      .not('.active')
+      .first()
+      .click();
+
+    cy.get('.attachment-viewer-button.virtualized.active').should(
+      'have.length',
+      1,
+    );
+  });
+
+  it('should display document details correctly in virtualized rows', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+    cy.get('#tab-document-view').click();
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized')
+      .first()
+      .should('contain.text', 'Test Document');
+  });
+
+  it('should render entries correctly after scrolling the virtualized list', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+    cy.get('#tab-document-view').click();
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.document-viewer--documents-list > div').first().scrollTo(0, 5000);
+
+    cy.get('.attachment-viewer-button.virtualized').should(
+      'have.length.greaterThan',
+      0,
+    );
+  });
+
+  it('should maintain correct sort order by No. when scrolling through the virtualized list', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+    cy.get('#tab-document-view').click();
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.virtualized .grid-col-2').then($cols => {
+      const numbers = Array.from($cols)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      for (let i = 1; i < numbers.length; i++) {
+        expect(numbers[i]).to.be.greaterThan(numbers[i - 1]);
+      }
+    });
+
+    cy.get('[data-testid="document-viewer-documents-list"] > div')
+      .first()
+      .scrollTo(0, 5000);
+
+    cy.get('.attachment-viewer-button.virtualized .grid-col-2').then($cols => {
+      const numbers = Array.from($cols)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      expect(numbers.length).to.be.greaterThan(0);
+      for (let i = 1; i < numbers.length; i++) {
+        expect(numbers[i]).to.be.greaterThan(numbers[i - 1]);
+      }
+    });
+
+    cy.get('[data-testid="document-viewer-documents-list"] > div')
+      .first()
+      .scrollTo(0, 15000);
+
+    cy.get('.attachment-viewer-button.virtualized .grid-col-2').then($cols => {
+      const numbers = Array.from($cols)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      expect(numbers.length).to.be.greaterThan(0);
+      for (let i = 1; i < numbers.length; i++) {
+        expect(numbers[i]).to.be.greaterThan(numbers[i - 1]);
+      }
+    });
+  });
+
+  it('should paginate the docket record tab when entries exceed threshold', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="tab-docket-record"]').should('exist');
+
+    cy.get('[data-testid="paginator-page-1"]').first().should('exist');
+    cy.get('[data-testid="paginator-page-2"]').first().should('exist');
+
+    cy.get('[data-testid="docket-entry-index-1"]').should('exist');
+
+    cy.get('[data-testid="paginator-page-2"]').first().click();
+
+    cy.get('[data-testid="docket-entry-index-501"]').should('exist');
+    cy.get('[data-testid="docket-entry-index-1"]').should('not.exist');
+
+    cy.get('[data-testid="paginator-page-1"]').first().click();
+    cy.get('[data-testid="docket-entry-index-1"]').should('exist');
+  });
+
+  it('should sort docket record entries by No. in descending order and maintain pagination', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="index-sortable-button"]').click();
+    cy.get('[data-testid="index-sortable-button"]').click();
+
+    cy.get('[data-testid="docket-entry-index-1050"]').should('exist');
+
+    cy.get('td[data-testid^="docket-entry-index-"]').then($cells => {
+      const indices = Array.from($cells)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      expect(indices.length).to.be.greaterThan(0);
+      for (let i = 1; i < indices.length; i++) {
+        expect(indices[i]).to.be.lessThan(indices[i - 1]);
+      }
+    });
+
+    cy.get('[data-testid="paginator-page-2"]').first().click();
+
+    cy.get('td[data-testid^="docket-entry-index-"]').then($cells => {
+      const indices = Array.from($cells)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      expect(indices.length).to.be.greaterThan(0);
+      for (let i = 1; i < indices.length; i++) {
+        expect(indices[i]).to.be.lessThan(indices[i - 1]);
+      }
+    });
+
+    cy.get('[data-testid="index-sortable-button"]').click();
+
+    cy.get('[data-testid="paginator-page-1"]').first().click();
+
+    cy.get('[data-testid="docket-entry-index-1"]').should('exist');
+
+    cy.get('td[data-testid^="docket-entry-index-"]').then($cells => {
+      const indices = Array.from($cells)
+        .map(el => parseInt(el.textContent!.trim(), 10))
+        .filter(n => !isNaN(n));
+      expect(indices.length).to.be.greaterThan(0);
+      for (let i = 1; i < indices.length; i++) {
+        expect(indices[i]).to.be.greaterThan(indices[i - 1]);
+      }
+    });
+  });
+
+  it('should center the selected docket entry in the virtualized index nav when opening the document viewer for a mid-list entry', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="paginator-page-2"]').first().click();
+
+    cy.get('td[data-testid^="docket-entry-index-"]').then($entries => {
+      const $selectedEntry = $entries.eq(Math.floor($entries.length / 2));
+      cy.wrap($selectedEntry.text().trim()).as('selectedDocketEntryIndex');
+
+      cy.wrap($selectedEntry)
+        .parents('tr')
+        .find('[data-testid="document-viewer-link-O"]')
+        .click();
+    });
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get<string>('@selectedDocketEntryIndex').then(selectedIndex => {
+      cy.get('.attachment-viewer-button.virtualized.active').should(
+        'have.length',
+        1,
+      );
+      cy.get('.attachment-viewer-button.virtualized.active .grid-col-2').should(
+        'have.text',
+        selectedIndex,
+      );
+
+      cy.get(
+        '[data-testid="document-viewer-documents-list"] > [role="list"]',
+      ).then($list => {
+        const listRect = $list[0].getBoundingClientRect();
+        const listCenter = listRect.top + listRect.height / 2;
+
+        cy.get('.attachment-viewer-button.virtualized.active').should(
+          $activeButton => {
+            const activeButtonRect = $activeButton[0].getBoundingClientRect();
+            const activeButtonCenter =
+              activeButtonRect.top + activeButtonRect.height / 2;
+
+            expect(activeButtonCenter).to.be.closeTo(listCenter, 100);
+          },
+        );
+      });
+    });
+  });
+});
+
+describe('DocumentViewer - standard index nav (≤1000 docket entries)', () => {
+  const STANDARD_ENTRY_COUNT = 200;
+
+  beforeEach(() => {
+    setupMockCase(STANDARD_ENTRY_COUNT);
+  });
+
+  it('should center the selected docket entry in the standard index nav when opening the document viewer for a mid-list entry', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+    });
+
+    cy.wait('@getDocketEntries');
+
+    cy.get('[data-testid="index-sortable-button"]').click();
+
+    cy.get('[data-testid="docket-entry-index-150"]')
+      .parents('tr')
+      .find('[data-testid="document-viewer-link-O"]')
+      .click();
+
+    cy.get('[data-testid="document-view-container"]').should('exist');
+
+    cy.get('.attachment-viewer-button.active').should('have.length', 1);
+    cy.get('.attachment-viewer-button.active .grid-col-2').should(
+      'contain.text',
+      '150',
+    );
+
+    cy.get('.document-viewer--documents-list').should($container => {
+      const container = $container[0];
+      const activeButton = container.querySelector<HTMLElement>(
+        '.attachment-viewer-button.active',
+      );
+      expect(
+        activeButton,
+        'active button rendered in list container',
+      ).to.not.equal(null);
+
+      expect(
+        container.scrollTop,
+        'index nav container scrolled away from the top',
+      ).to.be.greaterThan(0);
+
+      const buttonTop = activeButton!.offsetTop;
+      const buttonBottom = buttonTop + activeButton!.offsetHeight;
+      const visibleTop = container.scrollTop;
+      const visibleBottom = visibleTop + container.clientHeight;
+
+      expect(
+        buttonTop,
+        'active button top is inside the visible scroll range',
+      ).to.be.at.least(visibleTop);
+      expect(
+        buttonBottom,
+        'active button bottom is inside the visible scroll range',
+      ).to.be.at.most(visibleBottom);
+    });
+  });
+});

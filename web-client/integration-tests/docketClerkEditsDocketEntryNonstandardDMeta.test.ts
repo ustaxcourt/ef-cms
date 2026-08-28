@@ -1,7 +1,13 @@
 import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
 import { docketClerkNavigatesToEditDocketEntryCertificateOfService } from './journey/docketClerkNavigatesToEditDocketEntryCertificateOfService';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  fakeFile,
+  getPetitionDocumentForCase,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionerFilesANonstardardDDocumentForCase } from './journey/petitionerFilesANonstardardDDocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
@@ -20,7 +26,8 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
     expect(caseDetail.docketNumber).toBeDefined();
 
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.previousDocumentId =
+      getPetitionDocumentForCase(caseDetail).docketEntryId;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

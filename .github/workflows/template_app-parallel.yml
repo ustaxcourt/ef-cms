@@ -97,7 +97,7 @@ jobs:
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 3.5.0
+          opensearch-version: 3.7.0
       - name: Prepare Postgres
         run: |
           npm run migration:postgres

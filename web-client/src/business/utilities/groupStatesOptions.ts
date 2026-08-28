@@ -1,6 +1,8 @@
 import {
   US_STATES,
   US_STATES_OTHER,
+  US_STATES_OTHER_SORTED,
+  US_STATES_SORTED,
 } from '@shared/business/entities/EntityConstants';
 
 export const getGroupedStateOptions = (): {
@@ -10,25 +12,24 @@ export const getGroupedStateOptions = (): {
     value: string;
   }[];
 }[] => {
-  const otherOptions = [
-    ...Object.entries(US_STATES_OTHER).map(([value, label]) => ({
-      label,
-      value,
-    })),
-    { label: 'Other', value: 'Other' },
-  ];
   return [
     { label: '', options: [{ label: 'N/A', value: 'N/A' }] },
     {
       label: 'States',
-      options: Object.entries(US_STATES).map(([value, label]) => ({
-        label,
+      options: US_STATES_SORTED.map(value => ({
+        label: US_STATES[value],
         value,
       })),
     },
     {
       label: 'Other',
-      options: otherOptions,
+      options: [
+        ...US_STATES_OTHER_SORTED.map(value => ({
+          label: US_STATES_OTHER[value],
+          value,
+        })),
+        { label: 'Other', value: 'Other' },
+      ],
     },
   ];
 };

@@ -1,3 +1,177 @@
+<details><summary>Revert @joi/date 3.0.0 upgrade</summary>
+
+## Local
+
+#### Reinstall dependencies
+
+`@joi/date` was pinned back to **2.1.1**. Run `npm ci` after pulling so the stale ESM `@joi/date` 3.0.0 tree in `node_modules` is replaced.
+
+```bash
+npm ci
+```
+
+</details>
+<details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Do not enable this feature before the last weekend in August 2026. After both
+stories are deployed, and no later than September 8, 2026, enable the five new
+trial cities, consolidated petition trial-location menus, and
+procedure-neutral Order Designating Place of Trial by running:
+
+```bash
+./scripts/postgres/featureFlags/setup-new-trial-cities.ts
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-17</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.93`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+
+#### OpenSearch 3.5 → 3.7 engine upgrade
+
+Run the OpenSearch indices report and note the indices and aliases in the target environment:
+
+```bash
+. scripts/env/set-env.zsh {YOUR_ENV}
+scripts/reports/indices.ts
+```
+
+Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager to `OpenSearch_3.7`:
+
+```bash
+scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+Deploy to the environment. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify the cluster is still functional by running search smoketests against the current color:
+
+```bash
+scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
+```
+
+After the deployment's `cleanup` job is finished, rerun the OpenSearch indices report and ensure that all indices are present and populated, and that the aliases are configured as expected:
+
+```bash
+scripts/reports/indices.ts
+```
+
+#### PROD & TEST ONLY! Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager to `OpenSearch_3.7`
+
+```bash
+ENV=account scripts/secrets/update-secret.ts --key "ES_LOGS_ENGINE_VERSION" --value "OpenSearch_3.7"
+```
+
+#### PROD & TEST ONLY! Run an `account-specific` terraform deployment
+
+```bash
+npm run deploy:account-specific
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-10</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.92`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Payment Portal Integration</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Add Payment Portal Secrets
+__ADD THESE OR YOUR DEPLOYMENTS WILL FAIL__
+```bash
+# Secret values can be gotten off of exp2
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_ARN -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAYMENT_PORTAL_HOST -v {VALUE}
+./scripts/secrets/update-secret.ts -k PAY_GOV_ORIGIN -v {VALUE}
+```
+### After Deployment
+Run this to enable payment portal integration
+```bash
+./scripts/postgres/featureFlags/setup-enable-payment-portal-integration.ts
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-03</summary>
+
+## Local
+#### Upgrade NodeJS to `24.19.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.91`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-07-27</summary>
+
+## Local
+#### Upgrade NodeJS to `24.18.1`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.90`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-07-20</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.89`
+
+This script will prompt for an environment to pull the image from; choose `exp3`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>
 
 ## Manual Deployment Steps

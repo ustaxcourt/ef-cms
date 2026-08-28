@@ -327,6 +327,10 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```bash
       scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
       ```
+   1. `new-trial-cities`:
+      ```bash
+      scripts/postgres/featureFlags/setup-new-trial-cities.ts
+      ```
    1. `section-outbox-number-of-days`:
       ```bash
       scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts

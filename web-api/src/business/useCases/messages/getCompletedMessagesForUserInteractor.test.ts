@@ -8,6 +8,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { getCompletedMessagesForUserInteractor } from './getCompletedMessagesForUserInteractor';
 import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedUserInboxMessages';
 import {
+  mockCaseServicesSupervisorUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
@@ -57,12 +58,36 @@ describe('getCompletedMessagesForUserInteractor', () => {
     const returnedMessages = await getCompletedMessagesForUserInteractor(
       applicationContext,
       {
-        userId: messageData.completedByUserId,
+        userId: mockPetitionsClerkUser.userId,
       },
       mockPetitionsClerkUser,
     );
 
     expect(getCompletedUserInboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([messageData]);
+  });
+
+  it("throws unauthorized when a user with VIEW_MESSAGES tries to access another user's completed messages without DOCKET_CLERK_REPORT permission", async () => {
+    await expect(
+      getCompletedMessagesForUserInteractor(
+        applicationContext,
+        { userId: 'some-other-user-id' },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it("retrieves another user's completed messages when the caller has DOCKET_CLERK_REPORT permission", async () => {
+    (getCompletedUserInboxMessages as jest.Mock).mockReturnValue([]);
+
+    await expect(
+      getCompletedMessagesForUserInteractor(
+        applicationContext,
+        { userId: mockPetitionsClerkUser.userId },
+        mockCaseServicesSupervisorUser,
+      ),
+    ).resolves.not.toThrow();
+
+    expect(getCompletedUserInboxMessages).toHaveBeenCalled();
   });
 });

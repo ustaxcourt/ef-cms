@@ -6,8 +6,7 @@ if [[ -z "$AWS_SESSION_EXPIRATION" ]] || [[ -z "$ENV" ]]; then
 fi
 
 aws_expiration_iso="${AWS_SESSION_EXPIRATION%:*}${AWS_SESSION_EXPIRATION##*:}"
-# shellcheck disable=SC2327,SC2328
-if [[ -n "$(date --version >/dev/null 2>&1)" ]]; then
+if date --version >/dev/null 2>&1; then
   aws_expiration="$(date -d "$aws_expiration_iso" +%s)" # GNU date
 else
   aws_expiration="$(date -j -f '%Y-%m-%dT%H:%M:%S%z' "$aws_expiration_iso" +%s)" # BSD date
