@@ -74,9 +74,6 @@ export const fileExternalDocument = async (
       !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
   }
 
-  console.log(JSON.stringify(currentCaseEntity));
-  console.log(JSON.stringify(authorizedUser));
-
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,

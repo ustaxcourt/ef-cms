@@ -121,7 +121,6 @@ describe('fileExternalDocumentInteractor', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
-        mockPetitionerUser,
       ],
       irsPractitioners: [mockIrsPractitionerUser],
       preferredTrialCity: 'Fresno, California',
