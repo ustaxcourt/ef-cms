@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
@@ -452,6 +453,51 @@ describe('publicTrialSessionsHelper', () => {
           userIsAssignedToSession: false,
         },
       ]);
+    });
+  });
+
+  describe('new-trial-cities feature flag', () => {
+    const NEW_TRIAL_CITIES_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key;
+
+    it('should exclude new trial cities from trialCitiesByState when flag is false', () => {
+      const { trialCitiesByState } = runCompute(publicTrialSessionsHelper, {
+        state: {
+          [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
+          featureFlags: { [NEW_TRIAL_CITIES_FLAG_KEY]: false },
+        },
+      });
+
+      const allCityValues = trialCitiesByState.flatMap(
+        (group: { options: { value: string }[] }) =>
+          group.options.map((opt: { value: string }) => opt.value),
+      );
+
+      expect(allCityValues).not.toContain('Austin, Texas');
+      expect(allCityValues).not.toContain('Charlotte, North Carolina');
+      expect(allCityValues).not.toContain('Newark, New Jersey');
+      expect(allCityValues).not.toContain('Orlando, Florida');
+      expect(allCityValues).not.toContain('Sacramento, California');
+    });
+
+    it('should include new trial cities in trialCitiesByState when flag is true', () => {
+      const { trialCitiesByState } = runCompute(publicTrialSessionsHelper, {
+        state: {
+          [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
+          featureFlags: { [NEW_TRIAL_CITIES_FLAG_KEY]: true },
+        },
+      });
+
+      const allCityValues = trialCitiesByState.flatMap(
+        (group: { options: { value: string }[] }) =>
+          group.options.map((opt: { value: string }) => opt.value),
+      );
+
+      expect(allCityValues).toContain('Austin, Texas');
+      expect(allCityValues).toContain('Charlotte, North Carolina');
+      expect(allCityValues).toContain('Newark, New Jersey');
+      expect(allCityValues).toContain('Orlando, Florida');
+      expect(allCityValues).toContain('Sacramento, California');
     });
   });
 });

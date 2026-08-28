@@ -12,6 +12,7 @@ import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -1653,7 +1654,9 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
+      content: expect.stringContaining(
+        `at which this Court tries ${MOCK_CASE.procedureType.toLowerCase()} tax cases`,
+      ),
     });
 
     expect(
@@ -1663,6 +1666,69 @@ describe('serveCaseToIrsInteractor', () => {
     ).toMatchObject({
       content: expect.stringContaining('TRIAL_LOCATION'),
     });
+  });
+
+  it('should omit the procedure type in ODT content when new-trial-cities flag is enabled', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        value: { current: true },
+      },
+    ]);
+
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+      procedureType: 'Regular',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    const generatedDocument =
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument;
+
+    expect(generatedDocument.content).toContain(
+      'at which this Court tries tax cases',
+    );
+    expect(generatedDocument.content).not.toContain('[PROCEDURE_TYPE]');
+    expect(generatedDocument.content).not.toContain('tries regular tax cases');
+    expect(generatedDocument.content).toContain('TRIAL_LOCATION');
+  });
+
+  it('should include the procedure type in ODT content when new-trial-cities flag is disabled', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        value: { current: false },
+      },
+    ]);
+
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+      procedureType: 'Regular',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    const generatedDocument =
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument;
+
+    expect(generatedDocument.content).toContain(
+      'at which this Court tries regular tax cases',
+    );
   });
 
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {

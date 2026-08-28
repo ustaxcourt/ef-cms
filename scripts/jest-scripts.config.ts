@@ -40,6 +40,7 @@ const config: Config = {
     '!elasticsearch/reindex.ts',
     '!elasticsearch/retry-ocr-failures.ts',
     '!email/**',
+    'email/query-suppression-list.helpers.ts',
     '!generate-uuid.ts',
     '!git/prod-release-pr-description.ts',
     '!git/wiki-deployment-summary.ts',
