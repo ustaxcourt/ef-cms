@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FORMATS, TimeFormats } from '@shared/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const updateIrsNoticeIndexPropertyAction = ({
@@ -21,7 +21,7 @@ export const updateIrsNoticeIndexPropertyAction = ({
 function formatValue(
   applicationContext: ClientApplicationContext,
   value: string,
-  toFormat: TimeFormats,
+  toFormat: keyof typeof FORMATS,
 ): string {
   if (!value) return value;
 
@@ -30,22 +30,15 @@ function formatValue(
       .getUtilities()
       .getDateFormat(value, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
 
-    // Persistence timestamps (Joi ISO_DATE / createISODateString shape). Do not use
-    // formatDateString(FORMATS.ISO) — that Luxon token emits a numeric offset, which
-    // @joi/date 3 rejects.
-    if (toFormat === FORMATS.ISO) {
-      return applicationContext
-        .getUtilities()
-        .createISODateString(value, inputFormat);
-    }
-
     const luxonDate = applicationContext
       .getUtilities()
       .prepareDateFromString(value, inputFormat) as unknown as string;
 
-    return applicationContext
+    const formattedDate = applicationContext
       .getUtilities()
       .formatDateString(luxonDate, toFormat);
+
+    return formattedDate;
   } catch {
     return value;
   }
