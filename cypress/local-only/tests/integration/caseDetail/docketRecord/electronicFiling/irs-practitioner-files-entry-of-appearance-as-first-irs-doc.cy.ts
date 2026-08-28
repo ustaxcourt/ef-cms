@@ -3,6 +3,7 @@ import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fil
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
   loginAsIrsPractitioner1,
+  loginAsIrsPractitioner2,
   loginAsPetitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
@@ -93,6 +94,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
       });
     });
   });
+
   describe('IRS Practitioner Access', () => {
     it('should not let IRS practitioner not associated with case file a document on it after first appearance is filed', () => {
       loginAsPetitioner();
@@ -100,6 +102,29 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
         petitionsClerkServesPetition(docketNumber);
         // file first appearance
         loginAsIrsPractitioner1();
+        externalUserSearchesDocketNumber(docketNumber);
+        cy.get('[data-testid="button-first-irs-document"]').click();
+
+        selectTypeaheadInput(
+          'complete-doc-document-type-search',
+          'Entry of Appearance',
+        );
+        cy.get('[data-testid="submit-document"]').click();
+
+        cy.get('[data-testid="manual-generation-label"]').click();
+        attachSamplePdfFile('primary-document');
+        cy.get('[data-testid="file-document-submit-document"]').click();
+
+        cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
+
+        cy.get('[data-testid="document-download-link-EA"]').should(
+          'have.text',
+          'Entry of Appearance for Respondent',
+        );
+
+        // Second IRS practitoiner tries to file on case
+        loginAsIrsPractitioner2();
         cy.visit(
           `/case-detail/${docketNumber}/before-you-file-a-document`,
         ).then(() => {

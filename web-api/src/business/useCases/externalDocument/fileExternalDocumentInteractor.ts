@@ -1,6 +1,8 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
+  PRACTICE_TYPE,
+  ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
   Case,
@@ -30,6 +32,7 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -57,11 +60,29 @@ export const fileExternalDocument = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
+  let isFirstIrsFiling = false;
+
+  if (user.role === ROLES.irsPractitioner) {
+    const isCaseSealed = applicationContext
+      .getUtilities()
+      .isSealedCase(currentCaseEntity);
+    const isDojPractitioner =
+      (user as RawPractitioner).practiceType === PRACTICE_TYPE.DOJ;
+    const caseHasRespondent = !!currentCaseEntity.irsPractitioners?.length;
+
+    isFirstIrsFiling =
+      !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
+  }
+
+  console.log(JSON.stringify(currentCaseEntity));
+  console.log(JSON.stringify(authorizedUser));
+
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
       userId: authorizedUser.userId,
-    })
+    }) &&
+    !isFirstIrsFiling
   ) {
     throw new UnauthorizedError(
       `User is not associated with case: ${docketNumber}`,

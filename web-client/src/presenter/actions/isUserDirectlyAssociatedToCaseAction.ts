@@ -16,7 +16,6 @@ export const isUserDirectlyAssociatedToCaseAction = ({
   let isFirstIrsFiling = false;
 
   if (user.role === USER_ROLES.irsPractitioner) {
-    console.log('i am here');
     const isCaseSealed = applicationContext
       .getUtilities()
       .isSealedCase(caseDetail);
