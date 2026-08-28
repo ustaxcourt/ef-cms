@@ -35,7 +35,6 @@ export const canPractitionerFileEntryOfAppearance = ({
     const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
     const isCaseSealed = isSealedCase(caseDetail);
     const isDojPractitioner = isUserADojPractitioner(user);
-    console.log(caseHasRespondent, isCaseSealed, isDojPractitioner, caseDetail);
     return (
       caseHasRespondent &&
       !isCaseSealed &&

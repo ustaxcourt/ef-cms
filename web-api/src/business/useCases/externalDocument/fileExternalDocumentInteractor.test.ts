@@ -281,7 +281,7 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
+  describe('consolidated cases', () => {
     const consolidatedCase = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -354,70 +354,177 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    getCaseByDocketNumber.mockResolvedValueOnce(caseRecord);
-    getCasesByDocketNumbers.mockResolvedValueOnce([
-      caseRecord,
-      consolidatedCase as any,
-    ]);
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          consolidatedCasesToFileAcross: [
-            {
-              docketNumber: caseRecord.docketNumber,
-              leadDocketNumber: caseRecord.docketNumber,
-            },
-            {
-              docketNumber: consolidatedCase.docketNumber,
-              leadDocketNumber: caseRecord.docketNumber,
-            },
-          ],
+    it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
           docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
+          leadDocketNumber: caseRecord.docketNumber,
         },
-      },
-      mockIrsPractitionerUser,
-    );
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
 
-    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
-    expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
-    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
-    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalledTimes(2);
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
 
-    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
-    const entry = savedCase.docketEntries.find(
-      de => de.documentType === 'Memorandum in Support',
-    );
-    expect(entry).toBeDefined();
-    expect(entry?.servedAt).toBeDefined();
-    expect(entry).toMatchObject({
-      docketNumber: caseRecord.docketNumber,
-      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
-      originallyFiledDocketNumber: caseRecord.docketNumber,
-      isOnDocketRecord: true,
-      documentStorageId: mockDocketEntryId,
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross,
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
+      expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
+      expect(upsertWorkItems).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      ).toHaveBeenCalledTimes(2);
+
+      const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+      const entry = savedCase.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry).toBeDefined();
+      expect(entry?.servedAt).toBeDefined();
+      expect(entry).toMatchObject({
+        docketNumber: caseRecord.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
+      const savedCase2 =
+        updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+      const entry2 = savedCase2.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry2).toBeDefined();
+      expect(entry2?.servedAt).toBeDefined();
+      expect(entry2).toMatchObject({
+        docketNumber: consolidatedCase.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
     });
-    const savedCase2 = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
-    const entry2 = savedCase2.docketEntries.find(
-      de => de.documentType === 'Memorandum in Support',
-    );
-    expect(entry2).toBeDefined();
-    expect(entry2?.servedAt).toBeDefined();
-    expect(entry2).toMatchObject({
-      docketNumber: consolidatedCase.docketNumber,
-      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
-      originallyFiledDocketNumber: caseRecord.docketNumber,
-      isOnDocketRecord: true,
-      documentStorageId: mockDocketEntryId,
+
+    it('should recompute cases that are consolidated with current case to prevent injection of cases from request', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+
+      const injectedConsolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: '998-99',
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: '999-99',
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross:
+              injectedConsolidatedCasesToFileAcross,
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      ).toHaveBeenCalledTimes(2);
+
+      const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+      const entry = savedCase.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry).toBeDefined();
+      expect(entry?.servedAt).toBeDefined();
+      expect(entry).toMatchObject({
+        docketNumber: caseRecord.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
+      const savedCase2 =
+        updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+      const entry2 = savedCase2.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry2).toBeDefined();
+      expect(entry2?.servedAt).toBeDefined();
+      expect(entry2).toMatchObject({
+        docketNumber: consolidatedCase.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
     });
   });
 

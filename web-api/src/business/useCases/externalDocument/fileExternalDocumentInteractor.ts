@@ -159,10 +159,17 @@ export const fileExternalDocument = async (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
   ) {
-    for (let index = 0; index < consolidatedCasesToFileAcross.length; index++) {
+    const consolidatedCasesToFileAcrossRecomputed =
+      currentCaseEntity.consolidatedCases;
+    for (
+      let index = 0;
+      index < consolidatedCasesToFileAcrossRecomputed.length;
+      index++
+    ) {
       documentMetadataForConsolidatedCases.push({
         ...documentMetadata,
-        docketNumber: consolidatedCasesToFileAcross[index].docketNumber,
+        docketNumber:
+          consolidatedCasesToFileAcrossRecomputed[index].docketNumber,
       });
     }
   } else {
