@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
@@ -36,9 +37,11 @@ import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { verifyPendingCaseForUser as verifyPendingCaseForUserMock } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
+const verifyPendingCaseForUser = jest.mocked(verifyPendingCaseForUserMock);
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -134,6 +137,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
+    verifyPendingCaseForUser.mockResolvedValue(false);
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
@@ -683,6 +687,29 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
+  it('should throw an unauthorized error if the private practitioner has a pending case association', async () => {
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    verifyPendingCaseForUser.mockResolvedValue(true);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Entry of Appearance for IRS Practitioner',
+            documentType: 'Entry of Appearance',
+            eventCode: 'EA',
+            filedBy: 'IRS Practitioner',
+            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+        },
+        mockPrivatePractitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User is not associated with case: ${caseRecord.docketNumber}`,
+    );
+  });
+
   it('should allow private practitioner to file an entry of appearance', async () => {
     getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
     await fileExternalDocumentInteractor(
@@ -698,6 +725,26 @@ describe('fileExternalDocumentInteractor', () => {
         },
       },
       mockPrivatePractitionerUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+  });
+
+  it('should allow IRS practitioner to file an entry of appearance', async () => {
+    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for IRS Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'IRS Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+      mockIrsPractitionerUser,
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
