@@ -47,22 +47,10 @@ const config: Config = {
     // export condition via its `exports` map, breaking any test that
     // transitively instantiates an AWS SDK client. Force the Node.js CJS
     // bundles for all affected subpaths.
-    '^@smithy/core/config$':
-      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/config/index.js',
-    '^@smithy/core/retry$':
-      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/retry/index.js',
-    '^@smithy/core/serde$':
-      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/serde/index.js',
-    '^@aws-sdk/core/client$':
-      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/client/index.js',
-    '^@aws-sdk/core/httpAuthSchemes$':
-      '<rootDir>/../node_modules/@aws-sdk/core/dist-cjs/submodules/httpAuthSchemes/index.js',
-    '^@aws-sdk/checksums/crc$':
-      '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/crc/index.js',
-    '^@aws-sdk/checksums/sha$':
-      '<rootDir>/../node_modules/@aws-sdk/checksums/dist-cjs/submodules/sha/index.js',
-    '^@aws-sdk/middleware-sdk-s3/s3$':
-      '<rootDir>/../node_modules/@aws-sdk/middleware-sdk-s3/dist-cjs/submodules/s3/index.js',
+    '^@smithy/core/(.*)$':
+      '<rootDir>/../node_modules/@smithy/core/dist-cjs/submodules/$1/index.js',
+    '^@aws-sdk/(.*)/(.*)$':
+      '<rootDir>/../node_modules/@aws-sdk/$1/dist-cjs/submodules/$2/index.js',
   },
   setupFiles: ['core-js'],
   testEnvironment: path.resolve(

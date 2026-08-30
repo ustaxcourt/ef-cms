@@ -7,7 +7,7 @@ import {
 import fs from 'fs';
 import path from 'path';
 import { runCommand } from '../helpers/runCommand';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -164,9 +164,10 @@ async function app() {
     \\"AWS_SECRET_ACCESS_KEY\\": \\"$AWS_SECRET_ACCESS_KEY\\",
     \\"AWS_SESSION_TOKEN\\": \\"$AWS_SESSION_TOKEN\\"
   }"`;
-  const sourceAwsAccessKeyIdString = execSync(
+  const sourceAwsAccessKeyIdString = execFileSync('zsh', [
+    '-c',
     `${envSwitcherCommand}; ${echoInfoCommand}`,
-  )
+  ])
     .toString()
     .trim();
 
