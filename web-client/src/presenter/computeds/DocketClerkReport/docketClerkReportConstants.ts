@@ -15,8 +15,4 @@ export const DOCKET_CLERK_REPORT_PAGE_TYPE_OPTIONS: {
 ];
 
 export type DocketClerkReportBox =
-  | 'inbox'
-  | 'inProgress'
-  | 'processed'
-  | 'sent'
-  | 'completed';
+  'inbox' | 'inProgress' | 'processed' | 'sent' | 'completed';

@@ -23,7 +23,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost:5678' });
   });
 
   it('should throw an error for a document that is not publicly accessible', async () => {
@@ -59,7 +59,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     ).toMatchObject({
       key: mockCase.docketEntries[0].documentStorageId,
     });
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
   });
 
   it('should throw an error for a case that is not found', async () => {
@@ -138,7 +141,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
   });
 
   it('should return a url for a document that is publicly accessible', async () => {
@@ -166,7 +172,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
   });
 
   it('should throw a not found error for a document that is not found on the case', async () => {
