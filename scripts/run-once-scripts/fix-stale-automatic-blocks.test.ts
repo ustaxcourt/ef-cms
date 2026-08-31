@@ -149,6 +149,10 @@ jest.mock(
   }),
 );
 
+jest.mock('@web-api/persistence/postgres/utils/transactions', () => ({
+  withTransaction: (fn: () => Promise<unknown>) => fn(),
+}));
+
 jest.mock('@web-api/persistence/postgres/utils/mutex', () => ({
   withLocking:
     (
@@ -199,10 +203,33 @@ jest.mock('@shared/business/entities/cases/Case', () => ({
   },
 }));
 
+const flushPromises = (): Promise<void> =>
+  new Promise(resolve => setImmediate(resolve));
+
+const scriptCompletionMessages = [
+  'Dry run: no cases were updated.',
+  'Finished! Updated',
+] as const;
+
+const hasScriptCompleted = (): boolean =>
+  (console.log as jest.Mock).mock.calls.some(([message]) =>
+    typeof message === 'string'
+      ? scriptCompletionMessages.some(completionMessage =>
+          message.startsWith(completionMessage),
+        )
+      : false,
+  );
+
 const runScript = async (): Promise<void> => {
   jest.resetModules();
   await import('./fix-stale-automatic-blocks');
-  await new Promise(resolve => setImmediate(resolve));
+
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (hasScriptCompleted()) return;
+    await flushPromises();
+  }
+
+  throw new Error('Script did not complete within expected time');
 };
 
 // pgUpdateTable receives its docket numbers inside a `where` callback, so the
