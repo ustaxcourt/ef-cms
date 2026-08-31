@@ -5,6 +5,7 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
+  canDojPractitionersRepresentPartyForCase,
   Case,
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
@@ -33,6 +34,8 @@ import {
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
 import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
+import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -60,12 +63,25 @@ export const fileExternalDocument = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
+  let hasPendingAssociation = false;
+  if (user.role === ROLES.privatePractitioner) {
+    hasPendingAssociation = await verifyPendingCaseForUser({
+      docketNumber,
+      userId: user.userId,
+    });
+  }
+
   const isFilingEntryOfAppearance =
-    user.role === ROLES.privatePractitioner &&
+    canPractitionerFileEntryOfAppearance({
+      user,
+      caseDetail: currentCaseEntity,
+      canDojPractitionersRepresentParty:
+        canDojPractitionersRepresentPartyForCase(currentCaseEntity),
+      hasPendingAssociation,
+    }) &&
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.some(
       event => event.eventCode === documentMetadata.eventCode,
     );
-
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
@@ -143,10 +159,17 @@ export const fileExternalDocument = async (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
   ) {
-    for (let index = 0; index < consolidatedCasesToFileAcross.length; index++) {
+    const consolidatedCasesToFileAcrossRecomputed =
+      currentCaseEntity.consolidatedCases;
+    for (
+      let index = 0;
+      index < consolidatedCasesToFileAcrossRecomputed.length;
+      index++
+    ) {
       documentMetadataForConsolidatedCases.push({
         ...documentMetadata,
-        docketNumber: consolidatedCasesToFileAcross[index].docketNumber,
+        docketNumber:
+          consolidatedCasesToFileAcrossRecomputed[index].docketNumber,
       });
     }
   } else {

@@ -8,7 +8,7 @@ describe('File Document Page - Petitioner Accessibility', () => {
   });
 
   it('should be free of a11y issues', () => {
-    loginAsPetitioner();
+    loginAsPetitioner('petitioner@example.com');
     cy.visit('/case-detail/101-19/file-a-document');
     cy.get('[data-testid="complete-doc-document-type-search"]').should('exist');
 
@@ -16,7 +16,7 @@ describe('File Document Page - Petitioner Accessibility', () => {
   });
 
   it('should be free of a11y issues on step 2', () => {
-    loginAsPetitioner();
+    loginAsPetitioner('petitioner@example.com');
     cy.visit('/case-detail/101-19/file-a-document');
     selectTypeaheadInput(
       'complete-doc-document-type-search',

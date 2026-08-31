@@ -12,6 +12,10 @@ describe('isUserDirectlyAssociatedToCase', () => {
   const pathYesStub = jest.fn();
   const pathNoStub = jest.fn();
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.path = {
