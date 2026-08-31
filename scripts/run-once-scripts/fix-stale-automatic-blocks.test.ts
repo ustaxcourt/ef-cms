@@ -47,7 +47,7 @@ type WhereQueryBuilder = {
 };
 
 type UpdateStaleCasesOptions = { docketNumbers: string[] };
-type LockInfo = { identifiers: string[] };
+type MockLockInfo = { identifiers: string[] };
 
 // Stands in for the `dwCase` table; the `pgUpdateTable` mock writes back into it.
 let caseTable: CaseRow[] = [];
@@ -165,7 +165,7 @@ jest.mock('@web-api/persistence/postgres/utils/mutex', () => ({
         applicationContext: object,
         options: UpdateStaleCasesOptions,
         authorizedUser: undefined,
-      ) => LockInfo,
+      ) => MockLockInfo,
     ) =>
     async (
       applicationContext: object,
