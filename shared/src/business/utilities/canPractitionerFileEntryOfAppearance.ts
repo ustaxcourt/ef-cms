@@ -3,17 +3,11 @@ import {
   PRACTICE_TYPE,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 
-const isUserADojPractitioner = (
-  user: RawUser | RawPractitioner | RawIrsPractitioner,
-): boolean => {
-  if (user.role !== ROLES.irsPractitioner) return false;
-  const irsPractitioner: RawPractitioner = user as RawPractitioner;
-  if (irsPractitioner.practiceType !== PRACTICE_TYPE.DOJ) return false;
-  return true;
+const isUserADojPractitioner = (user: RawPractitioner): boolean => {
+  return user.practiceType === PRACTICE_TYPE.DOJ;
 };
 
 export const canPractitionerFileEntryOfAppearance = ({
@@ -34,7 +28,7 @@ export const canPractitionerFileEntryOfAppearance = ({
   if (user.role === ROLES.irsPractitioner) {
     const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
     const isCaseSealed = isSealedCase(caseDetail);
-    const isDojPractitioner = isUserADojPractitioner(user);
+    const isDojPractitioner = isUserADojPractitioner(user as RawPractitioner);
     return (
       caseHasRespondent &&
       !isCaseSealed &&
