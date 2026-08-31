@@ -7,7 +7,7 @@ const SLOW_CI_TIMEOUT = 120000;
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = faker.person.firstName(),
   preferredTrialCity: string = 'Mobile, Alabama',
-) {
+): Cypress.Chainable<string> {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
 
