@@ -39,7 +39,8 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathNoStub).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledTimes(1);
+    expect(pathYesStub).not.toHaveBeenCalled();
   });
 
   it('should return no if no isDirectlyAssociated prop is found', async () => {
@@ -59,7 +60,8 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathNoStub).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledTimes(1);
+    expect(pathYesStub).not.toHaveBeenCalled();
   });
 
   it('should return yes if the user is directly associated', async () => {
@@ -81,7 +83,8 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathYesStub).toHaveBeenCalled();
+    expect(pathYesStub).toHaveBeenCalledTimes(1);
+    expect(pathNoStub).not.toHaveBeenCalled();
   });
 
   it('should return yes if the user is an irs practitioner this is a first filing appearance', async () => {
@@ -102,7 +105,8 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathYesStub).toHaveBeenCalled();
+    expect(pathYesStub).toHaveBeenCalledTimes(1);
+    expect(pathNoStub).not.toHaveBeenCalled();
   });
 
   it('should return no if the user is an irs practitioner and the case already has representation', async () => {
@@ -123,7 +127,8 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathNoStub).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledTimes(1);
+    expect(pathYesStub).not.toHaveBeenCalled();
   });
 
   it('should return yes if the user is an irs practitioner and is associated', async () => {
@@ -145,6 +150,7 @@ describe('isUserDirectlyAssociatedToCase', () => {
       },
     });
 
-    expect(pathYesStub).toHaveBeenCalled();
+    expect(pathYesStub).toHaveBeenCalledTimes(1);
+    expect(pathNoStub).not.toHaveBeenCalled();
   });
 });
