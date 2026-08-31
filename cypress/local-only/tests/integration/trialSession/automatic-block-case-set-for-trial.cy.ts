@@ -194,7 +194,7 @@ describe('Automatic block on a case set for trial', () => {
     });
   });
 
-  it.only('should clear the automatic block when an eligible blocked case is calendared via set calendar', () => {
+  it('should clear the automatic block when an eligible blocked case is calendared via set calendar', () => {
     loginAsPetitionsClerk1();
     createTrialSession({
       sessionType: SESSION_TYPES.regular,
@@ -204,15 +204,16 @@ describe('Automatic block on a case set for trial', () => {
     });
 
     cy.get<string>('@docketNumber').then(docketNumber => {
-      cy.intercept(
-        'GET',
-        `**/cases/${docketNumber}?excludeDocketEntries=true`,
-      ).as('getCase');
       petitionerFilesAndDocketClerkCompletesDocumentQc({
         docketNumber,
         documentType: 'Motion to Dismiss',
         primaryFilerName,
       });
+      cy.intercept(
+        'GET',
+        `**/cases/${docketNumber}?excludeDocketEntries=true`,
+      ).as('getCase');
+      goToCase(docketNumber);
       cy.wait('@getCase').then(({ response }) => {
         const caseEntity = response?.body;
         expect(caseEntity.automaticBlocked).to.equal(true);
@@ -220,12 +221,13 @@ describe('Automatic block on a case set for trial', () => {
           AUTOMATIC_BLOCKED_REASONS.pending,
         );
       });
-      goToCase(docketNumber);
       cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
-
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         loginAsPetitionsClerk1();
-        cy.visit(`/trial-session-detail/${trialSessionId}`);
+        cy.get(`[data-testid="trial-session-link"]`).click();
+        cy.get(`[data-testid="new-trial-sessions-tab"]`).click();
+        cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+
         cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'exist',
@@ -234,7 +236,6 @@ describe('Automatic block on a case set for trial', () => {
         cy.get('[data-testid="modal-button-confirm"]').click();
         cy.url().should('include', 'print-paper-trial-notices');
         cy.get('[data-testid="printing-complete"]').click();
-
         cy.intercept(
           'GET',
           `**/cases/${docketNumber}?excludeDocketEntries=true`,
