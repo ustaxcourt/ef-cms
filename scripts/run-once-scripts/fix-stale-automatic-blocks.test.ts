@@ -7,6 +7,48 @@ type CaseRow = {
   hasDeadline: boolean;
 };
 
+type SubQueryBuilder = {
+  select: (column: string) => SubQueryBuilder;
+  where: (column: string, operator: string, value: unknown) => SubQueryBuilder;
+  whereRef: (
+    leftColumn: string,
+    operator: string,
+    rightColumn: string,
+  ) => SubQueryBuilder;
+};
+
+type ExistsExpression = {
+  as: (alias: string) => Record<string, never>;
+};
+
+type ExpressionBuilder = {
+  exists: (subquery: SubQueryBuilder) => ExistsExpression;
+  selectFrom: (table: string) => SubQueryBuilder;
+};
+
+type CaseQueryBuilder = {
+  execute: () => Promise<CaseRow[]>;
+  select: (
+    selectCallback: (eb: ExpressionBuilder) => readonly unknown[],
+  ) => CaseQueryBuilder;
+  where: (column: string, operator: string, value: unknown) => CaseQueryBuilder;
+};
+
+type MockDbReader = {
+  selectFrom: (table: string) => CaseQueryBuilder;
+};
+
+type WhereQueryBuilder = {
+  where: (
+    column: string,
+    operator: string,
+    value: string[],
+  ) => WhereQueryBuilder;
+};
+
+type UpdateStaleCasesOptions = { docketNumbers: string[] };
+type LockInfo = { identifiers: string[] };
+
 // Stands in for the `dwCase` table; the `pgUpdateTable` mock writes back into it.
 let caseTable: CaseRow[] = [];
 // When set, scoped (under-lock) re-scans see these rows instead of `caseTable`.
@@ -29,8 +71,8 @@ const mockPgUpdateTable = jest.fn();
 const mockUpdateCaseAutomaticBlock = jest.fn();
 const mockLockIdentifiers: string[][] = [];
 
-const createSubQueryBuilder = (): any => {
-  const builder: any = {
+const createSubQueryBuilder = (): SubQueryBuilder => {
+  const builder: SubQueryBuilder = {
     select: () => builder,
     where: () => builder,
     whereRef: () => builder,
@@ -38,10 +80,10 @@ const createSubQueryBuilder = (): any => {
   return builder;
 };
 
-const createCaseQueryBuilder = (): any => {
+const createCaseQueryBuilder = (): CaseQueryBuilder => {
   let scopedDocketNumbers: string[] | undefined;
 
-  const builder: any = {
+  const builder: CaseQueryBuilder = {
     execute: (): Promise<CaseRow[]> => {
       const rows = scopedDocketNumbers
         ? (caseTableAtRescan ?? caseTable).filter(row =>
@@ -50,7 +92,7 @@ const createCaseQueryBuilder = (): any => {
         : caseTable;
       return Promise.resolve(rows.filter(row => row.automaticBlocked));
     },
-    select: (selectCallback: (eb: any) => unknown) => {
+    select: (selectCallback: (eb: ExpressionBuilder) => readonly unknown[]) => {
       selectCallback({
         exists: () => ({ as: () => ({}) }),
         selectFrom: () => createSubQueryBuilder(),
@@ -58,8 +100,14 @@ const createCaseQueryBuilder = (): any => {
       return builder;
     },
     where: (column: string, operator: string, value: unknown) => {
-      if (column === 'c.docketNumber' && operator === 'in') {
-        scopedDocketNumbers = value as string[];
+      if (
+        column === 'c.docketNumber' &&
+        operator === 'in' &&
+        Array.isArray(value)
+      ) {
+        scopedDocketNumbers = value.filter(
+          (item): item is string => typeof item === 'string',
+        );
       }
       return builder;
     },
@@ -82,7 +130,7 @@ jest.mock('@web-api/applicationContext', () => ({
 }));
 
 jest.mock('@web-api/persistence/postgres/database', () => ({
-  getDbReader: (cb: (reader: any) => unknown) =>
+  getDbReader: (cb: (reader: MockDbReader) => unknown) =>
     cb({ selectFrom: () => createCaseQueryBuilder() }),
 }));
 
@@ -104,10 +152,22 @@ jest.mock(
 jest.mock('@web-api/persistence/postgres/utils/mutex', () => ({
   withLocking:
     (
-      interactor: (...args: any[]) => Promise<unknown>,
-      getLockInfo: (...args: any[]) => { identifiers: string[] },
+      interactor: (
+        applicationContext: object,
+        options: UpdateStaleCasesOptions,
+        authorizedUser: undefined,
+      ) => Promise<unknown>,
+      getLockInfo: (
+        applicationContext: object,
+        options: UpdateStaleCasesOptions,
+        authorizedUser: undefined,
+      ) => LockInfo,
     ) =>
-    async (applicationContext: any, options: any, authorizedUser: any) => {
+    async (
+      applicationContext: object,
+      options: UpdateStaleCasesOptions,
+      authorizedUser: undefined,
+    ) => {
       const { identifiers } = getLockInfo(
         applicationContext,
         options,
@@ -147,9 +207,11 @@ const runScript = async (): Promise<void> => {
 
 // pgUpdateTable receives its docket numbers inside a `where` callback, so the
 // callback is replayed against a stub query builder to read them back out.
-const getDocketNumbersFromWhere = (where: (qb: any) => unknown): string[] => {
+const getDocketNumbersFromWhere = (
+  where: (qb: WhereQueryBuilder) => unknown,
+): string[] => {
   const captured: string[] = [];
-  const queryBuilder: any = {
+  const queryBuilder: WhereQueryBuilder = {
     where: (_column: string, _operator: string, value: string[]) => {
       captured.push(...value);
       return queryBuilder;
@@ -180,7 +242,7 @@ describe('fix-stale-automatic-blocks.ts', () => {
         where,
       }: {
         values: Partial<CaseRow>;
-        where: (qb: any) => unknown;
+        where: (qb: WhereQueryBuilder) => unknown;
       }) => {
         const docketNumbers = getDocketNumbersFromWhere(where);
         caseTable = caseTable.map(row =>
