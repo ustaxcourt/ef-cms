@@ -16,6 +16,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  AUTOMATIC_BLOCKED_REASONS,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
@@ -38,6 +39,18 @@ import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock 
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('setTrialSessionCalendarInteractor', () => {
+  const TRIAL_SESSION_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
+  const AUTOMATIC_BLOCK_FIELDS = {
+    automaticBlocked: true,
+    automaticBlockedDate: '2020-01-01T00:00:00.000Z',
+    automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+  };
+  const CLEARED_AUTOMATIC_BLOCK_FIELDS = {
+    automaticBlocked: false,
+    automaticBlockedDate: undefined,
+    automaticBlockedReason: undefined,
+  };
+
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getEligibleCasesForTrialSession = jest.mocked(
     getEligibleCasesForTrialSessionMock,
@@ -317,5 +330,73 @@ describe('setTrialSessionCalendarInteractor', () => {
       regularDocketNumber1,
       regularDocketNumber2,
     ]);
+  });
+
+  it('should clear automatic block fields for eligible cases when setting the calendar', async () => {
+    const eligibleDocketNumber = '103-20';
+
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
+    getEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: eligibleDocketNumber,
+        ...AUTOMATIC_BLOCK_FIELDS,
+        qcCompleteForTrial: {
+          [TRIAL_SESSION_ID]: true,
+        },
+      },
+    ]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: TRIAL_SESSION_ID,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(upsertCases).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: eligibleDocketNumber,
+          ...CLEARED_AUTOMATIC_BLOCK_FIELDS,
+        }),
+      ]),
+    );
+  });
+
+  it('should clear automatic block fields for manually added QC-complete cases when setting the calendar', async () => {
+    const manuallyAddedDocketNumber = '102-19';
+
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: manuallyAddedDocketNumber,
+        ...AUTOMATIC_BLOCK_FIELDS,
+        qcCompleteForTrial: {
+          [TRIAL_SESSION_ID]: true,
+        },
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
+    getEligibleCasesForTrialSession.mockResolvedValue([]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: TRIAL_SESSION_ID,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(upsertCases).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: manuallyAddedDocketNumber,
+          ...CLEARED_AUTOMATIC_BLOCK_FIELDS,
+        }),
+      ]),
+    );
   });
 });
