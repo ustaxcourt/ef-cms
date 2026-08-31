@@ -3,6 +3,7 @@ import {
   resultKey,
 } from './generatePublicDocketRecordPdfWorkerLambda';
 import { genericHandler } from '../../genericHandler';
+import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/PublicDocketRecordPdfJobResponse';
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -26,11 +27,11 @@ export const getPublicDocketRecordStatusLambda = event =>
     // Reject anything that isn't a UUID so clients can't craft keys like
     // `../foo` and probe the temp bucket via the S3 client.
     if (typeof jobId !== 'string' || !UUID_REGEX.test(jobId)) {
-      return {
+      return new PublicDocketRecordPdfJobResponse({
         message: 'Invalid jobId',
         status: 'error',
         statusCode: 400,
-      };
+      }).validate();
     }
 
     const [isReady, hasError] = await Promise.all([
@@ -62,11 +63,11 @@ export const getPublicDocketRecordStatusLambda = event =>
         // fall through to the corrupted-marker branch below
       }
       if (!fileId) {
-        return {
+        return new PublicDocketRecordPdfJobResponse({
           message: 'Failed to generate docket record',
           status: 'error',
           statusCode: 500,
-        };
+        }).validate();
       }
 
       const { url } = await applicationContext
@@ -76,7 +77,10 @@ export const getPublicDocketRecordStatusLambda = event =>
           key: fileId,
           useTempBucket: true,
         });
-      return { status: 'ready', url };
+      return new PublicDocketRecordPdfJobResponse({
+        status: 'ready',
+        url,
+      }).validate();
     }
 
     if (hasError) {
@@ -98,8 +102,14 @@ export const getPublicDocketRecordStatusLambda = event =>
       } catch {
         // leave defaults
       }
-      return { message, status: 'error', statusCode };
+      return new PublicDocketRecordPdfJobResponse({
+        message,
+        status: 'error',
+        statusCode,
+      }).validate();
     }
 
-    return { status: 'pending' };
+    return new PublicDocketRecordPdfJobResponse({
+      status: 'pending',
+    }).validate();
   });

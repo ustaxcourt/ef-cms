@@ -18,6 +18,32 @@ Blocked Cases Report. Run the following to recompute those cases:
 ```
 </details>
 
+<details><summary>Dependency Updates - Week of 2026-08-24</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.15.9`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.9
+```
+```bash
+tfenv install 1.15.9
+tfenv use 1.15.9
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.94`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Revert @joi/date 3.0.0 upgrade</summary>
 
 ## Local

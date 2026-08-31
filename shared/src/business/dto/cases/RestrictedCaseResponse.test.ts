@@ -1,6 +1,6 @@
-import { RestrictedCaseDTO } from './RestrictedCaseDTO';
+import { RestrictedCaseResponse } from './RestrictedCaseResponse';
 
-describe('RestrictedCaseDTO', () => {
+describe('RestrictedCaseResponse', () => {
   it('maps a restricted raw case and removes served parties from docket entries', () => {
     const raw: RawRestrictedCase = {
       docketNumber: '101-20',
@@ -11,9 +11,9 @@ describe('RestrictedCaseDTO', () => {
       docketEntries: [],
     };
 
-    const dto = new RestrictedCaseDTO(raw);
+    const dto = new RestrictedCaseResponse(raw);
 
-    expect(dto.entityName).toBe('RestrictedCaseDTO');
+    expect(dto.entityName).toBe('RestrictedCaseResponse');
     expect(dto.docketNumber).toBe('101-20');
     expect(dto.docketNumberSuffix).toBe('S');
     expect(dto.docketNumberWithSuffix).toBe('101-20S');
