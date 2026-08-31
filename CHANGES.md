@@ -12,6 +12,19 @@ This script will prompt for an environment to pull the image from; choose `exp5`
 npm run ecr:check-version
 ```
 </details>
+<details><summary>Revert @joi/date 3.0.0 upgrade</summary>
+
+## Local
+
+#### Reinstall dependencies
+
+`@joi/date` was pinned back to **2.1.1**. Run `npm ci` after pulling so the stale ESM `@joi/date` 3.0.0 tree in `node_modules` is replaced.
+
+```bash
+npm ci
+```
+
+</details>
 <details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
 
 ## Manual Deployment Steps
