@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/10/2026, `babel-jest`, `ts-jest`, `recharts`, and `eslint-plugin-cypress` are documented as hand-managed caveats below but are absent from the script's `caveats` array — the upgrade script will bump them unless reverted manually after each run. Only `eslint-plugin-cypress` required attention during the 8/10/2026 rotation (the other three were already at their latest versions), but the gap is real and should be closed over time.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/17/2026, the script and docs are in sync; the following hand-managed packages are excluded by the upgrade script: `babel-jest`, `ts-jest`, `recharts`, `eslint-plugin-cypress`, and `aws-sigv4-sign`.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -374,7 +374,7 @@ If an update is available for DWT:
 **jest: 30.4.2**
 **jest-environment-jsdom: 30.4.1**
 
-- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. Verify the full unit test suites after any bump.
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
 
@@ -487,7 +487,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
 
-- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is absent from the upgrade script's `caveats` array, so the script will bump it to 7.x each rotation unless reverted manually afterward.
+- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is excluded by the upgrade script's `caveats` array.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
@@ -508,9 +508,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
 ### @joi/date
-**Installed Version: 3.0.0**
+**Installed Version: 2.1.1**
 
-- 8/7/26 - @joi/date had a major version update with breaking changes: the package is ESM-only (`.mjs`), and date format parsing moved from **moment** to **dayjs**. Updating requires changing how we import this package in validators that use tests.
+- 8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
 From
 
 ```ts
@@ -526,52 +526,25 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-Because of the moment → dayjs switch:
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
-- Keep the same allowed date shapes, but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches.
-- Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
-- For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`), reuse **`JoiValidationConstants.ISO_DATE`**, or chain `.format()` from it.
+- 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
 
-Without `utc: true`, dayjs parses the time in the machine's local timezone. That makes `.max('now')` reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
+### recharts
+**Installed Version: 3.10.1**
 
-**UTC ISO validation (required pattern).**
-
-Prefer these exports from `shared/src/business/entities/JoiValidationConstants.ts`:
-
-- **`JoiValidationConstants.ISO_DATE`** — default for entity validators (already includes `utc: true`).
-- **`ISO_DATE_FORMAT_STRING`** — the canonical `'YYYY-MM-DDTHH:mm:ss.SSS[Z]'` string when building allowed-format lists.
-- **`ISO_DATE_JOI_FORMAT`** — `{ format: ISO_DATE_FORMAT_STRING, utc: true }` when a standalone `joi.date().iso().format(...)` is needed.
-
-Example: `DocumentSearch` chains `.format()` from `ISO_DATE` and includes `ISO_DATE_FORMAT_STRING` in its allowed formats.
-
-**ESLint guard: `custom-rules-plugin/joi-iso-date-utc`.**
-
-Registered in `eslint.config.mjs` and enforced on every `npm run lint` / CI run.
-
-The rule errors when code calls `.format(...)` with a format that includes the literal `[Z]` suffix but omits `utc: true`. Chaining from `JoiValidationConstants.ISO_DATE.format(...)` is allowed.
-
-- Rule: `eslint-custom-rules/eslint-joi-iso-date-utc-rule.js`
-- Tests: `scripts/eslint-custom-rules/eslint-joi-iso-date-utc-rule.test.ts`
-
-Calendar-only formats (`MM/DD/YYYY`, `YYYY-MM-DD`) are unaffected.
-
-- 8/11/26 - Upgraded to **3.0.0**.
-
-  Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by:
-
-  - Widening the transform regex to `'\\.m?[jt]sx?$'`
-  - Adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`)
-  - Adding `mjs` to `moduleFileExtensions` where declared
-
-  Removed from the upgrade script's `caveats` array.
-
-  Also fixed **`JoiValidationConstants.ISO_DATE`** to use `utc: true`, and added **`custom-rules-plugin/joi-iso-date-utc`** plus the exports above so future validators cannot reintroduce local-time parsing for UTC ISO strings.
+- Pinned because `@recharts/devtools` does not yet peer-match recharts 3.10.x. Upgrade manually in coordination with `@recharts/devtools` when a compatible devtools release is available. This package is excluded by the upgrade script's `caveats` array.
 
 ### @recharts/devtools
 **Installed Version: 0.0.14**
 
 - 8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
+
+### aws-sigv4-sign
+**Installed Version: 1.2.1**
+
+- Pinned until tested in an experimental environment with payment-portal integration. A 2.x release is available but was reverted in [PR #10354](https://github.com/ustaxcourt/ef-cms/pull/10354) pending validation. This package is excluded by the upgrade script's `caveats` array.
 
 ## Troubleshooting
 

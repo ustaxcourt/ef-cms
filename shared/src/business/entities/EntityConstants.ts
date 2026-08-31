@@ -169,6 +169,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENABLE_PAYMENT_PORTAL_INTEGRATION: {
     key: 'enable-payment-portal-integration',
   },
+  NEW_TRIAL_CITIES: {
+    key: 'new-trial-cities',
+  },
   RESTRICTED_EVENT_CODES: {
     key: 'restricted-event-codes',
   },
@@ -969,7 +972,7 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
   },
   orderDesignatingPlaceOfTrial: {
-    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries[PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
     <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'O')!
       .documentType,
@@ -1421,8 +1424,7 @@ export const ALL_STATE_OPTIONS = {
 };
 
 export type AbbreviatedStates =
-  | keyof typeof US_STATES
-  | keyof typeof US_STATES_OTHER;
+  keyof typeof US_STATES | keyof typeof US_STATES_OTHER;
 
 export const NOT_AVAILABLE_OPTION = 'N/A';
 export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
@@ -1508,6 +1510,7 @@ export const COMMON_CITIES = [
   { city: 'Phoenix', state: 'Arizona' },
   { city: 'Little Rock', state: 'Arkansas' },
   { city: 'Los Angeles', state: 'California' },
+  { city: 'Sacramento', state: 'California' },
   { city: 'San Diego', state: 'California' },
   { city: 'San Francisco', state: 'California' },
   { city: 'Denver', state: 'Colorado' },
@@ -1515,6 +1518,7 @@ export const COMMON_CITIES = [
   { city: 'Washington', state: 'District of Columbia' },
   { city: 'Jacksonville', state: 'Florida' },
   { city: 'Miami', state: 'Florida' },
+  { city: 'Orlando', state: 'Florida' },
   { city: 'Tampa', state: 'Florida' },
   { city: 'Atlanta', state: 'Georgia' },
   { city: 'Honolulu', state: 'Hawaii' },
@@ -1535,9 +1539,11 @@ export const COMMON_CITIES = [
   { city: 'Omaha', state: 'Nebraska' },
   { city: 'Las Vegas', state: 'Nevada' },
   { city: 'Reno', state: 'Nevada' },
+  { city: 'Newark', state: 'New Jersey' },
   { city: 'Albuquerque', state: 'New Mexico' },
   { city: 'Buffalo', state: 'New York' },
   { city: 'New York City', state: 'New York' },
+  { city: 'Charlotte', state: 'North Carolina' },
   { city: 'Winston-Salem', state: 'North Carolina' },
   { city: 'Cincinnati', state: 'Ohio' },
   { city: 'Cleveland', state: 'Ohio' },
@@ -1550,6 +1556,7 @@ export const COMMON_CITIES = [
   { city: 'Knoxville', state: 'Tennessee' },
   { city: 'Memphis', state: 'Tennessee' },
   { city: 'Nashville', state: 'Tennessee' },
+  { city: 'Austin', state: 'Texas' },
   { city: 'Dallas', state: 'Texas' },
   { city: 'El Paso', state: 'Texas' },
   { city: 'Houston', state: 'Texas' },
@@ -1593,7 +1600,6 @@ export const LEGACY_TRIAL_CITIES = [
   { city: 'Huntington', state: 'West Virginia' },
   { city: 'Maui', state: 'Hawaii' },
   { city: 'Missoula', state: 'Montana' },
-  { city: 'Newark', state: 'New Jersey' },
   { city: 'Pasadena', state: 'California' },
   { city: 'Tulsa', state: 'Oklahoma' },
   { city: 'Westbury', state: 'New York' },
@@ -1610,6 +1616,14 @@ export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
+
+export const NEW_TRIAL_CITY_STRINGS: readonly string[] = [
+  'Austin, Texas',
+  'Charlotte, North Carolina',
+  'Newark, New Jersey',
+  'Orlando, Florida',
+  'Sacramento, California',
+];
 
 export const SESSION_TERMS_DICT = {
   WINTER: 'Winter',
@@ -1982,8 +1996,7 @@ export type FileUploadProgressType = {
 };
 
 export type FileUploadProgressValueType =
-  | FileUploadProgressType
-  | FileUploadProgressType[];
+  FileUploadProgressType | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -2106,8 +2119,7 @@ export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   other: 'Other',
 } as const;
 export type StatusReportOrderedForOption =
-  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
-  | '';
+  keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS | '';
 
 export const MOTION_FILED_BY_OPTIONS = {
   intervenor: 'Intervenor',

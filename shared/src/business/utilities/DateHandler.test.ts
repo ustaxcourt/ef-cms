@@ -42,8 +42,6 @@ import {
   getJsTimeframeForYear,
   getTimeframeForYear,
 } from './DateHandler';
-import { JoiValidationConstants } from '../entities/JoiValidationConstants';
-
 describe('DateHandler', () => {
   const timeZones = [
     'utc',
@@ -789,16 +787,6 @@ describe('DateHandler', () => {
 
       expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
     });
-
-    it('should return a UTC Z ISO string when outputFormat is ISO', () => {
-      const result = getBusinessDateInFuture({
-        numberOfDays: 30,
-        outputFormat: FORMATS.ISO,
-        startDate: '2021-05-31',
-      });
-
-      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
-    });
   });
 
   describe('isDateWithinGivenInterval', () => {
@@ -1183,21 +1171,6 @@ describe('DateHandler', () => {
       const output = formatDateFromDatePicker('9/9/2023', FORMATS.YYYYMMDD);
 
       expect(output).toEqual('2023-09-09');
-    });
-
-    it('should return a UTC ISO timestamp with a Z suffix when formatting for persistence', () => {
-      const output = formatDateFromDatePicker('01/02/2020', FORMATS.ISO);
-
-      expect(output).toEqual('2020-01-02T05:00:00.000Z');
-    });
-
-    it('should return an ISO timestamp that passes JoiValidationConstants.ISO_DATE', () => {
-      const output = formatDateFromDatePicker('01/02/2020', FORMATS.ISO);
-
-      const { error } =
-        JoiValidationConstants.ISO_DATE.max('now').validate(output);
-
-      expect(error).toBeUndefined();
     });
   });
 
