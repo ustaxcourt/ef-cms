@@ -282,19 +282,19 @@ describe('Automatic block on a case set for trial', () => {
       });
       cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
       cy.get<string>('@trialSessionId').then(trialSessionId => {
-        scheduleTrialSession(docketNumber, trialSessionId);
         loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get(
-          '[data-testid="new-trial-sessions-tab"] span.button-text',
-        ).click();
+        cy.get(`[data-testid="trial-session-link"]`).click();
+        cy.get(`[data-testid="new-trial-sessions-tab"]`).click();
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+
         cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
         cy.get(`[data-testid="qc-complete-${docketNumber}"]:checked`).should(
           'exist',
         );
         cy.get('[data-testid="set-calendar-button"]').click();
         cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.url().should('include', 'print-paper-trial-notices');
+        cy.get('[data-testid="printing-complete"]').click();
         cy.intercept(
           'GET',
           `**/cases/${docketNumber}?excludeDocketEntries=true`,
