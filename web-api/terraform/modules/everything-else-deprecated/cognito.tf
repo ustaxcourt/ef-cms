@@ -257,6 +257,19 @@ module "cognito_pre_signup_lambda" {
   memory_size    = "128"
 }
 
+module "cognito_inbound_federation_lambda" {
+  source = "../lambda"
+  handler_file   = "./web-api/src/lambdas/cognitoInboundFederation/cognitoInboundFederationLambda.ts"
+  handler_method = "cognitoInboundFederationLambdaHandler"
+  lambda_name    = "cognito_inbound_federation_lambda_${var.environment}"
+  role           = aws_iam_role.inbound_federation_lambda.arn
+  environment    = {
+    IDP_NAME = var.idp_name
+  }
+  timeout        = "29"
+  memory_size    = "128"
+}
+
 resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
   statement_id  = "AllowCognitoInvoke"
   action        = "lambda:InvokeFunction"
@@ -265,8 +278,39 @@ resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
   source_arn    = aws_cognito_user_pool.pool.arn
 }
 
+resource "aws_lambda_permission" "cognito_inbound_federation_lambda_invoke" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = module.cognito_inbound_federation_lambda.function_name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.pool.arn
+}
+
 resource "aws_iam_role" "pre_signup_lambda" {
   name = "pre_signup_lambda_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "apigateway.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "inbound_federation_lambda" {
+  name = "inbound_federation_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -314,6 +358,28 @@ resource "aws_iam_role_policy" "presignup_policy" {
       "Resource": [
         "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/*"
       ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "inbound_federation_policy" {
+  name = "inbound_federation_policy_${var.environment}"
+  role = aws_iam_role.inbound_federation_lambda.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }

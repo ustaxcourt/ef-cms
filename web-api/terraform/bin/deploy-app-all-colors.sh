@@ -43,7 +43,7 @@ echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
 echo "  - IDP_NAME=${IDP_NAME}"
 echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
 echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
-if [[ -z "$VAR" ]]; then
+if [[ -n "$OIDC_CLIENT_SECRET" ]]; then
   echo "  - OIDC_CLIENT_SECRET=***"
 else
   echo "  - OIDC_CLIENT_SECRET="
@@ -151,6 +151,15 @@ terraform init -upgrade -backend=true \
 if [ -z "${OUTPUT_ONLY}" ]; then
   terraform plan -out execution-plan
   terraform apply -auto-approve execution-plan
+
+  # this is temporary until terraform supports setting inbound federation trigger
+  # we also have to re-set the presignup lambda trigger or it will be overwritten with the default and removed
+  if [[ -n "$IDP_NAME" ]]; then
+    USER_POOL_ID=$(terraform output -raw aws_cognito_user_pool_id)
+    aws cognito-idp update-user-pool \
+      --user-pool-id "$USER_POOL_ID" \
+      --lambda-config PreSignUp=arn:aws:lambda:us-east-1:"$LOWER_ENV_ACCOUNT_IDS":function:cognito_pre_signup_lambda_"$ENV",InboundFederation=\{LambdaVersion=V1_0,LambdaArn=arn:aws:lambda:us-east-1:"$LOWER_ENV_ACCOUNT_IDS":function:cognito_inbound_federation_lambda_"$ENV"\}
+  fi
 else
   terraform output -json > output.json
 fi
