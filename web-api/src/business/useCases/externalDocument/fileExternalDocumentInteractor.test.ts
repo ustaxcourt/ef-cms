@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
@@ -25,6 +26,8 @@ import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } 
 import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -34,9 +37,11 @@ import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { verifyPendingCaseForUser as verifyPendingCaseForUserMock } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
+const verifyPendingCaseForUser = jest.mocked(verifyPendingCaseForUserMock);
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -121,6 +126,7 @@ describe('fileExternalDocumentInteractor', () => {
           state: 'CA',
         },
       ],
+      irsPractitioners: [mockIrsPractitionerUser],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -131,6 +137,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
+    verifyPendingCaseForUser.mockResolvedValue(false);
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
@@ -274,7 +281,7 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
+  describe('consolidated cases', () => {
     const consolidatedCase = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -347,70 +354,177 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    getCaseByDocketNumber.mockResolvedValueOnce(caseRecord);
-    getCasesByDocketNumbers.mockResolvedValueOnce([
-      caseRecord,
-      consolidatedCase as any,
-    ]);
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          consolidatedCasesToFileAcross: [
-            {
-              docketNumber: caseRecord.docketNumber,
-              leadDocketNumber: caseRecord.docketNumber,
-            },
-            {
-              docketNumber: consolidatedCase.docketNumber,
-              leadDocketNumber: caseRecord.docketNumber,
-            },
-          ],
+    it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
           docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
+          leadDocketNumber: caseRecord.docketNumber,
         },
-      },
-      mockIrsPractitionerUser,
-    );
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
 
-    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
-    expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
-    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
-    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalledTimes(2);
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
 
-    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
-    const entry = savedCase.docketEntries.find(
-      de => de.documentType === 'Memorandum in Support',
-    );
-    expect(entry).toBeDefined();
-    expect(entry?.servedAt).toBeDefined();
-    expect(entry).toMatchObject({
-      docketNumber: caseRecord.docketNumber,
-      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
-      originallyFiledDocketNumber: caseRecord.docketNumber,
-      isOnDocketRecord: true,
-      documentStorageId: mockDocketEntryId,
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross,
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
+      expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
+      expect(upsertWorkItems).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      ).toHaveBeenCalledTimes(2);
+
+      const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+      const entry = savedCase.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry).toBeDefined();
+      expect(entry?.servedAt).toBeDefined();
+      expect(entry).toMatchObject({
+        docketNumber: caseRecord.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
+      const savedCase2 =
+        updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+      const entry2 = savedCase2.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry2).toBeDefined();
+      expect(entry2?.servedAt).toBeDefined();
+      expect(entry2).toMatchObject({
+        docketNumber: consolidatedCase.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
     });
-    const savedCase2 = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
-    const entry2 = savedCase2.docketEntries.find(
-      de => de.documentType === 'Memorandum in Support',
-    );
-    expect(entry2).toBeDefined();
-    expect(entry2?.servedAt).toBeDefined();
-    expect(entry2).toMatchObject({
-      docketNumber: consolidatedCase.docketNumber,
-      multiDocketedOn: [caseRecord.docketNumber, consolidatedCase.docketNumber],
-      originallyFiledDocketNumber: caseRecord.docketNumber,
-      isOnDocketRecord: true,
-      documentStorageId: mockDocketEntryId,
+
+    it('should recompute cases that are consolidated with current case to prevent injection of cases from request', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+
+      const injectedConsolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: '998-99',
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: '999-99',
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross:
+              injectedConsolidatedCasesToFileAcross,
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      ).toHaveBeenCalledTimes(2);
+
+      const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+      const entry = savedCase.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry).toBeDefined();
+      expect(entry?.servedAt).toBeDefined();
+      expect(entry).toMatchObject({
+        docketNumber: caseRecord.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
+      const savedCase2 =
+        updateCaseAndAssociations.mock.calls[1][0].caseToUpdate;
+      const entry2 = savedCase2.docketEntries.find(
+        de => de.documentType === 'Memorandum in Support',
+      );
+      expect(entry2).toBeDefined();
+      expect(entry2?.servedAt).toBeDefined();
+      expect(entry2).toMatchObject({
+        docketNumber: consolidatedCase.docketNumber,
+        multiDocketedOn: [
+          caseRecord.docketNumber,
+          consolidatedCase.docketNumber,
+        ],
+        originallyFiledDocketNumber: caseRecord.docketNumber,
+        isOnDocketRecord: true,
+        documentStorageId: mockDocketEntryId,
+      });
     });
   });
 
@@ -655,5 +769,91 @@ describe('fileExternalDocumentInteractor', () => {
         identifiers: [`case|${caseRecord.docketNumber}`],
       }),
     );
+  });
+
+  it('should throw an unauthorized error if the user is not related to a case', async () => {
+    getUserById.mockResolvedValue(mockPetitionerUser as DbUser);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            category: 'Application',
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Application for Waiver of Filing Fee',
+            documentType: 'Application for Waiver of Filing Fee',
+            eventCode: 'APPW',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+        },
+        mockPetitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User is not associated with case: ${caseRecord.docketNumber}`,
+    );
+  });
+
+  it('should throw an unauthorized error if the private practitioner has a pending case association', async () => {
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    verifyPendingCaseForUser.mockResolvedValue(true);
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Entry of Appearance for IRS Practitioner',
+            documentType: 'Entry of Appearance',
+            eventCode: 'EA',
+            filedBy: 'IRS Practitioner',
+            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+        },
+        mockPrivatePractitionerUser,
+      ),
+    ).rejects.toThrow(
+      `User is not associated with case: ${caseRecord.docketNumber}`,
+    );
+  });
+
+  it('should allow private practitioner to file an entry of appearance', async () => {
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for Private Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'Private Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+      mockPrivatePractitionerUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+  });
+
+  it('should allow IRS practitioner to file an entry of appearance', async () => {
+    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for IRS Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'IRS Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });
