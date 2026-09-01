@@ -17,7 +17,6 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-08-24</summary>
 
 ## Local
