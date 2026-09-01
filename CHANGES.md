@@ -1,11 +1,22 @@
 <details><summary>Dependency Updates - Week of 2026-08-31</summary>
 
 ## Local
+
 #### Upgrade NodeJS to `24.19.0`
 ```bash
 nvm install
 nvm use
 nvm alias default "$(cat .nvmrc)"
+```
+
+#### Upgrade Terraform to `1.16.0`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.0
+```
+```bash
+tfenv install 1.16.0
+tfenv use 1.16.0
 ```
 
 </details>
