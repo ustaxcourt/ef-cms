@@ -1,5 +1,8 @@
 import { appendFileSync, existsSync, unlinkSync } from 'fs';
 
+const escapeCsvValue = (value: unknown): string =>
+  `"${String(value ?? '').replace(/"/g, '""')}"`;
+
 const compileOutput = ({
   columns,
   rows,
@@ -7,16 +10,12 @@ const compileOutput = ({
   columns: { header: string; key: string }[];
   rows: { [k: string]: any }[];
 }): string => {
-  const headers = columns.map(c => c.header);
+  const headers = columns.map(c => escapeCsvValue(c.header));
   const keys = columns.map(c => c.key);
-  let output = `"${headers.join('","')}"`;
+  let output = headers.join(',');
   for (const row of rows) {
-    const values: string[] = [];
-    for (const key of keys) {
-      const value = row[key] || '';
-      values.push(`${value}`);
-    }
-    output += `\n"${values.join('","')}"`;
+    const values = keys.map(key => escapeCsvValue(row[key]));
+    output += `\n${values.join(',')}`;
   }
   return output;
 };
