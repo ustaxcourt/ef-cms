@@ -21,6 +21,7 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 describe('Automatic block on a case set for trial', () => {
   const location = 'Phoenix, Arizona';
@@ -56,6 +57,7 @@ describe('Automatic block on a case set for trial', () => {
         );
       });
       cy.get('[data-testid="blocked-case-icon"]').should('be.visible');
+      checkA11y();
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="pending-report-tab"]').click();
       cy.get('[data-testid="remove-pending-item-button-0"]').click();
@@ -70,6 +72,7 @@ describe('Automatic block on a case set for trial', () => {
         expect(caseEntity.automaticBlocked).to.equal(false);
         expect(caseEntity.automaticBlockedReason).to.equal(undefined);
       });
+      checkA11y();
     });
   });
 
@@ -173,6 +176,7 @@ describe('Automatic block on a case set for trial', () => {
       cy.get(`[data-testid="blocked-case-${docketNumber}-row"]`).should(
         'be.visible',
       );
+      checkA11y();
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         cy.intercept(
