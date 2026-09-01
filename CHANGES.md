@@ -1,3 +1,14 @@
+<details><summary>Dependency Updates - Week of 2026-08-31</summary>
+
+## Local
+#### Upgrade NodeJS to `24.19.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-24</summary>
 
 ## Local
