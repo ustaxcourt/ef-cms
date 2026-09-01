@@ -159,17 +159,19 @@ export const setTrialSessionCalendarInteractor = async (
       theCase.validate().toRawObject(),
     );
 
-    const manuallyAddedQcIncompleteCaseEntities =
-      manuallyAddedQcIncompleteCases.map(c => {
+    const manuallyAddedQcIncompleteCaseEntities = await Promise.all(
+      manuallyAddedQcIncompleteCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.removeFromTrialWithAssociatedJudge();
+        await updateCaseAutomaticBlock({ caseEntity: theCase });
         caseOrdersToDelete.push(
           trialSessionEntity.deleteCaseFromCalendar({
             docketNumber: theCase.docketNumber,
           })!,
         );
         return theCase.validate().toRawObject();
-      });
+      }),
+    );
 
     const caseEntitiesToCalendar = [
       ...manuallyAddedQcCompleteCaseEntities,
