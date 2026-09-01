@@ -6,6 +6,7 @@ import {
   CASE_STATUS_TYPES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
@@ -70,7 +71,9 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to automaticBlocked if it has deadlines', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([MOCK_CASE_DEADLINE]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      new CaseDeadline(MOCK_CASE_DEADLINE),
+    ]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
@@ -87,7 +90,9 @@ describe('updateCaseAutomaticBlock', () => {
   });
 
   it('sets the case to automaticBlock if it has deadlines and pending items', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([MOCK_CASE_DEADLINE]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      new CaseDeadline(MOCK_CASE_DEADLINE),
+    ]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
     const caseEntity = new Case(mockCase, {
