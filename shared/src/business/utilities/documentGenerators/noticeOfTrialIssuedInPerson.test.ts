@@ -12,25 +12,27 @@ describe('noticeOfTrialIssuedInPerson', () => {
   generateAndVerifyPdfDiff({
     fileName: 'Notice_Trial_Issued_In_Person.pdf',
     pageNumber: 1,
-    pdfGenerateFunction: () =>
-      noticeOfTrialIssuedInPerson({
+    pdfGenerateFunction: () => {
+      applicationContext.getUtilities().formatNow = () => '05/28/26';
+
+      return noticeOfTrialIssuedInPerson({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner(s)',
-          caseTitle:
-            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
+          caseCaptionExtension: 'Petitioner',
+          caseTitle: 'John Doe',
           docketNumberWithSuffix: '123-45S',
-          nameOfClerk: 'Stephanie A. Servoss',
+          nameOfClerk: 'Charles G. Jeane',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
-            address1: '123 Candy Cane Lane',
-            address2: '22222',
-            city: 'troutville',
-            formattedJudge: 'Chief Special Trial Judge Carluzzo',
-            formattedStartDate: '01/01/2001',
-            formattedStartTime: '12:00 am',
-            postalCode: 'Boise, Idaho',
-            state: '33333',
+            address1: '400 Second St., NW',
+            address2: '',
+            city: 'Washington',
+            formattedJudge: 'Buch',
+            chambersPhoneNumber: '(555) 555-5555',
+            formattedStartDate: 'Monday, December 8, 2025',
+            formattedStartTime: '10:00 am',
+            postalCode: '20217',
+            state: 'DC',
             trialLocation: 'Birmingham, Alabama',
             caseOrder: [],
             isCalendared: true,
@@ -38,15 +40,16 @@ describe('noticeOfTrialIssuedInPerson', () => {
             sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
             sessionStatus: SESSION_STATUS_TYPES.new,
             sessionType: SESSION_TYPES.regular,
-            startDate: '2001-01-01T00:00:00Z',
-            term: 'Winter',
-            termYear: '2001',
+            startDate: '2025-12-08T00:00:00Z',
+            term: 'Fall',
+            termYear: '2025',
             trialSessionId: '111-111-112',
             paperServicePdfs: [],
-            hasNottBeenServed: false
+            hasNottBeenServed: false,
           },
         },
-      }),
+      });
+    },
     testDescription: 'generates a Notice of Trial Issued document',
   });
 });

@@ -64,7 +64,6 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#seal-address').should('be.checked');
-      cy.get('#seal-address').should('be.disabled');
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
@@ -119,6 +118,38 @@ describe('Sealed Contact Information', () => {
       cy.get('[data-testid="modal-confirm"]').click();
       cy.wait('@putCaseNote').its('response.statusCode').should('eq', 200);
       cy.contains('ADC able to edit').should('exist');
+    });
+  });
+
+  it('should let petitioner edit own contact information when sealed', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      loginAsDocketClerk();
+      goToCase(docketNumber);
+      updateCaseStatus('General Docket - At Issue (Ready for Trial)');
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="seal-address-label"]').contains(
+        'Seal contact information',
+      );
+      cy.get('[data-testid="seal-address-label"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      loginAsPetitioner();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="submit-contact-edit-button"]').click();
+      cy.get('[data-testid="error-alert"]').should('be.visible');
+      cy.get('[data-testid="domestic-country-btn"]').click();
+      cy.get('[data-testid="contact.address1"]').type('123 Main St');
+      cy.get('[data-testid="contact.city"]').type('Anytown');
+      cy.get('[data-testid="contact.state"]').select('NY');
+      cy.get('[data-testid="contact.postalCode"]').type('12345');
+      cy.get('[data-testid="phone-number-input"]').type('555-555-5555');
+      cy.get('[data-testid="submit-contact-edit-button"]').click();
+      cy.get('[data-testid="success-alert"]').should('be.visible');
+      cy.get('[data-testid="success-alert"]').contains('Changes saved.');
     });
   });
 });

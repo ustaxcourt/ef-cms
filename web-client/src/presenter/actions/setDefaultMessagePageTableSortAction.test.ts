@@ -11,7 +11,7 @@ describe('setDefaultMessagePageTableSortAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should keep the default values of tableSort for internal users with invalid box value', async () => {
+  it('should fall back to the inbox default sort for an unrecognized box value', async () => {
     const { state } = await runAction(setDefaultMessagePageTableSortAction, {
       modules: {
         presenter,
@@ -21,8 +21,8 @@ describe('setDefaultMessagePageTableSortAction', () => {
       },
       state: {
         tableSort: {
-          sortField: 'createdAt',
-          sortOrder: ASCENDING,
+          sortField: 'completedAt',
+          sortOrder: DESCENDING,
         },
         user: {
           role: 'adc',
@@ -70,6 +70,42 @@ describe('setDefaultMessagePageTableSortAction', () => {
 
     expect(state.tableSort.sortField).toEqual('createdAt');
     expect(state.tableSort.sortOrder).toEqual(DESCENDING);
+  });
+
+  it('the sent box (Docket Clerk Report messages) should be sorted by createdAt DESCENDING, same as outbox', async () => {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        box: 'sent',
+      },
+      state: {
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(state.tableSort.sortField).toEqual('createdAt');
+    expect(state.tableSort.sortOrder).toEqual(DESCENDING);
+  });
+
+  it('should default to the inbox sort when no box is provided', async () => {
+    const { state } = await runAction(setDefaultMessagePageTableSortAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(state.tableSort.sortField).toEqual('createdAt');
+    expect(state.tableSort.sortOrder).toEqual(ASCENDING);
   });
 
   it('the completed should be sorted by createdAt DESCENDING for internal users', async () => {

@@ -183,14 +183,34 @@ describe('caseFilter', () => {
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
       const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'authPractitioner',
+        },
+      );
+
+      expect(result.length).toEqual(4);
+      expect(result[2].petitioners[0].address1).toBeUndefined();
+      expect(result[2].petitioners[0].city).toBeUndefined();
+      expect(result[2].petitioners[0]).toMatchObject({
+        isAddressSealed: true,
+        name: 'Joe Walsh',
+        sealedAndUnavailable: true,
+      });
+    });
+
+    it('should NOT format sealed addresses in search results if user has permission to see sealed contact addresses', () => {
+      const result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
         mockPetitionsClerkUser,
       );
 
       expect(result.length).toEqual(4);
       expect(result[2].petitioners[0]).toMatchObject({
+        address1: '1 Eagle Way',
+        city: 'Hotel California',
         isAddressSealed: true,
         name: 'Joe Walsh',
-        sealedAndUnavailable: true,
       });
     });
 

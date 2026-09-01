@@ -32,4 +32,22 @@ describe('setDocketEntrySelectedFromMessageAction', () => {
       documentId: mockDocketEntryId,
     });
   });
+
+  it('should throw when the docket entry is not on the case', async () => {
+    await expect(
+      runAction(setDocketEntrySelectedFromMessageAction, {
+        props: {
+          docketEntryId: 'missing-entry',
+        },
+        state: {
+          caseDetail: {
+            docketEntries: [{ docketEntryId: mockDocketEntryId }],
+            docketNumber: '108-19',
+          },
+        },
+      }),
+    ).rejects.toThrow(
+      'Could not find docket entry missing-entry on case 108-19',
+    );
+  });
 });

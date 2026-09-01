@@ -71,8 +71,6 @@ export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
 export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
-export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
-
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = [
@@ -121,11 +119,6 @@ export const TRIAL_SESSION_SCOPE_TYPES = {
 export type TrialSessionScope =
   (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
-export const JURISDICTIONAL_OPTIONS = {
-  restoredToDocket: 'The case is restored to the general docket',
-  undersigned: 'Jurisdiction is retained by the undersigned',
-};
-
 export type DocketEntryRelation = {
   disposition: string;
   docketEntryId: string;
@@ -162,9 +155,6 @@ export const MOTION_DISPOSITION_VERBIAGE = {
   },
 };
 
-export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
-  'This case is stricken from the trial session';
-
 export const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
@@ -183,6 +173,12 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  ENABLE_PAYMENT_PORTAL_INTEGRATION: {
+    key: 'enable-payment-portal-integration',
+  },
+  NEW_TRIAL_CITIES: {
+    key: 'new-trial-cities',
   },
   RESTRICTED_EVENT_CODES: {
     key: 'restricted-event-codes',
@@ -984,7 +980,7 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
   },
   orderDesignatingPlaceOfTrial: {
-    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries[PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
     <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'O')!
       .documentType,
@@ -1400,6 +1396,15 @@ export const US_STATES = {
   WY: 'Wyoming',
 } as const;
 
+// State abbreviations ordered by full state name, for dropdowns that present a
+// sorted list. US_STATES itself stays keyed by abbreviation so lookups and the
+// validation lists built from its keys are unaffected.
+export const US_STATES_SORTED = (
+  Object.keys(US_STATES) as (keyof typeof US_STATES)[]
+).sort((firstState, secondState) =>
+  US_STATES[firstState].localeCompare(US_STATES[secondState]),
+);
+
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
   AE: 'Armed Forces Europe',
@@ -1413,6 +1418,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const US_STATES_OTHER_SORTED = (
+  Object.keys(US_STATES_OTHER) as (keyof typeof US_STATES_OTHER)[]
+).sort((firstState, secondState) =>
+  US_STATES_OTHER[firstState].localeCompare(US_STATES_OTHER[secondState]),
+);
 
 export const ALL_STATE_OPTIONS = {
   ...US_STATES,
@@ -1507,6 +1518,7 @@ export const COMMON_CITIES = [
   { city: 'Phoenix', state: 'Arizona' },
   { city: 'Little Rock', state: 'Arkansas' },
   { city: 'Los Angeles', state: 'California' },
+  { city: 'Sacramento', state: 'California' },
   { city: 'San Diego', state: 'California' },
   { city: 'San Francisco', state: 'California' },
   { city: 'Denver', state: 'Colorado' },
@@ -1514,6 +1526,7 @@ export const COMMON_CITIES = [
   { city: 'Washington', state: 'District of Columbia' },
   { city: 'Jacksonville', state: 'Florida' },
   { city: 'Miami', state: 'Florida' },
+  { city: 'Orlando', state: 'Florida' },
   { city: 'Tampa', state: 'Florida' },
   { city: 'Atlanta', state: 'Georgia' },
   { city: 'Honolulu', state: 'Hawaii' },
@@ -1534,9 +1547,11 @@ export const COMMON_CITIES = [
   { city: 'Omaha', state: 'Nebraska' },
   { city: 'Las Vegas', state: 'Nevada' },
   { city: 'Reno', state: 'Nevada' },
+  { city: 'Newark', state: 'New Jersey' },
   { city: 'Albuquerque', state: 'New Mexico' },
   { city: 'Buffalo', state: 'New York' },
   { city: 'New York City', state: 'New York' },
+  { city: 'Charlotte', state: 'North Carolina' },
   { city: 'Winston-Salem', state: 'North Carolina' },
   { city: 'Cincinnati', state: 'Ohio' },
   { city: 'Cleveland', state: 'Ohio' },
@@ -1549,6 +1564,7 @@ export const COMMON_CITIES = [
   { city: 'Knoxville', state: 'Tennessee' },
   { city: 'Memphis', state: 'Tennessee' },
   { city: 'Nashville', state: 'Tennessee' },
+  { city: 'Austin', state: 'Texas' },
   { city: 'Dallas', state: 'Texas' },
   { city: 'El Paso', state: 'Texas' },
   { city: 'Houston', state: 'Texas' },
@@ -1592,7 +1608,6 @@ export const LEGACY_TRIAL_CITIES = [
   { city: 'Huntington', state: 'West Virginia' },
   { city: 'Maui', state: 'Hawaii' },
   { city: 'Missoula', state: 'Montana' },
-  { city: 'Newark', state: 'New Jersey' },
   { city: 'Pasadena', state: 'California' },
   { city: 'Tulsa', state: 'Oklahoma' },
   { city: 'Westbury', state: 'New York' },
@@ -1609,6 +1624,14 @@ export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
+
+export const NEW_TRIAL_CITY_STRINGS: readonly string[] = [
+  'Austin, Texas',
+  'Charlotte, North Carolina',
+  'Newark, New Jersey',
+  'Orlando, Florida',
+  'Sacramento, California',
+];
 
 export const SESSION_TERMS_DICT = {
   WINTER: 'Winter',
@@ -1832,7 +1855,8 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for documents
+export const ADVANCED_CASE_SEARCH_PAGE_SIZE = 100; // number of results displayed for each page when searching for cases
 export const CASE_LIST_PAGE_SIZE = 100; // number of results returned for each page for the external user dashboard case list
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
@@ -1942,6 +1966,7 @@ export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   RESPONSE_TO_REFERENCE_INQUIRY: 'Response to Reference Inquiry',
   DISCIPLINARY: 'Disciplinary',
   CHANGE_OF_NAME: 'Change of Name',
+  CHANGE_OF_STATUS: 'Change of Status',
   EXAM_RELATED: 'Exam-Related',
   MISCELLANEOUS: 'Miscellaneous',
 };
@@ -1957,9 +1982,8 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 5000;
 export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
-export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -2253,6 +2277,33 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
 
+export const GRANT_DENY_MOTION_OPTIONS = {
+  issueOrderOptions: {
+    allCasesInGroup: 'allCasesInGroup',
+    justThisCase: 'justThisCase',
+  },
+  dueDateMessageOptions: {
+    statusReport: 'statusReport',
+    statusReportOrStipulatedDecision: 'statusReportOrStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+  filingPartyOptions: {
+    petitioners: 'Petitioner(s)',
+    respondent: 'Respondent',
+    joint: 'Joint',
+    parties: 'Parties',
+  },
+  orderType: 'grantDenyMotion',
+  pdfParagraphClass: 'grant-deny-indent-paragraph',
+  pdfOrderModifierClass: 'grant-deny-motion-order',
+  pdfParagraphIndentPx: 56,
+};
+
+export const MAX_GRANT_DENY_MOTION_ADDITIONAL_TEXT_CHARACTERS = 256;
+
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
   MAX_SESSIONS_PER_LOCATION: 5,
@@ -2328,6 +2379,10 @@ export const EVENT_CODES_WITH_NO_ORDER = [
 ];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
+
+export const PAYMENT_PORTAL_FEE_TYPES = {
+  PETITION_FILING_FEE: 'PETITION_FILING_FEE',
+} as Record<string, 'PETITION_FILING_FEE'>;
 
 export const GRAPH_COLORS = {
   BLUE: '#005EA2',

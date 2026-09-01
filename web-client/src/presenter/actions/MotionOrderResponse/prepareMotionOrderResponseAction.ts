@@ -9,24 +9,13 @@ import {
   isValidDateString,
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
+import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
 import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
 import {
   additionalOrderTextArrayWithRequiredFirstField,
   normalizeAdditionalOrderTextArray,
 } from '@web-client/utilities/normalizeAdditionalOrderTextArray';
-
-const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
-  const { petitioners } = caseDetail;
-  const pNames = petitioners.map(p => p.name);
-  const petitioner = pNames.length > 1 ? 'petitioners' : 'petitioner';
-  const cleanedFiledBy = motion.filedBy.replace(/^(?:Petr\.|Respt\.)?\s*/, '');
-  const movant = pNames.some(name => cleanedFiledBy.includes(name))
-    ? petitioner
-    : 'respondent';
-  const nonMovant = movant === petitioner ? 'respondent' : petitioner;
-  return { movant, nonMovant };
-};
 
 export const prepareMotionOrderResponseAction = ({
   get,
@@ -169,4 +158,9 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
   store.set(state.form.previousDocument, motion);
+
+  const documentToEdit = get(state.documentToEdit);
+  if (documentToEdit?.docketEntryId) {
+    store.set(state.form.docketEntryIdToEdit, documentToEdit.docketEntryId);
+  }
 };

@@ -2,6 +2,7 @@ import {
   loginAsColvin,
   loginAsColvinChambers,
 } from 'cypress/helpers/authentication/login-as-helpers';
+import { logout } from '../../../../helpers/authentication/logout';
 
 describe('Pending Motions Table', () => {
   it('should display the pending motion table for Judge Colvin', () => {
@@ -19,7 +20,16 @@ describe('Pending Motions Table', () => {
 
     cy.get('[class="modal-screen"]').should('be.visible');
 
-    const finalBriefDueDate = generateRandomDate();
+    // test cancel
+    cy.get('[data-testid="confirm-modal-cancel-btn"]').click();
+
+    cy.get('@pendingMotions')
+      .first()
+      .as('firstRow')
+      .find('[data-testid="add-edit-pending-motion-worksheet"]')
+      .click();
+
+    let finalBriefDueDate = generateRandomDate();
     selectRandomStatusOfMatterEntry(
       '[data-testid^="select-status-of-matter-"]',
     ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
@@ -52,6 +62,67 @@ describe('Pending Motions Table', () => {
         .eq(7)
         .should('contain.text', statusOfMatterLabel);
       cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+
+      // leave and come back to test hydrating form from DB
+      logout();
+      loginAsColvin();
+      cy.get('[data-testid="pending-motions-tab"]').click();
+      cy.get('@pendingMotions')
+        .first()
+        .as('firstRow')
+        .find('[data-testid="add-edit-pending-motion-worksheet"]')
+        .click();
+
+      // test that hydrated date saves properly
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
+
+      cy.get('@pendingMotions')
+        .first()
+        .as('firstRow')
+        .find('[data-testid="add-edit-pending-motion-worksheet"]')
+        .click();
+
+      finalBriefDueDate = generateRandomDate();
+      selectRandomStatusOfMatterEntry(
+        '[data-testid^="select-status-of-matter-"]',
+      ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
+        const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
+        cy.get(
+          '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+        ).clear();
+
+        cy.get(
+          '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+        ).type(finalBriefDueDate.longFormat);
+
+        cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
+          statusOfMatterKey,
+        );
+
+        cy.get(
+          '#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d',
+        ).type(primaryIssue);
+
+        cy.get('[data-testid="modal-confirm"]').click();
+
+        cy.get('@firstRow')
+          .find('td')
+          .eq(6)
+          .should('contain.text', finalBriefDueDate.shortFormat);
+
+        cy.get('@firstRow')
+          .find('td')
+          .eq(7)
+          .should('contain.text', statusOfMatterLabel);
+        cy.get('@pendingMotions')
+          .eq(1)
+          .should('contain.text', `${primaryIssue}`);
+      });
     });
   });
 
@@ -70,7 +141,16 @@ describe('Pending Motions Table', () => {
 
     cy.get('[class="modal-screen"]').should('be.visible');
 
-    const finalBriefDueDate = generateRandomDate();
+    // test cancel
+    cy.get('[data-testid="confirm-modal-cancel-btn"]').click();
+
+    cy.get('@pendingMotions')
+      .first()
+      .as('firstRow')
+      .find('[data-testid="add-edit-pending-motion-worksheet"]')
+      .click();
+
+    let finalBriefDueDate = generateRandomDate();
     selectRandomStatusOfMatterEntry(
       '[data-testid^="select-status-of-matter-"]',
     ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
@@ -103,6 +183,67 @@ describe('Pending Motions Table', () => {
         .eq(7)
         .should('contain.text', statusOfMatterLabel);
       cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+
+      // leave and come back to test hydrating form from DB
+      logout();
+      loginAsColvinChambers();
+      cy.get('[data-testid="pending-motions-tab"]').click();
+      cy.get('@pendingMotions')
+        .first()
+        .as('firstRow')
+        .find('[data-testid="add-edit-pending-motion-worksheet"]')
+        .click();
+
+      // test that hydrated date saves properly
+      cy.get('[data-testid="modal-confirm"]').click();
+
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
+
+      cy.get('@pendingMotions')
+        .first()
+        .as('firstRow')
+        .find('[data-testid="add-edit-pending-motion-worksheet"]')
+        .click();
+
+      finalBriefDueDate = generateRandomDate();
+      selectRandomStatusOfMatterEntry(
+        '[data-testid^="select-status-of-matter-"]',
+      ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
+        const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
+        cy.get(
+          '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+        ).clear();
+
+        cy.get(
+          '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+        ).type(finalBriefDueDate.longFormat);
+
+        cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
+          statusOfMatterKey,
+        );
+
+        cy.get(
+          '#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d',
+        ).type(primaryIssue);
+
+        cy.get('[data-testid="modal-confirm"]').click();
+
+        cy.get('@firstRow')
+          .find('td')
+          .eq(6)
+          .should('contain.text', finalBriefDueDate.shortFormat);
+
+        cy.get('@firstRow')
+          .find('td')
+          .eq(7)
+          .should('contain.text', statusOfMatterLabel);
+        cy.get('@pendingMotions')
+          .eq(1)
+          .should('contain.text', `${primaryIssue}`);
+      });
     });
   });
 });

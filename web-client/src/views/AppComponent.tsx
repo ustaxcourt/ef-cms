@@ -7,7 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
-import { ApplyStamp } from './StampMotion/ApplyStamp';
+import { GrantDenyMotion } from './GrantDenyMotion/GrantDenyMotion';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -22,6 +22,7 @@ import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { ChangePassword } from '@web-client/views/Login/ChangePassword';
 import { ColdCaseReport } from '@web-client/views/ColdCaseReport/ColdCaseReport';
+import { DocketClerkReport } from '@web-client/views/DocketClerkReport/DocketClerkReport';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -124,7 +125,7 @@ const pages = {
   AddTrialSession,
   AdvancedSearch,
   AppMaintenance,
-  ApplyStamp,
+  GrantDenyMotion,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -151,6 +152,7 @@ const pages = {
   DashboardIrsSuperuser,
   DashboardJudge,
   DashboardRespondent,
+  DocketClerkReport,
   DocketEntryQc,
   EditCaseDetails,
   EditCorrespondenceDocument,

@@ -1,11 +1,11 @@
 import { PublicClientState } from '@web-client/presenter/state-public';
-import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setPublicTrialSessionDetailsAction } from '@web-client/presenter/actions/Public/TrialSessions/setPublicTrialSessionDetailsAction';
+import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 
 describe('setPublicTrialSessionDetailsAction', () => {
   it('should set the public trial session details', async () => {
-    const mockTrialSession: PublicTrialSessionDetails = {
+    const mockTrialSession: RawPublicTrialSessionDetails = {
       address1: '123 Main St',
       calendaredCases: [],
       city: 'San Francisco',

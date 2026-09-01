@@ -59,7 +59,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'finalBriefDueDate',
-              toFormat: DATE_FORMATS.YYYYMMDD,
+              toFormat: DATE_FORMATS.ISO,
               value: e.target.value,
             });
             validateDocketEntryWorksheetSequence();

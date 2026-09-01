@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/17/2026, the script and docs are in sync; the following hand-managed packages are excluded by the upgrade script: `babel-jest`, `ts-jest`, `recharts`, `eslint-plugin-cypress`, and `aws-sigv4-sign`.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -31,7 +31,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    (cd web-api/runtimes/puppeteer && node ../../../scripts/npm/upgrade-npm-packages.ts)
 
    # web-api/terraform/modules/batch/docker-image/package.json
-   (cd ../../terraform/modules/batch/docker-image  && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
+   (cd web-api/terraform/modules/batch/docker-image && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
 1. After running, ensure all three package.json files are updated.
 
@@ -54,6 +54,10 @@ This command informs us of known security vulnerabilities. If transitive depende
 
 > **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
 > These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
+
+#### 1.3 Approve or deny scripts as needed
+
+Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
 
 ### 2. Update third-party dependencies
 
@@ -284,21 +288,34 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 - Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
+- As of July 27, 2026: **cerebral 6.0.0** is now published on npm. Still blocked for the same reasons as 5.2.x — the import syntax in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute` is incompatible. Keep pinned to 5.2.1 and `"github:ustaxcourt/cerebral-react#main"` respectively.
+
+### babel-plugin-cerebral
+**Installed Version: 1.0.2**
+
+- Required by `babel.config.js` to transpile Cerebral template-literal syntax (for example, `` state`foo` ``). Keep this pinned alongside the `cerebral` and `@cerebral/react` versions above.
+- See [removeCerebrealBabelPlugin.md](./removeCerebrealBabelPlugin.md) for the migration path if we remove this plugin in the future.
 
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.7.284**
+**Current Version Installed: 6.2.108**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
-### DWT
-**Current Installed DWT: 19.4.1**
+- Updated to next major version on 7/13/2026. `pdfjs` now supports at minimum Chrome version 125 and Safari version 18. However, after testing with older versions of Chrome, we can say that as long as the browser can run ES2022, it _should_ work.
 
-Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app.
+- As of 8/10/2026: Updated to **6.2.108** for [GHSA-hq66-cqwq-w95j](https://github.com/advisories/GHSA-hq66-cqwq-w95j) (arbitrary JavaScript execution on opening a malicious PDF, affecting `>=5.6.83 <6.2.108`). Re-verify `getPdfJs.ts` and `parsePdf.ts`, especially the `DOMMatrix` polyfill, in an experimental deploy — the Lambda-only failure mode does not reproduce locally.
+
+### DWT
+**Current Installed DWT: 19.4.2**
+
+Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
+
+- As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
@@ -331,6 +348,8 @@ If an update is available for DWT:
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
 - As of June 23, 2026: Puppeteer 25.2.0 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.0 update until `@sparticuz/chromium@150.x` is available.
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
+- As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
+- As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -345,14 +364,41 @@ If an update is available for DWT:
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
+### quill-delta-to-html
+**Installed Version: 0.12.1**
+
+- Used by `TextEditor.tsx` to convert Quill deltas to HTML. Keep this pinned alongside `quill` 1.3.7 until the embedded Microsoft Word editor replaces Quill.
+
+### jest and jest-environment-jsdom
+**Installed Versions:**
+**jest: 30.4.2**
+**jest-environment-jsdom: 30.4.1**
+
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
+- On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
+- On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+
+### websocket
+**Installed Version: 1.0.35**
+
+- Direct dependency for the local websocket server in `web-api/src/app-local.ts` and for the integration-test WebSocket polyfill in `web-client/integration-tests/helpers.ts`. Verify local stack websocket behavior after upgrading.
+
+### p-queue
+**Installed Version: 9.3.3**
+
+- `p-queue` v7 and above are ESM-only. Jest must transpile them via `transformIgnorePatterns` in `web-api/jest-unit.config.ts` (added December 10, 2025).
+- On September 19, 2025, upgrading past v6 caused module-import errors in GitHub Actions until the Jest config was updated. Patch upgrades within v9 are generally safe but require re-running the web-api unit tests.
+
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
-- As of June 23, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` which is the only published version of that package, which declares a peer dependency of `@babel/core@^7.0.0`. Attempting to install `@babel/core@8.x` causes peer-dependency conflicts that break `@babel/preset-react` and the rest of the babel preset chain. All four `@babel/*` packages have been added to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent the upgrade script from touching them. Revisit once `esbuild-plugin-babel-cached` publishes a version compatible with `@babel/core@^8`. Note: a nested override (e.g. `"esbuild-plugin-babel-cached": { "@babel/core": "^8" }`) could potentially bypass the peer-dependency conflict, but this may break at runtime if the plugin relies on `@babel/core` v7-specific APIs. Needs investigation before attempting ([PR #10187](https://github.com/ustaxcourt/ef-cms/pull/10187)).
+- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
+- As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
+- As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
 
 ### @types/node
-**Installed Version: 24.13.2**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.2, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.3**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.3, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -368,14 +414,22 @@ The major version of this package should match our major version of Node. We sho
 
 - As of June 23, 2026: Node.js updated to `v24.17.0`; `@types/node@24.13.x` is now available for the first time (previously stuck at `24.12.4`). Updated to **24.13.2**, the latest published version under major `24`. No `24.14+` published yet.
 
+- As of July 13, 2026: Updated to **24.13.3**, the latest published version under major `24`. No `24.14+` published yet.
+
+- As of 8/10/2026: **24.13.3** remains the latest published version under major `24` (latest overall is 26.2.0). No change.
+
 ### TypeScript
-**Installed Version: 6.0.3**
+**Installed Version: 7.0.2 and 6.0.2**
+
+- As of July 13, 2026, we have updated to TypeScript v7. However, version 7.0 does not ship with an API, so libraries that need it, such as `typescript-eslint` and `ts-node`, will not run. To fix this, we have an aliased version of TS 6.0.2 installed running simultaneously with TS v7, under `"typescript": "npm:@typescript/typescript6@6.0.2"` and `"@typescript/native": "npm:typescript@7.0.2"` respectively. TS v6 will be available for the libraries that need it, and `tsc` will use the new, faster v7. See [here](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0) for further details.
 
 **When upgrading TypeScript, make sure that the new version is supported by ts-jest and ts-node.**
 
 - After upgrading cypress past 15.14.0, it is now compatible with TS6. Updated tsconfig for cypress to support version 6 during the week of 5/18/2026
 
-- Ensure the pinned version of typescript globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version and is compatible with ts-node. On 7/08/2026, we started pulling TS7 when building this Dockerfile, and the batch job would not start up because ts-node was unable to find the TS compiler, so we pinned it to 6.0.3.
+- Ensure the pinned version of typescript globally installed in `web-api/terraform/modules/batch/docker-image/Dockerfile` matches the project-wide version and is compatible with ts-node. On 7/08/2026, we started pulling TS7 when building this Dockerfile, and the batch job would not start up because ts-node was unable to find the TS compiler, so we pinned it to 6.0.2.
+
+- On 7/13/2026, we updated the batch job docker to use the same aliased install as our package.json `typescript@npm:@typescript/typescript6@6.0.2`. Once TS 7.1.x is released, we should check if `ts-node` is compatible with it.
 
 ### ts-node
 **Installed Version: 10.9.2**
@@ -403,6 +457,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated.
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
+- July 13, 2026: it was decided to no longer update these packages outside of a vulnerability, due to the reasons above. Seeing as these packages are mostly CSS, it is unlikely any vulnerabilities will come up.
 
 ### minimatch, a 3rd party dependency of several of our packages
 **Installed Versions: <10.0.0**
@@ -415,29 +470,81 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternatives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
 - As of June 25, 2026: minimatch 10.2.5 is the latest. Still blocked since upstream packages have not yet migrated to minimatch 10.x.
+- July 13, 2026: An earlier note incorrectly stated that `npm audit` no longer reported this vulnerability.
+- As of July 27, 2026: `npm audit` still flags `minimatch` 2.0.0–10.0.2 (high) via the `brace-expansion` advisory ([GHSA-7r86-64r9-qc3w](https://github.com/advisories/GHSA-7r86-64r9-qc3w), DoS via unbounded expansion length). A `brace-expansion` override above 5.0.7 clears most of the cascade through `minimatch`, `glob`, and the Jest/Babel/ESLint dependency trees. Upstream packages migrating to minimatch 10.x remains the long-term fix.
 
 ### eslint and @eslint/js
 **Installed Versions:**
-**eslint: 9.39.4**
-**@eslint/js: 9.39.4**
+**eslint: 9.39.5**
+**@eslint/js: 9.39.5**
 - We have two eslint plugins that support only up to version 9 of eslint as a peer dependency, so we cannot update to version 10 yet. These are eslint-plugin-jsx-a11y, eslint-plugin-react.
 - There are new patches being published for eslint version 9. Check the npm website to see if there are new ones and manually install them if so.
 - As of June 25, 2026: eslint 10.5.0 is the latest, but still blocked since `eslint-plugin-jsx-a11y` and `eslint-plugin-react` still declare `eslint ^9` as their peer dependency. `9.39.4` is the latest 9.x patch; nothing new to install.
+- July 13, 2026: updated to 9.39.5
+- As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
+- As of 8/10/2026: eslint **10.8.1** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers do not accept eslint 10. Latest 9.x remains **9.39.5**.
+
+### eslint-plugin-cypress
+**Installed Version: 6.4.4**
+
+- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is excluded by the upgrade script's `caveats` array.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
 
 ### js-yaml
+**Installed Version: 4.3.1**
 - On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
+- July 27, 2026: moved the override from 4.2.0 to 4.3.0. The 4.2.0 pin sat inside the vulnerable range for merge-key chain quadratic CPU consumption ([GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m), CVE-2026-59869). Keep the override at 4.3.0 or later unless all transitive consumers are confirmed to resolve to a patched version.
+- As of 8/10/2026: moved the override from 4.3.0 to **4.3.1**. The 4.3.0 pin sat inside the vulnerable range for quadratic CPU consumption in `!!omap` resolution ([GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj), CVE-2026-59870). **5.2.3** is the latest overall but is a major jump for transitive consumers; **4.3.1** is the minimal patched version.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
-**image-blob-reduce: 5.0.0**
-**pica: 10.0.1**
+**image-blob-reduce: 5.0.1**
+**pica: 10.0.2**
 - image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
 - If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
+
+### @joi/date
+**Installed Version: 2.1.1**
+
+- 8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
+From
+
+```ts
+import joiDate from '@joi/date';
+...
+const joi: Root = joiImported.extend(joiDate);
+```
+to
+
+```ts
+import { JoiDate } from '@joi/date';
+...
+const joi: Root = joiImported.extend(JoiDate);
+```
+
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
+
+- 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
+
+### recharts
+**Installed Version: 3.10.1**
+
+- Pinned because `@recharts/devtools` does not yet peer-match recharts 3.10.x. Upgrade manually in coordination with `@recharts/devtools` when a compatible devtools release is available. This package is excluded by the upgrade script's `caveats` array.
+
+### @recharts/devtools
+**Installed Version: 0.0.14**
+
+- 8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
+- As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
+
+### aws-sigv4-sign
+**Installed Version: 1.2.1**
+
+- Pinned until tested in an experimental environment with payment-portal integration. A 2.x release is available but was reverted in [PR #10354](https://github.com/ustaxcourt/ef-cms/pull/10354) pending validation. This package is excluded by the upgrade script's `caveats` array.
 
 ## Troubleshooting
 

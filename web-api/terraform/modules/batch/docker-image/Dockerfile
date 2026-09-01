@@ -17,5 +17,5 @@ WORKDIR /usr/src/app
 COPY . .
 RUN npm ci
 
-RUN npm install -g ts-node@10.9.2 typescript@6.0.3
+RUN npm install -g ts-node@10.9.2 typescript@npm:@typescript/typescript6@6.0.2
 CMD ["ts-node", "src/docketEntryBatchDownloader.ts"]

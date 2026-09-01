@@ -12,6 +12,7 @@ import {
   getBusinessDateInFuture,
 } from '@shared/business/utilities/DateHandler';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
@@ -34,7 +35,10 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import {
+  getClerkOfTheCourtInfo,
+  getFeatureFlagValue,
+} from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { retrySettled } from '@web-api/utilities/retrySettled';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -163,20 +167,7 @@ const generateNoticeOfReceipt = async ({
 
   let accessCode = generateAccessCode();
 
-  const { CLERK_OF_THE_COURT_CONFIGURATION } =
-    applicationContext.getConstants();
-
-  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
-    CLERK_OF_THE_COURT_CONFIGURATION,
-  ]);
-
-  const {
-    name,
-    title,
-  }: {
-    name: string;
-    title: string;
-  } = CLERK_OF_THE_COURT_RECORD.value.current;
+  const { name, title } = await getClerkOfTheCourtInfo();
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
@@ -634,6 +625,10 @@ export const serveCaseToIrs = async (
 
     if (caseEntity.orderDesignatingPlaceOfTrial) {
       const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+      const newTrialCitiesEnabled =
+        (await getFeatureFlagValue<boolean>(
+          ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        )) ?? false;
 
       generatedDocuments.push(
         generateDraftDocument({
@@ -643,7 +638,9 @@ export const serveCaseToIrs = async (
           document: orderDesignatingPlaceOfTrial,
           replacements: [
             formattedFiledDate,
-            caseEntity.procedureType.toLowerCase(),
+            newTrialCitiesEnabled === true
+              ? ''
+              : ` ${caseEntity.procedureType.toLowerCase()}`,
           ],
         }),
       );

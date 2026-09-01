@@ -8,7 +8,7 @@ module "worker_lambda" {
   role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "900"
-  memory_size    = "3008"
+  memory_size    = "10240"
 }
 
 resource "aws_sqs_queue" "worker_queue" {

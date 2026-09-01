@@ -5,6 +5,7 @@ import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
 export const FilePetitionStep4 = connect(
@@ -13,6 +14,8 @@ export const FilePetitionStep4 = connect(
       sequences.deleteValidationErrorMessageSequence,
     filePetitionHelper: state.filePetitionHelper,
     form: state.form,
+    newTrialCitiesEnabled:
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key],
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -21,6 +24,7 @@ export const FilePetitionStep4 = connect(
     deleteValidationErrorMessageSequence,
     filePetitionHelper,
     form,
+    newTrialCitiesEnabled,
     petitionGenerationLiveValidationSequence,
     updateFormValueSequence,
   }) {
@@ -56,7 +60,9 @@ export const FilePetitionStep4 = connect(
                   validationKey: ['procedureType'],
                 });
 
-                form.preferredTrialCity = '';
+                if (!newTrialCitiesEnabled) {
+                  form.preferredTrialCity = '';
+                }
               }}
             />
           </div>
@@ -65,8 +71,9 @@ export const FilePetitionStep4 = connect(
               <h2>U.S. Tax Court trial locations</h2>
               <div className="max-width-900 tax-case-info">
                 {`This is ${isPetitioner ? 'your' : 'the'} preferred location where ${isPetitioner ? 'your' : 'the'} case may be heard if
-                it goes to trial. Trial locations may vary based on case
-                procedure selected.`}
+                it goes to trial.`}
+                {!newTrialCitiesEnabled &&
+                  ' Trial locations may vary based on case procedure selected.'}
                 <span>
                   {' '}
                   <InlineLink href="https://www.ustaxcourt.gov/dpt_cities.html">
@@ -76,7 +83,9 @@ export const FilePetitionStep4 = connect(
               </div>
               <TrialCity
                 label="Preferred trial location"
-                procedureType={form.procedureType}
+                procedureType={
+                  newTrialCitiesEnabled ? 'All' : form.procedureType
+                }
                 showDefaultOption={true}
                 value={form.preferredTrialCity || ''}
                 onBlur={() => {

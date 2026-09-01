@@ -34,6 +34,11 @@ export const submitCourtIssuedOrderAction = async ({
   const documentMetadata = Object.fromEntries(
     Object.entries({
       additionalOrderTextArray: formData.additionalOrderTextArray,
+      deniedAsMoot: formData.deniedAsMoot,
+      deniedWithoutPrejudice: formData.deniedWithoutPrejudice,
+      disposition: formData.disposition,
+      dueDateMessage: formData.dueDateMessage,
+      filingParty: formData.filingParty,
       affectedDocketEntries: formData.affectedDocketEntries,
       attachments: formData.attachments,
       date: formData.date,
@@ -58,6 +63,7 @@ export const submitCourtIssuedOrderAction = async ({
       judge: formData.judge,
       judgeWithTitle: formData.judgeWithTitle,
       jurisdiction: formData.jurisdiction,
+      motionOrderResponse: formData.motionOrderResponse,
       motionOrderResponseFilingDate: formData.motionOrderResponseFilingDate,
       orderType: formData.orderType,
       parentMessageId: formData.parentMessageId,
@@ -72,6 +78,7 @@ export const submitCourtIssuedOrderAction = async ({
       signedJudgeName: formData.signedJudgeName,
       statusReportFilingDate: formData.statusReportFilingDate,
       statusReportIndex: formData.statusReportIndex,
+      strickenFromTrialSession: formData.strickenFromTrialSession,
       strickenFromTrialSessions: formData.strickenFromTrialSessions,
       trialLocation: formData.trialLocation,
     }).filter(([, value]) => value !== undefined),

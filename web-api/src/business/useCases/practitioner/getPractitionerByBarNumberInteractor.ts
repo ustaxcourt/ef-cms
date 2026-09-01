@@ -1,12 +1,15 @@
 import {
   Practitioner,
-  PublicPractitionerByBarNumberSummary,
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import {
+  PublicContact,
+  RawPublicContact,
+} from '@shared/business/entities/cases/PublicContact';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -16,9 +19,7 @@ export const getPractitionerByBarNumberInteractor = async (
   _applicationContext: ServerApplicationContext,
   { barNumber }: { barNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<
-  RawPractitioner | PublicPractitionerByBarNumberSummary[] | undefined
-> => {
+): Promise<RawPractitioner | RawPublicContact[] | undefined> => {
   const isLoggedInUser = !!authorizedUser?.userId;
 
   if (
@@ -39,18 +40,10 @@ export const getPractitionerByBarNumberInteractor = async (
     ? practitioner
     : practitioner
       ? [
-          {
-            admissionsDate: practitioner.admissionsDate,
-            admissionsStatus: practitioner.admissionsStatus,
-            barNumber: practitioner.barNumber,
-            contact: {
-              state: practitioner.originalBarState,
-            },
-            name: practitioner.name,
-            practiceType: practitioner.practiceType,
-            practitionerType: practitioner.practitionerType,
-            originalBarState: practitioner.originalBarState,
-          },
+          new PublicContact({
+            ...practitioner,
+            state: practitioner.originalBarState,
+          }).toRawObject(),
         ]
       : []; // return empty array for public user if no practitioner found
 };
