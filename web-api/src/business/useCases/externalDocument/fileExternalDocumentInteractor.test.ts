@@ -838,7 +838,11 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should allow IRS practitioner to file an entry of appearance', async () => {
-    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
+    getUserById.mockResolvedValue({
+      ...mockIrsPractitionerUser,
+      email: 'mockIrsPractitioner2@example.com',
+      userId: '4eb0a70d-ed4c-4715-a95f-261cb1441db0',
+    } as DbUser);
     await fileExternalDocumentInteractor(
       applicationContext,
       {

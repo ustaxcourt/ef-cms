@@ -50,4 +50,13 @@ describe('canUserFileFirstIrsFiling', () => {
       canUserFileFirstIrsFiling(privatePractitionerUser, MOCK_CASE),
     ).toEqual(false);
   });
+
+  it('should work on a case using hasIrsPractitioner instead of list of irsPractitioners', () => {
+    expect(
+      canUserFileFirstIrsFiling(privatePractitionerUser, {
+        ...MOCK_CASE,
+        hasIrsPractitioner: true,
+      } as any),
+    ).toEqual(false);
+  });
 });
