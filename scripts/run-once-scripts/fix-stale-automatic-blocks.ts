@@ -170,9 +170,16 @@ const updateStaleCases = withLocking(
     { docketNumbers }: { docketNumbers: string[] },
   ): Promise<number> => {
     // A case may have been re-blocked between the scan and now, so re-decide under lock.
-    const { stale: stillStale } = await findStaleDocketNumbers({
-      docketNumbers,
-    });
+    const { stale: stillStale, failed: rescanFailed } =
+      await findStaleDocketNumbers({
+        docketNumbers,
+      });
+
+    if (rescanFailed.length) {
+      throw new Error(
+        `Failed to re-evaluate cases under lock: ${rescanFailed.join(', ')}`,
+      );
+    }
 
     if (!stillStale.length) return 0;
 

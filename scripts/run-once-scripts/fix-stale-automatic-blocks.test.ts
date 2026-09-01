@@ -149,6 +149,10 @@ jest.mock(
   }),
 );
 
+jest.mock('@web-api/persistence/postgres/utils/transactions', () => ({
+  withTransaction: (fn: () => Promise<unknown>) => fn(),
+}));
+
 jest.mock('@web-api/persistence/postgres/utils/mutex', () => ({
   withLocking:
     (
@@ -425,6 +429,26 @@ describe('fix-stale-automatic-blocks.ts', () => {
     );
     expect(console.log).toHaveBeenCalledWith('Skipped 1 cases:', ['109-20']);
     expect(getCaseRow('109-20')).toMatchObject({ automaticBlocked: true });
+  });
+
+  it('should skip a batch when the under-lock re-scan fails to evaluate cases', async () => {
+    caseTable = [blockedCase({ docketNumber: '112-20' })];
+    mockGetCasesByDocketNumbers
+      .mockResolvedValueOnce([{ docketNumber: '112-20' }])
+      .mockRejectedValueOnce(new Error('load failed under lock'));
+    mockUpdateCaseAutomaticBlock.mockResolvedValue({
+      automaticBlocked: false,
+    });
+
+    await runScript();
+
+    expect(mockPgUpdateTable).not.toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith(
+      'Skipped batch; could not lock or update',
+      expect.objectContaining({ docketNumbers: ['112-20'] }),
+    );
+    expect(console.log).toHaveBeenCalledWith('Skipped 1 cases:', ['112-20']);
+    expect(getCaseRow('112-20')).toMatchObject({ automaticBlocked: true });
   });
 
   it('should not update a case that was re-blocked between the scan and the update', async () => {
