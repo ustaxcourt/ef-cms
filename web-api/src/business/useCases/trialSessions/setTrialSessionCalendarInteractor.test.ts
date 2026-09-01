@@ -37,6 +37,7 @@ import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persist
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { PENDING_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 
 describe('setTrialSessionCalendarInteractor', () => {
   const TRIAL_SESSION_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -395,6 +396,48 @@ describe('setTrialSessionCalendarInteractor', () => {
         expect.objectContaining({
           docketNumber: manuallyAddedDocketNumber,
           ...CLEARED_AUTOMATIC_BLOCK_FIELDS,
+        }),
+      ]),
+    );
+  });
+
+  it('should restore automatic block fields for manually added QC-incomplete cases removed when setting the calendar', async () => {
+    const manuallyAddedDocketNumber = '102-19';
+
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: manuallyAddedDocketNumber,
+        ...CLEARED_AUTOMATIC_BLOCK_FIELDS,
+        docketEntries: [PENDING_DOCKET_ENTRY],
+        qcCompleteForTrial: {
+          [TRIAL_SESSION_ID]: false,
+        },
+        trialDate: '2020-08-28T01:49:58.121Z',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: TRIAL_SESSION_ID,
+        trialTime: '11:00',
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
+    getEligibleCasesForTrialSession.mockResolvedValue([]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: TRIAL_SESSION_ID,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(upsertCases).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: manuallyAddedDocketNumber,
+          trialDate: undefined,
+          trialSessionId: undefined,
+          automaticBlocked: true,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         }),
       ]),
     );
