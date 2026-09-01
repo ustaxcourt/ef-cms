@@ -1,4 +1,4 @@
-import { isSealedCase } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   PRACTICE_TYPE,
   ROLES,
@@ -11,12 +11,10 @@ export const canUserFileFirstIrsFiling = (
   caseDetail: RawCase,
 ): boolean => {
   if (user.role === ROLES.irsPractitioner) {
-    const isCaseSealed = isSealedCase(caseDetail);
     const isDojPractitioner =
       (user as RawPractitioner).practiceType === PRACTICE_TYPE.DOJ;
-    const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
 
-    return !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
+    return Case.isFirstIrsFiling(caseDetail) && !isDojPractitioner;
   }
 
   return false;
