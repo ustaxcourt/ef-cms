@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
@@ -57,13 +58,14 @@ const findCasesWithAutomaticBlockedTrue = async () => {
   return candidates;
 };
 
-const updateCase = async (docketNumber: string): Promise<Case> => {
-  const rawCases = await getCasesByDocketNumbers({
-    docketNumbers: [docketNumber],
-    excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
-  });
+const updateCase = async (
+  rawCase: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'irsPractitioners'
+  >,
+): Promise<Case> => {
   const updatedCase = await updateCaseAutomaticBlock({
-    caseEntity: new Case(rawCases[0], { authorizedUser: undefined }),
+    caseEntity: new Case(rawCase, { authorizedUser: undefined }),
   });
   return updatedCase;
 };
@@ -74,7 +76,11 @@ const updateCaseWithLocking = withLocking(
     _applicationContext,
     { docketNumber }: { docketNumber: string },
   ): Promise<boolean> => {
-    const updatedCase = await updateCase(docketNumber);
+    const [oldCase] = await getCasesByDocketNumbers({
+      docketNumbers: [docketNumber],
+      excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
+    });
+    const updatedCase = await updateCase(oldCase);
 
     if (dryRun) {
       return !updatedCase.automaticBlocked;
@@ -87,8 +93,10 @@ const updateCaseWithLocking = withLocking(
         table: 'dwCase',
         values: {
           automaticBlocked: updatedCase.automaticBlocked,
-          automaticBlockedDate: null,
-          automaticBlockedReason: null,
+          automaticBlockedDate: updatedCase.automaticBlockedDate
+            ? calculateDate({ dateString: updatedCase.automaticBlockedDate })
+            : null,
+          automaticBlockedReason: updatedCase.automaticBlockedReason ?? null,
           hasPendingItems: updatedCase.hasPendingItems,
         },
         where: qb => qb.where('docketNumber', '=', docketNumber),
