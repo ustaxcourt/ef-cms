@@ -41,10 +41,11 @@ The `trivy-baseline` job runs on every push to staging and scans all four images
 
 ## Flipping to blocking
 
-Each scan has a `ROLLOUT GUARD` comment marking it as warn-only. To make a scan blocking:
+The shared `.github/actions/dawson-trivy-image-scan/action.yml` action has the `ROLLOUT GUARD`
+marking image scans as warn-only. To make image scans blocking:
 
 1. Triage existing findings — either fix them or add to `.trivyignore`
-2. Change `exit-code: '0'` to `exit-code: '1'` for that scan step
+2. Change `exit-code: '0'` to `exit-code: '1'` in `dawson-trivy-image-scan/action.yml`
 3. The `containers-gate` job will then fail PRs that introduce new vulnerabilities
 
 Confirm with the team lead before flipping any scan to blocking.

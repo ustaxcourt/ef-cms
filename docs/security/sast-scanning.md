@@ -80,7 +80,7 @@ Findings appear in the **Security tab** under category `/language:javascript-typ
 
 ## ShellCheck
 
-Runs `./run-shellcheck.sh` which finds all `.sh` files (excluding node_modules, .terraform, dist, coverage) and runs ShellCheck with `-S error` severity. Only error-level findings fail the build.
+Runs `./run-shellcheck.sh` which finds all project `.sh` files (excluding generated Husky files, node_modules, .terraform, dist, and coverage) and runs ShellCheck with `-S error` severity. Only error-level findings fail the build.
 
 ## Security Gate
 

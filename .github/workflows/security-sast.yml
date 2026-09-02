@@ -3,6 +3,7 @@ name: Security - SAST
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
+    branches: [staging]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -69,10 +70,8 @@ jobs:
             --baseline-commit "$BASE_SHA"
 
       - name: Upload SARIF
-        if: >-
-          always() &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: semgrep-results.sarif
           category: semgrep
@@ -159,11 +158,8 @@ jobs:
           exit $EXIT_CODE
 
       - name: Upload SARIF
-        if: >-
-          always() &&
-          hashFiles('checkov-results.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: checkov-results.sarif
           category: checkov
