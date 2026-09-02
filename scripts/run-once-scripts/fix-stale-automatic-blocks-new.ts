@@ -57,13 +57,9 @@ const findCasesWithAutomaticBlockedTrue = async () => {
   return candidates;
 };
 
-const updateCase = async (docketNumber: string): Promise<Case> => {
-  const rawCases = await getCasesByDocketNumbers({
-    docketNumbers: [docketNumber],
-    excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
-  });
+const updateCase = async (caseEntity: Case): Promise<Case> => {
   const updatedCase = await updateCaseAutomaticBlock({
-    caseEntity: new Case(rawCases[0], { authorizedUser: undefined }),
+    caseEntity: new Case(caseEntity, { authorizedUser: undefined }),
   });
   return updatedCase;
 };
@@ -74,13 +70,23 @@ const updateCaseWithLocking = withLocking(
     _applicationContext,
     { docketNumber }: { docketNumber: string },
   ): Promise<boolean> => {
-    const updatedCase = await updateCase(docketNumber);
+    const oldCase = await getCasesByDocketNumbers({
+      docketNumbers: [docketNumber],
+      excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
+    })[0];
+    const updatedCase = await updateCase(oldCase);
 
     if (dryRun) {
       return !updatedCase.automaticBlocked;
     }
 
-    if (updatedCase.automaticBlocked) return false;
+    if (
+      oldCase.automaticBlocked === updatedCase.automaticBlocked &&
+      oldCase.automaticBlockedReason === updatedCase.automaticBlockedReason &&
+      oldCase.hasPendingItems === updatedCase.hasPendingItems
+    ) {
+      return false;
+    }
 
     await withTransaction(async () => {
       await pgUpdateTable({
@@ -124,12 +130,12 @@ const updateCaseWithLocking = withLocking(
     casesWithAutomaticBlockedTrue.map(({ docketNumber }) =>
       limit(async () => {
         try {
-          const wasUnblocked = await updateCaseWithLocking(
+          const wasUpdated = await updateCaseWithLocking(
             applicationContext,
             { docketNumber },
             undefined,
           );
-          if (wasUnblocked) updated++;
+          if (wasUpdated) updated++;
         } catch (e) {
           console.error(`Failed to update case ${docketNumber}`, e);
           failed.push(docketNumber);
@@ -142,7 +148,7 @@ const updateCaseWithLocking = withLocking(
   );
 
   console.log(
-    `${updated} cases are no longer automatically blocked; ${failed.length} failed to update.`,
+    `${updated} cases were updated; ${failed.length} failed to update.`,
   );
 
   if (failed.length) {
