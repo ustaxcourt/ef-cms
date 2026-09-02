@@ -11,6 +11,7 @@ DEPLOYING_COLOR=$2
 REGION="us-east-1"
 API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+MANAGED_LOGIN_URL="https://ef-cms-${ENV}.auth.us-east-1.amazoncognito.com"
 
 # Unique id per release used by CloudWatch RUM to locate the matching source
 # maps. Must match the S3 folder the `.map` files are uploaded to (deploy-ui.sh).
@@ -37,7 +38,7 @@ STAGE="${ENV}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \
   SESSION_TIMEOUT="${SESSION_TIMEOUT}" \
   SESSION_MODAL_TIMEOUT="${SESSION_MODAL_TIMEOUT}" \
-  MANAGED_LOGIN_DOMAIN="${MANAGED_LOGIN_DOMAIN}" \
+  MANAGED_LOGIN_DOMAIN="${MANAGED_LOGIN_URL}" \
   IDP_NAME="${IDP_NAME}" \
   COGNITO_CLIENT_ID="${CLIENT_ID}" \
   PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
