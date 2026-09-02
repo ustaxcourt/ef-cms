@@ -355,11 +355,11 @@ Used in: `.github/workflows/security-sast.yml` (line 97)
 Used in: `.github/actions/dawson-gitleaks/action.yml`
 
 1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
-1. Search the project for `gitleaks/releases/download/` and update both the version in the URL path and the filename. For example:
-   ```bash
-   curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.31.0/gitleaks_8.31.0_linux_x64.tar.gz \
-     | tar -xz -C /usr/local/bin gitleaks
+1. Update the `version` input in `.github/actions/dawson-gitleaks/action.yml`. For example:
+   ```yaml
+   version: 8.31.0
    ```
+   The download URL and archive filename are derived from this value.
 
 #### 8.4 lockfile-lint npx
 
