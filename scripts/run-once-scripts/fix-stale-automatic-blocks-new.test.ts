@@ -188,11 +188,6 @@ const getDocketNumbersFromWhere = (
   return captured;
 };
 
-const getUpdatedDocketNumbers = (): string[][] =>
-  mockPgUpdateTable.mock.calls.map(([{ where }]) =>
-    getDocketNumbersFromWhere(where),
-  );
-
 const getCaseRow = (docketNumber: string): CaseRow | undefined =>
   caseTable.find(row => row.docketNumber === docketNumber);
 
@@ -310,7 +305,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
       hasPendingItems: true,
     });
     expect(console.log).toHaveBeenCalledWith(
-      '0 cases were updated; 0 failed to update.',
+      '0 cases are no longer automatically blocked; 0 failed to update.',
     );
   });
 
@@ -346,7 +341,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
     });
   });
 
-  it('should persist when hasPendingItems changes even if automaticBlocked stays true', async () => {
+  it('should skip persisting when hasPendingItems changes but automaticBlocked stays true', async () => {
     caseTable = [blockedCase({ docketNumber: '113-20' })];
     mockGetCasesByDocketNumbers.mockImplementation(
       ({ docketNumbers }: { docketNumbers: string[] }) =>
@@ -370,25 +365,15 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
 
     await runScript();
 
-    expect(mockPgUpdateTable).toHaveBeenCalledTimes(1);
-    expect(mockPgUpdateTable.mock.calls[0][0]).toMatchObject({
-      table: 'dwCase',
-      values: {
-        automaticBlocked: true,
-        automaticBlockedDate: null,
-        automaticBlockedReason: 'Pending Item',
-        hasPendingItems: false,
-      },
-    });
-    expect(getUpdatedDocketNumbers()).toEqual([['113-20']]);
+    expect(mockPgUpdateTable).not.toHaveBeenCalled();
     expect(getCaseRow('113-20')).toMatchObject({
       automaticBlocked: true,
       automaticBlockedReason: 'Pending Item',
-      hasPendingItems: false,
+      hasPendingItems: true,
     });
   });
 
-  it('should persist when automaticBlockedReason changes even if automaticBlocked stays true', async () => {
+  it('should skip persisting when automaticBlockedReason changes but automaticBlocked stays true', async () => {
     caseTable = [blockedCase({ docketNumber: '120-20' })];
     mockGetCasesByDocketNumbers.mockImplementation(
       ({ docketNumbers }: { docketNumbers: string[] }) =>
@@ -412,11 +397,10 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
 
     await runScript();
 
-    expect(mockPgUpdateTable).toHaveBeenCalledTimes(1);
-    expect(getUpdatedDocketNumbers()).toEqual([['120-20']]);
+    expect(mockPgUpdateTable).not.toHaveBeenCalled();
     expect(getCaseRow('120-20')).toMatchObject({
       automaticBlocked: true,
-      automaticBlockedReason: 'Pending Item and Due Date',
+      automaticBlockedReason: 'Pending Item',
       hasPendingItems: true,
     });
   });
@@ -449,7 +433,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
     expect(getCaseRow('107-20')).toMatchObject({ automaticBlocked: true });
     expect(getCaseRow('108-20')).toMatchObject({ automaticBlocked: true });
     expect(console.log).toHaveBeenCalledWith(
-      '1 cases were updated; 0 failed to update.',
+      '1 cases are no longer automatically blocked; 0 failed to update.',
     );
   });
 
@@ -465,7 +449,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
       expect.any(Error),
     );
     expect(console.log).toHaveBeenCalledWith(
-      '0 cases were updated; 1 failed to update.',
+      '0 cases are no longer automatically blocked; 1 failed to update.',
     );
     expect(console.log).toHaveBeenCalledWith('Failed to update these cases:', [
       '114-20',
@@ -496,7 +480,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
       expect.any(Error),
     );
     expect(console.log).toHaveBeenCalledWith(
-      '0 cases were updated; 1 failed to update.',
+      '0 cases are no longer automatically blocked; 1 failed to update.',
     );
     expect(console.log).toHaveBeenCalledWith('Failed to update these cases:', [
       '115-20',
@@ -547,7 +531,7 @@ describe('fix-stale-automatic-blocks-new.ts', () => {
       0,
     );
     expect(console.log).toHaveBeenCalledWith(
-      '0 cases were updated; 0 failed to update.',
+      '0 cases are no longer automatically blocked; 0 failed to update.',
     );
   });
 
