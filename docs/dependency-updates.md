@@ -268,7 +268,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
-1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
 ### 7. Wrap up
 
@@ -299,12 +299,12 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `actions/setup-node` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/setup-node/releases) |
 | `actions/setup-python` | `security-sast.yml` (Checkov job) | [releases](https://github.com/actions/setup-python/releases) |
 | `actions/dependency-review-action` | `security-supply-chain.yml` | [releases](https://github.com/actions/dependency-review-action/releases) |
-| `github/codeql-action/init`, `analyze`, `upload-sarif` | `security-sast.yml`, all SARIF uploads | [releases](https://github.com/github/codeql-action/releases) |
-| `ankane/setup-opensearch` | `security-dast.yml`, `security-containers.yml` | [releases](https://github.com/ankane/setup-opensearch/releases) |
+| `github/codeql-action/init`, `analyze` | `security-sast.yml`; SARIF upload is centralized in `dawson-upload-sarif` | [releases](https://github.com/github/codeql-action/releases) |
+| `ankane/setup-opensearch` | `dawson-app-setup` action | [releases](https://github.com/ankane/setup-opensearch/releases) |
 | `zaproxy/action-api-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-api-scan/releases) |
 | `zaproxy/action-full-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-full-scan/releases) |
 | `zaproxy/action-baseline-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline-scan/releases) |
-| `aquasecurity/trivy-action` | `security-supply-chain.yml`, `security-containers.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
+| `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
 
 **Steps to update a `uses:` pin:**
 
@@ -317,7 +317,7 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 4. Update every occurrence to the new version tag.
 5. Verify CI passes before merging.
 
-> **Important:** Some actions appear in multiple workflow files. Always update all occurrences to the same version. For example, `github/codeql-action/upload-sarif@v4` appears in `security-sast.yml`, `security-dast.yml`, `security-supply-chain.yml`, `security-secrets.yml`, and `security-containers.yml` — all must match.
+> **Important:** Some actions are centralized in reusable composite actions. Update the action definition rather than copying a version change into each caller.
 
 #### 8.0.1 Container images in `services:` blocks (manual — monthly)
 
@@ -352,7 +352,7 @@ Used in: `.github/workflows/security-sast.yml` (line 97)
 
 #### 8.3 Gitleaks binary download
 
-Used in: `.github/workflows/security-secrets.yml` (lines 39 and 83 — **both must be updated to the same version**)
+Used in: `.github/actions/dawson-gitleaks/action.yml`
 
 1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
 1. Search the project for `gitleaks/releases/download/` and update both the version in the URL path and the filename. For example:
@@ -382,7 +382,7 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
    ```
 3. The install URL and filename derive from the variable automatically — no other changes needed.
 
-> **Note:** The `opensearch-version:` input in `security-dast.yml` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
+> **Note:** The `opensearch-version:` input in `dawson-app-setup` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
 
 ## Configurations
 **Safe to upgrade, but we use a non-standard configuration intentionally**

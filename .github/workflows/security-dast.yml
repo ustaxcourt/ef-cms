@@ -86,10 +86,8 @@ jobs:
           retention-days: 30
 
       - name: Upload SARIF to Security tab (${{ matrix.role }})
-        if: >-
-          always() &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: report_json
           category: zap-api-${{ matrix.role }}
@@ -105,12 +103,8 @@ jobs:
           artifact_name: zap-public-api-report
 
       - name: Upload SARIF to Security tab (public-api)
-        if: >-
-          matrix.role == 'petitioner' &&
-          always() &&
-          hashFiles('report_json') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always() && matrix.role == 'petitioner'
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: report_json
           category: zap-public-api
