@@ -19,6 +19,18 @@ tfenv install 1.16.0
 tfenv use 1.16.0
 ```
 
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.95`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
 </details>
 <details><summary>Dependency Updates - Week of 2026-08-24</summary>
 
