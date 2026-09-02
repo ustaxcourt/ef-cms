@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
@@ -57,9 +58,14 @@ const findCasesWithAutomaticBlockedTrue = async () => {
   return candidates;
 };
 
-const updateCase = async (caseEntity: Case): Promise<Case> => {
+const updateCase = async (
+  rawCase: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'irsPractitioners'
+  >,
+): Promise<Case> => {
   const updatedCase = await updateCaseAutomaticBlock({
-    caseEntity: new Case(caseEntity, { authorizedUser: undefined }),
+    caseEntity: new Case(rawCase, { authorizedUser: undefined }),
   });
   return updatedCase;
 };
@@ -70,10 +76,10 @@ const updateCaseWithLocking = withLocking(
     _applicationContext,
     { docketNumber }: { docketNumber: string },
   ): Promise<boolean> => {
-    const oldCase = await getCasesByDocketNumbers({
+    const [oldCase] = await getCasesByDocketNumbers({
       docketNumbers: [docketNumber],
       excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
-    })[0];
+    });
     const updatedCase = await updateCase(oldCase);
 
     if (dryRun) {
@@ -93,8 +99,10 @@ const updateCaseWithLocking = withLocking(
         table: 'dwCase',
         values: {
           automaticBlocked: updatedCase.automaticBlocked,
-          automaticBlockedDate: null,
-          automaticBlockedReason: null,
+          automaticBlockedDate: updatedCase.automaticBlockedDate
+            ? calculateDate({ dateString: updatedCase.automaticBlockedDate })
+            : null,
+          automaticBlockedReason: updatedCase.automaticBlockedReason ?? null,
           hasPendingItems: updatedCase.hasPendingItems,
         },
         where: qb => qb.where('docketNumber', '=', docketNumber),
