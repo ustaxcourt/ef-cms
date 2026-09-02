@@ -105,11 +105,8 @@ jobs:
           output: trivy-results.sarif
 
       - name: Upload SARIF to Security tab
-        if: >-
-          always() &&
-          hashFiles('trivy-results.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: trivy-results.sarif
           category: trivy

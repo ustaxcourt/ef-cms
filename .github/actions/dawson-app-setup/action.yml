@@ -1,7 +1,10 @@
 name: DAWSON App Setup
-description: Start DAWSON locally — OpenSearch, Postgres, app process, and wait. Single source of truth for all CI workflows.
+description: Configure and start DAWSON locally. Single source of truth for all CI workflows.
 
 inputs:
+  configure_sysctl:
+    description: Whether to configure kernel limits for browser-heavy test suites.
+    default: 'false'
   log_file:
     description: Path to redirect DAWSON stdout/stderr.
     required: true
@@ -13,6 +16,15 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Configure sysctl limits
+      if: ${{ inputs.configure_sysctl == 'true' }}
+      shell: bash
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+
     - name: Setup OpenSearch
       uses: ankane/setup-opensearch@v1
       with:
@@ -37,4 +49,5 @@ runs:
       env:
         WAIT_FLAGS: ${{ inputs.wait_flags }}
       run: |
-        env $WAIT_FLAGS ./wait-until-services.sh
+        read -r -a WAIT_ARGS <<< "$WAIT_FLAGS"
+        env "${WAIT_ARGS[@]}" ./wait-until-services.sh
