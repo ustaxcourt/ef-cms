@@ -86,7 +86,13 @@ const updateCaseWithLocking = withLocking(
       return !updatedCase.automaticBlocked;
     }
 
-    if (updatedCase.automaticBlocked) return false;
+    if (
+      oldCase.automaticBlocked === updatedCase.automaticBlocked &&
+      oldCase.automaticBlockedReason === updatedCase.automaticBlockedReason &&
+      oldCase.hasPendingItems === updatedCase.hasPendingItems
+    ) {
+      return false;
+    }
 
     await withTransaction(async () => {
       await pgUpdateTable({
@@ -132,12 +138,12 @@ const updateCaseWithLocking = withLocking(
     casesWithAutomaticBlockedTrue.map(({ docketNumber }) =>
       limit(async () => {
         try {
-          const wasUnblocked = await updateCaseWithLocking(
+          const wasUpdated = await updateCaseWithLocking(
             applicationContext,
             { docketNumber },
             undefined,
           );
-          if (wasUnblocked) updated++;
+          if (wasUpdated) updated++;
         } catch (e) {
           console.error(`Failed to update case ${docketNumber}`, e);
           failed.push(docketNumber);
@@ -150,7 +156,7 @@ const updateCaseWithLocking = withLocking(
   );
 
   console.log(
-    `${updated} cases are no longer automatically blocked; ${failed.length} failed to update.`,
+    `${updated} cases were updated; ${failed.length} failed to update.`,
   );
 
   if (failed.length) {
