@@ -40,6 +40,14 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
+echo "  - IDP_NAME=${IDP_NAME}"
+echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
+echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
+if [[ -n "$OIDC_CLIENT_SECRET" ]]; then
+  echo "  - OIDC_CLIENT_SECRET=***"
+else
+  echo "  - OIDC_CLIENT_SECRET="
+fi
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -114,6 +122,10 @@ export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
+export TF_VAR_idp_name=$IDP_NAME
+export TF_VAR_oidc_issuer_url=$OIDC_ISSUER_URL
+export TF_VAR_oidc_client_id=$OIDC_CLIENT_ID
+export TF_VAR_oidc_client_secret=$OIDC_CLIENT_SECRET
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
@@ -136,9 +148,18 @@ terraform init -upgrade -backend=true \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
 
-if [ -z "${OUTPUT_ONLY}" ]; then 
+if [ -z "${OUTPUT_ONLY}" ]; then
   terraform plan -out execution-plan
   terraform apply -auto-approve execution-plan
-else 
+
+  # this is temporary until terraform supports setting inbound federation trigger
+  # we also have to re-set the presignup lambda trigger or it will be overwritten with the default and removed
+  if [[ -n "$IDP_NAME" ]]; then
+    USER_POOL_ID=$(terraform output -raw aws_cognito_user_pool_id)
+    aws cognito-idp update-user-pool \
+      --user-pool-id "$USER_POOL_ID" \
+      --lambda-config PreSignUp=arn:aws:lambda:us-east-1:"$LOWER_ENV_ACCOUNT_IDS":function:cognito_pre_signup_lambda_"$ENV",InboundFederation=\{LambdaVersion=V1_0,LambdaArn=arn:aws:lambda:us-east-1:"$LOWER_ENV_ACCOUNT_IDS":function:cognito_inbound_federation_lambda_"$ENV"\}
+  fi
+else
   terraform output -json > output.json
 fi

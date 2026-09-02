@@ -81,7 +81,17 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:UpdateUserPool",
         "cognito-idp:UpdateUserPoolClient",
-        "cognito-idp:ListUsers"
+        "cognito-idp:ListUsers",
+        "cognito-idp:CreateIdentityProvider",
+        "cognito-idp:DescribeIdentityProvider",
+        "cognito-idp:ListIdentityProviders",
+        "cognito-idp:GetIdentityProviderByIdentifier",
+        "cognito-idp:UpdateIdentityProvider",
+        "cognito-idp:CreateManagedLoginBranding",
+        "cognito-idp:DeleteManagedLoginBranding",
+        "cognito-idp:DescribeManagedLoginBranding",
+        "cognito-idp:DescribeManagedLoginBrandingByClient",
+        "cognito-idp:UpdateManagedLoginBranding"
       ],
       "Resource": "*"
     },
@@ -442,6 +452,8 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/pdf_generator_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/pre_signup_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/inbound_federation_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",

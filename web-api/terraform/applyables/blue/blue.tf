@@ -62,7 +62,9 @@ resource "terraform_data" "locals" {
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
     EMAIL_SOURCE                       = "U.S. Tax Court <noreply@${var.dns_domain}>"
     IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
+    IDP_NAME                           = var.idp_name
     LOG_LEVEL                          = "info"
+    MANAGED_LOGIN_DOMAIN               = var.managed_login_domain
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PAYMENT_PORTAL_HOST                = var.payment_portal_host
