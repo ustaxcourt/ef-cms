@@ -303,7 +303,7 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `ankane/setup-opensearch` | `dawson-app-setup` action | [releases](https://github.com/ankane/setup-opensearch/releases) |
 | `zaproxy/action-api-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-api-scan/releases) |
 | `zaproxy/action-full-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-full-scan/releases) |
-| `zaproxy/action-baseline-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline-scan/releases) |
+| `zaproxy/action-baseline` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline/releases) |
 | `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
 
 **Steps to update a `uses:` pin:**
