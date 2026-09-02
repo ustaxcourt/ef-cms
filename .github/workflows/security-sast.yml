@@ -25,7 +25,9 @@ permissions:
 jobs:
   semgrep:
     name: Semgrep Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,8 +44,10 @@ jobs:
       - name: Run Semgrep
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          semgrep scan \
+          SEMGREP_ARGS=(
+            scan
             --config p/typescript \
             --config p/nodejs \
             --config p/react \
@@ -66,8 +70,12 @@ jobs:
             --exclude='aws/lambdas' \
             --exclude='.terraform' \
             --exclude='docs' \
-            --metrics=off \
-            --baseline-commit "$BASE_SHA"
+            --metrics=off
+          )
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            SEMGREP_ARGS+=(--baseline-commit "$BASE_SHA")
+          fi
+          semgrep "${SEMGREP_ARGS[@]}"
 
       - name: Upload SARIF
         if: always()
@@ -78,7 +86,9 @@ jobs:
 
   checkov:
     name: Checkov IaC Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read

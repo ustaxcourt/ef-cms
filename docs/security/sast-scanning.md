@@ -14,11 +14,12 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 ## Trigger
 
 - **PRs** (non-draft, targeting staging): runs `semgrep`, `checkov`, `shellcheck`, and the `security-gate` job
-- **Push to staging**: runs `codeql` only (deep analysis is too slow for PR feedback)
+- **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
 
 ## Semgrep
 
 Runs diff-scoped analysis (`--baseline-commit`) so only **new** findings in the PR are flagged.
+On pushes to `staging`, it scans the full tree to establish the default-branch baseline.
 
 ### Rule packs
 
