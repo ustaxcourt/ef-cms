@@ -2,7 +2,7 @@
 
 ## Local
 
-#### Upgrade NodeJS to `24.19.0`
+#### Upgrade NodeJS to `24.20.0`
 ```bash
 nvm install
 nvm use
