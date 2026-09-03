@@ -9,14 +9,14 @@ nvm use
 nvm alias default "$(cat .nvmrc)"
 ```
 
-#### Upgrade Terraform to `1.16.0`
+#### Upgrade Terraform to `1.16.1`
 use either tfswitch or tfenv
 ```bash
-tfswitch 1.16.0
+tfswitch 1.16.1
 ```
 ```bash
-tfenv install 1.16.0
-tfenv use 1.16.0
+tfenv install 1.16.1
+tfenv use 1.16.1
 ```
 
 ## Manual Deployment Steps
