@@ -55,9 +55,7 @@ const findCasesWithAutomaticBlockedTrue = async () => {
 
     return blocked.select(['c.docketNumber']).execute();
   });
-  return candidates.filter(candidate =>
-    ['964-20', '134-20', '107-20', '466-20'].includes(candidate.docketNumber),
-  );
+  return candidates;
 };
 
 const updateCase = async (
