@@ -5,19 +5,10 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import {
   CASE_STATUS_TYPES,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import {
-  Case,
-  getPetitionerById,
-  getPractitionersRepresenting,
-} from '@shared/business/entities/cases/Case';
+import { Case, getPetitionerById } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
@@ -28,35 +19,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
-
-export const getIsUserAuthorized = ({
-  petitionerCaseRaw,
-  updatedPetitionerData,
-  user,
-}) => {
-  let isRepresentingCounsel = false;
-  if (user.role === ROLES.privatePractitioner) {
-    const practitioners = getPractitionersRepresenting(
-      petitionerCaseRaw,
-      updatedPetitionerData?.contactId,
-    );
-
-    isRepresentingCounsel = practitioners?.find(
-      practitioner => practitioner.userId === user.userId,
-    );
-  }
-
-  let isCurrentPetitioner = false;
-  if (user.role === ROLES.petitioner) {
-    isCurrentPetitioner = updatedPetitionerData?.contactId === user.userId;
-  }
-
-  return (
-    isRepresentingCounsel ||
-    isCurrentPetitioner ||
-    isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)
-  );
-};
+import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
 
 const assertEmailAvailableForPetitioner = async ({
   applicationContext,
@@ -184,7 +147,7 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  const hasAuthorization = getIsUserAuthorized({
+  const hasAuthorization = canUserUpdatePetitionerContact({
     petitionerCaseRaw,
     updatedPetitionerData,
     user: authorizedUser,
